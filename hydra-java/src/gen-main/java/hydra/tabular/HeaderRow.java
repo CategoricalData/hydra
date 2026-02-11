@@ -23,7 +23,7 @@ public class HeaderRow implements Serializable, Comparable<HeaderRow> {
     if (!(other instanceof HeaderRow)) {
       return false;
     }
-    HeaderRow o = (HeaderRow) (other);
+    HeaderRow o = (HeaderRow) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

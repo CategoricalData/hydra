@@ -34,7 +34,7 @@ public class HoistCaseStatementsTestCase implements Serializable, Comparable<Hoi
     if (!(other instanceof HoistCaseStatementsTestCase)) {
       return false;
     }
-    HoistCaseStatementsTestCase o = (HoistCaseStatementsTestCase) (other);
+    HoistCaseStatementsTestCase o = (HoistCaseStatementsTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class HoistCaseStatementsTestCase implements Serializable, Comparable<Hoi
   @SuppressWarnings("unchecked")
   public int compareTo(HoistCaseStatementsTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public HoistCaseStatementsTestCase withInput(hydra.core.Term input) {

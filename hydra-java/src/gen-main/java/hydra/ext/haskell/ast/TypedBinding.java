@@ -34,7 +34,7 @@ public class TypedBinding implements Serializable, Comparable<TypedBinding> {
     if (!(other instanceof TypedBinding)) {
       return false;
     }
-    TypedBinding o = (TypedBinding) (other);
+    TypedBinding o = (TypedBinding) other;
     return java.util.Objects.equals(
       this.typeSignature,
       o.typeSignature) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TypedBinding implements Serializable, Comparable<TypedBinding> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypedBinding other) {
     int cmp = 0;
-    cmp = ((Comparable) (typeSignature)).compareTo(other.typeSignature);
+    cmp = ((Comparable) typeSignature).compareTo(other.typeSignature);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (valueBinding)).compareTo(other.valueBinding);
+    return ((Comparable) valueBinding).compareTo(other.valueBinding);
   }
   
   public TypedBinding withTypeSignature(hydra.ext.haskell.ast.TypeSignature typeSignature) {

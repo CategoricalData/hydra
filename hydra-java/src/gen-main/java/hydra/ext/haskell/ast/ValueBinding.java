@@ -24,11 +24,11 @@ public abstract class ValueBinding implements Serializable, Comparable<ValueBind
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ValueBinding instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Simple instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -47,7 +47,7 @@ public abstract class ValueBinding implements Serializable, Comparable<ValueBind
       if (!(other instanceof Simple)) {
         return false;
       }
-      Simple o = (Simple) (other);
+      Simple o = (Simple) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -61,12 +61,12 @@ public abstract class ValueBinding implements Serializable, Comparable<ValueBind
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ValueBinding other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Simple o = (Simple) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Simple o = (Simple) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

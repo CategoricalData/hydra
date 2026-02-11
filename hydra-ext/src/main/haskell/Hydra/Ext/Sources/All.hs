@@ -31,8 +31,13 @@ import qualified Hydra.Ext.Sources.Gql.OpenGql                 as OpenGql
 import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Expressions as PathAlgebraExpressions
 import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Syntax      as PathAlgebraSyntax
 import qualified Hydra.Ext.Sources.Graphviz.Dot                as Dot
+import qualified Hydra.Ext.Sources.Java.Helpers                as JavaHelpers
 import qualified Hydra.Ext.Sources.Java.Language               as JavaLanguage
+import qualified Hydra.Ext.Sources.Java.Names                  as JavaNames
+import qualified Hydra.Ext.Sources.Java.Serde                  as JavaSerde
 import qualified Hydra.Ext.Sources.Java.Syntax                 as JavaSyntax
+import qualified Hydra.Ext.Sources.Java.Utils                  as JavaUtils
+import qualified Hydra.Ext.Sources.Java.Coder                 as JavaCoder
 import qualified Hydra.Ext.Sources.JavaScript.Language         as JavaScriptLanguage
 import qualified Hydra.Ext.Sources.JavaScript.Operators        as JavaScriptOperators
 import qualified Hydra.Ext.Sources.JavaScript.Serde            as JavaScriptSerde
@@ -87,76 +92,140 @@ import qualified Hydra.Sources.Encode.Pg.Model                 as EncodePgModel
 
 
 hydraExtModules :: [Module]
-hydraExtModules = otherModules ++ gqlModules
-  where
-    otherModules = [
-      Atlas.module_,
-      AvroSchema.module_,
-      Coq.module_,
-      cppLanguageModule,
-      CppSyntax.module_,
-      csharpLanguageModule,
-      CsharpSyntax.module_,
-      datalogSyntaxModule,
-      DeltaParquet.module_,
-      Dot.module_,
-      AzureDtld.module_,
-      GeoJson.module_,
-      GoLanguage.module_,
-      -- GoSerde.module_, -- WIP, incomplete module
-      GoSyntax.module_,
-      graphqlSyntaxModule,
-      GraphsonCoder.module_,
-      GraphsonConstruct.module_,
-      GraphsonSyntax.module_,
-      GraphsonUtils.module_,
-      Gremlin.module_,
-      IanaRelations.module_,
-      JavaLanguage.module_,
-      JavaSyntax.module_,
-      JavaScriptLanguage.module_,
-      JavaScriptOperators.module_,
-      JavaScriptSerde.module_,
-      JavaScriptSyntax.module_,
-      JsonSchema.module_,
-      JsonSchemaLanguage.module_,
-      Kql.module_,
-      CypherFeatures.module_,
-      OpenCypher.module_,
-      Osv.module_,
-      OwlSyntax.module_,
-      ParquetFormat.module_,
-      Pdl.module_,
-      PgMapping.module_,
-      PgModel.module_,
-      PgQuery.module_,
-      PgValidation.module_,
-      Proto3.module_,
-      ProtobufAny.module_,
-      protobufLanguageModule,
-      ProtobufSourceContext.module_,
-      PythonHelpers.module_,
-      pythonLanguageModule,
-      PythonNames.module_,
-      PythonSerde.module_,
-      PythonSyntax.module_,
-      PythonUtils.module_,
-      PythonCoder.module_,
-      RdfSyntax.module_,
-      RustLanguage.module_,
-      RustOperators.module_,
-      RustSerde.module_,
-      RustSyntax.module_,
-      ScalaMeta.module_,
-      ShaclModel.module_,
-      shexSyntaxModule,
-      sqlModule,
-      StacItems.module_,
-      TinkerpopFeatures.module_,
-      typeScriptLanguageModule,
-      TypeScriptModel.module_,
-      XmlSchema.module_,
-      GenPGTransform.module_]
+hydraExtModules = otherExtModules
+  ++ cppModules
+  ++ csharpModules
+  ++ goModules
+  ++ gqlModules
+  ++ graphsonModules
+  ++ javaModules
+  ++ javaScriptModules
+  ++ jsonSchemaModules
+  ++ pgModules
+  ++ protobufModules
+  ++ pythonModules
+  ++ rdfModules
+  ++ rustModules
+  ++ typescriptModules
+
+otherExtModules :: [Module]
+otherExtModules = [
+  Atlas.module_,
+  AvroSchema.module_,
+  AzureDtld.module_,
+  Coq.module_,
+  datalogSyntaxModule,
+  DeltaParquet.module_,
+  Dot.module_,
+  GeoJson.module_,
+  graphqlSyntaxModule,
+  IanaRelations.module_,
+  Kql.module_,
+  Osv.module_,
+  ParquetFormat.module_,
+  Pdl.module_,
+  ScalaMeta.module_,
+  sqlModule,
+  StacItems.module_,
+  XmlSchema.module_,
+  GenPGTransform.module_]
+
+cppModules :: [Module]
+cppModules = [
+  cppLanguageModule,
+  CppSyntax.module_]
+
+csharpModules :: [Module]
+csharpModules = [
+  csharpLanguageModule,
+  CsharpSyntax.module_]
+
+goModules :: [Module]
+goModules = [
+  GoLanguage.module_,
+  -- GoSerde.module_, -- WIP, incomplete module
+  GoSyntax.module_]
+
+gqlModules = [
+  OpenGql.module_,
+  PathAlgebraExpressions.module_,
+  PathAlgebraSyntax.module_]
+
+graphsonModules :: [Module]
+graphsonModules = [
+  GraphsonCoder.module_,
+  GraphsonConstruct.module_,
+  GraphsonSyntax.module_,
+  GraphsonUtils.module_]
+
+javaModules :: [Module]
+javaModules = [
+  JavaHelpers.module_,
+  JavaLanguage.module_,
+  JavaNames.module_,
+  JavaSerde.module_,
+  JavaSyntax.module_,
+  JavaUtils.module_,
+  JavaCoder.module_]
+
+javaScriptModules :: [Module]
+javaScriptModules = [
+  JavaScriptLanguage.module_,
+  JavaScriptOperators.module_,
+  JavaScriptSerde.module_,
+  JavaScriptSyntax.module_]
+
+jsonSchemaModules :: [Module]
+jsonSchemaModules = [
+  JsonSchema.module_,
+  JsonSchemaLanguage.module_]
+
+pgModules :: [Module]
+pgModules = [
+  CypherFeatures.module_,
+  Gremlin.module_,
+  OpenCypher.module_,
+  PgMapping.module_,
+  PgModel.module_,
+  PgQuery.module_,
+  PgValidation.module_,
+  TinkerpopFeatures.module_]
+
+protobufModules :: [Module]
+protobufModules = [
+  Proto3.module_,
+  ProtobufAny.module_,
+  protobufLanguageModule,
+  ProtobufSourceContext.module_]
+
+pythonModules :: [Module]
+pythonModules = [
+  PythonHelpers.module_,
+  pythonLanguageModule,
+  PythonNames.module_,
+  PythonSerde.module_,
+  PythonSyntax.module_,
+  PythonUtils.module_,
+  PythonCoder.module_]
+
+rdfModules :: [Module]
+rdfModules = [
+  OwlSyntax.module_,
+  RdfSyntax.module_,
+  ShaclModel.module_,
+  shexSyntaxModule]
+
+rustModules :: [Module]
+rustModules = [
+  RustLanguage.module_,
+  RustOperators.module_,
+  RustSerde.module_,
+  RustSyntax.module_]
+
+typescriptModules :: [Module]
+typescriptModules = [
+  typeScriptLanguageModule,
+  TypeScriptModel.module_]
 
 {-
   :set +m
@@ -173,11 +242,6 @@ hydraExtDecodingModules = [
 hydraExtEncodingModules = [
   EncodePgMapping.module_,
   EncodePgModel.module_]
-
-gqlModules = [
-  OpenGql.module_,
-  PathAlgebraExpressions.module_,
-  PathAlgebraSyntax.module_]
 
 -- All hydra-ext modules for the GenPG demo
 genpgModules :: [Module]

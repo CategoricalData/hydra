@@ -42,7 +42,7 @@ public class TermDefinition implements Serializable, Comparable<TermDefinition> 
     if (!(other instanceof TermDefinition)) {
       return false;
     }
-    TermDefinition o = (TermDefinition) (other);
+    TermDefinition o = (TermDefinition) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class TermDefinition implements Serializable, Comparable<TermDefinition> 
   @SuppressWarnings("unchecked")
   public int compareTo(TermDefinition other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (term)).compareTo(other.term);
+    cmp = ((Comparable) term).compareTo(other.term);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public TermDefinition withName(hydra.core.Name name) {

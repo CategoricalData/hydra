@@ -50,7 +50,7 @@ public class AlphaConversionTestCase implements Serializable, Comparable<AlphaCo
     if (!(other instanceof AlphaConversionTestCase)) {
       return false;
     }
-    AlphaConversionTestCase o = (AlphaConversionTestCase) (other);
+    AlphaConversionTestCase o = (AlphaConversionTestCase) other;
     return java.util.Objects.equals(
       this.term,
       o.term) && java.util.Objects.equals(
@@ -71,19 +71,19 @@ public class AlphaConversionTestCase implements Serializable, Comparable<AlphaCo
   @SuppressWarnings("unchecked")
   public int compareTo(AlphaConversionTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (term)).compareTo(other.term);
+    cmp = ((Comparable) term).compareTo(other.term);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (oldVariable)).compareTo(other.oldVariable);
+    cmp = ((Comparable) oldVariable).compareTo(other.oldVariable);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (newVariable)).compareTo(other.newVariable);
+    cmp = ((Comparable) newVariable).compareTo(other.newVariable);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (result)).compareTo(other.result);
+    return ((Comparable) result).compareTo(other.result);
   }
   
   public AlphaConversionTestCase withTerm(hydra.core.Term term) {

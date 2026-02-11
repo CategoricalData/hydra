@@ -34,7 +34,7 @@ public class PatternImplication implements Serializable, Comparable<PatternImpli
     if (!(other instanceof PatternImplication)) {
       return false;
     }
-    PatternImplication o = (PatternImplication) (other);
+    PatternImplication o = (PatternImplication) other;
     return java.util.Objects.equals(
       this.antecedent,
       o.antecedent) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class PatternImplication implements Serializable, Comparable<PatternImpli
   @SuppressWarnings("unchecked")
   public int compareTo(PatternImplication other) {
     int cmp = 0;
-    cmp = ((Comparable) (antecedent)).compareTo(other.antecedent);
+    cmp = ((Comparable) antecedent).compareTo(other.antecedent);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (consequent)).compareTo(other.consequent);
+    return ((Comparable) consequent).compareTo(other.consequent);
   }
   
   public PatternImplication withAntecedent(hydra.query.Pattern antecedent) {

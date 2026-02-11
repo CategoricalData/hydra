@@ -28,15 +28,15 @@ public abstract class ImportModifier implements Serializable, Comparable<ImportM
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ImportModifier instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Pattern instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Type instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -50,7 +50,7 @@ public abstract class ImportModifier implements Serializable, Comparable<ImportM
       if (!(other instanceof Pattern)) {
         return false;
       }
-      Pattern o = (Pattern) (other);
+      Pattern o = (Pattern) other;
       return true;
     }
     
@@ -62,7 +62,7 @@ public abstract class ImportModifier implements Serializable, Comparable<ImportM
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ImportModifier other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -85,7 +85,7 @@ public abstract class ImportModifier implements Serializable, Comparable<ImportM
       if (!(other instanceof Type)) {
         return false;
       }
-      Type o = (Type) (other);
+      Type o = (Type) other;
       return true;
     }
     
@@ -97,7 +97,7 @@ public abstract class ImportModifier implements Serializable, Comparable<ImportM
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ImportModifier other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

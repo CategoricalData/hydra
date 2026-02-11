@@ -28,15 +28,15 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Operator instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Backtick instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Normal instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -55,7 +55,7 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
       if (!(other instanceof Backtick)) {
         return false;
       }
-      Backtick o = (Backtick) (other);
+      Backtick o = (Backtick) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -69,12 +69,12 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Operator other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Backtick o = (Backtick) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Backtick o = (Backtick) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -98,7 +98,7 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
       if (!(other instanceof Normal)) {
         return false;
       }
-      Normal o = (Normal) (other);
+      Normal o = (Normal) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -112,12 +112,12 @@ public abstract class Operator implements Serializable, Comparable<Operator> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Operator other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Normal o = (Normal) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Normal o = (Normal) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

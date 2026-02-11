@@ -36,23 +36,23 @@ public abstract class CaseConvention implements Serializable, Comparable<CaseCon
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(CaseConvention instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Camel instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Pascal instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(LowerSnake instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(UpperSnake instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -66,7 +66,7 @@ public abstract class CaseConvention implements Serializable, Comparable<CaseCon
       if (!(other instanceof Camel)) {
         return false;
       }
-      Camel o = (Camel) (other);
+      Camel o = (Camel) other;
       return true;
     }
     
@@ -78,7 +78,7 @@ public abstract class CaseConvention implements Serializable, Comparable<CaseCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CaseConvention other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -101,7 +101,7 @@ public abstract class CaseConvention implements Serializable, Comparable<CaseCon
       if (!(other instanceof Pascal)) {
         return false;
       }
-      Pascal o = (Pascal) (other);
+      Pascal o = (Pascal) other;
       return true;
     }
     
@@ -113,7 +113,7 @@ public abstract class CaseConvention implements Serializable, Comparable<CaseCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CaseConvention other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -136,7 +136,7 @@ public abstract class CaseConvention implements Serializable, Comparable<CaseCon
       if (!(other instanceof LowerSnake)) {
         return false;
       }
-      LowerSnake o = (LowerSnake) (other);
+      LowerSnake o = (LowerSnake) other;
       return true;
     }
     
@@ -148,7 +148,7 @@ public abstract class CaseConvention implements Serializable, Comparable<CaseCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CaseConvention other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -171,7 +171,7 @@ public abstract class CaseConvention implements Serializable, Comparable<CaseCon
       if (!(other instanceof UpperSnake)) {
         return false;
       }
-      UpperSnake o = (UpperSnake) (other);
+      UpperSnake o = (UpperSnake) other;
       return true;
     }
     
@@ -183,7 +183,7 @@ public abstract class CaseConvention implements Serializable, Comparable<CaseCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CaseConvention other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

@@ -34,7 +34,7 @@ public class TypeApplicationTerm implements Serializable, Comparable<TypeApplica
     if (!(other instanceof TypeApplicationTerm)) {
       return false;
     }
-    TypeApplicationTerm o = (TypeApplicationTerm) (other);
+    TypeApplicationTerm o = (TypeApplicationTerm) other;
     return java.util.Objects.equals(
       this.body,
       o.body) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TypeApplicationTerm implements Serializable, Comparable<TypeApplica
   @SuppressWarnings("unchecked")
   public int compareTo(TypeApplicationTerm other) {
     int cmp = 0;
-    cmp = ((Comparable) (body)).compareTo(other.body);
+    cmp = ((Comparable) body).compareTo(other.body);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public TypeApplicationTerm withBody(hydra.core.Term body) {

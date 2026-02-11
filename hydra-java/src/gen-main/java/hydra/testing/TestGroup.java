@@ -50,7 +50,7 @@ public class TestGroup implements Serializable, Comparable<TestGroup> {
     if (!(other instanceof TestGroup)) {
       return false;
     }
-    TestGroup o = (TestGroup) (other);
+    TestGroup o = (TestGroup) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -71,7 +71,7 @@ public class TestGroup implements Serializable, Comparable<TestGroup> {
   @SuppressWarnings("unchecked")
   public int compareTo(TestGroup other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

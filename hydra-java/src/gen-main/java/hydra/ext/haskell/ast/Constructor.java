@@ -28,15 +28,15 @@ public abstract class Constructor implements Serializable, Comparable<Constructo
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Constructor instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Ordinary instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Record instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -55,7 +55,7 @@ public abstract class Constructor implements Serializable, Comparable<Constructo
       if (!(other instanceof Ordinary)) {
         return false;
       }
-      Ordinary o = (Ordinary) (other);
+      Ordinary o = (Ordinary) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -69,12 +69,12 @@ public abstract class Constructor implements Serializable, Comparable<Constructo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Constructor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Ordinary o = (Ordinary) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Ordinary o = (Ordinary) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -98,7 +98,7 @@ public abstract class Constructor implements Serializable, Comparable<Constructo
       if (!(other instanceof Record)) {
         return false;
       }
-      Record o = (Record) (other);
+      Record o = (Record) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -112,12 +112,12 @@ public abstract class Constructor implements Serializable, Comparable<Constructo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Constructor other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Record o = (Record) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Record o = (Record) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

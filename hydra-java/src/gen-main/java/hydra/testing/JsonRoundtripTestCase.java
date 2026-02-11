@@ -34,7 +34,7 @@ public class JsonRoundtripTestCase implements Serializable, Comparable<JsonRound
     if (!(other instanceof JsonRoundtripTestCase)) {
       return false;
     }
-    JsonRoundtripTestCase o = (JsonRoundtripTestCase) (other);
+    JsonRoundtripTestCase o = (JsonRoundtripTestCase) other;
     return java.util.Objects.equals(
       this.type,
       o.type) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class JsonRoundtripTestCase implements Serializable, Comparable<JsonRound
   @SuppressWarnings("unchecked")
   public int compareTo(JsonRoundtripTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (type)).compareTo(other.type);
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (term)).compareTo(other.term);
+    return ((Comparable) term).compareTo(other.term);
   }
   
   public JsonRoundtripTestCase withType(hydra.core.Type type) {

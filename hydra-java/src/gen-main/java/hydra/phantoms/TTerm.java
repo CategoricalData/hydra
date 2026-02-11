@@ -23,7 +23,7 @@ public class TTerm<A> implements Serializable, Comparable<TTerm<A>> {
     if (!(other instanceof TTerm)) {
       return false;
     }
-    TTerm o = (TTerm) (other);
+    TTerm o = (TTerm) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class TTerm<A> implements Serializable, Comparable<TTerm<A>> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TTerm other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

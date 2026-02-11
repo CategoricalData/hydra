@@ -28,15 +28,15 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(SpecImport instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(List instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Hiding instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -55,7 +55,7 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
       if (!(other instanceof List)) {
         return false;
       }
-      List o = (List) (other);
+      List o = (List) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -69,11 +69,11 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SpecImport other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      List o = (List) (other);
+      List o = (List) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -100,7 +100,7 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
       if (!(other instanceof Hiding)) {
         return false;
       }
-      Hiding o = (Hiding) (other);
+      Hiding o = (Hiding) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -114,11 +114,11 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SpecImport other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Hiding o = (Hiding) (other);
+      Hiding o = (Hiding) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());

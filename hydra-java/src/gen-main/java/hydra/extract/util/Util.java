@@ -10,24 +10,24 @@ public interface Util {
     return hydra.lib.flows.Bind.apply(
       hydra.extract.core.Core.unitVariant(
         new hydra.core.Name("hydra.util.Comparison"),
-        (term)),
+        term),
       (java.util.function.Function<hydra.core.Name, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Comparison>>) (fname -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
-          ((fname)).value,
+          (fname).value,
           "equalTo"),
         () -> hydra.lib.flows.Pure.apply(new hydra.util.Comparison.EqualTo()),
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
-            ((fname)).value,
+            (fname).value,
             "lessThan"),
           () -> hydra.lib.flows.Pure.apply(new hydra.util.Comparison.LessThan()),
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
-              ((fname)).value,
+              (fname).value,
               "greaterThan"),
             () -> hydra.lib.flows.Pure.apply(new hydra.util.Comparison.GreaterThan()),
             () -> hydra.monads.Monads.unexpected(
               "comparison",
-              ((fname)).value))))));
+              (fname).value))))));
   }
 }

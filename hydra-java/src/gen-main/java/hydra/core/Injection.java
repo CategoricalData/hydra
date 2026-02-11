@@ -34,7 +34,7 @@ public class Injection implements Serializable, Comparable<Injection> {
     if (!(other instanceof Injection)) {
       return false;
     }
-    Injection o = (Injection) (other);
+    Injection o = (Injection) other;
     return java.util.Objects.equals(
       this.typeName,
       o.typeName) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class Injection implements Serializable, Comparable<Injection> {
   @SuppressWarnings("unchecked")
   public int compareTo(Injection other) {
     int cmp = 0;
-    cmp = ((Comparable) (typeName)).compareTo(other.typeName);
+    cmp = ((Comparable) typeName).compareTo(other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (field)).compareTo(other.field);
+    return ((Comparable) field).compareTo(other.field);
   }
   
   public Injection withTypeName(hydra.core.Name typeName) {

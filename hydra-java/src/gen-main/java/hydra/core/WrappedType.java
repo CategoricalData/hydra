@@ -34,7 +34,7 @@ public class WrappedType implements Serializable, Comparable<WrappedType> {
     if (!(other instanceof WrappedType)) {
       return false;
     }
-    WrappedType o = (WrappedType) (other);
+    WrappedType o = (WrappedType) other;
     return java.util.Objects.equals(
       this.typeName,
       o.typeName) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class WrappedType implements Serializable, Comparable<WrappedType> {
   @SuppressWarnings("unchecked")
   public int compareTo(WrappedType other) {
     int cmp = 0;
-    cmp = ((Comparable) (typeName)).compareTo(other.typeName);
+    cmp = ((Comparable) typeName).compareTo(other.typeName);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (body)).compareTo(other.body);
+    return ((Comparable) body).compareTo(other.body);
   }
   
   public WrappedType withTypeName(hydra.core.Name typeName) {

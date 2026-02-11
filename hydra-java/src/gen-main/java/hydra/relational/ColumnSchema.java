@@ -34,7 +34,7 @@ public class ColumnSchema<T> implements Serializable, Comparable<ColumnSchema<T>
     if (!(other instanceof ColumnSchema)) {
       return false;
     }
-    ColumnSchema o = (ColumnSchema) (other);
+    ColumnSchema o = (ColumnSchema) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class ColumnSchema<T> implements Serializable, Comparable<ColumnSchema<T>
   @SuppressWarnings("unchecked")
   public int compareTo(ColumnSchema other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (domain)).compareTo(other.domain);
+    return ((Comparable) domain).compareTo(other.domain);
   }
   
   public ColumnSchema withName(hydra.relational.ColumnName name) {

@@ -24,11 +24,11 @@ public abstract class TypeRewriter implements Serializable, Comparable<TypeRewri
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TypeRewriter instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(ReplaceStringWithInt32 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -45,7 +45,7 @@ public abstract class TypeRewriter implements Serializable, Comparable<TypeRewri
       if (!(other instanceof ReplaceStringWithInt32)) {
         return false;
       }
-      ReplaceStringWithInt32 o = (ReplaceStringWithInt32) (other);
+      ReplaceStringWithInt32 o = (ReplaceStringWithInt32) other;
       return true;
     }
     
@@ -57,7 +57,7 @@ public abstract class TypeRewriter implements Serializable, Comparable<TypeRewri
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeRewriter other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

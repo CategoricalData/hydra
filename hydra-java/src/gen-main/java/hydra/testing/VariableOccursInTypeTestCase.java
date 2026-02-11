@@ -42,7 +42,7 @@ public class VariableOccursInTypeTestCase implements Serializable, Comparable<Va
     if (!(other instanceof VariableOccursInTypeTestCase)) {
       return false;
     }
-    VariableOccursInTypeTestCase o = (VariableOccursInTypeTestCase) (other);
+    VariableOccursInTypeTestCase o = (VariableOccursInTypeTestCase) other;
     return java.util.Objects.equals(
       this.variable,
       o.variable) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class VariableOccursInTypeTestCase implements Serializable, Comparable<Va
   @SuppressWarnings("unchecked")
   public int compareTo(VariableOccursInTypeTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (variable)).compareTo(other.variable);
+    cmp = ((Comparable) variable).compareTo(other.variable);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (type)).compareTo(other.type);
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (expected)).compareTo(other.expected);
+    return ((Comparable) expected).compareTo(other.expected);
   }
   
   public VariableOccursInTypeTestCase withVariable(hydra.core.Name variable) {

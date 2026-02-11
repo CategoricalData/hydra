@@ -34,7 +34,7 @@ public class ContextType implements Serializable, Comparable<ContextType> {
     if (!(other instanceof ContextType)) {
       return false;
     }
-    ContextType o = (ContextType) (other);
+    ContextType o = (ContextType) other;
     return java.util.Objects.equals(
       this.ctx,
       o.ctx) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class ContextType implements Serializable, Comparable<ContextType> {
   @SuppressWarnings("unchecked")
   public int compareTo(ContextType other) {
     int cmp = 0;
-    cmp = ((Comparable) (ctx)).compareTo(other.ctx);
+    cmp = ((Comparable) ctx).compareTo(other.ctx);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public ContextType withCtx(hydra.ext.haskell.ast.Assertion ctx) {

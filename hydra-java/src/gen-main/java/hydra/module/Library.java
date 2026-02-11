@@ -42,7 +42,7 @@ public class Library implements Serializable, Comparable<Library> {
     if (!(other instanceof Library)) {
       return false;
     }
-    Library o = (Library) (other);
+    Library o = (Library) other;
     return java.util.Objects.equals(
       this.namespace,
       o.namespace) && java.util.Objects.equals(
@@ -61,11 +61,11 @@ public class Library implements Serializable, Comparable<Library> {
   @SuppressWarnings("unchecked")
   public int compareTo(Library other) {
     int cmp = 0;
-    cmp = ((Comparable) (namespace)).compareTo(other.namespace);
+    cmp = ((Comparable) namespace).compareTo(other.namespace);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (prefix)).compareTo(other.prefix);
+    cmp = ((Comparable) prefix).compareTo(other.prefix);
     if (cmp != 0) {
       return cmp;
     }

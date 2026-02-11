@@ -32,19 +32,19 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(DeclarationHead instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Application instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Parens instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Simple instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -63,7 +63,7 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
       if (!(other instanceof Application)) {
         return false;
       }
-      Application o = (Application) (other);
+      Application o = (Application) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -77,12 +77,12 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DeclarationHead other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Application o = (Application) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Application o = (Application) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -106,7 +106,7 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
       if (!(other instanceof Parens)) {
         return false;
       }
-      Parens o = (Parens) (other);
+      Parens o = (Parens) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -120,12 +120,12 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DeclarationHead other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Parens o = (Parens) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Parens o = (Parens) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -149,7 +149,7 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
       if (!(other instanceof Simple)) {
         return false;
       }
-      Simple o = (Simple) (other);
+      Simple o = (Simple) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -163,12 +163,12 @@ public abstract class DeclarationHead implements Serializable, Comparable<Declar
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DeclarationHead other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Simple o = (Simple) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Simple o = (Simple) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -32,19 +32,19 @@ public abstract class Node implements Serializable, Comparable<Node> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Node instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Term instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Variable instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Wildcard instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -63,7 +63,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
       if (!(other instanceof Term)) {
         return false;
       }
-      Term o = (Term) (other);
+      Term o = (Term) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -77,12 +77,12 @@ public abstract class Node implements Serializable, Comparable<Node> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Node other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Term o = (Term) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Term o = (Term) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -106,7 +106,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
       if (!(other instanceof Variable)) {
         return false;
       }
-      Variable o = (Variable) (other);
+      Variable o = (Variable) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -120,12 +120,12 @@ public abstract class Node implements Serializable, Comparable<Node> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Node other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Variable o = (Variable) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Variable o = (Variable) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -147,7 +147,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
       if (!(other instanceof Wildcard)) {
         return false;
       }
-      Wildcard o = (Wildcard) (other);
+      Wildcard o = (Wildcard) other;
       return true;
     }
     
@@ -159,7 +159,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Node other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

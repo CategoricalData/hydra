@@ -42,7 +42,7 @@ public class AccessorEdge implements Serializable, Comparable<AccessorEdge> {
     if (!(other instanceof AccessorEdge)) {
       return false;
     }
-    AccessorEdge o = (AccessorEdge) (other);
+    AccessorEdge o = (AccessorEdge) other;
     return java.util.Objects.equals(
       this.source,
       o.source) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class AccessorEdge implements Serializable, Comparable<AccessorEdge> {
   @SuppressWarnings("unchecked")
   public int compareTo(AccessorEdge other) {
     int cmp = 0;
-    cmp = ((Comparable) (source)).compareTo(other.source);
+    cmp = ((Comparable) source).compareTo(other.source);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (path)).compareTo(other.path);
+    cmp = ((Comparable) path).compareTo(other.path);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (target)).compareTo(other.target);
+    return ((Comparable) target).compareTo(other.target);
   }
   
   public AccessorEdge withSource(hydra.accessors.AccessorNode source) {

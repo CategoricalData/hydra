@@ -30,8 +30,8 @@ public class ListsTest {
 
             hydra.lib.lists.Apply.apply(
   java.util.List.of(
-    (hydra.lib.strings.ToUpper::apply),
-    (hydra.lib.strings.ToLower::apply)),
+    hydra.lib.strings.ToUpper::apply,
+    hydra.lib.strings.ToLower::apply),
   java.util.List.of(
     "One",
     "Two",
@@ -66,7 +66,7 @@ public class ListsTest {
             (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
 
             hydra.lib.lists.Apply.apply(
-  java.util.List.of((hydra.lib.strings.ToUpper::apply)),
+  java.util.List.of(hydra.lib.strings.ToUpper::apply),
   (java.util.List<String>) (java.util.List.<String>of())));
 
     }
@@ -80,7 +80,7 @@ public class ListsTest {
             java.util.List.of("HELLO"),
 
             hydra.lib.lists.Apply.apply(
-  java.util.List.of((hydra.lib.strings.ToUpper::apply)),
+  java.util.List.of(hydra.lib.strings.ToUpper::apply),
   java.util.List.of("hello")));
 
     }
@@ -97,8 +97,8 @@ public class ListsTest {
 
             hydra.lib.lists.Apply.apply(
   java.util.List.of(
-    (hydra.lib.strings.ToUpper::apply),
-    (hydra.lib.strings.ToLower::apply)),
+    hydra.lib.strings.ToUpper::apply,
+    hydra.lib.strings.ToLower::apply),
   java.util.List.of("Test")));
 
     }
@@ -206,7 +206,7 @@ public class ListsTest {
     2,
     3,
     4),
-  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply((x))))));
+  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
 
     }
 
@@ -220,7 +220,7 @@ public class ListsTest {
 
             hydra.lib.lists.Bind.apply(
   (java.util.List<Integer>) (java.util.List.<Integer>of()),
-  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply((x))))));
+  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
 
     }
 
@@ -234,7 +234,7 @@ public class ListsTest {
 
             hydra.lib.lists.Bind.apply(
   java.util.List.of(5),
-  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply((x))))));
+  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
 
     }
 
@@ -254,7 +254,7 @@ public class ListsTest {
     1,
     1,
     2),
-  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply((x))))));
+  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
 
     }
 
@@ -665,7 +665,7 @@ public class ListsTest {
 
             hydra.lib.lists.DropWhile.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     3)),
   java.util.List.of(
     1,
@@ -686,7 +686,7 @@ public class ListsTest {
 
             hydra.lib.lists.DropWhile.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     10)),
   java.util.List.of(
     1,
@@ -708,7 +708,7 @@ public class ListsTest {
 
             hydra.lib.lists.DropWhile.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     0)),
   java.util.List.of(
     1,
@@ -727,7 +727,7 @@ public class ListsTest {
 
             hydra.lib.lists.DropWhile.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     5)),
   (java.util.List<Integer>) (java.util.List.<Integer>of())));
 
@@ -877,7 +877,7 @@ public class ListsTest {
 
             hydra.lib.lists.Filter.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     0)),
   java.util.List.of(
     -1,
@@ -901,7 +901,7 @@ public class ListsTest {
 
             hydra.lib.lists.Filter.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     10)),
   java.util.List.of(
     1,
@@ -920,7 +920,7 @@ public class ListsTest {
 
             hydra.lib.lists.Filter.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     10)),
   java.util.List.of(
     1,
@@ -939,7 +939,7 @@ public class ListsTest {
 
             hydra.lib.lists.Filter.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     0)),
   (java.util.List<Integer>) (java.util.List.<Integer>of())));
 
@@ -957,7 +957,7 @@ public class ListsTest {
 
             hydra.lib.lists.Find.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     3)),
   java.util.List.of(
     1,
@@ -977,7 +977,7 @@ public class ListsTest {
 
             hydra.lib.lists.Find.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     0)),
   java.util.List.of(
     1,
@@ -996,7 +996,7 @@ public class ListsTest {
 
             hydra.lib.lists.Find.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     10)),
   java.util.List.of(
     1,
@@ -1015,7 +1015,7 @@ public class ListsTest {
 
             hydra.lib.lists.Find.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     0)),
   (java.util.List<Integer>) (java.util.List.<Integer>of())));
 
@@ -1031,7 +1031,7 @@ public class ListsTest {
 
             hydra.lib.lists.Find.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Equal.apply(
-    (x),
+    x,
     42)),
   java.util.List.of(42)));
 
@@ -1049,8 +1049,8 @@ public class ListsTest {
 
             hydra.lib.lists.Foldl.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   0,
   java.util.List.of(
     1,
@@ -1070,8 +1070,8 @@ public class ListsTest {
 
             hydra.lib.lists.Foldl.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Mul.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   1,
   java.util.List.of(
     2,
@@ -1090,8 +1090,8 @@ public class ListsTest {
 
             hydra.lib.lists.Foldl.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   5,
   (java.util.List<Integer>) (java.util.List.<Integer>of())));
 
@@ -1107,8 +1107,8 @@ public class ListsTest {
 
             hydra.lib.lists.Foldl.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   10,
   java.util.List.of(5)));
 
@@ -1124,8 +1124,8 @@ public class ListsTest {
 
             hydra.lib.lists.Foldl.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Sub.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   10,
   java.util.List.of(
     1,
@@ -1729,7 +1729,7 @@ public class ListsTest {
   "TWO"),
 
             hydra.lib.lists.Map.apply(
-  (hydra.lib.strings.ToUpper::apply),
+  hydra.lib.strings.ToUpper::apply,
   java.util.List.of(
     "one",
     "two")));
@@ -1745,7 +1745,7 @@ public class ListsTest {
             (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
 
             hydra.lib.lists.Map.apply(
-  (hydra.lib.strings.ToUpper::apply),
+  hydra.lib.strings.ToUpper::apply,
   (java.util.List<String>) (java.util.List.<String>of())));
 
     }
@@ -1759,7 +1759,7 @@ public class ListsTest {
             java.util.List.of("HELLO"),
 
             hydra.lib.lists.Map.apply(
-  (hydra.lib.strings.ToUpper::apply),
+  hydra.lib.strings.ToUpper::apply,
   java.util.List.of("hello")));
 
     }
@@ -1776,7 +1776,7 @@ public class ListsTest {
   -3),
 
             hydra.lib.lists.Map.apply(
-  (hydra.lib.math.Negate::apply),
+  hydra.lib.math.Negate::apply,
   java.util.List.of(
     1,
     2,
@@ -1796,7 +1796,7 @@ public class ListsTest {
   3),
 
             hydra.lib.lists.Map.apply(
-  (java.util.function.Function<Integer, Integer>) ((hydra.lib.equality.Identity::apply)),
+  (java.util.function.Function<Integer, Integer>) (hydra.lib.equality.Identity::apply),
   java.util.List.of(
     1,
     2,
@@ -1987,7 +1987,7 @@ public class ListsTest {
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     3)),
   java.util.List.of(
     1,
@@ -2012,7 +2012,7 @@ public class ListsTest {
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     10)),
   java.util.List.of(
     1,
@@ -2034,7 +2034,7 @@ public class ListsTest {
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     10)),
   java.util.List.of(
     1,
@@ -2058,7 +2058,7 @@ public class ListsTest {
   5)))),
 
             hydra.lib.lists.Partition.apply(
-  (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.math.Even.apply((x))),
+  (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.math.Even.apply(x)),
   java.util.List.of(
     1,
     2,
@@ -2079,7 +2079,7 @@ public class ListsTest {
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     5)),
   (java.util.List<Integer>) (java.util.List.<Integer>of())));
 
@@ -2533,7 +2533,7 @@ public class ListsTest {
   "world"),
 
             hydra.lib.lists.SortOn.apply(
-  (hydra.lib.strings.Length::apply),
+  hydra.lib.strings.Length::apply,
   java.util.List.of(
     "hello",
     "hi",
@@ -2550,7 +2550,7 @@ public class ListsTest {
             (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
 
             hydra.lib.lists.SortOn.apply(
-  (hydra.lib.strings.Length::apply),
+  hydra.lib.strings.Length::apply,
   (java.util.List<String>) (java.util.List.<String>of())));
 
     }
@@ -2564,7 +2564,7 @@ public class ListsTest {
             java.util.List.of("test"),
 
             hydra.lib.lists.SortOn.apply(
-  (hydra.lib.strings.Length::apply),
+  hydra.lib.strings.Length::apply,
   java.util.List.of("test")));
 
     }
@@ -2581,7 +2581,7 @@ public class ListsTest {
   1),
 
             hydra.lib.lists.SortOn.apply(
-  (hydra.lib.math.Negate::apply),
+  hydra.lib.math.Negate::apply,
   java.util.List.of(
     1,
     3,
@@ -2601,7 +2601,7 @@ public class ListsTest {
   -3),
 
             hydra.lib.lists.SortOn.apply(
-  (hydra.lib.math.Abs::apply),
+  hydra.lib.math.Abs::apply,
   java.util.List.of(
     -1,
     -3,
@@ -2626,7 +2626,7 @@ public class ListsTest {
 
             hydra.lib.lists.Span.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     3)),
   java.util.List.of(
     1,
@@ -2650,7 +2650,7 @@ public class ListsTest {
 
             hydra.lib.lists.Span.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     10)),
   java.util.List.of(
     1,
@@ -2672,7 +2672,7 @@ public class ListsTest {
 
             hydra.lib.lists.Span.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
-    (x),
+    x,
     10)),
   java.util.List.of(
     1,
@@ -2691,7 +2691,7 @@ public class ListsTest {
 
             hydra.lib.lists.Span.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
-    (x),
+    x,
     5)),
   (java.util.List<Integer>) (java.util.List.<Integer>of())));
 
@@ -3105,8 +3105,8 @@ public class ListsTest {
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   java.util.List.of(
     1,
     2,
@@ -3130,8 +3130,8 @@ public class ListsTest {
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   java.util.List.of(
     1,
     2),
@@ -3154,8 +3154,8 @@ public class ListsTest {
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   java.util.List.of(
     1,
     2,
@@ -3176,8 +3176,8 @@ public class ListsTest {
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   (java.util.List<Integer>) (java.util.List.<Integer>of()),
   java.util.List.of(
     1,
@@ -3196,8 +3196,8 @@ public class ListsTest {
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   java.util.List.of(
     1,
     2,
@@ -3218,8 +3218,8 @@ public class ListsTest {
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<String, java.util.function.Function<String, String>>) (p0 -> p1 -> hydra.lib.strings.Cat2.apply(
-    (p0),
-    (p1))),
+    p0,
+    p1)),
   java.util.List.of(
     "a",
     "b"),

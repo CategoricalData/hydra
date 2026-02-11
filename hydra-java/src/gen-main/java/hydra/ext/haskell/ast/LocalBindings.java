@@ -23,7 +23,7 @@ public class LocalBindings implements Serializable, Comparable<LocalBindings> {
     if (!(other instanceof LocalBindings)) {
       return false;
     }
-    LocalBindings o = (LocalBindings) (other);
+    LocalBindings o = (LocalBindings) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

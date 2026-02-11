@@ -92,79 +92,79 @@ public abstract class Term implements Serializable, Comparable<Term> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Term instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Annotated instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Application instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Either instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Function instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Let instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(List instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Literal instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Map instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Maybe instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Pair instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Record instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Set instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TypeApplication instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TypeLambda instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Union instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Unit instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Variable instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Wrap instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -183,7 +183,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Annotated)) {
         return false;
       }
-      Annotated o = (Annotated) (other);
+      Annotated o = (Annotated) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -197,12 +197,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Annotated o = (Annotated) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Annotated o = (Annotated) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -226,7 +226,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Application)) {
         return false;
       }
-      Application o = (Application) (other);
+      Application o = (Application) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -240,12 +240,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Application o = (Application) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Application o = (Application) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -269,7 +269,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Either)) {
         return false;
       }
-      Either o = (Either) (other);
+      Either o = (Either) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -283,11 +283,11 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Either o = (Either) (other);
+      Either o = (Either) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -314,7 +314,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Function)) {
         return false;
       }
-      Function o = (Function) (other);
+      Function o = (Function) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -328,12 +328,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Function o = (Function) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Function o = (Function) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -357,7 +357,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Let)) {
         return false;
       }
-      Let o = (Let) (other);
+      Let o = (Let) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -371,12 +371,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Let o = (Let) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Let o = (Let) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -400,7 +400,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof List)) {
         return false;
       }
-      List o = (List) (other);
+      List o = (List) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -414,11 +414,11 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      List o = (List) (other);
+      List o = (List) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -445,7 +445,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Literal)) {
         return false;
       }
-      Literal o = (Literal) (other);
+      Literal o = (Literal) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -459,12 +459,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Literal o = (Literal) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Literal o = (Literal) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -488,7 +488,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Map)) {
         return false;
       }
-      Map o = (Map) (other);
+      Map o = (Map) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -502,11 +502,11 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Map o = (Map) (other);
+      Map o = (Map) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -533,7 +533,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Maybe)) {
         return false;
       }
-      Maybe o = (Maybe) (other);
+      Maybe o = (Maybe) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -547,11 +547,11 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Maybe o = (Maybe) (other);
+      Maybe o = (Maybe) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -578,7 +578,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Pair)) {
         return false;
       }
-      Pair o = (Pair) (other);
+      Pair o = (Pair) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -592,11 +592,11 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Pair o = (Pair) (other);
+      Pair o = (Pair) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -623,7 +623,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Record)) {
         return false;
       }
-      Record o = (Record) (other);
+      Record o = (Record) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -637,12 +637,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Record o = (Record) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Record o = (Record) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -666,7 +666,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Set)) {
         return false;
       }
-      Set o = (Set) (other);
+      Set o = (Set) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -680,11 +680,11 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Set o = (Set) (other);
+      Set o = (Set) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -711,7 +711,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof TypeApplication)) {
         return false;
       }
-      TypeApplication o = (TypeApplication) (other);
+      TypeApplication o = (TypeApplication) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -725,12 +725,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TypeApplication o = (TypeApplication) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TypeApplication o = (TypeApplication) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -754,7 +754,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof TypeLambda)) {
         return false;
       }
-      TypeLambda o = (TypeLambda) (other);
+      TypeLambda o = (TypeLambda) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -768,12 +768,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TypeLambda o = (TypeLambda) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TypeLambda o = (TypeLambda) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -797,7 +797,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Union)) {
         return false;
       }
-      Union o = (Union) (other);
+      Union o = (Union) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -811,12 +811,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Union o = (Union) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Union o = (Union) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -838,7 +838,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Unit)) {
         return false;
       }
-      Unit o = (Unit) (other);
+      Unit o = (Unit) other;
       return true;
     }
     
@@ -850,7 +850,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -878,7 +878,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Variable)) {
         return false;
       }
-      Variable o = (Variable) (other);
+      Variable o = (Variable) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -892,12 +892,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Variable o = (Variable) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Variable o = (Variable) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -921,7 +921,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
       if (!(other instanceof Wrap)) {
         return false;
       }
-      Wrap o = (Wrap) (other);
+      Wrap o = (Wrap) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -935,12 +935,12 @@ public abstract class Term implements Serializable, Comparable<Term> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Term other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Wrap o = (Wrap) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Wrap o = (Wrap) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

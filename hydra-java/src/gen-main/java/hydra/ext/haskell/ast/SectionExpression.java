@@ -34,7 +34,7 @@ public class SectionExpression implements Serializable, Comparable<SectionExpres
     if (!(other instanceof SectionExpression)) {
       return false;
     }
-    SectionExpression o = (SectionExpression) (other);
+    SectionExpression o = (SectionExpression) other;
     return java.util.Objects.equals(
       this.operator,
       o.operator) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class SectionExpression implements Serializable, Comparable<SectionExpres
   @SuppressWarnings("unchecked")
   public int compareTo(SectionExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) (operator)).compareTo(other.operator);
+    cmp = ((Comparable) operator).compareTo(other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (expression)).compareTo(other.expression);
+    return ((Comparable) expression).compareTo(other.expression);
   }
   
   public SectionExpression withOperator(hydra.ext.haskell.ast.Operator operator) {

@@ -42,7 +42,7 @@ public class Module implements Serializable, Comparable<Module> {
     if (!(other instanceof Module)) {
       return false;
     }
-    Module o = (Module) (other);
+    Module o = (Module) other;
     return java.util.Objects.equals(
       this.head,
       o.head) && java.util.Objects.equals(

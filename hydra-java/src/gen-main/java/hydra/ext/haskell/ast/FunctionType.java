@@ -34,7 +34,7 @@ public class FunctionType implements Serializable, Comparable<FunctionType> {
     if (!(other instanceof FunctionType)) {
       return false;
     }
-    FunctionType o = (FunctionType) (other);
+    FunctionType o = (FunctionType) other;
     return java.util.Objects.equals(
       this.domain,
       o.domain) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class FunctionType implements Serializable, Comparable<FunctionType> {
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionType other) {
     int cmp = 0;
-    cmp = ((Comparable) (domain)).compareTo(other.domain);
+    cmp = ((Comparable) domain).compareTo(other.domain);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (codomain)).compareTo(other.codomain);
+    return ((Comparable) codomain).compareTo(other.codomain);
   }
   
   public FunctionType withDomain(hydra.ext.haskell.ast.Type domain) {

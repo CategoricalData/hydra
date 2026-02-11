@@ -28,15 +28,15 @@ public abstract class TermRewriter implements Serializable, Comparable<TermRewri
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TermRewriter instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(ReplaceFooWithBar instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(ReplaceInt32WithInt64 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -53,7 +53,7 @@ public abstract class TermRewriter implements Serializable, Comparable<TermRewri
       if (!(other instanceof ReplaceFooWithBar)) {
         return false;
       }
-      ReplaceFooWithBar o = (ReplaceFooWithBar) (other);
+      ReplaceFooWithBar o = (ReplaceFooWithBar) other;
       return true;
     }
     
@@ -65,7 +65,7 @@ public abstract class TermRewriter implements Serializable, Comparable<TermRewri
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermRewriter other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -91,7 +91,7 @@ public abstract class TermRewriter implements Serializable, Comparable<TermRewri
       if (!(other instanceof ReplaceInt32WithInt64)) {
         return false;
       }
-      ReplaceInt32WithInt64 o = (ReplaceInt32WithInt64) (other);
+      ReplaceInt32WithInt64 o = (ReplaceInt32WithInt64) other;
       return true;
     }
     
@@ -103,7 +103,7 @@ public abstract class TermRewriter implements Serializable, Comparable<TermRewri
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermRewriter other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

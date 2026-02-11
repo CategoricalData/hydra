@@ -34,7 +34,7 @@ public class ClassAssertion implements Serializable, Comparable<ClassAssertion> 
     if (!(other instanceof ClassAssertion)) {
       return false;
     }
-    ClassAssertion o = (ClassAssertion) (other);
+    ClassAssertion o = (ClassAssertion) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class ClassAssertion implements Serializable, Comparable<ClassAssertion> 
   @SuppressWarnings("unchecked")
   public int compareTo(ClassAssertion other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

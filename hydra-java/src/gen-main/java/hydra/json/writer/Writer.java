@@ -13,33 +13,33 @@ public interface Writer {
   static String jsonString(String s) {
     java.util.function.Function<Integer, String> escape = (java.util.function.Function<Integer, String>) (c -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
-        (c),
+        c,
         34),
       () -> "\\\"",
       () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
-          (c),
+          c,
           92),
         () -> "\\\\",
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
-            (c),
+            c,
             10),
           () -> "\\n",
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
-              (c),
+              c,
               13),
             () -> "\\r",
             () -> hydra.lib.logic.IfElse.lazy(
               hydra.lib.equality.Equal.apply(
-                (c),
+                c,
                 9),
               () -> "\\t",
-              () -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply((c)))))))));
+              () -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(c))))))));
     hydra.util.Lazy<String> escaped = new hydra.util.Lazy<>(() -> hydra.lib.strings.Cat.apply(hydra.lib.lists.Map.apply(
-      (escape),
-      hydra.lib.strings.ToList.apply((s)))));
+      escape,
+      hydra.lib.strings.ToList.apply(s))));
     return hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
         "\"",
@@ -48,8 +48,8 @@ public interface Writer {
   }
   
   static hydra.ast.Expr keyValueToExpr(hydra.util.Tuple.Tuple2<String, hydra.json.model.Value> pair) {
-    hydra.util.Lazy<String> key = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((pair)));
-    hydra.util.Lazy<hydra.json.model.Value> value = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((pair)));
+    hydra.util.Lazy<String> key = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
+    hydra.util.Lazy<hydra.json.model.Value> value = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
     return hydra.serialization.Serialization.ifx(
       hydra.json.writer.Writer.colonOp(),
       hydra.serialization.Serialization.cst(hydra.json.writer.Writer.jsonString(key.get())),
@@ -57,22 +57,22 @@ public interface Writer {
   }
   
   static String printJson(hydra.json.model.Value value) {
-    return hydra.serialization.Serialization.printExpr(hydra.json.writer.Writer.valueToExpr((value)));
+    return hydra.serialization.Serialization.printExpr(hydra.json.writer.Writer.valueToExpr(value));
   }
   
   static hydra.ast.Expr valueToExpr(hydra.json.model.Value value) {
-    return ((value)).accept(new hydra.json.model.Value.PartialVisitor<>() {
+    return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.json.model.Value.Array arr) {
         return hydra.serialization.Serialization.bracketListAdaptive(hydra.lib.lists.Map.apply(
-          (hydra.json.writer.Writer::valueToExpr),
-          ((arr)).value));
+          hydra.json.writer.Writer::valueToExpr,
+          (arr).value));
       }
       
       @Override
       public hydra.ast.Expr visit(hydra.json.model.Value.Boolean_ b) {
         return hydra.serialization.Serialization.cst(hydra.lib.logic.IfElse.lazy(
-          ((b)).value,
+          (b).value,
           () -> "true",
           () -> "false"));
       }
@@ -84,25 +84,25 @@ public interface Writer {
       
       @Override
       public hydra.ast.Expr visit(hydra.json.model.Value.Number_ n) {
-        java.math.BigInteger rounded = hydra.lib.literals.BigfloatToBigint.apply(((n)).value);
+        java.math.BigInteger rounded = hydra.lib.literals.BigfloatToBigint.apply((n).value);
         return hydra.serialization.Serialization.cst(hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
-            ((n)).value,
-            hydra.lib.literals.BigintToBigfloat.apply((rounded))),
-          () -> hydra.lib.literals.ShowBigint.apply((rounded)),
-          () -> hydra.lib.literals.ShowBigfloat.apply(((n)).value)));
+            (n).value,
+            hydra.lib.literals.BigintToBigfloat.apply(rounded)),
+          () -> hydra.lib.literals.ShowBigint.apply(rounded),
+          () -> hydra.lib.literals.ShowBigfloat.apply((n).value)));
       }
       
       @Override
       public hydra.ast.Expr visit(hydra.json.model.Value.Object_ obj) {
         return hydra.serialization.Serialization.bracesListAdaptive(hydra.lib.lists.Map.apply(
-          (hydra.json.writer.Writer::keyValueToExpr),
-          hydra.lib.maps.ToList.apply(((obj)).value)));
+          hydra.json.writer.Writer::keyValueToExpr,
+          hydra.lib.maps.ToList.apply((obj).value)));
       }
       
       @Override
       public hydra.ast.Expr visit(hydra.json.model.Value.String_ s) {
-        return hydra.serialization.Serialization.cst(hydra.json.writer.Writer.jsonString(((s)).value));
+        return hydra.serialization.Serialization.cst(hydra.json.writer.Writer.jsonString((s).value));
       }
     });
   }

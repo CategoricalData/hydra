@@ -42,7 +42,7 @@ public class ImportExportSpec implements Serializable, Comparable<ImportExportSp
     if (!(other instanceof ImportExportSpec)) {
       return false;
     }
-    ImportExportSpec o = (ImportExportSpec) (other);
+    ImportExportSpec o = (ImportExportSpec) other;
     return java.util.Objects.equals(
       this.modifier,
       o.modifier) && java.util.Objects.equals(
@@ -67,7 +67,7 @@ public class ImportExportSpec implements Serializable, Comparable<ImportExportSp
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

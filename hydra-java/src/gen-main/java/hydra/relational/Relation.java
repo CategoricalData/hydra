@@ -23,7 +23,7 @@ public class Relation<V> implements Serializable, Comparable<Relation<V>> {
     if (!(other instanceof Relation)) {
       return false;
     }
-    Relation o = (Relation) (other);
+    Relation o = (Relation) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

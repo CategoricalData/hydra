@@ -23,7 +23,7 @@ public class TermSubst implements Serializable, Comparable<TermSubst> {
     if (!(other instanceof TermSubst)) {
       return false;
     }
-    TermSubst o = (TermSubst) (other);
+    TermSubst o = (TermSubst) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

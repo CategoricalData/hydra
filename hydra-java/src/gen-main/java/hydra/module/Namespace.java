@@ -23,7 +23,7 @@ public class Namespace implements Serializable, Comparable<Namespace> {
     if (!(other instanceof Namespace)) {
       return false;
     }
-    Namespace o = (Namespace) (other);
+    Namespace o = (Namespace) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Namespace implements Serializable, Comparable<Namespace> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Namespace other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

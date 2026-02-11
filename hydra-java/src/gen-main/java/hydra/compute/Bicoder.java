@@ -34,7 +34,7 @@ public class Bicoder<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable
     if (!(other instanceof Bicoder)) {
       return false;
     }
-    Bicoder o = (Bicoder) (other);
+    Bicoder o = (Bicoder) other;
     return java.util.Objects.equals(
       this.encode,
       o.encode) && java.util.Objects.equals(

@@ -42,7 +42,7 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
     if (!(other instanceof AdapterContext)) {
       return false;
     }
-    AdapterContext o = (AdapterContext) (other);
+    AdapterContext o = (AdapterContext) other;
     return java.util.Objects.equals(
       this.graph,
       o.graph) && java.util.Objects.equals(
@@ -61,11 +61,11 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
   @SuppressWarnings("unchecked")
   public int compareTo(AdapterContext other) {
     int cmp = 0;
-    cmp = ((Comparable) (graph)).compareTo(other.graph);
+    cmp = ((Comparable) graph).compareTo(other.graph);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (language)).compareTo(other.language);
+    cmp = ((Comparable) language).compareTo(other.language);
     if (cmp != 0) {
       return cmp;
     }

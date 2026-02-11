@@ -23,7 +23,7 @@ public class FileExtension implements Serializable, Comparable<FileExtension> {
     if (!(other instanceof FileExtension)) {
       return false;
     }
-    FileExtension o = (FileExtension) (other);
+    FileExtension o = (FileExtension) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class FileExtension implements Serializable, Comparable<FileExtension> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(FileExtension other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

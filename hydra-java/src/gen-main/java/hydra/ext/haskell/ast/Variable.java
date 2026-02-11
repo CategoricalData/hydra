@@ -23,7 +23,7 @@ public class Variable implements Serializable, Comparable<Variable> {
     if (!(other instanceof Variable)) {
       return false;
     }
-    Variable o = (Variable) (other);
+    Variable o = (Variable) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Variable implements Serializable, Comparable<Variable> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Variable other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

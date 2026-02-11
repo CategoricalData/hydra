@@ -36,23 +36,23 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Declaration instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Data instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Type instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(ValueBinding instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(TypedBinding instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -71,7 +71,7 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
       if (!(other instanceof Data)) {
         return false;
       }
-      Data o = (Data) (other);
+      Data o = (Data) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -85,12 +85,12 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Declaration other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Data o = (Data) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Data o = (Data) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -114,7 +114,7 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
       if (!(other instanceof Type)) {
         return false;
       }
-      Type o = (Type) (other);
+      Type o = (Type) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -128,12 +128,12 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Declaration other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Type o = (Type) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Type o = (Type) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -157,7 +157,7 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
       if (!(other instanceof ValueBinding)) {
         return false;
       }
-      ValueBinding o = (ValueBinding) (other);
+      ValueBinding o = (ValueBinding) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -171,12 +171,12 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Declaration other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      ValueBinding o = (ValueBinding) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      ValueBinding o = (ValueBinding) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -200,7 +200,7 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
       if (!(other instanceof TypedBinding)) {
         return false;
       }
-      TypedBinding o = (TypedBinding) (other);
+      TypedBinding o = (TypedBinding) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -214,12 +214,12 @@ public abstract class Declaration implements Serializable, Comparable<Declaratio
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Declaration other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      TypedBinding o = (TypedBinding) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      TypedBinding o = (TypedBinding) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

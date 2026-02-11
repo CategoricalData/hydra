@@ -42,7 +42,7 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
     if (!(other instanceof ModuleHead)) {
       return false;
     }
-    ModuleHead o = (ModuleHead) (other);
+    ModuleHead o = (ModuleHead) other;
     return java.util.Objects.equals(
       this.comments,
       o.comments) && java.util.Objects.equals(
@@ -67,7 +67,7 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

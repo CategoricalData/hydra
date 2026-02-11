@@ -34,7 +34,7 @@ public class TBinding<A> implements Serializable, Comparable<TBinding<A>> {
     if (!(other instanceof TBinding)) {
       return false;
     }
-    TBinding o = (TBinding) (other);
+    TBinding o = (TBinding) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TBinding<A> implements Serializable, Comparable<TBinding<A>> {
   @SuppressWarnings("unchecked")
   public int compareTo(TBinding other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (term)).compareTo(other.term);
+    return ((Comparable) term).compareTo(other.term);
   }
   
   public TBinding withName(hydra.core.Name name) {

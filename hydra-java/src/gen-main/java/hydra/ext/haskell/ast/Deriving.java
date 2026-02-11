@@ -23,7 +23,7 @@ public class Deriving implements Serializable, Comparable<Deriving> {
     if (!(other instanceof Deriving)) {
       return false;
     }
-    Deriving o = (Deriving) (other);
+    Deriving o = (Deriving) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

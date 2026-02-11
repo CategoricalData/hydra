@@ -50,7 +50,7 @@ public class InferenceResult implements Serializable, Comparable<InferenceResult
     if (!(other instanceof InferenceResult)) {
       return false;
     }
-    InferenceResult o = (InferenceResult) (other);
+    InferenceResult o = (InferenceResult) other;
     return java.util.Objects.equals(
       this.term,
       o.term) && java.util.Objects.equals(
@@ -71,15 +71,15 @@ public class InferenceResult implements Serializable, Comparable<InferenceResult
   @SuppressWarnings("unchecked")
   public int compareTo(InferenceResult other) {
     int cmp = 0;
-    cmp = ((Comparable) (term)).compareTo(other.term);
+    cmp = ((Comparable) term).compareTo(other.term);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (type)).compareTo(other.type);
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (subst)).compareTo(other.subst);
+    cmp = ((Comparable) subst).compareTo(other.subst);
     if (cmp != 0) {
       return cmp;
     }

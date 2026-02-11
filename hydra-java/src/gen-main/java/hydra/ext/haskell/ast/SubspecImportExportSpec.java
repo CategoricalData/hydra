@@ -28,15 +28,15 @@ public abstract class SubspecImportExportSpec implements Serializable, Comparabl
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(SubspecImportExportSpec instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(All instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(List instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -53,7 +53,7 @@ public abstract class SubspecImportExportSpec implements Serializable, Comparabl
       if (!(other instanceof All)) {
         return false;
       }
-      All o = (All) (other);
+      All o = (All) other;
       return true;
     }
     
@@ -65,7 +65,7 @@ public abstract class SubspecImportExportSpec implements Serializable, Comparabl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SubspecImportExportSpec other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -93,7 +93,7 @@ public abstract class SubspecImportExportSpec implements Serializable, Comparabl
       if (!(other instanceof List)) {
         return false;
       }
-      List o = (List) (other);
+      List o = (List) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -107,11 +107,11 @@ public abstract class SubspecImportExportSpec implements Serializable, Comparabl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(SubspecImportExportSpec other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      List o = (List) (other);
+      List o = (List) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());

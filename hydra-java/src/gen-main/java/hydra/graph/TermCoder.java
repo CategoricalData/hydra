@@ -34,7 +34,7 @@ public class TermCoder<A> implements Serializable, Comparable<TermCoder<A>> {
     if (!(other instanceof TermCoder)) {
       return false;
     }
-    TermCoder o = (TermCoder) (other);
+    TermCoder o = (TermCoder) other;
     return java.util.Objects.equals(
       this.type,
       o.type) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TermCoder<A> implements Serializable, Comparable<TermCoder<A>> {
   @SuppressWarnings("unchecked")
   public int compareTo(TermCoder other) {
     int cmp = 0;
-    cmp = ((Comparable) (type)).compareTo(other.type);
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (coder)).compareTo(other.coder);
+    return ((Comparable) coder).compareTo(other.coder);
   }
   
   public TermCoder withType(hydra.core.Type type) {

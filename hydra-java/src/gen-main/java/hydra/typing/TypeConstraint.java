@@ -42,7 +42,7 @@ public class TypeConstraint implements Serializable, Comparable<TypeConstraint> 
     if (!(other instanceof TypeConstraint)) {
       return false;
     }
-    TypeConstraint o = (TypeConstraint) (other);
+    TypeConstraint o = (TypeConstraint) other;
     return java.util.Objects.equals(
       this.left,
       o.left) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class TypeConstraint implements Serializable, Comparable<TypeConstraint> 
   @SuppressWarnings("unchecked")
   public int compareTo(TypeConstraint other) {
     int cmp = 0;
-    cmp = ((Comparable) (left)).compareTo(other.left);
+    cmp = ((Comparable) left).compareTo(other.left);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (right)).compareTo(other.right);
+    cmp = ((Comparable) right).compareTo(other.right);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (comment)).compareTo(other.comment);
+    return ((Comparable) comment).compareTo(other.comment);
   }
   
   public TypeConstraint withLeft(hydra.core.Type left) {

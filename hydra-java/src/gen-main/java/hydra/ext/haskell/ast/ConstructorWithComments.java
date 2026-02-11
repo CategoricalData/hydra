@@ -34,7 +34,7 @@ public class ConstructorWithComments implements Serializable, Comparable<Constru
     if (!(other instanceof ConstructorWithComments)) {
       return false;
     }
-    ConstructorWithComments o = (ConstructorWithComments) (other);
+    ConstructorWithComments o = (ConstructorWithComments) other;
     return java.util.Objects.equals(
       this.body,
       o.body) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class ConstructorWithComments implements Serializable, Comparable<Constru
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorWithComments other) {
     int cmp = 0;
-    cmp = ((Comparable) (body)).compareTo(other.body);
+    cmp = ((Comparable) body).compareTo(other.body);
     if (cmp != 0) {
       return cmp;
     }

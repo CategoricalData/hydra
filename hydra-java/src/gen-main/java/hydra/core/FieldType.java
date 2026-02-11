@@ -34,7 +34,7 @@ public class FieldType implements Serializable, Comparable<FieldType> {
     if (!(other instanceof FieldType)) {
       return false;
     }
-    FieldType o = (FieldType) (other);
+    FieldType o = (FieldType) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class FieldType implements Serializable, Comparable<FieldType> {
   @SuppressWarnings("unchecked")
   public int compareTo(FieldType other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public FieldType withName(hydra.core.Name name) {

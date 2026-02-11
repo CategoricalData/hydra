@@ -22,7 +22,7 @@ import Hydra.Ext.Staging.Scala.Language (scalaLanguage)
 import Hydra.Ext.Staging.Cpp.Coder
 import Hydra.Ext.Staging.Graphql.Coder
 import Hydra.Ext.Staging.Graphql.Language (graphqlLanguage)
-import Hydra.Ext.Staging.Java.Coder
+import Hydra.Ext.Java.Coder (moduleToJava)
 import Hydra.Ext.Staging.Json.Schema.Coder
 import Hydra.Ext.Staging.Pegasus.Coder
 import Hydra.Ext.Staging.Protobuf.Coder

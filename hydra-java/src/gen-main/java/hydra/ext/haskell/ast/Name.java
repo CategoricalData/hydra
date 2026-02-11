@@ -32,19 +32,19 @@ public abstract class Name implements Serializable, Comparable<Name> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Name instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Implicit instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Normal instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Parens instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -63,7 +63,7 @@ public abstract class Name implements Serializable, Comparable<Name> {
       if (!(other instanceof Implicit)) {
         return false;
       }
-      Implicit o = (Implicit) (other);
+      Implicit o = (Implicit) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -77,12 +77,12 @@ public abstract class Name implements Serializable, Comparable<Name> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Name other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Implicit o = (Implicit) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Implicit o = (Implicit) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -106,7 +106,7 @@ public abstract class Name implements Serializable, Comparable<Name> {
       if (!(other instanceof Normal)) {
         return false;
       }
-      Normal o = (Normal) (other);
+      Normal o = (Normal) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -120,12 +120,12 @@ public abstract class Name implements Serializable, Comparable<Name> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Name other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Normal o = (Normal) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Normal o = (Normal) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -149,7 +149,7 @@ public abstract class Name implements Serializable, Comparable<Name> {
       if (!(other instanceof Parens)) {
         return false;
       }
-      Parens o = (Parens) (other);
+      Parens o = (Parens) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -163,12 +163,12 @@ public abstract class Name implements Serializable, Comparable<Name> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Name other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Parens o = (Parens) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Parens o = (Parens) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -32,19 +32,19 @@ public abstract class Step implements Serializable, Comparable<Step> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Step instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Edge instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Project instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Compare instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -63,7 +63,7 @@ public abstract class Step implements Serializable, Comparable<Step> {
       if (!(other instanceof Edge)) {
         return false;
       }
-      Edge o = (Edge) (other);
+      Edge o = (Edge) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -77,12 +77,12 @@ public abstract class Step implements Serializable, Comparable<Step> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Step other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Edge o = (Edge) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Edge o = (Edge) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -106,7 +106,7 @@ public abstract class Step implements Serializable, Comparable<Step> {
       if (!(other instanceof Project)) {
         return false;
       }
-      Project o = (Project) (other);
+      Project o = (Project) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -120,12 +120,12 @@ public abstract class Step implements Serializable, Comparable<Step> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Step other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Project o = (Project) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Project o = (Project) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -149,7 +149,7 @@ public abstract class Step implements Serializable, Comparable<Step> {
       if (!(other instanceof Compare)) {
         return false;
       }
-      Compare o = (Compare) (other);
+      Compare o = (Compare) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -163,12 +163,12 @@ public abstract class Step implements Serializable, Comparable<Step> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Step other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Compare o = (Compare) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Compare o = (Compare) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

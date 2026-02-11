@@ -34,7 +34,7 @@ public class EitherType implements Serializable, Comparable<EitherType> {
     if (!(other instanceof EitherType)) {
       return false;
     }
-    EitherType o = (EitherType) (other);
+    EitherType o = (EitherType) other;
     return java.util.Objects.equals(
       this.left,
       o.left) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class EitherType implements Serializable, Comparable<EitherType> {
   @SuppressWarnings("unchecked")
   public int compareTo(EitherType other) {
     int cmp = 0;
-    cmp = ((Comparable) (left)).compareTo(other.left);
+    cmp = ((Comparable) left).compareTo(other.left);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (right)).compareTo(other.right);
+    return ((Comparable) right).compareTo(other.right);
   }
   
   public EitherType withLeft(hydra.core.Type left) {

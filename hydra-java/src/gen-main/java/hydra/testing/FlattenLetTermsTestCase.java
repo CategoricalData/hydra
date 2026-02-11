@@ -34,7 +34,7 @@ public class FlattenLetTermsTestCase implements Serializable, Comparable<Flatten
     if (!(other instanceof FlattenLetTermsTestCase)) {
       return false;
     }
-    FlattenLetTermsTestCase o = (FlattenLetTermsTestCase) (other);
+    FlattenLetTermsTestCase o = (FlattenLetTermsTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class FlattenLetTermsTestCase implements Serializable, Comparable<Flatten
   @SuppressWarnings("unchecked")
   public int compareTo(FlattenLetTermsTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public FlattenLetTermsTestCase withInput(hydra.core.Term input) {

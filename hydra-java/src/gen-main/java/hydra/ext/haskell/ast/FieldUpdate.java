@@ -34,7 +34,7 @@ public class FieldUpdate implements Serializable, Comparable<FieldUpdate> {
     if (!(other instanceof FieldUpdate)) {
       return false;
     }
-    FieldUpdate o = (FieldUpdate) (other);
+    FieldUpdate o = (FieldUpdate) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class FieldUpdate implements Serializable, Comparable<FieldUpdate> {
   @SuppressWarnings("unchecked")
   public int compareTo(FieldUpdate other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
   
   public FieldUpdate withName(hydra.ext.haskell.ast.Name name) {

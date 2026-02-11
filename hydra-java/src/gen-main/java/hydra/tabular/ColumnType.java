@@ -28,7 +28,7 @@ public class ColumnType implements Serializable, Comparable<ColumnType> {
     if (!(other instanceof ColumnType)) {
       return false;
     }
-    ColumnType o = (ColumnType) (other);
+    ColumnType o = (ColumnType) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -45,11 +45,11 @@ public class ColumnType implements Serializable, Comparable<ColumnType> {
   @SuppressWarnings("unchecked")
   public int compareTo(ColumnType other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (type)).compareTo(other.type);
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public ColumnType withName(hydra.relational.ColumnName name) {

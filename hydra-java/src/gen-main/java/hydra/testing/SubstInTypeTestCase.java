@@ -42,7 +42,7 @@ public class SubstInTypeTestCase implements Serializable, Comparable<SubstInType
     if (!(other instanceof SubstInTypeTestCase)) {
       return false;
     }
-    SubstInTypeTestCase o = (SubstInTypeTestCase) (other);
+    SubstInTypeTestCase o = (SubstInTypeTestCase) other;
     return java.util.Objects.equals(
       this.substitution,
       o.substitution) && java.util.Objects.equals(
@@ -67,11 +67,11 @@ public class SubstInTypeTestCase implements Serializable, Comparable<SubstInType
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public SubstInTypeTestCase withSubstitution(java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>> substitution) {

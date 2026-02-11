@@ -34,7 +34,7 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
     if (!(other instanceof CaseExpression)) {
       return false;
     }
-    CaseExpression o = (CaseExpression) (other);
+    CaseExpression o = (CaseExpression) other;
     return java.util.Objects.equals(
       this.case_,
       o.case_) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
   @SuppressWarnings("unchecked")
   public int compareTo(CaseExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) (case_)).compareTo(other.case_);
+    cmp = ((Comparable) case_).compareTo(other.case_);
     if (cmp != 0) {
       return cmp;
     }

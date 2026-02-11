@@ -34,7 +34,7 @@ public class Let implements Serializable, Comparable<Let> {
     if (!(other instanceof Let)) {
       return false;
     }
-    Let o = (Let) (other);
+    Let o = (Let) other;
     return java.util.Objects.equals(
       this.bindings,
       o.bindings) && java.util.Objects.equals(
@@ -57,7 +57,7 @@ public class Let implements Serializable, Comparable<Let> {
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (body)).compareTo(other.body);
+    return ((Comparable) body).compareTo(other.body);
   }
   
   public Let withBindings(java.util.List<hydra.core.Binding> bindings) {

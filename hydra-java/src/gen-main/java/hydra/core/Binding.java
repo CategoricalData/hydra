@@ -42,7 +42,7 @@ public class Binding implements Serializable, Comparable<Binding> {
     if (!(other instanceof Binding)) {
       return false;
     }
-    Binding o = (Binding) (other);
+    Binding o = (Binding) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -61,11 +61,11 @@ public class Binding implements Serializable, Comparable<Binding> {
   @SuppressWarnings("unchecked")
   public int compareTo(Binding other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (term)).compareTo(other.term);
+    cmp = ((Comparable) term).compareTo(other.term);
     if (cmp != 0) {
       return cmp;
     }

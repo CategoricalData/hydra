@@ -42,7 +42,7 @@ public class Alternative implements Serializable, Comparable<Alternative> {
     if (!(other instanceof Alternative)) {
       return false;
     }
-    Alternative o = (Alternative) (other);
+    Alternative o = (Alternative) other;
     return java.util.Objects.equals(
       this.pattern,
       o.pattern) && java.util.Objects.equals(
@@ -61,11 +61,11 @@ public class Alternative implements Serializable, Comparable<Alternative> {
   @SuppressWarnings("unchecked")
   public int compareTo(Alternative other) {
     int cmp = 0;
-    cmp = ((Comparable) (pattern)).compareTo(other.pattern);
+    cmp = ((Comparable) pattern).compareTo(other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (rhs)).compareTo(other.rhs);
+    cmp = ((Comparable) rhs).compareTo(other.rhs);
     if (cmp != 0) {
       return cmp;
     }

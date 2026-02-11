@@ -42,7 +42,7 @@ public class HoistSubtermsTestCase implements Serializable, Comparable<HoistSubt
     if (!(other instanceof HoistSubtermsTestCase)) {
       return false;
     }
-    HoistSubtermsTestCase o = (HoistSubtermsTestCase) (other);
+    HoistSubtermsTestCase o = (HoistSubtermsTestCase) other;
     return java.util.Objects.equals(
       this.predicate,
       o.predicate) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class HoistSubtermsTestCase implements Serializable, Comparable<HoistSubt
   @SuppressWarnings("unchecked")
   public int compareTo(HoistSubtermsTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (predicate)).compareTo(other.predicate);
+    cmp = ((Comparable) predicate).compareTo(other.predicate);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public HoistSubtermsTestCase withPredicate(hydra.testing.HoistPredicate predicate) {

@@ -34,7 +34,7 @@ public class Padding implements Serializable, Comparable<Padding> {
     if (!(other instanceof Padding)) {
       return false;
     }
-    Padding o = (Padding) (other);
+    Padding o = (Padding) other;
     return java.util.Objects.equals(
       this.left,
       o.left) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class Padding implements Serializable, Comparable<Padding> {
   @SuppressWarnings("unchecked")
   public int compareTo(Padding other) {
     int cmp = 0;
-    cmp = ((Comparable) (left)).compareTo(other.left);
+    cmp = ((Comparable) left).compareTo(other.left);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (right)).compareTo(other.right);
+    return ((Comparable) right).compareTo(other.right);
   }
   
   public Padding withLeft(hydra.ast.Ws left) {

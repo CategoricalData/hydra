@@ -34,7 +34,7 @@ public class FreeVariablesTestCase implements Serializable, Comparable<FreeVaria
     if (!(other instanceof FreeVariablesTestCase)) {
       return false;
     }
-    FreeVariablesTestCase o = (FreeVariablesTestCase) (other);
+    FreeVariablesTestCase o = (FreeVariablesTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class FreeVariablesTestCase implements Serializable, Comparable<FreeVaria
   @SuppressWarnings("unchecked")
   public int compareTo(FreeVariablesTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }

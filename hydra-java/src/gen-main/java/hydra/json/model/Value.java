@@ -44,31 +44,31 @@ public abstract class Value implements Serializable, Comparable<Value> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Value instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Array instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Boolean_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Null instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Number_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Object_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(String_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -87,7 +87,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
       if (!(other instanceof Array)) {
         return false;
       }
-      Array o = (Array) (other);
+      Array o = (Array) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -101,11 +101,11 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Array o = (Array) (other);
+      Array o = (Array) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -132,7 +132,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
       if (!(other instanceof Boolean_)) {
         return false;
       }
-      Boolean_ o = (Boolean_) (other);
+      Boolean_ o = (Boolean_) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -146,12 +146,12 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Boolean_ o = (Boolean_) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Boolean_ o = (Boolean_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -173,7 +173,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
       if (!(other instanceof Null)) {
         return false;
       }
-      Null o = (Null) (other);
+      Null o = (Null) other;
       return true;
     }
     
@@ -185,7 +185,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -213,7 +213,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
       if (!(other instanceof Number_)) {
         return false;
       }
-      Number_ o = (Number_) (other);
+      Number_ o = (Number_) other;
       return this.value.compareTo(o.value) == 0;
     }
     
@@ -225,12 +225,12 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Number_ o = (Number_) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Number_ o = (Number_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -254,7 +254,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
       if (!(other instanceof Object_)) {
         return false;
       }
-      Object_ o = (Object_) (other);
+      Object_ o = (Object_) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -268,11 +268,11 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Object_ o = (Object_) (other);
+      Object_ o = (Object_) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -299,7 +299,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
       if (!(other instanceof String_)) {
         return false;
       }
-      String_ o = (String_) (other);
+      String_ o = (String_) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -313,12 +313,12 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      String_ o = (String_) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      String_ o = (String_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -50,7 +50,7 @@ public class UnifyTypesTestCase implements Serializable, Comparable<UnifyTypesTe
     if (!(other instanceof UnifyTypesTestCase)) {
       return false;
     }
-    UnifyTypesTestCase o = (UnifyTypesTestCase) (other);
+    UnifyTypesTestCase o = (UnifyTypesTestCase) other;
     return java.util.Objects.equals(
       this.schemaTypes,
       o.schemaTypes) && java.util.Objects.equals(
@@ -77,11 +77,11 @@ public class UnifyTypesTestCase implements Serializable, Comparable<UnifyTypesTe
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (left)).compareTo(other.left);
+    cmp = ((Comparable) left).compareTo(other.left);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (right)).compareTo(other.right);
+    cmp = ((Comparable) right).compareTo(other.right);
     if (cmp != 0) {
       return cmp;
     }

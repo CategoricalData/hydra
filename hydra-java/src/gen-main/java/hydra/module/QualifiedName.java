@@ -34,7 +34,7 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
     if (!(other instanceof QualifiedName)) {
       return false;
     }
-    QualifiedName o = (QualifiedName) (other);
+    QualifiedName o = (QualifiedName) other;
     return java.util.Objects.equals(
       this.namespace,
       o.namespace) && java.util.Objects.equals(
@@ -57,7 +57,7 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (local)).compareTo(other.local);
+    return ((Comparable) local).compareTo(other.local);
   }
   
   public QualifiedName withNamespace(hydra.util.Maybe<hydra.module.Namespace> namespace) {

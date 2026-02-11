@@ -34,7 +34,7 @@ public class WriterTestCase<A> implements Serializable, Comparable<WriterTestCas
     if (!(other instanceof WriterTestCase)) {
       return false;
     }
-    WriterTestCase o = (WriterTestCase) (other);
+    WriterTestCase o = (WriterTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class WriterTestCase<A> implements Serializable, Comparable<WriterTestCas
   @SuppressWarnings("unchecked")
   public int compareTo(WriterTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public WriterTestCase withInput(A input) {

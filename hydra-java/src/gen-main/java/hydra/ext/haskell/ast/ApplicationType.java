@@ -34,7 +34,7 @@ public class ApplicationType implements Serializable, Comparable<ApplicationType
     if (!(other instanceof ApplicationType)) {
       return false;
     }
-    ApplicationType o = (ApplicationType) (other);
+    ApplicationType o = (ApplicationType) other;
     return java.util.Objects.equals(
       this.context,
       o.context) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class ApplicationType implements Serializable, Comparable<ApplicationType
   @SuppressWarnings("unchecked")
   public int compareTo(ApplicationType other) {
     int cmp = 0;
-    cmp = ((Comparable) (context)).compareTo(other.context);
+    cmp = ((Comparable) context).compareTo(other.context);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (argument)).compareTo(other.argument);
+    return ((Comparable) argument).compareTo(other.argument);
   }
   
   public ApplicationType withContext(hydra.ext.haskell.ast.Type context) {

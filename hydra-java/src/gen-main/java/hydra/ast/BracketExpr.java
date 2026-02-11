@@ -42,7 +42,7 @@ public class BracketExpr implements Serializable, Comparable<BracketExpr> {
     if (!(other instanceof BracketExpr)) {
       return false;
     }
-    BracketExpr o = (BracketExpr) (other);
+    BracketExpr o = (BracketExpr) other;
     return java.util.Objects.equals(
       this.brackets,
       o.brackets) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class BracketExpr implements Serializable, Comparable<BracketExpr> {
   @SuppressWarnings("unchecked")
   public int compareTo(BracketExpr other) {
     int cmp = 0;
-    cmp = ((Comparable) (brackets)).compareTo(other.brackets);
+    cmp = ((Comparable) brackets).compareTo(other.brackets);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (enclosed)).compareTo(other.enclosed);
+    cmp = ((Comparable) enclosed).compareTo(other.enclosed);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (style)).compareTo(other.style);
+    return ((Comparable) style).compareTo(other.style);
   }
   
   public BracketExpr withBrackets(hydra.ast.Brackets brackets) {

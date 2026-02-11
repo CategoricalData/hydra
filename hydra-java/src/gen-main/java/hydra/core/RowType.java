@@ -34,7 +34,7 @@ public class RowType implements Serializable, Comparable<RowType> {
     if (!(other instanceof RowType)) {
       return false;
     }
-    RowType o = (RowType) (other);
+    RowType o = (RowType) other;
     return java.util.Objects.equals(
       this.typeName,
       o.typeName) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class RowType implements Serializable, Comparable<RowType> {
   @SuppressWarnings("unchecked")
   public int compareTo(RowType other) {
     int cmp = 0;
-    cmp = ((Comparable) (typeName)).compareTo(other.typeName);
+    cmp = ((Comparable) typeName).compareTo(other.typeName);
     if (cmp != 0) {
       return cmp;
     }

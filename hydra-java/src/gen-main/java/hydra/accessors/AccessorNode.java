@@ -42,7 +42,7 @@ public class AccessorNode implements Serializable, Comparable<AccessorNode> {
     if (!(other instanceof AccessorNode)) {
       return false;
     }
-    AccessorNode o = (AccessorNode) (other);
+    AccessorNode o = (AccessorNode) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class AccessorNode implements Serializable, Comparable<AccessorNode> {
   @SuppressWarnings("unchecked")
   public int compareTo(AccessorNode other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (label)).compareTo(other.label);
+    cmp = ((Comparable) label).compareTo(other.label);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (id)).compareTo(other.id);
+    return ((Comparable) id).compareTo(other.id);
   }
   
   public AccessorNode withName(hydra.core.Name name) {

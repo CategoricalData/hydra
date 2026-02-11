@@ -34,7 +34,7 @@ public class OrdinaryConstructor implements Serializable, Comparable<OrdinaryCon
     if (!(other instanceof OrdinaryConstructor)) {
       return false;
     }
-    OrdinaryConstructor o = (OrdinaryConstructor) (other);
+    OrdinaryConstructor o = (OrdinaryConstructor) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class OrdinaryConstructor implements Serializable, Comparable<OrdinaryCon
   @SuppressWarnings("unchecked")
   public int compareTo(OrdinaryConstructor other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

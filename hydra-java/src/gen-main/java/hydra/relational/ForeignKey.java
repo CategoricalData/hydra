@@ -34,7 +34,7 @@ public class ForeignKey implements Serializable, Comparable<ForeignKey> {
     if (!(other instanceof ForeignKey)) {
       return false;
     }
-    ForeignKey o = (ForeignKey) (other);
+    ForeignKey o = (ForeignKey) other;
     return java.util.Objects.equals(
       this.foreignRelation,
       o.foreignRelation) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class ForeignKey implements Serializable, Comparable<ForeignKey> {
   @SuppressWarnings("unchecked")
   public int compareTo(ForeignKey other) {
     int cmp = 0;
-    cmp = ((Comparable) (foreignRelation)).compareTo(other.foreignRelation);
+    cmp = ((Comparable) foreignRelation).compareTo(other.foreignRelation);
     if (cmp != 0) {
       return cmp;
     }

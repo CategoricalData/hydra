@@ -28,15 +28,15 @@ public abstract class LocalBinding implements Serializable, Comparable<LocalBind
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(LocalBinding instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Signature instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Value instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -55,7 +55,7 @@ public abstract class LocalBinding implements Serializable, Comparable<LocalBind
       if (!(other instanceof Signature)) {
         return false;
       }
-      Signature o = (Signature) (other);
+      Signature o = (Signature) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -69,12 +69,12 @@ public abstract class LocalBinding implements Serializable, Comparable<LocalBind
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LocalBinding other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Signature o = (Signature) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Signature o = (Signature) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -98,7 +98,7 @@ public abstract class LocalBinding implements Serializable, Comparable<LocalBind
       if (!(other instanceof Value)) {
         return false;
       }
-      Value o = (Value) (other);
+      Value o = (Value) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -112,12 +112,12 @@ public abstract class LocalBinding implements Serializable, Comparable<LocalBind
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LocalBinding other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Value o = (Value) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Value o = (Value) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

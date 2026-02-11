@@ -34,7 +34,7 @@ public class PathEquation implements Serializable, Comparable<PathEquation> {
     if (!(other instanceof PathEquation)) {
       return false;
     }
-    PathEquation o = (PathEquation) (other);
+    PathEquation o = (PathEquation) other;
     return java.util.Objects.equals(
       this.left,
       o.left) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class PathEquation implements Serializable, Comparable<PathEquation> {
   @SuppressWarnings("unchecked")
   public int compareTo(PathEquation other) {
     int cmp = 0;
-    cmp = ((Comparable) (left)).compareTo(other.left);
+    cmp = ((Comparable) left).compareTo(other.left);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (right)).compareTo(other.right);
+    return ((Comparable) right).compareTo(other.right);
   }
   
   public PathEquation withLeft(hydra.query.Path left) {

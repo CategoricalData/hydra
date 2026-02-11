@@ -28,15 +28,15 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Assertion instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Class_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Tuple instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -55,7 +55,7 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
       if (!(other instanceof Class_)) {
         return false;
       }
-      Class_ o = (Class_) (other);
+      Class_ o = (Class_) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -69,12 +69,12 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Assertion other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Class_ o = (Class_) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Class_ o = (Class_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -98,7 +98,7 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
       if (!(other instanceof Tuple)) {
         return false;
       }
-      Tuple o = (Tuple) (other);
+      Tuple o = (Tuple) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -112,11 +112,11 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Assertion other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Tuple o = (Tuple) (other);
+      Tuple o = (Tuple) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());

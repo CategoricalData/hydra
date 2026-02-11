@@ -28,15 +28,15 @@ public abstract class TraversalOrder implements Serializable, Comparable<Travers
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TraversalOrder instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Pre instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Post instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -53,7 +53,7 @@ public abstract class TraversalOrder implements Serializable, Comparable<Travers
       if (!(other instanceof Pre)) {
         return false;
       }
-      Pre o = (Pre) (other);
+      Pre o = (Pre) other;
       return true;
     }
     
@@ -65,7 +65,7 @@ public abstract class TraversalOrder implements Serializable, Comparable<Travers
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalOrder other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -91,7 +91,7 @@ public abstract class TraversalOrder implements Serializable, Comparable<Travers
       if (!(other instanceof Post)) {
         return false;
       }
-      Post o = (Post) (other);
+      Post o = (Post) other;
       return true;
     }
     
@@ -103,7 +103,7 @@ public abstract class TraversalOrder implements Serializable, Comparable<Travers
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalOrder other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

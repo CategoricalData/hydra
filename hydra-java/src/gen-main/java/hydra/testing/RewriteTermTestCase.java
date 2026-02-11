@@ -42,7 +42,7 @@ public class RewriteTermTestCase implements Serializable, Comparable<RewriteTerm
     if (!(other instanceof RewriteTermTestCase)) {
       return false;
     }
-    RewriteTermTestCase o = (RewriteTermTestCase) (other);
+    RewriteTermTestCase o = (RewriteTermTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class RewriteTermTestCase implements Serializable, Comparable<RewriteTerm
   @SuppressWarnings("unchecked")
   public int compareTo(RewriteTermTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (rewriter)).compareTo(other.rewriter);
+    cmp = ((Comparable) rewriter).compareTo(other.rewriter);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public RewriteTermTestCase withInput(hydra.core.Term input) {

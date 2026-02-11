@@ -23,7 +23,7 @@ public class Name implements Serializable, Comparable<Name> {
     if (!(other instanceof Name)) {
       return false;
     }
-    Name o = (Name) (other);
+    Name o = (Name) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class Name implements Serializable, Comparable<Name> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Name other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

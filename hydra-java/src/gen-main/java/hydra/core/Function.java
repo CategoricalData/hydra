@@ -32,19 +32,19 @@ public abstract class Function implements Serializable, Comparable<Function> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Function instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Elimination instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Lambda instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Primitive instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -63,7 +63,7 @@ public abstract class Function implements Serializable, Comparable<Function> {
       if (!(other instanceof Elimination)) {
         return false;
       }
-      Elimination o = (Elimination) (other);
+      Elimination o = (Elimination) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -77,12 +77,12 @@ public abstract class Function implements Serializable, Comparable<Function> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Function other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Elimination o = (Elimination) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Elimination o = (Elimination) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -106,7 +106,7 @@ public abstract class Function implements Serializable, Comparable<Function> {
       if (!(other instanceof Lambda)) {
         return false;
       }
-      Lambda o = (Lambda) (other);
+      Lambda o = (Lambda) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -120,12 +120,12 @@ public abstract class Function implements Serializable, Comparable<Function> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Function other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Lambda o = (Lambda) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Lambda o = (Lambda) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -149,7 +149,7 @@ public abstract class Function implements Serializable, Comparable<Function> {
       if (!(other instanceof Primitive)) {
         return false;
       }
-      Primitive o = (Primitive) (other);
+      Primitive o = (Primitive) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -163,12 +163,12 @@ public abstract class Function implements Serializable, Comparable<Function> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Function other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Primitive o = (Primitive) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Primitive o = (Primitive) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

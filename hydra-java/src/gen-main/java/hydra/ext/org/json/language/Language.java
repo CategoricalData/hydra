@@ -20,7 +20,7 @@ public interface Language {
       new hydra.variants.TermVariant.Map(),
       new hydra.variants.TermVariant.Maybe(),
       new hydra.variants.TermVariant.Record())));
-    java.util.function.Function<hydra.core.Type, Boolean> typePredicate = (java.util.function.Function<hydra.core.Type, Boolean>) (typ -> (hydra.rewriting.Rewriting.deannotateType((typ))).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.function.Function<hydra.core.Type, Boolean> typePredicate = (java.util.function.Function<hydra.core.Type, Boolean>) (typ -> (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return true;
@@ -28,7 +28,7 @@ public interface Language {
       
       @Override
       public Boolean visit(hydra.core.Type.Maybe innerType) {
-        return (((innerType)).value).accept(new hydra.core.Type.PartialVisitor<>() {
+        return ((innerType).value).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
           public Boolean otherwise(hydra.core.Type instance) {
             return true;
@@ -47,7 +47,7 @@ public interface Language {
       new hydra.variants.TypeVariant.Map(),
       new hydra.variants.TypeVariant.Maybe(),
       new hydra.variants.TypeVariant.Record())));
-    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.org.json"), new hydra.coders.LanguageConstraints(hydra.ext.org.json.language.Language.<hydra.variants.EliminationVariant>jsonLanguage_eliminationVariants(), literalVariants.get(), floatTypes.get(), hydra.ext.org.json.language.Language.<hydra.variants.FunctionVariant>jsonLanguage_functionVariants(), integerTypes.get(), termVariants.get(), typeVariants.get(), (typePredicate)));
+    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.ext.org.json"), new hydra.coders.LanguageConstraints(hydra.ext.org.json.language.Language.<hydra.variants.EliminationVariant>jsonLanguage_eliminationVariants(), literalVariants.get(), floatTypes.get(), hydra.ext.org.json.language.Language.<hydra.variants.FunctionVariant>jsonLanguage_functionVariants(), integerTypes.get(), termVariants.get(), typeVariants.get(), typePredicate));
   }
   
   static <T0> java.util.Set<T0> jsonLanguage_eliminationVariants() {

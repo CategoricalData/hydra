@@ -23,7 +23,7 @@ public class DataRow<V> implements Serializable, Comparable<DataRow<V>> {
     if (!(other instanceof DataRow)) {
       return false;
     }
-    DataRow o = (DataRow) (other);
+    DataRow o = (DataRow) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

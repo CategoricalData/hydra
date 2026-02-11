@@ -14,12 +14,12 @@ public interface Languages {
     hydra.util.Lazy<java.util.Set<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.reflect.Reflect.literalVariants()));
     hydra.util.Lazy<java.util.Set<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.reflect.Reflect.termVariants()));
     hydra.util.Lazy<java.util.Set<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.reflect.Reflect.typeVariants()));
-    java.util.function.Function<hydra.core.Type, Boolean> types = (java.util.function.Function<hydra.core.Type, Boolean>) (t -> ((t)).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.function.Function<hydra.core.Type, Boolean> types = (java.util.function.Function<hydra.core.Type, Boolean>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return true;
       }
     }));
-    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.core"), new hydra.coders.LanguageConstraints(eliminationVariants.get(), literalVariants.get(), floatTypes.get(), functionVariants.get(), integerTypes.get(), termVariants.get(), typeVariants.get(), (types)));
+    return new hydra.coders.Language(new hydra.coders.LanguageName("hydra.core"), new hydra.coders.LanguageConstraints(eliminationVariants.get(), literalVariants.get(), floatTypes.get(), functionVariants.get(), integerTypes.get(), termVariants.get(), typeVariants.get(), types));
   }
 }

@@ -50,7 +50,7 @@ public class CaseConversionTestCase implements Serializable, Comparable<CaseConv
     if (!(other instanceof CaseConversionTestCase)) {
       return false;
     }
-    CaseConversionTestCase o = (CaseConversionTestCase) (other);
+    CaseConversionTestCase o = (CaseConversionTestCase) other;
     return java.util.Objects.equals(
       this.fromConvention,
       o.fromConvention) && java.util.Objects.equals(
@@ -71,19 +71,19 @@ public class CaseConversionTestCase implements Serializable, Comparable<CaseConv
   @SuppressWarnings("unchecked")
   public int compareTo(CaseConversionTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (fromConvention)).compareTo(other.fromConvention);
+    cmp = ((Comparable) fromConvention).compareTo(other.fromConvention);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (toConvention)).compareTo(other.toConvention);
+    cmp = ((Comparable) toConvention).compareTo(other.toConvention);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (fromString)).compareTo(other.fromString);
+    cmp = ((Comparable) fromString).compareTo(other.fromString);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (toString)).compareTo(other.toString);
+    return ((Comparable) toString).compareTo(other.toString);
   }
   
   public CaseConversionTestCase withFromConvention(hydra.util.CaseConvention fromConvention) {

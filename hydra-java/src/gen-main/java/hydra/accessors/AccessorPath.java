@@ -23,7 +23,7 @@ public class AccessorPath implements Serializable, Comparable<AccessorPath> {
     if (!(other instanceof AccessorPath)) {
       return false;
     }
-    AccessorPath o = (AccessorPath) (other);
+    AccessorPath o = (AccessorPath) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

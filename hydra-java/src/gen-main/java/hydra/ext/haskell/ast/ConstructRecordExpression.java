@@ -34,7 +34,7 @@ public class ConstructRecordExpression implements Serializable, Comparable<Const
     if (!(other instanceof ConstructRecordExpression)) {
       return false;
     }
-    ConstructRecordExpression o = (ConstructRecordExpression) (other);
+    ConstructRecordExpression o = (ConstructRecordExpression) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -51,7 +51,7 @@ public class ConstructRecordExpression implements Serializable, Comparable<Const
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructRecordExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

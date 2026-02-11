@@ -32,23 +32,27 @@ Promotion is done **incrementally, one function at a time**, with testing at eac
 2. **Create the DSL module structure** — set up the source module file with standard imports, namespace, module definition, and an empty elements list. Build to verify it compiles.
 3. **Promote one function** — translate it into the Hydra DSL and add it to the module's elements list.
 4. **Regenerate** — generate the promoted function into `gen-main` (e.g., `writeHaskell`).
-5. **Comment out the original** — in the staging module, comment out the original function. This keeps it available as a reference while the generated version takes over. Import and use the generated version instead.
+5. **Comment out the original** — in the staging module, comment out the original function definition but **preserve it as a comment**. This is critical: the commented-out version serves as the authoritative reference for what the generated code should do. Import and use the generated version instead. The comment format should include the full function signature and body, not just the name.
 6. **Test** — run the relevant test suite (e.g., `bin/sync-python.sh` or `./gradlew test`). Verify the generated code produces the same results.
-7. **Repeat** steps 3–6 for the next function. The commented-out originals serve as a reference in case issues arise later in the promotion process.
-8. **Complete the migration** — once all functions are promoted and verified, update consumers to import the generated module directly, and remove the staging module.
+7. **Repeat** steps 3–6 for the next function. The commented-out originals serve as a reference in case issues arise later in the promotion process. After refactoring staging code (e.g., extracting `where`-clause helpers), the original pre-refactoring versions may not be in git history, so preserving them in comments is the only way to keep them accessible.
+8. **Complete the migration** — once all functions are promoted and verified, update consumers to import the generated module directly, and remove the staging module. This is the riskiest step: subtle behavioral differences (inclusive vs exclusive ranges, missing character escaping, type annotation placement) can produce different output even when the code compiles and passes unit tests. Run the full end-to-end pipeline — regenerate all target language code, diff the output against the staging version, and run integration tests — before considering the promotion complete.
+
+**Important: Maintain a 1:1 relationship between staging and DSL code.** Each staging function should have a corresponding DSL element. When you need to break up complex staging functions into smaller helpers, always refactor the staging code *first*, verify the refactored staging still compiles and passes tests, and *then* promote the newly refactored functions to DSL. Never write new DSL elements that don't correspond to staging functions — this breaks the 1:1 mapping and makes it impossible to fall back on individual staging functions if something goes wrong during promotion.
 
 ## Step-by-step guide
 
 ### 1. Simplify staging code first
 
-Before starting the actual promotion, refactor the staging (raw Haskell) code:
+Before starting the actual promotion, refactor the staging (raw Haskell) code *in place*:
 
-1. **Break up complex functions** into smaller, composable helpers
+1. **Break up complex functions** into smaller, composable helpers. Extract nested `where`-clause helpers to top-level functions. This creates more leaf functions that can be promoted independently.
 2. **Simplify pattern matching** to align with Hydra's case statement patterns
 3. **Extract pure logic** from functions with side effects
 4. **Remove unnecessary callbacks** — if functions take callbacks to break circular dependencies, consider whether direct calls would work. The DSL can handle mutual recursion directly.
 5. **Separate I/O from pure logic** — extract as much pure logic as possible. The I/O wrapper should become a thin shell that reads input, calls the generated pure functions, handles errors, and writes output.
 6. **Test the refactored staging code** to verify it still works correctly
+
+The key principle is that the staging code and the DSL code remain in a **1:1 correspondence** throughout the process. Every top-level staging function should map directly to a DSL element. This makes the promotion incremental and safe — if a promoted function has a bug, you can always revert to the staging version of just that function.
 
 ### 2. Create the source module file
 
@@ -566,7 +570,77 @@ The DSL can handle mutual recursion directly — functions in the same module ca
    - Rename your function (e.g., `partitionDefs` instead of `partitionDefinitions`)
    - Hide the conflicting import: `import Hydra.Kernel hiding (partitionDefinitions)`
 
-16. **GHCi regeneration in hydra-ext**: Use stdin redirect to run GHCi scripts in `hydra-ext`:
+16. **Bulk swapping with module re-exports**: When many functions have been promoted, you can swap the entire staging module to import from the generated module in bulk, rather than function by function. Use an explicit import list and re-export the imported modules so downstream consumers don't need changes:
+
+    ```haskell
+    module Hydra.Ext.Staging.Java.Utils (
+      module Hydra.Ext.Staging.Java.Utils,
+      module Hydra.Ext.Java.Helpers,
+      module Hydra.Ext.Java.Utils,
+      ) where
+
+    -- Import types from the generated Helpers module
+    import Hydra.Ext.Java.Helpers (Aliases(..))
+
+    -- Import promoted functions from the generated Utils module
+    import Hydra.Ext.Java.Utils (
+      addExpressions, fieldExpression, javaIdentifier,
+      -- ... list all functions being swapped
+      )
+
+    -- Comment out the original implementations, keeping them as reference
+    -- addExpressions :: [Java.MultiplicativeExpression] -> Java.AdditiveExpression
+    -- addExpressions exprs = ...
+
+    -- Keep staging-only functions that haven't been promoted yet
+    importAliasesForModule :: Module -> Aliases
+    importAliasesForModule mod = ...
+    ```
+
+    The module re-export pattern `module Foo (module Foo, module Bar) where` ensures that the imported symbols are re-exported, so downstream consumers (like the staging Coder) see everything they need without import changes.
+
+    When swapping, also swap any local type definitions (e.g., `data JavaFeatures`, `data JavaEnvironment`) to use the generated versions from the Helpers module. This may require renaming constructors or field accessors to match the generated names (e.g., `supportsDiamondOperator` becomes `javaFeaturesSupportsDiamondOperator`). Use `replace_all` or find-and-replace to update references throughout the staging code.
+
+    **Important**: Before bulk swapping, verify that the generated functions produce identical output by regenerating target code and running tests. Differences in the generated code (e.g., a function that sanitizes names when the staging version doesn't) indicate bugs in the DSL source definitions that must be fixed before the swap.
+
+17. **Known constructor naming issues**: Some generated Haskell constructors have naming conflicts with their parent type (e.g., `PrimaryNoNewArray` is both a type and a constructor of `Primary`). The generated code uses `PrimaryNoNewArray` but the actual constructor is `PrimaryNoNewArray_` (with trailing underscore). After each regeneration, apply a targeted fix:
+
+    ```bash
+    # Fix "PrimaryNoNewArray (" → "PrimaryNoNewArray_ ("
+    # Fix "PrimaryNoNewArray Syntax.PrimaryNoNewArrayThis" → "PrimaryNoNewArray_ Syntax.PrimaryNoNewArrayThis"
+    ```
+
+    Use `replace_all` in the Edit tool for this. Be careful not to use overly broad replacements (e.g., replacing `PrimaryNoNewArray ` with a trailing space can corrupt adjacent identifiers). Instead, replace specific patterns like `PrimaryNoNewArray (` and `PrimaryNoNewArray Syntax.PrimaryNoNewArrayThis`.
+
+18. **Eliminating Haskell-specific polymorphism**: Staging code may use typeclass polymorphism (e.g., `Integral a => a -> ...`) that can't be expressed in the monomorphic DSL. Check all call sites to determine the actual types used. If only one concrete type is used, promote with that type. If multiple types are used, create separate functions for each type, or add `fromIntegral`/conversion at the call site. For example, `javaInt :: Integral a => a -> Java.Literal` can become `javaInt :: Integer -> Java.Literal` with `fromIntegral` at call sites that pass `Int`.
+
+19. **Record construction and updates for state types**: When promoting functions that construct or update large record types (like an `Aliases` state record), use `record` with all fields for construction, and reconstruct the entire record for updates (copying unchanged fields via `project`):
+
+    ```haskell
+    -- Construction: set all fields explicitly
+    importAliasesForModule = def "importAliasesForModule" $
+      lambda "mod" $ record _Aliases [
+        _Aliases_currentNamespace>>: Module.moduleNamespace (var "mod"),
+        _Aliases_packages>>: (Maps.empty :: TTerm (M.Map Namespace Java.PackageName)),
+        _Aliases_branchVars>>: (Sets.empty :: TTerm (S.Set Name)),
+        -- ... all other fields
+        ]
+
+    -- Update: copy all fields, changing only what's needed
+    addInScopeVar = def "addInScopeVar" $
+      lambda "name" $ lambda "aliases" $
+        record _Aliases [
+          _Aliases_currentNamespace>>:
+            project _Aliases _Aliases_currentNamespace @@ var "aliases",
+          _Aliases_inScopeJavaVars>>:
+            Sets.insert (var "name") (project _Aliases _Aliases_inScopeJavaVars @@ var "aliases"),
+          -- ... copy all other fields unchanged
+          ]
+    ```
+
+    This is verbose but works reliably. Consider promoting all update functions for a record type together, since they share the same boilerplate pattern.
+
+20. **GHCi regeneration in hydra-ext**: Use stdin redirect to run GHCi scripts in `hydra-ext`:
 
     ```bash
     cd hydra-ext && stack ghci hydra-ext:lib < my_regen_script.ghci
@@ -590,6 +664,104 @@ The DSL can handle mutual recursion directly — functions in the same module ca
   - [ ] Import and use generated version
   - [ ] Run tests to verify identical behavior
 - [ ] Once all functions promoted, update consumers and remove staging module
+
+21. **Promoting mutually recursive function groups**: Functions that call each other (e.g., `encodeTerm` calls `encodeApplication` which calls `encodeTerm`) can be promoted incrementally using **stubs**. Promote one function at a time, adding stubs for the functions it calls that haven't been promoted yet:
+
+    ```haskell
+    -- Full definition for encodeTerm (calls encodeApplication)
+    encodeTerm :: TBinding (...)
+    encodeTerm = def "encodeTerm" $
+      lambda "env" $ lambda "term" $
+        ... encodeApplication @@ var "env" @@ var "app" ...
+
+    -- Stub for encodeApplication (not yet promoted)
+    encodeApplication :: TBinding (...)
+    encodeApplication = def "encodeApplication" $
+      lambda "env" $ lambda "app" $
+        Monads.unexpected @@ string "encodeApplication stub" @@ string "encodeApplication"
+    ```
+
+    All stubs must appear in the module's elements list. As you promote each function, replace its stub with the real implementation. The generated code will compile and work correctly for the promoted functions, while any path that hits a stub will fail with a clear error message.
+
+    **Extracting nested helpers**: Complex staging functions often have `where`-clause helpers that capture closed-over variables. When promoting, extract these into separate top-level `TBinding` definitions, passing the captured variables as explicit parameters. Add the extracted helpers to the elements list.
+
+    **Fallback pattern**: When a function has complex nested case analysis (e.g., `encodeApplication` has a `fallback` helper), extract the fallback logic into a separate `TBinding` with an explicit name like `encodeApplication_fallback`. This simplifies the main function and creates a clean separation of concerns.
+
+22. **DSL function availability pitfalls**: When translating Haskell code to DSL, several common functions have different names or don't exist:
+
+    | Haskell / Staging | DSL Equivalent |
+    |---|---|
+    | `S.isSubsetOf a b` | `Sets.null (Sets.difference a b)` |
+    | `S.unions xs` | `Sets.unions xs` (exists in Sets DSL) |
+    | `M.unions xs` | `Lists.foldl (\acc m -> Maps.union acc m) Maps.empty xs` |
+    | `M.values m` | `Maps.elems m` |
+    | `M.isEmpty m` | `Maps.null m` |
+    | `S.empty` / `S.null` | `Sets.empty` / `Sets.null` |
+    | `L.zipWith f a b` | `Lists.zipWith f a b` |
+    | `L.replicate n x` | `Lists.replicate n x` |
+    | `x == y` | `Equality.equal x y` (not `Equality.eq`) |
+    | `x /= y` | `Logic.not (Equality.equal x y)` |
+    | `foldM f acc xs` | `Flows.foldl f acc xs` (monadic fold) |
+    | `ShowCore.functionVariant` | `ShowCore.function` |
+    | `ShowCore.type_` | `ShowCore.type_` |
+
+23. **Triples in the DSL**: Hydra encodes triples as nested pairs: `triple a b c = pair a (pair b c)`. To destructure a triple result:
+
+    ```haskell
+    "result" <~ someFunction @@ ... $
+    "first"  <~ Pairs.first (var "result") $
+    "second" <~ Pairs.first (Pairs.second (var "result")) $
+    "third"  <~ Pairs.second (Pairs.second (var "result")) $
+    ```
+
+24. **`Graph` module accessors**: To access graph state fields like `graphPrimitives`, import `Hydra.Dsl.Meta.Graph` and use the accessor functions:
+
+    ```haskell
+    import qualified Hydra.Dsl.Meta.Graph as Graph
+
+    -- In DSL code:
+    "g" <<~ Monads.getState $
+    "prims" <~ Graph.graphPrimitives (var "g") $
+    ```
+
+    Note: `Graph.graphPrimitives`, `Graph.primitiveType`, etc. are Haskell-level DSL helpers (not `TBinding`s), so they take direct arguments without `@@`.
+
+25. **`Arity` module**: The `typeArity` function for computing function type arity is in `Hydra.Sources.Kernel.Terms.Arity`. Import it as `qualified Hydra.Sources.Kernel.Terms.Arity as Arity` and add `Arity.ns` to the module's namespace dependencies.
+
+26. **More DSL function availability pitfalls (batch 27-28)**:
+
+    | Staging code | DSL equivalent | Notes |
+    |---|---|---|
+    | `S.filter pred set` | `Sets.intersection set2 set` (if filtering by membership) | No `Sets.filter`; use `Sets.intersection` or convert to list |
+    | `L.concatMap f xs` | `Lists.concat (Lists.map f xs)` | No `Lists.concatMap` |
+    | `Y.catMaybes xs` | `Maybes.cat xs` | `Maybes.cat :: [Maybe a] -> [a]` |
+    | `Right x` | `right x` (from DSL prelude) | Not `inject _Either _Either_right` |
+    | `Left x` | `Phantoms.left x` | For `Either` left values |
+    | `Just $ Left $ ExpressionName ...` | `just (Phantoms.left (JavaDsl.expressionName nothing id))` | Common in methodInvocation calls |
+
+27. **Extracting large `where`-clause helpers**: When promoting complex functions like `encodeElimination` or `bindingsToStatements`, extract substantial `where`-clause helpers (e.g., `otherwiseBranch`, `visitBranch`, `toDeclInit`, `toDeclStatement`) as separate TBindings. Pass shared state (like `aliases`, `tcExtended`, `recursiveVars`) as explicit parameters. This makes each TBinding manageable and independently testable.
+
+28. **`encodeTypeAsTerm` helper**: The staging code uses `EncodeCore.type_ typ` to encode a `Type` as a `Term` for annotations. In the DSL, use the pre-defined helper `encodeTypeAsTerm @@ var "typ"` (defined as `TTerm $ TermVariable $ Name "hydra.encode.core.type"`). Alternatively, `Phantoms.encoderFor _Type @@ var "typ"` works too.
+
+29. **`Let` record fields**: The `Let` type has fields `_Let_bindings` and `_Let_body` (not `_Let_environment`). Check generated Core.hs for exact field names.
+
+30. **`Core.field` vs `Core.fieldType`**: `Core.field` constructs a `Field` (name + term), while `Core.fieldType` constructs a `FieldType` (name + type). When the staging code uses `FieldType (Name "value") someType`, use `Core.fieldType (wrap _Name (string "value")) (var "someType")`, NOT `Core.field`.
+
+31. **`project` and `unwrap` require `@@`**: These DSL functions return a `TTerm (a -> b)`, not a function at the Haskell level. You must apply them with `@@`: `project _Foo _Foo_bar @@ var "x"`, NOT `project _Foo _Foo_bar (var "x")`. Similarly, `unwrap _Name @@ var "x"`, NOT `unwrap _Name (var "x")`.
+
+32. **`Equality.lte`/`Equality.gte` for comparisons**: Use `Equality.lte (var "n") (int32 0)` for `n <= 0`, NOT `Math.lte`. The `Math` module handles arithmetic (`Math.sub`, `Math.add`), while `Equality` handles comparisons.
+
+33. **`Lists.zip` + `Flows.mapList` for `CM.zipWithM`**: Haskell's `Control.Monad.zipWithM f xs ys` becomes `Flows.mapList (lambda "pair" $ f @@ Pairs.first (var "pair") @@ Pairs.second (var "pair")) (Lists.zip xs ys)`. There is no `Flows.mapList2`.
+
+34. **Haskell code generator `PrimaryNoNewArray_` bug**: When a union variant name, capitalized and prefixed with the type name, collides with the type name itself (e.g., `Primary.noNewArray` → `PrimaryNoNewArray` collides with the type `PrimaryNoNewArray`), the Haskell code generator should append `_` to disambiguate. Inline `inject` calls may not handle this correctly. **Workaround**: Use a pre-existing helper function (e.g., `JavaUtilsSource.javaMethodInvocationToJavaPrimary`) that handles the wrapping, rather than constructing the Primary inline.
+
+35. **`Rewriting.deannotateType` is a TBinding**: Like other TBindings, it must be applied with `@@`: `Rewriting.deannotateType @@ var "t"`, NOT `Rewriting.deannotateType (var "t")`.
+
+36. **Naming collisions with kernel imports**: If your TBinding name (e.g., `isSerializableType`) conflicts with a name imported from `Hydra.Kernel`, rename it (e.g., `isSerializableJavaType`) to avoid ambiguity.
+
+37. **`Serialization` module for `printExpr`/`parenthesize`**: These functions live in `Hydra.Sources.Kernel.Terms.Serialization`, NOT in the Java Serde module. Import as `qualified Hydra.Sources.Kernel.Terms.Serialization as SerializationSource` and add `SerializationSource.ns` to the module dependencies.
+
+38. **Language-specific character escaping in serialization**: When promoting code that generates source files (e.g., a Java or Python serializer), be aware that target languages may require specific escape sequences for non-ASCII characters. For example, Java source files require `\uXXXX` escape sequences for characters outside ASCII. You may need to write custom escape functions (e.g., `escapeJavaChar`, `escapeJavaString`) in the DSL rather than relying on Haskell's default `show` behavior, which passes non-ASCII characters through as literal UTF-8. Test generated source files with non-ASCII input (e.g., `\u03BB` for lambda) to verify correct escaping.
 
 ## Related recipes
 

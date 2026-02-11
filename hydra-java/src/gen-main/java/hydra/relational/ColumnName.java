@@ -23,7 +23,7 @@ public class ColumnName implements Serializable, Comparable<ColumnName> {
     if (!(other instanceof ColumnName)) {
       return false;
     }
-    ColumnName o = (ColumnName) (other);
+    ColumnName o = (ColumnName) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class ColumnName implements Serializable, Comparable<ColumnName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ColumnName other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

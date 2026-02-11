@@ -34,7 +34,7 @@ public class TypeReductionTestCase implements Serializable, Comparable<TypeReduc
     if (!(other instanceof TypeReductionTestCase)) {
       return false;
     }
-    TypeReductionTestCase o = (TypeReductionTestCase) (other);
+    TypeReductionTestCase o = (TypeReductionTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class TypeReductionTestCase implements Serializable, Comparable<TypeReduc
   @SuppressWarnings("unchecked")
   public int compareTo(TypeReductionTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public TypeReductionTestCase withInput(hydra.core.Type input) {

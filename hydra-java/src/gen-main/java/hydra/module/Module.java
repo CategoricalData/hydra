@@ -58,7 +58,7 @@ public class Module implements Serializable, Comparable<Module> {
     if (!(other instanceof Module)) {
       return false;
     }
-    Module o = (Module) (other);
+    Module o = (Module) other;
     return java.util.Objects.equals(
       this.namespace,
       o.namespace) && java.util.Objects.equals(
@@ -81,7 +81,7 @@ public class Module implements Serializable, Comparable<Module> {
   @SuppressWarnings("unchecked")
   public int compareTo(Module other) {
     int cmp = 0;
-    cmp = ((Comparable) (namespace)).compareTo(other.namespace);
+    cmp = ((Comparable) namespace).compareTo(other.namespace);
     if (cmp != 0) {
       return cmp;
     }

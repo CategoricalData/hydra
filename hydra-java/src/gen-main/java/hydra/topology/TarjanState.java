@@ -63,7 +63,7 @@ public class TarjanState implements Serializable, Comparable<TarjanState> {
     if (!(other instanceof TarjanState)) {
       return false;
     }
-    TarjanState o = (TarjanState) (other);
+    TarjanState o = (TarjanState) other;
     return java.util.Objects.equals(
       this.counter,
       o.counter) && java.util.Objects.equals(
@@ -88,7 +88,7 @@ public class TarjanState implements Serializable, Comparable<TarjanState> {
   @SuppressWarnings("unchecked")
   public int compareTo(TarjanState other) {
     int cmp = 0;
-    cmp = ((Comparable) (counter)).compareTo(other.counter);
+    cmp = ((Comparable) counter).compareTo(other.counter);
     if (cmp != 0) {
       return cmp;
     }

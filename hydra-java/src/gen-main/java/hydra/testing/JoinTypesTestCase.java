@@ -42,7 +42,7 @@ public class JoinTypesTestCase implements Serializable, Comparable<JoinTypesTest
     if (!(other instanceof JoinTypesTestCase)) {
       return false;
     }
-    JoinTypesTestCase o = (JoinTypesTestCase) (other);
+    JoinTypesTestCase o = (JoinTypesTestCase) other;
     return java.util.Objects.equals(
       this.left,
       o.left) && java.util.Objects.equals(
@@ -61,11 +61,11 @@ public class JoinTypesTestCase implements Serializable, Comparable<JoinTypesTest
   @SuppressWarnings("unchecked")
   public int compareTo(JoinTypesTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (left)).compareTo(other.left);
+    cmp = ((Comparable) left).compareTo(other.left);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (right)).compareTo(other.right);
+    cmp = ((Comparable) right).compareTo(other.right);
     if (cmp != 0) {
       return cmp;
     }

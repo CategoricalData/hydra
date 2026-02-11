@@ -36,23 +36,23 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Expr instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Const instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Indent instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Op instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Brackets instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -71,7 +71,7 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
       if (!(other instanceof Const)) {
         return false;
       }
-      Const o = (Const) (other);
+      Const o = (Const) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -85,12 +85,12 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expr other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Const o = (Const) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Const o = (Const) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -114,7 +114,7 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
       if (!(other instanceof Indent)) {
         return false;
       }
-      Indent o = (Indent) (other);
+      Indent o = (Indent) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -128,12 +128,12 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expr other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Indent o = (Indent) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Indent o = (Indent) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -157,7 +157,7 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
       if (!(other instanceof Op)) {
         return false;
       }
-      Op o = (Op) (other);
+      Op o = (Op) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -171,12 +171,12 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expr other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Op o = (Op) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Op o = (Op) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -200,7 +200,7 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
       if (!(other instanceof Brackets)) {
         return false;
       }
-      Brackets o = (Brackets) (other);
+      Brackets o = (Brackets) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -214,12 +214,12 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expr other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Brackets o = (Brackets) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Brackets o = (Brackets) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

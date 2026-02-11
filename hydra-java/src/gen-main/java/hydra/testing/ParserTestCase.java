@@ -34,7 +34,7 @@ public class ParserTestCase<A> implements Serializable, Comparable<ParserTestCas
     if (!(other instanceof ParserTestCase)) {
       return false;
     }
-    ParserTestCase o = (ParserTestCase) (other);
+    ParserTestCase o = (ParserTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class ParserTestCase<A> implements Serializable, Comparable<ParserTestCas
   @SuppressWarnings("unchecked")
   public int compareTo(ParserTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public ParserTestCase withInput(String input) {

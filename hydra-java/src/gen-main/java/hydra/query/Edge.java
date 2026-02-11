@@ -42,7 +42,7 @@ public class Edge implements Serializable, Comparable<Edge> {
     if (!(other instanceof Edge)) {
       return false;
     }
-    Edge o = (Edge) (other);
+    Edge o = (Edge) other;
     return java.util.Objects.equals(
       this.type,
       o.type) && java.util.Objects.equals(
@@ -61,7 +61,7 @@ public class Edge implements Serializable, Comparable<Edge> {
   @SuppressWarnings("unchecked")
   public int compareTo(Edge other) {
     int cmp = 0;
-    cmp = ((Comparable) (type)).compareTo(other.type);
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }

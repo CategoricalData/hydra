@@ -23,7 +23,7 @@ public class LanguageName implements Serializable, Comparable<LanguageName> {
     if (!(other instanceof LanguageName)) {
       return false;
     }
-    LanguageName o = (LanguageName) (other);
+    LanguageName o = (LanguageName) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class LanguageName implements Serializable, Comparable<LanguageName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LanguageName other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

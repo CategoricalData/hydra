@@ -34,7 +34,7 @@ public class LabeledPattern implements Serializable, Comparable<LabeledPattern> 
     if (!(other instanceof LabeledPattern)) {
       return false;
     }
-    LabeledPattern o = (LabeledPattern) (other);
+    LabeledPattern o = (LabeledPattern) other;
     return java.util.Objects.equals(
       this.label,
       o.label) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class LabeledPattern implements Serializable, Comparable<LabeledPattern> 
   @SuppressWarnings("unchecked")
   public int compareTo(LabeledPattern other) {
     int cmp = 0;
-    cmp = ((Comparable) (label)).compareTo(other.label);
+    cmp = ((Comparable) label).compareTo(other.label);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (pattern)).compareTo(other.pattern);
+    return ((Comparable) pattern).compareTo(other.pattern);
   }
   
   public LabeledPattern withLabel(hydra.grammar.Label label) {

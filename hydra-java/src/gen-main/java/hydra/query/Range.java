@@ -34,7 +34,7 @@ public class Range implements Serializable, Comparable<Range> {
     if (!(other instanceof Range)) {
       return false;
     }
-    Range o = (Range) (other);
+    Range o = (Range) other;
     return java.util.Objects.equals(
       this.min,
       o.min) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class Range implements Serializable, Comparable<Range> {
   @SuppressWarnings("unchecked")
   public int compareTo(Range other) {
     int cmp = 0;
-    cmp = ((Comparable) (min)).compareTo(other.min);
+    cmp = ((Comparable) min).compareTo(other.min);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (max)).compareTo(other.max);
+    return ((Comparable) max).compareTo(other.max);
   }
   
   public Range withMin(Integer min) {

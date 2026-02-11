@@ -22,9 +22,9 @@ public class PairsTest {
 
             hydra.lib.pairs.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)),
-  (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply((s))),
+  (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply(s)),
   (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(5, "ab")))));
 
     }
@@ -39,9 +39,9 @@ public class PairsTest {
 
             hydra.lib.pairs.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
-    (x),
+    x,
     2)),
-  (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply((s))),
+  (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply(s)),
   (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(0, "hello")))));
 
     }

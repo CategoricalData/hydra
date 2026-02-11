@@ -23,7 +23,7 @@ public class CaseRhs implements Serializable, Comparable<CaseRhs> {
     if (!(other instanceof CaseRhs)) {
       return false;
     }
-    CaseRhs o = (CaseRhs) (other);
+    CaseRhs o = (CaseRhs) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
@@ -37,6 +37,6 @@ public class CaseRhs implements Serializable, Comparable<CaseRhs> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(CaseRhs other) {
-    return ((Comparable) (value)).compareTo(other.value);
+    return ((Comparable) value).compareTo(other.value);
   }
 }

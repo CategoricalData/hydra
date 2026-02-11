@@ -10,9 +10,10 @@ import Hydra.Testing
 import Hydra.Coders (LanguageName(..))
 import Hydra.Staging.Testing.Generation.Transform (collectTestCases)
 import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
-import Hydra.Ext.Staging.Java.Coder (JavaEnvironment(..), encodeTerm)
-import Hydra.Ext.Staging.Java.Utils (Aliases(..), importAliasesForModule)
-import Hydra.Ext.Staging.Java.Serde (writeExpression)
+import Hydra.Ext.Java.Coder (encodeTerm)
+import Hydra.Ext.Java.Helpers (JavaEnvironment(..), Aliases(..))
+import Hydra.Ext.Java.Utils (importAliasesForModule)
+import Hydra.Ext.Java.Serde (writeExpression)
 import Hydra.Serialization (printExpr, parenthesize)
 import qualified Hydra.Ext.Java.Syntax as Java
 import qualified Hydra.Names as Names

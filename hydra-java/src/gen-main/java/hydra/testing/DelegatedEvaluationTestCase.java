@@ -34,7 +34,7 @@ public class DelegatedEvaluationTestCase implements Serializable, Comparable<Del
     if (!(other instanceof DelegatedEvaluationTestCase)) {
       return false;
     }
-    DelegatedEvaluationTestCase o = (DelegatedEvaluationTestCase) (other);
+    DelegatedEvaluationTestCase o = (DelegatedEvaluationTestCase) other;
     return java.util.Objects.equals(
       this.input,
       o.input) && java.util.Objects.equals(
@@ -51,11 +51,11 @@ public class DelegatedEvaluationTestCase implements Serializable, Comparable<Del
   @SuppressWarnings("unchecked")
   public int compareTo(DelegatedEvaluationTestCase other) {
     int cmp = 0;
-    cmp = ((Comparable) (input)).compareTo(other.input);
+    cmp = ((Comparable) input).compareTo(other.input);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (output)).compareTo(other.output);
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public DelegatedEvaluationTestCase withInput(hydra.core.Term input) {

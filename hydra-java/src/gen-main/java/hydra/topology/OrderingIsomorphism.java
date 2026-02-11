@@ -31,7 +31,7 @@ public class OrderingIsomorphism<A> implements Serializable, Comparable<Ordering
     if (!(other instanceof OrderingIsomorphism)) {
       return false;
     }
-    OrderingIsomorphism o = (OrderingIsomorphism) (other);
+    OrderingIsomorphism o = (OrderingIsomorphism) other;
     return java.util.Objects.equals(
       this.encode,
       o.encode) && java.util.Objects.equals(

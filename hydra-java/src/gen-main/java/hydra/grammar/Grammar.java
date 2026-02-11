@@ -23,7 +23,7 @@ public class Grammar implements Serializable, Comparable<Grammar> {
     if (!(other instanceof Grammar)) {
       return false;
     }
-    Grammar o = (Grammar) (other);
+    Grammar o = (Grammar) other;
     return java.util.Objects.equals(
       this.value,
       o.value);

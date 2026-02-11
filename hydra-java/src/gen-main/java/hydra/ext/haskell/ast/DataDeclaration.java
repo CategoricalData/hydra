@@ -58,7 +58,7 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
     if (!(other instanceof DataDeclaration)) {
       return false;
     }
-    DataDeclaration o = (DataDeclaration) (other);
+    DataDeclaration o = (DataDeclaration) other;
     return java.util.Objects.equals(
       this.keyword,
       o.keyword) && java.util.Objects.equals(
@@ -81,7 +81,7 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
   @SuppressWarnings("unchecked")
   public int compareTo(DataDeclaration other) {
     int cmp = 0;
-    cmp = ((Comparable) (keyword)).compareTo(other.keyword);
+    cmp = ((Comparable) keyword).compareTo(other.keyword);
     if (cmp != 0) {
       return cmp;
     }
@@ -91,7 +91,7 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (head)).compareTo(other.head);
+    cmp = ((Comparable) head).compareTo(other.head);
     if (cmp != 0) {
       return cmp;
     }

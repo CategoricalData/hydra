@@ -42,7 +42,7 @@ public class InfixApplicationExpression implements Serializable, Comparable<Infi
     if (!(other instanceof InfixApplicationExpression)) {
       return false;
     }
-    InfixApplicationExpression o = (InfixApplicationExpression) (other);
+    InfixApplicationExpression o = (InfixApplicationExpression) other;
     return java.util.Objects.equals(
       this.lhs,
       o.lhs) && java.util.Objects.equals(
@@ -61,15 +61,15 @@ public class InfixApplicationExpression implements Serializable, Comparable<Infi
   @SuppressWarnings("unchecked")
   public int compareTo(InfixApplicationExpression other) {
     int cmp = 0;
-    cmp = ((Comparable) (lhs)).compareTo(other.lhs);
+    cmp = ((Comparable) lhs).compareTo(other.lhs);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (operator)).compareTo(other.operator);
+    cmp = ((Comparable) operator).compareTo(other.operator);
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (rhs)).compareTo(other.rhs);
+    return ((Comparable) rhs).compareTo(other.rhs);
   }
   
   public InfixApplicationExpression withLhs(hydra.ext.haskell.ast.Expression lhs) {

@@ -40,27 +40,27 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Scalar instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Bool instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Float_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Int instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Null instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Str instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -79,7 +79,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
       if (!(other instanceof Bool)) {
         return false;
       }
-      Bool o = (Bool) (other);
+      Bool o = (Bool) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -93,12 +93,12 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Bool o = (Bool) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Bool o = (Bool) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -122,7 +122,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
       if (!(other instanceof Float_)) {
         return false;
       }
-      Float_ o = (Float_) (other);
+      Float_ o = (Float_) other;
       return this.value.compareTo(o.value) == 0;
     }
     
@@ -134,12 +134,12 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Float_ o = (Float_) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Float_ o = (Float_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -163,7 +163,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
       if (!(other instanceof Int)) {
         return false;
       }
-      Int o = (Int) (other);
+      Int o = (Int) other;
       return this.value.compareTo(o.value) == 0;
     }
     
@@ -175,12 +175,12 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Int o = (Int) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Int o = (Int) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -202,7 +202,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
       if (!(other instanceof Null)) {
         return false;
       }
-      Null o = (Null) (other);
+      Null o = (Null) other;
       return true;
     }
     
@@ -214,7 +214,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -242,7 +242,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
       if (!(other instanceof Str)) {
         return false;
       }
-      Str o = (Str) (other);
+      Str o = (Str) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -256,12 +256,12 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Str o = (Str) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Str o = (Str) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

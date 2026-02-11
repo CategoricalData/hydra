@@ -42,7 +42,7 @@ public class LastMile<S, A> implements Serializable, Comparable<LastMile<S, A>> 
     if (!(other instanceof LastMile)) {
       return false;
     }
-    LastMile o = (LastMile) (other);
+    LastMile o = (LastMile) other;
     return java.util.Objects.equals(
       this.encoder,
       o.encoder) && java.util.Objects.equals(
@@ -73,7 +73,7 @@ public class LastMile<S, A> implements Serializable, Comparable<LastMile<S, A>> 
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (fileExtension)).compareTo(other.fileExtension);
+    return ((Comparable) fileExtension).compareTo(other.fileExtension);
   }
   
   public LastMile withEncoder(java.util.function.Function<hydra.core.Type, hydra.compute.Flow<S, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<S, java.util.List<A>>>>>> encoder) {

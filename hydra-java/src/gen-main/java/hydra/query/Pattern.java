@@ -40,27 +40,27 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Pattern instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Triple instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Negation instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Conjunction instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Disjunction instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Graph instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -79,7 +79,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Triple)) {
         return false;
       }
-      Triple o = (Triple) (other);
+      Triple o = (Triple) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -93,12 +93,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Triple o = (Triple) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Triple o = (Triple) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -122,7 +122,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Negation)) {
         return false;
       }
-      Negation o = (Negation) (other);
+      Negation o = (Negation) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -136,12 +136,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Negation o = (Negation) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Negation o = (Negation) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -165,7 +165,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Conjunction)) {
         return false;
       }
-      Conjunction o = (Conjunction) (other);
+      Conjunction o = (Conjunction) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -179,11 +179,11 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Conjunction o = (Conjunction) (other);
+      Conjunction o = (Conjunction) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -210,7 +210,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Disjunction)) {
         return false;
       }
-      Disjunction o = (Disjunction) (other);
+      Disjunction o = (Disjunction) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -224,11 +224,11 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Disjunction o = (Disjunction) (other);
+      Disjunction o = (Disjunction) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -255,7 +255,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Graph)) {
         return false;
       }
-      Graph o = (Graph) (other);
+      Graph o = (Graph) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -269,12 +269,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Graph o = (Graph) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Graph o = (Graph) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

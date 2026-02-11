@@ -28,15 +28,15 @@ public abstract class TypeClass implements Serializable, Comparable<TypeClass> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(TypeClass instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Equality instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Ordering instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -50,7 +50,7 @@ public abstract class TypeClass implements Serializable, Comparable<TypeClass> {
       if (!(other instanceof Equality)) {
         return false;
       }
-      Equality o = (Equality) (other);
+      Equality o = (Equality) other;
       return true;
     }
     
@@ -62,7 +62,7 @@ public abstract class TypeClass implements Serializable, Comparable<TypeClass> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeClass other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -85,7 +85,7 @@ public abstract class TypeClass implements Serializable, Comparable<TypeClass> {
       if (!(other instanceof Ordering)) {
         return false;
       }
-      Ordering o = (Ordering) (other);
+      Ordering o = (Ordering) other;
       return true;
     }
     
@@ -97,7 +97,7 @@ public abstract class TypeClass implements Serializable, Comparable<TypeClass> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeClass other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

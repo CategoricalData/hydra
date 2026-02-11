@@ -28,7 +28,7 @@ public class TableType implements Serializable, Comparable<TableType> {
     if (!(other instanceof TableType)) {
       return false;
     }
-    TableType o = (TableType) (other);
+    TableType o = (TableType) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -45,7 +45,7 @@ public class TableType implements Serializable, Comparable<TableType> {
   @SuppressWarnings("unchecked")
   public int compareTo(TableType other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }

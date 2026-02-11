@@ -42,7 +42,7 @@ public class SimpleValueBinding implements Serializable, Comparable<SimpleValueB
     if (!(other instanceof SimpleValueBinding)) {
       return false;
     }
-    SimpleValueBinding o = (SimpleValueBinding) (other);
+    SimpleValueBinding o = (SimpleValueBinding) other;
     return java.util.Objects.equals(
       this.pattern,
       o.pattern) && java.util.Objects.equals(
@@ -61,11 +61,11 @@ public class SimpleValueBinding implements Serializable, Comparable<SimpleValueB
   @SuppressWarnings("unchecked")
   public int compareTo(SimpleValueBinding other) {
     int cmp = 0;
-    cmp = ((Comparable) (pattern)).compareTo(other.pattern);
+    cmp = ((Comparable) pattern).compareTo(other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (rhs)).compareTo(other.rhs);
+    cmp = ((Comparable) rhs).compareTo(other.rhs);
     if (cmp != 0) {
       return cmp;
     }

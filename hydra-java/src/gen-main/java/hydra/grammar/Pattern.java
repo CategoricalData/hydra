@@ -64,51 +64,51 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Pattern instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Alternatives instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Constant instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Ignored instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Labeled instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Nil instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Nonterminal instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Option instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Plus instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Regex instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Sequence instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Star instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -127,7 +127,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Alternatives)) {
         return false;
       }
-      Alternatives o = (Alternatives) (other);
+      Alternatives o = (Alternatives) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -141,11 +141,11 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Alternatives o = (Alternatives) (other);
+      Alternatives o = (Alternatives) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -172,7 +172,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Constant)) {
         return false;
       }
-      Constant o = (Constant) (other);
+      Constant o = (Constant) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -186,12 +186,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Constant o = (Constant) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Constant o = (Constant) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -215,7 +215,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Ignored)) {
         return false;
       }
-      Ignored o = (Ignored) (other);
+      Ignored o = (Ignored) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -229,12 +229,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Ignored o = (Ignored) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Ignored o = (Ignored) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -258,7 +258,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Labeled)) {
         return false;
       }
-      Labeled o = (Labeled) (other);
+      Labeled o = (Labeled) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -272,12 +272,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Labeled o = (Labeled) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Labeled o = (Labeled) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -299,7 +299,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Nil)) {
         return false;
       }
-      Nil o = (Nil) (other);
+      Nil o = (Nil) other;
       return true;
     }
     
@@ -311,7 +311,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -339,7 +339,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Nonterminal)) {
         return false;
       }
-      Nonterminal o = (Nonterminal) (other);
+      Nonterminal o = (Nonterminal) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -353,12 +353,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Nonterminal o = (Nonterminal) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Nonterminal o = (Nonterminal) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -382,7 +382,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Option)) {
         return false;
       }
-      Option o = (Option) (other);
+      Option o = (Option) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -396,12 +396,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Option o = (Option) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Option o = (Option) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -425,7 +425,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Plus)) {
         return false;
       }
-      Plus o = (Plus) (other);
+      Plus o = (Plus) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -439,12 +439,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Plus o = (Plus) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Plus o = (Plus) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -468,7 +468,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Regex)) {
         return false;
       }
-      Regex o = (Regex) (other);
+      Regex o = (Regex) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -482,12 +482,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Regex o = (Regex) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Regex o = (Regex) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -511,7 +511,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Sequence)) {
         return false;
       }
-      Sequence o = (Sequence) (other);
+      Sequence o = (Sequence) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -525,11 +525,11 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Sequence o = (Sequence) (other);
+      Sequence o = (Sequence) other;
       return Integer.compare(
         value.hashCode(),
         o.value.hashCode());
@@ -556,7 +556,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
       if (!(other instanceof Star)) {
         return false;
       }
-      Star o = (Star) (other);
+      Star o = (Star) other;
       return java.util.Objects.equals(
         this.value,
         o.value);
@@ -570,12 +570,12 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Pattern other) {
-      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
-      Star o = (Star) (other);
-      return ((Comparable) (value)).compareTo(o.value);
+      Star o = (Star) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

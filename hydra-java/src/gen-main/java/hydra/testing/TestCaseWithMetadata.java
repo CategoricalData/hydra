@@ -50,7 +50,7 @@ public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWi
     if (!(other instanceof TestCaseWithMetadata)) {
       return false;
     }
-    TestCaseWithMetadata o = (TestCaseWithMetadata) (other);
+    TestCaseWithMetadata o = (TestCaseWithMetadata) other;
     return java.util.Objects.equals(
       this.name,
       o.name) && java.util.Objects.equals(
@@ -71,11 +71,11 @@ public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWi
   @SuppressWarnings("unchecked")
   public int compareTo(TestCaseWithMetadata other) {
     int cmp = 0;
-    cmp = ((Comparable) (name)).compareTo(other.name);
+    cmp = ((Comparable) name).compareTo(other.name);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) (case_)).compareTo(other.case_);
+    cmp = ((Comparable) case_).compareTo(other.case_);
     if (cmp != 0) {
       return cmp;
     }

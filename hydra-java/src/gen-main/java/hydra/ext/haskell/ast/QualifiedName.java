@@ -34,7 +34,7 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
     if (!(other instanceof QualifiedName)) {
       return false;
     }
-    QualifiedName o = (QualifiedName) (other);
+    QualifiedName o = (QualifiedName) other;
     return java.util.Objects.equals(
       this.qualifiers,
       o.qualifiers) && java.util.Objects.equals(
@@ -57,7 +57,7 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) (unqualified)).compareTo(other.unqualified);
+    return ((Comparable) unqualified).compareTo(other.unqualified);
   }
   
   public QualifiedName withQualifiers(java.util.List<hydra.ext.haskell.ast.NamePart> qualifiers) {

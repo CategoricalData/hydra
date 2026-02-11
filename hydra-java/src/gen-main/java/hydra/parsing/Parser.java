@@ -23,7 +23,7 @@ public class Parser<A> implements Serializable, Comparable<Parser<A>> {
     if (!(other instanceof Parser)) {
       return false;
     }
-    Parser o = (Parser) (other);
+    Parser o = (Parser) other;
     return java.util.Objects.equals(
       this.value,
       o.value);
