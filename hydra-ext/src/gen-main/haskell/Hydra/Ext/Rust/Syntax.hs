@@ -16,7 +16,7 @@ import qualified Data.Set as S
 data Crate = 
   Crate {
     -- | The top-level items in the crate
-    crateItems :: [Item]}
+    crateItems :: [ItemWithComments]}
   deriving (Eq, Ord, Read, Show)
 
 _Crate = (Core.Name "hydra.ext.rust.syntax.Crate")
