@@ -174,24 +174,25 @@ encodeFunction namespaces fun = ((\x -> case x of
                                 Core.applicationArgument = (Core.TermVariable (Core.Name v0))}))
                         rhsTerm = (Rewriting.simplifyTerm raw)
                         v1 = (Logic.ifElse (Rewriting.isFreeVariableInTerm (Core.Name v0) rhsTerm) Constants.ignoredVariable v0)
-                        hname = (Utils.unionFieldReference namespaces dn fn)
-                    in (Flows.bind (Maybes.cases (Maps.lookup fn fieldMap) (Flows.fail (Strings.cat [
-                      "field ",
-                      (Literals.showString (Core.unName fn)),
-                      " not found in ",
-                      (Literals.showString (Core.unName dn))])) (\fieldType ->  
-                      let ft = (Core.fieldTypeType fieldType) 
-                          noArgs = (Flows.pure [])
-                          singleArg = (Flows.pure [
-                                  Ast.PatternName (Utils.rawName v1)])
-                      in ((\x -> case x of
-                        Core.TypeUnit -> noArgs
-                        _ -> singleArg) (Rewriting.deannotateType ft)))) (\args ->  
-                      let lhs = (Utils.applicationPattern hname args)
-                      in (Flows.bind (Flows.map (\x -> Ast.CaseRhs x) (encodeTerm namespaces rhsTerm)) (\rhs -> Flows.pure (Ast.Alternative {
-                        Ast.alternativePattern = lhs,
-                        Ast.alternativeRhs = rhs,
-                        Ast.alternativeBinds = Nothing}))))))))
+                    in (Flows.bind Monads.getState (\g_ufr ->  
+                      let hname = (Utils.unionFieldReference g_ufr namespaces dn fn)
+                      in (Flows.bind (Maybes.cases (Maps.lookup fn fieldMap) (Flows.fail (Strings.cat [
+                        "field ",
+                        (Literals.showString (Core.unName fn)),
+                        " not found in ",
+                        (Literals.showString (Core.unName dn))])) (\fieldType ->  
+                        let ft = (Core.fieldTypeType fieldType) 
+                            noArgs = (Flows.pure [])
+                            singleArg = (Flows.pure [
+                                    Ast.PatternName (Utils.rawName v1)])
+                        in ((\x -> case x of
+                          Core.TypeUnit -> noArgs
+                          _ -> singleArg) (Rewriting.deannotateType ft)))) (\args ->  
+                        let lhs = (Utils.applicationPattern hname args)
+                        in (Flows.bind (Flows.map (\x -> Ast.CaseRhs x) (encodeTerm namespaces rhsTerm)) (\rhs -> Flows.pure (Ast.Alternative {
+                          Ast.alternativePattern = lhs,
+                          Ast.alternativeRhs = rhs,
+                          Ast.alternativeBinds = Nothing}))))))))))
       in (Flows.map (Utils.hslambda (Utils.rawName "x")) caseExpr)) v1)
   Core.FunctionLambda v1 ->  
     let v = (Core.lambdaParameter v1) 
@@ -291,11 +292,12 @@ encodeTerm namespaces term =
               field = (Core.injectionField v1)
               fn = (Core.fieldName field)
               ft = (Core.fieldTerm field)
-              lhs = (Ast.ExpressionVariable (Utils.unionFieldReference namespaces sname fn))
-              dflt = (Flows.map (Utils.hsapp lhs) (encode ft))
-          in (Flows.bind (Schemas.requireUnionField sname fn) (\ftyp -> (\x -> case x of
-            Core.TypeUnit -> (Flows.pure lhs)
-            _ -> dflt) (Rewriting.deannotateType ftyp)))
+          in (Flows.bind Monads.getState (\g_ufr2 ->  
+            let lhs = (Ast.ExpressionVariable (Utils.unionFieldReference g_ufr2 namespaces sname fn)) 
+                dflt = (Flows.map (Utils.hsapp lhs) (encode ft))
+            in (Flows.bind (Schemas.requireUnionField sname fn) (\ftyp -> (\x -> case x of
+              Core.TypeUnit -> (Flows.pure lhs)
+              _ -> dflt) (Rewriting.deannotateType ftyp)))))
         Core.TermUnit -> (Flows.pure (Ast.ExpressionTuple []))
         Core.TermVariable v1 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces v1)))
         Core.TermWrap v1 ->  

@@ -302,17 +302,24 @@ typeNameForRecord = haskellUtilsDefinition "typeNameForRecord" $
     "parts">: Strings.splitOn (string ".") (var "snameStr")] $
     Lists.last $ var "parts"
 
-unionFieldReference :: TBinding (HaskellNamespaces -> Name -> Name -> H.Name)
+unionFieldReference :: TBinding (Graph -> HaskellNamespaces -> Name -> Name -> H.Name)
 unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
-  doc "Generate a Haskell name for a union variant constructor" $
-  "namespaces" ~> "sname" ~> "fname" ~> lets [
+  doc "Generate a Haskell name for a union variant constructor, with disambiguation" $
+  "g" ~> "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
     "ns">: Module.qualifiedNameNamespace $ var "qname",
     "typeNameStr">: typeNameForRecord @@ var "sname",
     "capitalizedTypeName">: Formatting.capitalize @@ var "typeNameStr",
     "capitalizedFieldName">: Formatting.capitalize @@ var "fnameStr",
-    "nm">: Strings.cat2 (var "capitalizedTypeName") (var "capitalizedFieldName"),
+    "deconflict">: "name" ~> lets [
+      "tname">: Names.unqualifyName @@ record _QualifiedName [
+        _QualifiedName_namespace>>: var "ns",
+        _QualifiedName_local>>: var "name"]] $
+      Logic.ifElse (Maybes.isJust $ Lists.find ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "tname")) (Graph.graphElements $ var "g"))
+        (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
+        (var "name"),
+    "nm">: var "deconflict" @@ Strings.cat2 (var "capitalizedTypeName") (var "capitalizedFieldName"),
     "qualName">: record _QualifiedName [
       _QualifiedName_namespace>>: var "ns",
       _QualifiedName_local>>: var "nm"],
