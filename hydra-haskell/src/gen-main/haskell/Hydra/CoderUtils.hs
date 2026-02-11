@@ -155,101 +155,107 @@ tryTypeOf msg tc term = (Monads.withTrace msg (Checking.typeOf tc [] term))
 bindingMetadata :: (Typing.TypeContext -> Core.Binding -> Maybe Core.Term)
 bindingMetadata tc b = (Logic.ifElse (isComplexBinding tc b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing)
 
+analyzeFunctionTermWith_finish :: ((t0 -> Typing.TypeContext) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermWith_finish getTC fEnv tparams args bindings doms tapps body =  
+  let bodyWithTapps = (Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+          Core.typeApplicationTermBody = trm,
+          Core.typeApplicationTermType = typ})) body tapps)
+  in (Flows.bind (tryTypeOf "analyzeFunctionTermWith" (getTC fEnv) bodyWithTapps) (\typ -> Flows.pure (Typing.FunctionStructure {
+    Typing.functionStructureTypeParams = (Lists.reverse tparams),
+    Typing.functionStructureParams = (Lists.reverse args),
+    Typing.functionStructureBindings = bindings,
+    Typing.functionStructureBody = bodyWithTapps,
+    Typing.functionStructureDomains = (Lists.reverse doms),
+    Typing.functionStructureCodomain = (Just typ),
+    Typing.functionStructureEnvironment = fEnv})))
+
+analyzeFunctionTermWith_gather :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> (t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t = ((\x -> case x of
+  Core.TermFunction v1 -> ((\x -> case x of
+    Core.FunctionLambda v2 -> (Logic.ifElse argMode ( 
+      let v = (Core.lambdaParameter v2)
+      in  
+        let dom = (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v2))
+        in  
+          let body = (Core.lambdaBody v2)
+          in  
+            let newEnv = (setTC (Schemas.extendTypeContextForLambda (getTC gEnv) v2) gEnv)
+            in (analyzeFunctionTermWith_gather forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWith_finish getTC gEnv tparams args bindings doms tapps t))
+    _ -> (analyzeFunctionTermWith_finish getTC gEnv tparams args bindings doms tapps t)) v1)
+  Core.TermLet v1 ->  
+    let newBindings = (Core.letBindings v1)
+    in  
+      let body = (Core.letBody v1)
+      in  
+        let newEnv = (setTC (Schemas.extendTypeContextForLet forBinding (getTC gEnv) v1) gEnv)
+        in (analyzeFunctionTermWith_gather forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
+  Core.TermTypeApplication v1 ->  
+    let taBody = (Core.typeApplicationTermBody v1)
+    in  
+      let typ = (Core.typeApplicationTermType v1)
+      in (analyzeFunctionTermWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
+  Core.TermTypeLambda v1 ->  
+    let tvar = (Core.typeLambdaParameter v1)
+    in  
+      let tlBody = (Core.typeLambdaBody v1)
+      in  
+        let newEnv = (setTC (Schemas.extendTypeContextForTypeLambda (getTC gEnv) v1) gEnv)
+        in (analyzeFunctionTermWith_gather forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
+  _ -> (analyzeFunctionTermWith_finish getTC gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
+
 analyzeFunctionTermWith :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> (t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermWith forBinding getTC setTC env term =  
-  let finish = (\fEnv -> \tparams -> \args -> \bindings -> \doms -> \tapps -> \body ->  
-          let bodyWithTapps = (Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
-                  Core.typeApplicationTermBody = trm,
-                  Core.typeApplicationTermType = typ})) body tapps)
-          in (Flows.bind (tryTypeOf "analyzeFunctionTermWith" (getTC fEnv) bodyWithTapps) (\typ -> Flows.pure (Typing.FunctionStructure {
-            Typing.functionStructureTypeParams = (Lists.reverse tparams),
-            Typing.functionStructureParams = (Lists.reverse args),
-            Typing.functionStructureBindings = bindings,
-            Typing.functionStructureBody = bodyWithTapps,
-            Typing.functionStructureDomains = (Lists.reverse doms),
-            Typing.functionStructureCodomain = (Just typ),
-            Typing.functionStructureEnvironment = fEnv})))) 
-      gather = (\argMode -> \gEnv -> \tparams -> \args -> \bindings -> \doms -> \tapps -> \t -> (\x -> case x of
-              Core.TermFunction v1 -> ((\x -> case x of
-                Core.FunctionLambda v2 -> (Logic.ifElse argMode ( 
-                  let v = (Core.lambdaParameter v2)
-                  in  
-                    let dom = (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v2))
-                    in  
-                      let body = (Core.lambdaBody v2)
-                      in  
-                        let newEnv = (setTC (Schemas.extendTypeContextForLambda (getTC gEnv) v2) gEnv)
-                        in (gather argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (finish gEnv tparams args bindings doms tapps t))
-                _ -> (finish gEnv tparams args bindings doms tapps t)) v1)
-              Core.TermLet v1 ->  
-                let newBindings = (Core.letBindings v1)
-                in  
-                  let body = (Core.letBody v1)
-                  in  
-                    let newEnv = (setTC (Schemas.extendTypeContextForLet forBinding (getTC gEnv) v1) gEnv)
-                    in (gather False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
-              Core.TermTypeApplication v1 ->  
-                let taBody = (Core.typeApplicationTermBody v1)
-                in  
-                  let typ = (Core.typeApplicationTermType v1)
-                  in (gather argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
-              Core.TermTypeLambda v1 ->  
-                let tvar = (Core.typeLambdaParameter v1)
-                in  
-                  let tlBody = (Core.typeLambdaBody v1)
-                  in  
-                    let newEnv = (setTC (Schemas.extendTypeContextForTypeLambda (getTC gEnv) v1) gEnv)
-                    in (gather argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
-              _ -> (finish gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
-  in (gather True env [] [] [] [] [] term)
+analyzeFunctionTermWith forBinding getTC setTC env term = (analyzeFunctionTermWith_gather forBinding getTC setTC True env [] [] [] [] [] term)
+
+analyzeFunctionTermNoInferWith_finish :: (t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermNoInferWith_finish fEnv tparams args bindings doms tapps body =  
+  let bodyWithTapps = (Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+          Core.typeApplicationTermBody = trm,
+          Core.typeApplicationTermType = typ})) body tapps)
+  in (Flows.pure (Typing.FunctionStructure {
+    Typing.functionStructureTypeParams = (Lists.reverse tparams),
+    Typing.functionStructureParams = (Lists.reverse args),
+    Typing.functionStructureBindings = bindings,
+    Typing.functionStructureBody = bodyWithTapps,
+    Typing.functionStructureDomains = (Lists.reverse doms),
+    Typing.functionStructureCodomain = Nothing,
+    Typing.functionStructureEnvironment = fEnv}))
+
+analyzeFunctionTermNoInferWith_gather :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> (t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t = ((\x -> case x of
+  Core.TermFunction v1 -> ((\x -> case x of
+    Core.FunctionLambda v2 -> (Logic.ifElse argMode ( 
+      let v = (Core.lambdaParameter v2)
+      in  
+        let dom = (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v2))
+        in  
+          let body = (Core.lambdaBody v2)
+          in  
+            let newEnv = (setTC (Schemas.extendTypeContextForLambda (getTC gEnv) v2) gEnv)
+            in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t))
+    _ -> (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t)) v1)
+  Core.TermLet v1 ->  
+    let newBindings = (Core.letBindings v1)
+    in  
+      let body = (Core.letBody v1)
+      in  
+        let newEnv = (setTC (Schemas.extendTypeContextForLet forBinding (getTC gEnv) v1) gEnv)
+        in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
+  Core.TermTypeApplication v1 ->  
+    let taBody = (Core.typeApplicationTermBody v1)
+    in  
+      let typ = (Core.typeApplicationTermType v1)
+      in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
+  Core.TermTypeLambda v1 ->  
+    let tvar = (Core.typeLambdaParameter v1)
+    in  
+      let tlBody = (Core.typeLambdaBody v1)
+      in  
+        let newEnv = (setTC (Schemas.extendTypeContextForTypeLambda (getTC gEnv) v1) gEnv)
+        in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
+  _ -> (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
 
 analyzeFunctionTermNoInferWith :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> (t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermNoInferWith forBinding getTC setTC env term =  
-  let finish = (\fEnv -> \tparams -> \args -> \bindings -> \doms -> \tapps -> \body ->  
-          let bodyWithTapps = (Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
-                  Core.typeApplicationTermBody = trm,
-                  Core.typeApplicationTermType = typ})) body tapps)
-          in (Flows.pure (Typing.FunctionStructure {
-            Typing.functionStructureTypeParams = (Lists.reverse tparams),
-            Typing.functionStructureParams = (Lists.reverse args),
-            Typing.functionStructureBindings = bindings,
-            Typing.functionStructureBody = bodyWithTapps,
-            Typing.functionStructureDomains = (Lists.reverse doms),
-            Typing.functionStructureCodomain = Nothing,
-            Typing.functionStructureEnvironment = fEnv}))) 
-      gather = (\argMode -> \gEnv -> \tparams -> \args -> \bindings -> \doms -> \tapps -> \t -> (\x -> case x of
-              Core.TermFunction v1 -> ((\x -> case x of
-                Core.FunctionLambda v2 -> (Logic.ifElse argMode ( 
-                  let v = (Core.lambdaParameter v2)
-                  in  
-                    let dom = (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v2))
-                    in  
-                      let body = (Core.lambdaBody v2)
-                      in  
-                        let newEnv = (setTC (Schemas.extendTypeContextForLambda (getTC gEnv) v2) gEnv)
-                        in (gather argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (finish gEnv tparams args bindings doms tapps t))
-                _ -> (finish gEnv tparams args bindings doms tapps t)) v1)
-              Core.TermLet v1 ->  
-                let newBindings = (Core.letBindings v1)
-                in  
-                  let body = (Core.letBody v1)
-                  in  
-                    let newEnv = (setTC (Schemas.extendTypeContextForLet forBinding (getTC gEnv) v1) gEnv)
-                    in (gather False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
-              Core.TermTypeApplication v1 ->  
-                let taBody = (Core.typeApplicationTermBody v1)
-                in  
-                  let typ = (Core.typeApplicationTermType v1)
-                  in (gather argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
-              Core.TermTypeLambda v1 ->  
-                let tvar = (Core.typeLambdaParameter v1)
-                in  
-                  let tlBody = (Core.typeLambdaBody v1)
-                  in  
-                    let newEnv = (setTC (Schemas.extendTypeContextForTypeLambda (getTC gEnv) v1) gEnv)
-                    in (gather argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
-              _ -> (finish gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
-  in (gather True env [] [] [] [] [] term)
+analyzeFunctionTermNoInferWith forBinding getTC setTC env term = (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC True env [] [] [] [] [] term)
 
 analyzeFunctionTerm :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
 analyzeFunctionTerm getTC setTC env term = (analyzeFunctionTermWith bindingMetadata getTC setTC env term)

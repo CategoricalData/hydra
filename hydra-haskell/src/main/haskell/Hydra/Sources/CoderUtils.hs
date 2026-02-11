@@ -105,7 +105,11 @@ module_ = Module ns elements
      -- Function analysis helpers
      toBinding tryTypeOf,
      toBinding bindingMetadata,
+     toBinding analyzeFunctionTermWith_finish,
+     toBinding analyzeFunctionTermWith_gather,
      toBinding analyzeFunctionTermWith,
+     toBinding analyzeFunctionTermNoInferWith_finish,
+     toBinding analyzeFunctionTermNoInferWith_gather,
      toBinding analyzeFunctionTermNoInferWith,
      toBinding analyzeFunctionTerm,
      toBinding analyzeFunctionTermInline,
@@ -343,6 +347,93 @@ bindingMetadata = define "bindingMetadata" $
 -- collecting their components into a FunctionStructure. It uses a recursive
 -- gather/finish pattern with an argMode flag to track whether we're still
 -- collecting lambda parameters (vs. having seen a let which stops parameter collection).
+-- | Finish helper for analyzeFunctionTermWith: reapply type applications and infer return type
+analyzeFunctionTermWith_finish :: TBinding (
+  (env -> TypeContext) ->
+  env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
+  Flow s (FunctionStructure env))
+analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
+  "getTC" ~> "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
+  "bodyWithTapps" <~ Lists.foldl
+    ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
+    (var "body")
+    (var "tapps") $
+  "typ" <<~ tryTypeOf @@ string "analyzeFunctionTermWith" @@ (var "getTC" @@ var "fEnv") @@ var "bodyWithTapps" $
+  Flows.pure $ record _FunctionStructure [
+    _FunctionStructure_typeParams>>: Lists.reverse (var "tparams"),
+    _FunctionStructure_params>>: Lists.reverse (var "args"),
+    _FunctionStructure_bindings>>: var "bindings",
+    _FunctionStructure_body>>: var "bodyWithTapps",
+    _FunctionStructure_domains>>: Lists.reverse (var "doms"),
+    _FunctionStructure_codomain>>: just (var "typ"),
+    _FunctionStructure_environment>>: var "fEnv"]
+
+-- | Gather helper for analyzeFunctionTermWith: recursively collect function components
+analyzeFunctionTermWith_gather :: TBinding (
+  (TypeContext -> Binding -> Maybe Term) ->
+  (env -> TypeContext) ->
+  (TypeContext -> env -> env) ->
+  Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
+  Flow s (FunctionStructure env))
+analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
+  "forBinding" ~> "getTC" ~> "setTC" ~>
+  "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
+  cases _Term (Rewriting.deannotateTerm @@ var "t")
+    (Just $ analyzeFunctionTermWith_finish @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
+    _Term_function>>: "f" ~>
+      cases _Function (var "f")
+        (Just $ analyzeFunctionTermWith_finish @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
+        _Function_lambda>>: "lam" ~>
+          Logic.ifElse (var "argMode")
+            ("v" <~ Core.lambdaParameter (var "lam") $
+             "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
+             "body" <~ Core.lambdaBody (var "lam") $
+             "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
+             analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+               @@ var "argMode" @@ var "newEnv"
+               @@ var "tparams"
+               @@ (Lists.cons (var "v") (var "args"))
+               @@ var "bindings"
+               @@ (Lists.cons (var "dom") (var "doms"))
+               @@ var "tapps"
+               @@ var "body")
+            (analyzeFunctionTermWith_finish @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t")],
+    _Term_let>>: "lt" ~>
+      "newBindings" <~ Core.letBindings (var "lt") $
+      "body" <~ Core.letBody (var "lt") $
+      "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
+      analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+        @@ boolean False @@ var "newEnv"
+        @@ var "tparams"
+        @@ var "args"
+        @@ (Lists.concat2 (var "bindings") (var "newBindings"))
+        @@ var "doms"
+        @@ var "tapps"
+        @@ var "body",
+    _Term_typeApplication>>: "ta" ~>
+      "taBody" <~ Core.typeApplicationTermBody (var "ta") $
+      "typ" <~ Core.typeApplicationTermType (var "ta") $
+      analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+        @@ var "argMode" @@ var "gEnv"
+        @@ var "tparams"
+        @@ var "args"
+        @@ var "bindings"
+        @@ var "doms"
+        @@ (Lists.cons (var "typ") (var "tapps"))
+        @@ var "taBody",
+    _Term_typeLambda>>: "tl" ~>
+      "tvar" <~ Core.typeLambdaParameter (var "tl") $
+      "tlBody" <~ Core.typeLambdaBody (var "tl") $
+      "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
+      analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+        @@ var "argMode" @@ var "newEnv"
+        @@ (Lists.cons (var "tvar") (var "tparams"))
+        @@ var "args"
+        @@ var "bindings"
+        @@ var "doms"
+        @@ var "tapps"
+        @@ var "tlBody"]
+
 analyzeFunctionTermWith :: TBinding (
   (TypeContext -> Binding -> Maybe Term) ->
   (env -> TypeContext) ->
@@ -353,93 +444,99 @@ analyzeFunctionTermWith :: TBinding (
 analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
   doc "Analyze a function term with configurable binding metadata" $
   "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  -- Use mutually recursive helpers: gather and finish
-  lets [
-    -- Finish helper: reapply type applications and infer return type
-    "finish">: (
-      "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
-      -- Reapply type applications to the body
-      "bodyWithTapps" <~ Lists.foldl
-        ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
-        (var "body")
-        (var "tapps") $
-      -- Infer the return type
-      "typ" <<~ tryTypeOf @@ string "analyzeFunctionTermWith" @@ (var "getTC" @@ var "fEnv") @@ var "bodyWithTapps" $
-      Flows.pure $ record _FunctionStructure [
-        _FunctionStructure_typeParams>>: Lists.reverse (var "tparams"),
-        _FunctionStructure_params>>: Lists.reverse (var "args"),
-        _FunctionStructure_bindings>>: var "bindings",
-        _FunctionStructure_body>>: var "bodyWithTapps",
-        _FunctionStructure_domains>>: Lists.reverse (var "doms"),
-        _FunctionStructure_codomain>>: just (var "typ"),
-        _FunctionStructure_environment>>: var "fEnv"]),
-    -- Gather helper: recursively collect components
-    "gather">: (
-      "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
-      cases _Term (Rewriting.deannotateTerm @@ var "t")
-        (Just $ var "finish" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
-        -- Lambda: collect parameter and domain if in argMode
-        _Term_function>>: "f" ~>
-          cases _Function (var "f")
-            (Just $ var "finish" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
-            _Function_lambda>>: "lam" ~>
-              Logic.ifElse (var "argMode")
-                -- Collect parameter and domain, extend environment
-                ("v" <~ Core.lambdaParameter (var "lam") $
-                 "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
-                 "body" <~ Core.lambdaBody (var "lam") $
-                 "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
-                 var "gather" @@ var "argMode" @@ var "newEnv"
-                   @@ var "tparams"
-                   @@ (Lists.cons (var "v") (var "args"))
-                   @@ var "bindings"
-                   @@ (Lists.cons (var "dom") (var "doms"))
-                   @@ var "tapps"
-                   @@ var "body")
-                -- Stop collecting, finish
-                (var "finish" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t")],
-        -- Let: accumulate bindings, extend environment, stop argMode
-        _Term_let>>: "lt" ~>
-          "newBindings" <~ Core.letBindings (var "lt") $
-          "body" <~ Core.letBody (var "lt") $
-          "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
-          var "gather" @@ boolean False @@ var "newEnv"
-            @@ var "tparams"
-            @@ var "args"
-            @@ (Lists.concat2 (var "bindings") (var "newBindings"))
-            @@ var "doms"
-            @@ var "tapps"
-            @@ var "body",
-        -- Type application: accumulate type arguments
-        _Term_typeApplication>>: "ta" ~>
-          "taBody" <~ Core.typeApplicationTermBody (var "ta") $
-          "typ" <~ Core.typeApplicationTermType (var "ta") $
-          var "gather" @@ var "argMode" @@ var "gEnv"
-            @@ var "tparams"
-            @@ var "args"
-            @@ var "bindings"
-            @@ var "doms"
-            @@ (Lists.cons (var "typ") (var "tapps"))
-            @@ var "taBody",
-        -- Type lambda: collect type parameter, extend environment
-        _Term_typeLambda>>: "tl" ~>
-          "tvar" <~ Core.typeLambdaParameter (var "tl") $
-          "tlBody" <~ Core.typeLambdaBody (var "tl") $
-          "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
-          var "gather" @@ var "argMode" @@ var "newEnv"
-            @@ (Lists.cons (var "tvar") (var "tparams"))
-            @@ var "args"
-            @@ var "bindings"
-            @@ var "doms"
-            @@ var "tapps"
-            @@ var "tlBody"])] $
-  var "gather" @@ boolean True @@ var "env"
+  analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+    @@ boolean True @@ var "env"
     @@ list ([] :: [TTerm Name])
     @@ list ([] :: [TTerm Name])
     @@ list ([] :: [TTerm Binding])
     @@ list ([] :: [TTerm Type])
     @@ list ([] :: [TTerm Type])
     @@ var "term"
+
+-- | Finish helper for analyzeFunctionTermNoInferWith: reapply type applications, skip type inference
+analyzeFunctionTermNoInferWith_finish :: TBinding (
+  env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
+  Flow s (FunctionStructure env))
+analyzeFunctionTermNoInferWith_finish = define "analyzeFunctionTermNoInferWith_finish" $
+  "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
+  "bodyWithTapps" <~ Lists.foldl
+    ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
+    (var "body")
+    (var "tapps") $
+  Flows.pure $ record _FunctionStructure [
+    _FunctionStructure_typeParams>>: Lists.reverse (var "tparams"),
+    _FunctionStructure_params>>: Lists.reverse (var "args"),
+    _FunctionStructure_bindings>>: var "bindings",
+    _FunctionStructure_body>>: var "bodyWithTapps",
+    _FunctionStructure_domains>>: Lists.reverse (var "doms"),
+    _FunctionStructure_codomain>>: nothing,
+    _FunctionStructure_environment>>: var "fEnv"]
+
+-- | Gather helper for analyzeFunctionTermNoInferWith: recursively collect function components
+analyzeFunctionTermNoInferWith_gather :: TBinding (
+  (TypeContext -> Binding -> Maybe Term) ->
+  (env -> TypeContext) ->
+  (TypeContext -> env -> env) ->
+  Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
+  Flow s (FunctionStructure env))
+analyzeFunctionTermNoInferWith_gather = define "analyzeFunctionTermNoInferWith_gather" $
+  "forBinding" ~> "getTC" ~> "setTC" ~>
+  "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
+  cases _Term (Rewriting.deannotateTerm @@ var "t")
+    (Just $ analyzeFunctionTermNoInferWith_finish @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
+    _Term_function>>: "f" ~>
+      cases _Function (var "f")
+        (Just $ analyzeFunctionTermNoInferWith_finish @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
+        _Function_lambda>>: "lam" ~>
+          Logic.ifElse (var "argMode")
+            ("v" <~ Core.lambdaParameter (var "lam") $
+             "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
+             "body" <~ Core.lambdaBody (var "lam") $
+             "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
+             analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+               @@ var "argMode" @@ var "newEnv"
+               @@ var "tparams"
+               @@ (Lists.cons (var "v") (var "args"))
+               @@ var "bindings"
+               @@ (Lists.cons (var "dom") (var "doms"))
+               @@ var "tapps"
+               @@ var "body")
+            (analyzeFunctionTermNoInferWith_finish @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t")],
+    _Term_let>>: "lt" ~>
+      "newBindings" <~ Core.letBindings (var "lt") $
+      "body" <~ Core.letBody (var "lt") $
+      "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
+      analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+        @@ boolean False @@ var "newEnv"
+        @@ var "tparams"
+        @@ var "args"
+        @@ (Lists.concat2 (var "bindings") (var "newBindings"))
+        @@ var "doms"
+        @@ var "tapps"
+        @@ var "body",
+    _Term_typeApplication>>: "ta" ~>
+      "taBody" <~ Core.typeApplicationTermBody (var "ta") $
+      "typ" <~ Core.typeApplicationTermType (var "ta") $
+      analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+        @@ var "argMode" @@ var "gEnv"
+        @@ var "tparams"
+        @@ var "args"
+        @@ var "bindings"
+        @@ var "doms"
+        @@ (Lists.cons (var "typ") (var "tapps"))
+        @@ var "taBody",
+    _Term_typeLambda>>: "tl" ~>
+      "tvar" <~ Core.typeLambdaParameter (var "tl") $
+      "tlBody" <~ Core.typeLambdaBody (var "tl") $
+      "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
+      analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+        @@ var "argMode" @@ var "newEnv"
+        @@ (Lists.cons (var "tvar") (var "tparams"))
+        @@ var "args"
+        @@ var "bindings"
+        @@ var "doms"
+        @@ var "tapps"
+        @@ var "tlBody"]
 
 -- | Internal helper: analyze a function term without type inference, with configurable binding metadata.
 analyzeFunctionTermNoInferWith :: TBinding (
@@ -452,78 +549,8 @@ analyzeFunctionTermNoInferWith :: TBinding (
 analyzeFunctionTermNoInferWith = define "analyzeFunctionTermNoInferWith" $
   doc "Analyze a function term without type inference, with configurable binding metadata" $
   "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  -- Use mutually recursive helpers: gather and finish
-  lets [
-    -- Finish helper: reapply type applications, skip type inference
-    "finish">: (
-      "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
-      "bodyWithTapps" <~ Lists.foldl
-        ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
-        (var "body")
-        (var "tapps") $
-      Flows.pure $ record _FunctionStructure [
-        _FunctionStructure_typeParams>>: Lists.reverse (var "tparams"),
-        _FunctionStructure_params>>: Lists.reverse (var "args"),
-        _FunctionStructure_bindings>>: var "bindings",
-        _FunctionStructure_body>>: var "bodyWithTapps",
-        _FunctionStructure_domains>>: Lists.reverse (var "doms"),
-        _FunctionStructure_codomain>>: nothing,
-        _FunctionStructure_environment>>: var "fEnv"]),
-    -- Gather helper: recursively collect components
-    "gather">: (
-      "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
-      cases _Term (Rewriting.deannotateTerm @@ var "t")
-        (Just $ var "finish" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
-        _Term_function>>: "f" ~>
-          cases _Function (var "f")
-            (Just $ var "finish" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
-            _Function_lambda>>: "lam" ~>
-              Logic.ifElse (var "argMode")
-                ("v" <~ Core.lambdaParameter (var "lam") $
-                 "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
-                 "body" <~ Core.lambdaBody (var "lam") $
-                 "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
-                 var "gather" @@ var "argMode" @@ var "newEnv"
-                   @@ var "tparams"
-                   @@ (Lists.cons (var "v") (var "args"))
-                   @@ var "bindings"
-                   @@ (Lists.cons (var "dom") (var "doms"))
-                   @@ var "tapps"
-                   @@ var "body")
-                (var "finish" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t")],
-        _Term_let>>: "lt" ~>
-          "newBindings" <~ Core.letBindings (var "lt") $
-          "body" <~ Core.letBody (var "lt") $
-          "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
-          var "gather" @@ boolean False @@ var "newEnv"
-            @@ var "tparams"
-            @@ var "args"
-            @@ (Lists.concat2 (var "bindings") (var "newBindings"))
-            @@ var "doms"
-            @@ var "tapps"
-            @@ var "body",
-        _Term_typeApplication>>: "ta" ~>
-          "taBody" <~ Core.typeApplicationTermBody (var "ta") $
-          "typ" <~ Core.typeApplicationTermType (var "ta") $
-          var "gather" @@ var "argMode" @@ var "gEnv"
-            @@ var "tparams"
-            @@ var "args"
-            @@ var "bindings"
-            @@ var "doms"
-            @@ (Lists.cons (var "typ") (var "tapps"))
-            @@ var "taBody",
-        _Term_typeLambda>>: "tl" ~>
-          "tvar" <~ Core.typeLambdaParameter (var "tl") $
-          "tlBody" <~ Core.typeLambdaBody (var "tl") $
-          "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
-          var "gather" @@ var "argMode" @@ var "newEnv"
-            @@ (Lists.cons (var "tvar") (var "tparams"))
-            @@ var "args"
-            @@ var "bindings"
-            @@ var "doms"
-            @@ var "tapps"
-            @@ var "tlBody"])] $
-  var "gather" @@ boolean True @@ var "env"
+  analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+    @@ boolean True @@ var "env"
     @@ list ([] :: [TTerm Name])
     @@ list ([] :: [TTerm Name])
     @@ list ([] :: [TTerm Binding])
