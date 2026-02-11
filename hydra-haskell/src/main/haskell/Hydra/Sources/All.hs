@@ -31,7 +31,10 @@ import qualified Hydra.Sources.Yaml.Model as YamlModel
 
 
 mainModules :: [Module]
-mainModules = kernelModules ++ otherModules
+mainModules = kernelModules ++ jsonModules ++ otherModules
+
+kernelModules :: [Module]
+kernelModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules
 
 jsonModules :: [Module]
 jsonModules = [
@@ -54,6 +57,3 @@ otherModules = [
   HaskellSerde.module_,
   HaskellUtils.module_,
   YamlModel.module_]
-
-kernelModules :: [Module]
-kernelModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules

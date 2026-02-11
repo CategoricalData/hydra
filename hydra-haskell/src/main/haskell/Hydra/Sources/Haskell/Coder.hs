@@ -289,8 +289,9 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
                     "rhsTerm">: Rewriting.simplifyTerm @@ var "raw",
                     "v1">: Logic.ifElse (Rewriting.isFreeVariableInTerm @@ (wrap _Name $ var "v0") @@ var "rhsTerm")
                       (Constants.ignoredVariable)
-                      (var "v0"),
-                    "hname">: HaskellUtils.unionFieldReference @@ var "namespaces" @@ var "dn" @@ var "fn"] $
+                      (var "v0")] $
+                    "g_ufr" <<~ Monads.getState $ lets [
+                    "hname">: HaskellUtils.unionFieldReference @@ var "g_ufr" @@ var "namespaces" @@ var "dn" @@ var "fn"] $
                     "args" <<~ (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
                         (Flows.fail $ Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
                           string " not found in ", Literals.showString $ (Core.unName $ var "dn")]) $
@@ -465,8 +466,9 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "sname">: Core.injectionTypeName $ var "injection",
         "field">: Core.injectionField $ var "injection",
         "fn">: Core.fieldName $ var "field",
-        "ft">: Core.fieldTerm $ var "field",
-        "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ var "namespaces" @@ var "sname" @@ var "fn",
+        "ft">: Core.fieldTerm $ var "field"] $
+        "g_ufr2" <<~ Monads.getState $ lets [
+        "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ var "g_ufr2" @@ var "namespaces" @@ var "sname" @@ var "fn",
         "dflt">: Flows.map (HaskellUtils.hsapp @@ var "lhs") (var "encode" @@ var "ft")] $
         "ftyp" <<~ Schemas.requireUnionField_ @@ var "sname" @@ var "fn" $
         cases _Type (Rewriting.deannotateType @@ var "ftyp")

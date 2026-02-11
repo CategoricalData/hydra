@@ -164,16 +164,21 @@ typeNameForRecord sname =
       parts = (Strings.splitOn "." snameStr)
   in (Lists.last parts)
 
--- | Generate a Haskell name for a union variant constructor
-unionFieldReference :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name)
-unionFieldReference namespaces sname fname =  
+-- | Generate a Haskell name for a union variant constructor, with disambiguation
+unionFieldReference :: (Graph.Graph -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name)
+unionFieldReference g namespaces sname fname =  
   let fnameStr = (Core.unName fname) 
       qname = (Names.qualifyName sname)
       ns = (Module.qualifiedNameNamespace qname)
       typeNameStr = (typeNameForRecord sname)
       capitalizedTypeName = (Formatting.capitalize typeNameStr)
       capitalizedFieldName = (Formatting.capitalize fnameStr)
-      nm = (Strings.cat2 capitalizedTypeName capitalizedFieldName)
+      deconflict = (\name ->  
+              let tname = (Names.unqualifyName (Module.QualifiedName {
+                      Module.qualifiedNameNamespace = ns,
+                      Module.qualifiedNameLocal = name}))
+              in (Logic.ifElse (Maybes.isJust (Lists.find (\b -> Equality.equal (Core.bindingName b) tname) (Graph.graphElements g))) (deconflict (Strings.cat2 name "_")) name))
+      nm = (deconflict (Strings.cat2 capitalizedTypeName capitalizedFieldName))
       qualName = Module.QualifiedName {
               Module.qualifiedNameNamespace = ns,
               Module.qualifiedNameLocal = nm}
