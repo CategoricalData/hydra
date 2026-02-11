@@ -1399,7 +1399,8 @@ encodeLiteral_encodeFloat = def "encodeLiteral_encodeFloat" $
               Literals.float32ToBigfloat (var "v"))),
       _FloatValue_float64>>: "v" ~>
         encodeLiteral_litExp @@
-          (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $ var "v")]
+          (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
+            Literals.float64ToBigfloat (var "v"))]
 
 -- | Encode an integer value to a Java expression
 encodeLiteral_encodeInteger :: TBinding (IntegerValue -> Java.Expression)

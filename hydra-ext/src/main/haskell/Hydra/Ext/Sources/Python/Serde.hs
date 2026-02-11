@@ -523,7 +523,7 @@ encodeNumber = def "encodeNumber" $
   doc "Serialize a Python number literal" $
   lambda "num" $
     cases Py._Number (var "num") Nothing [
-      Py._Number_float>>: lambda "f" $ Serialization.cst @@ Literals.showFloat64 (var "f"),
+      Py._Number_float>>: lambda "f" $ Serialization.cst @@ Literals.showBigfloat (var "f"),
       Py._Number_integer>>: lambda "i" $ Serialization.cst @@ Literals.showBigint (var "i")]
 
 encodeString :: TBinding (Py.String_ -> Expr)

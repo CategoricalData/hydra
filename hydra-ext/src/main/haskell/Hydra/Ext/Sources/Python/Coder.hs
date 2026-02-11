@@ -443,7 +443,7 @@ encodeFloatValue = def "encodeFloatValue" $
           (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float32ToBigfloat $ var "f"),
       _FloatValue_float64>>: "f" ~>
         produce $ PyUtils.pyAtomToPyExpression @@
-          (PyDsl.atomNumber $ PyDsl.numberFloat $ var "f")]
+          (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float64ToBigfloat $ var "f")]
 
 -- | Encode an integer value to a Python expression
 encodeIntegerValue :: TBinding (IntegerValue -> Flow s Py.Expression)
@@ -592,27 +592,27 @@ encodeFunctionType = def "encodeFunctionType" $
     -- gatherParams collects all domain types and final codomain
     "gatherParams" <~ (
       "rdoms" ~> "ftype" ~>
-        "cod" <~ (project _FunctionType _FunctionType_codomain @@ var "ftype") $
+        "innerCod" <~ (project _FunctionType _FunctionType_codomain @@ var "ftype") $
         "dom" <~ (project _FunctionType _FunctionType_domain @@ var "ftype") $
-        cases _Type (Rewriting.deannotateType @@ var "cod") Nothing [
+        cases _Type (Rewriting.deannotateType @@ var "innerCod") Nothing [
           _Type_function>>: "ft2" ~>
             var "gatherParams" @@ (Lists.cons (var "dom") (var "rdoms")) @@ var "ft2",
-          -- Default: return (reverse (dom:rdoms), cod)
-          _Type_annotated>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_application>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_forall>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_list>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_literal>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_map>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_maybe>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_either>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_pair>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_record>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_set>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_union>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_unit>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_variable>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod"),
-          _Type_wrap>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "cod")]) $
+          -- Default: return (reverse (dom:rdoms), innerCod)
+          _Type_annotated>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_application>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_forall>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_list>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_literal>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_map>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_maybe>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_either>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_pair>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_record>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_set>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_union>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_unit>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_variable>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod"),
+          _Type_wrap>>: constant $ pair (Lists.reverse (Lists.cons (var "dom") (var "rdoms"))) (var "innerCod")]) $
     "domsAndCod" <~ (var "gatherParams" @@ list ([] :: [TTerm Type]) @@ var "ft") $
     "doms" <~ Pairs.first (var "domsAndCod") $
     "cod" <~ Pairs.second (var "domsAndCod") $
