@@ -48,7 +48,7 @@ key_type = hydra.core.Name("type")
 max_int32 = 2147483647
 
 # A maximum depth for nested flows. Currently, this is set very high because deep flows are common in type inference over the Hydra kernel.
-max_trace_depth = 4000
+max_trace_depth = 5000
 
 # A placeholder name for row types as they are being constructed.
 placeholder_name = hydra.core.Name("Placeholder")
