@@ -1,0 +1,1510 @@
+{
+  "description": [
+    "Utility functions for GraphSON encoding and property graph conversion."],
+  "elements": [
+    {
+      "name": "hydra.pg.graphson.utils.elementsToVerticesWithAdjacentEdges",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Convert a list of property graph elements to a list of vertices with their adjacent edges"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "partitioned",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "els"},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "pair": {
+                                                "@first": {
+                                                  "typeApplication": {
+                                                    "body": {"list": []},
+                                                    "type": {
+                                                      "application": {
+                                                        "argument": {"variable": "t0"},
+                                                        "function": {"variable": "hydra.pg.model.Vertex"}}}}},
+                                                "@second": {
+                                                  "typeApplication": {
+                                                    "body": {"list": []},
+                                                    "type": {
+                                                      "application": {
+                                                        "argument": {"variable": "t0"},
+                                                        "function": {"variable": "hydra.pg.model.Edge"}}}}}}},
+                                            "type": {
+                                              "list": {
+                                                "application": {
+                                                  "argument": {"variable": "t0"},
+                                                  "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
+                                        "type": {
+                                          "list": {
+                                            "application": {
+                                              "argument": {"variable": "t0"},
+                                              "function": {"variable": "hydra.pg.model.Edge"}}}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "el"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "function": {
+                                                                "elimination": {
+                                                                  "union": {
+                                                                    "cases": [
+                                                                      {
+                                                                        "name": "vertex",
+                                                                        "term": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "pair": {
+                                                                                          "@first": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "acc"},
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                          "type": {
+                                                                                                            "list": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "t0"},
+                                                                                                                "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
+                                                                                                      "type": {
+                                                                                                        "list": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "t0"},
+                                                                                                            "function": {"variable": "hydra.pg.model.Edge"}}}}}}}},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "v"},
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                      "type": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "t0"},
+                                                                                                          "function": {"variable": "hydra.pg.model.Vertex"}}}}}}}}},
+                                                                                          "@second": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "acc"},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                      "type": {
+                                                                                                        "list": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "t0"},
+                                                                                                            "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
+                                                                                                  "type": {
+                                                                                                    "list": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "t0"},
+                                                                                                        "function": {"variable": "hydra.pg.model.Edge"}}}}}}}}}},
+                                                                                      "type": {
+                                                                                        "list": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "t0"},
+                                                                                            "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
+                                                                                  "type": {
+                                                                                    "list": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "t0"},
+                                                                                        "function": {"variable": "hydra.pg.model.Edge"}}}}}},
+                                                                              "domain": [
+                                                                                {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "t0"},
+                                                                                    "function": {"variable": "hydra.pg.model.Vertex"}}}],
+                                                                              "parameter": "v"}}}},
+                                                                      {
+                                                                        "name": "edge",
+                                                                        "term": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "pair": {
+                                                                                          "@first": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "acc"},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                      "type": {
+                                                                                                        "list": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "t0"},
+                                                                                                            "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
+                                                                                                  "type": {
+                                                                                                    "list": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "t0"},
+                                                                                                        "function": {"variable": "hydra.pg.model.Edge"}}}}}}}},
+                                                                                          "@second": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "acc"},
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                          "type": {
+                                                                                                            "list": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "t0"},
+                                                                                                                "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
+                                                                                                      "type": {
+                                                                                                        "list": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "t0"},
+                                                                                                            "function": {"variable": "hydra.pg.model.Edge"}}}}}}}},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "e"},
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                      "type": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "t0"},
+                                                                                                          "function": {"variable": "hydra.pg.model.Edge"}}}}}}}}}}},
+                                                                                      "type": {
+                                                                                        "list": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "t0"},
+                                                                                            "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
+                                                                                  "type": {
+                                                                                    "list": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "t0"},
+                                                                                        "function": {"variable": "hydra.pg.model.Edge"}}}}}},
+                                                                              "domain": [
+                                                                                {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "t0"},
+                                                                                    "function": {"variable": "hydra.pg.model.Edge"}}}],
+                                                                              "parameter": "e"}}}}],
+                                                                    "default": null,
+                                                                    "typeName": "hydra.pg.model.Element"}}}},
+                                                            "type": {"variable": "t0"}}}}},
+                                                    "domain": [
+                                                      {
+                                                        "application": {
+                                                          "argument": {"variable": "t0"},
+                                                          "function": {"variable": "hydra.pg.model.Element"}}}],
+                                                    "parameter": "el"}}},
+                                              "domain": [
+                                                {
+                                                  "pair": {
+                                                    "first": {
+                                                      "list": {
+                                                        "application": {
+                                                          "argument": {"variable": "t0"},
+                                                          "function": {"variable": "hydra.pg.model.Vertex"}}}},
+                                                    "second": {
+                                                      "list": {
+                                                        "application": {
+                                                          "argument": {"variable": "t0"},
+                                                          "function": {"variable": "hydra.pg.model.Edge"}}}}}}],
+                                              "parameter": "acc"}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                "type": {
+                                                  "pair": {
+                                                    "first": {
+                                                      "list": {
+                                                        "application": {
+                                                          "argument": {"variable": "t0"},
+                                                          "function": {"variable": "hydra.pg.model.Vertex"}}}},
+                                                    "second": {
+                                                      "list": {
+                                                        "application": {
+                                                          "argument": {"variable": "t0"},
+                                                          "function": {"variable": "hydra.pg.model.Edge"}}}}}}}},
+                                            "type": {
+                                              "application": {
+                                                "argument": {"variable": "t0"},
+                                                "function": {"variable": "hydra.pg.model.Element"}}}}}}}}}}},
+                            "type": [
+                              {
+                                "constraints": null,
+                                "type": {
+                                  "pair": {
+                                    "first": {
+                                      "list": {
+                                        "application": {
+                                          "argument": {"variable": "t0"},
+                                          "function": {"variable": "hydra.pg.model.Vertex"}}}},
+                                    "second": {
+                                      "list": {
+                                        "application": {
+                                          "argument": {"variable": "t0"},
+                                          "function": {"variable": "hydra.pg.model.Edge"}}}}}},
+                                "variables": []}]}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "vertices",
+                                "term": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "partitioned"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                "type": {
+                                                  "list": {
+                                                    "application": {
+                                                      "argument": {"variable": "t0"},
+                                                      "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
+                                            "type": {
+                                              "list": {
+                                                "application": {
+                                                  "argument": {"variable": "t0"},
+                                                  "function": {"variable": "hydra.pg.model.Edge"}}}}}}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                        "type": {
+                                          "application": {
+                                            "argument": {"variable": "t0"},
+                                            "function": {"variable": "hydra.pg.model.Vertex"}}}}}}},
+                                "type": [
+                                  {
+                                    "constraints": null,
+                                    "type": {
+                                      "list": {
+                                        "application": {
+                                          "argument": {"variable": "t0"},
+                                          "function": {"variable": "hydra.pg.model.Vertex"}}}},
+                                    "variables": []}]}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "edges",
+                                    "term": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "partitioned"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                    "type": {
+                                                      "list": {
+                                                        "application": {
+                                                          "argument": {"variable": "t0"},
+                                                          "function": {"variable": "hydra.pg.model.Vertex"}}}}}},
+                                                "type": {
+                                                  "list": {
+                                                    "application": {
+                                                      "argument": {"variable": "t0"},
+                                                      "function": {"variable": "hydra.pg.model.Edge"}}}}}}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                            "type": {
+                                              "application": {
+                                                "argument": {"variable": "t0"},
+                                                "function": {"variable": "hydra.pg.model.Edge"}}}}}}},
+                                    "type": [
+                                      {
+                                        "constraints": null,
+                                        "type": {
+                                          "list": {
+                                            "application": {
+                                              "argument": {"variable": "t0"},
+                                              "function": {"variable": "hydra.pg.model.Edge"}}}},
+                                        "variables": []}]}],
+                                "body": {
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "vertexMap0",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "vertices"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "pair": {
+                                                                      "@first": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "v"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "function": {
+                                                                                  "elimination": {"record": {"field": "id", "typeName": "hydra.pg.model.Vertex"}}}},
+                                                                              "type": {"variable": "t0"}}}}},
+                                                                      "@second": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {"name": "vertex", "term": {"variable": "v"}},
+                                                                                {
+                                                                                  "name": "ins",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "t0"},
+                                                                                          "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}},
+                                                                                {
+                                                                                  "name": "outs",
+                                                                                  "term": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"list": []},
+                                                                                      "type": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "t0"},
+                                                                                          "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}}],
+                                                                              "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                          "type": {"variable": "t0"}}}}},
+                                                                  "type": {"variable": "t0"}}},
+                                                              "type": {
+                                                                "application": {
+                                                                  "argument": {"variable": "t0"},
+                                                                  "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
+                                                          "domain": [
+                                                            {
+                                                              "application": {
+                                                                "argument": {"variable": "t0"},
+                                                                "function": {"variable": "hydra.pg.model.Vertex"}}}],
+                                                          "parameter": "v"}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "type": {
+                                                              "application": {
+                                                                "argument": {"variable": "t0"},
+                                                                "function": {"variable": "hydra.pg.model.Vertex"}}}}},
+                                                        "type": {
+                                                          "pair": {
+                                                            "first": {"variable": "t0"},
+                                                            "second": {
+                                                              "application": {
+                                                                "argument": {"variable": "t0"},
+                                                                "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                    "type": {"variable": "t0"}}},
+                                                "type": {
+                                                  "application": {
+                                                    "argument": {"variable": "t0"},
+                                                    "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}},
+                                        "type": [
+                                          {
+                                            "constraints": null,
+                                            "type": {
+                                              "map": {
+                                                "keys": {"variable": "t0"},
+                                                "values": {
+                                                  "application": {
+                                                    "argument": {"variable": "t0"},
+                                                    "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
+                                            "variables": []}]}],
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "vertexMap1",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "edges"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "vertexMap0"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "let": {
+                                                                        "bindings": [
+                                                                          {
+                                                                            "name": "label",
+                                                                            "term": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "edge"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "function": {
+                                                                                        "elimination": {"record": {"field": "label", "typeName": "hydra.pg.model.Edge"}}}},
+                                                                                    "type": {"variable": "t0"}}}}},
+                                                                            "type": [
+                                                                              {
+                                                                                "constraints": null,
+                                                                                "type": {"variable": "hydra.pg.model.EdgeLabel"},
+                                                                                "variables": []}]}],
+                                                                        "body": {
+                                                                          "let": {
+                                                                            "bindings": [
+                                                                              {
+                                                                                "name": "edgeId",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "edge"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "function": {
+                                                                                            "elimination": {"record": {"field": "id", "typeName": "hydra.pg.model.Edge"}}}},
+                                                                                        "type": {"variable": "t0"}}}}},
+                                                                                "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
+                                                                            "body": {
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "outV",
+                                                                                    "term": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "edge"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "function": {
+                                                                                                "elimination": {"record": {"field": "out", "typeName": "hydra.pg.model.Edge"}}}},
+                                                                                            "type": {"variable": "t0"}}}}},
+                                                                                    "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
+                                                                                "body": {
+                                                                                  "let": {
+                                                                                    "bindings": [
+                                                                                      {
+                                                                                        "name": "inV",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "edge"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "function": {
+                                                                                                    "elimination": {"record": {"field": "in", "typeName": "hydra.pg.model.Edge"}}}},
+                                                                                                "type": {"variable": "t0"}}}}},
+                                                                                        "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
+                                                                                    "body": {
+                                                                                      "let": {
+                                                                                        "bindings": [
+                                                                                          {
+                                                                                            "name": "props",
+                                                                                            "term": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "edge"},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "function": {
+                                                                                                        "elimination": {"record": {"field": "properties", "typeName": "hydra.pg.model.Edge"}}}},
+                                                                                                    "type": {"variable": "t0"}}}}},
+                                                                                            "type": [
+                                                                                              {
+                                                                                                "constraints": null,
+                                                                                                "type": {
+                                                                                                  "map": {
+                                                                                                    "keys": {"variable": "hydra.pg.model.PropertyKey"},
+                                                                                                    "values": {"variable": "t0"}}},
+                                                                                                "variables": []}]}],
+                                                                                        "body": {
+                                                                                          "let": {
+                                                                                            "bindings": [
+                                                                                              {
+                                                                                                "name": "adjEdgeOut",
+                                                                                                "term": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "record": {
+                                                                                                        "fields": [
+                                                                                                          {"name": "label", "term": {"variable": "label"}},
+                                                                                                          {"name": "id", "term": {"variable": "edgeId"}},
+                                                                                                          {"name": "vertex", "term": {"variable": "inV"}},
+                                                                                                          {"name": "properties", "term": {"variable": "props"}}],
+                                                                                                        "typeName": "hydra.pg.model.AdjacentEdge"}},
+                                                                                                    "type": {"variable": "t0"}}},
+                                                                                                "type": [
+                                                                                                  {
+                                                                                                    "constraints": null,
+                                                                                                    "type": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "t0"},
+                                                                                                        "function": {"variable": "hydra.pg.model.AdjacentEdge"}}},
+                                                                                                    "variables": []}]}],
+                                                                                            "body": {
+                                                                                              "let": {
+                                                                                                "bindings": [
+                                                                                                  {
+                                                                                                    "name": "adjEdgeIn",
+                                                                                                    "term": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "record": {
+                                                                                                            "fields": [
+                                                                                                              {"name": "label", "term": {"variable": "label"}},
+                                                                                                              {"name": "id", "term": {"variable": "edgeId"}},
+                                                                                                              {"name": "vertex", "term": {"variable": "outV"}},
+                                                                                                              {"name": "properties", "term": {"variable": "props"}}],
+                                                                                                            "typeName": "hydra.pg.model.AdjacentEdge"}},
+                                                                                                        "type": {"variable": "t0"}}},
+                                                                                                    "type": [
+                                                                                                      {
+                                                                                                        "constraints": null,
+                                                                                                        "type": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "t0"},
+                                                                                                            "function": {"variable": "hydra.pg.model.AdjacentEdge"}}},
+                                                                                                        "variables": []}]}],
+                                                                                                "body": {
+                                                                                                  "let": {
+                                                                                                    "bindings": [
+                                                                                                      {
+                                                                                                        "name": "vmap1",
+                                                                                                        "term": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "vmap"},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "outV"},
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                                                            "type": {"variable": "t0"}}},
+                                                                                                                        "type": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "t0"},
+                                                                                                                            "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {
+                                                                                                                  "function": {
+                                                                                                                    "lambda": {
+                                                                                                                      "body": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "vmap"},
+                                                                                                                          "function": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {
+                                                                                                                                    "record": {
+                                                                                                                                      "fields": [
+                                                                                                                                        {
+                                                                                                                                          "name": "vertex",
+                                                                                                                                          "term": {
+                                                                                                                                            "application": {
+                                                                                                                                              "argument": {"variable": "vae"},
+                                                                                                                                              "function": {
+                                                                                                                                                "typeApplication": {
+                                                                                                                                                  "body": {
+                                                                                                                                                    "function": {
+                                                                                                                                                      "elimination": {
+                                                                                                                                                        "record": {
+                                                                                                                                                          "field": "vertex",
+                                                                                                                                                          "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}}}},
+                                                                                                                                                  "type": {"variable": "t0"}}}}}},
+                                                                                                                                        {
+                                                                                                                                          "name": "ins",
+                                                                                                                                          "term": {
+                                                                                                                                            "application": {
+                                                                                                                                              "argument": {"variable": "vae"},
+                                                                                                                                              "function": {
+                                                                                                                                                "typeApplication": {
+                                                                                                                                                  "body": {
+                                                                                                                                                    "function": {
+                                                                                                                                                      "elimination": {
+                                                                                                                                                        "record": {"field": "ins", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}}}},
+                                                                                                                                                  "type": {"variable": "t0"}}}}}},
+                                                                                                                                        {
+                                                                                                                                          "name": "outs",
+                                                                                                                                          "term": {
+                                                                                                                                            "application": {
+                                                                                                                                              "argument": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {"variable": "vae"},
+                                                                                                                                                  "function": {
+                                                                                                                                                    "typeApplication": {
+                                                                                                                                                      "body": {
+                                                                                                                                                        "function": {
+                                                                                                                                                          "elimination": {
+                                                                                                                                                            "record": {
+                                                                                                                                                              "field": "outs",
+                                                                                                                                                              "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}}}},
+                                                                                                                                                      "type": {"variable": "t0"}}}}},
+                                                                                                                                              "function": {
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {"variable": "adjEdgeOut"},
+                                                                                                                                                  "function": {
+                                                                                                                                                    "typeApplication": {
+                                                                                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                                                                      "type": {
+                                                                                                                                                        "application": {
+                                                                                                                                                          "argument": {"variable": "t0"},
+                                                                                                                                                          "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}}}}}}],
+                                                                                                                                      "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                                                                                  "type": {"variable": "t0"}}},
+                                                                                                                              "function": {
+                                                                                                                                "application": {
+                                                                                                                                  "argument": {"variable": "outV"},
+                                                                                                                                  "function": {
+                                                                                                                                    "typeApplication": {
+                                                                                                                                      "body": {
+                                                                                                                                        "typeApplication": {
+                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
+                                                                                                                                          "type": {"variable": "t0"}}},
+                                                                                                                                      "type": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "t0"},
+                                                                                                                                          "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}}}}}},
+                                                                                                                      "domain": [
+                                                                                                                        {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "t0"},
+                                                                                                                            "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}],
+                                                                                                                      "parameter": "vae"}}},
+                                                                                                                "function": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "vmap"},
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                                            "type": {
+                                                                                                                              "map": {
+                                                                                                                                "keys": {"variable": "t0"},
+                                                                                                                                "values": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"variable": "t0"},
+                                                                                                                                    "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}},
+                                                                                                                        "type": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "t0"},
+                                                                                                                            "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}}}}}},
+                                                                                                        "type": [
+                                                                                                          {
+                                                                                                            "constraints": null,
+                                                                                                            "type": {
+                                                                                                              "map": {
+                                                                                                                "keys": {"variable": "t0"},
+                                                                                                                "values": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "t0"},
+                                                                                                                    "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
+                                                                                                            "variables": []}]}],
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "vmap1"},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "inV"},
+                                                                                                                "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                                                        "type": {"variable": "t0"}}},
+                                                                                                                    "type": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "t0"},
+                                                                                                                        "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}}}},
+                                                                                                        "function": {
+                                                                                                          "application": {
+                                                                                                            "argument": {
+                                                                                                              "function": {
+                                                                                                                "lambda": {
+                                                                                                                  "body": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "vmap1"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {
+                                                                                                                                "record": {
+                                                                                                                                  "fields": [
+                                                                                                                                    {
+                                                                                                                                      "name": "vertex",
+                                                                                                                                      "term": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "vae"},
+                                                                                                                                          "function": {
+                                                                                                                                            "typeApplication": {
+                                                                                                                                              "body": {
+                                                                                                                                                "function": {
+                                                                                                                                                  "elimination": {
+                                                                                                                                                    "record": {
+                                                                                                                                                      "field": "vertex",
+                                                                                                                                                      "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}}}},
+                                                                                                                                              "type": {"variable": "t0"}}}}}},
+                                                                                                                                    {
+                                                                                                                                      "name": "ins",
+                                                                                                                                      "term": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {
+                                                                                                                                            "application": {
+                                                                                                                                              "argument": {"variable": "vae"},
+                                                                                                                                              "function": {
+                                                                                                                                                "typeApplication": {
+                                                                                                                                                  "body": {
+                                                                                                                                                    "function": {
+                                                                                                                                                      "elimination": {
+                                                                                                                                                        "record": {"field": "ins", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}}}},
+                                                                                                                                                  "type": {"variable": "t0"}}}}},
+                                                                                                                                          "function": {
+                                                                                                                                            "application": {
+                                                                                                                                              "argument": {"variable": "adjEdgeIn"},
+                                                                                                                                              "function": {
+                                                                                                                                                "typeApplication": {
+                                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                                                                  "type": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "t0"},
+                                                                                                                                                      "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}}}}}},
+                                                                                                                                    {
+                                                                                                                                      "name": "outs",
+                                                                                                                                      "term": {
+                                                                                                                                        "application": {
+                                                                                                                                          "argument": {"variable": "vae"},
+                                                                                                                                          "function": {
+                                                                                                                                            "typeApplication": {
+                                                                                                                                              "body": {
+                                                                                                                                                "function": {
+                                                                                                                                                  "elimination": {
+                                                                                                                                                    "record": {
+                                                                                                                                                      "field": "outs",
+                                                                                                                                                      "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}}}},
+                                                                                                                                              "type": {"variable": "t0"}}}}}}],
+                                                                                                                                  "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                                                                                              "type": {"variable": "t0"}}},
+                                                                                                                          "function": {
+                                                                                                                            "application": {
+                                                                                                                              "argument": {"variable": "inV"},
+                                                                                                                              "function": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {
+                                                                                                                                    "typeApplication": {
+                                                                                                                                      "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
+                                                                                                                                      "type": {"variable": "t0"}}},
+                                                                                                                                  "type": {
+                                                                                                                                    "application": {
+                                                                                                                                      "argument": {"variable": "t0"},
+                                                                                                                                      "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}}}}}},
+                                                                                                                  "domain": [
+                                                                                                                    {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "t0"},
+                                                                                                                        "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}],
+                                                                                                                  "parameter": "vae"}}},
+                                                                                                            "function": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "vmap1"},
+                                                                                                                "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                                        "type": {
+                                                                                                                          "map": {
+                                                                                                                            "keys": {"variable": "t0"},
+                                                                                                                            "values": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "t0"},
+                                                                                                                                "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}},
+                                                                                                                    "type": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "t0"},
+                                                                                                                        "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                                                                    "domain": [
+                                                                      {
+                                                                        "application": {
+                                                                          "argument": {"variable": "t0"},
+                                                                          "function": {"variable": "hydra.pg.model.Edge"}}}],
+                                                                    "parameter": "edge"}}},
+                                                              "domain": [
+                                                                {
+                                                                  "map": {
+                                                                    "keys": {"variable": "t0"},
+                                                                    "values": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "t0"},
+                                                                        "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}],
+                                                              "parameter": "vmap"}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                "type": {
+                                                                  "map": {
+                                                                    "keys": {"variable": "t0"},
+                                                                    "values": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "t0"},
+                                                                        "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}},
+                                                            "type": {
+                                                              "application": {
+                                                                "argument": {"variable": "t0"},
+                                                                "function": {"variable": "hydra.pg.model.Edge"}}}}}}}}}}},
+                                            "type": [
+                                              {
+                                                "constraints": null,
+                                                "type": {
+                                                  "map": {
+                                                    "keys": {"variable": "t0"},
+                                                    "values": {
+                                                      "application": {
+                                                        "argument": {"variable": "t0"},
+                                                        "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
+                                                "variables": []}]}],
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "vertexMap1"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"function": {"primitive": "hydra.lib.maps.elems"}},
+                                                    "type": {"variable": "t0"}}},
+                                                "type": {
+                                                  "application": {
+                                                    "argument": {"variable": "t0"},
+                                                    "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}}}}}}}}}}}}}},
+                    "domain": [
+                      {
+                        "list": {
+                          "application": {
+                            "argument": {"variable": "t0"},
+                            "function": {"variable": "hydra.pg.model.Element"}}}}],
+                    "parameter": "els"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "list": {
+                  "application": {
+                    "argument": {"variable": "t0"},
+                    "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}},
+              "domain": {
+                "list": {
+                  "application": {
+                    "argument": {"variable": "t0"},
+                    "function": {"variable": "hydra.pg.model.Element"}}}}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.pg.graphson.utils.encodeStringValue",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Encode a String value as a GraphSON Value"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "union": {
+                            "field": {"name": "string", "term": {"variable": "s"}},
+                            "typeName": "hydra.pg.graphson.syntax.Value"}},
+                        "function": {
+                          "typeApplication": {
+                            "body": {
+                              "typeApplication": {
+                                "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                "type": {"variable": "t0"}}},
+                            "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                    "domain": [{"literal": {"string": {}}}],
+                    "parameter": "s"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.pg.graphson.syntax.Value"},
+                  "function": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.compute.Flow"}}}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.pg.graphson.utils.encodeTermValue",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values."}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {"variable": "term"},
+                            "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
+                        "function": {
+                          "function": {
+                            "elimination": {
+                              "union": {
+                                "cases": [
+                                  {
+                                    "name": "literal",
+                                    "term": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "application": {
+                                              "argument": {"variable": "lit"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "union": {
+                                                      "cases": [
+                                                        {
+                                                          "name": "binary",
+                                                          "term": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "binary",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "b"},
+                                                                              "function": {"function": {"primitive": "hydra.lib.literals.binaryToString"}}}}},
+                                                                        "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                            "type": {"variable": "t0"}}},
+                                                                        "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                                                "domain": [{"literal": {"binary": {}}}],
+                                                                "parameter": "b"}}}},
+                                                        {
+                                                          "name": "boolean",
+                                                          "term": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "union": {
+                                                                        "field": {"name": "boolean", "term": {"variable": "b"}},
+                                                                        "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                            "type": {"variable": "t0"}}},
+                                                                        "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                                                "domain": [{"literal": {"boolean": {}}}],
+                                                                "parameter": "b"}}}},
+                                                        {
+                                                          "name": "float",
+                                                          "term": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "fv"},
+                                                                    "function": {
+                                                                      "function": {
+                                                                        "elimination": {
+                                                                          "union": {
+                                                                            "cases": [
+                                                                              {
+                                                                                "name": "bigfloat",
+                                                                                "term": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "bigDecimal",
+                                                                                                "term": {
+                                                                                                  "wrap": {
+                                                                                                    "body": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "f"},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.literals.showBigfloat"}}}},
+                                                                                                    "typeName": "hydra.pg.graphson.syntax.BigDecimalValue"}}},
+                                                                                              "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                                                  "type": {"variable": "t0"}}},
+                                                                                              "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                                                                      "domain": [{"literal": {"float": {"bigfloat": {}}}}],
+                                                                                      "parameter": "f"}}}},
+                                                                              {
+                                                                                "name": "float32",
+                                                                                "term": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "float",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "finite", "term": {"variable": "f"}},
+                                                                                                    "typeName": "hydra.pg.graphson.syntax.FloatValue"}}},
+                                                                                              "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                                                  "type": {"variable": "t0"}}},
+                                                                                              "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                                                                      "domain": [{"literal": {"float": {"float32": {}}}}],
+                                                                                      "parameter": "f"}}}},
+                                                                              {
+                                                                                "name": "float64",
+                                                                                "term": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "double",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "finite", "term": {"variable": "f"}},
+                                                                                                    "typeName": "hydra.pg.graphson.syntax.DoubleValue"}}},
+                                                                                              "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                                                  "type": {"variable": "t0"}}},
+                                                                                              "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                                                                      "domain": [{"literal": {"float": {"float64": {}}}}],
+                                                                                      "parameter": "f"}}}}],
+                                                                            "default": [
+                                                                              {
+                                                                                "application": {
+                                                                                  "argument": {"literal": {"string": "unsupported float type"}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.flows.fail"}},
+                                                                                          "type": {"variable": "t0"}}},
+                                                                                      "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}],
+                                                                            "typeName": "hydra.core.FloatValue"}}}}}},
+                                                                "domain": [{"variable": "hydra.core.FloatValue"}],
+                                                                "parameter": "fv"}}}},
+                                                        {
+                                                          "name": "integer",
+                                                          "term": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "iv"},
+                                                                    "function": {
+                                                                      "function": {
+                                                                        "elimination": {
+                                                                          "union": {
+                                                                            "cases": [
+                                                                              {
+                                                                                "name": "bigint",
+                                                                                "term": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "union": {
+                                                                                              "field": {"name": "bigInteger", "term": {"variable": "i"}},
+                                                                                              "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                                                  "type": {"variable": "t0"}}},
+                                                                                              "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                                                                      "domain": [{"literal": {"integer": {"bigint": {}}}}],
+                                                                                      "parameter": "i"}}}},
+                                                                              {
+                                                                                "name": "int32",
+                                                                                "term": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "union": {
+                                                                                              "field": {"name": "integer", "term": {"variable": "i"}},
+                                                                                              "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                                                  "type": {"variable": "t0"}}},
+                                                                                              "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                                                                      "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                                      "parameter": "i"}}}},
+                                                                              {
+                                                                                "name": "int64",
+                                                                                "term": {
+                                                                                  "function": {
+                                                                                    "lambda": {
+                                                                                      "body": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "union": {
+                                                                                              "field": {"name": "long", "term": {"variable": "i"}},
+                                                                                              "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                                                  "type": {"variable": "t0"}}},
+                                                                                              "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                                                                      "domain": [{"literal": {"integer": {"int64": {}}}}],
+                                                                                      "parameter": "i"}}}}],
+                                                                            "default": [
+                                                                              {
+                                                                                "application": {
+                                                                                  "argument": {"literal": {"string": "unsupported integer type"}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.flows.fail"}},
+                                                                                          "type": {"variable": "t0"}}},
+                                                                                      "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}],
+                                                                            "typeName": "hydra.core.IntegerValue"}}}}}},
+                                                                "domain": [{"variable": "hydra.core.IntegerValue"}],
+                                                                "parameter": "iv"}}}},
+                                                        {
+                                                          "name": "string",
+                                                          "term": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "union": {
+                                                                        "field": {"name": "string", "term": {"variable": "s"}},
+                                                                        "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                            "type": {"variable": "t0"}}},
+                                                                        "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                                                "domain": [{"literal": {"string": {}}}],
+                                                                "parameter": "s"}}}}],
+                                                      "default": [
+                                                        {
+                                                          "application": {
+                                                            "argument": {
+                                                              "literal": {"string": "unsupported literal type for GraphSON encoding"}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.flows.fail"}},
+                                                                    "type": {"variable": "t0"}}},
+                                                                "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}],
+                                                      "typeName": "hydra.core.Literal"}}}}}},
+                                          "domain": [{"variable": "hydra.core.Literal"}],
+                                          "parameter": "lit"}}}},
+                                  {
+                                    "name": "unit",
+                                    "term": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "application": {
+                                              "argument": {
+                                                "union": {
+                                                  "field": {"name": "null", "term": {"unit": {}}},
+                                                  "typeName": "hydra.pg.graphson.syntax.Value"}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                      "type": {"variable": "t0"}}},
+                                                  "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}},
+                                          "domain": [{"unit": {}}],
+                                          "parameter": "_"}}}}],
+                                "default": [
+                                  {
+                                    "application": {
+                                      "argument": {
+                                        "literal": {"string": "unsupported term variant for GraphSON encoding"}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.flows.fail"}},
+                                              "type": {"variable": "t0"}}},
+                                          "type": {"variable": "hydra.pg.graphson.syntax.Value"}}}}}],
+                                "typeName": "hydra.core.Term"}}}}}},
+                    "domain": [{"variable": "hydra.core.Term"}],
+                    "parameter": "term"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.pg.graphson.syntax.Value"},
+                  "function": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.compute.Flow"}}}}},
+              "domain": {"variable": "hydra.core.Term"}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.pg.graphson.utils.pgElementsToGraphson",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {
+                          "string": "Convert property graph elements to a list of GraphSON JSON values"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "els"},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "variable": "hydra.pg.graphson.utils.elementsToVerticesWithAdjacentEdges"},
+                                          "type": {"variable": "t0"}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"variable": "encodeValue"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "variable": "hydra.pg.graphson.construct.pgVertexWithAdjacentEdgesToJson"},
+                                                  "type": {"variable": "t0"}}},
+                                              "type": {"variable": "t1"}}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.flows.mapList"}},
+                                                  "type": {
+                                                    "application": {
+                                                      "argument": {"variable": "t0"},
+                                                      "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}}}},
+                                              "type": {"variable": "t1"}}},
+                                          "type": {"variable": "hydra.json.model.Value"}}}}}}},
+                              "domain": [
+                                {
+                                  "list": {
+                                    "application": {
+                                      "argument": {"variable": "t0"},
+                                      "function": {"variable": "hydra.pg.model.Element"}}}}],
+                              "parameter": "els"}}},
+                        "domain": [
+                          {
+                            "function": {
+                              "codomain": {
+                                "application": {
+                                  "argument": {"variable": "hydra.pg.graphson.syntax.Value"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "t1"},
+                                      "function": {"variable": "hydra.compute.Flow"}}}}},
+                              "domain": {"variable": "t0"}}}],
+                        "parameter": "encodeValue"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"list": {"variable": "hydra.json.model.Value"}},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "t1"},
+                          "function": {"variable": "hydra.compute.Flow"}}}}},
+                  "domain": {
+                    "list": {
+                      "application": {
+                        "argument": {"variable": "t0"},
+                        "function": {"variable": "hydra.pg.model.Element"}}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.pg.graphson.syntax.Value"},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "t1"},
+                          "function": {"variable": "hydra.compute.Flow"}}}}},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0", "t1"]}]}],
+  "namespace": "hydra.pg.graphson.utils",
+  "termDependencies": ["hydra.pg.graphson.construct", "hydra.rewriting"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow",
+    "hydra.pg.graphson.syntax",
+    "hydra.pg.model",
+    "hydra.json.model"]}
