@@ -1,0 +1,119 @@
+// Note: this is an automatically generated file. Do not edit.
+
+package hydra.ext.java.syntax;
+
+import java.io.Serializable;
+
+public abstract class ForStatementNoShortIf implements Serializable, Comparable<ForStatementNoShortIf> {
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ForStatementNoShortIf");
+  
+  public static final hydra.core.Name FIELD_NAME_BASIC = new hydra.core.Name("basic");
+  
+  public static final hydra.core.Name FIELD_NAME_ENHANCED = new hydra.core.Name("enhanced");
+  
+  private ForStatementNoShortIf () {
+  
+  }
+  
+  public abstract <R> R accept(Visitor<R> visitor) ;
+  
+  public interface Visitor<R> {
+    R visit(Basic instance) ;
+    
+    R visit(Enhanced instance) ;
+  }
+  
+  public interface PartialVisitor<R> extends Visitor<R> {
+    default R otherwise(ForStatementNoShortIf instance) {
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
+    }
+    
+    default R visit(Basic instance) {
+      return otherwise(instance);
+    }
+    
+    default R visit(Enhanced instance) {
+      return otherwise(instance);
+    }
+  }
+  
+  public static final class Basic extends hydra.ext.java.syntax.ForStatementNoShortIf implements Serializable {
+    public final hydra.ext.java.syntax.BasicForStatementNoShortIf value;
+    
+    public Basic (hydra.ext.java.syntax.BasicForStatementNoShortIf value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Basic)) {
+        return false;
+      }
+      Basic o = (Basic) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ForStatementNoShortIf other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Basic o = (Basic) other;
+      return ((Comparable) value).compareTo(o.value);
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  public static final class Enhanced extends hydra.ext.java.syntax.ForStatementNoShortIf implements Serializable {
+    public final hydra.ext.java.syntax.EnhancedForStatementNoShortIf value;
+    
+    public Enhanced (hydra.ext.java.syntax.EnhancedForStatementNoShortIf value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Enhanced)) {
+        return false;
+      }
+      Enhanced o = (Enhanced) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ForStatementNoShortIf other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Enhanced o = (Enhanced) other;
+      return ((Comparable) value).compareTo(o.value);
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+}
