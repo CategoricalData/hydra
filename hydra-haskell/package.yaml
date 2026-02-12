@@ -63,6 +63,20 @@ executables:
     dependencies:
       - hydra
 
+  update-json-main:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-main
+    dependencies:
+      - hydra
+
+  update-json-test:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-test
+    dependencies:
+      - hydra
+
   update-haskell-kernel:
     main: Main.hs
     source-dirs:
