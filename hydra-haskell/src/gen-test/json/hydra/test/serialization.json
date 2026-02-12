@@ -1,0 +1,1159 @@
+{
+  "description": ["Test cases for AST serialization"],
+  "elements": [
+    {
+      "name": "hydra.test.serialization.allTests",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Test cases for AST serialization"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "name", "term": {"literal": {"string": "serialization"}}},
+                {
+                  "name": "description",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "subgroups",
+                  "term": {
+                    "list": [
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "associativity"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "right-associative operator"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "d"}},
+                                                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"string": "c"}},
+                                                                        "function": {"variable": "hydra.serialization.cst"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.ext.haskell.operators.arrowOp"},
+                                                                        "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"string": "b"}},
+                                                                        "function": {"variable": "hydra.serialization.cst"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "a"}},
+                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.ext.haskell.operators.arrowOp"},
+                                                                            "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.ext.haskell.operators.arrowOp"},
+                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {"literal": {"string": "(a -> b) -> c -> d"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "case statements"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "simple case statement"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "list": [
+                                                                    {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "Big"}},
+                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"string": "False"}},
+                                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.ext.haskell.operators.caseOp"},
+                                                                                "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                    {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "Small"}},
+                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"string": "True"}},
+                                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.ext.haskell.operators.caseOp"},
+                                                                                "function": {"variable": "hydra.serialization.ifx"}}}}}}}]},
+                                                                "function": {"variable": "hydra.serialization.newlineSep"}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "list": [
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "case"}},
+                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"integer": {"int32": 42}}},
+                                                                                "function": {"variable": "hydra.serialization.num"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"literal": {"string": "x"}},
+                                                                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "hydra.ext.haskell.operators.gtOp"},
+                                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}]},
+                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "record": {
+                                                                        "fields": [
+                                                                          {
+                                                                            "name": "symbol",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "body": {"literal": {"string": "of"}},
+                                                                                "typeName": "hydra.ast.Symbol"}}},
+                                                                          {
+                                                                            "name": "padding",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "left",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {"name": "space", "term": {"unit": {}}},
+                                                                                        "typeName": "hydra.ast.Ws"}}},
+                                                                                  {
+                                                                                    "name": "right",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {"name": "breakAndIndent", "term": {"literal": {"string": "  "}}},
+                                                                                        "typeName": "hydra.ast.Ws"}}}],
+                                                                                "typeName": "hydra.ast.Padding"}}},
+                                                                          {
+                                                                            "name": "precedence",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "body": {"literal": {"integer": {"int32": 0}}},
+                                                                                "typeName": "hydra.ast.Precedence"}}},
+                                                                          {
+                                                                            "name": "associativity",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {"name": "none", "term": {"unit": {}}},
+                                                                                "typeName": "hydra.ast.Associativity"}}}],
+                                                                        "typeName": "hydra.ast.Op"}},
+                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {
+                                                          "literal": {"string": "case x > 42 of\n  False -> Big\n  True -> Small"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "nested case statement"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "list": [
+                                                                    {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "list": [
+                                                                                    {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"literal": {"string": "ReallyBig"}},
+                                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"literal": {"string": "True"}},
+                                                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "hydra.ext.haskell.operators.caseOp"},
+                                                                                                "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                                    {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"literal": {"string": "Big"}},
+                                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"literal": {"string": "False"}},
+                                                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "hydra.ext.haskell.operators.caseOp"},
+                                                                                                "function": {"variable": "hydra.serialization.ifx"}}}}}}}]},
+                                                                                "function": {"variable": "hydra.serialization.newlineSep"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "list": [
+                                                                                        {
+                                                                                          "application": {
+                                                                                            "argument": {"literal": {"string": "case"}},
+                                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                        {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"literal": {"integer": {"int32": 100}}},
+                                                                                                "function": {"variable": "hydra.serialization.num"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"literal": {"string": "x"}},
+                                                                                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "hydra.ext.haskell.operators.gtOp"},
+                                                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}]},
+                                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "record": {
+                                                                                        "fields": [
+                                                                                          {
+                                                                                            "name": "symbol",
+                                                                                            "term": {
+                                                                                              "wrap": {
+                                                                                                "body": {"literal": {"string": "of"}},
+                                                                                                "typeName": "hydra.ast.Symbol"}}},
+                                                                                          {
+                                                                                            "name": "padding",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "fields": [
+                                                                                                  {
+                                                                                                    "name": "left",
+                                                                                                    "term": {
+                                                                                                      "union": {
+                                                                                                        "field": {"name": "space", "term": {"unit": {}}},
+                                                                                                        "typeName": "hydra.ast.Ws"}}},
+                                                                                                  {
+                                                                                                    "name": "right",
+                                                                                                    "term": {
+                                                                                                      "union": {
+                                                                                                        "field": {"name": "breakAndIndent", "term": {"literal": {"string": "  "}}},
+                                                                                                        "typeName": "hydra.ast.Ws"}}}],
+                                                                                                "typeName": "hydra.ast.Padding"}}},
+                                                                                          {
+                                                                                            "name": "precedence",
+                                                                                            "term": {
+                                                                                              "wrap": {
+                                                                                                "body": {"literal": {"integer": {"int32": 0}}},
+                                                                                                "typeName": "hydra.ast.Precedence"}}},
+                                                                                          {
+                                                                                            "name": "associativity",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "none", "term": {"unit": {}}},
+                                                                                                "typeName": "hydra.ast.Associativity"}}}],
+                                                                                        "typeName": "hydra.ast.Op"}},
+                                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"string": "True"}},
+                                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.ext.haskell.operators.caseOp"},
+                                                                                "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                    {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "Small"}},
+                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"string": "False"}},
+                                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.ext.haskell.operators.caseOp"},
+                                                                                "function": {"variable": "hydra.serialization.ifx"}}}}}}}]},
+                                                                "function": {"variable": "hydra.serialization.newlineSep"}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "list": [
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "case"}},
+                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"literal": {"integer": {"int32": 42}}},
+                                                                                "function": {"variable": "hydra.serialization.num"}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"literal": {"string": "x"}},
+                                                                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "hydra.ext.haskell.operators.gtOp"},
+                                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}]},
+                                                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "record": {
+                                                                        "fields": [
+                                                                          {
+                                                                            "name": "symbol",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "body": {"literal": {"string": "of"}},
+                                                                                "typeName": "hydra.ast.Symbol"}}},
+                                                                          {
+                                                                            "name": "padding",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "left",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {"name": "space", "term": {"unit": {}}},
+                                                                                        "typeName": "hydra.ast.Ws"}}},
+                                                                                  {
+                                                                                    "name": "right",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {"name": "breakAndIndent", "term": {"literal": {"string": "  "}}},
+                                                                                        "typeName": "hydra.ast.Ws"}}}],
+                                                                                "typeName": "hydra.ast.Padding"}}},
+                                                                          {
+                                                                            "name": "precedence",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "body": {"literal": {"integer": {"int32": 0}}},
+                                                                                "typeName": "hydra.ast.Precedence"}}},
+                                                                          {
+                                                                            "name": "associativity",
+                                                                            "term": {
+                                                                              "union": {
+                                                                                "field": {"name": "none", "term": {"unit": {}}},
+                                                                                "typeName": "hydra.ast.Associativity"}}}],
+                                                                        "typeName": "hydra.ast.Op"}},
+                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {
+                                                          "literal": {
+                                                            "string": "case x > 42 of\n  True -> case x > 100 of\n    True -> ReallyBig\n    False -> Big\n  False -> Small"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "lambdas"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "simple lambda"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "y"}},
+                                                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"string": "x"}},
+                                                                        "function": {"variable": "hydra.serialization.cst"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.ext.haskell.operators.plusOp"},
+                                                                        "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "\\x y"}},
+                                                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.ext.haskell.operators.lambdaOp"},
+                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}},
+                                                      {"name": "output", "term": {"literal": {"string": "\\x y -> x + y"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "lists"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "empty list"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.ast.Expr"}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.serialization.inlineStyle"},
+                                                                "function": {"variable": "hydra.serialization.bracketList"}}}}}},
+                                                      {"name": "output", "term": {"literal": {"string": "[]"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "simple non-empty list"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "list": [
+                                                                {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                    "function": {"variable": "hydra.serialization.num"}}},
+                                                                {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"integer": {"int32": 2}}},
+                                                                    "function": {"variable": "hydra.serialization.num"}}},
+                                                                {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"integer": {"int32": 3}}},
+                                                                    "function": {"variable": "hydra.serialization.num"}}}]},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.serialization.inlineStyle"},
+                                                                "function": {"variable": "hydra.serialization.bracketList"}}}}}},
+                                                      {"name": "output", "term": {"literal": {"string": "[1, 2, 3]"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "nested list"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "list": [
+                                                                {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "list": [
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                            "function": {"variable": "hydra.serialization.num"}}},
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"integer": {"int32": 3}}},
+                                                                            "function": {"variable": "hydra.serialization.num"}}}]},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.serialization.inlineStyle"},
+                                                                        "function": {"variable": "hydra.serialization.bracketList"}}}}},
+                                                                {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"integer": {"int32": 2}}},
+                                                                    "function": {"variable": "hydra.serialization.num"}}}]},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.serialization.inlineStyle"},
+                                                                "function": {"variable": "hydra.serialization.bracketList"}}}}}},
+                                                      {"name": "output", "term": {"literal": {"string": "[[1, 3], 2]"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "list with parenthesized expression inside"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "list": [
+                                                                {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "list": [
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                            "function": {"variable": "hydra.serialization.num"}}},
+                                                                        {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"literal": {"integer": {"int32": 10}}},
+                                                                                    "function": {"variable": "hydra.serialization.num"}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                        "function": {"variable": "hydra.serialization.num"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "hydra.ext.haskell.operators.plusOp"},
+                                                                                        "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {"literal": {"integer": {"int32": 3}}},
+                                                                                        "function": {"variable": "hydra.serialization.num"}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"literal": {"integer": {"int32": 2}}},
+                                                                                            "function": {"variable": "hydra.serialization.num"}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "hydra.ext.haskell.operators.plusOp"},
+                                                                                            "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "hydra.ext.haskell.operators.multOp"},
+                                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}]},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.serialization.inlineStyle"},
+                                                                        "function": {"variable": "hydra.serialization.bracketList"}}}}},
+                                                                {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"integer": {"int32": 2}}},
+                                                                    "function": {"variable": "hydra.serialization.num"}}}]},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.serialization.inlineStyle"},
+                                                                "function": {"variable": "hydra.serialization.bracketList"}}}}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {"literal": {"string": "[[1, (2 + 3) * (1 + 10)], 2]"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "precedence"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "literal": {"string": "operators with different precedence - no parens needed"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"integer": {"int32": 10}}},
+                                                                    "function": {"variable": "hydra.serialization.num"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                        "function": {"variable": "hydra.serialization.num"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.ext.haskell.operators.multOp"},
+                                                                        "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"integer": {"int32": 3}}},
+                                                                        "function": {"variable": "hydra.serialization.num"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"integer": {"int32": 2}}},
+                                                                            "function": {"variable": "hydra.serialization.num"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.ext.haskell.operators.multOp"},
+                                                                            "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.ext.haskell.operators.plusOp"},
+                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}},
+                                                      {"name": "output", "term": {"literal": {"string": "2 * 3 + 1 * 10"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "literal": {"string": "operators with different precedence - parens needed"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"integer": {"int32": 10}}},
+                                                                    "function": {"variable": "hydra.serialization.num"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                        "function": {"variable": "hydra.serialization.num"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.ext.haskell.operators.plusOp"},
+                                                                        "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"integer": {"int32": 3}}},
+                                                                        "function": {"variable": "hydra.serialization.num"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"integer": {"int32": 2}}},
+                                                                            "function": {"variable": "hydra.serialization.num"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.ext.haskell.operators.plusOp"},
+                                                                            "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.ext.haskell.operators.multOp"},
+                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {"literal": {"string": "(2 + 3) * (1 + 10)"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "associative operator left nesting"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "z"}},
+                                                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"string": "y"}},
+                                                                        "function": {"variable": "hydra.serialization.cst"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.ext.haskell.operators.multOp"},
+                                                                        "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"string": "x"}},
+                                                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.ext.haskell.operators.multOp"},
+                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}},
+                                                      {"name": "output", "term": {"literal": {"string": "x * y * z"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "associative operator right nesting"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "serialization",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": "z"}},
+                                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"literal": {"string": "y"}},
+                                                                        "function": {"variable": "hydra.serialization.cst"}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"literal": {"string": "x"}},
+                                                                            "function": {"variable": "hydra.serialization.cst"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.ext.haskell.operators.multOp"},
+                                                                            "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.ext.haskell.operators.multOp"},
+                                                                    "function": {"variable": "hydra.serialization.ifx"}}}}}}}},
+                                                      {"name": "output", "term": {"literal": {"string": "x * y * z"}}}],
+                                                    "typeName": "hydra.testing.SerializationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}}]}},
+                {
+                  "name": "cases",
+                  "term": {
+                    "typeApplication": {
+                      "body": {"list": []},
+                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+              "typeName": "hydra.testing.TestGroup"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.testing.TestGroup"},
+          "variables": []}]}],
+  "namespace": "hydra.test.serialization",
+  "termDependencies": ["hydra.serialization", "hydra.ext.haskell.operators"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

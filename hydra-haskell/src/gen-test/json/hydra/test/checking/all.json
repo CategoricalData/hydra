@@ -1,0 +1,72 @@
+{
+  "description": ["Hydra's type checking test suite"],
+  "elements": [
+    {
+      "name": "hydra.test.checking.all.allTests",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "The group of all type checking tests"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "name", "term": {"literal": {"string": "checking"}}},
+                {
+                  "name": "description",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "subgroups",
+                  "term": {
+                    "list": [
+                      {"variable": "hydra.test.checking.advanced.allTests"},
+                      {"variable": "hydra.test.checking.algebraicTypes.allTests"},
+                      {"variable": "hydra.test.checking.collections.allTests"},
+                      {"variable": "hydra.test.checking.failures.allTests"},
+                      {"variable": "hydra.test.checking.fundamentals.allTests"},
+                      {"variable": "hydra.test.checking.nominalTypes.allTests"}]}},
+                {
+                  "name": "cases",
+                  "term": {
+                    "typeApplication": {
+                      "body": {"list": []},
+                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+              "typeName": "hydra.testing.TestGroup"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.testing.TestGroup"},
+          "variables": []}]}],
+  "namespace": "hydra.test.checking.all",
+  "termDependencies": [
+    "hydra.test.checking.advanced",
+    "hydra.test.checking.algebraicTypes",
+    "hydra.test.checking.collections",
+    "hydra.test.checking.failures",
+    "hydra.test.checking.fundamentals",
+    "hydra.test.checking.nominalTypes"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

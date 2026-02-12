@@ -1,0 +1,72 @@
+{
+  "description": ["Hydra's inference test suite"],
+  "elements": [
+    {
+      "name": "hydra.test.inference.all.allTests",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "The group of all inference tests"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "name", "term": {"literal": {"string": "inference"}}},
+                {
+                  "name": "description",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "subgroups",
+                  "term": {
+                    "list": [
+                      {"variable": "hydra.test.inference.algebraicTypes.allTests"},
+                      {"variable": "hydra.test.inference.algorithmW.allTests"},
+                      {"variable": "hydra.test.inference.failures.allTests"},
+                      {"variable": "hydra.test.inference.fundamentals.allTests"},
+                      {"variable": "hydra.test.inference.kernelExamples.allTests"},
+                      {"variable": "hydra.test.inference.nominalTypes.allTests"}]}},
+                {
+                  "name": "cases",
+                  "term": {
+                    "typeApplication": {
+                      "body": {"list": []},
+                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+              "typeName": "hydra.testing.TestGroup"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.testing.TestGroup"},
+          "variables": []}]}],
+  "namespace": "hydra.test.inference.all",
+  "termDependencies": [
+    "hydra.test.inference.algebraicTypes",
+    "hydra.test.inference.algorithmW",
+    "hydra.test.inference.failures",
+    "hydra.test.inference.fundamentals",
+    "hydra.test.inference.kernelExamples",
+    "hydra.test.inference.nominalTypes"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}
