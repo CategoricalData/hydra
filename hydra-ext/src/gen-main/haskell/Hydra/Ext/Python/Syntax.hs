@@ -1882,14 +1882,14 @@ _SliceOrStarredExpression_starred = (Core.Name "starred")
 
 data Slice = 
   SliceNamed NamedExpression |
-  SliceSlice SliceExpression
+  SliceSlice_ SliceExpression
   deriving (Eq, Ord, Read, Show)
 
 _Slice = (Core.Name "hydra.ext.python.syntax.Slice")
 
 _Slice_named = (Core.Name "named")
 
-_Slice_slice = (Core.Name "slice")
+_Slice_slice_ = (Core.Name "slice_")
 
 data SliceExpression = 
   SliceExpression {

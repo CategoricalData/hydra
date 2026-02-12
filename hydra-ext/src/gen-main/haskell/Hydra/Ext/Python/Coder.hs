@@ -149,7 +149,7 @@ encodeFloatValue fv = ((\x -> case x of
   Core.FloatValueBigfloat v1 -> (Flows.pure (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Decimal")) [
     Utils.singleQuotedString (Literals.showBigfloat v1)]))
   Core.FloatValueFloat32 v1 -> (Flows.pure (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float32ToBigfloat v1)))))
-  Core.FloatValueFloat64 v1 -> (Flows.pure (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat v1))))) fv)
+  Core.FloatValueFloat64 v1 -> (Flows.pure (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float64ToBigfloat v1)))))) fv)
 
 encodeIntegerValue :: (Core.IntegerValue -> Compute.Flow t0 Syntax.Expression)
 encodeIntegerValue iv =  
@@ -286,26 +286,26 @@ encodeForallType env lt =
 encodeFunctionType :: (Helpers.PythonEnvironment -> Core.FunctionType -> Compute.Flow t0 Syntax.Expression)
 encodeFunctionType env ft =  
   let gatherParams = (\rdoms -> \ftype ->  
-          let cod = (Core.functionTypeCodomain ftype)
+          let innerCod = (Core.functionTypeCodomain ftype)
           in  
             let dom = (Core.functionTypeDomain ftype)
             in ((\x -> case x of
               Core.TypeFunction v1 -> (gatherParams (Lists.cons dom rdoms) v1)
-              Core.TypeAnnotated _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeApplication _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeForall _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeList _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeLiteral _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeMap _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeMaybe _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeEither _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypePair _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeRecord _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeSet _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeUnion _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeUnit -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeVariable _ -> (Lists.reverse (Lists.cons dom rdoms), cod)
-              Core.TypeWrap _ -> (Lists.reverse (Lists.cons dom rdoms), cod)) (Rewriting.deannotateType cod)))
+              Core.TypeAnnotated _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeApplication _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeForall _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeList _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeLiteral _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeMap _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeMaybe _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeEither _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypePair _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeRecord _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeSet _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeUnion _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeUnit -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeVariable _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)
+              Core.TypeWrap _ -> (Lists.reverse (Lists.cons dom rdoms), innerCod)) (Rewriting.deannotateType innerCod)))
   in  
     let domsAndCod = (gatherParams [] ft)
     in  
@@ -699,11 +699,11 @@ encodeCaseBlock env tname rowType isEnum encodeBody field =
 
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: (Helpers.PyGraph -> Graph.Graph)
-pyGraphGraph = Helpers.pyGraphGraph
+pyGraphGraph pyg = (Helpers.pyGraphGraph pyg)
 
 -- | Accessor for the metadata field of PyGraph
 pyGraphMetadata :: (Helpers.PyGraph -> Helpers.PythonModuleMetadata)
-pyGraphMetadata = Helpers.pyGraphMetadata
+pyGraphMetadata pyg = (Helpers.pyGraphMetadata pyg)
 
 -- | Constructor for PyGraph record
 makePyGraph :: (Graph.Graph -> Helpers.PythonModuleMetadata -> Helpers.PyGraph)
@@ -1182,7 +1182,7 @@ functionArityWithPrimitives graph f = ((\x -> case x of
 
 -- | Get the TypeContext from a PythonEnvironment
 pythonEnvironmentGetTypeContext :: (Helpers.PythonEnvironment -> Typing.TypeContext)
-pythonEnvironmentGetTypeContext = Helpers.pythonEnvironmentTypeContext
+pythonEnvironmentGetTypeContext env = (Helpers.pythonEnvironmentTypeContext env)
 
 -- | Set the TypeContext in a PythonEnvironment
 pythonEnvironmentSetTypeContext :: (Typing.TypeContext -> Helpers.PythonEnvironment -> Helpers.PythonEnvironment)

@@ -514,7 +514,7 @@ encodeNameOrAttribute noa = (Serialization.dotSep (Lists.map encodeName (Syntax.
 -- | Serialize a Python number literal
 encodeNumber :: (Syntax.Number -> Ast.Expr)
 encodeNumber num = ((\x -> case x of
-  Syntax.NumberFloat v1 -> (Serialization.cst (Literals.showFloat64 v1))
+  Syntax.NumberFloat v1 -> (Serialization.cst (Literals.showBigfloat v1))
   Syntax.NumberInteger v1 -> (Serialization.cst (Literals.showBigint v1))) num)
 
 -- | Serialize an or pattern
@@ -685,7 +685,7 @@ encodeSingleTarget st = ((\x -> case x of
 encodeSlice :: (Syntax.Slice -> Ast.Expr)
 encodeSlice s = ((\x -> case x of
   Syntax.SliceNamed v1 -> (encodeNamedExpression v1)
-  Syntax.SliceSlice _ -> (Serialization.cst ":")) s)
+  Syntax.SliceSlice_ _ -> (Serialization.cst ":")) s)
 
 -- | Serialize a slice or starred expression
 encodeSliceOrStarredExpression :: (Syntax.SliceOrStarredExpression -> Ast.Expr)
