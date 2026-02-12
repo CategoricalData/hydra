@@ -1,0 +1,945 @@
+{
+  "description": ["AST operators for Haskell"],
+  "elements": [
+    {
+      "name": "hydra.ext.haskell.operators.andOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Logical AND operator (&&)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "right", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 3}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "&&"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.apOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Applicative apply operator (<*>)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "<*>"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.appOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Function application operator (whitespace)"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {
+                  "name": "symbol",
+                  "term": {
+                    "wrap": {"body": {"literal": {"string": ""}}, "typeName": "hydra.ast.Symbol"}}},
+                {
+                  "name": "padding",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "left",
+                          "term": {
+                            "union": {
+                              "field": {"name": "none", "term": {"unit": {}}},
+                              "typeName": "hydra.ast.Ws"}}},
+                        {
+                          "name": "right",
+                          "term": {
+                            "union": {
+                              "field": {"name": "space", "term": {"unit": {}}},
+                              "typeName": "hydra.ast.Ws"}}}],
+                      "typeName": "hydra.ast.Padding"}}},
+                {
+                  "name": "precedence",
+                  "term": {
+                    "wrap": {
+                      "body": {"literal": {"integer": {"int32": 0}}},
+                      "typeName": "hydra.ast.Precedence"}}},
+                {
+                  "name": "associativity",
+                  "term": {
+                    "union": {
+                      "field": {"name": "left", "term": {"unit": {}}},
+                      "typeName": "hydra.ast.Associativity"}}}],
+              "typeName": "hydra.ast.Op"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.applyOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Low-precedence function application ($)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "right", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 0}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "$"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.arrowOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Function type arrow (->)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "right", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"literal": {"integer": {"int32": 1}}},
+                      "function": {"function": {"primitive": "hydra.lib.math.negate"}}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "->"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.assertOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Type class constraint arrow (=>)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 0}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "=>"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.bindOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Monadic bind operator (>>=)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 1}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": ">>="}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.caseOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Case alternative arrow (->)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 0}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "->"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.composeOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Function composition (.)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 9}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "."}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.concatOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "List concatenation (++)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "right", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 5}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "++"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.consOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "List cons (:)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "right", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 5}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": ":"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.defineOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Definition operator (=)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 0}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "="}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.diamondOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Semigroup append (<>)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "right", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 6}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "<>"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.divOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Integer division (`div`)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 7}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "`div`"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.divideOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Fractional division (/)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 7}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "/"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.elemOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "List membership (`elem`)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "`elem`"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.equalOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Equality comparison (==)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "=="}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.fmapOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Functor map (<$>)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "<$>"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.gtOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Greater than (>)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": ">"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.gteOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Greater than or equal (>=)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": ">="}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.indexOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "List indexing (!!)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 9}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "!!"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.lambdaOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Lambda body arrow (->)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "right", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"literal": {"integer": {"int32": 1}}},
+                      "function": {"function": {"primitive": "hydra.lib.math.negate"}}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "->"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.ltOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Less than (<)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "<"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.lteOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Less than or equal (<=)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": ">="}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.minusOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Subtraction (-). Originally: associativityLeft"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "both", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 6}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "-"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.modOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Modulo (`mod`)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 7}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "`mod`"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.multOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Multiplication (*). Originally: associativityLeft"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "both", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 7}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "*"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.neqOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Not equal (/=)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "/="}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.notElemOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "List non-membership (`notElem`)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 4}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "`notElem`"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.orOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Logical OR (||)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "right", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 2}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "||"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.plusOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Addition (+). Originally: associativityLeft"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "both", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 6}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "+"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.quotOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Integer quotient (`quot`)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 7}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "`quot`"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.remOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Integer remainder (`rem`)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "left", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 7}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "`rem`"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.operators.typeOp",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Type annotation (::)"}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "union": {
+                  "field": {"name": "none", "term": {"unit": {}}},
+                  "typeName": "hydra.ast.Associativity"}},
+              "function": {
+                "application": {
+                  "argument": {"literal": {"integer": {"int32": 0}}},
+                  "function": {
+                    "application": {
+                      "argument": {"literal": {"string": "::"}},
+                      "function": {"variable": "hydra.serialization.op"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ast.Op"},
+          "variables": []}]}],
+  "namespace": "hydra.ext.haskell.operators",
+  "termDependencies": ["hydra.serialization"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

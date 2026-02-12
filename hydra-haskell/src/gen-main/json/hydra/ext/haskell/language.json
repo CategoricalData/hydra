@@ -1,0 +1,503 @@
+{
+  "description": ["Language constraints and reserved words for Haskell"],
+  "elements": [
+    {
+      "name": "hydra.ext.haskell.language.haskellLanguage",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Language constraints for Haskell"}}}],
+          "body": {
+            "let": {
+              "bindings": [
+                {
+                  "name": "eliminationVariants",
+                  "term": {
+                    "application": {
+                      "argument": {
+                        "list": [
+                          {
+                            "union": {
+                              "field": {"name": "record", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.EliminationVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "union", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.EliminationVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "wrap", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.EliminationVariant"}}]},
+                      "function": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                          "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {"set": {"variable": "hydra.variants.EliminationVariant"}},
+                      "variables": []}]},
+                {
+                  "name": "literalVariants",
+                  "term": {
+                    "application": {
+                      "argument": {
+                        "list": [
+                          {
+                            "union": {
+                              "field": {"name": "binary", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.LiteralVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "boolean", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.LiteralVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "float", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.LiteralVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "integer", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.LiteralVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "string", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.LiteralVariant"}}]},
+                      "function": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                          "type": {"variable": "hydra.variants.LiteralVariant"}}}}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {"set": {"variable": "hydra.variants.LiteralVariant"}},
+                      "variables": []}]},
+                {
+                  "name": "floatTypes",
+                  "term": {
+                    "application": {
+                      "argument": {
+                        "list": [
+                          {
+                            "union": {
+                              "field": {"name": "float32", "term": {"unit": {}}},
+                              "typeName": "hydra.core.FloatType"}},
+                          {
+                            "union": {
+                              "field": {"name": "float64", "term": {"unit": {}}},
+                              "typeName": "hydra.core.FloatType"}}]},
+                      "function": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                          "type": {"variable": "hydra.core.FloatType"}}}}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {"set": {"variable": "hydra.core.FloatType"}},
+                      "variables": []}]},
+                {
+                  "name": "functionVariants",
+                  "term": {
+                    "application": {
+                      "argument": {
+                        "list": [
+                          {
+                            "union": {
+                              "field": {"name": "elimination", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.FunctionVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "lambda", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.FunctionVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "primitive", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.FunctionVariant"}}]},
+                      "function": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                          "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {"set": {"variable": "hydra.variants.FunctionVariant"}},
+                      "variables": []}]},
+                {
+                  "name": "integerTypes",
+                  "term": {
+                    "application": {
+                      "argument": {
+                        "list": [
+                          {
+                            "union": {
+                              "field": {"name": "bigint", "term": {"unit": {}}},
+                              "typeName": "hydra.core.IntegerType"}},
+                          {
+                            "union": {
+                              "field": {"name": "int8", "term": {"unit": {}}},
+                              "typeName": "hydra.core.IntegerType"}},
+                          {
+                            "union": {
+                              "field": {"name": "int16", "term": {"unit": {}}},
+                              "typeName": "hydra.core.IntegerType"}},
+                          {
+                            "union": {
+                              "field": {"name": "int32", "term": {"unit": {}}},
+                              "typeName": "hydra.core.IntegerType"}},
+                          {
+                            "union": {
+                              "field": {"name": "int64", "term": {"unit": {}}},
+                              "typeName": "hydra.core.IntegerType"}}]},
+                      "function": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                          "type": {"variable": "hydra.core.IntegerType"}}}}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {"set": {"variable": "hydra.core.IntegerType"}},
+                      "variables": []}]},
+                {
+                  "name": "termVariants",
+                  "term": {
+                    "application": {
+                      "argument": {
+                        "list": [
+                          {
+                            "union": {
+                              "field": {"name": "annotated", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "application", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "either", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "function", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "let", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "list", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "literal", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "map", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "maybe", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "pair", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "record", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "set", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "union", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "unit", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "variable", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "wrap", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TermVariant"}}]},
+                      "function": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                          "type": {"variable": "hydra.variants.TermVariant"}}}}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {"set": {"variable": "hydra.variants.TermVariant"}},
+                      "variables": []}]},
+                {
+                  "name": "typeVariants",
+                  "term": {
+                    "application": {
+                      "argument": {
+                        "list": [
+                          {
+                            "union": {
+                              "field": {"name": "annotated", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "application", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "either", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "function", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "forall", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "list", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "literal", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "map", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "maybe", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "pair", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "record", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "set", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "union", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "unit", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "variable", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}},
+                          {
+                            "union": {
+                              "field": {"name": "wrap", "term": {"unit": {}}},
+                              "typeName": "hydra.variants.TypeVariant"}}]},
+                      "function": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                          "type": {"variable": "hydra.variants.TypeVariant"}}}}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {"set": {"variable": "hydra.variants.TypeVariant"}},
+                      "variables": []}]},
+                {
+                  "name": "typePredicate",
+                  "term": {
+                    "typeLambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {"literal": {"boolean": true}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "_"}}},
+                      "parameter": "t0"}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {
+                        "function": {
+                          "codomain": {"literal": {"boolean": {}}},
+                          "domain": {"variable": "t0"}}},
+                      "variables": ["t0"]}]}],
+              "body": {
+                "record": {
+                  "fields": [
+                    {
+                      "name": "name",
+                      "term": {
+                        "wrap": {
+                          "body": {"literal": {"string": "hydra.ext.haskell"}},
+                          "typeName": "hydra.coders.LanguageName"}}},
+                    {
+                      "name": "constraints",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "eliminationVariants",
+                              "term": {"variable": "eliminationVariants"}},
+                            {"name": "literalVariants", "term": {"variable": "literalVariants"}},
+                            {"name": "floatTypes", "term": {"variable": "floatTypes"}},
+                            {"name": "functionVariants", "term": {"variable": "functionVariants"}},
+                            {"name": "integerTypes", "term": {"variable": "integerTypes"}},
+                            {"name": "termVariants", "term": {"variable": "termVariants"}},
+                            {"name": "typeVariants", "term": {"variable": "typeVariants"}},
+                            {
+                              "name": "types",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"variable": "typePredicate"},
+                                  "type": {"variable": "hydra.core.Type"}}}}],
+                          "typeName": "hydra.coders.LanguageConstraints"}}}],
+                  "typeName": "hydra.coders.Language"}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.coders.Language"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.haskell.language.reservedWords",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Created on 2025-02-28 using GHCi 9.6.6\n\nYou can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into\n/tmp/browse_Prelude.txt, and then running the Bash command provided with each list.\n\nSee also https://www.haskell.org/onlinereport/standard-prelude.html"}}}],
+          "body": {
+            "let": {
+              "bindings": [
+                {
+                  "name": "keywordSymbols",
+                  "term": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Haskell's strictly reserved keywords; they cannot be used as identifiers."}}}],
+                      "body": {
+                        "list": [
+                          {"literal": {"string": "case"}},
+                          {"literal": {"string": "class"}},
+                          {"literal": {"string": "data"}},
+                          {"literal": {"string": "default"}},
+                          {"literal": {"string": "deriving"}},
+                          {"literal": {"string": "do"}},
+                          {"literal": {"string": "else"}},
+                          {"literal": {"string": "forall"}},
+                          {"literal": {"string": "foreign"}},
+                          {"literal": {"string": "if"}},
+                          {"literal": {"string": "import"}},
+                          {"literal": {"string": "in"}},
+                          {"literal": {"string": "infix"}},
+                          {"literal": {"string": "infixl"}},
+                          {"literal": {"string": "infixr"}},
+                          {"literal": {"string": "instance"}},
+                          {"literal": {"string": "let"}},
+                          {"literal": {"string": "module"}},
+                          {"literal": {"string": "newtype"}},
+                          {"literal": {"string": "of"}},
+                          {"literal": {"string": "then"}},
+                          {"literal": {"string": "type"}},
+                          {"literal": {"string": "where"}}]}}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {"list": {"literal": {"string": {}}}},
+                      "variables": []}]},
+                {
+                  "name": "reservedSymbols",
+                  "term": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Hydra uses these symbols in generated code, so we reserve them to avoid conflicts."}}}],
+                      "body": {
+                        "list": [
+                          {"literal": {"string": "Bool"}},
+                          {"literal": {"string": "Double"}},
+                          {"literal": {"string": "False"}},
+                          {"literal": {"string": "Float"}},
+                          {"literal": {"string": "Int"}},
+                          {"literal": {"string": "Integer"}},
+                          {"literal": {"string": "Just"}},
+                          {"literal": {"string": "Maybe"}},
+                          {"literal": {"string": "Nothing"}},
+                          {"literal": {"string": "Ord"}},
+                          {"literal": {"string": "Show"}},
+                          {"literal": {"string": "String"}},
+                          {"literal": {"string": "True"}}]}}},
+                  "type": [
+                    {
+                      "constraints": null,
+                      "type": {"list": {"literal": {"string": {}}}},
+                      "variables": []}]}],
+              "body": {
+                "application": {
+                  "argument": {
+                    "application": {
+                      "argument": {"variable": "reservedSymbols"},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "keywordSymbols"},
+                          "function": {
+                            "typeApplication": {
+                              "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                              "type": {"literal": {"string": {}}}}}}}}},
+                  "function": {
+                    "typeApplication": {
+                      "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                      "type": {"literal": {"string": {}}}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"set": {"literal": {"string": {}}}},
+          "variables": []}]}],
+  "namespace": "hydra.ext.haskell.language",
+  "termDependencies": [],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

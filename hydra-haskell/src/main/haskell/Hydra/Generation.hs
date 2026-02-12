@@ -420,6 +420,32 @@ writeEncoderHaskell :: FilePath -> [Module] -> [Module] -> IO ()
 writeEncoderHaskell = writeCoderHaskell generateEncoderModules
 
 ----------------------------------------
+-- Module Inference
+----------------------------------------
+
+-- | Perform type inference on a set of modules within a given universe.
+-- The universe modules are used to build the graph for inference, and the target
+-- modules are reconstructed from inferred elements by matching binding names,
+-- preserving the original element order.
+-- Type-only modules (containing only native type definitions) are passed through unchanged.
+inferModules :: [Module] -> [Module] -> IO [Module]
+inferModules universeMods targetMods = do
+  let g0 = modulesToGraph universeMods universeMods
+  mg1 <- runFlow g0 (Inference.inferGraphTypes g0)
+  case mg1 of
+    Nothing -> fail "Type inference failed on modules"
+    Just g1 -> do
+      let inferredElements = graphElements g1
+          refreshModule m
+            | isTypeModule m = m  -- Type-only modules don't go through inference
+            | otherwise = m {
+                moduleElements = Y.catMaybes
+                  ((\e -> L.find (\b -> bindingName b == bindingName e) inferredElements)
+                    <$> moduleElements m) }
+          isTypeModule mod = L.all isNativeType (moduleElements mod)
+      return $ fmap refreshModule targetMods
+
+----------------------------------------
 -- JSON Module Export
 ----------------------------------------
 
@@ -447,8 +473,13 @@ writeModuleJson basePath mod = do
 
 -- | Write multiple modules to JSON files.
 -- Each module is written to basePath/<namespace-path>.json
-writeModulesJson :: FilePath -> [Module] -> IO ()
-writeModulesJson basePath mods = mapM_ (writeModuleJson basePath) mods
+-- If doInfer is True, type inference is performed on the modules first.
+-- The universe modules are used for type inference context (may include more modules
+-- than those being written). If not inferring, the universe is ignored.
+writeModulesJson :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
+writeModulesJson doInfer basePath universeMods mods = do
+  mods' <- if doInfer then inferModules universeMods mods else return mods
+  mapM_ (writeModuleJson basePath) mods'
 
 -- | Convert a namespace to a file path (e.g., "hydra.monads" -> "hydra/monads")
 namespaceToPath :: Namespace -> FilePath
