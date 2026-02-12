@@ -1679,7 +1679,7 @@ sliceOrStarredExpression = def "SliceOrStarredExpression" $ T.union [
 slice :: Binding
 slice = def "Slice" $ T.union [
   "named">: python "NamedExpression",
-  "slice">: python "SliceExpression"]
+  "slice_">: python "SliceExpression"]
 
 sliceExpression :: Binding
 sliceExpression = def "SliceExpression" $ T.record [

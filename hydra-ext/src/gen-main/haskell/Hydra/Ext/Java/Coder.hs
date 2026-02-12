@@ -552,7 +552,7 @@ encodeLiteral_encodeFloat f = ((\x -> case x of
   Core.FloatValueBigfloat v1 -> (Utils_.javaConstructorCall (Utils_.javaConstructorName (Syntax.Identifier "java.math.BigDecimal") Nothing) [
     encodeLiteral (Core.LiteralString (Literals.showBigfloat v1))] Nothing)
   Core.FloatValueFloat32 v1 -> (encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeFloatingPoint Syntax.FloatingPointTypeFloat)) (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float32ToBigfloat v1)))))
-  Core.FloatValueFloat64 v1 -> (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral v1)))) f)
+  Core.FloatValueFloat64 v1 -> (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float64ToBigfloat v1))))) f)
 
 encodeLiteral_encodeInteger :: (Core.IntegerValue -> Syntax.Expression)
 encodeLiteral_encodeInteger i = ((\x -> case x of

@@ -1143,7 +1143,7 @@ slices hd tl = record Py._Slices [
 
 -- | Inject a SliceExpression into Slice
 sliceSlice :: TTerm Py.SliceExpression -> TTerm Py.Slice
-sliceSlice = inject Py._Slice Py._Slice_slice
+sliceSlice = inject Py._Slice Py._Slice_slice_
 
 -- =============================================================================
 -- RaiseExpression (record type) - constructor

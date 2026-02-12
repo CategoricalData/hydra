@@ -473,7 +473,7 @@ writeFieldModifier m = ((\x -> case x of
   Syntax.FieldModifierVolatile -> (Serialization.cst "volatile")) m)
 
 writeFloatingPointLiteral :: (Syntax.FloatingPointLiteral -> Ast.Expr)
-writeFloatingPointLiteral fl = (Serialization.cst (Literals.showFloat64 (Syntax.unFloatingPointLiteral fl)))
+writeFloatingPointLiteral fl = (Serialization.cst (Literals.showBigfloat (Syntax.unFloatingPointLiteral fl)))
 
 writeFloatingPointType :: (Syntax.FloatingPointType -> Ast.Expr)
 writeFloatingPointType ft = ((\x -> case x of
@@ -622,8 +622,10 @@ writeLiteral l = ((\x -> case x of
   Syntax.LiteralInteger v1 -> (writeIntegerLiteral v1)
   Syntax.LiteralFloatingPoint v1 -> (writeFloatingPointLiteral v1)
   Syntax.LiteralBoolean v1 -> (Serialization.cst (Logic.ifElse v1 "true" "false"))
-  Syntax.LiteralCharacter v1 -> (Serialization.cst (Strings.cat2 "'" (Strings.cat2 (Logic.ifElse (Equality.equal v1 39) "\\'" (Logic.ifElse (Equality.equal v1 92) "\\\\" (Logic.ifElse (Equality.equal v1 10) "\\n" (Logic.ifElse (Equality.equal v1 13) "\\r" (Logic.ifElse (Equality.equal v1 9) "\\t" (Logic.ifElse (Logic.and (Equality.gte v1 32) (Equality.lt v1 127)) (Strings.fromList [
-    v1]) (javaUnicodeEscape v1))))))) "'")))
+  Syntax.LiteralCharacter v1 ->  
+    let ci = (Literals.bigintToInt32 (Literals.uint16ToBigint v1))
+    in (Serialization.cst (Strings.cat2 "'" (Strings.cat2 (Logic.ifElse (Equality.equal ci 39) "\\'" (Logic.ifElse (Equality.equal ci 92) "\\\\" (Logic.ifElse (Equality.equal ci 10) "\\n" (Logic.ifElse (Equality.equal ci 13) "\\r" (Logic.ifElse (Equality.equal ci 9) "\\t" (Logic.ifElse (Logic.and (Equality.gte ci 32) (Equality.lt ci 127)) (Strings.fromList [
+      ci]) (javaUnicodeEscape ci))))))) "'")))
   Syntax.LiteralString v1 -> (writeStringLiteral v1)) l)
 
 writeLocalVariableDeclaration :: (Syntax.LocalVariableDeclaration -> Ast.Expr)

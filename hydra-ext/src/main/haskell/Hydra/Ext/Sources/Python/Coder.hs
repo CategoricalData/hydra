@@ -1169,13 +1169,13 @@ encodeCaseBlock = def "encodeCaseBlock" $
 pyGraphGraph :: TBinding (PyHelpers.PyGraph -> Graph)
 pyGraphGraph = def "pyGraphGraph" $
   doc "Accessor for the graph field of PyGraph" $
-  Phantoms.project PyHelpers._PyGraph PyHelpers._PyGraph_graph
+  lambda "pyg" $ project PyHelpers._PyGraph PyHelpers._PyGraph_graph @@ var "pyg"
 
 -- | Accessor for the metadata field of PyGraph
 pyGraphMetadata :: TBinding (PyHelpers.PyGraph -> PyHelpers.PythonModuleMetadata)
 pyGraphMetadata = def "pyGraphMetadata" $
   doc "Accessor for the metadata field of PyGraph" $
-  Phantoms.project PyHelpers._PyGraph PyHelpers._PyGraph_metadata
+  lambda "pyg" $ project PyHelpers._PyGraph PyHelpers._PyGraph_metadata @@ var "pyg"
 
 -- | Constructor for PyGraph record
 makePyGraph :: TBinding (Graph -> PyHelpers.PythonModuleMetadata -> PyHelpers.PyGraph)
@@ -1648,7 +1648,7 @@ functionArityWithPrimitives = def "functionArityWithPrimitives" $
 pythonEnvironmentGetTypeContext :: TBinding (PyHelpers.PythonEnvironment -> TypeContext)
 pythonEnvironmentGetTypeContext = def "pythonEnvironmentGetTypeContext" $
   doc "Get the TypeContext from a PythonEnvironment" $
-  Phantoms.project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext
+  lambda "env" $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env"
 
 -- | Set the TypeContext in a PythonEnvironment
 pythonEnvironmentSetTypeContext :: TBinding (TypeContext -> PyHelpers.PythonEnvironment -> PyHelpers.PythonEnvironment)

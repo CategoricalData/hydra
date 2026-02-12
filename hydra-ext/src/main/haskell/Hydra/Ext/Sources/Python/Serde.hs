@@ -646,7 +646,7 @@ encodeSlice = def "encodeSlice" $
   lambda "s" $
     cases Py._Slice (var "s") Nothing [
       Py._Slice_named>>: lambda "ne" $ encodeNamedExpression @@ var "ne",
-      Py._Slice_slice>>: lambda "_" $ Serialization.cst @@ string ":"]
+      Py._Slice_slice_>>: lambda "_" $ Serialization.cst @@ string ":"]
 
 encodeSliceOrStarredExpression :: TBinding (Py.SliceOrStarredExpression -> Expr)
 encodeSliceOrStarredExpression = def "encodeSliceOrStarredExpression" $
