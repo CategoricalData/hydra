@@ -1,0 +1,121 @@
+{
+  "description": [
+    "Hydra's common test suite, which is designed to run identically in each Hydra implementation; the criterion for a true Hydra implementation is that all test cases pass."],
+  "elements": [
+    {
+      "name": "hydra.test.testSuite.allTests",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "The group of all common tests"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "name", "term": {"literal": {"string": "common"}}},
+                {
+                  "name": "description",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "subgroups",
+                  "term": {
+                    "list": [
+                      {"variable": "hydra.test.lib.chars.allTests"},
+                      {"variable": "hydra.test.lib.eithers.allTests"},
+                      {"variable": "hydra.test.lib.equality.allTests"},
+                      {"variable": "hydra.test.lib.flows.allTests"},
+                      {"variable": "hydra.test.lib.lists.allTests"},
+                      {"variable": "hydra.test.lib.literals.allTests"},
+                      {"variable": "hydra.test.lib.logic.allTests"},
+                      {"variable": "hydra.test.lib.maps.allTests"},
+                      {"variable": "hydra.test.lib.math.allTests"},
+                      {"variable": "hydra.test.lib.maybes.allTests"},
+                      {"variable": "hydra.test.lib.pairs.allTests"},
+                      {"variable": "hydra.test.lib.sets.allTests"},
+                      {"variable": "hydra.test.lib.strings.allTests"},
+                      {"variable": "hydra.test.annotations.allTests"},
+                      {"variable": "hydra.test.checking.all.allTests"},
+                      {"variable": "hydra.test.etaExpansion.allTests"},
+                      {"variable": "hydra.test.formatting.allTests"},
+                      {"variable": "hydra.test.hoisting.allTests"},
+                      {"variable": "hydra.test.inference.all.allTests"},
+                      {"variable": "hydra.test.json.coder.allTests"},
+                      {"variable": "hydra.test.json.parser.allTests"},
+                      {"variable": "hydra.test.json.roundtrip.allTests"},
+                      {"variable": "hydra.test.json.writer.allTests"},
+                      {"variable": "hydra.test.monads.allTests"},
+                      {"variable": "hydra.test.reduction.allTests"},
+                      {"variable": "hydra.test.rewriting.allTests"},
+                      {"variable": "hydra.test.serialization.allTests"},
+                      {"variable": "hydra.test.sorting.allTests"},
+                      {"variable": "hydra.test.substitution.allTests"},
+                      {"variable": "hydra.test.unification.allTests"}]}},
+                {
+                  "name": "cases",
+                  "term": {
+                    "typeApplication": {
+                      "body": {"list": []},
+                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+              "typeName": "hydra.testing.TestGroup"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.testing.TestGroup"},
+          "variables": []}]}],
+  "namespace": "hydra.test.testSuite",
+  "termDependencies": [
+    "hydra.test.lib.chars",
+    "hydra.test.lib.eithers",
+    "hydra.test.lib.equality",
+    "hydra.test.lib.flows",
+    "hydra.test.lib.lists",
+    "hydra.test.lib.literals",
+    "hydra.test.lib.logic",
+    "hydra.test.lib.maps",
+    "hydra.test.lib.math",
+    "hydra.test.lib.maybes",
+    "hydra.test.lib.pairs",
+    "hydra.test.lib.sets",
+    "hydra.test.lib.strings",
+    "hydra.test.annotations",
+    "hydra.test.checking.all",
+    "hydra.test.etaExpansion",
+    "hydra.test.formatting",
+    "hydra.test.hoisting",
+    "hydra.test.inference.all",
+    "hydra.test.json.coder",
+    "hydra.test.json.parser",
+    "hydra.test.json.roundtrip",
+    "hydra.test.json.writer",
+    "hydra.test.monads",
+    "hydra.test.reduction",
+    "hydra.test.rewriting",
+    "hydra.test.serialization",
+    "hydra.test.sorting",
+    "hydra.test.substitution",
+    "hydra.test.unification"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

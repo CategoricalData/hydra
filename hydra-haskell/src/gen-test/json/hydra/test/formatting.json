@@ -1,0 +1,795 @@
+{
+  "description": ["Test cases for string formatting and case conversion"],
+  "elements": [
+    {
+      "name": "hydra.test.formatting.allTests",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Test cases for hydra.formatting"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "name", "term": {"literal": {"string": "formatting"}}},
+                {
+                  "name": "description",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "subgroups",
+                  "term": {"list": [{"variable": "hydra.test.formatting.caseConversionTests"}]}},
+                {
+                  "name": "cases",
+                  "term": {
+                    "typeApplication": {
+                      "body": {"list": []},
+                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+              "typeName": "hydra.testing.TestGroup"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.testing.TestGroup"},
+          "variables": []}]},
+    {
+      "name": "hydra.test.formatting.caseConversionTests",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Test cases for case conversion"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "name", "term": {"literal": {"string": "case conversion"}}},
+                {
+                  "name": "description",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "subgroups",
+                  "term": {
+                    "typeApplication": {
+                      "body": {"list": []},
+                      "type": {"variable": "hydra.testing.TestGroup"}}}},
+                {
+                  "name": "cases",
+                  "term": {
+                    "list": [
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#1 (lower_snake_case -> UPPER_SNAKE_CASE)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "lowerSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "a_hello_world_42_a42_42a_b"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "A_HELLO_WORLD_42_A42_42A_B"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#2 (lower_snake_case -> camelCase)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "lowerSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "camel", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "a_hello_world_42_a42_42a_b"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "aHelloWorld42A4242aB"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#3 (lower_snake_case -> PascalCase)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "lowerSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "pascal", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "a_hello_world_42_a42_42a_b"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "AHelloWorld42A4242aB"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#4 (lower_snake_case -> lower_snake_case)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "lowerSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "lowerSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "a_hello_world_42_a42_42a_b"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "a_hello_world_42_a42_42a_b"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#5 (UPPER_SNAKE_CASE -> lower_snake_case)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "lowerSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "A_HELLO_WORLD_42_A42_42A_B"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "a_hello_world_42_a42_42a_b"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#6 (UPPER_SNAKE_CASE -> camelCase)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "camel", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "A_HELLO_WORLD_42_A42_42A_B"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "aHelloWorld42A4242aB"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#7 (UPPER_SNAKE_CASE -> PascalCase)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "pascal", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "A_HELLO_WORLD_42_A42_42A_B"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "AHelloWorld42A4242aB"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#8 (UPPER_SNAKE_CASE -> UPPER_SNAKE_CASE)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "A_HELLO_WORLD_42_A42_42A_B"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "A_HELLO_WORLD_42_A42_42A_B"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#9 (camelCase -> lower_snake_case)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "camel", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "lowerSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "aHelloWorld42A4242aB"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "a_hello_world42_a4242a_b"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#10 (camelCase -> UPPER_SNAKE_CASE)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "camel", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "aHelloWorld42A4242aB"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "A_HELLO_WORLD42_A4242A_B"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#11 (camelCase -> PascalCase)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "camel", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "pascal", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "aHelloWorld42A4242aB"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "AHelloWorld42A4242aB"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#12 (camelCase -> camelCase)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "camel", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "camel", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "aHelloWorld42A4242aB"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "aHelloWorld42A4242aB"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#13 (PascalCase -> lower_snake_case)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "pascal", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "lowerSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "AHelloWorld42A4242aB"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "a_hello_world42_a4242a_b"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#14 (PascalCase -> UPPER_SNAKE_CASE)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "pascal", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "AHelloWorld42A4242aB"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "A_HELLO_WORLD42_A4242A_B"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#15 (PascalCase -> camelCase)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "pascal", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "camel", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "AHelloWorld42A4242aB"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "aHelloWorld42A4242aB"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "#16 (PascalCase -> PascalCase)"}}},
+                            {
+                              "name": "case",
+                              "term": {
+                                "union": {
+                                  "field": {
+                                    "name": "caseConversion",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "fromConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "pascal", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "toConvention",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "pascal", "term": {"unit": {}}},
+                                                "typeName": "hydra.util.CaseConvention"}}},
+                                          {
+                                            "name": "fromString",
+                                            "term": {"literal": {"string": "AHelloWorld42A4242aB"}}},
+                                          {
+                                            "name": "toString",
+                                            "term": {"literal": {"string": "AHelloWorld42A4242aB"}}}],
+                                        "typeName": "hydra.testing.CaseConversionTestCase"}}},
+                                  "typeName": "hydra.testing.TestCase"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "tags",
+                              "term": {
+                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                          "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+              "typeName": "hydra.testing.TestGroup"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.testing.TestGroup"},
+          "variables": []}]}],
+  "namespace": "hydra.test.formatting",
+  "termDependencies": ["hydra.test.testGraph"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

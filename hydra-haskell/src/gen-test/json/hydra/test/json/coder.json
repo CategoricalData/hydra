@@ -1,0 +1,2178 @@
+{
+  "description": [
+    "Test cases for the type-directed JSON coder (Hydra Term <-> JSON Value)"],
+  "elements": [
+    {
+      "name": "hydra.test.json.coder.allTests",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Test cases for the type-directed JSON coder"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "name", "term": {"literal": {"string": "JSON coder"}}},
+                {
+                  "name": "description",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "subgroups",
+                  "term": {
+                    "list": [
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "literal types"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "boolean true"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "boolean", "term": {"unit": {}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "boolean", "term": {"literal": {"boolean": true}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "boolean false"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "boolean", "term": {"unit": {}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "boolean", "term": {"literal": {"boolean": false}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "int32 positive"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 42}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "int32 negative"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"literal": {"integer": {"int32": -17}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": -17}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "int32 zero"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 0}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 0}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "float32"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "float32", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.FloatType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "float32",
+                                                                          "term": {"literal": {"float": {"float32": "1.5"}}}},
+                                                                        "typeName": "hydra.core.FloatValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1.5}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "float64"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "float64", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.FloatType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "float64",
+                                                                          "term": {"literal": {"float": {"float64": 2.718}}}},
+                                                                        "typeName": "hydra.core.FloatValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "number",
+                                                              "term": {"literal": {"float": {"bigfloat": 2.718}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "string simple"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "string", "term": {"unit": {}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "string empty"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "string", "term": {"unit": {}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "string", "term": {"literal": {"string": ""}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"literal": {"string": ""}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "string with spaces"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "string", "term": {"unit": {}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "string", "term": {"literal": {"string": "hello world"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"literal": {"string": "hello world"}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "integer types"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "int8 positive"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int8", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int8", "term": {"literal": {"integer": {"int8": 127}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 127}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "int8 negative"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int8", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int8", "term": {"literal": {"integer": {"int8": -128}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": -128}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "int16 positive"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int16", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int16", "term": {"literal": {"integer": {"int16": 1000}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1000}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "int16 negative"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int16", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int16", "term": {"literal": {"integer": {"int16": -1000}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "number",
+                                                              "term": {"literal": {"float": {"bigfloat": -1000}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "uint8 max"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "uint8", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "uint8", "term": {"literal": {"integer": {"uint8": 255}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 255}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "uint8 zero"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "uint8", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "uint8", "term": {"literal": {"integer": {"uint8": 0}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 0}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "uint16 positive"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "uint16", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "uint16",
+                                                                          "term": {"literal": {"integer": {"uint16": 60000}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "number",
+                                                              "term": {"literal": {"float": {"bigfloat": 60000}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "uint32 positive"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "uint32", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "uint32",
+                                                                          "term": {"literal": {"integer": {"uint32": "4000000000"}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "number",
+                                                              "term": {"literal": {"float": {"bigfloat": 4000000000}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "uint64 positive"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "uint64", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "uint64",
+                                                                          "term": {"literal": {"integer": {"uint64": "1000000"}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "number",
+                                                              "term": {"literal": {"float": {"bigfloat": 1000000}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "bigint positive"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "bigint", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "bigint",
+                                                                          "term": {"literal": {"integer": {"bigint": "123456789012345"}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "number",
+                                                              "term": {"literal": {"float": {"bigfloat": 123456789012345}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "bigint negative"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "bigint", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.IntegerType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "bigint",
+                                                                          "term": {"literal": {"integer": {"bigint": "-999999999999"}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "number",
+                                                              "term": {"literal": {"float": {"bigfloat": -999999999999}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "float types"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "bigfloat positive"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "bigfloat", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.FloatType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "bigfloat",
+                                                                          "term": {"literal": {"float": {"bigfloat": 3.14159265359}}}},
+                                                                        "typeName": "hydra.core.FloatValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "number",
+                                                              "term": {"literal": {"float": {"bigfloat": 3.14159265359}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "bigfloat negative"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "bigfloat", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.FloatType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "bigfloat",
+                                                                          "term": {"literal": {"float": {"bigfloat": -2.71828}}}},
+                                                                        "typeName": "hydra.core.FloatValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "number",
+                                                              "term": {"literal": {"float": {"bigfloat": -2.71828}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "bigfloat zero"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "bigfloat", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.FloatType"}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "float",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "bigfloat", "term": {"literal": {"float": {"bigfloat": 0}}}},
+                                                                        "typeName": "hydra.core.FloatValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 0}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "collection types"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "list of integers"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "list",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "integer",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {"name": "int32", "term": {"unit": {}}},
+                                                                              "typeName": "hydra.core.IntegerType"}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "list",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "integer",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
+                                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "integer",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
+                                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "integer",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 3}}}},
+                                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}}]}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "array",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 1}}}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 2}}}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 3}}}},
+                                                                      "typeName": "hydra.json.model.Value"}}]}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "list of strings"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "list",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "string", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "list",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {"name": "string", "term": {"literal": {"string": "a"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}},
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {"name": "string", "term": {"literal": {"string": "b"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}}]}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "array",
+                                                              "term": {
+                                                                "list": [
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {"name": "string", "term": {"literal": {"string": "a"}}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {"name": "string", "term": {"literal": {"string": "b"}}},
+                                                                      "typeName": "hydra.json.model.Value"}}]}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "empty list"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "list",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "integer",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {"name": "int32", "term": {"unit": {}}},
+                                                                              "typeName": "hydra.core.IntegerType"}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "list",
+                                                              "term": {
+                                                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "array",
+                                                              "term": {
+                                                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.json.model.Value"}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "optional types"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "optional string with value"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "string", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "maybe": [
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}}]}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "string", "term": {"literal": {"string": "hello"}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "optional string nothing"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "string", "term": {"unit": {}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "null", "term": {"unit": {}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "optional int with value"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "integer",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {"name": "int32", "term": {"unit": {}}},
+                                                                              "typeName": "hydra.core.IntegerType"}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "maybe": [
+                                                                  {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "literal",
+                                                                        "term": {
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "integer",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 42}}}},
+                                                                                  "typeName": "hydra.core.IntegerValue"}}},
+                                                                            "typeName": "hydra.core.Literal"}}},
+                                                                      "typeName": "hydra.core.Term"}}]}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "number", "term": {"literal": {"float": {"bigfloat": 42}}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "optional int nothing"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "jsonCoder",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "integer",
+                                                                          "term": {
+                                                                            "union": {
+                                                                              "field": {"name": "int32", "term": {"unit": {}}},
+                                                                              "typeName": "hydra.core.IntegerType"}}},
+                                                                        "typeName": "hydra.core.LiteralType"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "term",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "json",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "null", "term": {"unit": {}}},
+                                                            "typeName": "hydra.json.model.Value"}}}],
+                                                    "typeName": "hydra.testing.JsonCoderTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "record types"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+                          "typeName": "hydra.testing.TestGroup"}}]}},
+                {
+                  "name": "cases",
+                  "term": {
+                    "typeApplication": {
+                      "body": {"list": []},
+                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+              "typeName": "hydra.testing.TestGroup"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.testing.TestGroup"},
+          "variables": []}]}],
+  "namespace": "hydra.test.json.coder",
+  "termDependencies": [],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

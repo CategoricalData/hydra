@@ -1,0 +1,1983 @@
+{
+  "description": ["Test cases for topological sorting algorithms"],
+  "elements": [
+    {
+      "name": "hydra.test.sorting.allTests",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Test cases for topological sorting"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {"name": "name", "term": {"literal": {"string": "sorting"}}},
+                {
+                  "name": "description",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "subgroups",
+                  "term": {
+                    "list": [
+                      {
+                        "record": {
+                          "fields": [
+                            {"name": "name", "term": {"literal": {"string": "topological sort"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "empty set"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSort",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {"list": []},
+                                                            "type": {
+                                                              "pair": {
+                                                                "first": {"literal": {"integer": {"int32": {}}}},
+                                                                "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@right": {
+                                                                      "typeApplication": {
+                                                                        "body": {"list": []},
+                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "singleton set"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSort",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {"@right": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "discrete set with multiple elements"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSort",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@right": {
+                                                                      "list": [
+                                                                        {"literal": {"integer": {"int32": 1}}},
+                                                                        {"literal": {"integer": {"int32": 2}}},
+                                                                        {"literal": {"integer": {"int32": 3}}}]}}},
+                                                                "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "linked list"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSort",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@right": {
+                                                                      "list": [
+                                                                        {"literal": {"integer": {"int32": 1}}},
+                                                                        {"literal": {"integer": {"int32": 3}}},
+                                                                        {"literal": {"integer": {"int32": 2}}}]}}},
+                                                                "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "binary tree"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSort",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 1}}},
+                                                                            {"literal": {"integer": {"int32": 4}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 4}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 6}}},
+                                                                            {"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 5}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 6}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 5}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@right": {
+                                                                      "list": [
+                                                                        {"literal": {"integer": {"int32": 5}}},
+                                                                        {"literal": {"integer": {"int32": 1}}},
+                                                                        {"literal": {"integer": {"int32": 2}}},
+                                                                        {"literal": {"integer": {"int32": 6}}},
+                                                                        {"literal": {"integer": {"int32": 4}}},
+                                                                        {"literal": {"integer": {"int32": 3}}}]}}},
+                                                                "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "two trees"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSort",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 1}}},
+                                                                            {"literal": {"integer": {"int32": 4}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 5}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 6}}},
+                                                                            {"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 7}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 4}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 6}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 7}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@right": {
+                                                                      "list": [
+                                                                        {"literal": {"integer": {"int32": 1}}},
+                                                                        {"literal": {"integer": {"int32": 7}}},
+                                                                        {"literal": {"integer": {"int32": 2}}},
+                                                                        {"literal": {"integer": {"int32": 4}}},
+                                                                        {"literal": {"integer": {"int32": 3}}},
+                                                                        {"literal": {"integer": {"int32": 6}}},
+                                                                        {"literal": {"integer": {"int32": 5}}}]}}},
+                                                                "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "diamond DAG"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSort",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 3}}},
+                                                                            {"literal": {"integer": {"int32": 4}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 4}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 5}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 5}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@right": {
+                                                                      "list": [
+                                                                        {"literal": {"integer": {"int32": 5}}},
+                                                                        {"literal": {"integer": {"int32": 2}}},
+                                                                        {"literal": {"integer": {"int32": 3}}},
+                                                                        {"literal": {"integer": {"int32": 4}}},
+                                                                        {"literal": {"integer": {"int32": 1}}}]}}},
+                                                                "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "two-node cycle"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSort",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@left": {
+                                                                      "list": [
+                                                                        {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 1}}},
+                                                                            {"literal": {"integer": {"int32": 2}}}]}]}}},
+                                                                "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "cycle with incoming and outgoing edges"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSort",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 3}}},
+                                                                            {"literal": {"integer": {"int32": 4}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 4}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 5}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 5}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "either": {
+                                                                    "@left": {
+                                                                      "list": [
+                                                                        {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 2}}},
+                                                                            {"literal": {"integer": {"int32": 3}}}]}]}}},
+                                                                "type": {"list": {"list": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "name",
+                              "term": {"literal": {"string": "topological sort SCC"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "empty set"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {"list": []},
+                                                            "type": {
+                                                              "pair": {
+                                                                "first": {"literal": {"integer": {"int32": {}}}},
+                                                                "second": {"list": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {"list": []},
+                                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "singleton set"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {"list": [{"list": [{"literal": {"integer": {"int32": 1}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "discrete set with multiple elements"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {"list": [{"literal": {"integer": {"int32": 1}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 2}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 3}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "single two-element component #1"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {"list": [{"literal": {"integer": {"int32": 2}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 1}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "single two-element component #2"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {"list": [{"literal": {"integer": {"int32": 1}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 2}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "multiple-element component"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 1}}},
+                                                                            {"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {"list": [{"literal": {"integer": {"int32": 3}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 1}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 2}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "cycle of two nodes #1"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 1}}},
+                                                                {"literal": {"integer": {"int32": 2}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "cycle of two nodes #2"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 1}}},
+                                                                {"literal": {"integer": {"int32": 2}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "cycle of three nodes #1"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 1}}},
+                                                                {"literal": {"integer": {"int32": 2}}},
+                                                                {"literal": {"integer": {"int32": 3}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "cycle of three nodes #2"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 1}}},
+                                                                {"literal": {"integer": {"int32": 2}}},
+                                                                {"literal": {"integer": {"int32": 3}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "multiple disconnected cycles"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 200}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 100}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 300}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 10}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 20}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 20}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 10}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 1}}},
+                                                                {"literal": {"integer": {"int32": 2}}},
+                                                                {"literal": {"integer": {"int32": 3}}}]},
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 10}}},
+                                                                {"literal": {"integer": {"int32": 20}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 100}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 200}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 300}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "complex cycles"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 2}}},
+                                                                            {"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 1}}},
+                                                                {"literal": {"integer": {"int32": 2}}},
+                                                                {"literal": {"integer": {"int32": 3}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "chain of three SCCs"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 2}}},
+                                                                            {"literal": {"integer": {"int32": 10}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 10}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 20}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 20}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 100}}},
+                                                                            {"literal": {"integer": {"int32": 10}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 100}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {"list": [{"literal": {"integer": {"int32": 100}}}]},
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 10}}},
+                                                                {"literal": {"integer": {"int32": 20}}}]},
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 1}}},
+                                                                {"literal": {"integer": {"int32": 2}}},
+                                                                {"literal": {"integer": {"int32": 3}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "literal": {"string": "SCCs with dependencies to/from non-SCC nodes"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "topologicalSortSCC",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "adjacencyList",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 2}}},
+                                                                            {"literal": {"integer": {"int32": 3}}},
+                                                                            {"literal": {"integer": {"int32": 10}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 3}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 3}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 1}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 10}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 20}}},
+                                                                            {"literal": {"integer": {"int32": 30}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 20}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 30}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 30}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 100}}},
+                                                                        "@second": {
+                                                                          "list": [
+                                                                            {"literal": {"integer": {"int32": 200}}},
+                                                                            {"literal": {"integer": {"int32": 2}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 200}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 300}}},
+                                                                        "@second": {"list": [{"literal": {"integer": {"int32": 100}}}]}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 1000}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                                            {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"literal": {"integer": {"int32": 2000}}},
+                                                                        "@second": {
+                                                                          "typeApplication": {
+                                                                            "body": {"list": []},
+                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                "type": {"list": {"literal": {"integer": {"int32": {}}}}}}}]}},
+                                                      {
+                                                        "name": "expected",
+                                                        "term": {
+                                                          "list": [
+                                                            {"list": [{"literal": {"integer": {"int32": 30}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 20}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 10}}}]},
+                                                            {
+                                                              "list": [
+                                                                {"literal": {"integer": {"int32": 1}}},
+                                                                {"literal": {"integer": {"int32": 2}}},
+                                                                {"literal": {"integer": {"int32": 3}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 200}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 100}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 300}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 1000}}}]},
+                                                            {"list": [{"literal": {"integer": {"int32": 2000}}}]}]}}],
+                                                    "typeName": "hydra.testing.TopologicalSortSCCTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}}]}},
+                {
+                  "name": "cases",
+                  "term": {
+                    "typeApplication": {
+                      "body": {"list": []},
+                      "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+              "typeName": "hydra.testing.TestGroup"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.testing.TestGroup"},
+          "variables": []}]}],
+  "namespace": "hydra.test.sorting",
+  "termDependencies": ["hydra.sorting"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}
