@@ -39,13 +39,20 @@
                                               "field": {"name": "string", "term": {"variable": "x"}},
                                               "typeName": "hydra.core.Literal"}}},
                                         "typeName": "hydra.core.Term"}},
-                                    "domain": null,
+                                    "domain": [{"literal": {"string": {}}}],
                                     "parameter": "x"}}}}}}],
                       "typeName": "hydra.core.WrappedTerm"}}},
                 "typeName": "hydra.core.Term"}},
-            "domain": null,
+            "domain": [{"variable": "hydra.grammar.Constant"}],
             "parameter": "x"}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.grammar.Constant"}}},
+          "variables": []}]},
     {
       "name": "hydra.encode.grammar.grammar",
       "term": {
@@ -85,15 +92,28 @@
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "hydra.encode.grammar.production"},
-                                                  "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                          "type": {"variable": "hydra.grammar.Production"}}},
+                                                      "type": {"variable": "hydra.core.Term"}}}}}}}},
                                         "typeName": "hydra.core.Term"}},
-                                    "domain": null,
+                                    "domain": [{"list": {"variable": "hydra.grammar.Production"}}],
                                     "parameter": "xs"}}}}}}],
                       "typeName": "hydra.core.WrappedTerm"}}},
                 "typeName": "hydra.core.Term"}},
-            "domain": null,
+            "domain": [{"variable": "hydra.grammar.Grammar"}],
             "parameter": "x"}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.grammar.Grammar"}}},
+          "variables": []}]},
     {
       "name": "hydra.encode.grammar.label",
       "term": {
@@ -132,13 +152,20 @@
                                               "field": {"name": "string", "term": {"variable": "x"}},
                                               "typeName": "hydra.core.Literal"}}},
                                         "typeName": "hydra.core.Term"}},
-                                    "domain": null,
+                                    "domain": [{"literal": {"string": {}}}],
                                     "parameter": "x"}}}}}}],
                       "typeName": "hydra.core.WrappedTerm"}}},
                 "typeName": "hydra.core.Term"}},
-            "domain": null,
+            "domain": [{"variable": "hydra.grammar.Label"}],
             "parameter": "x"}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.grammar.Label"}}},
+          "variables": []}]},
     {
       "name": "hydra.encode.grammar.labeledPattern",
       "term": {
@@ -207,9 +234,16 @@
                                   "typeName": "hydra.core.Field"}}]}}],
                       "typeName": "hydra.core.Record"}}},
                 "typeName": "hydra.core.Term"}},
-            "domain": null,
+            "domain": [{"variable": "hydra.grammar.LabeledPattern"}],
             "parameter": "x"}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.grammar.LabeledPattern"}}},
+          "variables": []}]},
     {
       "name": "hydra.encode.grammar.pattern",
       "term": {
@@ -264,14 +298,20 @@
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"variable": "hydra.encode.grammar.pattern"},
-                                                                      "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                              "type": {"variable": "hydra.grammar.Pattern"}}},
+                                                                          "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                             "typeName": "hydra.core.Term"}},
-                                                        "domain": null,
+                                                        "domain": [{"list": {"variable": "hydra.grammar.Pattern"}}],
                                                         "parameter": "xs"}}}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"list": {"variable": "hydra.grammar.Pattern"}}],
                         "parameter": "y"}}}},
                 {
                   "name": "constant",
@@ -311,7 +351,7 @@
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"variable": "hydra.grammar.Constant"}],
                         "parameter": "y"}}}},
                 {
                   "name": "ignored",
@@ -351,7 +391,7 @@
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"variable": "hydra.grammar.Pattern"}],
                         "parameter": "y"}}}},
                 {
                   "name": "labeled",
@@ -391,7 +431,7 @@
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"variable": "hydra.grammar.LabeledPattern"}],
                         "parameter": "y"}}}},
                 {
                   "name": "nil",
@@ -434,12 +474,12 @@
                                                           "union": {
                                                             "field": {"name": "unit", "term": {"unit": {}}},
                                                             "typeName": "hydra.core.Term"}},
-                                                        "domain": null,
+                                                        "domain": [{"unit": {}}],
                                                         "parameter": "_"}}}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"unit": {}}],
                         "parameter": "y"}}}},
                 {
                   "name": "nonterminal",
@@ -479,7 +519,7 @@
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"variable": "hydra.grammar.Symbol"}],
                         "parameter": "y"}}}},
                 {
                   "name": "option",
@@ -519,7 +559,7 @@
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"variable": "hydra.grammar.Pattern"}],
                         "parameter": "y"}}}},
                 {
                   "name": "plus",
@@ -559,7 +599,7 @@
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"variable": "hydra.grammar.Pattern"}],
                         "parameter": "y"}}}},
                 {
                   "name": "regex",
@@ -599,7 +639,7 @@
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"variable": "hydra.grammar.Regex"}],
                         "parameter": "y"}}}},
                 {
                   "name": "sequence",
@@ -648,14 +688,20 @@
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"variable": "hydra.encode.grammar.pattern"},
-                                                                      "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                              "type": {"variable": "hydra.grammar.Pattern"}}},
+                                                                          "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                             "typeName": "hydra.core.Term"}},
-                                                        "domain": null,
+                                                        "domain": [{"list": {"variable": "hydra.grammar.Pattern"}}],
                                                         "parameter": "xs"}}}}}}],
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"list": {"variable": "hydra.grammar.Pattern"}}],
                         "parameter": "y"}}}},
                 {
                   "name": "star",
@@ -695,11 +741,18 @@
                                           "typeName": "hydra.core.Field"}}}],
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
-                        "domain": null,
+                        "domain": [{"variable": "hydra.grammar.Pattern"}],
                         "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.grammar.Pattern"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.grammar.Pattern"}}},
+          "variables": []}]},
     {
       "name": "hydra.encode.grammar.production",
       "term": {
@@ -768,9 +821,16 @@
                                   "typeName": "hydra.core.Field"}}]}}],
                       "typeName": "hydra.core.Record"}}},
                 "typeName": "hydra.core.Term"}},
-            "domain": null,
+            "domain": [{"variable": "hydra.grammar.Production"}],
             "parameter": "x"}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.grammar.Production"}}},
+          "variables": []}]},
     {
       "name": "hydra.encode.grammar.regex",
       "term": {
@@ -809,13 +869,20 @@
                                               "field": {"name": "string", "term": {"variable": "x"}},
                                               "typeName": "hydra.core.Literal"}}},
                                         "typeName": "hydra.core.Term"}},
-                                    "domain": null,
+                                    "domain": [{"literal": {"string": {}}}],
                                     "parameter": "x"}}}}}}],
                       "typeName": "hydra.core.WrappedTerm"}}},
                 "typeName": "hydra.core.Term"}},
-            "domain": null,
+            "domain": [{"variable": "hydra.grammar.Regex"}],
             "parameter": "x"}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.grammar.Regex"}}},
+          "variables": []}]},
     {
       "name": "hydra.encode.grammar.symbol",
       "term": {
@@ -854,13 +921,20 @@
                                               "field": {"name": "string", "term": {"variable": "x"}},
                                               "typeName": "hydra.core.Literal"}}},
                                         "typeName": "hydra.core.Term"}},
-                                    "domain": null,
+                                    "domain": [{"literal": {"string": {}}}],
                                     "parameter": "x"}}}}}}],
                       "typeName": "hydra.core.WrappedTerm"}}},
                 "typeName": "hydra.core.Term"}},
-            "domain": null,
+            "domain": [{"variable": "hydra.grammar.Symbol"}],
             "parameter": "x"}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.grammar.Symbol"}}},
+          "variables": []}]}],
   "namespace": "hydra.encode.grammar",
   "termDependencies": ["hydra.encode.core"],
   "typeDependencies": ["hydra.grammar"]}

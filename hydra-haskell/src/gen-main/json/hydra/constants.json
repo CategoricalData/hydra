@@ -11,7 +11,11 @@
               "@value": {
                 "literal": {"string": "Disable type checking by default, for better performance"}}}],
           "body": {"literal": {"boolean": true}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"literal": {"boolean": {}}},
+          "variables": []}]},
     {
       "name": "hydra.constants.ignoredVariable",
       "term": {
@@ -21,7 +25,11 @@
               "@key": "description",
               "@value": {"literal": {"string": "The name used for ignored variables"}}}],
           "body": {"literal": {"string": "_"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"literal": {"string": {}}},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_classes",
       "term": {
@@ -34,7 +42,11 @@
             "wrap": {
               "body": {"literal": {"string": "classes"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_debugId",
       "term": {
@@ -47,7 +59,11 @@
             "wrap": {
               "body": {"literal": {"string": "debugId"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_deprecated",
       "term": {
@@ -60,7 +76,11 @@
             "wrap": {
               "body": {"literal": {"string": "deprecated"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_description",
       "term": {
@@ -73,7 +93,11 @@
             "wrap": {
               "body": {"literal": {"string": "description"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_exclude",
       "term": {
@@ -86,7 +110,11 @@
             "wrap": {
               "body": {"literal": {"string": "exclude"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_firstClassType",
       "term": {
@@ -101,7 +129,11 @@
             "wrap": {
               "body": {"literal": {"string": "firstClassType"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_maxLength",
       "term": {
@@ -115,7 +147,11 @@
             "wrap": {
               "body": {"literal": {"string": "maxLength"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_minLength",
       "term": {
@@ -129,7 +165,11 @@
             "wrap": {
               "body": {"literal": {"string": "minLength"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_preserveFieldName",
       "term": {
@@ -144,7 +184,11 @@
             "wrap": {
               "body": {"literal": {"string": "preserveFieldName"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_type",
       "term": {
@@ -157,7 +201,11 @@
             "wrap": {
               "body": {"literal": {"string": "type"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.key_freshTypeVariableCount",
       "term": {
@@ -171,7 +219,11 @@
             "wrap": {
               "body": {"literal": {"string": "freshTypeVariableCount"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.maxInt32",
       "term": {
@@ -181,7 +233,11 @@
               "@key": "description",
               "@value": {"literal": {"string": "The maximum value of a 32-bit integer"}}}],
           "body": {"literal": {"integer": {"int32": 2147483647}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"literal": {"integer": {"int32": {}}}},
+          "variables": []}]},
     {
       "name": "hydra.constants.placeholderName",
       "term": {
@@ -196,7 +252,11 @@
             "wrap": {
               "body": {"literal": {"string": "Placeholder"}},
               "typeName": "hydra.core.Name"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
     {
       "name": "hydra.constants.maxTraceDepth",
       "term": {
@@ -208,7 +268,11 @@
                 "literal": {
                   "string": "A maximum depth for nested flows. Currently, this is set very high because deep flows are common in type inference over the Hydra kernel."}}}],
           "body": {"literal": {"integer": {"int32": 5000}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"literal": {"integer": {"int32": {}}}},
+          "variables": []}]},
     {
       "name": "hydra.constants.warningAutoGeneratedFile",
       "term": {
@@ -221,7 +285,11 @@
           "body": {
             "literal": {
               "string": "Note: this is an automatically generated file. Do not edit."}}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {"literal": {"string": {}}},
+          "variables": []}]}],
   "namespace": "hydra.constants",
   "termDependencies": [],
   "typeDependencies": [

@@ -4,261 +4,593 @@
     {
       "name": "hydra.ext.org.json.decoding.decodeArray",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {"string": "Decode a JSON array using a decoder for elements"}}}],
+        "typeLambda": {
           "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "function": {
-                    "elimination": {
-                      "union": {
-                        "cases": [
-                          {
-                            "name": "array",
-                            "term": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "application": {
-                                      "argument": {"variable": "a"},
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {"string": "Decode a JSON array using a decoder for elements"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "elimination": {
+                              "union": {
+                                "cases": [
+                                  {
+                                    "name": "array",
+                                    "term": {
                                       "function": {
-                                        "application": {
-                                          "argument": {"variable": "decodeElem"},
-                                          "function": {"function": {"primitive": "hydra.lib.flows.mapList"}}}}}},
-                                  "domain": null,
-                                  "parameter": "a"}}}}],
-                        "default": [
+                                        "lambda": {
+                                          "body": {
+                                            "application": {
+                                              "argument": {"variable": "a"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"variable": "decodeElem"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.flows.mapList"}},
+                                                              "type": {"variable": "hydra.json.model.Value"}}},
+                                                          "type": {"variable": "t0"}}},
+                                                      "type": {"variable": "t1"}}}}}}},
+                                          "domain": [{"list": {"variable": "hydra.json.model.Value"}}],
+                                          "parameter": "a"}}}}],
+                                "default": [
+                                  {
+                                    "application": {
+                                      "argument": {"literal": {"string": "expected an array"}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.flows.fail"}},
+                                              "type": {"variable": "t0"}}},
+                                          "type": {"list": {"variable": "t1"}}}}}}],
+                                "typeName": "hydra.json.model.Value"}}}},
+                        "domain": [
                           {
-                            "application": {
-                              "argument": {"literal": {"string": "expected an array"}},
-                              "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}}],
-                        "typeName": "hydra.json.model.Value"}}}},
-                "domain": null,
-                "parameter": "decodeElem"}}}}},
-      "type": null},
+                            "function": {
+                              "codomain": {
+                                "application": {
+                                  "argument": {"variable": "t1"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "t0"},
+                                      "function": {"variable": "hydra.compute.Flow"}}}}},
+                              "domain": {"variable": "hydra.json.model.Value"}}}],
+                        "parameter": "decodeElem"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"list": {"variable": "t1"}},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "t0"},
+                          "function": {"variable": "hydra.compute.Flow"}}}}},
+                  "domain": {"variable": "hydra.json.model.Value"}}},
+              "domain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "t1"},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "t0"},
+                          "function": {"variable": "hydra.compute.Flow"}}}}},
+                  "domain": {"variable": "hydra.json.model.Value"}}}}},
+          "variables": ["t0", "t1"]}]},
     {
       "name": "hydra.ext.org.json.decoding.decodeBoolean",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {"literal": {"string": "Decode a JSON boolean value"}}}],
+        "typeLambda": {
           "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Decode a JSON boolean value"}}}],
+              "body": {
+                "function": {
+                  "elimination": {
+                    "union": {
+                      "cases": [
+                        {
+                          "name": "boolean",
+                          "term": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "b"},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                            "type": {"variable": "t0"}}},
+                                        "type": {"literal": {"boolean": {}}}}}}},
+                                "domain": [{"literal": {"boolean": {}}}],
+                                "parameter": "b"}}}}],
+                      "default": [
+                        {
+                          "application": {
+                            "argument": {"literal": {"string": "expected a boolean"}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.flows.fail"}},
+                                    "type": {"variable": "t0"}}},
+                                "type": {"literal": {"boolean": {}}}}}}}],
+                      "typeName": "hydra.json.model.Value"}}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
             "function": {
-              "elimination": {
-                "union": {
-                  "cases": [
-                    {
-                      "name": "boolean",
-                      "term": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "application": {
-                                "argument": {"variable": "b"},
-                                "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                            "domain": null,
-                            "parameter": "b"}}}}],
-                  "default": [
-                    {
-                      "application": {
-                        "argument": {"literal": {"string": "expected a boolean"}},
-                        "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}}],
-                  "typeName": "hydra.json.model.Value"}}}}}},
-      "type": null},
+              "codomain": {
+                "application": {
+                  "argument": {"literal": {"boolean": {}}},
+                  "function": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.compute.Flow"}}}}},
+              "domain": {"variable": "hydra.json.model.Value"}}},
+          "variables": ["t0"]}]},
     {
       "name": "hydra.ext.org.json.decoding.decodeField",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {"literal": {"string": "Decode a required field from a JSON object"}}}],
+        "typeLambda": {
           "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "function": {
-                    "lambda": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {"literal": {"string": "Decode a required field from a JSON object"}}}],
                       "body": {
                         "function": {
                           "lambda": {
                             "body": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {"variable": "f"},
-                                              "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                                          "domain": null,
-                                          "parameter": "f"}}},
+                              "function": {
+                                "lambda": {
+                                  "body": {
                                     "function": {
-                                      "application": {
-                                        "argument": {
+                                      "lambda": {
+                                        "body": {
                                           "application": {
                                             "argument": {
                                               "application": {
-                                                "argument": {"variable": "name"},
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "f"},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                  "type": {"variable": "t1"}}},
+                                                              "type": {"variable": "t2"}}}}},
+                                                      "domain": [{"variable": "t2"}],
+                                                      "parameter": "f"}}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {"literal": {"string": "missing field: "}},
-                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                            "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}},
-                                        "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "m"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "name"},
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "name"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": "missing field: "}},
+                                                                "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.flows.fail"}},
+                                                                "type": {"variable": "t1"}}},
+                                                            "type": {"variable": "t2"}}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                            "type": {
+                                                              "application": {
+                                                                "argument": {"variable": "t2"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "t1"},
+                                                                    "function": {"variable": "hydra.compute.Flow"}}}}}}},
+                                                        "type": {"variable": "t2"}}}}}}},
                                             "function": {
                                               "application": {
-                                                "argument": {"variable": "decodeValue"},
-                                                "function": {"variable": "hydra.ext.org.json.decoding.decodeOptionalField"}}}}}}},
-                                    "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
-                            "domain": null,
-                            "parameter": "m"}}},
-                      "domain": null,
-                      "parameter": "name"}}},
-                "domain": null,
-                "parameter": "decodeValue"}}}}},
-      "type": null},
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "m"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "name"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "decodeValue"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.ext.org.json.decoding.decodeOptionalField"},
+                                                                            "type": {"variable": "t0"}}},
+                                                                        "type": {"variable": "t1"}}},
+                                                                    "type": {"variable": "t2"}}},
+                                                                "type": {"literal": {"string": {}}}}}}}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.flows.bind"}},
+                                                            "type": {"variable": "t1"}}},
+                                                        "type": {"maybe": {"variable": "t2"}}}},
+                                                    "type": {"variable": "t2"}}}}}}},
+                                        "domain": [
+                                          {
+                                            "map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}}],
+                                        "parameter": "m"}}},
+                                  "domain": [{"literal": {"string": {}}}],
+                                  "parameter": "name"}}},
+                            "domain": [
+                              {
+                                "function": {
+                                  "codomain": {
+                                    "application": {
+                                      "argument": {"variable": "t2"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "t1"},
+                                          "function": {"variable": "hydra.compute.Flow"}}}}},
+                                  "domain": {"variable": "t0"}}}],
+                            "parameter": "decodeValue"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "application": {
+                          "argument": {"variable": "t2"},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "t1"},
+                              "function": {"variable": "hydra.compute.Flow"}}}}},
+                      "domain": {
+                        "map": {"keys": {"literal": {"string": {}}}, "values": {"variable": "t0"}}}}},
+                  "domain": {"literal": {"string": {}}}}},
+              "domain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "t2"},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "t1"},
+                          "function": {"variable": "hydra.compute.Flow"}}}}},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0", "t1", "t2"]}]},
     {
       "name": "hydra.ext.org.json.decoding.decodeObject",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {"literal": {"string": "Decode a JSON object value"}}}],
+        "typeLambda": {
           "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Decode a JSON object value"}}}],
+              "body": {
+                "function": {
+                  "elimination": {
+                    "union": {
+                      "cases": [
+                        {
+                          "name": "object",
+                          "term": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "o"},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                            "type": {"variable": "t0"}}},
+                                        "type": {
+                                          "map": {
+                                            "keys": {"literal": {"string": {}}},
+                                            "values": {"variable": "hydra.json.model.Value"}}}}}}},
+                                "domain": [
+                                  {
+                                    "map": {
+                                      "keys": {"literal": {"string": {}}},
+                                      "values": {"variable": "hydra.json.model.Value"}}}],
+                                "parameter": "o"}}}}],
+                      "default": [
+                        {
+                          "application": {
+                            "argument": {"literal": {"string": "expected an object"}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.flows.fail"}},
+                                    "type": {"variable": "t0"}}},
+                                "type": {
+                                  "map": {
+                                    "keys": {"literal": {"string": {}}},
+                                    "values": {"variable": "hydra.json.model.Value"}}}}}}}],
+                      "typeName": "hydra.json.model.Value"}}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
             "function": {
-              "elimination": {
-                "union": {
-                  "cases": [
-                    {
-                      "name": "object",
-                      "term": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "application": {
-                                "argument": {"variable": "o"},
-                                "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                            "domain": null,
-                            "parameter": "o"}}}}],
-                  "default": [
-                    {
-                      "application": {
-                        "argument": {"literal": {"string": "expected an object"}},
-                        "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}}],
-                  "typeName": "hydra.json.model.Value"}}}}}},
-      "type": null},
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "map": {
+                      "keys": {"literal": {"string": {}}},
+                      "values": {"variable": "hydra.json.model.Value"}}},
+                  "function": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.compute.Flow"}}}}},
+              "domain": {"variable": "hydra.json.model.Value"}}},
+          "variables": ["t0"]}]},
     {
       "name": "hydra.ext.org.json.decoding.decodeOptionalField",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {"literal": {"string": "Decode an optional field from a JSON object"}}}],
+        "typeLambda": {
           "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "function": {
-                    "lambda": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "typeLambda": {
                       "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "m"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "name"},
-                                        "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "v"},
-                                                  "function": {"variable": "decodeValue"}}},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {"literal": {"string": "Decode an optional field from a JSON object"}}}],
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "m"},
                                                     "function": {
-                                                      "lambda": {
-                                                        "body": {"maybe": [{"variable": "x"}]},
-                                                        "domain": null,
-                                                        "parameter": "x"}}},
-                                                  "function": {"function": {"primitive": "hydra.lib.flows.map"}}}}}},
-                                          "domain": null,
-                                          "parameter": "v"}}},
+                                                      "application": {
+                                                        "argument": {"variable": "name"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                "type": {"variable": "t3"}}},
+                                                            "type": {"variable": "t0"}}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "v"},
+                                                                  "function": {"variable": "decodeValue"}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {"maybe": [{"variable": "x"}]},
+                                                                        "domain": [{"variable": "t2"}],
+                                                                        "parameter": "x"}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.flows.map"}},
+                                                                              "type": {"variable": "t2"}}},
+                                                                          "type": {"maybe": {"variable": "t2"}}}},
+                                                                      "type": {"variable": "t1"}}}}}}},
+                                                          "domain": [{"variable": "t0"}],
+                                                          "parameter": "v"}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t2"}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                                    "type": {"variable": "t1"}}},
+                                                                "type": {"maybe": {"variable": "t2"}}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                "type": {
+                                                                  "application": {
+                                                                    "argument": {"maybe": {"variable": "t2"}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "t1"},
+                                                                        "function": {"variable": "hydra.compute.Flow"}}}}}}},
+                                                            "type": {"variable": "t0"}}}}}}}}},
+                                            "domain": [{"map": {"keys": {"variable": "t3"}, "values": {"variable": "t0"}}}],
+                                            "parameter": "m"}}},
+                                      "domain": [{"variable": "t3"}],
+                                      "parameter": "name"}}},
+                                "domain": [
+                                  {
                                     "function": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"maybe": null},
-                                            "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                                        "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                            "domain": null,
-                            "parameter": "m"}}},
-                      "domain": null,
-                      "parameter": "name"}}},
-                "domain": null,
-                "parameter": "decodeValue"}}}}},
-      "type": null},
+                                      "codomain": {
+                                        "application": {
+                                          "argument": {"variable": "t2"},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"variable": "t1"},
+                                              "function": {"variable": "hydra.compute.Flow"}}}}},
+                                      "domain": {"variable": "t0"}}}],
+                                "parameter": "decodeValue"}}}}},
+                      "parameter": "t3"}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t3", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "application": {
+                          "argument": {"maybe": {"variable": "t2"}},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "t1"},
+                              "function": {"variable": "hydra.compute.Flow"}}}}},
+                      "domain": {"map": {"keys": {"variable": "t3"}, "values": {"variable": "t0"}}}}},
+                  "domain": {"variable": "t3"}}},
+              "domain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "t2"},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "t1"},
+                          "function": {"variable": "hydra.compute.Flow"}}}}},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0", "t1", "t2", "t3"]}]},
     {
       "name": "hydra.ext.org.json.decoding.decodeString",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {"literal": {"string": "Decode a JSON string value"}}}],
+        "typeLambda": {
           "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Decode a JSON string value"}}}],
+              "body": {
+                "function": {
+                  "elimination": {
+                    "union": {
+                      "cases": [
+                        {
+                          "name": "string",
+                          "term": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "s"},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                            "type": {"variable": "t0"}}},
+                                        "type": {"literal": {"string": {}}}}}}},
+                                "domain": [{"literal": {"string": {}}}],
+                                "parameter": "s"}}}}],
+                      "default": [
+                        {
+                          "application": {
+                            "argument": {"literal": {"string": "expected a string"}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.flows.fail"}},
+                                    "type": {"variable": "t0"}}},
+                                "type": {"literal": {"string": {}}}}}}}],
+                      "typeName": "hydra.json.model.Value"}}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
             "function": {
-              "elimination": {
-                "union": {
-                  "cases": [
-                    {
-                      "name": "string",
-                      "term": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "application": {
-                                "argument": {"variable": "s"},
-                                "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
-                            "domain": null,
-                            "parameter": "s"}}}}],
-                  "default": [
-                    {
-                      "application": {
-                        "argument": {"literal": {"string": "expected a string"}},
-                        "function": {"function": {"primitive": "hydra.lib.flows.fail"}}}}],
-                  "typeName": "hydra.json.model.Value"}}}}}},
-      "type": null}],
+              "codomain": {
+                "application": {
+                  "argument": {"literal": {"string": {}}},
+                  "function": {
+                    "application": {
+                      "argument": {"variable": "t0"},
+                      "function": {"variable": "hydra.compute.Flow"}}}}},
+              "domain": {"variable": "hydra.json.model.Value"}}},
+          "variables": ["t0"]}]}],
   "namespace": "hydra.ext.org.json.decoding",
   "termDependencies": [],
   "typeDependencies": [

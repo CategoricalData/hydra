@@ -19,44 +19,86 @@
                       {
                         "name": "idx",
                         "term": {
-                          "function": {
-                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "i"}}},
-                        "type": null}],
+                          "typeLambda": {
+                            "body": {
+                              "typeLambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t1"}}},
+                                      "domain": [{"variable": "t0"}],
+                                      "parameter": "i"}}},
+                                "parameter": "t1"}},
+                            "parameter": "t0"}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {
+                              "function": {
+                                "codomain": {"maybe": {"variable": "t1"}},
+                                "domain": {"variable": "t0"}}},
+                            "variables": ["t0", "t1"]}]}],
                     "body": {
                       "let": {
                         "bindings": [
                           {
                             "name": "idxSuff",
                             "term": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {"argument": {"variable": "i"}, "function": {"variable": "idx"}}},
-                                            "function": {
+                              "typeLambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
                                               "application": {
                                                 "argument": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "application": {
-                                                          "argument": {"variable": "suffix"},
-                                                          "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "i"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {"body": {"variable": "idx"}, "type": {"variable": "t0"}}},
+                                                        "type": {"literal": {"string": {}}}}}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
                                                             "application": {
-                                                              "argument": {"variable": "s"},
-                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                      "domain": null,
-                                                      "parameter": "s"}}},
-                                                "function": {"function": {"primitive": "hydra.lib.maybes.map"}}}}}},
-                                        "domain": null,
-                                        "parameter": "i"}}},
-                                  "domain": null,
-                                  "parameter": "suffix"}}},
-                            "type": null}],
+                                                              "argument": {"variable": "suffix"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "s"},
+                                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                          "domain": [{"literal": {"string": {}}}],
+                                                          "parameter": "s"}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                            "type": {"literal": {"string": {}}}}},
+                                                        "type": {"literal": {"string": {}}}}}}}}},
+                                            "domain": [{"variable": "t0"}],
+                                            "parameter": "i"}}},
+                                      "domain": [{"literal": {"string": {}}}],
+                                      "parameter": "suffix"}}},
+                                "parameter": "t0"}},
+                            "type": [
+                              {
+                                "constraints": null,
+                                "type": {
+                                  "function": {
+                                    "codomain": {
+                                      "function": {
+                                        "codomain": {"maybe": {"literal": {"string": {}}}},
+                                        "domain": {"variable": "t0"}}},
+                                    "domain": {"literal": {"string": {}}}}},
+                                "variables": ["t0"]}]}],
                         "body": {
                           "application": {
                             "argument": {"variable": "accessor"},
@@ -69,14 +111,18 @@
                                         "name": "annotatedBody",
                                         "term": {
                                           "function": {
-                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                            "lambda": {
+                                              "body": {
+                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                              "domain": [{"unit": {}}],
+                                              "parameter": "_"}}}},
                                       {
                                         "name": "applicationFunction",
                                         "term": {
                                           "function": {
                                             "lambda": {
                                               "body": {"maybe": [{"literal": {"string": "fun"}}]},
-                                              "domain": null,
+                                              "domain": [{"unit": {}}],
                                               "parameter": "_"}}}},
                                       {
                                         "name": "applicationArgument",
@@ -84,7 +130,7 @@
                                           "function": {
                                             "lambda": {
                                               "body": {"maybe": [{"literal": {"string": "arg"}}]},
-                                              "domain": null,
+                                              "domain": [{"unit": {}}],
                                               "parameter": "_"}}}},
                                       {
                                         "name": "lambdaBody",
@@ -92,7 +138,7 @@
                                           "function": {
                                             "lambda": {
                                               "body": {"maybe": [{"literal": {"string": "body"}}]},
-                                              "domain": null,
+                                              "domain": [{"unit": {}}],
                                               "parameter": "_"}}}},
                                       {
                                         "name": "unionCasesDefault",
@@ -100,7 +146,7 @@
                                           "function": {
                                             "lambda": {
                                               "body": {"maybe": [{"literal": {"string": "default"}}]},
-                                              "domain": null,
+                                              "domain": [{"unit": {}}],
                                               "parameter": "_"}}}},
                                       {
                                         "name": "unionCasesBranch",
@@ -119,7 +165,7 @@
                                                         "application": {
                                                           "argument": {"literal": {"string": "."}},
                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}]},
-                                              "domain": null,
+                                              "domain": [{"variable": "hydra.core.Name"}],
                                               "parameter": "name"}}}},
                                       {
                                         "name": "letBody",
@@ -127,7 +173,7 @@
                                           "function": {
                                             "lambda": {
                                               "body": {"maybe": [{"literal": {"string": "in"}}]},
-                                              "domain": null,
+                                              "domain": [{"unit": {}}],
                                               "parameter": "_"}}}},
                                       {
                                         "name": "letBinding",
@@ -146,7 +192,7 @@
                                                               "argument": {"variable": "name"},
                                                               "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}]},
-                                              "domain": null,
+                                              "domain": [{"variable": "hydra.core.Name"}],
                                               "parameter": "name"}}}},
                                       {
                                         "name": "listElement",
@@ -154,8 +200,16 @@
                                           "function": {
                                             "lambda": {
                                               "body": {
-                                                "application": {"argument": {"variable": "i"}, "function": {"variable": "idx"}}},
-                                              "domain": null,
+                                                "application": {
+                                                  "argument": {"variable": "i"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "idx"},
+                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                      "type": {"literal": {"string": {}}}}}}},
+                                              "domain": [{"literal": {"integer": {"int32": {}}}}],
                                               "parameter": "i"}}}},
                                       {
                                         "name": "mapKey",
@@ -168,8 +222,11 @@
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": ".key"}},
-                                                      "function": {"variable": "idxSuff"}}}}},
-                                              "domain": null,
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "idxSuff"},
+                                                          "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                              "domain": [{"literal": {"integer": {"int32": {}}}}],
                                               "parameter": "i"}}}},
                                       {
                                         "name": "mapValue",
@@ -182,8 +239,11 @@
                                                   "function": {
                                                     "application": {
                                                       "argument": {"literal": {"string": ".value"}},
-                                                      "function": {"variable": "idxSuff"}}}}},
-                                              "domain": null,
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "idxSuff"},
+                                                          "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                              "domain": [{"literal": {"integer": {"int32": {}}}}],
                                               "parameter": "i"}}}},
                                       {
                                         "name": "maybeTerm",
@@ -191,7 +251,7 @@
                                           "function": {
                                             "lambda": {
                                               "body": {"maybe": [{"literal": {"string": "just"}}]},
-                                              "domain": null,
+                                              "domain": [{"unit": {}}],
                                               "parameter": "_"}}}},
                                       {
                                         "name": "productTerm",
@@ -199,8 +259,16 @@
                                           "function": {
                                             "lambda": {
                                               "body": {
-                                                "application": {"argument": {"variable": "i"}, "function": {"variable": "idx"}}},
-                                              "domain": null,
+                                                "application": {
+                                                  "argument": {"variable": "i"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "idx"},
+                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                      "type": {"literal": {"string": {}}}}}}},
+                                              "domain": [{"literal": {"integer": {"int32": {}}}}],
                                               "parameter": "i"}}}},
                                       {
                                         "name": "recordField",
@@ -219,7 +287,7 @@
                                                         "application": {
                                                           "argument": {"literal": {"string": "."}},
                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}}]},
-                                              "domain": null,
+                                              "domain": [{"variable": "hydra.core.Name"}],
                                               "parameter": "name"}}}},
                                       {
                                         "name": "setElement",
@@ -227,39 +295,74 @@
                                           "function": {
                                             "lambda": {
                                               "body": {
-                                                "application": {"argument": {"variable": "i"}, "function": {"variable": "idx"}}},
-                                              "domain": null,
+                                                "application": {
+                                                  "argument": {"variable": "i"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "idx"},
+                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                      "type": {"literal": {"string": {}}}}}}},
+                                              "domain": [{"literal": {"integer": {"int32": {}}}}],
                                               "parameter": "i"}}}},
                                       {
                                         "name": "sumTerm",
                                         "term": {
                                           "function": {
-                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                            "lambda": {
+                                              "body": {
+                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                              "domain": [{"unit": {}}],
+                                              "parameter": "_"}}}},
                                       {
                                         "name": "typeLambdaBody",
                                         "term": {
                                           "function": {
-                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                            "lambda": {
+                                              "body": {
+                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                              "domain": [{"unit": {}}],
+                                              "parameter": "_"}}}},
                                       {
                                         "name": "typeApplicationTerm",
                                         "term": {
                                           "function": {
-                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                            "lambda": {
+                                              "body": {
+                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                              "domain": [{"unit": {}}],
+                                              "parameter": "_"}}}},
                                       {
                                         "name": "injectionTerm",
                                         "term": {
                                           "function": {
-                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}},
+                                            "lambda": {
+                                              "body": {
+                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                              "domain": [{"unit": {}}],
+                                              "parameter": "_"}}}},
                                       {
                                         "name": "wrappedTerm",
                                         "term": {
                                           "function": {
-                                            "lambda": {"body": {"maybe": null}, "domain": null, "parameter": "_"}}}}],
+                                            "lambda": {
+                                              "body": {
+                                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}},
+                                              "domain": [{"unit": {}}],
+                                              "parameter": "_"}}}}],
                                     "default": null,
                                     "typeName": "hydra.accessors.TermAccessor"}}}}}}}}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.accessors.TermAccessor"}],
                 "parameter": "accessor"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"maybe": {"literal": {"string": {}}}},
+              "domain": {"variable": "hydra.accessors.TermAccessor"}}},
+          "variables": []}]},
     {
       "name": "hydra.show.accessors.termToAccessorGraph",
       "term": {
@@ -283,7 +386,11 @@
                                 "union": {
                                   "field": {"name": "annotatedBody", "term": {"unit": {}}},
                                   "typeName": "hydra.accessors.TermAccessor"}},
-                              "type": null},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {"variable": "hydra.accessors.TermAccessor"},
+                                  "variables": []}]},
                             {
                               "name": "helper",
                               "term": {
@@ -309,43 +416,112 @@
                                                                     "term": {
                                                                       "application": {
                                                                         "argument": {"variable": "accessorTerm"},
-                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                    "type": null},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                            "type": {"variable": "hydra.core.Term"}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"variable": "hydra.accessors.TermAccessor"},
+                                                                        "variables": []}]},
                                                                   {
                                                                     "name": "currentTerm",
                                                                     "term": {
                                                                       "application": {
                                                                         "argument": {"variable": "accessorTerm"},
-                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                    "type": null},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                            "type": {"variable": "hydra.core.Term"}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"variable": "hydra.core.Term"},
+                                                                        "variables": []}]},
                                                                   {
                                                                     "name": "nodesEdges",
                                                                     "term": {
                                                                       "application": {
                                                                         "argument": {"variable": "state"},
-                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                    "type": null},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                "type": {
+                                                                                  "pair": {
+                                                                                    "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                    "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}}}},
+                                                                            "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {
+                                                                          "pair": {
+                                                                            "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                            "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                        "variables": []}]},
                                                                   {
                                                                     "name": "visited",
                                                                     "term": {
                                                                       "application": {
                                                                         "argument": {"variable": "state"},
-                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                    "type": null},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                "type": {
+                                                                                  "pair": {
+                                                                                    "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                    "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}}}},
+                                                                            "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"set": {"literal": {"string": {}}}},
+                                                                        "variables": []}]},
                                                                   {
                                                                     "name": "nodes",
                                                                     "term": {
                                                                       "application": {
                                                                         "argument": {"variable": "nodesEdges"},
-                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                    "type": null},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                            "type": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                        "variables": []}]},
                                                                   {
                                                                     "name": "edges",
                                                                     "term": {
                                                                       "application": {
                                                                         "argument": {"variable": "nodesEdges"},
-                                                                        "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                    "type": null},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                            "type": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"list": {"variable": "hydra.accessors.AccessorEdge"}},
+                                                                        "variables": []}]},
                                                                   {
                                                                     "name": "nextPath",
                                                                     "term": {
@@ -354,8 +530,15 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "accessor"},
-                                                                            "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
-                                                                    "type": null}],
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                "type": {"variable": "hydra.accessors.TermAccessor"}}}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"list": {"variable": "hydra.accessors.TermAccessor"}},
+                                                                        "variables": []}]}],
                                                                 "body": {
                                                                   "application": {
                                                                     "argument": {"variable": "currentTerm"},
@@ -380,7 +563,11 @@
                                                                                                   "function": {
                                                                                                     "function": {
                                                                                                       "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
-                                                                                              "type": null},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {"list": {"variable": "hydra.core.Binding"}},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "env",
                                                                                               "term": {
@@ -389,7 +576,11 @@
                                                                                                   "function": {
                                                                                                     "function": {
                                                                                                       "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}},
-                                                                                              "type": null},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {"variable": "hydra.core.Term"},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "bindingNames",
                                                                                               "term": {
@@ -400,8 +591,18 @@
                                                                                                       "argument": {
                                                                                                         "function": {
                                                                                                           "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}},
-                                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                                                              "type": null},
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                              "type": {"variable": "hydra.core.Binding"}}},
+                                                                                                          "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {"list": {"variable": "hydra.core.Name"}},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "addBindingName",
                                                                                               "term": {
@@ -418,29 +619,87 @@
                                                                                                                   "term": {
                                                                                                                     "application": {
                                                                                                                       "argument": {"variable": "nodesVisitedIds"},
-                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                                                                  "type": null},
+                                                                                                                      "function": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                              "type": {
+                                                                                                                                "pair": {
+                                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                                  "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                                          "type": {
+                                                                                                                            "map": {
+                                                                                                                              "keys": {"variable": "hydra.core.Name"},
+                                                                                                                              "values": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {
+                                                                                                                        "pair": {
+                                                                                                                          "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                          "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "currentIds",
                                                                                                                   "term": {
                                                                                                                     "application": {
                                                                                                                       "argument": {"variable": "nodesVisitedIds"},
-                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                                                                  "type": null},
+                                                                                                                      "function": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                                              "type": {
+                                                                                                                                "pair": {
+                                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                                  "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                                          "type": {
+                                                                                                                            "map": {
+                                                                                                                              "keys": {"variable": "hydra.core.Name"},
+                                                                                                                              "values": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {
+                                                                                                                        "map": {
+                                                                                                                          "keys": {"variable": "hydra.core.Name"},
+                                                                                                                          "values": {"variable": "hydra.accessors.AccessorNode"}}},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "currentNodes",
                                                                                                                   "term": {
                                                                                                                     "application": {
                                                                                                                       "argument": {"variable": "currentNodesVisited"},
-                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                                                                  "type": null},
+                                                                                                                      "function": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                              "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                                                                          "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "currentVisited",
                                                                                                                   "term": {
                                                                                                                     "application": {
                                                                                                                       "argument": {"variable": "currentNodesVisited"},
-                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                                                                  "type": null},
+                                                                                                                      "function": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                                              "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                                                                          "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"set": {"literal": {"string": {}}}},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "rawLabel",
                                                                                                                   "term": {
@@ -450,7 +709,11 @@
                                                                                                                         "application": {
                                                                                                                           "argument": {"variable": "namespaces"},
                                                                                                                           "function": {"variable": "hydra.names.compactName"}}}}},
-                                                                                                                  "type": null},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"literal": {"string": {}}},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "uniqueLabel",
                                                                                                                   "term": {
@@ -460,7 +723,11 @@
                                                                                                                         "application": {
                                                                                                                           "argument": {"variable": "currentVisited"},
                                                                                                                           "function": {"variable": "hydra.names.uniqueLabel"}}}}},
-                                                                                                                  "type": null},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"literal": {"string": {}}},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "node",
                                                                                                                   "term": {
@@ -470,7 +737,11 @@
                                                                                                                         {"name": "label", "term": {"variable": "rawLabel"}},
                                                                                                                         {"name": "id", "term": {"variable": "uniqueLabel"}}],
                                                                                                                       "typeName": "hydra.accessors.AccessorNode"}},
-                                                                                                                  "type": null},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"variable": "hydra.accessors.AccessorNode"},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "newVisited",
                                                                                                                   "term": {
@@ -479,8 +750,15 @@
                                                                                                                       "function": {
                                                                                                                         "application": {
                                                                                                                           "argument": {"variable": "uniqueLabel"},
-                                                                                                                          "function": {"function": {"primitive": "hydra.lib.sets.insert"}}}}}},
-                                                                                                                  "type": null},
+                                                                                                                          "function": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"function": {"primitive": "hydra.lib.sets.insert"}},
+                                                                                                                              "type": {"literal": {"string": {}}}}}}}}},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"set": {"literal": {"string": {}}}},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "newNodes",
                                                                                                                   "term": {
@@ -489,8 +767,15 @@
                                                                                                                       "function": {
                                                                                                                         "application": {
                                                                                                                           "argument": {"variable": "node"},
-                                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
-                                                                                                                  "type": null},
+                                                                                                                          "function": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                                              "type": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "newIds",
                                                                                                                   "term": {
@@ -502,20 +787,89 @@
                                                                                                                           "function": {
                                                                                                                             "application": {
                                                                                                                               "argument": {"variable": "name"},
-                                                                                                                              "function": {"function": {"primitive": "hydra.lib.maps.insert"}}}}}}}},
-                                                                                                                  "type": null}],
+                                                                                                                              "function": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {
+                                                                                                                                    "typeApplication": {
+                                                                                                                                      "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
+                                                                                                                                      "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                  "type": {"variable": "hydra.accessors.AccessorNode"}}}}}}}}},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {
+                                                                                                                        "map": {
+                                                                                                                          "keys": {"variable": "hydra.core.Name"},
+                                                                                                                          "values": {"variable": "hydra.accessors.AccessorNode"}}},
+                                                                                                                      "variables": []}]}],
                                                                                                               "body": {
-                                                                                                                "pair": {
-                                                                                                                  "@first": {
-                                                                                                                    "pair": {
-                                                                                                                      "@first": {"variable": "newNodes"},
-                                                                                                                      "@second": {"variable": "newVisited"}}},
-                                                                                                                  "@second": {"variable": "newIds"}}}}},
-                                                                                                          "domain": null,
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "pair": {
+                                                                                                                          "@first": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {
+                                                                                                                                    "pair": {
+                                                                                                                                      "@first": {"variable": "newNodes"},
+                                                                                                                                      "@second": {"variable": "newVisited"}}},
+                                                                                                                                  "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                                                                              "type": {"set": {"literal": {"string": {}}}}}},
+                                                                                                                          "@second": {"variable": "newIds"}}},
+                                                                                                                      "type": {
+                                                                                                                        "pair": {
+                                                                                                                          "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                          "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                                  "type": {
+                                                                                                                    "map": {
+                                                                                                                      "keys": {"variable": "hydra.core.Name"},
+                                                                                                                      "values": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                                          "domain": [{"variable": "hydra.core.Name"}],
                                                                                                           "parameter": "name"}}},
-                                                                                                    "domain": null,
+                                                                                                    "domain": [
+                                                                                                      {
+                                                                                                        "pair": {
+                                                                                                          "first": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                              "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                          "second": {
+                                                                                                            "map": {
+                                                                                                              "keys": {"variable": "hydra.core.Name"},
+                                                                                                              "values": {"variable": "hydra.accessors.AccessorNode"}}}}}],
                                                                                                     "parameter": "nodesVisitedIds"}}},
-                                                                                              "type": null},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {
+                                                                                                    "function": {
+                                                                                                      "codomain": {
+                                                                                                        "function": {
+                                                                                                          "codomain": {
+                                                                                                            "pair": {
+                                                                                                              "first": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                  "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                              "second": {
+                                                                                                                "map": {
+                                                                                                                  "keys": {"variable": "hydra.core.Name"},
+                                                                                                                  "values": {"variable": "hydra.accessors.AccessorNode"}}}}},
+                                                                                                          "domain": {"variable": "hydra.core.Name"}}},
+                                                                                                      "domain": {
+                                                                                                        "pair": {
+                                                                                                          "first": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                              "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                          "second": {
+                                                                                                            "map": {
+                                                                                                              "keys": {"variable": "hydra.core.Name"},
+                                                                                                              "values": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "nodesVisitedIds1",
                                                                                               "term": {
@@ -524,14 +878,66 @@
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {
-                                                                                                        "pair": {
-                                                                                                          "@first": {"pair": {"@first": {"list": []}, "@second": {"variable": "visited"}}},
-                                                                                                          "@second": {"variable": "ids"}}},
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "pair": {
+                                                                                                                  "@first": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "pair": {
+                                                                                                                              "@first": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {"list": []},
+                                                                                                                                  "type": {"variable": "hydra.accessors.AccessorNode"}}},
+                                                                                                                              "@second": {"variable": "visited"}}},
+                                                                                                                          "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                                                                      "type": {"set": {"literal": {"string": {}}}}}},
+                                                                                                                  "@second": {"variable": "ids"}}},
+                                                                                                              "type": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                  "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                          "type": {
+                                                                                                            "map": {
+                                                                                                              "keys": {"variable": "hydra.core.Name"},
+                                                                                                              "values": {"variable": "hydra.accessors.AccessorNode"}}}}},
                                                                                                       "function": {
                                                                                                         "application": {
                                                                                                           "argument": {"variable": "addBindingName"},
-                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
-                                                                                              "type": null},
+                                                                                                          "function": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                                  "type": {
+                                                                                                                    "pair": {
+                                                                                                                      "first": {
+                                                                                                                        "pair": {
+                                                                                                                          "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                          "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                                      "second": {
+                                                                                                                        "map": {
+                                                                                                                          "keys": {"variable": "hydra.core.Name"},
+                                                                                                                          "values": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                                              "type": {"variable": "hydra.core.Name"}}}}}}}}},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {
+                                                                                                    "pair": {
+                                                                                                      "first": {
+                                                                                                        "pair": {
+                                                                                                          "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                          "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                      "second": {
+                                                                                                        "map": {
+                                                                                                          "keys": {"variable": "hydra.core.Name"},
+                                                                                                          "values": {"variable": "hydra.accessors.AccessorNode"}}}}},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "nodes1",
                                                                                               "term": {
@@ -539,9 +945,31 @@
                                                                                                   "argument": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "nodesVisitedIds1"},
-                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                                              "type": null},
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                              "type": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                  "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                          "type": {
+                                                                                                            "map": {
+                                                                                                              "keys": {"variable": "hydra.core.Name"},
+                                                                                                              "values": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                          "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "visited1",
                                                                                               "term": {
@@ -549,16 +977,57 @@
                                                                                                   "argument": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "nodesVisitedIds1"},
-                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                                              "type": null},
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                              "type": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                  "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                          "type": {
+                                                                                                            "map": {
+                                                                                                              "keys": {"variable": "hydra.core.Name"},
+                                                                                                              "values": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                          "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {"set": {"literal": {"string": {}}}},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "ids1",
                                                                                               "term": {
                                                                                                 "application": {
                                                                                                   "argument": {"variable": "nodesVisitedIds1"},
-                                                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                                              "type": null},
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                          "type": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                              "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                      "type": {
+                                                                                                        "map": {
+                                                                                                          "keys": {"variable": "hydra.core.Name"},
+                                                                                                          "values": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {
+                                                                                                    "map": {
+                                                                                                      "keys": {"variable": "hydra.core.Name"},
+                                                                                                      "values": {"variable": "hydra.accessors.AccessorNode"}}},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "addBindingTerm",
                                                                                               "term": {
@@ -575,15 +1044,35 @@
                                                                                                                   "term": {
                                                                                                                     "application": {
                                                                                                                       "argument": {"variable": "nodeBinding"},
-                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                                                                                  "type": null},
+                                                                                                                      "function": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                                              "type": {"variable": "hydra.accessors.AccessorNode"}}},
+                                                                                                                          "type": {"variable": "hydra.core.Binding"}}}}},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"variable": "hydra.accessors.AccessorNode"},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "binding",
                                                                                                                   "term": {
                                                                                                                     "application": {
                                                                                                                       "argument": {"variable": "nodeBinding"},
-                                                                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                                                                  "type": null},
+                                                                                                                      "function": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                                                              "type": {"variable": "hydra.accessors.AccessorNode"}}},
+                                                                                                                          "type": {"variable": "hydra.core.Binding"}}}}},
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"variable": "hydra.core.Binding"},
+                                                                                                                      "variables": []}]},
                                                                                                                 {
                                                                                                                   "name": "term1",
                                                                                                                   "term": {
@@ -592,29 +1081,78 @@
                                                                                                                       "function": {
                                                                                                                         "function": {
                                                                                                                           "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                                  "type": null}],
+                                                                                                                  "type": [
+                                                                                                                    {
+                                                                                                                      "constraints": null,
+                                                                                                                      "type": {"variable": "hydra.core.Term"},
+                                                                                                                      "variables": []}]}],
                                                                                                               "body": {
                                                                                                                 "application": {
                                                                                                                   "argument": {
-                                                                                                                    "pair": {
-                                                                                                                      "@first": {"variable": "dontCareAccessor"},
-                                                                                                                      "@second": {"variable": "term1"}}},
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "pair": {
+                                                                                                                              "@first": {"variable": "dontCareAccessor"},
+                                                                                                                              "@second": {"variable": "term1"}}},
+                                                                                                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                                                      "type": {"variable": "hydra.core.Term"}}},
                                                                                                                   "function": {
                                                                                                                     "application": {
                                                                                                                       "argument": {"variable": "currentState"},
                                                                                                                       "function": {
                                                                                                                         "application": {
-                                                                                                                          "argument": {"list": []},
+                                                                                                                          "argument": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {"list": []},
+                                                                                                                              "type": {"variable": "hydra.accessors.TermAccessor"}}},
                                                                                                                           "function": {
                                                                                                                             "application": {
                                                                                                                               "argument": {"maybe": [{"variable": "root"}]},
                                                                                                                               "function": {
                                                                                                                                 "application": {"argument": {"variable": "ids1"}, "function": {"variable": "helper"}}}}}}}}}}}}},
-                                                                                                          "domain": null,
+                                                                                                          "domain": [
+                                                                                                            {
+                                                                                                              "pair": {
+                                                                                                                "first": {"variable": "hydra.accessors.AccessorNode"},
+                                                                                                                "second": {"variable": "hydra.core.Binding"}}}],
                                                                                                           "parameter": "nodeBinding"}}},
-                                                                                                    "domain": null,
+                                                                                                    "domain": [
+                                                                                                      {
+                                                                                                        "pair": {
+                                                                                                          "first": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                              "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                          "second": {"set": {"literal": {"string": {}}}}}}],
                                                                                                     "parameter": "currentState"}}},
-                                                                                              "type": null},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {
+                                                                                                    "function": {
+                                                                                                      "codomain": {
+                                                                                                        "function": {
+                                                                                                          "codomain": {
+                                                                                                            "pair": {
+                                                                                                              "first": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                  "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                              "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                          "domain": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"variable": "hydra.accessors.AccessorNode"},
+                                                                                                              "second": {"variable": "hydra.core.Binding"}}}}},
+                                                                                                      "domain": {
+                                                                                                        "pair": {
+                                                                                                          "first": {
+                                                                                                            "pair": {
+                                                                                                              "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                              "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                          "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "nodeBindingPairs",
                                                                                               "term": {
@@ -623,8 +1161,22 @@
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "nodes1"},
-                                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
-                                                                                              "type": null},
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.zip"}},
+                                                                                                              "type": {"variable": "hydra.accessors.AccessorNode"}}},
+                                                                                                          "type": {"variable": "hydra.core.Binding"}}}}}}},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {
+                                                                                                    "list": {
+                                                                                                      "pair": {
+                                                                                                        "first": {"variable": "hydra.accessors.AccessorNode"},
+                                                                                                        "second": {"variable": "hydra.core.Binding"}}}},
+                                                                                                  "variables": []}]},
                                                                                             {
                                                                                               "name": "stateAfterBindings",
                                                                                               "term": {
@@ -633,32 +1185,81 @@
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {
-                                                                                                        "pair": {
-                                                                                                          "@first": {
-                                                                                                            "pair": {
-                                                                                                              "@first": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "nodes"},
-                                                                                                                  "function": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "nodes1"},
-                                                                                                                      "function": {"function": {"primitive": "hydra.lib.lists.concat2"}}}}}},
-                                                                                                              "@second": {"variable": "edges"}}},
-                                                                                                          "@second": {"variable": "visited1"}}},
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "pair": {
+                                                                                                                  "@first": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "pair": {
+                                                                                                                              "@first": {
+                                                                                                                                "application": {
+                                                                                                                                  "argument": {"variable": "nodes"},
+                                                                                                                                  "function": {
+                                                                                                                                    "application": {
+                                                                                                                                      "argument": {"variable": "nodes1"},
+                                                                                                                                      "function": {
+                                                                                                                                        "typeApplication": {
+                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                                                                                                          "type": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
+                                                                                                                              "@second": {"variable": "edges"}}},
+                                                                                                                          "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                                                                      "type": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                                  "@second": {"variable": "visited1"}}},
+                                                                                                              "type": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                  "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}}}},
+                                                                                                          "type": {"set": {"literal": {"string": {}}}}}},
                                                                                                       "function": {
                                                                                                         "application": {
                                                                                                           "argument": {"variable": "addBindingTerm"},
-                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
-                                                                                              "type": null}],
+                                                                                                          "function": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                                  "type": {
+                                                                                                                    "pair": {
+                                                                                                                      "first": {
+                                                                                                                        "pair": {
+                                                                                                                          "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                          "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                                      "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                              "type": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"variable": "hydra.accessors.AccessorNode"},
+                                                                                                                  "second": {"variable": "hydra.core.Binding"}}}}}}}}}}},
+                                                                                              "type": [
+                                                                                                {
+                                                                                                  "constraints": null,
+                                                                                                  "type": {
+                                                                                                    "pair": {
+                                                                                                      "first": {
+                                                                                                        "pair": {
+                                                                                                          "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                          "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                      "second": {"set": {"literal": {"string": {}}}}}},
+                                                                                                  "variables": []}]}],
                                                                                           "body": {
                                                                                             "application": {
                                                                                               "argument": {
-                                                                                                "pair": {
-                                                                                                  "@first": {
-                                                                                                    "union": {
-                                                                                                      "field": {"name": "letBody", "term": {"unit": {}}},
-                                                                                                      "typeName": "hydra.accessors.TermAccessor"}},
-                                                                                                  "@second": {"variable": "env"}}},
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "pair": {
+                                                                                                          "@first": {
+                                                                                                            "union": {
+                                                                                                              "field": {"name": "letBody", "term": {"unit": {}}},
+                                                                                                              "typeName": "hydra.accessors.TermAccessor"}},
+                                                                                                          "@second": {"variable": "env"}}},
+                                                                                                      "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                                                                                  "type": {"variable": "hydra.core.Term"}}},
                                                                                               "function": {
                                                                                                 "application": {
                                                                                                   "argument": {"variable": "stateAfterBindings"},
@@ -670,7 +1271,7 @@
                                                                                                           "argument": {"variable": "mroot"},
                                                                                                           "function": {
                                                                                                             "application": {"argument": {"variable": "ids1"}, "function": {"variable": "helper"}}}}}}}}}}}}},
-                                                                                      "domain": null,
+                                                                                      "domain": [{"variable": "hydra.core.Let"}],
                                                                                       "parameter": "letExpr"}}}},
                                                                               {
                                                                                 "name": "variable",
@@ -693,7 +1294,13 @@
                                                                                                             "function": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "name"},
-                                                                                                                "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                                                                                "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                    "type": {"variable": "hydra.accessors.AccessorNode"}}}}}}},
                                                                                                         "function": {
                                                                                                           "application": {
                                                                                                             "argument": {
@@ -715,11 +1322,18 @@
                                                                                                                                       "body": {
                                                                                                                                         "application": {
                                                                                                                                           "argument": {"variable": "nextPath"},
-                                                                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.reverse"}}}},
+                                                                                                                                          "function": {
+                                                                                                                                            "typeApplication": {
+                                                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                                                                                                                              "type": {"variable": "hydra.accessors.TermAccessor"}}}}},
                                                                                                                                       "typeName": "hydra.accessors.AccessorPath"}}},
                                                                                                                                 {"name": "target", "term": {"variable": "node"}}],
                                                                                                                               "typeName": "hydra.accessors.AccessorEdge"}},
-                                                                                                                          "type": null},
+                                                                                                                          "type": [
+                                                                                                                            {
+                                                                                                                              "constraints": null,
+                                                                                                                              "type": {"variable": "hydra.accessors.AccessorEdge"},
+                                                                                                                              "variables": []}]},
                                                                                                                         {
                                                                                                                           "name": "newEdges",
                                                                                                                           "term": {
@@ -728,26 +1342,72 @@
                                                                                                                               "function": {
                                                                                                                                 "application": {
                                                                                                                                   "argument": {"variable": "edge"},
-                                                                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
-                                                                                                                          "type": null}],
+                                                                                                                                  "function": {
+                                                                                                                                    "typeApplication": {
+                                                                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                                                      "type": {"variable": "hydra.accessors.AccessorEdge"}}}}}}},
+                                                                                                                          "type": [
+                                                                                                                            {
+                                                                                                                              "constraints": null,
+                                                                                                                              "type": {"list": {"variable": "hydra.accessors.AccessorEdge"}},
+                                                                                                                              "variables": []}]}],
                                                                                                                       "body": {
-                                                                                                                        "pair": {
-                                                                                                                          "@first": {
-                                                                                                                            "pair": {"@first": {"variable": "nodes"}, "@second": {"variable": "newEdges"}}},
-                                                                                                                          "@second": {"variable": "visited"}}}}},
-                                                                                                                  "domain": null,
+                                                                                                                        "typeApplication": {
+                                                                                                                          "body": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {
+                                                                                                                                "pair": {
+                                                                                                                                  "@first": {
+                                                                                                                                    "typeApplication": {
+                                                                                                                                      "body": {
+                                                                                                                                        "typeApplication": {
+                                                                                                                                          "body": {
+                                                                                                                                            "pair": {"@first": {"variable": "nodes"}, "@second": {"variable": "newEdges"}}},
+                                                                                                                                          "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                                                                                                                      "type": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                                                  "@second": {"variable": "visited"}}},
+                                                                                                                              "type": {
+                                                                                                                                "pair": {
+                                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                                  "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}}}},
+                                                                                                                          "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                                  "domain": [{"variable": "hydra.accessors.AccessorNode"}],
                                                                                                                   "parameter": "node"}}},
                                                                                                             "function": {
                                                                                                               "application": {
                                                                                                                 "argument": {"variable": "state"},
-                                                                                                                "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                                                                    "domain": null,
+                                                                                                                "function": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                                        "type": {
+                                                                                                                          "pair": {
+                                                                                                                            "first": {
+                                                                                                                              "pair": {
+                                                                                                                                "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                                "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                                            "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                                    "type": {"variable": "hydra.accessors.AccessorNode"}}}}}}}}},
+                                                                                                    "domain": [{"variable": "hydra.accessors.AccessorNode"}],
                                                                                                     "parameter": "root"}}},
                                                                                               "function": {
                                                                                                 "application": {
                                                                                                   "argument": {"variable": "state"},
-                                                                                                  "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                                                      "domain": null,
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                          "type": {
+                                                                                                            "pair": {
+                                                                                                              "first": {
+                                                                                                                "pair": {
+                                                                                                                  "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                                  "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                              "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                                      "type": {"variable": "hydra.accessors.AccessorNode"}}}}}}}}},
+                                                                                      "domain": [{"variable": "hydra.core.Name"}],
                                                                                       "parameter": "name"}}}}],
                                                                             "default": [
                                                                               {
@@ -769,80 +1429,279 @@
                                                                                                   "argument": {"variable": "mroot"},
                                                                                                   "function": {
                                                                                                     "application": {"argument": {"variable": "ids"}, "function": {"variable": "helper"}}}}}}},
-                                                                                          "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}}],
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                  "type": {
+                                                                                                    "pair": {
+                                                                                                      "first": {
+                                                                                                        "pair": {
+                                                                                                          "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                                                          "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                                                                      "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                                                              "type": {
+                                                                                                "pair": {
+                                                                                                  "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                                                  "second": {"variable": "hydra.core.Term"}}}}}}}}}}}],
                                                                             "typeName": "hydra.core.Term"}}}}}}}},
-                                                            "domain": null,
+                                                            "domain": [
+                                                              {
+                                                                "pair": {
+                                                                  "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                                  "second": {"variable": "hydra.core.Term"}}}],
                                                             "parameter": "accessorTerm"}}},
-                                                      "domain": null,
+                                                      "domain": [
+                                                        {
+                                                          "pair": {
+                                                            "first": {
+                                                              "pair": {
+                                                                "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                                "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                            "second": {"set": {"literal": {"string": {}}}}}}],
                                                       "parameter": "state"}}},
-                                                "domain": null,
+                                                "domain": [{"list": {"variable": "hydra.accessors.TermAccessor"}}],
                                                 "parameter": "path"}}},
-                                          "domain": null,
+                                          "domain": [{"maybe": {"variable": "hydra.accessors.AccessorNode"}}],
                                           "parameter": "mroot"}}},
-                                    "domain": null,
+                                    "domain": [
+                                      {
+                                        "map": {
+                                          "keys": {"variable": "hydra.core.Name"},
+                                          "values": {"variable": "hydra.accessors.AccessorNode"}}}],
                                     "parameter": "ids"}}},
-                              "type": null},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "function": {
+                                      "codomain": {
+                                        "function": {
+                                          "codomain": {
+                                            "function": {
+                                              "codomain": {
+                                                "function": {
+                                                  "codomain": {
+                                                    "function": {
+                                                      "codomain": {
+                                                        "pair": {
+                                                          "first": {
+                                                            "pair": {
+                                                              "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                              "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                          "second": {"set": {"literal": {"string": {}}}}}},
+                                                      "domain": {
+                                                        "pair": {
+                                                          "first": {"variable": "hydra.accessors.TermAccessor"},
+                                                          "second": {"variable": "hydra.core.Term"}}}}},
+                                                  "domain": {
+                                                    "pair": {
+                                                      "first": {
+                                                        "pair": {
+                                                          "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                                          "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                                      "second": {"set": {"literal": {"string": {}}}}}}}},
+                                              "domain": {"list": {"variable": "hydra.accessors.TermAccessor"}}}},
+                                          "domain": {"maybe": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                      "domain": {
+                                        "map": {
+                                          "keys": {"variable": "hydra.core.Name"},
+                                          "values": {"variable": "hydra.accessors.AccessorNode"}}}}},
+                                  "variables": []}]},
                             {
                               "name": "initialState",
                               "term": {
-                                "pair": {
-                                  "@first": {"pair": {"@first": {"list": []}, "@second": {"list": []}}},
-                                  "@second": {"function": {"primitive": "hydra.lib.sets.empty"}}}},
-                              "type": null},
+                                "typeLambda": {
+                                  "body": {
+                                    "typeLambda": {
+                                      "body": {
+                                        "typeLambda": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "pair": {
+                                                      "@first": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "pair": {
+                                                                  "@first": {
+                                                                    "typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}},
+                                                                  "@second": {
+                                                                    "typeApplication": {"body": {"list": []}, "type": {"variable": "t1"}}}}},
+                                                              "type": {"list": {"variable": "t0"}}}},
+                                                          "type": {"list": {"variable": "t1"}}}},
+                                                      "@second": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                          "type": {"variable": "t2"}}}}},
+                                                  "type": {
+                                                    "pair": {
+                                                      "first": {"list": {"variable": "t0"}},
+                                                      "second": {"list": {"variable": "t1"}}}}}},
+                                              "type": {"set": {"variable": "t2"}}}},
+                                          "parameter": "t2"}},
+                                      "parameter": "t1"}},
+                                  "parameter": "t0"}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "pair": {
+                                      "first": {
+                                        "pair": {
+                                          "first": {"list": {"variable": "t0"}},
+                                          "second": {"list": {"variable": "t1"}}}},
+                                      "second": {"set": {"variable": "t2"}}}},
+                                  "variables": ["t0", "t1", "t2"]}]},
                             {
                               "name": "result",
                               "term": {
                                 "application": {
                                   "argument": {
-                                    "pair": {
-                                      "@first": {"variable": "dontCareAccessor"},
-                                      "@second": {"variable": "term"}}},
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "pair": {
+                                              "@first": {"variable": "dontCareAccessor"},
+                                              "@second": {"variable": "term"}}},
+                                          "type": {"variable": "hydra.accessors.TermAccessor"}}},
+                                      "type": {"variable": "hydra.core.Term"}}},
                                   "function": {
                                     "application": {
-                                      "argument": {"variable": "initialState"},
+                                      "argument": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {"variable": "initialState"},
+                                                  "type": {"variable": "hydra.accessors.AccessorNode"}}},
+                                              "type": {"variable": "hydra.accessors.AccessorEdge"}}},
+                                          "type": {"literal": {"string": {}}}}},
                                       "function": {
                                         "application": {
-                                          "argument": {"list": []},
+                                          "argument": {
+                                            "typeApplication": {
+                                              "body": {"list": []},
+                                              "type": {"variable": "hydra.accessors.TermAccessor"}}},
                                           "function": {
                                             "application": {
-                                              "argument": {"maybe": null},
+                                              "argument": {
+                                                "typeApplication": {
+                                                  "body": {"maybe": null},
+                                                  "type": {"variable": "hydra.accessors.AccessorNode"}}},
                                               "function": {
                                                 "application": {
-                                                  "argument": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                                                  "argument": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                                                          "type": {"variable": "hydra.core.Name"}}},
+                                                      "type": {"variable": "hydra.accessors.AccessorNode"}}},
                                                   "function": {"variable": "helper"}}}}}}}}}}},
-                              "type": null},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "pair": {
+                                      "first": {
+                                        "pair": {
+                                          "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                          "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                      "second": {"set": {"literal": {"string": {}}}}}},
+                                  "variables": []}]},
                             {
                               "name": "finalNodesEdges",
                               "term": {
                                 "application": {
                                   "argument": {"variable": "result"},
-                                  "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                              "type": null},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                          "type": {
+                                            "pair": {
+                                              "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                              "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}}}},
+                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "pair": {
+                                      "first": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                      "second": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}},
+                                  "variables": []}]},
                             {
                               "name": "finalNodes",
                               "term": {
                                 "application": {
                                   "argument": {"variable": "finalNodesEdges"},
-                                  "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                              "type": null},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                          "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                      "type": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}}}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {"list": {"variable": "hydra.accessors.AccessorNode"}},
+                                  "variables": []}]},
                             {
                               "name": "finalEdges",
                               "term": {
                                 "application": {
                                   "argument": {"variable": "finalNodesEdges"},
-                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                              "type": null}],
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                          "type": {"list": {"variable": "hydra.accessors.AccessorNode"}}}},
+                                      "type": {"list": {"variable": "hydra.accessors.AccessorEdge"}}}}}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {"list": {"variable": "hydra.accessors.AccessorEdge"}},
+                                  "variables": []}]}],
                           "body": {
                             "record": {
                               "fields": [
                                 {"name": "nodes", "term": {"variable": "finalNodes"}},
                                 {"name": "edges", "term": {"variable": "finalEdges"}}],
                               "typeName": "hydra.accessors.AccessorGraph"}}}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.core.Term"}],
                       "parameter": "term"}}},
-                "domain": null,
+                "domain": [
+                  {
+                    "map": {
+                      "keys": {"variable": "hydra.module.Namespace"},
+                      "values": {"literal": {"string": {}}}}}],
                 "parameter": "namespaces"}}}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.accessors.AccessorGraph"},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {
+                "map": {
+                  "keys": {"variable": "hydra.module.Namespace"},
+                  "values": {"literal": {"string": {}}}}}}},
+          "variables": []}]}],
   "namespace": "hydra.show.accessors",
   "termDependencies": ["hydra.names", "hydra.rewriting"],
   "typeDependencies": [

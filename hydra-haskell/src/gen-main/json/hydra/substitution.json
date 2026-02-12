@@ -37,8 +37,17 @@
                                             "application": {
                                               "argument": {"variable": "s2"},
                                               "function": {"function": {"elimination": {"wrap": "hydra.typing.TypeSubst"}}}}},
-                                          "function": {"function": {"primitive": "hydra.lib.maps.null"}}}},
-                                      "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.maps.null"}},
+                                                  "type": {"variable": "hydra.core.Name"}}},
+                                              "type": {"variable": "hydra.core.Type"}}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                          "type": {"variable": "hydra.typing.TypeSubst"}}}}}}}}},
                           "function": {
                             "application": {
                               "argument": {"variable": "s2"},
@@ -50,13 +59,32 @@
                                         "application": {
                                           "argument": {"variable": "s1"},
                                           "function": {"function": {"elimination": {"wrap": "hydra.typing.TypeSubst"}}}}},
-                                      "function": {"function": {"primitive": "hydra.lib.maps.null"}}}},
-                                  "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
-                      "domain": null,
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.maps.null"}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "type": {"variable": "hydra.core.Type"}}}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                      "type": {"variable": "hydra.typing.TypeSubst"}}}}}}}}},
+                      "domain": [{"variable": "hydra.typing.TypeSubst"}],
                       "parameter": "s2"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "s1"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.typing.TypeSubst"},
+                  "domain": {"variable": "hydra.typing.TypeSubst"}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.composeTypeSubstNonEmpty",
       "term": {
@@ -79,29 +107,51 @@
                             {
                               "name": "isExtra",
                               "term": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {
+                                "typeLambda": {
+                                  "body": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
                                                 "application": {
                                                   "argument": {
                                                     "application": {
-                                                      "argument": {"variable": "s1"},
-                                                      "function": {"function": {"elimination": {"wrap": "hydra.typing.TypeSubst"}}}}},
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "s1"},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.typing.TypeSubst"}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "k"},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                  "type": {"variable": "hydra.core.Name"}}},
+                                                              "type": {"variable": "hydra.core.Type"}}}}}}},
                                                   "function": {
-                                                    "application": {
-                                                      "argument": {"variable": "k"},
-                                                      "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
-                                              "function": {"function": {"primitive": "hydra.lib.maybes.isNothing"}}}},
-                                          "domain": null,
-                                          "parameter": "v"}}},
-                                    "domain": null,
-                                    "parameter": "k"}}},
-                              "type": null},
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.maybes.isNothing"}},
+                                                      "type": {"variable": "hydra.core.Type"}}}}},
+                                              "domain": [{"variable": "t0"}],
+                                              "parameter": "v"}}},
+                                        "domain": [{"variable": "hydra.core.Name"}],
+                                        "parameter": "k"}}},
+                                  "parameter": "t0"}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "function": {
+                                      "codomain": {
+                                        "function": {
+                                          "codomain": {"literal": {"boolean": {}}},
+                                          "domain": {"variable": "t0"}}},
+                                      "domain": {"variable": "hydra.core.Name"}}},
+                                  "variables": ["t0"]}]},
                             {
                               "name": "withExtra",
                               "term": {
@@ -112,9 +162,25 @@
                                       "function": {"function": {"elimination": {"wrap": "hydra.typing.TypeSubst"}}}}},
                                   "function": {
                                     "application": {
-                                      "argument": {"variable": "isExtra"},
-                                      "function": {"function": {"primitive": "hydra.lib.maps.filterWithKey"}}}}}},
-                              "type": null}],
+                                      "argument": {
+                                        "typeApplication": {
+                                          "body": {"variable": "isExtra"},
+                                          "type": {"variable": "hydra.core.Type"}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.maps.filterWithKey"}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "type": {"variable": "hydra.core.Type"}}}}}}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "map": {
+                                      "keys": {"variable": "hydra.core.Name"},
+                                      "values": {"variable": "hydra.core.Type"}}},
+                                  "variables": []}]}],
                           "body": {
                             "wrap": {
                               "body": {
@@ -131,17 +197,42 @@
                                             "application": {
                                               "argument": {"variable": "s2"},
                                               "function": {"variable": "hydra.substitution.substInType"}}},
-                                          "function": {"function": {"primitive": "hydra.lib.maps.map"}}}}}},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.maps.map"}},
+                                                      "type": {"variable": "hydra.core.Type"}}},
+                                                  "type": {"variable": "hydra.core.Type"}}},
+                                              "type": {"variable": "hydra.core.Name"}}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "withExtra"},
-                                      "function": {"function": {"primitive": "hydra.lib.maps.union"}}}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.maps.union"}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "type": {"variable": "hydra.core.Type"}}}}}}},
                               "typeName": "hydra.typing.TypeSubst"}}}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.typing.TypeSubst"}],
                       "parameter": "s2"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "s1"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.typing.TypeSubst"},
+                  "domain": {"variable": "hydra.typing.TypeSubst"}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.composeTypeSubstList",
       "term": {
@@ -156,8 +247,21 @@
               "function": {
                 "application": {
                   "argument": {"variable": "hydra.substitution.composeTypeSubst"},
-                  "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
-      "type": null},
+                  "function": {
+                    "typeApplication": {
+                      "body": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                          "type": {"variable": "hydra.typing.TypeSubst"}}},
+                      "type": {"variable": "hydra.typing.TypeSubst"}}}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.typing.TypeSubst"},
+              "domain": {"list": {"variable": "hydra.typing.TypeSubst"}}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.idTypeSubst",
       "term": {
@@ -168,9 +272,19 @@
               "@value": {"literal": {"string": "The identity type substitution"}}}],
           "body": {
             "wrap": {
-              "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+              "body": {
+                "typeApplication": {
+                  "body": {
+                    "typeApplication": {
+                      "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                      "type": {"variable": "hydra.core.Name"}}},
+                  "type": {"variable": "hydra.core.Type"}}},
               "typeName": "hydra.typing.TypeSubst"}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.typing.TypeSubst"},
+          "variables": []}]},
     {
       "name": "hydra.substitution.singletonTypeSubst",
       "term": {
@@ -195,13 +309,29 @@
                               "function": {
                                 "application": {
                                   "argument": {"variable": "v"},
-                                  "function": {"function": {"primitive": "hydra.lib.maps.singleton"}}}}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.maps.singleton"}},
+                                          "type": {"variable": "hydra.core.Name"}}},
+                                      "type": {"variable": "hydra.core.Type"}}}}}}},
                           "typeName": "hydra.typing.TypeSubst"}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.core.Type"}],
                       "parameter": "t"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.core.Name"}],
                 "parameter": "v"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.typing.TypeSubst"},
+                  "domain": {"variable": "hydra.core.Type"}}},
+              "domain": {"variable": "hydra.core.Name"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substituteInBinding",
       "term": {
@@ -250,11 +380,21 @@
                                     "function": {
                                       "elimination": {"record": {"field": "type", "typeName": "hydra.core.Binding"}}}}}}}],
                           "typeName": "hydra.core.Binding"}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.core.Binding"}],
                       "parameter": "b"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TermSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Binding"},
+                  "domain": {"variable": "hydra.core.Binding"}}},
+              "domain": {"variable": "hydra.typing.TermSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substituteInConstraint",
       "term": {
@@ -313,11 +453,21 @@
                                       "elimination": {
                                         "record": {"field": "comment", "typeName": "hydra.typing.TypeConstraint"}}}}}}}],
                           "typeName": "hydra.typing.TypeConstraint"}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.typing.TypeConstraint"}],
                       "parameter": "c"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.typing.TypeConstraint"},
+                  "domain": {"variable": "hydra.typing.TypeConstraint"}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substituteInConstraints",
       "term": {
@@ -342,12 +492,28 @@
                                 "application": {
                                   "argument": {"variable": "subst"},
                                   "function": {"variable": "hydra.substitution.substituteInConstraint"}}},
-                              "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                      "domain": null,
+                              "function": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                      "type": {"variable": "hydra.typing.TypeConstraint"}}},
+                                  "type": {"variable": "hydra.typing.TypeConstraint"}}}}}}},
+                      "domain": [{"list": {"variable": "hydra.typing.TypeConstraint"}}],
                       "parameter": "cs"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"list": {"variable": "hydra.typing.TypeConstraint"}},
+                  "domain": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substInClassConstraints",
       "term": {
@@ -373,107 +539,186 @@
                                 "application": {
                                   "argument": {"variable": "subst"},
                                   "function": {"function": {"elimination": {"wrap": "hydra.typing.TypeSubst"}}}}},
-                              "type": null}],
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "map": {
+                                      "keys": {"variable": "hydra.core.Name"},
+                                      "values": {"variable": "hydra.core.Type"}}},
+                                  "variables": []}]}],
                           "body": {
                             "let": {
                               "bindings": [
                                 {
                                   "name": "insertOrMerge",
                                   "term": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "function": {
-                                            "lambda": {
-                                              "body": {
-                                                "function": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "acc"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "varName"},
-                                                                "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
-                                                        "function": {
+                                    "typeLambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "function": {
+                                                "lambda": {
+                                                  "body": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
                                                           "application": {
                                                             "argument": {
-                                                              "function": {
-                                                                "lambda": {
-                                                                  "body": {
-                                                                    "let": {
-                                                                      "bindings": [
-                                                                        {
-                                                                          "name": "merged",
-                                                                          "term": {
-                                                                            "record": {
-                                                                              "fields": [
-                                                                                {
-                                                                                  "name": "classes",
-                                                                                  "term": {
-                                                                                    "application": {
-                                                                                      "argument": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "metadata"},
-                                                                                          "function": {
-                                                                                            "function": {
-                                                                                              "elimination": {
-                                                                                                "record": {"field": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}}}},
-                                                                                      "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "acc"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "varName"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                            "type": {"variable": "t0"}}},
+                                                                        "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "let": {
+                                                                          "bindings": [
+                                                                            {
+                                                                              "name": "merged",
+                                                                              "term": {
+                                                                                "record": {
+                                                                                  "fields": [
+                                                                                    {
+                                                                                      "name": "classes",
+                                                                                      "term": {
                                                                                         "application": {
                                                                                           "argument": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "existing"},
+                                                                                              "argument": {"variable": "metadata"},
                                                                                               "function": {
                                                                                                 "function": {
                                                                                                   "elimination": {
                                                                                                     "record": {"field": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}}}},
-                                                                                          "function": {"function": {"primitive": "hydra.lib.sets.union"}}}}}}}],
-                                                                              "typeName": "hydra.core.TypeVariableMetadata"}},
-                                                                          "type": null}],
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "acc"},
-                                                                          "function": {
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "existing"},
+                                                                                                  "function": {
+                                                                                                    "function": {
+                                                                                                      "elimination": {
+                                                                                                        "record": {"field": "classes", "typeName": "hydra.core.TypeVariableMetadata"}}}}}},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.union"}},
+                                                                                                  "type": {"variable": "hydra.core.Name"}}}}}}}}],
+                                                                                  "typeName": "hydra.core.TypeVariableMetadata"}},
+                                                                              "type": [
+                                                                                {
+                                                                                  "constraints": null,
+                                                                                  "type": {"variable": "hydra.core.TypeVariableMetadata"},
+                                                                                  "variables": []}]}],
+                                                                          "body": {
                                                                             "application": {
-                                                                              "argument": {"variable": "merged"},
+                                                                              "argument": {"variable": "acc"},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "varName"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.maps.insert"}}}}}}}}}},
-                                                                  "domain": null,
-                                                                  "parameter": "existing"}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
+                                                                                  "argument": {"variable": "merged"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "varName"},
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
+                                                                                              "type": {"variable": "t0"}}},
+                                                                                          "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}}}}},
+                                                                      "domain": [{"variable": "hydra.core.TypeVariableMetadata"}],
+                                                                      "parameter": "existing"}}},
+                                                                "function": {
                                                                   "application": {
-                                                                    "argument": {"variable": "acc"},
-                                                                    "function": {
+                                                                    "argument": {
                                                                       "application": {
-                                                                        "argument": {"variable": "metadata"},
+                                                                        "argument": {"variable": "acc"},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {"variable": "varName"},
-                                                                            "function": {"function": {"primitive": "hydra.lib.maps.insert"}}}}}}}},
-                                                                "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                    "domain": null,
-                                                    "parameter": "acc"}}},
-                                              "domain": null,
-                                              "parameter": "metadata"}}},
-                                        "domain": null,
-                                        "parameter": "varName"}}},
-                                  "type": null}],
+                                                                            "argument": {"variable": "metadata"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "varName"},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
+                                                                                        "type": {"variable": "t0"}}},
+                                                                                    "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}}},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                            "type": {
+                                                                              "map": {
+                                                                                "keys": {"variable": "t0"},
+                                                                                "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                                                        "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}}},
+                                                        "domain": [
+                                                          {
+                                                            "map": {
+                                                              "keys": {"variable": "t0"},
+                                                              "values": {"variable": "hydra.core.TypeVariableMetadata"}}}],
+                                                        "parameter": "acc"}}},
+                                                  "domain": [{"variable": "hydra.core.TypeVariableMetadata"}],
+                                                  "parameter": "metadata"}}},
+                                            "domain": [{"variable": "t0"}],
+                                            "parameter": "varName"}}},
+                                      "parameter": "t0"}},
+                                  "type": [
+                                    {
+                                      "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+                                      "type": {
+                                        "function": {
+                                          "codomain": {
+                                            "function": {
+                                              "codomain": {
+                                                "function": {
+                                                  "codomain": {
+                                                    "map": {
+                                                      "keys": {"variable": "t0"},
+                                                      "values": {"variable": "hydra.core.TypeVariableMetadata"}}},
+                                                  "domain": {
+                                                    "map": {
+                                                      "keys": {"variable": "t0"},
+                                                      "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                              "domain": {"variable": "hydra.core.TypeVariableMetadata"}}},
+                                          "domain": {"variable": "t0"}}},
+                                      "variables": ["t0"]}]}],
                               "body": {
                                 "application": {
                                   "argument": {
                                     "application": {
                                       "argument": {"variable": "constraints"},
-                                      "function": {"function": {"primitive": "hydra.lib.maps.toList"}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
                                   "function": {
                                     "application": {
-                                      "argument": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                                      "argument": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "type": {"variable": "hydra.core.TypeVariableMetadata"}}},
                                       "function": {
                                         "application": {
                                           "argument": {
@@ -490,8 +735,18 @@
                                                               "term": {
                                                                 "application": {
                                                                   "argument": {"variable": "pair"},
-                                                                  "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                              "type": null}],
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                          "type": {"variable": "hydra.core.Name"}}},
+                                                                      "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                                              "type": [
+                                                                {
+                                                                  "constraints": null,
+                                                                  "type": {"variable": "hydra.core.Name"},
+                                                                  "variables": []}]}],
                                                           "body": {
                                                             "let": {
                                                               "bindings": [
@@ -500,8 +755,18 @@
                                                                   "term": {
                                                                     "application": {
                                                                       "argument": {"variable": "pair"},
-                                                                      "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                                  "type": null}],
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                              "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                                                  "type": [
+                                                                    {
+                                                                      "constraints": null,
+                                                                      "type": {"variable": "hydra.core.TypeVariableMetadata"},
+                                                                      "variables": []}]}],
                                                               "body": {
                                                                 "application": {
                                                                   "argument": {
@@ -510,7 +775,13 @@
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {"variable": "varName"},
-                                                                          "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                  "type": {"variable": "hydra.core.Name"}}},
+                                                                              "type": {"variable": "hydra.core.Type"}}}}}}},
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {
@@ -527,8 +798,15 @@
                                                                                           "application": {
                                                                                             "argument": {"variable": "targetType"},
                                                                                             "function": {"variable": "hydra.rewriting.freeVariablesInType"}}},
-                                                                                        "function": {"function": {"primitive": "hydra.lib.sets.toList"}}}},
-                                                                                    "type": null}],
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                                                            "type": {"variable": "hydra.core.Name"}}}}},
+                                                                                    "type": [
+                                                                                      {
+                                                                                        "constraints": null,
+                                                                                        "type": {"list": {"variable": "hydra.core.Name"}},
+                                                                                        "variables": []}]}],
                                                                                 "body": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "freeVars"},
@@ -552,13 +830,29 @@
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "freeVar"},
-                                                                                                                    "function": {"variable": "insertOrMerge"}}}}}}},
-                                                                                                        "domain": null,
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"variable": "insertOrMerge"},
+                                                                                                                        "type": {"variable": "hydra.core.Name"}}}}}}}}},
+                                                                                                        "domain": [{"variable": "hydra.core.Name"}],
                                                                                                         "parameter": "freeVar"}}},
-                                                                                                  "domain": null,
+                                                                                                  "domain": [
+                                                                                                    {
+                                                                                                      "map": {
+                                                                                                        "keys": {"variable": "hydra.core.Name"},
+                                                                                                        "values": {"variable": "hydra.core.TypeVariableMetadata"}}}],
                                                                                                   "parameter": "acc2"}}},
-                                                                                            "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}}}},
-                                                                            "domain": null,
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                    "type": {
+                                                                                                      "map": {
+                                                                                                        "keys": {"variable": "hydra.core.Name"},
+                                                                                                        "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                                                                                "type": {"variable": "hydra.core.Name"}}}}}}}}}}},
+                                                                            "domain": [{"variable": "hydra.core.Type"}],
                                                                             "parameter": "targetType"}}},
                                                                       "function": {
                                                                         "application": {
@@ -571,18 +865,70 @@
                                                                                   "function": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "varName"},
-                                                                                      "function": {"variable": "insertOrMerge"}}}}}}},
-                                                                          "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}}}}}},
-                                                      "domain": null,
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"variable": "insertOrMerge"},
+                                                                                          "type": {"variable": "hydra.core.Name"}}}}}}}}},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                  "type": {
+                                                                                    "map": {
+                                                                                      "keys": {"variable": "hydra.core.Name"},
+                                                                                      "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                                                              "type": {"variable": "hydra.core.Type"}}}}}}}}}}}}},
+                                                      "domain": [
+                                                        {
+                                                          "pair": {
+                                                            "first": {"variable": "hydra.core.Name"},
+                                                            "second": {"variable": "hydra.core.TypeVariableMetadata"}}}],
                                                       "parameter": "pair"}}},
-                                                "domain": null,
+                                                "domain": [
+                                                  {
+                                                    "map": {
+                                                      "keys": {"variable": "hydra.core.Name"},
+                                                      "values": {"variable": "hydra.core.TypeVariableMetadata"}}}],
                                                 "parameter": "acc"}}},
-                                          "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}}}}}},
-                      "domain": null,
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                  "type": {
+                                                    "map": {
+                                                      "keys": {"variable": "hydra.core.Name"},
+                                                      "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                              "type": {
+                                                "pair": {
+                                                  "first": {"variable": "hydra.core.Name"},
+                                                  "second": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}}}}}}}}},
+                      "domain": [
+                        {
+                          "map": {
+                            "keys": {"variable": "hydra.core.Name"},
+                            "values": {"variable": "hydra.core.TypeVariableMetadata"}}}],
                       "parameter": "constraints"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "map": {
+                      "keys": {"variable": "hydra.core.Name"},
+                      "values": {"variable": "hydra.core.TypeVariableMetadata"}}},
+                  "domain": {
+                    "map": {
+                      "keys": {"variable": "hydra.core.Name"},
+                      "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substInContext",
       "term": {
@@ -618,8 +964,24 @@
                                         "application": {
                                           "argument": {"variable": "subst"},
                                           "function": {"variable": "hydra.substitution.substInTypeScheme"}}},
-                                      "function": {"function": {"primitive": "hydra.lib.maps.map"}}}}}},
-                              "type": null}],
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.maps.map"}},
+                                                  "type": {"variable": "hydra.core.TypeScheme"}}},
+                                              "type": {"variable": "hydra.core.TypeScheme"}}},
+                                          "type": {"variable": "hydra.core.Name"}}}}}}},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "map": {
+                                      "keys": {"variable": "hydra.core.Name"},
+                                      "values": {"variable": "hydra.core.TypeScheme"}}},
+                                  "variables": []}]}],
                           "body": {
                             "let": {
                               "bindings": [
@@ -640,7 +1002,14 @@
                                         "application": {
                                           "argument": {"variable": "subst"},
                                           "function": {"variable": "hydra.substitution.substInClassConstraints"}}}}},
-                                  "type": null}],
+                                  "type": [
+                                    {
+                                      "constraints": null,
+                                      "type": {
+                                        "map": {
+                                          "keys": {"variable": "hydra.core.Name"},
+                                          "values": {"variable": "hydra.core.TypeVariableMetadata"}}},
+                                      "variables": []}]}],
                               "body": {
                                 "record": {
                                   "fields": [
@@ -678,11 +1047,21 @@
                                               "elimination": {
                                                 "record": {"field": "debug", "typeName": "hydra.typing.InferenceContext"}}}}}}}],
                                   "typeName": "hydra.typing.InferenceContext"}}}}}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.typing.InferenceContext"}],
                       "parameter": "cx"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.typing.InferenceContext"},
+                  "domain": {"variable": "hydra.typing.InferenceContext"}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substituteInTerm",
       "term": {
@@ -706,7 +1085,14 @@
                                 "application": {
                                   "argument": {"variable": "subst"},
                                   "function": {"function": {"elimination": {"wrap": "hydra.typing.TermSubst"}}}}},
-                              "type": null},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "map": {
+                                      "keys": {"variable": "hydra.core.Name"},
+                                      "values": {"variable": "hydra.core.Term"}}},
+                                  "variables": []}]},
                             {
                               "name": "rewrite",
                               "term": {
@@ -734,7 +1120,11 @@
                                                                     "function": {
                                                                       "function": {
                                                                         "elimination": {"record": {"field": "parameter", "typeName": "hydra.core.Lambda"}}}}}},
-                                                                "type": null},
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"variable": "hydra.core.Name"},
+                                                                    "variables": []}]},
                                                               {
                                                                 "name": "subst2",
                                                                 "term": {
@@ -745,9 +1135,19 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "v"},
-                                                                            "function": {"function": {"primitive": "hydra.lib.maps.delete"}}}}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.delete"}},
+                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"variable": "hydra.core.Term"}}}}}}},
                                                                     "typeName": "hydra.typing.TermSubst"}},
-                                                                "type": null}],
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"variable": "hydra.typing.TermSubst"},
+                                                                    "variables": []}]}],
                                                             "body": {
                                                               "union": {
                                                                 "field": {
@@ -785,9 +1185,16 @@
                                                                             "typeName": "hydra.core.Lambda"}}},
                                                                       "typeName": "hydra.core.Function"}}},
                                                                 "typeName": "hydra.core.Term"}}}},
-                                                        "domain": null,
+                                                        "domain": [{"variable": "hydra.core.Lambda"}],
                                                         "parameter": "l"}}},
-                                                  "type": null},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {"variable": "hydra.core.Term"},
+                                                          "domain": {"variable": "hydra.core.Lambda"}}},
+                                                      "variables": []}]},
                                                 {
                                                   "name": "withLet",
                                                   "term": {
@@ -804,7 +1211,11 @@
                                                                     "function": {
                                                                       "function": {
                                                                         "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
-                                                                "type": null},
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"list": {"variable": "hydra.core.Binding"}},
+                                                                    "variables": []}]},
                                                               {
                                                                 "name": "names",
                                                                 "term": {
@@ -817,9 +1228,22 @@
                                                                             "argument": {
                                                                               "function": {
                                                                                 "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                                    "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
-                                                                "type": null},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                    "type": {"variable": "hydra.core.Binding"}}},
+                                                                                "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                        "type": {"variable": "hydra.core.Name"}}}}},
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"set": {"variable": "hydra.core.Name"}},
+                                                                    "variables": []}]},
                                                               {
                                                                 "name": "subst2",
                                                                 "term": {
@@ -843,15 +1267,28 @@
                                                                                                 "function": {
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "k"},
-                                                                                                    "function": {"function": {"primitive": "hydra.lib.sets.member"}}}}}},
+                                                                                                    "function": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"function": {"primitive": "hydra.lib.sets.member"}},
+                                                                                                        "type": {"variable": "hydra.core.Name"}}}}}}},
                                                                                             "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
-                                                                                        "domain": null,
+                                                                                        "domain": [{"variable": "hydra.core.Term"}],
                                                                                         "parameter": "v"}}},
-                                                                                  "domain": null,
+                                                                                  "domain": [{"variable": "hydra.core.Name"}],
                                                                                   "parameter": "k"}}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.maps.filterWithKey"}}}}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.filterWithKey"}},
+                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"variable": "hydra.core.Term"}}}}}}},
                                                                     "typeName": "hydra.typing.TermSubst"}},
-                                                                "type": null},
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"variable": "hydra.typing.TermSubst"},
+                                                                    "variables": []}]},
                                                               {
                                                                 "name": "rewriteBinding",
                                                                 "term": {
@@ -891,9 +1328,16 @@
                                                                                     "function": {
                                                                                       "elimination": {"record": {"field": "type", "typeName": "hydra.core.Binding"}}}}}}}],
                                                                           "typeName": "hydra.core.Binding"}},
-                                                                      "domain": null,
+                                                                      "domain": [{"variable": "hydra.core.Binding"}],
                                                                       "parameter": "b"}}},
-                                                                "type": null}],
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {
+                                                                      "function": {
+                                                                        "codomain": {"variable": "hydra.core.Binding"},
+                                                                        "domain": {"variable": "hydra.core.Binding"}}},
+                                                                    "variables": []}]}],
                                                             "body": {
                                                               "union": {
                                                                 "field": {
@@ -909,7 +1353,13 @@
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "rewriteBinding"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                          "type": {"variable": "hydra.core.Binding"}}},
+                                                                                      "type": {"variable": "hydra.core.Binding"}}}}}}}},
                                                                         {
                                                                           "name": "body",
                                                                           "term": {
@@ -926,9 +1376,16 @@
                                                                                   "function": {"variable": "hydra.substitution.substituteInTerm"}}}}}}],
                                                                       "typeName": "hydra.core.Let"}}},
                                                                 "typeName": "hydra.core.Term"}}}},
-                                                        "domain": null,
+                                                        "domain": [{"variable": "hydra.core.Let"}],
                                                         "parameter": "lt"}}},
-                                                  "type": null}],
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {"variable": "hydra.core.Term"},
+                                                          "domain": {"variable": "hydra.core.Let"}}},
+                                                      "variables": []}]}],
                                               "body": {
                                                 "application": {
                                                   "argument": {"variable": "term"},
@@ -959,7 +1416,7 @@
                                                                                             "application": {
                                                                                               "argument": {"variable": "l"},
                                                                                               "function": {"variable": "withLambda"}}},
-                                                                                          "domain": null,
+                                                                                          "domain": [{"variable": "hydra.core.Lambda"}],
                                                                                           "parameter": "l"}}}}],
                                                                                 "default": [
                                                                                   {
@@ -967,7 +1424,7 @@
                                                                                       "argument": {"variable": "term"},
                                                                                       "function": {"variable": "recurse"}}}],
                                                                                 "typeName": "hydra.core.Function"}}}}}},
-                                                                    "domain": null,
+                                                                    "domain": [{"variable": "hydra.core.Function"}],
                                                                     "parameter": "fun"}}}},
                                                             {
                                                               "name": "let",
@@ -976,7 +1433,7 @@
                                                                   "lambda": {
                                                                     "body": {
                                                                       "application": {"argument": {"variable": "l"}, "function": {"variable": "withLet"}}},
-                                                                    "domain": null,
+                                                                    "domain": [{"variable": "hydra.core.Let"}],
                                                                     "parameter": "l"}}}},
                                                             {
                                                               "name": "variable",
@@ -991,20 +1448,35 @@
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "name"},
-                                                                                "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
                                                                               "function": {
-                                                                                "lambda": {"body": {"variable": "sterm"}, "domain": null, "parameter": "sterm"}}},
+                                                                                "lambda": {
+                                                                                  "body": {"variable": "sterm"},
+                                                                                  "domain": [{"variable": "hydra.core.Term"}],
+                                                                                  "parameter": "sterm"}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "term"},
                                                                                     "function": {"variable": "recurse"}}},
-                                                                                "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                                    "domain": null,
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                    "domain": [{"variable": "hydra.core.Name"}],
                                                                     "parameter": "name"}}}}],
                                                           "default": [
                                                             {
@@ -1012,11 +1484,28 @@
                                                                 "argument": {"variable": "term"},
                                                                 "function": {"variable": "recurse"}}}],
                                                           "typeName": "hydra.core.Term"}}}}}}}},
-                                          "domain": null,
+                                          "domain": [{"variable": "hydra.core.Term"}],
                                           "parameter": "term"}}},
-                                    "domain": null,
+                                    "domain": [
+                                      {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.core.Term"},
+                                          "domain": {"variable": "hydra.core.Term"}}}],
                                     "parameter": "recurse"}}},
-                              "type": null}],
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "function": {
+                                      "codomain": {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.core.Term"},
+                                          "domain": {"variable": "hydra.core.Term"}}},
+                                      "domain": {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.core.Term"},
+                                          "domain": {"variable": "hydra.core.Term"}}}}},
+                                  "variables": []}]}],
                           "body": {
                             "application": {
                               "argument": {"variable": "term0"},
@@ -1024,11 +1513,21 @@
                                 "application": {
                                   "argument": {"variable": "rewrite"},
                                   "function": {"variable": "hydra.rewriting.rewriteTerm"}}}}}}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.core.Term"}],
                       "parameter": "term0"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TermSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.typing.TermSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substInType",
       "term": {
@@ -1063,13 +1562,32 @@
                                         "application": {
                                           "argument": {"variable": "subst"},
                                           "function": {"function": {"elimination": {"wrap": "hydra.typing.TypeSubst"}}}}},
-                                      "function": {"function": {"primitive": "hydra.lib.maps.null"}}}},
-                                  "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
-                      "domain": null,
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.maps.null"}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "type": {"variable": "hydra.core.Type"}}}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                      "type": {"variable": "hydra.core.Type"}}}}}}}}},
+                      "domain": [{"variable": "hydra.core.Type"}],
                       "parameter": "typ0"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Type"},
+                  "domain": {"variable": "hydra.core.Type"}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substInTypeNonEmpty",
       "term": {
@@ -1127,7 +1645,13 @@
                                                                                   "function": {
                                                                                     "elimination": {
                                                                                       "record": {"field": "parameter", "typeName": "hydra.core.ForallType"}}}}}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"variable": "hydra.core.Type"}}}}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
@@ -1174,14 +1698,20 @@
                                                                                                     "function": {"variable": "hydra.substitution.substInType"}}}}}}],
                                                                                         "typeName": "hydra.core.ForallType"}}},
                                                                                   "typeName": "hydra.core.Type"}},
-                                                                              "domain": null,
+                                                                              "domain": [{"variable": "hydra.core.Type"}],
                                                                               "parameter": "styp"}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
                                                                               "application": {"argument": {"variable": "typ"}, "function": {"variable": "recurse"}}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                                "domain": null,
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                    "type": {"variable": "hydra.core.Type"}}},
+                                                                                "type": {"variable": "hydra.core.Type"}}}}}}}}},
+                                                                "domain": [{"variable": "hydra.core.ForallType"}],
                                                                 "parameter": "lt"}}}},
                                                         {
                                                           "name": "variable",
@@ -1199,27 +1729,59 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "v"},
-                                                                            "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"variable": "hydra.core.Type"}}}}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
                                                                           "function": {
-                                                                            "lambda": {"body": {"variable": "styp"}, "domain": null, "parameter": "styp"}}},
+                                                                            "lambda": {
+                                                                              "body": {"variable": "styp"},
+                                                                              "domain": [{"variable": "hydra.core.Type"}],
+                                                                              "parameter": "styp"}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "typ"},
-                                                                            "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                                "domain": null,
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                    "type": {"variable": "hydra.core.Type"}}},
+                                                                                "type": {"variable": "hydra.core.Type"}}}}}}}}},
+                                                                "domain": [{"variable": "hydra.core.Name"}],
                                                                 "parameter": "v"}}}}],
                                                       "default": [
                                                         {
                                                           "application": {"argument": {"variable": "typ"}, "function": {"variable": "recurse"}}}],
                                                       "typeName": "hydra.core.Type"}}}}}},
-                                          "domain": null,
+                                          "domain": [{"variable": "hydra.core.Type"}],
                                           "parameter": "typ"}}},
-                                    "domain": null,
+                                    "domain": [
+                                      {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.core.Type"},
+                                          "domain": {"variable": "hydra.core.Type"}}}],
                                     "parameter": "recurse"}}},
-                              "type": null},
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "function": {
+                                      "codomain": {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.core.Type"},
+                                          "domain": {"variable": "hydra.core.Type"}}},
+                                      "domain": {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.core.Type"},
+                                          "domain": {"variable": "hydra.core.Type"}}}}},
+                                  "variables": []}]},
                             {
                               "name": "removeVar",
                               "term": {
@@ -1236,11 +1798,24 @@
                                             "function": {
                                               "application": {
                                                 "argument": {"variable": "v"},
-                                                "function": {"function": {"primitive": "hydra.lib.maps.delete"}}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"function": {"primitive": "hydra.lib.maps.delete"}},
+                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                    "type": {"variable": "hydra.core.Type"}}}}}}},
                                         "typeName": "hydra.typing.TypeSubst"}},
-                                    "domain": null,
+                                    "domain": [{"variable": "hydra.core.Name"}],
                                     "parameter": "v"}}},
-                              "type": null}],
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "function": {
+                                      "codomain": {"variable": "hydra.typing.TypeSubst"},
+                                      "domain": {"variable": "hydra.core.Name"}}},
+                                  "variables": []}]}],
                           "body": {
                             "application": {
                               "argument": {"variable": "typ0"},
@@ -1248,11 +1823,21 @@
                                 "application": {
                                   "argument": {"variable": "rewrite"},
                                   "function": {"variable": "hydra.rewriting.rewriteType"}}}}}}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.core.Type"}],
                       "parameter": "typ0"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Type"},
+                  "domain": {"variable": "hydra.core.Type"}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substInTypeScheme",
       "term": {
@@ -1310,13 +1895,35 @@
                                         "application": {
                                           "argument": {"variable": "subst"},
                                           "function": {"variable": "hydra.substitution.substInClassConstraints"}}},
-                                      "function": {"function": {"primitive": "hydra.lib.maybes.map"}}}}}}}],
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                              "type": {
+                                                "map": {
+                                                  "keys": {"variable": "hydra.core.Name"},
+                                                  "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}},
+                                          "type": {
+                                            "map": {
+                                              "keys": {"variable": "hydra.core.Name"},
+                                              "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}}}}}],
                           "typeName": "hydra.core.TypeScheme"}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.core.TypeScheme"}],
                       "parameter": "ts"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.TypeScheme"},
+                  "domain": {"variable": "hydra.core.TypeScheme"}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]},
     {
       "name": "hydra.substitution.substTypesInTerm",
       "term": {
@@ -1353,7 +1960,11 @@
                                                     "application": {
                                                       "argument": {"variable": "term"},
                                                       "function": {"variable": "recurse"}}},
-                                                  "type": null},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {"variable": "hydra.core.Term"},
+                                                      "variables": []}]},
                                                 {
                                                   "name": "forFunction",
                                                   "term": {
@@ -1371,7 +1982,10 @@
                                                                         "name": "elimination",
                                                                         "term": {
                                                                           "function": {
-                                                                            "lambda": {"body": {"variable": "dflt"}, "domain": null, "parameter": "e"}}}},
+                                                                            "lambda": {
+                                                                              "body": {"variable": "dflt"},
+                                                                              "domain": [{"variable": "hydra.core.Elimination"}],
+                                                                              "parameter": "e"}}}},
                                                                       {
                                                                         "name": "lambda",
                                                                         "term": {
@@ -1379,13 +1993,20 @@
                                                                             "lambda": {
                                                                               "body": {
                                                                                 "application": {"argument": {"variable": "l"}, "function": {"variable": "forLambda"}}},
-                                                                              "domain": null,
+                                                                              "domain": [{"variable": "hydra.core.Lambda"}],
                                                                               "parameter": "l"}}}}],
                                                                     "default": [{"variable": "dflt"}],
                                                                     "typeName": "hydra.core.Function"}}}}}},
-                                                        "domain": null,
+                                                        "domain": [{"variable": "hydra.core.Function"}],
                                                         "parameter": "f"}}},
-                                                  "type": null},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {"variable": "hydra.core.Term"},
+                                                          "domain": {"variable": "hydra.core.Function"}}},
+                                                      "variables": []}]},
                                                 {
                                                   "name": "forLambda",
                                                   "term": {
@@ -1426,7 +2047,13 @@
                                                                                       "application": {
                                                                                         "argument": {"variable": "subst"},
                                                                                         "function": {"variable": "hydra.substitution.substInType"}}},
-                                                                                    "function": {"function": {"primitive": "hydra.lib.maybes.map"}}}}}}},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                            "type": {"variable": "hydra.core.Type"}}},
+                                                                                        "type": {"variable": "hydra.core.Type"}}}}}}}},
                                                                           {
                                                                             "name": "body",
                                                                             "term": {
@@ -1444,9 +2071,16 @@
                                                                         "typeName": "hydra.core.Lambda"}}},
                                                                   "typeName": "hydra.core.Function"}}},
                                                             "typeName": "hydra.core.Term"}},
-                                                        "domain": null,
+                                                        "domain": [{"variable": "hydra.core.Lambda"}],
                                                         "parameter": "l"}}},
-                                                  "type": null},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {"variable": "hydra.core.Term"},
+                                                          "domain": {"variable": "hydra.core.Lambda"}}},
+                                                      "variables": []}]},
                                                 {
                                                   "name": "forLet",
                                                   "term": {
@@ -1501,11 +2135,24 @@
                                                                                         "application": {
                                                                                           "argument": {"variable": "subst"},
                                                                                           "function": {"variable": "hydra.substitution.substInTypeScheme"}}},
-                                                                                      "function": {"function": {"primitive": "hydra.lib.maybes.map"}}}}}}}],
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                                                              "type": {"variable": "hydra.core.TypeScheme"}}},
+                                                                                          "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}],
                                                                           "typeName": "hydra.core.Binding"}},
-                                                                      "domain": null,
+                                                                      "domain": [{"variable": "hydra.core.Binding"}],
                                                                       "parameter": "b"}}},
-                                                                "type": null}],
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {
+                                                                      "function": {
+                                                                        "codomain": {"variable": "hydra.core.Binding"},
+                                                                        "domain": {"variable": "hydra.core.Binding"}}},
+                                                                    "variables": []}]}],
                                                             "body": {
                                                               "union": {
                                                                 "field": {
@@ -1526,7 +2173,13 @@
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "rewriteBinding"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                          "type": {"variable": "hydra.core.Binding"}}},
+                                                                                      "type": {"variable": "hydra.core.Binding"}}}}}}}},
                                                                         {
                                                                           "name": "body",
                                                                           "term": {
@@ -1543,9 +2196,16 @@
                                                                                   "function": {"variable": "hydra.substitution.substTypesInTerm"}}}}}}],
                                                                       "typeName": "hydra.core.Let"}}},
                                                                 "typeName": "hydra.core.Term"}}}},
-                                                        "domain": null,
+                                                        "domain": [{"variable": "hydra.core.Let"}],
                                                         "parameter": "l"}}},
-                                                  "type": null},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {"variable": "hydra.core.Term"},
+                                                          "domain": {"variable": "hydra.core.Let"}}},
+                                                      "variables": []}]},
                                                 {
                                                   "name": "forTypeApplication",
                                                   "term": {
@@ -1590,9 +2250,16 @@
                                                                               "function": {"variable": "hydra.substitution.substInType"}}}}}}],
                                                                   "typeName": "hydra.core.TypeApplicationTerm"}}},
                                                             "typeName": "hydra.core.Term"}},
-                                                        "domain": null,
+                                                        "domain": [{"variable": "hydra.core.TypeApplicationTerm"}],
                                                         "parameter": "tt"}}},
-                                                  "type": null},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {"variable": "hydra.core.Term"},
+                                                          "domain": {"variable": "hydra.core.TypeApplicationTerm"}}},
+                                                      "variables": []}]},
                                                 {
                                                   "name": "forTypeLambda",
                                                   "term": {
@@ -1610,7 +2277,11 @@
                                                                       "function": {
                                                                         "elimination": {
                                                                           "record": {"field": "parameter", "typeName": "hydra.core.TypeLambda"}}}}}},
-                                                                "type": null},
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"variable": "hydra.core.Name"},
+                                                                    "variables": []}]},
                                                               {
                                                                 "name": "subst2",
                                                                 "term": {
@@ -1624,9 +2295,19 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "param"},
-                                                                            "function": {"function": {"primitive": "hydra.lib.maps.delete"}}}}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.delete"}},
+                                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                                "type": {"variable": "hydra.core.Type"}}}}}}},
                                                                     "typeName": "hydra.typing.TypeSubst"}},
-                                                                "type": null}],
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"variable": "hydra.typing.TypeSubst"},
+                                                                    "variables": []}]}],
                                                             "body": {
                                                               "union": {
                                                                 "field": {
@@ -1651,9 +2332,16 @@
                                                                                   "function": {"variable": "hydra.substitution.substTypesInTerm"}}}}}}],
                                                                       "typeName": "hydra.core.TypeLambda"}}},
                                                                 "typeName": "hydra.core.Term"}}}},
-                                                        "domain": null,
+                                                        "domain": [{"variable": "hydra.core.TypeLambda"}],
                                                         "parameter": "ta"}}},
-                                                  "type": null}],
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {"variable": "hydra.core.Term"},
+                                                          "domain": {"variable": "hydra.core.TypeLambda"}}},
+                                                      "variables": []}]}],
                                               "body": {
                                                 "application": {
                                                   "argument": {"variable": "term"},
@@ -1671,7 +2359,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "f"},
                                                                         "function": {"variable": "forFunction"}}},
-                                                                    "domain": null,
+                                                                    "domain": [{"variable": "hydra.core.Function"}],
                                                                     "parameter": "f"}}}},
                                                             {
                                                               "name": "let",
@@ -1680,7 +2368,7 @@
                                                                   "lambda": {
                                                                     "body": {
                                                                       "application": {"argument": {"variable": "l"}, "function": {"variable": "forLet"}}},
-                                                                    "domain": null,
+                                                                    "domain": [{"variable": "hydra.core.Let"}],
                                                                     "parameter": "l"}}}},
                                                             {
                                                               "name": "typeApplication",
@@ -1691,7 +2379,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "ta"},
                                                                         "function": {"variable": "forTypeApplication"}}},
-                                                                    "domain": null,
+                                                                    "domain": [{"variable": "hydra.core.TypeApplicationTerm"}],
                                                                     "parameter": "ta"}}}},
                                                             {
                                                               "name": "typeLambda",
@@ -1702,15 +2390,32 @@
                                                                       "application": {
                                                                         "argument": {"variable": "tl"},
                                                                         "function": {"variable": "forTypeLambda"}}},
-                                                                    "domain": null,
+                                                                    "domain": [{"variable": "hydra.core.TypeLambda"}],
                                                                     "parameter": "tl"}}}}],
                                                           "default": [{"variable": "dflt"}],
                                                           "typeName": "hydra.core.Term"}}}}}}}},
-                                          "domain": null,
+                                          "domain": [{"variable": "hydra.core.Term"}],
                                           "parameter": "term"}}},
-                                    "domain": null,
+                                    "domain": [
+                                      {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.core.Term"},
+                                          "domain": {"variable": "hydra.core.Term"}}}],
                                     "parameter": "recurse"}}},
-                              "type": null}],
+                              "type": [
+                                {
+                                  "constraints": null,
+                                  "type": {
+                                    "function": {
+                                      "codomain": {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.core.Term"},
+                                          "domain": {"variable": "hydra.core.Term"}}},
+                                      "domain": {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.core.Term"},
+                                          "domain": {"variable": "hydra.core.Term"}}}}},
+                                  "variables": []}]}],
                           "body": {
                             "application": {
                               "argument": {"variable": "term0"},
@@ -1718,11 +2423,21 @@
                                 "application": {
                                   "argument": {"variable": "rewrite"},
                                   "function": {"variable": "hydra.rewriting.rewriteTerm"}}}}}}},
-                      "domain": null,
+                      "domain": [{"variable": "hydra.core.Term"}],
                       "parameter": "term0"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.typing.TypeSubst"}],
                 "parameter": "subst"}}}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Term"},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.typing.TypeSubst"}}},
+          "variables": []}]}],
   "namespace": "hydra.substitution",
   "termDependencies": ["hydra.rewriting"],
   "typeDependencies": [

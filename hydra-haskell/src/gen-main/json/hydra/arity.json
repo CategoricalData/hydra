@@ -22,7 +22,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"integer": {"int32": 1}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Elimination"}],
                             "parameter": "_"}}}},
                     {
                       "name": "lambda",
@@ -46,7 +46,7 @@
                                                     "function": {
                                                       "elimination": {"record": {"field": "body", "typeName": "hydra.core.Lambda"}}}}}},
                                               "function": {"variable": "hydra.arity.termArity"}}},
-                                          "domain": null,
+                                          "domain": [{"variable": "hydra.core.Lambda"}],
                                           "parameter": "arg_"}}}}},
                                 "function": {
                                   "function": {
@@ -58,9 +58,9 @@
                                             "application": {
                                               "argument": {"literal": {"integer": {"int32": 1}}},
                                               "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
-                                      "domain": null,
+                                      "domain": [{"literal": {"integer": {"int32": {}}}}],
                                       "parameter": "i"}}}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Lambda"}],
                             "parameter": "arg_"}}}},
                     {
                       "name": "primitive",
@@ -76,11 +76,18 @@
                                       "literal": {
                                         "string": "TODO: This function needs to be monadic, so we can look up the primitive"}}}],
                                 "body": {"literal": {"integer": {"int32": 42}}}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Name"}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.Function"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"integer": {"int32": {}}}},
+              "domain": {"variable": "hydra.core.Function"}}},
+          "variables": []}]},
     {
       "name": "hydra.arity.primitiveArity",
       "term": {
@@ -114,11 +121,18 @@
                                     "function": {
                                       "elimination": {"record": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}}}},
                               "function": {"variable": "hydra.arity.typeArity"}}},
-                          "domain": null,
+                          "domain": [{"variable": "hydra.core.TypeScheme"}],
                           "parameter": "arg_"}}}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.graph.Primitive"}],
                 "parameter": "arg_"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"integer": {"int32": {}}}},
+              "domain": {"variable": "hydra.graph.Primitive"}}},
+          "variables": []}]},
     {
       "name": "hydra.arity.termArity",
       "term": {
@@ -166,18 +180,25 @@
                                                       "application": {
                                                         "argument": {"variable": "xapp"},
                                                         "function": {"function": {"primitive": "hydra.lib.math.sub"}}}}}},
-                                                "domain": null,
+                                                "domain": [{"literal": {"integer": {"int32": {}}}}],
                                                 "parameter": "xapp"}}}}},
-                                      "domain": null,
+                                      "domain": [{"variable": "hydra.core.Term"}],
                                       "parameter": "arg_"}}}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Application"}],
                             "parameter": "arg_"}}}},
                     {
                       "name": "function",
                       "term": {"variable": "hydra.arity.functionArity"}}],
                   "default": [{"literal": {"integer": {"int32": 0}}}],
                   "typeName": "hydra.core.Term"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"integer": {"int32": {}}}},
+              "domain": {"variable": "hydra.core.Term"}}},
+          "variables": []}]},
     {
       "name": "hydra.arity.typeArity",
       "term": {
@@ -206,7 +227,7 @@
                                       "function": {
                                         "elimination": {"record": {"field": "body", "typeName": "hydra.core.AnnotatedType"}}}}}},
                                 "function": {"variable": "hydra.arity.typeArity"}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.AnnotatedType"}],
                             "parameter": "arg_"}}}},
                     {
                       "name": "application",
@@ -223,7 +244,7 @@
                                         "elimination": {
                                           "record": {"field": "function", "typeName": "hydra.core.ApplicationType"}}}}}},
                                 "function": {"variable": "hydra.arity.typeArity"}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.ApplicationType"}],
                             "parameter": "arg_"}}}},
                     {
                       "name": "forall",
@@ -239,7 +260,7 @@
                                       "function": {
                                         "elimination": {"record": {"field": "body", "typeName": "hydra.core.ForallType"}}}}}},
                                 "function": {"variable": "hydra.arity.typeArity"}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.ForallType"}],
                             "parameter": "arg_"}}}},
                     {
                       "name": "function",
@@ -264,17 +285,24 @@
                                                       "elimination": {
                                                         "record": {"field": "codomain", "typeName": "hydra.core.FunctionType"}}}}}},
                                               "function": {"variable": "hydra.arity.typeArity"}}},
-                                          "domain": null,
+                                          "domain": [{"variable": "hydra.core.FunctionType"}],
                                           "parameter": "arg_"}}}}},
                                 "function": {
                                   "application": {
                                     "argument": {"literal": {"integer": {"int32": 1}}},
                                     "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.FunctionType"}],
                             "parameter": "f"}}}}],
                   "default": [{"literal": {"integer": {"int32": 0}}}],
                   "typeName": "hydra.core.Type"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"integer": {"int32": {}}}},
+              "domain": {"variable": "hydra.core.Type"}}},
+          "variables": []}]},
     {
       "name": "hydra.arity.typeSchemeArity",
       "term": {
@@ -297,9 +325,16 @@
                           "function": {
                             "elimination": {"record": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}}}},
                     "function": {"variable": "hydra.arity.typeArity"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.core.TypeScheme"}],
                 "parameter": "arg_"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"integer": {"int32": {}}}},
+              "domain": {"variable": "hydra.core.TypeScheme"}}},
+          "variables": []}]},
     {
       "name": "hydra.arity.uncurryType",
       "term": {
@@ -335,7 +370,7 @@
                                                 "function": {
                                                   "elimination": {"record": {"field": "body", "typeName": "hydra.core.AnnotatedType"}}}}}},
                                           "function": {"variable": "hydra.arity.uncurryType"}}},
-                                      "domain": null,
+                                      "domain": [{"variable": "hydra.core.AnnotatedType"}],
                                       "parameter": "arg_"}}}},
                               {
                                 "name": "application",
@@ -352,7 +387,7 @@
                                                   "elimination": {
                                                     "record": {"field": "function", "typeName": "hydra.core.ApplicationType"}}}}}},
                                           "function": {"variable": "hydra.arity.uncurryType"}}},
-                                      "domain": null,
+                                      "domain": [{"variable": "hydra.core.ApplicationType"}],
                                       "parameter": "arg_"}}}},
                               {
                                 "name": "forall",
@@ -368,7 +403,7 @@
                                                 "function": {
                                                   "elimination": {"record": {"field": "body", "typeName": "hydra.core.ForallType"}}}}}},
                                           "function": {"variable": "hydra.arity.uncurryType"}}},
-                                      "domain": null,
+                                      "domain": [{"variable": "hydra.core.ForallType"}],
                                       "parameter": "arg_"}}}},
                               {
                                 "name": "function",
@@ -393,7 +428,7 @@
                                                                 "elimination": {
                                                                   "record": {"field": "codomain", "typeName": "hydra.core.FunctionType"}}}}}},
                                                         "function": {"variable": "hydra.arity.uncurryType"}}},
-                                                    "domain": null,
+                                                    "domain": [{"variable": "hydra.core.FunctionType"}],
                                                     "parameter": "arg_"}}}}},
                                           "function": {
                                             "application": {
@@ -403,14 +438,24 @@
                                                   "function": {
                                                     "function": {
                                                       "elimination": {"record": {"field": "domain", "typeName": "hydra.core.FunctionType"}}}}}},
-                                              "function": {"function": {"primitive": "hydra.lib.lists.cons"}}}}}},
-                                      "domain": null,
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                  "type": {"variable": "hydra.core.Type"}}}}}}},
+                                      "domain": [{"variable": "hydra.core.FunctionType"}],
                                       "parameter": "ft"}}}}],
                             "default": [{"list": [{"variable": "t"}]}],
                             "typeName": "hydra.core.Type"}}}}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.core.Type"}],
                 "parameter": "t"}}}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"list": {"variable": "hydra.core.Type"}},
+              "domain": {"variable": "hydra.core.Type"}}},
+          "variables": []}]}],
   "namespace": "hydra.arity",
   "termDependencies": [],
   "typeDependencies": [

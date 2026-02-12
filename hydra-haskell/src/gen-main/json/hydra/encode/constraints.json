@@ -69,9 +69,16 @@
                                   "typeName": "hydra.core.Field"}}]}}],
                       "typeName": "hydra.core.Record"}}},
                 "typeName": "hydra.core.Term"}},
-            "domain": null,
+            "domain": [{"variable": "hydra.constraints.PathEquation"}],
             "parameter": "x"}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.constraints.PathEquation"}}},
+          "variables": []}]},
     {
       "name": "hydra.encode.constraints.patternImplication",
       "term": {
@@ -144,9 +151,16 @@
                                   "typeName": "hydra.core.Field"}}]}}],
                       "typeName": "hydra.core.Record"}}},
                 "typeName": "hydra.core.Term"}},
-            "domain": null,
+            "domain": [{"variable": "hydra.constraints.PatternImplication"}],
             "parameter": "x"}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.constraints.PatternImplication"}}},
+          "variables": []}]}],
   "namespace": "hydra.encode.constraints",
   "termDependencies": ["hydra.encode.core"],
   "typeDependencies": ["hydra.constraints"]}
