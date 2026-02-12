@@ -13,6 +13,7 @@ import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Decode as JsonDecode
 import qualified Hydra.Decode.Module as DecodeModule
 import qualified Hydra.Decode.Core as DecodeCore
+import qualified Hydra.Rewriting as Rewriting
 
 import Control.Monad (forM, when)
 import System.Exit (exitFailure, exitSuccess)
@@ -135,13 +136,15 @@ main = do
                     flushPut $ "    " ++ err
                     return (False, nsStr ++ ": " ++ err)
                   Right decodedMod ->
-                    if decodedMod == origMod
+                    let compareMod = if isTypeModule origMod then decodedMod else stripTypeAnnotations decodedMod
+                        compareOrig = if isTypeModule origMod then origMod else stripTypeAnnotations origMod
+                    in if compareMod == compareOrig
                       then do
                         flushPut $ "  ✓ " ++ nsStr
                         return (True, nsStr)
                       else do
                         flushPut $ "  ✗ " ++ nsStr ++ " (content mismatch)"
-                        let diff = findDifference origMod decodedMod
+                        let diff = findDifference compareOrig compareMod
                         flushPut $ "    " ++ diff
                         return (False, nsStr ++ ": " ++ diff)
 
@@ -161,6 +164,21 @@ main = do
       when (length failures > 20) $
         putStrLn $ "  ... and " ++ show (length failures - 20) ++ " more"
       exitFailure
+
+-- | Check whether a module contains only native type definitions (no term definitions).
+isTypeModule :: Module -> Bool
+isTypeModule m = all isNativeType (moduleElements m)
+
+-- | Strip type annotations from a module for comparison with raw (pre-inference) modules.
+-- Removes TypeLambda, TypeApplication, binding TypeSchemes, and lambda domain types from terms,
+-- but preserves user annotations.
+stripTypeAnnotations :: Module -> Module
+stripTypeAnnotations m = m {
+  moduleElements = fmap stripBinding (moduleElements m) }
+  where
+    stripBinding b = b {
+      bindingTerm = Rewriting.removeTypesFromTerm (bindingTerm b),
+      bindingType = Nothing }
 
 -- | Find the first difference between two modules
 findDifference :: Module -> Module -> String
