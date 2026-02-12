@@ -26,7 +26,7 @@
                               "union": {
                                 "field": {"name": "record", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.EliminationVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Projection"}],
                             "parameter": "_"}}}},
                     {
                       "name": "union",
@@ -37,7 +37,7 @@
                               "union": {
                                 "field": {"name": "union", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.EliminationVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.CaseStatement"}],
                             "parameter": "_"}}}},
                     {
                       "name": "wrap",
@@ -48,11 +48,18 @@
                               "union": {
                                 "field": {"name": "wrap", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.EliminationVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Name"}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.Elimination"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.variants.EliminationVariant"},
+              "domain": {"variable": "hydra.core.Elimination"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.eliminationVariants",
       "term": {
@@ -77,7 +84,11 @@
                 "union": {
                   "field": {"name": "wrap", "term": {"unit": {}}},
                   "typeName": "hydra.variants.EliminationVariant"}}]}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"list": {"variable": "hydra.variants.EliminationVariant"}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.floatTypePrecision",
       "term": {
@@ -101,7 +112,7 @@
                               "union": {
                                 "field": {"name": "arbitrary", "term": {"unit": {}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "float32",
@@ -112,7 +123,7 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 32}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "float64",
@@ -123,11 +134,18 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 64}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.FloatType"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.util.Precision"},
+              "domain": {"variable": "hydra.core.FloatType"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.floatTypes",
       "term": {
@@ -151,7 +169,11 @@
                 "union": {
                   "field": {"name": "float64", "term": {"unit": {}}},
                   "typeName": "hydra.core.FloatType"}}]}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"list": {"variable": "hydra.core.FloatType"}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.floatValueType",
       "term": {
@@ -175,7 +197,7 @@
                               "union": {
                                 "field": {"name": "bigfloat", "term": {"unit": {}}},
                                 "typeName": "hydra.core.FloatType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"float": {"bigfloat": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "float32",
@@ -186,7 +208,7 @@
                               "union": {
                                 "field": {"name": "float32", "term": {"unit": {}}},
                                 "typeName": "hydra.core.FloatType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"float": {"float32": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "float64",
@@ -197,11 +219,18 @@
                               "union": {
                                 "field": {"name": "float64", "term": {"unit": {}}},
                                 "typeName": "hydra.core.FloatType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"float": {"float64": {}}}}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.FloatValue"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.FloatType"},
+              "domain": {"variable": "hydra.core.FloatValue"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.functionVariant",
       "term": {
@@ -226,7 +255,7 @@
                               "union": {
                                 "field": {"name": "elimination", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.FunctionVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Elimination"}],
                             "parameter": "_"}}}},
                     {
                       "name": "lambda",
@@ -237,7 +266,7 @@
                               "union": {
                                 "field": {"name": "lambda", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.FunctionVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Lambda"}],
                             "parameter": "_"}}}},
                     {
                       "name": "primitive",
@@ -248,11 +277,18 @@
                               "union": {
                                 "field": {"name": "primitive", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.FunctionVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Name"}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.Function"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.variants.FunctionVariant"},
+              "domain": {"variable": "hydra.core.Function"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.functionVariants",
       "term": {
@@ -277,7 +313,11 @@
                 "union": {
                   "field": {"name": "primitive", "term": {"unit": {}}},
                   "typeName": "hydra.variants.FunctionVariant"}}]}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"list": {"variable": "hydra.variants.FunctionVariant"}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.integerTypeIsSigned",
       "term": {
@@ -299,7 +339,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"boolean": true}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int8",
@@ -307,7 +347,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"boolean": true}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int16",
@@ -315,7 +355,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"boolean": true}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int32",
@@ -323,7 +363,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"boolean": true}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int64",
@@ -331,7 +371,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"boolean": true}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint8",
@@ -339,7 +379,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"boolean": false}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint16",
@@ -347,7 +387,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"boolean": false}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint32",
@@ -355,7 +395,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"boolean": false}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint64",
@@ -363,11 +403,18 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"boolean": false}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.IntegerType"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"boolean": {}}},
+              "domain": {"variable": "hydra.core.IntegerType"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.integerTypePrecision",
       "term": {
@@ -390,7 +437,7 @@
                               "union": {
                                 "field": {"name": "arbitrary", "term": {"unit": {}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int8",
@@ -401,7 +448,7 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 8}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int16",
@@ -412,7 +459,7 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 16}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int32",
@@ -423,7 +470,7 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 32}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int64",
@@ -434,7 +481,7 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 64}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint8",
@@ -445,7 +492,7 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 8}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint16",
@@ -456,7 +503,7 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 16}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint32",
@@ -467,7 +514,7 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 32}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint64",
@@ -478,11 +525,18 @@
                               "union": {
                                 "field": {"name": "bits", "term": {"literal": {"integer": {"int32": 64}}}},
                                 "typeName": "hydra.util.Precision"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.IntegerType"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.util.Precision"},
+              "domain": {"variable": "hydra.core.IntegerType"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.integerTypes",
       "term": {
@@ -529,7 +583,11 @@
                 "union": {
                   "field": {"name": "uint64", "term": {"unit": {}}},
                   "typeName": "hydra.core.IntegerType"}}]}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"list": {"variable": "hydra.core.IntegerType"}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.integerValueType",
       "term": {
@@ -553,7 +611,7 @@
                               "union": {
                                 "field": {"name": "bigint", "term": {"unit": {}}},
                                 "typeName": "hydra.core.IntegerType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"bigint": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int8",
@@ -564,7 +622,7 @@
                               "union": {
                                 "field": {"name": "int8", "term": {"unit": {}}},
                                 "typeName": "hydra.core.IntegerType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"int8": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int16",
@@ -575,7 +633,7 @@
                               "union": {
                                 "field": {"name": "int16", "term": {"unit": {}}},
                                 "typeName": "hydra.core.IntegerType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"int16": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int32",
@@ -586,7 +644,7 @@
                               "union": {
                                 "field": {"name": "int32", "term": {"unit": {}}},
                                 "typeName": "hydra.core.IntegerType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"int32": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "int64",
@@ -597,7 +655,7 @@
                               "union": {
                                 "field": {"name": "int64", "term": {"unit": {}}},
                                 "typeName": "hydra.core.IntegerType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"int64": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint8",
@@ -608,7 +666,7 @@
                               "union": {
                                 "field": {"name": "uint8", "term": {"unit": {}}},
                                 "typeName": "hydra.core.IntegerType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"uint8": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint16",
@@ -619,7 +677,7 @@
                               "union": {
                                 "field": {"name": "uint16", "term": {"unit": {}}},
                                 "typeName": "hydra.core.IntegerType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"uint16": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint32",
@@ -630,7 +688,7 @@
                               "union": {
                                 "field": {"name": "uint32", "term": {"unit": {}}},
                                 "typeName": "hydra.core.IntegerType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"uint32": {}}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "uint64",
@@ -641,11 +699,18 @@
                               "union": {
                                 "field": {"name": "uint64", "term": {"unit": {}}},
                                 "typeName": "hydra.core.IntegerType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"uint64": {}}}}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.IntegerValue"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.IntegerType"},
+              "domain": {"variable": "hydra.core.IntegerValue"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.literalType",
       "term": {
@@ -669,7 +734,7 @@
                               "union": {
                                 "field": {"name": "binary", "term": {"unit": {}}},
                                 "typeName": "hydra.core.LiteralType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"binary": {}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "boolean",
@@ -680,7 +745,7 @@
                               "union": {
                                 "field": {"name": "boolean", "term": {"unit": {}}},
                                 "typeName": "hydra.core.LiteralType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"boolean": {}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "float",
@@ -700,9 +765,9 @@
                                         "union": {
                                           "field": {"name": "float", "term": {"variable": "injected_"}},
                                           "typeName": "hydra.core.LiteralType"}},
-                                      "domain": null,
+                                      "domain": [{"variable": "hydra.core.FloatType"}],
                                       "parameter": "injected_"}}}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.FloatValue"}],
                             "parameter": "arg_"}}}},
                     {
                       "name": "integer",
@@ -722,9 +787,9 @@
                                         "union": {
                                           "field": {"name": "integer", "term": {"variable": "injected_"}},
                                           "typeName": "hydra.core.LiteralType"}},
-                                      "domain": null,
+                                      "domain": [{"variable": "hydra.core.IntegerType"}],
                                       "parameter": "injected_"}}}}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.IntegerValue"}],
                             "parameter": "arg_"}}}},
                     {
                       "name": "string",
@@ -735,11 +800,18 @@
                               "union": {
                                 "field": {"name": "string", "term": {"unit": {}}},
                                 "typeName": "hydra.core.LiteralType"}},
-                            "domain": null,
+                            "domain": [{"literal": {"string": {}}}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.Literal"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.LiteralType"},
+              "domain": {"variable": "hydra.core.Literal"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.literalTypeVariant",
       "term": {
@@ -764,7 +836,7 @@
                               "union": {
                                 "field": {"name": "binary", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.LiteralVariant"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "boolean",
@@ -775,7 +847,7 @@
                               "union": {
                                 "field": {"name": "boolean", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.LiteralVariant"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "float",
@@ -786,7 +858,7 @@
                               "union": {
                                 "field": {"name": "float", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.LiteralVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.FloatType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "integer",
@@ -797,7 +869,7 @@
                               "union": {
                                 "field": {"name": "integer", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.LiteralVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.IntegerType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "string",
@@ -808,11 +880,18 @@
                               "union": {
                                 "field": {"name": "string", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.LiteralVariant"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.LiteralType"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.variants.LiteralVariant"},
+              "domain": {"variable": "hydra.core.LiteralType"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.literalTypes",
       "term": {
@@ -847,9 +926,15 @@
                                   "union": {
                                     "field": {"name": "float", "term": {"variable": "x"}},
                                     "typeName": "hydra.core.LiteralType"}},
-                                "domain": null,
+                                "domain": [{"variable": "hydra.core.FloatType"}],
                                 "parameter": "x"}}},
-                          "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                          "function": {
+                            "typeApplication": {
+                              "body": {
+                                "typeApplication": {
+                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                  "type": {"variable": "hydra.core.FloatType"}}},
+                              "type": {"variable": "hydra.core.LiteralType"}}}}}}},
                   {
                     "application": {
                       "argument": {"variable": "hydra.reflect.integerTypes"},
@@ -862,17 +947,30 @@
                                   "union": {
                                     "field": {"name": "integer", "term": {"variable": "x"}},
                                     "typeName": "hydra.core.LiteralType"}},
-                                "domain": null,
+                                "domain": [{"variable": "hydra.core.IntegerType"}],
                                 "parameter": "x"}}},
-                          "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
+                          "function": {
+                            "typeApplication": {
+                              "body": {
+                                "typeApplication": {
+                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                  "type": {"variable": "hydra.core.IntegerType"}}},
+                              "type": {"variable": "hydra.core.LiteralType"}}}}}}},
                   {
                     "list": [
                       {
                         "union": {
                           "field": {"name": "string", "term": {"unit": {}}},
                           "typeName": "hydra.core.LiteralType"}}]}]},
-              "function": {"function": {"primitive": "hydra.lib.lists.concat"}}}}}},
-      "type": null},
+              "function": {
+                "typeApplication": {
+                  "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                  "type": {"variable": "hydra.core.LiteralType"}}}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"list": {"variable": "hydra.core.LiteralType"}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.literalVariant",
       "term": {
@@ -893,9 +991,16 @@
                         "argument": {"variable": "arg_"},
                         "function": {"variable": "hydra.reflect.literalType"}}},
                     "function": {"variable": "hydra.reflect.literalTypeVariant"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.core.Literal"}],
                 "parameter": "arg_"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.variants.LiteralVariant"},
+              "domain": {"variable": "hydra.core.Literal"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.literalVariants",
       "term": {
@@ -926,7 +1031,11 @@
                 "union": {
                   "field": {"name": "string", "term": {"unit": {}}},
                   "typeName": "hydra.variants.LiteralVariant"}}]}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"list": {"variable": "hydra.variants.LiteralVariant"}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.termVariant",
       "term": {
@@ -950,7 +1059,7 @@
                               "union": {
                                 "field": {"name": "annotated", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.AnnotatedTerm"}],
                             "parameter": "_"}}}},
                     {
                       "name": "application",
@@ -961,7 +1070,7 @@
                               "union": {
                                 "field": {"name": "application", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Application"}],
                             "parameter": "_"}}}},
                     {
                       "name": "either",
@@ -972,7 +1081,11 @@
                               "union": {
                                 "field": {"name": "either", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [
+                              {
+                                "either": {
+                                  "left": {"variable": "hydra.core.Term"},
+                                  "right": {"variable": "hydra.core.Term"}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "function",
@@ -983,7 +1096,7 @@
                               "union": {
                                 "field": {"name": "function", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Function"}],
                             "parameter": "_"}}}},
                     {
                       "name": "let",
@@ -994,7 +1107,7 @@
                               "union": {
                                 "field": {"name": "let", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Let"}],
                             "parameter": "_"}}}},
                     {
                       "name": "list",
@@ -1005,7 +1118,7 @@
                               "union": {
                                 "field": {"name": "list", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"list": {"variable": "hydra.core.Term"}}],
                             "parameter": "_"}}}},
                     {
                       "name": "literal",
@@ -1016,7 +1129,7 @@
                               "union": {
                                 "field": {"name": "literal", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Literal"}],
                             "parameter": "_"}}}},
                     {
                       "name": "map",
@@ -1027,7 +1140,11 @@
                               "union": {
                                 "field": {"name": "map", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [
+                              {
+                                "map": {
+                                  "keys": {"variable": "hydra.core.Term"},
+                                  "values": {"variable": "hydra.core.Term"}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "maybe",
@@ -1038,7 +1155,7 @@
                               "union": {
                                 "field": {"name": "maybe", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"maybe": {"variable": "hydra.core.Term"}}],
                             "parameter": "_"}}}},
                     {
                       "name": "pair",
@@ -1049,7 +1166,11 @@
                               "union": {
                                 "field": {"name": "pair", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [
+                              {
+                                "pair": {
+                                  "first": {"variable": "hydra.core.Term"},
+                                  "second": {"variable": "hydra.core.Term"}}}],
                             "parameter": "_"}}}},
                     {
                       "name": "record",
@@ -1060,7 +1181,7 @@
                               "union": {
                                 "field": {"name": "record", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Record"}],
                             "parameter": "_"}}}},
                     {
                       "name": "set",
@@ -1071,7 +1192,7 @@
                               "union": {
                                 "field": {"name": "set", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"set": {"variable": "hydra.core.Term"}}],
                             "parameter": "_"}}}},
                     {
                       "name": "typeApplication",
@@ -1082,7 +1203,7 @@
                               "union": {
                                 "field": {"name": "typeApplication", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.TypeApplicationTerm"}],
                             "parameter": "_"}}}},
                     {
                       "name": "typeLambda",
@@ -1093,7 +1214,7 @@
                               "union": {
                                 "field": {"name": "typeLambda", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.TypeLambda"}],
                             "parameter": "_"}}}},
                     {
                       "name": "union",
@@ -1104,7 +1225,7 @@
                               "union": {
                                 "field": {"name": "union", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Injection"}],
                             "parameter": "_"}}}},
                     {
                       "name": "unit",
@@ -1115,7 +1236,7 @@
                               "union": {
                                 "field": {"name": "unit", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "variable",
@@ -1126,7 +1247,7 @@
                               "union": {
                                 "field": {"name": "variable", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Name"}],
                             "parameter": "_"}}}},
                     {
                       "name": "wrap",
@@ -1137,11 +1258,18 @@
                               "union": {
                                 "field": {"name": "wrap", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TermVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.WrappedTerm"}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.Term"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.variants.TermVariant"},
+              "domain": {"variable": "hydra.core.Term"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.termVariants",
       "term": {
@@ -1221,7 +1349,11 @@
                 "union": {
                   "field": {"name": "wrap", "term": {"unit": {}}},
                   "typeName": "hydra.variants.TermVariant"}}]}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"list": {"variable": "hydra.variants.TermVariant"}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.typeVariant",
       "term": {
@@ -1245,7 +1377,7 @@
                               "union": {
                                 "field": {"name": "annotated", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.AnnotatedType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "application",
@@ -1256,7 +1388,7 @@
                               "union": {
                                 "field": {"name": "application", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.ApplicationType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "either",
@@ -1267,7 +1399,7 @@
                               "union": {
                                 "field": {"name": "either", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.EitherType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "function",
@@ -1278,7 +1410,7 @@
                               "union": {
                                 "field": {"name": "function", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.FunctionType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "forall",
@@ -1289,7 +1421,7 @@
                               "union": {
                                 "field": {"name": "forall", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.ForallType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "list",
@@ -1300,7 +1432,7 @@
                               "union": {
                                 "field": {"name": "list", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Type"}],
                             "parameter": "_"}}}},
                     {
                       "name": "literal",
@@ -1311,7 +1443,7 @@
                               "union": {
                                 "field": {"name": "literal", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.LiteralType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "map",
@@ -1322,7 +1454,7 @@
                               "union": {
                                 "field": {"name": "map", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.MapType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "maybe",
@@ -1333,7 +1465,7 @@
                               "union": {
                                 "field": {"name": "maybe", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Type"}],
                             "parameter": "_"}}}},
                     {
                       "name": "pair",
@@ -1344,7 +1476,7 @@
                               "union": {
                                 "field": {"name": "pair", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.PairType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "record",
@@ -1355,7 +1487,7 @@
                               "union": {
                                 "field": {"name": "record", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.RowType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "set",
@@ -1366,7 +1498,7 @@
                               "union": {
                                 "field": {"name": "set", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Type"}],
                             "parameter": "_"}}}},
                     {
                       "name": "union",
@@ -1377,7 +1509,7 @@
                               "union": {
                                 "field": {"name": "union", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.RowType"}],
                             "parameter": "_"}}}},
                     {
                       "name": "unit",
@@ -1388,7 +1520,7 @@
                               "union": {
                                 "field": {"name": "unit", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "variable",
@@ -1399,7 +1531,7 @@
                               "union": {
                                 "field": {"name": "variable", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.Name"}],
                             "parameter": "_"}}}},
                     {
                       "name": "wrap",
@@ -1410,11 +1542,18 @@
                               "union": {
                                 "field": {"name": "wrap", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": null,
+                            "domain": [{"variable": "hydra.core.WrappedType"}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.Type"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.variants.TypeVariant"},
+              "domain": {"variable": "hydra.core.Type"}}},
+          "variables": []}]},
     {
       "name": "hydra.reflect.typeVariants",
       "term": {
@@ -1489,7 +1628,11 @@
                 "union": {
                   "field": {"name": "variable", "term": {"unit": {}}},
                   "typeName": "hydra.variants.TypeVariant"}}]}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {"list": {"variable": "hydra.variants.TypeVariant"}},
+          "variables": []}]}],
   "namespace": "hydra.reflect",
   "termDependencies": [],
   "typeDependencies": [

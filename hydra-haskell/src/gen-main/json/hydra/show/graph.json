@@ -23,7 +23,11 @@
                             "function": {
                               "function": {
                                 "elimination": {"record": {"field": "elements", "typeName": "hydra.graph.Graph"}}}}}},
-                        "type": null},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"list": {"variable": "hydra.core.Binding"}},
+                            "variables": []}]},
                       {
                         "name": "elementStrs",
                         "term": {
@@ -32,8 +36,18 @@
                             "function": {
                               "application": {
                                 "argument": {"variable": "hydra.show.core.binding"},
-                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                        "type": null}],
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                        "type": {"variable": "hydra.core.Binding"}}},
+                                    "type": {"literal": {"string": {}}}}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"list": {"literal": {"string": {}}}},
+                            "variables": []}]}],
                     "body": {
                       "application": {
                         "argument": {
@@ -48,9 +62,16 @@
                                     "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
                             {"literal": {"string": "}"}}]},
                         "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.graph.Graph"}],
                 "parameter": "graph"}}}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"string": {}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}]}],
   "namespace": "hydra.show.graph",
   "termDependencies": ["hydra.show.core"],
   "typeDependencies": [

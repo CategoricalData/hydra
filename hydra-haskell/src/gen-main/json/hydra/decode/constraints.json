@@ -45,7 +45,14 @@
                                                                 "application": {
                                                                   "argument": {"variable": "record"},
                                                                   "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
-                                                              "type": null}],
+                                                              "type": [
+                                                                {
+                                                                  "constraints": null,
+                                                                  "type": {
+                                                                    "map": {
+                                                                      "keys": {"variable": "hydra.core.Name"},
+                                                                      "values": {"variable": "hydra.core.Term"}}},
+                                                                  "variables": []}]}],
                                                           "body": {
                                                             "application": {
                                                               "argument": {
@@ -57,14 +64,20 @@
                                                                           "function": {
                                                                             "lambda": {
                                                                               "body": {
-                                                                                "either": {
-                                                                                  "@right": {
-                                                                                    "record": {
-                                                                                      "fields": [
-                                                                                        {"name": "left", "term": {"variable": "field_left"}},
-                                                                                        {"name": "right", "term": {"variable": "field_right"}}],
-                                                                                      "typeName": "hydra.constraints.PathEquation"}}}},
-                                                                              "domain": null,
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "either": {
+                                                                                          "@right": {
+                                                                                            "record": {
+                                                                                              "fields": [
+                                                                                                {"name": "left", "term": {"variable": "field_left"}},
+                                                                                                {"name": "right", "term": {"variable": "field_right"}}],
+                                                                                              "typeName": "hydra.constraints.PathEquation"}}}},
+                                                                                      "type": {"variable": "hydra.util.DecodingError"}}},
+                                                                                  "type": {"variable": "hydra.constraints.PathEquation"}}},
+                                                                              "domain": [{"variable": "hydra.query.Path"}],
                                                                               "parameter": "field_right"}}},
                                                                         "function": {
                                                                           "application": {
@@ -80,9 +93,27 @@
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {"literal": {"string": "right"}},
-                                                                                            "function": {"variable": "hydra.extract.helpers.requireField"}}}}}}}}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
-                                                                    "domain": null,
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                        "type": {"variable": "hydra.graph.Graph"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                "type": {"variable": "hydra.query.Path"}}}}}}}}}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                        "type": {"variable": "hydra.util.DecodingError"}}},
+                                                                                    "type": {"variable": "hydra.query.Path"}}},
+                                                                                "type": {"variable": "hydra.constraints.PathEquation"}}}}}}},
+                                                                    "domain": [{"variable": "hydra.query.Path"}],
                                                                     "parameter": "field_left"}}},
                                                               "function": {
                                                                 "application": {
@@ -98,20 +129,44 @@
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {"literal": {"string": "left"}},
-                                                                                  "function": {"variable": "hydra.extract.helpers.requireField"}}}}}}}}},
-                                                                  "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}}}},
-                                                      "domain": null,
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                              "type": {"variable": "hydra.graph.Graph"}}},
+                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                      "type": {"variable": "hydra.query.Path"}}}}}}}}}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                              "type": {"variable": "hydra.util.DecodingError"}}},
+                                                                          "type": {"variable": "hydra.query.Path"}}},
+                                                                      "type": {"variable": "hydra.constraints.PathEquation"}}}}}}}}},
+                                                      "domain": [{"variable": "hydra.core.Record"}],
                                                       "parameter": "record"}}}}],
                                             "default": [
                                               {
-                                                "either": {
-                                                  "@left": {
-                                                    "wrap": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
                                                       "body": {
-                                                        "literal": {"string": "expected record of type hydra.constraints.PathEquation"}},
-                                                      "typeName": "hydra.util.DecodingError"}}}}],
+                                                        "either": {
+                                                          "@left": {
+                                                            "wrap": {
+                                                              "body": {
+                                                                "literal": {"string": "expected record of type hydra.constraints.PathEquation"}},
+                                                              "typeName": "hydra.util.DecodingError"}}}},
+                                                      "type": {"variable": "hydra.util.DecodingError"}}},
+                                                  "type": {"variable": "hydra.constraints.PathEquation"}}}],
                                             "typeName": "hydra.core.Term"}}}}}},
-                                "domain": null,
+                                "domain": [{"variable": "hydra.core.Term"}],
                                 "parameter": "stripped"}}},
                           "function": {
                             "application": {
@@ -119,15 +174,33 @@
                                 "function": {
                                   "lambda": {
                                     "body": {
-                                      "either": {
-                                        "@left": {
-                                          "wrap": {"body": {"variable": "err"}, "typeName": "hydra.util.DecodingError"}}}},
-                                    "domain": null,
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "either": {
+                                                "@left": {
+                                                  "wrap": {"body": {"variable": "err"}, "typeName": "hydra.util.DecodingError"}}}},
+                                            "type": {"variable": "hydra.util.DecodingError"}}},
+                                        "type": {"variable": "hydra.constraints.PathEquation"}}},
+                                    "domain": [{"literal": {"string": {}}}],
                                     "parameter": "err"}}},
-                              "function": {"function": {"primitive": "hydra.lib.eithers.either"}}}}}}}},
-                  "domain": null,
+                              "function": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
+                                          "type": {"literal": {"string": {}}}}},
+                                      "type": {"variable": "hydra.core.Term"}}},
+                                  "type": {
+                                    "either": {
+                                      "left": {"variable": "hydra.util.DecodingError"},
+                                      "right": {"variable": "hydra.constraints.PathEquation"}}}}}}}}}}},
+                  "domain": [{"variable": "hydra.core.Term"}],
                   "parameter": "raw"}}},
-            "domain": null,
+            "domain": [{"variable": "hydra.graph.Graph"}],
             "parameter": "cx"}}},
       "type": [
         {
@@ -187,7 +260,14 @@
                                                                 "application": {
                                                                   "argument": {"variable": "record"},
                                                                   "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
-                                                              "type": null}],
+                                                              "type": [
+                                                                {
+                                                                  "constraints": null,
+                                                                  "type": {
+                                                                    "map": {
+                                                                      "keys": {"variable": "hydra.core.Name"},
+                                                                      "values": {"variable": "hydra.core.Term"}}},
+                                                                  "variables": []}]}],
                                                           "body": {
                                                             "application": {
                                                               "argument": {
@@ -199,14 +279,20 @@
                                                                           "function": {
                                                                             "lambda": {
                                                                               "body": {
-                                                                                "either": {
-                                                                                  "@right": {
-                                                                                    "record": {
-                                                                                      "fields": [
-                                                                                        {"name": "antecedent", "term": {"variable": "field_antecedent"}},
-                                                                                        {"name": "consequent", "term": {"variable": "field_consequent"}}],
-                                                                                      "typeName": "hydra.constraints.PatternImplication"}}}},
-                                                                              "domain": null,
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "either": {
+                                                                                          "@right": {
+                                                                                            "record": {
+                                                                                              "fields": [
+                                                                                                {"name": "antecedent", "term": {"variable": "field_antecedent"}},
+                                                                                                {"name": "consequent", "term": {"variable": "field_consequent"}}],
+                                                                                              "typeName": "hydra.constraints.PatternImplication"}}}},
+                                                                                      "type": {"variable": "hydra.util.DecodingError"}}},
+                                                                                  "type": {"variable": "hydra.constraints.PatternImplication"}}},
+                                                                              "domain": [{"variable": "hydra.query.Pattern"}],
                                                                               "parameter": "field_consequent"}}},
                                                                         "function": {
                                                                           "application": {
@@ -222,9 +308,27 @@
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {"literal": {"string": "consequent"}},
-                                                                                            "function": {"variable": "hydra.extract.helpers.requireField"}}}}}}}}},
-                                                                            "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}},
-                                                                    "domain": null,
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                        "type": {"variable": "hydra.graph.Graph"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                "type": {"variable": "hydra.query.Pattern"}}}}}}}}}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                        "type": {"variable": "hydra.util.DecodingError"}}},
+                                                                                    "type": {"variable": "hydra.query.Pattern"}}},
+                                                                                "type": {"variable": "hydra.constraints.PatternImplication"}}}}}}},
+                                                                    "domain": [{"variable": "hydra.query.Pattern"}],
                                                                     "parameter": "field_antecedent"}}},
                                                               "function": {
                                                                 "application": {
@@ -240,21 +344,45 @@
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {"literal": {"string": "antecedent"}},
-                                                                                  "function": {"variable": "hydra.extract.helpers.requireField"}}}}}}}}},
-                                                                  "function": {"function": {"primitive": "hydra.lib.eithers.bind"}}}}}}}},
-                                                      "domain": null,
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                              "type": {"variable": "hydra.graph.Graph"}}},
+                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                      "type": {"variable": "hydra.query.Pattern"}}}}}}}}}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                              "type": {"variable": "hydra.util.DecodingError"}}},
+                                                                          "type": {"variable": "hydra.query.Pattern"}}},
+                                                                      "type": {"variable": "hydra.constraints.PatternImplication"}}}}}}}}},
+                                                      "domain": [{"variable": "hydra.core.Record"}],
                                                       "parameter": "record"}}}}],
                                             "default": [
                                               {
-                                                "either": {
-                                                  "@left": {
-                                                    "wrap": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
                                                       "body": {
-                                                        "literal": {
-                                                          "string": "expected record of type hydra.constraints.PatternImplication"}},
-                                                      "typeName": "hydra.util.DecodingError"}}}}],
+                                                        "either": {
+                                                          "@left": {
+                                                            "wrap": {
+                                                              "body": {
+                                                                "literal": {
+                                                                  "string": "expected record of type hydra.constraints.PatternImplication"}},
+                                                              "typeName": "hydra.util.DecodingError"}}}},
+                                                      "type": {"variable": "hydra.util.DecodingError"}}},
+                                                  "type": {"variable": "hydra.constraints.PatternImplication"}}}],
                                             "typeName": "hydra.core.Term"}}}}}},
-                                "domain": null,
+                                "domain": [{"variable": "hydra.core.Term"}],
                                 "parameter": "stripped"}}},
                           "function": {
                             "application": {
@@ -262,15 +390,33 @@
                                 "function": {
                                   "lambda": {
                                     "body": {
-                                      "either": {
-                                        "@left": {
-                                          "wrap": {"body": {"variable": "err"}, "typeName": "hydra.util.DecodingError"}}}},
-                                    "domain": null,
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "either": {
+                                                "@left": {
+                                                  "wrap": {"body": {"variable": "err"}, "typeName": "hydra.util.DecodingError"}}}},
+                                            "type": {"variable": "hydra.util.DecodingError"}}},
+                                        "type": {"variable": "hydra.constraints.PatternImplication"}}},
+                                    "domain": [{"literal": {"string": {}}}],
                                     "parameter": "err"}}},
-                              "function": {"function": {"primitive": "hydra.lib.eithers.either"}}}}}}}},
-                  "domain": null,
+                              "function": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
+                                          "type": {"literal": {"string": {}}}}},
+                                      "type": {"variable": "hydra.core.Term"}}},
+                                  "type": {
+                                    "either": {
+                                      "left": {"variable": "hydra.util.DecodingError"},
+                                      "right": {"variable": "hydra.constraints.PatternImplication"}}}}}}}}}}},
+                  "domain": [{"variable": "hydra.core.Term"}],
                   "parameter": "raw"}}},
-            "domain": null,
+            "domain": [{"variable": "hydra.graph.Graph"}],
             "parameter": "cx"}}},
       "type": [
         {

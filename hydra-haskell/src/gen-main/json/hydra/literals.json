@@ -34,7 +34,7 @@
                                               "union": {
                                                 "field": {"name": "bigfloat", "term": {"variable": "bf"}},
                                                 "typeName": "hydra.core.FloatValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "float32",
@@ -50,7 +50,7 @@
                                                       "argument": {"variable": "bf"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigfloatToFloat32"}}}}},
                                                 "typeName": "hydra.core.FloatValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "float64",
@@ -66,15 +66,25 @@
                                                       "argument": {"variable": "bf"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigfloatToFloat64"}}}}},
                                                 "typeName": "hydra.core.FloatValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}}],
                                   "default": null,
                                   "typeName": "hydra.core.FloatType"}}}}}},
-                      "domain": null,
+                      "domain": [{"literal": {"float": {"bigfloat": {}}}}],
                       "parameter": "bf"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.core.FloatType"}],
                 "parameter": "ft"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.FloatValue"},
+                  "domain": {"literal": {"float": {"bigfloat": {}}}}}},
+              "domain": {"variable": "hydra.core.FloatType"}}},
+          "variables": []}]},
     {
       "name": "hydra.literals.bigintToIntegerValue",
       "term": {
@@ -108,7 +118,7 @@
                                               "union": {
                                                 "field": {"name": "bigint", "term": {"variable": "bi"}},
                                                 "typeName": "hydra.core.IntegerValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "int8",
@@ -124,7 +134,7 @@
                                                       "argument": {"variable": "bi"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigintToInt8"}}}}},
                                                 "typeName": "hydra.core.IntegerValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "int16",
@@ -140,7 +150,7 @@
                                                       "argument": {"variable": "bi"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigintToInt16"}}}}},
                                                 "typeName": "hydra.core.IntegerValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "int32",
@@ -156,7 +166,7 @@
                                                       "argument": {"variable": "bi"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigintToInt32"}}}}},
                                                 "typeName": "hydra.core.IntegerValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "int64",
@@ -172,7 +182,7 @@
                                                       "argument": {"variable": "bi"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigintToInt64"}}}}},
                                                 "typeName": "hydra.core.IntegerValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "uint8",
@@ -188,7 +198,7 @@
                                                       "argument": {"variable": "bi"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigintToUint8"}}}}},
                                                 "typeName": "hydra.core.IntegerValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "uint16",
@@ -204,7 +214,7 @@
                                                       "argument": {"variable": "bi"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigintToUint16"}}}}},
                                                 "typeName": "hydra.core.IntegerValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "uint32",
@@ -220,7 +230,7 @@
                                                       "argument": {"variable": "bi"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigintToUint32"}}}}},
                                                 "typeName": "hydra.core.IntegerValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}},
                                     {
                                       "name": "uint64",
@@ -236,15 +246,25 @@
                                                       "argument": {"variable": "bi"},
                                                       "function": {"function": {"primitive": "hydra.lib.literals.bigintToUint64"}}}}},
                                                 "typeName": "hydra.core.IntegerValue"}},
-                                            "domain": null,
+                                            "domain": [{"unit": {}}],
                                             "parameter": "_"}}}}],
                                   "default": null,
                                   "typeName": "hydra.core.IntegerType"}}}}}},
-                      "domain": null,
+                      "domain": [{"literal": {"integer": {"bigint": {}}}}],
                       "parameter": "bi"}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.core.IntegerType"}],
                 "parameter": "it"}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.IntegerValue"},
+                  "domain": {"literal": {"integer": {"bigint": {}}}}}},
+              "domain": {"variable": "hydra.core.IntegerType"}}},
+          "variables": []}]},
     {
       "name": "hydra.literals.floatValueToBigfloat",
       "term": {
@@ -264,7 +284,10 @@
                       "name": "bigfloat",
                       "term": {
                         "function": {
-                          "lambda": {"body": {"variable": "bf"}, "domain": null, "parameter": "bf"}}}},
+                          "lambda": {
+                            "body": {"variable": "bf"},
+                            "domain": [{"literal": {"float": {"bigfloat": {}}}}],
+                            "parameter": "bf"}}}},
                     {
                       "name": "float32",
                       "term": {
@@ -274,7 +297,7 @@
                               "application": {
                                 "argument": {"variable": "f32"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.float32ToBigfloat"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"float": {"float32": {}}}}],
                             "parameter": "f32"}}}},
                     {
                       "name": "float64",
@@ -285,11 +308,18 @@
                               "application": {
                                 "argument": {"variable": "f64"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.float64ToBigfloat"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"float": {"float64": {}}}}],
                             "parameter": "f64"}}}}],
                   "default": null,
                   "typeName": "hydra.core.FloatValue"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"float": {"bigfloat": {}}}},
+              "domain": {"variable": "hydra.core.FloatValue"}}},
+          "variables": []}]},
     {
       "name": "hydra.literals.integerValueToBigint",
       "term": {
@@ -308,7 +338,10 @@
                       "name": "bigint",
                       "term": {
                         "function": {
-                          "lambda": {"body": {"variable": "bi"}, "domain": null, "parameter": "bi"}}}},
+                          "lambda": {
+                            "body": {"variable": "bi"},
+                            "domain": [{"literal": {"integer": {"bigint": {}}}}],
+                            "parameter": "bi"}}}},
                     {
                       "name": "int8",
                       "term": {
@@ -318,7 +351,7 @@
                               "application": {
                                 "argument": {"variable": "i8"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.int8ToBigint"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"int8": {}}}}],
                             "parameter": "i8"}}}},
                     {
                       "name": "int16",
@@ -329,7 +362,7 @@
                               "application": {
                                 "argument": {"variable": "i16"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.int16ToBigint"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"int16": {}}}}],
                             "parameter": "i16"}}}},
                     {
                       "name": "int32",
@@ -340,7 +373,7 @@
                               "application": {
                                 "argument": {"variable": "i32"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.int32ToBigint"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"int32": {}}}}],
                             "parameter": "i32"}}}},
                     {
                       "name": "int64",
@@ -351,7 +384,7 @@
                               "application": {
                                 "argument": {"variable": "i64"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.int64ToBigint"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"int64": {}}}}],
                             "parameter": "i64"}}}},
                     {
                       "name": "uint8",
@@ -362,7 +395,7 @@
                               "application": {
                                 "argument": {"variable": "ui8"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.uint8ToBigint"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"uint8": {}}}}],
                             "parameter": "ui8"}}}},
                     {
                       "name": "uint16",
@@ -373,7 +406,7 @@
                               "application": {
                                 "argument": {"variable": "ui16"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.uint16ToBigint"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"uint16": {}}}}],
                             "parameter": "ui16"}}}},
                     {
                       "name": "uint32",
@@ -384,7 +417,7 @@
                               "application": {
                                 "argument": {"variable": "ui32"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.uint32ToBigint"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"uint32": {}}}}],
                             "parameter": "ui32"}}}},
                     {
                       "name": "uint64",
@@ -395,11 +428,18 @@
                               "application": {
                                 "argument": {"variable": "ui64"},
                                 "function": {"function": {"primitive": "hydra.lib.literals.uint64ToBigint"}}}},
-                            "domain": null,
+                            "domain": [{"literal": {"integer": {"uint64": {}}}}],
                             "parameter": "ui64"}}}}],
                   "default": null,
                   "typeName": "hydra.core.IntegerValue"}}}}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"integer": {"bigint": {}}}},
+              "domain": {"variable": "hydra.core.IntegerValue"}}},
+          "variables": []}]}],
   "namespace": "hydra.literals",
   "termDependencies": [],
   "typeDependencies": [

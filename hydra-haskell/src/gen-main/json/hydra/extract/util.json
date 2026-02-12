@@ -32,7 +32,13 @@
                                           "function": {
                                             "application": {
                                               "argument": {"literal": {"string": "comparison"}},
-                                              "function": {"variable": "hydra.monads.unexpected"}}}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.monads.unexpected"},
+                                                      "type": {"variable": "hydra.graph.Graph"}}},
+                                                  "type": {"variable": "hydra.util.Comparison"}}}}}}},
                                       "function": {
                                         "application": {
                                           "argument": {
@@ -41,7 +47,13 @@
                                                 "union": {
                                                   "field": {"name": "greaterThan", "term": {"unit": {}}},
                                                   "typeName": "hydra.util.Comparison"}},
-                                              "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                      "type": {"variable": "hydra.graph.Graph"}}},
+                                                  "type": {"variable": "hydra.util.Comparison"}}}}},
                                           "function": {
                                             "application": {
                                               "argument": {
@@ -53,8 +65,20 @@
                                                         "application": {
                                                           "argument": {"variable": "fname"},
                                                           "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                      "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
-                                              "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                          "type": {"literal": {"string": {}}}}}}}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                  "type": {
+                                                    "application": {
+                                                      "argument": {"variable": "hydra.util.Comparison"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "hydra.graph.Graph"},
+                                                          "function": {"variable": "hydra.compute.Flow"}}}}}}}}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {
@@ -63,7 +87,13 @@
                                             "union": {
                                               "field": {"name": "lessThan", "term": {"unit": {}}},
                                               "typeName": "hydra.util.Comparison"}},
-                                          "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                                  "type": {"variable": "hydra.graph.Graph"}}},
+                                              "type": {"variable": "hydra.util.Comparison"}}}}},
                                       "function": {
                                         "application": {
                                           "argument": {
@@ -75,8 +105,20 @@
                                                     "application": {
                                                       "argument": {"variable": "fname"},
                                                       "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                  "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
-                                          "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                      "type": {"literal": {"string": {}}}}}}}}},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                              "type": {
+                                                "application": {
+                                                  "argument": {"variable": "hydra.util.Comparison"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "hydra.graph.Graph"},
+                                                      "function": {"variable": "hydra.compute.Flow"}}}}}}}}}}}}},
                               "function": {
                                 "application": {
                                   "argument": {
@@ -85,7 +127,13 @@
                                         "union": {
                                           "field": {"name": "equalTo", "term": {"unit": {}}},
                                           "typeName": "hydra.util.Comparison"}},
-                                      "function": {"function": {"primitive": "hydra.lib.flows.pure"}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                              "type": {"variable": "hydra.graph.Graph"}}},
+                                          "type": {"variable": "hydra.util.Comparison"}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {
@@ -97,9 +145,21 @@
                                                 "application": {
                                                   "argument": {"variable": "fname"},
                                                   "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                              "function": {"function": {"primitive": "hydra.lib.equality.equal"}}}}}},
-                                      "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}},
-                          "domain": null,
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                  "type": {"literal": {"string": {}}}}}}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                          "type": {
+                                            "application": {
+                                              "argument": {"variable": "hydra.util.Comparison"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"variable": "hydra.graph.Graph"},
+                                                  "function": {"variable": "hydra.compute.Flow"}}}}}}}}}}}}},
+                          "domain": [{"variable": "hydra.core.Name"}],
                           "parameter": "fname"}}},
                     "function": {
                       "application": {
@@ -113,10 +173,32 @@
                                     "body": {"literal": {"string": "hydra.util.Comparison"}},
                                     "typeName": "hydra.core.Name"}},
                                 "function": {"variable": "hydra.extract.core.unitVariant"}}}}},
-                        "function": {"function": {"primitive": "hydra.lib.flows.bind"}}}}}},
-                "domain": null,
+                        "function": {
+                          "typeApplication": {
+                            "body": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.flows.bind"}},
+                                    "type": {"variable": "hydra.graph.Graph"}}},
+                                "type": {"variable": "hydra.core.Name"}}},
+                            "type": {"variable": "hydra.util.Comparison"}}}}}}},
+                "domain": [{"variable": "hydra.core.Term"}],
                 "parameter": "term"}}}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {"variable": "hydra.util.Comparison"},
+                  "function": {
+                    "application": {
+                      "argument": {"variable": "hydra.graph.Graph"},
+                      "function": {"variable": "hydra.compute.Flow"}}}}},
+              "domain": {"variable": "hydra.core.Term"}}},
+          "variables": []}]}],
   "namespace": "hydra.extract.util",
   "termDependencies": ["hydra.extract.core", "hydra.monads"],
   "typeDependencies": [

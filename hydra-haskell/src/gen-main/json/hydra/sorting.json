@@ -4,444 +4,326 @@
     {
       "name": "hydra.sorting.adjacencyListToMap",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {
-                  "string": "Convert an adjacency list to a map, concatenating values for duplicate keys"}}}],
+        "typeLambda": {
           "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "pairs"},
-                    "function": {
-                      "application": {
-                        "argument": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                        "function": {
-                          "application": {
-                            "argument": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "k",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "p"},
-                                                    "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                                                "type": null}],
-                                            "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "vs",
-                                                    "term": {
-                                                      "application": {
-                                                        "argument": {"variable": "p"},
-                                                        "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                                    "type": null}],
-                                                "body": {
-                                                  "let": {
-                                                    "bindings": [
-                                                      {
-                                                        "name": "existing",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "mp"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "k"},
-                                                                    "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"function": {"primitive": "hydra.lib.equality.identity"}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"list": []},
-                                                                    "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                        "type": null}],
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {"variable": "mp"},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "vs"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "existing"},
-                                                                    "function": {"function": {"primitive": "hydra.lib.lists.concat2"}}}}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "k"},
-                                                                "function": {"function": {"primitive": "hydra.lib.maps.insert"}}}}}}}}}}}}}},
-                                        "domain": null,
-                                        "parameter": "p"}}},
-                                  "domain": null,
-                                  "parameter": "mp"}}},
-                            "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
-                "domain": null,
-                "parameter": "pairs"}}}}},
-      "type": null},
-    {
-      "name": "hydra.sorting.createOrderingIsomorphism",
-      "term": {
-        "function": {
-          "lambda": {
-            "body": {
-              "function": {
-                "lambda": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {
+                          "string": "Convert an adjacency list to a map, concatenating values for duplicate keys"}}}],
                   "body": {
-                    "let": {
-                      "bindings": [
-                        {
-                          "name": "sourceToTargetMapping",
-                          "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "pairs"},
                             "function": {
-                              "lambda": {
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "mp",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "els"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "sourceOrd"},
-                                                    "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
-                                            "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
-                                        "type": null}],
+                              "application": {
+                                "argument": {
+                                  "typeApplication": {
                                     "body": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "targetOrd"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "application": {
-                                                          "argument": {"variable": "mp"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "n"},
-                                                              "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
-                                                      "domain": null,
-                                                      "parameter": "n"}}},
-                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                        "function": {"function": {"primitive": "hydra.lib.maybes.cat"}}}}}},
-                                "domain": null,
-                                "parameter": "els"}}},
-                          "type": null}],
-                      "body": {
-                        "let": {
-                          "bindings": [
-                            {
-                              "name": "targetToSourceMapping",
-                              "term": {
+                                      "typeApplication": {
+                                        "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                                        "type": {"variable": "t0"}}},
+                                    "type": {"list": {"variable": "t1"}}}},
                                 "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "let": {
-                                        "bindings": [
-                                          {
-                                            "name": "mp",
-                                            "term": {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "els"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "targetOrd"},
-                                                        "function": {"function": {"primitive": "hydra.lib.lists.zip"}}}}}},
-                                                "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
-                                            "type": null}],
-                                        "body": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "sourceOrd"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "body": {
-                                                            "application": {
-                                                              "argument": {"variable": "mp"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"variable": "n"},
-                                                                  "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
-                                                          "domain": null,
-                                                          "parameter": "n"}}},
-                                                    "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                            "function": {"function": {"primitive": "hydra.lib.maybes.cat"}}}}}},
-                                    "domain": null,
-                                    "parameter": "els"}}},
-                              "type": null}],
-                          "body": {
-                            "record": {
-                              "fields": [
-                                {"name": "encode", "term": {"variable": "sourceToTargetMapping"}},
-                                {"name": "decode", "term": {"variable": "targetToSourceMapping"}}],
-                              "typeName": "hydra.topology.OrderingIsomorphism"}}}}}},
-                  "domain": null,
-                  "parameter": "targetOrd"}}},
-            "domain": null,
-            "parameter": "sourceOrd"}}},
-      "type": null},
-    {
-      "name": "hydra.sorting.findReachableNodes",
-      "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {
-                  "string": "Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)"}}}],
-          "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "let": {
-                          "bindings": [
-                            {
-                              "name": "visit",
-                              "term": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
+                                  "application": {
+                                    "argument": {
                                       "function": {
                                         "lambda": {
                                           "body": {
-                                            "let": {
-                                              "bindings": [
-                                                {
-                                                  "name": "toVisit",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "visited"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {"argument": {"variable": "node"}, "function": {"variable": "adj"}}},
-                                                          "function": {"function": {"primitive": "hydra.lib.sets.difference"}}}}}},
-                                                  "type": null}],
-                                              "body": {
-                                                "application": {
-                                                  "argument": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"variable": "toVisit"},
-                                                          "function": {"function": {"primitive": "hydra.lib.sets.toList"}}}},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "visited"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "function": {
-                                                                        "lambda": {
-                                                                          "body": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "n"},
-                                                                              "function": {
-                                                                                "application": {
-                                                                                  "argument": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "v"},
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "n"},
-                                                                                          "function": {"function": {"primitive": "hydra.lib.sets.insert"}}}}}},
-                                                                                  "function": {"variable": "visit"}}}}},
-                                                                          "domain": null,
-                                                                          "parameter": "n"}}},
-                                                                    "domain": null,
-                                                                    "parameter": "v"}}},
-                                                              "function": {"function": {"primitive": "hydra.lib.lists.foldl"}}}}}}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {"variable": "visited"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "toVisit"},
-                                                              "function": {"function": {"primitive": "hydra.lib.sets.null"}}}},
-                                                          "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}},
-                                          "domain": null,
-                                          "parameter": "node"}}},
-                                    "domain": null,
-                                    "parameter": "visited"}}},
-                              "type": null}],
-                          "body": {
-                            "application": {
-                              "argument": {"variable": "root"},
-                              "function": {
-                                "application": {
-                                  "argument": {
-                                    "application": {
-                                      "argument": {"variable": "root"},
-                                      "function": {"function": {"primitive": "hydra.lib.sets.singleton"}}}},
-                                  "function": {"variable": "visit"}}}}}}},
-                      "domain": null,
-                      "parameter": "root"}}},
-                "domain": null,
-                "parameter": "adj"}}}}},
-      "type": null},
-    {
-      "name": "hydra.sorting.propagateTags",
-      "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {
-                  "string": "Given a graph as an adjacency list of edges and a list of explicit tags per node, compute the full set of tags for each node by propagating tags through edges. If there is an edge from n1 to n2 and n2 has tag t, then n1 also has tag t. Note: pairs in the output are not ordered."}}}],
-          "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "let": {
-                          "bindings": [
-                            {
-                              "name": "adjMap",
-                              "term": {
-                                "application": {
-                                  "argument": {"variable": "edges"},
-                                  "function": {"variable": "hydra.sorting.adjacencyListToMap"}}},
-                              "type": null}],
-                          "body": {
-                            "let": {
-                              "bindings": [
-                                {
-                                  "name": "tagMap",
-                                  "term": {
-                                    "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {"variable": "nodeTags"},
-                                          "function": {"variable": "hydra.sorting.adjacencyListToMap"}}},
-                                      "function": {
-                                        "application": {
-                                          "argument": {"function": {"primitive": "hydra.lib.sets.fromList"}},
-                                          "function": {"function": {"primitive": "hydra.lib.maps.map"}}}}}},
-                                  "type": null}],
-                              "body": {
-                                "let": {
-                                  "bindings": [
-                                    {
-                                      "name": "allNodes",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {
-                                                    "application": {
-                                                      "argument": {"variable": "nodeTags"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                          "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"variable": "edges"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                              "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                      "function": {"function": {"primitive": "hydra.lib.lists.concat2"}}}}}},
-                                              "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
-                                          "function": {"function": {"primitive": "hydra.lib.sets.toList"}}}},
-                                      "type": null}],
-                                  "body": {
-                                    "let": {
-                                      "bindings": [
-                                        {
-                                          "name": "getTagsForNode",
-                                          "term": {
                                             "function": {
                                               "lambda": {
                                                 "body": {
                                                   "let": {
                                                     "bindings": [
                                                       {
-                                                        "name": "reachable",
+                                                        "name": "k",
                                                         "term": {
                                                           "application": {
-                                                            "argument": {"variable": "node"},
+                                                            "argument": {"variable": "p"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                    "type": {"variable": "t0"}}},
+                                                                "type": {"list": {"variable": "t1"}}}}}},
+                                                        "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
+                                                    "body": {
+                                                      "let": {
+                                                        "bindings": [
+                                                          {
+                                                            "name": "vs",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "p"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"list": {"variable": "t1"}}}}}},
+                                                            "type": [
+                                                              {
+                                                                "constraints": null,
+                                                                "type": {"list": {"variable": "t1"}},
+                                                                "variables": []}]}],
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "existing",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "mp"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "k"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                    "type": {"variable": "t0"}}},
+                                                                                "type": {"list": {"variable": "t1"}}}}}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.equality.identity"}},
+                                                                            "type": {"list": {"variable": "t1"}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "t1"}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                    "type": {"list": {"variable": "t1"}}}},
+                                                                                "type": {"list": {"variable": "t1"}}}}}}}}}},
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"list": {"variable": "t1"}},
+                                                                    "variables": []}]}],
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {"variable": "mp"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "vs"},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "existing"},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                                                "type": {"variable": "t1"}}}}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "k"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
+                                                                                "type": {"variable": "t0"}}},
+                                                                            "type": {"list": {"variable": "t1"}}}}}}}}}}}}}}}},
+                                                "domain": [
+                                                  {
+                                                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}],
+                                                "parameter": "p"}}},
+                                          "domain": [
+                                            {
+                                              "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}],
+                                          "parameter": "mp"}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                            "type": {
+                                              "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}}}},
+                                        "type": {
+                                          "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}}}}}}},
+                        "domain": [
+                          {
+                            "list": {
+                              "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}],
+                        "parameter": "pairs"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t1"}}}},
+              "domain": {
+                "list": {
+                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}},
+          "variables": ["t0", "t1"]}]},
+    {
+      "name": "hydra.sorting.createOrderingIsomorphism",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "sourceToTargetMapping",
+                                  "term": {
+                                    "typeLambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "mp",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "els"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
+                                                                "argument": {"variable": "sourceOrd"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.lists.zip"}},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"variable": "t2"}}}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                                "type": {"variable": "t0"}}},
+                                                            "type": {"variable": "t2"}}}}},
+                                                    "type": [
+                                                      {
+                                                        "constraints": null,
+                                                        "type": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t2"}}},
+                                                        "variables": []}]}],
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "targetOrd"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "mp"},
+                                                                      "function": {
                                                                         "application": {
-                                                                          "argument": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "adjMap"},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "n"},
-                                                                                      "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
-                                                                              "function": {
-                                                                                "application": {
-                                                                                  "argument": {"function": {"primitive": "hydra.lib.equality.identity"}},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"list": []},
-                                                                                      "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                                          "function": {"function": {"primitive": "hydra.lib.sets.fromList"}}}},
-                                                                      "domain": null,
-                                                                      "parameter": "n"}}},
-                                                                "function": {"variable": "hydra.sorting.findReachableNodes"}}}}},
-                                                        "type": null}],
+                                                                          "argument": {"variable": "n"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                  "type": {"variable": "t0"}}},
+                                                                              "type": {"variable": "t2"}}}}}}},
+                                                                  "domain": [{"variable": "t0"}],
+                                                                  "parameter": "n"}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                    "type": {"variable": "t0"}}},
+                                                                "type": {"maybe": {"variable": "t2"}}}}}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                                        "type": {"variable": "t2"}}}}}}},
+                                            "domain": [{"list": {"variable": "t2"}}],
+                                            "parameter": "els"}}},
+                                      "parameter": "t2"}},
+                                  "type": [
+                                    {
+                                      "constraints": null,
+                                      "type": {
+                                        "function": {
+                                          "codomain": {"list": {"variable": "t2"}},
+                                          "domain": {"list": {"variable": "t2"}}}},
+                                      "variables": ["t2"]}]}],
+                              "body": {
+                                "let": {
+                                  "bindings": [
+                                    {
+                                      "name": "targetToSourceMapping",
+                                      "term": {
+                                        "typeLambda": {
+                                          "body": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "mp",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "els"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "targetOrd"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.lists.zip"}},
+                                                                            "type": {"variable": "t0"}}},
+                                                                        "type": {"variable": "t2"}}}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                                    "type": {"variable": "t0"}}},
+                                                                "type": {"variable": "t2"}}}}},
+                                                        "type": [
+                                                          {
+                                                            "constraints": null,
+                                                            "type": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t2"}}},
+                                                            "variables": []}]}],
                                                     "body": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "reachable"},
-                                                                "function": {"function": {"primitive": "hydra.lib.sets.toList"}}}},
+                                                            "argument": {"variable": "sourceOrd"},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
@@ -449,304 +331,1101 @@
                                                                     "lambda": {
                                                                       "body": {
                                                                         "application": {
-                                                                          "argument": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "tagMap"},
-                                                                              "function": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "n"},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
+                                                                          "argument": {"variable": "mp"},
                                                                           "function": {
                                                                             "application": {
-                                                                              "argument": {"function": {"primitive": "hydra.lib.equality.identity"}},
+                                                                              "argument": {"variable": "n"},
                                                                               "function": {
-                                                                                "application": {
-                                                                                  "argument": {"function": {"primitive": "hydra.lib.sets.empty"}},
-                                                                                  "function": {"function": {"primitive": "hydra.lib.maybes.maybe"}}}}}}}},
-                                                                      "domain": null,
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                      "type": {"variable": "t0"}}},
+                                                                                  "type": {"variable": "t2"}}}}}}},
+                                                                      "domain": [{"variable": "t0"}],
                                                                       "parameter": "n"}}},
-                                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                        "function": {"function": {"primitive": "hydra.lib.sets.unions"}}}}}},
-                                                "domain": null,
-                                                "parameter": "node"}}},
-                                          "type": null}],
-                                      "body": {
-                                        "application": {
-                                          "argument": {"variable": "allNodes"},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
-                                                "function": {
-                                                  "lambda": {
-                                                    "body": {
-                                                      "pair": {
-                                                        "@first": {"variable": "n"},
-                                                        "@second": {
-                                                          "application": {
-                                                            "argument": {"variable": "n"},
-                                                            "function": {"variable": "getTagsForNode"}}}}},
-                                                    "domain": null,
-                                                    "parameter": "n"}}},
-                                              "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}}}}}}}}},
-                      "domain": null,
-                      "parameter": "nodeTags"}}},
-                "domain": null,
-                "parameter": "edges"}}}}},
-      "type": null},
-    {
-      "name": "hydra.sorting.topologicalSort",
-      "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {
-                  "string": "Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list."}}}],
-          "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "sccs",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "pairs"},
-                            "function": {"variable": "hydra.sorting.topologicalSortComponents"}}},
-                        "type": null}],
-                    "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "isCycle",
-                            "term": {
-                              "function": {
-                                "lambda": {
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"maybe": {"variable": "t2"}}}}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                                            "type": {"variable": "t2"}}}}}}},
+                                                "domain": [{"list": {"variable": "t2"}}],
+                                                "parameter": "els"}}},
+                                          "parameter": "t2"}},
+                                      "type": [
+                                        {
+                                          "constraints": null,
+                                          "type": {
+                                            "function": {
+                                              "codomain": {"list": {"variable": "t2"}},
+                                              "domain": {"list": {"variable": "t2"}}}},
+                                          "variables": ["t2"]}]}],
                                   "body": {
-                                    "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "scc"},
-                                              "function": {"function": {"primitive": "hydra.lib.lists.tail"}}}},
-                                          "function": {"function": {"primitive": "hydra.lib.lists.null"}}}},
-                                      "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
-                                  "domain": null,
-                                  "parameter": "scc"}}},
-                            "type": null}],
-                        "body": {
-                          "let": {
-                            "bindings": [
-                              {
-                                "name": "withCycles",
-                                "term": {
-                                  "application": {
-                                    "argument": {"variable": "sccs"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "isCycle"},
-                                        "function": {"function": {"primitive": "hydra.lib.lists.filter"}}}}}},
-                                "type": null}],
-                            "body": {
-                              "application": {
-                                "argument": {"either": {"@left": {"variable": "withCycles"}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {
-                                      "either": {
-                                        "@right": {
-                                          "application": {
-                                            "argument": {"variable": "sccs"},
-                                            "function": {"function": {"primitive": "hydra.lib.lists.concat"}}}}}},
-                                    "function": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "withCycles"},
-                                            "function": {"function": {"primitive": "hydra.lib.lists.null"}}}},
-                                        "function": {"function": {"primitive": "hydra.lib.logic.ifElse"}}}}}}}}}}}}}},
-                "domain": null,
-                "parameter": "pairs"}}}}},
-      "type": null},
-    {
-      "name": "hydra.sorting.topologicalSortComponents",
-      "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {
-                  "string": "Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents"}}}],
-          "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "graphResult",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "pairs"},
-                            "function": {"variable": "hydra.tarjan.adjacencyListsToGraph"}}},
-                        "type": null}],
-                    "body": {
-                      "let": {
-                        "bindings": [
-                          {
-                            "name": "g",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "graphResult"},
-                                "function": {"function": {"primitive": "hydra.lib.pairs.first"}}}},
-                            "type": null}],
-                        "body": {
-                          "application": {
-                            "argument": {
-                              "application": {
-                                "argument": {"variable": "g"},
-                                "function": {"variable": "hydra.tarjan.stronglyConnectedComponents"}}},
-                            "function": {
-                              "application": {
-                                "argument": {
-                                  "function": {
-                                    "lambda": {
+                                    "typeApplication": {
                                       "body": {
-                                        "application": {
-                                          "argument": {"variable": "comp"},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "graphResult"},
-                                                  "function": {"function": {"primitive": "hydra.lib.pairs.second"}}}},
-                                              "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                      "domain": null,
-                                      "parameter": "comp"}}},
-                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}}}}},
-                "domain": null,
-                "parameter": "pairs"}}}}},
-      "type": null},
-    {
-      "name": "hydra.sorting.topologicalSortNodes",
-      "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {
-                  "string": "Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes."}}}],
-          "body": {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "encode",
+                                              "term": {
+                                                "typeApplication": {
+                                                  "body": {"variable": "sourceToTargetMapping"},
+                                                  "type": {"variable": "t1"}}}},
+                                            {
+                                              "name": "decode",
+                                              "term": {
+                                                "typeApplication": {
+                                                  "body": {"variable": "targetToSourceMapping"},
+                                                  "type": {"variable": "t1"}}}}],
+                                          "typeName": "hydra.topology.OrderingIsomorphism"}},
+                                      "type": {"variable": "t1"}}}}}}},
+                          "domain": [{"list": {"variable": "t0"}}],
+                          "parameter": "targetOrd"}}},
+                    "domain": [{"list": {"variable": "t0"}}],
+                    "parameter": "sourceOrd"}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+          "type": {
             "function": {
-              "lambda": {
-                "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "let": {
-                                "bindings": [
-                                  {
-                                    "name": "nodesByKey",
-                                    "term": {
-                                      "application": {
-                                        "argument": {
-                                          "application": {
-                                            "argument": {"variable": "nodes"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "pair": {
-                                                          "@first": {
-                                                            "application": {"argument": {"variable": "n"}, "function": {"variable": "getKey"}}},
-                                                          "@second": {"variable": "n"}}},
-                                                      "domain": null,
-                                                      "parameter": "n"}}},
-                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                        "function": {"function": {"primitive": "hydra.lib.maps.fromList"}}}},
-                                    "type": null}],
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "pairs",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "nodes"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "pair": {
-                                                          "@first": {
-                                                            "application": {"argument": {"variable": "n"}, "function": {"variable": "getKey"}}},
-                                                          "@second": {
-                                                            "application": {"argument": {"variable": "n"}, "function": {"variable": "getAdj"}}}}},
-                                                      "domain": null,
-                                                      "parameter": "n"}}},
-                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                        "type": null}],
-                                    "body": {
-                                      "let": {
-                                        "bindings": [
-                                          {
-                                            "name": "comps",
-                                            "term": {
-                                              "application": {
-                                                "argument": {"variable": "pairs"},
-                                                "function": {"variable": "hydra.sorting.topologicalSortComponents"}}},
-                                            "type": null}],
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "t1"},
+                      "function": {"variable": "hydra.topology.OrderingIsomorphism"}}},
+                  "domain": {"list": {"variable": "t0"}}}},
+              "domain": {"list": {"variable": "t0"}}}},
+          "variables": ["t0", "t1"]}]},
+    {
+      "name": "hydra.sorting.findReachableNodes",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "let": {
+                              "bindings": [
+                                {
+                                  "name": "visit",
+                                  "term": {
+                                    "function": {
+                                      "lambda": {
                                         "body": {
-                                          "application": {
-                                            "argument": {"variable": "comps"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "let": {
+                                                  "bindings": [
+                                                    {
+                                                      "name": "toVisit",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "visited"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {"argument": {"variable": "node"}, "function": {"variable": "adj"}}},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.sets.difference"}},
+                                                                  "type": {"variable": "t0"}}}}}}},
+                                                      "type": [
+                                                        {
+                                                          "constraints": null,
+                                                          "type": {"set": {"variable": "t0"}},
+                                                          "variables": []}]}],
+                                                  "body": {
+                                                    "application": {
+                                                      "argument": {
                                                         "application": {
                                                           "argument": {
                                                             "application": {
-                                                              "argument": {"variable": "c"},
+                                                              "argument": {"variable": "toVisit"},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                                  "type": {"variable": "t0"}}}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "visited"},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
                                                                     "function": {
                                                                       "lambda": {
                                                                         "body": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "n"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "v"},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "n"},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.insert"}},
+                                                                                                  "type": {"variable": "t0"}}}}}}},
+                                                                                      "function": {"variable": "visit"}}}}},
+                                                                              "domain": [{"variable": "t0"}],
+                                                                              "parameter": "n"}}},
+                                                                        "domain": [{"set": {"variable": "t0"}}],
+                                                                        "parameter": "v"}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                          "type": {"set": {"variable": "t0"}}}},
+                                                                      "type": {"variable": "t0"}}}}}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "visited"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "toVisit"},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.sets.null"}},
+                                                                      "type": {"variable": "t0"}}}}},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                  "type": {"set": {"variable": "t0"}}}}}}}}}}}},
+                                              "domain": [{"variable": "t0"}],
+                                              "parameter": "node"}}},
+                                        "domain": [{"set": {"variable": "t0"}}],
+                                        "parameter": "visited"}}},
+                                  "type": [
+                                    {
+                                      "constraints": null,
+                                      "type": {
+                                        "function": {
+                                          "codomain": {
+                                            "function": {
+                                              "codomain": {"set": {"variable": "t0"}},
+                                              "domain": {"variable": "t0"}}},
+                                          "domain": {"set": {"variable": "t0"}}}},
+                                      "variables": []}]}],
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "root"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"variable": "root"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.sets.singleton"}},
+                                              "type": {"variable": "t0"}}}}},
+                                      "function": {"variable": "visit"}}}}}}},
+                          "domain": [{"variable": "t0"}],
+                          "parameter": "root"}}},
+                    "domain": [
+                      {
+                        "function": {
+                          "codomain": {"set": {"variable": "t0"}},
+                          "domain": {"variable": "t0"}}}],
+                    "parameter": "adj"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"set": {"variable": "t0"}},
+                  "domain": {"variable": "t0"}}},
+              "domain": {
+                "function": {
+                  "codomain": {"set": {"variable": "t0"}},
+                  "domain": {"variable": "t0"}}}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.sorting.propagateTags",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {
+                          "string": "Given a graph as an adjacency list of edges and a list of explicit tags per node, compute the full set of tags for each node by propagating tags through edges. If there is an edge from n1 to n2 and n2 has tag t, then n1 also has tag t. Note: pairs in the output are not ordered."}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "let": {
+                                  "bindings": [
+                                    {
+                                      "name": "adjMap",
+                                      "term": {
+                                        "application": {
+                                          "argument": {"variable": "edges"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {"variable": "hydra.sorting.adjacencyListToMap"},
+                                                  "type": {"variable": "t0"}}},
+                                              "type": {"variable": "t0"}}}}},
+                                      "type": [
+                                        {
+                                          "constraints": null,
+                                          "type": {
+                                            "map": {"keys": {"variable": "t0"}, "values": {"list": {"variable": "t0"}}}},
+                                          "variables": []}]}],
+                                  "body": {
+                                    "let": {
+                                      "bindings": [
+                                        {
+                                          "name": "tagMap",
+                                          "term": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "nodeTags"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "hydra.sorting.adjacencyListToMap"},
+                                                          "type": {"variable": "t0"}}},
+                                                      "type": {"variable": "t1"}}}}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                      "type": {"variable": "t1"}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.maps.map"}},
+                                                              "type": {"list": {"variable": "t1"}}}},
+                                                          "type": {"set": {"variable": "t1"}}}},
+                                                      "type": {"variable": "t0"}}}}}}},
+                                          "type": [
+                                            {
+                                              "constraints": null,
+                                              "type": {
+                                                "map": {"keys": {"variable": "t0"}, "values": {"set": {"variable": "t1"}}}},
+                                              "variables": []}]}],
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "allNodes",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "nodeTags"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                          "type": {"variable": "t0"}}},
+                                                                      "type": {"list": {"variable": "t1"}}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                          "type": {
+                                                                            "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}},
+                                                                      "type": {"variable": "t0"}}}}}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "edges"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                              "type": {"variable": "t0"}}},
+                                                                          "type": {"list": {"variable": "t0"}}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                              "type": {
+                                                                                "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}},
+                                                                          "type": {"variable": "t0"}}}}}}},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                                  "type": {"variable": "t0"}}}}}}},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                          "type": {"variable": "t0"}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                      "type": {"variable": "t0"}}}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {"list": {"variable": "t0"}},
+                                                  "variables": []}]}],
+                                          "body": {
+                                            "let": {
+                                              "bindings": [
+                                                {
+                                                  "name": "getTagsForNode",
+                                                  "term": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "reachable",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "node"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "adjMap"},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "n"},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                                      "type": {"variable": "t0"}}},
+                                                                                                  "type": {"list": {"variable": "t0"}}}}}}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"function": {"primitive": "hydra.lib.equality.identity"}},
+                                                                                              "type": {"list": {"variable": "t0"}}}},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "typeApplication": {"body": {"list": []}, "type": {"variable": "t0"}}},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                      "type": {"list": {"variable": "t0"}}}},
+                                                                                                  "type": {"list": {"variable": "t0"}}}}}}}}}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                                      "type": {"variable": "t0"}}}}},
+                                                                              "domain": [{"variable": "t0"}],
+                                                                              "parameter": "n"}}},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.sorting.findReachableNodes"},
+                                                                            "type": {"variable": "t0"}}}}}}},
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"set": {"variable": "t0"}},
+                                                                    "variables": []}]}],
+                                                            "body": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "reachable"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                                            "type": {"variable": "t0"}}}}},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "tagMap"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "n"},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                                  "type": {"variable": "t0"}}},
+                                                                                              "type": {"set": {"variable": "t1"}}}}}}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.equality.identity"}},
+                                                                                          "type": {"set": {"variable": "t1"}}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                                                              "type": {"variable": "t1"}}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                  "type": {"set": {"variable": "t1"}}}},
+                                                                                              "type": {"set": {"variable": "t1"}}}}}}}}}},
+                                                                              "domain": [{"variable": "t0"}],
+                                                                              "parameter": "n"}}},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                "type": {"variable": "t0"}}},
+                                                                            "type": {"set": {"variable": "t1"}}}}}}}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.sets.unions"}},
+                                                                    "type": {"variable": "t1"}}}}}}},
+                                                        "domain": [{"variable": "t0"}],
+                                                        "parameter": "node"}}},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "function": {
+                                                          "codomain": {"set": {"variable": "t1"}},
+                                                          "domain": {"variable": "t0"}}},
+                                                      "variables": []}]}],
+                                              "body": {
+                                                "application": {
+                                                  "argument": {"variable": "allNodes"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "function": {
+                                                          "lambda": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "pair": {
+                                                                        "@first": {"variable": "n"},
+                                                                        "@second": {
                                                                           "application": {
-                                                                            "argument": {"variable": "nodesByKey"},
+                                                                            "argument": {"variable": "n"},
+                                                                            "function": {"variable": "getTagsForNode"}}}}},
+                                                                    "type": {"variable": "t0"}}},
+                                                                "type": {"set": {"variable": "t1"}}}},
+                                                            "domain": [{"variable": "t0"}],
+                                                            "parameter": "n"}}},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                              "type": {"variable": "t0"}}},
+                                                          "type": {
+                                                            "pair": {"first": {"variable": "t0"}, "second": {"set": {"variable": "t1"}}}}}}}}}}}}}}}}}},
+                              "domain": [
+                                {
+                                  "list": {
+                                    "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}],
+                              "parameter": "nodeTags"}}},
+                        "domain": [
+                          {
+                            "list": {
+                              "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}],
+                        "parameter": "edges"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [
+            [
+              {"@key": "t0", "@value": {"classes": ["ordering"]}},
+              {"@key": "t1", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "list": {
+                      "pair": {"first": {"variable": "t0"}, "second": {"set": {"variable": "t1"}}}}},
+                  "domain": {
+                    "list": {
+                      "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t1"}}}}}}},
+              "domain": {
+                "list": {
+                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
+          "variables": ["t0", "t1"]}]},
+    {
+      "name": "hydra.sorting.topologicalSort",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Sort a directed acyclic graph (DAG) based on an adjacency list. Yields a list of nontrivial strongly connected components if the graph has cycles, otherwise a simple list."}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "sccs",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "pairs"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.sorting.topologicalSortComponents"},
+                                    "type": {"variable": "t0"}}}}},
+                            "type": [
+                              {
+                                "constraints": null,
+                                "type": {"list": {"list": {"variable": "t0"}}},
+                                "variables": []}]}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "isCycle",
+                                "term": {
+                                  "typeLambda": {
+                                    "body": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "scc"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
+                                                          "type": {"variable": "t1"}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                                      "type": {"variable": "t1"}}}}},
+                                              "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                                          "domain": [{"list": {"variable": "t1"}}],
+                                          "parameter": "scc"}}},
+                                    "parameter": "t1"}},
+                                "type": [
+                                  {
+                                    "constraints": null,
+                                    "type": {
+                                      "function": {
+                                        "codomain": {"literal": {"boolean": {}}},
+                                        "domain": {"list": {"variable": "t1"}}}},
+                                    "variables": ["t1"]}]}],
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "withCycles",
+                                    "term": {
+                                      "application": {
+                                        "argument": {"variable": "sccs"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "typeApplication": {"body": {"variable": "isCycle"}, "type": {"variable": "t0"}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.lists.filter"}},
+                                                "type": {"list": {"variable": "t0"}}}}}}}},
+                                    "type": [
+                                      {
+                                        "constraints": null,
+                                        "type": {"list": {"list": {"variable": "t0"}}},
+                                        "variables": []}]}],
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"either": {"@left": {"variable": "withCycles"}}},
+                                            "type": {"list": {"list": {"variable": "t0"}}}}},
+                                        "type": {"list": {"variable": "t0"}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "either": {
+                                                    "@right": {
+                                                      "application": {
+                                                        "argument": {"variable": "sccs"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                            "type": {"variable": "t0"}}}}}}},
+                                                "type": {"list": {"list": {"variable": "t0"}}}}},
+                                            "type": {"list": {"variable": "t0"}}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "withCycles"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                                    "type": {"list": {"variable": "t0"}}}}}},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                "type": {
+                                                  "either": {
+                                                    "left": {"list": {"list": {"variable": "t0"}}},
+                                                    "right": {"list": {"variable": "t0"}}}}}}}}}}}}}}}}}},
+                    "domain": [
+                      {
+                        "list": {
+                          "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}],
+                    "parameter": "pairs"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "either": {
+                  "left": {"list": {"list": {"variable": "t0"}}},
+                  "right": {"list": {"variable": "t0"}}}},
+              "domain": {
+                "list": {
+                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.sorting.topologicalSortComponents",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Find the strongly connected components (including cycles and isolated vertices) of a graph, in (reverse) topological order, i.e. dependencies before dependents"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "graphResult",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "pairs"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.tarjan.adjacencyListsToGraph"},
+                                    "type": {"variable": "t0"}}}}},
+                            "type": [
+                              {
+                                "constraints": null,
+                                "type": {
+                                  "pair": {
+                                    "first": {
+                                      "map": {
+                                        "keys": {"literal": {"integer": {"int32": {}}}},
+                                        "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                    "second": {
+                                      "function": {
+                                        "codomain": {"variable": "t0"},
+                                        "domain": {"literal": {"integer": {"int32": {}}}}}}}},
+                                "variables": []}]}],
+                        "body": {
+                          "let": {
+                            "bindings": [
+                              {
+                                "name": "g",
+                                "term": {
+                                  "application": {
+                                    "argument": {"variable": "graphResult"},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                            "type": {
+                                              "map": {
+                                                "keys": {"literal": {"integer": {"int32": {}}}},
+                                                "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
+                                        "type": {
+                                          "function": {
+                                            "codomain": {"variable": "t0"},
+                                            "domain": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                "type": [
+                                  {
+                                    "constraints": null,
+                                    "type": {
+                                      "map": {
+                                        "keys": {"literal": {"integer": {"int32": {}}}},
+                                        "values": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                    "variables": []}]}],
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "g"},
+                                    "function": {"variable": "hydra.tarjan.stronglyConnectedComponents"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "application": {
+                                              "argument": {"variable": "comp"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "graphResult"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                              "type": {
+                                                                "map": {
+                                                                  "keys": {"literal": {"integer": {"int32": {}}}},
+                                                                  "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "t0"},
+                                                              "domain": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                          "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                      "type": {"variable": "t0"}}}}}}},
+                                          "domain": [{"list": {"literal": {"integer": {"int32": {}}}}}],
+                                          "parameter": "comp"}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                            "type": {"list": {"literal": {"integer": {"int32": {}}}}}}},
+                                        "type": {"list": {"variable": "t0"}}}}}}}}}}}},
+                    "domain": [
+                      {
+                        "list": {
+                          "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}],
+                    "parameter": "pairs"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {"list": {"list": {"variable": "t0"}}},
+              "domain": {
+                "list": {
+                  "pair": {"first": {"variable": "t0"}, "second": {"list": {"variable": "t0"}}}}}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.sorting.topologicalSortNodes",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {
+                          "string": "Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes."}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "let": {
+                                        "bindings": [
+                                          {
+                                            "name": "nodesByKey",
+                                            "term": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "nodes"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "pair": {
+                                                                          "@first": {
+                                                                            "application": {"argument": {"variable": "n"}, "function": {"variable": "getKey"}}},
+                                                                          "@second": {"variable": "n"}}},
+                                                                      "type": {"variable": "t1"}}},
+                                                                  "type": {"variable": "t0"}}},
+                                                              "domain": [{"variable": "t0"}],
+                                                              "parameter": "n"}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                "type": {"variable": "t0"}}},
+                                                            "type": {"pair": {"first": {"variable": "t1"}, "second": {"variable": "t0"}}}}}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                        "type": {"variable": "t1"}}},
+                                                    "type": {"variable": "t0"}}}}},
+                                            "type": [
+                                              {
+                                                "constraints": null,
+                                                "type": {"map": {"keys": {"variable": "t1"}, "values": {"variable": "t0"}}},
+                                                "variables": []}]}],
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "pairs",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {"variable": "nodes"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "pair": {
+                                                                          "@first": {
+                                                                            "application": {"argument": {"variable": "n"}, "function": {"variable": "getKey"}}},
+                                                                          "@second": {
+                                                                            "application": {"argument": {"variable": "n"}, "function": {"variable": "getAdj"}}}}},
+                                                                      "type": {"variable": "t1"}}},
+                                                                  "type": {"list": {"variable": "t1"}}}},
+                                                              "domain": [{"variable": "t0"}],
+                                                              "parameter": "n"}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                "type": {"variable": "t0"}}},
+                                                            "type": {
+                                                              "pair": {"first": {"variable": "t1"}, "second": {"list": {"variable": "t1"}}}}}}}}}},
+                                                "type": [
+                                                  {
+                                                    "constraints": null,
+                                                    "type": {
+                                                      "list": {
+                                                        "pair": {"first": {"variable": "t1"}, "second": {"list": {"variable": "t1"}}}}},
+                                                    "variables": []}]}],
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
+                                                  {
+                                                    "name": "comps",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "pairs"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"variable": "hydra.sorting.topologicalSortComponents"},
+                                                            "type": {"variable": "t1"}}}}},
+                                                    "type": [
+                                                      {
+                                                        "constraints": null,
+                                                        "type": {"list": {"list": {"variable": "t1"}}},
+                                                        "variables": []}]}],
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "comps"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "c"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
                                                                             "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "k"},
-                                                                                "function": {"function": {"primitive": "hydra.lib.maps.lookup"}}}}}},
-                                                                        "domain": null,
-                                                                        "parameter": "k"}}},
-                                                                  "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}},
-                                                          "function": {"function": {"primitive": "hydra.lib.maybes.cat"}}}},
-                                                      "domain": null,
-                                                      "parameter": "c"}}},
-                                                "function": {"function": {"primitive": "hydra.lib.lists.map"}}}}}}}}}}}},
-                            "domain": null,
-                            "parameter": "nodes"}}},
-                      "domain": null,
-                      "parameter": "getAdj"}}},
-                "domain": null,
-                "parameter": "getKey"}}}}},
-      "type": null}],
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "nodesByKey"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "k"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                                                                "type": {"variable": "t1"}}},
+                                                                                            "type": {"variable": "t0"}}}}}}},
+                                                                                "domain": [{"variable": "t1"}],
+                                                                                "parameter": "k"}}},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                  "type": {"variable": "t1"}}},
+                                                                              "type": {"maybe": {"variable": "t0"}}}}}}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                                                      "type": {"variable": "t0"}}}}},
+                                                              "domain": [{"list": {"variable": "t1"}}],
+                                                              "parameter": "c"}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                "type": {"list": {"variable": "t1"}}}},
+                                                            "type": {"list": {"variable": "t0"}}}}}}}}}}}}}},
+                                    "domain": [{"list": {"variable": "t0"}}],
+                                    "parameter": "nodes"}}},
+                              "domain": [
+                                {
+                                  "function": {
+                                    "codomain": {"list": {"variable": "t1"}},
+                                    "domain": {"variable": "t0"}}}],
+                              "parameter": "getAdj"}}},
+                        "domain": [
+                          {
+                            "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}}],
+                        "parameter": "getKey"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t1", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"list": {"list": {"variable": "t0"}}},
+                      "domain": {"list": {"variable": "t0"}}}},
+                  "domain": {
+                    "function": {
+                      "codomain": {"list": {"variable": "t1"}},
+                      "domain": {"variable": "t0"}}}}},
+              "domain": {
+                "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}}}},
+          "variables": ["t0", "t1"]}]}],
   "namespace": "hydra.sorting",
   "termDependencies": ["hydra.tarjan"],
   "typeDependencies": [

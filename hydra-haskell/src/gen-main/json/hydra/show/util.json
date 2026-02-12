@@ -26,7 +26,7 @@
                                   "function": {
                                     "lambda": {
                                       "body": {"literal": {"string": "lower_snake_case"}},
-                                      "domain": null,
+                                      "domain": [{"unit": {}}],
                                       "parameter": "_"}}}},
                               {
                                 "name": "upperSnake",
@@ -34,7 +34,7 @@
                                   "function": {
                                     "lambda": {
                                       "body": {"literal": {"string": "UPPER_SNAKE_CASE"}},
-                                      "domain": null,
+                                      "domain": [{"unit": {}}],
                                       "parameter": "_"}}}},
                               {
                                 "name": "camel",
@@ -42,7 +42,7 @@
                                   "function": {
                                     "lambda": {
                                       "body": {"literal": {"string": "camelCase"}},
-                                      "domain": null,
+                                      "domain": [{"unit": {}}],
                                       "parameter": "_"}}}},
                               {
                                 "name": "pascal",
@@ -50,13 +50,20 @@
                                   "function": {
                                     "lambda": {
                                       "body": {"literal": {"string": "PascalCase"}},
-                                      "domain": null,
+                                      "domain": [{"unit": {}}],
                                       "parameter": "_"}}}}],
                             "default": null,
                             "typeName": "hydra.util.CaseConvention"}}}}}},
-                "domain": null,
+                "domain": [{"variable": "hydra.util.CaseConvention"}],
                 "parameter": "c"}}}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"string": {}}},
+              "domain": {"variable": "hydra.util.CaseConvention"}}},
+          "variables": []}]}],
   "namespace": "hydra.show.util",
   "termDependencies": [],
   "typeDependencies": [

@@ -20,7 +20,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "annotated"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "application",
@@ -28,7 +28,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "application"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "either",
@@ -36,7 +36,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "either"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "function",
@@ -44,7 +44,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "function"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "let",
@@ -52,7 +52,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "let"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "list",
@@ -60,7 +60,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "list"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "literal",
@@ -68,7 +68,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "literal"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "map",
@@ -76,7 +76,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "map"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "maybe",
@@ -84,7 +84,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "maybe"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "pair",
@@ -92,7 +92,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "pair"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "record",
@@ -100,7 +100,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "record"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "set",
@@ -108,7 +108,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "set"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "typeLambda",
@@ -116,7 +116,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "typeLambda"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "typeApplication",
@@ -124,7 +124,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "typeApplication"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "union",
@@ -132,7 +132,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "union"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "unit",
@@ -140,7 +140,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "unit"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "variable",
@@ -148,7 +148,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "variable"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "wrap",
@@ -156,11 +156,18 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "wrap"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.variants.TermVariant"}}}}}},
-      "type": null},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"string": {}}},
+              "domain": {"variable": "hydra.variants.TermVariant"}}},
+          "variables": []}]},
     {
       "name": "hydra.show.meta.typeVariant",
       "term": {
@@ -180,7 +187,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "annotated"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "application",
@@ -188,7 +195,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "application"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "either",
@@ -196,7 +203,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "either"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "forall",
@@ -204,7 +211,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "forall"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "function",
@@ -212,7 +219,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "function"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "list",
@@ -220,7 +227,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "list"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "literal",
@@ -228,7 +235,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "literal"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "map",
@@ -236,7 +243,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "map"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "maybe",
@@ -244,7 +251,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "maybe"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "pair",
@@ -252,7 +259,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "pair"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "record",
@@ -260,7 +267,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "record"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "set",
@@ -268,7 +275,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "set"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "union",
@@ -276,7 +283,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "union"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "unit",
@@ -284,7 +291,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "unit"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "variable",
@@ -292,7 +299,7 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "variable"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}},
                     {
                       "name": "wrap",
@@ -300,11 +307,18 @@
                         "function": {
                           "lambda": {
                             "body": {"literal": {"string": "wrap"}},
-                            "domain": null,
+                            "domain": [{"unit": {}}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.variants.TypeVariant"}}}}}},
-      "type": null}],
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"string": {}}},
+              "domain": {"variable": "hydra.variants.TypeVariant"}}},
+          "variables": []}]}],
   "namespace": "hydra.show.meta",
   "termDependencies": [],
   "typeDependencies": [
