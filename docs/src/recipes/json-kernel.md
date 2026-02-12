@@ -1,66 +1,86 @@
-# Exporting and Verifying the Hydra Kernel as JSON
+# Exporting and Verifying Hydra Modules as JSON
 
-This recipe explains how to export the Hydra kernel to JSON and verify the export is consistent.
+This recipe explains how to export Hydra modules to JSON and verify the export is consistent.
 
 ## Background
 
-Hydra's kernel (types, modules, and test data) is defined in Haskell as the source of truth. To make this data available to other implementations (Python, Java, etc.) without embedding Haskell-specific code, the kernel is exported to JSON format.
+Hydra's kernel (types, modules, and test data) is defined in Haskell as the source of truth. To make this data available to other implementations (Python, Java, etc.) without embedding Haskell-specific code, the modules are exported to JSON format.
 
 The JSON export provides a language-agnostic representation of:
 - All kernel modules (types, terms, dependencies)
 - Module metadata (namespace, descriptions)
-- Type definitions and term bindings
+- Type definitions and term bindings with inferred types
+
+Type inference is performed on modules before export, so the JSON files contain type-annotated terms (see [issue #253](https://github.com/CategoricalData/hydra/issues/253)). This eliminates the need for downstream consumers to run inference themselves.
 
 This supports [issue #243](https://github.com/CategoricalData/hydra/issues/243) - enabling introspection and testing in non-Haskell implementations.
 
 ## Generated Files
 
-JSON files are generated to `hydra-haskell/src/gen-main/json/`:
+There are three sets of JSON exports:
 
+**Kernel modules** (`hydra-haskell/src/gen-main/json/`):
 ```
 src/gen-main/json/
 ├── hydra/
 │   ├── core.json           # Core types and terms
 │   ├── module.json         # Module type definitions
 │   ├── graph.json          # Graph structures
-│   ├── adapt/
-│   │   ├── literals.json
-│   │   ├── modules.json
-│   │   └── ...
-│   ├── decode/
-│   │   ├── core.json
-│   │   └── ...
 │   └── ...
+```
+
+**Main modules** (also `hydra-haskell/src/gen-main/json/`):
+Includes all kernel modules plus additional main modules (encoders, decoders, JSON support, etc.).
+
+**Test modules** (`hydra-haskell/src/gen-test/json/`):
+```
+src/gen-test/json/
+├── hydra/
+│   └── test/
+│       ├── ...
 ```
 
 Each file contains a single module encoded as JSON, using Hydra's type-directed JSON encoding.
 
 ## Quick Commands
 
-### Export kernel to JSON
+### Export kernel modules to JSON
 
 ```bash
 cd hydra-haskell
 ./bin/update-json-kernel.sh
 ```
 
-### Verify JSON consistency
+### Export all main modules to JSON
+
+```bash
+cd hydra-haskell
+./bin/update-json-main.sh
+```
+
+### Export test modules to JSON
+
+```bash
+cd hydra-haskell
+./bin/update-json-test.sh
+```
+
+### Verify JSON consistency (kernel)
 
 ```bash
 cd hydra-haskell
 ./bin/verify-json-kernel.sh
 ```
 
-Both scripts build the necessary executables automatically.
+All scripts build the necessary executables automatically.
 
 ## When to Run
 
-### Update JSON (update-json-kernel)
+### Update JSON
 
-Run after making changes to:
-- Kernel type definitions (`Hydra.Sources.*`)
-- Module structure or metadata
-- Term encodings or bindings
+- **update-json-kernel**: Run after changes to kernel type definitions (`Hydra.Sources.*`), module structure, or term encodings
+- **update-json-main**: Run after changes to any main modules (kernel + encoders, decoders, JSON support, etc.)
+- **update-json-test**: Run after changes to test modules (`Hydra.Sources.Test.*`)
 
 ### Verify JSON (verify-json-kernel)
 
@@ -81,24 +101,25 @@ This is especially useful after:
 
 ```bash
 cd hydra-haskell
-stack build hydra:update-json-kernel hydra:verify-json-kernel
+stack build hydra:update-json-kernel hydra:update-json-main hydra:update-json-test hydra:verify-json-kernel
 ```
 
-### Running update
+### Running update (kernel)
 
 ```bash
 stack exec update-json-kernel
 ```
 
-Output:
+### Running update (main)
+
+```bash
+stack exec update-json-main
 ```
-=== Generate Hydra kernel JSON ===
 
-Generating 103 kernel modules to JSON...
+### Running update (test)
 
-=== Done! ===
-
-Generated files are in: src/gen-main/json/
+```bash
+stack exec update-json-test
 ```
 
 ### Running verification
@@ -109,23 +130,8 @@ stack exec verify-json-kernel
 
 Output (success):
 ```
-=== Verify JSON Kernel ===
-
-Building graph from kernel modules...
-Building schema map for JSON decoding...
-  Schema map has 190 type definitions
-Using TypeVariable for Module type (decoder will resolve it).
-Counting modules...
-Verifying 103 kernel modules...
-
-  Processing: hydra.accessors
-    JSON parsed successfully
-    JSON decoded to Term
-  ✓ hydra.accessors
-  ...
-
 === SUCCESS ===
-All 103 modules verified successfully!
+All 112 modules verified successfully!
 ```
 
 Output (failure):
@@ -196,15 +202,20 @@ Verification builds the full module graph and schema, which takes time. This is 
 
 | File | Purpose |
 |------|---------|
-| `src/exec/update-json-kernel/Main.hs` | Executable to generate JSON files |
+| `src/exec/update-json-kernel/Main.hs` | Executable to generate kernel module JSON files |
+| `src/exec/update-json-main/Main.hs` | Executable to generate main module JSON files |
+| `src/exec/update-json-test/Main.hs` | Executable to generate test module JSON files |
 | `src/exec/verify-json-kernel/Main.hs` | Executable to verify JSON consistency |
-| `bin/update-json-kernel.sh` | Wrapper script for generation |
+| `bin/update-json-kernel.sh` | Wrapper script for kernel generation |
+| `bin/update-json-main.sh` | Wrapper script for main generation |
+| `bin/update-json-test.sh` | Wrapper script for test generation |
 | `bin/verify-json-kernel.sh` | Wrapper script for verification |
-| `src/gen-main/json/` | Generated JSON output directory |
+| `src/gen-main/json/` | Generated JSON output (kernel + main) |
+| `src/gen-test/json/` | Generated JSON output (test) |
 
 ### Dependencies
 
-- **update-json-kernel**: Uses `Hydra.Generation.writeModulesJson`
+- **update-json-kernel/main/test**: Uses `Hydra.Generation.writeModulesJson` with type inference
 - **verify-json-kernel**: Uses `Hydra.Json.Decode.fromJson` with type-directed decoding
 
 ### JSON encoding format
