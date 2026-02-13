@@ -5,15 +5,15 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class WithStatement implements Serializable, Comparable<WithStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.WithStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.WithStatement");
   
-  public static final hydra.core.Name FIELD_NAME_ASYNC = new hydra.core.Name("async");
+  public static final hydra.core.Name ASYNC = new hydra.core.Name("async");
   
-  public static final hydra.core.Name FIELD_NAME_ITEMS = new hydra.core.Name("items");
+  public static final hydra.core.Name ITEMS = new hydra.core.Name("items");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_COMMENT = new hydra.core.Name("typeComment");
+  public static final hydra.core.Name TYPE_COMMENT = new hydra.core.Name("typeComment");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   public final Boolean async;
   

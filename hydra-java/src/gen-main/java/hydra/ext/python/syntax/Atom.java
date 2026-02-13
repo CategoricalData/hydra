@@ -5,39 +5,39 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class Atom implements Serializable, Comparable<Atom> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Atom");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Atom");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_TRUE = new hydra.core.Name("true");
+  public static final hydra.core.Name TRUE = new hydra.core.Name("true");
   
-  public static final hydra.core.Name FIELD_NAME_FALSE = new hydra.core.Name("false");
+  public static final hydra.core.Name FALSE = new hydra.core.Name("false");
   
-  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  public static final hydra.core.Name NONE = new hydra.core.Name("none");
   
-  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  public static final hydra.core.Name STRING = new hydra.core.Name("string");
   
-  public static final hydra.core.Name FIELD_NAME_NUMBER = new hydra.core.Name("number");
+  public static final hydra.core.Name NUMBER = new hydra.core.Name("number");
   
-  public static final hydra.core.Name FIELD_NAME_TUPLE = new hydra.core.Name("tuple");
+  public static final hydra.core.Name TUPLE = new hydra.core.Name("tuple");
   
-  public static final hydra.core.Name FIELD_NAME_GROUP = new hydra.core.Name("group");
+  public static final hydra.core.Name GROUP = new hydra.core.Name("group");
   
-  public static final hydra.core.Name FIELD_NAME_GENEXP = new hydra.core.Name("genexp");
+  public static final hydra.core.Name GENEXP = new hydra.core.Name("genexp");
   
-  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  public static final hydra.core.Name LIST = new hydra.core.Name("list");
   
-  public static final hydra.core.Name FIELD_NAME_LISTCOMP = new hydra.core.Name("listcomp");
+  public static final hydra.core.Name LISTCOMP = new hydra.core.Name("listcomp");
   
-  public static final hydra.core.Name FIELD_NAME_DICT = new hydra.core.Name("dict");
+  public static final hydra.core.Name DICT = new hydra.core.Name("dict");
   
-  public static final hydra.core.Name FIELD_NAME_SET = new hydra.core.Name("set");
+  public static final hydra.core.Name SET = new hydra.core.Name("set");
   
-  public static final hydra.core.Name FIELD_NAME_DICTCOMP = new hydra.core.Name("dictcomp");
+  public static final hydra.core.Name DICTCOMP = new hydra.core.Name("dictcomp");
   
-  public static final hydra.core.Name FIELD_NAME_SETCOMP = new hydra.core.Name("setcomp");
+  public static final hydra.core.Name SETCOMP = new hydra.core.Name("setcomp");
   
-  public static final hydra.core.Name FIELD_NAME_ELLIPSIS = new hydra.core.Name("ellipsis");
+  public static final hydra.core.Name ELLIPSIS = new hydra.core.Name("ellipsis");
   
   private Atom () {
   

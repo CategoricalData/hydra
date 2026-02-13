@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class ShiftOp implements Serializable, Comparable<ShiftOp> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ShiftOp");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ShiftOp");
   
-  public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
+  public static final hydra.core.Name LEFT = new hydra.core.Name("left");
   
-  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
+  public static final hydra.core.Name RIGHT = new hydra.core.Name("right");
   
   private ShiftOp () {
   

@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class Number_ implements Serializable, Comparable<Number_> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Number");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Number");
   
-  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  public static final hydra.core.Name INTEGER = new hydra.core.Name("integer");
   
-  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  public static final hydra.core.Name FLOAT = new hydra.core.Name("float");
   
   private Number_ () {
   

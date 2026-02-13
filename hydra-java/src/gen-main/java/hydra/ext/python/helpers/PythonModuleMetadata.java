@@ -8,51 +8,51 @@ import java.io.Serializable;
  * Temporary metadata used to create the header section of a Python file
  */
 public class PythonModuleMetadata implements Serializable, Comparable<PythonModuleMetadata> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.helpers.PythonModuleMetadata");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.helpers.PythonModuleMetadata");
   
-  public static final hydra.core.Name FIELD_NAME_NAMESPACES = new hydra.core.Name("namespaces");
+  public static final hydra.core.Name NAMESPACES = new hydra.core.Name("namespaces");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_VARIABLES = new hydra.core.Name("typeVariables");
+  public static final hydra.core.Name TYPE_VARIABLES = new hydra.core.Name("typeVariables");
   
-  public static final hydra.core.Name FIELD_NAME_USES_ANNOTATED = new hydra.core.Name("usesAnnotated");
+  public static final hydra.core.Name USES_ANNOTATED = new hydra.core.Name("usesAnnotated");
   
-  public static final hydra.core.Name FIELD_NAME_USES_CALLABLE = new hydra.core.Name("usesCallable");
+  public static final hydra.core.Name USES_CALLABLE = new hydra.core.Name("usesCallable");
   
-  public static final hydra.core.Name FIELD_NAME_USES_CAST = new hydra.core.Name("usesCast");
+  public static final hydra.core.Name USES_CAST = new hydra.core.Name("usesCast");
   
-  public static final hydra.core.Name FIELD_NAME_USES_LRU_CACHE = new hydra.core.Name("usesLruCache");
+  public static final hydra.core.Name USES_LRU_CACHE = new hydra.core.Name("usesLruCache");
   
-  public static final hydra.core.Name FIELD_NAME_USES_TYPE_ALIAS = new hydra.core.Name("usesTypeAlias");
+  public static final hydra.core.Name USES_TYPE_ALIAS = new hydra.core.Name("usesTypeAlias");
   
-  public static final hydra.core.Name FIELD_NAME_USES_DATACLASS = new hydra.core.Name("usesDataclass");
+  public static final hydra.core.Name USES_DATACLASS = new hydra.core.Name("usesDataclass");
   
-  public static final hydra.core.Name FIELD_NAME_USES_DECIMAL = new hydra.core.Name("usesDecimal");
+  public static final hydra.core.Name USES_DECIMAL = new hydra.core.Name("usesDecimal");
   
-  public static final hydra.core.Name FIELD_NAME_USES_EITHER = new hydra.core.Name("usesEither");
+  public static final hydra.core.Name USES_EITHER = new hydra.core.Name("usesEither");
   
-  public static final hydra.core.Name FIELD_NAME_USES_ENUM = new hydra.core.Name("usesEnum");
+  public static final hydra.core.Name USES_ENUM = new hydra.core.Name("usesEnum");
   
-  public static final hydra.core.Name FIELD_NAME_USES_FROZEN_DICT = new hydra.core.Name("usesFrozenDict");
+  public static final hydra.core.Name USES_FROZEN_DICT = new hydra.core.Name("usesFrozenDict");
   
-  public static final hydra.core.Name FIELD_NAME_USES_FROZEN_LIST = new hydra.core.Name("usesFrozenList");
+  public static final hydra.core.Name USES_FROZEN_LIST = new hydra.core.Name("usesFrozenList");
   
-  public static final hydra.core.Name FIELD_NAME_USES_GENERIC = new hydra.core.Name("usesGeneric");
+  public static final hydra.core.Name USES_GENERIC = new hydra.core.Name("usesGeneric");
   
-  public static final hydra.core.Name FIELD_NAME_USES_JUST = new hydra.core.Name("usesJust");
+  public static final hydra.core.Name USES_JUST = new hydra.core.Name("usesJust");
   
-  public static final hydra.core.Name FIELD_NAME_USES_LEFT = new hydra.core.Name("usesLeft");
+  public static final hydra.core.Name USES_LEFT = new hydra.core.Name("usesLeft");
   
-  public static final hydra.core.Name FIELD_NAME_USES_MAYBE = new hydra.core.Name("usesMaybe");
+  public static final hydra.core.Name USES_MAYBE = new hydra.core.Name("usesMaybe");
   
-  public static final hydra.core.Name FIELD_NAME_USES_NAME = new hydra.core.Name("usesName");
+  public static final hydra.core.Name USES_NAME = new hydra.core.Name("usesName");
   
-  public static final hydra.core.Name FIELD_NAME_USES_NODE = new hydra.core.Name("usesNode");
+  public static final hydra.core.Name USES_NODE = new hydra.core.Name("usesNode");
   
-  public static final hydra.core.Name FIELD_NAME_USES_NOTHING = new hydra.core.Name("usesNothing");
+  public static final hydra.core.Name USES_NOTHING = new hydra.core.Name("usesNothing");
   
-  public static final hydra.core.Name FIELD_NAME_USES_RIGHT = new hydra.core.Name("usesRight");
+  public static final hydra.core.Name USES_RIGHT = new hydra.core.Name("usesRight");
   
-  public static final hydra.core.Name FIELD_NAME_USES_TYPE_VAR = new hydra.core.Name("usesTypeVar");
+  public static final hydra.core.Name USES_TYPE_VAR = new hydra.core.Name("usesTypeVar");
   
   /**
    * Namespace mapping for imports

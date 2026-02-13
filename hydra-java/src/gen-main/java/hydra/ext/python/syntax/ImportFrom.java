@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class ImportFrom implements Serializable, Comparable<ImportFrom> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ImportFrom");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ImportFrom");
   
-  public static final hydra.core.Name FIELD_NAME_PREFIXES = new hydra.core.Name("prefixes");
+  public static final hydra.core.Name PREFIXES = new hydra.core.Name("prefixes");
   
-  public static final hydra.core.Name FIELD_NAME_DOTTED_NAME = new hydra.core.Name("dottedName");
+  public static final hydra.core.Name DOTTED_NAME = new hydra.core.Name("dottedName");
   
-  public static final hydra.core.Name FIELD_NAME_TARGETS = new hydra.core.Name("targets");
+  public static final hydra.core.Name TARGETS = new hydra.core.Name("targets");
   
   public final java.util.List<hydra.ext.python.syntax.RelativeImportPrefix> prefixes;
   

@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class ParamNoDefaultStarAnnotation implements Serializable, Comparable<ParamNoDefaultStarAnnotation> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ParamNoDefaultStarAnnotation");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ParamNoDefaultStarAnnotation");
   
-  public static final hydra.core.Name FIELD_NAME_PARAM_STAR_ANNOTATION = new hydra.core.Name("paramStarAnnotation");
+  public static final hydra.core.Name PARAM_STAR_ANNOTATION = new hydra.core.Name("paramStarAnnotation");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_COMMENT = new hydra.core.Name("typeComment");
+  public static final hydra.core.Name TYPE_COMMENT = new hydra.core.Name("typeComment");
   
   public final hydra.ext.python.syntax.ParamStarAnnotation paramStarAnnotation;
   

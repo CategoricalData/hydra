@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class KeyValuePattern implements Serializable, Comparable<KeyValuePattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.KeyValuePattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.KeyValuePattern");
   
-  public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
+  public static final hydra.core.Name KEY = new hydra.core.Name("key");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final hydra.ext.python.syntax.LiteralExpressionOrAttribute key;
   

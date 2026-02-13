@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class Expression implements Serializable, Comparable<Expression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Expression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Expression");
   
-  public static final hydra.core.Name FIELD_NAME_CONDITIONAL = new hydra.core.Name("conditional");
+  public static final hydra.core.Name CONDITIONAL = new hydra.core.Name("conditional");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
-  public static final hydra.core.Name FIELD_NAME_LAMBDA = new hydra.core.Name("lambda");
+  public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
   
   private Expression () {
   

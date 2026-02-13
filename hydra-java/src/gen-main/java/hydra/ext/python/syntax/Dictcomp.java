@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class Dictcomp implements Serializable, Comparable<Dictcomp> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Dictcomp");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Dictcomp");
   
-  public static final hydra.core.Name FIELD_NAME_KVPAIR = new hydra.core.Name("kvpair");
+  public static final hydra.core.Name KVPAIR = new hydra.core.Name("kvpair");
   
-  public static final hydra.core.Name FIELD_NAME_FOR_IF_CLAUSES = new hydra.core.Name("forIfClauses");
+  public static final hydra.core.Name FOR_IF_CLAUSES = new hydra.core.Name("forIfClauses");
   
   public final hydra.ext.python.syntax.Kvpair kvpair;
   

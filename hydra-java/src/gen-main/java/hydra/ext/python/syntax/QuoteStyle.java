@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class QuoteStyle implements Serializable, Comparable<QuoteStyle> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.QuoteStyle");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.QuoteStyle");
   
-  public static final hydra.core.Name FIELD_NAME_SINGLE = new hydra.core.Name("single");
+  public static final hydra.core.Name SINGLE = new hydra.core.Name("single");
   
-  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  public static final hydra.core.Name DOUBLE = new hydra.core.Name("double");
   
-  public static final hydra.core.Name FIELD_NAME_TRIPLE = new hydra.core.Name("triple");
+  public static final hydra.core.Name TRIPLE = new hydra.core.Name("triple");
   
   private QuoteStyle () {
   

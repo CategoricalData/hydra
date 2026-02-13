@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class AwaitPrimary implements Serializable, Comparable<AwaitPrimary> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.AwaitPrimary");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.AwaitPrimary");
   
-  public static final hydra.core.Name FIELD_NAME_AWAIT = new hydra.core.Name("await");
+  public static final hydra.core.Name AWAIT = new hydra.core.Name("await");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
+  public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
   
   public final Boolean await;
   

@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class DelTarget implements Serializable, Comparable<DelTarget> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.DelTarget");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.DelTarget");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY_AND_NAME = new hydra.core.Name("primaryAndName");
+  public static final hydra.core.Name PRIMARY_AND_NAME = new hydra.core.Name("primaryAndName");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY_AND_SLICES = new hydra.core.Name("primaryAndSlices");
+  public static final hydra.core.Name PRIMARY_AND_SLICES = new hydra.core.Name("primaryAndSlices");
   
-  public static final hydra.core.Name FIELD_NAME_DEL_T_ATOM = new hydra.core.Name("delTAtom");
+  public static final hydra.core.Name DEL_T_ATOM = new hydra.core.Name("delTAtom");
   
   private DelTarget () {
   

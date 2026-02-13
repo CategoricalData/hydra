@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class LambdaParamWithDefault implements Serializable, Comparable<LambdaParamWithDefault> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.LambdaParamWithDefault");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.LambdaParamWithDefault");
   
-  public static final hydra.core.Name FIELD_NAME_PARAM = new hydra.core.Name("param");
+  public static final hydra.core.Name PARAM = new hydra.core.Name("param");
   
-  public static final hydra.core.Name FIELD_NAME_DEFAULT = new hydra.core.Name("default");
+  public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
   
   public final hydra.ext.python.syntax.Name param;
   

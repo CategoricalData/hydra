@@ -38,11 +38,11 @@ public class Compare extends PrimitiveFunction {
             // This is a simplified implementation; a full implementation would need proper Ord instance
             int cmp = compareTerms(args.get(0), args.get(1));
             if (cmp < 0) {
-                return Flows.pure(Terms.injectUnit(Comparison.TYPE_NAME, Comparison.FIELD_NAME_LESS_THAN));
+                return Flows.pure(Terms.injectUnit(Comparison.TYPE_, Comparison.LESS_THAN));
             } else if (cmp > 0) {
-                return Flows.pure(Terms.injectUnit(Comparison.TYPE_NAME, Comparison.FIELD_NAME_GREATER_THAN));
+                return Flows.pure(Terms.injectUnit(Comparison.TYPE_, Comparison.GREATER_THAN));
             } else {
-                return Flows.pure(Terms.injectUnit(Comparison.TYPE_NAME, Comparison.FIELD_NAME_EQUAL_TO));
+                return Flows.pure(Terms.injectUnit(Comparison.TYPE_, Comparison.EQUAL_TO));
             }
         };
     }

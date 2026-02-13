@@ -5,23 +5,23 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class CompoundStatement implements Serializable, Comparable<CompoundStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.CompoundStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.CompoundStatement");
   
-  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
   
-  public static final hydra.core.Name FIELD_NAME_IF = new hydra.core.Name("if");
+  public static final hydra.core.Name IF = new hydra.core.Name("if");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS_DEF = new hydra.core.Name("classDef");
+  public static final hydra.core.Name CLASS_DEF = new hydra.core.Name("classDef");
   
-  public static final hydra.core.Name FIELD_NAME_WITH = new hydra.core.Name("with");
+  public static final hydra.core.Name WITH = new hydra.core.Name("with");
   
-  public static final hydra.core.Name FIELD_NAME_FOR = new hydra.core.Name("for");
+  public static final hydra.core.Name FOR = new hydra.core.Name("for");
   
-  public static final hydra.core.Name FIELD_NAME_TRY = new hydra.core.Name("try");
+  public static final hydra.core.Name TRY = new hydra.core.Name("try");
   
-  public static final hydra.core.Name FIELD_NAME_WHILE = new hydra.core.Name("while");
+  public static final hydra.core.Name WHILE = new hydra.core.Name("while");
   
-  public static final hydra.core.Name FIELD_NAME_MATCH = new hydra.core.Name("match");
+  public static final hydra.core.Name MATCH = new hydra.core.Name("match");
   
   private CompoundStatement () {
   

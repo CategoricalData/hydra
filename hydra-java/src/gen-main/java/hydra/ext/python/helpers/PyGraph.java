@@ -8,11 +8,11 @@ import java.io.Serializable;
  * Combined graph and metadata state for Python code generation
  */
 public class PyGraph implements Serializable, Comparable<PyGraph> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.helpers.PyGraph");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.helpers.PyGraph");
   
-  public static final hydra.core.Name FIELD_NAME_GRAPH = new hydra.core.Name("graph");
+  public static final hydra.core.Name GRAPH = new hydra.core.Name("graph");
   
-  public static final hydra.core.Name FIELD_NAME_METADATA = new hydra.core.Name("metadata");
+  public static final hydra.core.Name METADATA = new hydra.core.Name("metadata");
   
   /**
    * The Hydra graph being processed

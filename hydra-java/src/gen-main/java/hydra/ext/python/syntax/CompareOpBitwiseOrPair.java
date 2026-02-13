@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class CompareOpBitwiseOrPair implements Serializable, Comparable<CompareOpBitwiseOrPair> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.CompareOpBitwiseOrPair");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.CompareOpBitwiseOrPair");
   
-  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  public static final hydra.core.Name OPERATOR = new hydra.core.Name("operator");
   
-  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
+  public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
   
   public final hydra.ext.python.syntax.CompareOp operator;
   

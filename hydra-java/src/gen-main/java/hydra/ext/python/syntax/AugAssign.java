@@ -5,33 +5,33 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.AugAssign");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.AugAssign");
   
-  public static final hydra.core.Name FIELD_NAME_PLUS_EQUAL = new hydra.core.Name("plusEqual");
+  public static final hydra.core.Name PLUS_EQUAL = new hydra.core.Name("plusEqual");
   
-  public static final hydra.core.Name FIELD_NAME_MINUS_EQUAL = new hydra.core.Name("minusEqual");
+  public static final hydra.core.Name MINUS_EQUAL = new hydra.core.Name("minusEqual");
   
-  public static final hydra.core.Name FIELD_NAME_TIMES_EQUAL = new hydra.core.Name("timesEqual");
+  public static final hydra.core.Name TIMES_EQUAL = new hydra.core.Name("timesEqual");
   
-  public static final hydra.core.Name FIELD_NAME_AT_EQUAL = new hydra.core.Name("atEqual");
+  public static final hydra.core.Name AT_EQUAL = new hydra.core.Name("atEqual");
   
-  public static final hydra.core.Name FIELD_NAME_SLASH_EQUAL = new hydra.core.Name("slashEqual");
+  public static final hydra.core.Name SLASH_EQUAL = new hydra.core.Name("slashEqual");
   
-  public static final hydra.core.Name FIELD_NAME_PERCENT_EQUAL = new hydra.core.Name("percentEqual");
+  public static final hydra.core.Name PERCENT_EQUAL = new hydra.core.Name("percentEqual");
   
-  public static final hydra.core.Name FIELD_NAME_AMPERSAND_EQUAL = new hydra.core.Name("ampersandEqual");
+  public static final hydra.core.Name AMPERSAND_EQUAL = new hydra.core.Name("ampersandEqual");
   
-  public static final hydra.core.Name FIELD_NAME_BAR_EQUAL = new hydra.core.Name("barEqual");
+  public static final hydra.core.Name BAR_EQUAL = new hydra.core.Name("barEqual");
   
-  public static final hydra.core.Name FIELD_NAME_CARET_EQUAL = new hydra.core.Name("caretEqual");
+  public static final hydra.core.Name CARET_EQUAL = new hydra.core.Name("caretEqual");
   
-  public static final hydra.core.Name FIELD_NAME_LEFT_SHIFT_EQUAL = new hydra.core.Name("leftShiftEqual");
+  public static final hydra.core.Name LEFT_SHIFT_EQUAL = new hydra.core.Name("leftShiftEqual");
   
-  public static final hydra.core.Name FIELD_NAME_RIGHT_SHIFT_EQUAL = new hydra.core.Name("rightShiftEqual");
+  public static final hydra.core.Name RIGHT_SHIFT_EQUAL = new hydra.core.Name("rightShiftEqual");
   
-  public static final hydra.core.Name FIELD_NAME_STAR_STAR_EQUAL = new hydra.core.Name("starStarEqual");
+  public static final hydra.core.Name STAR_STAR_EQUAL = new hydra.core.Name("starStarEqual");
   
-  public static final hydra.core.Name FIELD_NAME_DOUBLE_SLASH_EQUAL = new hydra.core.Name("doubleSlashEqual");
+  public static final hydra.core.Name DOUBLE_SLASH_EQUAL = new hydra.core.Name("doubleSlashEqual");
   
   private AugAssign () {
   

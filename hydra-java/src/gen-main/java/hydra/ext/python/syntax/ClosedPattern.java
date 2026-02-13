@@ -5,23 +5,23 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class ClosedPattern implements Serializable, Comparable<ClosedPattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ClosedPattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ClosedPattern");
   
-  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  public static final hydra.core.Name LITERAL = new hydra.core.Name("literal");
   
-  public static final hydra.core.Name FIELD_NAME_CAPTURE = new hydra.core.Name("capture");
+  public static final hydra.core.Name CAPTURE = new hydra.core.Name("capture");
   
-  public static final hydra.core.Name FIELD_NAME_WILDCARD = new hydra.core.Name("wildcard");
+  public static final hydra.core.Name WILDCARD = new hydra.core.Name("wildcard");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public static final hydra.core.Name FIELD_NAME_GROUP = new hydra.core.Name("group");
+  public static final hydra.core.Name GROUP = new hydra.core.Name("group");
   
-  public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
+  public static final hydra.core.Name SEQUENCE = new hydra.core.Name("sequence");
   
-  public static final hydra.core.Name FIELD_NAME_MAPPING = new hydra.core.Name("mapping");
+  public static final hydra.core.Name MAPPING = new hydra.core.Name("mapping");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  public static final hydra.core.Name CLASS = new hydra.core.Name("class");
   
   private ClosedPattern () {
   

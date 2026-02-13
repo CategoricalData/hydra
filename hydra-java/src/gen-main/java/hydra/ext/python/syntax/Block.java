@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class Block implements Serializable, Comparable<Block> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Block");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Block");
   
-  public static final hydra.core.Name FIELD_NAME_INDENTED = new hydra.core.Name("indented");
+  public static final hydra.core.Name INDENTED = new hydra.core.Name("indented");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
   private Block () {
   

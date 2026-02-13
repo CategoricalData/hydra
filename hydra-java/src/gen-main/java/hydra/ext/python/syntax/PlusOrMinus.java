@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class PlusOrMinus implements Serializable, Comparable<PlusOrMinus> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.PlusOrMinus");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.PlusOrMinus");
   
-  public static final hydra.core.Name FIELD_NAME_PLUS = new hydra.core.Name("plus");
+  public static final hydra.core.Name PLUS = new hydra.core.Name("plus");
   
-  public static final hydra.core.Name FIELD_NAME_MINUS = new hydra.core.Name("minus");
+  public static final hydra.core.Name MINUS = new hydra.core.Name("minus");
   
   private PlusOrMinus () {
   

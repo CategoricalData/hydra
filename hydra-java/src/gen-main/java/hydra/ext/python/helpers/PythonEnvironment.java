@@ -8,21 +8,21 @@ import java.io.Serializable;
  * Environment for Python code generation
  */
 public class PythonEnvironment implements Serializable, Comparable<PythonEnvironment> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.helpers.PythonEnvironment");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.helpers.PythonEnvironment");
   
-  public static final hydra.core.Name FIELD_NAME_NAMESPACES = new hydra.core.Name("namespaces");
+  public static final hydra.core.Name NAMESPACES = new hydra.core.Name("namespaces");
   
-  public static final hydra.core.Name FIELD_NAME_BOUND_TYPE_VARIABLES = new hydra.core.Name("boundTypeVariables");
+  public static final hydra.core.Name BOUND_TYPE_VARIABLES = new hydra.core.Name("boundTypeVariables");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_CONTEXT = new hydra.core.Name("typeContext");
+  public static final hydra.core.Name TYPE_CONTEXT = new hydra.core.Name("typeContext");
   
-  public static final hydra.core.Name FIELD_NAME_NULLARY_BINDINGS = new hydra.core.Name("nullaryBindings");
+  public static final hydra.core.Name NULLARY_BINDINGS = new hydra.core.Name("nullaryBindings");
   
-  public static final hydra.core.Name FIELD_NAME_VERSION = new hydra.core.Name("version");
+  public static final hydra.core.Name VERSION = new hydra.core.Name("version");
   
-  public static final hydra.core.Name FIELD_NAME_SKIP_CASTS = new hydra.core.Name("skipCasts");
+  public static final hydra.core.Name SKIP_CASTS = new hydra.core.Name("skipCasts");
   
-  public static final hydra.core.Name FIELD_NAME_INLINE_VARIABLES = new hydra.core.Name("inlineVariables");
+  public static final hydra.core.Name INLINE_VARIABLES = new hydra.core.Name("inlineVariables");
   
   /**
    * Namespace mapping for imports

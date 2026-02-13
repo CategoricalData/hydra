@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class MatchStatement implements Serializable, Comparable<MatchStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.MatchStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.MatchStatement");
   
-  public static final hydra.core.Name FIELD_NAME_SUBJECT = new hydra.core.Name("subject");
+  public static final hydra.core.Name SUBJECT = new hydra.core.Name("subject");
   
-  public static final hydra.core.Name FIELD_NAME_CASES = new hydra.core.Name("cases");
+  public static final hydra.core.Name CASES = new hydra.core.Name("cases");
   
   public final hydra.ext.python.syntax.SubjectExpression subject;
   

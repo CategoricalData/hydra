@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class TPrimaryAndGenexp implements Serializable, Comparable<TPrimaryAndGenexp> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndGenexp");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndGenexp");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
+  public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
   
-  public static final hydra.core.Name FIELD_NAME_GENEXP = new hydra.core.Name("genexp");
+  public static final hydra.core.Name GENEXP = new hydra.core.Name("genexp");
   
   public final hydra.ext.python.syntax.TPrimary primary;
   
