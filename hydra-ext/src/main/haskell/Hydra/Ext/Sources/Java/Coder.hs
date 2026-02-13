@@ -3317,7 +3317,7 @@ recordHashCodeMethod = def "recordHashCodeMethod" $
 -- Batch 22: constantDecl, declarationForRecordType, and entry-point functions
 -- =============================================================================
 
--- | Create a constant field declaration (e.g., public static final Name TYPE_NAME = new Name("..."))
+-- | Create a constant field declaration (e.g., public static final Name TYPE_ = new Name("..."))
 constantDecl :: TBinding (String -> JavaHelpers.Aliases -> Name -> Flow Graph Java.ClassBodyDeclarationWithComments)
 constantDecl = def "constantDecl" $
   lambda "javaName" $ lambda "aliases" $ lambda "name" $ lets [
@@ -3343,15 +3343,14 @@ constantDeclForFieldType :: TBinding (JavaHelpers.Aliases -> FieldType -> Flow G
 constantDeclForFieldType = def "constantDeclForFieldType" $
   lambda "aliases" $ lambda "ftyp" $ lets [
     "name">: Core.fieldTypeName (var "ftyp"),
-    "javaName">: Strings.cat2 (string "FIELD_NAME_")
-      (Formatting.nonAlnumToUnderscores @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ (unwrap _Name @@ var "name")))] $
+    "javaName">: Formatting.nonAlnumToUnderscores @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ (unwrap _Name @@ var "name"))] $
     constantDecl @@ var "javaName" @@ var "aliases" @@ var "name"
 
 -- | Create a constant field declaration for a type name.
 constantDeclForTypeName :: TBinding (JavaHelpers.Aliases -> Name -> Flow Graph Java.ClassBodyDeclarationWithComments)
 constantDeclForTypeName = def "constantDeclForTypeName" $
   lambda "aliases" $ lambda "name" $
-    constantDecl @@ string "TYPE_NAME" @@ var "aliases" @@ var "name"
+    constantDecl @@ string "TYPE_" @@ var "aliases" @@ var "name"
 
 -- | Create a record type class declaration (without parent class).
 declarationForRecordType :: TBinding (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name
