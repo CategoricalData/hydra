@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A query path
  */
 public abstract class Path implements Serializable, Comparable<Path> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Path");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.Path");
   
-  public static final hydra.core.Name FIELD_NAME_STEP = new hydra.core.Name("step");
+  public static final hydra.core.Name STEP = new hydra.core.Name("step");
   
-  public static final hydra.core.Name FIELD_NAME_REGEX = new hydra.core.Name("regex");
+  public static final hydra.core.Name REGEX = new hydra.core.Name("regex");
   
-  public static final hydra.core.Name FIELD_NAME_INVERSE = new hydra.core.Name("inverse");
+  public static final hydra.core.Name INVERSE = new hydra.core.Name("inverse");
   
   private Path () {
   

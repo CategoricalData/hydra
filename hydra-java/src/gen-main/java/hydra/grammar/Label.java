@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A name for a pattern
  */
 public class Label implements Serializable, Comparable<Label> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.grammar.Label");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.grammar.Label");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   

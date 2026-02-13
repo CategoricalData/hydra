@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A term which applies a function to an argument
  */
 public class Application implements Serializable, Comparable<Application> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Application");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Application");
   
-  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
   
-  public static final hydra.core.Name FIELD_NAME_ARGUMENT = new hydra.core.Name("argument");
+  public static final hydra.core.Name ARGUMENT = new hydra.core.Name("argument");
   
   /**
    * The left-hand side of the application

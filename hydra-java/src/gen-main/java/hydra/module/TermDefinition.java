@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A term-level definition, including a name, a term, and the type scheme of the term
  */
 public class TermDefinition implements Serializable, Comparable<TermDefinition> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.TermDefinition");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.module.TermDefinition");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  public static final hydra.core.Name TERM = new hydra.core.Name("term");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
   /**
    * The name of the term

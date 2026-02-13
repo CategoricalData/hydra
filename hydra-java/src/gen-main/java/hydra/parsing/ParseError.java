@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An error which occurred while parsing
  */
 public class ParseError implements Serializable, Comparable<ParseError> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.parsing.ParseError");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.parsing.ParseError");
   
-  public static final hydra.core.Name FIELD_NAME_MESSAGE = new hydra.core.Name("message");
+  public static final hydra.core.Name MESSAGE = new hydra.core.Name("message");
   
-  public static final hydra.core.Name FIELD_NAME_REMAINDER = new hydra.core.Name("remainder");
+  public static final hydra.core.Name REMAINDER = new hydra.core.Name("remainder");
   
   /**
    * An error message

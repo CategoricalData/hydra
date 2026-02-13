@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A case expression
  */
 public class CaseExpression implements Serializable, Comparable<CaseExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.CaseExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.CaseExpression");
   
-  public static final hydra.core.Name FIELD_NAME_CASE = new hydra.core.Name("case");
+  public static final hydra.core.Name CASE = new hydra.core.Name("case");
   
-  public static final hydra.core.Name FIELD_NAME_ALTERNATIVES = new hydra.core.Name("alternatives");
+  public static final hydra.core.Name ALTERNATIVES = new hydra.core.Name("alternatives");
   
   /**
    * The expression being matched

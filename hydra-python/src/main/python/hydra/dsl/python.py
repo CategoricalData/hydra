@@ -83,6 +83,14 @@ class Node(Generic[T]):
 
     value: T
 
+    def __matmul__(self, other: Node) -> Node:
+        """Apply this term to an argument (left-associative function application).
+
+        Mirrors Haskell's @@ operator: f @@ a @@ b  becomes  f @ a @ b in Python.
+        """
+        from hydra.core import Application, TermApplication
+        return type(self)(TermApplication(Application(self.value, other.value)))
+
 
 def freeze(obj: Any) -> Any:
     """Recursively freeze an object into an immutable variant."""

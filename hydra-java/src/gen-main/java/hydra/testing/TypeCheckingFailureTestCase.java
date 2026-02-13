@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A test case providing a term for which type checking is expected to fail. Note: there are currently no such test cases.
  */
 public class TypeCheckingFailureTestCase implements Serializable, Comparable<TypeCheckingFailureTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TypeCheckingFailureTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TypeCheckingFailureTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
   /**
    * The term for which type checking should fail

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case which strips all annotations from a type and compares the result with the expected type
  */
 public class DeannotateTypeTestCase implements Serializable, Comparable<DeannotateTypeTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.DeannotateTypeTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.DeannotateTypeTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The type to deannotate

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A type which provides a choice between a 'left' type and a 'right' type
  */
 public class EitherType implements Serializable, Comparable<EitherType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.EitherType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.EitherType");
   
-  public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
+  public static final hydra.core.Name LEFT = new hydra.core.Name("left");
   
-  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
+  public static final hydra.core.Name RIGHT = new hydra.core.Name("right");
   
   /**
    * The 'left' alternative

@@ -5,19 +5,19 @@ package hydra.topology;
 import java.io.Serializable;
 
 public class TarjanState implements Serializable, Comparable<TarjanState> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.topology.TarjanState");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.topology.TarjanState");
   
-  public static final hydra.core.Name FIELD_NAME_COUNTER = new hydra.core.Name("counter");
+  public static final hydra.core.Name COUNTER = new hydra.core.Name("counter");
   
-  public static final hydra.core.Name FIELD_NAME_INDICES = new hydra.core.Name("indices");
+  public static final hydra.core.Name INDICES = new hydra.core.Name("indices");
   
-  public static final hydra.core.Name FIELD_NAME_LOW_LINKS = new hydra.core.Name("lowLinks");
+  public static final hydra.core.Name LOW_LINKS = new hydra.core.Name("lowLinks");
   
-  public static final hydra.core.Name FIELD_NAME_STACK = new hydra.core.Name("stack");
+  public static final hydra.core.Name STACK = new hydra.core.Name("stack");
   
-  public static final hydra.core.Name FIELD_NAME_ON_STACK = new hydra.core.Name("onStack");
+  public static final hydra.core.Name ON_STACK = new hydra.core.Name("onStack");
   
-  public static final hydra.core.Name FIELD_NAME_SCCS = new hydra.core.Name("sccs");
+  public static final hydra.core.Name SCCS = new hydra.core.Name("sccs");
   
   /**
    * Next available index for vertices in the DFS traversal

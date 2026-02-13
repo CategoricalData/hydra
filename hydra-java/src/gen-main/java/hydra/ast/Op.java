@@ -8,15 +8,15 @@ import java.io.Serializable;
  * An operator symbol
  */
 public class Op implements Serializable, Comparable<Op> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Op");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ast.Op");
   
-  public static final hydra.core.Name FIELD_NAME_SYMBOL = new hydra.core.Name("symbol");
+  public static final hydra.core.Name SYMBOL = new hydra.core.Name("symbol");
   
-  public static final hydra.core.Name FIELD_NAME_PADDING = new hydra.core.Name("padding");
+  public static final hydra.core.Name PADDING = new hydra.core.Name("padding");
   
-  public static final hydra.core.Name FIELD_NAME_PRECEDENCE = new hydra.core.Name("precedence");
+  public static final hydra.core.Name PRECEDENCE = new hydra.core.Name("precedence");
   
-  public static final hydra.core.Name FIELD_NAME_ASSOCIATIVITY = new hydra.core.Name("associativity");
+  public static final hydra.core.Name ASSOCIATIVITY = new hydra.core.Name("associativity");
   
   /**
    * The operator symbol

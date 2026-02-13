@@ -5,11 +5,11 @@ package hydra.topology;
 import java.io.Serializable;
 
 public class OrderingIsomorphism<A> implements Serializable, Comparable<OrderingIsomorphism<A>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.topology.OrderingIsomorphism");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.topology.OrderingIsomorphism");
   
-  public static final hydra.core.Name FIELD_NAME_ENCODE = new hydra.core.Name("encode");
+  public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
   
-  public static final hydra.core.Name FIELD_NAME_DECODE = new hydra.core.Name("decode");
+  public static final hydra.core.Name DECODE = new hydra.core.Name("decode");
   
   /**
    * Mapping from source ordering to target ordering

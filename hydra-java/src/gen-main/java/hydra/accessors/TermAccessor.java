@@ -8,47 +8,47 @@ import java.io.Serializable;
  * A function which maps from a term to a particular immediate subterm
  */
 public abstract class TermAccessor implements Serializable, Comparable<TermAccessor> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.accessors.TermAccessor");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.accessors.TermAccessor");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATED_BODY = new hydra.core.Name("annotatedBody");
+  public static final hydra.core.Name ANNOTATED_BODY = new hydra.core.Name("annotatedBody");
   
-  public static final hydra.core.Name FIELD_NAME_APPLICATION_FUNCTION = new hydra.core.Name("applicationFunction");
+  public static final hydra.core.Name APPLICATION_FUNCTION = new hydra.core.Name("applicationFunction");
   
-  public static final hydra.core.Name FIELD_NAME_APPLICATION_ARGUMENT = new hydra.core.Name("applicationArgument");
+  public static final hydra.core.Name APPLICATION_ARGUMENT = new hydra.core.Name("applicationArgument");
   
-  public static final hydra.core.Name FIELD_NAME_LAMBDA_BODY = new hydra.core.Name("lambdaBody");
+  public static final hydra.core.Name LAMBDA_BODY = new hydra.core.Name("lambdaBody");
   
-  public static final hydra.core.Name FIELD_NAME_UNION_CASES_DEFAULT = new hydra.core.Name("unionCasesDefault");
+  public static final hydra.core.Name UNION_CASES_DEFAULT = new hydra.core.Name("unionCasesDefault");
   
-  public static final hydra.core.Name FIELD_NAME_UNION_CASES_BRANCH = new hydra.core.Name("unionCasesBranch");
+  public static final hydra.core.Name UNION_CASES_BRANCH = new hydra.core.Name("unionCasesBranch");
   
-  public static final hydra.core.Name FIELD_NAME_LET_BODY = new hydra.core.Name("letBody");
+  public static final hydra.core.Name LET_BODY = new hydra.core.Name("letBody");
   
-  public static final hydra.core.Name FIELD_NAME_LET_BINDING = new hydra.core.Name("letBinding");
+  public static final hydra.core.Name LET_BINDING = new hydra.core.Name("letBinding");
   
-  public static final hydra.core.Name FIELD_NAME_LIST_ELEMENT = new hydra.core.Name("listElement");
+  public static final hydra.core.Name LIST_ELEMENT = new hydra.core.Name("listElement");
   
-  public static final hydra.core.Name FIELD_NAME_MAP_KEY = new hydra.core.Name("mapKey");
+  public static final hydra.core.Name MAP_KEY = new hydra.core.Name("mapKey");
   
-  public static final hydra.core.Name FIELD_NAME_MAP_VALUE = new hydra.core.Name("mapValue");
+  public static final hydra.core.Name MAP_VALUE = new hydra.core.Name("mapValue");
   
-  public static final hydra.core.Name FIELD_NAME_MAYBE_TERM = new hydra.core.Name("maybeTerm");
+  public static final hydra.core.Name MAYBE_TERM = new hydra.core.Name("maybeTerm");
   
-  public static final hydra.core.Name FIELD_NAME_PRODUCT_TERM = new hydra.core.Name("productTerm");
+  public static final hydra.core.Name PRODUCT_TERM = new hydra.core.Name("productTerm");
   
-  public static final hydra.core.Name FIELD_NAME_RECORD_FIELD = new hydra.core.Name("recordField");
+  public static final hydra.core.Name RECORD_FIELD = new hydra.core.Name("recordField");
   
-  public static final hydra.core.Name FIELD_NAME_SET_ELEMENT = new hydra.core.Name("setElement");
+  public static final hydra.core.Name SET_ELEMENT = new hydra.core.Name("setElement");
   
-  public static final hydra.core.Name FIELD_NAME_SUM_TERM = new hydra.core.Name("sumTerm");
+  public static final hydra.core.Name SUM_TERM = new hydra.core.Name("sumTerm");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_LAMBDA_BODY = new hydra.core.Name("typeLambdaBody");
+  public static final hydra.core.Name TYPE_LAMBDA_BODY = new hydra.core.Name("typeLambdaBody");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_APPLICATION_TERM = new hydra.core.Name("typeApplicationTerm");
+  public static final hydra.core.Name TYPE_APPLICATION_TERM = new hydra.core.Name("typeApplicationTerm");
   
-  public static final hydra.core.Name FIELD_NAME_INJECTION_TERM = new hydra.core.Name("injectionTerm");
+  public static final hydra.core.Name INJECTION_TERM = new hydra.core.Name("injectionTerm");
   
-  public static final hydra.core.Name FIELD_NAME_WRAPPED_TERM = new hydra.core.Name("wrappedTerm");
+  public static final hydra.core.Name WRAPPED_TERM = new hydra.core.Name("wrappedTerm");
   
   private TermAccessor () {
   

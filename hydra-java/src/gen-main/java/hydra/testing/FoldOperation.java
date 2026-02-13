@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A predefined fold operation for testing foldOverTerm
  */
 public abstract class FoldOperation implements Serializable, Comparable<FoldOperation> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.FoldOperation");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.FoldOperation");
   
-  public static final hydra.core.Name FIELD_NAME_SUM_INT32_LITERALS = new hydra.core.Name("sumInt32Literals");
+  public static final hydra.core.Name SUM_INT32_LITERALS = new hydra.core.Name("sumInt32Literals");
   
-  public static final hydra.core.Name FIELD_NAME_COLLECT_LIST_LENGTHS = new hydra.core.Name("collectListLengths");
+  public static final hydra.core.Name COLLECT_LIST_LENGTHS = new hydra.core.Name("collectListLengths");
   
-  public static final hydra.core.Name FIELD_NAME_COLLECT_LABELS = new hydra.core.Name("collectLabels");
+  public static final hydra.core.Name COLLECT_LABELS = new hydra.core.Name("collectLabels");
   
   private FoldOperation () {
   

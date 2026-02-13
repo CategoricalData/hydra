@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A type-level definition, including a name and the type
  */
 public class TypeDefinition implements Serializable, Comparable<TypeDefinition> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.TypeDefinition");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.module.TypeDefinition");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
   /**
    * The name of the type

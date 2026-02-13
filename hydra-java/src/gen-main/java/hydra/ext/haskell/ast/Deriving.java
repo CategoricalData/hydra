@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A 'deriving' statement
  */
 public class Deriving implements Serializable, Comparable<Deriving> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Deriving");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Deriving");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.ext.haskell.ast.Name> value;
   

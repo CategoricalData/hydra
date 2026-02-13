@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A term together with an annotation
  */
 public class AnnotatedTerm implements Serializable, Comparable<AnnotatedTerm> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.AnnotatedTerm");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.AnnotatedTerm");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
+  public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
   
   /**
    * The term being annotated

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A set of (possibly recursive) 'let' bindings together with a body in which they are bound
  */
 public class Let implements Serializable, Comparable<Let> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Let");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Let");
   
-  public static final hydra.core.Name FIELD_NAME_BINDINGS = new hydra.core.Name("bindings");
+  public static final hydra.core.Name BINDINGS = new hydra.core.Name("bindings");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   /**
    * The list of variable bindings

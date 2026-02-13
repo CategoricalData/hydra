@@ -8,13 +8,13 @@ import java.io.Serializable;
  * An expression enclosed by brackets
  */
 public class BracketExpr implements Serializable, Comparable<BracketExpr> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.BracketExpr");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ast.BracketExpr");
   
-  public static final hydra.core.Name FIELD_NAME_BRACKETS = new hydra.core.Name("brackets");
+  public static final hydra.core.Name BRACKETS = new hydra.core.Name("brackets");
   
-  public static final hydra.core.Name FIELD_NAME_ENCLOSED = new hydra.core.Name("enclosed");
+  public static final hydra.core.Name ENCLOSED = new hydra.core.Name("enclosed");
   
-  public static final hydra.core.Name FIELD_NAME_STYLE = new hydra.core.Name("style");
+  public static final hydra.core.Name STYLE = new hydra.core.Name("style");
   
   /**
    * The bracket pair enclosing the expression

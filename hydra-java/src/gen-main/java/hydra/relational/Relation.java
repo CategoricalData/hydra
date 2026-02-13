@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A set of distinct n-tuples; a table
  */
 public class Relation<V> implements Serializable, Comparable<Relation<V>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.Relation");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.relational.Relation");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.relational.Row<V>> value;
   

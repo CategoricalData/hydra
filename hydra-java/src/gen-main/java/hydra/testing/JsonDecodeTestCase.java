@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A test case for the Either-based JSON decoder. Takes a type, input JSON, and expected result (Either String Term).
  */
 public class JsonDecodeTestCase implements Serializable, Comparable<JsonDecodeTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.JsonDecodeTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.JsonDecodeTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_JSON = new hydra.core.Name("json");
+  public static final hydra.core.Name JSON = new hydra.core.Name("json");
   
-  public static final hydra.core.Name FIELD_NAME_EXPECTED = new hydra.core.Name("expected");
+  public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
   
   /**
    * The Hydra type to decode into

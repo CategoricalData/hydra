@@ -8,13 +8,13 @@ import java.io.Serializable;
  * The last mile of a transformation, which encodes and serializes terms to a file
  */
 public class LastMile<S, A> implements Serializable, Comparable<LastMile<S, A>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.workflow.LastMile");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.workflow.LastMile");
   
-  public static final hydra.core.Name FIELD_NAME_ENCODER = new hydra.core.Name("encoder");
+  public static final hydra.core.Name ENCODER = new hydra.core.Name("encoder");
   
-  public static final hydra.core.Name FIELD_NAME_SERIALIZER = new hydra.core.Name("serializer");
+  public static final hydra.core.Name SERIALIZER = new hydra.core.Name("serializer");
   
-  public static final hydra.core.Name FIELD_NAME_FILE_EXTENSION = new hydra.core.Name("fileExtension");
+  public static final hydra.core.Name FILE_EXTENSION = new hydra.core.Name("fileExtension");
   
   /**
    * An encoder for terms to a list of output objects

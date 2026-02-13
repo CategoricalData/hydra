@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A BNF production
  */
 public class Production implements Serializable, Comparable<Production> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.grammar.Production");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.grammar.Production");
   
-  public static final hydra.core.Name FIELD_NAME_SYMBOL = new hydra.core.Name("symbol");
+  public static final hydra.core.Name SYMBOL = new hydra.core.Name("symbol");
   
-  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
+  public static final hydra.core.Name PATTERN = new hydra.core.Name("pattern");
   
   /**
    * The nonterminal symbol being defined

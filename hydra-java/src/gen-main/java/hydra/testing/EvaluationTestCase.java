@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A test case which evaluates (reduces) a given term and compares it with the expected result
  */
 public class EvaluationTestCase implements Serializable, Comparable<EvaluationTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.EvaluationTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.EvaluationTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_EVALUATION_STYLE = new hydra.core.Name("evaluationStyle");
+  public static final hydra.core.Name EVALUATION_STYLE = new hydra.core.Name("evaluationStyle");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The evaluation style (eager or lazy)

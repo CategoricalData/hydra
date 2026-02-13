@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A type definition for a table, including column names and types
  */
 public class TableType implements Serializable, Comparable<TableType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.tabular.TableType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.tabular.TableType");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_COLUMNS = new hydra.core.Name("columns");
+  public static final hydra.core.Name COLUMNS = new hydra.core.Name("columns");
   
   public final hydra.relational.RelationName name;
   

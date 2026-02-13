@@ -8,19 +8,19 @@ import java.io.Serializable;
  * A JSON value
  */
 public abstract class Value implements Serializable, Comparable<Value> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.json.model.Value");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.json.model.Value");
   
-  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  public static final hydra.core.Name ARRAY = new hydra.core.Name("array");
   
-  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  public static final hydra.core.Name BOOLEAN = new hydra.core.Name("boolean");
   
-  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  public static final hydra.core.Name NULL = new hydra.core.Name("null");
   
-  public static final hydra.core.Name FIELD_NAME_NUMBER = new hydra.core.Name("number");
+  public static final hydra.core.Name NUMBER = new hydra.core.Name("number");
   
-  public static final hydra.core.Name FIELD_NAME_OBJECT = new hydra.core.Name("object");
+  public static final hydra.core.Name OBJECT = new hydra.core.Name("object");
   
-  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  public static final hydra.core.Name STRING = new hydra.core.Name("string");
   
   private Value () {
   

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * Numeric precision: arbitrary precision, or precision to a specified number of bits
  */
 public abstract class Precision implements Serializable, Comparable<Precision> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.util.Precision");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.util.Precision");
   
-  public static final hydra.core.Name FIELD_NAME_ARBITRARY = new hydra.core.Name("arbitrary");
+  public static final hydra.core.Name ARBITRARY = new hydra.core.Name("arbitrary");
   
-  public static final hydra.core.Name FIELD_NAME_BITS = new hydra.core.Name("bits");
+  public static final hydra.core.Name BITS = new hydra.core.Name("bits");
   
   private Precision () {
   

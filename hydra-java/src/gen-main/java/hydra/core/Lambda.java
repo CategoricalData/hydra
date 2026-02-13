@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A function abstraction (lambda)
  */
 public class Lambda implements Serializable, Comparable<Lambda> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Lambda");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Lambda");
   
-  public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
+  public static final hydra.core.Name PARAMETER = new hydra.core.Name("parameter");
   
-  public static final hydra.core.Name FIELD_NAME_DOMAIN = new hydra.core.Name("domain");
+  public static final hydra.core.Name DOMAIN = new hydra.core.Name("domain");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   /**
    * The parameter of the lambda

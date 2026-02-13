@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A two-level encoder and decoder, operating both at a type level and an instance (data) level
  */
 public class Bicoder<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable<Bicoder<S1, S2, T1, T2, V1, V2>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.compute.Bicoder");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.Bicoder");
   
-  public static final hydra.core.Name FIELD_NAME_ENCODE = new hydra.core.Name("encode");
+  public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
   
-  public static final hydra.core.Name FIELD_NAME_DECODE = new hydra.core.Name("decode");
+  public static final hydra.core.Name DECODE = new hydra.core.Name("decode");
   
   /**
    * A function from source types to adapters

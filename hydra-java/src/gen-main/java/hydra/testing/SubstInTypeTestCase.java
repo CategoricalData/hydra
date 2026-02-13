@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A test case which applies a type substitution to a type and compares the result. The substitution is provided as a list of (variable name, replacement type) pairs.
  */
 public class SubstInTypeTestCase implements Serializable, Comparable<SubstInTypeTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.SubstInTypeTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.SubstInTypeTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_SUBSTITUTION = new hydra.core.Name("substitution");
+  public static final hydra.core.Name SUBSTITUTION = new hydra.core.Name("substitution");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The type substitution as a list of (name, type) pairs

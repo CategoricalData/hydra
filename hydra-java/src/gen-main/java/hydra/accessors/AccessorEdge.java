@@ -8,13 +8,13 @@ import java.io.Serializable;
  * An edge in an accessor graph, connecting two nodes via a path
  */
 public class AccessorEdge implements Serializable, Comparable<AccessorEdge> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.accessors.AccessorEdge");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.accessors.AccessorEdge");
   
-  public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
+  public static final hydra.core.Name SOURCE = new hydra.core.Name("source");
   
-  public static final hydra.core.Name FIELD_NAME_PATH = new hydra.core.Name("path");
+  public static final hydra.core.Name PATH = new hydra.core.Name("path");
   
-  public static final hydra.core.Name FIELD_NAME_TARGET = new hydra.core.Name("target");
+  public static final hydra.core.Name TARGET = new hydra.core.Name("target");
   
   /**
    * The source node of the edge

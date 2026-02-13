@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A universally quantified type; the System F equivalent of a type scheme, and the type-level equivalent of a lambda term.
  */
 public class ForallType implements Serializable, Comparable<ForallType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.ForallType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.ForallType");
   
-  public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
+  public static final hydra.core.Name PARAMETER = new hydra.core.Name("parameter");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   /**
    * The variable which is bound by the lambda

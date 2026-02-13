@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A field with an optional type scheme, used to bind variables to terms in a 'let' expression
  */
 public class Binding implements Serializable, Comparable<Binding> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Binding");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Binding");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  public static final hydra.core.Name TERM = new hydra.core.Name("term");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
   /**
    * The name of the bound variable

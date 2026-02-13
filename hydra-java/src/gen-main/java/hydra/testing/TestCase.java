@@ -8,83 +8,83 @@ import java.io.Serializable;
  * A simple test case with an input and an expected output
  */
 public abstract class TestCase implements Serializable, Comparable<TestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TestCase");
   
-  public static final hydra.core.Name FIELD_NAME_ALPHA_CONVERSION = new hydra.core.Name("alphaConversion");
+  public static final hydra.core.Name ALPHA_CONVERSION = new hydra.core.Name("alphaConversion");
   
-  public static final hydra.core.Name FIELD_NAME_CASE_CONVERSION = new hydra.core.Name("caseConversion");
+  public static final hydra.core.Name CASE_CONVERSION = new hydra.core.Name("caseConversion");
   
-  public static final hydra.core.Name FIELD_NAME_DEANNOTATE_TERM = new hydra.core.Name("deannotateTerm");
+  public static final hydra.core.Name DEANNOTATE_TERM = new hydra.core.Name("deannotateTerm");
   
-  public static final hydra.core.Name FIELD_NAME_DEANNOTATE_TYPE = new hydra.core.Name("deannotateType");
+  public static final hydra.core.Name DEANNOTATE_TYPE = new hydra.core.Name("deannotateType");
   
-  public static final hydra.core.Name FIELD_NAME_DELEGATED_EVALUATION = new hydra.core.Name("delegatedEvaluation");
+  public static final hydra.core.Name DELEGATED_EVALUATION = new hydra.core.Name("delegatedEvaluation");
   
-  public static final hydra.core.Name FIELD_NAME_ETA_EXPANSION = new hydra.core.Name("etaExpansion");
+  public static final hydra.core.Name ETA_EXPANSION = new hydra.core.Name("etaExpansion");
   
-  public static final hydra.core.Name FIELD_NAME_FLATTEN_LET_TERMS = new hydra.core.Name("flattenLetTerms");
+  public static final hydra.core.Name FLATTEN_LET_TERMS = new hydra.core.Name("flattenLetTerms");
   
-  public static final hydra.core.Name FIELD_NAME_FREE_VARIABLES = new hydra.core.Name("freeVariables");
+  public static final hydra.core.Name FREE_VARIABLES = new hydra.core.Name("freeVariables");
   
-  public static final hydra.core.Name FIELD_NAME_EVALUATION = new hydra.core.Name("evaluation");
+  public static final hydra.core.Name EVALUATION = new hydra.core.Name("evaluation");
   
-  public static final hydra.core.Name FIELD_NAME_INFERENCE = new hydra.core.Name("inference");
+  public static final hydra.core.Name INFERENCE = new hydra.core.Name("inference");
   
-  public static final hydra.core.Name FIELD_NAME_INFERENCE_FAILURE = new hydra.core.Name("inferenceFailure");
+  public static final hydra.core.Name INFERENCE_FAILURE = new hydra.core.Name("inferenceFailure");
   
-  public static final hydra.core.Name FIELD_NAME_JSON_CODER = new hydra.core.Name("jsonCoder");
+  public static final hydra.core.Name JSON_CODER = new hydra.core.Name("jsonCoder");
   
-  public static final hydra.core.Name FIELD_NAME_JSON_DECODE = new hydra.core.Name("jsonDecode");
+  public static final hydra.core.Name JSON_DECODE = new hydra.core.Name("jsonDecode");
   
-  public static final hydra.core.Name FIELD_NAME_JSON_ENCODE = new hydra.core.Name("jsonEncode");
+  public static final hydra.core.Name JSON_ENCODE = new hydra.core.Name("jsonEncode");
   
-  public static final hydra.core.Name FIELD_NAME_JSON_PARSER = new hydra.core.Name("jsonParser");
+  public static final hydra.core.Name JSON_PARSER = new hydra.core.Name("jsonParser");
   
-  public static final hydra.core.Name FIELD_NAME_JSON_ROUNDTRIP = new hydra.core.Name("jsonRoundtrip");
+  public static final hydra.core.Name JSON_ROUNDTRIP = new hydra.core.Name("jsonRoundtrip");
   
-  public static final hydra.core.Name FIELD_NAME_JSON_WRITER = new hydra.core.Name("jsonWriter");
+  public static final hydra.core.Name JSON_WRITER = new hydra.core.Name("jsonWriter");
   
-  public static final hydra.core.Name FIELD_NAME_LIFT_LAMBDA_ABOVE_LET = new hydra.core.Name("liftLambdaAboveLet");
+  public static final hydra.core.Name LIFT_LAMBDA_ABOVE_LET = new hydra.core.Name("liftLambdaAboveLet");
   
-  public static final hydra.core.Name FIELD_NAME_SERIALIZATION = new hydra.core.Name("serialization");
+  public static final hydra.core.Name SERIALIZATION = new hydra.core.Name("serialization");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLIFY_TERM = new hydra.core.Name("simplifyTerm");
+  public static final hydra.core.Name SIMPLIFY_TERM = new hydra.core.Name("simplifyTerm");
   
-  public static final hydra.core.Name FIELD_NAME_TOPOLOGICAL_SORT = new hydra.core.Name("topologicalSort");
+  public static final hydra.core.Name TOPOLOGICAL_SORT = new hydra.core.Name("topologicalSort");
   
-  public static final hydra.core.Name FIELD_NAME_TOPOLOGICAL_SORT_BINDINGS = new hydra.core.Name("topologicalSortBindings");
+  public static final hydra.core.Name TOPOLOGICAL_SORT_BINDINGS = new hydra.core.Name("topologicalSortBindings");
   
-  public static final hydra.core.Name FIELD_NAME_TOPOLOGICAL_SORT_S_C_C = new hydra.core.Name("topologicalSortSCC");
+  public static final hydra.core.Name TOPOLOGICAL_SORT_S_C_C = new hydra.core.Name("topologicalSortSCC");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_CHECKING = new hydra.core.Name("typeChecking");
+  public static final hydra.core.Name TYPE_CHECKING = new hydra.core.Name("typeChecking");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_CHECKING_FAILURE = new hydra.core.Name("typeCheckingFailure");
+  public static final hydra.core.Name TYPE_CHECKING_FAILURE = new hydra.core.Name("typeCheckingFailure");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_REDUCTION = new hydra.core.Name("typeReduction");
+  public static final hydra.core.Name TYPE_REDUCTION = new hydra.core.Name("typeReduction");
   
-  public static final hydra.core.Name FIELD_NAME_NORMALIZE_TYPE_VARIABLES = new hydra.core.Name("normalizeTypeVariables");
+  public static final hydra.core.Name NORMALIZE_TYPE_VARIABLES = new hydra.core.Name("normalizeTypeVariables");
   
-  public static final hydra.core.Name FIELD_NAME_FOLD_OVER_TERM = new hydra.core.Name("foldOverTerm");
+  public static final hydra.core.Name FOLD_OVER_TERM = new hydra.core.Name("foldOverTerm");
   
-  public static final hydra.core.Name FIELD_NAME_REWRITE_TERM = new hydra.core.Name("rewriteTerm");
+  public static final hydra.core.Name REWRITE_TERM = new hydra.core.Name("rewriteTerm");
   
-  public static final hydra.core.Name FIELD_NAME_REWRITE_TYPE = new hydra.core.Name("rewriteType");
+  public static final hydra.core.Name REWRITE_TYPE = new hydra.core.Name("rewriteType");
   
-  public static final hydra.core.Name FIELD_NAME_HOIST_SUBTERMS = new hydra.core.Name("hoistSubterms");
+  public static final hydra.core.Name HOIST_SUBTERMS = new hydra.core.Name("hoistSubterms");
   
-  public static final hydra.core.Name FIELD_NAME_HOIST_CASE_STATEMENTS = new hydra.core.Name("hoistCaseStatements");
+  public static final hydra.core.Name HOIST_CASE_STATEMENTS = new hydra.core.Name("hoistCaseStatements");
   
-  public static final hydra.core.Name FIELD_NAME_HOIST_LET_BINDINGS = new hydra.core.Name("hoistLetBindings");
+  public static final hydra.core.Name HOIST_LET_BINDINGS = new hydra.core.Name("hoistLetBindings");
   
-  public static final hydra.core.Name FIELD_NAME_HOIST_POLYMORPHIC_LET_BINDINGS = new hydra.core.Name("hoistPolymorphicLetBindings");
+  public static final hydra.core.Name HOIST_POLYMORPHIC_LET_BINDINGS = new hydra.core.Name("hoistPolymorphicLetBindings");
   
-  public static final hydra.core.Name FIELD_NAME_SUBST_IN_TYPE = new hydra.core.Name("substInType");
+  public static final hydra.core.Name SUBST_IN_TYPE = new hydra.core.Name("substInType");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLE_OCCURS_IN_TYPE = new hydra.core.Name("variableOccursInType");
+  public static final hydra.core.Name VARIABLE_OCCURS_IN_TYPE = new hydra.core.Name("variableOccursInType");
   
-  public static final hydra.core.Name FIELD_NAME_UNIFY_TYPES = new hydra.core.Name("unifyTypes");
+  public static final hydra.core.Name UNIFY_TYPES = new hydra.core.Name("unifyTypes");
   
-  public static final hydra.core.Name FIELD_NAME_JOIN_TYPES = new hydra.core.Name("joinTypes");
+  public static final hydra.core.Name JOIN_TYPES = new hydra.core.Name("joinTypes");
   
   private TestCase () {
   

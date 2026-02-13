@@ -8,9 +8,9 @@ import java.io.Serializable;
  * Metadata associated with a type variable, including typeclass constraints
  */
 public class TypeVariableMetadata implements Serializable, Comparable<TypeVariableMetadata> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.TypeVariableMetadata");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.TypeVariableMetadata");
   
-  public static final hydra.core.Name FIELD_NAME_CLASSES = new hydra.core.Name("classes");
+  public static final hydra.core.Name CLASSES = new hydra.core.Name("classes");
   
   /**
    * The set of typeclass constraints on this type variable

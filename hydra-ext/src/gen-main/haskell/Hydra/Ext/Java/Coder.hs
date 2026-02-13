@@ -1619,11 +1619,11 @@ constantDecl javaName aliases name =
 constantDeclForFieldType :: (Helpers.Aliases -> Core.FieldType -> Compute.Flow Graph.Graph Syntax.ClassBodyDeclarationWithComments)
 constantDeclForFieldType aliases ftyp =  
   let name = (Core.fieldTypeName ftyp) 
-      javaName = (Strings.cat2 "FIELD_NAME_" (Formatting.nonAlnumToUnderscores (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name))))
+      javaName = (Formatting.nonAlnumToUnderscores (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name)))
   in (constantDecl javaName aliases name)
 
 constantDeclForTypeName :: (Helpers.Aliases -> Core.Name -> Compute.Flow Graph.Graph Syntax.ClassBodyDeclarationWithComments)
-constantDeclForTypeName aliases name = (constantDecl "TYPE_NAME" aliases name)
+constantDeclForTypeName aliases name = (constantDecl "TYPE_" aliases name)
 
 declarationForRecordType :: (Bool -> Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Compute.Flow Graph.Graph Syntax.ClassDeclaration)
 declarationForRecordType isInner isSer aliases tparams elName fields = (declarationForRecordType_ isInner isSer aliases tparams elName Nothing fields)

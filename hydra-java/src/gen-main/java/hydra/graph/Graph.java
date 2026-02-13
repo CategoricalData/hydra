@@ -8,19 +8,19 @@ import java.io.Serializable;
  * A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
  */
 public class Graph implements Serializable, Comparable<Graph> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.graph.Graph");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.graph.Graph");
   
-  public static final hydra.core.Name FIELD_NAME_ELEMENTS = new hydra.core.Name("elements");
+  public static final hydra.core.Name ELEMENTS = new hydra.core.Name("elements");
   
-  public static final hydra.core.Name FIELD_NAME_ENVIRONMENT = new hydra.core.Name("environment");
+  public static final hydra.core.Name ENVIRONMENT = new hydra.core.Name("environment");
   
-  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
+  public static final hydra.core.Name TYPES = new hydra.core.Name("types");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMITIVES = new hydra.core.Name("primitives");
+  public static final hydra.core.Name PRIMITIVES = new hydra.core.Name("primitives");
   
-  public static final hydra.core.Name FIELD_NAME_SCHEMA = new hydra.core.Name("schema");
+  public static final hydra.core.Name SCHEMA = new hydra.core.Name("schema");
   
   /**
    * All of the elements in the graph

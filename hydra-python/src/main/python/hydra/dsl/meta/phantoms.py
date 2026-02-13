@@ -272,7 +272,7 @@ def lambdas(params: Sequence[str], body: TTerm[X]) -> TTerm[A]:
     return TTerm[A](terms.lambdas(params, un_tterm(body)))
 
 
-def let1(name: str, value: TTerm[A], env: TTerm[B]) -> TTerm[B]:
+def let(name: str, value: TTerm[A], env: TTerm[B]) -> TTerm[B]:
     """Create a let expression with a single binding."""
     return TTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(env)))
 

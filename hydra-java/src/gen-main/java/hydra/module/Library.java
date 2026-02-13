@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A library of primitive functions
  */
 public class Library implements Serializable, Comparable<Library> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.Library");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.module.Library");
   
-  public static final hydra.core.Name FIELD_NAME_NAMESPACE = new hydra.core.Name("namespace");
+  public static final hydra.core.Name NAMESPACE = new hydra.core.Name("namespace");
   
-  public static final hydra.core.Name FIELD_NAME_PREFIX = new hydra.core.Name("prefix");
+  public static final hydra.core.Name PREFIX = new hydra.core.Name("prefix");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMITIVES = new hydra.core.Name("primitives");
+  public static final hydra.core.Name PRIMITIVES = new hydra.core.Name("primitives");
   
   /**
    * A common prefix for all primitive function names in the library

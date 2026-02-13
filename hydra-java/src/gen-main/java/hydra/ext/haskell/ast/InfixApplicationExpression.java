@@ -8,13 +8,13 @@ import java.io.Serializable;
  * An infix application expression
  */
 public class InfixApplicationExpression implements Serializable, Comparable<InfixApplicationExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.InfixApplicationExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.InfixApplicationExpression");
   
-  public static final hydra.core.Name FIELD_NAME_LHS = new hydra.core.Name("lhs");
+  public static final hydra.core.Name LHS = new hydra.core.Name("lhs");
   
-  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  public static final hydra.core.Name OPERATOR = new hydra.core.Name("operator");
   
-  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
+  public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
   
   /**
    * The left-hand operand

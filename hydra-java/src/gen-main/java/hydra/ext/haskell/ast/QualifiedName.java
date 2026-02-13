@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A qualified name
  */
 public class QualifiedName implements Serializable, Comparable<QualifiedName> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.QualifiedName");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.QualifiedName");
   
-  public static final hydra.core.Name FIELD_NAME_QUALIFIERS = new hydra.core.Name("qualifiers");
+  public static final hydra.core.Name QUALIFIERS = new hydra.core.Name("qualifiers");
   
-  public static final hydra.core.Name FIELD_NAME_UNQUALIFIED = new hydra.core.Name("unqualified");
+  public static final hydra.core.Name UNQUALIFIED = new hydra.core.Name("unqualified");
   
   /**
    * The qualifier parts

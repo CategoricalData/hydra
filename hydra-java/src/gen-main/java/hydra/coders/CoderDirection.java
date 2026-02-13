@@ -8,11 +8,11 @@ import java.io.Serializable;
  * Indicates either the 'out' or the 'in' direction of a coder
  */
 public abstract class CoderDirection implements Serializable, Comparable<CoderDirection> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.CoderDirection");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.coders.CoderDirection");
   
-  public static final hydra.core.Name FIELD_NAME_ENCODE = new hydra.core.Name("encode");
+  public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
   
-  public static final hydra.core.Name FIELD_NAME_DECODE = new hydra.core.Name("decode");
+  public static final hydra.core.Name DECODE = new hydra.core.Name("decode");
   
   private CoderDirection () {
   

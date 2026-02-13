@@ -8,43 +8,43 @@ import java.io.Serializable;
  * A data expression
  */
 public abstract class Expression implements Serializable, Comparable<Expression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Expression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Expression");
   
-  public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
+  public static final hydra.core.Name APPLICATION = new hydra.core.Name("application");
   
-  public static final hydra.core.Name FIELD_NAME_CASE = new hydra.core.Name("case");
+  public static final hydra.core.Name CASE = new hydra.core.Name("case");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTRUCT_RECORD = new hydra.core.Name("constructRecord");
+  public static final hydra.core.Name CONSTRUCT_RECORD = new hydra.core.Name("constructRecord");
   
-  public static final hydra.core.Name FIELD_NAME_DO = new hydra.core.Name("do");
+  public static final hydra.core.Name DO = new hydra.core.Name("do");
   
-  public static final hydra.core.Name FIELD_NAME_IF = new hydra.core.Name("if");
+  public static final hydra.core.Name IF = new hydra.core.Name("if");
   
-  public static final hydra.core.Name FIELD_NAME_INFIX_APPLICATION = new hydra.core.Name("infixApplication");
+  public static final hydra.core.Name INFIX_APPLICATION = new hydra.core.Name("infixApplication");
   
-  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  public static final hydra.core.Name LITERAL = new hydra.core.Name("literal");
   
-  public static final hydra.core.Name FIELD_NAME_LAMBDA = new hydra.core.Name("lambda");
+  public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
   
-  public static final hydra.core.Name FIELD_NAME_LEFT_SECTION = new hydra.core.Name("leftSection");
+  public static final hydra.core.Name LEFT_SECTION = new hydra.core.Name("leftSection");
   
-  public static final hydra.core.Name FIELD_NAME_LET = new hydra.core.Name("let");
+  public static final hydra.core.Name LET = new hydra.core.Name("let");
   
-  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  public static final hydra.core.Name LIST = new hydra.core.Name("list");
   
-  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
+  public static final hydra.core.Name PARENS = new hydra.core.Name("parens");
   
-  public static final hydra.core.Name FIELD_NAME_PREFIX_APPLICATION = new hydra.core.Name("prefixApplication");
+  public static final hydra.core.Name PREFIX_APPLICATION = new hydra.core.Name("prefixApplication");
   
-  public static final hydra.core.Name FIELD_NAME_RIGHT_SECTION = new hydra.core.Name("rightSection");
+  public static final hydra.core.Name RIGHT_SECTION = new hydra.core.Name("rightSection");
   
-  public static final hydra.core.Name FIELD_NAME_TUPLE = new hydra.core.Name("tuple");
+  public static final hydra.core.Name TUPLE = new hydra.core.Name("tuple");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_SIGNATURE = new hydra.core.Name("typeSignature");
+  public static final hydra.core.Name TYPE_SIGNATURE = new hydra.core.Name("typeSignature");
   
-  public static final hydra.core.Name FIELD_NAME_UPDATE_RECORD = new hydra.core.Name("updateRecord");
+  public static final hydra.core.Name UPDATE_RECORD = new hydra.core.Name("updateRecord");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
   
   private Expression () {
   

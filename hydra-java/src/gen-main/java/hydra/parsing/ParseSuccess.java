@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A successful parse result
  */
 public class ParseSuccess<A> implements Serializable, Comparable<ParseSuccess<A>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.parsing.ParseSuccess");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.parsing.ParseSuccess");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public static final hydra.core.Name FIELD_NAME_REMAINDER = new hydra.core.Name("remainder");
+  public static final hydra.core.Name REMAINDER = new hydra.core.Name("remainder");
   
   /**
    * The parsed value

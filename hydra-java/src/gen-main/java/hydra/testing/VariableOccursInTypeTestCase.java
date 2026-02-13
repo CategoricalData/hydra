@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A test case which checks whether a type variable occurs in a type expression. This is the occur check used in type unification.
  */
 public class VariableOccursInTypeTestCase implements Serializable, Comparable<VariableOccursInTypeTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_EXPECTED = new hydra.core.Name("expected");
+  public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
   
   /**
    * The variable name to search for

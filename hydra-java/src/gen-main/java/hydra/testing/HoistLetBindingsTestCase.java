@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case for hoistLetBindings with hoistAll=True, which hoists ALL nested let bindings to the top level of a let term, not just polymorphic ones. This is used for targets like Java that cannot have let expressions in arbitrary positions.
  */
 public class HoistLetBindingsTestCase implements Serializable, Comparable<HoistLetBindingsTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.HoistLetBindingsTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.HoistLetBindingsTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The input let term

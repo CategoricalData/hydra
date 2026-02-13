@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A predefined term rewriter for testing rewriteTerm
  */
 public abstract class TermRewriter implements Serializable, Comparable<TermRewriter> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TermRewriter");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TermRewriter");
   
-  public static final hydra.core.Name FIELD_NAME_REPLACE_FOO_WITH_BAR = new hydra.core.Name("replaceFooWithBar");
+  public static final hydra.core.Name REPLACE_FOO_WITH_BAR = new hydra.core.Name("replaceFooWithBar");
   
-  public static final hydra.core.Name FIELD_NAME_REPLACE_INT32_WITH_INT64 = new hydra.core.Name("replaceInt32WithInt64");
+  public static final hydra.core.Name REPLACE_INT32_WITH_INT64 = new hydra.core.Name("replaceInt32WithInt64");
   
   private TermRewriter () {
   

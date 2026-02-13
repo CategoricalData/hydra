@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A container for logging and error information
  */
 public class Trace implements Serializable, Comparable<Trace> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.compute.Trace");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.Trace");
   
-  public static final hydra.core.Name FIELD_NAME_STACK = new hydra.core.Name("stack");
+  public static final hydra.core.Name STACK = new hydra.core.Name("stack");
   
-  public static final hydra.core.Name FIELD_NAME_MESSAGES = new hydra.core.Name("messages");
+  public static final hydra.core.Name MESSAGES = new hydra.core.Name("messages");
   
-  public static final hydra.core.Name FIELD_NAME_OTHER = new hydra.core.Name("other");
+  public static final hydra.core.Name OTHER = new hydra.core.Name("other");
   
   /**
    * A stack of context labels

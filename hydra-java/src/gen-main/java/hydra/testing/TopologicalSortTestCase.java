@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case which performs topological sort on a directed graph and compares the result with either an expected sorted list or expected cycles
  */
 public class TopologicalSortTestCase implements Serializable, Comparable<TopologicalSortTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TopologicalSortTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TopologicalSortTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_ADJACENCY_LIST = new hydra.core.Name("adjacencyList");
+  public static final hydra.core.Name ADJACENCY_LIST = new hydra.core.Name("adjacencyList");
   
-  public static final hydra.core.Name FIELD_NAME_EXPECTED = new hydra.core.Name("expected");
+  public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
   
   /**
    * The directed graph as an adjacency list (node to list of dependencies)

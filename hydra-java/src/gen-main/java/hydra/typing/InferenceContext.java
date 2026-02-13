@@ -8,17 +8,17 @@ import java.io.Serializable;
  * The context provided to type inference, including various typing environments.
  */
 public class InferenceContext implements Serializable, Comparable<InferenceContext> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.typing.InferenceContext");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.typing.InferenceContext");
   
-  public static final hydra.core.Name FIELD_NAME_SCHEMA_TYPES = new hydra.core.Name("schemaTypes");
+  public static final hydra.core.Name SCHEMA_TYPES = new hydra.core.Name("schemaTypes");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMITIVE_TYPES = new hydra.core.Name("primitiveTypes");
+  public static final hydra.core.Name PRIMITIVE_TYPES = new hydra.core.Name("primitiveTypes");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_TYPES = new hydra.core.Name("dataTypes");
+  public static final hydra.core.Name DATA_TYPES = new hydra.core.Name("dataTypes");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS_CONSTRAINTS = new hydra.core.Name("classConstraints");
+  public static final hydra.core.Name CLASS_CONSTRAINTS = new hydra.core.Name("classConstraints");
   
-  public static final hydra.core.Name FIELD_NAME_DEBUG = new hydra.core.Name("debug");
+  public static final hydra.core.Name DEBUG = new hydra.core.Name("debug");
   
   /**
    * A fixed typing environment which is derived from the schema of the graph.

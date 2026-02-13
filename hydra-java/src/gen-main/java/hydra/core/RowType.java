@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A labeled record or union type
  */
 public class RowType implements Serializable, Comparable<RowType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.RowType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.RowType");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("typeName");
   
-  public static final hydra.core.Name FIELD_NAME_FIELDS = new hydra.core.Name("fields");
+  public static final hydra.core.Name FIELDS = new hydra.core.Name("fields");
   
   /**
    * The name of the row type, which must correspond to the name of a Type element

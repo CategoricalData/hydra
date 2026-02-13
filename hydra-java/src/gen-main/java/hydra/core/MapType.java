@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A map type
  */
 public class MapType implements Serializable, Comparable<MapType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.MapType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.MapType");
   
-  public static final hydra.core.Name FIELD_NAME_KEYS = new hydra.core.Name("keys");
+  public static final hydra.core.Name KEYS = new hydra.core.Name("keys");
   
-  public static final hydra.core.Name FIELD_NAME_VALUES = new hydra.core.Name("values");
+  public static final hydra.core.Name VALUES = new hydra.core.Name("values");
   
   /**
    * The type of keys in the map

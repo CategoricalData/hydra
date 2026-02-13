@@ -8,19 +8,19 @@ import java.io.Serializable;
  * A typing environment used for type reconstruction (typeOf) over System F terms
  */
 public class TypeContext implements Serializable, Comparable<TypeContext> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.typing.TypeContext");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.typing.TypeContext");
   
-  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
+  public static final hydra.core.Name TYPES = new hydra.core.Name("types");
   
-  public static final hydra.core.Name FIELD_NAME_METADATA = new hydra.core.Name("metadata");
+  public static final hydra.core.Name METADATA = new hydra.core.Name("metadata");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_VARIABLES = new hydra.core.Name("typeVariables");
+  public static final hydra.core.Name TYPE_VARIABLES = new hydra.core.Name("typeVariables");
   
-  public static final hydra.core.Name FIELD_NAME_LAMBDA_VARIABLES = new hydra.core.Name("lambdaVariables");
+  public static final hydra.core.Name LAMBDA_VARIABLES = new hydra.core.Name("lambdaVariables");
   
-  public static final hydra.core.Name FIELD_NAME_LET_VARIABLES = new hydra.core.Name("letVariables");
+  public static final hydra.core.Name LET_VARIABLES = new hydra.core.Name("letVariables");
   
-  public static final hydra.core.Name FIELD_NAME_INFERENCE_CONTEXT = new hydra.core.Name("inferenceContext");
+  public static final hydra.core.Name INFERENCE_CONTEXT = new hydra.core.Name("inferenceContext");
   
   /**
    * A mapping of lambda- and let-bound variables to their types

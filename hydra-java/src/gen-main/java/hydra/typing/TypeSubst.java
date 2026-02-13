@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A substitution of type variables for types
  */
 public class TypeSubst implements Serializable, Comparable<TypeSubst> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.typing.TypeSubst");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.typing.TypeSubst");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.util.Map<hydra.core.Name, hydra.core.Type> value;
   

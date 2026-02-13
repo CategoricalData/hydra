@@ -8,15 +8,15 @@ import java.io.Serializable;
  * A test case which attempts to unify two types and compares the result. The expected result is either Left (failure message substring) or Right (substitution).
  */
 public class UnifyTypesTestCase implements Serializable, Comparable<UnifyTypesTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.UnifyTypesTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.UnifyTypesTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_SCHEMA_TYPES = new hydra.core.Name("schemaTypes");
+  public static final hydra.core.Name SCHEMA_TYPES = new hydra.core.Name("schemaTypes");
   
-  public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
+  public static final hydra.core.Name LEFT = new hydra.core.Name("left");
   
-  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
+  public static final hydra.core.Name RIGHT = new hydra.core.Name("right");
   
-  public static final hydra.core.Name FIELD_NAME_EXPECTED = new hydra.core.Name("expected");
+  public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
   
   /**
    * The schema types map (type variable names that should not be bound)

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A binding with its type signature
  */
 public class TypedBinding implements Serializable, Comparable<TypedBinding> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.TypedBinding");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.TypedBinding");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_SIGNATURE = new hydra.core.Name("typeSignature");
+  public static final hydra.core.Name TYPE_SIGNATURE = new hydra.core.Name("typeSignature");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE_BINDING = new hydra.core.Name("valueBinding");
+  public static final hydra.core.Name VALUE_BINDING = new hydra.core.Name("valueBinding");
   
   /**
    * The type signature

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * Matching open and close bracket symbols
  */
 public class Brackets implements Serializable, Comparable<Brackets> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Brackets");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ast.Brackets");
   
-  public static final hydra.core.Name FIELD_NAME_OPEN = new hydra.core.Name("open");
+  public static final hydra.core.Name OPEN = new hydra.core.Name("open");
   
-  public static final hydra.core.Name FIELD_NAME_CLOSE = new hydra.core.Name("close");
+  public static final hydra.core.Name CLOSE = new hydra.core.Name("close");
   
   /**
    * The opening bracket symbol

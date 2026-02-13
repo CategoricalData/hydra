@@ -8,29 +8,29 @@ import java.io.Serializable;
  * A codec for generating compiled test files from test groups into a target programming language
  */
 public class TestCodec implements Serializable, Comparable<TestCodec> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TestCodec");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TestCodec");
   
-  public static final hydra.core.Name FIELD_NAME_LANGUAGE = new hydra.core.Name("language");
+  public static final hydra.core.Name LANGUAGE = new hydra.core.Name("language");
   
-  public static final hydra.core.Name FIELD_NAME_FILE_EXTENSION = new hydra.core.Name("fileExtension");
+  public static final hydra.core.Name FILE_EXTENSION = new hydra.core.Name("fileExtension");
   
-  public static final hydra.core.Name FIELD_NAME_ENCODE_TERM = new hydra.core.Name("encodeTerm");
+  public static final hydra.core.Name ENCODE_TERM = new hydra.core.Name("encodeTerm");
   
-  public static final hydra.core.Name FIELD_NAME_ENCODE_TYPE = new hydra.core.Name("encodeType");
+  public static final hydra.core.Name ENCODE_TYPE = new hydra.core.Name("encodeType");
   
-  public static final hydra.core.Name FIELD_NAME_FORMAT_TEST_NAME = new hydra.core.Name("formatTestName");
+  public static final hydra.core.Name FORMAT_TEST_NAME = new hydra.core.Name("formatTestName");
   
-  public static final hydra.core.Name FIELD_NAME_FORMAT_MODULE_NAME = new hydra.core.Name("formatModuleName");
+  public static final hydra.core.Name FORMAT_MODULE_NAME = new hydra.core.Name("formatModuleName");
   
-  public static final hydra.core.Name FIELD_NAME_TEST_CASE_TEMPLATE = new hydra.core.Name("testCaseTemplate");
+  public static final hydra.core.Name TEST_CASE_TEMPLATE = new hydra.core.Name("testCaseTemplate");
   
-  public static final hydra.core.Name FIELD_NAME_TEST_GROUP_TEMPLATE = new hydra.core.Name("testGroupTemplate");
+  public static final hydra.core.Name TEST_GROUP_TEMPLATE = new hydra.core.Name("testGroupTemplate");
   
-  public static final hydra.core.Name FIELD_NAME_MODULE_TEMPLATE = new hydra.core.Name("moduleTemplate");
+  public static final hydra.core.Name MODULE_TEMPLATE = new hydra.core.Name("moduleTemplate");
   
-  public static final hydra.core.Name FIELD_NAME_IMPORT_TEMPLATE = new hydra.core.Name("importTemplate");
+  public static final hydra.core.Name IMPORT_TEMPLATE = new hydra.core.Name("importTemplate");
   
-  public static final hydra.core.Name FIELD_NAME_FIND_IMPORTS = new hydra.core.Name("findImports");
+  public static final hydra.core.Name FIND_IMPORTS = new hydra.core.Name("findImports");
   
   /**
    * The name of the target programming language
