@@ -14,7 +14,7 @@ import hydra.dsl.annotations as annotations
 import hydra.formatting
 import hydra.classes
 import hydra.util
-from hydra.core import Field, Name, Term, Type
+from hydra.core import Binding, Field, Name, Term, Type
 from hydra.module import Module, Namespace, QualifiedName
 from hydra.phantoms import TBinding, TTerm
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing
@@ -132,6 +132,14 @@ def definition_in_namespace(ns: Namespace, lname: str, term: TTerm[A]) -> TBindi
     qname = QualifiedName(Just(ns), lname)
     name = unqualify_name(qname)
     return TBinding(name, term)
+
+
+def to_binding(tb: TBinding[A]) -> Binding:
+    """Convert a TBinding to an untyped Binding for use in module element lists.
+
+    This mirrors Haskell's toBinding and Java's Phantoms.toBinding().
+    """
+    return Binding(tb.name, tb.term.value, Nothing())
 
 
 def derive_primitive_name() -> Name:

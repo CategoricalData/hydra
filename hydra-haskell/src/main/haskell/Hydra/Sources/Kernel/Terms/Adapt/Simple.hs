@@ -163,50 +163,58 @@ adaptDataGraph = define "adaptDataGraph" $
     (var "transform" @@ var "graph0" @@ var "gterm0")
     (produce $ var "gterm0") $
   "gterm2" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
-  "els1Raw" <~ Schemas.termAsGraph @@ var "gterm2" $
+  -- Strip lambda domains from the adapted term (when doExpand=False).
+  -- Lambda domains carry pre-adaptation types (e.g. bigfloat) that conflict with adapted terms.
+  "stripLambdaDomains" <~ ("recurse" ~> "term" ~>
+    "rewritten" <~ var "recurse" @@ var "term" $
+    cases _Term (var "rewritten")
+      (Just $ var "rewritten") [
+      _Term_function>>: "f" ~> cases _Function (var "f")
+        (Just $ Core.termFunction $ var "f") [
+        _Function_elimination>>: "e" ~> Core.termFunction $ Core.functionElimination $ var "e",
+        _Function_lambda>>: "l" ~> Core.termFunction $ Core.functionLambda $ Core.lambda
+          (Core.lambdaParameter $ var "l")
+          nothing
+          (Core.lambdaBody $ var "l")]]) $
+  "gterm3" <~ Logic.ifElse (var "doExpand")
+    (var "gterm2")
+    (Rewriting.rewriteTerm @@ var "stripLambdaDomains" @@ var "gterm2") $
+  "els1Raw" <~ Schemas.termAsGraph @@ var "gterm3" $
+
+  -- Strip nested let binding TypeSchemes within each top-level binding's term.
+  -- These may carry stale types from JSON modules (e.g. bigfloat).
+  -- Applied per-binding AFTER termAsGraph so that top-level binding TypeSchemes
+  -- (which carry type-class constraints like Ord) are preserved.
+  "stripNestedTypes" <~ ("recurse" ~> "term" ~>
+    "rewritten" <~ var "recurse" @@ var "term" $
+    cases _Term (var "rewritten")
+      (Just $ var "rewritten") [
+      _Term_let>>: "lt" ~>
+        "stripB" <~ ("b" ~> Core.binding
+          (Core.bindingName $ var "b")
+          (Core.bindingTerm $ var "b")
+          nothing) $
+        Core.termLet $ Core.let_
+          (Lists.map (var "stripB") (Core.letBindings $ var "lt"))
+          (Core.letBody $ var "lt")]) $
+  -- Process each binding: strip nested let TypeSchemes AND adapt top-level TypeSchemes.
+  -- Adapting (rather than stripping) TypeSchemes converts stale types like bigfloat→float64
+  -- while preserving type-class constraints like Ord needed by decodeSet.
+  "processBinding" <~ ("el" ~>
+    Logic.ifElse (var "doExpand")
+      (produce $ var "el")
+      ("newTerm" <~ Rewriting.rewriteTerm @@ var "stripNestedTypes" @@ (Core.bindingTerm $ var "el") $
+       "adaptedType" <<~ optCases (Core.bindingType $ var "el")
+         (produce nothing)
+         ("ts" ~>
+           "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
+           produce $ just $ var "ts1") $
+       produce $ Core.binding
+         (Core.bindingName $ var "el")
+         (var "newTerm")
+         (var "adaptedType"))) $
+  "els1" <<~ Flows.mapList (var "processBinding") (var "els1Raw") $
   "prims1" <<~ Flows.mapElems (adaptPrimitive @@ var "constraints" @@ var "litmap") (var "prims0") $
-
-  -- Collect existing constraints from original bindings (keyed by binding name)
-  -- These need to be preserved through adaptation since termAsGraph doesn't preserve TypeScheme constraints
-  "originalConstraints" <~ Maps.fromList (Maybes.cat $ Lists.map
-    ("el" ~> Maybes.bind
-      (Core.bindingType $ var "el")
-      ("ts" ~> Maybes.map
-        ("c" ~> pair (Core.bindingName $ var "el") (var "c"))
-        (Core.typeSchemeConstraints $ var "ts")))
-    (var "els0")) $
-
-  -- Merge original constraints back into adapted bindings
-  "mergeConstraints" <~ ("el" ~>
-    "bname" <~ Core.bindingName (var "el") $
-    "origConstraints" <~ Maps.lookup (var "bname") (var "originalConstraints") $
-    Maybes.maybe
-      (var "el")  -- No original constraints, keep binding as-is
-      ("origC" ~> Maybes.maybe
-        -- No inferred type scheme, create one with just the constraints
-        (Core.binding
-          (var "bname")
-          (Core.bindingTerm $ var "el")
-          (just $ Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.name $ string "a") (just $ var "origC")))
-        ("ts" ~>
-          "inferredC" <~ Core.typeSchemeConstraints (var "ts") $
-          "mergedC" <~ Maybes.maybe
-            (just $ var "origC")  -- No inferred constraints, use original
-            ("infC" ~> just $ Maps.union (var "origC") (var "infC"))  -- Merge both
-            (var "inferredC") $
-          Core.binding
-            (var "bname")
-            (Core.bindingTerm $ var "el")
-            (just $ Core.typeScheme
-              (Core.typeSchemeVariables $ var "ts")
-              (Core.typeSchemeType $ var "ts")
-              (var "mergedC")))
-        (Core.bindingType $ var "el"))
-      (var "origConstraints")) $
-
-  "els1" <~ Lists.map
-    ("el" ~> var "mergeConstraints" @@ var "el")
-    (var "els1Raw") $
 
   produce $ Graph.graph
     (var "els1")
@@ -321,6 +329,11 @@ adaptTerm = define "adaptTerm" $
   "rewrite" <~ ("recurse" ~> "term0" ~> lets [
     "forSupported">: ("term" ~> cases _Term (var "term")
       (Just $ produce $ just $ var "term") [
+      _Term_annotated>>: "at" ~>
+        -- Strip type annotations, as they may be stale after adaptation
+        -- (e.g. bigfloat annotations on terms that now use float64).
+        -- The second inference pass will re-infer correct types.
+        produce $ just $ Core.annotatedTermBody (var "at"),
       _Term_literal>>: "l" ~>
         "lt" <~ Reflect.literalType @@ var "l" $
         produce $ just $ Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
@@ -441,8 +454,13 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
      produce $ Graph.graphWithElements (var "graphh1") (var "newElements2"))
     (produce $ var "graphh1") $
 
-  -- Step 3: Run first inference if eta expansion is needed (eta expansion needs types)
-  "graphi1" <<~ Logic.ifElse (Logic.or (var "doExpand") (var "doHoistPolymorphicLetBindings"))
+  -- Step 3: Run first inference if eta expansion is needed (eta expansion needs types),
+  -- but skip if all bindings already have types (e.g. modules loaded from inferred JSON)
+  "allHaveTypes" <~ Logic.ands (Lists.map ("b" ~> Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graphu1")) $
+  "graphi1" <<~ Logic.ifElse
+    (Logic.and
+      (Logic.or (var "doExpand") (var "doHoistPolymorphicLetBindings"))
+      (Logic.not (var "allHaveTypes")))
     (Inference.inferGraphTypes @@ var "graphu1")
     (produce $ var "graphu1") $
 
@@ -475,8 +493,6 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
 
   -- Step 5: Adapt the graph (includes eta expansion if enabled)
   "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphh" $
-
---  "debug" <<~ Flows.fail (string "expanded") $
 
   -- Step 6: Perform second inference on the adapted graph (eta expansion may introduce new terms)
   "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
@@ -620,7 +636,12 @@ termAlternatives = define "termAlternatives" $
       Core.termList $ optCases (var "ot")
         (list ([] :: [TTerm Term]))
         ("term2" ~> list [var "term2"])],
-    -- Note: no type abstractions or type applications, as we are not expecting System F terms here
+    _Term_typeLambda>>: "abs" ~>
+      "term2" <~ Core.typeLambdaBody (var "abs") $
+      produce $ list [var "term2"],
+    _Term_typeApplication>>: "ta" ~>
+      "term2" <~ Core.typeApplicationTermBody (var "ta") $
+      produce $ list [var "term2"],
     _Term_union>>: "inj" ~>
       "tname" <~ Core.injectionTypeName (var "inj") $
       "field" <~ Core.injectionField (var "inj") $

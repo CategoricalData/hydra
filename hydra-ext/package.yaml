@@ -146,3 +146,13 @@ executables:
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
+
+  bootstrap-from-json:
+    main: Main.hs
+    source-dirs:
+      - src/exec/bootstrap-from-json
+      - ../hydra-haskell/src/gen-test/haskell
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+      - hspec

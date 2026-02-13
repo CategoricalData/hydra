@@ -761,7 +761,87 @@ The DSL can handle mutual recursion directly — functions in the same module ca
 
 37. **`Serialization` module for `printExpr`/`parenthesize`**: These functions live in `Hydra.Sources.Kernel.Terms.Serialization`, NOT in the Java Serde module. Import as `qualified Hydra.Sources.Kernel.Terms.Serialization as SerializationSource` and add `SerializationSource.ns` to the module dependencies.
 
-38. **Language-specific character escaping in serialization**: When promoting code that generates source files (e.g., a Java or Python serializer), be aware that target languages may require specific escape sequences for non-ASCII characters. For example, Java source files require `\uXXXX` escape sequences for characters outside ASCII. You may need to write custom escape functions (e.g., `escapeJavaChar`, `escapeJavaString`) in the DSL rather than relying on Haskell's default `show` behavior, which passes non-ASCII characters through as literal UTF-8. Test generated source files with non-ASCII input (e.g., `\u03BB` for lambda) to verify correct escaping.
+38. **Empty list type ambiguity**: When using `list []` in a context where GHC cannot infer the element type (e.g., inside `optCases` branches or as an argument to `Flows.pure`), you may get "ambiguous type variable" errors because the `AsTerm` constraint on `list` cannot be resolved. The fix is to bypass `list` and construct directly from `Terms.list`:
+
+    ```haskell
+    -- Error: Ambiguous type variable 'a0' arising from a use of 'list'
+    Flows.pure (list [])
+
+    -- Fix: construct via Terms.list with a type annotation
+    Flows.pure (TTerm (Terms.list []) :: TTerm [(String, String)])
+    ```
+
+    This works because `Terms.list` operates at the untyped term level and doesn't require the `AsTerm` constraint, while the outer `TTerm` annotation tells GHC the phantom type.
+
+39. **Language-specific character escaping in serialization**: When promoting code that generates source files (e.g., a Java or Python serializer), be aware that target languages may require specific escape sequences for non-ASCII characters. For example, Java source files require `\uXXXX` escape sequences for characters outside ASCII. You may need to write custom escape functions (e.g., `escapeJavaChar`, `escapeJavaString`) in the DSL rather than relying on Haskell's default `show` behavior, which passes non-ASCII characters through as literal UTF-8. Test generated source files with non-ASCII input (e.g., `\u03BB` for lambda) to verify correct escaping.
+
+## Promoting modules with I/O
+
+When the module to be promoted contains a mix of pure logic and I/O operations (file reading, file writing, console output), the I/O must be separated out first. Only the pure logic can be promoted to the DSL.
+
+### The I/O separation pattern
+
+1. **Identify the I/O boundary.** Audit each function: does it call `IO` actions (file system, console, network)? Does it use Haskell-specific libraries (Aeson, ByteString) that have no Hydra equivalent? These stay behind.
+
+2. **Extract the pure core.** For each I/O function, extract the pure computation as a separate function. The I/O function becomes a thin wrapper that:
+   - Reads input (files, config)
+   - Calls the pure function
+   - Evaluates the result (e.g., `runFlow`)
+   - Writes output (files, console)
+
+   Example from `Generation.hs`:
+   ```haskell
+   -- Pure core (promotable):
+   generateSourceFiles :: ... -> Flow Graph [(FilePath, String)]
+   generateSourceFiles printDefs lang ... bsGraph universe mods = ...
+
+   -- I/O wrapper (stays in Haskell):
+   generateSources :: ... -> IO ()
+   generateSources printDefs lang ... basePath universe mods = do
+     mfiles <- runFlow bootstrapGraph $
+       generateSourceFiles printDefs lang ... bootstrapGraph universe mods
+     case mfiles of
+       Nothing -> fail "Failed"
+       Just files -> mapM_ writePair files
+   ```
+
+3. **Parameterize Haskell-specific values.** Some values exist only in Haskell (e.g., `bootstrapGraph` from `Hydra.Dsl.Bootstrap`). Instead of importing them in the pure code, pass them as explicit parameters. This makes the pure code language-independent — each language's I/O layer provides its own version:
+   ```haskell
+   -- Before: pure code imports bootstrapGraph
+   modulesToGraph universeModules modules = elementsToGraph bootstrapGraph ...
+
+   -- After: pure code takes it as a parameter
+   modulesToGraph bsGraph universeModules modules = elementsToGraph bsGraph ...
+
+   -- Haskell I/O layer passes it in:
+   modulesToGraph = Generated.modulesToGraph bootstrapGraph
+   ```
+
+4. **Test the separation.** Build and run the full test suite after extracting the pure core but *before* promoting. This verifies the I/O separation didn't break anything.
+
+5. **Promote the pure functions.** Follow the standard promotion workflow (create DSL module, promote incrementally, regenerate, test).
+
+6. **Delegate from the original module.** After promotion, the hand-written module imports the generated module and delegates to it. The I/O wrappers remain hand-written:
+   ```haskell
+   import qualified Hydra.CodeGeneration as Generated
+
+   -- Delegated to generated code:
+   generateSourceFiles = Generated.generateSourceFiles
+   stripModuleTypeSchemes = Generated.stripModuleTypeSchemes
+
+   -- I/O wrapper stays hand-written:
+   generateSources ... = do
+     mfiles <- runFlow bootstrapGraph $ generateSourceFiles ...
+     ...
+   ```
+
+### What typically stays behind
+
+- File I/O: `readFile`, `writeFile`, `createDirectoryIfMissing`, directory listing
+- Flow evaluation: `runFlow`, `printTrace`
+- Library-specific code: Aeson JSON parsing, ByteString processing
+- Haskell-specific encoders/decoders: `EncodeModule.module_`, `DecodeCore.type_`
+- Bootstrap graph: `bootstrapGraph` (Haskell's is defined in `Hydra.Dsl.Bootstrap`)
 
 ## Related recipes
 
