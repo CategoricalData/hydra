@@ -62,9 +62,9 @@ typeAliasStatementFor :: (Helpers.PythonEnvironment -> Syntax.Name -> [Syntax.Ty
 typeAliasStatementFor env name tparams mcomment tyexpr = (Logic.ifElse (useInlineTypeParamsFor (Helpers.pythonEnvironmentVersion env)) (Utils.typeAliasStatement name tparams mcomment tyexpr) (Utils.typeAliasStatement310 name tparams mcomment tyexpr))
 
 -- | Version-aware union type statement generation
-unionTypeStatementsFor :: (Helpers.PythonEnvironment -> Syntax.Name -> [Syntax.TypeParameter] -> Maybe String -> Syntax.Expression -> [Syntax.Statement])
-unionTypeStatementsFor env name tparams mcomment tyexpr = (Logic.ifElse (useInlineTypeParamsFor (Helpers.pythonEnvironmentVersion env)) [
-  Utils.typeAliasStatement name tparams mcomment tyexpr] (Utils.unionTypeClassStatements310 name mcomment tyexpr))
+unionTypeStatementsFor :: (Helpers.PythonEnvironment -> Syntax.Name -> [Syntax.TypeParameter] -> Maybe String -> Syntax.Expression -> [Syntax.Statement] -> [Syntax.Statement])
+unionTypeStatementsFor env name tparams mcomment tyexpr extraStmts = (Logic.ifElse (useInlineTypeParamsFor (Helpers.pythonEnvironmentVersion env)) (Lists.concat2 [
+  Utils.typeAliasStatement name tparams mcomment tyexpr] extraStmts) (Utils.unionTypeClassStatements310 name mcomment tyexpr extraStmts))
 
 -- | Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation
 wrapInNullaryLambda :: (Syntax.Expression -> Syntax.Expression)
@@ -348,34 +348,16 @@ encodeType env typ =
 encodeTypeQuoted :: (Helpers.PythonEnvironment -> Core.Type -> Compute.Flow t0 Syntax.Expression)
 encodeTypeQuoted env typ = (Flows.bind (encodeType env typ) (\pytype -> Flows.pure (Logic.ifElse (Sets.null (Rewriting.freeVariablesInType typ)) pytype (Utils.doubleQuotedString (Serialization.printExpr (Serde.encodeExpression pytype))))))
 
--- | Generate name constants for a type
-encodeNameConstants :: (Helpers.PythonEnvironment -> Core.Name -> Core.Type -> [Syntax.Statement])
-encodeNameConstants env name typ =  
+-- | Generate name constants for a type as class-level attributes
+encodeNameConstants :: (Helpers.PythonEnvironment -> Core.Name -> [Core.FieldType] -> [Syntax.Statement])
+encodeNameConstants env name fields =  
   let toStmt = (\pair -> Utils.assignmentStatement (Pairs.first pair) (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
           Utils.doubleQuotedString (Core.unName (Pairs.second pair))]))
   in  
     let namePair = (Names.encodeConstantForTypeName env name, name)
     in  
-      let fieldPair = (\field -> (Names.encodeConstantForFieldName env name (Core.fieldTypeName field), (Core.fieldTypeName field)))
-      in  
-        let fieldPairs = (\t -> (\x -> case x of
-                Core.TypeForall v1 -> (fieldPairs (Core.forallTypeBody v1))
-                Core.TypeRecord v1 -> (Lists.map fieldPair (Core.rowTypeFields v1))
-                Core.TypeUnion v1 -> (Lists.map fieldPair (Core.rowTypeFields v1))
-                Core.TypeAnnotated _ -> []
-                Core.TypeApplication _ -> []
-                Core.TypeFunction _ -> []
-                Core.TypeList _ -> []
-                Core.TypeLiteral _ -> []
-                Core.TypeMap _ -> []
-                Core.TypeMaybe _ -> []
-                Core.TypeEither _ -> []
-                Core.TypePair _ -> []
-                Core.TypeSet _ -> []
-                Core.TypeUnit -> []
-                Core.TypeVariable _ -> []
-                Core.TypeWrap _ -> []) (Rewriting.deannotateType t))
-        in (Lists.map toStmt (Lists.cons namePair (fieldPairs typ)))
+      let fieldPairs = (Lists.map (\field -> (Names.encodeConstantForFieldName env name (Core.fieldTypeName field), (Core.fieldTypeName field))) fields)
+      in (Lists.map toStmt (Lists.cons namePair fieldPairs))
 
 -- | Find type parameters in a type that are bound in the environment
 findTypeParams :: (Helpers.PythonEnvironment -> Core.Type -> [Core.Name])
@@ -385,17 +367,24 @@ findTypeParams env typ =
     let isBound = (\v -> Maybes.isJust (Maps.lookup v boundVars))
     in (Lists.filter isBound (Sets.toList (Rewriting.freeVariablesInType typ)))
 
-encodeWrappedType :: (Helpers.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Compute.Flow t0 Syntax.Statement)
+encodeWrappedType :: (Helpers.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Compute.Flow t0 [Syntax.Statement])
 encodeWrappedType env name typ comment =  
   let tparamList = (Pairs.first (Helpers.pythonEnvironmentBoundTypeVariables env))
   in (Flows.bind (encodeTypeQuoted env typ) (\ptypeQuoted ->  
-    let body = (Utils.indentedBlock comment [])
-    in (Flows.pure (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
-      Syntax.classDefinitionDecorators = Nothing,
-      Syntax.classDefinitionName = (Names.encodeName False Util.CaseConventionPascal env name),
-      Syntax.classDefinitionTypeParams = (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (Names.encodeTypeVariable arg_)) (findTypeParams env typ)),
-      Syntax.classDefinitionArguments = (Just (variantArgs ptypeQuoted tparamList)),
-      Syntax.classDefinitionBody = body})))))
+    let pyName = (Names.encodeName False Util.CaseConventionPascal env name)
+    in  
+      let body = (Utils.indentedBlock comment [])
+      in  
+        let typeConstStmt = (Utils.dottedAssignmentStatement pyName (Names.encodeConstantForTypeName env name) (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
+                Utils.doubleQuotedString (Core.unName name)]))
+        in (Flows.pure [
+          Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
+            Syntax.classDefinitionDecorators = Nothing,
+            Syntax.classDefinitionName = pyName,
+            Syntax.classDefinitionTypeParams = (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (Names.encodeTypeVariable arg_)) (findTypeParams env typ)),
+            Syntax.classDefinitionArguments = (Just (variantArgs ptypeQuoted tparamList)),
+            Syntax.classDefinitionBody = body}),
+          typeConstStmt])))
 
 -- | Extend a PythonEnvironment with a new bound type variable
 extendEnvWithTypeVar :: (Helpers.PythonEnvironment -> Core.Name -> Helpers.PythonEnvironment)
@@ -744,30 +733,33 @@ encodeRecordType :: (Helpers.PythonEnvironment -> Core.Name -> Core.RowType -> M
 encodeRecordType env name rowType comment =  
   let tfields = (Core.rowTypeFields rowType)
   in (Flows.bind (Flows.mapList (encodeFieldType env) tfields) (\pyFields ->  
-    let body = (Utils.indentedBlock comment [
-            pyFields])
+    let constStmts = (encodeNameConstants env name tfields)
     in  
-      let boundVars = (Helpers.pythonEnvironmentBoundTypeVariables env)
+      let body = (Utils.indentedBlock comment [
+              pyFields,
+              constStmts])
       in  
-        let tparamList = (Pairs.first boundVars)
+        let boundVars = (Helpers.pythonEnvironmentBoundTypeVariables env)
         in  
-          let mGenericArg = (genericArg tparamList)
+          let tparamList = (Pairs.first boundVars)
           in  
-            let args = (Maybes.maybe Nothing (\a -> Just (Utils.pyExpressionsToPyArgs [
-                    a])) mGenericArg)
+            let mGenericArg = (genericArg tparamList)
             in  
-              let decs = (Just (Syntax.Decorators [
-                      dataclassDecorator]))
+              let args = (Maybes.maybe Nothing (\a -> Just (Utils.pyExpressionsToPyArgs [
+                      a])) mGenericArg)
               in  
-                let pyName = (Names.encodeName False Util.CaseConventionPascal env name)
+                let decs = (Just (Syntax.Decorators [
+                        dataclassDecorator]))
                 in  
-                  let noTypeParams = []
-                  in (Flows.pure (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
-                    Syntax.classDefinitionDecorators = decs,
-                    Syntax.classDefinitionName = pyName,
-                    Syntax.classDefinitionTypeParams = noTypeParams,
-                    Syntax.classDefinitionArguments = args,
-                    Syntax.classDefinitionBody = body})))))
+                  let pyName = (Names.encodeName False Util.CaseConventionPascal env name)
+                  in  
+                    let noTypeParams = []
+                    in (Flows.pure (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
+                      Syntax.classDefinitionDecorators = decs,
+                      Syntax.classDefinitionName = pyName,
+                      Syntax.classDefinitionTypeParams = noTypeParams,
+                      Syntax.classDefinitionArguments = args,
+                      Syntax.classDefinitionBody = body})))))
 
 -- | Encode an enum value assignment statement with optional comment
 encodeEnumValueAssignment :: (Helpers.PythonEnvironment -> Core.FieldType -> Compute.Flow Helpers.PyGraph [Syntax.Statement])
@@ -780,7 +772,8 @@ encodeEnumValueAssignment env fieldType =
       in  
         let fnameStr = (Core.unName fname)
         in  
-          let pyValue = (Utils.doubleQuotedString fnameStr)
+          let pyValue = (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
+                  Utils.doubleQuotedString fnameStr])
           in  
             let assignStmt = (Utils.assignmentStatement pyName pyValue)
             in (Flows.pure (Maybes.maybe [
@@ -827,19 +820,25 @@ encodeUnionType env name rowType comment =
                 Utils.pyNameToPyExpression enumName]))
         in  
           let pyName = (Names.encodeName False Util.CaseConventionPascal env name)
-          in (Flows.pure [
-            Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
-              Syntax.classDefinitionDecorators = Nothing,
-              Syntax.classDefinitionName = pyName,
-              Syntax.classDefinitionTypeParams = [],
-              Syntax.classDefinitionArguments = args,
-              Syntax.classDefinitionBody = body})]))) (Flows.bind (Flows.mapList (encodeUnionField env name) tfields) (\fieldStmts ->  
-    let tparams = (environmentTypeParameters env)
-    in  
-      let unionAlts = (Lists.map (encodeUnionFieldAlt env name) tfields)
+          in  
+            let typeConstStmt = (Utils.dottedAssignmentStatement pyName (Names.encodeConstantForTypeName env name) (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
+                    Utils.doubleQuotedString (Core.unName name)]))
+            in (Flows.pure [
+              Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
+                Syntax.classDefinitionDecorators = Nothing,
+                Syntax.classDefinitionName = pyName,
+                Syntax.classDefinitionTypeParams = [],
+                Syntax.classDefinitionArguments = args,
+                Syntax.classDefinitionBody = body}),
+              typeConstStmt]))) ( 
+    let constStmts = (encodeNameConstants env name tfields)
+    in (Flows.bind (Flows.mapList (encodeUnionField env name) tfields) (\fieldStmts ->  
+      let tparams = (environmentTypeParameters env)
       in  
-        let unionStmts = (unionTypeStatementsFor env (Names.encodeName False Util.CaseConventionPascal env name) tparams comment (Utils.orExpression unionAlts))
-        in (Flows.pure (Lists.concat2 fieldStmts unionStmts)))))
+        let unionAlts = (Lists.map (encodeUnionFieldAlt env name) tfields)
+        in  
+          let unionStmts = (unionTypeStatementsFor env (Names.encodeName False Util.CaseConventionPascal env name) tparams comment (Utils.orExpression unionAlts) constStmts)
+          in (Flows.pure (Lists.concat2 fieldStmts unionStmts))))))
 
 -- | Encode a union field as a primary expression for | alternatives
 encodeUnionFieldAlt :: (Helpers.PythonEnvironment -> Core.Name -> Core.FieldType -> Syntax.Primary)
@@ -868,11 +867,8 @@ encodeTypeDefSingle env name comment typeExpr =
 
 -- | Encode a type definition, dispatching based on type structure
 encodeTypeAssignment :: (Helpers.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Compute.Flow Helpers.PyGraph [[Syntax.Statement]])
-encodeTypeAssignment env name typ comment = (Flows.bind (encodeTypeAssignmentInner env name typ comment) (\defStmts ->  
-  let constStmts = (encodeNameConstants env name typ)
-  in (Flows.pure (Lists.concat2 (Lists.map (\s -> [
-    s]) defStmts) [
-    constStmts]))))
+encodeTypeAssignment env name typ comment = (Flows.bind (encodeTypeAssignmentInner env name typ comment) (\defStmts -> Flows.pure (Lists.map (\s -> [
+  s]) defStmts)))
 
 -- | Encode the inner type definition, unwrapping forall types
 encodeTypeAssignmentInner :: (Helpers.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Compute.Flow Helpers.PyGraph [Syntax.Statement])
@@ -893,8 +889,7 @@ encodeTypeAssignmentInner env name typ comment =
       Core.TypeUnion v1 -> (encodeUnionType env name v1 comment)
       Core.TypeWrap v1 ->  
         let innerType = (Core.wrappedTypeBody v1)
-        in (Flows.map (\s -> [
-          s]) (encodeWrappedType env name innerType comment))
+        in (encodeWrappedType env name innerType comment)
       _ -> dflt) stripped)
 
 -- | Create an expression that calls hydra.dsl.python.unsupported(message) at runtime

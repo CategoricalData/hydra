@@ -10,159 +10,114 @@ import hydra.core
 class EliminationVariant(Enum):
     r"""The identifier of an elimination constructor."""
     
-    RECORD = "record"
+    RECORD = hydra.core.Name("record")
     
-    UNION = "union"
+    UNION = hydra.core.Name("union")
     
-    WRAP = "wrap"
+    WRAP = hydra.core.Name("wrap")
 
-ELIMINATION_VARIANT__NAME = hydra.core.Name("hydra.variants.EliminationVariant")
-ELIMINATION_VARIANT__RECORD__NAME = hydra.core.Name("record")
-ELIMINATION_VARIANT__UNION__NAME = hydra.core.Name("union")
-ELIMINATION_VARIANT__WRAP__NAME = hydra.core.Name("wrap")
+EliminationVariant.TYPE_ = hydra.core.Name("hydra.variants.EliminationVariant")
 
 class FunctionVariant(Enum):
     r"""The identifier of a function constructor."""
     
-    ELIMINATION = "elimination"
+    ELIMINATION = hydra.core.Name("elimination")
     
-    LAMBDA = "lambda"
+    LAMBDA = hydra.core.Name("lambda")
     
-    PRIMITIVE = "primitive"
+    PRIMITIVE = hydra.core.Name("primitive")
 
-FUNCTION_VARIANT__NAME = hydra.core.Name("hydra.variants.FunctionVariant")
-FUNCTION_VARIANT__ELIMINATION__NAME = hydra.core.Name("elimination")
-FUNCTION_VARIANT__LAMBDA__NAME = hydra.core.Name("lambda")
-FUNCTION_VARIANT__PRIMITIVE__NAME = hydra.core.Name("primitive")
+FunctionVariant.TYPE_ = hydra.core.Name("hydra.variants.FunctionVariant")
 
 class LiteralVariant(Enum):
     r"""The identifier of a literal constructor."""
     
-    BINARY = "binary"
+    BINARY = hydra.core.Name("binary")
     
-    BOOLEAN = "boolean"
+    BOOLEAN = hydra.core.Name("boolean")
     
-    FLOAT = "float"
+    FLOAT = hydra.core.Name("float")
     
-    INTEGER = "integer"
+    INTEGER = hydra.core.Name("integer")
     
-    STRING = "string"
+    STRING = hydra.core.Name("string")
 
-LITERAL_VARIANT__NAME = hydra.core.Name("hydra.variants.LiteralVariant")
-LITERAL_VARIANT__BINARY__NAME = hydra.core.Name("binary")
-LITERAL_VARIANT__BOOLEAN__NAME = hydra.core.Name("boolean")
-LITERAL_VARIANT__FLOAT__NAME = hydra.core.Name("float")
-LITERAL_VARIANT__INTEGER__NAME = hydra.core.Name("integer")
-LITERAL_VARIANT__STRING__NAME = hydra.core.Name("string")
+LiteralVariant.TYPE_ = hydra.core.Name("hydra.variants.LiteralVariant")
 
 class TermVariant(Enum):
     r"""The identifier of a term expression constructor."""
     
-    ANNOTATED = "annotated"
+    ANNOTATED = hydra.core.Name("annotated")
     
-    APPLICATION = "application"
+    APPLICATION = hydra.core.Name("application")
     
-    EITHER = "either"
+    EITHER = hydra.core.Name("either")
     
-    FUNCTION = "function"
+    FUNCTION = hydra.core.Name("function")
     
-    LET = "let"
+    LET = hydra.core.Name("let")
     
-    LIST = "list"
+    LIST = hydra.core.Name("list")
     
-    LITERAL = "literal"
+    LITERAL = hydra.core.Name("literal")
     
-    MAP = "map"
+    MAP = hydra.core.Name("map")
     
-    MAYBE = "maybe"
+    MAYBE = hydra.core.Name("maybe")
     
-    PAIR = "pair"
+    PAIR = hydra.core.Name("pair")
     
-    RECORD = "record"
+    RECORD = hydra.core.Name("record")
     
-    SET = "set"
+    SET = hydra.core.Name("set")
     
-    TYPE_APPLICATION = "typeApplication"
+    TYPE_APPLICATION = hydra.core.Name("typeApplication")
     
-    TYPE_LAMBDA = "typeLambda"
+    TYPE_LAMBDA = hydra.core.Name("typeLambda")
     
-    UNION = "union"
+    UNION = hydra.core.Name("union")
     
-    UNIT = "unit"
+    UNIT = hydra.core.Name("unit")
     
-    VARIABLE = "variable"
+    VARIABLE = hydra.core.Name("variable")
     
-    WRAP = "wrap"
+    WRAP = hydra.core.Name("wrap")
 
-TERM_VARIANT__NAME = hydra.core.Name("hydra.variants.TermVariant")
-TERM_VARIANT__ANNOTATED__NAME = hydra.core.Name("annotated")
-TERM_VARIANT__APPLICATION__NAME = hydra.core.Name("application")
-TERM_VARIANT__EITHER__NAME = hydra.core.Name("either")
-TERM_VARIANT__FUNCTION__NAME = hydra.core.Name("function")
-TERM_VARIANT__LET__NAME = hydra.core.Name("let")
-TERM_VARIANT__LIST__NAME = hydra.core.Name("list")
-TERM_VARIANT__LITERAL__NAME = hydra.core.Name("literal")
-TERM_VARIANT__MAP__NAME = hydra.core.Name("map")
-TERM_VARIANT__MAYBE__NAME = hydra.core.Name("maybe")
-TERM_VARIANT__PAIR__NAME = hydra.core.Name("pair")
-TERM_VARIANT__RECORD__NAME = hydra.core.Name("record")
-TERM_VARIANT__SET__NAME = hydra.core.Name("set")
-TERM_VARIANT__TYPE_APPLICATION__NAME = hydra.core.Name("typeApplication")
-TERM_VARIANT__TYPE_LAMBDA__NAME = hydra.core.Name("typeLambda")
-TERM_VARIANT__UNION__NAME = hydra.core.Name("union")
-TERM_VARIANT__UNIT__NAME = hydra.core.Name("unit")
-TERM_VARIANT__VARIABLE__NAME = hydra.core.Name("variable")
-TERM_VARIANT__WRAP__NAME = hydra.core.Name("wrap")
+TermVariant.TYPE_ = hydra.core.Name("hydra.variants.TermVariant")
 
 class TypeVariant(Enum):
     r"""The identifier of a type constructor."""
     
-    ANNOTATED = "annotated"
+    ANNOTATED = hydra.core.Name("annotated")
     
-    APPLICATION = "application"
+    APPLICATION = hydra.core.Name("application")
     
-    EITHER = "either"
+    EITHER = hydra.core.Name("either")
     
-    FORALL = "forall"
+    FORALL = hydra.core.Name("forall")
     
-    FUNCTION = "function"
+    FUNCTION = hydra.core.Name("function")
     
-    LIST = "list"
+    LIST = hydra.core.Name("list")
     
-    LITERAL = "literal"
+    LITERAL = hydra.core.Name("literal")
     
-    MAP = "map"
+    MAP = hydra.core.Name("map")
     
-    MAYBE = "maybe"
+    MAYBE = hydra.core.Name("maybe")
     
-    PAIR = "pair"
+    PAIR = hydra.core.Name("pair")
     
-    RECORD = "record"
+    RECORD = hydra.core.Name("record")
     
-    SET = "set"
+    SET = hydra.core.Name("set")
     
-    UNION = "union"
+    UNION = hydra.core.Name("union")
     
-    UNIT = "unit"
+    UNIT = hydra.core.Name("unit")
     
-    VARIABLE = "variable"
+    VARIABLE = hydra.core.Name("variable")
     
-    WRAP = "wrap"
+    WRAP = hydra.core.Name("wrap")
 
-TYPE_VARIANT__NAME = hydra.core.Name("hydra.variants.TypeVariant")
-TYPE_VARIANT__ANNOTATED__NAME = hydra.core.Name("annotated")
-TYPE_VARIANT__APPLICATION__NAME = hydra.core.Name("application")
-TYPE_VARIANT__EITHER__NAME = hydra.core.Name("either")
-TYPE_VARIANT__FORALL__NAME = hydra.core.Name("forall")
-TYPE_VARIANT__FUNCTION__NAME = hydra.core.Name("function")
-TYPE_VARIANT__LIST__NAME = hydra.core.Name("list")
-TYPE_VARIANT__LITERAL__NAME = hydra.core.Name("literal")
-TYPE_VARIANT__MAP__NAME = hydra.core.Name("map")
-TYPE_VARIANT__MAYBE__NAME = hydra.core.Name("maybe")
-TYPE_VARIANT__PAIR__NAME = hydra.core.Name("pair")
-TYPE_VARIANT__RECORD__NAME = hydra.core.Name("record")
-TYPE_VARIANT__SET__NAME = hydra.core.Name("set")
-TYPE_VARIANT__UNION__NAME = hydra.core.Name("union")
-TYPE_VARIANT__UNIT__NAME = hydra.core.Name("unit")
-TYPE_VARIANT__VARIABLE__NAME = hydra.core.Name("variable")
-TYPE_VARIANT__WRAP__NAME = hydra.core.Name("wrap")
+TypeVariant.TYPE_ = hydra.core.Name("hydra.variants.TypeVariant")

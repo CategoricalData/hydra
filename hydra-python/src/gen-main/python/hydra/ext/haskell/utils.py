@@ -101,26 +101,8 @@ def hsvar(s: str) -> hydra.ext.haskell.ast.Expression:
 
 def namespaces_for_module(mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName]]:
     r"""Compute the Haskell module namespaces for a Hydra module."""
-
-    def build_namespaces(nss):
-        ns = mod.namespace
-        to_module_name = lambda namespace: (namespace_str := namespace.value, parts := hydra.lib.strings.split_on(".", namespace_str), last_part := hydra.lib.lists.last(parts), capitalized := hydra.formatting.capitalize(last_part), hydra.ext.haskell.ast.ModuleName(capitalized))[4]
-        to_pair = lambda name: (name, to_module_name(name))
-        def add_pair(state, name_pair):
-            current_map = hydra.lib.pairs.first(state)
-            current_set = hydra.lib.pairs.second(state)
-            name = hydra.lib.pairs.first(name_pair)
-            alias = hydra.lib.pairs.second(name_pair)
-            alias_str = alias.value
-            return hydra.lib.logic.if_else(hydra.lib.sets.member(alias, current_set), (lambda : add_pair(state, (name, hydra.ext.haskell.ast.ModuleName(hydra.lib.strings.cat2(alias_str, "_"))))), (lambda : (hydra.lib.maps.insert(name, alias, current_map), hydra.lib.sets.insert(alias, current_set))))
-        focus_pair = to_pair(ns)
-        nss_as_list = hydra.lib.sets.to_list(nss)
-        nss_pairs = hydra.lib.lists.map((lambda x1: to_pair(x1)), nss_as_list)
-        empty_state = (hydra.lib.maps.empty(), hydra.lib.sets.empty())
-        final_state = hydra.lib.lists.foldl((lambda x1, x2: add_pair(x1, x2)), empty_state, nss_pairs)
-        result_map = hydra.lib.pairs.first(final_state)
-        return hydra.lib.flows.pure(hydra.module.Namespaces(focus_pair, result_map))
-    return hydra.lib.flows.bind(hydra.schemas.module_dependency_namespaces(True, True, True, True, mod), build_namespaces)
+    
+    return hydra.lib.flows.bind(hydra.schemas.module_dependency_namespaces(True, True, True, True, mod), (lambda nss: (ns := mod.namespace, focus_pair := to_pair(ns), nss_as_list := hydra.lib.sets.to_list(nss), nss_pairs := hydra.lib.lists.map((lambda x1: to_pair(x1)), nss_as_list), empty_state := (hydra.lib.maps.empty(), hydra.lib.sets.empty()), final_state := hydra.lib.lists.foldl((lambda x1, x2: add_pair(x1, x2)), empty_state, nss_pairs), result_map := hydra.lib.pairs.first(final_state), to_module_name := (lambda namespace: (namespace_str := namespace.value, parts := hydra.lib.strings.split_on(".", namespace_str), last_part := hydra.lib.lists.last(parts), capitalized := hydra.formatting.capitalize(last_part), hydra.ext.haskell.ast.ModuleName(capitalized))[4]), to_pair := (lambda name: (name, to_module_name(name))), add_pair := (lambda state, name_pair: (current_map := hydra.lib.pairs.first(state), current_set := hydra.lib.pairs.second(state), name := hydra.lib.pairs.first(name_pair), alias := hydra.lib.pairs.second(name_pair), alias_str := alias.value, hydra.lib.logic.if_else(hydra.lib.sets.member(alias, current_set), (lambda : add_pair(state, (name, hydra.ext.haskell.ast.ModuleName(hydra.lib.strings.cat2(alias_str, "_"))))), (lambda : (hydra.lib.maps.insert(name, alias, current_map), hydra.lib.sets.insert(alias, current_set)))))[5]), hydra.lib.flows.pure(hydra.module.Namespaces(focus_pair, result_map)))[10]))
 
 def newtype_accessor_name(name: hydra.core.Name) -> str:
     r"""Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)."""

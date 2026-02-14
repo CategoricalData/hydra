@@ -204,6 +204,8 @@ module_ = Module ns elements
       toBinding encodeSum,
       toBinding encodeTerm_,
       toBinding encodeTargetWithStarAtom,
+      toBinding encodeTPrimaryAndName,
+      toBinding encodeTPrimary,
       toBinding encodeTuple,
       toBinding encodeTypeAlias,
       toBinding encodeTypeParameter,
@@ -986,8 +988,29 @@ encodeTargetWithStarAtom = def "encodeTargetWithStarAtom" $
   lambda "t" $
     cases Py._TargetWithStarAtom (var "t") Nothing [
       Py._TargetWithStarAtom_atom>>: lambda "a" $ encodeStarAtom @@ var "a",
-      Py._TargetWithStarAtom_project>>: lambda "_" $ Serialization.cst @@ string "...",
+      Py._TargetWithStarAtom_project>>: lambda "pn" $ encodeTPrimaryAndName @@ var "pn",
       Py._TargetWithStarAtom_slices>>: lambda "_" $ Serialization.cst @@ string "..."]
+
+-- | Serialize a TPrimaryAndName (e.g., obj.attr)
+encodeTPrimaryAndName :: TBinding (Py.TPrimaryAndName -> Expr)
+encodeTPrimaryAndName = def "encodeTPrimaryAndName" $
+  doc "Serialize a TPrimaryAndName as primary.name" $
+  lambda "pn" $ lets [
+    "prim">: project Py._TPrimaryAndName Py._TPrimaryAndName_primary @@ var "pn",
+    "name_">: project Py._TPrimaryAndName Py._TPrimaryAndName_name @@ var "pn"] $
+    Serialization.noSep @@ list [encodeTPrimary @@ var "prim", Serialization.cst @@ string ".", encodeName @@ var "name_"]
+
+-- | Serialize a TPrimary (target-side primary expression)
+encodeTPrimary :: TBinding (Py.TPrimary -> Expr)
+encodeTPrimary = def "encodeTPrimary" $
+  doc "Serialize a target-side primary expression" $
+  lambda "tp" $
+    cases Py._TPrimary (var "tp") Nothing [
+      Py._TPrimary_atom>>: lambda "a" $ encodeAtom @@ var "a",
+      Py._TPrimary_primaryAndName>>: lambda "pn" $ encodeTPrimaryAndName @@ var "pn",
+      Py._TPrimary_primaryAndSlices>>: lambda "_" $ Serialization.cst @@ string "...",
+      Py._TPrimary_primaryAndGenexp>>: lambda "_" $ Serialization.cst @@ string "...",
+      Py._TPrimary_primaryAndArguments>>: lambda "_" $ Serialization.cst @@ string "..."]
 
 encodeStarAtom :: TBinding (Py.StarAtom -> Expr)
 encodeStarAtom = def "encodeStarAtom" $

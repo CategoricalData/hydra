@@ -14,10 +14,10 @@ class PathEquation:
     
     left: Annotated[hydra.query.Path, "The left-hand side of the equation"]
     right: Annotated[hydra.query.Path, "The right-hand side of the equation"]
-
-PATH_EQUATION__NAME = hydra.core.Name("hydra.constraints.PathEquation")
-PATH_EQUATION__LEFT__NAME = hydra.core.Name("left")
-PATH_EQUATION__RIGHT__NAME = hydra.core.Name("right")
+    
+    TYPE_ = hydra.core.Name("hydra.constraints.PathEquation")
+    LEFT = hydra.core.Name("left")
+    RIGHT = hydra.core.Name("right")
 
 @dataclass(frozen=True)
 class PatternImplication:
@@ -25,7 +25,7 @@ class PatternImplication:
     
     antecedent: Annotated[hydra.query.Pattern, "The pattern which, if it matches, triggers the constraint"]
     consequent: Annotated[hydra.query.Pattern, "The pattern which must also match when the antecedent matches"]
-
-PATTERN_IMPLICATION__NAME = hydra.core.Name("hydra.constraints.PatternImplication")
-PATTERN_IMPLICATION__ANTECEDENT__NAME = hydra.core.Name("antecedent")
-PATTERN_IMPLICATION__CONSEQUENT__NAME = hydra.core.Name("consequent")
+    
+    TYPE_ = hydra.core.Name("hydra.constraints.PatternImplication")
+    ANTECEDENT = hydra.core.Name("antecedent")
+    CONSEQUENT = hydra.core.Name("consequent")

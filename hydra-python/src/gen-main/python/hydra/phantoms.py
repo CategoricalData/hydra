@@ -16,12 +16,12 @@ class TBinding(Generic[A]):
     
     name: Annotated[hydra.core.Name, "The name of the term"]
     term: Annotated[TTerm[A], "The term with its phantom type"]
-
-T_BINDING__NAME = hydra.core.Name("hydra.phantoms.TBinding")
-T_BINDING__NAME__NAME = hydra.core.Name("name")
-T_BINDING__TERM__NAME = hydra.core.Name("term")
+    
+    TYPE_ = hydra.core.Name("hydra.phantoms.TBinding")
+    NAME = hydra.core.Name("name")
+    TERM = hydra.core.Name("term")
 
 class TTerm(Node["hydra.core.Term"], Generic[A]):
     r"""An association of a term with a phantom type."""
 
-T_TERM__NAME = hydra.core.Name("hydra.phantoms.TTerm")
+TTerm.TYPE_ = hydra.core.Name("hydra.phantoms.TTerm")

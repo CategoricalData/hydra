@@ -10,10 +10,8 @@ import hydra.core
 class TypeClass(Enum):
     r"""Any of a small number of built-in type classes."""
     
-    EQUALITY = "equality"
+    EQUALITY = hydra.core.Name("equality")
     
-    ORDERING = "ordering"
+    ORDERING = hydra.core.Name("ordering")
 
-TYPE_CLASS__NAME = hydra.core.Name("hydra.classes.TypeClass")
-TYPE_CLASS__EQUALITY__NAME = hydra.core.Name("equality")
-TYPE_CLASS__ORDERING__NAME = hydra.core.Name("ordering")
+TypeClass.TYPE_ = hydra.core.Name("hydra.classes.TypeClass")

@@ -3,7 +3,10 @@
 # Demonstrates that Python can independently load and process Hydra modules
 # from a language-independent JSON representation.
 #
-# Usage: ./python-bootstrap.sh --target <haskell|java|python>
+# Usage: ./python-bootstrap.sh --target <haskell|java|python> [--types-only] [--kernel-only] [--output <dir>]
+#
+# The detailed step-by-step output (timing, file counts, etc.) is provided
+# by the Python bootstrap module itself.
 
 set -e
 
@@ -16,7 +19,7 @@ echo "Python Bootstrapping Demo"
 echo "=========================================="
 echo ""
 
-# Use the project venv Python 3.12
+# Locate Python
 PYTHON="$HYDRA_PYTHON_DIR/.venv/bin/python3"
 if [ ! -f "$PYTHON" ]; then
     echo "Error: Python venv not found at $PYTHON"
@@ -24,8 +27,11 @@ if [ ! -f "$PYTHON" ]; then
     exit 1
 fi
 
+echo "Python: $($PYTHON --version 2>&1)"
+echo ""
+
 PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python:$HYDRA_PYTHON_DIR/src/gen-main/python"
 export PYTHONPATH
 
-# Run the Python bootstrap
+# Run the Python bootstrap (its output includes detailed timing and file counts)
 "$PYTHON" -m hydra.bootstrap "$@" --json-dir "$HYDRA_ROOT/hydra-haskell/src/gen-main/json"

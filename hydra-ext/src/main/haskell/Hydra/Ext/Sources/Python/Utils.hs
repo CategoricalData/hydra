@@ -151,6 +151,7 @@ module_ = Module ns elements
       toBinding tripleQuotedString,
       toBinding assignment,
       toBinding assignmentStatement,
+      toBinding dottedAssignmentStatement,
       toBinding returnSingle,
       toBinding castTo,
       toBinding projectFromExpression,
@@ -447,6 +448,23 @@ assignmentStatement = def "assignmentStatement" $
   lambdas ["name", "expr"] $
     assignment @@ var "name" @@ (pyExpressionToPyAnnotatedRhs @@ var "expr")
 
+-- | Create a dotted assignment statement: obj.attr = expr
+dottedAssignmentStatement :: TBinding (Py.Name -> Py.Name -> Py.Expression -> Py.Statement)
+dottedAssignmentStatement = def "dottedAssignmentStatement" $
+  doc "Create a dotted assignment statement: obj.attr = expr" $
+  lambdas ["obj", "attr", "expr"] $
+    "target" <~ (PyDsl.starTargetUnstarred $
+      inject Py._TargetWithStarAtom Py._TargetWithStarAtom_project $
+        record Py._TPrimaryAndName [
+          Py._TPrimaryAndName_primary>>: inject Py._TPrimary Py._TPrimary_atom $
+            inject Py._Atom Py._Atom_name $ var "obj",
+          Py._TPrimaryAndName_name>>: var "attr"]) $
+    pyAssignmentToPyStatement @@
+      (PyDsl.assignmentUntyped $
+        PyDsl.untypedAssignmentSimple
+          (list [var "target"])
+          (pyExpressionToPyAnnotatedRhs @@ var "expr"))
+
 -- | Create a return statement with a single expression
 returnSingle :: TBinding (Py.Expression -> Py.Statement)
 returnSingle = def "returnSingle" $
@@ -707,10 +725,10 @@ getItemParams = def "getItemParams" $
       PyDsl.paramNoDefaultSimple $ PyDsl.paramSimple $ PyDsl.name $ string "item"]
 
 -- | Generate a subscriptable union class for Python 3.10
-unionTypeClassStatements310 :: TBinding (Py.Name -> Maybe String -> Py.Expression -> [Py.Statement])
+unionTypeClassStatements310 :: TBinding (Py.Name -> Maybe String -> Py.Expression -> [Py.Statement] -> [Py.Statement])
 unionTypeClassStatements310 = def "unionTypeClassStatements310" $
   doc "Generate a subscriptable union class for Python 3.10" $
-  "name" ~> "mcomment" ~> "tyexpr" ~>
+  "name" ~> "mcomment" ~> "tyexpr" ~> "extraStmts" ~>
     "nameStr" <~ (PyDsl.unName $ var "name") $
     "metaName" <~ (PyDsl.name $ string "_" ++ var "nameStr" ++ string "Meta") $
     "docString" <~ (Serialization.printExpr @@ (PySerde.encodeExpression @@ var "tyexpr")) $
@@ -737,10 +755,13 @@ unionTypeClassStatements310 = def "unionTypeClassStatements310" $
         (list ([] :: [TTerm Py.TypeParameter]))
         (just $ pyExpressionsToPyArgs @@ list [PyDsl.pyNameToPyExpression $ PyDsl.name $ string "type"])
         (indentedBlock @@ nothing @@ list [list [var "getItemMethod"]])) $
-    -- pass statement
-    "passStmt" <~ (pySimpleStatementToPyStatement @@ PyDsl.simpleStatementPass) $
     -- docstring statement
     "docStmt" <~ (pyExpressionToPyStatement @@ (tripleQuotedString @@ var "docString")) $
+    -- Build body groups: docstring, then extra statements (constants), then pass if no extras
+    "bodyGroups" <~ Logic.ifElse (Lists.null $ var "extraStmts")
+      ("passStmt" <~ (pySimpleStatementToPyStatement @@ PyDsl.simpleStatementPass) $
+       list [list [var "docStmt"], list [var "passStmt"]])
+      (list [list [var "docStmt"], var "extraStmts"]) $
     -- metaclass kwarg
     "metaclassArg" <~ (PyDsl.kwarg (PyDsl.name $ string "metaclass") (PyDsl.pyNameToPyExpression $ var "metaName")) $
     -- class Name(metaclass=_NameMeta): ...
@@ -752,7 +773,7 @@ unionTypeClassStatements310 = def "unionTypeClassStatements310" $
             (list ([] :: [TTerm Py.PosArg]))
             (list [PyDsl.kwargOrStarredKwarg $ var "metaclassArg"])
             (list ([] :: [TTerm Py.KwargOrDoubleStarred])))
-          (indentedBlock @@ nothing @@ list [list [var "docStmt"], list [var "passStmt"]]))) $
+          (indentedBlock @@ nothing @@ var "bodyGroups"))) $
     list [var "metaClass", var "unionClass"]
 
 -- | Generate __eq__ and __hash__ method parameters

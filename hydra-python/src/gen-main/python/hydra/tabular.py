@@ -17,20 +17,20 @@ class ColumnType:
     
     name: hydra.relational.ColumnName
     type: hydra.core.Type
-
-COLUMN_TYPE__NAME = hydra.core.Name("hydra.tabular.ColumnType")
-COLUMN_TYPE__NAME__NAME = hydra.core.Name("name")
-COLUMN_TYPE__TYPE__NAME = hydra.core.Name("type")
+    
+    TYPE_ = hydra.core.Name("hydra.tabular.ColumnType")
+    NAME = hydra.core.Name("name")
+    TYPE = hydra.core.Name("type")
 
 class DataRow(Node["frozenlist[Maybe[V]]"], Generic[V]):
     r"""A data row, containing optional-valued cells; one per column."""
 
-DATA_ROW__NAME = hydra.core.Name("hydra.tabular.DataRow")
+DataRow.TYPE_ = hydra.core.Name("hydra.tabular.DataRow")
 
 class HeaderRow(Node[frozenlist[str]]):
     r"""A header row, containing column names (but no types or data)."""
 
-HEADER_ROW__NAME = hydra.core.Name("hydra.tabular.HeaderRow")
+HeaderRow.TYPE_ = hydra.core.Name("hydra.tabular.HeaderRow")
 
 @dataclass(frozen=True)
 class Table(Generic[V]):
@@ -38,10 +38,10 @@ class Table(Generic[V]):
     
     header: Annotated[Maybe[HeaderRow], "The optional header row of the table. If present, the header must have the same number of cells as each data row."]
     data: Annotated[frozenlist[DataRow[V]], "The data rows of the table. Each row must have the same number of cells."]
-
-TABLE__NAME = hydra.core.Name("hydra.tabular.Table")
-TABLE__HEADER__NAME = hydra.core.Name("header")
-TABLE__DATA__NAME = hydra.core.Name("data")
+    
+    TYPE_ = hydra.core.Name("hydra.tabular.Table")
+    HEADER = hydra.core.Name("header")
+    DATA = hydra.core.Name("data")
 
 @dataclass(frozen=True)
 class TableType:
@@ -49,7 +49,7 @@ class TableType:
     
     name: hydra.relational.RelationName
     columns: frozenlist[ColumnType]
-
-TABLE_TYPE__NAME = hydra.core.Name("hydra.tabular.TableType")
-TABLE_TYPE__NAME__NAME = hydra.core.Name("name")
-TABLE_TYPE__COLUMNS__NAME = hydra.core.Name("columns")
+    
+    TYPE_ = hydra.core.Name("hydra.tabular.TableType")
+    NAME = hydra.core.Name("name")
+    COLUMNS = hydra.core.Name("columns")

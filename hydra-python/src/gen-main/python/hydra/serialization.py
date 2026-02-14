@@ -31,8 +31,8 @@ def brackets(br: hydra.ast.Brackets, style: hydra.ast.BlockStyle, e: hydra.ast.E
 def cst(s: str) -> hydra.ast.Expr:
     return cast(hydra.ast.Expr, hydra.ast.ExprConst(sym(s)))
 
-def ifx(op: hydra.ast.Op, lhs: hydra.ast.Expr, rhs: hydra.ast.Expr) -> hydra.ast.Expr:
-    return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs, rhs)))
+def ifx(op: hydra.ast.Op, lhs2: hydra.ast.Expr, rhs2: hydra.ast.Expr) -> hydra.ast.Expr:
+    return cast(hydra.ast.Expr, hydra.ast.ExprOp(hydra.ast.OpExpr(op, lhs2, rhs2)))
 
 def symbol_sep(symb: str, style: hydra.ast.BlockStyle, l: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     @lru_cache(1)

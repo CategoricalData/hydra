@@ -1,7 +1,9 @@
 #!/bin/bash
-# Bootstrap Hydra to Haskell from JSON modules.
+# Bootstrap Hydra to Haskell from JSON modules (via Haskell host).
 # Generates code into a standalone /tmp directory, copies static resources,
 # then builds and runs the Haskell test suite.
+#
+# Usage: ./bootstrap-to-haskell.sh [--types-only] [--kernel-only]
 
 set -e
 
@@ -14,15 +16,31 @@ OUTPUT_BASE="/tmp/hydra-bootstrapping-demo"
 OUTPUT_DIR="$OUTPUT_BASE/haskell-to-haskell"
 RTS_FLAGS="+RTS -K256M -A32M -RTS"
 
+# Collect extra flags (--types-only, --kernel-only, etc.)
+EXTRA_FLAGS=""
+for arg in "$@"; do
+    case "$arg" in
+        --types-only|--kernel-only) EXTRA_FLAGS="$EXTRA_FLAGS $arg" ;;
+    esac
+done
+
 echo "=========================================="
 echo "Bootstrap: Haskell -> JSON -> Haskell"
 echo "=========================================="
 echo ""
-echo "Output directory: $OUTPUT_DIR"
+echo "  Host language:   Haskell"
+echo "  Target language: Haskell"
+echo "  Output:          $OUTPUT_DIR"
+if [ -n "$EXTRA_FLAGS" ]; then
+    echo "  Flags:          $EXTRA_FLAGS"
+fi
 echo ""
+
+TOTAL_START=$(date +%s)
 
 # Step 1: Ensure JSON is up to date
 echo "Step 1: Ensuring JSON exports are up to date..."
+STEP_START=$(date +%s)
 echo "  Building hydra-haskell..."
 cd "$HYDRA_HASKELL_DIR"
 stack build 2>&1 | tail -3
@@ -35,6 +53,14 @@ cd "$HYDRA_EXT_DIR"
 stack build 2>&1 | tail -3
 echo "  Exporting ext modules to JSON..."
 stack exec update-json-main -- $RTS_FLAGS
+STEP_END=$(date +%s)
+echo "  Time: $((STEP_END - STEP_START))s"
+echo ""
+
+# Count JSON input files
+JSON_DIR="$HYDRA_HASKELL_DIR/src/gen-main/json"
+JSON_COUNT=$(find "$JSON_DIR" -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
+echo "  JSON input files: $JSON_COUNT (in $JSON_DIR)"
 echo ""
 
 # Step 2: Clean output directory
@@ -46,8 +72,11 @@ echo ""
 
 # Step 3: Bootstrap from JSON (generate code to /tmp)
 echo "Step 3: Generating Haskell code from JSON..."
+STEP_START=$(date +%s)
 cd "$HYDRA_EXT_DIR"
-stack exec bootstrap-from-json -- --target haskell --output "$OUTPUT_BASE" $RTS_FLAGS
+stack exec bootstrap-from-json -- --target haskell --output "$OUTPUT_BASE" $EXTRA_FLAGS $RTS_FLAGS
+STEP_END=$(date +%s)
+echo "  Time: $((STEP_END - STEP_START))s"
 echo ""
 
 # Step 4: Copy static resources
@@ -87,7 +116,11 @@ echo "  Generated test modules:   $TEST_COUNT files"
 echo "  Static resources:         $STATIC_COUNT files"
 echo ""
 
+TOTAL_END=$(date +%s)
+TOTAL_SECS=$((TOTAL_END - TOTAL_START))
+
 echo "=========================================="
 echo "Bootstrap to Haskell: COMPLETE"
-echo "Output: $OUTPUT_DIR"
+echo "  Output:     $OUTPUT_DIR"
+echo "  Total time: ${TOTAL_SECS}s"
 echo "=========================================="

@@ -40,12 +40,10 @@ class _ValueMeta(type):
 class Value(metaclass=_ValueMeta):
     r"""ValueArray | ValueBoolean | ValueNull | ValueNumber | ValueObject | ValueString"""
     
-    pass
-
-VALUE__NAME = hydra.core.Name("hydra.json.model.Value")
-VALUE__ARRAY__NAME = hydra.core.Name("array")
-VALUE__BOOLEAN__NAME = hydra.core.Name("boolean")
-VALUE__NULL__NAME = hydra.core.Name("null")
-VALUE__NUMBER__NAME = hydra.core.Name("number")
-VALUE__OBJECT__NAME = hydra.core.Name("object")
-VALUE__STRING__NAME = hydra.core.Name("string")
+    TYPE_ = hydra.core.Name("hydra.json.model.Value")
+    ARRAY = hydra.core.Name("array")
+    BOOLEAN = hydra.core.Name("boolean")
+    NULL = hydra.core.Name("null")
+    NUMBER = hydra.core.Name("number")
+    OBJECT = hydra.core.Name("object")
+    STRING = hydra.core.Name("string")

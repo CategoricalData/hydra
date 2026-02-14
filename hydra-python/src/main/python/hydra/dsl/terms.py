@@ -141,18 +141,18 @@ def comparison(comp: hydra.util.Comparison) -> Term:
     match comp:
         case hydra.util.Comparison.EQUAL_TO:
             return inject_unit(
-                hydra.util.COMPARISON__NAME,
-                hydra.util.COMPARISON__EQUAL_TO__NAME
+                hydra.util.Comparison.TYPE_,
+                hydra.util.Comparison.EQUAL_TO.value
             )
         case hydra.util.Comparison.LESS_THAN:
             return inject_unit(
-                hydra.util.COMPARISON__NAME,
-                hydra.util.COMPARISON__LESS_THAN__NAME
+                hydra.util.Comparison.TYPE_,
+                hydra.util.Comparison.LESS_THAN.value
             )
         case hydra.util.Comparison.GREATER_THAN:
             return inject_unit(
-                hydra.util.COMPARISON__NAME,
-                hydra.util.COMPARISON__GREATER_THAN__NAME
+                hydra.util.Comparison.TYPE_,
+                hydra.util.Comparison.GREATER_THAN.value
             )
 
 

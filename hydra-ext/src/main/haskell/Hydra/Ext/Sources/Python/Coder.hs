@@ -293,13 +293,16 @@ typeAliasStatementFor = def "typeAliasStatementFor" $
 -- | Version-aware union type statement generation.
 --   Uses PEP 695 type alias syntax for Python 3.12+.
 --   For Python 3.10, generates a metaclass-based class that is subscriptable at runtime.
-unionTypeStatementsFor :: TBinding (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> [Py.Statement])
+unionTypeStatementsFor :: TBinding (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> [Py.Statement] -> [Py.Statement])
 unionTypeStatementsFor = def "unionTypeStatementsFor" $
   doc "Version-aware union type statement generation" $
-  "env" ~> "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~>
+  "env" ~> "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~> "extraStmts" ~>
     Logic.ifElse (useInlineTypeParamsFor @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "env"))
-      (list [PyUtils.typeAliasStatement @@ var "name" @@ var "tparams" @@ var "mcomment" @@ var "tyexpr"])
-      (PyUtils.unionTypeClassStatements310 @@ var "name" @@ var "mcomment" @@ var "tyexpr")
+      -- For 3.12+, type alias has no class body; append constants as module-level statements
+      (Lists.concat2
+        (list [PyUtils.typeAliasStatement @@ var "name" @@ var "tparams" @@ var "mcomment" @@ var "tyexpr"])
+        (var "extraStmts"))
+      (PyUtils.unionTypeClassStatements310 @@ var "name" @@ var "mcomment" @@ var "tyexpr" @@ var "extraStmts")
 
 -- | Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation
 wrapInNullaryLambda :: TBinding (Py.Expression -> Py.Expression)
@@ -688,12 +691,12 @@ encodeTypeQuoted = def "encodeTypeQuoted" $
       (var "pytype")
       (PyUtils.doubleQuotedString @@ (Serialization.printExpr @@ (PySerde.encodeExpression @@ var "pytype")))
 
--- | Generate name constants for a type: _TypeName and _TypeName_fieldName for each field.
---   These constants allow field access via string constants for serialization/deserialization.
-encodeNameConstants :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> [Py.Statement])
+-- | Generate name constants for a type as class-level attributes.
+--   Produces a TYPE_ constant for the type name, plus one constant per field.
+encodeNameConstants :: TBinding (PyHelpers.PythonEnvironment -> Name -> [FieldType] -> [Py.Statement])
 encodeNameConstants = def "encodeNameConstants" $
-  doc "Generate name constants for a type" $
-  "env" ~> "name" ~> "typ" ~>
+  doc "Generate name constants for a type as class-level attributes" $
+  "env" ~> "name" ~> "fields" ~>
     -- Helper to create a statement from a (pyName, hname) pair
     "toStmt" <~ ("pair" ~>
       PyUtils.assignmentStatement
@@ -701,34 +704,14 @@ encodeNameConstants = def "encodeNameConstants" $
         @@ (PyUtils.functionCall
               @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
               @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ Pairs.second $ var "pair")])) $
-    -- The name constant for the type itself
+    -- The name constant for the type itself (TYPE_)
     "namePair" <~ pair (PyNames.encodeConstantForTypeName @@ var "env" @@ var "name") (var "name") $
     -- Create field constant pairs from field types
-    "fieldPair" <~ ("field" ~>
+    "fieldPairs" <~ Lists.map ("field" ~>
       pair
         (PyNames.encodeConstantForFieldName @@ var "env" @@ var "name" @@ (project _FieldType _FieldType_name @@ var "field"))
-        (project _FieldType _FieldType_name @@ var "field")) $
-    -- Extract field pairs from the type by traversing foralls to get to record/union
-    "fieldPairs" <~ ("t" ~>
-      cases _Type (Rewriting.deannotateType @@ var "t") Nothing [
-        _Type_forall>>: "ft" ~> var "fieldPairs" @@ (project _ForallType _ForallType_body @@ var "ft"),
-        _Type_record>>: "rt" ~> Lists.map (var "fieldPair") (project _RowType _RowType_fields @@ var "rt"),
-        _Type_union>>: "rt" ~> Lists.map (var "fieldPair") (project _RowType _RowType_fields @@ var "rt"),
-        -- All other types have no fields
-        _Type_annotated>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_application>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_function>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_list>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_literal>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_map>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_maybe>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_either>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_pair>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_set>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_unit>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_variable>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_wrap>>: constant $ list ([] :: [TTerm (Py.Name, Name)])]) $
-    Lists.map (var "toStmt") (Lists.cons (var "namePair") (var "fieldPairs" @@ var "typ"))
+        (project _FieldType _FieldType_name @@ var "field")) (var "fields") $
+    Lists.map (var "toStmt") (Lists.cons (var "namePair") (var "fieldPairs"))
 
 -- | Find type parameters in a type that are bound in the environment.
 --   Returns the free type variables that are also in the bound type variables map.
@@ -742,20 +725,31 @@ findTypeParams = def "findTypeParams" $
 
 -- | Encode a wrapped type (newtype) to a Python class definition.
 --   Creates a class that extends Node[inner_type] with optional Generic[T] for polymorphic types.
-encodeWrappedType :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyHelpers.PyGraph Py.Statement)
+--   TYPE_ is assigned after the class to avoid self-reference issues (e.g., Name.TYPE_ = Name(...)).
+encodeWrappedType :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyHelpers.PyGraph [Py.Statement])
 encodeWrappedType = def "encodeWrappedType" $
   doc "Encode a wrapped type (newtype) to a Python class definition" $
   "env" ~> "name" ~> "typ" ~> "comment" ~>
     "tparamList" <~ (Pairs.first $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
     "ptypeQuoted" <<~ encodeTypeQuoted @@ var "env" @@ var "typ" $
+    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
     "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list ([] :: [TTerm [Py.Statement]])) $
-    produce $ PyUtils.pyClassDefinitionToPyStatement @@
-      PyDsl.classDefinition
-        nothing
-        (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name")
-        (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (findTypeParams @@ var "env" @@ var "typ"))
-        (just (variantArgs @@ var "ptypeQuoted" @@ var "tparamList"))
-        (var "body")
+    -- Generate TYPE_ as a dotted assignment after the class: ClassName.TYPE_ = Name("...")
+    "typeConstStmt" <~ (PyUtils.dottedAssignmentStatement
+      @@ var "pyName"
+      @@ (PyNames.encodeConstantForTypeName @@ var "env" @@ var "name")
+      @@ (PyUtils.functionCall
+            @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+            @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ var "name")])) $
+    produce $ list [
+      PyUtils.pyClassDefinitionToPyStatement @@
+        PyDsl.classDefinition
+          nothing
+          (var "pyName")
+          (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (findTypeParams @@ var "env" @@ var "typ"))
+          (just (variantArgs @@ var "ptypeQuoted" @@ var "tparamList"))
+          (var "body"),
+      var "typeConstStmt"]
 
 -- | Extend a PythonEnvironment with a new bound type variable.
 --   This creates a new environment with the variable added to the type parameter list and map.
@@ -1231,7 +1225,9 @@ encodeRecordType = def "encodeRecordType" $
   "env" ~> "name" ~> "rowType" ~> "comment" ~>
     "tfields" <~ Core.rowTypeFields (var "rowType") $
     "pyFields" <<~ (Flows.mapList (encodeFieldType @@ var "env") (var "tfields")) $
-    "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list [var "pyFields"]) $
+    -- Generate class-level name constants
+    "constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "tfields") $
+    "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list [var "pyFields", var "constStmts"]) $
     -- Get bound type variables for Generic args
     "boundVars" <~ (Phantoms.project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
     "tparamList" <~ Pairs.first (var "boundVars") $
@@ -1250,7 +1246,7 @@ encodeRecordType = def "encodeRecordType" $
         Phantoms.field Py._ClassDefinition_arguments (var "args"),
         Phantoms.field Py._ClassDefinition_body (var "body")]
 
--- | Encode an enum value assignment: ENUM_VALUE = "enum_value"
+-- | Encode an enum value assignment: ENUM_VALUE = Name("enum_value")
 encodeEnumValueAssignment :: TBinding (PyHelpers.PythonEnvironment -> FieldType -> Flow PyHelpers.PyGraph [Py.Statement])
 encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
   doc "Encode an enum value assignment statement with optional comment" $
@@ -1260,7 +1256,9 @@ encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
     "mcomment" <<~ (inGraphContext @@ (Annotations.getTypeDescription @@ var "ftype")) $
     "pyName" <~ (PyNames.encodeEnumValue @@ var "env" @@ var "fname") $
     "fnameStr" <~ (Core.unName $ var "fname") $
-    "pyValue" <~ (PyUtils.doubleQuotedString @@ var "fnameStr") $
+    "pyValue" <~ (PyUtils.functionCall
+      @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+      @@ list [PyUtils.doubleQuotedString @@ var "fnameStr"]) $
     "assignStmt" <~ (PyUtils.assignmentStatement @@ var "pyName" @@ var "pyValue") $
     produce $ optCases (var "mcomment")
       (list [var "assignStmt"])
@@ -1303,23 +1301,33 @@ encodeUnionType = def "encodeUnionType" $
   "env" ~> "name" ~> "rowType" ~> "comment" ~>
     "tfields" <~ Core.rowTypeFields (var "rowType") $
     Logic.ifElse (Schemas.isEnumRowType @@ var "rowType")
-      -- Enum case
+      -- Enum case: enum values are Name objects; TYPE_ assigned after class to avoid becoming a member
       ("vals" <<~ (Flows.mapList (encodeEnumValueAssignment @@ var "env") (var "tfields")) $
        "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ var "vals") $
        "enumName" <~ PyDsl.name (string "Enum") $
        "args" <~ (just $ PyUtils.pyExpressionsToPyArgs @@ list [PyUtils.pyNameToPyExpression @@ var "enumName"]) $
        "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
+       -- Generate TYPE_ as a dotted assignment after the class: ClassName.TYPE_ = Name("...")
+       "typeConstStmt" <~ (PyUtils.dottedAssignmentStatement
+         @@ var "pyName"
+         @@ (PyNames.encodeConstantForTypeName @@ var "env" @@ var "name")
+         @@ (PyUtils.functionCall
+               @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+               @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ var "name")])) $
        produce $ list [PyUtils.pyClassDefinitionToPyStatement @@
-         PyDsl.classDefinition nothing (var "pyName") (Phantoms.list ([] :: [TTerm Py.TypeParameter])) (var "args") (var "body")])
-      -- Union case
-      ("fieldStmts" <<~ (Flows.mapList (encodeUnionField @@ var "env" @@ var "name") (var "tfields")) $
+         PyDsl.classDefinition nothing (var "pyName") (Phantoms.list ([] :: [TTerm Py.TypeParameter])) (var "args") (var "body"),
+         var "typeConstStmt"])
+      -- Union case: pass constants to the union class body
+      ("constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "tfields") $
+       "fieldStmts" <<~ (Flows.mapList (encodeUnionField @@ var "env" @@ var "name") (var "tfields")) $
        "tparams" <~ (environmentTypeParameters @@ var "env") $
        "unionAlts" <~ Lists.map (encodeUnionFieldAlt @@ var "env" @@ var "name") (var "tfields") $
        "unionStmts" <~ (unionTypeStatementsFor @@ var "env" @@
          (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") @@
          (var "tparams") @@
          (var "comment") @@
-         (PyUtils.orExpression @@ var "unionAlts")) $
+         (PyUtils.orExpression @@ var "unionAlts") @@
+         (var "constStmts")) $
        produce $ Lists.concat2 (var "fieldStmts") (var "unionStmts"))
 
 -- | Encode a union field as an alternative expression for the union type alias
@@ -1347,15 +1355,13 @@ encodeTypeDefSingle = def "encodeTypeDefSingle" $
     list [typeAliasStatementFor @@ var "env" @@ var "pyName" @@ var "tparams" @@ var "comment" @@ var "typeExpr"]
 
 -- | Encode a type assignment (dispatches to record, union, wrap, or simple typedef)
+--   Name constants are now generated inside the class body by each type encoder.
 encodeTypeAssignment :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyHelpers.PyGraph [[Py.Statement]])
 encodeTypeAssignment = def "encodeTypeAssignment" $
   doc "Encode a type definition, dispatching based on type structure" $
   "env" ~> "name" ~> "typ" ~> "comment" ~>
     "defStmts" <<~ (encodeTypeAssignmentInner @@ var "env" @@ var "name" @@ var "typ" @@ var "comment") $
-    "constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "typ") $
-    produce $ Lists.concat2
-      (Lists.map ("s" ~> list [var "s"]) (var "defStmts"))
-      (list [var "constStmts"])
+    produce $ Lists.map ("s" ~> list [var "s"]) (var "defStmts")
 
 -- | Inner type assignment encoding that handles forall unwrapping
 encodeTypeAssignmentInner :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyHelpers.PyGraph [Py.Statement])
@@ -1385,7 +1391,7 @@ encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
       -- Wrapped type
       _Type_wrap>>: "wt" ~>
         "innerType" <~ (Core.wrappedTypeBody $ var "wt") $
-        Flows.map ("s" ~> list [var "s"]) (encodeWrappedType @@ var "env" @@ var "name" @@ var "innerType" @@ var "comment")]
+        encodeWrappedType @@ var "env" @@ var "name" @@ var "innerType" @@ var "comment"]
 
 -- | Encode a field (name-value pair) to a Python (Name, Expression) pair
 encodeField :: TBinding (PyHelpers.PythonEnvironment -> Field -> (TTerm Term -> Flow PyHelpers.PyGraph Py.Expression) -> Flow PyHelpers.PyGraph (Py.Name, Py.Expression))

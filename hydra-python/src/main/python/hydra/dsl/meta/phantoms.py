@@ -28,6 +28,21 @@ def _tbinding_matmul(self, other):
 TBinding.__matmul__ = _tbinding_matmul
 
 
+def _name_rshift(self, val):
+    """Create a Field from a Name and a TTerm: name >> term."""
+    return Field(self, un_tterm(val))
+
+Name.__rshift__ = _name_rshift
+
+from enum import Enum
+
+def _enum_rshift(self, val):
+    """Create a Field from an enum member (whose value is a Name) and a TTerm: member >> term."""
+    return Field(self.value, un_tterm(val))
+
+Enum.__rshift__ = _enum_rshift
+
+
 # Re-export phantom literals
 from hydra.dsl.meta.phantom_literals import (
     bigfloat,

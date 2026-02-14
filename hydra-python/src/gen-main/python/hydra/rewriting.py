@@ -733,7 +733,7 @@ def rewrite_type_m(f: Callable[[
                 return hydra.lib.flows.bind(recurse2(at.body), (lambda t: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(t, at.annotation))))))
             
             case hydra.core.TypeApplication(value=at2):
-                return hydra.lib.flows.bind(recurse2(at2.function), (lambda lhs: hydra.lib.flows.bind(recurse2(at2.argument), (lambda rhs: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(lhs, rhs))))))))
+                return hydra.lib.flows.bind(recurse2(at2.function), (lambda lhs2: hydra.lib.flows.bind(recurse2(at2.argument), (lambda rhs2: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(lhs2, rhs2))))))))
             
             case hydra.core.TypeEither(value=et):
                 return hydra.lib.flows.bind(recurse2(et.left), (lambda left: hydra.lib.flows.bind(recurse2(et.right), (lambda right: hydra.lib.flows.pure(cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(left, right))))))))
@@ -1603,7 +1603,7 @@ def rewrite_term_m(f: Callable[[
                 return hydra.lib.flows.bind(recurse2(at.body), (lambda ex: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(ex, at.annotation))))))
             
             case hydra.core.TermApplication(value=app):
-                return hydra.lib.flows.bind(recurse2(app.function), (lambda lhs: hydra.lib.flows.bind(recurse2(app.argument), (lambda rhs: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, rhs))))))))
+                return hydra.lib.flows.bind(recurse2(app.function), (lambda lhs2: hydra.lib.flows.bind(recurse2(app.argument), (lambda rhs2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs2, rhs2))))))))
             
             case hydra.core.TermEither(value=e):
                 return hydra.lib.flows.bind(hydra.lib.eithers.either((lambda l: hydra.lib.flows.map((lambda x: Left(x)), recurse2(l))), (lambda r: hydra.lib.flows.map((lambda x: Right(x)), recurse2(r))), e), (lambda re: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermEither(re)))))
@@ -1899,7 +1899,7 @@ def rewrite_term_with_context_m(f: Callable[[
                 return hydra.lib.flows.bind(recurse(at.body), (lambda ex: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(ex, at.annotation))))))
             
             case hydra.core.TermApplication(value=app):
-                return hydra.lib.flows.bind(recurse(app.function), (lambda lhs: hydra.lib.flows.bind(recurse(app.argument), (lambda rhs: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs, rhs))))))))
+                return hydra.lib.flows.bind(recurse(app.function), (lambda lhs2: hydra.lib.flows.bind(recurse(app.argument), (lambda rhs2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs2, rhs2))))))))
             
             case hydra.core.TermEither(value=e):
                 return hydra.lib.flows.bind(hydra.lib.eithers.either((lambda l: hydra.lib.flows.map((lambda x: Left(x)), recurse(l))), (lambda r: hydra.lib.flows.map((lambda x: Right(x)), recurse(r))), e), (lambda re: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermEither(re)))))
@@ -2011,14 +2011,14 @@ def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
     r"""Simplify terms by applying beta reduction where possible."""
     
     def simplify(recurse: Callable[[hydra.core.Term], T0], term2: hydra.core.Term) -> T0:
-        def for_rhs(rhs: hydra.core.Term, var: hydra.core.Name, body: hydra.core.Term) -> hydra.core.Term:
-            match deannotate_term(rhs):
+        def for_rhs(rhs2: hydra.core.Term, var: hydra.core.Name, body: hydra.core.Term) -> hydra.core.Term:
+            match deannotate_term(rhs2):
                 case hydra.core.TermVariable(value=v):
                     return simplify_term(substitute_variable(var, v, body))
                 
                 case _:
                     return term2
-        def for_lhs(lhs: hydra.core.Term, rhs: hydra.core.Term) -> hydra.core.Term:
+        def for_lhs(lhs2: hydra.core.Term, rhs2: hydra.core.Term) -> hydra.core.Term:
             def for_fun(fun: hydra.core.Function) -> hydra.core.Term:
                 match fun:
                     case hydra.core.FunctionLambda(value=l):
@@ -2028,11 +2028,11 @@ def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
                         @lru_cache(1)
                         def body() -> hydra.core.Term:
                             return l.body
-                        return hydra.lib.logic.if_else(hydra.lib.sets.member(var(), free_variables_in_term(body())), (lambda : for_rhs(rhs, var(), body())), (lambda : simplify_term(body())))
+                        return hydra.lib.logic.if_else(hydra.lib.sets.member(var(), free_variables_in_term(body())), (lambda : for_rhs(rhs2, var(), body())), (lambda : simplify_term(body())))
                     
                     case _:
                         return term2
-            match deannotate_term(lhs):
+            match deannotate_term(lhs2):
                 case hydra.core.TermFunction(value=fun):
                     return for_fun(fun)
                 

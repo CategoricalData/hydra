@@ -24,22 +24,20 @@ class AdapterContext:
     graph: Annotated[hydra.graph.Graph, "The underlying graph of elements and primitives"]
     language: Annotated[Language, "The language being encoded or decoded"]
     adapters: Annotated[FrozenDict[hydra.core.Name, hydra.compute.Adapter[AdapterContext, AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], "A map of type names to adapters for those types"]
-
-ADAPTER_CONTEXT__NAME = hydra.core.Name("hydra.coders.AdapterContext")
-ADAPTER_CONTEXT__GRAPH__NAME = hydra.core.Name("graph")
-ADAPTER_CONTEXT__LANGUAGE__NAME = hydra.core.Name("language")
-ADAPTER_CONTEXT__ADAPTERS__NAME = hydra.core.Name("adapters")
+    
+    TYPE_ = hydra.core.Name("hydra.coders.AdapterContext")
+    GRAPH = hydra.core.Name("graph")
+    LANGUAGE = hydra.core.Name("language")
+    ADAPTERS = hydra.core.Name("adapters")
 
 class CoderDirection(Enum):
     r"""Indicates either the 'out' or the 'in' direction of a coder."""
     
-    ENCODE = "encode"
+    ENCODE = hydra.core.Name("encode")
     
-    DECODE = "decode"
+    DECODE = hydra.core.Name("decode")
 
-CODER_DIRECTION__NAME = hydra.core.Name("hydra.coders.CoderDirection")
-CODER_DIRECTION__ENCODE__NAME = hydra.core.Name("encode")
-CODER_DIRECTION__DECODE__NAME = hydra.core.Name("decode")
+CoderDirection.TYPE_ = hydra.core.Name("hydra.coders.CoderDirection")
 
 @dataclass(frozen=True)
 class Language:
@@ -47,10 +45,10 @@ class Language:
     
     name: Annotated[LanguageName, "The unique name of the language"]
     constraints: Annotated[LanguageConstraints, "The constraints which characterize the language"]
-
-LANGUAGE__NAME = hydra.core.Name("hydra.coders.Language")
-LANGUAGE__NAME__NAME = hydra.core.Name("name")
-LANGUAGE__CONSTRAINTS__NAME = hydra.core.Name("constraints")
+    
+    TYPE_ = hydra.core.Name("hydra.coders.Language")
+    NAME = hydra.core.Name("name")
+    CONSTRAINTS = hydra.core.Name("constraints")
 
 @dataclass(frozen=True)
 class LanguageConstraints:
@@ -64,41 +62,35 @@ class LanguageConstraints:
     term_variants: Annotated[frozenset[hydra.variants.TermVariant], "All supported term variants"]
     type_variants: Annotated[frozenset[hydra.variants.TypeVariant], "All supported type variants"]
     types: Annotated[Callable[[hydra.core.Type], bool], "A logical set of types, as a predicate which tests a type for inclusion"]
-
-LANGUAGE_CONSTRAINTS__NAME = hydra.core.Name("hydra.coders.LanguageConstraints")
-LANGUAGE_CONSTRAINTS__ELIMINATION_VARIANTS__NAME = hydra.core.Name("eliminationVariants")
-LANGUAGE_CONSTRAINTS__LITERAL_VARIANTS__NAME = hydra.core.Name("literalVariants")
-LANGUAGE_CONSTRAINTS__FLOAT_TYPES__NAME = hydra.core.Name("floatTypes")
-LANGUAGE_CONSTRAINTS__FUNCTION_VARIANTS__NAME = hydra.core.Name("functionVariants")
-LANGUAGE_CONSTRAINTS__INTEGER_TYPES__NAME = hydra.core.Name("integerTypes")
-LANGUAGE_CONSTRAINTS__TERM_VARIANTS__NAME = hydra.core.Name("termVariants")
-LANGUAGE_CONSTRAINTS__TYPE_VARIANTS__NAME = hydra.core.Name("typeVariants")
-LANGUAGE_CONSTRAINTS__TYPES__NAME = hydra.core.Name("types")
+    
+    TYPE_ = hydra.core.Name("hydra.coders.LanguageConstraints")
+    ELIMINATION_VARIANTS = hydra.core.Name("eliminationVariants")
+    LITERAL_VARIANTS = hydra.core.Name("literalVariants")
+    FLOAT_TYPES = hydra.core.Name("floatTypes")
+    FUNCTION_VARIANTS = hydra.core.Name("functionVariants")
+    INTEGER_TYPES = hydra.core.Name("integerTypes")
+    TERM_VARIANTS = hydra.core.Name("termVariants")
+    TYPE_VARIANTS = hydra.core.Name("typeVariants")
+    TYPES = hydra.core.Name("types")
 
 class LanguageName(Node[str]):
     r"""The unique name of a language."""
 
-LANGUAGE_NAME__NAME = hydra.core.Name("hydra.coders.LanguageName")
+LanguageName.TYPE_ = hydra.core.Name("hydra.coders.LanguageName")
 
 # A bidirectional encoder which maps between the same type and term languages on either side.
 SymmetricAdapter: TypeAlias = "hydra.compute.Adapter[S, S, T, T, V, V]"
 
-SYMMETRIC_ADAPTER__NAME = hydra.core.Name("hydra.coders.SymmetricAdapter")
-
 class TraversalOrder(Enum):
     r"""Specifies either a pre-order or post-order traversal."""
     
-    PRE = "pre"
+    PRE = hydra.core.Name("pre")
     r"""Pre-order traversal"""
     
-    POST = "post"
+    POST = hydra.core.Name("post")
     r"""Post-order traversal"""
 
-TRAVERSAL_ORDER__NAME = hydra.core.Name("hydra.coders.TraversalOrder")
-TRAVERSAL_ORDER__PRE__NAME = hydra.core.Name("pre")
-TRAVERSAL_ORDER__POST__NAME = hydra.core.Name("post")
+TraversalOrder.TYPE_ = hydra.core.Name("hydra.coders.TraversalOrder")
 
 # A function which maps a Hydra type to a symmetric adapter between types and terms.
 TypeAdapter: TypeAlias = "Callable[[hydra.core.Type], hydra.compute.Flow[AdapterContext, SymmetricAdapter[AdapterContext, hydra.core.Type, hydra.core.Term]]]"
-
-TYPE_ADAPTER__NAME = hydra.core.Name("hydra.coders.TypeAdapter")
