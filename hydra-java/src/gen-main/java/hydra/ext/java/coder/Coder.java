@@ -4484,12 +4484,10 @@ public interface Coder {
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> constantDeclForFieldType(hydra.ext.java.helpers.Aliases aliases, hydra.core.FieldType ftyp) {
     hydra.core.Name name = (ftyp).name;
-    String javaName = hydra.lib.strings.Cat2.apply(
-      "FIELD_NAME_",
-      hydra.formatting.Formatting.nonAlnumToUnderscores(hydra.formatting.Formatting.convertCase(
-        new hydra.util.CaseConvention.Camel(),
-        new hydra.util.CaseConvention.UpperSnake(),
-        (name).value)));
+    String javaName = hydra.formatting.Formatting.nonAlnumToUnderscores(hydra.formatting.Formatting.convertCase(
+      new hydra.util.CaseConvention.Camel(),
+      new hydra.util.CaseConvention.UpperSnake(),
+      (name).value));
     return hydra.ext.java.coder.Coder.constantDecl(
       javaName,
       aliases,
@@ -4498,7 +4496,7 @@ public interface Coder {
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> constantDeclForTypeName(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name) {
     return hydra.ext.java.coder.Coder.constantDecl(
-      "TYPE_NAME",
+      "TYPE_",
       aliases,
       name);
   }

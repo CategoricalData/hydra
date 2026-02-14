@@ -278,13 +278,11 @@ public interface Unification {
   }
   
   static <T0, T1, T2> hydra.compute.Flow<T1, T2> joinTypes_cannotUnify(java.util.function.Function<T0, String> hydra_show_core_type2, T0 sleft, T0 sright) {
-    return hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
-      hydra.lib.strings.Cat2.apply(
-        hydra.lib.strings.Cat2.apply(
-          "cannot unify ",
-          (hydra_show_core_type2).apply(sleft)),
-        " with "),
-      (hydra_show_core_type2).apply(sright)));
+    return hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
+      "cannot unify ",
+      (hydra_show_core_type2).apply(sleft),
+      " with ",
+      (hydra_show_core_type2).apply(sright))));
   }
   
   static <T0, T1, T2> hydra.compute.Flow<T1, java.util.List<T2>> joinTypes_assertEqual(java.util.function.Function<T0, String> hydra_show_core_type2, T0 sleft, T0 sright) {

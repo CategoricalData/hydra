@@ -36,7 +36,7 @@ public interface Flows {
      * The maximum size of a collection over which we can apply the mapM() functions.
      * This is a conservative limit which will avoid stack overflow conditions in typical JVM environments.
      */
-    int MAX_MAPM_SIZE = 1000;
+    int MAX_MAPM_SIZE = 2000;
 
     Unit UNIT = new Unit();
 
@@ -369,20 +369,24 @@ public interface Flows {
         requireNonNull(as, "as");
         requireNonNull(f, "f");
 
-        if (as.size() > MAX_MAPM_SIZE) {
-            throw new IllegalArgumentException("Can't mapM over a collection with more than "
-                + MAX_MAPM_SIZE + " (MAX_MAPM_SIZE) elements. This would present a risk of stack overflow.");
-        }
-
-        Flow<S, List<B>> result = pure(new ArrayList<>());
-        for (A a : as) {
-            result = bind(result, ys -> map(f.apply(a), b -> {
-                List<B> newList = new ArrayList<>(ys);
-                newList.add(b);
-                return newList;
-            }));
-        }
-        return result;
+        // Evaluate each element eagerly to avoid building a deep closure chain
+        // that would overflow the stack for large collections.
+        return new Flow<>(s -> t -> {
+            List<B> results = new ArrayList<>(as.size());
+            S currentState = s;
+            Trace currentTrace = t;
+            for (A a : as) {
+                Flow<S, B> elemFlow = f.apply(a);
+                FlowState<S, B> elemResult = elemFlow.value.apply(currentState).apply(currentTrace);
+                if (!elemResult.value.isJust()) {
+                    return new FlowState<>(Maybe.nothing(), elemResult.state, elemResult.trace);
+                }
+                results.add(elemResult.value.fromJust());
+                currentState = elemResult.state;
+                currentTrace = elemResult.trace;
+            }
+            return new FlowState<>(Maybe.just(results), currentState, currentTrace);
+        });
     }
 
     /**
@@ -458,20 +462,24 @@ public interface Flows {
         requireNonNull(as, "as");
         requireNonNull(f, "f");
 
-        if (as.size() > MAX_MAPM_SIZE) {
-            throw new IllegalArgumentException("Can't mapM over a collection with more than "
-                + MAX_MAPM_SIZE + " (MAX_MAPM_SIZE) elements. This would present a risk of stack overflow.");
-        }
-
-        Flow<S, Set<B>> result = pure(new HashSet<>(as.size()));
-        for (A a : as) {
-            result = bind(result, ys -> map(f.apply(a), b -> {
-                Set<B> newSet = new HashSet<>(ys);
-                newSet.add(b);
-                return newSet;
-            }));
-        }
-        return result;
+        // Evaluate each element eagerly to avoid building a deep closure chain
+        // that would overflow the stack for large collections.
+        return new Flow<>(s -> t -> {
+            Set<B> results = new HashSet<>(as.size());
+            S currentState = s;
+            Trace currentTrace = t;
+            for (A a : as) {
+                Flow<S, B> elemFlow = f.apply(a);
+                FlowState<S, B> elemResult = elemFlow.value.apply(currentState).apply(currentTrace);
+                if (!elemResult.value.isJust()) {
+                    return new FlowState<>(Maybe.nothing(), elemResult.state, elemResult.trace);
+                }
+                results.add(elemResult.value.fromJust());
+                currentState = elemResult.state;
+                currentTrace = elemResult.trace;
+            }
+            return new FlowState<>(Maybe.just(results), currentState, currentTrace);
+        });
     }
 
     /**

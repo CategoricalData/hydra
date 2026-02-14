@@ -14,6 +14,7 @@ import hydra.util.Maybe;
 import java.util.List;
 import java.util.function.Function;
 
+import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
@@ -37,7 +38,7 @@ public class IsNothing extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("a", function(optional("a"), "a"));
+        return scheme("a", function(optional("a"), boolean_()));
     }
 
     /**

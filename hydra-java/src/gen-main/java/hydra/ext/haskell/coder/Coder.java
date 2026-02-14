@@ -1239,7 +1239,7 @@ public interface Coder {
           typ_),
         (java.util.function.Function<hydra.ext.haskell.ast.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>) (htype -> {
           hydra.ext.haskell.ast.Name constructorName = hydra.ext.haskell.utils.Utils.simpleName(hydra.names.Names.localNameOf(tname));
-          hydra.util.Lazy<hydra.ext.haskell.ast.FieldWithComments> hfield = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.ast.FieldWithComments(new hydra.ext.haskell.ast.Field(hname, htype), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())));
+          hydra.util.Lazy<hydra.ext.haskell.ast.FieldWithComments> hfield = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.ast.FieldWithComments(new hydra.ext.haskell.ast.Field(hname2, htype), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())));
           return hydra.lib.flows.Pure.apply(new hydra.ext.haskell.ast.ConstructorWithComments(new hydra.ext.haskell.ast.Constructor.Record(new hydra.ext.haskell.ast.RecordConstructor(constructorName, java.util.List.of(hfield.get()))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())));
         }));
     }));

@@ -51,11 +51,10 @@ T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 T3 = TypeVar("T3")
 
-@lru_cache(1)
-def python_environment_get_type_context() -> Callable[[hydra.ext.python.helpers.PythonEnvironment], hydra.typing.TypeContext]:
+def python_environment_get_type_context(env: hydra.ext.python.helpers.PythonEnvironment) -> hydra.typing.TypeContext:
     r"""Get the TypeContext from a PythonEnvironment."""
-    
-    return (lambda v1: v1.type_context)
+
+    return env.type_context
 
 def python_environment_set_type_context(tc: hydra.typing.TypeContext, env: hydra.ext.python.helpers.PythonEnvironment) -> hydra.ext.python.helpers.PythonEnvironment:
     r"""Set the TypeContext in a PythonEnvironment."""
@@ -289,11 +288,10 @@ def make_uncurried_lambda(params: frozenlist[hydra.ext.python.syntax.Name], body
     
     return cast(hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.ExpressionLambda(hydra.ext.python.syntax.Lambda(hydra.ext.python.syntax.LambdaParameters(Nothing(), hydra.lib.lists.map((lambda p: hydra.ext.python.syntax.LambdaParamNoDefault(p)), params), (), Nothing()), body)))
 
-@lru_cache(1)
-def py_graph_graph() -> Callable[[hydra.ext.python.helpers.PyGraph], hydra.graph.Graph]:
+def py_graph_graph(pyg: hydra.ext.python.helpers.PyGraph) -> hydra.graph.Graph:
     r"""Accessor for the graph field of PyGraph."""
-    
-    return (lambda v1: v1.graph)
+
+    return pyg.graph
 
 def encode_variable(env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name, args: frozenlist[hydra.ext.python.syntax.Expression]) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, hydra.ext.python.syntax.Expression]:
     r"""Encode a variable reference to a Python expression."""
@@ -676,11 +674,10 @@ def make_py_graph(g: hydra.graph.Graph, m: hydra.ext.python.helpers.PythonModule
     
     return hydra.ext.python.helpers.PyGraph(g, m)
 
-@lru_cache(1)
-def py_graph_metadata() -> Callable[[hydra.ext.python.helpers.PyGraph], hydra.ext.python.helpers.PythonModuleMetadata]:
+def py_graph_metadata(pyg: hydra.ext.python.helpers.PyGraph) -> hydra.ext.python.helpers.PythonModuleMetadata:
     r"""Accessor for the metadata field of PyGraph."""
-    
-    return (lambda v1: v1.metadata)
+
+    return pyg.metadata
 
 def in_graph_context(graph_flow: hydra.compute.Flow[hydra.graph.Graph, T0]) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, T0]:
     return hydra.coder_utils.in_coder_graph_context((lambda x1: py_graph_graph(x1)), (lambda x1: py_graph_metadata(x1)), (lambda x1, x2: make_py_graph(x1, x2)), graph_flow)

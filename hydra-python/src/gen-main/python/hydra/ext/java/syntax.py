@@ -2618,9 +2618,9 @@ class _PrimaryNoNewArrayMeta(type):
     def __getitem__(cls, item):
         return object
 
-class PrimaryNoNewArray(metaclass=_PrimaryNoNewArrayMeta):
+class _PrimaryNoNewArray_Union(metaclass=_PrimaryNoNewArrayMeta):
     r"""PrimaryNoNewArrayLiteral | PrimaryNoNewArrayClassLiteral | PrimaryNoNewArrayThis | PrimaryNoNewArrayDotThis | PrimaryNoNewArrayParens | PrimaryNoNewArrayClassInstance | PrimaryNoNewArrayFieldAccess | PrimaryNoNewArrayArrayAccess | PrimaryNoNewArrayMethodInvocation | PrimaryNoNewArrayMethodReference"""
-    
+
     pass
 
 PRIMARY_NO_NEW_ARRAY__NAME = hydra.core.Name("hydra.ext.java.syntax.PrimaryNoNewArray")
