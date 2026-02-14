@@ -4,10 +4,10 @@ Mirrors the Haskell module Hydra.Dsl.Meta.Graph, providing phantom-typed constru
 accessors, and modifiers for graph-related Hydra types.
 """
 
-import hydra.classes
 import hydra.dsl.meta.phantoms as Phantoms
-import hydra.graph
+from hydra.classes import TypeClass
 from hydra.core import Name
+from hydra.graph import Graph, Primitive
 from hydra.phantoms import TTerm
 
 
@@ -49,49 +49,49 @@ def graph(
         schema: TTerm,
 ) -> TTerm:
     """Construct a Graph."""
-    return Phantoms.record(hydra.graph.GRAPH__NAME, [
-        Phantoms.field(hydra.graph.GRAPH__ELEMENTS__NAME, elements),
-        Phantoms.field(hydra.graph.GRAPH__ENVIRONMENT__NAME, environment),
-        Phantoms.field(hydra.graph.GRAPH__TYPES__NAME, types),
-        Phantoms.field(hydra.graph.GRAPH__BODY__NAME, body),
-        Phantoms.field(hydra.graph.GRAPH__PRIMITIVES__NAME, primitives),
-        Phantoms.field(hydra.graph.GRAPH__SCHEMA__NAME, schema)])
+    return Phantoms.record(Graph.TYPE_, [
+        Phantoms.field(Graph.ELEMENTS, elements),
+        Phantoms.field(Graph.ENVIRONMENT, environment),
+        Phantoms.field(Graph.TYPES, types),
+        Phantoms.field(Graph.BODY, body),
+        Phantoms.field(Graph.PRIMITIVES, primitives),
+        Phantoms.field(Graph.SCHEMA, schema)])
 
 
 def graph_elements(g: TTerm) -> TTerm:
     """Get the elements of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__ELEMENTS__NAME), g)
+        Phantoms.project(Graph.TYPE_, Graph.ELEMENTS), g)
 
 
 def graph_environment(g: TTerm) -> TTerm:
     """Get the environment of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__ENVIRONMENT__NAME), g)
+        Phantoms.project(Graph.TYPE_, Graph.ENVIRONMENT), g)
 
 
 def graph_types(g: TTerm) -> TTerm:
     """Get the types of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__TYPES__NAME), g)
+        Phantoms.project(Graph.TYPE_, Graph.TYPES), g)
 
 
 def graph_body(g: TTerm) -> TTerm:
     """Get the body of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__BODY__NAME), g)
+        Phantoms.project(Graph.TYPE_, Graph.BODY), g)
 
 
 def graph_primitives(g: TTerm) -> TTerm:
     """Get the primitives of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__PRIMITIVES__NAME), g)
+        Phantoms.project(Graph.TYPE_, Graph.PRIMITIVES), g)
 
 
 def graph_schema(g: TTerm) -> TTerm:
     """Get the schema of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(hydra.graph.GRAPH__NAME, hydra.graph.GRAPH__SCHEMA__NAME), g)
+        Phantoms.project(Graph.TYPE_, Graph.SCHEMA), g)
 
 
 def graph_with_elements(g: TTerm, new_elements: TTerm) -> TTerm:
@@ -136,28 +136,28 @@ def graph_with_schema(g: TTerm, new_schema: TTerm) -> TTerm:
 
 def primitive(name: TTerm, typ: TTerm, implementation: TTerm) -> TTerm:
     """Construct a Primitive."""
-    return Phantoms.record(hydra.graph.PRIMITIVE__NAME, [
-        Phantoms.field(hydra.graph.PRIMITIVE__NAME__NAME, name),
-        Phantoms.field(hydra.graph.PRIMITIVE__TYPE__NAME, typ),
-        Phantoms.field(hydra.graph.PRIMITIVE__IMPLEMENTATION__NAME, implementation)])
+    return Phantoms.record(Primitive.TYPE_, [
+        Phantoms.field(Primitive.NAME, name),
+        Phantoms.field(Primitive.TYPE, typ),
+        Phantoms.field(Primitive.IMPLEMENTATION, implementation)])
 
 
 def primitive_name(p: TTerm) -> TTerm:
     """Get the name of a Primitive."""
     return Phantoms.apply(
-        Phantoms.project(hydra.graph.PRIMITIVE__NAME, hydra.graph.PRIMITIVE__NAME__NAME), p)
+        Phantoms.project(Primitive.TYPE_, Primitive.NAME), p)
 
 
 def primitive_type(p: TTerm) -> TTerm:
     """Get the type of a Primitive."""
     return Phantoms.apply(
-        Phantoms.project(hydra.graph.PRIMITIVE__NAME, hydra.graph.PRIMITIVE__TYPE__NAME), p)
+        Phantoms.project(Primitive.TYPE_, Primitive.TYPE), p)
 
 
 def primitive_implementation(p: TTerm) -> TTerm:
     """Get the implementation of a Primitive."""
     return Phantoms.apply(
-        Phantoms.project(hydra.graph.PRIMITIVE__NAME, hydra.graph.PRIMITIVE__IMPLEMENTATION__NAME), p)
+        Phantoms.project(Primitive.TYPE_, Primitive.IMPLEMENTATION), p)
 
 
 def primitive_with_type(p: TTerm, new_type: TTerm) -> TTerm:
@@ -171,9 +171,9 @@ def primitive_with_type(p: TTerm, new_type: TTerm) -> TTerm:
 
 def type_class_equality() -> TTerm:
     """The equality TypeClass variant."""
-    return Phantoms.inject_unit(hydra.classes.TYPE_CLASS__NAME, hydra.classes.TYPE_CLASS__EQUALITY__NAME)
+    return Phantoms.inject_unit(TypeClass.TYPE_, TypeClass.EQUALITY.value)
 
 
 def type_class_ordering() -> TTerm:
     """The ordering TypeClass variant."""
-    return Phantoms.inject_unit(hydra.classes.TYPE_CLASS__NAME, hydra.classes.TYPE_CLASS__ORDERING__NAME)
+    return Phantoms.inject_unit(TypeClass.TYPE_, TypeClass.ORDERING.value)

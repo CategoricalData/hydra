@@ -681,16 +681,19 @@ def write_class_type(ct: hydra.ext.java.syntax.ClassType) -> hydra.ast.Expr:
         return ct.arguments
     @lru_cache(1)
     def qualified_id() -> hydra.ast.Expr:
-        match qual():
+        q = qual()
+        if q is None:
+            return write_type_identifier(id())
+        match q:
             case hydra.ext.java.syntax.ClassTypeQualifierNone():
                 return write_type_identifier(id())
-            
+
             case hydra.ext.java.syntax.ClassTypeQualifierPackage(value=pkg):
                 return hydra.serialization.dot_sep((write_package_name(pkg), write_type_identifier(id())))
-            
+
             case hydra.ext.java.syntax.ClassTypeQualifierParent(value=cit):
                 return hydra.serialization.dot_sep((write_class_or_interface_type(cit), write_type_identifier(id())))
-            
+
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns()), (lambda : Nothing()), (lambda : Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns()))))), Just(qualified_id()))))), hydra.lib.logic.if_else(hydra.lib.lists.null(args()), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_argument(x1)), args()))))))))
@@ -1309,7 +1312,7 @@ def write_postfix_expression(e: hydra.ext.java.syntax.PostfixExpression) -> hydr
 
 def write_primary(p: hydra.ext.java.syntax.Primary) -> hydra.ast.Expr:
     match p:
-        case hydra.ext.java.syntax.PrimaryNoNewArray(value=n):
+        case hydra.ext.java.syntax.PrimaryNoNewArray_(value=n):
             return write_primary_no_new_array(n)
         
         case hydra.ext.java.syntax.PrimaryArrayCreation(value=a):

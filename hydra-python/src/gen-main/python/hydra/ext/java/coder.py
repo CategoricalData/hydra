@@ -326,7 +326,17 @@ def is_lambda_bound_variable(name: hydra.core.Name) -> bool:
     return hydra.lib.equality.lte(hydra.lib.strings.length(v()), 4)
 
 def encode_type_resolve_if_typedef(aliases: T0, bound_vars: frozenset[hydra.core.Name], in_scope_type_params: frozenset[hydra.core.Name], name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
-    return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.sets.member(name, bound_vars), hydra.lib.sets.member(name, in_scope_type_params)), (lambda : hydra.lib.flows.pure(Nothing())), (lambda : hydra.lib.logic.if_else(is_lambda_bound_variable(name), (lambda : hydra.lib.flows.pure(Nothing())), (lambda : hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: hydra.lib.flows.bind(hydra.schemas.graph_to_inference_context(g), (lambda ix: (schema_types := ix.schema_types, _hoist_body_1 := (lambda ts, v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.maybes.cases(hydra.lib.maps.lookup(name, schema_types), hydra.lib.flows.pure(Nothing()), (lambda ts: hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(ts.variables)), (lambda : hydra.lib.flows.pure(Nothing())), (lambda : _hoist_body_1(ts, hydra.rewriting.deannotate_type(ts.type)))))))[2]))))))))
+    def _resolve_type(ts, v1):
+        match v1:
+            case hydra.core.TypeRecord():
+                return hydra.lib.flows.pure(Nothing())
+            case hydra.core.TypeUnion():
+                return hydra.lib.flows.pure(Nothing())
+            case hydra.core.TypeWrap():
+                return hydra.lib.flows.pure(Nothing())
+            case _:
+                return hydra.lib.flows.pure(Just(ts.type))
+    return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.sets.member(name, bound_vars), hydra.lib.sets.member(name, in_scope_type_params)), (lambda : hydra.lib.flows.pure(Nothing())), (lambda : hydra.lib.logic.if_else(is_lambda_bound_variable(name), (lambda : hydra.lib.flows.pure(Nothing())), (lambda : hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: hydra.lib.flows.bind(hydra.schemas.graph_to_inference_context(g), (lambda ix: (schema_types := ix.schema_types, hydra.lib.maybes.cases(hydra.lib.maps.lookup(name, schema_types), hydra.lib.flows.pure(Nothing()), (lambda ts: hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(ts.variables)), (lambda : hydra.lib.flows.pure(Nothing())), (lambda : _resolve_type(ts, hydra.rewriting.deannotate_type(ts.type)))))))[1]))))))))
 
 def is_unresolved_inference_var_is_digit(c: int) -> bool:
     return hydra.lib.logic.and_(hydra.lib.equality.gte(c, 48), hydra.lib.equality.lte(c, 57))
@@ -742,7 +752,15 @@ def correct_cast_type(inner_body: hydra.core.Term, type_args: frozenlist[hydra.c
             return hydra.lib.flows.pure(fallback)
 
 def build_arg_subst(scheme_var_set: frozenset[hydra.core.Name], scheme_doms: frozenlist[hydra.core.Type], arg_types: frozenlist[T0]) -> FrozenDict[hydra.core.Name, T0]:
-    return hydra.lib.maps.from_list(hydra.lib.lists.bind(hydra.lib.lists.zip(scheme_doms, arg_types), (lambda p: (sdom := hydra.lib.pairs.first(p), arg_type := hydra.lib.pairs.second(p), hydra.dsl.python.unsupported("inline match expressions are not yet supported"))[2])))
+    def _match_sdom(p):
+        sdom = hydra.lib.pairs.first(p)
+        arg_type = hydra.lib.pairs.second(p)
+        match hydra.rewriting.deannotate_type(sdom):
+            case hydra.core.TypeVariable(value=v1):
+                return hydra.lib.logic.if_else(hydra.lib.sets.member(v1, scheme_var_set), (lambda: ((v1, arg_type),)), (lambda: ()))
+            case _:
+                return ()
+    return hydra.lib.maps.from_list(hydra.lib.lists.bind(hydra.lib.lists.zip(scheme_doms, arg_types), _match_sdom))
 
 def peel_domain_types(n: int, t: hydra.core.Type) -> tuple[frozenlist[hydra.core.Type], hydra.core.Type]:
     def _hoist_hydra_ext_java_coder_peel_domain_types_1(n: int, t: hydra.core.Type, v1: hydra.core.Type) -> tuple[frozenlist[hydra.core.Type], hydra.core.Type]:
@@ -1264,24 +1282,89 @@ def encode_nullary_constant(env: hydra.ext.java.helpers.JavaEnvironment, typ: hy
             return hydra.monads.unexpected("nullary function", hydra.show.core.function(fun))
 
 def is_field_unit_type(type_name: hydra.core.Name, field_name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, bool]:
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: hydra.lib.flows.bind(hydra.schemas.graph_to_inference_context(g), (lambda ix: (schema_types := ix.schema_types, _hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.maybes.cases(hydra.lib.maps.lookup(type_name, schema_types), hydra.lib.flows.pure(False), (lambda ts: _hoist_body_1(hydra.rewriting.deannotate_type(ts.type)))))[2]))))
+    def _match_type(v1):
+        match v1:
+            case hydra.core.TypeUnion(value=rt):
+                return hydra.lib.flows.pure(hydra.lib.maybes.cases(hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name, field_name)), rt.fields), False, (lambda ft: hydra.schemas.is_unit_type(hydra.rewriting.deannotate_type(ft.type)))))
+            case _:
+                return hydra.lib.flows.pure(False)
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: hydra.lib.flows.bind(hydra.schemas.graph_to_inference_context(g), (lambda ix: (schema_types := ix.schema_types, hydra.lib.maybes.cases(hydra.lib.maps.lookup(type_name, schema_types), hydra.lib.flows.pure(False), (lambda ts: _match_type(hydra.rewriting.deannotate_type(ts.type)))))[1]))))
 
 def take_type_args(label: str, n: int, tyapps: frozenlist[hydra.ext.java.syntax.Type]) -> hydra.compute.Flow[T0, frozenlist[hydra.ext.java.syntax.TypeArgument]]:
     return hydra.lib.logic.if_else(hydra.lib.equality.lt(hydra.lib.lists.length(tyapps), n), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat(("needed type arguments for ", label, ", found too few")), "takeTypeArgs")), (lambda : hydra.lib.flows.map_list((lambda jt: hydra.lib.flows.bind(hydra.ext.java.utils.java_type_to_java_reference_type(jt), (lambda rt: hydra.lib.flows.pure(cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(rt)))))), hydra.lib.lists.take(n, tyapps))))
 
 def decode_type_from_term(term: hydra.core.Term) -> Maybe[hydra.core.Type]:
+    def _decode_variable(fterm):
+        match fterm:
+            case hydra.core.TermWrap(value=v2):
+                match v2.body:
+                    case hydra.core.TermLiteral(value=v3):
+                        match v3:
+                            case hydra.core.LiteralString(value=v4):
+                                return Just(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name(v4))))
+                            case _:
+                                return Nothing()
+                    case _:
+                        return Nothing()
+            case _:
+                return Nothing()
+    def _decode_annotated(fterm):
+        match fterm:
+            case hydra.core.TermRecord(value=v2):
+                return hydra.lib.maybes.bind(hydra.lib.lists.safe_head(hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, hydra.core.Name("body"))), v2.fields)), (lambda body_field: decode_type_from_term(body_field.term)))
+            case _:
+                return Nothing()
+    def _decode_application(fterm):
+        match fterm:
+            case hydra.core.TermRecord(value=v2):
+                return hydra.lib.maybes.bind(hydra.lib.lists.safe_head(hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, hydra.core.Name("function"))), v2.fields)), (lambda func_field: hydra.lib.maybes.bind(decode_type_from_term(func_field.term), (lambda func: hydra.lib.maybes.bind(hydra.lib.lists.safe_head(hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, hydra.core.Name("argument"))), v2.fields)), (lambda arg_field: hydra.lib.maybes.map((lambda arg: cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(func, arg)))), decode_type_from_term(arg_field.term))))))))
+            case _:
+                return Nothing()
+    def _decode_function(fterm):
+        match fterm:
+            case hydra.core.TermRecord(value=v2):
+                return hydra.lib.maybes.bind(hydra.lib.lists.safe_head(hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, hydra.core.Name("domain"))), v2.fields)), (lambda dom_field: hydra.lib.maybes.bind(decode_type_from_term(dom_field.term), (lambda dom: hydra.lib.maybes.bind(hydra.lib.lists.safe_head(hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, hydra.core.Name("codomain"))), v2.fields)), (lambda cod_field: hydra.lib.maybes.map((lambda cod: cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(dom, cod)))), decode_type_from_term(cod_field.term))))))))
+            case _:
+                return Nothing()
+    def _decode_literal(fterm):
+        match fterm:
+            case hydra.core.TermUnion(value=v2):
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(v2.field.name.value, "string"), (lambda: Just(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()))))), (lambda: Nothing()))
+            case _:
+                return Nothing()
     match hydra.rewriting.deannotate_term(term):
         case hydra.core.TermUnion(value=inj):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(inj.type_name, hydra.core.Name("hydra.core.Type")), (lambda : (fname := inj.field.name.value, (fterm := inj.field.term, (_hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_4 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_5 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_6 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_7 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.logic.if_else(hydra.lib.equality.equal(fname, "variable"), (lambda : _hoist_body_3(fterm)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(fname, "annotated"), (lambda : _hoist_body_4(fterm)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(fname, "application"), (lambda : _hoist_body_5(fterm)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(fname, "function"), (lambda : _hoist_body_6(fterm)), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(fname, "literal"), (lambda : _hoist_body_7(fterm)), (lambda : Nothing())))))))))))[7])[1])[1]), (lambda : Nothing()))
-        
+            if not hydra.lib.equality.equal(inj.type_name, hydra.core.Name("hydra.core.Type")):
+                return Nothing()
+            fname = inj.field.name.value
+            fterm = inj.field.term
+            if hydra.lib.equality.equal(fname, "variable"):
+                return _decode_variable(fterm)
+            elif hydra.lib.equality.equal(fname, "annotated"):
+                return _decode_annotated(fterm)
+            elif hydra.lib.equality.equal(fname, "application"):
+                return _decode_application(fterm)
+            elif hydra.lib.equality.equal(fname, "function"):
+                return _decode_function(fterm)
+            elif hydra.lib.equality.equal(fname, "literal"):
+                return _decode_literal(fterm)
+            else:
+                return Nothing()
+
         case _:
             return Nothing()
 
 def try_infer_function_type(fun: hydra.core.Function) -> Maybe[hydra.core.Type]:
+    def _infer_cod_from_body(body):
+        match body:
+            case hydra.core.TermAnnotated(value=v2):
+                return hydra.lib.maybes.bind(hydra.lib.maps.lookup(hydra.constants.key_type, v2.annotation), (lambda type_term: decode_type_from_term(type_term)))
+            case _:
+                return Nothing()
     match fun:
         case hydra.core.FunctionLambda(value=lam):
-            return hydra.lib.maybes.bind(lam.domain, (lambda dom: (m_cod := hydra.dsl.python.unsupported("inline match expressions are not yet supported"), hydra.lib.maybes.map((lambda cod: cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(dom, cod)))), m_cod))[1]))
-        
+            return hydra.lib.maybes.bind(lam.domain, (lambda dom: (m_cod := _infer_cod_from_body(lam.body), hydra.lib.maybes.map((lambda cod: cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(dom, cod)))), m_cod))[1]))
+
         case _:
             return Nothing()
 
@@ -1343,7 +1426,33 @@ def encode_application(env: hydra.ext.java.helpers.JavaEnvironment, app: hydra.c
     @lru_cache(1)
     def type_apps() -> frozenlist[hydra.core.Type]:
         return hydra.lib.pairs.second(hydra.lib.pairs.second(gathered()))
-    return hydra.lib.flows.bind(hydra.annotations.get_type(hydra.annotations.term_annotation_internal(fun())), (lambda mfun_typ: hydra.lib.flows.bind(hydra.lib.maybes.cases(mfun_typ, hydra.coder_utils.try_type_of("1", tc(), fun()), (lambda t: hydra.lib.flows.pure(t))), (lambda fun_typ: (arity := hydra.arity.type_arity(fun_typ), deannotated_fun := hydra.rewriting.deannotate_term(fun()), callee_name := (_hoist_callee_name_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.dsl.python.unsupported("inline match expressions are not yet supported"))[1], _hoist_body_1 := (lambda annotated_args, v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda annotated_args, v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.flows.bind(hydra.lib.maybes.cases(callee_name, hydra.lib.flows.pure(args()), (lambda cname: annotate_lambda_args(cname, type_apps(), args()))), (lambda annotated_args: _hoist_body_2(annotated_args, deannotated_fun))))[5]))))
+    def _extract_callee_name(deannotated_fun):
+        match deannotated_fun:
+            case hydra.core.TermFunction(value=v1):
+                match v1:
+                    case hydra.core.FunctionPrimitive(value=v2):
+                        return Just(v2)
+                    case _:
+                        return Nothing()
+            case hydra.core.TermVariable(value=v1):
+                return Just(v1)
+            case _:
+                return Nothing()
+    def _dispatch_application(annotated_args, deannotated_fun, arity):
+        match deannotated_fun:
+            case hydra.core.TermFunction(value=v1):
+                match v1:
+                    case hydra.core.FunctionPrimitive(value=v2):
+                        hargs = hydra.lib.lists.take(arity, annotated_args)
+                        rargs = hydra.lib.lists.drop(arity, annotated_args)
+                        return hydra.lib.flows.bind(function_call(env, True, v2, hargs, ()), (lambda initial_call: hydra.lib.flows.foldl((lambda acc, h: hydra.lib.flows.bind(encode_term(env, h), (lambda jarg: hydra.lib.flows.pure(apply_java_arg(acc, jarg))))), initial_call, rargs)))
+                    case _:
+                        return encode_application_fallback(env, aliases(), tc(), type_apps(), app.function, app.argument)
+            case hydra.core.TermVariable(value=v1):
+                return hydra.lib.logic.if_else(hydra.lib.logic.and_(is_recursive_variable(aliases(), v1), hydra.lib.logic.not_(is_lambda_bound_in(v1, aliases().lambda_vars))), (lambda: encode_application_fallback(env, aliases(), tc(), type_apps(), app.function, app.argument)), (lambda: hydra.lib.flows.bind(classify_data_reference(v1), (lambda sym_class: (method_arity := (sym_class.value if isinstance(sym_class, hydra.ext.java.helpers.JavaSymbolClassHoistedLambda) else arity), hargs := hydra.lib.lists.take(method_arity, annotated_args), rargs := hydra.lib.lists.drop(method_arity, annotated_args), trusted := aliases().trusted_type_vars, in_scope := aliases().in_scope_type_params, filtered_type_apps := hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.sets.null(trusted), hydra.lib.sets.null(in_scope)), (lambda: ()), (lambda: (all_vars := hydra.lib.sets.unions(hydra.lib.lists.map((lambda t: collect_type_vars(t)), type_apps())), hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.sets.null(hydra.lib.sets.difference(all_vars, in_scope))), (lambda: ()), (lambda: hydra.lib.logic.if_else(hydra.lib.sets.null(hydra.lib.sets.difference(all_vars, trusted)), (lambda: type_apps()), (lambda: ())))))[1])), hydra.lib.flows.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(filtered_type_apps), (lambda: hydra.lib.flows.pure(())), (lambda: correct_type_apps(tc(), v1, hargs, filtered_type_apps))), (lambda safe_type_apps: hydra.lib.flows.bind(filter_phantom_type_args(v1, safe_type_apps), (lambda final_type_apps: hydra.lib.flows.bind(function_call(env, False, v1, hargs, final_type_apps), (lambda initial_call: hydra.lib.flows.foldl((lambda acc, h: hydra.lib.flows.bind(encode_term(env, h), (lambda jarg: hydra.lib.flows.pure(apply_java_arg(acc, jarg))))), initial_call, rargs))))))))[6]))))
+            case _:
+                return encode_application_fallback(env, aliases(), tc(), type_apps(), app.function, app.argument)
+    return hydra.lib.flows.bind(hydra.annotations.get_type(hydra.annotations.term_annotation_internal(fun())), (lambda mfun_typ: hydra.lib.flows.bind(hydra.lib.maybes.cases(mfun_typ, hydra.coder_utils.try_type_of("1", tc(), fun()), (lambda t: hydra.lib.flows.pure(t))), (lambda fun_typ: (arity := hydra.arity.type_arity(fun_typ), deannotated_fun := hydra.rewriting.deannotate_term(fun()), callee_name := _extract_callee_name(deannotated_fun), hydra.lib.flows.bind(hydra.lib.maybes.cases(callee_name, hydra.lib.flows.pure(args()), (lambda cname: annotate_lambda_args(cname, type_apps(), args()))), (lambda annotated_args: _dispatch_application(annotated_args, deannotated_fun, arity))))[3]))))
 
 def encode_application_fallback(env: hydra.ext.java.helpers.JavaEnvironment, aliases: hydra.ext.java.helpers.Aliases, tc: hydra.typing.TypeContext, type_apps: frozenlist[hydra.core.Type], lhs2: hydra.core.Term, rhs2: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.java.syntax.Expression]:
     def _hoist_hydra_ext_java_coder_encode_application_fallback_1(env: hydra.ext.java.helpers.JavaEnvironment, lhs2: hydra.core.Term, rhs2: hydra.core.Term, t: hydra.core.Type, tc: hydra.typing.TypeContext, v1: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.java.syntax.Expression]:
@@ -1413,8 +1522,30 @@ def encode_function(env: hydra.ext.java.helpers.JavaEnvironment, dom: hydra.core
             return hydra.monads.with_trace(hydra.lib.strings.cat(("elimination (", hydra.show.core.elimination(elm), ")")), encode_elimination(env, Nothing(), dom, cod, elm))
         
         case hydra.core.FunctionLambda(value=lam):
-            return hydra.monads.with_trace(hydra.lib.strings.cat2("lambda ", lam.parameter.value), with_lambda(env, lam, (lambda env2: (lambda_var := lam.parameter, body := lam.body, _hoist_body_1 := (lambda inner_lam, v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.dsl.python.unsupported("inline match expressions are not yet supported"))[4])))
-        
+            def _encode_lambda_body(env2):
+                lambda_var = lam.parameter
+                body = lam.body
+                def _encode_body_default(env2_, body_):
+                    return hydra.lib.flows.bind(hydra.monads.with_trace("analyze function body", analyze_java_function(env2_, body_)), (lambda fs: (bindings := fs.bindings, inner_body := fs.body, env3 := fs.environment, hydra.lib.flows.bind(bindings_to_statements(env3, bindings), (lambda bind_result: (binding_stmts := hydra.lib.pairs.first(bind_result), env4 := hydra.lib.pairs.second(bind_result), hydra.lib.flows.bind(encode_term(env4, inner_body), (lambda jbody: (lam1 := hydra.lib.logic.if_else(hydra.lib.lists.null(bindings), (lambda: hydra.ext.java.utils.java_lambda(lambda_var, jbody)), (lambda: (return_st := cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.ext.java.utils.java_return_statement(Just(jbody)))), hydra.ext.java.utils.java_lambda_from_block(lambda_var, hydra.ext.java.syntax.Block(hydra.lib.lists.concat2(binding_stmts, (return_st,)))))[1])), apply_cast_if_safe(aliases(), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(dom, cod))), lam1))[1])))[2])))[3]))
+                deannotated_body = hydra.rewriting.deannotate_term(body)
+                match deannotated_body:
+                    case hydra.core.TermFunction(value=v2):
+                        match v2:
+                            case hydra.core.FunctionLambda(value=inner_lam):
+                                deannotated_cod = hydra.rewriting.deannotate_type(cod)
+                                match deannotated_cod:
+                                    case hydra.core.TypeFunction(value=v4):
+                                        dom2 = v4.domain
+                                        cod2 = v4.codomain
+                                        return hydra.lib.flows.bind(encode_function(env2, dom2, cod2, cast(hydra.core.Function, hydra.core.FunctionLambda(inner_lam))), (lambda inner_java_lambda: (lam1 := hydra.ext.java.utils.java_lambda(lambda_var, inner_java_lambda), apply_cast_if_safe(aliases(), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(dom, cod))), lam1))[1]))
+                                    case _:
+                                        return hydra.monads.fail(hydra.lib.strings.cat2("expected function type for lambda body, but got: ", hydra.show.core.type_(cod)))
+                            case _:
+                                return _encode_body_default(env2, body)
+                    case _:
+                        return _encode_body_default(env2, body)
+            return hydra.monads.with_trace(hydra.lib.strings.cat2("lambda ", lam.parameter.value), with_lambda(env, lam, _encode_lambda_body))
+
         case hydra.core.FunctionPrimitive(value=name):
             @lru_cache(1)
             def class_with_apply() -> str:
@@ -1454,7 +1585,13 @@ def encode_term_internal(env: hydra.ext.java.helpers.JavaEnvironment, anns: froz
             return hydra.lib.flows.bind(take_type_args("either", 2, tyapps), (lambda targs: hydra.lib.eithers.either((lambda term1: hydra.lib.flows.bind(encode(term1), (lambda expr: hydra.lib.flows.pure(hydra.ext.java.utils.java_method_invocation_to_java_expression(hydra.ext.java.utils.method_invocation_static_with_type_args(hydra.ext.java.syntax.Identifier("hydra.util.Either"), hydra.ext.java.syntax.Identifier("left"), targs, (expr,))))))), (lambda term1: hydra.lib.flows.bind(encode(term1), (lambda expr: hydra.lib.flows.pure(hydra.ext.java.utils.java_method_invocation_to_java_expression(hydra.ext.java.utils.method_invocation_static_with_type_args(hydra.ext.java.syntax.Identifier("hydra.util.Either"), hydra.ext.java.syntax.Identifier("right"), targs, (expr,))))))), et)))
         
         case hydra.core.TermFunction(value=f):
-            return hydra.monads.with_trace(hydra.lib.strings.cat2("encode function (", hydra.lib.strings.cat2(hydra.show.core.function(f), ")")), (combined_anns := hydra.lib.lists.foldl((lambda acc, m: hydra.lib.maps.union(acc, m)), hydra.lib.maps.empty(), anns), (_hoist_body_1 := (lambda typ, v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.flows.bind(hydra.annotations.get_type(combined_anns), (lambda mt: hydra.lib.flows.bind(hydra.lib.maybes.cases(mt, hydra.lib.maybes.cases(try_infer_function_type(f), hydra.coder_utils.try_type_of("4", tc(), term), (lambda inferred_type: hydra.lib.flows.pure(inferred_type))), (lambda t: hydra.lib.flows.pure(t))), (lambda typ: _hoist_body_1(typ, hydra.rewriting.deannotate_type(typ)))))))[1])[1])
+            def _encode_function_dispatch(typ, deannotated_typ):
+                match deannotated_typ:
+                    case hydra.core.TypeFunction(value=v2):
+                        return encode_function(env, v2.domain, v2.codomain, f)
+                    case _:
+                        return encode_nullary_constant(env, typ, f)
+            return hydra.monads.with_trace(hydra.lib.strings.cat2("encode function (", hydra.lib.strings.cat2(hydra.show.core.function(f), ")")), (combined_anns := hydra.lib.lists.foldl((lambda acc, m: hydra.lib.maps.union(acc, m)), hydra.lib.maps.empty(), anns), hydra.lib.flows.bind(hydra.annotations.get_type(combined_anns), (lambda mt: hydra.lib.flows.bind(hydra.lib.maybes.cases(mt, hydra.lib.maybes.cases(try_infer_function_type(f), hydra.coder_utils.try_type_of("4", tc(), term), (lambda inferred_type: hydra.lib.flows.pure(inferred_type))), (lambda t: hydra.lib.flows.pure(t))), (lambda typ: _encode_function_dispatch(typ, hydra.rewriting.deannotate_type(typ)))))))[1])
         
         case hydra.core.TermLet(value=lt):
             return hydra.monads.with_trace("encode let as block", (bindings := lt.bindings, (body := lt.body, hydra.lib.logic.if_else(hydra.lib.lists.null(bindings), (lambda : encode(body)), (lambda : hydra.lib.flows.bind(bindings_to_statements(env, bindings), (lambda bind_result: (binding_stmts := hydra.lib.pairs.first(bind_result), env2 := hydra.lib.pairs.second(bind_result), hydra.lib.flows.bind(encode_term(env2, body), (lambda jbody: (return_st := cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.ext.java.utils.java_return_statement(Just(jbody)))), block := hydra.ext.java.syntax.Block(hydra.lib.lists.concat2(binding_stmts, (return_st,))), nullary_lambda := cast(hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.ExpressionLambda(hydra.ext.java.syntax.LambdaExpression(cast(hydra.ext.java.syntax.LambdaParameters, hydra.ext.java.syntax.LambdaParametersTuple(())), cast(hydra.ext.java.syntax.LambdaBody, hydra.ext.java.syntax.LambdaBodyBlock(block))))), combined_anns := hydra.lib.lists.foldl((lambda acc, m: hydra.lib.maps.union(acc, m)), hydra.lib.maps.empty(), anns), tc2 := env2.type_context, aliases2 := env2.aliases, hydra.lib.flows.bind(hydra.annotations.get_type(combined_anns), (lambda mt: hydra.lib.flows.bind(hydra.lib.maybes.cases(mt, hydra.coder_utils.try_type_of("let-body", tc2, body), (lambda t: hydra.lib.flows.pure(t))), (lambda let_type: hydra.lib.flows.bind(encode_type(aliases2, hydra.lib.sets.empty(), let_type), (lambda j_let_type: hydra.lib.flows.bind(hydra.ext.java.utils.java_type_to_java_reference_type(j_let_type), (lambda rt: (supplier_rt := cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.utils.java_class_type((rt,), hydra.ext.java.names.java_util_function_package_name, "Supplier"))))), cast_expr := hydra.ext.java.utils.java_cast_expression_to_java_expression(hydra.ext.java.utils.java_cast_expression(supplier_rt, hydra.ext.java.utils.java_expression_to_java_unary_expression(nullary_lambda))), hydra.lib.flows.pure(hydra.ext.java.utils.java_method_invocation_to_java_expression(hydra.ext.java.utils.method_invocation(Just(Right(hydra.ext.java.utils.java_expression_to_java_primary(cast_expr))), hydra.ext.java.syntax.Identifier("get"), ()))))[2])))))))))[6])))[2])))))[1])[1])
@@ -1487,7 +1624,13 @@ def encode_term_internal(env: hydra.ext.java.helpers.JavaEnvironment, anns: froz
             return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: encode(x1)), slist()), (lambda jels: hydra.lib.logic.if_else(hydra.lib.sets.null(s), (lambda : hydra.lib.flows.bind(take_type_args("set", 1, tyapps), (lambda targs: hydra.lib.flows.pure(hydra.ext.java.utils.java_method_invocation_to_java_expression(hydra.ext.java.utils.method_invocation_static_with_type_args(hydra.ext.java.syntax.Identifier("java.util.Set"), hydra.ext.java.syntax.Identifier("of"), targs, ())))))), (lambda : (prim := hydra.ext.java.utils.java_method_invocation_to_java_primary(hydra.ext.java.utils.method_invocation_static(hydra.ext.java.syntax.Identifier("java.util.stream.Stream"), hydra.ext.java.syntax.Identifier("of"), jels)), (coll := hydra.ext.java.utils.java_method_invocation_to_java_expression(hydra.ext.java.utils.method_invocation_static(hydra.ext.java.syntax.Identifier("java.util.stream.Collectors"), hydra.ext.java.syntax.Identifier("toSet"), ())), hydra.lib.flows.pure(hydra.ext.java.utils.java_method_invocation_to_java_expression(hydra.ext.java.utils.method_invocation(Just(Right(prim)), hydra.ext.java.syntax.Identifier("collect"), (coll,)))))[1])[1]))))
         
         case hydra.core.TermTypeLambda(value=tl):
-            return with_type_lambda(env, tl, (lambda env2: (combined_anns := hydra.lib.lists.foldl((lambda acc, m: hydra.lib.maps.union(acc, m)), hydra.lib.maps.empty(), anns), hydra.lib.flows.bind(hydra.annotations.get_type(combined_anns), (lambda mtyp: (annotated_body := (_hoist_annotated_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.maybes.cases(mtyp, tl.body, (lambda t: _hoist_annotated_body_1(t))))[1], encode_term(env2, annotated_body))[1])))[1]))
+            def _annotate_type_lambda_body(t):
+                match t:
+                    case hydra.core.TypeForall(value=v2):
+                        return hydra.annotations.set_term_annotation(hydra.constants.key_type, Just(hydra.encode.core.type_(v2.body)), tl.body)
+                    case _:
+                        return tl.body
+            return with_type_lambda(env, tl, (lambda env2: (combined_anns := hydra.lib.lists.foldl((lambda acc, m: hydra.lib.maps.union(acc, m)), hydra.lib.maps.empty(), anns), hydra.lib.flows.bind(hydra.annotations.get_type(combined_anns), (lambda mtyp: (annotated_body := hydra.lib.maybes.cases(mtyp, tl.body, (lambda t: _annotate_type_lambda_body(t))), encode_term(env2, annotated_body))[1])))[1]))
         
         case hydra.core.TermUnion(value=inj):
             @lru_cache(1)
@@ -1526,8 +1669,14 @@ def encode_term_internal(env: hydra.ext.java.helpers.JavaEnvironment, anns: froz
             @lru_cache(1)
             def body() -> hydra.core.Term:
                 return ta.body
-            return hydra.lib.flows.bind(encode_type(aliases(), hydra.lib.sets.empty(), atyp()), (lambda jatyp: (combined_anns := hydra.lib.lists.foldl((lambda acc, m: hydra.lib.maps.union(acc, m)), hydra.lib.maps.empty(), anns), hydra.lib.flows.bind(hydra.annotations.get_type(combined_anns), (lambda mtyp: hydra.lib.flows.bind(hydra.lib.maybes.cases(mtyp, hydra.coder_utils.try_type_of("5", tc(), term), (lambda t: hydra.lib.flows.pure(t))), (lambda typ: (collected0 := collect_type_apps0(body(), (atyp(),)), innermost_body0 := hydra.lib.pairs.first(collected0), all_type_args0 := hydra.lib.pairs.second(collected0), hydra.lib.flows.bind(correct_cast_type(innermost_body0, all_type_args0, typ), (lambda corrected_typ: (collected := collect_type_apps(body(), (atyp(),)), innermost_body := hydra.lib.pairs.first(collected), all_type_args := hydra.lib.pairs.second(collected), hydra.dsl.python.unsupported("inline match expressions are not yet supported"))[3])))[3])))))[1]))
-        
+            def _dispatch_type_app(innermost_body, env, aliases_, anns, tyapps, jatyp, body_, corrected_typ, all_type_args):
+                match innermost_body:
+                    case hydra.core.TermVariable(value=v2):
+                        return hydra.lib.flows.bind(classify_data_reference(v2), (lambda cls: type_app_nullary_or_hoisted(env, aliases_, anns, tyapps, jatyp, body_, corrected_typ, v2, cls, all_type_args)))
+                    case _:
+                        return type_app_fallback_cast(env, aliases_, anns, tyapps, jatyp, body_, corrected_typ)
+            return hydra.lib.flows.bind(encode_type(aliases(), hydra.lib.sets.empty(), atyp()), (lambda jatyp: (combined_anns := hydra.lib.lists.foldl((lambda acc, m: hydra.lib.maps.union(acc, m)), hydra.lib.maps.empty(), anns), hydra.lib.flows.bind(hydra.annotations.get_type(combined_anns), (lambda mtyp: hydra.lib.flows.bind(hydra.lib.maybes.cases(mtyp, hydra.coder_utils.try_type_of("5", tc(), term), (lambda t: hydra.lib.flows.pure(t))), (lambda typ: (collected0 := collect_type_apps0(body(), (atyp(),)), innermost_body0 := hydra.lib.pairs.first(collected0), all_type_args0 := hydra.lib.pairs.second(collected0), hydra.lib.flows.bind(correct_cast_type(innermost_body0, all_type_args0, typ), (lambda corrected_typ: (collected := collect_type_apps(body(), (atyp(),)), innermost_body := hydra.lib.pairs.first(collected), all_type_args := hydra.lib.pairs.second(collected), _dispatch_type_app(innermost_body, env, aliases(), anns, tyapps, jatyp, body(), corrected_typ, all_type_args))[3])))[3])))))[1]))
+
         case _:
             return hydra.lib.flows.pure(encode_literal(cast(hydra.core.Literal, hydra.core.LiteralString("Unimplemented term variant"))))
 
@@ -1545,7 +1694,7 @@ def otherwise_branch(env: hydra.ext.java.helpers.JavaEnvironment, aliases: hydra
     def jdom() -> hydra.ext.java.syntax.Type:
         return cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.name_to_java_reference_type(aliases, True, targs, tname, Nothing())))
     mods = (cast(hydra.ext.java.syntax.MethodModifier, hydra.ext.java.syntax.MethodModifierPublic()),)
-    anns = (hydra.ext.java.utils.override_annotation,)
+    anns = (hydra.ext.java.utils.override_annotation(),)
     @lru_cache(1)
     def param() -> hydra.ext.java.syntax.FormalParameter:
         return hydra.ext.java.utils.java_type_to_java_formal_parameter(jdom(), hydra.core.Name("instance"))
@@ -1594,7 +1743,7 @@ def visit_branch(env: hydra.ext.java.helpers.JavaEnvironment, aliases: hydra.ext
     def jdom() -> hydra.ext.java.syntax.Type:
         return cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.name_to_java_reference_type(aliases, True, targs, tname, Just(hydra.formatting.capitalize(field.name.value)))))
     mods = (cast(hydra.ext.java.syntax.MethodModifier, hydra.ext.java.syntax.MethodModifierPublic()),)
-    anns = (hydra.ext.java.utils.override_annotation,)
+    anns = (hydra.ext.java.utils.override_annotation(),)
     @lru_cache(1)
     def result() -> hydra.ext.java.syntax.Result:
         return cast(hydra.ext.java.syntax.Result, hydra.ext.java.syntax.ResultType(hydra.ext.java.syntax.UnannType(jcod)))
@@ -1949,7 +2098,7 @@ def build_type_subst(scheme_var_set: frozenset[hydra.core.Name], scheme_type: hy
 class_mods_public = (cast(hydra.ext.java.syntax.ClassModifier, hydra.ext.java.syntax.ClassModifierPublic()),)
 
 def cmp_decl_statement(aliases: T0) -> hydra.ext.java.syntax.BlockStatement:
-    return hydra.ext.java.utils.variable_declaration_statement(aliases, hydra.ext.java.utils.java_int_type, hydra.ext.java.utils.java_identifier("cmp"), hydra.ext.java.utils.java_int_expression(0))
+    return hydra.ext.java.utils.variable_declaration_statement(aliases, hydra.ext.java.utils.java_int_type(), hydra.ext.java.utils.java_identifier("cmp"), hydra.ext.java.utils.java_int_expression(0))
 
 @lru_cache(1)
 def cmp_not_zero_expr() -> hydra.ext.java.syntax.Expression:
@@ -2141,12 +2290,12 @@ def interface_types(is_ser: bool, aliases: hydra.ext.java.helpers.Aliases, tpara
     return hydra.lib.logic.if_else(is_ser, (lambda : (java_serializable_type(), java_comparable_type())), (lambda : ()))
 
 def record_compare_to_method(aliases: hydra.ext.java.helpers.Aliases, tparams: T0, el_name: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
-    anns = (hydra.ext.java.utils.override_annotation, hydra.ext.java.utils.suppress_warnings_unchecked_annotation)
+    anns = (hydra.ext.java.utils.override_annotation(), hydra.ext.java.utils.suppress_warnings_unchecked_annotation())
     mods = (cast(hydra.ext.java.syntax.MethodModifier, hydra.ext.java.syntax.MethodModifierPublic()),)
     @lru_cache(1)
     def param() -> hydra.ext.java.syntax.FormalParameter:
         return hydra.ext.java.utils.java_type_to_java_formal_parameter(hydra.ext.java.utils.java_type_from_type_name(aliases, el_name), hydra.core.Name(hydra.ext.java.names.other_instance_name))
-    result = hydra.ext.java.utils.java_type_to_java_result(hydra.ext.java.utils.java_int_type)
+    result = hydra.ext.java.utils.java_type_to_java_result(hydra.ext.java.utils.java_int_type())
     return hydra.ext.java.utils.method_declaration(mods, (), anns, hydra.ext.java.names.compare_to_method_name, (param(),), result, Just(compare_to_body(aliases, hydra.ext.java.names.other_instance_name, fields)))
 
 def field_type_to_formal_param(aliases: hydra.ext.java.helpers.Aliases, ft: hydra.core.FieldType) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.java.syntax.FormalParameter]:
@@ -2212,12 +2361,12 @@ def eq_clause(tmp_name: str, ft: hydra.core.FieldType) -> hydra.ext.java.syntax.
     return hydra.lib.logic.if_else(is_binary_type(ftype()), (lambda : arrays_equals_clause(tmp_name, fname())), (lambda : hydra.lib.logic.if_else(is_big_numeric_type(ftype()), (lambda : compare_to_zero_clause(tmp_name, fname())), (lambda : equals_clause(tmp_name, fname())))))
 
 def record_equals_method(aliases: hydra.ext.java.helpers.Aliases, el_name: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
-    anns = (hydra.ext.java.utils.override_annotation,)
+    anns = (hydra.ext.java.utils.override_annotation(),)
     mods = (cast(hydra.ext.java.syntax.MethodModifier, hydra.ext.java.syntax.MethodModifierPublic()),)
     @lru_cache(1)
     def param() -> hydra.ext.java.syntax.FormalParameter:
         return hydra.ext.java.utils.java_type_to_java_formal_parameter(hydra.ext.java.utils.java_ref_type((), Nothing(), "Object"), hydra.core.Name(hydra.ext.java.names.other_instance_name))
-    result = hydra.ext.java.utils.java_type_to_java_result(hydra.ext.java.utils.java_boolean_type)
+    result = hydra.ext.java.utils.java_type_to_java_result(hydra.ext.java.utils.java_boolean_type())
     tmp_name = "o"
     @lru_cache(1)
     def instance_of_stmt() -> hydra.ext.java.syntax.BlockStatement:
@@ -2245,9 +2394,9 @@ def hash_code_mult_pair(i: int, fname: hydra.core.Name) -> hydra.ext.java.syntax
     return cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionTimes(hydra.ext.java.syntax.MultiplicativeExpression_Binary(lhs(), rhs())))
 
 def record_hash_code_method(fields: frozenlist[hydra.core.FieldType]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
-    anns = (hydra.ext.java.utils.override_annotation,)
+    anns = (hydra.ext.java.utils.override_annotation(),)
     mods = (cast(hydra.ext.java.syntax.MethodModifier, hydra.ext.java.syntax.MethodModifierPublic()),)
-    result = hydra.ext.java.utils.java_type_to_java_result(hydra.ext.java.utils.java_int_type)
+    result = hydra.ext.java.utils.java_type_to_java_result(hydra.ext.java.utils.java_int_type())
     @lru_cache(1)
     def return_sum() -> hydra.ext.java.syntax.BlockStatement:
         return cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.lib.logic.if_else(hydra.lib.lists.null(fields), (lambda : hydra.ext.java.utils.java_return_statement(Just(hydra.ext.java.utils.java_int_expression(0)))), (lambda : hydra.ext.java.utils.java_return_statement(Just(hydra.ext.java.utils.java_additive_expression_to_java_expression(hydra.ext.java.utils.add_expressions(hydra.lib.lists.zip_with((lambda x1, x2: hash_code_mult_pair(x1, x2)), first20_primes, hydra.lib.lists.map((lambda f: f.name), fields))))))))))
@@ -2316,16 +2465,16 @@ def tag_compare_expr() -> hydra.ext.java.syntax.Expression:
     return hydra.ext.java.utils.java_method_invocation_to_java_expression(hydra.ext.java.syntax.MethodInvocation(cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderComplex(hydra.ext.java.syntax.MethodInvocation_Complex(cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantPrimary(hydra.ext.java.utils.java_method_invocation_to_java_primary(this_get_name()))), (), hydra.ext.java.syntax.Identifier(hydra.ext.java.names.compare_to_method_name)))), (hydra.ext.java.utils.java_method_invocation_to_java_expression(other_get_name()),)))
 
 def variant_compare_to_method(aliases: hydra.ext.java.helpers.Aliases, tparams: T0, parent_name: hydra.core.Name, variant_name: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
-    anns = (hydra.ext.java.utils.override_annotation, hydra.ext.java.utils.suppress_warnings_unchecked_annotation)
+    anns = (hydra.ext.java.utils.override_annotation(), hydra.ext.java.utils.suppress_warnings_unchecked_annotation())
     mods = (cast(hydra.ext.java.syntax.MethodModifier, hydra.ext.java.syntax.MethodModifierPublic()),)
     @lru_cache(1)
     def param() -> hydra.ext.java.syntax.FormalParameter:
         return hydra.ext.java.utils.java_type_to_java_formal_parameter(hydra.ext.java.utils.java_type_from_type_name(aliases, parent_name), hydra.core.Name(hydra.ext.java.names.other_instance_name))
-    result = hydra.ext.java.utils.java_type_to_java_result(hydra.ext.java.utils.java_int_type)
+    result = hydra.ext.java.utils.java_type_to_java_result(hydra.ext.java.utils.java_int_type())
     var_tmp_name = "o"
     @lru_cache(1)
     def tag_decl_stmt() -> hydra.ext.java.syntax.BlockStatement:
-        return hydra.ext.java.utils.variable_declaration_statement(aliases, hydra.ext.java.utils.java_int_type, hydra.ext.java.utils.java_identifier("tagCmp"), tag_compare_expr())
+        return hydra.ext.java.utils.variable_declaration_statement(aliases, hydra.ext.java.utils.java_int_type(), hydra.ext.java.utils.java_identifier("tagCmp"), tag_compare_expr())
     @lru_cache(1)
     def tag_return_stmt() -> hydra.ext.java.syntax.BlockStatement:
         return cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(cast(hydra.ext.java.syntax.Statement, hydra.ext.java.syntax.StatementIfThen(hydra.ext.java.syntax.IfThenStatement(tag_cmp_not_zero_expr(), hydra.ext.java.utils.java_return_statement(Just(hydra.ext.java.utils.java_expression_name_to_java_expression(hydra.ext.java.syntax.ExpressionName(Nothing(), hydra.ext.java.utils.java_identifier("tagCmp"))))))))))
@@ -2354,7 +2503,7 @@ def declaration_for_record_type(is_inner: bool, is_ser: bool, aliases: hydra.ext
     return declaration_for_record_type_(is_inner, is_ser, aliases, tparams, el_name, Nothing(), fields)
 
 def declaration_for_union_type(is_ser: bool, aliases: hydra.ext.java.helpers.Aliases, tparams: frozenlist[hydra.ext.java.syntax.TypeParameter], el_name: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration]:
-    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda ft: (fname := ft.name, ftype := ft.type, rfields := hydra.lib.logic.if_else(hydra.schemas.is_unit_type(hydra.rewriting.deannotate_type(ftype)), (lambda : ()), (lambda : (hydra.core.FieldType(hydra.core.Name("value"), hydra.rewriting.deannotate_type(ftype)),))), var_name := hydra.ext.java.utils.variant_class_name(False, el_name, fname), hydra.lib.flows.bind(declaration_for_record_type_(True, is_ser, aliases, (), var_name, hydra.lib.logic.if_else(is_ser, (lambda : Just(el_name)), (lambda : Nothing())), rfields), (lambda inner_decl: hydra.lib.flows.pure(augment_variant_class(aliases, tparams, el_name, inner_decl)))))[4]), fields), (lambda variant_classes: (variant_decls := hydra.lib.lists.map((lambda vc: cast(hydra.ext.java.syntax.ClassBodyDeclaration, hydra.ext.java.syntax.ClassBodyDeclarationClassMember(cast(hydra.ext.java.syntax.ClassMemberDeclaration, hydra.ext.java.syntax.ClassMemberDeclarationClass(vc))))), variant_classes), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda pair: add_comment(hydra.lib.pairs.first(pair), hydra.lib.pairs.second(pair))), hydra.lib.lists.zip(variant_decls, fields)), (lambda variant_decls_: (private_const := hydra.ext.java.utils.make_constructor(aliases, el_name, True, (), ()), accept_decl := hydra.ext.java.utils.to_accept_method(True, tparams), vtparams := hydra.lib.lists.concat2(tparams, (hydra.ext.java.utils.java_type_parameter(hydra.ext.java.names.visitor_return_parameter),)), visitor_methods := hydra.lib.lists.map((lambda ft: (fname := ft.name, type_args := hydra.lib.lists.map((lambda tp: hydra.ext.java.utils.type_parameter_to_type_argument(tp)), tparams), var_ref := hydra.ext.java.utils.java_class_type_to_java_type(hydra.ext.java.utils.name_to_java_class_type(aliases, False, type_args, hydra.ext.java.utils.variant_class_name(False, el_name, fname), Nothing())), param := hydra.ext.java.utils.java_type_to_java_formal_parameter(var_ref, hydra.core.Name("instance")), result_r := hydra.ext.java.utils.java_type_to_java_result(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.visitor_type_variable))), hydra.ext.java.utils.interface_method_declaration((), (), hydra.ext.java.names.visit_method_name, (param,), result_r, Nothing()))[5]), fields), visitor_body := hydra.ext.java.syntax.InterfaceBody(visitor_methods), visitor := hydra.ext.java.utils.java_interface_declaration_to_java_class_body_declaration(hydra.ext.java.syntax.NormalInterfaceDeclaration((cast(hydra.ext.java.syntax.InterfaceModifier, hydra.ext.java.syntax.InterfaceModifierPublic()),), hydra.ext.java.syntax.TypeIdentifier(hydra.ext.java.syntax.Identifier(hydra.ext.java.names.visitor_name)), vtparams, (), visitor_body)), type_args := hydra.lib.lists.map((lambda tp: hydra.ext.java.utils.type_parameter_to_type_argument(tp)), tparams), visitor_class_type := hydra.ext.java.utils.java_class_type(hydra.lib.lists.concat2(hydra.lib.lists.map((lambda tp: hydra.ext.java.utils.type_parameter_to_reference_type(tp)), tparams), (hydra.ext.java.utils.visitor_type_variable,)), Nothing(), hydra.ext.java.names.visitor_name), main_instance_param := hydra.ext.java.utils.java_type_to_java_formal_parameter(hydra.ext.java.utils.java_class_type_to_java_type(hydra.ext.java.utils.name_to_java_class_type(aliases, False, type_args, el_name, Nothing())), hydra.core.Name("instance")), result_r := hydra.ext.java.utils.java_type_to_java_result(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.visitor_type_variable))), throw_stmt := cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.ext.java.utils.java_throw_illegal_state_exception((hydra.ext.java.utils.java_additive_expression_to_java_expression(hydra.ext.java.utils.add_expressions((hydra.ext.java.utils.java_string_multiplicative_expression("Non-exhaustive patterns when matching: "), cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionUnary(hydra.ext.java.utils.java_identifier_to_java_unary_expression(hydra.ext.java.syntax.Identifier("instance"))))))),)))), default_mod := (cast(hydra.ext.java.syntax.InterfaceMethodModifier, hydra.ext.java.syntax.InterfaceMethodModifierDefault()),), otherwise_decl := hydra.ext.java.utils.interface_method_declaration(default_mod, (), hydra.ext.java.names.otherwise_method_name, (main_instance_param,), result_r, Just((throw_stmt,))), pv_visit_methods := hydra.lib.lists.map((lambda ft: (fname := ft.name, var_ref := hydra.ext.java.utils.java_class_type_to_java_type(hydra.ext.java.utils.name_to_java_class_type(aliases, False, type_args, hydra.ext.java.utils.variant_class_name(False, el_name, fname), Nothing())), param := hydra.ext.java.utils.java_type_to_java_formal_parameter(var_ref, hydra.core.Name("instance")), mi := hydra.ext.java.utils.method_invocation(Nothing(), hydra.ext.java.syntax.Identifier(hydra.ext.java.names.otherwise_method_name), (hydra.ext.java.utils.java_identifier_to_java_expression(hydra.ext.java.syntax.Identifier("instance")),)), return_otherwise := cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.ext.java.utils.java_return_statement(Just(hydra.ext.java.utils.java_primary_to_java_expression(hydra.ext.java.utils.java_method_invocation_to_java_primary(mi)))))), hydra.ext.java.utils.interface_method_declaration(default_mod, (), hydra.ext.java.names.visit_method_name, (param,), result_r, Just((return_otherwise,))))[5]), fields), pv_body := hydra.ext.java.syntax.InterfaceBody(hydra.lib.lists.concat2((otherwise_decl,), pv_visit_methods)), partial_visitor := hydra.ext.java.utils.java_interface_declaration_to_java_class_body_declaration(hydra.ext.java.syntax.NormalInterfaceDeclaration((cast(hydra.ext.java.syntax.InterfaceModifier, hydra.ext.java.syntax.InterfaceModifierPublic()),), hydra.ext.java.syntax.TypeIdentifier(hydra.ext.java.syntax.Identifier(hydra.ext.java.names.partial_visitor_name)), vtparams, (hydra.ext.java.syntax.InterfaceType(visitor_class_type),), pv_body)), hydra.lib.flows.bind(constant_decl_for_type_name(aliases, el_name), (lambda tn0: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda ft: constant_decl_for_field_type(aliases, ft)), fields), (lambda tn1: (tn := hydra.lib.lists.concat2((tn0,), tn1), other_decls := hydra.lib.lists.map((lambda d: no_comment(d)), (private_const, accept_decl, visitor, partial_visitor)), body_decls := hydra.lib.lists.concat((tn, other_decls, variant_decls_)), mods := hydra.lib.lists.concat2(class_mods_public, (cast(hydra.ext.java.syntax.ClassModifier, hydra.ext.java.syntax.ClassModifierAbstract()),)), hydra.lib.flows.pure(hydra.ext.java.utils.java_class_declaration(aliases, tparams, el_name, mods, Nothing(), interface_types(is_ser, aliases, tparams, el_name), body_decls)))[4])))))[16])))[1]))
+    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda ft: (fname := ft.name, ftype := ft.type, rfields := hydra.lib.logic.if_else(hydra.schemas.is_unit_type(hydra.rewriting.deannotate_type(ftype)), (lambda : ()), (lambda : (hydra.core.FieldType(hydra.core.Name("value"), hydra.rewriting.deannotate_type(ftype)),))), var_name := hydra.ext.java.utils.variant_class_name(False, el_name, fname), hydra.lib.flows.bind(declaration_for_record_type_(True, is_ser, aliases, (), var_name, hydra.lib.logic.if_else(is_ser, (lambda : Just(el_name)), (lambda : Nothing())), rfields), (lambda inner_decl: hydra.lib.flows.pure(augment_variant_class(aliases, tparams, el_name, inner_decl)))))[4]), fields), (lambda variant_classes: (variant_decls := hydra.lib.lists.map((lambda vc: cast(hydra.ext.java.syntax.ClassBodyDeclaration, hydra.ext.java.syntax.ClassBodyDeclarationClassMember(cast(hydra.ext.java.syntax.ClassMemberDeclaration, hydra.ext.java.syntax.ClassMemberDeclarationClass(vc))))), variant_classes), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda pair: add_comment(hydra.lib.pairs.first(pair), hydra.lib.pairs.second(pair))), hydra.lib.lists.zip(variant_decls, fields)), (lambda variant_decls_: (private_const := hydra.ext.java.utils.make_constructor(aliases, el_name, True, (), ()), accept_decl := hydra.ext.java.utils.to_accept_method(True, tparams), vtparams := hydra.lib.lists.concat2(tparams, (hydra.ext.java.utils.java_type_parameter(hydra.ext.java.names.visitor_return_parameter),)), visitor_methods := hydra.lib.lists.map((lambda ft: (fname := ft.name, type_args := hydra.lib.lists.map((lambda tp: hydra.ext.java.utils.type_parameter_to_type_argument(tp)), tparams), var_ref := hydra.ext.java.utils.java_class_type_to_java_type(hydra.ext.java.utils.name_to_java_class_type(aliases, False, type_args, hydra.ext.java.utils.variant_class_name(False, el_name, fname), Nothing())), param := hydra.ext.java.utils.java_type_to_java_formal_parameter(var_ref, hydra.core.Name("instance")), result_r := hydra.ext.java.utils.java_type_to_java_result(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.visitor_type_variable()))), hydra.ext.java.utils.interface_method_declaration((), (), hydra.ext.java.names.visit_method_name, (param,), result_r, Nothing()))[5]), fields), visitor_body := hydra.ext.java.syntax.InterfaceBody(visitor_methods), visitor := hydra.ext.java.utils.java_interface_declaration_to_java_class_body_declaration(hydra.ext.java.syntax.NormalInterfaceDeclaration((cast(hydra.ext.java.syntax.InterfaceModifier, hydra.ext.java.syntax.InterfaceModifierPublic()),), hydra.ext.java.syntax.TypeIdentifier(hydra.ext.java.syntax.Identifier(hydra.ext.java.names.visitor_name)), vtparams, (), visitor_body)), type_args := hydra.lib.lists.map((lambda tp: hydra.ext.java.utils.type_parameter_to_type_argument(tp)), tparams), visitor_class_type := hydra.ext.java.utils.java_class_type(hydra.lib.lists.concat2(hydra.lib.lists.map((lambda tp: hydra.ext.java.utils.type_parameter_to_reference_type(tp)), tparams), (hydra.ext.java.utils.visitor_type_variable(),)), Nothing(), hydra.ext.java.names.visitor_name), main_instance_param := hydra.ext.java.utils.java_type_to_java_formal_parameter(hydra.ext.java.utils.java_class_type_to_java_type(hydra.ext.java.utils.name_to_java_class_type(aliases, False, type_args, el_name, Nothing())), hydra.core.Name("instance")), result_r := hydra.ext.java.utils.java_type_to_java_result(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.visitor_type_variable()))), throw_stmt := cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.ext.java.utils.java_throw_illegal_state_exception((hydra.ext.java.utils.java_additive_expression_to_java_expression(hydra.ext.java.utils.add_expressions((hydra.ext.java.utils.java_string_multiplicative_expression("Non-exhaustive patterns when matching: "), cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionUnary(hydra.ext.java.utils.java_identifier_to_java_unary_expression(hydra.ext.java.syntax.Identifier("instance"))))))),)))), default_mod := (cast(hydra.ext.java.syntax.InterfaceMethodModifier, hydra.ext.java.syntax.InterfaceMethodModifierDefault()),), otherwise_decl := hydra.ext.java.utils.interface_method_declaration(default_mod, (), hydra.ext.java.names.otherwise_method_name, (main_instance_param,), result_r, Just((throw_stmt,))), pv_visit_methods := hydra.lib.lists.map((lambda ft: (fname := ft.name, var_ref := hydra.ext.java.utils.java_class_type_to_java_type(hydra.ext.java.utils.name_to_java_class_type(aliases, False, type_args, hydra.ext.java.utils.variant_class_name(False, el_name, fname), Nothing())), param := hydra.ext.java.utils.java_type_to_java_formal_parameter(var_ref, hydra.core.Name("instance")), mi := hydra.ext.java.utils.method_invocation(Nothing(), hydra.ext.java.syntax.Identifier(hydra.ext.java.names.otherwise_method_name), (hydra.ext.java.utils.java_identifier_to_java_expression(hydra.ext.java.syntax.Identifier("instance")),)), return_otherwise := cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.ext.java.utils.java_return_statement(Just(hydra.ext.java.utils.java_primary_to_java_expression(hydra.ext.java.utils.java_method_invocation_to_java_primary(mi)))))), hydra.ext.java.utils.interface_method_declaration(default_mod, (), hydra.ext.java.names.visit_method_name, (param,), result_r, Just((return_otherwise,))))[5]), fields), pv_body := hydra.ext.java.syntax.InterfaceBody(hydra.lib.lists.concat2((otherwise_decl,), pv_visit_methods)), partial_visitor := hydra.ext.java.utils.java_interface_declaration_to_java_class_body_declaration(hydra.ext.java.syntax.NormalInterfaceDeclaration((cast(hydra.ext.java.syntax.InterfaceModifier, hydra.ext.java.syntax.InterfaceModifierPublic()),), hydra.ext.java.syntax.TypeIdentifier(hydra.ext.java.syntax.Identifier(hydra.ext.java.names.partial_visitor_name)), vtparams, (hydra.ext.java.syntax.InterfaceType(visitor_class_type),), pv_body)), hydra.lib.flows.bind(constant_decl_for_type_name(aliases, el_name), (lambda tn0: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda ft: constant_decl_for_field_type(aliases, ft)), fields), (lambda tn1: (tn := hydra.lib.lists.concat2((tn0,), tn1), other_decls := hydra.lib.lists.map((lambda d: no_comment(d)), (private_const, accept_decl, visitor, partial_visitor)), body_decls := hydra.lib.lists.concat((tn, other_decls, variant_decls_)), mods := hydra.lib.lists.concat2(class_mods_public, (cast(hydra.ext.java.syntax.ClassModifier, hydra.ext.java.syntax.ClassModifierAbstract()),)), hydra.lib.flows.pure(hydra.ext.java.utils.java_class_declaration(aliases, tparams, el_name, mods, Nothing(), interface_types(is_ser, aliases, tparams, el_name), body_decls)))[4])))))[16])))[1]))
 
 def peel_domains_and_cod(n: int, t: hydra.core.Type) -> tuple[frozenlist[hydra.core.Type], hydra.core.Type]:
     def _hoist_hydra_ext_java_coder_peel_domains_and_cod_1(n: int, t: hydra.core.Type, v1: hydra.core.Type) -> tuple[frozenlist[hydra.core.Type], hydra.core.Type]:
@@ -2477,7 +2626,7 @@ def encode_term_definition(env: hydra.ext.java.helpers.JavaEnvironment, tdef: hy
     @lru_cache(1)
     def ts() -> hydra.core.TypeScheme:
         return tdef.type
-    return hydra.monads.with_trace(hydra.lib.strings.cat2("encode term definition \"", hydra.lib.strings.cat2(name().value, "\"")), (term := hydra.rewriting.unshadow_variables(term0()), hydra.lib.flows.bind(hydra.monads.with_trace("analyze function term for term assignment", analyze_java_function(env, term)), (lambda fs: (scheme_vars := hydra.lib.lists.filter((lambda v: is_simple_name(v)), ts().variables), term_vars := fs.type_params, scheme_type_vars := collect_type_vars(ts().type), used_scheme_vars := hydra.lib.lists.filter((lambda v: hydra.lib.sets.member(v, scheme_type_vars)), scheme_vars), tparams := hydra.lib.logic.if_else(hydra.lib.lists.null(used_scheme_vars), (lambda : term_vars), (lambda : used_scheme_vars)), params := fs.params, bindings := fs.bindings, body := fs.body, doms := fs.domains, env2 := fs.environment, scheme_type := ts().type, num_params := hydra.lib.lists.length(params), peel_result := peel_domains_and_cod(num_params, scheme_type), scheme_doms := hydra.lib.pairs.first(peel_result), cod := hydra.lib.pairs.second(peel_result), scheme_var_set := hydra.lib.sets.from_list(tparams), hydra.lib.flows.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(tparams), (lambda : hydra.lib.flows.pure(hydra.lib.maps.empty())), (lambda : build_subst_from_annotations(scheme_var_set, term))), (lambda type_var_subst: (overgen_subst := detect_accumulator_unification(scheme_doms, cod, tparams), overgen_var_subst := hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda entry: (k := hydra.lib.pairs.first(entry), v := hydra.lib.pairs.second(entry), hydra.dsl.python.unsupported("inline match expressions are not yet supported"))[2]), hydra.lib.maps.to_list(overgen_subst)))), fixed_cod := hydra.lib.logic.if_else(hydra.lib.maps.null(overgen_subst), (lambda : cod), (lambda : substitute_type_vars_with_types(overgen_subst, cod))), fixed_doms := hydra.lib.logic.if_else(hydra.lib.maps.null(overgen_subst), (lambda : scheme_doms), (lambda : hydra.lib.lists.map((lambda d: substitute_type_vars_with_types(overgen_subst, d)), scheme_doms))), fixed_tparams := hydra.lib.logic.if_else(hydra.lib.maps.null(overgen_subst), (lambda : tparams), (lambda : hydra.lib.lists.filter((lambda v: hydra.lib.logic.not_(hydra.lib.maps.member(v, overgen_subst))), tparams))), constraints := hydra.lib.maybes.from_maybe(hydra.lib.maps.empty(), ts().constraints), jparams := hydra.lib.lists.map((lambda v: hydra.ext.java.utils.java_type_parameter(hydra.formatting.capitalize(v.value))), fixed_tparams), aliases2base := env2.aliases, trusted_vars := hydra.lib.sets.unions(hydra.lib.lists.map((lambda d: collect_type_vars(d)), hydra.lib.lists.concat2(fixed_doms, (fixed_cod,)))), fixed_scheme_var_set := hydra.lib.sets.from_list(fixed_tparams), aliases2 := hydra.ext.java.helpers.Aliases(aliases2base.current_namespace, aliases2base.packages, aliases2base.branch_vars, aliases2base.recursive_vars, fixed_scheme_var_set, aliases2base.polymorphic_locals, aliases2base.in_scope_java_vars, aliases2base.var_renames, hydra.lib.sets.union(aliases2base.lambda_vars, hydra.lib.sets.from_list(params)), hydra.lib.maps.union(overgen_var_subst, type_var_subst), hydra.lib.sets.intersection(trusted_vars, fixed_scheme_var_set), Just(fixed_cod), aliases2base.thunked_vars), env2_with_type_params := hydra.ext.java.helpers.JavaEnvironment(aliases2, env2.type_context), hydra.lib.flows.bind(bindings_to_statements(env2_with_type_params, bindings), (lambda bind_result: (binding_stmts := hydra.lib.pairs.first(bind_result), env3 := hydra.lib.pairs.second(bind_result), hydra.lib.flows.bind(hydra.lib.logic.if_else(hydra.lib.maps.null(overgen_subst), (lambda : hydra.lib.flows.pure(body)), (lambda : apply_overgen_subst_to_term_annotations(overgen_subst, body))), (lambda body_: (annotated_body := propagate_types_in_app_chain(fixed_cod, fixed_cod, body_), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda pair: hydra.lib.flows.bind(encode_type(aliases2, hydra.lib.sets.empty(), hydra.lib.pairs.first(pair)), (lambda jdom: hydra.lib.flows.pure(hydra.ext.java.utils.java_type_to_java_formal_parameter(jdom, hydra.lib.pairs.second(pair)))))), hydra.lib.lists.zip(fixed_doms, params)), (lambda jformal_params: hydra.lib.flows.bind(encode_type(aliases2, hydra.lib.sets.empty(), fixed_cod), (lambda jcod: (result := hydra.ext.java.utils.java_type_to_java_result(jcod), hydra.lib.flows.bind(encode_term(env3, annotated_body), (lambda jbody: (mods := (cast(hydra.ext.java.syntax.InterfaceMethodModifier, hydra.ext.java.syntax.InterfaceMethodModifierStatic()),), jname := hydra.ext.java.utils.sanitize_java_name(hydra.formatting.decapitalize(hydra.names.local_name_of(name()))), return_st := cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.ext.java.utils.java_return_statement(Just(jbody)))), hydra.lib.flows.pure(hydra.ext.java.utils.interface_method_declaration(mods, jparams, jname, jformal_params, result, Just(hydra.lib.lists.concat2(binding_stmts, (return_st,))))))[3])))[1])))))[1])))[2])))[12])))[16])))[1])
+    return hydra.monads.with_trace(hydra.lib.strings.cat2("encode term definition \"", hydra.lib.strings.cat2(name().value, "\"")), (term := hydra.rewriting.unshadow_variables(term0()), hydra.lib.flows.bind(hydra.monads.with_trace("analyze function term for term assignment", analyze_java_function(env, term)), (lambda fs: (scheme_vars := hydra.lib.lists.filter((lambda v: is_simple_name(v)), ts().variables), term_vars := fs.type_params, scheme_type_vars := collect_type_vars(ts().type), used_scheme_vars := hydra.lib.lists.filter((lambda v: hydra.lib.sets.member(v, scheme_type_vars)), scheme_vars), tparams := hydra.lib.logic.if_else(hydra.lib.lists.null(used_scheme_vars), (lambda : term_vars), (lambda : used_scheme_vars)), params := fs.params, bindings := fs.bindings, body := fs.body, doms := fs.domains, env2 := fs.environment, scheme_type := ts().type, num_params := hydra.lib.lists.length(params), peel_result := peel_domains_and_cod(num_params, scheme_type), scheme_doms := hydra.lib.pairs.first(peel_result), cod := hydra.lib.pairs.second(peel_result), scheme_var_set := hydra.lib.sets.from_list(tparams), hydra.lib.flows.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(tparams), (lambda : hydra.lib.flows.pure(hydra.lib.maps.empty())), (lambda : build_subst_from_annotations(scheme_var_set, term))), (lambda type_var_subst: (overgen_subst := detect_accumulator_unification(scheme_doms, cod, tparams), overgen_var_subst := hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda entry: (k := hydra.lib.pairs.first(entry), v := hydra.lib.pairs.second(entry), Just((k, v.value)) if isinstance(v, hydra.core.TypeVariable) else Nothing())[2]), hydra.lib.maps.to_list(overgen_subst)))), fixed_cod := hydra.lib.logic.if_else(hydra.lib.maps.null(overgen_subst), (lambda : cod), (lambda : substitute_type_vars_with_types(overgen_subst, cod))), fixed_doms := hydra.lib.logic.if_else(hydra.lib.maps.null(overgen_subst), (lambda : scheme_doms), (lambda : hydra.lib.lists.map((lambda d: substitute_type_vars_with_types(overgen_subst, d)), scheme_doms))), fixed_tparams := hydra.lib.logic.if_else(hydra.lib.maps.null(overgen_subst), (lambda : tparams), (lambda : hydra.lib.lists.filter((lambda v: hydra.lib.logic.not_(hydra.lib.maps.member(v, overgen_subst))), tparams))), constraints := hydra.lib.maybes.from_maybe(hydra.lib.maps.empty(), ts().constraints), jparams := hydra.lib.lists.map((lambda v: hydra.ext.java.utils.java_type_parameter(hydra.formatting.capitalize(v.value))), fixed_tparams), aliases2base := env2.aliases, trusted_vars := hydra.lib.sets.unions(hydra.lib.lists.map((lambda d: collect_type_vars(d)), hydra.lib.lists.concat2(fixed_doms, (fixed_cod,)))), fixed_scheme_var_set := hydra.lib.sets.from_list(fixed_tparams), aliases2 := hydra.ext.java.helpers.Aliases(aliases2base.current_namespace, aliases2base.packages, aliases2base.branch_vars, aliases2base.recursive_vars, fixed_scheme_var_set, aliases2base.polymorphic_locals, aliases2base.in_scope_java_vars, aliases2base.var_renames, hydra.lib.sets.union(aliases2base.lambda_vars, hydra.lib.sets.from_list(params)), hydra.lib.maps.union(overgen_var_subst, type_var_subst), hydra.lib.sets.intersection(trusted_vars, fixed_scheme_var_set), Just(fixed_cod), aliases2base.thunked_vars), env2_with_type_params := hydra.ext.java.helpers.JavaEnvironment(aliases2, env2.type_context), hydra.lib.flows.bind(bindings_to_statements(env2_with_type_params, bindings), (lambda bind_result: (binding_stmts := hydra.lib.pairs.first(bind_result), env3 := hydra.lib.pairs.second(bind_result), hydra.lib.flows.bind(hydra.lib.logic.if_else(hydra.lib.maps.null(overgen_subst), (lambda : hydra.lib.flows.pure(body)), (lambda : apply_overgen_subst_to_term_annotations(overgen_subst, body))), (lambda body_: (annotated_body := propagate_types_in_app_chain(fixed_cod, fixed_cod, body_), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda pair: hydra.lib.flows.bind(encode_type(aliases2, hydra.lib.sets.empty(), hydra.lib.pairs.first(pair)), (lambda jdom: hydra.lib.flows.pure(hydra.ext.java.utils.java_type_to_java_formal_parameter(jdom, hydra.lib.pairs.second(pair)))))), hydra.lib.lists.zip(fixed_doms, params)), (lambda jformal_params: hydra.lib.flows.bind(encode_type(aliases2, hydra.lib.sets.empty(), fixed_cod), (lambda jcod: (result := hydra.ext.java.utils.java_type_to_java_result(jcod), hydra.lib.flows.bind(encode_term(env3, annotated_body), (lambda jbody: (mods := (cast(hydra.ext.java.syntax.InterfaceMethodModifier, hydra.ext.java.syntax.InterfaceMethodModifierStatic()),), jname := hydra.ext.java.utils.sanitize_java_name(hydra.formatting.decapitalize(hydra.names.local_name_of(name()))), return_st := cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.ext.java.utils.java_return_statement(Just(jbody)))), hydra.lib.flows.pure(hydra.ext.java.utils.interface_method_declaration(mods, jparams, jname, jformal_params, result, Just(hydra.lib.lists.concat2(binding_stmts, (return_st,))))))[3])))[1])))))[1])))[2])))[12])))[16])))[1])
 
 def is_serializable_java_type(typ: hydra.core.Type) -> bool:
     match hydra.rewriting.deannotate_type(typ):

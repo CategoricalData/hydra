@@ -12,8 +12,8 @@ import hydra.constants
 import hydra.dsl.terms as terms
 import hydra.dsl.annotations as annotations
 import hydra.formatting
-import hydra.classes
-import hydra.util
+from hydra.classes import TypeClass
+from hydra.util import CaseConvention
 from hydra.core import Binding, Field, Name, Term, Type
 from hydra.module import Module, Namespace, QualifiedName
 from hydra.phantoms import TBinding, TTerm
@@ -164,6 +164,22 @@ def definition_in_namespace(ns: Namespace, lname: str, term: TTerm[A] | None = N
     return DefineBuilder(name, [])
 
 
+def make_local(ns: Namespace):
+    """Create a local reference function for a namespace.
+
+    Returns a function that takes a local name and produces a TTerm variable
+    reference with the full qualified name. Use this for recursive or
+    forward references within a module.
+
+    Usage:
+        local = make_local(ns)
+        ...
+        .to(local("rewriteTerm") @ var("rewrite") @ var("term"))
+    """
+    prefix = ns.value + "."
+    return lambda lname: var(prefix + lname)
+
+
 def to_binding(tb: TBinding[A]) -> Binding:
     """Convert a TBinding to an untyped Binding for use in module element lists.
 
@@ -200,8 +216,8 @@ def derive_primitive_name() -> Name:
     # Remove trailing underscore if present (e.g., abs_ -> abs), then convert snake_case to camelCase
     clean_name = func_name.rstrip('_')
     camel_name = hydra.formatting.convert_case(
-        hydra.util.CaseConvention.LOWER_SNAKE,
-        hydra.util.CaseConvention.CAMEL,
+        CaseConvention.LOWER_SNAKE,
+        CaseConvention.CAMEL,
         clean_name
     )
 
@@ -657,7 +673,7 @@ def var(v: str) -> TTerm[A]:
 def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
     """Associate the Eq type class with the inferred type of a term."""
     return with_type_classes(
-        FrozenDict({Name(v): frozenset([hydra.classes.TypeClass.EQUALITY])}),
+        FrozenDict({Name(v): frozenset([TypeClass.EQUALITY])}),
         term
     )
 
@@ -665,7 +681,7 @@ def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
 def with_ord(v: str, term: TTerm[A]) -> TTerm[A]:
     """Associate the Ord type class with the inferred type of a term."""
     return with_type_classes(
-        FrozenDict({Name(v): frozenset([hydra.classes.TypeClass.ORDERING])}),
+        FrozenDict({Name(v): frozenset([TypeClass.ORDERING])}),
         term
     )
 

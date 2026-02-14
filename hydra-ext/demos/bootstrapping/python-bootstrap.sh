@@ -19,11 +19,18 @@ echo "Python Bootstrapping Demo"
 echo "=========================================="
 echo ""
 
-# Locate Python
-PYTHON="$HYDRA_PYTHON_DIR/.venv/bin/python3"
-if [ ! -f "$PYTHON" ]; then
-    echo "Error: Python venv not found at $PYTHON"
-    echo "Run: cd $HYDRA_PYTHON_DIR && python3.12 -m venv .venv"
+# Locate Python interpreter
+# PyPy3 is strongly recommended for term-level generation (CPython is too slow).
+# For type-only generation, CPython works fine.
+if command -v pypy3 >/dev/null 2>&1; then
+    PYTHON="pypy3"
+elif [ -f "$HYDRA_PYTHON_DIR/.venv-pypy/bin/pypy3" ]; then
+    PYTHON="$HYDRA_PYTHON_DIR/.venv-pypy/bin/pypy3"
+elif [ -f "$HYDRA_PYTHON_DIR/.venv/bin/python3" ]; then
+    PYTHON="$HYDRA_PYTHON_DIR/.venv/bin/python3"
+else
+    echo "Error: No Python interpreter found."
+    echo "Install pypy3 or create a venv: cd $HYDRA_PYTHON_DIR && python3.12 -m venv .venv"
     exit 1
 fi
 

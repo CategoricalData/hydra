@@ -66,7 +66,8 @@ hydra-python/
 - All three language environments are set up:
   - Haskell: `stack build` works in hydra-haskell and hydra-ext
   - Java: `./gradlew compileJava` works in hydra-java
-  - Python: Python 3.12+ venv at hydra-python/.venv/
+  - Python: Python 3.10+ (match/case syntax required). PyPy3 strongly
+    recommended for term-level generation
 
 ## Usage
 
@@ -107,13 +108,13 @@ cd hydra-ext
 ./demos/bootstrapping/python-bootstrap.sh --target python
 ```
 
-Or run the Python bootstrap module directly:
+Or run the Python bootstrap module directly (PyPy3 recommended for term-level):
 
 ```bash
 cd hydra-python
 PYTHONPATH=src/main/python:src/gen-main/python \
-  .venv/bin/python3 -m hydra.bootstrap \
-  --target python --json-dir ../hydra-haskell/src/gen-main/json
+  pypy3 -m hydra.bootstrap \
+  --target haskell --kernel-only --json-dir ../hydra-haskell/src/gen-main/json
 ```
 
 ## Architecture
@@ -216,20 +217,28 @@ When TypeSchemes are stripped, two inference passes are needed: one before
 eta expansion (if applicable) and one after adaptation. This is less
 efficient than the single-pass approach used when TypeSchemes are available.
 
-### Java code generation limitations
+### Performance
 
-The Java code generation phase currently hits a `mapM` size limit
-(>1000 elements) in the Flow infrastructure when processing large modules.
-Module loading from JSON works correctly (130 modules). This is a
-pre-existing infrastructure limitation, not a bootstrapping-specific issue.
+Flow evaluation for term-level generation (adaptation + type inference +
+code generation) for 120 kernel modules takes multiple hours in both Java
+and Python. The bottleneck is `dataGraphToDefinitions` which builds a schema
+graph and performs type inference over all ~1630 bindings. Observed runtimes:
 
-### Python code generation limitations
+- Java: 3+ hours at 100% CPU, ~2GB RSS
+- Python (PyPy3): 2+ hours at 100% CPU, ~900MB RSS
 
-The Python code generation phase currently encounters issues in the
-generated Python coder modules (thunked function calling conventions,
-forward references in walrus assignments). Module loading from JSON works
-correctly (130 modules via kernel Source module universe). These are
-pre-existing code generation issues in the Python coder output.
+PyPy3 is strongly recommended for the Python host. CPython 3.12 is too slow
+for term-level generation.
+
+### Python inline match expression placeholders
+
+The Python code generator emits `unsupported("inline match expressions")`
+placeholders where it cannot express Haskell `case` expressions inline
+within a lambda or walrus tuple. For the Haskell coder path, 8 such
+placeholders have been manually fixed. The Java and Python coder paths
+(`ext/java/coder.py`, `ext/python/coder.py`) still have ~20+ unresolved
+placeholders that need manual fixes before Python-to-Java and
+Python-to-Python term-level generation can complete.
 
 ### Generated Source module limitations
 
