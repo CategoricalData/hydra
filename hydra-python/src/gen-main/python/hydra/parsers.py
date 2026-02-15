@@ -22,19 +22,10 @@ T3 = TypeVar("T3")
 
 def alt(p1: hydra.parsing.Parser[T0], p2: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
     def parse(input: str) -> hydra.parsing.ParseResult[T0]:
-        v1 = p1.value(input)
-        match v1:
-            case hydra.parsing.ParseResultSuccess():
-                return cast(hydra.parsing.ParseResult, v1)
-            case hydra.parsing.ParseResultFailure(value=e):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(e.remainder, input), (lambda: p2.value(input)), (lambda: cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e))))
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
+        return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(p1.value(input))
     return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
-    r"""Parse a character (codepoint) that satisfies the given predicate."""
-    
     def parse(input: str) -> hydra.parsing.ParseResult[int]:
         @lru_cache(1)
         def codes() -> frozenlist[int]:
@@ -44,8 +35,6 @@ def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
 
 @lru_cache(1)
 def any_char() -> hydra.parsing.Parser[int]:
-    r"""Parse any single character (codepoint)."""
-    
     return satisfy((lambda _: True))
 
 def apply(pf: hydra.parsing.Parser[Callable[[T0], T1]], pa: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T1]:
@@ -60,26 +49,12 @@ def apply(pf: hydra.parsing.Parser[Callable[[T0], T1]], pa: hydra.parsing.Parser
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        v1 = pf.value(input)
-        match v1:
-            case hydra.parsing.ParseResultSuccess(value=sf):
-                return _hoist_parse_1(sf, pa.value(sf.remainder))
-            case hydra.parsing.ParseResultFailure(value=e):
-                return cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e))
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
+        return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(pf.value(input))
     return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 def bind(pa: hydra.parsing.Parser[T0], f: Callable[[T0], hydra.parsing.Parser[T1]]) -> hydra.parsing.Parser[T1]:
     def parse(input: str) -> hydra.parsing.ParseResult[T1]:
-        v1 = pa.value(input)
-        match v1:
-            case hydra.parsing.ParseResultSuccess(value=s):
-                return f(s.value).value(s.remainder)
-            case hydra.parsing.ParseResultFailure(value=e):
-                return cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e))
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
+        return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(pa.value(input))
     return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 def pure(a: T0) -> hydra.parsing.Parser[T0]:
@@ -89,8 +64,6 @@ def between(open: hydra.parsing.Parser[T0], close: hydra.parsing.Parser[T1], p: 
     return bind(open, (lambda _: bind(p, (lambda x: bind(close, (lambda _2: pure(x)))))))
 
 def char(c: int) -> hydra.parsing.Parser[int]:
-    r"""Parse a specific character (codepoint)."""
-    
     return satisfy((lambda x: hydra.lib.equality.equal(x, c)))
 
 def fail(msg: str) -> hydra.parsing.Parser[T0]:
@@ -101,8 +74,6 @@ def choice(ps: frozenlist[hydra.parsing.Parser[T0]]) -> hydra.parsing.Parser[T0]
 
 @lru_cache(1)
 def eof() -> hydra.parsing.Parser[None]:
-    r"""A parser that succeeds only at the end of input."""
-    
     return hydra.parsing.Parser((lambda input: hydra.lib.logic.if_else(hydra.lib.equality.equal(input, ""), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(None, "")))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("expected end of input", input)))))))
 
 def lazy(f: Callable[[None], hydra.parsing.Parser[T0]]) -> hydra.parsing.Parser[T0]:
@@ -116,14 +87,7 @@ def some(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[frozenlist[T0]]:
 
 def map(f: Callable[[T0], T1], pa: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T1]:
     def parse(input: str) -> hydra.parsing.ParseResult[T1]:
-        v1 = pa.value(input)
-        match v1:
-            case hydra.parsing.ParseResultSuccess(value=s):
-                return cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(f(s.value), s.remainder)))
-            case hydra.parsing.ParseResultFailure(value=e):
-                return cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e))
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
+        return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(pa.value(input))
     return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 def optional(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[Maybe[T0]]:
@@ -139,6 +103,4 @@ def sep_by(p: hydra.parsing.Parser[T0], sep: hydra.parsing.Parser[T1]) -> hydra.
     return alt(sep_by1(p, sep), pure(()))
 
 def string(str: str) -> hydra.parsing.Parser[str]:
-    r"""Parse a specific string."""
-    
     return hydra.parsing.Parser((lambda input: (str_codes := hydra.lib.strings.to_list(str), input_codes := hydra.lib.strings.to_list(input), str_len := hydra.lib.lists.length(str_codes), input_prefix := hydra.lib.lists.take(str_len, input_codes), hydra.lib.logic.if_else(hydra.lib.equality.equal(str_codes, input_prefix), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(str, hydra.lib.strings.from_list(hydra.lib.lists.drop(str_len, input_codes)))))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError(hydra.lib.strings.cat2("expected: ", str), input))))))[4]))

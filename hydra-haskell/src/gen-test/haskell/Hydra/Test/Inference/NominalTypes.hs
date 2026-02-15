@@ -15,7 +15,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Nominal type tests
 allTests :: Testing.TestGroup
 allTests = Testing.TestGroup {
   Testing.testGroupName = "Nominal terms",

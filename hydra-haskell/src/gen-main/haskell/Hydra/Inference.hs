@@ -43,7 +43,6 @@ import qualified Data.Set as S
 bindConstraints :: (Typing_.InferenceContext -> (Typing_.TypeSubst -> Compute.Flow t0 t1) -> [Typing_.TypeConstraint] -> Compute.Flow t0 t1)
 bindConstraints cx f constraints = (Flows.bind (Unification.unifyTypeConstraints (Typing_.inferenceContextSchemaTypes cx) constraints) (\s -> Flows.bind (Checking.checkTypeSubst cx s) (\_ -> f s)))
 
--- | Place unbound type variables appearing anywhere under a typed let binding in the type scheme of that binding. These variables may appear in the binding type scheme itself or in that of a subterm, in domain types attached to functions, and in type abstraction and type application terms. This process attempts to capture type variables which have escaped unification, e.g. due to unused code. However, unbound type variables not appearing beneath any typed let binding remain unbound.
 bindUnboundTypeVariables :: (Typing_.InferenceContext -> Core.Term -> Core.Term)
 bindUnboundTypeVariables cx term0 =  
   let svars = (Sets.fromList (Maps.keys (Typing_.inferenceContextSchemaTypes cx)))
@@ -84,13 +83,11 @@ bindUnboundTypeVariables cx term0 =
             _ -> (recurse term)) term)
     in (Rewriting.rewriteTerm rewrite term0)
 
--- | Fold a list of type variables over a term to build a type application term
 buildTypeApplicationTerm :: ([Core.Name] -> Core.Term -> Core.Term)
 buildTypeApplicationTerm tvars body = (Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypeApplicationTerm {
   Core.typeApplicationTermBody = t,
   Core.typeApplicationTermType = (Core.TypeVariable v)})) body tvars)
 
--- | An empty inference context
 emptyInferenceContext :: Typing_.InferenceContext
 emptyInferenceContext = Typing_.InferenceContext {
   Typing_.inferenceContextSchemaTypes = Maps.empty,
@@ -99,7 +96,6 @@ emptyInferenceContext = Typing_.InferenceContext {
   Typing_.inferenceContextClassConstraints = Maps.empty,
   Typing_.inferenceContextDebug = False}
 
--- | Add (term variable, type scheme) pairs to the typing environment
 extendContext :: ([(Core.Name, Core.TypeScheme)] -> Typing_.InferenceContext -> Typing_.InferenceContext)
 extendContext pairs cx = Typing_.InferenceContext {
   Typing_.inferenceContextSchemaTypes = (Typing_.inferenceContextSchemaTypes cx),
@@ -116,14 +112,12 @@ finalizeInferredTerm cx term =
 forInferredTerm :: (Typing_.InferenceContext -> Core.Term -> String -> (Typing_.InferenceResult -> t0) -> Compute.Flow t1 t0)
 forInferredTerm cx term desc f = (Flows.map f (inferTypeOfTerm cx term desc))
 
--- | Get all free variables in an inference context
 freeVariablesInContext :: (Typing_.InferenceContext -> S.Set Core.Name)
 freeVariablesInContext cx = (Lists.foldl Sets.union Sets.empty (Lists.map Rewriting.freeVariablesInTypeSchemeSimple (Maps.elems (Typing_.inferenceContextDataTypes cx))))
 
 freshVariableType :: (Compute.Flow t0 Core.Type)
 freshVariableType = (Flows.map (\x -> Core.TypeVariable x) Schemas.freshName)
 
--- | Generalize a type to a type scheme
 generalize :: (Typing_.InferenceContext -> Core.Type -> Core.TypeScheme)
 generalize cx typ =  
   let isTypeVarName = (\name ->  
@@ -174,7 +168,6 @@ inferGraphTypes g0 =
           let ts = (Typing_.inferenceResultType result)
           in (Flows.bind (finalizeInferredTerm cx term) (\finalized -> forFinal finalized))))))
 
--- | Infer the type of a term in graph context
 inferInGraphContext :: (Core.Term -> Compute.Flow Graph.Graph Typing_.InferenceResult)
 inferInGraphContext term = (Flows.bind Monads.getState (\g -> Flows.bind (Schemas.graphToInferenceContext g) (\cx -> inferTypeOfTerm cx term "single term")))
 
@@ -841,7 +834,6 @@ inferTypeOfTypeLambda cx ta = (inferTypeOfTerm cx (Core.typeLambdaBody ta) "type
 inferTypeOfTypeApplication :: (Typing_.InferenceContext -> Core.TypeApplicationTerm -> Compute.Flow t0 Typing_.InferenceResult)
 inferTypeOfTypeApplication cx tt = (inferTypeOfTerm cx (Core.typeApplicationTermBody tt) "type application term")
 
--- | The trivial inference rule for the unit term
 inferTypeOfUnit :: Typing_.InferenceResult
 inferTypeOfUnit = Typing_.InferenceResult {
   Typing_.inferenceResultTerm = Core.TermUnit,
@@ -949,7 +941,6 @@ initialTypeContext g =
     Typing_.typeContextLetVariables = Sets.empty,
     Typing_.typeContextInferenceContext = ix}))))
 
--- | Check if a variable is unbound in context
 isUnbound :: (Typing_.InferenceContext -> Core.Name -> Bool)
 isUnbound cx v = (Logic.and (Logic.not (Sets.member v (freeVariablesInContext cx))) (Logic.not (Maps.member v (Typing_.inferenceContextSchemaTypes cx))))
 
@@ -966,7 +957,6 @@ mergeClassConstraints m1 m2 = (Lists.foldl (\acc -> \pair ->
               Core.typeVariableMetadataClasses = (Sets.union (Core.typeVariableMetadataClasses existing) (Core.typeVariableMetadataClasses v))}
       in (Maps.insert k merged acc)) (Maps.lookup k acc))) m1 (Maps.toList m2))
 
--- | Show an inference result for debugging
 showInferenceResult :: (Typing_.InferenceResult -> String)
 showInferenceResult result =  
   let term = (Typing_.inferenceResultTerm result)
@@ -983,7 +973,6 @@ showInferenceResult result =
         (Typing.typeSubst subst),
         "}"])
 
--- | Create an inference result with no class constraints
 yield :: (Core.Term -> Core.Type -> Typing_.TypeSubst -> Typing_.InferenceResult)
 yield term typ subst = Typing_.InferenceResult {
   Typing_.inferenceResultTerm = (Substitution.substTypesInTerm subst term),
@@ -1036,7 +1025,6 @@ yieldDebug cx debugId term typ subst =
       Typing_.inferenceResultSubst = subst,
       Typing_.inferenceResultClassConstraints = Maps.empty})))
 
--- | Create an inference result with class constraints
 yieldWithConstraints :: (Core.Term -> Core.Type -> Typing_.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> Typing_.InferenceResult)
 yieldWithConstraints term typ subst constraints = Typing_.InferenceResult {
   Typing_.inferenceResultTerm = (Substitution.substTypesInTerm subst term),

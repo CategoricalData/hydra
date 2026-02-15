@@ -33,7 +33,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Normalize a comment string for consistent output across coders
 normalizeComment :: (String -> String)
 normalizeComment s =  
   let stripped = (Formatting.stripLeadingAndTrailingWhitespace s)
@@ -43,7 +42,6 @@ normalizeComment s =
       let lastChar = (Strings.charAt lastIdx stripped)
       in (Logic.ifElse (Equality.equal lastChar 46) stripped (Strings.cat2 stripped "."))))
 
--- | Gather applications from a term, returning (args, baseTerm)
 gatherApplications :: (Core.Term -> ([Core.Term], Core.Term))
 gatherApplications term =  
   let go = (\args -> \t -> (\x -> case x of
@@ -55,7 +53,6 @@ gatherApplications term =
           _ -> (args, t)) (Rewriting.deannotateTerm t))
   in (go [] term)
 
--- | Gather term arguments, stripping type-level constructs
 gatherArgs :: (Core.Term -> [Core.Term] -> (Core.Term, [Core.Term]))
 gatherArgs term args = ((\x -> case x of
   Core.TermApplication v1 ->  
@@ -71,7 +68,6 @@ gatherArgs term args = ((\x -> case x of
     in (gatherArgs body args)
   _ -> (term, args)) (Rewriting.deannotateTerm term))
 
--- | Gather term and type arguments from a term
 gatherArgsWithTypeApps :: (Core.Term -> [Core.Term] -> [Core.Type] -> (Core.Term, ([Core.Term], [Core.Type])))
 gatherArgsWithTypeApps term args tyArgs = ((\x -> case x of
   Core.TermApplication v1 ->  
@@ -89,7 +85,6 @@ gatherArgsWithTypeApps term args tyArgs = ((\x -> case x of
       in (gatherArgsWithTypeApps body args (Lists.cons typ tyArgs))
   _ -> (term, (args, tyArgs))) (Rewriting.deannotateTerm term))
 
--- | Check if a term can be encoded as a simple assignment
 isSimpleAssignment :: (Core.Term -> Bool)
 isSimpleAssignment term = ((\x -> case x of
   Core.TermAnnotated v1 -> (isSimpleAssignment (Core.annotatedTermBody v1))
@@ -109,7 +104,6 @@ isSimpleAssignment term = ((\x -> case x of
         _ -> True) v1)
       _ -> True) baseTerm)) term)
 
--- | Check if a term needs to be treated as a function rather than a simple value
 isComplexTerm :: (Typing.TypeContext -> Core.Term -> Bool)
 isComplexTerm tc t = ((\x -> case x of
   Core.TermLet _ -> True
@@ -118,7 +112,6 @@ isComplexTerm tc t = ((\x -> case x of
   Core.TermVariable v1 -> (isComplexVariable tc v1)
   _ -> (Lists.foldl (\b -> \sub -> Logic.or b (isComplexTerm tc sub)) False (Rewriting.subterms t))) t)
 
--- | Check if a variable is bound to a complex term
 isComplexVariable :: (Typing.TypeContext -> Core.Name -> Bool)
 isComplexVariable tc name =  
   let metaLookup = (Maps.lookup name (Typing.typeContextMetadata tc))
@@ -126,7 +119,6 @@ isComplexVariable tc name =
     let typeLookup = (Maps.lookup name (Typing.typeContextTypes tc))
     in (Logic.not (Maybes.isJust typeLookup)))))
 
--- | Check if a binding needs to be treated as a function
 isComplexBinding :: (Typing.TypeContext -> Core.Binding -> Bool)
 isComplexBinding tc b =  
   let term = (Core.bindingTerm b)
@@ -140,18 +132,15 @@ isComplexBinding tc b =
           let isComplex = (isComplexTerm tc term)
           in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)))
 
--- | Extract comments/description from a Binding
 commentsFromElement :: (Core.Binding -> Compute.Flow Graph.Graph (Maybe String))
 commentsFromElement b = (Annotations.getTermDescription (Core.bindingTerm b))
 
--- | Extract comments/description from a FieldType
 commentsFromFieldType :: (Core.FieldType -> Compute.Flow Graph.Graph (Maybe String))
 commentsFromFieldType ft = (Annotations.getTypeDescription (Core.fieldTypeType ft))
 
 tryTypeOf :: (String -> Typing.TypeContext -> Core.Term -> Compute.Flow t0 Core.Type)
 tryTypeOf msg tc term = (Monads.withTrace msg (Checking.typeOf tc [] term))
 
--- | Produces metadata for a binding if it is complex
 bindingMetadata :: (Typing.TypeContext -> Core.Binding -> Maybe Core.Term)
 bindingMetadata tc b = (Logic.ifElse (isComplexBinding tc b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing)
 

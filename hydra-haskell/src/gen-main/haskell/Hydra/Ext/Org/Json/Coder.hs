@@ -372,7 +372,6 @@ untypedTermToJson term =
                             (Core___.term term)]))) term)
                   in result
 
--- | Placeholder for reading a string into a term (to be implemented)
 readStringStub :: (String -> Core.Term)
 readStringStub s = (Core.TermLiteral (Core.LiteralString (Strings.cat2 "TODO: read " s)))
 

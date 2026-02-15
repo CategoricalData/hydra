@@ -15,56 +15,48 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Find the elimination inject (constructor) for a given elimination term
 eliminationVariant :: (Core.Elimination -> Variants.EliminationVariant)
 eliminationVariant x = case x of
   Core.EliminationRecord _ -> Variants.EliminationVariantRecord
   Core.EliminationUnion _ -> Variants.EliminationVariantUnion
   Core.EliminationWrap _ -> Variants.EliminationVariantWrap
 
--- | All elimination variants (constructors), in a canonical order
 eliminationVariants :: [Variants.EliminationVariant]
 eliminationVariants = [
   Variants.EliminationVariantRecord,
   Variants.EliminationVariantUnion,
   Variants.EliminationVariantWrap]
 
--- | Find the precision of a given floating-point type
 floatTypePrecision :: (Core.FloatType -> Util.Precision)
 floatTypePrecision x = case x of
   Core.FloatTypeBigfloat -> Util.PrecisionArbitrary
   Core.FloatTypeFloat32 -> (Util.PrecisionBits 32)
   Core.FloatTypeFloat64 -> (Util.PrecisionBits 64)
 
--- | All floating-point types in a canonical order
 floatTypes :: [Core.FloatType]
 floatTypes = [
   Core.FloatTypeBigfloat,
   Core.FloatTypeFloat32,
   Core.FloatTypeFloat64]
 
--- | Find the float type for a given floating-point value
 floatValueType :: (Core.FloatValue -> Core.FloatType)
 floatValueType x = case x of
   Core.FloatValueBigfloat _ -> Core.FloatTypeBigfloat
   Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
   Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
 
--- | Find the function inject (constructor) for a given function
 functionVariant :: (Core.Function -> Variants.FunctionVariant)
 functionVariant x = case x of
   Core.FunctionElimination _ -> Variants.FunctionVariantElimination
   Core.FunctionLambda _ -> Variants.FunctionVariantLambda
   Core.FunctionPrimitive _ -> Variants.FunctionVariantPrimitive
 
--- | All function variants (constructors), in a canonical order
 functionVariants :: [Variants.FunctionVariant]
 functionVariants = [
   Variants.FunctionVariantElimination,
   Variants.FunctionVariantLambda,
   Variants.FunctionVariantPrimitive]
 
--- | Find whether a given integer type is signed (true) or unsigned (false)
 integerTypeIsSigned :: (Core.IntegerType -> Bool)
 integerTypeIsSigned x = case x of
   Core.IntegerTypeBigint -> True
@@ -77,7 +69,6 @@ integerTypeIsSigned x = case x of
   Core.IntegerTypeUint32 -> False
   Core.IntegerTypeUint64 -> False
 
--- | Find the precision of a given integer type
 integerTypePrecision :: (Core.IntegerType -> Util.Precision)
 integerTypePrecision x = case x of
   Core.IntegerTypeBigint -> Util.PrecisionArbitrary
@@ -90,7 +81,6 @@ integerTypePrecision x = case x of
   Core.IntegerTypeUint32 -> (Util.PrecisionBits 32)
   Core.IntegerTypeUint64 -> (Util.PrecisionBits 64)
 
--- | All integer types, in a canonical order
 integerTypes :: [Core.IntegerType]
 integerTypes = [
   Core.IntegerTypeBigint,
@@ -103,7 +93,6 @@ integerTypes = [
   Core.IntegerTypeUint32,
   Core.IntegerTypeUint64]
 
--- | Find the integer type for a given integer value
 integerValueType :: (Core.IntegerValue -> Core.IntegerType)
 integerValueType x = case x of
   Core.IntegerValueBigint _ -> Core.IntegerTypeBigint
@@ -116,7 +105,6 @@ integerValueType x = case x of
   Core.IntegerValueUint32 _ -> Core.IntegerTypeUint32
   Core.IntegerValueUint64 _ -> Core.IntegerTypeUint64
 
--- | Find the literal type for a given literal value
 literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
   Core.LiteralBinary _ -> Core.LiteralTypeBinary
@@ -125,7 +113,6 @@ literalType x = case x of
   Core.LiteralInteger v1 -> ((\injected_ -> Core.LiteralTypeInteger injected_) (integerValueType v1))
   Core.LiteralString _ -> Core.LiteralTypeString
 
--- | Find the literal type inject (constructor) for a given literal value
 literalTypeVariant :: (Core.LiteralType -> Variants.LiteralVariant)
 literalTypeVariant x = case x of
   Core.LiteralTypeBinary -> Variants.LiteralVariantBinary
@@ -134,7 +121,6 @@ literalTypeVariant x = case x of
   Core.LiteralTypeInteger _ -> Variants.LiteralVariantInteger
   Core.LiteralTypeString -> Variants.LiteralVariantString
 
--- | All literal types, in a canonical order
 literalTypes :: [Core.LiteralType]
 literalTypes = (Lists.concat [
   [
@@ -145,11 +131,9 @@ literalTypes = (Lists.concat [
   [
     Core.LiteralTypeString]])
 
--- | Find the literal inject (constructor) for a given literal value
 literalVariant :: (Core.Literal -> Variants.LiteralVariant)
 literalVariant arg_ = (literalTypeVariant (literalType arg_))
 
--- | All literal variants, in a canonical order
 literalVariants :: [Variants.LiteralVariant]
 literalVariants = [
   Variants.LiteralVariantBinary,
@@ -158,7 +142,6 @@ literalVariants = [
   Variants.LiteralVariantInteger,
   Variants.LiteralVariantString]
 
--- | Find the term inject (constructor) for a given term
 termVariant :: (Core.Term -> Variants.TermVariant)
 termVariant x = case x of
   Core.TermAnnotated _ -> Variants.TermVariantAnnotated
@@ -180,7 +163,6 @@ termVariant x = case x of
   Core.TermVariable _ -> Variants.TermVariantVariable
   Core.TermWrap _ -> Variants.TermVariantWrap
 
--- | All term (expression) variants, in a canonical order
 termVariants :: [Variants.TermVariant]
 termVariants = [
   Variants.TermVariantAnnotated,
@@ -201,7 +183,6 @@ termVariants = [
   Variants.TermVariantVariable,
   Variants.TermVariantWrap]
 
--- | Find the type inject (constructor) for a given type
 typeVariant :: (Core.Type -> Variants.TypeVariant)
 typeVariant x = case x of
   Core.TypeAnnotated _ -> Variants.TypeVariantAnnotated
@@ -221,7 +202,6 @@ typeVariant x = case x of
   Core.TypeVariable _ -> Variants.TypeVariantVariable
   Core.TypeWrap _ -> Variants.TypeVariantWrap
 
--- | All type variants, in a canonical order
 typeVariants :: [Variants.TypeVariant]
 typeVariants = [
   Variants.TypeVariantAnnotated,

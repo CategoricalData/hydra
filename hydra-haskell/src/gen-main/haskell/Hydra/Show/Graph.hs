@@ -15,7 +15,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Show a graph as a string
 graph :: (Graph.Graph -> String)
 graph graph =  
   let elements = (Graph.graphElements graph) 

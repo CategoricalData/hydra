@@ -37,7 +37,6 @@ bind l r =
 eitherToFlow :: ((t0 -> String) -> Either t0 t1 -> Compute.Flow t2 t1)
 eitherToFlow formatError e = (Eithers.either (\l -> fail (formatError l)) (\r -> pure r) e)
 
--- | An empty trace with no stack, messages, or other attributes
 emptyTrace :: Compute.Trace
 emptyTrace = Compute.Trace {
   Compute.traceStack = [],
@@ -115,7 +114,6 @@ pure xp = (Compute.Flow (\s -> \t -> Compute.FlowState {
   Compute.flowStateState = s,
   Compute.flowStateTrace = t}))
 
--- | Push an error message
 pushError :: (String -> Compute.Trace -> Compute.Trace)
 pushError msg t =  
   let condenseRepeats = (\ys ->  
@@ -149,7 +147,6 @@ putState cx = (Compute.Flow (\s0 -> \t0 ->
     Compute.flowStateState = cx,
     Compute.flowStateTrace = (Compute.flowStateTrace f1)}))
 
--- | Summarize a trace as a string
 traceSummary :: (Compute.Trace -> String)
 traceSummary t =  
   let messageLines = (Lists.nub (Compute.traceMessages t))

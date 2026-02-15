@@ -124,8 +124,6 @@ def check_nominal_application(tx: hydra.typing.TypeContext, tname: hydra.core.Na
     return hydra.lib.flows.bind(hydra.schemas.require_schema_type(tx.inference_context, tname), (lambda schema_type: (vars := schema_type.variables, body := schema_type.type, varslen := hydra.lib.lists.length(vars), argslen := hydra.lib.lists.length(type_args), hydra.lib.logic.if_else(hydra.lib.equality.equal(varslen, argslen), (lambda : hydra.lib.flows.pure(None)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("nominal type ", tname.value), " applied to the wrong number of type arguments: "), "(expected "), hydra.lib.literals.show_int32(varslen)), " arguments, got "), hydra.lib.literals.show_int32(argslen)), "): "), hydra.formatting.show_list((lambda x1: hydra.show.core.type(x1)), type_args))))))[4]))
 
 def normalize_type_free_vars(typ: hydra.core.Type) -> hydra.core.Type:
-    r"""Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables."""
-    
     def collect_vars(acc: FrozenDict[hydra.core.Name, hydra.core.Name], t: hydra.core.Type) -> FrozenDict[hydra.core.Name, hydra.core.Name]:
         match t:
             case hydra.core.TypeVariable(value=v):
@@ -139,8 +137,6 @@ def normalize_type_free_vars(typ: hydra.core.Type) -> hydra.core.Type:
     return hydra.rewriting.substitute_type_variables(subst(), typ)
 
 def types_all_effectively_equal(tx: hydra.typing.TypeContext, tlist: frozenlist[hydra.core.Type]) -> bool:
-    r"""Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming. Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency."""
-    
     @lru_cache(1)
     def types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
         return tx.inference_context.schema_types
@@ -161,8 +157,6 @@ def check_same_type(tx: hydra.typing.TypeContext, desc: str, types: frozenlist[h
     return hydra.lib.logic.if_else(types_all_effectively_equal(tx, types), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(types))), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("unequal types ", hydra.formatting.show_list((lambda x1: hydra.show.core.type(x1)), types), " in ", desc)))))
 
 def contains_in_scope_type_vars(tx: hydra.typing.TypeContext, t: hydra.core.Type) -> bool:
-    r"""Check if a type contains any type variable from the current scope."""
-    
     @lru_cache(1)
     def vars() -> frozenset[hydra.core.Name]:
         return tx.type_variables
@@ -172,8 +166,6 @@ def contains_in_scope_type_vars(tx: hydra.typing.TypeContext, t: hydra.core.Type
     return hydra.lib.logic.not_(hydra.lib.sets.null(hydra.lib.sets.intersection(vars(), free_vars())))
 
 def types_effectively_equal(tx: hydra.typing.TypeContext, t1: hydra.core.Type, t2: hydra.core.Type) -> bool:
-    r"""Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards."""
-    
     return hydra.lib.logic.or_(contains_in_scope_type_vars(tx, t1), hydra.lib.logic.or_(contains_in_scope_type_vars(tx, t2), types_all_effectively_equal(tx, (hydra.schemas.fully_strip_and_normalize_type(t1), hydra.schemas.fully_strip_and_normalize_type(t2)))))
 
 def type_of_injection(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], injection: hydra.core.Injection) -> hydra.compute.Flow[T0, hydra.core.Type]:
@@ -192,8 +184,6 @@ def type_of_injection(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.
     return hydra.lib.flows.bind(hydra.schemas.require_schema_type(tx.inference_context, tname()), (lambda schema_type: (svars := schema_type.variables, sbody := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.union_type(tname(), sbody), (lambda sfields: hydra.lib.flows.bind(hydra.schemas.find_field_type(fname(), sfields), (lambda ftyp: hydra.lib.flows.pure(hydra.schemas.nominal_application(tname(), type_args)))))))[2]))
 
 def type_lists_effectively_equal(tx: hydra.typing.TypeContext, tlist1: frozenlist[hydra.core.Type], tlist2: frozenlist[hydra.core.Type]) -> bool:
-    r"""Check whether two lists of types are effectively equal, disregarding type aliases."""
-    
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(tlist1), hydra.lib.lists.length(tlist2)), (lambda : hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda v1, v2: types_effectively_equal(tx, v1, v2)), tlist1, tlist2))), (lambda : False))
 
 def type_of_literal(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], lit: hydra.core.Literal) -> hydra.compute.Flow[T0, hydra.core.Type]:
@@ -521,6 +511,4 @@ def check_type_subst(cx: hydra.typing.InferenceContext, subst: hydra.typing.Type
     return hydra.lib.logic.if_else(hydra.lib.sets.null(bad_vars()), (lambda : hydra.lib.flows.pure(subst)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Schema type(s) incorrectly unified: {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda x1: print_pair(x1)), bad_pairs()))), "}"))))
 
 def to_f_context(cx: hydra.typing.InferenceContext) -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-    r"""Convert an inference context to a type environment by converting type schemes to System F types."""
-    
     return hydra.lib.maps.map((lambda x1: hydra.schemas.type_scheme_to_f_type(x1)), cx.data_types)

@@ -29,7 +29,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Compare two precision values
 comparePrecision :: (Util.Precision -> Util.Precision -> Util.Comparison)
 comparePrecision p1 p2 = ((\x -> case x of
   Util.PrecisionArbitrary -> ((\x -> case x of
@@ -39,7 +38,6 @@ comparePrecision p1 p2 = ((\x -> case x of
     Util.PrecisionArbitrary -> Util.ComparisonLessThan
     Util.PrecisionBits v2 -> (Logic.ifElse (Equality.lt v1 v2) Util.ComparisonLessThan Util.ComparisonGreaterThan)) p2)) p1)
 
--- | Convert a float value to a different float type
 convertFloatValue :: (Core.FloatType -> Core.FloatValue -> Core.FloatValue)
 convertFloatValue target fv =  
   let decoder = (\fv -> (\x -> case x of
@@ -53,7 +51,6 @@ convertFloatValue target fv =
             Core.FloatTypeFloat64 -> (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 d))) target)
     in (encoder (decoder fv))
 
--- | Convert an integer value to a different integer type
 convertIntegerValue :: (Core.IntegerType -> Core.IntegerValue -> Core.IntegerValue)
 convertIntegerValue target iv =  
   let decoder = (\iv -> (\x -> case x of
@@ -79,7 +76,6 @@ convertIntegerValue target iv =
             Core.IntegerTypeUint64 -> (Core.IntegerValueUint64 (Literals.bigintToUint64 d))) target)
     in (encoder (decoder iv))
 
--- | Generate a disclaimer message for type conversions
 disclaimer :: (Bool -> String -> String -> String)
 disclaimer lossy source target = (Strings.cat [
   "replace ",

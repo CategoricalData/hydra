@@ -63,7 +63,6 @@ encodeDecode dir coder term = ((\x -> case x of
   Coders.CoderDirectionEncode -> (Compute.coderEncode coder term)
   Coders.CoderDirectionDecode -> (Compute.coderDecode coder term)) dir)
 
--- | Check if float type is supported by language constraints
 floatTypeIsSupported :: (Coders.LanguageConstraints -> Core.FloatType -> Bool)
 floatTypeIsSupported constraints ft = (Sets.member ft (Coders.languageConstraintsFloatTypes constraints))
 
@@ -79,11 +78,9 @@ idCoder = Compute.Coder {
   Compute.coderEncode = Flows.pure,
   Compute.coderDecode = Flows.pure}
 
--- | Check if integer type is supported by language constraints
 integerTypeIsSupported :: (Coders.LanguageConstraints -> Core.IntegerType -> Bool)
 integerTypeIsSupported constraints it = (Sets.member it (Coders.languageConstraintsIntegerTypes constraints))
 
--- | Check if literal type is supported by language constraints
 literalTypeIsSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)
 literalTypeIsSupported constraints lt =  
   let isSupported = (\lt -> (\x -> case x of
@@ -92,7 +89,6 @@ literalTypeIsSupported constraints lt =
           _ -> True) lt)
   in (Logic.and (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (isSupported lt))
 
--- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 nameToFilePath :: (Util.CaseConvention -> Util.CaseConvention -> Module.FileExtension -> Core.Name -> String)
 nameToFilePath nsConv localConv ext name =  
   let qualName = (Names.qualifyName name)
@@ -112,7 +108,6 @@ nameToFilePath nsConv localConv ext name =
               ".",
               (Module.unFileExtension ext)])
 
--- | Check if type is supported by language constraints
 typeIsSupported :: (Coders.LanguageConstraints -> Core.Type -> Bool)
 typeIsSupported constraints t =  
   let base = (Rewriting.deannotateType t)

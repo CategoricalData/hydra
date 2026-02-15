@@ -368,6 +368,9 @@ public interface Flows {
     static <S, A, B> Flow<S, List<B>> mapM(List<A> as, Function<A, Flow<S, B>> f) {
         requireNonNull(as, "as");
         requireNonNull(f, "f");
+        if (as.size() > MAX_MAPM_SIZE) {
+            throw new IllegalArgumentException("mapM list size " + as.size() + " exceeds limit " + MAX_MAPM_SIZE);
+        }
 
         // Evaluate each element eagerly to avoid building a deep closure chain
         // that would overflow the stack for large collections.
@@ -424,6 +427,9 @@ public interface Flows {
         requireNonNull(xs, "xs");
         requireNonNull(kf, "kf");
         requireNonNull(vf, "vf");
+        if (xs.size() > MAX_MAPM_SIZE) {
+            throw new IllegalArgumentException("mapM map size " + xs.size() + " exceeds limit " + MAX_MAPM_SIZE);
+        }
 
         Set<Map.Entry<K1, V1>> entries1 = xs.entrySet();
         Flow<S, Set<Map.Entry<K2, V2>>> entries2 = mapM(entries1,
@@ -461,6 +467,9 @@ public interface Flows {
     static <S, A, B> Flow<S, Set<B>> mapM(Set<A> as, Function<A, Flow<S, B>> f) {
         requireNonNull(as, "as");
         requireNonNull(f, "f");
+        if (as.size() > MAX_MAPM_SIZE) {
+            throw new IllegalArgumentException("mapM set size " + as.size() + " exceeds limit " + MAX_MAPM_SIZE);
+        }
 
         // Evaluate each element eagerly to avoid building a deep closure chain
         // that would overflow the stack for large collections.

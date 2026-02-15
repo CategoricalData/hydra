@@ -16,7 +16,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Language constraints for Haskell
 haskellLanguage :: Coders.Language
 haskellLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra.ext.haskell"),
@@ -89,12 +88,6 @@ haskellLanguage = Coders.Language {
       Variants.TypeVariantWrap])
     typePredicate = (\_ -> True)
 
--- | Created on 2025-02-28 using GHCi 9.6.6
--- | 
--- | You can reproduce these lists of symbols by issuing the command `:browse Prelude` in GHCi, pasting the results into
--- | /tmp/browse_Prelude.txt, and then running the Bash command provided with each list.
--- | 
--- | See also https://www.haskell.org/onlinereport/standard-prelude.html
 reservedWords :: (S.Set String)
 reservedWords = (Sets.fromList (Lists.concat2 keywordSymbols reservedSymbols)) 
   where 

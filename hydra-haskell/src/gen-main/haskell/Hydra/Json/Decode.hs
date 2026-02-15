@@ -24,7 +24,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Decode a JSON value to a Hydra term given a type. Returns Left for type mismatches.
 fromJson :: (M.Map Core.Name Core.Type -> Core.Type -> Model.Value -> Either String Core.Term)
 fromJson types typ value =  
   let stripped = (Rewriting.deannotateType typ)
@@ -182,7 +181,6 @@ fromJson types typ value =
       "unsupported type for JSON decoding: ",
       (Core_.type_ typ)]))) stripped)
 
--- | Decode a JSON value to a literal term
 decodeLiteral :: (Core.LiteralType -> Model.Value -> Either String Core.Term)
 decodeLiteral lt value = ((\x -> case x of
   Core.LiteralTypeBinary ->  
@@ -197,7 +195,6 @@ decodeLiteral lt value = ((\x -> case x of
     let strResult = (expectString value)
     in (Eithers.map (\s -> Core.TermLiteral (Core.LiteralString s)) strResult)) lt)
 
--- | Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string.
 decodeFloat :: (Core.FloatType -> Model.Value -> Either String Core.Term)
 decodeFloat ft value = ((\x -> case x of
   Core.FloatTypeBigfloat ->  
@@ -214,7 +211,6 @@ decodeFloat ft value = ((\x -> case x of
     let numResult = (expectNumber value)
     in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 n)))) numResult)) ft)
 
--- | Decode a JSON value to an integer term. Small ints from numbers; large ints from strings.
 decodeInteger :: (Core.IntegerType -> Model.Value -> Either String Core.Term)
 decodeInteger it value = ((\x -> case x of
   Core.IntegerTypeBigint ->  
@@ -261,25 +257,21 @@ decodeInteger it value = ((\x -> case x of
     let numResult = (expectNumber value)
     in (Eithers.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueUint16 (Literals.bigintToUint16 (Literals.bigfloatToBigint n))))) numResult)) it)
 
--- | Extract a string from a JSON value
 expectString :: (Model.Value -> Either String String)
 expectString value = ((\x -> case x of
   Model.ValueString v1 -> (Right v1)
   _ -> (Left "expected string")) value)
 
--- | Extract an array from a JSON value
 expectArray :: (Model.Value -> Either String [Model.Value])
 expectArray value = ((\x -> case x of
   Model.ValueArray v1 -> (Right v1)
   _ -> (Left "expected array")) value)
 
--- | Extract an object from a JSON value
 expectObject :: (Model.Value -> Either String (M.Map String Model.Value))
 expectObject value = ((\x -> case x of
   Model.ValueObject v1 -> (Right v1)
   _ -> (Left "expected object")) value)
 
--- | Extract a number from a JSON value
 expectNumber :: (Model.Value -> Either String Double)
 expectNumber value = ((\x -> case x of
   Model.ValueNumber v1 -> (Right v1)

@@ -24,7 +24,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Create a graph schema from a graph which contains nothing but encoded type definitions
 graphToSchema :: (Graph.Graph -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))
 graphToSchema g =  
   let toPair = (\el ->  

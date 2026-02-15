@@ -172,8 +172,6 @@ def join_types(left: hydra.core.Type, right: hydra.core.Type, comment: str) -> h
             return cannot_unify()
 
 def variable_occurs_in_type(var: hydra.core.Name, typ0: hydra.core.Type) -> bool:
-    r"""Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables."""
-    
     def try_type(b: bool, typ: hydra.core.Type) -> bool:
         match typ:
             case hydra.core.TypeVariable(value=v):

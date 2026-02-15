@@ -16,7 +16,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Language constraints for JSON
 jsonLanguage :: Coders.Language
 jsonLanguage = Coders.Language {
   Coders.languageName = (Coders.LanguageName "hydra.ext.org.json"),

@@ -10,8 +10,6 @@ import hydra.lib.lists
 import hydra.lib.math
 
 def function_arity(v1: hydra.core.Function) -> int:
-    r"""Find the arity (expected number of arguments) of a function."""
-    
     match v1:
         case hydra.core.FunctionElimination():
             return 1
@@ -26,8 +24,6 @@ def function_arity(v1: hydra.core.Function) -> int:
             raise AssertionError("Unreachable: all variants handled")
 
 def term_arity(v1: hydra.core.Term) -> int:
-    r"""Find the arity (expected number of arguments) of a term."""
-    
     match v1:
         case hydra.core.TermApplication(value=arg_):
             return hydra.lib.math.sub(term_arity(arg_.function), 1)
@@ -39,8 +35,6 @@ def term_arity(v1: hydra.core.Term) -> int:
             return 0
 
 def type_arity(v1: hydra.core.Type) -> int:
-    r"""Find the arity (expected number of arguments) of a type."""
-    
     match v1:
         case hydra.core.TypeAnnotated(value=arg_):
             return type_arity(arg_.body)
@@ -58,18 +52,12 @@ def type_arity(v1: hydra.core.Type) -> int:
             return 0
 
 def primitive_arity(arg_: hydra.graph.Primitive) -> int:
-    r"""Find the arity (expected number of arguments) of a primitive constant or function."""
-    
     return type_arity(arg_.type.type)
 
 def type_scheme_arity(arg_: hydra.core.TypeScheme) -> int:
-    r"""Find the arity (expected number of arguments) of a type scheme."""
-    
     return type_arity(arg_.type)
 
 def uncurry_type(t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
-    r"""Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)."""
-    
     match t:
         case hydra.core.TypeAnnotated(value=arg_):
             return uncurry_type(arg_.body)

@@ -35,7 +35,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Attempt to adapt a floating-point type using the given language constraints
 adaptFloatType :: (Coders.LanguageConstraints -> Core.FloatType -> Maybe Core.FloatType)
 adaptFloatType constraints ft =  
   let supported = (Sets.member ft (Coders.languageConstraintsFloatTypes constraints))
@@ -48,7 +47,6 @@ adaptFloatType constraints ft =
               Core.FloatTypeFloat64 -> (alt Core.FloatTypeBigfloat)) ft)
       in (Logic.ifElse supported (Just ft) (forUnsupported ft))
 
--- | Adapt a graph and its schema to the given language constraints. The doExpand flag controls eta expansion of partial applications. Note: case statement hoisting is done separately, prior to inference.
 adaptDataGraph :: (Coders.LanguageConstraints -> Bool -> Graph.Graph -> Compute.Flow Graph.Graph Graph.Graph)
 adaptDataGraph constraints doExpand graph0 =  
   let transform = (\graph -> \gterm -> Flows.bind (Schemas.graphToTypeContext graph) (\tx ->  
@@ -133,7 +131,6 @@ adaptGraphSchema constraints litmap types0 =
             in (Flows.bind (adaptType constraints litmap typ) (\typ1 -> Flows.pure (name, typ1))))
   in (Flows.bind (Flows.mapList mapPair (Maps.toList types0)) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
--- | Attempt to adapt an integer type using the given language constraints
 adaptIntegerType :: (Coders.LanguageConstraints -> Core.IntegerType -> Maybe Core.IntegerType)
 adaptIntegerType constraints it =  
   let supported = (Sets.member it (Coders.languageConstraintsIntegerTypes constraints))
@@ -152,7 +149,6 @@ adaptIntegerType constraints it =
               Core.IntegerTypeUint64 -> (alt Core.IntegerTypeBigint)) it)
       in (Logic.ifElse supported (Just it) (forUnsupported it))
 
--- | Convert a literal to a different type
 adaptLiteral :: (Core.LiteralType -> Core.Literal -> Core.Literal)
 adaptLiteral lt l = ((\x -> case x of
   Core.LiteralBinary v1 -> ((\x -> case x of
@@ -164,7 +160,6 @@ adaptLiteral lt l = ((\x -> case x of
   Core.LiteralInteger v1 -> ((\x -> case x of
     Core.LiteralTypeInteger v2 -> (Core.LiteralInteger (Literals_.bigintToIntegerValue v2 (Literals_.integerValueToBigint v1)))) lt)) l)
 
--- | Attempt to adapt a literal type using the given language constraints
 adaptLiteralType :: (Coders.LanguageConstraints -> Core.LiteralType -> Maybe Core.LiteralType)
 adaptLiteralType constraints lt =  
   let forUnsupported = (\lt -> (\x -> case x of
@@ -175,7 +170,6 @@ adaptLiteralType constraints lt =
           _ -> Nothing) lt)
   in (Logic.ifElse (literalTypeSupported constraints lt) Nothing (forUnsupported lt))
 
--- | Derive a map of adapted literal types for the given language constraints
 adaptLiteralTypesMap :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType)
 adaptLiteralTypesMap constraints =  
   let tryType = (\lt -> Maybes.maybe Nothing (\lt2 -> Just (lt, lt2)) (adaptLiteralType constraints lt))
@@ -192,7 +186,6 @@ adaptPrimitive constraints litmap prim0 =
     Graph.primitiveType = ts1,
     Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)})))
 
--- | Adapt a term using the given language constraints
 adaptTerm :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 adaptTerm constraints litmap term0 =  
   let rewrite = (\recurse -> \term0 ->  
@@ -239,7 +232,6 @@ adaptTypeScheme constraints litmap ts0 =
       Core.typeSchemeType = t1,
       Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts0)})))
 
--- | Given a data graph along with language constraints and a designated list of namespaces, adapt the graph to the language constraints, perform inference, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java).
 dataGraphToDefinitions :: (Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Graph.Graph -> [Module.Namespace] -> Compute.Flow Graph.Graph (Graph.Graph, [[Module.TermDefinition]]))
 dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymorphicLetBindings graph namespaces =  
   let namespacesSet = (Sets.fromList namespaces)
@@ -303,7 +295,6 @@ dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymor
                           in (Maybes.cat (Lists.map toDef elsForNs))) namespaces)
                   in (Flows.pure (graph2, defsGrouped)))))))))))
 
--- | Check if a literal type is supported by the given language constraints
 literalTypeSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)
 literalTypeSupported constraints lt =  
   let forType = (\lt -> (\x -> case x of
@@ -312,7 +303,6 @@ literalTypeSupported constraints lt =
           _ -> True) lt)
   in (Logic.ifElse (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (forType lt) False)
 
--- | Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name.
 schemaGraphToDefinitions :: (Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type, [[Module.TypeDefinition]]))
 schemaGraphToDefinitions constraints graph nameLists =  
   let litmap = (adaptLiteralTypesMap constraints)
@@ -322,7 +312,6 @@ schemaGraphToDefinitions constraints graph nameLists =
             Module.typeDefinitionType = (Pairs.second pair)})
     in (Flows.pure (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Maybes.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
 
--- | Find a list of alternatives for a given term, if any
 termAlternatives :: (Core.Term -> Compute.Flow Graph.Graph [Core.Term])
 termAlternatives term = ((\x -> case x of
   Core.TermAnnotated v1 ->  
@@ -366,7 +355,6 @@ termAlternatives term = ((\x -> case x of
       term2])
   _ -> (Flows.pure [])) term)
 
--- | Find a list of alternatives for a given type, if any
 typeAlternatives :: (Core.Type -> [Core.Type])
 typeAlternatives type_ = ((\x -> case x of
   Core.TypeAnnotated v1 ->  

@@ -168,8 +168,6 @@ def literal_json_coder(lt: hydra.core.LiteralType) -> hydra.compute.Flow[T0, hyd
     return hydra.lib.flows.pure(encoded())
 
 def read_string_stub(s: str) -> hydra.core.Term:
-    r"""Placeholder for reading a string into a term (to be implemented)."""
-    
     return cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.strings.cat2("TODO: read ", s)))))
 
 @lru_cache(1)

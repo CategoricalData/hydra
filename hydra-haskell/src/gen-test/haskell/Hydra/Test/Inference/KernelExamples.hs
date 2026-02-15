@@ -13,7 +13,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Examples from the Hydra kernel
 allTests :: Testing.TestGroup
 allTests = Testing.TestGroup {
   Testing.testGroupName = "Examples from the Hydra kernel",

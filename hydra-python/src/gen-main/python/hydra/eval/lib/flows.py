@@ -34,8 +34,6 @@ def bind(flow_term: hydra.core.Term, fun_term: hydra.core.Term) -> hydra.compute
             return hydra.monads.unexpected("flow term", hydra.show.core.term(flow_term))
 
 def foldl(fun_term: hydra.core.Term, init_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
-    r"""Interpreter-friendly foldl for Flow."""
-    
     return hydra.lib.flows.bind(hydra.extract.core.list(list_term), (lambda elements: hydra.lib.flows.pure(hydra.lib.lists.foldl((lambda acc, el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.flows.bind"))))), acc))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("accVal"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("accVal")))))), el)))))))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.flows.pure"))))), init_term))), elements))))
 
 def map(fun_term: hydra.core.Term, flow_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
@@ -72,8 +70,6 @@ def map_keys(fun_term: hydra.core.Term, map_term: hydra.core.Term) -> hydra.comp
             return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
 
 def map_list(fun_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
-    r"""Interpreter-friendly mapList for List with Flow."""
-    
     return hydra.lib.flows.bind(hydra.extract.core.list(list_term), (lambda elements: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.flows.sequence"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el)))), elements)))))))))
 
 def map_maybe(fun_term: hydra.core.Term, maybe_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
@@ -85,8 +81,6 @@ def map_maybe(fun_term: hydra.core.Term, maybe_term: hydra.core.Term) -> hydra.c
             return hydra.monads.unexpected("optional value", hydra.show.core.term(maybe_term))
 
 def map_set(fun_term: hydra.core.Term, set_term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
-    r"""Interpreter-friendly mapSet for Set with Flow."""
-    
     return hydra.lib.flows.bind(hydra.extract.core.set(set_term), (lambda elements: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.flows.map"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.sets.fromList")))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.flows.sequence"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el)))), hydra.lib.sets.to_list(elements)))))))))))))
 
 def with_default(fallback_term: hydra.core.Term, flow_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:

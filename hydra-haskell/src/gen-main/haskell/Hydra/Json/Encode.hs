@@ -22,7 +22,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Encode a Hydra term to a JSON value. Returns Left for unsupported constructs.
 toJson :: (Core.Term -> Either String Model.Value)
 toJson term =  
   let stripped = (Rewriting.deannotateTerm term)

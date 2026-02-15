@@ -88,8 +88,6 @@ def encode_literal(lit: hydra.core.Literal) -> Either[T0, hydra.json.model.Value
             raise AssertionError("Unreachable: all variants handled")
 
 def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
-    r"""Encode a Hydra term to a JSON value. Returns Left for unsupported constructs."""
-    
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
         return hydra.rewriting.deannotate_term(term)

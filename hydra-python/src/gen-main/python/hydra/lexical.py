@@ -43,13 +43,9 @@ def lookup_element(g: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.c
     return hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, name)), g.elements)
 
 def dereference_element(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Binding]]:
-    r"""Look up an element in the current graph context."""
-    
     return hydra.lib.flows.map((lambda g: lookup_element(g, name)), hydra.monads.get_state())
 
 def dereference_schema_type(name: hydra.core.Name, types2: FrozenDict[hydra.core.Name, hydra.core.TypeScheme]) -> Maybe[hydra.core.TypeScheme]:
-    r"""Resolve a schema type through a chain of zero or more typedefs."""
-    
     def for_type(t: hydra.core.Type) -> Maybe[hydra.core.TypeScheme]:
         match t:
             case hydra.core.TypeAnnotated(value=at):
@@ -66,29 +62,19 @@ def dereference_schema_type(name: hydra.core.Name, types2: FrozenDict[hydra.core
     return hydra.lib.maybes.bind(hydra.lib.maps.lookup(name, types2), (lambda ts: hydra.lib.maybes.map((lambda ts2: hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, ts2.variables), ts2.type, ts2.constraints)), for_type(ts.type))))
 
 def dereference_variable(g: hydra.graph.Graph, name: hydra.core.Name) -> Either[str, hydra.core.Binding]:
-    r"""Look up an element by name in a graph, returning Either an error or the binding."""
-    
     return hydra.lib.maybes.maybe(Left(hydra.lib.strings.cat2("no such element: ", name.value)), (lambda right_: Right(right_)), lookup_element(g, name))
 
 def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph], elements: frozenlist[hydra.core.Binding]) -> hydra.graph.Graph:
-    r"""Create a graph from a parent graph, optional schema, and list of element bindings."""
-    
     return hydra.graph.Graph(elements, parent.environment, parent.types, parent.body, parent.primitives, schema)
 
 @lru_cache(1)
 def empty_graph() -> hydra.graph.Graph:
-    r"""An empty graph; no elements, no primitives, no schema, and an arbitrary body."""
-    
     return hydra.graph.Graph((), hydra.lib.maps.empty(), hydra.lib.maps.empty(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("empty graph")))), hydra.lib.maps.empty(), Nothing())
 
 def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydra.graph.Graph) -> hydra.graph.Graph:
-    r"""Add bindings to an existing graph."""
-    
     return hydra.graph.Graph(hydra.lib.lists.concat2(bindings, g.elements), g.environment, g.types, g.body, g.primitives, g.schema)
 
 def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
-    r"""Extract the fields of a record or union type."""
-    
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(t)
@@ -172,8 +158,6 @@ def require_primitive_type(tx: hydra.typing.TypeContext, name: hydra.core.Name) 
     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no such primitive function: ", name.value)), (lambda ts: hydra.lib.flows.pure(ts)), mts())
 
 def resolve_term(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
-    r"""TODO: distinguish between lambda-bound and let-bound variables."""
-    
     def recurse(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
         @lru_cache(1)
         def stripped() -> hydra.core.Term:
@@ -190,8 +174,6 @@ def require_term(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph,
     return hydra.lib.flows.bind(resolve_term(name), (lambda mt: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no such element: ", name.value)), (lambda x1: hydra.lib.flows.pure(x1)), mt)))
 
 def schema_context(g: hydra.graph.Graph) -> hydra.graph.Graph:
-    r"""Note: assuming for now that primitive functions are the same in the schema graph."""
-    
     return hydra.lib.maybes.from_maybe(g, g.schema)
 
 def strip_and_dereference_term(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
@@ -206,8 +188,6 @@ def strip_and_dereference_term(term: hydra.core.Term) -> hydra.compute.Flow[hydr
             return hydra.lib.flows.pure(stripped())
 
 def strip_and_dereference_term_either(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
-    r"""Strip annotations and dereference variables, returning Either an error or the resolved term."""
-    
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
         return hydra.rewriting.deannotate_and_detype_term(term)

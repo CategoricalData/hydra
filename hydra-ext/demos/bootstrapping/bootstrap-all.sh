@@ -165,15 +165,22 @@ run_path() {
     path_start=$(date +%s)
 
     local exit_code=0
+    local demo_dir="$OUTPUT_BASE/${host}-to-${target}"
     case "$host" in
         haskell)
             "$SCRIPT_DIR/bootstrap-to-${target}.sh" $EXTRA_FLAGS 2>&1 || exit_code=$?
             ;;
         java)
-            "$SCRIPT_DIR/java-bootstrap.sh" --target "$target" $EXTRA_FLAGS 2>&1 || exit_code=$?
+            "$SCRIPT_DIR/java-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --kernel-only $EXTRA_FLAGS 2>&1 || exit_code=$?
+            if [ $exit_code -eq 0 ]; then
+                "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 || exit_code=$?
+            fi
             ;;
         python)
-            "$SCRIPT_DIR/python-bootstrap.sh" --target "$target" $EXTRA_FLAGS 2>&1 || exit_code=$?
+            "$SCRIPT_DIR/python-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --kernel-only $EXTRA_FLAGS 2>&1 || exit_code=$?
+            if [ $exit_code -eq 0 ]; then
+                "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 || exit_code=$?
+            fi
             ;;
     esac
 

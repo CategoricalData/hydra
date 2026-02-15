@@ -33,7 +33,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Create an adapter for field types
 fieldAdapter :: (Core.FieldType -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.FieldType Core.FieldType Core.Field Core.Field))
 fieldAdapter ftyp =  
   let encdec = (\ad -> \dir -> \field ->  
@@ -51,7 +50,6 @@ fieldAdapter ftyp =
       Core.fieldTypeType = (Compute.adapterTarget ad)},
     Compute.adapterCoder = (Utils.bidirectional (encdec ad))})))
 
--- | This function accounts for recursive type definitions
 forTypeReference :: (Core.Name -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 forTypeReference name =  
   let encdec = (\name -> \dir -> \term -> Flows.bind Monads.getState (\cx ->  
@@ -119,7 +117,6 @@ functionProxyType _ = (Core.TypeUnion (Core.RowType {
       Core.fieldTypeName = (Core.Name "variable"),
       Core.fieldTypeType = (Core.TypeLiteral Core.LiteralTypeString)}]}))
 
--- | Convert function types to union types
 functionToUnion :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 functionToUnion t =  
   let encTerm = (\term -> \strippedTerm -> (\x -> case x of
@@ -222,7 +219,6 @@ functionToUnion t =
                     Compute.coderEncode = (encode ad),
                     Compute.coderDecode = (decode ad)}}))))) t)
 
--- | Convert forall types to monotypes
 lambdaToMonotype :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 lambdaToMonotype t = ((\x -> case x of
   Core.TypeForall v1 ->  
@@ -233,7 +229,6 @@ lambdaToMonotype t = ((\x -> case x of
       Compute.adapterTarget = (Compute.adapterTarget ad),
       Compute.adapterCoder = (Compute.adapterCoder ad)})))) t)
 
--- | Convert optional types to list types
 maybeToList :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 maybeToList t =  
   let encode = (\ad -> \term -> (\x -> case x of
@@ -251,7 +246,6 @@ maybeToList t =
           Compute.coderEncode = (encode ad),
           Compute.coderDecode = (decode ad)}})))) t)
 
--- | Pass through application types
 passApplication :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passApplication t =  
   let forApplicationType = (\at ->  
@@ -268,7 +262,6 @@ passApplication t =
   in ((\x -> case x of
     Core.TypeApplication v1 -> (forApplicationType v1)) t)
 
--- | Pass through either types
 passEither :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passEither t =  
   let forEitherType = (\et ->  
@@ -285,7 +278,6 @@ passEither t =
   in ((\x -> case x of
     Core.TypeEither v1 -> (forEitherType v1)) t)
 
--- | Pass through function types with adaptation
 passFunction :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passFunction t =  
   let toCaseAds = (\dom -> \cod -> (\x -> case x of
@@ -352,7 +344,6 @@ passFunction t =
               in ((\x -> case x of
                 Core.TypeFunction v1 -> (forFunctionType v1)) t)
 
--- | Pass through forall types
 passForall :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passForall t =  
   let forForallType = (\ft ->  
@@ -369,7 +360,6 @@ passForall t =
   in ((\x -> case x of
     Core.TypeForall v1 -> (forForallType v1)) t)
 
--- | Pass through literal types with literal adaptation
 passLiteral :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passLiteral t =  
   let encdec = (\ad -> \dir -> \term -> Flows.bind (withGraphContext (Core_.literal term)) (\l -> Flows.bind (Utils.encodeDecode dir (Compute.adapterCoder ad) l) (\l2 -> Flows.pure (Core.TermLiteral l2))))
@@ -384,7 +374,6 @@ passLiteral t =
     in ((\x -> case x of
       Core.TypeLiteral v1 -> (forLiteral v1)) t)
 
--- | Pass through list types
 passList :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passList t =  
   let encdec = (\ad -> \dir -> \term -> (\x -> case x of
@@ -398,7 +387,6 @@ passList t =
     in ((\x -> case x of
       Core.TypeList v1 -> (forListType v1)) t)
 
--- | Pass through map types
 passMap :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passMap t =  
   let encdec = (\kad -> \vad -> \dir -> \term -> (\x -> case x of
@@ -422,7 +410,6 @@ passMap t =
     in ((\x -> case x of
       Core.TypeMap v1 -> (forMapType v1)) t)
 
--- | Pass through optional types
 passOptional :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passOptional t =  
   let mapTerm = (\coder -> \dir -> \term -> Flows.bind (withGraphContext (Core_.maybeTerm Flows.pure term)) (\opt -> Flows.bind (Flows.mapMaybe (Utils.encodeDecode dir coder) opt) (\newOpt -> Flows.pure (Core.TermMaybe newOpt))))
@@ -433,7 +420,6 @@ passOptional t =
       Compute.adapterTarget = (Core.TypeMaybe (Compute.adapterTarget adapter)),
       Compute.adapterCoder = (Utils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
 
--- | Pass through record types
 passRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passRecord t =  
   let encdec = (\rt -> \adapters -> \dir -> \term -> (\x -> case x of
@@ -457,7 +443,6 @@ passRecord t =
     in ((\x -> case x of
       Core.TypeRecord v1 -> (forRecordType v1)) t)
 
--- | Pass through set types
 passSet :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passSet t =  
   let encdec = (\ad -> \dir -> \term -> (\x -> case x of
@@ -469,7 +454,6 @@ passSet t =
       Compute.adapterTarget = (Core.TypeSet (Compute.adapterTarget ad)),
       Compute.adapterCoder = (Utils.bidirectional (encdec ad))})))) t)
 
--- | Pass through union types
 passUnion :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passUnion t = ((\x -> case x of
   Core.TypeUnion v1 ->  
@@ -501,7 +485,6 @@ passUnit _ = (Flows.pure (Compute.Adapter {
     Compute.coderEncode = (\_ -> Flows.pure Core.TermUnit),
     Compute.coderDecode = (\_ -> Flows.pure Core.TermUnit)}}))
 
--- | Pass through wrapped types
 passWrapped :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 passWrapped t = ((\x -> case x of
   Core.TypeWrap v1 ->  
@@ -520,7 +503,6 @@ passWrapped t = ((\x -> case x of
             Core.wrappedTypeBody = (Compute.adapterTarget adapter)})),
           Compute.adapterCoder = (Utils.bidirectional (mapTerm (Compute.adapterCoder adapter)))})))) t)
 
--- | Convert set types to list types
 setToList :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 setToList t =  
   let encode = (\ad -> \term -> (\x -> case x of
@@ -541,7 +523,6 @@ setToList t =
         in ((\x -> case x of
           Core.TypeSet v1 -> (forSetType v1)) t)
 
--- | Simplify application types
 simplifyApplication :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 simplifyApplication t =  
   let encdec = (\ad -> \dir -> \term -> Utils.encodeDecode dir (Compute.adapterCoder ad) term)
@@ -556,7 +537,6 @@ simplifyApplication t =
     in ((\x -> case x of
       Core.TypeApplication v1 -> (forApplicationType v1)) t)
 
--- | Create an adapter for any type
 termAdapter :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 termAdapter typ =  
   let constraints = (\cx -> Coders.languageConstraints (Coders.adapterContextLanguage cx))
@@ -640,7 +620,6 @@ termAdapter typ =
                     Compute.adapterCoder = (Compute.adapterCoder ad)})))
                   _ -> (Monads.withTrace (Strings.cat2 "adapter for " (Core__.type_ typ)) dflt)) typ)
 
--- | Convert union types to record types
 unionToRecord :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 unionToRecord t =  
   let forField = (\field ->  
@@ -697,7 +676,6 @@ unionToRecord t =
                           Core.recordFields = (Lists.map (toRecordField term fn) sfields)}))))),
                     Compute.coderDecode = (\term -> Flows.bind (Compute.coderDecode (Compute.adapterCoder ad) term) (\recTerm -> forRecTerm nm ad term recTerm))}})))) t)
 
--- | Convert a union row type to a record row type
 unionTypeToRecordType :: (Core.RowType -> Core.RowType)
 unionTypeToRecordType rt =  
   let makeOptional = (\f ->  
@@ -724,7 +702,6 @@ unitToRecord _ = (Flows.pure (Compute.Adapter {
       Core.recordFields = []}))),
     Compute.coderDecode = (\_ -> Flows.pure Core.TermUnit)}}))
 
--- | Convert wrapped types to unwrapped types
 wrapToUnwrapped :: (Core.Type -> Compute.Flow Coders.AdapterContext (Compute.Adapter Coders.AdapterContext Coders.AdapterContext Core.Type Core.Type Core.Term Core.Term))
 wrapToUnwrapped t = ((\x -> case x of
   Core.TypeWrap v1 ->  

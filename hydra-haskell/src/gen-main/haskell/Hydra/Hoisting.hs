@@ -32,7 +32,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas.
 augmentBindingsWithNewFreeVars :: (Typing.TypeContext -> S.Set Core.Name -> [Core.Binding] -> ([Core.Binding], Typing.TermSubst))
 augmentBindingsWithNewFreeVars cx boundVars bindings =  
   let types = (Typing.typeContextTypes cx)
@@ -67,11 +66,9 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
         let results = (Lists.map augment bindings)
         in (Lists.map Pairs.first results, (Typing.TermSubst (Maps.fromList (Maybes.cat (Lists.map Pairs.second results)))))
 
--- | Check if a binding has a polymorphic type (non-empty list of type scheme variables)
 bindingIsPolymorphic :: (Core.Binding -> Bool)
 bindingIsPolymorphic binding = (Maybes.maybe False (\ts -> Logic.not (Lists.null (Core.typeSchemeVariables ts))) (Core.bindingType binding))
 
--- | Check if a binding's type uses any type variables from the given TypeContext. Returns True if the free type variables in the binding's type intersect with the type variables in scope (typeContextTypeVariables).
 bindingUsesContextTypeVars :: (Typing.TypeContext -> Core.Binding -> Bool)
 bindingUsesContextTypeVars cx binding = (Maybes.maybe False (\ts ->  
   let freeInType = (Rewriting.freeVariablesInType (Core.typeSchemeType ts))
@@ -79,7 +76,6 @@ bindingUsesContextTypeVars cx binding = (Maybes.maybe False (\ts ->
     let contextTypeVars = (Typing.typeContextTypeVariables cx)
     in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars)))) (Core.bindingType binding))
 
--- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
 countVarOccurrences :: (Core.Name -> Core.Term -> Int)
 countVarOccurrences name term =  
   let childCount = (Lists.foldl (\acc -> \t -> Math.add acc (countVarOccurrences name t)) 0 (Rewriting.subterms term))
@@ -87,7 +83,6 @@ countVarOccurrences name term =
     Core.TermVariable v1 -> (Logic.ifElse (Equality.equal v1 name) (Math.add 1 childCount) childCount)
     _ -> childCount) term)
 
--- | Transform a let-term by pulling ALL let bindings to the top level. This is useful for targets like Java that don't support nested let expressions at all. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistAllLetBindings :: (Core.Let -> Core.Let)
 hoistAllLetBindings let0 =  
   let emptyIx = Typing.InferenceContext {
@@ -106,7 +101,6 @@ hoistAllLetBindings let0 =
             Typing.typeContextInferenceContext = emptyIx}
     in (hoistLetBindingsWithPredicate (\_ -> True) shouldHoistAll emptyCx let0)
 
--- | Hoist case statements into local let bindings. This is useful for targets such as Python which only support case statements (match) at the top level. Case statements are hoisted only when they appear at non-top-level positions. Top level = root, or reachable through annotations, let body/binding, lambda bodies, or ONE application LHS. Once through an application LHS, lambda bodies no longer count as pass-through.
 hoistCaseStatements :: (Typing.TypeContext -> Core.Term -> Core.Term)
 hoistCaseStatements = (hoistSubterms shouldHoistCaseStatement)
 
@@ -140,11 +134,9 @@ hoistCaseStatementsInGraph graph =
             Graph.graphPrimitives = (Graph.graphPrimitives graph),
             Graph.graphSchema = (Graph.graphSchema graph)}))
 
--- | Transform a let-term by pulling polymorphic let bindings to the top level, using TypeContext. A binding is hoisted if: (1) It is polymorphic (has non-empty typeSchemeVariables), OR (2) Its type uses type variables from the TypeContext (i.e., from enclosing type lambdas). Bindings which are already at the top level are not hoisted. If a hoisted binding captures lambda-bound or let-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding uses type variables from the context, those type variables are added to the binding's type scheme. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistLetBindingsWithContext :: ((Core.Binding -> Bool) -> Typing.TypeContext -> Core.Let -> Core.Let)
 hoistLetBindingsWithContext isParentBinding cx let0 = (hoistLetBindingsWithPredicate isParentBinding shouldHoistPolymorphic cx let0)
 
--- | Transform a let-term by pulling let bindings to the top level. The isParentBinding predicate applies to top-level bindings and determines whether their subterm bindings are eligible for hoisting. The shouldHoistBinding predicate takes the TypeContext and a subterm binding, and returns True if the binding should be hoisted. This is useful for targets like Java that cannot have polymorphic definitions in arbitrary positions. The TypeContext provides information about type variables and lambda variables in scope. If a hoisted binding captures let-bound or lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding captures type variables from an enclosing type lambda scope, those type variables are added to the binding's type scheme, and references are replaced with type applications. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistLetBindingsWithPredicate :: ((Core.Binding -> Bool) -> (Typing.TypeContext -> Core.Binding -> Bool) -> Typing.TypeContext -> Core.Let -> Core.Let)
 hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =  
   let hoistOne = (\prefix -> \cx -> \pair -> \bindingWithCapturedVars ->  
@@ -331,7 +323,6 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
             Core.letBindings = (Lists.concat (Lists.map forBinding (Core.letBindings let0))),
             Core.letBody = (Core.letBody let0)}
 
--- | Transform a let-term by pulling all polymorphic let bindings to the top level. This is useful to ensure that polymorphic bindings are not nested within other terms, which is unsupported by certain targets such as Java. Polymorphic bindings are those with a non-empty list of type scheme variables. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistPolymorphicLetBindings :: ((Core.Binding -> Bool) -> Core.Let -> Core.Let)
 hoistPolymorphicLetBindings isParentBinding let0 =  
   let emptyIx = Typing.InferenceContext {
@@ -350,7 +341,6 @@ hoistPolymorphicLetBindings isParentBinding let0 =
             Typing.typeContextInferenceContext = emptyIx}
     in (hoistLetBindingsWithPredicate isParentBinding shouldHoistPolymorphic emptyCx let0)
 
--- | Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of TermAccessors from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables.
 hoistSubterms :: ((([Accessors.TermAccessor], Core.Term) -> Bool) -> Typing.TypeContext -> Core.Term -> Core.Term)
 hoistSubterms shouldHoist cx0 term0 =  
   let processImmediateSubterm = (\cx -> \counter -> \namePrefix -> \subterm ->  
@@ -465,7 +455,6 @@ isApplicationFunction acc = ((\x -> case x of
   Accessors.TermAccessorApplicationFunction -> True
   _ -> False) acc)
 
--- | Check if a function is a union elimination
 isEliminationUnion :: (Core.Function -> Bool)
 isEliminationUnion f = ((\x -> case x of
   Core.FunctionElimination v1 -> ((\x -> case x of
@@ -478,13 +467,11 @@ isLambdaBody acc = ((\x -> case x of
   Accessors.TermAccessorLambdaBody -> True
   _ -> False) acc)
 
--- | Check if a term is a union elimination (case statement)
 isUnionElimination :: (Core.Term -> Bool)
 isUnionElimination term = ((\x -> case x of
   Core.TermFunction v1 -> (isEliminationUnion v1)
   _ -> False) term)
 
--- | Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...].
 normalizePathForHoisting :: ([Accessors.TermAccessor] -> [Accessors.TermAccessor])
 normalizePathForHoisting path =  
   let go = (\remaining -> Logic.ifElse (Logic.or (Lists.null remaining) (Lists.null (Lists.tail remaining))) remaining ( 
@@ -576,7 +563,6 @@ rewriteTermWithTypeContext f cx0 term0 =
 shouldHoistAll :: (t0 -> t1 -> Bool)
 shouldHoistAll _ _ = True
 
--- | Predicate for case statement hoisting. Returns True if term is a case statement AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through.
 shouldHoistCaseStatement :: (([Accessors.TermAccessor], Core.Term) -> Bool)
 shouldHoistCaseStatement pathAndTerm =  
   let path = (Pairs.first pathAndTerm)
@@ -586,11 +572,9 @@ shouldHoistCaseStatement pathAndTerm =
       let finalState = (Lists.foldl (\st -> \acc -> updateHoistState acc st) (True, False) path)
       in (Logic.not (Pairs.first finalState))))
 
--- | Predicate for hoisting polymorphic bindings. Returns True if the binding is polymorphic (has type scheme variables) or if its type uses any type variables from the TypeContext.
 shouldHoistPolymorphic :: (Typing.TypeContext -> Core.Binding -> Bool)
 shouldHoistPolymorphic cx binding = (Logic.or (bindingIsPolymorphic binding) (bindingUsesContextTypeVars cx binding))
 
--- | Update hoisting state when traversing an accessor. State is (atTopLevel, usedAppLHS). Returns updated state.
 updateHoistState :: (Accessors.TermAccessor -> (Bool, Bool) -> (Bool, Bool))
 updateHoistState accessor state =  
   let atTop = (Pairs.first state)

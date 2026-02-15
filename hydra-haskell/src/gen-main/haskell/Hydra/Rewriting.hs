@@ -29,7 +29,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Apply a term-level function inside any leading type lambdas
 applyInsideTypeLambdasAndAnnotations :: ((Core.Term -> Core.Term) -> Core.Term -> Core.Term)
 applyInsideTypeLambdasAndAnnotations f term0 = ((\x -> case x of
   Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -40,7 +39,6 @@ applyInsideTypeLambdasAndAnnotations f term0 = ((\x -> case x of
     Core.typeLambdaBody = (applyInsideTypeLambdasAndAnnotations f (Core.typeLambdaBody v1))}))
   _ -> (f term0)) term0)
 
--- | Strip type annotations from the top levels of a term
 deannotateAndDetypeTerm :: (Core.Term -> Core.Term)
 deannotateAndDetypeTerm t = ((\x -> case x of
   Core.TermAnnotated v1 -> (deannotateAndDetypeTerm (Core.annotatedTermBody v1))
@@ -48,25 +46,21 @@ deannotateAndDetypeTerm t = ((\x -> case x of
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   _ -> t) t)
 
--- | Strip all annotations (including System F type annotations) from the top levels of a term
 deannotateTerm :: (Core.Term -> Core.Term)
 deannotateTerm t = ((\x -> case x of
   Core.TermAnnotated v1 -> (deannotateTerm (Core.annotatedTermBody v1))
   _ -> t) t)
 
--- | Strip all annotations from a term
 deannotateType :: (Core.Type -> Core.Type)
 deannotateType t = ((\x -> case x of
   Core.TypeAnnotated v1 -> (deannotateType (Core.annotatedTypeBody v1))
   _ -> t) t)
 
--- | Strip any top-level type lambdas from a type, extracting the (possibly nested) type body
 deannotateTypeParameters :: (Core.Type -> Core.Type)
 deannotateTypeParameters t = ((\x -> case x of
   Core.TypeForall v1 -> (deannotateTypeParameters (Core.forallTypeBody v1))
   _ -> t) (deannotateType t))
 
--- | Recursively strip all annotations from a type
 deannotateTypeRecursive :: (Core.Type -> Core.Type)
 deannotateTypeRecursive typ =  
   let strip = (\recurse -> \typ ->  
@@ -76,7 +70,6 @@ deannotateTypeRecursive typ =
             _ -> rewritten) rewritten))
   in (rewriteType strip typ)
 
--- | Recursively strip all annotations from a type scheme
 deannotateTypeSchemeRecursive :: (Core.TypeScheme -> Core.TypeScheme)
 deannotateTypeSchemeRecursive ts =  
   let vars = (Core.typeSchemeVariables ts)
@@ -89,7 +82,6 @@ deannotateTypeSchemeRecursive ts =
         Core.typeSchemeType = (deannotateTypeRecursive typ),
         Core.typeSchemeConstraints = constraints}
 
--- | Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact
 detypeTerm :: (Core.Term -> Core.Term)
 detypeTerm t = ((\x -> case x of
   Core.TermAnnotated v1 ->  
@@ -103,7 +95,6 @@ detypeTerm t = ((\x -> case x of
   Core.TermTypeLambda v1 -> (deannotateAndDetypeTerm (Core.typeLambdaBody v1))
   _ -> t) t)
 
--- | Flatten nested let expressions
 flattenLetTerms :: (Core.Term -> Core.Term)
 flattenLetTerms term =  
   let rewriteBinding = (\binding ->  
@@ -205,7 +196,6 @@ foldOverType order fld b0 typ = ((\x -> case x of
   Coders.TraversalOrderPre -> (Lists.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ))
   Coders.TraversalOrderPost -> (fld (Lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ)) order)
 
--- | Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.
 freeTypeVariablesInTerm :: (Core.Term -> S.Set Core.Name)
 freeTypeVariablesInTerm term0 =  
   let allOf = (\sets -> Lists.foldl Sets.union Sets.empty sets)
@@ -233,7 +223,6 @@ freeTypeVariablesInTerm term0 =
                   _ -> dflt) term))
       in (getAll Sets.empty term0)
 
--- | Find the free variables (i.e. variables not bound by a lambda or let) in a term
 freeVariablesInTerm :: (Core.Term -> S.Set Core.Name)
 freeVariablesInTerm term =  
   let dfltVars = (Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInTerm t)) Sets.empty (subterms term))
@@ -245,7 +234,6 @@ freeVariablesInTerm term =
     Core.TermVariable v1 -> (Sets.singleton v1)
     _ -> dfltVars) term)
 
--- | Find the free variables (i.e. variables not bound by a lambda or let) in a type
 freeVariablesInType :: (Core.Type -> S.Set Core.Name)
 freeVariablesInType typ =  
   let dfltVars = (Lists.foldl (\s -> \t -> Sets.union s (freeVariablesInType t)) Sets.empty (subtypes typ))
@@ -254,7 +242,6 @@ freeVariablesInType typ =
     Core.TypeVariable v1 -> (Sets.singleton v1)
     _ -> dfltVars) typ)
 
--- | Find the free variables in a type in deterministic left-to-right order
 freeVariablesInTypeOrdered :: (Core.Type -> [Core.Name])
 freeVariablesInTypeOrdered typ =  
   let collectVars = (\boundVars -> \t -> (\x -> case x of
@@ -264,7 +251,6 @@ freeVariablesInTypeOrdered typ =
           _ -> (Lists.concat (Lists.map (collectVars boundVars) (subtypes t)))) t)
   in (Lists.nub (collectVars Sets.empty typ))
 
--- | Find free variables in a type scheme (simple version)
 freeVariablesInTypeSchemeSimple :: (Core.TypeScheme -> S.Set Core.Name)
 freeVariablesInTypeSchemeSimple ts =  
   let vars = (Core.typeSchemeVariables ts)
@@ -272,7 +258,6 @@ freeVariablesInTypeSchemeSimple ts =
     let t = (Core.typeSchemeType ts)
     in (Sets.difference (freeVariablesInTypeSimple t) (Sets.fromList vars))
 
--- | Find free variables in a type scheme
 freeVariablesInTypeScheme :: (Core.TypeScheme -> S.Set Core.Name)
 freeVariablesInTypeScheme ts =  
   let vars = (Core.typeSchemeVariables ts)
@@ -280,7 +265,6 @@ freeVariablesInTypeScheme ts =
     let t = (Core.typeSchemeType ts)
     in (Sets.difference (freeVariablesInType t) (Sets.fromList vars))
 
--- | Same as freeVariablesInType, but ignores the binding action of lambda types
 freeVariablesInTypeSimple :: (Core.Type -> S.Set Core.Name)
 freeVariablesInTypeSimple typ =  
   let helper = (\types -> \typ -> (\x -> case x of
@@ -297,11 +281,9 @@ inlineType schema typ =
           in (Flows.bind (recurse typ) (\tr -> afterRecurse tr)))
   in (rewriteTypeM f typ)
 
--- | Check whether a variable is free (not bound) in a term
 isFreeVariableInTerm :: (Core.Name -> Core.Term -> Bool)
 isFreeVariableInTerm v term = (Logic.not (Sets.member v (freeVariablesInTerm term)))
 
--- | Check whether a term is a lambda, possibly nested within let and/or annotation terms
 isLambda :: (Core.Term -> Bool)
 isLambda term = ((\x -> case x of
   Core.TermFunction v1 -> ((\x -> case x of
@@ -310,7 +292,6 @@ isLambda term = ((\x -> case x of
   Core.TermLet v1 -> (isLambda (Core.letBody v1))
   _ -> False) (deannotateTerm term))
 
--- | Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables above let-bound variables, recursively. This is helpful for targets such as Python.
 liftLambdaAboveLet :: (Core.Term -> Core.Term)
 liftLambdaAboveLet term0 =  
   let rewrite = (\recurse -> \term ->  
@@ -342,7 +323,6 @@ liftLambdaAboveLet term0 =
                 _ -> (recurse term)) term))
   in (rewriteTerm rewrite term0)
 
--- | Apply a transformation to the first type beneath a chain of annotations
 mapBeneathTypeAnnotations :: ((Core.Type -> Core.Type) -> Core.Type -> Core.Type)
 mapBeneathTypeAnnotations f t = ((\x -> case x of
   Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
@@ -350,7 +330,6 @@ mapBeneathTypeAnnotations f t = ((\x -> case x of
     Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
   _ -> (f t)) t)
 
--- | Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ...
 normalizeTypeVariablesInTerm :: (Core.Term -> Core.Term)
 normalizeTypeVariablesInTerm term =  
   let replaceName = (\subst -> \v -> Maybes.fromMaybe v (Maps.lookup v subst))
@@ -454,7 +433,6 @@ normalizeTypeVariablesInTerm term =
                       in (rewriteTerm rewrite term0))
       in (rewriteWithSubst ((Maps.empty, Sets.empty), 0) term)
 
--- | Given a let expression, remove any unused bindings. The resulting expression is still a let, even if has no remaining bindings
 pruneLet :: (Core.Let -> Core.Let)
 pruneLet l =  
   let bindingMap = (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) (Core.letBindings l)))
@@ -470,7 +448,6 @@ pruneLet l =
             Core.letBindings = prunedBindings,
             Core.letBody = (Core.letBody l)}
 
--- | Recursively remove term annotations, including within subterms
 removeTermAnnotations :: (Core.Term -> Core.Term)
 removeTermAnnotations term =  
   let remove = (\recurse -> \term ->  
@@ -480,7 +457,6 @@ removeTermAnnotations term =
             _ -> rewritten) term))
   in (rewriteTerm remove term)
 
--- | Recursively remove type annotations, including within subtypes
 removeTypeAnnotations :: (Core.Type -> Core.Type)
 removeTypeAnnotations typ =  
   let remove = (\recurse -> \typ ->  
@@ -490,7 +466,6 @@ removeTypeAnnotations typ =
             _ -> rewritten) rewritten))
   in (rewriteType remove typ)
 
--- | Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations
 removeTypeAnnotationsFromTerm :: (Core.Term -> Core.Term)
 removeTypeAnnotationsFromTerm term =  
   let strip = (\recurse -> \term ->  
@@ -509,7 +484,6 @@ removeTypeAnnotationsFromTerm term =
               _ -> rewritten) rewritten))
   in (rewriteTerm strip term)
 
--- | Strip type annotations from terms while preserving other annotations
 removeTypesFromTerm :: (Core.Term -> Core.Term)
 removeTypesFromTerm term =  
   let strip = (\recurse -> \term ->  
@@ -535,7 +509,6 @@ removeTypesFromTerm term =
               _ -> rewritten) rewritten))
   in (rewriteTerm strip term)
 
--- | Replace a free variable in a term
 replaceFreeTermVariable :: (Core.Name -> Core.Term -> Core.Term -> Core.Term)
 replaceFreeTermVariable vold tnew term =  
   let rewrite = (\recurse -> \t -> (\x -> case x of
@@ -548,7 +521,6 @@ replaceFreeTermVariable vold tnew term =
           _ -> (recurse t)) t)
   in (rewriteTerm rewrite term)
 
--- | Replace free occurrences of a name in a type
 replaceFreeTypeVariable :: (Core.Name -> Core.Type -> Core.Type -> Core.Type)
 replaceFreeTypeVariable v rep typ =  
   let mapExpr = (\recurse -> \t -> (\x -> case x of
@@ -559,7 +531,6 @@ replaceFreeTypeVariable v rep typ =
           _ -> (recurse t)) t)
   in (rewriteType mapExpr typ)
 
--- | Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively
 replaceTypedefs :: (M.Map Core.Name Core.TypeScheme -> Core.Type -> Core.Type)
 replaceTypedefs types typ0 =  
   let rewrite = (\recurse -> \typ ->  
@@ -1399,7 +1370,6 @@ rewriteTypeM f typ0 =
     let recurse = (f (fsub recurse))
     in (recurse typ0)
 
--- | Simplify terms by applying beta reduction where possible
 simplifyTerm :: (Core.Term -> Core.Term)
 simplifyTerm term =  
   let simplify = (\recurse -> \term ->  
@@ -1431,7 +1401,6 @@ simplifyTerm term =
                 in (recurse (forTerm stripped)))
   in (rewriteTerm simplify term)
 
--- | Substitute type variables in a type
 substituteTypeVariables :: (M.Map Core.Name Core.Name -> Core.Type -> Core.Type)
 substituteTypeVariables subst typ =  
   let replace = (\recurse -> \typ -> (\x -> case x of
@@ -1439,7 +1408,6 @@ substituteTypeVariables subst typ =
           _ -> (recurse typ)) typ)
   in (rewriteType replace typ)
 
--- | Substitute one variable for another in a term
 substituteVariable :: (Core.Name -> Core.Name -> Core.Term -> Core.Term)
 substituteVariable from to term =  
   let replace = (\recurse -> \term -> (\x -> case x of
@@ -1450,7 +1418,6 @@ substituteVariable from to term =
           _ -> (recurse term)) term)
   in (rewriteTerm replace term)
 
--- | Substitute multiple variables in a term
 substituteVariables :: (M.Map Core.Name Core.Name -> Core.Term -> Core.Term)
 substituteVariables subst term =  
   let replace = (\recurse -> \term -> (\x -> case x of
@@ -1461,7 +1428,6 @@ substituteVariables subst term =
           _ -> (recurse term)) term)
   in (rewriteTerm replace term)
 
--- | Find the children of a given term
 subterms :: (Core.Term -> [Core.Term])
 subterms x = case x of
   Core.TermAnnotated v1 -> [
@@ -1504,7 +1470,6 @@ subterms x = case x of
   Core.TermWrap v1 -> [
     Core.wrappedTermBody v1]
 
--- | Find the children of a given term
 subtermsWithAccessors :: (Core.Term -> [(Accessors.TermAccessor, Core.Term)])
 subtermsWithAccessors x = case x of
   Core.TermAnnotated v1 -> [
@@ -1543,7 +1508,6 @@ subtermsWithAccessors x = case x of
   Core.TermWrap v1 -> [
     (Accessors.TermAccessorWrappedTerm, (Core.wrappedTermBody v1))]
 
--- | Find the children of a given type expression
 subtypes :: (Core.Type -> [Core.Type])
 subtypes x = case x of
   Core.TypeAnnotated v1 -> [
@@ -1579,7 +1543,6 @@ subtypes x = case x of
   Core.TypeWrap v1 -> [
     Core.wrappedTypeBody v1]
 
--- | Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
 termDependencyNames :: (Bool -> Bool -> Bool -> Core.Term -> S.Set Core.Name)
 termDependencyNames binds withPrims withNoms term0 =  
   let addNames = (\names -> \term ->  
@@ -1603,7 +1566,6 @@ termDependencyNames binds withPrims withNoms term0 =
                 _ -> names) term))
   in (foldOverTerm Coders.TraversalOrderPre addNames Sets.empty term0)
 
--- | Generate short names from a list of fully qualified names
 toShortNames :: ([Core.Name] -> M.Map Core.Name Core.Name)
 toShortNames original =  
   let addName = (\acc -> \name ->  
@@ -1627,7 +1589,6 @@ toShortNames original =
                       in (Lists.zipWith rename (Sets.toList names) (rangeFrom 1)))
         in (Maps.fromList (Lists.concat (Lists.map renameGroup (Maps.toList groups))))
 
--- | Topological sort of connected components, in terms of dependencies between variable/term binding pairs
 topologicalSortBindingMap :: (M.Map Core.Name Core.Term -> [[(Core.Name, Core.Term)]])
 topologicalSortBindingMap bindingMap =  
   let bindings = (Maps.toList bindingMap)
@@ -1647,7 +1608,6 @@ topologicalSortBindingMap bindingMap =
           let toPair = (\name -> (name, (Maybes.fromMaybe (Core.TermLiteral (Core.LiteralString "Impossible!")) (Maps.lookup name bindingMap))))
           in (Lists.map (Lists.map toPair) (Sorting.topologicalSortComponents (Lists.map depsOf bindings)))
 
--- | Topological sort of elements based on their dependencies
 topologicalSortBindings :: ([Core.Binding] -> Either [[Core.Name]] [Core.Name])
 topologicalSortBindings els =  
   let adjlist = (\e -> (Core.bindingName e, (Sets.toList (termDependencyNames False True True (Core.bindingTerm e)))))
@@ -1671,7 +1631,6 @@ typeNamesInType typ0 =
           _ -> names) typ)
   in (foldOverType Coders.TraversalOrderPre addNames Sets.empty typ0)
 
--- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term
 unshadowVariables :: (Core.Term -> Core.Term)
 unshadowVariables term0 =  
   let rewrite = (\recurse -> \m -> \term ->  

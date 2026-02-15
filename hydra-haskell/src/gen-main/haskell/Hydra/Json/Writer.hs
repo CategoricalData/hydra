@@ -21,7 +21,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | The colon operator used to separate keys and values in JSON objects
 colonOp :: Ast.Op
 colonOp = Ast.Op {
   Ast.opSymbol = (Ast.Symbol ":"),
@@ -31,7 +30,6 @@ colonOp = Ast.Op {
   Ast.opPrecedence = (Ast.Precedence 0),
   Ast.opAssociativity = Ast.AssociativityNone}
 
--- | Escape and quote a string for JSON output
 jsonString :: (String -> String)
 jsonString s =  
   let escape = (\c -> Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Strings.fromList (Lists.pure c)))))))
@@ -39,7 +37,6 @@ jsonString s =
     let escaped = (Strings.cat (Lists.map escape (Strings.toList s)))
     in (Strings.cat2 (Strings.cat2 "\"" escaped) "\"")
 
--- | Convert a key-value pair to an AST expression
 keyValueToExpr :: ((String, Model.Value) -> Ast.Expr)
 keyValueToExpr pair =  
   let key = (Pairs.first pair)
@@ -47,11 +44,9 @@ keyValueToExpr pair =
     let value = (Pairs.second pair)
     in (Serialization.ifx colonOp (Serialization.cst (jsonString key)) (valueToExpr value))
 
--- | Serialize a JSON value to a string
 printJson :: (Model.Value -> String)
 printJson value = (Serialization.printExpr (valueToExpr value))
 
--- | Convert a JSON value to an AST expression for serialization
 valueToExpr :: (Model.Value -> Ast.Expr)
 valueToExpr value = ((\x -> case x of
   Model.ValueArray v1 -> (Serialization.bracketListAdaptive (Lists.map valueToExpr v1))

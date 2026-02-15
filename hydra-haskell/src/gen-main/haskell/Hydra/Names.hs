@@ -22,7 +22,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Given a mapping of namespaces to prefixes, convert a name to a compact string representation
 compactName :: (M.Map Module.Namespace String -> Core.Name -> String)
 compactName namespaces name =  
   let qualName = (qualifyName name) 
@@ -33,28 +32,23 @@ compactName namespaces name =
     ":",
     local]) (Maps.lookup ns namespaces)) mns)
 
--- | Extract the local part of a name
 localNameOf :: (Core.Name -> String)
 localNameOf arg_ = (Module.qualifiedNameLocal (qualifyName arg_))
 
--- | Extract the namespace of a name, if any
 namespaceOf :: (Core.Name -> Maybe Module.Namespace)
 namespaceOf arg_ = (Module.qualifiedNameNamespace (qualifyName arg_))
 
--- | Convert a namespace to a file path with the given case convention and file extension
 namespaceToFilePath :: (Util.CaseConvention -> Module.FileExtension -> Module.Namespace -> String)
 namespaceToFilePath caseConv ext ns =  
   let parts = (Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Module.unNamespace ns)))
   in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Module.unFileExtension ext))
 
--- | Construct a qualified (dot-separated) name
 qname :: (Module.Namespace -> String -> Core.Name)
 qname ns name = (Core.Name (Strings.cat [
   Module.unNamespace ns,
   ".",
   name]))
 
--- | Split a dot-separated name into a namespace and local name
 qualifyName :: (Core.Name -> Module.QualifiedName)
 qualifyName name =  
   let parts = (Lists.reverse (Strings.splitOn "." (Core.unName name)))
@@ -64,11 +58,9 @@ qualifyName name =
     Module.qualifiedNameNamespace = (Just (Module.Namespace (Strings.intercalate "." (Lists.reverse (Lists.tail parts))))),
     Module.qualifiedNameLocal = (Lists.head parts)}))
 
--- | Generate a unique label by appending a suffix if the label is already in use
 uniqueLabel :: (S.Set String -> String -> String)
 uniqueLabel visited l = (Logic.ifElse (Sets.member l visited) (uniqueLabel visited (Strings.cat2 l "'")) l)
 
--- | Convert a qualified name to a dot-separated name
 unqualifyName :: (Module.QualifiedName -> Core.Name)
 unqualifyName qname =  
   let prefix = (Maybes.maybe "" (\n -> Strings.cat2 (Module.unNamespace n) ".") (Module.qualifiedNameNamespace qname))

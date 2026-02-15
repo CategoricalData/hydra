@@ -20,48 +20,39 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Compose two type substitutions
 composeTypeSubst :: (Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst)
 composeTypeSubst s1 s2 = (Logic.ifElse (Maps.null (Typing.unTypeSubst s1)) s2 (Logic.ifElse (Maps.null (Typing.unTypeSubst s2)) s1 (composeTypeSubstNonEmpty s1 s2)))
 
--- | Compose two non-empty type substitutions (internal helper)
 composeTypeSubstNonEmpty :: (Typing.TypeSubst -> Typing.TypeSubst -> Typing.TypeSubst)
 composeTypeSubstNonEmpty s1 s2 =  
   let isExtra = (\k -> \v -> Maybes.isNothing (Maps.lookup k (Typing.unTypeSubst s1))) 
       withExtra = (Maps.filterWithKey isExtra (Typing.unTypeSubst s2))
   in (Typing.TypeSubst (Maps.union withExtra (Maps.map (substInType s2) (Typing.unTypeSubst s1))))
 
--- | Compose a list of type substitutions
 composeTypeSubstList :: ([Typing.TypeSubst] -> Typing.TypeSubst)
 composeTypeSubstList = (Lists.foldl composeTypeSubst idTypeSubst)
 
--- | The identity type substitution
 idTypeSubst :: Typing.TypeSubst
 idTypeSubst = (Typing.TypeSubst Maps.empty)
 
--- | Create a type substitution with a single variable mapping
 singletonTypeSubst :: (Core.Name -> Core.Type -> Typing.TypeSubst)
 singletonTypeSubst v t = (Typing.TypeSubst (Maps.singleton v t))
 
--- | Apply a term substitution to a binding
 substituteInBinding :: (Typing.TermSubst -> Core.Binding -> Core.Binding)
 substituteInBinding subst b = Core.Binding {
   Core.bindingName = (Core.bindingName b),
   Core.bindingTerm = (substituteInTerm subst (Core.bindingTerm b)),
   Core.bindingType = (Core.bindingType b)}
 
--- | Apply a type substitution to a type constraint
 substituteInConstraint :: (Typing.TypeSubst -> Typing.TypeConstraint -> Typing.TypeConstraint)
 substituteInConstraint subst c = Typing.TypeConstraint {
   Typing.typeConstraintLeft = (substInType subst (Typing.typeConstraintLeft c)),
   Typing.typeConstraintRight = (substInType subst (Typing.typeConstraintRight c)),
   Typing.typeConstraintComment = (Typing.typeConstraintComment c)}
 
--- | Apply a type substitution to a list of type constraints
 substituteInConstraints :: (Typing.TypeSubst -> [Typing.TypeConstraint] -> [Typing.TypeConstraint])
 substituteInConstraints subst cs = (Lists.map (substituteInConstraint subst) cs)
 
--- | Apply a type substitution to class constraints, propagating to free variables
 substInClassConstraints :: (Typing.TypeSubst -> M.Map Core.Name Core.TypeVariableMetadata -> M.Map Core.Name Core.TypeVariableMetadata)
 substInClassConstraints subst constraints =  
   let substMap = (Typing.unTypeSubst subst)
@@ -78,7 +69,6 @@ substInClassConstraints subst constraints =
           let freeVars = (Sets.toList (Rewriting.freeVariablesInType targetType))
           in (Lists.foldl (\acc2 -> \freeVar -> insertOrMerge freeVar metadata acc2) acc freeVars)) (Maps.lookup varName substMap))) Maps.empty (Maps.toList constraints))
 
--- | Apply a type substitution to an inference context
 substInContext :: (Typing.TypeSubst -> Typing.InferenceContext -> Typing.InferenceContext)
 substInContext subst cx =  
   let newDataTypes = (Maps.map (substInTypeScheme subst) (Typing.inferenceContextDataTypes cx))
@@ -91,7 +81,6 @@ substInContext subst cx =
       Typing.inferenceContextClassConstraints = newClassConstraints,
       Typing.inferenceContextDebug = (Typing.inferenceContextDebug cx)}
 
--- | Apply a term substitution to a term
 substituteInTerm :: (Typing.TermSubst -> Core.Term -> Core.Term)
 substituteInTerm subst term0 =  
   let s = (Typing.unTermSubst subst) 
@@ -123,11 +112,9 @@ substituteInTerm subst term0 =
                 _ -> (recurse term)) term))
   in (Rewriting.rewriteTerm rewrite term0)
 
--- | Apply a type substitution to a type
 substInType :: (Typing.TypeSubst -> Core.Type -> Core.Type)
 substInType subst typ0 = (Logic.ifElse (Maps.null (Typing.unTypeSubst subst)) typ0 (substInTypeNonEmpty subst typ0))
 
--- | Apply a non-empty type substitution to a type (internal helper)
 substInTypeNonEmpty :: (Typing.TypeSubst -> Core.Type -> Core.Type)
 substInTypeNonEmpty subst typ0 =  
   let rewrite = (\recurse -> \typ -> (\x -> case x of
@@ -139,14 +126,12 @@ substInTypeNonEmpty subst typ0 =
       removeVar = (\v -> Typing.TypeSubst (Maps.delete v (Typing.unTypeSubst subst)))
   in (Rewriting.rewriteType rewrite typ0)
 
--- | Apply a type substitution to a type scheme
 substInTypeScheme :: (Typing.TypeSubst -> Core.TypeScheme -> Core.TypeScheme)
 substInTypeScheme subst ts = Core.TypeScheme {
   Core.typeSchemeVariables = (Core.typeSchemeVariables ts),
   Core.typeSchemeType = (substInType subst (Core.typeSchemeType ts)),
   Core.typeSchemeConstraints = (Maybes.map (substInClassConstraints subst) (Core.typeSchemeConstraints ts))}
 
--- | Apply a type substitution to the type annotations within a term
 substTypesInTerm :: (Typing.TypeSubst -> Core.Term -> Core.Term)
 substTypesInTerm subst term0 =  
   let rewrite = (\recurse -> \term ->  

@@ -28,7 +28,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Extract an arbitrary-precision floating-point value from a term
 bigfloat :: (Core.Term -> Compute.Flow Graph.Graph Double)
 bigfloat t = (Flows.bind (literal t) (\l -> Flows.bind (floatLiteral l) (\f -> bigfloatValue f)))
 
@@ -37,7 +36,6 @@ bigfloatValue v = ((\x -> case x of
   Core.FloatValueBigfloat v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "bigfloat" (Core_.float v))) v)
 
--- | Extract an arbitrary-precision integer value from a term
 bigint :: (Core.Term -> Compute.Flow Graph.Graph Integer)
 bigint t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> bigintValue i)))
 
@@ -46,7 +44,6 @@ bigintValue v = ((\x -> case x of
   Core.IntegerValueBigint v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "bigint" (Core_.integer v))) v)
 
--- | Extract a binary data value from a term
 binary :: (Core.Term -> Compute.Flow Graph.Graph B.ByteString)
 binary t = (Flows.bind (literal t) (\l -> binaryLiteral l))
 
@@ -55,7 +52,6 @@ binaryLiteral v = ((\x -> case x of
   Core.LiteralBinary v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "binary" (Core_.literal v))) v)
 
--- | Extract a boolean value from a term
 boolean :: (Core.Term -> Compute.Flow Graph.Graph Bool)
 boolean t = (Flows.bind (literal t) (\l -> booleanLiteral l))
 
@@ -64,7 +60,6 @@ booleanLiteral v = ((\x -> case x of
   Core.LiteralBoolean v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "boolean" (Core_.literal v))) v)
 
--- | Extract a specific case handler from a case statement term
 caseField :: (Core.Name -> String -> Core.Term -> Compute.Flow Graph.Graph Core.Field)
 caseField name n term =  
   let fieldName = (Core.Name n)
@@ -72,7 +67,6 @@ caseField name n term =
     let matching = (Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fieldName)) (Core.caseStatementCases cs))
     in (Logic.ifElse (Lists.null matching) (Flows.fail "not enough cases") (Flows.pure (Lists.head matching)))))
 
--- | Extract case statement from a term
 cases :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.CaseStatement)
 cases name term0 =  
   let extract = (\term -> (\x -> case x of
@@ -89,7 +83,6 @@ field fname mapping fields =
   let matchingFields = (Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fname)) fields)
   in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat2 (Strings.cat2 "field " (Core.unName fname)) " not found")) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Flows.bind (Lexical.stripAndDereferenceTerm (Core.fieldTerm (Lists.head matchingFields))) (\stripped -> mapping stripped)) (Flows.fail (Strings.cat2 "multiple fields named " (Core.unName fname)))))
 
--- | Extract a 32-bit floating-point value from a term
 float32 :: (Core.Term -> Compute.Flow Graph.Graph Float)
 float32 t = (Flows.bind (literal t) (\l -> Flows.bind (floatLiteral l) (\f -> float32Value f)))
 
@@ -98,7 +91,6 @@ float32Value v = ((\x -> case x of
   Core.FloatValueFloat32 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "float32" (Core_.float v))) v)
 
--- | Extract a 64-bit floating-point value from a term
 float64 :: (Core.Term -> Compute.Flow Graph.Graph Double)
 float64 t = (Flows.bind (literal t) (\l -> Flows.bind (floatLiteral l) (\f -> float64Value f)))
 
@@ -112,7 +104,6 @@ floatLiteral lit = ((\x -> case x of
   Core.LiteralFloat v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "floating-point value" (Core_.literal lit))) lit)
 
--- | Extract a float value from a term
 floatValue :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatValue)
 floatValue t = (Flows.bind (literal t) (\l -> floatLiteral l))
 
@@ -137,7 +128,6 @@ functionType typ =
     Core.TypeFunction v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "function type" (Core_.type_ typ))) stripped)
 
--- | Extract a field from a union term
 injection :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Field)
 injection expected term0 =  
   let extract = (\term -> (\x -> case x of
@@ -145,7 +135,6 @@ injection expected term0 =
           _ -> (Monads.unexpected "injection" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
--- | Extract a 16-bit signed integer value from a term
 int16 :: (Core.Term -> Compute.Flow Graph.Graph I.Int16)
 int16 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int16Value i)))
 
@@ -154,7 +143,6 @@ int16Value v = ((\x -> case x of
   Core.IntegerValueInt16 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "int16" (Core_.integer v))) v)
 
--- | Extract a 32-bit signed integer value from a term
 int32 :: (Core.Term -> Compute.Flow Graph.Graph Int)
 int32 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int32Value i)))
 
@@ -163,7 +151,6 @@ int32Value v = ((\x -> case x of
   Core.IntegerValueInt32 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "int32" (Core_.integer v))) v)
 
--- | Extract a 64-bit signed integer value from a term
 int64 :: (Core.Term -> Compute.Flow Graph.Graph I.Int64)
 int64 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int64Value i)))
 
@@ -172,7 +159,6 @@ int64Value v = ((\x -> case x of
   Core.IntegerValueInt64 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "int64" (Core_.integer v))) v)
 
--- | Extract an 8-bit signed integer value from a term
 int8 :: (Core.Term -> Compute.Flow Graph.Graph I.Int8)
 int8 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int8Value i)))
 
@@ -186,15 +172,12 @@ integerLiteral lit = ((\x -> case x of
   Core.LiteralInteger v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "integer value" (Core_.literal lit))) lit)
 
--- | Extract an integer value from a term
 integerValue :: (Core.Term -> Compute.Flow Graph.Graph Core.IntegerValue)
 integerValue t = (Flows.bind (literal t) (\l -> integerLiteral l))
 
--- | Extract the body of a lambda term
 lambdaBody :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
 lambdaBody term = (Flows.map Core.lambdaBody (lambda term))
 
--- | Extract a lambda from a term
 lambda :: (Core.Term -> Compute.Flow Graph.Graph Core.Lambda)
 lambda term0 =  
   let extract = (\term -> (\x -> case x of
@@ -204,7 +187,6 @@ lambda term0 =
           _ -> (Monads.unexpected "lambda" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
--- | Extract a binding with the given name from a let term
 letBinding :: (String -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 letBinding n term =  
   let name = (Core.Name n)
@@ -212,7 +194,6 @@ letBinding n term =
     let matchingBindings = (Lists.filter (\b -> Equality.equal (Core.unName (Core.bindingName b)) (Core.unName name)) (Core.letBindings letExpr))
     in (Logic.ifElse (Lists.null matchingBindings) (Flows.fail (Strings.cat2 "no such binding: " n)) (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Flows.pure (Core.bindingTerm (Lists.head matchingBindings))) (Flows.fail (Strings.cat2 "multiple bindings named " n))))))
 
--- | Extract a let expression from a term
 let_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Let)
 let_ term0 =  
   let extract = (\term -> (\x -> case x of
@@ -220,7 +201,6 @@ let_ term0 =
           _ -> (Monads.unexpected "let term" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
--- | Extract a list of terms from a term
 list :: (Core.Term -> Compute.Flow Graph.Graph [Core.Term])
 list term =  
   let extract = (\stripped -> (\x -> case x of
@@ -228,7 +208,6 @@ list term =
           _ -> (Monads.unexpected "list" (Core_.term stripped))) stripped)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term) (\stripped -> extract stripped))
 
--- | Extract the first element of a list term
 listHead :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
 listHead term = (Flows.bind (list term) (\l -> Logic.ifElse (Lists.null l) (Flows.fail "empty list") (Flows.pure (Lists.head l))))
 
@@ -242,7 +221,6 @@ listType typ =
     Core.TypeList v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "list type" (Core_.type_ typ))) stripped)
 
--- | Extract a literal value from a term
 literal :: (Core.Term -> Compute.Flow Graph.Graph Core.Literal)
 literal term0 =  
   let extract = (\term -> (\x -> case x of
@@ -297,7 +275,6 @@ pair kf vf term0 =
           _ -> (Monads.unexpected "pair" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
--- | Extract a record's fields from a term
 record :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph [Core.Field])
 record expected term0 = (Flows.bind (termRecord term0) (\record -> Logic.ifElse (Equality.equal (Core.recordTypeName record) expected) (Flows.pure (Core.recordFields record)) (Monads.unexpected (Strings.cat2 "record of type " (Core.unName expected)) (Core.unName (Core.recordTypeName record)))))
 
@@ -308,7 +285,6 @@ recordType ename typ =
     Core.TypeRecord v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.rowTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat2 "record of type " (Core.unName ename)) (Strings.cat2 "record of type " (Core.unName (Core.rowTypeTypeName v1)))))
     _ -> (Monads.unexpected "record type" (Core_.type_ typ))) stripped)
 
--- | Extract a set of terms from a term
 set :: (Core.Term -> Compute.Flow Graph.Graph (S.Set Core.Term))
 set term =  
   let extract = (\stripped -> (\x -> case x of
@@ -326,7 +302,6 @@ setType typ =
     Core.TypeSet v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "set type" (Core_.type_ typ))) stripped)
 
--- | Extract a string value from a term
 string :: (Core.Term -> Compute.Flow Graph.Graph String)
 string t = (Flows.bind (literal t) (\l -> stringLiteral l))
 
@@ -335,7 +310,6 @@ stringLiteral v = ((\x -> case x of
   Core.LiteralString v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "string" (Core_.literal v))) v)
 
--- | Extract a record from a term
 termRecord :: (Core.Term -> Compute.Flow Graph.Graph Core.Record)
 termRecord term0 =  
   let extract = (\term -> (\x -> case x of
@@ -343,7 +317,6 @@ termRecord term0 =
           _ -> (Monads.unexpected "record" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
--- | Extract a 16-bit unsigned integer value from a term
 uint16 :: (Core.Term -> Compute.Flow Graph.Graph Int)
 uint16 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint16Value i)))
 
@@ -352,7 +325,6 @@ uint16Value v = ((\x -> case x of
   Core.IntegerValueUint16 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "uint16" (Core_.integer v))) v)
 
--- | Extract a 32-bit unsigned integer value from a term
 uint32 :: (Core.Term -> Compute.Flow Graph.Graph I.Int64)
 uint32 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint32Value i)))
 
@@ -361,7 +333,6 @@ uint32Value v = ((\x -> case x of
   Core.IntegerValueUint32 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "uint32" (Core_.integer v))) v)
 
--- | Extract a 64-bit unsigned integer value from a term
 uint64 :: (Core.Term -> Compute.Flow Graph.Graph Integer)
 uint64 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint64Value i)))
 
@@ -370,7 +341,6 @@ uint64Value v = ((\x -> case x of
   Core.IntegerValueUint64 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "uint64" (Core_.integer v))) v)
 
--- | Extract an 8-bit unsigned integer value from a term
 uint8 :: (Core.Term -> Compute.Flow Graph.Graph I.Int16)
 uint8 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint8Value i)))
 
@@ -391,11 +361,9 @@ unit term = ((\x -> case x of
   Core.TermUnit -> (Flows.pure ())
   _ -> (Monads.unexpected "unit" (Core_.term term))) term)
 
--- | Extract a unit variant (a variant with an empty record value) from a union term
 unitVariant :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Name)
 unitVariant tname term = (Flows.bind (injection tname term) (\field -> Flows.bind (unit (Core.fieldTerm field)) (\ignored -> Flows.pure (Core.fieldName field))))
 
--- | Extract the wrapped value from a wrapped term
 wrap :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 wrap expected term0 =  
   let extract = (\term -> (\x -> case x of

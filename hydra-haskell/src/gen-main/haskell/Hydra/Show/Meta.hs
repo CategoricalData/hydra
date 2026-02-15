@@ -12,7 +12,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Show a term variant as a string
 termVariant :: (Variants.TermVariant -> String)
 termVariant x = case x of
   Variants.TermVariantAnnotated -> "annotated"
@@ -34,7 +33,6 @@ termVariant x = case x of
   Variants.TermVariantVariable -> "variable"
   Variants.TermVariantWrap -> "wrap"
 
--- | Show a type variant as a string
 typeVariant :: (Variants.TypeVariant -> String)
 typeVariant x = case x of
   Variants.TypeVariantAnnotated -> "annotated"

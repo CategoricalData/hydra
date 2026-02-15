@@ -13,14 +13,12 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Convert a bigfloat to a floating-point value of a given type (note: lossy)
 bigfloatToFloatValue :: (Core.FloatType -> Double -> Core.FloatValue)
 bigfloatToFloatValue ft bf = ((\x -> case x of
   Core.FloatTypeBigfloat -> (Core.FloatValueBigfloat bf)
   Core.FloatTypeFloat32 -> (Core.FloatValueFloat32 (Literals.bigfloatToFloat32 bf))
   Core.FloatTypeFloat64 -> (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 bf))) ft)
 
--- | Convert a bigint to an integer value of a given type (note: lossy)
 bigintToIntegerValue :: (Core.IntegerType -> Integer -> Core.IntegerValue)
 bigintToIntegerValue it bi = ((\x -> case x of
   Core.IntegerTypeBigint -> (Core.IntegerValueBigint bi)
@@ -33,14 +31,12 @@ bigintToIntegerValue it bi = ((\x -> case x of
   Core.IntegerTypeUint32 -> (Core.IntegerValueUint32 (Literals.bigintToUint32 bi))
   Core.IntegerTypeUint64 -> (Core.IntegerValueUint64 (Literals.bigintToUint64 bi))) it)
 
--- | Convert a floating-point value of any precision to a bigfloat
 floatValueToBigfloat :: (Core.FloatValue -> Double)
 floatValueToBigfloat x = case x of
   Core.FloatValueBigfloat v1 -> v1
   Core.FloatValueFloat32 v1 -> (Literals.float32ToBigfloat v1)
   Core.FloatValueFloat64 v1 -> (Literals.float64ToBigfloat v1)
 
--- | Convert an integer value of any precision to a bigint
 integerValueToBigint :: (Core.IntegerValue -> Integer)
 integerValueToBigint x = case x of
   Core.IntegerValueBigint v1 -> v1

@@ -28,7 +28,6 @@ angleBraces = Ast.Brackets {
 angleBracesList :: (Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
 angleBracesList style els = (Logic.ifElse (Lists.null els) (cst "<>") (brackets angleBraces style (commaSep style els)))
 
--- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression.
 bracesListAdaptive :: ([Ast.Expr] -> Ast.Expr)
 bracesListAdaptive els =  
   let inlineList = (curlyBracesList Nothing inlineStyle els)
@@ -37,7 +36,6 @@ bracesListAdaptive els =
 bracketList :: (Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
 bracketList style els = (Logic.ifElse (Lists.null els) (cst "[]") (brackets squareBrackets style (commaSep style els)))
 
--- | Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression.
 bracketListAdaptive :: ([Ast.Expr] -> Ast.Expr)
 bracketListAdaptive els =  
   let inlineList = (bracketList inlineStyle els)
@@ -102,7 +100,6 @@ doubleNewlineSep = (sep (Ast.Op {
 doubleSpace :: String
 doubleSpace = "  "
 
--- | Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it.
 expressionLength :: (Ast.Expr -> Int)
 expressionLength e =  
   let symbolLength = (\s -> Strings.length (Ast.unSymbol s))
@@ -436,7 +433,6 @@ squareBrackets = Ast.Brackets {
   Ast.bracketsOpen = (sym "["),
   Ast.bracketsClose = (sym "]")}
 
--- | Append a suffix string to an expression
 suffix :: (String -> Ast.Expr -> Ast.Expr)
 suffix s expr =  
   let sufOp = Ast.Op {

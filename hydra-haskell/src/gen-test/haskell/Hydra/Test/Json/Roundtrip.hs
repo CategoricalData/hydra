@@ -13,7 +13,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Round-trip test cases for JSON encoding and decoding
 allTests :: Testing.TestGroup
 allTests = Testing.TestGroup {
   Testing.testGroupName = "JSON round-trip",

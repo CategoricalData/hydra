@@ -15,8 +15,6 @@ T0 = TypeVar("T0")
 
 @lru_cache(1)
 def json_language() -> hydra.coders.Language:
-    r"""Language constraints for JSON."""
-    
     @lru_cache(1)
     def elimination_variants() -> frozenset[T0]:
         return hydra.lib.sets.empty()

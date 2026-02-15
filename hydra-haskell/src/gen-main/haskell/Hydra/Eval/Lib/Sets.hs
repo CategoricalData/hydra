@@ -18,7 +18,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Interpreter-friendly map for Set terms.
 map :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 map fun setTerm = (Flows.bind (Core_.set setTerm) (\elements -> Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),

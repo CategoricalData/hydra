@@ -19,12 +19,9 @@ import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.serialization
 
-# The colon operator used to separate keys and values in JSON objects.
 colon_op = hydra.ast.Op(hydra.ast.Symbol(":"), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsSpace())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)
 
 def json_string(s: str) -> str:
-    r"""Escape and quote a string for JSON output."""
-    
     def escape(c: int) -> str:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 34), (lambda : "\\\""), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 92), (lambda : "\\\\"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 10), (lambda : "\\n"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 13), (lambda : "\\r"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 9), (lambda : "\\t"), (lambda : hydra.lib.strings.from_list(hydra.lib.lists.pure(c))))))))))))
     @lru_cache(1)
@@ -33,8 +30,6 @@ def json_string(s: str) -> str:
     return hydra.lib.strings.cat2(hydra.lib.strings.cat2("\"", escaped()), "\"")
 
 def key_value_to_expr(pair: tuple[str, hydra.json.model.Value]) -> hydra.ast.Expr:
-    r"""Convert a key-value pair to an AST expression."""
-    
     @lru_cache(1)
     def key() -> str:
         return hydra.lib.pairs.first(pair)
@@ -44,8 +39,6 @@ def key_value_to_expr(pair: tuple[str, hydra.json.model.Value]) -> hydra.ast.Exp
     return hydra.serialization.ifx(colon_op, hydra.serialization.cst(json_string(key())), value_to_expr(value()))
 
 def value_to_expr(value: hydra.json.model.Value) -> hydra.ast.Expr:
-    r"""Convert a JSON value to an AST expression for serialization."""
-    
     match value:
         case hydra.json.model.ValueArray(value=arr):
             return hydra.serialization.bracket_list_adaptive(hydra.lib.lists.map((lambda x1: value_to_expr(x1)), arr))
@@ -72,6 +65,4 @@ def value_to_expr(value: hydra.json.model.Value) -> hydra.ast.Expr:
             raise AssertionError("Unreachable: all variants handled")
 
 def print_json(value: hydra.json.model.Value) -> str:
-    r"""Serialize a JSON value to a string."""
-    
     return hydra.serialization.print_expr(value_to_expr(value))

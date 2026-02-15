@@ -52,7 +52,6 @@ decodeSet elemDecoder g term = (Eithers.bind (Eithers.bimap (\x -> Util.Decoding
   Core.TermSet v1 -> (Eithers.map Sets.fromList (Eithers.mapList (elemDecoder g) (Sets.toList v1)))
   _ -> (Left (Util.DecodingError "expected set"))) stripped))
 
--- | Decode a unit value
 decodeUnit :: (Graph.Graph -> Core.Term -> Either Util.DecodingError ())
 decodeUnit g term = (Eithers.bind (Eithers.bimap (\x -> Util.DecodingError x) (\x -> x) (Lexical.stripAndDereferenceTermEither g term)) (\stripped -> (\x -> case x of
   Core.TermUnit -> (Right ())
@@ -69,6 +68,5 @@ requireField fieldName decoder fieldMap g = (Maybes.maybe (Left (Util.DecodingEr
   fieldName,
   " in record"]))) (\fieldTerm -> decoder g fieldTerm) (Maps.lookup (Core.Name fieldName) fieldMap))
 
--- | Convert a Record's fields to a Map from Name to Term
 toFieldMap :: (Core.Record -> M.Map Core.Name Core.Term)
 toFieldMap record = (Maps.fromList (Lists.map (\f -> (Core.fieldName f, (Core.fieldTerm f))) (Core.recordFields record)))

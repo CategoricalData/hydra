@@ -57,7 +57,6 @@ adjacencyListsToGraph edges0 =
             let vertexToKey = (\v -> Maybes.fromJust (Maps.lookup v vertexMap))
             in (graph, vertexToKey)
 
--- | Compute the strongly connected components of the given graph. The components are returned in reverse topological order
 stronglyConnectedComponents :: (M.Map Int [Int] -> [[Int]])
 stronglyConnectedComponents graph =  
   let verts = (Maps.keys graph)
@@ -67,7 +66,6 @@ stronglyConnectedComponents graph =
       let finalState = (Monads.exec (Flows.mapList processVertex verts) initialState)
       in (Lists.reverse (Lists.map Lists.sort (Topology.tarjanStateSccs finalState)))
 
--- | Initial state for Tarjan's algorithm
 initialState :: Topology.TarjanState
 initialState = Topology.TarjanState {
   Topology.tarjanStateCounter = 0,
@@ -77,7 +75,6 @@ initialState = Topology.TarjanState {
   Topology.tarjanStateOnStack = Sets.empty,
   Topology.tarjanStateSccs = []}
 
--- | Pop vertices off the stack until the given vertex is reached, collecting the current strongly connected component
 popStackUntil :: (Int -> Compute.Flow Topology.TarjanState [Int])
 popStackUntil v =  
   let go = (\acc ->  
@@ -107,7 +104,6 @@ popStackUntil v =
           in (Flows.bind Monads.getState (\st -> Logic.ifElse (Lists.null (Topology.tarjanStateStack st)) (Flows.fail "popStackUntil: empty stack") (succeed st))))
   in (go [])
 
--- | Visit a vertex and recursively explore its successors
 strongConnect :: (M.Map Int [Int] -> Int -> Compute.Flow Topology.TarjanState ())
 strongConnect graph v = (Flows.bind Monads.getState (\st ->  
   let i = (Topology.tarjanStateCounter st)

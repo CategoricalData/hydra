@@ -53,7 +53,6 @@ map rightFun eitherTerm = ((\x -> case x of
     Core.applicationArgument = val})))) v1))
   _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
 
--- | Interpreter-friendly mapList for Either (traverse).
 mapList :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 mapList funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermApplication (Core.Application {

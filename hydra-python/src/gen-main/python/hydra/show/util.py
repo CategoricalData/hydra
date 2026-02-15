@@ -7,8 +7,6 @@ import hydra.core
 import hydra.util
 
 def case_convention(c: hydra.util.CaseConvention) -> str:
-    r"""Show a case convention as a string."""
-    
     match c:
         case hydra.util.CaseConvention.LOWER_SNAKE:
             return "lower_snake_case"

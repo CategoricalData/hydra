@@ -59,7 +59,6 @@ map funTerm optTerm = ((\x -> case x of
     Core.applicationArgument = val})) v1)))
   _ -> (Monads.unexpected "optional value" (Core__.term optTerm))) optTerm)
 
--- | Interpreter-friendly mapMaybe for List terms.
 mapMaybe :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 mapMaybe funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.cat"))),

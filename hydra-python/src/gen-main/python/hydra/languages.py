@@ -11,8 +11,6 @@ import hydra.reflect
 
 @lru_cache(1)
 def hydra_language() -> hydra.coders.Language:
-    r"""Language constraints for Hydra Core, i.e. no constraints."""
-    
     @lru_cache(1)
     def elimination_variants() -> frozenset[hydra.variants.EliminationVariant]:
         return hydra.lib.sets.from_list(hydra.reflect.elimination_variants)

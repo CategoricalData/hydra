@@ -126,7 +126,6 @@ bind flowTerm funTerm = ((\x -> case x of
                 Core.applicationArgument = (Core.TermVariable (Core.Name "t"))}))}))}))})))})))})))
   _ -> (Monads.unexpected "flow term" (Core__.term flowTerm))) flowTerm)
 
--- | Interpreter-friendly foldl for Flow.
 foldl :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 foldl funTerm initTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -268,7 +267,6 @@ mapKeys funTerm mapTerm = ((\x -> case x of
             Core.applicationArgument = (Core.TermVariable (Core.Name "newPairs"))}))}))})))})))
   _ -> (Monads.unexpected "map value" (Core__.term mapTerm))) mapTerm)
 
--- | Interpreter-friendly mapList for List with Flow.
 mapList :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 mapList funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.flows.sequence"))),
@@ -310,7 +308,6 @@ mapMaybe funTerm maybeTerm = ((\x -> case x of
     Core.applicationArgument = Core.TermUnit})))
   _ -> (Monads.unexpected "optional value" (Core__.term maybeTerm))) maybeTerm)
 
--- | Interpreter-friendly mapSet for Set with Flow.
 mapSet :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 mapSet funTerm setTerm = (Flows.bind (Core_.set setTerm) (\elements -> Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermApplication (Core.Application {

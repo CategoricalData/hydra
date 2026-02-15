@@ -12,7 +12,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Test cases for topological sorting
 allTests :: Testing.TestGroup
 allTests = Testing.TestGroup {
   Testing.testGroupName = "sorting",

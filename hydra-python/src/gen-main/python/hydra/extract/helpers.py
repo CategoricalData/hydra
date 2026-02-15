@@ -107,6 +107,4 @@ def require_field(field_name: str, decoder: Callable[[T0, T1], Either[hydra.util
     return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("missing field ", field_name, " in record")))), (lambda field_term: decoder(g, field_term)), hydra.lib.maps.lookup(hydra.core.Name(field_name), field_map))
 
 def to_field_map(record: hydra.core.Record) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-    r"""Convert a Record's fields to a Map from Name to Term."""
-    
     return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda f: (f.name, f.term)), record.fields))

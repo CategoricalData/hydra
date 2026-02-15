@@ -151,11 +151,9 @@ checkTypeSubst cx subst =
 checkTypeVariables :: (t0 -> t1 -> Compute.Flow t2 ())
 checkTypeVariables _tx _typ = (Flows.pure ())
 
--- | Convert an inference context to a type environment by converting type schemes to System F types
 toFContext :: (Typing.InferenceContext -> M.Map Core.Name Core.Type)
 toFContext cx = (Maps.map Schemas.typeSchemeToFType (Typing.inferenceContextDataTypes cx))
 
--- | Check whether two lists of types are effectively equal, disregarding type aliases
 typeListsEffectivelyEqual :: (Typing.TypeContext -> [Core.Type] -> [Core.Type] -> Bool)
 typeListsEffectivelyEqual tx tlist1 tlist2 = (Logic.ifElse (Equality.equal (Lists.length tlist1) (Lists.length tlist2)) (Lists.foldl Logic.and True (Lists.zipWith (typesEffectivelyEqual tx) tlist1 tlist2)) False)
 
@@ -450,7 +448,6 @@ typeOfWrappedTerm tx typeArgs wt =
     let body = (Core.wrappedTermBody wt)
     in (Flows.bind (typeOf tx [] body) (\btype -> Flows.bind (checkTypeVariables tx btype) (\_ -> Flows.pure (Schemas.nominalApplication tname typeArgs))))
 
--- | Check if a type contains any type variable from the current scope
 containsInScopeTypeVars :: (Typing.TypeContext -> Core.Type -> Bool)
 containsInScopeTypeVars tx t =  
   let vars = (Typing.typeContextTypeVariables tx)
@@ -458,7 +455,6 @@ containsInScopeTypeVars tx t =
     let freeVars = (Rewriting.freeVariablesInTypeSimple t)
     in (Logic.not (Sets.null (Sets.intersection vars freeVars)))
 
--- | Normalize free type variables in a type to canonical names based on order of first occurrence. This allows comparing types that differ only in the naming of free type variables.
 normalizeTypeFreeVars :: (Core.Type -> Core.Type)
 normalizeTypeFreeVars typ =  
   let collectVars = (\acc -> \t -> (\x -> case x of
@@ -468,7 +464,6 @@ normalizeTypeFreeVars typ =
     let subst = (Rewriting.foldOverType Coders.TraversalOrderPre collectVars Maps.empty typ)
     in (Rewriting.substituteTypeVariables subst typ)
 
--- | Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming. Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency.
 typesAllEffectivelyEqual :: (Typing.TypeContext -> [Core.Type] -> Bool)
 typesAllEffectivelyEqual tx tlist =  
   let types = (Typing.inferenceContextSchemaTypes (Typing.typeContextInferenceContext tx))
@@ -482,7 +477,6 @@ typesAllEffectivelyEqual tx tlist =
       let anyContainsFreeVar = (Lists.foldl (\acc -> \t -> Logic.or acc (containsFreeVar t)) False tlist)
       in (Logic.ifElse anyContainsFreeVar True (Logic.ifElse (allEqual (Lists.map (\t -> normalizeTypeFreeVars t) tlist)) True (allEqual (Lists.map (\t -> normalizeTypeFreeVars (Rewriting.deannotateTypeRecursive (Rewriting.replaceTypedefs types t))) tlist))))
 
--- | Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards
 typesEffectivelyEqual :: (Typing.TypeContext -> Core.Type -> Core.Type -> Bool)
 typesEffectivelyEqual tx t1 t2 = (Logic.or (containsInScopeTypeVars tx t1) (Logic.or (containsInScopeTypeVars tx t2) (typesAllEffectivelyEqual tx [
   Schemas.fullyStripAndNormalizeType t1,

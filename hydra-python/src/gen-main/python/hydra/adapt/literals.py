@@ -70,8 +70,6 @@ def compare_precision(p1: hydra.util.Precision, p2: hydra.util.Precision) -> hyd
             raise AssertionError("Unreachable: all variants handled")
 
 def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue) -> hydra.core.FloatValue:
-    r"""Convert a float value to a different float type."""
-    
     def decoder(fv2: hydra.core.FloatValue) -> Decimal:
         match fv2:
             case hydra.core.FloatValueBigfloat(value=d):
@@ -101,8 +99,6 @@ def convert_float_value(target: hydra.core.FloatType, fv: hydra.core.FloatValue)
     return encoder(decoder(fv))
 
 def convert_integer_value(target: hydra.core.IntegerType, iv: hydra.core.IntegerValue) -> hydra.core.IntegerValue:
-    r"""Convert an integer value to a different integer type."""
-    
     def decoder(iv2: hydra.core.IntegerValue) -> int:
         match iv2:
             case hydra.core.IntegerValueBigint(value=v):
@@ -168,8 +164,6 @@ def convert_integer_value(target: hydra.core.IntegerType, iv: hydra.core.Integer
     return encoder(decoder(iv))
 
 def disclaimer(lossy: bool, source: str, target: str) -> str:
-    r"""Generate a disclaimer message for type conversions."""
-    
     return hydra.lib.strings.cat(("replace ", source, " with ", target, hydra.lib.logic.if_else(lossy, (lambda : " (lossy)"), (lambda : ""))))
 
 def float_adapter(ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T1, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]:

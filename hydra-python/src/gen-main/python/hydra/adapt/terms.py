@@ -42,8 +42,6 @@ def with_graph_context(f: hydra.compute.Flow[hydra.graph.Graph, T0]) -> hydra.co
 function_proxy_name = hydra.core.Name("hydra.core.FunctionProxy")
 
 def pass_literal(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through literal types with literal adaptation."""
-    
     def encdec(ad: hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, T0, T1, hydra.core.Literal, hydra.core.Literal], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.core.Term]:
         return hydra.lib.flows.bind(with_graph_context(hydra.extract.core.literal(term)), (lambda l: hydra.lib.flows.bind(hydra.adapt.utils.encode_decode(dir, ad.coder, l), (lambda l2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermLiteral(l2)))))))
     def for_literal(lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
@@ -59,8 +57,6 @@ def pass_unit(_: T0) -> hydra.compute.Flow[T1, hydra.compute.Adapter[T2, T3, hyd
     return hydra.lib.flows.pure(hydra.compute.Adapter(False, cast(hydra.core.Type, hydra.core.TypeUnit()), cast(hydra.core.Type, hydra.core.TypeUnit()), hydra.compute.Coder((lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))), (lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def union_type_to_record_type(rt: hydra.core.RowType) -> hydra.core.RowType:
-    r"""Convert a union row type to a record row type."""
-    
     def make_optional(f: hydra.core.FieldType) -> hydra.core.FieldType:
         @lru_cache(1)
         def fn() -> hydra.core.Name:
@@ -75,8 +71,6 @@ def unit_to_record(_: T0) -> hydra.compute.Flow[T1, hydra.compute.Adapter[T2, T3
     return hydra.lib.flows.pure(hydra.compute.Adapter(False, cast(hydra.core.Type, hydra.core.TypeUnit()), cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("_Unit"), ()))), hydra.compute.Coder((lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("_Unit"), ()))))), (lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def field_adapter(ftyp: hydra.core.FieldType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.FieldType, hydra.core.FieldType, hydra.core.Field, hydra.core.Field]]:
-    r"""Create an adapter for field types."""
-    
     def encdec(ad: hydra.compute.Adapter[T0, T0, T1, T2, hydra.core.Term, hydra.core.Term], dir: hydra.coders.CoderDirection, field: hydra.core.Field) -> hydra.compute.Flow[T0, hydra.core.Field]:
         @lru_cache(1)
         def name() -> hydra.core.Name:
@@ -88,8 +82,6 @@ def field_adapter(ftyp: hydra.core.FieldType) -> hydra.compute.Flow[hydra.coders
     return hydra.lib.flows.bind(term_adapter(ftyp.type), (lambda ad: hydra.lib.flows.pure(hydra.compute.Adapter(ad.is_lossy, ftyp, hydra.core.FieldType(ftyp.name, ad.target), hydra.adapt.utils.bidirectional((lambda v1, v2: encdec(ad, v1, v2)))))))
 
 def for_type_reference(name: hydra.core.Name) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""This function accounts for recursive type definitions."""
-    
     def encdec(name2: hydra.core.Name, dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.core.Term]:
         return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (adapters := cx.adapters, hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no adapter for reference type ", name2.value)), (lambda ad: hydra.adapt.utils.encode_decode(dir, ad.coder, term)), hydra.lib.maps.lookup(name2, adapters)))[1]))
     def for_type(cx: hydra.coders.AdapterContext, adapters: FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
@@ -112,8 +104,6 @@ def for_type_reference(name: hydra.core.Name) -> hydra.compute.Flow[hydra.coders
     return hydra.monads.with_trace(hydra.lib.strings.cat2("adapt named type ", name.value), flow())
 
 def function_to_union(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Convert function types to union types."""
-    
     def enc_term(term: hydra.core.Term, stripped_term: hydra.core.Term) -> hydra.core.Term:
         def _hoist_enc_term_1(term: hydra.core.Term, v1: hydra.core.Elimination) -> hydra.core.Term:
             match v1:
@@ -190,8 +180,6 @@ def function_to_union(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Ada
             raise TypeError("Unsupported Type")
 
 def lambda_to_monotype(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Convert forall types to monotypes."""
-    
     match t:
         case hydra.core.TypeForall(value=ft):
             @lru_cache(1)
@@ -203,8 +191,6 @@ def lambda_to_monotype(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Ad
             raise TypeError("Unsupported Type")
 
 def maybe_to_list(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Convert optional types to list types."""
-    
     def encode(ad: hydra.compute.Adapter[T0, T1, T2, T3, hydra.core.Term, hydra.core.Term], term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         match term:
             case hydra.core.TermMaybe(value=m):
@@ -227,8 +213,6 @@ def maybe_to_list(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapter
             raise TypeError("Unsupported Type")
 
 def pass_application(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through application types."""
-    
     def for_application_type(at: hydra.core.ApplicationType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
         @lru_cache(1)
         def lhs() -> hydra.core.Type:
@@ -245,8 +229,6 @@ def pass_application(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adap
             raise TypeError("Unsupported Type")
 
 def pass_either(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through either types."""
-    
     def for_either_type(et: hydra.core.EitherType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
         @lru_cache(1)
         def left() -> hydra.core.Type:
@@ -263,8 +245,6 @@ def pass_either(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterCo
             raise TypeError("Unsupported Type")
 
 def pass_forall(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through forall types."""
-    
     def for_forall_type(ft: hydra.core.ForallType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
         @lru_cache(1)
         def v() -> hydra.core.Name:
@@ -281,8 +261,6 @@ def pass_forall(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterCo
             raise TypeError("Unsupported Type")
 
 def pass_function(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through function types with adaptation."""
-    
     def to_case_ads(dom: hydra.core.Type, cod: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.FieldType, hydra.core.FieldType, hydra.core.Field, hydra.core.Field]]]:
         match hydra.rewriting.deannotate_type(dom):
             case hydra.core.TypeUnion(value=rt):
@@ -360,8 +338,6 @@ def pass_function(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapter
             raise TypeError("Unsupported Type")
 
 def pass_list(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through list types."""
-    
     def encdec(ad: hydra.compute.Adapter[T0, T0, T1, T2, hydra.core.Term, hydra.core.Term], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         match term:
             case hydra.core.TermList(value=terms):
@@ -379,8 +355,6 @@ def pass_list(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterCont
             raise TypeError("Unsupported Type")
 
 def pass_map(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through map types."""
-    
     def encdec(kad: hydra.compute.Adapter[T0, T0, T1, T2, hydra.core.Term, hydra.core.Term], vad: hydra.compute.Adapter[T0, T0, T3, T4, hydra.core.Term, hydra.core.Term], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         match term:
             case hydra.core.TermMap(value=m):
@@ -404,8 +378,6 @@ def pass_map(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterConte
             raise TypeError("Unsupported Type")
 
 def pass_optional(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through optional types."""
-    
     def map_term(coder: hydra.compute.Coder[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Term, hydra.core.Term], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.core.Term]:
         return hydra.lib.flows.bind(with_graph_context(hydra.extract.core.maybe_term((lambda x1: hydra.lib.flows.pure(x1)), term)), (lambda opt: hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda v1: hydra.adapt.utils.encode_decode(dir, coder, v1)), opt), (lambda new_opt: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(new_opt)))))))
     match t:
@@ -416,8 +388,6 @@ def pass_optional(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapter
             raise TypeError("Unsupported Type")
 
 def pass_record(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through record types."""
-    
     def encdec(rt: hydra.core.RowType, adapters: frozenlist[hydra.compute.Adapter[T0, T0, T1, T2, hydra.core.Field, hydra.core.Field]], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         match term:
             case hydra.core.TermRecord(value=rec):
@@ -438,8 +408,6 @@ def pass_record(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterCo
             raise TypeError("Unsupported Type")
 
 def pass_set(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through set types."""
-    
     def encdec(ad: hydra.compute.Adapter[T0, T0, T1, T2, hydra.core.Term, hydra.core.Term], dir: hydra.coders.CoderDirection, term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         match term:
             case hydra.core.TermSet(value=terms):
@@ -455,8 +423,6 @@ def pass_set(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterConte
             raise TypeError("Unsupported Type")
 
 def pass_union(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through union types."""
-    
     match t:
         case hydra.core.TypeUnion(value=rt):
             @lru_cache(1)
@@ -473,8 +439,6 @@ def pass_union(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterCon
             raise TypeError("Unsupported Type")
 
 def pass_wrapped(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Pass through wrapped types."""
-    
     match t:
         case hydra.core.TypeWrap(value=wt):
             @lru_cache(1)
@@ -491,8 +455,6 @@ def pass_wrapped(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterC
             raise TypeError("Unsupported Type")
 
 def set_to_list(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Convert set types to list types."""
-    
     def encode(ad: hydra.compute.Adapter[T0, T1, T2, T3, hydra.core.Term, T4], term: hydra.core.Term) -> hydra.compute.Flow[T0, T4]:
         match term:
             case hydra.core.TermSet(value=s):
@@ -519,8 +481,6 @@ def set_to_list(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterCo
             raise TypeError("Unsupported Type")
 
 def simplify_application(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Simplify application types."""
-    
     def encdec(ad: hydra.compute.Adapter[T0, T0, T1, T2, T3, T3], dir: hydra.coders.CoderDirection, term: T3) -> hydra.compute.Flow[T0, T3]:
         return hydra.adapt.utils.encode_decode(dir, ad.coder, term)
     def for_application_type(at: hydra.core.ApplicationType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
@@ -536,8 +496,6 @@ def simplify_application(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.
             raise TypeError("Unsupported Type")
 
 def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Create an adapter for any type."""
-    
     def constraints(cx: hydra.coders.AdapterContext) -> hydra.coders.LanguageConstraints:
         return cx.language.constraints
     def supported(cx: hydra.coders.AdapterContext, v1: hydra.core.Type) -> bool:
@@ -668,8 +626,6 @@ def term_adapter(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapte
             return hydra.monads.with_trace(hydra.lib.strings.cat2("adapter for ", hydra.show.core.type(typ)), dflt())
 
 def union_to_record(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Convert union types to record types."""
-    
     def for_field(field: hydra.core.Field) -> Maybe[hydra.core.Field]:
         @lru_cache(1)
         def fn() -> hydra.core.Name:
@@ -720,8 +676,6 @@ def union_to_record(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Adapt
             raise TypeError("Unsupported Type")
 
 def wrap_to_unwrapped(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
-    r"""Convert wrapped types to unwrapped types."""
-    
     match t:
         case hydra.core.TypeWrap(value=wt):
             @lru_cache(1)

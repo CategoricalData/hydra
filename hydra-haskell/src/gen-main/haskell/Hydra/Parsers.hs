@@ -24,7 +24,6 @@ alt p1 p2 =
           Parsing.ParseResultFailure v1 -> (Logic.ifElse (Equality.equal (Parsing.parseErrorRemainder v1) input) (Parsing.unParser p2 input) (Parsing.ParseResultFailure v1))) (Parsing.unParser p1 input))
   in (Parsing.Parser parse)
 
--- | Parse any single character (codepoint)
 anyChar :: (Parsing.Parser Int)
 anyChar = (satisfy (\_ -> True))
 
@@ -49,14 +48,12 @@ bind pa f =
           Parsing.ParseResultFailure v1 -> (Parsing.ParseResultFailure v1)) (Parsing.unParser pa input))
   in (Parsing.Parser parse)
 
--- | Parse a specific character (codepoint)
 char :: (Int -> Parsing.Parser Int)
 char c = (satisfy (\x -> Equality.equal x c))
 
 choice :: ([Parsing.Parser t0] -> Parsing.Parser t0)
 choice ps = (Lists.foldl alt (fail "no choice matched") ps)
 
--- | A parser that succeeds only at the end of input
 eof :: (Parsing.Parser ())
 eof = (Parsing.Parser (\input -> Logic.ifElse (Equality.equal input "") (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
   Parsing.parseSuccessValue = (),
@@ -95,7 +92,6 @@ pure a = (Parsing.Parser (\input -> Parsing.ParseResultSuccess (Parsing.ParseSuc
 runParser :: (Parsing.Parser t0 -> String -> Parsing.ParseResult t0)
 runParser p input = (Parsing.unParser p input)
 
--- | Parse a character (codepoint) that satisfies the given predicate
 satisfy :: ((Int -> Bool) -> Parsing.Parser Int)
 satisfy pred =  
   let parse = (\input ->  
@@ -120,7 +116,6 @@ sepBy1 p sep = (bind p (\x -> bind (many (bind sep (\_ -> p))) (\xs -> pure (Lis
 some :: (Parsing.Parser t0 -> Parsing.Parser [t0])
 some p = (bind p (\x -> bind (many p) (\xs -> pure (Lists.cons x xs))))
 
--- | Parse a specific string
 string :: (String -> Parsing.Parser String)
 string str = (Parsing.Parser (\input ->  
   let strCodes = (Strings.toList str)

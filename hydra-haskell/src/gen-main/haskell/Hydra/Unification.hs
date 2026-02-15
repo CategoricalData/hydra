@@ -143,7 +143,6 @@ unifyTypes schemaTypes l r comment = (unifyTypeConstraints schemaTypes [
     Typing.typeConstraintRight = r,
     Typing.typeConstraintComment = comment}])
 
--- | Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables.
 variableOccursInType :: (Core.Name -> Core.Type -> Bool)
 variableOccursInType var typ0 =  
   let tryType = (\b -> \typ -> (\x -> case x of

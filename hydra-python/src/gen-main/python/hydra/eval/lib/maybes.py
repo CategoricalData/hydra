@@ -60,8 +60,6 @@ def map(fun_term: hydra.core.Term, opt_term: hydra.core.Term) -> hydra.compute.F
             return hydra.monads.unexpected("optional value", hydra.show.core.term(opt_term))
 
 def map_maybe(fun_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
-    r"""Interpreter-friendly mapMaybe for List terms."""
-    
     return hydra.lib.flows.bind(hydra.extract.core.list(list_term), (lambda elements: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.cat"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el)))), elements)))))))))
 
 def maybe(default_term: hydra.core.Term, fun_term: hydra.core.Term, opt_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:

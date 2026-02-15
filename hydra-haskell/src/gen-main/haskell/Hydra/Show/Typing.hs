@@ -18,7 +18,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Show a type constraint as a string
 typeConstraint :: (Typing.TypeConstraint -> String)
 typeConstraint tc =  
   let ltyp = (Typing.typeConstraintLeft tc) 
@@ -28,7 +27,6 @@ typeConstraint tc =
     "\8801",
     (Core_.type_ rtyp)])
 
--- | Show a type substitution as a string
 typeSubst :: (Typing.TypeSubst -> String)
 typeSubst ts =  
   let subst = (Typing.unTypeSubst ts) 

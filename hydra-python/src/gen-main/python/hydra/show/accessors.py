@@ -23,8 +23,6 @@ T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 
 def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
-    r"""Convert a term accessor to a string representation."""
-    
     def idx(i: T0) -> Maybe[T1]:
         return Nothing()
     def idx_suff(suffix: str, i: T0) -> Maybe[str]:
@@ -94,8 +92,6 @@ def term_accessor(accessor: hydra.accessors.TermAccessor) -> Maybe[str]:
             raise AssertionError("Unreachable: all variants handled")
 
 def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], term: hydra.core.Term) -> hydra.accessors.AccessorGraph:
-    r"""Build an accessor graph from a term."""
-    
     dont_care_accessor = cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody())
     def helper(ids: FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode], mroot: Maybe[hydra.accessors.AccessorNode], path: frozenlist[hydra.accessors.TermAccessor], state: tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]], accessor_term: tuple[hydra.accessors.TermAccessor, hydra.core.Term]) -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
         @lru_cache(1)

@@ -18,7 +18,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Interpreter-friendly applicative apply for List terms.
 apply :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 apply funsTerm argsTerm = (Flows.bind (Core_.list funsTerm) (\funs -> Flows.bind (Core_.list argsTerm) (\arguments ->  
   let applyOne = (\f -> Lists.map (\arg -> Core.TermApplication (Core.Application {
@@ -26,7 +25,6 @@ apply funsTerm argsTerm = (Flows.bind (Core_.list funsTerm) (\funs -> Flows.bind
           Core.applicationArgument = arg})) arguments)
   in (Flows.pure (Core.TermList (Lists.concat (Lists.map applyOne funs)))))))
 
--- | Interpreter-friendly monadic bind for List terms.
 bind :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 bind listTerm funTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
@@ -43,7 +41,6 @@ dropWhile predTerm listTerm = (Flows.pure (Core.TermApplication (Core.Applicatio
       Core.applicationArgument = predTerm})),
     Core.applicationArgument = listTerm}))})))
 
--- | Interpreter-friendly filter for List terms.
 filter :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 filter predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
@@ -66,7 +63,6 @@ find predTerm listTerm = (Flows.pure (Core.TermApplication (Core.Application {
       Core.applicationArgument = predTerm})),
     Core.applicationArgument = listTerm}))})))
 
--- | Interpreter-friendly left fold for List terms.
 foldl :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 foldl funTerm initTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -74,13 +70,11 @@ foldl funTerm initTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -
     Core.applicationArgument = acc})),
   Core.applicationArgument = el})) initTerm elements)))
 
--- | Interpreter-friendly map for List terms.
 map :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 map funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermList (Lists.reverse (Lists.foldl (\acc -> \el -> Lists.cons (Core.TermApplication (Core.Application {
   Core.applicationFunction = funTerm,
   Core.applicationArgument = el})) acc) [] elements)))))
 
--- | Interpreter-friendly partition for List terms.
 partition :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 partition predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements ->  
   let initialState = (Core.TermPair (Core.TermList [], (Core.TermList [])))
@@ -114,7 +108,6 @@ partition predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements ->
                     el])}))))}))) initialState elements)
     in (Flows.pure finalState)))
 
--- | Interpreter-friendly sortOn for List terms.
 sortOn :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 sortOn projTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Lists.foldl (\sorted -> \x ->  
   let splitResult = (Core.TermApplication (Core.Application {
@@ -151,7 +144,6 @@ sortOn projTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
             Core.applicationArgument = x})),
           Core.applicationArgument = after}))}))) (Core.TermList []) elements)))
 
--- | Interpreter-friendly span for List terms.
 span :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 span predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements ->  
   let initialState = (Core.TermPair (Core.TermPair (Core.TermLiteral (Core.LiteralBoolean True), (Core.TermList [])), (Core.TermList [])))
@@ -203,7 +195,6 @@ span predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements ->
       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
       Core.applicationArgument = finalState})))))))
 
--- | Interpreter-friendly zipWith for List terms.
 zipWith :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 zipWith funTerm listTerm1 listTerm2 = (Flows.bind (Core_.list listTerm1) (\elements1 -> Flows.bind (Core_.list listTerm2) (\elements2 -> Flows.pure (Core.TermList (Lists.map (\p ->  
   let a = (Pairs.first p)
