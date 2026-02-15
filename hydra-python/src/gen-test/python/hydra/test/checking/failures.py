@@ -18,6 +18,4 @@ def fail_on_untyped_tests() -> hydra.testing.TestGroup:
 
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
-    r"""Type checking failure test cases."""
-    
     return hydra.testing.TestGroup("Failures", Nothing(), (fail_on_untyped_tests(),), ())

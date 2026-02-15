@@ -15,6 +15,4 @@ def test_group_for_system_f() -> hydra.testing.TestGroup:
 
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
-    r"""Algorithm W test cases."""
-    
     return hydra.testing.TestGroup("Algorithm W test cases", Nothing(), (test_group_for_system_f(),), ())

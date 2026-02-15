@@ -15,6 +15,4 @@ def test_group_for_nested_let() -> hydra.testing.TestGroup:
 
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
-    r"""Examples from the Hydra kernel."""
-    
     return hydra.testing.TestGroup("Examples from the Hydra kernel", Nothing(), (test_group_for_nested_let(),), ())
