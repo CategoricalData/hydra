@@ -26,6 +26,8 @@ T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 
 def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
+    r"""Create a graph schema from a graph which contains nothing but encoded type definitions."""
+    
     def to_pair(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, tuple[hydra.core.Name, hydra.core.Type]]:
         @lru_cache(1)
         def name() -> hydra.core.Name:

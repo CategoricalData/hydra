@@ -29,6 +29,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Compare two precision values
 comparePrecision :: (Util.Precision -> Util.Precision -> Util.Comparison)
 comparePrecision p1 p2 = ((\x -> case x of
   Util.PrecisionArbitrary -> ((\x -> case x of
@@ -38,6 +39,7 @@ comparePrecision p1 p2 = ((\x -> case x of
     Util.PrecisionArbitrary -> Util.ComparisonLessThan
     Util.PrecisionBits v2 -> (Logic.ifElse (Equality.lt v1 v2) Util.ComparisonLessThan Util.ComparisonGreaterThan)) p2)) p1)
 
+-- | Convert a float value to a different float type
 convertFloatValue :: (Core.FloatType -> Core.FloatValue -> Core.FloatValue)
 convertFloatValue target fv =  
   let decoder = (\fv -> (\x -> case x of
@@ -51,6 +53,7 @@ convertFloatValue target fv =
             Core.FloatTypeFloat64 -> (Core.FloatValueFloat64 (Literals.bigfloatToFloat64 d))) target)
     in (encoder (decoder fv))
 
+-- | Convert an integer value to a different integer type
 convertIntegerValue :: (Core.IntegerType -> Core.IntegerValue -> Core.IntegerValue)
 convertIntegerValue target iv =  
   let decoder = (\iv -> (\x -> case x of
@@ -76,6 +79,7 @@ convertIntegerValue target iv =
             Core.IntegerTypeUint64 -> (Core.IntegerValueUint64 (Literals.bigintToUint64 d))) target)
     in (encoder (decoder iv))
 
+-- | Generate a disclaimer message for type conversions
 disclaimer :: (Bool -> String -> String -> String)
 disclaimer lossy source target = (Strings.cat [
   "replace ",
@@ -84,6 +88,7 @@ disclaimer lossy source target = (Strings.cat [
   target,
   (Logic.ifElse lossy " (lossy)" "")])
 
+-- | Create an adapter for literal types
 literalAdapter :: (Core.LiteralType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t0 Core.LiteralType Core.LiteralType Core.Literal Core.Literal))
 literalAdapter lt =  
   let forBinary = (\t ->  
@@ -196,6 +201,7 @@ literalAdapter lt =
             let supported = (Utils.literalTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
             in (Utils.chooseAdapter alts supported Core__.literalType Core__.literalType lt)))
 
+-- | Create an adapter for float types
 floatAdapter :: (Core.FloatType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.FloatType Core.FloatType Core.FloatValue Core.FloatValue))
 floatAdapter ft =  
   let makeAdapter = (\source -> \target ->  
@@ -228,6 +234,7 @@ floatAdapter ft =
         let supported = (Utils.floatTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
         in (Utils.chooseAdapter alts supported Core__.floatType Core__.floatType ft)))
 
+-- | Create an adapter for integer types
 integerAdapter :: (Core.IntegerType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.IntegerType Core.IntegerType Core.IntegerValue Core.IntegerValue))
 integerAdapter it =  
   let interleave = (\xs -> \ys -> Lists.concat (Lists.transpose [

@@ -20,9 +20,13 @@ import hydra.typing
 T0 = TypeVar("T0")
 
 def subst_in_type(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra.core.Type:
+    r"""Apply a type substitution to a type."""
+    
     return hydra.lib.logic.if_else(hydra.lib.maps.null(subst.value), (lambda : typ0), (lambda : subst_in_type_non_empty(subst, typ0)))
 
 def subst_in_type_non_empty(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra.core.Type:
+    r"""Apply a non-empty type substitution to a type (internal helper)."""
+    
     def rewrite(recurse: Callable[[hydra.core.Type], hydra.core.Type], typ: hydra.core.Type) -> hydra.core.Type:
         match typ:
             case hydra.core.TypeForall(value=lt):
@@ -38,6 +42,8 @@ def subst_in_type_non_empty(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type
     return hydra.rewriting.rewrite_type((lambda x1, x2: rewrite(x1, x2)), typ0)
 
 def compose_type_subst_non_empty(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -> hydra.typing.TypeSubst:
+    r"""Compose two non-empty type substitutions (internal helper)."""
+    
     def is_extra(k: hydra.core.Name, v: T0) -> bool:
         return hydra.lib.maybes.is_nothing(hydra.lib.maps.lookup(k, s1.value))
     @lru_cache(1)
@@ -46,19 +52,29 @@ def compose_type_subst_non_empty(s1: hydra.typing.TypeSubst, s2: hydra.typing.Ty
     return hydra.typing.TypeSubst(hydra.lib.maps.union(with_extra(), hydra.lib.maps.map((lambda v1: subst_in_type(s2, v1)), s1.value)))
 
 def compose_type_subst(s1: hydra.typing.TypeSubst, s2: hydra.typing.TypeSubst) -> hydra.typing.TypeSubst:
+    r"""Compose two type substitutions."""
+    
     return hydra.lib.logic.if_else(hydra.lib.maps.null(s1.value), (lambda : s2), (lambda : hydra.lib.logic.if_else(hydra.lib.maps.null(s2.value), (lambda : s1), (lambda : compose_type_subst_non_empty(s1, s2)))))
 
 @lru_cache(1)
 def id_type_subst() -> hydra.typing.TypeSubst:
+    r"""The identity type substitution."""
+    
     return hydra.typing.TypeSubst(hydra.lib.maps.empty())
 
 def compose_type_subst_list(v1: frozenlist[hydra.typing.TypeSubst]) -> hydra.typing.TypeSubst:
+    r"""Compose a list of type substitutions."""
+    
     return hydra.lib.lists.foldl((lambda x1, x2: compose_type_subst(x1, x2)), id_type_subst(), v1)
 
 def singleton_type_subst(v: hydra.core.Name, t: hydra.core.Type) -> hydra.typing.TypeSubst:
+    r"""Create a type substitution with a single variable mapping."""
+    
     return hydra.typing.TypeSubst(hydra.lib.maps.singleton(v, t))
 
 def subst_in_class_constraints(subst: hydra.typing.TypeSubst, constraints: FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]:
+    r"""Apply a type substitution to class constraints, propagating to free variables."""
+    
     @lru_cache(1)
     def subst_map() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
         return subst.value
@@ -67,9 +83,13 @@ def subst_in_class_constraints(subst: hydra.typing.TypeSubst, constraints: Froze
     return hydra.lib.lists.foldl((lambda acc, pair: (var_name := hydra.lib.pairs.first(pair), metadata := hydra.lib.pairs.second(pair), hydra.lib.maybes.maybe(insert_or_merge(var_name, metadata, acc), (lambda target_type: (free_vars := hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_type(target_type)), hydra.lib.lists.foldl((lambda acc2, free_var: insert_or_merge(free_var, metadata, acc2)), acc, free_vars))[1]), hydra.lib.maps.lookup(var_name, subst_map())))[2]), hydra.lib.maps.empty(), hydra.lib.maps.to_list(constraints))
 
 def subst_in_type_scheme(subst: hydra.typing.TypeSubst, ts: hydra.core.TypeScheme) -> hydra.core.TypeScheme:
+    r"""Apply a type substitution to a type scheme."""
+    
     return hydra.core.TypeScheme(ts.variables, subst_in_type(subst, ts.type), hydra.lib.maybes.map((lambda v1: subst_in_class_constraints(subst, v1)), ts.constraints))
 
 def subst_in_context(subst: hydra.typing.TypeSubst, cx: hydra.typing.InferenceContext) -> hydra.typing.InferenceContext:
+    r"""Apply a type substitution to an inference context."""
+    
     @lru_cache(1)
     def new_data_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
         return hydra.lib.maps.map((lambda v1: subst_in_type_scheme(subst, v1)), cx.data_types)
@@ -79,6 +99,8 @@ def subst_in_context(subst: hydra.typing.TypeSubst, cx: hydra.typing.InferenceCo
     return hydra.typing.InferenceContext(cx.schema_types, cx.primitive_types, new_data_types(), new_class_constraints(), cx.debug)
 
 def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -> hydra.core.Term:
+    r"""Apply a type substitution to the type annotations within a term."""
+    
     def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
         @lru_cache(1)
         def dflt() -> hydra.core.Term:
@@ -127,6 +149,8 @@ def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -
     return hydra.rewriting.rewrite_term((lambda x1, x2: rewrite(x1, x2)), term0)
 
 def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) -> hydra.core.Term:
+    r"""Apply a term substitution to a term."""
+    
     @lru_cache(1)
     def s() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
         return subst.value
@@ -174,10 +198,16 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
     return hydra.rewriting.rewrite_term((lambda x1, x2: rewrite(x1, x2)), term0)
 
 def substitute_in_binding(subst: hydra.typing.TermSubst, b: hydra.core.Binding) -> hydra.core.Binding:
+    r"""Apply a term substitution to a binding."""
+    
     return hydra.core.Binding(b.name, substitute_in_term(subst, b.term), b.type)
 
 def substitute_in_constraint(subst: hydra.typing.TypeSubst, c: hydra.typing.TypeConstraint) -> hydra.typing.TypeConstraint:
+    r"""Apply a type substitution to a type constraint."""
+    
     return hydra.typing.TypeConstraint(subst_in_type(subst, c.left), subst_in_type(subst, c.right), c.comment)
 
 def substitute_in_constraints(subst: hydra.typing.TypeSubst, cs: frozenlist[hydra.typing.TypeConstraint]) -> frozenlist[hydra.typing.TypeConstraint]:
+    r"""Apply a type substitution to a list of type constraints."""
+    
     return hydra.lib.lists.map((lambda v1: substitute_in_constraint(subst, v1)), cs)

@@ -23,6 +23,8 @@ import hydra.rewriting
 import hydra.show.core
 
 def expect_number(value: hydra.json.model.Value) -> Either[str, Decimal]:
+    r"""Extract a number from a JSON value."""
+    
     match value:
         case hydra.json.model.ValueNumber(value=n):
             return Right(n)
@@ -31,6 +33,8 @@ def expect_number(value: hydra.json.model.Value) -> Either[str, Decimal]:
             return Left("expected number")
 
 def expect_string(value: hydra.json.model.Value) -> Either[str, str]:
+    r"""Extract a string from a JSON value."""
+    
     match value:
         case hydra.json.model.ValueString(value=s):
             return Right(s)
@@ -39,6 +43,8 @@ def expect_string(value: hydra.json.model.Value) -> Either[str, str]:
             return Left("expected string")
 
 def decode_float(ft: hydra.core.FloatType, value: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
+    r"""Decode a JSON value to a float term. Float64/Bigfloat from numbers; Float32 from string."""
+    
     match ft:
         case hydra.core.FloatType.BIGFLOAT:
             @lru_cache(1)
@@ -62,6 +68,8 @@ def decode_float(ft: hydra.core.FloatType, value: hydra.json.model.Value) -> Eit
             raise AssertionError("Unreachable: all variants handled")
 
 def decode_integer(it: hydra.core.IntegerType, value: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
+    r"""Decode a JSON value to an integer term. Small ints from numbers; large ints from strings."""
+    
     match it:
         case hydra.core.IntegerType.BIGINT:
             @lru_cache(1)
@@ -154,6 +162,8 @@ def decode_literal(lt: hydra.core.LiteralType, value: hydra.json.model.Value) ->
             raise AssertionError("Unreachable: all variants handled")
 
 def expect_array(value: hydra.json.model.Value) -> Either[str, frozenlist[hydra.json.model.Value]]:
+    r"""Extract an array from a JSON value."""
+    
     match value:
         case hydra.json.model.ValueArray(value=arr):
             return Right(arr)
@@ -162,6 +172,8 @@ def expect_array(value: hydra.json.model.Value) -> Either[str, frozenlist[hydra.
             return Left("expected array")
 
 def expect_object(value: hydra.json.model.Value) -> Either[str, FrozenDict[str, hydra.json.model.Value]]:
+    r"""Extract an object from a JSON value."""
+    
     match value:
         case hydra.json.model.ValueObject(value=obj):
             return Right(obj)
@@ -170,6 +182,8 @@ def expect_object(value: hydra.json.model.Value) -> Either[str, FrozenDict[str, 
             return Left("expected object")
 
 def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.core.Type, value: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
+    r"""Decode a JSON value to a Hydra term given a type. Returns Left for type mismatches."""
+    
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)

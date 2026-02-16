@@ -25,6 +25,8 @@ import hydra.schemas
 import hydra.util
 
 def collect_forall_variables(typ: hydra.core.Type) -> frozenlist[hydra.core.Name]:
+    r"""Collect forall type variable names from a type."""
+    
     match typ:
         case hydra.core.TypeAnnotated(value=at):
             return collect_forall_variables(at.body)
@@ -36,6 +38,8 @@ def collect_forall_variables(typ: hydra.core.Type) -> frozenlist[hydra.core.Name
             return ()
 
 def collect_type_variables_from_type(typ: hydra.core.Type) -> frozenlist[hydra.core.Name]:
+    r"""Collect all type variable names from a type expression."""
+    
     match typ:
         case hydra.core.TypeAnnotated(value=at):
             return collect_type_variables_from_type(at.body)
@@ -80,6 +84,8 @@ def collect_type_variables_from_type(typ: hydra.core.Type) -> frozenlist[hydra.c
             return ()
 
 def collect_ord_constrained_variables(typ: hydra.core.Type) -> frozenlist[hydra.core.Name]:
+    r"""Collect type variables needing Ord constraints (from Set element types)."""
+    
     match typ:
         case hydra.core.TypeAnnotated(value=at):
             return collect_ord_constrained_variables(at.body)
@@ -121,9 +127,13 @@ def collect_ord_constrained_variables(typ: hydra.core.Type) -> frozenlist[hydra.
             return ()
 
 def collect_type_variables(typ: hydra.core.Type) -> frozenlist[hydra.core.Name]:
+    r"""Collect type variable names from a type (forall parameters only)."""
+    
     return collect_forall_variables(typ)
 
 def decode_binding_name(n: hydra.core.Name) -> hydra.core.Name:
+    r"""Generate a binding name for a decoder function from a type name."""
+    
     return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.tail(hydra.lib.strings.split_on(".", n.value)))), (lambda : hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(("hydra", "decode"), hydra.lib.lists.concat2(hydra.lib.lists.tail(hydra.lib.lists.init(hydra.lib.strings.split_on(".", n.value))), (hydra.formatting.decapitalize(hydra.names.local_name_of(n)),)))))), (lambda : hydra.core.Name(hydra.formatting.decapitalize(hydra.names.local_name_of(n)))))
 
 def decode_literal_type(lt: hydra.core.LiteralType) -> hydra.core.Term:
@@ -190,9 +200,12 @@ def decode_literal_type(lt: hydra.core.LiteralType) -> hydra.core.Term:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+# Generate a decoder for the unit type.
 decode_unit_type = cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.extract.helpers.decodeUnit")))
 
 def decode_either_type(et: hydra.core.EitherType) -> hydra.core.Term:
+    r"""Generate a decoder for an Either type."""
+    
     @lru_cache(1)
     def left_decoder() -> hydra.core.Term:
         return decode_type(et.left)
@@ -202,15 +215,21 @@ def decode_either_type(et: hydra.core.EitherType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.extract.helpers.decodeEither"))), left_decoder()))), right_decoder())))
 
 def decode_forall_type(ft: hydra.core.ForallType) -> hydra.core.Term:
+    r"""Generate a decoder for a polymorphic (forall) type."""
+    
     return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(decode_binding_name(ft.parameter), Nothing(), decode_type(ft.body))))))
 
 def decode_list_type(elem_type: hydra.core.Type) -> hydra.core.Term:
+    r"""Generate a decoder for a list type."""
+    
     @lru_cache(1)
     def elem_decoder() -> hydra.core.Term:
         return decode_type(elem_type)
     return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.extract.helpers.decodeList"))), elem_decoder())))
 
 def decode_map_type(mt: hydra.core.MapType) -> hydra.core.Term:
+    r"""Generate a decoder for a map type."""
+    
     @lru_cache(1)
     def key_decoder() -> hydra.core.Term:
         return decode_type(mt.keys)
@@ -220,12 +239,16 @@ def decode_map_type(mt: hydra.core.MapType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.extract.helpers.decodeMap"))), key_decoder()))), val_decoder())))
 
 def decode_maybe_type(elem_type: hydra.core.Type) -> hydra.core.Term:
+    r"""Generate a decoder for an optional type."""
+    
     @lru_cache(1)
     def elem_decoder() -> hydra.core.Term:
         return decode_type(elem_type)
     return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.extract.helpers.decodeMaybe"))), elem_decoder())))
 
 def decode_pair_type(pt: hydra.core.PairType) -> hydra.core.Term:
+    r"""Generate a decoder for a pair type."""
+    
     @lru_cache(1)
     def first_decoder() -> hydra.core.Term:
         return decode_type(pt.first)
@@ -235,6 +258,8 @@ def decode_pair_type(pt: hydra.core.PairType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.extract.helpers.decodePair"))), first_decoder()))), second_decoder())))
 
 def decode_record_type(rt: hydra.core.RowType) -> hydra.core.Term:
+    r"""Generate a decoder for a record type."""
+    
     @lru_cache(1)
     def type_name() -> hydra.core.Name:
         return rt.type_name
@@ -253,12 +278,16 @@ def decode_record_type(rt: hydra.core.RowType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("cx"), Nothing(), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("raw"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.eithers.either"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("err"), Nothing(), cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("err"))))))))))))))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("stripped"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(hydra.core.Name("hydra.core.Term"), Just(cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.strings.cat(("expected record of type ", type_name().value))))))))))))), (hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("record"), Nothing(), cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let((hydra.core.Binding(hydra.core.Name("fieldMap"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.extract.helpers.toFieldMap"))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("record")))))), Nothing()),), decode_body()))))))))),)))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("stripped")))))))))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lexical.stripAndDereferenceTermEither"))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("cx")))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("raw")))))))))))))))))))
 
 def decode_set_type(elem_type: hydra.core.Type) -> hydra.core.Term:
+    r"""Generate a decoder for a set type."""
+    
     @lru_cache(1)
     def elem_decoder() -> hydra.core.Term:
         return decode_type(elem_type)
     return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.extract.helpers.decodeSet"))), elem_decoder())))
 
 def decode_type(typ: hydra.core.Type) -> hydra.core.Term:
+    r"""Generate a decoder term for a Type."""
+    
     match typ:
         case hydra.core.TypeAnnotated(value=at):
             return decode_type(at.body)
@@ -309,6 +338,8 @@ def decode_type(typ: hydra.core.Type) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("cx"), Nothing(), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("t"), Nothing(), cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("unsupported type variant"))))))))))))))))))))
 
 def decode_union_type(rt: hydra.core.RowType) -> hydra.core.Term:
+    r"""Generate a decoder for a union type."""
+    
     @lru_cache(1)
     def type_name() -> hydra.core.Name:
         return rt.type_name
@@ -317,12 +348,16 @@ def decode_union_type(rt: hydra.core.RowType) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("cx"), Nothing(), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("raw"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.eithers.either"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("err"), Nothing(), cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("err"))))))))))))))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("stripped"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(hydra.core.Name("hydra.core.Term"), Just(cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.strings.cat(("expected union of type ", type_name().value))))))))))))), (hydra.core.Field(hydra.core.Name("union"), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("inj"), Nothing(), cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let((hydra.core.Binding(hydra.core.Name("tname"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.core.Injection"), hydra.core.Name("typeName")))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("inj")))))), Nothing()), hydra.core.Binding(hydra.core.Name("field"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.core.Injection"), hydra.core.Name("field")))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("inj")))))), Nothing()), hydra.core.Binding(hydra.core.Name("fname"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.core.Field"), hydra.core.Name("name")))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("field")))))), Nothing()), hydra.core.Binding(hydra.core.Name("fterm"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.core.Field"), hydra.core.Name("term")))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("field")))))), Nothing()), hydra.core.Binding(hydra.core.Name("variantMap"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.fromList"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: to_variant_pair(x1)), rt.fields)))))), Nothing())), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.maybe"))))), cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.strings.cat"))))), cast(hydra.core.Term, hydra.core.TermList((cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("no such field ")))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(hydra.core.Name("hydra.core.Name"))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("fname")))))), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(" in union type ")))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(hydra.core.Name("hydra.core.Name"))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("tname"))))))))))))))))))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("f"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("f"))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("fterm")))))))))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maps.lookup"))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("fname")))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("variantMap")))))))))))))))))),)))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("stripped")))))))))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lexical.stripAndDereferenceTermEither"))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("cx")))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("raw")))))))))))))))))))
 
 def decode_wrapped_type(wt: hydra.core.WrappedType) -> hydra.core.Term:
+    r"""Generate a decoder for a wrapped type."""
+    
     @lru_cache(1)
     def body_decoder() -> hydra.core.Term:
         return decode_type(wt.body)
     return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("cx"), Nothing(), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("raw"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.eithers.either"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("err"), Nothing(), cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("err"))))))))))))))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("stripped"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(hydra.core.Name("hydra.core.Term"), Just(cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.strings.cat(("expected wrapped type ", wt.type_name.value))))))))))))), (hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("wrappedTerm"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.eithers.map"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("b"), Nothing(), cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(wt.type_name, cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("b")))))))))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body_decoder(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("cx")))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(hydra.core.Name("hydra.core.WrappedTerm"), hydra.core.Name("body")))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("wrappedTerm")))))))))))))))))),)))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("stripped")))))))))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("hydra.lexical.stripAndDereferenceTermEither"))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("cx")))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("raw")))))))))))))))))))
 
 def decoder_full_result_type(typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Get full result type for decoder."""
+    
     match typ:
         case hydra.core.TypeAnnotated(value=at):
             return decoder_full_result_type(at.body)
@@ -373,6 +408,8 @@ def decoder_full_result_type(typ: hydra.core.Type) -> hydra.core.Type:
             return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term")))
 
 def prepend_forall_decoders(base_type: hydra.core.Type, typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Prepend decoder types for forall parameters to base type."""
+    
     match typ:
         case hydra.core.TypeAnnotated(value=at):
             return prepend_forall_decoders(base_type, at.body)
@@ -384,6 +421,8 @@ def prepend_forall_decoders(base_type: hydra.core.Type, typ: hydra.core.Type) ->
             return base_type
 
 def decoder_type(typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Build decoder function type."""
+    
     @lru_cache(1)
     def result_type() -> hydra.core.Type:
         return decoder_full_result_type(typ)
@@ -393,6 +432,8 @@ def decoder_type(typ: hydra.core.Type) -> hydra.core.Type:
     return prepend_forall_decoders(base_type(), typ)
 
 def decoder_type_scheme(typ: hydra.core.Type) -> hydra.core.TypeScheme:
+    r"""Build type scheme for a decoder function."""
+    
     @lru_cache(1)
     def type_vars() -> frozenlist[hydra.core.Name]:
         return collect_type_variables(typ)
@@ -408,21 +449,33 @@ def decoder_type_scheme(typ: hydra.core.Type) -> hydra.core.TypeScheme:
     return hydra.core.TypeScheme(type_vars(), decoder_type(typ), constraints())
 
 def decode_binding(b: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Binding]:
+    r"""Transform a type binding into a decoder binding."""
+    
     return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: hydra.lib.flows.bind(hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, b.term)), (lambda typ: hydra.lib.flows.pure(hydra.core.Binding(decode_binding_name(b.name), decode_type(typ), Just(decoder_type_scheme(typ))))))))
 
 def decode_namespace(ns: hydra.module.Namespace) -> hydra.module.Namespace:
+    r"""Generate a decoder module namespace from a source module namespace."""
+    
     return hydra.module.Namespace(hydra.lib.strings.cat(("hydra.decode.", hydra.lib.strings.intercalate(".", hydra.lib.lists.tail(hydra.lib.strings.split_on(".", ns.value))))))
 
 def is_decodable_binding(b: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Binding]]:
+    r"""Check if a binding is decodable (serializable type)."""
+    
     return hydra.lib.flows.map((lambda serializable: hydra.lib.logic.if_else(serializable, (lambda : Just(b)), (lambda : Nothing()))), hydra.schemas.is_serializable_by_name(b.name))
 
 def filter_type_bindings(bindings: frozenlist[hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.core.Binding]]:
+    r"""Filter bindings to only decodable type definitions."""
+    
     return hydra.lib.flows.map((lambda x1: hydra.lib.maybes.cat(x1)), hydra.lib.flows.map_list((lambda x1: is_decodable_binding(x1)), hydra.lib.lists.filter((lambda x1: hydra.annotations.is_native_type(x1)), bindings)))
 
 def decode_module(mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.module.Module]]:
+    r"""Transform a type module into a decoder module."""
+    
     return hydra.lib.flows.bind(filter_type_bindings(mod.elements), (lambda type_bindings: hydra.lib.logic.if_else(hydra.lib.lists.null(type_bindings), (lambda : hydra.lib.flows.pure(Nothing())), (lambda : hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: decode_binding(x1)), type_bindings), (lambda decoded_bindings: (decoded_type_deps := hydra.lib.lists.map((lambda x1: decode_namespace(x1)), mod.type_dependencies), decoded_term_deps := hydra.lib.lists.map((lambda x1: decode_namespace(x1)), mod.term_dependencies), all_decoded_deps := hydra.lib.lists.nub(hydra.lib.lists.concat2(decoded_type_deps, decoded_term_deps)), hydra.lib.flows.pure(Just(hydra.module.Module(decode_namespace(mod.namespace), decoded_bindings, hydra.lib.lists.concat2((hydra.module.Namespace("hydra.extract.helpers"), hydra.module.Namespace("hydra.lexical"), hydra.module.Namespace("hydra.rewriting")), all_decoded_deps), (mod.namespace, hydra.module.Namespace("hydra.util")), Just(hydra.lib.strings.cat(("Term decoders for ", mod.namespace.value)))))))[3]))))))
 
 def decoder_result_type(typ: hydra.core.Type) -> hydra.core.Name:
+    r"""Compute the result type name for a decoder."""
+    
     match typ:
         case hydra.core.TypeAnnotated(value=at):
             return decoder_result_type(at.body)

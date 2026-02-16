@@ -44,6 +44,8 @@ def bind_constraints(cx: hydra.typing.InferenceContext, f: Callable[[hydra.typin
     return hydra.lib.flows.bind(hydra.unification.unify_type_constraints(cx.schema_types, constraints), (lambda s: hydra.lib.flows.bind(hydra.checking.check_type_subst(cx, s), (lambda _: f(s)))))
 
 def bind_unbound_type_variables(cx: hydra.typing.InferenceContext, term0: hydra.core.Term) -> hydra.core.Term:
+    r"""Place unbound type variables appearing anywhere under a typed let binding in the type scheme of that binding. These variables may appear in the binding type scheme itself or in that of a subterm, in domain types attached to functions, and in type abstraction and type application terms. This process attempts to capture type variables which have escaped unification, e.g. due to unused code. However, unbound type variables not appearing beneath any typed let binding remain unbound."""
+    
     @lru_cache(1)
     def svars() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.from_list(hydra.lib.maps.keys(cx.schema_types))
@@ -65,13 +67,19 @@ def bind_unbound_type_variables(cx: hydra.typing.InferenceContext, term0: hydra.
     return hydra.rewriting.rewrite_term((lambda x1, x2: rewrite(x1, x2)), term0)
 
 def build_type_application_term(tvars: frozenlist[hydra.core.Name], body: hydra.core.Term) -> hydra.core.Term:
+    r"""Fold a list of type variables over a term to build a type application term."""
+    
     return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(t, cast(hydra.core.Type, hydra.core.TypeVariable(v)))))), body, tvars)
 
 @lru_cache(1)
 def empty_inference_context() -> hydra.typing.InferenceContext:
+    r"""An empty inference context."""
+    
     return hydra.typing.InferenceContext(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), False)
 
 def extend_context(pairs: frozenlist[tuple[hydra.core.Name, hydra.core.TypeScheme]], cx: hydra.typing.InferenceContext) -> hydra.typing.InferenceContext:
+    r"""Add (term variable, type scheme) pairs to the typing environment."""
+    
     return hydra.typing.InferenceContext(cx.schema_types, cx.primitive_types, hydra.lib.maps.union(hydra.lib.maps.from_list(pairs), cx.data_types), cx.class_constraints, cx.debug)
 
 def finalize_inferred_term(cx: hydra.typing.InferenceContext, term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
@@ -100,6 +108,8 @@ def map_constraints(cx: hydra.typing.InferenceContext, f: Callable[[hydra.typing
     return hydra.lib.flows.bind(hydra.unification.unify_type_constraints(cx.schema_types, constraints), (lambda s: hydra.lib.flows.bind(hydra.checking.check_type_subst(cx, s), (lambda _: hydra.lib.flows.pure(f(s))))))
 
 def yield_(term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst) -> hydra.typing.InferenceResult:
+    r"""Create an inference result with no class constraints."""
+    
     return hydra.typing.InferenceResult(hydra.substitution.subst_types_in_term(subst, term), hydra.substitution.subst_in_type(subst, typ), subst, hydra.lib.maps.empty())
 
 def infer_type_of_projection(cx: hydra.typing.InferenceContext, proj: hydra.core.Projection) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
@@ -115,6 +125,8 @@ def infer_type_of_unwrap(cx: hydra.typing.InferenceContext, tname: hydra.core.Na
     return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname), (lambda schema_type: (svars := schema_type.variables, stype := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.wrapped_type(tname, stype), (lambda wtyp: hydra.lib.flows.pure(yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(tname))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), wtyp))), hydra.substitution.id_type_subst())))))[2]))
 
 def free_variables_in_context(cx: hydra.typing.InferenceContext) -> frozenset[hydra.core.Name]:
+    r"""Get all free variables in an inference context."""
+    
     return hydra.lib.lists.foldl((lambda x1, x2: hydra.lib.sets.union(x1, x2)), hydra.lib.sets.empty(), hydra.lib.lists.map((lambda x1: hydra.rewriting.free_variables_in_type_scheme_simple(x1)), hydra.lib.maps.elems(cx.data_types)))
 
 def yield_checked_with_constraints(term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst, constraints: FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
@@ -133,9 +145,13 @@ def infer_type_of_primitive(cx: hydra.typing.InferenceContext, name: hydra.core.
     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("No such primitive: ", name.value)), (lambda scheme: hydra.lib.flows.bind(hydra.schemas.instantiate_type_scheme(scheme), (lambda ts: (constraints := hydra.lib.maybes.from_maybe(hydra.lib.maps.empty(), ts.constraints), yield_checked_with_constraints(build_type_application_term(ts.variables, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name))))), ts.type, hydra.substitution.id_type_subst(), constraints))[1]))), hydra.lib.maps.lookup(name, cx.primitive_types))
 
 def is_unbound(cx: hydra.typing.InferenceContext, v: hydra.core.Name) -> bool:
+    r"""Check if a variable is unbound in context."""
+    
     return hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.lib.sets.member(v, free_variables_in_context(cx))), hydra.lib.logic.not_(hydra.lib.maps.member(v, cx.schema_types)))
 
 def generalize(cx: hydra.typing.InferenceContext, typ: hydra.core.Type) -> hydra.core.TypeScheme:
+    r"""Generalize a type to a type scheme."""
+    
     def is_type_var_name(name: hydra.core.Name) -> bool:
         @lru_cache(1)
         def parts() -> frozenlist[str]:
@@ -160,6 +176,8 @@ def infer_type_of_literal(_: T0, lit: hydra.core.Literal) -> hydra.compute.Flow[
 
 @lru_cache(1)
 def infer_type_of_unit() -> hydra.typing.InferenceResult:
+    r"""The trivial inference rule for the unit term."""
+    
     return hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermUnit()), cast(hydra.core.Type, hydra.core.TypeUnit()), hydra.substitution.id_type_subst(), hydra.lib.maps.empty())
 
 def infer_type_of_variable(cx: hydra.typing.InferenceContext, name: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
@@ -524,6 +542,8 @@ def infer_graph_types(g0: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.gra
     return hydra.monads.with_trace("graph inference", hydra.lib.flows.bind(hydra.schemas.graph_to_inference_context(g0), (lambda cx: hydra.lib.flows.bind(infer_type_of_term(cx, to_let_term(g0), "graph term"), (lambda result: (term := result.term, ts := result.type, hydra.lib.flows.bind(finalize_inferred_term(cx, term), (lambda finalized: for_final(finalized))))[2])))))
 
 def infer_in_graph_context(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.typing.InferenceResult]:
+    r"""Infer the type of a term in graph context."""
+    
     return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: hydra.lib.flows.bind(hydra.schemas.graph_to_inference_context(g), (lambda cx: infer_type_of_term(cx, term, "single term")))))
 
 def infer_type_of(cx: hydra.typing.InferenceContext, term: hydra.core.Term) -> hydra.compute.Flow[T0, tuple[hydra.core.Term, hydra.core.TypeScheme]]:
@@ -557,6 +577,8 @@ def initial_type_context(g: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.t
     return hydra.lib.flows.bind(hydra.schemas.graph_to_inference_context(g), (lambda ix: hydra.lib.flows.bind(hydra.lib.flows.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.flows.map_list((lambda x1: to_pair(x1)), g.elements)), (lambda types: hydra.lib.flows.pure(hydra.typing.TypeContext(types, hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), ix))))))
 
 def show_inference_result(result: hydra.typing.InferenceResult) -> str:
+    r"""Show an inference result for debugging."""
+    
     @lru_cache(1)
     def term() -> hydra.core.Term:
         return result.term
@@ -578,4 +600,6 @@ def yield_debug(cx: T0, debug_id: T1, term: hydra.core.Term, typ: hydra.core.Typ
     return hydra.lib.flows.bind(hydra.annotations.debug_if(debug_id, hydra.lib.strings.cat(("\n\tterm: ", hydra.show.core.term(term), "\n\ttyp: ", hydra.show.core.type(typ), "\n\tsubst: ", hydra.show.typing.type_subst(subst), "\n\trterm: ", hydra.show.core.term(rterm()), "\n\trtyp: ", hydra.show.core.type(rtyp())))), (lambda result: hydra.lib.flows.pure(hydra.typing.InferenceResult(rterm(), rtyp(), subst, hydra.lib.maps.empty()))))
 
 def yield_with_constraints(term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst, constraints: FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> hydra.typing.InferenceResult:
+    r"""Create an inference result with class constraints."""
+    
     return hydra.typing.InferenceResult(hydra.substitution.subst_types_in_term(subst, term), hydra.substitution.subst_in_type(subst, typ), subst, constraints)

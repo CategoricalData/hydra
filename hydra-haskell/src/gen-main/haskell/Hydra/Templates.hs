@@ -24,6 +24,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Create a graph schema from a graph which contains nothing but encoded type definitions
 graphToSchema :: (Graph.Graph -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))
 graphToSchema g =  
   let toPair = (\el ->  
@@ -31,6 +32,7 @@ graphToSchema g =
           in (Flows.bind Monads.getState (\cx -> Flows.bind (Monads.withTrace "graph to schema" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm el)))) (\t -> Flows.pure (name, t)))))
   in (Flows.bind (Flows.mapList toPair (Graph.graphElements g)) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
+-- | Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals
 instantiateTemplate :: (Bool -> M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Term)
 instantiateTemplate minimal schema t =  
   let inst = (instantiateTemplate minimal schema)

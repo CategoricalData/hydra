@@ -12,6 +12,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Show a case convention as a string
 caseConvention :: (Util.CaseConvention -> String)
 caseConvention c = ((\x -> case x of
   Util.CaseConventionLowerSnake -> "lower_snake_case"

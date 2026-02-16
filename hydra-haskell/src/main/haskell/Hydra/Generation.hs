@@ -237,7 +237,9 @@ writeYaml basePath universeModules modulesToGenerate = do
           else withTrace "generate YAML files" $ do
             let g0 = modulesToGraph completeUniverse completeUniverse  -- Use complete universe for full dependency resolution
                 namespaces = fmap moduleNamespace dataModules
-            (g1, defLists) <- dataGraphToDefinitions constraints True False False g0 namespaces
+            -- Infer types on the data graph before adaptation (eta expansion requires types)
+            g0' <- inferGraphTypes g0
+            (g1, defLists) <- dataGraphToDefinitions constraints True False False g0' namespaces
             withState g1 $ do
               maps <- CM.zipWithM forEachModule dataModules defLists
               return $ L.concat (M.toList <$> maps)

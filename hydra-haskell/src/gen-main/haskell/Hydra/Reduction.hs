@@ -33,9 +33,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Alpha convert a variable in a term
 alphaConvert :: (Core.Name -> Core.Name -> Core.Term -> Core.Term)
 alphaConvert vold vnew term = (Rewriting.replaceFreeTermVariable vold (Core.TermVariable vnew) term)
 
+-- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
 betaReduceType :: (Core.Type -> Compute.Flow Graph.Graph Core.Type)
 betaReduceType typ =  
   let reduceApp = (\app ->  
@@ -60,6 +62,11 @@ betaReduceType typ =
             in (Flows.bind (recurse t) (\r -> findApp r)))
     in (Rewriting.rewriteTypeM mapExpr typ)
 
+-- | Apply the special rules:
+-- |     ((\x.e1) e2) == e1, where x does not appear free in e1
+-- |   and
+-- |      ((\x.e1) e2) = e1[x/e2]
+-- | These are both limited forms of beta reduction which help to "clean up" a term without fully evaluating it.
 contractTerm :: (Core.Term -> Core.Term)
 contractTerm term =  
   let rewrite = (\recurse -> \t ->  
@@ -84,6 +91,7 @@ contractTerm term =
 countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
 
+-- | Eta-reduce a term by removing redundant lambda abstractions
 etaReduceTerm :: (Core.Term -> Core.Term)
 etaReduceTerm term =  
   let noChange = term
@@ -122,6 +130,7 @@ etaReduceTerm term =
         _ -> noChange) v1)
       _ -> noChange) term)
 
+-- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', in which the implicit parameters of primitive functions and eliminations are made into explicit lambda parameters. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 etaExpandTerm :: (Graph.Graph -> Core.Term -> Core.Term)
 etaExpandTerm graph term =  
   let expand = (\args -> \arity -> \t ->  
@@ -154,6 +163,7 @@ etaExpandTerm graph term =
                 _ -> (afterRecursion (recurse t2))) t2))
     in (contractTerm (Rewriting.rewriteTerm (rewrite []) term))
 
+-- | Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the TypeContext to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the TypeContext through nested scopes.
 etaExpandTermNew :: (Typing.TypeContext -> Core.Term -> Core.Term)
 etaExpandTermNew tx0 term0 =  
   let termArityWithContext = (\tx -> \term -> (\x -> case x of
@@ -295,6 +305,7 @@ etaExpandTermNew tx0 term0 =
                             Core.wrappedTermBody = (recurse tx (Core.wrappedTermBody v1))})))) term))
       in (contractTerm (rewriteWithArgs [] tx0 term0))
 
+-- | Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 etaExpansionArity :: (Graph.Graph -> Core.Term -> Int)
 etaExpansionArity graph term = ((\x -> case x of
   Core.TermAnnotated v1 -> (etaExpansionArity graph (Core.annotatedTermBody v1))
@@ -308,6 +319,7 @@ etaExpansionArity graph term = ((\x -> case x of
   Core.TermVariable v1 -> (Maybes.maybe 0 (\ts -> Arity.typeArity (Core.typeSchemeType ts)) (Maybes.bind (Lexical.lookupElement graph v1) (\b -> Core.bindingType b)))
   _ -> 0) term)
 
+-- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
 etaExpandTypedTerm :: (Typing.TypeContext -> Core.Term -> Compute.Flow t0 Core.Term)
 etaExpandTypedTerm tx0 term0 =  
   let rewrite = (\topLevel -> \forced -> \typeArgs -> \recurse -> \tx -> \term ->  
@@ -419,6 +431,7 @@ etaExpandTypedTerm tx0 term0 =
                                 _ -> (recurseOrForce term)) term))
   in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
 
+-- | A term evaluation function which is alternatively lazy or eager
 reduceTerm :: (Bool -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 reduceTerm eager term =  
   let reduce = (\eager -> reduceTerm eager)
@@ -524,9 +537,11 @@ reduceTerm eager term =
               let mapping = (\recurse -> \mid -> Flows.bind (Logic.ifElse (doRecurse eager mid) (recurse mid) (Flows.pure mid)) (\inner -> applyIfNullary eager inner []))
               in (Rewriting.rewriteTermM mapping term)
 
+-- | Whether a term is closed, i.e. represents a complete program
 termIsClosed :: (Core.Term -> Bool)
 termIsClosed term = (Sets.null (Rewriting.freeVariablesInTerm term))
 
+-- | Whether a term has been fully reduced to a value
 termIsValue :: (t0 -> Core.Term -> Bool)
 termIsValue g term =  
   let forList = (\els -> Lists.foldl (\b -> \t -> Logic.and b (termIsValue g t)) True els)

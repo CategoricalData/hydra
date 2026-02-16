@@ -60,6 +60,8 @@ def curly_braces_list(msymb: Maybe[str], style: hydra.ast.BlockStyle, els: froze
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : cst("{}")), (lambda : brackets(curly_braces(), style, symbol_sep(hydra.lib.maybes.from_maybe(",", msymb), style, els))))
 
 def expression_length(e: hydra.ast.Expr) -> int:
+    r"""Find the approximate length (number of characters, including spaces and newlines) of an expression without actually printing it."""
+    
     def symbol_length(s: hydra.ast.Symbol) -> int:
         return hydra.lib.strings.length(s.value)
     def ws_length(ws: hydra.ast.Ws) -> int:
@@ -162,6 +164,8 @@ def inline_style() -> hydra.ast.BlockStyle:
     return hydra.ast.BlockStyle(Nothing(), False, False)
 
 def braces_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
+    r"""Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."""
+    
     @lru_cache(1)
     def inline_list() -> hydra.ast.Expr:
         return curly_braces_list(Nothing(), inline_style(), els)
@@ -175,6 +179,8 @@ def bracket_list(style: hydra.ast.BlockStyle, els: frozenlist[hydra.ast.Expr]) -
     return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : cst("[]")), (lambda : brackets(square_brackets(), style, comma_sep(style, els))))
 
 def bracket_list_adaptive(els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
+    r"""Produce a bracketed list which separates elements by spaces or newlines depending on the estimated width of the expression."""
+    
     @lru_cache(1)
     def inline_list() -> hydra.ast.Expr:
         return bracket_list(inline_style(), els)
@@ -512,6 +518,8 @@ def semicolon_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return symbol_sep(";", inline_style(), v1)
 
 def suffix(s: str, expr: hydra.ast.Expr) -> hydra.ast.Expr:
+    r"""Append a suffix string to an expression."""
+    
     @lru_cache(1)
     def suf_op() -> hydra.ast.Op:
         return hydra.ast.Op(sym(s), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsNone()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE)

@@ -27,12 +27,14 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Generate child name
 childName :: (String -> String -> String)
 childName lname n = (Strings.cat [
   lname,
   "_",
   (Formatting.capitalize n)])
 
+-- | Find unique names for patterns
 findNames :: ([Grammar.Pattern] -> [String])
 findNames pats =  
   let nextName = (\acc -> \pat ->  
@@ -50,6 +52,7 @@ findNames pats =
                     in (Lists.cons nn names, (Maps.insert rn ni nameMap)))
   in (Lists.reverse (Pairs.first (Lists.foldl nextName ([], Maps.empty) pats)))
 
+-- | Convert a BNF grammar to a Hydra module
 grammarToModule :: (Module.Namespace -> Grammar.Grammar -> Maybe String -> Module.Module)
 grammarToModule ns grammar desc =  
   let prodPairs = (Lists.map (\prod -> (Grammar.unSymbol (Grammar.productionSymbol prod), (Grammar.productionPattern prod))) (Grammar.unGrammar grammar))
@@ -72,6 +75,7 @@ grammarToModule ns grammar desc =
             Module.moduleTypeDependencies = [],
             Module.moduleDescription = desc}
 
+-- | Check if pattern is complex
 isComplex :: (Grammar.Pattern -> Bool)
 isComplex pat = ((\x -> case x of
   Grammar.PatternLabeled v1 -> (isComplex (Grammar.labeledPatternPattern v1))
@@ -79,6 +83,7 @@ isComplex pat = ((\x -> case x of
   Grammar.PatternAlternatives v1 -> (isNontrivial False v1)
   _ -> False) pat)
 
+-- | Check if patterns are nontrivial
 isNontrivial :: (Bool -> [Grammar.Pattern] -> Bool)
 isNontrivial isRecord pats =  
   let minPats = (simplify isRecord pats)
@@ -88,6 +93,7 @@ isNontrivial isRecord pats =
             _ -> False) p)
     in (Logic.ifElse (Equality.equal (Lists.length minPats) 1) (isLabeled (Lists.head minPats)) True)
 
+-- | Create elements from pattern
 makeElements :: (Bool -> Module.Namespace -> String -> Grammar.Pattern -> [(String, Core.Type)])
 makeElements omitTrivial ns lname pat =  
   let trivial = (Logic.ifElse omitTrivial [] [
@@ -135,6 +141,7 @@ makeElements omitTrivial ns lname pat =
                               in (Logic.ifElse (isNontrivial isRecord pats) (Lists.cons (lname, (construct fields)) els) (forPat (Lists.head minPats))))
         in (forPat pat)
 
+-- | Get raw name from pattern
 rawName :: (Grammar.Pattern -> String)
 rawName pat = ((\x -> case x of
   Grammar.PatternAlternatives _ -> "alts"
@@ -149,6 +156,7 @@ rawName pat = ((\x -> case x of
   Grammar.PatternSequence _ -> "sequence"
   Grammar.PatternStar v1 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v1)))) pat)
 
+-- | Remove trivial patterns from records
 simplify :: (Bool -> [Grammar.Pattern] -> [Grammar.Pattern])
 simplify isRecord pats =  
   let isConstant = (\p -> (\x -> case x of
@@ -156,11 +164,13 @@ simplify isRecord pats =
           _ -> False) p)
   in (Logic.ifElse isRecord (Lists.filter (\p -> Logic.not (isConstant p)) pats) pats)
 
+-- | Convert local name to qualified name
 toName :: (Module.Namespace -> String -> Core.Name)
 toName ns local = (Names.unqualifyName (Module.QualifiedName {
   Module.qualifiedNameNamespace = (Just ns),
   Module.qualifiedNameLocal = local}))
 
+-- | Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type
 wrapType :: (Core.Type -> Core.Type)
 wrapType t = ((\x -> case x of
   Core.TypeRecord _ -> t

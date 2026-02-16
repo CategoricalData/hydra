@@ -13,6 +13,8 @@ import hydra.util
 import hydra.variants
 
 def elimination_variant(v1: hydra.core.Elimination) -> hydra.variants.EliminationVariant:
+    r"""Find the elimination inject (constructor) for a given elimination term."""
+    
     match v1:
         case hydra.core.EliminationRecord():
             return hydra.variants.EliminationVariant.RECORD
@@ -26,9 +28,12 @@ def elimination_variant(v1: hydra.core.Elimination) -> hydra.variants.Eliminatio
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+# All elimination variants (constructors), in a canonical order.
 elimination_variants = (hydra.variants.EliminationVariant.RECORD, hydra.variants.EliminationVariant.UNION, hydra.variants.EliminationVariant.WRAP)
 
 def float_type_precision(v1: hydra.core.FloatType) -> hydra.util.Precision:
+    r"""Find the precision of a given floating-point type."""
+    
     match v1:
         case hydra.core.FloatType.BIGFLOAT:
             return cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())
@@ -42,9 +47,12 @@ def float_type_precision(v1: hydra.core.FloatType) -> hydra.util.Precision:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+# All floating-point types in a canonical order.
 float_types = (hydra.core.FloatType.BIGFLOAT, hydra.core.FloatType.FLOAT32, hydra.core.FloatType.FLOAT64)
 
 def float_value_type(v1: hydra.core.FloatValue) -> hydra.core.FloatType:
+    r"""Find the float type for a given floating-point value."""
+    
     match v1:
         case hydra.core.FloatValueBigfloat():
             return hydra.core.FloatType.BIGFLOAT
@@ -59,6 +67,8 @@ def float_value_type(v1: hydra.core.FloatValue) -> hydra.core.FloatType:
             raise AssertionError("Unreachable: all variants handled")
 
 def function_variant(v1: hydra.core.Function) -> hydra.variants.FunctionVariant:
+    r"""Find the function inject (constructor) for a given function."""
+    
     match v1:
         case hydra.core.FunctionElimination():
             return hydra.variants.FunctionVariant.ELIMINATION
@@ -72,9 +82,12 @@ def function_variant(v1: hydra.core.Function) -> hydra.variants.FunctionVariant:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+# All function variants (constructors), in a canonical order.
 function_variants = (hydra.variants.FunctionVariant.ELIMINATION, hydra.variants.FunctionVariant.LAMBDA, hydra.variants.FunctionVariant.PRIMITIVE)
 
 def integer_type_is_signed(v1: hydra.core.IntegerType) -> bool:
+    r"""Find whether a given integer type is signed (true) or unsigned (false)."""
+    
     match v1:
         case hydra.core.IntegerType.BIGINT:
             return True
@@ -107,6 +120,8 @@ def integer_type_is_signed(v1: hydra.core.IntegerType) -> bool:
             raise AssertionError("Unreachable: all variants handled")
 
 def integer_type_precision(v1: hydra.core.IntegerType) -> hydra.util.Precision:
+    r"""Find the precision of a given integer type."""
+    
     match v1:
         case hydra.core.IntegerType.BIGINT:
             return cast(hydra.util.Precision, hydra.util.PrecisionArbitrary())
@@ -138,9 +153,12 @@ def integer_type_precision(v1: hydra.core.IntegerType) -> hydra.util.Precision:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+# All integer types, in a canonical order.
 integer_types = (hydra.core.IntegerType.BIGINT, hydra.core.IntegerType.INT8, hydra.core.IntegerType.INT16, hydra.core.IntegerType.INT32, hydra.core.IntegerType.INT64, hydra.core.IntegerType.UINT8, hydra.core.IntegerType.UINT16, hydra.core.IntegerType.UINT32, hydra.core.IntegerType.UINT64)
 
 def integer_value_type(v1: hydra.core.IntegerValue) -> hydra.core.IntegerType:
+    r"""Find the integer type for a given integer value."""
+    
     match v1:
         case hydra.core.IntegerValueBigint():
             return hydra.core.IntegerType.BIGINT
@@ -173,6 +191,8 @@ def integer_value_type(v1: hydra.core.IntegerValue) -> hydra.core.IntegerType:
             raise AssertionError("Unreachable: all variants handled")
 
 def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
+    r"""Find the literal type for a given literal value."""
+    
     match v1:
         case hydra.core.LiteralBinary():
             return cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary())
@@ -193,6 +213,8 @@ def literal_type(v1: hydra.core.Literal) -> hydra.core.LiteralType:
             raise AssertionError("Unreachable: all variants handled")
 
 def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.variants.LiteralVariant:
+    r"""Find the literal type inject (constructor) for a given literal value."""
+    
     match v1:
         case hydra.core.LiteralTypeBinary():
             return hydra.variants.LiteralVariant.BINARY
@@ -214,14 +236,21 @@ def literal_type_variant(v1: hydra.core.LiteralType) -> hydra.variants.LiteralVa
 
 @lru_cache(1)
 def literal_types() -> frozenlist[hydra.core.LiteralType]:
+    r"""All literal types, in a canonical order."""
+    
     return hydra.lib.lists.concat(((cast(hydra.core.LiteralType, hydra.core.LiteralTypeBinary()), cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(x))), float_types), hydra.lib.lists.map((lambda x: cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(x))), integer_types), (cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()),)))
 
 def literal_variant(arg_: hydra.core.Literal) -> hydra.variants.LiteralVariant:
+    r"""Find the literal inject (constructor) for a given literal value."""
+    
     return literal_type_variant(literal_type(arg_))
 
+# All literal variants, in a canonical order.
 literal_variants = (hydra.variants.LiteralVariant.BINARY, hydra.variants.LiteralVariant.BOOLEAN, hydra.variants.LiteralVariant.FLOAT, hydra.variants.LiteralVariant.INTEGER, hydra.variants.LiteralVariant.STRING)
 
 def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
+    r"""Find the term inject (constructor) for a given term."""
+    
     match v1:
         case hydra.core.TermAnnotated():
             return hydra.variants.TermVariant.ANNOTATED
@@ -280,9 +309,12 @@ def term_variant(v1: hydra.core.Term) -> hydra.variants.TermVariant:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+# All term (expression) variants, in a canonical order.
 term_variants = (hydra.variants.TermVariant.ANNOTATED, hydra.variants.TermVariant.APPLICATION, hydra.variants.TermVariant.EITHER, hydra.variants.TermVariant.FUNCTION, hydra.variants.TermVariant.LIST, hydra.variants.TermVariant.LITERAL, hydra.variants.TermVariant.MAP, hydra.variants.TermVariant.MAYBE, hydra.variants.TermVariant.PAIR, hydra.variants.TermVariant.RECORD, hydra.variants.TermVariant.SET, hydra.variants.TermVariant.TYPE_LAMBDA, hydra.variants.TermVariant.TYPE_APPLICATION, hydra.variants.TermVariant.UNION, hydra.variants.TermVariant.UNIT, hydra.variants.TermVariant.VARIABLE, hydra.variants.TermVariant.WRAP)
 
 def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
+    r"""Find the type inject (constructor) for a given type."""
+    
     match v1:
         case hydra.core.TypeAnnotated():
             return hydra.variants.TypeVariant.ANNOTATED
@@ -335,4 +367,5 @@ def type_variant(v1: hydra.core.Type) -> hydra.variants.TypeVariant:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+# All type variants, in a canonical order.
 type_variants = (hydra.variants.TypeVariant.ANNOTATED, hydra.variants.TypeVariant.APPLICATION, hydra.variants.TypeVariant.EITHER, hydra.variants.TypeVariant.FUNCTION, hydra.variants.TypeVariant.FORALL, hydra.variants.TypeVariant.LIST, hydra.variants.TypeVariant.LITERAL, hydra.variants.TypeVariant.MAP, hydra.variants.TypeVariant.WRAP, hydra.variants.TypeVariant.MAYBE, hydra.variants.TypeVariant.PAIR, hydra.variants.TypeVariant.RECORD, hydra.variants.TypeVariant.SET, hydra.variants.TypeVariant.UNION, hydra.variants.TypeVariant.UNIT, hydra.variants.TypeVariant.VARIABLE)

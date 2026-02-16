@@ -57,15 +57,21 @@ def encode_decode(dir: hydra.coders.CoderDirection, coder: hydra.compute.Coder[T
             raise AssertionError("Unreachable: all variants handled")
 
 def float_type_is_supported(constraints: hydra.coders.LanguageConstraints, ft: hydra.core.FloatType) -> bool:
+    r"""Check if float type is supported by language constraints."""
+    
     return hydra.lib.sets.member(ft, constraints.float_types)
 
 def id_adapter(t: T0) -> hydra.compute.Adapter[T1, T2, T0, T0, T3, T3]:
     return hydra.compute.Adapter(False, t, t, id_coder())
 
 def integer_type_is_supported(constraints: hydra.coders.LanguageConstraints, it: hydra.core.IntegerType) -> bool:
+    r"""Check if integer type is supported by language constraints."""
+    
     return hydra.lib.sets.member(it, constraints.integer_types)
 
 def literal_type_is_supported(constraints: hydra.coders.LanguageConstraints, lt: hydra.core.LiteralType) -> bool:
+    r"""Check if literal type is supported by language constraints."""
+    
     def is_supported(lt2: hydra.core.LiteralType) -> bool:
         match lt2:
             case hydra.core.LiteralTypeFloat(value=ft):
@@ -79,6 +85,8 @@ def literal_type_is_supported(constraints: hydra.coders.LanguageConstraints, lt:
     return hydra.lib.logic.and_(hydra.lib.sets.member(hydra.reflect.literal_type_variant(lt), constraints.literal_variants), is_supported(lt))
 
 def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util.CaseConvention, ext: hydra.module.FileExtension, name: hydra.core.Name) -> str:
+    r"""Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator."""
+    
     @lru_cache(1)
     def qual_name() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(name)
@@ -99,6 +107,8 @@ def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util
     return hydra.lib.strings.cat((prefix(), suffix(), ".", ext.value))
 
 def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.core.Type) -> bool:
+    r"""Check if type is supported by language constraints."""
+    
     @lru_cache(1)
     def base() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(t)

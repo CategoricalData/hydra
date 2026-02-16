@@ -10,6 +10,8 @@ import hydra.core
 import hydra.lib.literals
 
 def bigfloat_to_float_value(ft: hydra.core.FloatType, bf: Decimal) -> hydra.core.FloatValue:
+    r"""Convert a bigfloat to a floating-point value of a given type (note: lossy)."""
+    
     match ft:
         case hydra.core.FloatType.BIGFLOAT:
             return cast(hydra.core.FloatValue, hydra.core.FloatValueBigfloat(bf))
@@ -24,6 +26,8 @@ def bigfloat_to_float_value(ft: hydra.core.FloatType, bf: Decimal) -> hydra.core
             raise AssertionError("Unreachable: all variants handled")
 
 def bigint_to_integer_value(it: hydra.core.IntegerType, bi: int) -> hydra.core.IntegerValue:
+    r"""Convert a bigint to an integer value of a given type (note: lossy)."""
+    
     match it:
         case hydra.core.IntegerType.BIGINT:
             return cast(hydra.core.IntegerValue, hydra.core.IntegerValueBigint(bi))
@@ -56,6 +60,8 @@ def bigint_to_integer_value(it: hydra.core.IntegerType, bi: int) -> hydra.core.I
             raise AssertionError("Unreachable: all variants handled")
 
 def float_value_to_bigfloat(v1: hydra.core.FloatValue) -> Decimal:
+    r"""Convert a floating-point value of any precision to a bigfloat."""
+    
     match v1:
         case hydra.core.FloatValueBigfloat(value=bf):
             return bf
@@ -70,6 +76,8 @@ def float_value_to_bigfloat(v1: hydra.core.FloatValue) -> Decimal:
             raise AssertionError("Unreachable: all variants handled")
 
 def integer_value_to_bigint(v1: hydra.core.IntegerValue) -> int:
+    r"""Convert an integer value of any precision to a bigint."""
+    
     match v1:
         case hydra.core.IntegerValueBigint(value=bi):
             return bi

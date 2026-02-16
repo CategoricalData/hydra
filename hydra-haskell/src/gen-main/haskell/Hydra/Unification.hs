@@ -25,6 +25,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Join two types, producing a list of type constraints.The comment is used to provide context for the constraints.
 joinTypes :: (Core.Type -> Core.Type -> String -> Compute.Flow t0 [Typing.TypeConstraint])
 joinTypes left right comment =  
   let sleft = (Rewriting.deannotateType left)
@@ -97,6 +98,12 @@ joinTypes left right comment =
                   _ -> cannotUnify) sright)
                 _ -> cannotUnify) sleft)
 
+-- | Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
+-- | Specifically this is an implementation of the following rules:
+-- |   * Unify({(x, t)} ∪ E) = {t/x} Unify(E{t/x}) if x ∉ FV(t)
+-- |   * Unify(∅) = I (the identity substitution x ↦ x)
+-- |   * Unify({(x, x)} ∪ E) = Unify(E)
+-- |   * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))
 unifyTypeConstraints :: (M.Map Core.Name t0 -> [Typing.TypeConstraint] -> Compute.Flow t1 Typing.TypeSubst)
 unifyTypeConstraints schemaTypes constraints =  
   let withConstraint = (\c -> \rest ->  
@@ -143,6 +150,7 @@ unifyTypes schemaTypes l r comment = (unifyTypeConstraints schemaTypes [
     Typing.typeConstraintRight = r,
     Typing.typeConstraintComment = comment}])
 
+-- | Determine whether a type variable appears within a type expression.No distinction is made between free and bound type variables.
 variableOccursInType :: (Core.Name -> Core.Type -> Bool)
 variableOccursInType var typ0 =  
   let tryType = (\b -> \typ -> (\x -> case x of

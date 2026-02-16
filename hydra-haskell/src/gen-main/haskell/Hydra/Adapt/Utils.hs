@@ -29,11 +29,13 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Create a bidirectional coder from a direction-aware function
 bidirectional :: ((Coders.CoderDirection -> t0 -> Compute.Flow t1 t0) -> Compute.Coder t1 t1 t0 t0)
 bidirectional f = Compute.Coder {
   Compute.coderEncode = (f Coders.CoderDirectionEncode),
   Compute.coderDecode = (f Coders.CoderDirectionDecode)}
 
+-- | Choose an appropriate adapter for a type
 chooseAdapter :: ((t0 -> Compute.Flow t1 [Compute.Adapter t2 t3 t0 t0 t4 t4]) -> (t0 -> Bool) -> (t0 -> String) -> (t0 -> String) -> t0 -> Compute.Flow t1 (Compute.Adapter t2 t3 t0 t0 t4 t4))
 chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (Flows.pure (Compute.Adapter {
   Compute.adapterIsLossy = False,
@@ -53,19 +55,23 @@ chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (
     ". Original type: ",
     (show typ)])) (Flows.pure (Lists.head candidates))))))
 
+-- | Compose two coders
 composeCoders :: (Compute.Coder t0 t1 t2 t3 -> Compute.Coder t0 t1 t3 t4 -> Compute.Coder t0 t1 t2 t4)
 composeCoders c1 c2 = Compute.Coder {
   Compute.coderEncode = (\a -> Flows.bind (Compute.coderEncode c1 a) (\b1 -> Compute.coderEncode c2 b1)),
   Compute.coderDecode = (\c -> Flows.bind (Compute.coderDecode c2 c) (\b2 -> Compute.coderDecode c1 b2))}
 
+-- | Apply coder in the specified direction
 encodeDecode :: (Coders.CoderDirection -> Compute.Coder t0 t0 t1 t1 -> t1 -> Compute.Flow t0 t1)
 encodeDecode dir coder term = ((\x -> case x of
   Coders.CoderDirectionEncode -> (Compute.coderEncode coder term)
   Coders.CoderDirectionDecode -> (Compute.coderDecode coder term)) dir)
 
+-- | Check if float type is supported by language constraints
 floatTypeIsSupported :: (Coders.LanguageConstraints -> Core.FloatType -> Bool)
 floatTypeIsSupported constraints ft = (Sets.member ft (Coders.languageConstraintsFloatTypes constraints))
 
+-- | Identity adapter
 idAdapter :: (t0 -> Compute.Adapter t1 t2 t0 t0 t3 t3)
 idAdapter t = Compute.Adapter {
   Compute.adapterIsLossy = False,
@@ -73,14 +79,17 @@ idAdapter t = Compute.Adapter {
   Compute.adapterTarget = t,
   Compute.adapterCoder = idCoder}
 
+-- | Identity coder
 idCoder :: (Compute.Coder t0 t1 t2 t2)
 idCoder = Compute.Coder {
   Compute.coderEncode = Flows.pure,
   Compute.coderDecode = Flows.pure}
 
+-- | Check if integer type is supported by language constraints
 integerTypeIsSupported :: (Coders.LanguageConstraints -> Core.IntegerType -> Bool)
 integerTypeIsSupported constraints it = (Sets.member it (Coders.languageConstraintsIntegerTypes constraints))
 
+-- | Check if literal type is supported by language constraints
 literalTypeIsSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)
 literalTypeIsSupported constraints lt =  
   let isSupported = (\lt -> (\x -> case x of
@@ -89,6 +98,7 @@ literalTypeIsSupported constraints lt =
           _ -> True) lt)
   in (Logic.and (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (isSupported lt))
 
+-- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
 nameToFilePath :: (Util.CaseConvention -> Util.CaseConvention -> Module.FileExtension -> Core.Name -> String)
 nameToFilePath nsConv localConv ext name =  
   let qualName = (Names.qualifyName name)
@@ -108,6 +118,7 @@ nameToFilePath nsConv localConv ext name =
               ".",
               (Module.unFileExtension ext)])
 
+-- | Check if type is supported by language constraints
 typeIsSupported :: (Coders.LanguageConstraints -> Core.Type -> Bool)
 typeIsSupported constraints t =  
   let base = (Rewriting.deannotateType t)
@@ -137,6 +148,7 @@ typeIsSupported constraints t =
                 Core.TypeVariable _ -> True) base)
         in (Logic.and (Coders.languageConstraintsTypes constraints base) (Logic.and (isSupportedVariant (Reflect.typeVariant base)) (isSupported base)))
 
+-- | Create a unidirectional coder
 unidirectionalCoder :: ((t0 -> Compute.Flow t1 t2) -> Compute.Coder t1 t3 t0 t2)
 unidirectionalCoder m = Compute.Coder {
   Compute.coderEncode = m,

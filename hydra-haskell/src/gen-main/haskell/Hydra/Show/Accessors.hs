@@ -22,6 +22,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Convert a term accessor to a string representation
 termAccessor :: (Accessors.TermAccessor -> Maybe String)
 termAccessor accessor =  
   let idx = (\i -> Nothing)
@@ -49,6 +50,7 @@ termAccessor accessor =
       Accessors.TermAccessorInjectionTerm -> Nothing
       Accessors.TermAccessorWrappedTerm -> Nothing) accessor)
 
+-- | Build an accessor graph from a term
 termToAccessorGraph :: (M.Map Module.Namespace String -> Core.Term -> Accessors.AccessorGraph)
 termToAccessorGraph namespaces term =  
   let dontCareAccessor = Accessors.TermAccessorAnnotatedBody 

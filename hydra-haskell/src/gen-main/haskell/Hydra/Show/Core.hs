@@ -21,9 +21,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | A placeholder for reading terms from their serialized form. Not implemented.
 readTerm :: (String -> Maybe Core.Term)
 readTerm s = (Just (Core.TermLiteral (Core.LiteralString s)))
 
+-- | Show a binding as a string
 binding :: (Core.Binding -> String)
 binding el =  
   let name = (Core.unName (Core.bindingName el))
@@ -40,6 +42,7 @@ binding el =
         " = ",
         (term t)])
 
+-- | Show an elimination as a string
 elimination :: (Core.Elimination -> String)
 elimination elm = ((\x -> case x of
   Core.EliminationRecord v1 ->  
@@ -97,6 +100,7 @@ fieldType ft =
       ":",
       (type_ ftyp)])
 
+-- | Show a list of fields as a string
 fields :: ([Core.Field] -> String)
 fields flds =  
   let fieldStrs = (Lists.map field flds)
@@ -105,24 +109,28 @@ fields flds =
     (Strings.intercalate ", " fieldStrs),
     "}"])
 
+-- | Show a float value as a string
 float :: (Core.FloatValue -> String)
 float fv = ((\x -> case x of
   Core.FloatValueBigfloat v1 -> (Strings.cat2 (Literals.showBigfloat v1) ":bigfloat")
   Core.FloatValueFloat32 v1 -> (Strings.cat2 (Literals.showFloat32 v1) ":float32")
   Core.FloatValueFloat64 v1 -> (Strings.cat2 (Literals.showFloat64 v1) ":float64")) fv)
 
+-- | Show a float type as a string
 floatType :: (Core.FloatType -> String)
 floatType ft = ((\x -> case x of
   Core.FloatTypeBigfloat -> "bigfloat"
   Core.FloatTypeFloat32 -> "float32"
   Core.FloatTypeFloat64 -> "float64") ft)
 
+-- | Show a function as a string
 function :: (Core.Function -> String)
 function f = ((\x -> case x of
   Core.FunctionElimination v1 -> (elimination v1)
   Core.FunctionLambda v1 -> (lambda v1)
   Core.FunctionPrimitive v1 -> (Strings.cat2 (Core.unName v1) "!")) f)
 
+-- | Show an injection as a string
 injection :: (Core.Injection -> String)
 injection inj =  
   let tname = (Core.injectionTypeName inj)
@@ -135,6 +143,7 @@ injection inj =
       (fields [
         f])])
 
+-- | Show an integer value as a string
 integer :: (Core.IntegerValue -> String)
 integer iv = ((\x -> case x of
   Core.IntegerValueBigint v1 -> (Strings.cat2 (Literals.showBigint v1) ":bigint")
@@ -147,6 +156,7 @@ integer iv = ((\x -> case x of
   Core.IntegerValueUint32 v1 -> (Strings.cat2 (Literals.showUint32 v1) ":uint32")
   Core.IntegerValueUint64 v1 -> (Strings.cat2 (Literals.showUint64 v1) ":uint64")) iv)
 
+-- | Show an integer type as a string
 integerType :: (Core.IntegerType -> String)
 integerType it = ((\x -> case x of
   Core.IntegerTypeBigint -> "bigint"
@@ -159,6 +169,7 @@ integerType it = ((\x -> case x of
   Core.IntegerTypeUint32 -> "uint32"
   Core.IntegerTypeUint64 -> "uint64") it)
 
+-- | Show a lambda as a string
 lambda :: (Core.Lambda -> String)
 lambda l =  
   let v = (Core.unName (Core.lambdaParameter l))
@@ -175,6 +186,7 @@ lambda l =
           ".",
           (term body)])
 
+-- | Show a let expression as a string
 let_ :: (Core.Let -> String)
 let_ l =  
   let bindings = (Core.letBindings l)
@@ -188,6 +200,7 @@ let_ l =
         " in ",
         (term env)])
 
+-- | Show a list using a given function to show each element
 list :: ((t0 -> String) -> [t0] -> String)
 list f xs =  
   let elementStrs = (Lists.map f xs)
@@ -196,6 +209,7 @@ list f xs =
     (Strings.intercalate ", " elementStrs),
     "]"])
 
+-- | Show a literal as a string
 literal :: (Core.Literal -> String)
 literal l = ((\x -> case x of
   Core.LiteralBinary _ -> "[binary]"
@@ -204,6 +218,7 @@ literal l = ((\x -> case x of
   Core.LiteralInteger v1 -> (integer v1)
   Core.LiteralString v1 -> (Literals.showString v1)) l)
 
+-- | Show a literal type as a string
 literalType :: (Core.LiteralType -> String)
 literalType lt = ((\x -> case x of
   Core.LiteralTypeBinary -> "binary"
@@ -212,6 +227,7 @@ literalType lt = ((\x -> case x of
   Core.LiteralTypeInteger v1 -> (integerType v1)
   Core.LiteralTypeString -> "string") lt)
 
+-- | Show a term as a string
 term :: (Core.Term -> String)
 term t =  
   let gatherTerms = (\prev -> \app ->  
@@ -311,6 +327,7 @@ term t =
           (term term1),
           "}"])) t)
 
+-- | Show a type as a string
 type_ :: (Core.Type -> String)
 type_ typ =  
   let showRowType = (\rt ->  
@@ -423,6 +440,7 @@ type_ typ =
               (type_ typ1),
               ")"])) typ)
 
+-- | Show a type scheme as a string
 typeScheme :: (Core.TypeScheme -> String)
 typeScheme ts =  
   let vars = (Core.typeSchemeVariables ts)

@@ -22,6 +22,8 @@ import hydra.lib.strings
 T0 = TypeVar("T0")
 
 def float_type(ft: hydra.core.FloatType) -> str:
+    r"""Show a float type as a string."""
+    
     match ft:
         case hydra.core.FloatType.BIGFLOAT:
             return "bigfloat"
@@ -36,6 +38,8 @@ def float_type(ft: hydra.core.FloatType) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def integer_type(it: hydra.core.IntegerType) -> str:
+    r"""Show an integer type as a string."""
+    
     match it:
         case hydra.core.IntegerType.BIGINT:
             return "bigint"
@@ -68,6 +72,8 @@ def integer_type(it: hydra.core.IntegerType) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def literal_type(lt: hydra.core.LiteralType) -> str:
+    r"""Show a literal type as a string."""
+    
     match lt:
         case hydra.core.LiteralTypeBinary():
             return "binary"
@@ -97,6 +103,8 @@ def field_type(ft: hydra.core.FieldType) -> str:
     return hydra.lib.strings.cat((fname(), ":", type(ftyp())))
 
 def type(typ: hydra.core.Type) -> str:
+    r"""Show a type as a string."""
+    
     def show_row_type(rt: hydra.core.RowType) -> str:
         @lru_cache(1)
         def flds() -> frozenlist[hydra.core.FieldType]:
@@ -226,6 +234,8 @@ def type(typ: hydra.core.Type) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def float(fv: hydra.core.FloatValue) -> str:
+    r"""Show a float value as a string."""
+    
     match fv:
         case hydra.core.FloatValueBigfloat(value=v):
             return hydra.lib.strings.cat2(hydra.lib.literals.show_bigfloat(v), ":bigfloat")
@@ -240,6 +250,8 @@ def float(fv: hydra.core.FloatValue) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def integer(iv: hydra.core.IntegerValue) -> str:
+    r"""Show an integer value as a string."""
+    
     match iv:
         case hydra.core.IntegerValueBigint(value=v):
             return hydra.lib.strings.cat2(hydra.lib.literals.show_bigint(v), ":bigint")
@@ -272,6 +284,8 @@ def integer(iv: hydra.core.IntegerValue) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def literal(l: hydra.core.Literal) -> str:
+    r"""Show a literal as a string."""
+    
     match l:
         case hydra.core.LiteralBinary():
             return "[binary]"
@@ -292,6 +306,8 @@ def literal(l: hydra.core.Literal) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def type_scheme(ts: hydra.core.TypeScheme) -> str:
+    r"""Show a type scheme as a string."""
+    
     @lru_cache(1)
     def vars() -> frozenlist[hydra.core.Name]:
         return ts.variables
@@ -307,6 +323,8 @@ def type_scheme(ts: hydra.core.TypeScheme) -> str:
     return hydra.lib.strings.cat(("(", fa(), type(body()), ")"))
 
 def binding(el: hydra.core.Binding) -> str:
+    r"""Show a binding as a string."""
+    
     @lru_cache(1)
     def name() -> str:
         return el.name.value
@@ -319,6 +337,8 @@ def binding(el: hydra.core.Binding) -> str:
     return hydra.lib.strings.cat((name(), type_str(), " = ", term(t())))
 
 def elimination(elm: hydra.core.Elimination) -> str:
+    r"""Show an elimination as a string."""
+    
     match elm:
         case hydra.core.EliminationRecord(value=proj):
             @lru_cache(1)
@@ -363,12 +383,16 @@ def field(field: hydra.core.Field) -> str:
     return hydra.lib.strings.cat((fname(), "=", term(fterm())))
 
 def fields(flds: frozenlist[hydra.core.Field]) -> str:
+    r"""Show a list of fields as a string."""
+    
     @lru_cache(1)
     def field_strs() -> frozenlist[str]:
         return hydra.lib.lists.map((lambda x1: field(x1)), flds)
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", field_strs()), "}"))
 
 def function(f: hydra.core.Function) -> str:
+    r"""Show a function as a string."""
+    
     match f:
         case hydra.core.FunctionElimination(value=v1):
             return elimination(v1)
@@ -383,6 +407,8 @@ def function(f: hydra.core.Function) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def injection(inj: hydra.core.Injection) -> str:
+    r"""Show an injection as a string."""
+    
     @lru_cache(1)
     def tname() -> hydra.core.Name:
         return inj.type_name
@@ -392,6 +418,8 @@ def injection(inj: hydra.core.Injection) -> str:
     return hydra.lib.strings.cat(("inject(", tname().value, ")", fields((f(),))))
 
 def lambda_(l: hydra.core.Lambda) -> str:
+    r"""Show a lambda as a string."""
+    
     @lru_cache(1)
     def v() -> str:
         return l.parameter.value
@@ -407,6 +435,8 @@ def lambda_(l: hydra.core.Lambda) -> str:
     return hydra.lib.strings.cat(("λ", v(), type_str(), ".", term(body())))
 
 def let(l: hydra.core.Let) -> str:
+    r"""Show a let expression as a string."""
+    
     @lru_cache(1)
     def bindings() -> frozenlist[hydra.core.Binding]:
         return l.bindings
@@ -419,6 +449,8 @@ def let(l: hydra.core.Let) -> str:
     return hydra.lib.strings.cat(("let ", hydra.lib.strings.intercalate(", ", binding_strs()), " in ", term(env())))
 
 def term(t: hydra.core.Term) -> str:
+    r"""Show a term as a string."""
+    
     def gather_terms(prev: frozenlist[hydra.core.Term], app: hydra.core.Application) -> frozenlist[hydra.core.Term]:
         @lru_cache(1)
         def lhs() -> hydra.core.Term:
@@ -532,4 +564,6 @@ def list(f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
     return hydra.lib.strings.cat(("[", hydra.lib.strings.intercalate(", ", element_strs()), "]"))
 
 def read_term(s: str) -> Maybe[hydra.core.Term]:
+    r"""A placeholder for reading terms from their serialized form. Not implemented."""
+    
     return Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(s)))))

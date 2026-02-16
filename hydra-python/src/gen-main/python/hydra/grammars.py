@@ -27,9 +27,13 @@ import hydra.names
 T0 = TypeVar("T0")
 
 def child_name(lname: str, n: str) -> str:
+    r"""Generate child name."""
+    
     return hydra.lib.strings.cat((lname, "_", hydra.formatting.capitalize(n)))
 
 def raw_name(pat: hydra.grammar.Pattern) -> str:
+    r"""Get raw name from pattern."""
+    
     match pat:
         case hydra.grammar.PatternAlternatives():
             return "alts"
@@ -68,6 +72,8 @@ def raw_name(pat: hydra.grammar.Pattern) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def find_names(pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[str]:
+    r"""Find unique names for patterns."""
+    
     def next_name(acc: tuple[frozenlist[str], FrozenDict[str, int]], pat: hydra.grammar.Pattern) -> tuple[frozenlist[str], FrozenDict[str, int]]:
         @lru_cache(1)
         def names() -> frozenlist[str]:
@@ -91,6 +97,8 @@ def find_names(pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[str]:
     return hydra.lib.lists.reverse(hydra.lib.pairs.first(hydra.lib.lists.foldl((lambda x1, x2: next_name(x1, x2)), ((), hydra.lib.maps.empty()), pats)))
 
 def simplify(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[hydra.grammar.Pattern]:
+    r"""Remove trivial patterns from records."""
+    
     def is_constant(p: hydra.grammar.Pattern) -> bool:
         match p:
             case hydra.grammar.PatternConstant():
@@ -101,6 +109,8 @@ def simplify(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> frozen
     return hydra.lib.logic.if_else(is_record, (lambda : hydra.lib.lists.filter((lambda p: hydra.lib.logic.not_(is_constant(p))), pats)), (lambda : pats))
 
 def is_nontrivial(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> bool:
+    r"""Check if patterns are nontrivial."""
+    
     @lru_cache(1)
     def min_pats() -> frozenlist[hydra.grammar.Pattern]:
         return simplify(is_record, pats)
@@ -114,6 +124,8 @@ def is_nontrivial(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> b
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(min_pats()), 1), (lambda : is_labeled(hydra.lib.lists.head(min_pats()))), (lambda : True))
 
 def is_complex(pat: hydra.grammar.Pattern) -> bool:
+    r"""Check if pattern is complex."""
+    
     match pat:
         case hydra.grammar.PatternLabeled(value=lp):
             return is_complex(lp.pattern)
@@ -128,9 +140,13 @@ def is_complex(pat: hydra.grammar.Pattern) -> bool:
             return False
 
 def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Name:
+    r"""Convert local name to qualified name."""
+    
     return hydra.names.unqualify_name(hydra.module.QualifiedName(Just(ns), local))
 
 def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pat: hydra.grammar.Pattern) -> frozenlist[tuple[str, hydra.core.Type]]:
+    r"""Create elements from pattern."""
+    
     @lru_cache(1)
     def trivial() -> frozenlist[tuple[str, hydra.core.Type]]:
         return hydra.lib.logic.if_else(omit_trivial, (lambda : ()), (lambda : ((lname, cast(hydra.core.Type, hydra.core.TypeUnit())),)))
@@ -200,6 +216,8 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
     return for_pat(pat)
 
 def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
+    r"""Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type."""
+    
     match t:
         case hydra.core.TypeRecord():
             return t
@@ -214,6 +232,8 @@ def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
             return cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(hydra.core.Name("Placeholder"), t)))
 
 def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar, desc: Maybe[str]) -> hydra.module.Module:
+    r"""Convert a BNF grammar to a Hydra module."""
+    
     @lru_cache(1)
     def prod_pairs() -> frozenlist[tuple[str, hydra.grammar.Pattern]]:
         return hydra.lib.lists.map((lambda prod: (prod.symbol.value, prod.pattern)), grammar.value)

@@ -36,6 +36,8 @@ def bind(l: hydra.compute.Flow[T0, T1], r: Callable[[T1], hydra.compute.Flow[T0,
     return hydra.compute.Flow((lambda x1, x2: q(x1, x2)))
 
 def push_error(msg: str, t: hydra.compute.Trace) -> hydra.compute.Trace:
+    r"""Push an error message."""
+    
     def condense_repeats(ys: frozenlist[str]) -> frozenlist[str]:
         def condense_group(xs: frozenlist[str]) -> str:
             @lru_cache(1)
@@ -62,6 +64,8 @@ def either_to_flow(format_error: Callable[[T0], str], e: Either[T0, T1]) -> hydr
 
 @lru_cache(1)
 def empty_trace() -> hydra.compute.Trace:
+    r"""An empty trace with no stack, messages, or other attributes."""
+    
     return hydra.compute.Trace((), (), hydra.lib.maps.empty())
 
 def exec(f: hydra.compute.Flow[T0, T1], s0: T0) -> T0:
@@ -104,6 +108,8 @@ def mutate_trace(mutate: Callable[[hydra.compute.Trace], Either[str, hydra.compu
     return hydra.compute.Flow((lambda x1, x2: flow_fun(x1, x2)))
 
 def trace_summary(t: hydra.compute.Trace) -> str:
+    r"""Summarize a trace as a string."""
+    
     @lru_cache(1)
     def message_lines() -> frozenlist[str]:
         return hydra.lib.lists.nub(t.messages)

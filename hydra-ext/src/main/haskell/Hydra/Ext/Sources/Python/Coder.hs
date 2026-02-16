@@ -839,7 +839,7 @@ extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
   doc "Extend environment with lambda parameters from a term" $
   "env" ~> "term" ~>
     "go" <~ ("e" ~> "t" ~>
-      cases _Term (Rewriting.deannotateTerm @@ var "t") (Just $ var "e") [
+      cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "t") (Just $ var "e") [
         _Term_function>>: "f" ~>
           cases _Function (var "f") (Just $ var "e") [
             _Function_lambda>>: "lam" ~>
@@ -965,8 +965,8 @@ deduplicateCaseVariables = def "deduplicateCaseVariables" $
         "done" <~ Pairs.second (var "state") $
         "fname" <~ Core.fieldName (var "field") $
         "fterm" <~ Core.fieldTerm (var "field") $
-        -- Check if term is a lambda
-        cases _Term (Rewriting.deannotateTerm @@ var "fterm") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
+        -- Check if term is a lambda (strip annotations and type wrappers)
+        cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
           _Term_function>>: "f" ~>
             cases _Function (var "f") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
               _Function_lambda>>: "lam" ~>
@@ -1014,7 +1014,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
                    (Core.bindingType $ var "bnd")) $
     -- Main rewrite function as Y combinator style
     "rewrite" <~ ("recurse" ~> "term" ~>
-      cases _Term (Rewriting.deannotateTerm @@ var "term") (Just $ var "term") [
+      cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "term") (Just $ var "term") [
         -- Replace the variable with unit
         _Term_variable>>: "n" ~>
           Logic.ifElse (Equality.equal (var "n") (var "v"))
@@ -1124,8 +1124,8 @@ encodeCaseBlock = def "encodeCaseBlock" $
   "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
     "fname" <~ Core.fieldName (var "field") $
     "fterm" <~ Core.fieldTerm (var "field") $
-    -- The field term should be a lambda; extract its parameter and body
-    cases _Term (Rewriting.deannotateTerm @@ var "fterm") Nothing [
+    -- The field term should be a lambda; strip annotations and type wrappers to extract it
+    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") Nothing [
       _Term_function>>: "f" ~>
         cases _Function (var "f") Nothing [
           _Function_lambda>>: "lam" ~>
@@ -2204,7 +2204,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
     -- Default case: encode function and apply
     "defaultCase" <~ ("pfun" <<~ (encodeTermInline @@ var "env" @@ false @@ var "fun") $
       produce $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")) $
-    cases _Term (Rewriting.deannotateTerm @@ var "fun") (Just $ var "defaultCase") [
+    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fun") (Just $ var "defaultCase") [
       _Term_function>>: "f" ~>
         cases _Function (var "f") (Just $ var "defaultCase") [
           _Function_elimination>>: "elm" ~>
@@ -2345,8 +2345,8 @@ encodeTermInline = def "encodeTermInline" $
                 PyHelpers._PythonModuleMetadata_usesTypeVar>>:
                   project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"])) $
             produce $ PyUtils.castTo @@ var "pytyp" @@ var "pyexp"))) $
-    -- Main case dispatch on term variant
-    cases _Term (Rewriting.deannotateTerm @@ var "term") Nothing [
+    -- Main case dispatch on term variant (strip annotations and type wrappers)
+    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "term") Nothing [
       -- TermApplication
       _Term_application>>: "app" ~>
         encodeApplication @@ var "env" @@ var "app",

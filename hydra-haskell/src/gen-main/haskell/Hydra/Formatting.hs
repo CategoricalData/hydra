@@ -21,9 +21,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Capitalize the first letter of a string
 capitalize :: (String -> String)
 capitalize = (mapFirstLetter Strings.toUpper)
 
+-- | Convert a string from one case convention to another
 convertCase :: (Util.CaseConvention -> Util.CaseConvention -> String -> String)
 convertCase from to original =  
   let parts =  
@@ -44,29 +46,37 @@ convertCase from to original =
     Util.CaseConventionLowerSnake -> (Strings.intercalate "_" (Lists.map Strings.toLower parts))
     Util.CaseConventionUpperSnake -> (Strings.intercalate "_" (Lists.map Strings.toUpper parts))) to)
 
+-- | Convert a string from camel case to lower snake case
 convertCaseCamelToLowerSnake :: (String -> String)
 convertCaseCamelToLowerSnake = (convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake)
 
+-- | Convert a string from camel case to upper snake case
 convertCaseCamelToUpperSnake :: (String -> String)
 convertCaseCamelToUpperSnake = (convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake)
 
+-- | Convert a string from pascal case to upper snake case
 convertCasePascalToUpperSnake :: (String -> String)
 convertCasePascalToUpperSnake = (convertCase Util.CaseConventionPascal Util.CaseConventionUpperSnake)
 
+-- | Decapitalize the first letter of a string
 decapitalize :: (String -> String)
 decapitalize = (mapFirstLetter Strings.toLower)
 
+-- | Escape reserved words by appending an underscore
 escapeWithUnderscore :: (S.Set String -> String -> String)
 escapeWithUnderscore reserved s = (Logic.ifElse (Sets.member s reserved) (Strings.cat2 s "_") s)
 
+-- | Indent each line of a string with four spaces
 indentLines :: (String -> String)
 indentLines s =  
   let indent = (\l -> Strings.cat2 "    " l)
   in (Strings.unlines (Lists.map indent (Strings.lines s)))
 
+-- | Format a string as a Java-style block comment
 javaStyleComment :: (String -> String)
 javaStyleComment s = (Strings.cat2 (Strings.cat2 (Strings.cat2 "/**\n" " * ") s) "\n */")
 
+-- | A helper which maps the first letter of a string to another string
 mapFirstLetter :: ((String -> String) -> String -> String)
 mapFirstLetter mapping s =  
   let list = (Strings.toList s)
@@ -74,6 +84,7 @@ mapFirstLetter mapping s =
     let firstLetter = (mapping (Strings.fromList (Lists.pure (Lists.head list))))
     in (Logic.ifElse (Strings.null s) s (Strings.cat2 firstLetter (Strings.fromList (Lists.tail list))))
 
+-- | Replace sequences of non-alphanumeric characters with single underscores
 nonAlnumToUnderscores :: (String -> String)
 nonAlnumToUnderscores input =  
   let isAlnum = (\c -> Logic.or (Logic.and (Equality.gte c 65) (Equality.lte c 90)) (Logic.or (Logic.and (Equality.gte c 97) (Equality.lte c 122)) (Logic.and (Equality.gte c 48) (Equality.lte c 57))))
@@ -87,18 +98,22 @@ nonAlnumToUnderscores input =
       let result = (Lists.foldl replace ([], False) (Strings.toList input))
       in (Strings.fromList (Lists.reverse (Pairs.first result)))
 
+-- | Sanitize a string by replacing non-alphanumeric characters and escaping reserved words
 sanitizeWithUnderscores :: (S.Set String -> String -> String)
 sanitizeWithUnderscores reserved s = (escapeWithUnderscore reserved (nonAlnumToUnderscores s))
 
+-- | Format a list of elements as a bracketed, comma-separated string
 showList :: ((t0 -> String) -> [t0] -> String)
 showList f els = (Strings.cat [
   "[",
   (Strings.intercalate ", " (Lists.map f els)),
   "]"])
 
+-- | Remove leading and trailing whitespace from a string
 stripLeadingAndTrailingWhitespace :: (String -> String)
 stripLeadingAndTrailingWhitespace s = (Strings.fromList (Lists.dropWhile Chars.isSpace (Lists.reverse (Lists.dropWhile Chars.isSpace (Lists.reverse (Strings.toList s))))))
 
+-- | Replace special characters with their alphanumeric aliases
 withCharacterAliases :: (String -> String)
 withCharacterAliases original =  
   let aliases = (Maps.fromList [
@@ -138,6 +153,7 @@ withCharacterAliases original =
       alias = (\c -> Maybes.fromMaybe (Lists.pure c) (Maybes.map Strings.toList (Maps.lookup c aliases)))
   in (Strings.fromList (Lists.filter Chars.isAlphaNum (Lists.concat (Lists.map alias (Strings.toList original)))))
 
+-- | A simple soft line wrap which is suitable for code comments
 wrapLine :: (Int -> String -> String)
 wrapLine maxlen input =  
   let helper = (\prev -> \rem ->  

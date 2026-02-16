@@ -22,6 +22,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Encode a Hydra term to a JSON value. Returns Left for unsupported constructs.
 toJson :: (Core.Term -> Either String Model.Value)
 toJson term =  
   let stripped = (Rewriting.deannotateTerm term)
@@ -101,6 +102,7 @@ toJson term =
       "unsupported term variant for JSON encoding: ",
       (Core_.term term)]))) stripped)
 
+-- | Encode a Hydra literal to a JSON value
 encodeLiteral :: (Core.Literal -> Either t0 Model.Value)
 encodeLiteral lit = ((\x -> case x of
   Core.LiteralBinary v1 -> (Right (Model.ValueString (Literals.binaryToString v1)))
@@ -109,12 +111,14 @@ encodeLiteral lit = ((\x -> case x of
   Core.LiteralInteger v1 -> (encodeInteger v1)
   Core.LiteralString v1 -> (Right (Model.ValueString v1))) lit)
 
+-- | Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string.
 encodeFloat :: (Core.FloatValue -> Either t0 Model.Value)
 encodeFloat fv = ((\x -> case x of
   Core.FloatValueBigfloat v1 -> (Right (Model.ValueNumber v1))
   Core.FloatValueFloat32 v1 -> (Right (Model.ValueString (Literals.showFloat32 v1)))
   Core.FloatValueFloat64 v1 -> (Right (Model.ValueNumber (Literals.float64ToBigfloat v1)))) fv)
 
+-- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
 encodeInteger :: (Core.IntegerValue -> Either t0 Model.Value)
 encodeInteger iv = ((\x -> case x of
   Core.IntegerValueBigint v1 -> (Right (Model.ValueString (Literals.showBigint v1)))

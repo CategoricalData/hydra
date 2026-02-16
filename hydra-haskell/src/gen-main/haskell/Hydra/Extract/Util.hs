@@ -20,5 +20,6 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Extract a comparison from a term
 comparison :: (Core.Term -> Compute.Flow Graph.Graph Util.Comparison)
 comparison term = (Flows.bind (Core_.unitVariant (Core.Name "hydra.util.Comparison") term) (\fname -> Logic.ifElse (Equality.equal (Core.unName fname) "equalTo") (Flows.pure Util.ComparisonEqualTo) (Logic.ifElse (Equality.equal (Core.unName fname) "lessThan") (Flows.pure Util.ComparisonLessThan) (Logic.ifElse (Equality.equal (Core.unName fname) "greaterThan") (Flows.pure Util.ComparisonGreaterThan) (Monads.unexpected "comparison" (Core.unName fname))))))

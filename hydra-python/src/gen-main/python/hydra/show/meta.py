@@ -7,6 +7,8 @@ import hydra.core
 import hydra.variants
 
 def term_variant(v1: hydra.variants.TermVariant) -> str:
+    r"""Show a term variant as a string."""
+    
     match v1:
         case hydra.variants.TermVariant.ANNOTATED:
             return "annotated"
@@ -66,6 +68,8 @@ def term_variant(v1: hydra.variants.TermVariant) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def type_variant(v1: hydra.variants.TypeVariant) -> str:
+    r"""Show a type variant as a string."""
+    
     match v1:
         case hydra.variants.TypeVariant.ANNOTATED:
             return "annotated"

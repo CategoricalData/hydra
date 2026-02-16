@@ -11,6 +11,8 @@ import hydra.lib.strings
 import hydra.show.core
 
 def graph(graph: hydra.graph.Graph) -> str:
+    r"""Show a graph as a string."""
+    
     @lru_cache(1)
     def elements() -> frozenlist[hydra.core.Binding]:
         return graph.elements

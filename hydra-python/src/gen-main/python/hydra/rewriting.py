@@ -37,6 +37,8 @@ T8 = TypeVar("T8")
 T9 = TypeVar("T9")
 
 def apply_inside_type_lambdas_and_annotations(f: Callable[[hydra.core.Term], hydra.core.Term], term0: hydra.core.Term) -> hydra.core.Term:
+    r"""Apply a term-level function inside any leading type lambdas."""
+    
     match term0:
         case hydra.core.TermAnnotated(value=at):
             return cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(apply_inside_type_lambdas_and_annotations(f, at.body), at.annotation)))
@@ -48,6 +50,8 @@ def apply_inside_type_lambdas_and_annotations(f: Callable[[hydra.core.Term], hyd
             return f(term0)
 
 def deannotate_and_detype_term(t: hydra.core.Term) -> hydra.core.Term:
+    r"""Strip type annotations from the top levels of a term."""
+    
     match t:
         case hydra.core.TermAnnotated(value=at):
             return deannotate_and_detype_term(at.body)
@@ -62,6 +66,8 @@ def deannotate_and_detype_term(t: hydra.core.Term) -> hydra.core.Term:
             return t
 
 def deannotate_term(t: hydra.core.Term) -> hydra.core.Term:
+    r"""Strip all annotations (including System F type annotations) from the top levels of a term."""
+    
     match t:
         case hydra.core.TermAnnotated(value=at):
             return deannotate_term(at.body)
@@ -70,6 +76,8 @@ def deannotate_term(t: hydra.core.Term) -> hydra.core.Term:
             return t
 
 def deannotate_type(t: hydra.core.Type) -> hydra.core.Type:
+    r"""Strip all annotations from a term."""
+    
     match t:
         case hydra.core.TypeAnnotated(value=arg_):
             return deannotate_type(arg_.body)
@@ -78,6 +86,8 @@ def deannotate_type(t: hydra.core.Type) -> hydra.core.Type:
             return t
 
 def deannotate_type_parameters(t: hydra.core.Type) -> hydra.core.Type:
+    r"""Strip any top-level type lambdas from a type, extracting the (possibly nested) type body."""
+    
     match deannotate_type(t):
         case hydra.core.TypeForall(value=lt):
             return deannotate_type_parameters(lt.body)
@@ -145,6 +155,8 @@ def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydr
     return recurse(typ0)
 
 def deannotate_type_recursive(typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Recursively strip all annotations from a type."""
+    
     def strip(recurse: Callable[[T0], hydra.core.Type], typ2: T0) -> hydra.core.Type:
         @lru_cache(1)
         def rewritten() -> hydra.core.Type:
@@ -158,6 +170,8 @@ def deannotate_type_recursive(typ: hydra.core.Type) -> hydra.core.Type:
     return rewrite_type((lambda x1, x2: strip(x1, x2)), typ)
 
 def deannotate_type_scheme_recursive(ts: hydra.core.TypeScheme) -> hydra.core.TypeScheme:
+    r"""Recursively strip all annotations from a type scheme."""
+    
     @lru_cache(1)
     def vars() -> frozenlist[hydra.core.Name]:
         return ts.variables
@@ -170,6 +184,8 @@ def deannotate_type_scheme_recursive(ts: hydra.core.TypeScheme) -> hydra.core.Ty
     return hydra.core.TypeScheme(vars(), deannotate_type_recursive(typ()), constraints())
 
 def detype_term(t: hydra.core.Term) -> hydra.core.Term:
+    r"""Strip System F type annotations from the top levels of a term, but leave application-specific annotations intact."""
+    
     match t:
         case hydra.core.TermAnnotated(value=at):
             @lru_cache(1)
@@ -289,6 +305,8 @@ def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydr
     return recurse(term0)
 
 def substitute_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], term: hydra.core.Term) -> hydra.core.Term:
+    r"""Substitute multiple variables in a term."""
+    
     def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
         def _hoist_replace_1(recurse: Callable[[T0], T0], term2: T0, v1: hydra.core.Function) -> T0:
             match v1:
@@ -309,6 +327,8 @@ def substitute_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], te
     return rewrite_term((lambda x1, x2: replace(x1, x2)), term)
 
 def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
+    r"""Flatten nested let expressions."""
+    
     def rewrite_binding(binding: hydra.core.Binding) -> tuple[hydra.core.Binding, frozenlist[hydra.core.Binding]]:
         @lru_cache(1)
         def key0() -> hydra.core.Name:
@@ -415,6 +435,8 @@ def flatten_let_terms(term: hydra.core.Term) -> hydra.core.Term:
     return rewrite_term((lambda x1, x2: flatten(x1, x2)), term)
 
 def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
+    r"""Find the children of a given term."""
+    
     match v1:
         case hydra.core.TermAnnotated(value=at):
             return (at.body,)
@@ -498,6 +520,8 @@ def fold_over_term(order: hydra.coders.TraversalOrder, fld: Callable[[T0, hydra.
             raise AssertionError("Unreachable: all variants handled")
 
 def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
+    r"""Find the children of a given type expression."""
+    
     match v1:
         case hydra.core.TypeAnnotated(value=at):
             return (at.body,)
@@ -562,6 +586,8 @@ def fold_over_type(order: hydra.coders.TraversalOrder, fld: Callable[[T0, hydra.
             raise AssertionError("Unreachable: all variants handled")
 
 def free_variables_in_type(typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
+    r"""Find the free variables (i.e. variables not bound by a lambda or let) in a type."""
+    
     @lru_cache(1)
     def dflt_vars() -> frozenset[hydra.core.Name]:
         return hydra.lib.lists.foldl((lambda s, t: hydra.lib.sets.union(s, free_variables_in_type(t))), hydra.lib.sets.empty(), subtypes(typ))
@@ -576,6 +602,8 @@ def free_variables_in_type(typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
             return dflt_vars()
 
 def free_type_variables_in_term(term0: hydra.core.Term) -> frozenset[hydra.core.Name]:
+    r"""Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not."""
+    
     def all_of(sets: frozenlist[frozenset[T0]]) -> frozenset[T0]:
         return hydra.lib.lists.foldl((lambda x1, x2: hydra.lib.sets.union(x1, x2)), hydra.lib.sets.empty(), sets)
     def try_type(tvars: frozenset[hydra.core.Name], typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
@@ -622,6 +650,8 @@ def free_type_variables_in_term(term0: hydra.core.Term) -> frozenset[hydra.core.
     return get_all(hydra.lib.sets.empty(), term0)
 
 def free_variables_in_term(term: hydra.core.Term) -> frozenset[hydra.core.Name]:
+    r"""Find the free variables (i.e. variables not bound by a lambda or let) in a term."""
+    
     @lru_cache(1)
     def dflt_vars() -> frozenset[hydra.core.Name]:
         return hydra.lib.lists.foldl((lambda s, t: hydra.lib.sets.union(s, free_variables_in_term(t))), hydra.lib.sets.empty(), subterms(term))
@@ -646,6 +676,8 @@ def free_variables_in_term(term: hydra.core.Term) -> frozenset[hydra.core.Name]:
             return dflt_vars()
 
 def free_variables_in_type_ordered(typ: hydra.core.Type) -> frozenlist[hydra.core.Name]:
+    r"""Find the free variables in a type in deterministic left-to-right order."""
+    
     def collect_vars(bound_vars: frozenset[hydra.core.Name], t: hydra.core.Type) -> frozenlist[hydra.core.Name]:
         match t:
             case hydra.core.TypeVariable(value=v):
@@ -659,6 +691,8 @@ def free_variables_in_type_ordered(typ: hydra.core.Type) -> frozenlist[hydra.cor
     return hydra.lib.lists.nub(collect_vars(hydra.lib.sets.empty(), typ))
 
 def free_variables_in_type_scheme(ts: hydra.core.TypeScheme) -> frozenset[hydra.core.Name]:
+    r"""Find free variables in a type scheme."""
+    
     @lru_cache(1)
     def vars() -> frozenlist[hydra.core.Name]:
         return ts.variables
@@ -668,6 +702,8 @@ def free_variables_in_type_scheme(ts: hydra.core.TypeScheme) -> frozenset[hydra.
     return hydra.lib.sets.difference(free_variables_in_type(t()), hydra.lib.sets.from_list(vars()))
 
 def free_variables_in_type_simple(typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
+    r"""Same as freeVariablesInType, but ignores the binding action of lambda types."""
+    
     def helper(types2: frozenset[hydra.core.Name], typ2: hydra.core.Type) -> frozenset[hydra.core.Name]:
         match typ2:
             case hydra.core.TypeVariable(value=v):
@@ -678,6 +714,8 @@ def free_variables_in_type_simple(typ: hydra.core.Type) -> frozenset[hydra.core.
     return fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: helper(x1, x2)), hydra.lib.sets.empty(), typ)
 
 def free_variables_in_type_scheme_simple(ts: hydra.core.TypeScheme) -> frozenset[hydra.core.Name]:
+    r"""Find free variables in a type scheme (simple version)."""
+    
     @lru_cache(1)
     def vars() -> frozenlist[hydra.core.Name]:
         return ts.variables
@@ -774,6 +812,8 @@ def inline_type(schema: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra
     return rewrite_type_m((lambda x1, x2: f(x1, x2)), typ)
 
 def is_free_variable_in_term(v: hydra.core.Name, term: hydra.core.Term) -> bool:
+    r"""Check whether a variable is free (not bound) in a term."""
+    
     return hydra.lib.logic.not_(hydra.lib.sets.member(v, free_variables_in_term(term)))
 
 def is_lambda(term: hydra.core.Term) -> bool:
@@ -795,6 +835,8 @@ def is_lambda(term: hydra.core.Term) -> bool:
             return False
 
 def lift_lambda_above_let(term0: hydra.core.Term) -> hydra.core.Term:
+    r"""Rewrite terms like `let foo = bar in λx.baz` to `λx.let foo = bar in baz`, lifting lambda-bound variables above let-bound variables, recursively. This is helpful for targets such as Python."""
+    
     def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
         def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Binding:
             return hydra.core.Binding(b.name, rewrite(recurse, b.term), b.type)
@@ -829,6 +871,8 @@ def lift_lambda_above_let(term0: hydra.core.Term) -> hydra.core.Term:
     return rewrite_term((lambda x1, x2: rewrite(x1, x2)), term0)
 
 def map_beneath_type_annotations(f: Callable[[hydra.core.Type], hydra.core.Type], t: hydra.core.Type) -> hydra.core.Type:
+    r"""Apply a transformation to the first type beneath a chain of annotations."""
+    
     match t:
         case hydra.core.TypeAnnotated(value=at):
             return cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(map_beneath_type_annotations(f, at.body), at.annotation)))
@@ -837,6 +881,8 @@ def map_beneath_type_annotations(f: Callable[[hydra.core.Type], hydra.core.Type]
             return f(t)
 
 def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
+    r"""Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..."""
+    
     def replace_name(subst: FrozenDict[T0, T0], v: T0) -> T0:
         return hydra.lib.maybes.from_maybe(v, hydra.lib.maps.lookup(v, subst))
     def subst_type(subst: FrozenDict[hydra.core.Name, hydra.core.Name], typ: hydra.core.Type) -> hydra.core.Type:
@@ -959,6 +1005,8 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
     return rewrite_with_subst(((hydra.lib.maps.empty(), hydra.lib.sets.empty()), 0), term)
 
 def prune_let(l: hydra.core.Let) -> hydra.core.Let:
+    r"""Given a let expression, remove any unused bindings. The resulting expression is still a let, even if has no remaining bindings."""
+    
     @lru_cache(1)
     def binding_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b.term)), l.bindings))
@@ -974,6 +1022,8 @@ def prune_let(l: hydra.core.Let) -> hydra.core.Let:
     return hydra.core.Let(pruned_bindings(), l.body)
 
 def remove_term_annotations(term: hydra.core.Term) -> hydra.core.Term:
+    r"""Recursively remove term annotations, including within subterms."""
+    
     def remove(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
         @lru_cache(1)
         def rewritten() -> hydra.core.Term:
@@ -987,6 +1037,8 @@ def remove_term_annotations(term: hydra.core.Term) -> hydra.core.Term:
     return rewrite_term((lambda x1, x2: remove(x1, x2)), term)
 
 def remove_type_annotations(typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Recursively remove type annotations, including within subtypes."""
+    
     def remove(recurse: Callable[[T0], hydra.core.Type], typ2: T0) -> hydra.core.Type:
         @lru_cache(1)
         def rewritten() -> hydra.core.Type:
@@ -1000,6 +1052,8 @@ def remove_type_annotations(typ: hydra.core.Type) -> hydra.core.Type:
     return rewrite_type((lambda x1, x2: remove(x1, x2)), typ)
 
 def remove_type_annotations_from_term(term: hydra.core.Term) -> hydra.core.Term:
+    r"""Strip type annotations (TypeLambda, TypeApplication, binding type schemes) from terms while preserving lambda domain types and other annotations."""
+    
     def strip(recurse: Callable[[T0], hydra.core.Term], term2: T0) -> hydra.core.Term:
         @lru_cache(1)
         def rewritten() -> hydra.core.Term:
@@ -1021,6 +1075,8 @@ def remove_type_annotations_from_term(term: hydra.core.Term) -> hydra.core.Term:
     return rewrite_term((lambda x1, x2: strip(x1, x2)), term)
 
 def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
+    r"""Strip type annotations from terms while preserving other annotations."""
+    
     def strip(recurse: Callable[[T0], hydra.core.Term], term2: T0) -> hydra.core.Term:
         @lru_cache(1)
         def rewritten() -> hydra.core.Term:
@@ -1055,6 +1111,8 @@ def remove_types_from_term(term: hydra.core.Term) -> hydra.core.Term:
     return rewrite_term((lambda x1, x2: strip(x1, x2)), term)
 
 def replace_free_term_variable(vold: hydra.core.Name, tnew: hydra.core.Term, term: hydra.core.Term) -> hydra.core.Term:
+    r"""Replace a free variable in a term."""
+    
     def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], t: hydra.core.Term) -> hydra.core.Term:
         def _hoist_rewrite_1(recurse: Callable[[T0], T0], t: T0, v1: hydra.core.Function) -> T0:
             match v1:
@@ -1078,6 +1136,8 @@ def replace_free_term_variable(vold: hydra.core.Name, tnew: hydra.core.Term, ter
     return rewrite_term((lambda x1, x2: rewrite(x1, x2)), term)
 
 def replace_free_type_variable(v: hydra.core.Name, rep: hydra.core.Type, typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Replace free occurrences of a name in a type."""
+    
     def map_expr(recurse: Callable[[hydra.core.Type], hydra.core.Type], t: hydra.core.Type) -> hydra.core.Type:
         match t:
             case hydra.core.TypeForall(value=ft):
@@ -1091,6 +1151,8 @@ def replace_free_type_variable(v: hydra.core.Name, rep: hydra.core.Type, typ: hy
     return rewrite_type((lambda x1, x2: map_expr(x1, x2)), typ)
 
 def replace_typedefs(types2: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], typ0: hydra.core.Type) -> hydra.core.Type:
+    r"""Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively."""
+    
     def rewrite(recurse: Callable[[hydra.core.Type], hydra.core.Type], typ: hydra.core.Type) -> hydra.core.Type:
         @lru_cache(1)
         def dflt() -> hydra.core.Type:
@@ -1924,6 +1986,8 @@ def rewrite_term_with_context_m(f: Callable[[
     return rewrite(cx0, term0)
 
 def substitute_variable(from_: hydra.core.Name, to: hydra.core.Name, term: hydra.core.Term) -> hydra.core.Term:
+    r"""Substitute one variable for another in a term."""
+    
     def replace(recurse: Callable[[hydra.core.Term], hydra.core.Term], term2: hydra.core.Term) -> hydra.core.Term:
         def _hoist_replace_1(recurse: Callable[[T0], T0], term2: T0, v1: hydra.core.Function) -> T0:
             match v1:
@@ -1944,6 +2008,8 @@ def substitute_variable(from_: hydra.core.Name, to: hydra.core.Name, term: hydra
     return rewrite_term((lambda x1, x2: replace(x1, x2)), term)
 
 def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
+    r"""Simplify terms by applying beta reduction where possible."""
+    
     def simplify(recurse: Callable[[hydra.core.Term], T0], term2: hydra.core.Term) -> T0:
         def for_rhs(rhs: hydra.core.Term, var: hydra.core.Name, body: hydra.core.Term) -> hydra.core.Term:
             match deannotate_term(rhs):
@@ -1992,6 +2058,8 @@ def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
     return rewrite_term((lambda x1, x2: simplify(x1, x2)), term)
 
 def substitute_type_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Substitute type variables in a type."""
+    
     def replace(recurse: Callable[[hydra.core.Type], hydra.core.Type], typ2: hydra.core.Type) -> hydra.core.Type:
         match typ2:
             case hydra.core.TypeVariable(value=n):
@@ -2002,6 +2070,8 @@ def substitute_type_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name
     return rewrite_type((lambda x1, x2: replace(x1, x2)), typ)
 
 def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[tuple[hydra.accessors.TermAccessor, hydra.core.Term]]:
+    r"""Find the children of a given term."""
+    
     match v1:
         case hydra.core.TermAnnotated(value=at):
             return ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorAnnotatedBody()), at.body),)
@@ -2074,6 +2144,8 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[tuple[hydra.acces
             raise AssertionError("Unreachable: all variants handled")
 
 def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0: hydra.core.Term) -> frozenset[hydra.core.Name]:
+    r"""Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that."""
+    
     def add_names(names: frozenset[hydra.core.Name], term: hydra.core.Term) -> frozenset[hydra.core.Name]:
         def nominal(name: hydra.core.Name) -> frozenset[hydra.core.Name]:
             return hydra.lib.logic.if_else(with_noms, (lambda : hydra.lib.sets.insert(name, names)), (lambda : names))
@@ -2125,6 +2197,8 @@ def term_dependency_names(binds: bool, with_prims: bool, with_noms: bool, term0:
     return fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: add_names(x1, x2)), hydra.lib.sets.empty(), term0)
 
 def to_short_names(original: frozenlist[hydra.core.Name]) -> FrozenDict[hydra.core.Name, hydra.core.Name]:
+    r"""Generate short names from a list of fully qualified names."""
+    
     def add_name(acc: FrozenDict[str, frozenset[hydra.core.Name]], name: hydra.core.Name) -> FrozenDict[str, frozenset[hydra.core.Name]]:
         @lru_cache(1)
         def local() -> str:
@@ -2153,6 +2227,8 @@ def to_short_names(original: frozenlist[hydra.core.Name]) -> FrozenDict[hydra.co
     return hydra.lib.maps.from_list(hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: rename_group(x1)), hydra.lib.maps.to_list(groups()))))
 
 def topological_sort_binding_map(binding_map: FrozenDict[hydra.core.Name, hydra.core.Term]) -> frozenlist[frozenlist[tuple[hydra.core.Name, hydra.core.Term]]]:
+    r"""Topological sort of connected components, in terms of dependencies between variable/term binding pairs."""
+    
     @lru_cache(1)
     def bindings() -> frozenlist[tuple[hydra.core.Name, hydra.core.Term]]:
         return hydra.lib.maps.to_list(binding_map)
@@ -2179,6 +2255,8 @@ def topological_sort_binding_map(binding_map: FrozenDict[hydra.core.Name, hydra.
     return hydra.lib.lists.map((lambda v1: hydra.lib.lists.map((lambda x1: to_pair(x1)), v1)), hydra.sorting.topological_sort_components(hydra.lib.lists.map((lambda x1: deps_of(x1)), bindings())))
 
 def topological_sort_bindings(els: frozenlist[hydra.core.Binding]) -> Either[frozenlist[frozenlist[hydra.core.Name]], frozenlist[hydra.core.Name]]:
+    r"""Topological sort of elements based on their dependencies."""
+    
     def adjlist(e: hydra.core.Binding) -> tuple[hydra.core.Name, frozenlist[hydra.core.Name]]:
         return (e.name, hydra.lib.sets.to_list(term_dependency_names(False, True, True, e.term)))
     return hydra.sorting.topological_sort(hydra.lib.lists.map((lambda x1: adjlist(x1)), els))
@@ -2212,6 +2290,8 @@ def type_dependency_names(with_schema: bool, typ: hydra.core.Type) -> frozenset[
     return hydra.lib.logic.if_else(with_schema, (lambda : hydra.lib.sets.union(free_variables_in_type(typ), type_names_in_type(typ))), (lambda : free_variables_in_type(typ)))
 
 def unshadow_variables(term0: hydra.core.Term) -> hydra.core.Term:
+    r"""Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term."""
+    
     def rewrite(recurse: Callable[[FrozenDict[hydra.core.Name, int], hydra.core.Term], tuple[FrozenDict[hydra.core.Name, int], hydra.core.Term]], m: FrozenDict[hydra.core.Name, int], term: hydra.core.Term) -> tuple[FrozenDict[hydra.core.Name, int], hydra.core.Term]:
         @lru_cache(1)
         def dflt() -> tuple[FrozenDict[hydra.core.Name, int], hydra.core.Term]:

@@ -33,6 +33,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Normalize a comment string for consistent output across coders
 normalizeComment :: (String -> String)
 normalizeComment s =  
   let stripped = (Formatting.stripLeadingAndTrailingWhitespace s)
@@ -42,6 +43,7 @@ normalizeComment s =
       let lastChar = (Strings.charAt lastIdx stripped)
       in (Logic.ifElse (Equality.equal lastChar 46) stripped (Strings.cat2 stripped "."))))
 
+-- | Gather applications from a term, returning (args, baseTerm)
 gatherApplications :: (Core.Term -> ([Core.Term], Core.Term))
 gatherApplications term =  
   let go = (\args -> \t -> (\x -> case x of
@@ -53,6 +55,7 @@ gatherApplications term =
           _ -> (args, t)) (Rewriting.deannotateTerm t))
   in (go [] term)
 
+-- | Gather term arguments, stripping type-level constructs
 gatherArgs :: (Core.Term -> [Core.Term] -> (Core.Term, [Core.Term]))
 gatherArgs term args = ((\x -> case x of
   Core.TermApplication v1 ->  
@@ -68,6 +71,7 @@ gatherArgs term args = ((\x -> case x of
     in (gatherArgs body args)
   _ -> (term, args)) (Rewriting.deannotateTerm term))
 
+-- | Gather term and type arguments from a term
 gatherArgsWithTypeApps :: (Core.Term -> [Core.Term] -> [Core.Type] -> (Core.Term, ([Core.Term], [Core.Type])))
 gatherArgsWithTypeApps term args tyArgs = ((\x -> case x of
   Core.TermApplication v1 ->  
@@ -85,6 +89,7 @@ gatherArgsWithTypeApps term args tyArgs = ((\x -> case x of
       in (gatherArgsWithTypeApps body args (Lists.cons typ tyArgs))
   _ -> (term, (args, tyArgs))) (Rewriting.deannotateTerm term))
 
+-- | Check if a term can be encoded as a simple assignment
 isSimpleAssignment :: (Core.Term -> Bool)
 isSimpleAssignment term = ((\x -> case x of
   Core.TermAnnotated v1 -> (isSimpleAssignment (Core.annotatedTermBody v1))
@@ -104,6 +109,7 @@ isSimpleAssignment term = ((\x -> case x of
         _ -> True) v1)
       _ -> True) baseTerm)) term)
 
+-- | Check if a term needs to be treated as a function rather than a simple value
 isComplexTerm :: (Typing.TypeContext -> Core.Term -> Bool)
 isComplexTerm tc t = ((\x -> case x of
   Core.TermLet _ -> True
@@ -112,6 +118,7 @@ isComplexTerm tc t = ((\x -> case x of
   Core.TermVariable v1 -> (isComplexVariable tc v1)
   _ -> (Lists.foldl (\b -> \sub -> Logic.or b (isComplexTerm tc sub)) False (Rewriting.subterms t))) t)
 
+-- | Check if a variable is bound to a complex term
 isComplexVariable :: (Typing.TypeContext -> Core.Name -> Bool)
 isComplexVariable tc name =  
   let metaLookup = (Maps.lookup name (Typing.typeContextMetadata tc))
@@ -119,6 +126,7 @@ isComplexVariable tc name =
     let typeLookup = (Maps.lookup name (Typing.typeContextTypes tc))
     in (Logic.not (Maybes.isJust typeLookup)))))
 
+-- | Check if a binding needs to be treated as a function
 isComplexBinding :: (Typing.TypeContext -> Core.Binding -> Bool)
 isComplexBinding tc b =  
   let term = (Core.bindingTerm b)
@@ -132,15 +140,19 @@ isComplexBinding tc b =
           let isComplex = (isComplexTerm tc term)
           in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)))
 
+-- | Extract comments/description from a Binding
 commentsFromElement :: (Core.Binding -> Compute.Flow Graph.Graph (Maybe String))
 commentsFromElement b = (Annotations.getTermDescription (Core.bindingTerm b))
 
+-- | Extract comments/description from a FieldType
 commentsFromFieldType :: (Core.FieldType -> Compute.Flow Graph.Graph (Maybe String))
 commentsFromFieldType ft = (Annotations.getTypeDescription (Core.fieldTypeType ft))
 
+-- | Infer the type of a term with tracing
 tryTypeOf :: (String -> Typing.TypeContext -> Core.Term -> Compute.Flow t0 Core.Type)
 tryTypeOf msg tc term = (Monads.withTrace msg (Checking.typeOf tc [] term))
 
+-- | Produces metadata for a binding if it is complex
 bindingMetadata :: (Typing.TypeContext -> Core.Binding -> Maybe Core.Term)
 bindingMetadata tc b = (Logic.ifElse (isComplexBinding tc b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing)
 
@@ -192,6 +204,7 @@ analyzeFunctionTermWith_gather forBinding getTC setTC argMode gEnv tparams args 
         in (analyzeFunctionTermWith_gather forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
   _ -> (analyzeFunctionTermWith_finish getTC gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
 
+-- | Analyze a function term with configurable binding metadata
 analyzeFunctionTermWith :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> (t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
 analyzeFunctionTermWith forBinding getTC setTC env term = (analyzeFunctionTermWith_gather forBinding getTC setTC True env [] [] [] [] [] term)
 
@@ -243,26 +256,34 @@ analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode gEnv tparam
         in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
   _ -> (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
 
+-- | Analyze a function term without type inference, with configurable binding metadata
 analyzeFunctionTermNoInferWith :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> (t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
 analyzeFunctionTermNoInferWith forBinding getTC setTC env term = (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC True env [] [] [] [] [] term)
 
+-- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
 analyzeFunctionTerm :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
 analyzeFunctionTerm getTC setTC env term = (analyzeFunctionTermWith bindingMetadata getTC setTC env term)
 
+-- | Analyze a function term without recording binding metadata
 analyzeFunctionTermInline :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
 analyzeFunctionTermInline getTC setTC env term = (analyzeFunctionTermWith (\_ -> \_ -> Nothing) getTC setTC env term)
 
+-- | Analyze a function term without type inference (performance optimization)
 analyzeFunctionTermNoInfer :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
 analyzeFunctionTermNoInfer getTC setTC env term = (analyzeFunctionTermNoInferWith bindingMetadata getTC setTC env term)
 
+-- | Update the metadata portion of a coder state
 updateCoderMetadata :: ((t0 -> t1) -> (t2 -> t3 -> t0) -> (t0 -> t2) -> (t1 -> t3) -> Compute.Flow t0 ())
 updateCoderMetadata getMeta makeCoder getGraph f = (Flows.bind Monads.getState (\st -> Monads.putState (makeCoder (getGraph st) (f (getMeta st)))))
 
+-- | Temporarily update the graph for a computation, then restore it
 withUpdatedCoderGraph :: ((t0 -> t1) -> (t0 -> t2) -> (t1 -> t2 -> t0) -> (t1 -> t1) -> Compute.Flow t0 t3 -> Compute.Flow t0 t3)
 withUpdatedCoderGraph getGraph getMeta makeCoder f flow = (Flows.bind Monads.getState (\st -> Flows.bind (Monads.putState (makeCoder (f (getGraph st)) (getMeta st))) (\_ -> Flows.bind flow (\r -> Flows.bind Monads.getState (\st2 -> Flows.bind (Monads.putState (makeCoder (getGraph st) (getMeta st2))) (\_ -> Flows.pure r))))))
 
+-- | Temporarily extend the graph with additional bindings for a computation
 withGraphBindings :: ((t0 -> Graph.Graph) -> (Graph.Graph -> t1 -> t0) -> (t0 -> t1) -> [Core.Binding] -> Compute.Flow t0 t2 -> Compute.Flow t0 t2)
 withGraphBindings getGraph makeCoder getMeta bindings flow = (withUpdatedCoderGraph getGraph getMeta makeCoder (Lexical.extendGraphWithBindings bindings) flow)
 
+-- | Run a Flow Graph computation within a Flow state computation
 inCoderGraphContext :: ((t0 -> t1) -> (t0 -> t2) -> (t1 -> t2 -> t0) -> Compute.Flow t1 t3 -> Compute.Flow t0 t3)
 inCoderGraphContext getGraph getMeta makeCoder graphFlow = (Flows.bind Monads.getState (\st -> Flows.bind (Monads.withState (getGraph st) (Flows.bind graphFlow (\ret -> Flows.bind Monads.getState (\g2 -> Flows.pure (ret, g2))))) (\result -> Flows.bind (Monads.putState (makeCoder (Pairs.second result) (getMeta st))) (\_ -> Flows.pure (Pairs.first result)))))

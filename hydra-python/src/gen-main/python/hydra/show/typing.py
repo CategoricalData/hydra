@@ -13,6 +13,8 @@ import hydra.show.core
 import hydra.typing
 
 def type_constraint(tc: hydra.typing.TypeConstraint) -> str:
+    r"""Show a type constraint as a string."""
+    
     @lru_cache(1)
     def ltyp() -> hydra.core.Type:
         return tc.left
@@ -22,6 +24,8 @@ def type_constraint(tc: hydra.typing.TypeConstraint) -> str:
     return hydra.lib.strings.cat((hydra.show.core.type(ltyp()), "≡", hydra.show.core.type(rtyp())))
 
 def type_subst(ts: hydra.typing.TypeSubst) -> str:
+    r"""Show a type substitution as a string."""
+    
     @lru_cache(1)
     def subst() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
         return ts.value

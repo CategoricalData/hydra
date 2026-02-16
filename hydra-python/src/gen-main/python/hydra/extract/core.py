@@ -44,6 +44,8 @@ def float_literal(lit: hydra.core.Literal) -> hydra.compute.Flow[T0, hydra.core.
             return hydra.monads.unexpected("floating-point value", hydra.show.core.literal(lit))
 
 def literal(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Literal]:
+    r"""Extract a literal value from a term."""
+    
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Literal]:
         match term:
             case hydra.core.TermLiteral(value=lit):
@@ -54,6 +56,8 @@ def literal(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hyd
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def bigfloat(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Decimal]:
+    r"""Extract an arbitrary-precision floating-point value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(float_literal(l), (lambda f: bigfloat_value(f)))))
 
 def bigint_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
@@ -73,6 +77,8 @@ def integer_literal(lit: hydra.core.Literal) -> hydra.compute.Flow[T0, hydra.cor
             return hydra.monads.unexpected("integer value", hydra.show.core.literal(lit))
 
 def bigint(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+    r"""Extract an arbitrary-precision integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: bigint_value(i)))))
 
 def binary_literal(v: hydra.core.Literal) -> hydra.compute.Flow[T0, bytes]:
@@ -84,6 +90,8 @@ def binary_literal(v: hydra.core.Literal) -> hydra.compute.Flow[T0, bytes]:
             return hydra.monads.unexpected("binary", hydra.show.core.literal(v))
 
 def binary(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, bytes]:
+    r"""Extract a binary data value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: binary_literal(l)))
 
 def boolean_literal(v: hydra.core.Literal) -> hydra.compute.Flow[T0, bool]:
@@ -95,9 +103,13 @@ def boolean_literal(v: hydra.core.Literal) -> hydra.compute.Flow[T0, bool]:
             return hydra.monads.unexpected("boolean", hydra.show.core.literal(v))
 
 def boolean(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, bool]:
+    r"""Extract a boolean value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: boolean_literal(l)))
 
 def cases(name: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.CaseStatement]:
+    r"""Extract case statement from a term."""
+    
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.CaseStatement]:
         def _hoist_extract_1(term: hydra.core.Term, v1: hydra.core.Elimination) -> hydra.compute.Flow[hydra.core.CaseStatement, hydra.core.CaseStatement]:
             match v1:
@@ -122,6 +134,8 @@ def cases(name: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[h
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def case_field(name: hydra.core.Name, n: str, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Field]:
+    r"""Extract a specific case handler from a case statement term."""
+    
     @lru_cache(1)
     def field_name() -> hydra.core.Name:
         return hydra.core.Name(n)
@@ -163,6 +177,8 @@ def float32_value(v: hydra.core.FloatValue) -> hydra.compute.Flow[T0, float]:
             return hydra.monads.unexpected("float32", hydra.show.core.float(v))
 
 def float32(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, float]:
+    r"""Extract a 32-bit floating-point value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(float_literal(l), (lambda f: float32_value(f)))))
 
 def float64_value(v: hydra.core.FloatValue) -> hydra.compute.Flow[T0, float]:
@@ -174,9 +190,13 @@ def float64_value(v: hydra.core.FloatValue) -> hydra.compute.Flow[T0, float]:
             return hydra.monads.unexpected("float64", hydra.show.core.float(v))
 
 def float64(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, float]:
+    r"""Extract a 64-bit floating-point value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(float_literal(l), (lambda f: float64_value(f)))))
 
 def float_value(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.FloatValue]:
+    r"""Extract a float value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: float_literal(l)))
 
 def function_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.FunctionType]:
@@ -191,6 +211,8 @@ def function_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Fun
             return hydra.monads.unexpected("function type", hydra.show.core.type(typ))
 
 def injection(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Field]:
+    r"""Extract a field from a union term."""
+    
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Field]:
         match term:
             case hydra.core.TermUnion(value=injection):
@@ -209,6 +231,8 @@ def int16_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
             return hydra.monads.unexpected("int16", hydra.show.core.integer(v))
 
 def int16(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+    r"""Extract a 16-bit signed integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: int16_value(i)))))
 
 def int32_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
@@ -220,6 +244,8 @@ def int32_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
             return hydra.monads.unexpected("int32", hydra.show.core.integer(v))
 
 def int32(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+    r"""Extract a 32-bit signed integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: int32_value(i)))))
 
 def int64_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
@@ -231,6 +257,8 @@ def int64_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
             return hydra.monads.unexpected("int64", hydra.show.core.integer(v))
 
 def int64(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+    r"""Extract a 64-bit signed integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: int64_value(i)))))
 
 def int8_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
@@ -242,12 +270,18 @@ def int8_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
             return hydra.monads.unexpected("int8", hydra.show.core.integer(v))
 
 def int8(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+    r"""Extract an 8-bit signed integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: int8_value(i)))))
 
 def integer_value(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.IntegerValue]:
+    r"""Extract an integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: integer_literal(l)))
 
 def lambda_(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Lambda]:
+    r"""Extract a lambda from a term."""
+    
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Lambda]:
         def _hoist_extract_1(term: hydra.core.Term, v1: hydra.core.Function) -> hydra.compute.Flow[hydra.core.Lambda, hydra.core.Lambda]:
             match v1:
@@ -265,9 +299,13 @@ def lambda_(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hyd
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def lambda_body(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+    r"""Extract the body of a lambda term."""
+    
     return hydra.lib.flows.map((lambda v1: v1.body), lambda_(term))
 
 def let(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Let]:
+    r"""Extract a let expression from a term."""
+    
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Let]:
         match term:
             case hydra.core.TermLet(value=lt):
@@ -278,12 +316,16 @@ def let(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.c
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def let_binding(n: str, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+    r"""Extract a binding with the given name from a let term."""
+    
     @lru_cache(1)
     def name() -> hydra.core.Name:
         return hydra.core.Name(n)
     return hydra.lib.flows.bind(let(term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name().value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("no such binding: ", n))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching_bindings).term)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("multiple bindings named ", n)))))))[1]))
 
 def list(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.core.Term]]:
+    r"""Extract a list of terms from a term."""
+    
     def extract(stripped: hydra.core.Term) -> hydra.compute.Flow[T0, frozenlist[hydra.core.Term]]:
         match stripped:
             case hydra.core.TermList(value=l):
@@ -294,6 +336,8 @@ def list(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenl
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term), (lambda stripped: extract(stripped)))
 
 def list_head(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+    r"""Extract the first element of a list term."""
+    
     return hydra.lib.flows.bind(list(term), (lambda l: hydra.lib.logic.if_else(hydra.lib.lists.null(l), (lambda : hydra.lib.flows.fail("empty list")), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(l))))))
 
 def list_of(f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[T0]]:
@@ -374,6 +418,8 @@ def pair(kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def term_record(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Record]:
+    r"""Extract a record from a term."""
+    
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Record]:
         match term:
             case hydra.core.TermRecord(value=record):
@@ -384,6 +430,8 @@ def term_record(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph,
     return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
 
 def record(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.core.Field]]:
+    r"""Extract a record's fields from a term."""
+    
     return hydra.lib.flows.bind(term_record(term0), (lambda record: hydra.lib.logic.if_else(hydra.lib.equality.equal(record.type_name, expected), (lambda : hydra.lib.flows.pure(record.fields)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("record of type ", expected.value), record.type_name.value)))))
 
 def record_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydra.core.FieldType]]:
@@ -398,6 +446,8 @@ def record_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.F
             return hydra.monads.unexpected("record type", hydra.show.core.type(typ))
 
 def set(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenset[hydra.core.Term]]:
+    r"""Extract a set of terms from a term."""
+    
     def extract(stripped: hydra.core.Term) -> hydra.compute.Flow[T0, frozenset[hydra.core.Term]]:
         match stripped:
             case hydra.core.TermSet(value=s):
@@ -430,6 +480,8 @@ def string_literal(v: hydra.core.Literal) -> hydra.compute.Flow[T0, str]:
             return hydra.monads.unexpected("string", hydra.show.core.literal(v))
 
 def string(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, str]:
+    r"""Extract a string value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: string_literal(l)))
 
 def uint16_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
@@ -441,6 +493,8 @@ def uint16_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
             return hydra.monads.unexpected("uint16", hydra.show.core.integer(v))
 
 def uint16(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+    r"""Extract a 16-bit unsigned integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: uint16_value(i)))))
 
 def uint32_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
@@ -452,6 +506,8 @@ def uint32_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
             return hydra.monads.unexpected("uint32", hydra.show.core.integer(v))
 
 def uint32(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+    r"""Extract a 32-bit unsigned integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: uint32_value(i)))))
 
 def uint64_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
@@ -463,6 +519,8 @@ def uint64_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
             return hydra.monads.unexpected("uint64", hydra.show.core.integer(v))
 
 def uint64(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+    r"""Extract a 64-bit unsigned integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: uint64_value(i)))))
 
 def uint8_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
@@ -474,6 +532,8 @@ def uint8_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
             return hydra.monads.unexpected("uint8", hydra.show.core.integer(v))
 
 def uint8(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+    r"""Extract an 8-bit unsigned integer value from a term."""
+    
     return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: uint8_value(i)))))
 
 def union_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydra.core.FieldType]]:
@@ -496,9 +556,13 @@ def unit(term: hydra.core.Term) -> hydra.compute.Flow[T0, None]:
             return hydra.monads.unexpected("unit", hydra.show.core.term(term))
 
 def unit_variant(tname: hydra.core.Name, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Name]:
+    r"""Extract a unit variant (a variant with an empty record value) from a union term."""
+    
     return hydra.lib.flows.bind(injection(tname, term), (lambda field: hydra.lib.flows.bind(unit(field.term), (lambda ignored: hydra.lib.flows.pure(field.name)))))
 
 def wrap(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+    r"""Extract the wrapped value from a wrapped term."""
+    
     def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
         match term:
             case hydra.core.TermWrap(value=wrapped_term):
