@@ -243,16 +243,17 @@ termCoder typ =
 
 -- | JSON coder for unit values
 unitCoder :: (Compute.Coder t0 t1 Core.Term Model.Value)
-unitCoder = Compute.Coder {
-  Compute.coderEncode = encodeUnit,
-  Compute.coderDecode = decodeUnit} 
-  where 
-    encodeUnit = (\term -> (\x -> case x of
-      Core.TermUnit -> (Flows.pure Model.ValueNull)
-      _ -> (Monads.unexpected "unit" (Core___.term term))) (Rewriting.deannotateTerm term))
-    decodeUnit = (\n -> (\x -> case x of
-      Model.ValueNull -> (Flows.pure Core.TermUnit)
-      _ -> (Monads.unexpected "null" (showValue n))) n)
+unitCoder =  
+  let encodeUnit = (\term -> (\x -> case x of
+          Core.TermUnit -> (Flows.pure Model.ValueNull)
+          _ -> (Monads.unexpected "unit" (Core___.term term))) (Rewriting.deannotateTerm term))
+  in  
+    let decodeUnit = (\n -> (\x -> case x of
+            Model.ValueNull -> (Flows.pure Core.TermUnit)
+            _ -> (Monads.unexpected "null" (showValue n))) n)
+    in Compute.Coder {
+      Compute.coderEncode = encodeUnit,
+      Compute.coderDecode = decodeUnit}
 
 -- | A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption.
 untypedTermToJson :: (Core.Term -> Compute.Flow t0 Model.Value)

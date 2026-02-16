@@ -735,10 +735,13 @@ hoistSubterms = define "hoistSubterms" $
              "newLambdaVars" <~ Sets.difference (var "allLambdaVars") (var "baselineLambdaVars") $
              "freeVars" <~ Rewriting.freeVariablesInTerm @@ var "processedTerm" $
              "capturedVars" <~ Sets.toList (Sets.intersection (var "newLambdaVars") (var "freeVars")) $
-             -- Wrap the term in lambdas for each captured variable
+             -- Wrap the term in lambdas for each captured variable, looking up their types from the context
+             "typeMap" <~ Typing.typeContextTypes (var "cxInner") $
              "wrappedTerm" <~ Lists.foldl
                ("body" ~> "varName" ~>
-                 Core.termFunction $ Core.functionLambda $ Core.lambda (var "varName") nothing (var "body"))
+                 Core.termFunction $ Core.functionLambda $ Core.lambda (var "varName")
+                   (Maps.lookup (var "varName") (var "typeMap"))
+                   (var "body"))
                (var "processedTerm")
                (Lists.reverse $ var "capturedVars") $
              -- Create the reference: apply the binding to all captured variables

@@ -26,6 +26,8 @@ T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 
 def join_types(left: hydra.core.Type, right: hydra.core.Type, comment: str) -> hydra.compute.Flow[T0, frozenlist[hydra.typing.TypeConstraint]]:
+    r"""Join two types, producing a list of type constraints.The comment is used to provide context for the constraints."""
+    
     @lru_cache(1)
     def sleft() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(left)
@@ -184,6 +186,13 @@ def variable_occurs_in_type(var: hydra.core.Name, typ0: hydra.core.Type) -> bool
     return hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: try_type(x1, x2)), False, typ0)
 
 def unify_type_constraints(schema_types: FrozenDict[hydra.core.Name, T0], constraints: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
+    r"""Robinson's algorithm, following https://www.cs.cornell.edu/courses/cs6110/2017sp/lectures/lec23.pdf
+    Specifically this is an implementation of the following rules:
+      * Unify({(x, t)} ∪ E) = {t/x} Unify(E{t/x}) if x ∉ FV(t)
+      * Unify(∅) = I (the identity substitution x ↦ x)
+      * Unify({(x, x)} ∪ E) = Unify(E)
+      * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))."""
+    
     def with_constraint(c: hydra.typing.TypeConstraint, rest: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
         @lru_cache(1)
         def sleft() -> hydra.core.Type:

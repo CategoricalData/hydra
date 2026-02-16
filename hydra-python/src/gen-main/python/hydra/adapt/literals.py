@@ -173,6 +173,8 @@ def disclaimer(lossy: bool, source: str, target: str) -> str:
     return hydra.lib.strings.cat(("replace ", source, " with ", target, hydra.lib.logic.if_else(lossy, (lambda : " (lossy)"), (lambda : ""))))
 
 def float_adapter(ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T1, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]:
+    r"""Create an adapter for float types."""
+    
     def make_adapter(source: hydra.core.FloatType, target: hydra.core.FloatType) -> hydra.compute.Flow[T2, hydra.compute.Adapter[T3, T4, hydra.core.FloatType, hydra.core.FloatType, hydra.core.FloatValue, hydra.core.FloatValue]]:
         @lru_cache(1)
         def lossy() -> bool:
@@ -202,6 +204,8 @@ def float_adapter(ft: hydra.core.FloatType) -> hydra.compute.Flow[hydra.coders.A
     return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.float_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter((lambda x1: alts(x1)), (lambda x1: supported(x1)), (lambda x1: hydra.show.core.float_type(x1)), (lambda x1: hydra.show.core.float_type(x1)), ft))[1]))
 
 def integer_adapter(it: hydra.core.IntegerType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T1, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue]]:
+    r"""Create an adapter for integer types."""
+    
     def interleave(xs: frozenlist[T2], ys: frozenlist[T2]) -> frozenlist[T2]:
         return hydra.lib.lists.concat(hydra.lib.lists.transpose((xs, ys)))
     @lru_cache(1)
@@ -273,6 +277,8 @@ def integer_adapter(it: hydra.core.IntegerType) -> hydra.compute.Flow[hydra.code
     return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (supported := (lambda v1: hydra.adapt.utils.integer_type_is_supported(cx.language.constraints, v1)), hydra.adapt.utils.choose_adapter((lambda x1: alts(x1)), (lambda x1: supported(x1)), (lambda x1: hydra.show.core.integer_type(x1)), (lambda x1: hydra.show.core.integer_type(x1)), it))[1]))
 
 def literal_adapter(lt: hydra.core.LiteralType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]:
+    r"""Create an adapter for literal types."""
+    
     def for_binary(t: T1) -> hydra.compute.Flow[T2, frozenlist[hydra.compute.Adapter[T3, T4, T1, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
         def match_binary(lit: hydra.core.Literal) -> hydra.compute.Flow[T5, hydra.core.Literal]:
             match lit:

@@ -389,20 +389,22 @@ hoistSubterms shouldHoist cx0 term0 =
                                           in  
                                             let capturedVars = (Sets.toList (Sets.intersection newLambdaVars freeVars))
                                             in  
-                                              let wrappedTerm = (Lists.foldl (\body -> \varName -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                      Core.lambdaParameter = varName,
-                                                      Core.lambdaDomain = Nothing,
-                                                      Core.lambdaBody = body}))) processedTerm (Lists.reverse capturedVars))
+                                              let typeMap = (Typing.typeContextTypes cxInner)
                                               in  
-                                                let reference = (Lists.foldl (\fn -> \varName -> Core.TermApplication (Core.Application {
-                                                        Core.applicationFunction = fn,
-                                                        Core.applicationArgument = (Core.TermVariable varName)})) (Core.TermVariable bindingName) capturedVars)
+                                                let wrappedTerm = (Lists.foldl (\body -> \varName -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                                        Core.lambdaParameter = varName,
+                                                        Core.lambdaDomain = (Maps.lookup varName typeMap),
+                                                        Core.lambdaBody = body}))) processedTerm (Lists.reverse capturedVars))
                                                 in  
-                                                  let newBinding = Core.Binding {
-                                                          Core.bindingName = bindingName,
-                                                          Core.bindingTerm = wrappedTerm,
-                                                          Core.bindingType = Nothing}
-                                                  in ((Math.add newCounter 1, (Lists.cons newBinding newBindings)), reference)) (newAcc, processedTerm))) term))
+                                                  let reference = (Lists.foldl (\fn -> \varName -> Core.TermApplication (Core.Application {
+                                                          Core.applicationFunction = fn,
+                                                          Core.applicationArgument = (Core.TermVariable varName)})) (Core.TermVariable bindingName) capturedVars)
+                                                  in  
+                                                    let newBinding = Core.Binding {
+                                                            Core.bindingName = bindingName,
+                                                            Core.bindingTerm = wrappedTerm,
+                                                            Core.bindingType = Nothing}
+                                                    in ((Math.add newCounter 1, (Lists.cons newBinding newBindings)), reference)) (newAcc, processedTerm))) term))
             in  
               let result = (rewriteAndFoldTermWithTypeContextAndPath collectAndReplace cx (counter, []) subterm)
               in  

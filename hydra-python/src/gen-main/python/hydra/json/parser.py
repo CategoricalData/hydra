@@ -40,6 +40,8 @@ def whitespace() -> hydra.parsing.Parser[None]:
     return hydra.parsers.map((lambda _: None), hydra.parsers.many(hydra.parsers.satisfy((lambda c: hydra.lib.lists.foldl(hydra.lib.logic.or_, False, (hydra.lib.equality.equal(c, 32), hydra.lib.equality.equal(c, 9), hydra.lib.equality.equal(c, 10), hydra.lib.equality.equal(c, 13)))))))
 
 def token(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
+    r"""Parse a token followed by optional whitespace."""
+    
     return hydra.parsers.bind(p, (lambda x: hydra.parsers.bind(whitespace(), (lambda _: hydra.parsers.pure(x)))))
 
 @lru_cache(1)

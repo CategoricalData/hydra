@@ -179,131 +179,184 @@ etaExpandTermNew tx0 term0 =
           Core.TermVariable v1 -> (Maybes.maybe 0 Arity.typeArity (Maps.lookup v1 (Typing.typeContextTypes tx)))
           _ -> 0) term)
   in  
-    let expand = (\alwaysPad -> \args -> \arity -> \head ->  
-            let applied = (Lists.foldl (\lhs -> \arg -> Core.TermApplication (Core.Application {
-                    Core.applicationFunction = lhs,
-                    Core.applicationArgument = arg})) head args)
-            in  
-              let numArgs = (Lists.length args)
-              in  
-                let needed = (Math.sub arity numArgs)
-                in (Logic.ifElse (Logic.and (Equality.gt needed 0) (Logic.or alwaysPad (Equality.gt numArgs 0))) ( 
-                  let indices = (Math.range 1 needed)
-                  in  
-                    let fullyApplied = (Lists.foldl (\body -> \i ->  
-                            let vn = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
-                            in (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = body,
-                              Core.applicationArgument = (Core.TermVariable vn)}))) applied indices)
-                    in (Lists.foldl (\body -> \i ->  
-                      let vn = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
-                      in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                        Core.lambdaParameter = vn,
-                        Core.lambdaDomain = Nothing,
-                        Core.lambdaBody = body})))) fullyApplied (Lists.reverse indices))) applied))
+    let domainTypes = (\n -> \mt -> Logic.ifElse (Equality.lte n 0) [] (Maybes.maybe (Lists.map (\_ -> Nothing) (Math.range 1 n)) (\typ -> (\x -> case x of
+            Core.TypeFunction v1 -> (Lists.cons (Just (Core.functionTypeDomain v1)) (domainTypes (Math.sub n 1) (Just (Core.functionTypeCodomain v1))))
+            Core.TypeAnnotated v1 -> (domainTypes n (Just (Core.annotatedTypeBody v1)))
+            Core.TypeApplication v1 -> (domainTypes n (Just (Core.applicationTypeFunction v1)))
+            Core.TypeForall v1 -> (domainTypes n (Just (Core.forallTypeBody v1)))
+            _ -> (Lists.map (\_ -> Nothing) (Math.range 1 n))) typ) mt))
     in  
-      let rewriteWithArgs = (\args -> \tx -> \term ->  
-              let recurse = (\tx1 -> \term1 -> rewriteWithArgs [] tx1 term1)
-              in  
-                let afterRecursion = (\trm ->  
-                        let arity = (termArityWithContext tx trm)
-                        in (expand False args arity trm))
+      let peelFunctionDomains = (\mtyp -> \n -> Logic.ifElse (Equality.lte n 0) mtyp (Maybes.maybe Nothing (\typ -> (\x -> case x of
+              Core.TypeFunction v1 -> (peelFunctionDomains (Just (Core.functionTypeCodomain v1)) (Math.sub n 1))
+              Core.TypeAnnotated v1 -> (peelFunctionDomains (Just (Core.annotatedTypeBody v1)) n)
+              Core.TypeApplication v1 -> (peelFunctionDomains (Just (Core.applicationTypeFunction v1)) n)
+              Core.TypeForall v1 -> (peelFunctionDomains (Just (Core.forallTypeBody v1)) n)
+              _ -> Nothing) typ) mtyp))
+      in  
+        let expand = (\alwaysPad -> \args -> \arity -> \headTyp -> \head ->  
+                let applied = (Lists.foldl (\lhs -> \arg -> Core.TermApplication (Core.Application {
+                        Core.applicationFunction = lhs,
+                        Core.applicationArgument = arg})) head args)
                 in  
-                  let forField = (\f -> Core.Field {
-                          Core.fieldName = (Core.fieldName f),
-                          Core.fieldTerm = (recurse tx (Core.fieldTerm f))})
+                  let numArgs = (Lists.length args)
                   in  
-                    let forCaseBranch = (\f ->  
-                            let branchBody = (recurse tx (Core.fieldTerm f))
-                            in  
-                              let arty = (termArityWithContext tx branchBody)
-                              in Core.Field {
-                                Core.fieldName = (Core.fieldName f),
-                                Core.fieldTerm = (expand True [] arty branchBody)})
-                    in  
-                      let forElimination = (\elm -> (\x -> case x of
-                              Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
-                              Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
-                                Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
-                                Core.caseStatementDefault = (Maybes.map (\t1 -> recurse tx t1) (Core.caseStatementDefault v1)),
-                                Core.caseStatementCases = (Lists.map forCaseBranch (Core.caseStatementCases v1))}))
-                              Core.EliminationWrap v1 -> (Core.EliminationWrap v1)) elm)
+                    let needed = (Math.sub arity numArgs)
+                    in (Logic.ifElse (Logic.and (Equality.gt needed 0) (Logic.or alwaysPad (Equality.gt numArgs 0))) ( 
+                      let indices = (Math.range 1 needed)
                       in  
-                        let forMap = (\mp ->  
-                                let forPair = (\pr -> (recurse tx (Pairs.first pr), (recurse tx (Pairs.second pr))))
-                                in (Maps.fromList (Lists.map forPair (Maps.toList mp))))
-                        in ((\x -> case x of
-                          Core.TermAnnotated v1 -> (afterRecursion (Core.TermAnnotated (Core.AnnotatedTerm {
-                            Core.annotatedTermBody = (recurse tx (Core.annotatedTermBody v1)),
-                            Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})))
-                          Core.TermApplication v1 ->  
-                            let rhs = (rewriteWithArgs [] tx (Core.applicationArgument v1))
-                            in (rewriteWithArgs (Lists.cons rhs args) tx (Core.applicationFunction v1))
-                          Core.TermEither v1 -> (afterRecursion (Core.TermEither (Eithers.either (\l -> Left (recurse tx l)) (\r -> Right (recurse tx r)) v1)))
-                          Core.TermFunction v1 -> ((\x -> case x of
-                            Core.FunctionElimination v2 ->  
-                              let padElim = ((\x -> case x of
-                                      Core.EliminationRecord _ -> False
-                                      Core.EliminationUnion _ -> True
-                                      Core.EliminationWrap _ -> False) v2)
-                              in (expand padElim args 1 (Core.TermFunction (Core.FunctionElimination (forElimination v2))))
-                            Core.FunctionLambda v2 ->  
-                              let tx1 = (Schemas.extendTypeContextForLambda tx v2)
-                              in  
-                                let body = (rewriteWithArgs [] tx1 (Core.lambdaBody v2))
+                        let remainingType = (peelFunctionDomains headTyp numArgs)
+                        in  
+                          let domains = (domainTypes needed remainingType)
+                          in  
+                            let fullyApplied = (Lists.foldl (\body -> \i ->  
+                                    let vn = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
+                                    in (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = body,
+                                      Core.applicationArgument = (Core.TermVariable vn)}))) applied indices)
+                            in  
+                              let indexedDomains = (Lists.zip indices domains)
+                              in (Lists.foldl (\body -> \idPair ->  
+                                let i = (Pairs.first idPair)
                                 in  
-                                  let result = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                          Core.lambdaParameter = (Core.lambdaParameter v2),
-                                          Core.lambdaDomain = (Core.lambdaDomain v2),
-                                          Core.lambdaBody = body})))
+                                  let dom = (Pairs.second idPair)
                                   in  
-                                    let arty = (termArityWithContext tx result)
-                                    in (expand False args arty result)
-                            Core.FunctionPrimitive _ ->  
-                              let arty = (termArityWithContext tx term)
-                              in (expand False args arty term)) v1)
-                          Core.TermLet v1 ->  
-                            let tx1 = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx v1)
-                            in  
-                              let mapBinding = (\b -> Core.Binding {
-                                      Core.bindingName = (Core.bindingName b),
-                                      Core.bindingTerm = (rewriteWithArgs [] tx1 (Core.bindingTerm b)),
-                                      Core.bindingType = (Core.bindingType b)})
+                                    let vn = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
+                                    in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                      Core.lambdaParameter = vn,
+                                      Core.lambdaDomain = dom,
+                                      Core.lambdaBody = body})))) fullyApplied (Lists.reverse indexedDomains))) applied))
+        in  
+          let rewriteWithArgs = (\args -> \tx -> \term ->  
+                  let recurse = (\tx1 -> \term1 -> rewriteWithArgs [] tx1 term1)
+                  in  
+                    let termHeadType = (\tx2 -> \trm2 -> (\x -> case x of
+                            Core.TermAnnotated v1 -> (termHeadType tx2 (Core.annotatedTermBody v1))
+                            Core.TermFunction v1 -> ((\x -> case x of
+                              Core.FunctionPrimitive v2 -> (Maybes.map (\ts2 -> Core.typeSchemeType ts2) (Maps.lookup v2 (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx2))))
+                              _ -> Nothing) v1)
+                            Core.TermLet v1 -> (termHeadType (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx2 v1) (Core.letBody v1))
+                            Core.TermTypeLambda v1 -> (termHeadType (Schemas.extendTypeContextForTypeLambda tx2 v1) (Core.typeLambdaBody v1))
+                            Core.TermTypeApplication v1 -> (Maybes.bind (termHeadType tx2 (Core.typeApplicationTermBody v1)) (\htyp2 -> (\x -> case x of
+                              Core.TypeForall v2 -> (Just (Rewriting.replaceFreeTypeVariable (Core.forallTypeParameter v2) (Core.typeApplicationTermType v1) (Core.forallTypeBody v2)))
+                              _ -> (Just htyp2)) htyp2))
+                            Core.TermVariable v1 -> (Maps.lookup v1 (Typing.typeContextTypes tx2))
+                            _ -> Nothing) trm2)
+                    in  
+                      let afterRecursion = (\trm ->  
+                              let arity = (termArityWithContext tx trm)
                               in  
-                                let result = (Core.TermLet (Core.Let {
-                                        Core.letBindings = (Lists.map mapBinding (Core.letBindings v1)),
-                                        Core.letBody = (rewriteWithArgs [] tx1 (Core.letBody v1))}))
-                                in (afterRecursion result)
-                          Core.TermList v1 -> (afterRecursion (Core.TermList (Lists.map (\el -> recurse tx el) v1)))
-                          Core.TermLiteral v1 -> (Core.TermLiteral v1)
-                          Core.TermMap v1 -> (afterRecursion (Core.TermMap (forMap v1)))
-                          Core.TermMaybe v1 -> (afterRecursion (Core.TermMaybe (Maybes.map (\v -> recurse tx v) v1)))
-                          Core.TermPair v1 -> (afterRecursion (Core.TermPair (recurse tx (Pairs.first v1), (recurse tx (Pairs.second v1)))))
-                          Core.TermRecord v1 -> (afterRecursion (Core.TermRecord (Core.Record {
-                            Core.recordTypeName = (Core.recordTypeName v1),
-                            Core.recordFields = (Lists.map forField (Core.recordFields v1))})))
-                          Core.TermSet v1 -> (afterRecursion (Core.TermSet (Sets.fromList (Lists.map (\el -> recurse tx el) (Sets.toList v1)))))
-                          Core.TermTypeApplication v1 -> (afterRecursion (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                            Core.typeApplicationTermBody = (recurse tx (Core.typeApplicationTermBody v1)),
-                            Core.typeApplicationTermType = (Core.typeApplicationTermType v1)})))
-                          Core.TermTypeLambda v1 ->  
-                            let tx1 = (Schemas.extendTypeContextForTypeLambda tx v1)
+                                let hType = (termHeadType tx trm)
+                                in (expand False args arity hType trm))
+                      in  
+                        let forField = (\f -> Core.Field {
+                                Core.fieldName = (Core.fieldName f),
+                                Core.fieldTerm = (recurse tx (Core.fieldTerm f))})
+                        in  
+                          let forCaseBranch = (\f ->  
+                                  let branchBody = (recurse tx (Core.fieldTerm f))
+                                  in  
+                                    let arty = (termArityWithContext tx branchBody)
+                                    in  
+                                      let branchHType = (termHeadType tx branchBody)
+                                      in Core.Field {
+                                        Core.fieldName = (Core.fieldName f),
+                                        Core.fieldTerm = (expand True [] arty branchHType branchBody)})
+                          in  
+                            let forElimination = (\elm -> (\x -> case x of
+                                    Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
+                                    Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
+                                      Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
+                                      Core.caseStatementDefault = (Maybes.map (\t1 -> recurse tx t1) (Core.caseStatementDefault v1)),
+                                      Core.caseStatementCases = (Lists.map forCaseBranch (Core.caseStatementCases v1))}))
+                                    Core.EliminationWrap v1 -> (Core.EliminationWrap v1)) elm)
                             in  
-                              let result = (Core.TermTypeLambda (Core.TypeLambda {
-                                      Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
-                                      Core.typeLambdaBody = (rewriteWithArgs [] tx1 (Core.typeLambdaBody v1))}))
-                              in (afterRecursion result)
-                          Core.TermUnion v1 -> (afterRecursion (Core.TermUnion (Core.Injection {
-                            Core.injectionTypeName = (Core.injectionTypeName v1),
-                            Core.injectionField = (forField (Core.injectionField v1))})))
-                          Core.TermUnit -> Core.TermUnit
-                          Core.TermVariable _ ->  
-                            let arty = (termArityWithContext tx term)
-                            in (expand False args arty term)
-                          Core.TermWrap v1 -> (afterRecursion (Core.TermWrap (Core.WrappedTerm {
-                            Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
-                            Core.wrappedTermBody = (recurse tx (Core.wrappedTermBody v1))})))) term))
-      in (contractTerm (rewriteWithArgs [] tx0 term0))
+                              let forMap = (\mp ->  
+                                      let forPair = (\pr -> (recurse tx (Pairs.first pr), (recurse tx (Pairs.second pr))))
+                                      in (Maps.fromList (Lists.map forPair (Maps.toList mp))))
+                              in ((\x -> case x of
+                                Core.TermAnnotated v1 -> (afterRecursion (Core.TermAnnotated (Core.AnnotatedTerm {
+                                  Core.annotatedTermBody = (recurse tx (Core.annotatedTermBody v1)),
+                                  Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)})))
+                                Core.TermApplication v1 ->  
+                                  let rhs = (rewriteWithArgs [] tx (Core.applicationArgument v1))
+                                  in (rewriteWithArgs (Lists.cons rhs args) tx (Core.applicationFunction v1))
+                                Core.TermEither v1 -> (afterRecursion (Core.TermEither (Eithers.either (\l -> Left (recurse tx l)) (\r -> Right (recurse tx r)) v1)))
+                                Core.TermFunction v1 -> ((\x -> case x of
+                                  Core.FunctionElimination v2 ->  
+                                    let padElim = ((\x -> case x of
+                                            Core.EliminationRecord _ -> False
+                                            Core.EliminationUnion _ -> True
+                                            Core.EliminationWrap _ -> False) v2)
+                                    in  
+                                      let elimTerm = (Core.TermFunction (Core.FunctionElimination (forElimination v2)))
+                                      in  
+                                        let elimHeadType = ((\x -> case x of
+                                                Core.EliminationUnion v3 -> (Just (Core.TypeFunction (Core.FunctionType {
+                                                  Core.functionTypeDomain = (Core.TypeVariable (Core.caseStatementTypeName v3)),
+                                                  Core.functionTypeCodomain = Core.TypeUnit})))
+                                                _ -> Nothing) v2)
+                                        in (expand padElim args 1 elimHeadType elimTerm)
+                                  Core.FunctionLambda v2 ->  
+                                    let tx1 = (Schemas.extendTypeContextForLambda tx v2)
+                                    in  
+                                      let body = (rewriteWithArgs [] tx1 (Core.lambdaBody v2))
+                                      in  
+                                        let result = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                                Core.lambdaParameter = (Core.lambdaParameter v2),
+                                                Core.lambdaDomain = (Core.lambdaDomain v2),
+                                                Core.lambdaBody = body})))
+                                        in  
+                                          let arty = (termArityWithContext tx result)
+                                          in (expand False args arty Nothing result)
+                                  Core.FunctionPrimitive v2 ->  
+                                    let arty = (termArityWithContext tx term)
+                                    in  
+                                      let primType = (Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v2 (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx))))
+                                      in (expand False args arty primType term)) v1)
+                                Core.TermLet v1 ->  
+                                  let tx1 = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx v1)
+                                  in  
+                                    let mapBinding = (\b -> Core.Binding {
+                                            Core.bindingName = (Core.bindingName b),
+                                            Core.bindingTerm = (rewriteWithArgs [] tx1 (Core.bindingTerm b)),
+                                            Core.bindingType = (Core.bindingType b)})
+                                    in  
+                                      let result = (Core.TermLet (Core.Let {
+                                              Core.letBindings = (Lists.map mapBinding (Core.letBindings v1)),
+                                              Core.letBody = (rewriteWithArgs [] tx1 (Core.letBody v1))}))
+                                      in (afterRecursion result)
+                                Core.TermList v1 -> (afterRecursion (Core.TermList (Lists.map (\el -> recurse tx el) v1)))
+                                Core.TermLiteral v1 -> (Core.TermLiteral v1)
+                                Core.TermMap v1 -> (afterRecursion (Core.TermMap (forMap v1)))
+                                Core.TermMaybe v1 -> (afterRecursion (Core.TermMaybe (Maybes.map (\v -> recurse tx v) v1)))
+                                Core.TermPair v1 -> (afterRecursion (Core.TermPair (recurse tx (Pairs.first v1), (recurse tx (Pairs.second v1)))))
+                                Core.TermRecord v1 -> (afterRecursion (Core.TermRecord (Core.Record {
+                                  Core.recordTypeName = (Core.recordTypeName v1),
+                                  Core.recordFields = (Lists.map forField (Core.recordFields v1))})))
+                                Core.TermSet v1 -> (afterRecursion (Core.TermSet (Sets.fromList (Lists.map (\el -> recurse tx el) (Sets.toList v1)))))
+                                Core.TermTypeApplication v1 -> (afterRecursion (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                                  Core.typeApplicationTermBody = (recurse tx (Core.typeApplicationTermBody v1)),
+                                  Core.typeApplicationTermType = (Core.typeApplicationTermType v1)})))
+                                Core.TermTypeLambda v1 ->  
+                                  let tx1 = (Schemas.extendTypeContextForTypeLambda tx v1)
+                                  in  
+                                    let result = (Core.TermTypeLambda (Core.TypeLambda {
+                                            Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
+                                            Core.typeLambdaBody = (rewriteWithArgs [] tx1 (Core.typeLambdaBody v1))}))
+                                    in (afterRecursion result)
+                                Core.TermUnion v1 -> (afterRecursion (Core.TermUnion (Core.Injection {
+                                  Core.injectionTypeName = (Core.injectionTypeName v1),
+                                  Core.injectionField = (forField (Core.injectionField v1))})))
+                                Core.TermUnit -> Core.TermUnit
+                                Core.TermVariable v1 ->  
+                                  let arty = (termArityWithContext tx term)
+                                  in  
+                                    let varType = (Maps.lookup v1 (Typing.typeContextTypes tx))
+                                    in (expand False args arty varType term)
+                                Core.TermWrap v1 -> (afterRecursion (Core.TermWrap (Core.WrappedTerm {
+                                  Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
+                                  Core.wrappedTermBody = (recurse tx (Core.wrappedTermBody v1))})))) term))
+          in (contractTerm (rewriteWithArgs [] tx0 term0))
 
 -- | Calculate the arity for eta expansion Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references.
 etaExpansionArity :: (Graph.Graph -> Core.Term -> Int)

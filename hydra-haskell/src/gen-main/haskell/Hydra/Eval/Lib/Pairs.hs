@@ -17,6 +17,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Interpreter-friendly bimap for Pair terms.
 bimap :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 bimap firstFun secondFun pairTerm = ((\x -> case x of
   Core.TermPair v1 ->  

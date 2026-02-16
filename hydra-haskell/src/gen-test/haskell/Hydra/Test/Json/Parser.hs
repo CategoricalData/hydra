@@ -14,6 +14,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Test cases for JSON parsing
 allTests :: Testing.TestGroup
 allTests = Testing.TestGroup {
   Testing.testGroupName = "JSON parsing",

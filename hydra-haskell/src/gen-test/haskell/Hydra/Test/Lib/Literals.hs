@@ -14,6 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Hydra.Lib.Literals as Literals
 
+-- | Test cases for hydra.lib.literals primitives
 allTests :: Testing.TestGroup
 allTests = Testing.TestGroup {
   Testing.testGroupName = "hydra.lib.literals primitives",

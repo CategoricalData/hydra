@@ -103,7 +103,24 @@ public interface Annotations {
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>> getTermDescription(hydra.core.Term term) {
-    return hydra.annotations.Annotations.getDescription(hydra.annotations.Annotations.termAnnotationInternal(term));
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.core.Term>> peel = new java.util.concurrent.atomic.AtomicReference<>();
+    peel.set((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term otherwise(hydra.core.Term instance) {
+        return t;
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
+        return (peel.get()).apply(((tl).value).body);
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.TypeApplication ta) {
+        return (peel.get()).apply(((ta).value).body);
+      }
+    })));
+    return hydra.annotations.Annotations.getDescription(hydra.annotations.Annotations.termAnnotationInternal((peel.get()).apply(term)));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> getType(java.util.Map<hydra.core.Name, hydra.core.Term> anns) {

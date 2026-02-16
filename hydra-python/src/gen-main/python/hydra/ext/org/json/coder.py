@@ -38,9 +38,13 @@ T3 = TypeVar("T3")
 T4 = TypeVar("T4")
 
 def show_value(value: T0) -> str:
+    r"""Show a JSON value as a string (placeholder implementation)."""
+    
     return "TODO: implement showValue"
 
 def decode_record(rt: hydra.core.RowType, coders: frozenlist[tuple[hydra.core.FieldType, hydra.compute.Coder[T0, T1, hydra.core.Term, hydra.json.model.Value]]], n: hydra.json.model.Value) -> hydra.compute.Flow[T1, hydra.core.Term]:
+    r"""Decode a JSON value to a record term."""
+    
     def decode_object_body(m: FrozenDict[str, hydra.json.model.Value]) -> hydra.compute.Flow[T1, hydra.core.Term]:
         def decode_field(coder: tuple[hydra.core.FieldType, hydra.compute.Coder[T2, T3, hydra.core.Term, hydra.json.model.Value]]) -> hydra.compute.Flow[T3, hydra.core.Field]:
             @lru_cache(1)
@@ -69,6 +73,8 @@ def decode_record(rt: hydra.core.RowType, coders: frozenlist[tuple[hydra.core.Fi
     return result()
 
 def encode_record(coders: frozenlist[tuple[hydra.core.FieldType, hydra.compute.Coder[hydra.graph.Graph, T0, hydra.core.Term, hydra.json.model.Value]]], term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.json.model.Value]:
+    r"""Encode a record term to JSON."""
+    
     @lru_cache(1)
     def stripped() -> hydra.core.Term:
         return hydra.rewriting.deannotate_term(term)
@@ -117,6 +123,8 @@ def encode_record(coders: frozenlist[tuple[hydra.core.FieldType, hydra.compute.C
     return hydra.lib.flows.bind(hydra.extract.core.term_record(stripped()), (lambda record: (fields := record.fields, hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: encode_field(x1)), hydra.lib.lists.zip(coders, fields)), (lambda maybe_fields: hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.maybes.cat(maybe_fields))))))))[1]))
 
 def literal_json_coder(lt: hydra.core.LiteralType) -> hydra.compute.Flow[T0, hydra.compute.Coder[T1, T2, hydra.core.Literal, hydra.json.model.Value]]:
+    r"""Create a JSON coder for literal types."""
+    
     def decode_bool(s: hydra.json.model.Value) -> hydra.compute.Flow[T3, hydra.core.Literal]:
         match s:
             case hydra.json.model.ValueBoolean(value=b):
@@ -174,6 +182,8 @@ def read_string_stub(s: str) -> hydra.core.Term:
 
 @lru_cache(1)
 def unit_coder() -> hydra.compute.Coder[T0, T1, hydra.core.Term, hydra.json.model.Value]:
+    r"""JSON coder for unit values."""
+    
     def encode_unit(term: hydra.core.Term) -> hydra.compute.Flow[T2, hydra.json.model.Value]:
         match hydra.rewriting.deannotate_term(term):
             case hydra.core.TermUnit():
@@ -191,6 +201,8 @@ def unit_coder() -> hydra.compute.Coder[T0, T1, hydra.core.Term, hydra.json.mode
     return hydra.compute.Coder((lambda x1: encode_unit(x1)), (lambda x1: decode_unit(x1)))
 
 def record_coder(rt: hydra.core.RowType) -> hydra.compute.Flow[T0, hydra.compute.Coder[hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value]]:
+    r"""Create a JSON coder for record types."""
+    
     @lru_cache(1)
     def fields() -> frozenlist[hydra.core.FieldType]:
         return rt.fields
@@ -199,6 +211,8 @@ def record_coder(rt: hydra.core.RowType) -> hydra.compute.Flow[T0, hydra.compute
     return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: get_coder(x1)), fields()), (lambda coders: hydra.lib.flows.pure(hydra.compute.Coder((lambda v1: encode_record(coders, v1)), (lambda v1: decode_record(rt, coders, v1))))))
 
 def term_coder(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.compute.Coder[hydra.graph.Graph, T1, hydra.core.Term, hydra.json.model.Value]]:
+    r"""Create a JSON coder for term types."""
+    
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
@@ -303,9 +317,13 @@ def term_coder(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.compute.Cod
     return result()
 
 def json_coder(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.compute.Coder[hydra.graph.Graph, T0, hydra.core.Term, hydra.json.model.Value]]:
+    r"""Create a JSON coder for a given type."""
+    
     return hydra.lib.flows.bind(hydra.adapt.modules.language_adapter(hydra.ext.org.json.language.json_language(), typ), (lambda adapter: hydra.lib.flows.bind(term_coder(adapter.target), (lambda coder: hydra.lib.flows.pure(hydra.adapt.utils.compose_coders(adapter.coder, coder))))))
 
 def untyped_term_to_json(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.json.model.Value]:
+    r"""A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption."""
+    
     def unexp(msg: str) -> hydra.compute.Flow[T1, hydra.json.model.Value]:
         return hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.strings.cat2("FAIL: ", msg))))
     def as_record(fields: frozenlist[hydra.core.Field]) -> hydra.compute.Flow[T0, hydra.json.model.Value]:

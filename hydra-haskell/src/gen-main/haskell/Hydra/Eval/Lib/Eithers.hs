@@ -21,6 +21,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Interpreter-friendly bind for Either terms.
 bind :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 bind eitherTerm funTerm = ((\x -> case x of
   Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermApplication (Core.Application {
@@ -28,6 +29,7 @@ bind eitherTerm funTerm = ((\x -> case x of
     Core.applicationArgument = val})) v1))
   _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
 
+-- | Interpreter-friendly bimap for Either terms.
 bimap :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 bimap leftFun rightFun eitherTerm = ((\x -> case x of
   Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left (Core.TermApplication (Core.Application {
@@ -37,6 +39,7 @@ bimap leftFun rightFun eitherTerm = ((\x -> case x of
     Core.applicationArgument = val})))) v1))
   _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
 
+-- | Interpreter-friendly case analysis for Either terms.
 either :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 either leftFun rightFun eitherTerm = ((\x -> case x of
   Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermApplication (Core.Application {
@@ -46,6 +49,7 @@ either leftFun rightFun eitherTerm = ((\x -> case x of
     Core.applicationArgument = val})) v1))
   _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
 
+-- | Interpreter-friendly map for Either terms.
 map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 map rightFun eitherTerm = ((\x -> case x of
   Core.TermEither v1 -> (Flows.pure (Eithers.either (\val -> Core.TermEither (Left val)) (\val -> Core.TermEither (Right (Core.TermApplication (Core.Application {
@@ -53,6 +57,7 @@ map rightFun eitherTerm = ((\x -> case x of
     Core.applicationArgument = val})))) v1))
   _ -> (Monads.unexpected "either value" (Core__.term eitherTerm))) eitherTerm)
 
+-- | Interpreter-friendly mapList for Either (traverse).
 mapList :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
 mapList funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Lists.foldl (\acc -> \el -> Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -86,6 +91,7 @@ mapList funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
     Core.applicationFunction = funTerm,
     Core.applicationArgument = el}))})) (Core.TermEither (Right (Core.TermList []))) (Lists.reverse elements))))
 
+-- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
 mapMaybe :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 mapMaybe funTerm maybeTerm = ((\x -> case x of
   Core.TermMaybe v1 -> (Flows.pure (Maybes.maybe (Core.TermEither (Right (Core.TermMaybe Nothing))) (\val -> Core.TermApplication (Core.Application {

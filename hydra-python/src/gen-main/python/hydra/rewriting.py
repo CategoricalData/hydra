@@ -509,6 +509,8 @@ def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
             raise AssertionError("Unreachable: all variants handled")
 
 def fold_over_term(order: hydra.coders.TraversalOrder, fld: Callable[[T0, hydra.core.Term], T0], b0: T0, term: hydra.core.Term) -> T0:
+    r"""Fold over a term, traversing its subterms in the specified order."""
+    
     match order:
         case hydra.coders.TraversalOrder.PRE:
             return hydra.lib.lists.foldl((lambda v1, v2: fold_over_term(order, fld, v1, v2)), fld(b0, term), subterms(term))
@@ -575,6 +577,8 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
             raise AssertionError("Unreachable: all variants handled")
 
 def fold_over_type(order: hydra.coders.TraversalOrder, fld: Callable[[T0, hydra.core.Type], T0], b0: T0, typ: hydra.core.Type) -> T0:
+    r"""Fold over a type, traversing its subtypes in the specified order."""
+    
     match order:
         case hydra.coders.TraversalOrder.PRE:
             return hydra.lib.lists.foldl((lambda v1, v2: fold_over_type(order, fld, v1, v2)), fld(b0, typ), subtypes(typ))
@@ -727,6 +731,8 @@ def free_variables_in_type_scheme_simple(ts: hydra.core.TypeScheme) -> frozenset
 def rewrite_type_m(f: Callable[[
   Callable[[hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]],
   hydra.core.Type], hydra.compute.Flow[T0, hydra.core.Type]], typ0: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+    r"""Monadic type rewriting."""
+    
     def fsub(recurse2: Callable[[hydra.core.Type], hydra.compute.Flow[T1, hydra.core.Type]], typ: hydra.core.Type) -> hydra.compute.Flow[T1, hydra.core.Type]:
         match typ:
             case hydra.core.TypeAnnotated(value=at):
@@ -800,6 +806,8 @@ def rewrite_type_m(f: Callable[[
     return recurse(typ0)
 
 def inline_type(schema: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+    r"""Inline all type variables in a type using the provided schema. Note: this function is only appropriate for nonrecursive type definitions."""
+    
     def f(recurse: Callable[[T1], hydra.compute.Flow[T0, hydra.core.Type]], typ2: T1) -> hydra.compute.Flow[T0, hydra.core.Type]:
         def after_recurse(tr: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
             match tr:
@@ -1199,6 +1207,8 @@ def rewrite_and_fold_term(f: Callable[[
   Callable[[T0, hydra.core.Term], tuple[T0, hydra.core.Term]],
   T0,
   hydra.core.Term], tuple[T0, hydra.core.Term]], term0: T0, v1: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
+    r"""Rewrite a term, and at the same time, fold a function over it, accumulating a value."""
+    
     def fsub(recurse2: Callable[[T1, hydra.core.Term], tuple[T1, hydra.core.Term]], val0: T1, term02: hydra.core.Term) -> tuple[T1, hydra.core.Term]:
         def for_single(rec: Callable[[T2, T3], tuple[T4, T5]], cons: Callable[[T5], T6], val: T2, term: T3) -> tuple[T4, T6]:
             @lru_cache(1)
@@ -1339,6 +1349,8 @@ def rewrite_and_fold_term_m(f: Callable[[
   Callable[[T0, hydra.core.Term], hydra.compute.Flow[T1, tuple[T0, hydra.core.Term]]],
   T0,
   hydra.core.Term], hydra.compute.Flow[T1, tuple[T0, hydra.core.Term]]], term0: T0, v1: hydra.core.Term) -> hydra.compute.Flow[T1, tuple[T0, hydra.core.Term]]:
+    r"""Monadic version: rewrite a term and fold a function over it, accumulating a value."""
+    
     def fsub(recurse2: Callable[[T2, hydra.core.Term], hydra.compute.Flow[T3, tuple[T2, hydra.core.Term]]], val0: T2, term02: hydra.core.Term) -> hydra.compute.Flow[T3, tuple[T2, hydra.core.Term]]:
         def for_single(rec: Callable[[T4, T5], hydra.compute.Flow[T6, tuple[T7, T8]]], cons: Callable[[T8], T9], val: T4, term: T5) -> hydra.compute.Flow[T6, tuple[T7, T9]]:
             return hydra.lib.flows.bind(rec(val, term), (lambda r: hydra.lib.flows.pure((hydra.lib.pairs.first(r), cons(hydra.lib.pairs.second(r))))))
@@ -1431,6 +1443,8 @@ def rewrite_and_fold_term_with_path(f: Callable[[
   frozenlist[hydra.accessors.TermAccessor],
   T0,
   hydra.core.Term], tuple[T0, hydra.core.Term]], term0: T0, v1: hydra.core.Term) -> tuple[T0, hydra.core.Term]:
+    r"""Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of TermAccessors from root to current position."""
+    
     def fsub(recurse2: Callable[[frozenlist[hydra.accessors.TermAccessor], T1, hydra.core.Term], tuple[T1, hydra.core.Term]], path: frozenlist[hydra.accessors.TermAccessor], val0: T1, term02: hydra.core.Term) -> tuple[T1, hydra.core.Term]:
         def for_single_with_accessor(rec: Callable[[frozenlist[hydra.accessors.TermAccessor], T2, T3], tuple[T4, T5]], cons: Callable[[T5], T6], accessor: hydra.accessors.TermAccessor, val: T2, term: T3) -> tuple[T4, T6]:
             @lru_cache(1)
@@ -1591,6 +1605,8 @@ def rewrite_and_fold_term_with_path(f: Callable[[
 def rewrite_term_m(f: Callable[[
   Callable[[hydra.core.Term], hydra.compute.Flow[T0, hydra.core.Term]],
   hydra.core.Term], hydra.compute.Flow[T0, hydra.core.Term]], term0: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Monadic term rewriting with custom transformation function."""
+    
     def fsub(recurse2: Callable[[hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]], term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
         def for_field(field: hydra.core.Field) -> hydra.compute.Flow[T1, hydra.core.Field]:
             return hydra.lib.flows.bind(recurse2(field.term), (lambda t: hydra.lib.flows.pure(hydra.core.Field(field.name, t))))
@@ -1737,6 +1753,8 @@ def rewrite_term_with_context(f: Callable[[
   Callable[[T0, hydra.core.Term], hydra.core.Term],
   T0,
   hydra.core.Term], hydra.core.Term], cx0: T0, term0: hydra.core.Term) -> hydra.core.Term:
+    r"""A variant of rewriteTerm which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting."""
+    
     def for_subterms(recurse0: Callable[[T1, hydra.core.Term], hydra.core.Term], cx: T1, term: hydra.core.Term) -> hydra.core.Term:
         def recurse(v1: hydra.core.Term) -> hydra.core.Term:
             return recurse0(cx, v1)
@@ -1841,6 +1859,8 @@ def rewrite_term_with_context_m(f: Callable[[
   Callable[[T0, hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]],
   T0,
   hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]], cx0: T0, term0: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.core.Term]:
+    r"""A variant of rewriteTermM which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting."""
+    
     def for_subterms(recurse0: Callable[[T2, hydra.core.Term], hydra.compute.Flow[T3, hydra.core.Term]], cx: T2, term: hydra.core.Term) -> hydra.compute.Flow[T3, hydra.core.Term]:
         def recurse(v1: hydra.core.Term) -> hydra.compute.Flow[T3, hydra.core.Term]:
             return recurse0(cx, v1)

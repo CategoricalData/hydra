@@ -483,22 +483,27 @@ public interface Hoisting {
                           newLambdaVars.get(),
                           freeVars)));
                         return ((java.util.function.Supplier<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                          hydra.util.Lazy<hydra.core.Term> wrappedTerm = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                            (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(varName, (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), body))))),
-                            processedTerm.get(),
-                            hydra.lib.lists.Reverse.apply(capturedVars.get())));
+                          java.util.Map<hydra.core.Name, hydra.core.Type> typeMap = (cxInner).types;
                           return ((java.util.function.Supplier<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                            hydra.util.Lazy<hydra.core.Term> reference = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                              (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (fn -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Application(new hydra.core.Application(fn, new hydra.core.Term.Variable(varName))))),
-                              new hydra.core.Term.Variable(bindingName),
-                              capturedVars.get()));
+                            hydra.util.Lazy<hydra.core.Term> wrappedTerm = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                              (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(varName, hydra.lib.maps.Lookup.apply(
+                                varName,
+                                typeMap), body))))),
+                              processedTerm.get(),
+                              hydra.lib.lists.Reverse.apply(capturedVars.get())));
                             return ((java.util.function.Supplier<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                              hydra.util.Lazy<hydra.core.Binding> newBinding = new hydra.util.Lazy<>(() -> new hydra.core.Binding(bindingName, wrappedTerm.get(), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
-                              return (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>((hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>) ((hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>) (new hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>(hydra.lib.math.Add.apply(
-                                newCounter.get(),
-                                1), hydra.lib.lists.Cons.apply(
-                                newBinding.get(),
-                                newBindings.get())))), reference.get())));
+                              hydra.util.Lazy<hydra.core.Term> reference = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                                (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (fn -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Application(new hydra.core.Application(fn, new hydra.core.Term.Variable(varName))))),
+                                new hydra.core.Term.Variable(bindingName),
+                                capturedVars.get()));
+                              return ((java.util.function.Supplier<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
+                                hydra.util.Lazy<hydra.core.Binding> newBinding = new hydra.util.Lazy<>(() -> new hydra.core.Binding(bindingName, wrappedTerm.get(), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
+                                return (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>((hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>) ((hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>) (new hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>(hydra.lib.math.Add.apply(
+                                  newCounter.get(),
+                                  1), hydra.lib.lists.Cons.apply(
+                                  newBinding.get(),
+                                  newBindings.get())))), reference.get())));
+                              })).get();
                             })).get();
                           })).get();
                         })).get();

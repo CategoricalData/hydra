@@ -76,9 +76,14 @@ getDescription anns = (Maybes.maybe (Flows.pure Nothing) (\term -> Flows.map May
 getTermAnnotation :: (Core.Name -> Core.Term -> Maybe Core.Term)
 getTermAnnotation key term = (Maps.lookup key (termAnnotationInternal term))
 
--- | Get term description
+-- | Get term description. Peels through TermTypeLambda and TermTypeApplication wrappers (added by inference for polymorphic bindings) to find the description annotation underneath.
 getTermDescription :: (Core.Term -> Compute.Flow Graph.Graph (Maybe String))
-getTermDescription term = (getDescription (termAnnotationInternal term))
+getTermDescription term =  
+  let peel = (\t -> (\x -> case x of
+          Core.TermTypeLambda v1 -> (peel (Core.typeLambdaBody v1))
+          Core.TermTypeApplication v1 -> (peel (Core.typeApplicationTermBody v1))
+          _ -> t) t)
+  in (getDescription (termAnnotationInternal (peel term)))
 
 -- | Get type from annotations
 getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))

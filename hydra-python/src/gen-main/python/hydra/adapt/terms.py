@@ -37,6 +37,8 @@ T4 = TypeVar("T4")
 T5 = TypeVar("T5")
 
 def with_graph_context(f: hydra.compute.Flow[hydra.graph.Graph, T0]) -> hydra.compute.Flow[hydra.coders.AdapterContext, T0]:
+    r"""Execute a flow with graph context."""
+    
     return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: hydra.monads.with_state(cx.graph, f)))
 
 function_proxy_name = hydra.core.Name("hydra.core.FunctionProxy")
@@ -56,6 +58,8 @@ def pass_literal(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterC
             raise TypeError("Unsupported Type")
 
 def pass_unit(_: T0) -> hydra.compute.Flow[T1, hydra.compute.Adapter[T2, T3, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
+    r"""Pass through unit types."""
+    
     return hydra.lib.flows.pure(hydra.compute.Adapter(False, cast(hydra.core.Type, hydra.core.TypeUnit()), cast(hydra.core.Type, hydra.core.TypeUnit()), hydra.compute.Coder((lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))), (lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def union_type_to_record_type(rt: hydra.core.RowType) -> hydra.core.RowType:
@@ -72,6 +76,8 @@ def union_type_to_record_type(rt: hydra.core.RowType) -> hydra.core.RowType:
     return hydra.core.RowType(rt.type_name, hydra.lib.lists.map((lambda x1: make_optional(x1)), rt.fields))
 
 def unit_to_record(_: T0) -> hydra.compute.Flow[T1, hydra.compute.Adapter[T2, T3, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
+    r"""Convert unit terms to records."""
+    
     return hydra.lib.flows.pure(hydra.compute.Adapter(False, cast(hydra.core.Type, hydra.core.TypeUnit()), cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(hydra.core.Name("_Unit"), ()))), hydra.compute.Coder((lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("_Unit"), ()))))), (lambda _2: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermUnit()))))))
 
 def field_adapter(ftyp: hydra.core.FieldType) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.FieldType, hydra.core.FieldType, hydra.core.Field, hydra.core.Field]]:
@@ -740,4 +746,6 @@ def wrap_to_unwrapped(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Ada
             raise TypeError("Unsupported Type")
 
 def function_proxy_type(_: T0) -> hydra.core.Type:
+    r"""Generate a function proxy type for a given domain type."""
+    
     return cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(function_proxy_name, (hydra.core.FieldType(hydra.core.Name("wrap"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("record"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("union"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("lambda"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("primitive"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))), hydra.core.FieldType(hydra.core.Name("variable"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()))))))))

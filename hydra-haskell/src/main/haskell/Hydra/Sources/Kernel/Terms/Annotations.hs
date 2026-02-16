@@ -198,8 +198,13 @@ getTermAnnotation = define "getTermAnnotation" $
 
 getTermDescription :: TBinding (Term -> Flow Graph (Maybe String))
 getTermDescription = define "getTermDescription" $
-  doc "Get term description" $
-  "term" ~> getDescription @@ (termAnnotationInternal @@ var "term")
+  doc "Get term description. Peels through TermTypeLambda and TermTypeApplication wrappers (added by inference for polymorphic bindings) to find the description annotation underneath." $
+  "term" ~>
+  "peel" <~ ("t" ~> cases _Term (var "t")
+    (Just $ var "t") [
+    _Term_typeLambda>>: "tl" ~> var "peel" @@ Core.typeLambdaBody (var "tl"),
+    _Term_typeApplication>>: "ta" ~> var "peel" @@ Core.typeApplicationTermBody (var "ta")]) $
+  getDescription @@ (termAnnotationInternal @@ (var "peel" @@ var "term"))
 
 getType :: TBinding (M.Map Name Term -> Flow Graph (Maybe Type))
 getType = define "getType" $

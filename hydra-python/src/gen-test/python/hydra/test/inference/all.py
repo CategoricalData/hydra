@@ -16,4 +16,6 @@ import hydra.testing
 
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
+    r"""The group of all inference tests."""
+    
     return hydra.testing.TestGroup("inference", Nothing(), (hydra.test.inference.algebraic_types.all_tests(), hydra.test.inference.algorithm_w.all_tests(), hydra.test.inference.failures.all_tests(), hydra.test.inference.fundamentals.all_tests(), hydra.test.inference.kernel_examples.all_tests(), hydra.test.inference.nominal_types.all_tests()), ())

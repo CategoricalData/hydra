@@ -676,71 +676,55 @@ public interface Simple {
                       constraints,
                       doExpand,
                       graphi2),
-                    (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph1 -> {
-                      hydra.util.Lazy<Boolean> allHaveTypesAfterAdapt = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                        (java.util.function.Function<Boolean, java.util.function.Function<Boolean, Boolean>>) (p0 -> p1 -> hydra.lib.logic.And.apply(
-                          p0,
-                          p1)),
-                        true,
-                        hydra.lib.lists.Map.apply(
-                          (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.IsJust.apply((b).type)),
-                          (graph1).elements)));
-                      Boolean needsInference = hydra.lib.logic.Or.apply(
-                        doExpand,
-                        hydra.lib.logic.Not.apply(allHaveTypesAfterAdapt.get()));
-                      return hydra.lib.flows.Bind.apply(
-                        hydra.lib.logic.IfElse.lazy(
-                          needsInference,
-                          () -> hydra.inference.Inference.inferGraphTypes(graph1),
-                          () -> hydra.lib.flows.Pure.apply(graph1)),
-                        (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph2 -> {
-                          hydra.util.Lazy<java.util.List<hydra.core.Binding>> selectedElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-                            (java.util.function.Function<hydra.core.Binding, Boolean>) (el -> hydra.lib.maybes.Maybe.apply(
-                              false,
-                              (java.util.function.Function<hydra.module.Namespace, Boolean>) (ns -> hydra.lib.sets.Member.apply(
-                                ns,
-                                namespacesSet.get())),
-                              hydra.names.Names.namespaceOf((el).name))),
-                            (graph2).elements));
-                          hydra.util.Lazy<java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>> elementsByNamespace = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                            (java.util.function.Function<java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>>) (acc -> (java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>) (el -> hydra.lib.maybes.Maybe.apply(
-                              acc,
-                              (java.util.function.Function<hydra.module.Namespace, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>) (ns -> {
-                                hydra.util.Lazy<java.util.List<hydra.core.Binding>> existing = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-                                  (java.util.List<hydra.core.Binding>) (java.util.List.<hydra.core.Binding>of()),
-                                  (java.util.function.Function<java.util.List<hydra.core.Binding>, java.util.List<hydra.core.Binding>>) (hydra.lib.equality.Identity::apply),
-                                  hydra.lib.maps.Lookup.apply(
-                                    ns,
-                                    acc)));
-                                return hydra.lib.maps.Insert.apply(
-                                  ns,
-                                  hydra.lib.lists.Concat2.apply(
-                                    existing.get(),
-                                    java.util.List.of(el)),
-                                  acc);
-                              }),
-                              hydra.names.Names.namespaceOf((el).name)))),
-                            (java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>) ((java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>) (hydra.lib.maps.Empty.<hydra.module.Namespace, java.util.List<hydra.core.Binding>>apply())),
-                            selectedElements.get()));
-                          java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.module.TermDefinition>> toDef = (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.module.TermDefinition>>) (el -> hydra.lib.maybes.Map.apply(
-                            (java.util.function.Function<hydra.core.TypeScheme, hydra.module.TermDefinition>) (ts -> new hydra.module.TermDefinition((el).name, (el).term, ts)),
-                            (el).type));
-                          hydra.util.Lazy<java.util.List<java.util.List<hydra.module.TermDefinition>>> defsGrouped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-                            (java.util.function.Function<hydra.module.Namespace, java.util.List<hydra.module.TermDefinition>>) (ns -> {
-                              hydra.util.Lazy<java.util.List<hydra.core.Binding>> elsForNs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
+                    (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph1 -> hydra.lib.flows.Bind.apply(
+                      hydra.inference.Inference.inferGraphTypes(graph1),
+                      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph2 -> {
+                        hydra.util.Lazy<java.util.List<hydra.core.Binding>> selectedElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+                          (java.util.function.Function<hydra.core.Binding, Boolean>) (el -> hydra.lib.maybes.Maybe.apply(
+                            false,
+                            (java.util.function.Function<hydra.module.Namespace, Boolean>) (ns -> hydra.lib.sets.Member.apply(
+                              ns,
+                              namespacesSet.get())),
+                            hydra.names.Names.namespaceOf((el).name))),
+                          (graph2).elements));
+                        hydra.util.Lazy<java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>> elementsByNamespace = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                          (java.util.function.Function<java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>>) (acc -> (java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>) (el -> hydra.lib.maybes.Maybe.apply(
+                            acc,
+                            (java.util.function.Function<hydra.module.Namespace, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>) (ns -> {
+                              hydra.util.Lazy<java.util.List<hydra.core.Binding>> existing = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
                                 (java.util.List<hydra.core.Binding>) (java.util.List.<hydra.core.Binding>of()),
                                 (java.util.function.Function<java.util.List<hydra.core.Binding>, java.util.List<hydra.core.Binding>>) (hydra.lib.equality.Identity::apply),
                                 hydra.lib.maps.Lookup.apply(
                                   ns,
-                                  elementsByNamespace.get())));
-                              return hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-                                toDef,
-                                elsForNs.get()));
+                                  acc)));
+                              return hydra.lib.maps.Insert.apply(
+                                ns,
+                                hydra.lib.lists.Concat2.apply(
+                                  existing.get(),
+                                  java.util.List.of(el)),
+                                acc);
                             }),
-                            namespaces));
-                          return hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>) ((hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>) (new hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>(graph2, defsGrouped.get()))));
-                        }));
-                    }))));
+                            hydra.names.Names.namespaceOf((el).name)))),
+                          (java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>) ((java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>) (hydra.lib.maps.Empty.<hydra.module.Namespace, java.util.List<hydra.core.Binding>>apply())),
+                          selectedElements.get()));
+                        java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.module.TermDefinition>> toDef = (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.module.TermDefinition>>) (el -> hydra.lib.maybes.Map.apply(
+                          (java.util.function.Function<hydra.core.TypeScheme, hydra.module.TermDefinition>) (ts -> new hydra.module.TermDefinition((el).name, (el).term, ts)),
+                          (el).type));
+                        hydra.util.Lazy<java.util.List<java.util.List<hydra.module.TermDefinition>>> defsGrouped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                          (java.util.function.Function<hydra.module.Namespace, java.util.List<hydra.module.TermDefinition>>) (ns -> {
+                            hydra.util.Lazy<java.util.List<hydra.core.Binding>> elsForNs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
+                              (java.util.List<hydra.core.Binding>) (java.util.List.<hydra.core.Binding>of()),
+                              (java.util.function.Function<java.util.List<hydra.core.Binding>, java.util.List<hydra.core.Binding>>) (hydra.lib.equality.Identity::apply),
+                              hydra.lib.maps.Lookup.apply(
+                                ns,
+                                elementsByNamespace.get())));
+                            return hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+                              toDef,
+                              elsForNs.get()));
+                          }),
+                          namespaces));
+                        return hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>) ((hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>) (new hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>(graph2, defsGrouped.get()))));
+                      }))))));
               }));
           }))))));
   }

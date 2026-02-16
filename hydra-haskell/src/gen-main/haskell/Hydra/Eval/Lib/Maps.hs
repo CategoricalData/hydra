@@ -19,6 +19,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Interpreter-friendly alter for Map terms.
 alter :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 alter funTerm keyTerm mapTerm = ((\x -> case x of
   Core.TermMap v1 ->  
@@ -49,6 +50,7 @@ alter funTerm keyTerm mapTerm = ((\x -> case x of
         Core.applicationArgument = newVal})))
   _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
 
+-- | Interpreter-friendly bimap for Map terms.
 bimap :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 bimap keyFun valFun mapTerm = ((\x -> case x of
   Core.TermMap v1 ->  
@@ -64,6 +66,7 @@ bimap keyFun valFun mapTerm = ((\x -> case x of
           Core.applicationArgument = v})))) pairs))))
   _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
 
+-- | Interpreter-friendly filter for Map terms.
 filter :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 filter valPred mapTerm = ((\x -> case x of
   Core.TermMap v1 ->  
@@ -85,6 +88,7 @@ filter valPred mapTerm = ((\x -> case x of
             Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
   _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
 
+-- | Interpreter-friendly filterWithKey for Map terms.
 filterWithKey :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 filterWithKey pred mapTerm = ((\x -> case x of
   Core.TermMap v1 ->  
@@ -110,6 +114,7 @@ filterWithKey pred mapTerm = ((\x -> case x of
               Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
   _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
 
+-- | Interpreter-friendly map for Map terms.
 map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 map valFun mapTerm = ((\x -> case x of
   Core.TermMap v1 ->  
@@ -123,6 +128,7 @@ map valFun mapTerm = ((\x -> case x of
           Core.applicationArgument = v})))) pairs))))
   _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
 
+-- | Interpreter-friendly mapKeys for Map terms.
 mapKeys :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 mapKeys keyFun mapTerm = ((\x -> case x of
   Core.TermMap v1 ->  

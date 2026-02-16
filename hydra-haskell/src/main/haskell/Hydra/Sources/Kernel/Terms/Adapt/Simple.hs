@@ -485,13 +485,9 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi2" $
 
   -- Step 6: Perform inference on the adapted graph.
-  -- Always infer when doExpand=True, because eta expansion creates lambdas with lambdaDomain=Nothing.
-  -- Otherwise, skip inference if all bindings already have types.
-  "allHaveTypesAfterAdapt" <~ Logic.ands (Lists.map ("b" ~> Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graph1")) $
-  "needsInference" <~ Logic.or (var "doExpand") (Logic.not $ var "allHaveTypesAfterAdapt") $
-  "graph2" <<~ Logic.ifElse (var "needsInference")
-    (Inference.inferGraphTypes @@ var "graph1")
-    (produce $ var "graph1") $
+  -- TODO: Eliminate this step once eta expansion and adaptation produce fully-typed terms
+  -- (including type applications for pairs, eithers, etc.)
+  "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
 
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>

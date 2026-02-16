@@ -219,6 +219,8 @@ def strip_and_dereference_term_either(g: hydra.graph.Graph, term: hydra.core.Ter
             return Right(stripped())
 
 def with_empty_graph(v1: hydra.compute.Flow[hydra.graph.Graph, T0]) -> hydra.compute.Flow[T1, T0]:
+    r"""Execute flow with empty graph."""
+    
     return hydra.monads.with_state(empty_graph(), v1)
 
 def with_schema_context(f: hydra.compute.Flow[hydra.graph.Graph, T0]) -> hydra.compute.Flow[hydra.graph.Graph, T0]:

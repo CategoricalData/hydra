@@ -35,4 +35,6 @@ def test_group_for_primitives() -> hydra.testing.TestGroup:
 
 @lru_cache(1)
 def all_tests() -> hydra.testing.TestGroup:
+    r"""Fundamental language feature tests."""
+    
     return hydra.testing.TestGroup("Fundamentals", Nothing(), (test_group_for_lambdas(), test_group_for_let(), test_group_for_literals(), test_group_for_pathological_terms(), test_group_for_polymorphism(), test_group_for_primitives()), ())
