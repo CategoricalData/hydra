@@ -448,33 +448,33 @@ public interface Simple {
       term0);
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T1, hydra.core.Term> adaptTerm_rewrite(hydra.coders.LanguageConstraints constraints, java.util.function.Function<hydra.coders.LanguageConstraints, java.util.function.Function<T0, Boolean>> hydra_adapt_simple_literalTypeSupported2, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, java.util.List<hydra.core.Term>>> hydra_adapt_simple_termAlternatives2, java.util.function.Function<hydra.core.Literal, T0> hydra_reflect_literalType2, java.util.function.Function<hydra.core.Term, hydra.variants.TermVariant> hydra_reflect_termVariant2, java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.Map<T0, hydra.core.LiteralType> litmap, java.util.function.Function<T2, hydra.compute.Flow<T1, hydra.core.Term>> recurse, T2 term0) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>> forUnsupported = new java.util.concurrent.atomic.AtomicReference<>();
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>> tryTerm = new java.util.concurrent.atomic.AtomicReference<>();
-    forUnsupported.set((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>) (term -> {
-      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>> forNonNull = new java.util.concurrent.atomic.AtomicReference<>();
-      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>> tryAlts = new java.util.concurrent.atomic.AtomicReference<>();
-      forNonNull.set((java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>) (alts -> hydra.lib.flows.Bind.apply(
+  static <T0, T1> hydra.compute.Flow<T0, hydra.core.Term> adaptTerm_rewrite(hydra.coders.LanguageConstraints constraints, java.util.function.Function<hydra.coders.LanguageConstraints, java.util.function.Function<hydra.core.LiteralType, Boolean>> hydra_adapt_simple_literalTypeSupported2, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.util.List<hydra.core.Term>>> hydra_adapt_simple_termAlternatives2, java.util.function.Function<hydra.core.Literal, hydra.core.LiteralType> hydra_reflect_literalType2, java.util.function.Function<hydra.core.Term, hydra.variants.TermVariant> hydra_reflect_termVariant2, java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.Map<hydra.core.LiteralType, hydra.core.LiteralType> litmap, java.util.function.Function<T1, hydra.compute.Flow<T0, hydra.core.Term>> recurse, T1 term0) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>> forUnsupported = new java.util.concurrent.atomic.AtomicReference<>();
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>> tryTerm = new java.util.concurrent.atomic.AtomicReference<>();
+    forUnsupported.set((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>) (term -> {
+      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>> forNonNull = new java.util.concurrent.atomic.AtomicReference<>();
+      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>> tryAlts = new java.util.concurrent.atomic.AtomicReference<>();
+      forNonNull.set((java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>) (alts -> hydra.lib.flows.Bind.apply(
         (tryTerm.get()).apply(hydra.lib.lists.Head.apply(alts)),
-        (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>) (mterm -> hydra.lib.maybes.Maybe.apply(
+        (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>) (mterm -> hydra.lib.maybes.Maybe.apply(
           (tryAlts.get()).apply(hydra.lib.lists.Tail.apply(alts)),
-          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>) (t -> hydra.lib.flows.Pure.apply(hydra.util.Maybe.just(t))),
+          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>) (t -> hydra.lib.flows.Pure.apply(hydra.util.Maybe.just(t))),
           mterm)))));
-      tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>) (alts -> hydra.lib.logic.IfElse.lazy(
+      tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>) (alts -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(alts),
         () -> hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
         () -> (forNonNull.get()).apply(alts))));
       return hydra.lib.flows.Bind.apply(
         (hydra_adapt_simple_termAlternatives2).apply(term),
-        (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>) (alts -> (tryAlts.get()).apply(alts)));
+        (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>) (alts -> (tryAlts.get()).apply(alts)));
     }));
-    tryTerm.set((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>) (term -> {
+    tryTerm.set((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>) (term -> {
       hydra.util.Lazy<Boolean> supportedVariant = new hydra.util.Lazy<>(() -> hydra.lib.sets.Member.apply(
         (hydra_reflect_termVariant2).apply(term),
         (constraints).termVariants));
       return hydra.lib.logic.IfElse.lazy(
         supportedVariant.get(),
-        () -> ((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.Term>>>) (v1 -> hydra.adapt.simple.Simple.adaptTerm_forSupported(
+        () -> ((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.core.Term>>>) (v1 -> hydra.adapt.simple.Simple.adaptTerm_forSupported(
           constraints,
           hydra_adapt_simple_literalTypeSupported2,
           hydra_reflect_literalType2,
@@ -484,14 +484,34 @@ public interface Simple {
     }));
     return hydra.lib.flows.Bind.apply(
       (recurse).apply(term0),
-      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>) (term1 -> hydra.lib.flows.Bind.apply(
-        (tryTerm.get()).apply(term1),
-        (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.compute.Flow<T1, hydra.core.Term>>) (mterm -> hydra.lib.maybes.Maybe.apply(
-          hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
-            "no alternatives for term: ",
-            (hydra_show_core_term2).apply(term1))),
-          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>) (term2 -> hydra.lib.flows.Pure.apply(term2)),
-          mterm)))));
+      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (term1 -> (term1).accept(new hydra.core.Term.PartialVisitor<>() {
+        @Override
+        public hydra.compute.Flow<T0, hydra.core.Term> otherwise(hydra.core.Term instance) {
+          return hydra.lib.flows.Bind.apply(
+            (tryTerm.get()).apply(term1),
+            (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.compute.Flow<T0, hydra.core.Term>>) (mterm -> hydra.lib.maybes.Maybe.apply(
+              hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
+                "no alternatives for term: ",
+                (hydra_show_core_term2).apply(term1))),
+              (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (term2 -> hydra.lib.flows.Pure.apply(term2)),
+              mterm)));
+        }
+        
+        @Override
+        public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Term.TypeApplication ta) {
+          return hydra.lib.flows.Bind.apply(
+            hydra.adapt.simple.Simple.<T0>adaptType(
+              constraints,
+              litmap,
+              ((ta).value).type),
+            (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Term>>) (atyp -> hydra.lib.flows.Pure.apply(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(((ta).value).body, atyp)))));
+        }
+        
+        @Override
+        public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Term.TypeLambda ignored) {
+          return hydra.lib.flows.Pure.apply(term1);
+        }
+      })));
   }
   
   static <T0, T1, T2> hydra.compute.Flow<T2, hydra.util.Maybe<hydra.core.Term>> adaptTerm_forSupported(T0 constraints, java.util.function.Function<T0, java.util.function.Function<T1, Boolean>> hydra_adapt_simple_literalTypeSupported2, java.util.function.Function<hydra.core.Literal, T1> hydra_reflect_literalType2, java.util.Map<T1, hydra.core.LiteralType> litmap, hydra.core.Term term) {

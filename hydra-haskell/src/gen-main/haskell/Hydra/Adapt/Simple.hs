@@ -200,7 +200,12 @@ adaptTerm constraints litmap term0 =
               tryTerm = (\term ->  
                       let supportedVariant = (Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints))
                       in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term)))
-          in (Flows.bind (recurse term0) (\term1 -> Flows.bind (tryTerm term1) (\mterm -> Maybes.maybe (Flows.fail (Strings.cat2 "no alternatives for term: " (Core_.term term1))) (\term2 -> Flows.pure term2) mterm))))
+          in (Flows.bind (recurse term0) (\term1 -> (\x -> case x of
+            Core.TermTypeApplication v1 -> (Flows.bind (adaptType constraints litmap (Core.typeApplicationTermType v1)) (\atyp -> Flows.pure (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.typeApplicationTermBody v1),
+              Core.typeApplicationTermType = atyp}))))
+            Core.TermTypeLambda _ -> (Flows.pure term1)
+            _ -> (Flows.bind (tryTerm term1) (\mterm -> Maybes.maybe (Flows.fail (Strings.cat2 "no alternatives for term: " (Core_.term term1))) (\term2 -> Flows.pure term2) mterm))) term1)))
   in (Rewriting.rewriteTermM rewrite term0)
 
 -- | Adapt a type using the given language constraints
@@ -232,7 +237,7 @@ adaptTypeScheme constraints litmap ts0 =
       Core.typeSchemeType = t1,
       Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts0)})))
 
--- | Given a data graph along with language constraints and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations, and again after hoisting if hoisting creates new untyped bindings. Adaptation is type-preserving and no post-adaptation inference is needed. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java).
+-- | Given a data graph along with language constraints and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations, and again after hoisting if hoisting creates new untyped bindings. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java).
 dataGraphToDefinitions :: (Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Graph.Graph -> [Module.Namespace] -> Compute.Flow Graph.Graph (Graph.Graph, [[Module.TermDefinition]]))
 dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymorphicLetBindings graph namespaces =  
   let namespacesSet = (Sets.fromList namespaces)

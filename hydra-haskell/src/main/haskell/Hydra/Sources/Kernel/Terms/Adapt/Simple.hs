@@ -353,10 +353,21 @@ adaptTerm = define "adaptTerm" $
         (var "forSupported" @@ var "term")
         (var "forUnsupported" @@ var "term"))] $
     "term1" <<~ var "recurse" @@ var "term0" $
-    "mterm" <<~ var "tryTerm" @@ var "term1" $
-    optCases (var "mterm")
-      (Flows.fail $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
-      ("term2" ~> produce $ var "term2")) $
+    -- Type application/lambda wrappers pass through unconditionally.
+    -- fsub already recursed into their bodies; we must not strip the wrappers
+    -- because they carry type information needed by typeOf in the coders.
+    cases _Term (var "term1")
+      (Just $
+        "mterm" <<~ var "tryTerm" @@ var "term1" $
+        optCases (var "mterm")
+          (Flows.fail $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
+          ("term2" ~> produce $ var "term2"))
+      [_Term_typeApplication>>: "ta" ~>
+         "atyp" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ (Core.typeApplicationTermType $ var "ta") $
+         produce $ Core.termTypeApplication $ Core.typeApplicationTerm
+           (Core.typeApplicationTermBody $ var "ta")
+           (var "atyp"),
+       _Term_typeLambda>>:      "_" ~> produce $ var "term1"]) $
   Rewriting.rewriteTermM @@ var "rewrite" @@ var "term0"
 
 adaptType :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Flow s Type)
@@ -409,7 +420,8 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     <> " then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces)."
     <> " Inference is performed before adaptation if bindings lack type annotations,"
     <> " and again after hoisting if hoisting creates new untyped bindings."
-    <> " Adaptation is type-preserving and no post-adaptation inference is needed."
+    <> " Adaptation preserves type application/lambda wrappers and adapts embedded types."
+    <> " Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent."
     <> " The doExpand flag controls eta expansion."
     <> " The doHoistCaseStatements flag controls case statement hoisting (needed for Python)."
     <> " The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java).") $
@@ -481,12 +493,11 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     (Inference.inferGraphTypes @@ var "graphh") $
 
   -- Step 5: Adapt the graph (includes eta expansion if enabled).
-  -- Adaptation is type-preserving: all type annotations are adapted, not stripped.
+  -- Adaptation preserves type application/lambda wrappers and adapts embedded types
+  -- (literal types, lambda domains, TypeSchemes). Post-adaptation inference (Step 6)
+  -- is still needed to ensure binding TypeSchemes are fully consistent.
   "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi2" $
-
-  -- Step 6: Perform inference on the adapted graph.
-  -- TODO: Eliminate this step once eta expansion and adaptation produce fully-typed terms
-  -- (including type applications for pairs, eithers, etc.)
+  -- Step 6: Post-adaptation inference to fix up TypeSchemes.
   "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
 
   -- Construct term definitions grouped by namespace
