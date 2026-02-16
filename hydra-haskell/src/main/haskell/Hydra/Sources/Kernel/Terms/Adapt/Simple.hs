@@ -121,29 +121,20 @@ adaptDataGraph :: TBinding (LanguageConstraints -> Bool -> Graph -> Flow s Graph
 adaptDataGraph = define "adaptDataGraph" $
   doc ("Adapt a graph and its schema to the given language constraints."
     <> " The doExpand flag controls eta expansion of partial applications."
-    <> " Note: case statement hoisting is done separately, prior to inference.") $
+    <> " Adaptation is type-preserving: binding-level TypeSchemes are adapted (not stripped)."
+    <> " Note: case statement hoisting is done separately, prior to adaptation.") $
   "constraints" ~> "doExpand" ~> "graph0" ~>
   "transform" <~ ("graph" ~> "gterm" ~>
     "tx" <<~ Schemas.graphToTypeContext @@ var "graph" $
     -- Order of operations:
     -- 1. Unshadow variables first (prevents capture issues in eta expansion)
     -- 2. Eta expand (needs type annotations; creates fully-applied functions)
-    -- 3. Remove types (cleanup after eta expansion)
-    -- 4. Lift lambdas above lets (structural cleanup)
+    -- 3. Lift lambdas above lets (structural cleanup)
     "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm" $
-
---    "debug" <<~ Flows.fail (Strings.concat [
---      string "graph after unshadowing: ",
---      ShowCore.term @@ var "gterm1"]) $
-
     "gterm2" <~ Rewriting.unshadowVariables @@ (Logic.ifElse (var "doExpand")
       (Reduction.etaExpandTermNew @@ var "tx" @@ var "gterm1")
       (var "gterm1")) $
-
---    "debug" <<~ Flows.fail "made it here" $
-
-    "gterm3" <~ Rewriting.removeTypesFromTerm @@ var "gterm2" $
-    produce $ Rewriting.liftLambdaAboveLet @@ var "gterm3") $
+    produce $ Rewriting.liftLambdaAboveLet @@ var "gterm2") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "els0" <~ Graph.graphElements (var "graph0") $
   "env0" <~ Graph.graphEnvironment (var "graph0") $
@@ -163,7 +154,7 @@ adaptDataGraph = define "adaptDataGraph" $
     (var "transform" @@ var "graph0" @@ var "gterm0")
     (produce $ var "gterm0") $
   "gterm2" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
-  -- Strip lambda domains from the adapted term (when doExpand=False).
+  -- Strip lambda domains from the adapted term.
   -- Lambda domains carry pre-adaptation types (e.g. bigfloat) that conflict with adapted terms.
   "stripLambdaDomains" <~ ("recurse" ~> "term" ~>
     "rewritten" <~ var "recurse" @@ var "term" $
@@ -176,9 +167,7 @@ adaptDataGraph = define "adaptDataGraph" $
           (Core.lambdaParameter $ var "l")
           nothing
           (Core.lambdaBody $ var "l")]]) $
-  "gterm3" <~ Logic.ifElse (var "doExpand")
-    (var "gterm2")
-    (Rewriting.rewriteTerm @@ var "stripLambdaDomains" @@ var "gterm2") $
+  "gterm3" <~ Rewriting.rewriteTerm @@ var "stripLambdaDomains" @@ var "gterm2" $
   "els1Raw" <~ Schemas.termAsGraph @@ var "gterm3" $
 
   -- Strip nested let binding TypeSchemes within each top-level binding's term.
@@ -201,18 +190,16 @@ adaptDataGraph = define "adaptDataGraph" $
   -- Adapting (rather than stripping) TypeSchemes converts stale types like bigfloat→float64
   -- while preserving type-class constraints like Ord needed by decodeSet.
   "processBinding" <~ ("el" ~>
-    Logic.ifElse (var "doExpand")
-      (produce $ var "el")
-      ("newTerm" <~ Rewriting.rewriteTerm @@ var "stripNestedTypes" @@ (Core.bindingTerm $ var "el") $
-       "adaptedType" <<~ optCases (Core.bindingType $ var "el")
-         (produce nothing)
-         ("ts" ~>
-           "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
-           produce $ just $ var "ts1") $
-       produce $ Core.binding
-         (Core.bindingName $ var "el")
-         (var "newTerm")
-         (var "adaptedType"))) $
+    "newTerm" <~ Rewriting.rewriteTerm @@ var "stripNestedTypes" @@ (Core.bindingTerm $ var "el") $
+    "adaptedType" <<~ optCases (Core.bindingType $ var "el")
+      (produce nothing)
+      ("ts" ~>
+        "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
+        produce $ just $ var "ts1") $
+    produce $ Core.binding
+      (Core.bindingName $ var "el")
+      (var "newTerm")
+      (var "adaptedType")) $
   "els1" <<~ Flows.mapList (var "processBinding") (var "els1Raw") $
   "prims1" <<~ Flows.mapElems (adaptPrimitive @@ var "constraints" @@ var "litmap") (var "prims0") $
 
@@ -410,8 +397,9 @@ adaptTypeScheme = define "adaptTypeScheme" $
 dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Bool -> Graph -> [Namespace] -> Flow s (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints and a designated list of namespaces,"
-    <> " adapt the graph to the language constraints, perform inference,"
+    <> " adapt the graph to the language constraints,"
     <> " then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces)."
+    <> " Inference is performed only if needed (i.e. if bindings lack type annotations after adaptation)."
     <> " The doExpand flag controls eta expansion."
     <> " The doHoistCaseStatements flag controls case statement hoisting (needed for Python)."
     <> " The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java).") $
@@ -494,8 +482,11 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- Step 5: Adapt the graph (includes eta expansion if enabled)
   "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphh" $
 
-  -- Step 6: Perform second inference on the adapted graph (eta expansion may introduce new terms)
-  "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
+  -- Step 6: Perform inference on the adapted graph, but skip if all bindings already have types
+  "allHaveTypesAfterAdapt" <~ Logic.ands (Lists.map ("b" ~> Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graph1")) $
+  "graph2" <<~ Logic.ifElse (var "allHaveTypesAfterAdapt")
+    (produce $ var "graph1")
+    (Inference.inferGraphTypes @@ var "graph1") $
 
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>

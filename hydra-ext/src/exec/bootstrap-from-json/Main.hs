@@ -14,8 +14,6 @@ import Hydra.Ext.Generation
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
 import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
-import qualified Data.Map as M
-import qualified Data.Set as S
 import qualified System.FilePath as FP
 
 
@@ -42,23 +40,14 @@ main = do
   -- JSON directory (relative to hydra-ext working directory)
   let haskellMainJson = "../hydra-haskell/src/gen-main/json"
 
-  -- Load main modules from JSON, then strip System F type annotations
-  -- from terms (type applications, type lambdas, lambda domain types,
-  -- let binding type schemes). Module-level TypeSchemes on term bindings
-  -- are also stripped to avoid bigfloat/float64 unification conflicts.
-  -- TypeSchemes on type-defining bindings are preserved so the schema
-  -- graph can identify type-defining bindings via isNativeType.
+  -- Load main modules from JSON. TypeSchemes are preserved; the adaptation
+  -- pipeline will adapt types (e.g. bigfloat → float64) rather than stripping
+  -- and re-inferring them. System F constructs in term bodies (type lambdas,
+  -- type applications) are handled by termAlternatives during adaptation.
   putStrLn "Loading main modules from JSON..."
   putStrLn $ "  Source: " ++ haskellMainJson
-  rawMods <- loadAllModulesFromJsonDirWith False haskellMainJson kernelModules
-  -- Two views of main modules:
-  --   mainModsWithConstraints: preserves Ord/Eq constraints as minimal TypeSchemes
-  --     (used for main code generation where constraints must appear in output)
-  --   mainModsClean: strips all TypeSchemes (used as universe for test generation
-  --     to avoid schema-type unification conflicts in the larger combined graph)
-  let mainModsWithConstraints = fmap (stripTermTypesPreservingConstraints) rawMods
-  let mainModsClean = fmap stripTermTypes rawMods
-  putStrLn $ "  Loaded " ++ show (length rawMods) ++ " main modules."
+  mainMods <- loadAllModulesFromJsonDirWith False haskellMainJson kernelModules
+  putStrLn $ "  Loaded " ++ show (length mainMods) ++ " main modules."
   putStrLn ""
 
   -- Generate code for the target language (kernel modules only)
@@ -67,21 +56,24 @@ main = do
   putStrLn ""
 
   case target of
-    "haskell" -> writeHaskell outMain mainModsWithConstraints mainModsWithConstraints
-    "java"    -> writeJava    outMain mainModsWithConstraints mainModsWithConstraints
-    "python"  -> writePython  outMain mainModsWithConstraints mainModsWithConstraints
+    "haskell" -> writeHaskell outMain mainMods mainMods
+    "java"    -> writeJava    outMain mainMods mainMods
+    "python"  -> writePython  outMain mainMods mainMods
     _ -> do
       putStrLn $ "Unknown target: " ++ target
       exitFailure
 
   putStrLn ""
 
-  -- Load and generate test modules
+  -- Load and generate test modules.
+  -- Test modules need inference (many bindings intentionally lack types).
+  -- For the test universe, strip TypeSchemes from main modules to avoid
+  -- schema-name unification conflicts (e.g. hydra.core.Term vs hydra.core.Type).
   let haskellTestJson = "../hydra-haskell/src/gen-test/json"
   putStrLn "Loading test modules from JSON..."
   putStrLn $ "  Source: " ++ haskellTestJson
-  rawTestMods <- loadAllModulesFromJsonDirWith False haskellTestJson (kernelModules ++ mainModsClean)
-  let testMods = fmap stripTermTypes rawTestMods
+  let mainModsClean = fmap stripModuleTypeSchemes mainMods
+  testMods <- loadAllModulesFromJsonDirWith False haskellTestJson (kernelModules ++ mainModsClean)
   putStrLn $ "  Loaded " ++ show (length testMods) ++ " test modules."
   putStrLn ""
 
@@ -102,69 +94,3 @@ main = do
   putStrLn $ "Output written to: " ++ outDir
   putStrLn "=========================================="
 
--- | Strip System F type annotations from all term bodies in a module.
--- All TypeSchemes on term bindings are removed; only type-defining
--- bindings are preserved (needed by isNativeType for schema graph
--- construction).
-stripTermTypes :: Module -> Module
-stripTermTypes m = m { moduleElements = fmap stripBinding (moduleElements m) }
-  where
-    stripBinding b = b
-      { bindingTerm = removeTypesFromTerm (bindingTerm b)
-      , bindingType = if isNativeType b then bindingType b else Nothing }
-
--- | Like stripTermTypes, but preserves typeclass constraints (Ord, Eq)
--- by keeping the original TypeScheme with schema type names replaced by
--- fresh-like type variables. This preserves the type structure (so
--- constraints map to the correct type variable positions during
--- inference unification) while avoiding schema-name unification
--- conflicts. This is needed because the inference engine cannot
--- rediscover Ord constraints hidden behind nominal types (e.g. Set/Map
--- inside newtype wrappers).
-stripTermTypesPreservingConstraints :: Module -> Module
-stripTermTypesPreservingConstraints m = m { moduleElements = fmap stripBinding (moduleElements m) }
-  where
-    stripBinding b = b
-      { bindingTerm = removeTypesFromTerm (bindingTerm b)
-      , bindingType = stripTypeScheme b }
-    stripTypeScheme b
-      | isNativeType b = bindingType b
-      | otherwise = case bindingType b of
-          Just ts -> case typeSchemeConstraints ts of
-            Just c | not (M.null c) -> Just (eraseSchemaNames ts)
-            _ -> Nothing
-          Nothing -> Nothing
-    -- Replace schema type names (qualified names like "hydra.core.Term")
-    -- with unique placeholder type variables to avoid schema unification
-    -- errors while preserving the type structure. Polymorphic variables
-    -- (unqualified names like "v", "t0") are left unchanged.
-    eraseSchemaNames ts =
-      let vars = typeSchemeVariables ts
-          varSet = S.fromList (fmap unName vars)
-          rewriteType t = case t of
-            TypeVariable n ->
-              if isSchemaName n && not (S.member (unName n) varSet)
-                then TypeVariable (Name ("_s" ++ show (abs (hash (unName n)))))
-                else t
-            TypeFunction ft -> TypeFunction (FunctionType
-              { functionTypeDomain = rewriteType (functionTypeDomain ft)
-              , functionTypeCodomain = rewriteType (functionTypeCodomain ft) })
-            TypeApplication at -> TypeApplication (ApplicationType
-              { applicationTypeFunction = rewriteType (applicationTypeFunction at)
-              , applicationTypeArgument = rewriteType (applicationTypeArgument at) })
-            TypeList lt -> TypeList (rewriteType lt)
-            TypeSet st -> TypeSet (rewriteType st)
-            TypeMap mt -> TypeMap (MapType
-              { mapTypeKeys = rewriteType (mapTypeKeys mt)
-              , mapTypeValues = rewriteType (mapTypeValues mt) })
-            TypeMaybe ot -> TypeMaybe (rewriteType ot)
-            TypeEither et -> TypeEither (EitherType
-              { eitherTypeLeft = rewriteType (eitherTypeLeft et)
-              , eitherTypeRight = rewriteType (eitherTypeRight et) })
-            TypePair pt -> TypePair (PairType
-              { pairTypeFirst = rewriteType (pairTypeFirst pt)
-              , pairTypeSecond = rewriteType (pairTypeSecond pt) })
-            _ -> t
-      in ts { typeSchemeType = rewriteType (typeSchemeType ts) }
-    isSchemaName (Name n) = elem '.' n
-    hash s = foldl (\h c -> h * 31 + fromEnum c) 0 s
