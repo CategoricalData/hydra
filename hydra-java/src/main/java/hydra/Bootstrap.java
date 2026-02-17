@@ -95,22 +95,18 @@ public class Bootstrap {
         System.out.println("  Time: " + formatTime(stepTime));
         System.out.println();
 
-        // Step 2: Strip System F type annotations
-        System.out.println("Step 2: Stripping System F type annotations...");
-        stepStart = System.currentTimeMillis();
-        List<Module> allMods = Generation.stripAllTermTypes(rawMods);
-        stepTime = System.currentTimeMillis() - stepStart;
-        System.out.println("  Stripped " + allMods.size() + " modules.");
-        System.out.println("  Time: " + formatTime(stepTime));
-        System.out.println();
+        // Main modules keep their type annotations from JSON (no stripping).
+        // This allows the pipeline to skip pre-adaptation inference (Step 3 in
+        // dataGraphToDefinitions), which is a major performance win.
+        List<Module> allMods = rawMods;
 
-        // Step 3: Filter modules
+        // Step 2: Filter modules
         List<Module> modsToGenerate = allMods;
         if (kernelOnly) {
             int before = modsToGenerate.size();
             modsToGenerate = Generation.filterKernelModules(modsToGenerate);
             allMods = Generation.filterKernelModules(allMods);
-            System.out.println("Step 3: Filtering to kernel modules...");
+            System.out.println("Step 2: Filtering to kernel modules...");
             System.out.println("  Before: " + before + " modules");
             System.out.println("  After:  " + modsToGenerate.size() + " kernel modules (excluded "
                     + (before - modsToGenerate.size()) + " ext modules)");
@@ -119,7 +115,7 @@ public class Bootstrap {
         if (typesOnly) {
             int before = modsToGenerate.size();
             modsToGenerate = Generation.filterTypeModules(modsToGenerate);
-            System.out.println("Step 3b: Filtering to type modules...");
+            System.out.println("Step 2b: Filtering to type modules...");
             System.out.println("  Before: " + before + " modules");
             System.out.println("  After:  " + modsToGenerate.size() + " type modules (excluded "
                     + (before - modsToGenerate.size()) + " non-type modules)");
@@ -144,7 +140,7 @@ public class Bootstrap {
         }
 
         // List modules to generate
-        System.out.println("Step 4: Generating " + target + " code...");
+        System.out.println("Step 3: Generating " + target + " code...");
         System.out.println("  Universe: " + allMods.size() + " modules");
         System.out.println("  Generating: " + modsToGenerate.size() + " modules:");
         for (Module m : modsToGenerate) {
@@ -189,9 +185,9 @@ public class Bootstrap {
         System.out.println("  Time: " + formatTime(stepTime));
         System.out.println();
 
-        // Step 5: Load and generate test modules
+        // Step 4: Load and generate test modules
         String testJsonDir = jsonDir.replace("gen-main/json", "gen-test/json");
-        System.out.println("Step 5: Loading test modules from JSON...");
+        System.out.println("Step 4: Loading test modules from JSON...");
         System.out.println("  Source: " + testJsonDir);
 
         stepStart = System.currentTimeMillis();
@@ -211,7 +207,7 @@ public class Bootstrap {
         allUniverse.addAll(testMods);
 
         String outTest = outDir + File.separator + "src/gen-test";
-        System.out.println("Step 6: Generating " + target + " test code...");
+        System.out.println("Step 5: Generating " + target + " test code...");
         System.out.println("  Universe: " + allUniverse.size() + " modules");
         System.out.println("  Generating: " + testMods.size() + " test modules");
         System.out.println("  Output: " + outTest);

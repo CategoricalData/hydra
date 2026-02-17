@@ -494,11 +494,15 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
 
   -- Step 5: Adapt the graph (includes eta expansion if enabled).
   -- Adaptation preserves type application/lambda wrappers and adapts embedded types
-  -- (literal types, lambda domains, TypeSchemes). Post-adaptation inference (Step 6)
-  -- is still needed to ensure binding TypeSchemes are fully consistent.
+  -- (literal types, lambda domains, TypeSchemes).
   "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi2" $
-  -- Step 6: Post-adaptation inference to fix up TypeSchemes.
-  "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
+  -- Step 6: Post-adaptation inference, only if adaptation removed types.
+  -- When input bindings have types, adaptDataGraph preserves them (via adaptTypeScheme),
+  -- so this step is skipped.
+  "allHaveTypesAfterAdapt" <~ Logic.ands (Lists.map ("b" ~> Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graph1")) $
+  "graph2" <<~ Logic.ifElse (var "allHaveTypesAfterAdapt")
+    (produce $ var "graph1")
+    (Inference.inferGraphTypes @@ var "graph1") $
 
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>

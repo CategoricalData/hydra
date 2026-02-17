@@ -106,22 +106,18 @@ def main():
     print(f"  Time: {_format_time(step_time)}", flush=True)
     print(flush=True)
 
-    # Step 3: Strip System F type annotations
-    print("Step 3: Stripping System F type annotations...", flush=True)
-    step_start = time.time()
-    all_mods = strip_all_term_types(raw_mods)
-    step_time = time.time() - step_start
-    print(f"  Stripped {len(all_mods)} modules.", flush=True)
-    print(f"  Time: {_format_time(step_time)}", flush=True)
-    print(flush=True)
+    # Main modules keep their type annotations from JSON (no stripping).
+    # This allows the pipeline to skip pre-adaptation inference (Step 3 in
+    # data_graph_to_definitions), which is a major performance win.
+    all_mods = raw_mods
 
-    # Step 4: Filter modules
+    # Step 3: Filter modules
     mods_to_generate = all_mods
     if args.kernel_only:
         before = len(mods_to_generate)
         mods_to_generate = filter_kernel_modules(mods_to_generate)
         all_mods = filter_kernel_modules(all_mods)
-        print("Step 4: Filtering to kernel modules...", flush=True)
+        print("Step 3: Filtering to kernel modules...", flush=True)
         print(f"  Before: {before} modules", flush=True)
         print(f"  After:  {len(mods_to_generate)} kernel modules "
               f"(excluded {before - len(mods_to_generate)} ext modules)", flush=True)
@@ -129,7 +125,7 @@ def main():
     if args.types_only:
         before = len(mods_to_generate)
         mods_to_generate = filter_type_modules(mods_to_generate)
-        print("Step 4b: Filtering to type modules...", flush=True)
+        print("Step 3b: Filtering to type modules...", flush=True)
         print(f"  Before: {before} modules", flush=True)
         print(f"  After:  {len(mods_to_generate)} type modules "
               f"(excluded {before - len(mods_to_generate)} non-type modules)", flush=True)
@@ -137,7 +133,7 @@ def main():
 
     # Step 5: Generate code for the target language
     out_main = os.path.join(out_dir, "src/gen-main")
-    print(f"Step 5: Generating {args.target} code...", flush=True)
+    print(f"Step 4: Generating {args.target} code...", flush=True)
     print(f"  Universe: {len(all_mods)} modules", flush=True)
     print(f"  Generating: {len(mods_to_generate)} modules:", flush=True)
     for m in mods_to_generate:
@@ -167,7 +163,7 @@ def main():
 
     # Step 6: Load and generate test modules
     test_json_dir = args.json_dir.replace("gen-main/json", "gen-test/json")
-    print("Step 6: Loading test modules from JSON...", flush=True)
+    print("Step 5: Loading test modules from JSON...", flush=True)
     print(f"  Source: {test_json_dir}", flush=True)
     step_start = time.time()
     raw_test_mods = load_all_modules_from_json_dir(test_json_dir, all_mods)
@@ -180,7 +176,7 @@ def main():
 
     all_universe = all_mods + test_mods
     out_test = os.path.join(out_dir, "src/gen-test")
-    print(f"Step 7: Generating {args.target} test code...", flush=True)
+    print(f"Step 6: Generating {args.target} test code...", flush=True)
     print(f"  Universe: {len(all_universe)} modules", flush=True)
     print(f"  Generating: {len(test_mods)} test modules", flush=True)
     print(f"  Output: {out_test}", flush=True)
