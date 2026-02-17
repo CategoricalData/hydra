@@ -3501,11 +3501,11 @@ encodeTermInternal = def "encodeTermInternal" $
         ("bindings" <~ Core.letBindings (var "lt") $
         "body" <~ Core.letBody (var "lt") $
         Logic.ifElse (Lists.null (var "bindings"))
-          (var "encode" @@ var "body")
+          (encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "body")
           ("bindResult" <<~ (bindingsToStatements @@ var "env" @@ var "bindings") $
             "bindingStmts" <~ Pairs.first (var "bindResult") $
             "env2" <~ Pairs.second (var "bindResult") $
-            "jbody" <<~ (encodeTerm @@ var "env2" @@ var "body") $
+            "jbody" <<~ (encodeTermInternal @@ var "env2" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "body") $
             "returnSt" <~ JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody")) $
             "block" <~ (wrap Java._Block (Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))) $
             "nullaryLambda" <~ JavaDsl.expressionLambda
@@ -3597,15 +3597,32 @@ encodeTermInternal = def "encodeTermInternal" $
           @@ list [var "jterm1", var "jterm2"] @@ nothing),
 
       -- TermRecord: new RecordType(field1, field2, ...)
+      -- When tyapps is non-empty (from TermTypeApplication wrappers), use those directly.
+      -- When tyapps is empty, fall back to extracting type args from the annotation type.
+      -- This handles cases like unitCoder where the record has concrete type parameters
+      -- (e.g. Coder<Graph, Graph, Term, Value>) but no TermTypeApplication wrappers in the term.
       _Term_record>>: lambda "rec" $
         "recName" <~ Core.recordTypeName (var "rec") $
         "fieldExprs" <<~ (Flows.mapList (lambda "fld" $ var "encode" @@ Core.fieldTerm (var "fld")) (Core.recordFields (var "rec"))) $
         "consId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "recName") $
-        "mtargs" <<~ (Logic.ifElse (Lists.null (var "tyapps"))
-          (Flows.pure nothing)
+        "mtargs" <<~ (Logic.ifElse (Logic.not (Lists.null (var "tyapps")))
           ("rts" <<~ (Flows.mapList (lambda "jt" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt") (var "tyapps")) $
             Flows.pure (just (JavaDsl.typeArgumentsOrDiamondArguments
-              (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "rts")))))) $
+              (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "rts")))))
+          -- tyapps is empty: try to extract type args from annotation
+          ("combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
+           "mtyp" <<~ (Annotations.getType @@ var "combinedAnns") $
+           Maybes.cases (var "mtyp")
+             (Flows.pure nothing)
+             (lambda "annTyp" $
+               "typeArgs" <~ (extractTypeApplicationArgs @@ (Rewriting.deannotateType @@ var "annTyp")) $
+               Logic.ifElse (Lists.null (var "typeArgs"))
+                 (Flows.pure nothing)
+                 ("jTypeArgs" <<~ (Flows.mapList (lambda "t" $
+                   "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t") $
+                   JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt") (var "typeArgs")) $
+                  Flows.pure (just (JavaDsl.typeArgumentsOrDiamondArguments
+                    (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "jTypeArgs")))))))) $
         Flows.pure (JavaUtilsSource.javaConstructorCall
           @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ var "mtargs")
           @@ var "fieldExprs" @@ nothing),

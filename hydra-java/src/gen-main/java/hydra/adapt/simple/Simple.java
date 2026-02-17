@@ -64,6 +64,7 @@ public interface Simple {
             doExpand,
             () -> hydra.adapt.simple.Simple.adaptDataGraph_transform(
               doExpand,
+              hydra.adapt.simple.Simple::pushTypeAppsInward,
               (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (p0 -> p1 -> hydra.reduction.Reduction.etaExpandTermNew(
                 p0,
                 p1)),
@@ -106,14 +107,14 @@ public interface Simple {
       }));
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T2, T1> adaptDataGraph_transform(Boolean doExpand, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, T0>> hydra_reduction_etaExpandTermNew2, java.util.function.Function<T0, T1> hydra_rewriting_liftLambdaAboveLet2, java.util.function.Function<T0, T0> hydra_rewriting_unshadowVariables2, hydra.graph.Graph graph, T0 gterm) {
+  static <T0, T1, T2, T3> hydra.compute.Flow<T3, T2> adaptDataGraph_transform(Boolean doExpand, java.util.function.Function<T0, T1> hydra_adapt_simple_pushTypeAppsInward2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T1, T0>> hydra_reduction_etaExpandTermNew2, java.util.function.Function<T1, T2> hydra_rewriting_liftLambdaAboveLet2, java.util.function.Function<T1, T1> hydra_rewriting_unshadowVariables2, hydra.graph.Graph graph, T0 gterm) {
     return hydra.lib.flows.Bind.apply(
-      hydra.schemas.Schemas.<T2>graphToTypeContext(graph),
-      (java.util.function.Function<hydra.typing.TypeContext, hydra.compute.Flow<T2, T1>>) (tx -> {
-        T0 gterm1 = (hydra_rewriting_unshadowVariables2).apply(gterm);
-        hydra.util.Lazy<T0> gterm2 = new hydra.util.Lazy<>(() -> (hydra_rewriting_unshadowVariables2).apply(hydra.lib.logic.IfElse.lazy(
+      hydra.schemas.Schemas.<T3>graphToTypeContext(graph),
+      (java.util.function.Function<hydra.typing.TypeContext, hydra.compute.Flow<T3, T2>>) (tx -> {
+        T1 gterm1 = (hydra_rewriting_unshadowVariables2).apply((hydra_adapt_simple_pushTypeAppsInward2).apply(gterm));
+        hydra.util.Lazy<T1> gterm2 = new hydra.util.Lazy<>(() -> (hydra_rewriting_unshadowVariables2).apply(hydra.lib.logic.IfElse.lazy(
           doExpand,
-          () -> ((hydra_reduction_etaExpandTermNew2).apply(tx)).apply(gterm1),
+          () -> (hydra_adapt_simple_pushTypeAppsInward2).apply(((hydra_reduction_etaExpandTermNew2).apply(tx)).apply(gterm1)),
           () -> gterm1)));
         return hydra.lib.flows.Pure.apply((hydra_rewriting_liftLambdaAboveLet2).apply(gterm2.get()));
       }));
@@ -678,25 +679,18 @@ public interface Simple {
                   doHoistPolymorphicLetBindings,
                   () -> (hoistPoly).apply(graphi1),
                   () -> graphi1));
-                hydra.util.Lazy<Boolean> allHaveTypesAfterHoist = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                  (java.util.function.Function<Boolean, java.util.function.Function<Boolean, Boolean>>) (p0 -> p1 -> hydra.lib.logic.And.apply(
-                    p0,
-                    p1)),
-                  true,
-                  hydra.lib.lists.Map.apply(
-                    (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.IsJust.apply((b).type)),
-                    (graphh.get()).elements)));
                 return hydra.lib.flows.Bind.apply(
-                  hydra.lib.logic.IfElse.lazy(
-                    allHaveTypesAfterHoist.get(),
-                    () -> hydra.lib.flows.Pure.apply(graphh.get()),
-                    () -> hydra.inference.Inference.inferGraphTypes(graphh.get())),
+                  hydra.inference.Inference.inferGraphTypes(graphh.get()),
                   (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graphi2 -> hydra.lib.flows.Bind.apply(
                     hydra.adapt.simple.Simple.adaptDataGraph(
                       constraints,
                       doExpand,
                       graphi2),
-                    (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph1 -> {
+                    (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph1raw -> {
+                      java.util.function.Function<hydra.graph.Graph, hydra.graph.Graph> normalizeGraph = (java.util.function.Function<hydra.graph.Graph, hydra.graph.Graph>) (g -> new hydra.graph.Graph(hydra.lib.lists.Map.apply(
+                        (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, hydra.adapt.simple.Simple.pushTypeAppsInward((b).term), (b).type)),
+                        (g).elements), (g).environment, (g).types, (g).body, (g).primitives, (g).schema));
+                      hydra.graph.Graph graph1 = (normalizeGraph).apply(graph1raw);
                       hydra.util.Lazy<Boolean> allHaveTypesAfterAdapt = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
                         (java.util.function.Function<Boolean, java.util.function.Function<Boolean, Boolean>>) (p0 -> p1 -> hydra.lib.logic.And.apply(
                           p0,
@@ -710,7 +704,8 @@ public interface Simple {
                           allHaveTypesAfterAdapt.get(),
                           () -> hydra.lib.flows.Pure.apply(graph1),
                           () -> hydra.inference.Inference.inferGraphTypes(graph1)),
-                        (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph2 -> {
+                        (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph2raw -> {
+                          hydra.graph.Graph graph2 = (normalizeGraph).apply(graph2raw);
                           hydra.util.Lazy<java.util.List<hydra.core.Binding>> selectedElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
                             (java.util.function.Function<hydra.core.Binding, Boolean>) (el -> hydra.lib.maybes.Maybe.apply(
                               false,
@@ -789,6 +784,197 @@ public interface Simple {
         (constraints).literalVariants),
       () -> (forType).apply(lt),
       () -> false);
+  }
+  
+  static hydra.core.Term pushTypeAppsInward(hydra.core.Term term) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.core.Term>> go = new java.util.concurrent.atomic.AtomicReference<>();
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Type, hydra.core.Term>>> push = new java.util.concurrent.atomic.AtomicReference<>();
+    go.set((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> {
+      java.util.function.Function<hydra.core.Field, hydra.core.Field> forField = (java.util.function.Function<hydra.core.Field, hydra.core.Field>) (fld -> new hydra.core.Field((fld).name, (go.get()).apply((fld).term)));
+      java.util.function.Function<hydra.core.Elimination, hydra.core.Elimination> forElimination = (java.util.function.Function<hydra.core.Elimination, hydra.core.Elimination>) (elm -> (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
+        @Override
+        public hydra.core.Elimination visit(hydra.core.Elimination.Record p) {
+          return new hydra.core.Elimination.Record((p).value);
+        }
+        
+        @Override
+        public hydra.core.Elimination visit(hydra.core.Elimination.Union cs) {
+          return new hydra.core.Elimination.Union(new hydra.core.CaseStatement(((cs).value).typeName, hydra.lib.maybes.Map.apply(
+            go.get(),
+            ((cs).value).default_), hydra.lib.lists.Map.apply(
+            forField,
+            ((cs).value).cases)));
+        }
+        
+        @Override
+        public hydra.core.Elimination visit(hydra.core.Elimination.Wrap name) {
+          return new hydra.core.Elimination.Wrap((name).value);
+        }
+      }));
+      java.util.function.Function<hydra.core.Function, hydra.core.Function> forFunction = (java.util.function.Function<hydra.core.Function, hydra.core.Function>) (fun -> (fun).accept(new hydra.core.Function.PartialVisitor<>() {
+        @Override
+        public hydra.core.Function visit(hydra.core.Function.Elimination elm) {
+          return new hydra.core.Function.Elimination((forElimination).apply((elm).value));
+        }
+        
+        @Override
+        public hydra.core.Function visit(hydra.core.Function.Lambda l) {
+          return new hydra.core.Function.Lambda(new hydra.core.Lambda(((l).value).parameter, ((l).value).domain, (go.get()).apply(((l).value).body)));
+        }
+        
+        @Override
+        public hydra.core.Function visit(hydra.core.Function.Primitive name) {
+          return new hydra.core.Function.Primitive((name).value);
+        }
+      }));
+      java.util.function.Function<hydra.core.Let, hydra.core.Let> forLet = (java.util.function.Function<hydra.core.Let, hydra.core.Let>) (lt -> {
+        java.util.function.Function<hydra.core.Binding, hydra.core.Binding> mapBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, (go.get()).apply((b).term), (b).type));
+        return new hydra.core.Let(hydra.lib.lists.Map.apply(
+          mapBinding,
+          (lt).bindings), (go.get()).apply((lt).body));
+      });
+      java.util.function.Function<java.util.Map<hydra.core.Term, hydra.core.Term>, java.util.Map<hydra.core.Term, hydra.core.Term>> forMap = (java.util.function.Function<java.util.Map<hydra.core.Term, hydra.core.Term>, java.util.Map<hydra.core.Term, hydra.core.Term>>) (m -> {
+        java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>> forPair = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) (p -> (hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>((go.get()).apply(hydra.lib.pairs.First.apply(p)), (go.get()).apply(hydra.lib.pairs.Second.apply(p))))));
+        return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+          forPair,
+          hydra.lib.maps.ToList.apply(m)));
+      });
+      return (t).accept(new hydra.core.Term.PartialVisitor<>() {
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Annotated at) {
+          return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((go.get()).apply(((at).value).body), ((at).value).annotation));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Application a) {
+          return new hydra.core.Term.Application(new hydra.core.Application((go.get()).apply(((a).value).function), (go.get()).apply(((a).value).argument)));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Either e) {
+          return new hydra.core.Term.Either(hydra.lib.eithers.Either.apply(
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (l -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>left((go.get()).apply(l))))),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (r -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>right((go.get()).apply(r))))),
+            (e).value));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Function fun) {
+          return new hydra.core.Term.Function((forFunction).apply((fun).value));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Let lt) {
+          return new hydra.core.Term.Let((forLet).apply((lt).value));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.List els) {
+          return new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+            go.get(),
+            (els).value));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Literal v) {
+          return new hydra.core.Term.Literal((v).value);
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Map m) {
+          return new hydra.core.Term.Map((forMap).apply((m).value));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Maybe m) {
+          return new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
+            go.get(),
+            (m).value));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Pair p) {
+          return new hydra.core.Term.Pair((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>((go.get()).apply(hydra.lib.pairs.First.apply((p).value)), (go.get()).apply(hydra.lib.pairs.Second.apply((p).value))))));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Record r) {
+          return new hydra.core.Term.Record(new hydra.core.Record(((r).value).typeName, hydra.lib.lists.Map.apply(
+            forField,
+            ((r).value).fields)));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Set s) {
+          return new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
+            go.get(),
+            hydra.lib.sets.ToList.apply((s).value))));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
+          hydra.core.Term body1 = (go.get()).apply(((tt).value).body);
+          return ((push.get()).apply(body1)).apply(((tt).value).type);
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
+          return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(((ta).value).parameter, (go.get()).apply(((ta).value).body)));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Union i) {
+          return new hydra.core.Term.Union(new hydra.core.Injection(((i).value).typeName, (forField).apply(((i).value).field)));
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Unit ignored) {
+          return new hydra.core.Term.Unit();
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Variable v) {
+          return new hydra.core.Term.Variable((v).value);
+        }
+        
+        @Override
+        public hydra.core.Term visit(hydra.core.Term.Wrap wt) {
+          return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(((wt).value).typeName, (go.get()).apply(((wt).value).body)));
+        }
+      });
+    }));
+    push.set((java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Type, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.core.Type, hydra.core.Term>) (typ -> (body).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term otherwise(hydra.core.Term instance) {
+        return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(body, typ));
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Application a) {
+        return (go.get()).apply(new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(((a).value).function, typ)), ((a).value).argument)));
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Function f) {
+        return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          @Override
+          public hydra.core.Term otherwise(hydra.core.Function instance) {
+            return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(new hydra.core.Term.Function((f).value), typ));
+          }
+          
+          @Override
+          public hydra.core.Term visit(hydra.core.Function.Lambda l) {
+            return (go.get()).apply(new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(((l).value).parameter, ((l).value).domain, new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(((l).value).body, typ))))));
+          }
+        });
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Let lt) {
+        return (go.get()).apply(new hydra.core.Term.Let(new hydra.core.Let(((lt).value).bindings, new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(((lt).value).body, typ)))));
+      }
+    }))));
+    return (go.get()).apply(term);
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.List<java.util.List<hydra.module.TypeDefinition>>>> schemaGraphToDefinitions(hydra.coders.LanguageConstraints constraints, hydra.graph.Graph graph, java.util.List<java.util.List<hydra.core.Name>> nameLists) {

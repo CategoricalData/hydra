@@ -588,7 +588,7 @@ public interface Coder {
     return new hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.json.model.Value>>) (v1 -> hydra.ext.org.json.coder.Coder.unitCoder_encodeUnit(
       hydra.rewriting.Rewriting::deannotateTerm,
       hydra.show.core.Core::term,
-      v1)), (java.util.function.Function<hydra.json.model.Value, hydra.compute.Flow<T1, hydra.core.Term>>) (p0 -> hydra.ext.org.json.coder.Coder.<T1>unitCoder_decodeUnit(p0)));
+      v1)), p0 -> hydra.ext.org.json.coder.Coder.<T1>unitCoder_decodeUnit(p0));
   }
   
   static <T0, T1> hydra.compute.Flow<T1, hydra.json.model.Value> unitCoder_encodeUnit(java.util.function.Function<T0, hydra.core.Term> hydra_rewriting_deannotateTerm2, java.util.function.Function<T0, String> hydra_show_core_term2, T0 term) {

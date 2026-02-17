@@ -1678,11 +1678,11 @@ encodeTermInternal env anns tyapps term =
       let bindings = (Core.letBindings v1)
       in  
         let body = (Core.letBody v1)
-        in (Logic.ifElse (Lists.null bindings) (encode body) (Flows.bind (bindingsToStatements env bindings) (\bindResult ->  
+        in (Logic.ifElse (Lists.null bindings) (encodeTermInternal env anns [] body) (Flows.bind (bindingsToStatements env bindings) (\bindResult ->  
           let bindingStmts = (Pairs.first bindResult)
           in  
             let env2 = (Pairs.second bindResult)
-            in (Flows.bind (encodeTerm env2 body) (\jbody ->  
+            in (Flows.bind (encodeTermInternal env2 anns [] body) (\jbody ->  
               let returnSt = (Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jbody)))
               in  
                 let block = (Syntax.Block (Lists.concat2 bindingStmts [
@@ -1719,7 +1719,11 @@ encodeTermInternal env anns tyapps term =
       let recName = (Core.recordTypeName v1)
       in (Flows.bind (Flows.mapList (\fld -> encode (Core.fieldTerm fld)) (Core.recordFields v1)) (\fieldExprs ->  
         let consId = (Utils_.nameToJavaName aliases recName)
-        in (Flows.bind (Logic.ifElse (Lists.null tyapps) (Flows.pure Nothing) (Flows.bind (Flows.mapList (\jt -> Utils_.javaTypeToJavaReferenceType jt) tyapps) (\rts -> Flows.pure (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts)))))) (\mtargs -> Flows.pure (Utils_.javaConstructorCall (Utils_.javaConstructorName consId mtargs) fieldExprs Nothing)))))
+        in (Flows.bind (Logic.ifElse (Logic.not (Lists.null tyapps)) (Flows.bind (Flows.mapList (\jt -> Utils_.javaTypeToJavaReferenceType jt) tyapps) (\rts -> Flows.pure (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts))))) ( 
+          let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
+          in (Flows.bind (Annotations.getType combinedAnns) (\mtyp -> Maybes.cases mtyp (Flows.pure Nothing) (\annTyp ->  
+            let typeArgs = (extractTypeApplicationArgs (Rewriting.deannotateType annTyp))
+            in (Logic.ifElse (Lists.null typeArgs) (Flows.pure Nothing) (Flows.bind (Flows.mapList (\t -> Flows.bind (encodeType aliases Sets.empty t) (\jt -> Utils_.javaTypeToJavaReferenceType jt)) typeArgs) (\jTypeArgs -> Flows.pure (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs))))))))))) (\mtargs -> Flows.pure (Utils_.javaConstructorCall (Utils_.javaConstructorName consId mtargs) fieldExprs Nothing)))))
     Core.TermSet v1 ->  
       let slist = (Sets.toList v1)
       in (Flows.bind (Flows.mapList encode slist) (\jels -> Logic.ifElse (Sets.null v1) (Flows.bind (takeTypeArgs "set" 1 tyapps) (\targs -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "java.util.Set") (Syntax.Identifier "of") targs [])))) ( 

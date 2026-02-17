@@ -83,7 +83,7 @@ public interface Utils {
   }
   
   static <T0, T1, T2> hydra.compute.Coder<T0, T1, T2, T2> idCoder() {
-    return new hydra.compute.Coder((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) (hydra.lib.flows.Pure::apply)), (java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) (hydra.lib.flows.Pure::apply)));
+    return new hydra.compute.Coder<T0, T1, T2, T2>((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) (hydra.lib.flows.Pure::apply)), (java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) (hydra.lib.flows.Pure::apply)));
   }
   
   static Boolean integerTypeIsSupported(hydra.coders.LanguageConstraints constraints, hydra.core.IntegerType it) {

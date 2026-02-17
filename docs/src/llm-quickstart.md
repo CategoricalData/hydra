@@ -69,6 +69,7 @@ This section links to every major document in the project with a brief descripti
 | Hydra-Ext | [hydra-ext/README.md](../../hydra-ext/README.md) | Code generators, coders, demos, tools. Comprehensive coder reference (Java, Python, C++, Protobuf, GraphQL, JSON Schema, PDL, Scala, Avro, RDF, SHACL, Graphviz). Type mapping tables per target. Sync scripts. Language syntax models and domain models |
 | Hydra-Scala | [hydra-scala/README.md](../../hydra-scala/README.md) | Experimental, on hold. Build with `sbt compile` |
 | GenPG demo | [hydra-ext/demos/genpg/README.md](../../hydra-ext/demos/genpg/README.md) | End-to-end CSV-to-property-graph demo. Runs in Haskell or Python. LLM-assisted schema generation workflow. GraphSON output for TinkerPop-compatible databases |
+| Bootstrapping demo | [hydra-ext/demos/bootstrapping/README.md](../../hydra-ext/demos/bootstrapping/README.md) | Self-hosting validation: 3 host languages x 3 target languages. JSON module interchange, code generation, baseline diffing |
 
 ### docs/ directory (checked into git)
 
@@ -84,6 +85,7 @@ This section links to every major document in the project with a brief descripti
 | Document | Path | Description |
 |----------|------|-------------|
 | This quickstart | [docs/src/llm-quickstart.md](llm-quickstart.md) | LLM orientation guide (this document) |
+| Demos | [docs/src/demos.md](demos.md) | Overview of all four demos: GenPG, Bootstrapping, Avro-to-property-graphs, Metered evaluation |
 | Test suite architecture | [docs/src/test-suite-architecture.md](test-suite-architecture.md) | How the common test suite is structured. TestGraph shared types, module-based organization, meta-level vs term-level DSLs, test case types (checking, inference, evaluation, formatting) |
 
 ### docs/src/recipes/ -- step-by-step developer guides
@@ -169,6 +171,16 @@ logging, and tracing.
 
 Bidirectional transformations: `Coder { coderEncode, coderDecode }`.
 Language coders live in `hydra-ext/src/main/haskell/Hydra/Ext/Staging/`.
+
+## Demos
+
+Four demos live under `hydra-ext/`. See [demos.md](demos.md) for descriptions and links
+to the individual demo READMEs.
+
+- **GenPG** -- CSV to GraphSON property graphs (translingual, with LLM-assisted workflow)
+- **Bootstrapping** -- Everything-to-everything code generation (9 paths, 249 modules)
+- **Avro to property graphs** -- Avro JSON to GraphSON or SHACL RDF
+- **Metered evaluation** -- Instrumented term reduction with primitive call counting
 
 ## Key source directories
 
