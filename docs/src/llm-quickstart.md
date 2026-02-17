@@ -177,7 +177,7 @@ Language coders live in `hydra-ext/src/main/haskell/Hydra/Ext/Staging/`.
 Four demos live under `hydra-ext/`. See [demos.md](demos.md) for descriptions and links
 to the individual demo READMEs.
 
-- **GenPG** -- CSV to GraphSON property graphs (translingual, with LLM-assisted workflow)
+- **GenPG** -- CSV to GraphSON property graphs (Haskell, Python, Java; with LLM-assisted workflow)
 - **Bootstrapping** -- Everything-to-everything code generation (9 paths, 249 modules)
 - **Avro to property graphs** -- Avro JSON to GraphSON or SHACL RDF
 - **Metered evaluation** -- Instrumented term reduction with primitive call counting

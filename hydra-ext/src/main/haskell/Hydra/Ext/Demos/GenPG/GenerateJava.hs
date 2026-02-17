@@ -1,6 +1,6 @@
--- | Python code generation for the GenPG demo.
+-- | Java code generation for the GenPG demo.
 --
--- This module provides functions to generate all Python modules needed for
+-- This module provides functions to generate all Java modules needed for
 -- the GenPG demo, including:
 --   - hydra.pg.model, hydra.pg.mapping
 --   - hydra.pg.graphson.* (coder, construct, syntax, utils)
@@ -10,10 +10,10 @@
 --   - hydra.demos.genpg.health (health database/graph schemas and mapping)
 --
 -- Usage from GHCI:
---   > import Hydra.Ext.Demos.GenPG.GeneratePython
---   > generatePythonModules
+--   > import Hydra.Ext.Demos.GenPG.GenerateJava
+--   > generateJavaModules
 
-module Hydra.Ext.Demos.GenPG.GeneratePython where
+module Hydra.Ext.Demos.GenPG.GenerateJava where
 
 import Hydra.Ext.Generation
 import Hydra.Sources.All (kernelModules)
@@ -23,19 +23,19 @@ import System.Directory (createDirectoryIfMissing)
 import System.IO (hFlush, stdout)
 
 
--- | Generate all Python modules for the GenPG demo.
+-- | Generate all Java modules for the GenPG demo.
 --
--- This generates to hydra-ext/src/gen-main/python:
+-- This generates to hydra-ext/src/gen-main/java:
 --   - hydra.pg.* modules
 --   - hydra.demos.genpg.transform
 --   - hydra.demos.genpg.sales
 --   - hydra.demos.genpg.health
-generatePythonModules :: IO ()
-generatePythonModules = do
-  let outputDir = "src/gen-main/python"
+generateJavaModules :: IO ()
+generateJavaModules = do
+  let outputDir = "src/gen-main/java"
   createDirectoryIfMissing True outputDir
 
-  putStrLn "=== Generate Python GenPG Modules ==="
+  putStrLn "=== Generate Java GenPG Modules ==="
   putStrLn ""
   putStrLn $ "Output directory: " ++ outputDir
   putStrLn ""
@@ -54,7 +54,7 @@ generatePythonModules = do
   -- We generate genpgModules plus the sales and health modules
   let universeModules = kernelModules ++ hydraExtModules ++ [salesModule, healthModule]
   let modulesToGenerate = genpgModules ++ [salesModule, healthModule]
-  writePython outputDir universeModules modulesToGenerate
+  writeJava outputDir universeModules modulesToGenerate
 
   putStrLn ""
   putStrLn "=== Done! ==="
