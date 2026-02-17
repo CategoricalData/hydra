@@ -16,7 +16,7 @@ def parse_error(x: hydra.parsing.ParseError) -> hydra.core.Term:
 def parse_success(a: Callable[[T0], hydra.core.Term], x: hydra.parsing.ParseSuccess[T0]) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.parsing.ParseSuccess"), (hydra.core.Field(hydra.core.Name("value"), a(x.value)), hydra.core.Field(hydra.core.Name("remainder"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.remainder)))))))))
 
-def parse_result(a: Callable[[T0], hydra.core.Term], v1: hydra.parsing.ParseResult[T0]) -> hydra.core.Term:
+def parse_result(a: Callable[[T0], hydra.core.Term], v1: hydra.parsing.ParseResult) -> hydra.core.Term:
     match v1:
         case hydra.parsing.ParseResultSuccess(value=y):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.parsing.ParseResult"), hydra.core.Field(hydra.core.Name("success"), parse_success(a, y)))))

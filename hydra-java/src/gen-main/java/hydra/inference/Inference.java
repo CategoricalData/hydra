@@ -182,9 +182,9 @@ public interface Inference {
               hydra.inference.Inference.<T0>finalizeInferredTerm(
                 cx,
                 term),
-              (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.graph.Graph>>) (finalized -> ((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.graph.Graph>>) (v1 -> hydra.inference.Inference.inferGraphTypes_forFinal(
+              (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.graph.Graph>>) (finalized -> hydra.inference.Inference.inferGraphTypes_forFinal(
                 fromLetTerm,
-                v1))).apply(finalized)));
+                finalized)));
           })))));
   }
   
@@ -501,10 +501,10 @@ public interface Inference {
         cx,
         letTerm.get(),
         "infer type of term"),
-      (java.util.function.Function<hydra.typing.InferenceResult, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (result -> ((java.util.function.Function<hydra.typing.InferenceResult, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (v1 -> hydra.inference.Inference.<T0>inferTypeOf_unifyAndSubst(
+      (java.util.function.Function<hydra.typing.InferenceResult, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (result -> hydra.inference.Inference.<T0>inferTypeOf_unifyAndSubst(
         cx,
         hydra.extract.core.Core::let,
-        v1))).apply(result)));
+        result)));
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>> inferTypeOf_forBindings(java.util.List<hydra.core.Binding> bindings) {

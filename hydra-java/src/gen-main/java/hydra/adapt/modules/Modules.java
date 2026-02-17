@@ -53,11 +53,11 @@ public interface Modules {
               (java.util.function.Function<hydra.core.TypeApplicationTerm, hydra.core.Type>) (arg_ -> hydra.rewriting.Rewriting.deannotateType((arg_).type)),
               tterms))));
             return hydra.lib.flows.Bind.apply(
-              ((java.util.function.Function<java.util.List<hydra.core.Type>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T0, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>>>) (v1 -> hydra.adapt.modules.Modules.adaptedModuleDefinitions_adaptersFor(
+              hydra.adapt.modules.Modules.adaptedModuleDefinitions_adaptersFor(
                 lang,
-                v1))).apply(types.get()),
+                types.get()),
               (java.util.function.Function<java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T0, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.module.Definition>>>) (adapters -> hydra.lib.flows.MapList.apply(
-                ((java.util.function.Function<java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T0, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition>>>) (v1 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition>>) (v2 -> hydra.adapt.modules.Modules.adaptedModuleDefinitions_classify(
+                (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition>>) (v1 -> hydra.adapt.modules.Modules.adaptedModuleDefinitions_classify(
                   cx,
                   hydra.annotations.Annotations::isNativeType,
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.core.Core.type(
@@ -65,8 +65,8 @@ public interface Modules {
                     p1)),
                   hydra.schemas.Schemas::typeToTypeScheme,
                   lang,
-                  v1,
-                  v2)))).apply(adapters),
+                  adapters,
+                  v1)),
                 hydra.lib.lists.Zip.apply(
                   els,
                   tterms))));

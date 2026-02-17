@@ -17,6 +17,7 @@ T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 T3 = TypeVar("T3")
+X = TypeVar("X")
 
 def decode_array(decode_elem: Callable[[hydra.json.model.Value], hydra.compute.Flow[T0, T1]], v1: hydra.json.model.Value) -> hydra.compute.Flow[T0, frozenlist[T1]]:
     r"""Decode a JSON array using a decoder for elements."""

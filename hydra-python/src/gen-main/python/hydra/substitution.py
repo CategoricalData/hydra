@@ -18,6 +18,7 @@ import hydra.rewriting
 import hydra.typing
 
 T0 = TypeVar("T0")
+X = TypeVar("X")
 
 def subst_in_type(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra.core.Type:
     r"""Apply a type substitution to a type."""
@@ -62,7 +63,7 @@ def id_type_subst() -> hydra.typing.TypeSubst:
     
     return hydra.typing.TypeSubst(hydra.lib.maps.empty())
 
-def compose_type_subst_list(v1: frozenlist[hydra.typing.TypeSubst]) -> hydra.typing.TypeSubst:
+def compose_type_subst_list(v1: frozenlist[X]) -> hydra.typing.TypeSubst:
     r"""Compose a list of type substitutions."""
     
     return hydra.lib.lists.foldl((lambda x1, x2: compose_type_subst(x1, x2)), id_type_subst(), v1)

@@ -10,6 +10,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Inference as Inference
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -52,9 +53,9 @@ adaptFloatType constraints ft =
 adaptDataGraph :: (Coders.LanguageConstraints -> Bool -> Graph.Graph -> Compute.Flow Graph.Graph Graph.Graph)
 adaptDataGraph constraints doExpand graph0 =  
   let transform = (\graph -> \gterm -> Flows.bind (Schemas.graphToTypeContext graph) (\tx ->  
-          let gterm1 = (Rewriting.unshadowVariables gterm)
+          let gterm1 = (Rewriting.unshadowVariables (pushTypeAppsInward gterm))
           in  
-            let gterm2 = (Rewriting.unshadowVariables (Logic.ifElse doExpand (Reduction.etaExpandTermNew tx gterm1) gterm1))
+            let gterm2 = (Rewriting.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTermNew tx gterm1)) gterm1))
             in (Flows.pure (Rewriting.liftLambdaAboveLet gterm2))))
   in  
     let litmap = (adaptLiteralTypesMap constraints)
@@ -283,27 +284,40 @@ dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymor
         let allHaveTypes = (Lists.foldl Logic.and True (Lists.map (\b -> Maybes.isJust (Core.bindingType b)) (Graph.graphElements graphu1)))
         in (Flows.bind (Logic.ifElse allHaveTypes (Flows.pure graphu1) (Inference.inferGraphTypes graphu1)) (\graphi1 ->  
           let graphh = (Logic.ifElse doHoistPolymorphicLetBindings (hoistPoly graphi1) graphi1)
-          in  
-            let allHaveTypesAfterHoist = (Lists.foldl Logic.and True (Lists.map (\b -> Maybes.isJust (Core.bindingType b)) (Graph.graphElements graphh)))
-            in (Flows.bind (Logic.ifElse allHaveTypesAfterHoist (Flows.pure graphh) (Inference.inferGraphTypes graphh)) (\graphi2 -> Flows.bind (adaptDataGraph constraints doExpand graphi2) (\graph1 ->  
-              let allHaveTypesAfterAdapt = (Lists.foldl Logic.and True (Lists.map (\b -> Maybes.isJust (Core.bindingType b)) (Graph.graphElements graph1)))
-              in (Flows.bind (Logic.ifElse allHaveTypesAfterAdapt (Flows.pure graph1) (Inference.inferGraphTypes graph1)) (\graph2 ->  
-                let toDef = (\el -> Maybes.map (\ts -> Module.TermDefinition {
-                        Module.termDefinitionName = (Core.bindingName el),
-                        Module.termDefinitionTerm = (Core.bindingTerm el),
-                        Module.termDefinitionType = ts}) (Core.bindingType el))
-                in  
-                  let selectedElements = (Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) (Graph.graphElements graph2))
+          in (Flows.bind (Inference.inferGraphTypes graphh) (\graphi2 -> Flows.bind (adaptDataGraph constraints doExpand graphi2) (\graph1raw ->  
+            let normalizeGraph = (\g -> Graph.Graph {
+                    Graph.graphElements = (Lists.map (\b -> Core.Binding {
+                      Core.bindingName = (Core.bindingName b),
+                      Core.bindingTerm = (pushTypeAppsInward (Core.bindingTerm b)),
+                      Core.bindingType = (Core.bindingType b)}) (Graph.graphElements g)),
+                    Graph.graphEnvironment = (Graph.graphEnvironment g),
+                    Graph.graphTypes = (Graph.graphTypes g),
+                    Graph.graphBody = (Graph.graphBody g),
+                    Graph.graphPrimitives = (Graph.graphPrimitives g),
+                    Graph.graphSchema = (Graph.graphSchema g)})
+            in  
+              let graph1 = (normalizeGraph graph1raw)
+              in  
+                let allHaveTypesAfterAdapt = (Lists.foldl Logic.and True (Lists.map (\b -> Maybes.isJust (Core.bindingType b)) (Graph.graphElements graph1)))
+                in (Flows.bind (Logic.ifElse allHaveTypesAfterAdapt (Flows.pure graph1) (Inference.inferGraphTypes graph1)) (\graph2raw ->  
+                  let graph2 = (normalizeGraph graph2raw)
                   in  
-                    let elementsByNamespace = (Lists.foldl (\acc -> \el -> Maybes.maybe acc (\ns ->  
-                            let existing = (Maybes.maybe [] Equality.identity (Maps.lookup ns acc))
-                            in (Maps.insert ns (Lists.concat2 existing [
-                              el]) acc)) (Names.namespaceOf (Core.bindingName el))) Maps.empty selectedElements)
+                    let toDef = (\el -> Maybes.map (\ts -> Module.TermDefinition {
+                            Module.termDefinitionName = (Core.bindingName el),
+                            Module.termDefinitionTerm = (Core.bindingTerm el),
+                            Module.termDefinitionType = ts}) (Core.bindingType el))
                     in  
-                      let defsGrouped = (Lists.map (\ns ->  
-                              let elsForNs = (Maybes.maybe [] Equality.identity (Maps.lookup ns elementsByNamespace))
-                              in (Maybes.cat (Lists.map toDef elsForNs))) namespaces)
-                      in (Flows.pure (graph2, defsGrouped)))))))))))))
+                      let selectedElements = (Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) (Graph.graphElements graph2))
+                      in  
+                        let elementsByNamespace = (Lists.foldl (\acc -> \el -> Maybes.maybe acc (\ns ->  
+                                let existing = (Maybes.maybe [] Equality.identity (Maps.lookup ns acc))
+                                in (Maps.insert ns (Lists.concat2 existing [
+                                  el]) acc)) (Names.namespaceOf (Core.bindingName el))) Maps.empty selectedElements)
+                        in  
+                          let defsGrouped = (Lists.map (\ns ->  
+                                  let elsForNs = (Maybes.maybe [] Equality.identity (Maps.lookup ns elementsByNamespace))
+                                  in (Maybes.cat (Lists.map toDef elsForNs))) namespaces)
+                          in (Flows.pure (graph2, defsGrouped)))))))))))))
 
 -- | Check if a literal type is supported by the given language constraints
 literalTypeSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)
@@ -313,6 +327,101 @@ literalTypeSupported constraints lt =
           Core.LiteralTypeInteger v1 -> (Sets.member v1 (Coders.languageConstraintsIntegerTypes constraints))
           _ -> True) lt)
   in (Logic.ifElse (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (forType lt) False)
+
+-- | Normalize a term by pushing TermTypeApplication inward past TermApplication and TermFunction (Lambda). This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable.
+pushTypeAppsInward :: (Core.Term -> Core.Term)
+pushTypeAppsInward term =  
+  let push = (\body -> \typ -> (\x -> case x of
+          Core.TermApplication v1 -> (go (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.applicationFunction v1),
+              Core.typeApplicationTermType = typ})),
+            Core.applicationArgument = (Core.applicationArgument v1)})))
+          Core.TermFunction v1 -> ((\x -> case x of
+            Core.FunctionLambda v2 -> (go (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.lambdaParameter v2),
+              Core.lambdaDomain = (Core.lambdaDomain v2),
+              Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.lambdaBody v2),
+                Core.typeApplicationTermType = typ}))}))))
+            _ -> (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.TermFunction v1),
+              Core.typeApplicationTermType = typ}))) v1)
+          Core.TermLet v1 -> (go (Core.TermLet (Core.Let {
+            Core.letBindings = (Core.letBindings v1),
+            Core.letBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.letBody v1),
+              Core.typeApplicationTermType = typ}))})))
+          _ -> (Core.TermTypeApplication (Core.TypeApplicationTerm {
+            Core.typeApplicationTermBody = body,
+            Core.typeApplicationTermType = typ}))) body) 
+      go = (\t ->  
+              let forField = (\fld -> Core.Field {
+                      Core.fieldName = (Core.fieldName fld),
+                      Core.fieldTerm = (go (Core.fieldTerm fld))})
+              in  
+                let forElimination = (\elm -> (\x -> case x of
+                        Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
+                        Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
+                          Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
+                          Core.caseStatementDefault = (Maybes.map go (Core.caseStatementDefault v1)),
+                          Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v1))}))
+                        Core.EliminationWrap v1 -> (Core.EliminationWrap v1)) elm)
+                in  
+                  let forFunction = (\fun -> (\x -> case x of
+                          Core.FunctionElimination v1 -> (Core.FunctionElimination (forElimination v1))
+                          Core.FunctionLambda v1 -> (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.lambdaParameter v1),
+                            Core.lambdaDomain = (Core.lambdaDomain v1),
+                            Core.lambdaBody = (go (Core.lambdaBody v1))}))
+                          Core.FunctionPrimitive v1 -> (Core.FunctionPrimitive v1)) fun)
+                  in  
+                    let forLet = (\lt ->  
+                            let mapBinding = (\b -> Core.Binding {
+                                    Core.bindingName = (Core.bindingName b),
+                                    Core.bindingTerm = (go (Core.bindingTerm b)),
+                                    Core.bindingType = (Core.bindingType b)})
+                            in Core.Let {
+                              Core.letBindings = (Lists.map mapBinding (Core.letBindings lt)),
+                              Core.letBody = (go (Core.letBody lt))})
+                    in  
+                      let forMap = (\m ->  
+                              let forPair = (\p -> (go (Pairs.first p), (go (Pairs.second p))))
+                              in (Maps.fromList (Lists.map forPair (Maps.toList m))))
+                      in ((\x -> case x of
+                        Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
+                          Core.annotatedTermBody = (go (Core.annotatedTermBody v1)),
+                          Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
+                        Core.TermApplication v1 -> (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (go (Core.applicationFunction v1)),
+                          Core.applicationArgument = (go (Core.applicationArgument v1))}))
+                        Core.TermEither v1 -> (Core.TermEither (Eithers.either (\l -> Left (go l)) (\r -> Right (go r)) v1))
+                        Core.TermFunction v1 -> (Core.TermFunction (forFunction v1))
+                        Core.TermLet v1 -> (Core.TermLet (forLet v1))
+                        Core.TermList v1 -> (Core.TermList (Lists.map go v1))
+                        Core.TermLiteral v1 -> (Core.TermLiteral v1)
+                        Core.TermMap v1 -> (Core.TermMap (forMap v1))
+                        Core.TermMaybe v1 -> (Core.TermMaybe (Maybes.map go v1))
+                        Core.TermPair v1 -> (Core.TermPair (go (Pairs.first v1), (go (Pairs.second v1))))
+                        Core.TermRecord v1 -> (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.recordTypeName v1),
+                          Core.recordFields = (Lists.map forField (Core.recordFields v1))}))
+                        Core.TermSet v1 -> (Core.TermSet (Sets.fromList (Lists.map go (Sets.toList v1))))
+                        Core.TermTypeApplication v1 ->  
+                          let body1 = (go (Core.typeApplicationTermBody v1))
+                          in (push body1 (Core.typeApplicationTermType v1))
+                        Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
+                          Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
+                          Core.typeLambdaBody = (go (Core.typeLambdaBody v1))}))
+                        Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
+                          Core.injectionTypeName = (Core.injectionTypeName v1),
+                          Core.injectionField = (forField (Core.injectionField v1))}))
+                        Core.TermUnit -> Core.TermUnit
+                        Core.TermVariable v1 -> (Core.TermVariable v1)
+                        Core.TermWrap v1 -> (Core.TermWrap (Core.WrappedTerm {
+                          Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
+                          Core.wrappedTermBody = (go (Core.wrappedTermBody v1))}))) t))
+  in (go term)
 
 -- | Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name.
 schemaGraphToDefinitions :: (Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type, [[Module.TypeDefinition]]))

@@ -276,10 +276,10 @@ public interface Lexical {
       (java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (mel -> hydra.lib.maybes.Maybe.apply(
         hydra.lib.flows.Bind.apply(
           hydra.monads.Monads.<hydra.graph.Graph>getState(),
-          (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (g -> ((java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (v1 -> hydra.lexical.Lexical.requireElement_err(
+          (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (g -> hydra.lexical.Lexical.requireElement_err(
             ellipsis,
             name,
-            v1))).apply(g))),
+            g))),
         (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) ((java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (hydra.lib.flows.Pure::apply)),
         mel)));
   }

@@ -276,18 +276,18 @@ public interface Literals {
       
       @Override
       public hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>> visit(hydra.core.LiteralType.Float_ ft) {
-        return (((java.util.function.Function<hydra.core.LiteralType, java.util.function.Function<hydra.core.FloatType, hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>>>>) (v1 -> (java.util.function.Function<hydra.core.FloatType, hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>>>) (v2 -> hydra.adapt.literals.Literals.literalAdapter_forFloat(
+        return hydra.adapt.literals.Literals.literalAdapter_forFloat(
           hydra_show_core_literal2,
-          v1,
-          v2)))).apply(t)).apply((ft).value);
+          t,
+          (ft).value);
       }
       
       @Override
       public hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>> visit(hydra.core.LiteralType.Integer_ it) {
-        return (((java.util.function.Function<hydra.core.LiteralType, java.util.function.Function<hydra.core.IntegerType, hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>>>>) (v1 -> (java.util.function.Function<hydra.core.IntegerType, hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T0, T0, hydra.core.LiteralType, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>>>) (v2 -> hydra.adapt.literals.Literals.literalAdapter_forInteger(
+        return hydra.adapt.literals.Literals.literalAdapter_forInteger(
           hydra_show_core_literal2,
-          v1,
-          v2)))).apply(t)).apply((it).value);
+          t,
+          (it).value);
       }
       
       @Override
@@ -327,11 +327,11 @@ public interface Literals {
   }
   
   static <T0, T1, T2> hydra.compute.Coder<T0, T0, hydra.core.Literal, hydra.core.Literal> literalAdapter_step(java.util.function.Function<hydra.core.Literal, String> hydra_show_core_literal2, hydra.compute.Adapter<T0, T0, T1, T2, hydra.core.IntegerValue, hydra.core.IntegerValue> adapter) {
-    return hydra.adapt.utils.Utils.bidirectional(((java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T2, hydra.core.IntegerValue, hydra.core.IntegerValue>, java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>>>) (v1 -> (java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>>) (v2 -> (java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>) (v3 -> hydra.adapt.literals.Literals.<T0, T1, T2>literalAdapter_adapt(
+    return hydra.adapt.utils.Utils.bidirectional((java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>>) (v1 -> (java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>) (v2 -> hydra.adapt.literals.Literals.<T0, T1, T2>literalAdapter_adapt(
       hydra_show_core_literal2,
+      adapter,
       v1,
-      v2,
-      v3))))).apply(adapter));
+      v2))));
   }
   
   static <T0, T1> hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T1, T1, T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>> literalAdapter_withFloats(hydra.core.FloatType ft, java.util.function.Function<hydra.core.Literal, String> hydra_show_core_literal2, T0 t) {
@@ -364,11 +364,11 @@ public interface Literals {
   }
   
   static <T0, T1, T2> hydra.compute.Coder<T0, T0, hydra.core.Literal, hydra.core.Literal> literalAdapter_step2(java.util.function.Function<hydra.core.Literal, String> hydra_show_core_literal2, hydra.compute.Adapter<T0, T0, T1, T2, hydra.core.FloatValue, hydra.core.FloatValue> adapter) {
-    return hydra.adapt.utils.Utils.bidirectional(((java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T2, hydra.core.FloatValue, hydra.core.FloatValue>, java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>>>) (v1 -> (java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>>) (v2 -> (java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>) (v3 -> hydra.adapt.literals.Literals.<T0, T1, T2>literalAdapter_adapt2(
+    return hydra.adapt.utils.Utils.bidirectional((java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>>) (v1 -> (java.util.function.Function<hydra.core.Literal, hydra.compute.Flow<T0, hydra.core.Literal>>) (v2 -> hydra.adapt.literals.Literals.<T0, T1, T2>literalAdapter_adapt2(
       hydra_show_core_literal2,
+      adapter,
       v1,
-      v2,
-      v3))))).apply(adapter));
+      v2))));
   }
   
   static <T0, T1> hydra.compute.Flow<T0, hydra.core.Literal> literalAdapter_matchBoolean(hydra.compute.Coder<T0, T1, hydra.core.IntegerValue, hydra.core.IntegerValue> step_, hydra.core.Literal lit) {
@@ -407,9 +407,9 @@ public interface Literals {
   static <T0, T1, T2> hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T1, T2, T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>> literalAdapter_withIntegers2(T0 t) {
     return hydra.lib.flows.Bind.apply(
       hydra.adapt.literals.Literals.<T1, T2>integerAdapter(new hydra.core.IntegerType.Uint8()),
-      (java.util.function.Function<hydra.compute.Adapter<T1, T2, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue>, hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T1, T2, T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>>>) (adapter -> ((java.util.function.Function<hydra.compute.Adapter<T1, T2, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue>, hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T1, T2, T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>>>) (v1 -> hydra.adapt.literals.Literals.literalAdapter_withAdapter(
+      (java.util.function.Function<hydra.compute.Adapter<T1, T2, hydra.core.IntegerType, hydra.core.IntegerType, hydra.core.IntegerValue, hydra.core.IntegerValue>, hydra.compute.Flow<hydra.coders.AdapterContext, java.util.List<hydra.compute.Adapter<T1, T2, T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>>>>) (adapter -> hydra.adapt.literals.Literals.literalAdapter_withAdapter(
         t,
-        v1))).apply(adapter)));
+        adapter)));
   }
   
   static <T0, T1, T2> java.util.List<hydra.compute.Adapter<T1, T2, T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal>> literalAdapter_withStrings(T0 t) {
@@ -548,14 +548,14 @@ public interface Literals {
   
   static <T0, T1, T2, T3, T4, T5, T6> hydra.compute.Flow<T4, java.util.List<hydra.compute.Adapter<T5, T6, T1, T1, T2, T2>>> floatAdapter_alts(java.util.function.Function<T0, java.util.function.Function<T0, hydra.util.Comparison>> hydra_adapt_literals_comparePrecision2, java.util.function.Function<T1, java.util.function.Function<T2, T2>> hydra_adapt_literals_convertFloatValue2, java.util.function.Function<Boolean, java.util.function.Function<T3, java.util.function.Function<T3, String>>> hydra_adapt_literals_disclaimer2, java.util.function.Function<T1, T0> hydra_reflect_floatTypePrecision2, java.util.function.Function<T1, T3> hydra_show_core_floatType2, java.util.function.Function<T1, java.util.List<T1>> altTypes, T1 t) {
     return hydra.lib.flows.MapList.apply(
-      ((java.util.function.Function<T1, java.util.function.Function<T1, hydra.compute.Flow<T4, hydra.compute.Adapter<T5, T6, T1, T1, T2, T2>>>>) (v1 -> (java.util.function.Function<T1, hydra.compute.Flow<T4, hydra.compute.Adapter<T5, T6, T1, T1, T2, T2>>>) (v2 -> hydra.adapt.literals.Literals.<T0, T1, T2, T3, T4, T5, T6>floatAdapter_makeAdapter(
+      (java.util.function.Function<T1, hydra.compute.Flow<T4, hydra.compute.Adapter<T5, T6, T1, T1, T2, T2>>>) (v1 -> hydra.adapt.literals.Literals.<T0, T1, T2, T3, T4, T5, T6>floatAdapter_makeAdapter(
         hydra_adapt_literals_comparePrecision2,
         hydra_adapt_literals_convertFloatValue2,
         hydra_adapt_literals_disclaimer2,
         hydra_reflect_floatTypePrecision2,
         hydra_show_core_floatType2,
-        v1,
-        v2)))).apply(t),
+        t,
+        v1)),
       (altTypes).apply(t));
   }
   
@@ -714,14 +714,14 @@ public interface Literals {
   
   static <T0, T1, T2, T3, T4, T5, T6> hydra.compute.Flow<T4, java.util.List<hydra.compute.Adapter<T5, T6, T1, T1, T2, T2>>> integerAdapter_alts(java.util.function.Function<T0, java.util.function.Function<T0, hydra.util.Comparison>> hydra_adapt_literals_comparePrecision2, java.util.function.Function<T1, java.util.function.Function<T2, T2>> hydra_adapt_literals_convertIntegerValue2, java.util.function.Function<Boolean, java.util.function.Function<T3, java.util.function.Function<T3, String>>> hydra_adapt_literals_disclaimer2, java.util.function.Function<T1, T0> hydra_reflect_integerTypePrecision2, java.util.function.Function<T1, T3> hydra_show_core_integerType2, java.util.function.Function<T1, java.util.List<T1>> altTypes, T1 t) {
     return hydra.lib.flows.MapList.apply(
-      ((java.util.function.Function<T1, java.util.function.Function<T1, hydra.compute.Flow<T4, hydra.compute.Adapter<T5, T6, T1, T1, T2, T2>>>>) (v1 -> (java.util.function.Function<T1, hydra.compute.Flow<T4, hydra.compute.Adapter<T5, T6, T1, T1, T2, T2>>>) (v2 -> hydra.adapt.literals.Literals.<T0, T1, T2, T3, T4, T5, T6>integerAdapter_makeAdapter(
+      (java.util.function.Function<T1, hydra.compute.Flow<T4, hydra.compute.Adapter<T5, T6, T1, T1, T2, T2>>>) (v1 -> hydra.adapt.literals.Literals.<T0, T1, T2, T3, T4, T5, T6>integerAdapter_makeAdapter(
         hydra_adapt_literals_comparePrecision2,
         hydra_adapt_literals_convertIntegerValue2,
         hydra_adapt_literals_disclaimer2,
         hydra_reflect_integerTypePrecision2,
         hydra_show_core_integerType2,
-        v1,
-        v2)))).apply(t),
+        t,
+        v1)),
       (altTypes).apply(t));
   }
   

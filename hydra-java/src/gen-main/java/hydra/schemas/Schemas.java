@@ -1011,7 +1011,7 @@ public interface Schemas {
                   hydra.decode.core.Core.type(
                     cx,
                     (el).term))),
-              () -> ((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.TypeScheme>>>) (v1 -> hydra.schemas.Schemas.schemaGraphToTypingEnvironment_forTerm(
+              () -> hydra.schemas.Schemas.schemaGraphToTypingEnvironment_forTerm(
                 cx,
                 el,
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.core.Core.type(
@@ -1021,7 +1021,7 @@ public interface Schemas {
                   p0,
                   p1)),
                 toTypeScheme.get(),
-                v1))).apply(hydra.rewriting.Rewriting.deannotateTerm((el).term))))),
+                hydra.rewriting.Rewriting.deannotateTerm((el).term))))),
           (el).type),
         (java.util.function.Function<hydra.util.Maybe<hydra.core.TypeScheme>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>>>) (mts -> hydra.lib.flows.Pure.apply(hydra.lib.maybes.Map.apply(
           (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((el).name, ts)))),

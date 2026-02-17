@@ -76,21 +76,21 @@ public interface Checking {
   
   static <T0> hydra.compute.Flow<T0, java.lang.Void> checkForUnboundTypeVariables(hydra.typing.InferenceContext cx, hydra.core.Term term0) {
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> svars = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((cx).schemaTypes)));
-    return (((((java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.List<String>, java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>>>>) (v1 -> (java.util.function.Function<java.util.List<String>, java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>>>) (v2 -> (java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>) (v4 -> hydra.checking.Checking.<T0>checkForUnboundTypeVariables_checkRecursive(
+    return hydra.checking.Checking.<T0>checkForUnboundTypeVariables_checkRecursive(
       hydra.rewriting.Rewriting::freeVariablesInType,
       hydra.rewriting.Rewriting::subterms,
       hydra.show.core.Core::term,
       hydra.show.core.Core::type,
       hydra.show.core.Core::typeScheme,
       svars.get(),
-      v1,
-      v2,
-      v3,
-      v4)))))).apply((java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()))).apply(java.util.List.of("top level"))).apply((hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing()))).apply(term0);
+      (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
+      java.util.List.of("top level"),
+      (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing()),
+      term0);
   }
   
   static <T0> hydra.compute.Flow<T0, java.lang.Void> checkForUnboundTypeVariables_checkRecursive(java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>> hydra_rewriting_freeVariablesInType2, java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>> hydra_rewriting_subterms2, java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, java.util.function.Function<hydra.core.TypeScheme, String> hydra_show_core_typeScheme2, java.util.Set<hydra.core.Name> svars, java.util.Set<hydra.core.Name> vars, java.util.List<String> trace, hydra.util.Maybe<hydra.core.Binding> lbinding, hydra.core.Term term) {
-    java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>> recurse = (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>) (v1 -> (hydra.checking.Checking.<T0>checkForUnboundTypeVariables_recurse(
+    java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>> recurse = (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>) (v1 -> hydra.checking.Checking.<T0>checkForUnboundTypeVariables_recurse(
       hydra_rewriting_freeVariablesInType2,
       hydra_rewriting_subterms2,
       hydra_show_core_term2,
@@ -99,7 +99,8 @@ public interface Checking {
       svars,
       lbinding,
       trace,
-      vars)).apply(v1));
+      vars,
+      v1));
     hydra.util.Lazy<hydra.compute.Flow<T0, java.lang.Void>> dflt = new hydra.util.Lazy<>(() -> hydra.checking.Checking.checkForUnboundTypeVariables_dflt(
       hydra_rewriting_subterms2,
       recurse,
@@ -126,7 +127,7 @@ public interface Checking {
           @Override
           public hydra.compute.Flow<T0, java.lang.Void> visit(hydra.core.Function.Lambda l) {
             return hydra.lib.flows.Bind.apply(
-              ((java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.compute.Flow<T0, java.lang.Void>>) (v1 -> hydra.checking.Checking.checkForUnboundTypeVariables_checkOptional(
+              hydra.checking.Checking.checkForUnboundTypeVariables_checkOptional(
                 hydra_rewriting_freeVariablesInType2,
                 hydra_show_core_term2,
                 hydra_show_core_type2,
@@ -135,7 +136,7 @@ public interface Checking {
                 svars,
                 trace,
                 vars,
-                v1))).apply(((l).value).domain),
+                ((l).value).domain),
               (java.util.function.Function<java.lang.Void, hydra.compute.Flow<T0, java.lang.Void>>) (ignored -> (recurse).apply(((l).value).body)));
           }
         });
@@ -162,7 +163,7 @@ public interface Checking {
       @Override
       public hydra.compute.Flow<T0, java.lang.Void> visit(hydra.core.Term.TypeApplication tt) {
         return hydra.lib.flows.Bind.apply(
-          ((java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, java.lang.Void>>) (v1 -> hydra.checking.Checking.checkForUnboundTypeVariables_check(
+          hydra.checking.Checking.checkForUnboundTypeVariables_check(
             hydra_rewriting_freeVariablesInType2,
             hydra_show_core_term2,
             hydra_show_core_type2,
@@ -171,14 +172,14 @@ public interface Checking {
             svars,
             trace,
             vars,
-            v1))).apply(((tt).value).type),
+            ((tt).value).type),
           (java.util.function.Function<java.lang.Void, hydra.compute.Flow<T0, java.lang.Void>>) (ignored -> (recurse).apply(((tt).value).body)));
       }
       
       @Override
       public hydra.compute.Flow<T0, java.lang.Void> visit(hydra.core.Term.TypeLambda tl) {
         return hydra.lib.flows.Bind.apply(
-          ((java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, java.lang.Void>>) (v1 -> hydra.checking.Checking.checkForUnboundTypeVariables_check(
+          hydra.checking.Checking.checkForUnboundTypeVariables_check(
             hydra_rewriting_freeVariablesInType2,
             hydra_show_core_term2,
             hydra_show_core_type2,
@@ -187,24 +188,24 @@ public interface Checking {
             svars,
             trace,
             vars,
-            v1))).apply(new hydra.core.Type.Variable(((tl).value).parameter)),
+            new hydra.core.Type.Variable(((tl).value).parameter)),
           (java.util.function.Function<java.lang.Void, hydra.compute.Flow<T0, java.lang.Void>>) (ignored -> (recurse).apply(((tl).value).body)));
       }
     });
   }
   
-  static <T0> java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>> checkForUnboundTypeVariables_recurse(java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>> hydra_rewriting_freeVariablesInType2, java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>> hydra_rewriting_subterms2, java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, java.util.function.Function<hydra.core.TypeScheme, String> hydra_show_core_typeScheme2, java.util.Set<hydra.core.Name> svars, hydra.util.Maybe<hydra.core.Binding> lbinding, java.util.List<String> trace, java.util.Set<hydra.core.Name> vars) {
-    return ((((java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.List<String>, java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>>>>) (v1 -> (java.util.function.Function<java.util.List<String>, java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>>>) (v2 -> (java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>) (v4 -> hydra.checking.Checking.<T0>checkForUnboundTypeVariables_checkRecursive(
+  static <T0> hydra.compute.Flow<T0, java.lang.Void> checkForUnboundTypeVariables_recurse(java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>> hydra_rewriting_freeVariablesInType2, java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>> hydra_rewriting_subterms2, java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, java.util.function.Function<hydra.core.TypeScheme, String> hydra_show_core_typeScheme2, java.util.Set<hydra.core.Name> svars, hydra.util.Maybe<hydra.core.Binding> lbinding, java.util.List<String> trace, java.util.Set<hydra.core.Name> vars, hydra.core.Term v1) {
+    return hydra.checking.Checking.<T0>checkForUnboundTypeVariables_checkRecursive(
       hydra_rewriting_freeVariablesInType2,
       hydra_rewriting_subterms2,
       hydra_show_core_term2,
       hydra_show_core_type2,
       hydra_show_core_typeScheme2,
       svars,
-      v1,
-      v2,
-      v3,
-      v4)))))).apply(vars)).apply(trace)).apply(lbinding);
+      vars,
+      trace,
+      lbinding,
+      v1);
   }
   
   static <T0, T1, T2, T3> hydra.compute.Flow<T2, java.lang.Void> checkForUnboundTypeVariables_dflt(java.util.function.Function<T0, java.util.List<T1>> hydra_rewriting_subterms2, java.util.function.Function<T1, hydra.compute.Flow<T2, T3>> recurse, T0 term) {
@@ -305,17 +306,17 @@ public interface Checking {
         vars,
         hydra.lib.sets.FromList.apply((ts).variables))),
       (b).type));
-    return (((((java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.List<String>, java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>>>>) (v1 -> (java.util.function.Function<java.util.List<String>, java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>>>) (v2 -> (java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, java.lang.Void>>) (v4 -> hydra.checking.Checking.<T0>checkForUnboundTypeVariables_checkRecursive(
+    return hydra.checking.Checking.<T0>checkForUnboundTypeVariables_checkRecursive(
       hydra_rewriting_freeVariablesInType2,
       hydra_rewriting_subterms2,
       hydra_show_core_term2,
       hydra_show_core_type2,
       hydra_show_core_typeScheme2,
       svars,
-      v1,
-      v2,
-      v3,
-      v4)))))).apply(newVars.get())).apply(newTrace.get())).apply(hydra.util.Maybe.just(b))).apply(bterm);
+      newVars.get(),
+      newTrace.get(),
+      hydra.util.Maybe.just(b),
+      bterm);
   }
   
   static <T0> hydra.compute.Flow<T0, java.lang.Void> checkNominalApplication(hydra.typing.TypeContext tx, hydra.core.Name tname, java.util.List<hydra.core.Type> typeArgs) {
@@ -711,7 +712,7 @@ public interface Checking {
           (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
           arg),
         (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Type>>) (targ -> hydra.lib.flows.Bind.apply(
-          (((java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Type>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Type>>) (v2 -> hydra.checking.Checking.typeOfApplication_tryType(
+          hydra.checking.Checking.typeOfApplication_tryType(
             fun,
             (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, Boolean>>>) (p0 -> p1 -> p2 -> hydra.checking.Checking.typesEffectivelyEqual(
               p0,
@@ -720,8 +721,8 @@ public interface Checking {
             hydra.show.core.Core::term,
             hydra.show.core.Core::type,
             tx,
-            v1,
-            v2)))).apply(tfun)).apply(targ),
+            tfun,
+            targ),
           (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Type>>) (t -> hydra.checking.Checking.<T0>applyTypeArgumentsToType(
             tx,
             typeArgs,
@@ -751,14 +752,14 @@ public interface Checking {
       
       @Override
       public hydra.compute.Flow<T1, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
-        return (((java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.core.Type>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.core.Type>>) (v2 -> hydra.checking.Checking.<T0, T1>typeOfApplication_tryType(
+        return hydra.checking.Checking.<T0, T1>typeOfApplication_tryType(
           fun,
           hydra_checking_typesEffectivelyEqual2,
           hydra_show_core_term2,
           hydra_show_core_type2,
           tx,
-          v1,
-          v2)))).apply(((ft).value).body)).apply(targ);
+          ((ft).value).body,
+          targ);
       }
       
       @Override

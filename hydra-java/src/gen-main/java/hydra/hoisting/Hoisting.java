@@ -228,7 +228,7 @@ public interface Hoisting {
         ((b).name).value,
         "_");
       hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>> resultPair = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContext(
-        ((java.util.function.Function<String, java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>>>) (v2 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>>) (v3 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>) (v4 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>) (v5 -> hydra.hoisting.Hoisting.hoistLetBindingsWithPredicate_rewrite(
+        (java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>>) (v2 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>) (v4 -> hydra.hoisting.Hoisting.hoistLetBindingsWithPredicate_rewrite(
           hoistOne,
           (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, hydra.typing.TermSubst>>>>) (p0 -> p1 -> p2 -> hydra.hoisting.Hoisting.augmentBindingsWithNewFreeVars(
             p0,
@@ -247,11 +247,11 @@ public interface Hoisting {
             p0,
             p1)),
           shouldHoistBinding,
+          prefix,
           v1,
           v2,
           v3,
-          v4,
-          v5))))))).apply(prefix),
+          v4))))),
         cx1.get(),
         hydra.hoisting.Hoisting.hoistLetBindingsWithPredicate_init(b),
         (b).term));
@@ -604,11 +604,11 @@ public interface Hoisting {
           
           @Override
           public hydra.util.Tuple.Tuple2<T3, hydra.core.Term> visit(hydra.core.Term.Let lt2) {
-            return ((((java.util.function.Function<T0, java.util.function.Function<T3, java.util.function.Function<hydra.core.Let, hydra.util.Tuple.Tuple2<T3, hydra.core.Term>>>>) (v1 -> (java.util.function.Function<T3, java.util.function.Function<hydra.core.Let, hydra.util.Tuple.Tuple2<T3, hydra.core.Term>>>) (v2 -> (java.util.function.Function<hydra.core.Let, hydra.util.Tuple.Tuple2<T3, hydra.core.Term>>) (v3 -> hydra.hoisting.Hoisting.<T0, T1, T3>hoistSubterms_processLetTerm(
+            return hydra.hoisting.Hoisting.<T0, T1, T3>hoistSubterms_processLetTerm(
               processImmediateSubterm,
-              v1,
-              v2,
-              v3))))).apply(cx)).apply(newCounter.get())).apply((lt2).value);
+              cx,
+              newCounter.get(),
+              (lt2).value);
           }
         });
       }

@@ -129,7 +129,7 @@ public interface Grammars {
   }
   
   static java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>> makeElements(Boolean omitTrivial, hydra.module.Namespace ns, String lname, hydra.grammar.Pattern pat) {
-    java.util.function.Function<String, java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>> mod = (java.util.function.Function<String, java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>>) (n -> (java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>) (f -> (java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>) (p -> ((((java.util.function.Function<String, java.util.function.Function<java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>, java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>>) (v1 -> (java.util.function.Function<java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>, java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>) (v2 -> (java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>) (v3 -> hydra.grammars.Grammars.makeElements_descend(
+    java.util.function.Function<String, java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>> mod = (java.util.function.Function<String, java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>>) (n -> (java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>) (f -> (java.util.function.Function<hydra.grammar.Pattern, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>) (p -> hydra.grammars.Grammars.makeElements_descend(
       (java.util.function.Function<String, java.util.function.Function<String, String>>) (p0 -> p1 -> hydra.grammars.Grammars.childName(
         p0,
         p1)),
@@ -144,11 +144,11 @@ public interface Grammars {
         p1)),
       lname,
       ns,
-      v1,
-      v2,
-      v3))))).apply(n)).apply((java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>) (pairs -> hydra.lib.lists.Cons.apply(
-      (hydra.util.Tuple.Tuple2<String, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<String, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<String, hydra.core.Type>(lname, (f).apply(hydra.lib.pairs.Second.apply(hydra.lib.lists.Head.apply(pairs)))))),
-      hydra.lib.lists.Tail.apply(pairs))))).apply(p))));
+      n,
+      (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>) (pairs -> hydra.lib.lists.Cons.apply(
+        (hydra.util.Tuple.Tuple2<String, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<String, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<String, hydra.core.Type>(lname, (f).apply(hydra.lib.pairs.Second.apply(hydra.lib.lists.Head.apply(pairs)))))),
+        hydra.lib.lists.Tail.apply(pairs))),
+      p))));
     hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>> trivial = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       omitTrivial,
       () -> (java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>) (java.util.List.<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>of()),
@@ -218,7 +218,7 @@ public interface Grammars {
         isRecord,
         pats);
       java.util.List<String> fieldNames = hydra.grammars.Grammars.findNames(minPats);
-      java.util.function.Function<String, java.util.function.Function<hydra.grammar.Pattern, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>> toField = (java.util.function.Function<String, java.util.function.Function<hydra.grammar.Pattern, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>>) (n -> (java.util.function.Function<hydra.grammar.Pattern, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>) (p -> ((((java.util.function.Function<String, java.util.function.Function<java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>, java.util.function.Function<hydra.grammar.Pattern, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>>>) (v1 -> (java.util.function.Function<java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>, java.util.function.Function<hydra.grammar.Pattern, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>>) (v2 -> (java.util.function.Function<hydra.grammar.Pattern, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>) (v3 -> hydra.grammars.Grammars.makeElements_descend(
+      java.util.function.Function<String, java.util.function.Function<hydra.grammar.Pattern, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>> toField = (java.util.function.Function<String, java.util.function.Function<hydra.grammar.Pattern, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>>) (n -> (java.util.function.Function<hydra.grammar.Pattern, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>) (p -> hydra.grammars.Grammars.makeElements_descend(
         (java.util.function.Function<String, java.util.function.Function<String, String>>) (p0 -> p1 -> hydra.grammars.Grammars.childName(
           p0,
           p1)),
@@ -233,9 +233,9 @@ public interface Grammars {
           p1)),
         lname,
         ns,
-        v1,
-        v2,
-        v3))))).apply(n)).apply((java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>) (pairs -> (hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>) ((hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>) (new hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>(new hydra.core.FieldType(new hydra.core.Name(n), hydra.lib.pairs.Second.apply(hydra.lib.lists.Head.apply(pairs))), hydra.lib.lists.Tail.apply(pairs))))))).apply(p)));
+        n,
+        (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>, hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>) (pairs -> (hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>) ((hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>) (new hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>(new hydra.core.FieldType(new hydra.core.Name(n), hydra.lib.pairs.Second.apply(hydra.lib.lists.Head.apply(pairs))), hydra.lib.lists.Tail.apply(pairs))))),
+        p)));
       hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.FieldType, java.util.List<hydra.util.Tuple.Tuple2<String, hydra.core.Type>>>>> fieldPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.ZipWith.apply(
         toField,
         fieldNames,

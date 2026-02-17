@@ -5,7 +5,8 @@ module Hydra.Sources.Kernel.Terms.Adapt.Simple where
 import Hydra.Kernel hiding (
   adaptFloatType, adaptDataGraph, adaptGraphSchema, adaptIntegerType, adaptLiteral, adaptLiteralType,
   adaptLiteralTypesMap, adaptLiteralValue, adaptPrimitive, adaptTerm, adaptType, adaptTypeScheme,
-  dataGraphToDefinitions, literalTypeSupported, schemaGraphToDefinitions, termAlternatives, typeAlternatives)
+  dataGraphToDefinitions, literalTypeSupported, pushTypeAppsInward, schemaGraphToDefinitions,
+  termAlternatives, typeAlternatives)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -94,6 +95,7 @@ module_ = Module ns elements
       toBinding adaptTypeScheme,
       toBinding dataGraphToDefinitions,
       toBinding literalTypeSupported,
+      toBinding pushTypeAppsInward,
       toBinding schemaGraphToDefinitions,
       toBinding termAlternatives,
       toBinding typeAlternatives]
@@ -130,9 +132,9 @@ adaptDataGraph = define "adaptDataGraph" $
     -- 1. Unshadow variables first (prevents capture issues in eta expansion)
     -- 2. Eta expand (needs type annotations; creates fully-applied functions)
     -- 3. Lift lambdas above lets (structural cleanup)
-    "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm" $
+    "gterm1" <~ Rewriting.unshadowVariables @@ (pushTypeAppsInward @@ var "gterm") $
     "gterm2" <~ Rewriting.unshadowVariables @@ (Logic.ifElse (var "doExpand")
-      (Reduction.etaExpandTermNew @@ var "tx" @@ var "gterm1")
+      (pushTypeAppsInward @@ (Reduction.etaExpandTermNew @@ var "tx" @@ var "gterm1"))
       (var "gterm1")) $
     produce $ Rewriting.liftLambdaAboveLet @@ var "gterm2") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
@@ -413,6 +415,109 @@ adaptTypeScheme = define "adaptTypeScheme" $
   "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
   produce $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
 
+pushTypeAppsInward :: TBinding (Term -> Term)
+pushTypeAppsInward = define "pushTypeAppsInward" $
+  doc ("Normalize a term by pushing TermTypeApplication inward past TermApplication and"
+    <> " TermFunction (Lambda). This corrects structures produced by poly-let hoisting and"
+    <> " eta expansion, where type applications from inference end up wrapping term"
+    <> " applications or lambda abstractions instead of being directly on the polymorphic variable.") $
+  "term" ~>
+  lets [
+  "push">: ("body" ~> "typ" ~> cases _Term (var "body")
+    -- Default: keep TypeApp as-is
+    (Just $ Core.termTypeApplication $ Core.typeApplicationTerm (var "body") (var "typ")) [
+    -- TypeApp(App(f, arg), τ) → go(App(TypeApp(f, τ), arg))
+    _Term_application>>: "a" ~> var "go" @@
+      (Core.termApplication $ Core.application
+        (Core.termTypeApplication $ Core.typeApplicationTerm
+          (Core.applicationFunction $ var "a")
+          (var "typ"))
+        (Core.applicationArgument $ var "a")),
+    -- TypeApp(Lambda(v, d, body), τ) → go(Lambda(v, d, TypeApp(body, τ)))
+    _Term_function>>: "f" ~> cases _Function (var "f")
+      (Just $ Core.termTypeApplication $ Core.typeApplicationTerm
+        (Core.termFunction $ var "f") (var "typ")) [
+      _Function_lambda>>: "l" ~> var "go" @@
+        (Core.termFunction $ Core.functionLambda $ Core.lambda
+          (Core.lambdaParameter $ var "l")
+          (Core.lambdaDomain $ var "l")
+          (Core.termTypeApplication $ Core.typeApplicationTerm
+            (Core.lambdaBody $ var "l")
+            (var "typ")))],
+    -- TypeApp(Let(bindings, body), τ) → go(Let(bindings, TypeApp(body, τ)))
+    _Term_let>>: "lt" ~> var "go" @@
+      (Core.termLet $ Core.let_
+        (Core.letBindings $ var "lt")
+        (Core.termTypeApplication $ Core.typeApplicationTerm
+          (Core.letBody $ var "lt")
+          (var "typ")))]),
+  "go">: ("t" ~>
+    "forField" <~ ("fld" ~> Core.fieldWithTerm (var "go" @@ (Core.fieldTerm $ var "fld")) (var "fld")) $
+    "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
+      _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
+      _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
+        (Core.caseStatementTypeName $ var "cs")
+        (Maybes.map (var "go") (Core.caseStatementDefault $ var "cs"))
+        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
+      _Elimination_wrap>>: "name" ~> Core.eliminationWrap $ var "name"]) $
+    "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
+      _Function_elimination>>: "elm" ~> Core.functionElimination $ var "forElimination" @@ var "elm",
+      _Function_lambda>>: "l" ~> Core.functionLambda $ Core.lambda
+        (Core.lambdaParameter $ var "l")
+        (Core.lambdaDomain $ var "l")
+        (var "go" @@ (Core.lambdaBody $ var "l")),
+      _Function_primitive>>: "name" ~> Core.functionPrimitive $ var "name"]) $
+    "forLet" <~ ("lt" ~>
+      "mapBinding" <~ ("b" ~> Core.binding
+        (Core.bindingName $ var "b")
+        (var "go" @@ (Core.bindingTerm $ var "b"))
+        (Core.bindingType $ var "b")) $
+      Core.let_
+        (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
+        (var "go" @@ (Core.letBody $ var "lt"))) $
+    "forMap" <~ ("m" ~>
+      "forPair" <~ ("p" ~> pair (var "go" @@ (Pairs.first $ var "p")) (var "go" @@ (Pairs.second $ var "p"))) $
+      Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "m") $
+    cases _Term (var "t") Nothing [
+      _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
+        (var "go" @@ (Core.annotatedTermBody $ var "at"))
+        (Core.annotatedTermAnnotation $ var "at"),
+      _Term_application>>: "a" ~> Core.termApplication $ Core.application
+        (var "go" @@ (Core.applicationFunction $ var "a"))
+        (var "go" @@ (Core.applicationArgument $ var "a")),
+      _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
+        ("l" ~> left $ var "go" @@ var "l")
+        ("r" ~> right $ var "go" @@ var "r")
+        (var "e"),
+      _Term_function>>: "fun" ~> Core.termFunction $ var "forFunction" @@ var "fun",
+      _Term_let>>: "lt" ~> Core.termLet $ var "forLet" @@ var "lt",
+      _Term_list>>: "els" ~> Core.termList $ Lists.map (var "go") (var "els"),
+      _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
+      _Term_map>>: "m" ~> Core.termMap $ var "forMap" @@ var "m",
+      _Term_maybe>>: "m" ~> Core.termMaybe $ Maybes.map (var "go") (var "m"),
+      _Term_pair>>: "p" ~> Core.termPair $ pair
+        (var "go" @@ (Pairs.first $ var "p"))
+        (var "go" @@ (Pairs.second $ var "p")),
+      _Term_record>>: "r" ~> Core.termRecord $ Core.record
+        (Core.recordTypeName $ var "r")
+        (Lists.map (var "forField") (Core.recordFields $ var "r")),
+      _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "go") $ Sets.toList (var "s"),
+      _Term_typeApplication>>: "tt" ~>
+        "body1" <~ var "go" @@ (Core.typeApplicationTermBody $ var "tt") $
+        var "push" @@ var "body1" @@ (Core.typeApplicationTermType $ var "tt"),
+      _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
+        (Core.typeLambdaParameter $ var "ta")
+        (var "go" @@ (Core.typeLambdaBody $ var "ta")),
+      _Term_union>>: "i" ~> Core.termUnion $ Core.injection
+        (Core.injectionTypeName $ var "i")
+        (var "forField" @@ (Core.injectionField $ var "i")),
+      _Term_unit>>: constant Core.termUnit,
+      _Term_variable>>: "v" ~> Core.termVariable $ var "v",
+      _Term_wrap>>: "wt" ~> Core.termWrap $ Core.wrappedTerm
+        (Core.wrappedTermTypeName $ var "wt")
+        (var "go" @@ (Core.wrappedTermBody $ var "wt"))])] $
+  var "go" @@ var "term"
+
 dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Bool -> Graph -> [Namespace] -> Flow s (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints and a designated list of namespaces,"
@@ -484,25 +589,34 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     (var "hoistPoly" @@ var "graphi1")
     (var "graphi1") $
 
-  -- Step 4.5: Re-infer if hoisting created new untyped bindings.
+  -- Step 4.5: Always re-infer after hoisting.
   -- hoistPolymorphicLetBindings creates new top-level bindings with bindingType=Nothing
   -- and wrapper lambdas with lambdaDomain=Nothing. Re-inference assigns types to these.
-  "allHaveTypesAfterHoist" <~ Logic.ands (Lists.map ("b" ~> Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graphh")) $
-  "graphi2" <<~ Logic.ifElse (var "allHaveTypesAfterHoist")
-    (produce $ var "graphh")
-    (Inference.inferGraphTypes @@ var "graphh") $
+  -- Even when top-level bindings have types, inner let bindings created as cache entries
+  -- by hoisting may lack types.
+  "graphi2" <<~ Inference.inferGraphTypes @@ var "graphh" $
 
   -- Step 5: Adapt the graph (includes eta expansion if enabled).
   -- Adaptation preserves type application/lambda wrappers and adapts embedded types
   -- (literal types, lambda domains, TypeSchemes).
-  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi2" $
+  "graph1raw" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi2" $
+  -- Normalize: push type applications inward past applications and lambdas.
+  -- This corrects structures where TypeApp wraps App/Lambda after adaptation and eta expansion.
+  "normalizeGraph" <~ ("g" ~> Graph.graphWithElements (var "g")
+    (Lists.map ("b" ~> Core.binding
+      (Core.bindingName $ var "b")
+      (pushTypeAppsInward @@ (Core.bindingTerm $ var "b"))
+      (Core.bindingType $ var "b"))
+    (Graph.graphElements $ var "g"))) $
+  "graph1" <~ var "normalizeGraph" @@ var "graph1raw" $
   -- Step 6: Post-adaptation inference, only if adaptation removed types.
   -- When input bindings have types, adaptDataGraph preserves them (via adaptTypeScheme),
   -- so this step is skipped.
   "allHaveTypesAfterAdapt" <~ Logic.ands (Lists.map ("b" ~> Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graph1")) $
-  "graph2" <<~ Logic.ifElse (var "allHaveTypesAfterAdapt")
+  "graph2raw" <<~ Logic.ifElse (var "allHaveTypesAfterAdapt")
     (produce $ var "graph1")
     (Inference.inferGraphTypes @@ var "graph1") $
+  "graph2" <~ var "normalizeGraph" @@ var "graph2raw" $
 
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>

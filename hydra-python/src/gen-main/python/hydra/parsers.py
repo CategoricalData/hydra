@@ -47,7 +47,7 @@ def apply(pf: hydra.parsing.Parser[Callable[[T0], T1]], pa: hydra.parsing.Parser
     r"""Apply a parser containing a function to a parser containing a value."""
     
     def parse(input: str) -> hydra.parsing.ParseResult[T1]:
-        def _hoist_parse_1(sf: hydra.parsing.ParseSuccess[Callable[[T2], T3]], v1: hydra.parsing.ParseResult[T2]) -> hydra.parsing.ParseResult[T3]:
+        def _hoist_parse_1(sf: hydra.parsing.ParseSuccess[Callable[[T2], T3]], v1: hydra.parsing.ParseResult) -> hydra.parsing.ParseResult[T3]:
             match v1:
                 case hydra.parsing.ParseResultSuccess(value=sa):
                     return cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(sf.value(sa.value), sa.remainder)))

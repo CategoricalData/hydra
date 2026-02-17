@@ -35,6 +35,7 @@ T6 = TypeVar("T6")
 T7 = TypeVar("T7")
 T8 = TypeVar("T8")
 T9 = TypeVar("T9")
+X = TypeVar("X")
 
 def apply_inside_type_lambdas_and_annotations(f: Callable[[hydra.core.Term], hydra.core.Term], term0: hydra.core.Term) -> hydra.core.Term:
     r"""Apply a term-level function inside any leading type lambdas."""

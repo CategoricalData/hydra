@@ -178,13 +178,13 @@ public interface Unification {
           
           @Override
           public hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Record r) {
-            return (((java.util.function.Function<hydra.core.RowType, java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>>>>) (v1 -> (java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>>>) (v2 -> hydra.unification.Unification.joinTypes_joinRowTypes(
+            return hydra.unification.Unification.joinTypes_joinRowTypes(
               hydra.show.core.Core::type,
               sleft,
               sright,
               joinOne,
-              v1,
-              v2)))).apply((l).value)).apply((r).value);
+              (l).value,
+              (r).value);
           }
         });
       }
@@ -220,13 +220,13 @@ public interface Unification {
           
           @Override
           public hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Union r) {
-            return (((java.util.function.Function<hydra.core.RowType, java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>>>>) (v1 -> (java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>>>) (v2 -> hydra.unification.Unification.joinTypes_joinRowTypes(
+            return hydra.unification.Unification.joinTypes_joinRowTypes(
               hydra.show.core.Core::type,
               sleft,
               sright,
               joinOne,
-              v1,
-              v2)))).apply((l).value)).apply((r).value);
+              (l).value,
+              (r).value);
           }
         });
       }
@@ -343,17 +343,17 @@ public interface Unification {
               hydra.lib.lists.Map.apply(
                 projected -> projected.name,
                 (right).fields))))),
-      () -> (((java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<java.util.List<hydra.core.Type>, hydra.compute.Flow<T2, java.util.List<T1>>>>) (v1 -> (java.util.function.Function<java.util.List<hydra.core.Type>, hydra.compute.Flow<T2, java.util.List<T1>>>) (v2 -> hydra.unification.Unification.joinTypes_joinList(
+      () -> hydra.unification.Unification.joinTypes_joinList(
         hydra_show_core_type2,
         sleft,
         sright,
         joinOne,
-        v1,
-        v2)))).apply(hydra.lib.lists.Map.apply(
-        projected -> projected.type,
-        (left).fields))).apply(hydra.lib.lists.Map.apply(
-        projected -> projected.type,
-        (right).fields)),
+        hydra.lib.lists.Map.apply(
+          projected -> projected.type,
+          (left).fields),
+        hydra.lib.lists.Map.apply(
+          projected -> projected.type,
+          (right).fields)),
       () -> hydra.unification.Unification.<T0, T2, java.util.List<T1>>joinTypes_cannotUnify(
         hydra_show_core_type2,
         sleft,
