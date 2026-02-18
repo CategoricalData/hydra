@@ -9,7 +9,6 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_EXT_DIR="$HYDRA_ROOT/hydra-ext"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
 HYDRA_PYTHON_DIR="$HYDRA_ROOT/hydra-python"
 
@@ -38,28 +37,17 @@ echo ""
 
 TOTAL_START=$(date +%s)
 
-# Step 1: Ensure JSON is up to date
-echo "Step 1: Ensuring JSON exports are up to date..."
-STEP_START=$(date +%s)
-echo "  Building hydra-haskell..."
-cd "$HYDRA_HASKELL_DIR"
-stack build 2>&1 | tail -3
-echo "  Exporting main modules to JSON..."
-stack exec update-json-main -- +RTS -K256M -A32M -RTS
-echo "  Exporting test modules to JSON..."
-stack exec update-json-test -- +RTS -K256M -A32M -RTS
-echo "  Building hydra-ext..."
-cd "$HYDRA_EXT_DIR"
-stack build 2>&1 | tail -3
-echo "  Exporting ext modules to JSON..."
-stack exec update-json-main -- +RTS -K256M -A32M -RTS
-STEP_END=$(date +%s)
-echo "  Time: $((STEP_END - STEP_START))s"
-echo ""
-
-# Count JSON input files
+# Step 1: Verify JSON modules exist
+# JSON is generated once by bin/update-json-kernel.sh from the Haskell host
+# and checked in. The demo simply consumes these files.
+echo "Step 1: Verifying JSON modules..."
 JSON_DIR="$HYDRA_HASKELL_DIR/src/gen-main/json"
 JSON_COUNT=$(find "$JSON_DIR" -name "*.json" 2>/dev/null | wc -l | tr -d ' ')
+if [ "$JSON_COUNT" -eq 0 ]; then
+    echo "  ERROR: No JSON files found in $JSON_DIR"
+    echo "  Run bin/update-json-kernel.sh first to generate JSON modules."
+    exit 1
+fi
 echo "  JSON input files: $JSON_COUNT (in $JSON_DIR)"
 echo ""
 

@@ -284,7 +284,7 @@ dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymor
         let allHaveTypes = (Lists.foldl Logic.and True (Lists.map (\b -> Maybes.isJust (Core.bindingType b)) (Graph.graphElements graphu1)))
         in (Flows.bind (Logic.ifElse allHaveTypes (Flows.pure graphu1) (Inference.inferGraphTypes graphu1)) (\graphi1 ->  
           let graphh = (Logic.ifElse doHoistPolymorphicLetBindings (hoistPoly graphi1) graphi1)
-          in (Flows.bind (Inference.inferGraphTypes graphh) (\graphi2 -> Flows.bind (adaptDataGraph constraints doExpand graphi2) (\graph1raw ->  
+          in (Flows.bind (Logic.ifElse doHoistPolymorphicLetBindings (Inference.inferGraphTypes graphh) (Flows.pure graphh)) (\graphi2 -> Flows.bind (adaptDataGraph constraints doExpand graphi2) (\graph1raw ->  
             let normalizeGraph = (\g -> Graph.Graph {
                     Graph.graphElements = (Lists.map (\b -> Core.Binding {
                       Core.bindingName = (Core.bindingName b),
@@ -298,26 +298,26 @@ dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymor
             in  
               let graph1 = (normalizeGraph graph1raw)
               in  
-                let allHaveTypesAfterAdapt = (Lists.foldl Logic.and True (Lists.map (\b -> Maybes.isJust (Core.bindingType b)) (Graph.graphElements graph1)))
-                in (Flows.bind (Logic.ifElse allHaveTypesAfterAdapt (Flows.pure graph1) (Inference.inferGraphTypes graph1)) (\graph2raw ->  
-                  let graph2 = (normalizeGraph graph2raw)
+                let untypedAfterAdapt = (Lists.map (\b -> Core.unName (Core.bindingName b)) (Lists.filter (\b -> Logic.not (Maybes.isJust (Core.bindingType b))) (Graph.graphElements graph1)))
+                in (Flows.bind (Logic.ifElse (Lists.null untypedAfterAdapt) (Flows.pure (normalizeGraph graph1)) (Flows.fail (Strings.cat [
+                  "Adaptation removed types from bindings: ",
+                  (Strings.intercalate ", " untypedAfterAdapt)]))) (\graph2 ->  
+                  let toDef = (\el -> Maybes.map (\ts -> Module.TermDefinition {
+                          Module.termDefinitionName = (Core.bindingName el),
+                          Module.termDefinitionTerm = (Core.bindingTerm el),
+                          Module.termDefinitionType = ts}) (Core.bindingType el))
                   in  
-                    let toDef = (\el -> Maybes.map (\ts -> Module.TermDefinition {
-                            Module.termDefinitionName = (Core.bindingName el),
-                            Module.termDefinitionTerm = (Core.bindingTerm el),
-                            Module.termDefinitionType = ts}) (Core.bindingType el))
+                    let selectedElements = (Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) (Graph.graphElements graph2))
                     in  
-                      let selectedElements = (Lists.filter (\el -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName el))) (Graph.graphElements graph2))
+                      let elementsByNamespace = (Lists.foldl (\acc -> \el -> Maybes.maybe acc (\ns ->  
+                              let existing = (Maybes.maybe [] Equality.identity (Maps.lookup ns acc))
+                              in (Maps.insert ns (Lists.concat2 existing [
+                                el]) acc)) (Names.namespaceOf (Core.bindingName el))) Maps.empty selectedElements)
                       in  
-                        let elementsByNamespace = (Lists.foldl (\acc -> \el -> Maybes.maybe acc (\ns ->  
-                                let existing = (Maybes.maybe [] Equality.identity (Maps.lookup ns acc))
-                                in (Maps.insert ns (Lists.concat2 existing [
-                                  el]) acc)) (Names.namespaceOf (Core.bindingName el))) Maps.empty selectedElements)
-                        in  
-                          let defsGrouped = (Lists.map (\ns ->  
-                                  let elsForNs = (Maybes.maybe [] Equality.identity (Maps.lookup ns elementsByNamespace))
-                                  in (Maybes.cat (Lists.map toDef elsForNs))) namespaces)
-                          in (Flows.pure (graph2, defsGrouped)))))))))))))
+                        let defsGrouped = (Lists.map (\ns ->  
+                                let elsForNs = (Maybes.maybe [] Equality.identity (Maps.lookup ns elementsByNamespace))
+                                in (Maybes.cat (Lists.map toDef elsForNs))) namespaces)
+                        in (Flows.pure (graph2, defsGrouped)))))))))))))
 
 -- | Check if a literal type is supported by the given language constraints
 literalTypeSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)

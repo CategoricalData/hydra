@@ -392,7 +392,15 @@ public interface Hoisting {
           (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, Boolean>) (p -> (isCacheable).apply(hydra.lib.pairs.First.apply(p))),
           hoistNameReplacementPairs.get()));
         hydra.util.Lazy<java.util.List<hydra.core.Binding>> cacheBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, hydra.core.Binding>) (p -> new hydra.core.Binding(hydra.lib.pairs.First.apply(p), hydra.lib.pairs.Second.apply(p), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))),
+          (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, hydra.core.Binding>) (p -> {
+            hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> origType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
+              (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()),
+              (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.TypeScheme>>) (b -> (b).type),
+              hydra.lib.maps.Lookup.apply(
+                hydra.lib.pairs.First.apply(p),
+                hoistBindingMap.get())));
+            return new hydra.core.Binding(hydra.lib.pairs.First.apply(p), hydra.lib.pairs.Second.apply(p), origType.get());
+          }),
           multiRefPairs.get()));
         hydra.util.Lazy<hydra.core.Term> bodyWithCache = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(cacheBindings.get()),

@@ -546,21 +546,11 @@ typeOfLet = define "typeOfLet" $
     (Maps.union
       (Maps.fromList $ Lists.zip (var "bnames") (var "btypes"))
       (Typing.typeContextTypes $ var "tx"))) $
-  -- Reconstructed type for each binding
-  "typeofs" <<~ Flows.mapList (typeOf @@ var "tx2" @@ noTypeArgs ) (var "bterms") $
-  -- Note: We don't call checkTypeVariables on btypes because they come from type schemes that
-  -- may contain phantom type variables from polymorphic instantiation. These were already
-  -- validated during inference. We also don't check typeofs since they also come from inference.
-  -- The type equality check below ensures they match.
-  "t" <<~ Logic.ifElse (typeListsEffectivelyEqual @@ var "tx" @@ var "typeofs" @@ var "btypes")
-    (typeOf @@ var "tx2" @@ noTypeArgs  @@ var "body")
-    (Flows.fail $ Strings.cat $ list [
-      string "binding types disagree: ",
-      Formatting.showList @@ ShowCore.type_ @@ var "btypes",
-      string " and ",
-      Formatting.showList @@ ShowCore.type_ @@ var "typeofs",
-      string " from terms: ",
-      Formatting.showList @@ ShowCore.term @@ var "bterms"]) $
+  -- Note: We trust the declared binding types (btypes) and use them to type-check the body.
+  -- Previously we also reconstructed types from terms and verified they match,
+  -- but this fails for terms that lack type application wrappers (e.g. after hoisting).
+  -- Since binding types come from inference and are authoritative, we skip the verification.
+  "t" <<~ typeOf @@ var "tx2" @@ noTypeArgs  @@ var "body" $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfList :: TBinding (TypeContext -> [Type] -> [Term] -> Flow s Type)

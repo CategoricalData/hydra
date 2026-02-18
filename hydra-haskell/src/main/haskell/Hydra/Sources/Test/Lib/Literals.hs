@@ -319,7 +319,24 @@ literalsShowBoolean = subgroup "showBoolean" [
 literalsShowString :: TTerm TestGroup
 literalsShowString = subgroup "showString" [
   test "simple" "hello" "\"hello\"",
-  test "empty" "" "\"\""]
+  test "empty" "" "\"\"",
+  -- Non-ASCII characters are escaped as decimal codes
+  test "latin accented" "caf\233" "\"caf\\233\"",
+  test "greek lambda" "\955" "\"\\955\"",
+  test "mixed ascii and non-ascii" "A\233B" "\"A\\233B\"",
+  -- Standard named escapes
+  test "tab" "\t" "\"\\t\"",
+  test "newline" "\n" "\"\\n\"",
+  test "carriage return" "\r" "\"\\r\"",
+  test "backslash" "\\" "\"\\\\\"",
+  test "double quote" "\"" "\"\\\"\"",
+  -- Control characters with named escapes
+  test "null" "\0" "\"\\NUL\"",
+  test "bell" "\a" "\"\\a\"",
+  test "backspace" "\b" "\"\\b\"",
+  test "form feed" "\f" "\"\\f\"",
+  test "vertical tab" "\v" "\"\\v\"",
+  test "delete" "\127" "\"\\DEL\""]
   where
     test name x result = primCase name _literals_showString [string x] (string result)
 

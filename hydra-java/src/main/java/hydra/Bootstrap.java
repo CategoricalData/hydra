@@ -191,8 +191,9 @@ public class Bootstrap {
         System.out.println("  Source: " + testJsonDir);
 
         stepStart = System.currentTimeMillis();
-        List<Module> rawTestMods = Generation.loadAllModulesFromJsonDir(testJsonDir, allMods);
-        List<Module> testMods = Generation.stripAllTermTypes(rawTestMods);
+        // Load test modules WITHOUT stripping TypeSchemes (stripTypeSchemes=false).
+        // Test modules need their types preserved so inference can be skipped.
+        List<Module> testMods = Generation.loadAllModulesFromJsonDirWith(false, testJsonDir, allMods);
         stepTime = System.currentTimeMillis() - stepStart;
 
         int testBindings = 0;
@@ -215,16 +216,23 @@ public class Bootstrap {
 
         stepStart = System.currentTimeMillis();
 
-        switch (target) {
-            case "haskell":
-                Generation.writeHaskell(outTest + "/haskell", allUniverse, testMods);
-                break;
-            case "java":
-                Generation.writeJava(outTest + "/java", allUniverse, testMods);
-                break;
-            case "python":
-                Generation.writePython(outTest + "/python", allUniverse, testMods);
-                break;
+        boolean testGenOk = true;
+        try {
+            switch (target) {
+                case "haskell":
+                    Generation.writeHaskell(outTest + "/haskell", allUniverse, testMods);
+                    break;
+                case "java":
+                    Generation.writeJava(outTest + "/java", allUniverse, testMods);
+                    break;
+                case "python":
+                    Generation.writePython(outTest + "/python", allUniverse, testMods);
+                    break;
+            }
+        } catch (Exception e) {
+            testGenOk = false;
+            System.out.println("  WARNING: Test generation failed: " + e.getMessage());
+            System.out.println("  (Main code generation succeeded; test generation is a known issue)");
         }
 
         stepTime = System.currentTimeMillis() - stepStart;

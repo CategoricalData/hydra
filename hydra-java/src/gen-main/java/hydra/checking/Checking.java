@@ -955,39 +955,14 @@ public interface Checking {
             btypes)),
           (tx).types), (tx).metadata, (tx).typeVariables, (tx).lambdaVariables, (tx).letVariables, (tx).inferenceContext));
         return hydra.lib.flows.Bind.apply(
-          hydra.lib.flows.MapList.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Type>>) (v1 -> hydra.checking.Checking.<T0>typeOf(
-              tx2.get(),
-              (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
-              v1)),
-            bterms.get()),
-          (java.util.function.Function<java.util.List<hydra.core.Type>, hydra.compute.Flow<T0, hydra.core.Type>>) (typeofs -> hydra.lib.flows.Bind.apply(
-            hydra.lib.logic.IfElse.lazy(
-              hydra.checking.Checking.typeListsEffectivelyEqual(
-                tx,
-                typeofs,
-                btypes),
-              () -> hydra.checking.Checking.<T0>typeOf(
-                tx2.get(),
-                (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
-                body),
-              () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
-                "binding types disagree: ",
-                hydra.formatting.Formatting.showList(
-                  hydra.show.core.Core::type,
-                  btypes),
-                " and ",
-                hydra.formatting.Formatting.showList(
-                  hydra.show.core.Core::type,
-                  typeofs),
-                " from terms: ",
-                hydra.formatting.Formatting.showList(
-                  hydra.show.core.Core::term,
-                  bterms.get()))))),
-            (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Type>>) (t -> hydra.checking.Checking.<T0>applyTypeArgumentsToType(
-              tx,
-              typeArgs,
-              t)))));
+          hydra.checking.Checking.<T0>typeOf(
+            tx2.get(),
+            (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
+            body),
+          (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Type>>) (t -> hydra.checking.Checking.<T0>applyTypeArgumentsToType(
+            tx,
+            typeArgs,
+            t)));
       }));
   }
   

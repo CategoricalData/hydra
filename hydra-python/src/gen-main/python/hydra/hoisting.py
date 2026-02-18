@@ -299,7 +299,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
                     return hydra.substitution.substitute_in_term(body_only_subst(), body())
                 @lru_cache(1)
                 def cache_bindings() -> frozenlist[hydra.core.Binding]:
-                    return hydra.lib.lists.map((lambda p: hydra.core.Binding(hydra.lib.pairs.first(p), hydra.lib.pairs.second(p), Nothing())), multi_ref_pairs())
+                    return hydra.lib.lists.map((lambda p: (orig_type := hydra.lib.maybes.maybe(Nothing(), (lambda b: b.type), hydra.lib.maps.lookup(hydra.lib.pairs.first(p), hoist_binding_map())), hydra.core.Binding(hydra.lib.pairs.first(p), hydra.lib.pairs.second(p), orig_type))[1]), multi_ref_pairs())
                 @lru_cache(1)
                 def body_with_cache() -> hydra.core.Term:
                     return hydra.lib.logic.if_else(hydra.lib.lists.null(cache_bindings()), (lambda : body_subst()), (lambda : cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(cache_bindings(), body_subst())))))

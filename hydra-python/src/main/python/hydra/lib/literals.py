@@ -387,10 +387,37 @@ def show_uint64(x: int) -> str:
 
 
 def show_string(s: str) -> str:
-    """Convert a string to a quoted string representation (with double quotes)."""
-    # Use Haskell-style double quotes instead of Python's single quotes
-    escaped = s.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\t', '\\t')
-    return f'"{escaped}"'
+    """Convert a string to a quoted string representation matching Haskell's show."""
+    # ASCII control character names matching Haskell's show for Char
+    _ASCII_CONTROL_NAMES = [
+        "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "a",
+        "b",   "t",   "n",   "v",   "f",   "r",   "SO",  "SI",
+        "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB",
+        "CAN", "EM",  "SUB", "ESC", "FS",  "GS",  "RS",  "US",
+    ]
+    sb = []
+    last_was_numeric_escape = False
+    for c in s:
+        cp = ord(c)
+        if last_was_numeric_escape and c.isdigit():
+            sb.append("\\&")
+        last_was_numeric_escape = False
+        if c == '\\':
+            sb.append("\\\\")
+        elif c == '"':
+            sb.append('\\"')
+        elif cp < 0x20:
+            sb.append('\\')
+            sb.append(_ASCII_CONTROL_NAMES[cp])
+        elif cp == 0x7F:
+            sb.append("\\DEL")
+        elif cp > 0x7F:
+            sb.append('\\')
+            sb.append(str(cp))
+            last_was_numeric_escape = True
+        else:
+            sb.append(c)
+    return '"' + ''.join(sb) + '"'
 
 
 def string_to_binary(s: str) -> bytes:

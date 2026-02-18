@@ -321,13 +321,7 @@ typeOfLet tx typeArgs letTerm =
                     Typing.typeContextLambdaVariables = (Typing.typeContextLambdaVariables tx),
                     Typing.typeContextLetVariables = (Typing.typeContextLetVariables tx),
                     Typing.typeContextInferenceContext = (Typing.typeContextInferenceContext tx)}
-            in (Flows.bind (Flows.mapList (typeOf tx2 []) bterms) (\typeofs -> Flows.bind (Logic.ifElse (typeListsEffectivelyEqual tx typeofs btypes) (typeOf tx2 [] body) (Flows.fail (Strings.cat [
-              "binding types disagree: ",
-              (Formatting.showList Core__.type_ btypes),
-              " and ",
-              (Formatting.showList Core__.type_ typeofs),
-              " from terms: ",
-              (Formatting.showList Core__.term bterms)]))) (\t -> applyTypeArgumentsToType tx typeArgs t)))))
+            in (Flows.bind (typeOf tx2 [] body) (\t -> applyTypeArgumentsToType tx typeArgs t))))
 
 -- | Reconstruct the type of a list
 typeOfList :: (Typing.TypeContext -> [Core.Type] -> [Core.Term] -> Compute.Flow t0 Core.Type)

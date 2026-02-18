@@ -203,11 +203,6 @@ def type_of_injection(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.
         return field().term
     return hydra.lib.flows.bind(hydra.schemas.require_schema_type(tx.inference_context, tname()), (lambda schema_type: (svars := schema_type.variables, sbody := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.union_type(tname(), sbody), (lambda sfields: hydra.lib.flows.bind(hydra.schemas.find_field_type(fname(), sfields), (lambda ftyp: hydra.lib.flows.pure(hydra.schemas.nominal_application(tname(), type_args)))))))[2]))
 
-def type_lists_effectively_equal(tx: hydra.typing.TypeContext, tlist1: frozenlist[hydra.core.Type], tlist2: frozenlist[hydra.core.Type]) -> bool:
-    r"""Check whether two lists of types are effectively equal, disregarding type aliases."""
-    
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(tlist1), hydra.lib.lists.length(tlist2)), (lambda : hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda v1, v2: types_effectively_equal(tx, v1, v2)), tlist1, tlist2))), (lambda : False))
-
 def type_of_literal(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], lit: hydra.core.Literal) -> hydra.compute.Flow[T0, hydra.core.Type]:
     r"""Reconstruct the type of a literal."""
     
@@ -437,7 +432,7 @@ def type_of_let(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.T
         return hydra.lib.lists.map((lambda v1: v1.term), bs())
     def binding_type(b: hydra.core.Binding) -> hydra.compute.Flow[T1, hydra.core.Type]:
         return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("untyped let binding: ", hydra.show.core.binding(b)))), (lambda ts: hydra.lib.flows.pure(hydra.schemas.type_scheme_to_f_type(ts))), b.type)
-    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: binding_type(x1)), bs()), (lambda btypes: (tx2 := hydra.typing.TypeContext(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.zip(bnames(), btypes)), tx.types), tx.metadata, tx.type_variables, tx.lambda_variables, tx.let_variables, tx.inference_context), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: type_of(tx2, (), v1)), bterms()), (lambda typeofs: hydra.lib.flows.bind(hydra.lib.logic.if_else(type_lists_effectively_equal(tx, typeofs, btypes), (lambda : type_of(tx2, (), body())), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("binding types disagree: ", hydra.formatting.show_list((lambda x1: hydra.show.core.type(x1)), btypes), " and ", hydra.formatting.show_list((lambda x1: hydra.show.core.type(x1)), typeofs), " from terms: ", hydra.formatting.show_list((lambda x1: hydra.show.core.term(x1)), bterms())))))), (lambda t: apply_type_arguments_to_type(tx, type_args, t))))))[1]))
+    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: binding_type(x1)), bs()), (lambda btypes: (tx2 := hydra.typing.TypeContext(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.zip(bnames(), btypes)), tx.types), tx.metadata, tx.type_variables, tx.lambda_variables, tx.let_variables, tx.inference_context), hydra.lib.flows.bind(type_of(tx2, (), body()), (lambda t: apply_type_arguments_to_type(tx, type_args, t))))[1]))
 
 def type_of_list(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], els: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.core.Type]:
     r"""Reconstruct the type of a list."""
@@ -584,3 +579,8 @@ def to_f_context(cx: hydra.typing.InferenceContext) -> FrozenDict[hydra.core.Nam
     r"""Convert an inference context to a type environment by converting type schemes to System F types."""
     
     return hydra.lib.maps.map((lambda x1: hydra.schemas.type_scheme_to_f_type(x1)), cx.data_types)
+
+def type_lists_effectively_equal(tx: hydra.typing.TypeContext, tlist1: frozenlist[hydra.core.Type], tlist2: frozenlist[hydra.core.Type]) -> bool:
+    r"""Check whether two lists of types are effectively equal, disregarding type aliases."""
+    
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(tlist1), hydra.lib.lists.length(tlist2)), (lambda : hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda v1, v2: types_effectively_equal(tx, v1, v2)), tlist1, tlist2))), (lambda : False))

@@ -271,10 +271,12 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                                                                             in  
                                                                               let bodySubst = (Substitution.substituteInTerm bodyOnlySubst body)
                                                                               in  
-                                                                                let cacheBindings = (Lists.map (\p -> Core.Binding {
-                                                                                        Core.bindingName = (Pairs.first p),
-                                                                                        Core.bindingTerm = (Pairs.second p),
-                                                                                        Core.bindingType = Nothing}) multiRefPairs)
+                                                                                let cacheBindings = (Lists.map (\p ->  
+                                                                                        let origType = (Maybes.maybe Nothing (\b -> Core.bindingType b) (Maps.lookup (Pairs.first p) hoistBindingMap))
+                                                                                        in Core.Binding {
+                                                                                          Core.bindingName = (Pairs.first p),
+                                                                                          Core.bindingTerm = (Pairs.second p),
+                                                                                          Core.bindingType = origType}) multiRefPairs)
                                                                                 in  
                                                                                   let bodyWithCache = (Logic.ifElse (Lists.null cacheBindings) bodySubst (Core.TermLet (Core.Let {
                                                                                           Core.letBindings = cacheBindings,

@@ -21,12 +21,11 @@ echo ""
 
 # Step 0: Build hydra-java
 echo "Building hydra-java..."
-BUILD_START=$(date +%s%N 2>/dev/null || python3 -c 'import time; print(int(time.time()*1e9))')
+BUILD_START=$(date +%s)
 cd "$HYDRA_ROOT"
 ./gradlew :hydra-java:compileJava 2>&1 | tail -3
-BUILD_END=$(date +%s%N 2>/dev/null || python3 -c 'import time; print(int(time.time()*1e9))')
-BUILD_MS=$(( (BUILD_END - BUILD_START) / 1000000 ))
-echo "  Build time: ${BUILD_MS}ms"
+BUILD_END=$(date +%s)
+echo "  Build time: $((BUILD_END - BUILD_START))s"
 echo ""
 
 # Build classpath

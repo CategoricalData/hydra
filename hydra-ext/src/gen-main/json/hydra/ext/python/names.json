@@ -22,75 +22,52 @@
       "term": {
         "typeLambda": {
           "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "@key": "description",
-                  "@value": {
-                    "literal": {"string": "Generate a constant name for a field definition"}}}],
+            "typeLambda": {
               "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "function": {
-                              "lambda": {
-                                "body": {
-                                  "wrap": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {"string": "Generate a constant name for a field definition"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "function": {
+                                  "lambda": {
                                     "body": {
-                                      "application": {
-                                        "argument": {
-                                          "list": [
-                                            {
+                                      "wrap": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "fname"},
+                                                "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                            "function": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "tname"},
-                                                    "function": {"variable": "hydra.names.localNameOf"}}},
+                                                  "union": {
+                                                    "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                    "typeName": "hydra.util.CaseConvention"}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
                                                       "union": {
-                                                        "field": {"name": "upperSnake", "term": {"unit": {}}},
+                                                        "field": {"name": "camel", "term": {"unit": {}}},
                                                         "typeName": "hydra.util.CaseConvention"}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "union": {
-                                                            "field": {"name": "pascal", "term": {"unit": {}}},
-                                                            "typeName": "hydra.util.CaseConvention"}},
-                                                        "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
-                                            {"literal": {"string": "__"}},
-                                            {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "fname"},
-                                                    "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "union": {
-                                                        "field": {"name": "upperSnake", "term": {"unit": {}}},
-                                                        "typeName": "hydra.util.CaseConvention"}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "union": {
-                                                            "field": {"name": "camel", "term": {"unit": {}}},
-                                                            "typeName": "hydra.util.CaseConvention"}},
-                                                        "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
-                                            {"literal": {"string": "__NAME"}}]},
-                                        "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
-                                    "typeName": "hydra.ext.python.syntax.Name"}},
-                                "domain": [{"variable": "hydra.core.Name"}],
-                                "parameter": "fname"}}},
-                          "domain": [{"variable": "hydra.core.Name"}],
-                          "parameter": "tname"}}},
-                    "domain": [{"variable": "t0"}],
-                    "parameter": "env"}}}}},
+                                                    "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
+                                        "typeName": "hydra.ext.python.syntax.Name"}},
+                                    "domain": [{"variable": "hydra.core.Name"}],
+                                    "parameter": "fname"}}},
+                              "domain": [{"variable": "t1"}],
+                              "parameter": "tname"}}},
+                        "domain": [{"variable": "t0"}],
+                        "parameter": "env"}}}}},
+              "parameter": "t1"}},
           "parameter": "t0"}},
       "type": [
         {
@@ -103,58 +80,37 @@
                     "function": {
                       "codomain": {"variable": "hydra.ext.python.syntax.Name"},
                       "domain": {"variable": "hydra.core.Name"}}},
-                  "domain": {"variable": "hydra.core.Name"}}},
+                  "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}]},
+          "variables": ["t0", "t1"]}]},
     {
       "name": "hydra.ext.python.names.encodeConstantForTypeName",
       "term": {
         "typeLambda": {
           "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "@key": "description",
-                  "@value": {
-                    "literal": {"string": "Generate a constant name for a type definition"}}}],
+            "typeLambda": {
               "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "wrap": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {"string": "Generate a constant name for a type definition"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
                               "body": {
-                                "application": {
-                                  "argument": {"literal": {"string": "__NAME"}},
-                                  "function": {
-                                    "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "tname"},
-                                              "function": {"variable": "hydra.names.localNameOf"}}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
-                                                "union": {
-                                                  "field": {"name": "upperSnake", "term": {"unit": {}}},
-                                                  "typeName": "hydra.util.CaseConvention"}},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {
-                                                    "union": {
-                                                      "field": {"name": "pascal", "term": {"unit": {}}},
-                                                      "typeName": "hydra.util.CaseConvention"}},
-                                                  "function": {"variable": "hydra.formatting.convertCase"}}}}}}},
-                                      "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                              "typeName": "hydra.ext.python.syntax.Name"}},
-                          "domain": [{"variable": "hydra.core.Name"}],
-                          "parameter": "tname"}}},
-                    "domain": [{"variable": "t0"}],
-                    "parameter": "env"}}}}},
+                                "wrap": {
+                                  "body": {"literal": {"string": "TYPE_"}},
+                                  "typeName": "hydra.ext.python.syntax.Name"}},
+                              "domain": [{"variable": "t1"}],
+                              "parameter": "tname"}}},
+                        "domain": [{"variable": "t0"}],
+                        "parameter": "env"}}}}},
+              "parameter": "t1"}},
           "parameter": "t0"}},
       "type": [
         {
@@ -164,9 +120,9 @@
               "codomain": {
                 "function": {
                   "codomain": {"variable": "hydra.ext.python.syntax.Name"},
-                  "domain": {"variable": "hydra.core.Name"}}},
+                  "domain": {"variable": "t1"}}},
               "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}]},
+          "variables": ["t0", "t1"]}]},
     {
       "name": "hydra.ext.python.names.encodeEnumValue",
       "term": {

@@ -403,9 +403,13 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
 
         -- Create local let bindings for multi-ref hoisted names.
         -- These bind the original name to the replacement expression (which calls the hoisted function once).
-        -- bindingType = Nothing so inference will infer the correct monomorphic type in context.
+        -- Carry over the original binding's TypeScheme so that downstream code can use typeOf without inference.
         "cacheBindings" <~ Lists.map
-          ("p" ~> Core.binding (Pairs.first $ var "p") (Pairs.second $ var "p") nothing)
+          ("p" ~>
+            "origType" <~ optCases (Maps.lookup (Pairs.first $ var "p") (var "hoistBindingMap"))
+              nothing
+              ("b" ~> Core.bindingType $ var "b") $
+            Core.binding (Pairs.first $ var "p") (Pairs.second $ var "p") (var "origType"))
           (var "multiRefPairs") $
 
         -- Wrap the body in a let with the cache bindings if there are any

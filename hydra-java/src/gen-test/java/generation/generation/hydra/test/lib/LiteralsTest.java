@@ -1258,6 +1258,174 @@ public class LiteralsTest {
 
     }
 
+    @Test
+
+    public void testShowstringLatinAccented() {
+
+        assertEquals(
+
+            "\"caf\\233\"",
+
+            hydra.lib.literals.ShowString.apply("caf\u00E9"));
+
+    }
+
+    @Test
+
+    public void testShowstringGreekLambda() {
+
+        assertEquals(
+
+            "\"\\955\"",
+
+            hydra.lib.literals.ShowString.apply("\u03BB"));
+
+    }
+
+    @Test
+
+    public void testShowstringMixedAsciiAndNonNegascii() {
+
+        assertEquals(
+
+            "\"A\\233B\"",
+
+            hydra.lib.literals.ShowString.apply("A\u00E9B"));
+
+    }
+
+    @Test
+
+    public void testShowstringTab() {
+
+        assertEquals(
+
+            "\"\\t\"",
+
+            hydra.lib.literals.ShowString.apply("\t"));
+
+    }
+
+    @Test
+
+    public void testShowstringNewline() {
+
+        assertEquals(
+
+            "\"\\n\"",
+
+            hydra.lib.literals.ShowString.apply("\n"));
+
+    }
+
+    @Test
+
+    public void testShowstringCarriageReturn() {
+
+        assertEquals(
+
+            "\"\\r\"",
+
+            hydra.lib.literals.ShowString.apply("\r"));
+
+    }
+
+    @Test
+
+    public void testShowstringBackslash() {
+
+        assertEquals(
+
+            "\"\\\\\"",
+
+            hydra.lib.literals.ShowString.apply("\\"));
+
+    }
+
+    @Test
+
+    public void testShowstringDoubleQuote() {
+
+        assertEquals(
+
+            "\"\\\"\"",
+
+            hydra.lib.literals.ShowString.apply("\""));
+
+    }
+
+    @Test
+
+    public void testShowstringNull() {
+
+        assertEquals(
+
+            "\"\\NUL\"",
+
+            hydra.lib.literals.ShowString.apply("\u0000"));
+
+    }
+
+    @Test
+
+    public void testShowstringBell() {
+
+        assertEquals(
+
+            "\"\\a\"",
+
+            hydra.lib.literals.ShowString.apply("\u0007"));
+
+    }
+
+    @Test
+
+    public void testShowstringBackspace() {
+
+        assertEquals(
+
+            "\"\\b\"",
+
+            hydra.lib.literals.ShowString.apply("\b"));
+
+    }
+
+    @Test
+
+    public void testShowstringFormFeed() {
+
+        assertEquals(
+
+            "\"\\f\"",
+
+            hydra.lib.literals.ShowString.apply("\f"));
+
+    }
+
+    @Test
+
+    public void testShowstringVerticalTab() {
+
+        assertEquals(
+
+            "\"\\v\"",
+
+            hydra.lib.literals.ShowString.apply("\u000B"));
+
+    }
+
+    @Test
+
+    public void testShowstringDelete() {
+
+        assertEquals(
+
+            "\"\\DEL\"",
+
+            hydra.lib.literals.ShowString.apply("\u007F"));
+
+    }
+
     // readInt8
 
     @Test

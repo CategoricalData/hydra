@@ -680,7 +680,10 @@ public interface Simple {
                   () -> (hoistPoly).apply(graphi1),
                   () -> graphi1));
                 return hydra.lib.flows.Bind.apply(
-                  hydra.inference.Inference.inferGraphTypes(graphh.get()),
+                  hydra.lib.logic.IfElse.lazy(
+                    doHoistPolymorphicLetBindings,
+                    () -> hydra.inference.Inference.inferGraphTypes(graphh.get()),
+                    () -> hydra.lib.flows.Pure.apply(graphh.get())),
                   (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graphi2 -> hydra.lib.flows.Bind.apply(
                     hydra.adapt.simple.Simple.adaptDataGraph(
                       constraints,
@@ -691,21 +694,21 @@ public interface Simple {
                         (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, hydra.adapt.simple.Simple.pushTypeAppsInward((b).term), (b).type)),
                         (g).elements), (g).environment, (g).types, (g).body, (g).primitives, (g).schema));
                       hydra.graph.Graph graph1 = (normalizeGraph).apply(graph1raw);
-                      hydra.util.Lazy<Boolean> allHaveTypesAfterAdapt = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                        (java.util.function.Function<Boolean, java.util.function.Function<Boolean, Boolean>>) (p0 -> p1 -> hydra.lib.logic.And.apply(
-                          p0,
-                          p1)),
-                        true,
-                        hydra.lib.lists.Map.apply(
-                          (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.IsJust.apply((b).type)),
+                      hydra.util.Lazy<java.util.List<String>> untypedAfterAdapt = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+                        (java.util.function.Function<hydra.core.Binding, String>) (b -> ((b).name).value),
+                        hydra.lib.lists.Filter.apply(
+                          (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.logic.Not.apply(hydra.lib.maybes.IsJust.apply((b).type))),
                           (graph1).elements)));
                       return hydra.lib.flows.Bind.apply(
                         hydra.lib.logic.IfElse.lazy(
-                          allHaveTypesAfterAdapt.get(),
-                          () -> hydra.lib.flows.Pure.apply(graph1),
-                          () -> hydra.inference.Inference.inferGraphTypes(graph1)),
-                        (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph2raw -> {
-                          hydra.graph.Graph graph2 = (normalizeGraph).apply(graph2raw);
+                          hydra.lib.lists.Null.apply(untypedAfterAdapt.get()),
+                          () -> hydra.lib.flows.Pure.apply((normalizeGraph).apply(graph1)),
+                          () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
+                            "Adaptation removed types from bindings: ",
+                            hydra.lib.strings.Intercalate.apply(
+                              ", ",
+                              untypedAfterAdapt.get()))))),
+                        (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (graph2 -> {
                           hydra.util.Lazy<java.util.List<hydra.core.Binding>> selectedElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
                             (java.util.function.Function<hydra.core.Binding, Boolean>) (el -> hydra.lib.maybes.Maybe.apply(
                               false,

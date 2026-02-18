@@ -301,7 +301,7 @@ public class Generation {
             }
         }
 
-        return new Module(namespace, elements, typeDeps, termDeps, description);
+        return new Module(namespace, elements, termDeps, typeDeps, description);
     }
 
     /**
@@ -338,8 +338,34 @@ public class Generation {
             variables.add(new Name(expectString(v, "TypeScheme.variable")));
         }
         hydra.core.Type type = nativeDecodeType(obj.get("type"));
-        Maybe<Map<Name, hydra.core.TypeVariableMetadata>> constraints = Maybe.nothing();
+        Maybe<Map<Name, hydra.core.TypeVariableMetadata>> constraints = nativeDecodeConstraints(obj.get("constraints"));
         return new TypeScheme(variables, type, constraints);
+    }
+
+    private static Maybe<Map<Name, hydra.core.TypeVariableMetadata>> nativeDecodeConstraints(Value val) {
+        if (val == null) return Maybe.nothing();
+        if (!(val instanceof Value.Array)) return Maybe.nothing();
+        List<Value> maybeArr = ((Value.Array) val).value;
+        if (maybeArr.isEmpty()) return Maybe.nothing();
+        // Maybe is encoded as [] for Nothing, [value] for Just
+        // The value is a list of map entries: [{"@key": name, "@value": metadata}, ...]
+        Value mapVal = maybeArr.get(0);
+        if (!(mapVal instanceof Value.Array)) return Maybe.nothing();
+        List<Value> entries = ((Value.Array) mapVal).value;
+        Map<Name, hydra.core.TypeVariableMetadata> result = new java.util.LinkedHashMap<>();
+        for (Value entry : entries) {
+            Map<String, Value> entryObj = expectObject(entry, "constraint entry");
+            Name key = new Name(expectString(entryObj.get("@key"), "constraint key"));
+            Map<String, Value> metaObj = expectObject(entryObj.get("@value"), "TypeVariableMetadata");
+            java.util.Set<hydra.core.Name> classes = new java.util.LinkedHashSet<>();
+            if (metaObj.containsKey("classes")) {
+                for (Value cv : expectArray(metaObj.get("classes"), "classes")) {
+                    classes.add(new Name(expectString(cv, "class name")));
+                }
+            }
+            result.put(key, new hydra.core.TypeVariableMetadata(classes));
+        }
+        return Maybe.just(result);
     }
 
     /**
@@ -350,8 +376,121 @@ public class Generation {
         if (obj.containsKey("variable")) {
             return new hydra.core.Type.Variable(new Name(expectString(obj.get("variable"), "Type.variable")));
         }
-        // For other type shapes, return a placeholder — only TypeVariable matters for isNativeType
+        if (obj.containsKey("function")) {
+            Map<String, Value> fn = expectObject(obj.get("function"), "FunctionType");
+            return new hydra.core.Type.Function(new hydra.core.FunctionType(
+                    nativeDecodeType(fn.get("domain")),
+                    nativeDecodeType(fn.get("codomain"))));
+        }
+        if (obj.containsKey("application")) {
+            Map<String, Value> app = expectObject(obj.get("application"), "ApplicationType");
+            return new hydra.core.Type.Application(new hydra.core.ApplicationType(
+                    nativeDecodeType(app.get("function")),
+                    nativeDecodeType(app.get("argument"))));
+        }
+        if (obj.containsKey("list")) {
+            return new hydra.core.Type.List(nativeDecodeType(obj.get("list")));
+        }
+        if (obj.containsKey("set")) {
+            return new hydra.core.Type.Set(nativeDecodeType(obj.get("set")));
+        }
+        if (obj.containsKey("map")) {
+            Map<String, Value> m = expectObject(obj.get("map"), "MapType");
+            return new hydra.core.Type.Map(new hydra.core.MapType(
+                    nativeDecodeType(m.get("keys")),
+                    nativeDecodeType(m.get("values"))));
+        }
+        if (obj.containsKey("maybe")) {
+            return new hydra.core.Type.Maybe(nativeDecodeType(obj.get("maybe")));
+        }
+        if (obj.containsKey("pair")) {
+            Map<String, Value> p = expectObject(obj.get("pair"), "PairType");
+            return new hydra.core.Type.Pair(new hydra.core.PairType(
+                    nativeDecodeType(p.get("first")),
+                    nativeDecodeType(p.get("second"))));
+        }
+        if (obj.containsKey("either")) {
+            Map<String, Value> e = expectObject(obj.get("either"), "EitherType");
+            return new hydra.core.Type.Either(new hydra.core.EitherType(
+                    nativeDecodeType(e.get("left")),
+                    nativeDecodeType(e.get("right"))));
+        }
+        if (obj.containsKey("literal")) {
+            return new hydra.core.Type.Literal(nativeDecodeLiteralType(obj.get("literal")));
+        }
+        if (obj.containsKey("unit")) {
+            return new hydra.core.Type.Unit();
+        }
+        if (obj.containsKey("record")) {
+            // Record types have a rowType with typeName and fields
+            Map<String, Value> row = expectObject(obj.get("record"), "RowType");
+            Name typeName = new Name(expectString(row.get("typeName"), "RowType.typeName"));
+            List<hydra.core.FieldType> fields = new ArrayList<>();
+            if (row.containsKey("fields")) {
+                for (Value fv : expectArray(row.get("fields"), "RowType.fields")) {
+                    Map<String, Value> fobj = expectObject(fv, "FieldType");
+                    fields.add(new hydra.core.FieldType(
+                            new Name(expectString(fobj.get("name"), "FieldType.name")),
+                            nativeDecodeType(fobj.get("type"))));
+                }
+            }
+            return new hydra.core.Type.Record(new hydra.core.RowType(typeName, fields));
+        }
+        if (obj.containsKey("union")) {
+            Map<String, Value> row = expectObject(obj.get("union"), "RowType");
+            Name typeName = new Name(expectString(row.get("typeName"), "RowType.typeName"));
+            List<hydra.core.FieldType> fields = new ArrayList<>();
+            if (row.containsKey("fields")) {
+                for (Value fv : expectArray(row.get("fields"), "RowType.fields")) {
+                    Map<String, Value> fobj = expectObject(fv, "FieldType");
+                    fields.add(new hydra.core.FieldType(
+                            new Name(expectString(fobj.get("name"), "FieldType.name")),
+                            nativeDecodeType(fobj.get("type"))));
+                }
+            }
+            return new hydra.core.Type.Union(new hydra.core.RowType(typeName, fields));
+        }
+        if (obj.containsKey("forall")) {
+            Map<String, Value> fa = expectObject(obj.get("forall"), "ForallType");
+            Name param = new Name(expectString(fa.get("parameter"), "ForallType.parameter"));
+            hydra.core.Type body = nativeDecodeType(fa.get("body"));
+            return new hydra.core.Type.Forall(new hydra.core.ForallType(param, body));
+        }
+        if (obj.containsKey("wrap")) {
+            Map<String, Value> w = expectObject(obj.get("wrap"), "WrappedType");
+            Name typeName = new Name(expectString(w.get("typeName"), "WrappedType.typeName"));
+            hydra.core.Type object = nativeDecodeType(w.get("object"));
+            return new hydra.core.Type.Wrap(new hydra.core.WrappedType(typeName, object));
+        }
+        // Fallback for unknown type shapes
         return new hydra.core.Type.Variable(new Name("unknown"));
+    }
+
+    private static hydra.core.LiteralType nativeDecodeLiteralType(Value val) {
+        Map<String, Value> obj = expectObject(val, "LiteralType");
+        if (obj.containsKey("boolean")) return new hydra.core.LiteralType.Boolean_();
+        if (obj.containsKey("string")) return new hydra.core.LiteralType.String_();
+        if (obj.containsKey("binary")) return new hydra.core.LiteralType.Binary();
+        if (obj.containsKey("integer")) {
+            Map<String, Value> intObj = expectObject(obj.get("integer"), "IntegerType");
+            if (intObj.containsKey("bigint")) return new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Bigint());
+            if (intObj.containsKey("int8")) return new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int8());
+            if (intObj.containsKey("int16")) return new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int16());
+            if (intObj.containsKey("int32")) return new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32());
+            if (intObj.containsKey("int64")) return new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int64());
+            if (intObj.containsKey("uint8")) return new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Uint8());
+            if (intObj.containsKey("uint16")) return new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Uint16());
+            if (intObj.containsKey("uint32")) return new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Uint32());
+            if (intObj.containsKey("uint64")) return new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Uint64());
+        }
+        if (obj.containsKey("float")) {
+            Map<String, Value> floatObj = expectObject(obj.get("float"), "FloatType");
+            if (floatObj.containsKey("bigfloat")) return new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Bigfloat());
+            if (floatObj.containsKey("float32")) return new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float32());
+            if (floatObj.containsKey("float64")) return new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float64());
+        }
+        // Fallback
+        return new hydra.core.LiteralType.String_();
     }
 
     /**

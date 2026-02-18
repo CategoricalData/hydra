@@ -6881,10 +6881,10 @@
                                     "lambda": {
                                       "body": {
                                         "application": {
-                                          "argument": {"literal": {"string": "..."}},
-                                          "function": {"variable": "hydra.serialization.cst"}}},
+                                          "argument": {"variable": "pn"},
+                                          "function": {"variable": "hydra.ext.python.serde.encodeTPrimaryAndName"}}},
                                       "domain": [{"variable": "hydra.ext.python.syntax.TPrimaryAndName"}],
-                                      "parameter": "_"}}}},
+                                      "parameter": "pn"}}}},
                               {
                                 "name": "slices",
                                 "term": {
@@ -6907,6 +6907,165 @@
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.ext.python.syntax.TargetWithStarAtom"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.python.serde.encodeTPrimaryAndName",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Serialize a TPrimaryAndName as primary.name"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "prim",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "pn"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {
+                                    "field": "primary",
+                                    "typeName": "hydra.ext.python.syntax.TPrimaryAndName"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ext.python.syntax.TPrimary"},
+                            "variables": []}]},
+                      {
+                        "name": "name_",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "pn"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {
+                                    "field": "name",
+                                    "typeName": "hydra.ext.python.syntax.TPrimaryAndName"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ext.python.syntax.Name"},
+                            "variables": []}]}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "application": {
+                                "argument": {"variable": "prim"},
+                                "function": {"variable": "hydra.ext.python.serde.encodeTPrimary"}}},
+                            {
+                              "application": {
+                                "argument": {"literal": {"string": "."}},
+                                "function": {"variable": "hydra.serialization.cst"}}},
+                            {
+                              "application": {
+                                "argument": {"variable": "name_"},
+                                "function": {"variable": "hydra.ext.python.serde.encodeName"}}}]},
+                        "function": {"variable": "hydra.serialization.noSep"}}}}},
+                "domain": [{"variable": "hydra.ext.python.syntax.TPrimaryAndName"}],
+                "parameter": "pn"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.python.syntax.TPrimaryAndName"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.python.serde.encodeTPrimary",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Serialize a target-side primary expression"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "tp"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "atom",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "a"},
+                                          "function": {"variable": "hydra.ext.python.serde.encodeAtom"}}},
+                                      "domain": [{"variable": "hydra.ext.python.syntax.Atom"}],
+                                      "parameter": "a"}}}},
+                              {
+                                "name": "primaryAndName",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"variable": "pn"},
+                                          "function": {"variable": "hydra.ext.python.serde.encodeTPrimaryAndName"}}},
+                                      "domain": [{"variable": "hydra.ext.python.syntax.TPrimaryAndName"}],
+                                      "parameter": "pn"}}}},
+                              {
+                                "name": "primaryAndSlices",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"literal": {"string": "..."}},
+                                          "function": {"variable": "hydra.serialization.cst"}}},
+                                      "domain": [{"variable": "hydra.ext.python.syntax.TPrimaryAndSlices"}],
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "primaryAndGenexp",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"literal": {"string": "..."}},
+                                          "function": {"variable": "hydra.serialization.cst"}}},
+                                      "domain": [{"variable": "hydra.ext.python.syntax.TPrimaryAndGenexp"}],
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "primaryAndArguments",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {"literal": {"string": "..."}},
+                                          "function": {"variable": "hydra.serialization.cst"}}},
+                                      "domain": [{"variable": "hydra.ext.python.syntax.TPrimaryAndArguments"}],
+                                      "parameter": "_"}}}}],
+                            "default": null,
+                            "typeName": "hydra.ext.python.syntax.TPrimary"}}}}}},
+                "domain": [{"variable": "hydra.ext.python.syntax.TPrimary"}],
+                "parameter": "tp"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.python.syntax.TPrimary"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.python.serde.encodeTuple",

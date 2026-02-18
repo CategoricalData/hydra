@@ -589,12 +589,13 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     (var "hoistPoly" @@ var "graphi1")
     (var "graphi1") $
 
-  -- Step 4.5: Always re-infer after hoisting.
-  -- hoistPolymorphicLetBindings creates new top-level bindings with bindingType=Nothing
-  -- and wrapper lambdas with lambdaDomain=Nothing. Re-inference assigns types to these.
-  -- Even when top-level bindings have types, inner let bindings created as cache entries
-  -- by hoisting may lack types.
-  "graphi2" <<~ Inference.inferGraphTypes @@ var "graphh" $
+  -- Step 4.5: Re-infer types after hoisting, but only if hoisting actually occurred.
+  -- Hoisting strips type application wrappers from terms (via detypeTerm), which means
+  -- typeOf cannot reconstruct types from the raw terms. Inference repairs this.
+  -- When hoisting is disabled (e.g. for Haskell), this step is skipped entirely.
+  "graphi2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
+    (Inference.inferGraphTypes @@ var "graphh")
+    (produce $ var "graphh") $
 
   -- Step 5: Adapt the graph (includes eta expansion if enabled).
   -- Adaptation preserves type application/lambda wrappers and adapts embedded types
@@ -609,14 +610,15 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       (Core.bindingType $ var "b"))
     (Graph.graphElements $ var "g"))) $
   "graph1" <~ var "normalizeGraph" @@ var "graph1raw" $
-  -- Step 6: Post-adaptation inference, only if adaptation removed types.
-  -- When input bindings have types, adaptDataGraph preserves them (via adaptTypeScheme),
-  -- so this step is skipped.
-  "allHaveTypesAfterAdapt" <~ Logic.ands (Lists.map ("b" ~> Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graph1")) $
-  "graph2raw" <<~ Logic.ifElse (var "allHaveTypesAfterAdapt")
-    (produce $ var "graph1")
-    (Inference.inferGraphTypes @@ var "graph1") $
-  "graph2" <~ var "normalizeGraph" @@ var "graph2raw" $
+  -- Step 6: Assert types are preserved after adaptation.
+  -- Adaptation should be type-preserving. If types are missing, fail rather than
+  -- silently re-inferring.
+  "untypedAfterAdapt" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
+    (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graph1")) $
+  "graph2" <<~ Logic.ifElse (Lists.null $ var "untypedAfterAdapt")
+    (produce $ var "normalizeGraph" @@ var "graph1")
+    (Flows.fail $ Strings.concat [string "Adaptation removed types from bindings: ",
+      Strings.intercalate (string ", ") (var "untypedAfterAdapt")]) $
 
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>
