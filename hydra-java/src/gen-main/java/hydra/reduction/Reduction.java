@@ -375,30 +375,41 @@ public interface Reduction {
             return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
               java.util.List<hydra.util.Maybe<hydra.core.Type>> domains = ((domainTypes.get()).apply(needed)).apply(remainingType);
               return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
-                hydra.util.Lazy<hydra.core.Term> fullyApplied = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                  (java.util.function.Function<hydra.core.Term, java.util.function.Function<Integer, hydra.core.Term>>) (body -> (java.util.function.Function<Integer, hydra.core.Term>) (i -> {
-                    hydra.core.Name vn = new hydra.core.Name(hydra.lib.strings.Cat2.apply(
-                      "v",
-                      hydra.lib.literals.ShowInt32.apply(i)));
-                    return new hydra.core.Term.Application(new hydra.core.Application(body, new hydra.core.Term.Variable(vn)));
-                  })),
-                  applied.get(),
-                  indices));
+                hydra.util.Maybe<hydra.core.Type> codomainType = ((peelFunctionDomains.get()).apply(remainingType)).apply(needed);
                 return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
-                  hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<Integer, hydra.util.Maybe<hydra.core.Type>>>> indexedDomains = new hydra.util.Lazy<>(() -> hydra.lib.lists.Zip.apply(
-                    indices,
-                    domains));
-                  return hydra.lib.lists.Foldl.apply(
-                    (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>) (idPair -> {
-                      hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> dom = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(idPair));
-                      hydra.util.Lazy<Integer> i = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(idPair));
+                  hydra.util.Lazy<hydra.core.Term> fullyAppliedRaw = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                    (java.util.function.Function<hydra.core.Term, java.util.function.Function<Integer, hydra.core.Term>>) (body -> (java.util.function.Function<Integer, hydra.core.Term>) (i -> {
                       hydra.core.Name vn = new hydra.core.Name(hydra.lib.strings.Cat2.apply(
                         "v",
-                        hydra.lib.literals.ShowInt32.apply(i.get())));
-                      return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(vn, dom.get(), body)));
+                        hydra.lib.literals.ShowInt32.apply(i)));
+                      return new hydra.core.Term.Application(new hydra.core.Application(body, new hydra.core.Term.Variable(vn)));
                     })),
-                    fullyApplied.get(),
-                    hydra.lib.lists.Reverse.apply(indexedDomains.get()));
+                    applied.get(),
+                    indices));
+                  return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
+                    hydra.util.Lazy<hydra.core.Term> fullyApplied = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
+                      fullyAppliedRaw.get(),
+                      (java.util.function.Function<hydra.core.Type, hydra.core.Term>) (ct -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(fullyAppliedRaw.get(), hydra.lib.maps.Singleton.apply(
+                        new hydra.core.Name("type"),
+                        hydra.encode.core.Core.type(ct))))),
+                      codomainType));
+                    return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
+                      hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<Integer, hydra.util.Maybe<hydra.core.Type>>>> indexedDomains = new hydra.util.Lazy<>(() -> hydra.lib.lists.Zip.apply(
+                        indices,
+                        domains));
+                      return hydra.lib.lists.Foldl.apply(
+                        (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>) (idPair -> {
+                          hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> dom = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(idPair));
+                          hydra.util.Lazy<Integer> i = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(idPair));
+                          hydra.core.Name vn = new hydra.core.Name(hydra.lib.strings.Cat2.apply(
+                            "v",
+                            hydra.lib.literals.ShowInt32.apply(i.get())));
+                          return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(vn, dom.get(), body)));
+                        })),
+                        fullyApplied.get(),
+                        hydra.lib.lists.Reverse.apply(indexedDomains.get()));
+                    })).get();
+                  })).get();
                 })).get();
               })).get();
             })).get();
@@ -890,7 +901,7 @@ public interface Reduction {
       (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Type, hydra.core.Term>>) (e -> (java.util.function.Function<hydra.core.Type, hydra.core.Term>) (t -> new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(e, t)))),
       term2,
       typeArgs));
-    java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>> recurseOrForce = (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>) (v1 -> hydra.reduction.Reduction.etaExpandTypedTerm_recurseOrForce(
+    java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>> recurseOrForce = (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>) (v1 -> hydra.reduction.Reduction.<T1>etaExpandTypedTerm_recurseOrForce(
       hydra_arity_typeArity2,
       padn,
       forced,
@@ -931,7 +942,7 @@ public interface Reduction {
               tx,
               lhs),
             (java.util.function.Function<Integer, hydra.compute.Flow<T1, hydra.core.Term>>) (lhsarity -> hydra.lib.flows.Bind.apply(
-              hydra.reduction.Reduction.etaExpandTypedTerm_rewriteSpine(
+              hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewriteSpine(
                 hydra_arity_typeArity2,
                 hydra_arity_typeSchemeArity2,
                 hydra_schemas_extendTypeContextForLambda2,
@@ -963,14 +974,14 @@ public interface Reduction {
           
           @Override
           public hydra.compute.Flow<T1, hydra.core.Term> visit(hydra.core.Function.Elimination elm) {
-            return hydra.reduction.Reduction.etaExpandTypedTerm_forElimination(
-              (java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<T72364, hydra.core.Term>>) (v1 -> hydra.reduction.Reduction.etaExpandTypedTerm_forCaseStatement(
+            return hydra.reduction.Reduction.<T1>etaExpandTypedTerm_forElimination(
+              (java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<T1, hydra.core.Term>>) (v1 -> hydra.reduction.Reduction.<T1>etaExpandTypedTerm_forCaseStatement(
                 hydra_arity_typeArity2,
                 hydra_arity_typeSchemeArity2,
                 hydra_schemas_extendTypeContextForLambda2,
                 hydra_schemas_extendTypeContextForLet2,
                 hydra_schemas_extendTypeContextForTypeLambda2,
-                (java.util.function.Function<hydra.core.Field, hydra.compute.Flow<T72369, hydra.core.Field>>) (v12 -> hydra.reduction.Reduction.etaExpandTypedTerm_forCase(
+                (java.util.function.Function<hydra.core.Field, hydra.compute.Flow<T1, hydra.core.Field>>) (v12 -> hydra.reduction.Reduction.<T1>etaExpandTypedTerm_forCase(
                   hydra_arity_typeArity2,
                   hydra_arity_typeSchemeArity2,
                   hydra_schemas_extendTypeContextForLambda2,
@@ -1055,7 +1066,7 @@ public interface Reduction {
       @Override
       public hydra.compute.Flow<T1, hydra.core.Term> visit(hydra.core.Term.Annotated at) {
         return hydra.lib.flows.Bind.apply(
-          hydra.reduction.Reduction.etaExpandTypedTerm_rewriteSpine(
+          hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewriteSpine(
             hydra_arity_typeArity2,
             hydra_arity_typeSchemeArity2,
             hydra_schemas_extendTypeContextForLambda2,
@@ -1077,7 +1088,7 @@ public interface Reduction {
           () -> java.util.List.of(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
           () -> (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of())));
         return hydra.lib.flows.Bind.apply(
-          hydra.reduction.Reduction.etaExpandTypedTerm_rewriteSpine(
+          hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewriteSpine(
             hydra_arity_typeArity2,
             hydra_arity_typeSchemeArity2,
             hydra_schemas_extendTypeContextForLambda2,
@@ -1105,7 +1116,7 @@ public interface Reduction {
       @Override
       public hydra.compute.Flow<T1, hydra.core.Term> visit(hydra.core.Term.TypeApplication tat) {
         return hydra.lib.flows.Bind.apply(
-          hydra.reduction.Reduction.etaExpandTypedTerm_rewriteSpine(
+          hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewriteSpine(
             hydra_arity_typeArity2,
             hydra_arity_typeSchemeArity2,
             hydra_schemas_extendTypeContextForLambda2,
@@ -1146,7 +1157,7 @@ public interface Reduction {
       
       @Override
       public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.Function f) {
-        return hydra.reduction.Reduction.etaExpandTypedTerm_forFunction(
+        return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_forFunction(
           hydra_arity_typeArity2,
           hydra_schemas_extendTypeContextForLet2,
           hydra_schemas_extendTypeContextForTypeLambda2,
@@ -1282,7 +1293,7 @@ public interface Reduction {
     return hydra.lib.flows.Bind.apply(
       hydra.lib.flows.Map.apply(
         unwind,
-        hydra.reduction.Reduction.etaExpandTypedTerm_checkBase(
+        hydra.reduction.Reduction.<T1>etaExpandTypedTerm_checkBase(
           forCaseStatement,
           recurse,
           term,

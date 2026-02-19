@@ -13,7 +13,7 @@ public interface Schemas {
     return (hydra.module.Namespaces<T0>) (new hydra.module.Namespaces<T0>(((java.util.function.Function<hydra.module.Namespaces<T0>, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>>) (projected -> projected.focus)).apply(ns0), hydra.lib.maps.Union.apply(
       ((java.util.function.Function<hydra.module.Namespaces<T0>, java.util.Map<hydra.module.Namespace, T0>>) (projected -> projected.mapping)).apply(ns0),
       hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.module.Namespace, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>>) (v1 -> hydra.schemas.Schemas.addNamesToNamespaces_toPair(
+        (java.util.function.Function<hydra.module.Namespace, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>>) (v1 -> hydra.schemas.Schemas.<T0>addNamesToNamespaces_toPair(
           encodeNamespace,
           v1)),
         hydra.lib.sets.ToList.apply(nss.get()))))));
@@ -755,7 +755,7 @@ public interface Schemas {
     hydra.util.Lazy<java.util.Set<hydra.module.Namespace>> nss = new hydra.util.Lazy<>(() -> hydra.lib.sets.Delete.apply(
       focusNs,
       hydra.schemas.Schemas.definitionDependencyNamespaces(defs)));
-    java.util.function.Function<hydra.module.Namespace, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>> toPair = (java.util.function.Function<hydra.module.Namespace, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>>) (v1 -> hydra.schemas.Schemas.namespacesForDefinitions_toPair(
+    java.util.function.Function<hydra.module.Namespace, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>> toPair = (java.util.function.Function<hydra.module.Namespace, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>>) (v1 -> hydra.schemas.Schemas.<T0>namespacesForDefinitions_toPair(
       encodeNamespace,
       v1));
     return (hydra.module.Namespaces<T0>) (new hydra.module.Namespaces<T0>((toPair).apply(focusNs), hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(

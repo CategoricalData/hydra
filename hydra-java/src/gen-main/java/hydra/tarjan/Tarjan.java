@@ -7,19 +7,19 @@ package hydra.tarjan;
  */
 public interface Tarjan {
   static <T0> hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>> adjacencyListsToGraph(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> edges0) {
-    java.util.List<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>> indexedEdges = hydra.tarjan.Tarjan.adjacencyListsToGraph_indexedEdges(hydra.tarjan.Tarjan.adjacencyListsToGraph_sortedEdges(edges0));
+    hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>>> indexedEdges = new hydra.util.Lazy<>(() -> hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_indexedEdges(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_sortedEdges(edges0)));
     hydra.util.Lazy<java.util.Map<Integer, java.util.List<Integer>>> graph = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>, hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>>) (vkNeighbors -> {
         hydra.util.Lazy<Integer> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(vkNeighbors));
         return (hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>) ((hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>) (new hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>(v.get(), hydra.lib.maybes.MapMaybe.apply(
           (java.util.function.Function<T0, hydra.util.Maybe<Integer>>) (k -> hydra.lib.maps.Lookup.apply(
             k,
-            hydra.tarjan.Tarjan.adjacencyListsToGraph_keyToVertex(indexedEdges))),
-          hydra.tarjan.Tarjan.adjacencyListsToGraph_neighbors(hydra.tarjan.Tarjan.adjacencyListsToGraph_kNeighbors(vkNeighbors))))));
+            hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_keyToVertex(indexedEdges.get()))),
+          hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_neighbors(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_kNeighbors(vkNeighbors))))));
       }),
-      indexedEdges)));
-    return (hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>) ((hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>) (new hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>(graph.get(), (java.util.function.Function<Integer, T80147>) (v1 -> hydra.tarjan.Tarjan.adjacencyListsToGraph_vertexToKey(
-      hydra.tarjan.Tarjan.adjacencyListsToGraph_vertexMap(indexedEdges),
+      indexedEdges.get())));
+    return (hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>) ((hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>) (new hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>(graph.get(), (java.util.function.Function<Integer, T0>) (v1 -> hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_vertexToKey(
+      hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_vertexMap(indexedEdges.get()),
       v1)))));
   }
   
@@ -41,7 +41,7 @@ public interface Tarjan {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>, hydra.util.Tuple.Tuple2<T0, Integer>>) (vkNeighbors -> {
         hydra.util.Lazy<Integer> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(vkNeighbors));
-        return (hydra.util.Tuple.Tuple2<T0, Integer>) ((hydra.util.Tuple.Tuple2<T0, Integer>) (new hydra.util.Tuple.Tuple2<T0, Integer>(hydra.tarjan.Tarjan.adjacencyListsToGraph_k2(hydra.tarjan.Tarjan.adjacencyListsToGraph_kNeighbors3(vkNeighbors)), v.get())));
+        return (hydra.util.Tuple.Tuple2<T0, Integer>) ((hydra.util.Tuple.Tuple2<T0, Integer>) (new hydra.util.Tuple.Tuple2<T0, Integer>(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_k2(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_kNeighbors3(vkNeighbors)), v.get())));
       }),
       indexedEdges));
   }
@@ -50,7 +50,7 @@ public interface Tarjan {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>, hydra.util.Tuple.Tuple2<Integer, T0>>) (vkNeighbors -> {
         hydra.util.Lazy<Integer> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(vkNeighbors));
-        return (hydra.util.Tuple.Tuple2<Integer, T0>) ((hydra.util.Tuple.Tuple2<Integer, T0>) (new hydra.util.Tuple.Tuple2<Integer, T0>(v.get(), hydra.tarjan.Tarjan.adjacencyListsToGraph_k(hydra.tarjan.Tarjan.adjacencyListsToGraph_kNeighbors2(vkNeighbors)))));
+        return (hydra.util.Tuple.Tuple2<Integer, T0>) ((hydra.util.Tuple.Tuple2<Integer, T0>) (new hydra.util.Tuple.Tuple2<Integer, T0>(v.get(), hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_k(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_kNeighbors2(vkNeighbors)))));
       }),
       indexedEdges));
   }

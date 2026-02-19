@@ -305,11 +305,18 @@ etaExpandTermNew = define "etaExpandTermNew" $
        "remainingType" <~ var "peelFunctionDomains" @@ var "headTyp" @@ var "numArgs" $
        "domains" <~ var "domainTypes" @@ var "needed" @@ var "remainingType" $
        -- Step 1: Build fully applied term: applied v1 v2 ... vn
-       "fullyApplied" <~ Lists.foldl
+       -- Also compute the codomain type (type of fullyApplied) for annotation
+       "codomainType" <~ var "peelFunctionDomains" @@ var "remainingType" @@ var "needed" $
+       "fullyAppliedRaw" <~ Lists.foldl
          ("body" ~> "i" ~>
            "vn" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
            Core.termApplication $ Core.application (var "body") (Core.termVariable $ var "vn"))
          (var "applied") (var "indices") $
+       -- Annotate fullyApplied with its codomain type so downstream coders can determine the return type
+       "fullyApplied" <~ Maybes.maybe (var "fullyAppliedRaw")
+         ("ct" ~> Core.termAnnotated $ Core.annotatedTerm (var "fullyAppliedRaw")
+           (Maps.singleton (Core.name (string "type")) (Phantoms.encoderFor _Type @@ var "ct")))
+         (var "codomainType") $
        -- Step 2: Wrap with lambdas from inside out by reversing indices: \v1 -> \v2 -> ... -> fullyApplied
        -- Using foldl with reversed indices+domains gives us: for [2,1], wrap v2 first (innermost), then v1 (outermost)
        -- Zip indices with domains to pair each lambda with its domain type

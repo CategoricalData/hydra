@@ -2189,7 +2189,9 @@ tryInferFunctionType = def "tryInferFunctionType" $
               Maybes.bind
                 (Maps.lookup (Constants.key_type) (Core.annotatedTermAnnotation (var "at")))
                 (lambda "typeTerm" $
-                  decodeTypeFromTerm @@ var "typeTerm")]) $
+                  decodeTypeFromTerm @@ var "typeTerm"),
+            _Term_function>>: lambda "innerFun" $
+              tryInferFunctionType @@ var "innerFun"]) $
           Maybes.map (lambda "cod" $
             Core.typeFunction (Core.functionType (var "dom") (var "cod")))
             (var "mCod"))]

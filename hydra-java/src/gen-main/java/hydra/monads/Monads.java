@@ -7,7 +7,7 @@ package hydra.monads;
  */
 public interface Monads {
   static <T0, T1, T2> hydra.compute.Flow<T0, T2> bind(hydra.compute.Flow<T0, T1> l, java.util.function.Function<T1, hydra.compute.Flow<T0, T2>> r) {
-    return (hydra.compute.Flow<T0, T2>) ((hydra.compute.Flow<T0, T2>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T70848, T70850>>>) (v1 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T70848, T70850>>) (v2 -> hydra.monads.Monads.bind_q(
+    return (hydra.compute.Flow<T0, T2>) ((hydra.compute.Flow<T0, T2>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T2>>>) (v1 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T2>>) (v2 -> hydra.monads.Monads.<T0, T1, T2>bind_q(
       l,
       r,
       v1,
@@ -15,14 +15,14 @@ public interface Monads {
   }
   
   static <T0, T1, T2> hydra.compute.FlowState<T0, T2> bind_q(hydra.compute.Flow<T0, T1> l, java.util.function.Function<T1, hydra.compute.Flow<T0, T2>> r, T0 s0, hydra.compute.Trace t0) {
-    hydra.compute.FlowState<T0, T1> fs1 = hydra.monads.Monads.bind_fs1(
+    hydra.util.Lazy<hydra.compute.FlowState<T0, T1>> fs1 = new hydra.util.Lazy<>(() -> hydra.monads.Monads.<T0, T1>bind_fs1(
       l,
       s0,
-      t0);
+      t0));
     return hydra.lib.maybes.Maybe.apply(
-      (hydra.compute.FlowState<T0, T2>) ((hydra.compute.FlowState<T0, T2>) (new hydra.compute.FlowState<T0, T2>((hydra.util.Maybe<T2>) (hydra.util.Maybe.<T2>nothing()), ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) (projected -> projected.state))).apply(fs1), ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(fs1)))),
-      (java.util.function.Function<T1, hydra.compute.FlowState<T0, T2>>) (v -> ((((java.util.function.Function<hydra.compute.Flow<T0, T2>, java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T2>>>>) ((java.util.function.Function<hydra.compute.Flow<T0, T2>, java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T2>>>>) (wrapped -> (wrapped).value))).apply((r).apply(v))).apply(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) (projected -> projected.state))).apply(fs1))).apply(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(fs1))),
-      ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) (projected -> projected.value))).apply(fs1));
+      (hydra.compute.FlowState<T0, T2>) ((hydra.compute.FlowState<T0, T2>) (new hydra.compute.FlowState<T0, T2>((hydra.util.Maybe<T2>) (hydra.util.Maybe.<T2>nothing()), ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) (projected -> projected.state))).apply(fs1.get()), ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(fs1.get())))),
+      (java.util.function.Function<T1, hydra.compute.FlowState<T0, T2>>) (v -> ((((java.util.function.Function<hydra.compute.Flow<T0, T2>, java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T2>>>>) ((java.util.function.Function<hydra.compute.Flow<T0, T2>, java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T2>>>>) (wrapped -> (wrapped).value))).apply((r).apply(v))).apply(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) (projected -> projected.state))).apply(fs1.get()))).apply(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(fs1.get()))),
+      ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) (projected -> projected.value))).apply(fs1.get()));
   }
   
   static <T0, T1> hydra.compute.FlowState<T0, T1> bind_fs1(hydra.compute.Flow<T0, T1> l, T0 s0, hydra.compute.Trace t0) {
@@ -63,15 +63,15 @@ public interface Monads {
   
   static <T0> hydra.compute.Flow<T0, T0> getState() {
     return new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T0>>>) (s0 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T0>>) (t0 -> {
-      hydra.compute.FlowState<T0, java.lang.Void> fs1 = hydra.monads.Monads.getState_fs1(
+      hydra.util.Lazy<hydra.compute.FlowState<T0, java.lang.Void>> fs1 = new hydra.util.Lazy<>(() -> hydra.monads.Monads.<T0>getState_fs1(
         s0,
-        t0);
-      T0 s = hydra.monads.Monads.getState_s(fs1);
-      hydra.util.Lazy<hydra.compute.Trace> t = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.compute.Trace>) (projected -> projected.trace))).apply(fs1));
-      hydra.util.Lazy<hydra.util.Maybe<java.lang.Void>> v = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.util.Maybe<java.lang.Void>>) ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.util.Maybe<java.lang.Void>>) (projected -> projected.value))).apply(fs1));
+        t0));
+      hydra.util.Lazy<T0> s = new hydra.util.Lazy<>(() -> hydra.monads.Monads.<T0>getState_s(fs1.get()));
+      hydra.util.Lazy<hydra.compute.Trace> t = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.compute.Trace>) (projected -> projected.trace))).apply(fs1.get()));
+      hydra.util.Lazy<hydra.util.Maybe<java.lang.Void>> v = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.util.Maybe<java.lang.Void>>) ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.util.Maybe<java.lang.Void>>) (projected -> projected.value))).apply(fs1.get()));
       return hydra.lib.maybes.Maybe.apply(
-        (hydra.compute.FlowState<T0, T0>) ((hydra.compute.FlowState<T0, T0>) (new hydra.compute.FlowState<T0, T0>((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()), s, t.get()))),
-        (java.util.function.Function<java.lang.Void, hydra.compute.FlowState<T0, T0>>) (ignored -> (hydra.compute.FlowState<T0, T0>) ((hydra.compute.FlowState<T0, T0>) (new hydra.compute.FlowState<T0, T0>(hydra.util.Maybe.just(s), s, t.get())))),
+        (hydra.compute.FlowState<T0, T0>) ((hydra.compute.FlowState<T0, T0>) (new hydra.compute.FlowState<T0, T0>((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()), s.get(), t.get()))),
+        (java.util.function.Function<java.lang.Void, hydra.compute.FlowState<T0, T0>>) (ignored -> (hydra.compute.FlowState<T0, T0>) ((hydra.compute.FlowState<T0, T0>) (new hydra.compute.FlowState<T0, T0>(hydra.util.Maybe.just(s.get()), s.get(), t.get())))),
         v.get());
     })));
   }
@@ -86,13 +86,13 @@ public interface Monads {
   
   static <T0, T1, T2> hydra.compute.Flow<T2, T1> map(java.util.function.Function<T0, T1> f, hydra.compute.Flow<T2, T0> f1) {
     return (hydra.compute.Flow<T2, T1>) ((hydra.compute.Flow<T2, T1>) (new hydra.compute.Flow((java.util.function.Function<T2, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T2, T1>>>) (s0 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T2, T1>>) (t0 -> {
-      hydra.compute.FlowState<T2, T0> f2 = hydra.monads.Monads.map_f2(
+      hydra.util.Lazy<hydra.compute.FlowState<T2, T0>> f2 = new hydra.util.Lazy<>(() -> hydra.monads.Monads.<T0, T2>map_f2(
         f1,
         s0,
-        t0);
+        t0));
       return (hydra.compute.FlowState<T2, T1>) ((hydra.compute.FlowState<T2, T1>) (new hydra.compute.FlowState<T2, T1>(hydra.lib.maybes.Map.apply(
         f,
-        ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, hydra.util.Maybe<T0>>) ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, hydra.util.Maybe<T0>>) (projected -> projected.value))).apply(f2)), ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, T2>) ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, T2>) (projected -> projected.state))).apply(f2), ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f2))));
+        ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, hydra.util.Maybe<T0>>) ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, hydra.util.Maybe<T0>>) (projected -> projected.value))).apply(f2.get())), ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, T2>) ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, T2>) (projected -> projected.state))).apply(f2.get()), ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T2, T0>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f2.get()))));
     })))));
   }
   
@@ -107,7 +107,7 @@ public interface Monads {
   }
   
   static <T0, T1> hydra.compute.Flow<T0, T1> mutateTrace(java.util.function.Function<hydra.compute.Trace, hydra.util.Either<String, hydra.compute.Trace>> mutate, java.util.function.Function<hydra.compute.Trace, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>> restore, hydra.compute.Flow<T0, T1> f) {
-    return (hydra.compute.Flow<T0, T1>) ((hydra.compute.Flow<T0, T1>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T71159, T71160>>>) (v1 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T71159, T71160>>) (v2 -> hydra.monads.Monads.mutateTrace_flowFun(
+    return (hydra.compute.Flow<T0, T1>) ((hydra.compute.Flow<T0, T1>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T1>>>) (v1 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T1>>) (v2 -> hydra.monads.Monads.<T0, T1>mutateTrace_flowFun(
       f,
       (java.util.function.Function<String, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>>) (p0 -> p1 -> hydra.monads.Monads.pushError(
         p0,
@@ -127,12 +127,12 @@ public interface Monads {
   
   static <T0, T1> hydra.compute.FlowState<T0, T1> mutateTrace_flowFun(hydra.compute.Flow<T0, T1> f, java.util.function.Function<String, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>> hydra_monads_pushError2, java.util.function.Function<hydra.compute.Trace, hydra.util.Either<String, hydra.compute.Trace>> mutate, java.util.function.Function<hydra.compute.Trace, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>> restore, T0 s0, hydra.compute.Trace t0) {
     return hydra.monads.Monads.mutateTrace_choose(
-      (java.util.function.Function<String, hydra.compute.FlowState<T0, T1>>) (v1 -> hydra.monads.Monads.<T1>mutateTrace_forLeft(
+      (java.util.function.Function<String, hydra.compute.FlowState<T0, T1>>) (v1 -> hydra.monads.Monads.<T0, T1>mutateTrace_forLeft(
         hydra_monads_pushError2,
         s0,
         t0,
         v1)),
-      (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T1>>) (v1 -> hydra.monads.Monads.mutateTrace_forRight(
+      (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, T1>>) (v1 -> hydra.monads.Monads.<T0, T1>mutateTrace_forRight(
         f,
         restore,
         s0,
@@ -146,11 +146,11 @@ public interface Monads {
   }
   
   static <T0, T1> hydra.compute.FlowState<T0, T1> mutateTrace_forRight(hydra.compute.Flow<T0, T1> f, java.util.function.Function<hydra.compute.Trace, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>> restore, T0 s0, hydra.compute.Trace t0, hydra.compute.Trace t1) {
-    hydra.compute.FlowState<T0, T1> f2 = hydra.monads.Monads.mutateTrace_f2(
+    hydra.util.Lazy<hydra.compute.FlowState<T0, T1>> f2 = new hydra.util.Lazy<>(() -> hydra.monads.Monads.<T0, T1>mutateTrace_f2(
       f,
       s0,
-      t1);
-    return (hydra.compute.FlowState<T0, T1>) ((hydra.compute.FlowState<T0, T1>) (new hydra.compute.FlowState<T0, T1>(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) (projected -> projected.value))).apply(f2), ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) (projected -> projected.state))).apply(f2), ((restore).apply(t0)).apply(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f2)))));
+      t1));
+    return (hydra.compute.FlowState<T0, T1>) ((hydra.compute.FlowState<T0, T1>) (new hydra.compute.FlowState<T0, T1>(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) (projected -> projected.value))).apply(f2.get()), ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) (projected -> projected.state))).apply(f2.get()), ((restore).apply(t0)).apply(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f2.get())))));
   }
   
   static <T0, T1> hydra.compute.FlowState<T0, T1> mutateTrace_f2(hydra.compute.Flow<T0, T1> f, T0 s0, hydra.compute.Trace t1) {
@@ -203,10 +203,10 @@ public interface Monads {
   
   static <T0> hydra.compute.Flow<T0, java.lang.Void> putState(T0 cx) {
     return (hydra.compute.Flow<T0, java.lang.Void>) ((hydra.compute.Flow<T0, java.lang.Void>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, java.lang.Void>>>) (s0 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T0, java.lang.Void>>) (t0 -> {
-      hydra.compute.FlowState<T0, java.lang.Void> f1 = hydra.monads.Monads.putState_f1(
+      hydra.util.Lazy<hydra.compute.FlowState<T0, java.lang.Void>> f1 = new hydra.util.Lazy<>(() -> hydra.monads.Monads.<T0>putState_f1(
         s0,
-        t0);
-      return (hydra.compute.FlowState<T0, java.lang.Void>) ((hydra.compute.FlowState<T0, java.lang.Void>) (new hydra.compute.FlowState<T0, java.lang.Void>(((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.util.Maybe<java.lang.Void>>) ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.util.Maybe<java.lang.Void>>) (projected -> projected.value))).apply(f1), cx, ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f1))));
+        t0));
+      return (hydra.compute.FlowState<T0, java.lang.Void>) ((hydra.compute.FlowState<T0, java.lang.Void>) (new hydra.compute.FlowState<T0, java.lang.Void>(((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.util.Maybe<java.lang.Void>>) ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.util.Maybe<java.lang.Void>>) (projected -> projected.value))).apply(f1.get()), cx, ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, java.lang.Void>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f1.get()))));
     })))));
   }
   
@@ -255,11 +255,11 @@ public interface Monads {
           "Warning: ",
           msg),
         (t).messages), (t).other));
-      hydra.compute.FlowState<T0, T1> f1 = hydra.monads.Monads.warn_f1(
+      hydra.util.Lazy<hydra.compute.FlowState<T0, T1>> f1 = new hydra.util.Lazy<>(() -> hydra.monads.Monads.<T0, T1>warn_f1(
         b,
         s0,
-        t0);
-      return (hydra.compute.FlowState<T0, T1>) ((hydra.compute.FlowState<T0, T1>) (new hydra.compute.FlowState<T0, T1>(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) (projected -> projected.value))).apply(f1), ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) (projected -> projected.state))).apply(f1), (addMessage).apply(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f1)))));
+        t0));
+      return (hydra.compute.FlowState<T0, T1>) ((hydra.compute.FlowState<T0, T1>) (new hydra.compute.FlowState<T0, T1>(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) (projected -> projected.value))).apply(f1.get()), ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, T0>) (projected -> projected.state))).apply(f1.get()), (addMessage).apply(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f1.get())))));
     })))));
   }
   
@@ -292,11 +292,11 @@ public interface Monads {
   
   static <T0, T1, T2> hydra.compute.Flow<T2, T1> withState(T0 cx0, hydra.compute.Flow<T0, T1> f) {
     return (hydra.compute.Flow<T2, T1>) ((hydra.compute.Flow<T2, T1>) (new hydra.compute.Flow((java.util.function.Function<T2, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T2, T1>>>) (cx1 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T2, T1>>) (t1 -> {
-      hydra.compute.FlowState<T0, T1> f1 = hydra.monads.Monads.withState_f1(
+      hydra.util.Lazy<hydra.compute.FlowState<T0, T1>> f1 = new hydra.util.Lazy<>(() -> hydra.monads.Monads.<T0, T1>withState_f1(
         cx0,
         f,
-        t1);
-      return (hydra.compute.FlowState<T2, T1>) ((hydra.compute.FlowState<T2, T1>) (new hydra.compute.FlowState<T2, T1>(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) (projected -> projected.value))).apply(f1), cx1, ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f1))));
+        t1));
+      return (hydra.compute.FlowState<T2, T1>) ((hydra.compute.FlowState<T2, T1>) (new hydra.compute.FlowState<T2, T1>(((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.util.Maybe<T1>>) (projected -> projected.value))).apply(f1.get()), cx1, ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) ((java.util.function.Function<hydra.compute.FlowState<T0, T1>, hydra.compute.Trace>) (projected -> projected.trace))).apply(f1.get()))));
     })))));
   }
   

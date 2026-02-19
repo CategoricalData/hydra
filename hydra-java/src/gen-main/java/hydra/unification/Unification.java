@@ -364,7 +364,7 @@ public interface Unification {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(constraints),
       () -> hydra.lib.flows.Pure.apply(hydra.substitution.Substitution.idTypeSubst()),
-      () -> hydra.unification.Unification.unifyTypeConstraints_withConstraint(
+      () -> hydra.unification.Unification.<T0, T1>unifyTypeConstraints_withConstraint(
         hydra.rewriting.Rewriting::deannotateType,
         hydra.show.core.Core::type,
         (java.util.function.Function<hydra.typing.TypeSubst, java.util.function.Function<hydra.typing.TypeSubst, hydra.typing.TypeSubst>>) (p0 -> p1 -> hydra.substitution.Substitution.composeTypeSubst(
@@ -385,7 +385,7 @@ public interface Unification {
   }
   
   static <T0, T1> hydra.compute.Flow<T1, hydra.typing.TypeSubst> unifyTypeConstraints_withConstraint(java.util.function.Function<hydra.core.Type, hydra.core.Type> hydra_rewriting_deannotateType2, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, java.util.function.Function<hydra.typing.TypeSubst, java.util.function.Function<hydra.typing.TypeSubst, hydra.typing.TypeSubst>> hydra_substitution_composeTypeSubst2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.typing.TypeSubst>> hydra_substitution_singletonTypeSubst2, java.util.function.Function<hydra.typing.TypeSubst, java.util.function.Function<java.util.List<hydra.typing.TypeConstraint>, java.util.List<hydra.typing.TypeConstraint>>> hydra_substitution_substituteInConstraints2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, Boolean>> hydra_unification_variableOccursInType2, java.util.Map<hydra.core.Name, T0> schemaTypes, hydra.typing.TypeConstraint c, java.util.List<hydra.typing.TypeConstraint> rest) {
-    java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>> bind = (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>) (v2 -> hydra.unification.Unification.unifyTypeConstraints_bind(
+    java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>> bind = (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>) (v2 -> hydra.unification.Unification.<T0, T1>unifyTypeConstraints_bind(
       hydra_substitution_composeTypeSubst2,
       hydra_substitution_singletonTypeSubst2,
       hydra_substitution_substituteInConstraints2,
@@ -396,7 +396,7 @@ public interface Unification {
     String comment = (c).comment;
     hydra.core.Type sleft = (hydra_rewriting_deannotateType2).apply((c).left);
     hydra.core.Type sright = (hydra_rewriting_deannotateType2).apply((c).right);
-    java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>> tryBinding = (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>) (v2 -> hydra.unification.Unification.unifyTypeConstraints_tryBinding(
+    java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>> tryBinding = (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>) (v2 -> hydra.unification.Unification.<T1>unifyTypeConstraints_tryBinding(
       bind,
       comment,
       hydra_show_core_type2,
@@ -406,8 +406,8 @@ public interface Unification {
     return (sleft).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.compute.Flow<T1, hydra.typing.TypeSubst> otherwise(hydra.core.Type instance) {
-        return hydra.unification.Unification.unifyTypeConstraints_dflt(
-          hydra.unification.Unification.unifyTypeConstraints_noVars(
+        return hydra.unification.Unification.<T1>unifyTypeConstraints_dflt(
+          hydra.unification.Unification.<T0, T1>unifyTypeConstraints_noVars(
             comment,
             rest,
             schemaTypes,
@@ -499,7 +499,7 @@ public interface Unification {
         sleft,
         sright,
         comment),
-      (java.util.function.Function<java.util.List<hydra.typing.TypeConstraint>, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>) (v1 -> hydra.unification.Unification.unifyTypeConstraints_withConstraints(
+      (java.util.function.Function<java.util.List<hydra.typing.TypeConstraint>, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>) (v1 -> hydra.unification.Unification.<T0, T1>unifyTypeConstraints_withConstraints(
         rest,
         schemaTypes,
         v1)));

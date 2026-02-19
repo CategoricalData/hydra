@@ -160,7 +160,7 @@ public interface Simple {
         constraints,
         litmap,
         typ.get()),
-      (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T3, hydra.util.Tuple.Tuple2<T2, hydra.core.Type>>>) (typ1 -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<T2, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<T2, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<T2, hydra.core.Type>(hydra.adapt.simple.Simple.adaptGraphSchema_name(pair), typ1))))));
+      (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T3, hydra.util.Tuple.Tuple2<T2, hydra.core.Type>>>) (typ1 -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<T2, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<T2, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<T2, hydra.core.Type>(hydra.adapt.simple.Simple.<T2>adaptGraphSchema_name(pair), typ1))))));
   }
   
   static <T2> T2 adaptGraphSchema_name(hydra.util.Tuple.Tuple2<T2, hydra.core.Type> pair) {

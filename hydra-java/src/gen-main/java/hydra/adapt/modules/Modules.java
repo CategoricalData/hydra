@@ -10,7 +10,7 @@ public interface Modules {
     return (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.compute.Flow<hydra.graph.Graph, T0> otherwise(hydra.core.Type instance) {
-        return hydra.adapt.modules.Modules.adaptTypeToLanguageAndEncode_dflt(
+        return hydra.adapt.modules.Modules.<T0>adaptTypeToLanguageAndEncode_dflt(
           enc,
           lang,
           typ);
@@ -177,7 +177,7 @@ public interface Modules {
       hydra.lib.strings.Cat2.apply(
         "transform module ",
         ((mod).namespace).value),
-      hydra.adapt.modules.Modules.transformModule_transform(
+      hydra.adapt.modules.Modules.<T0, T1, T2, T3>transformModule_transform(
         createModule,
         els,
         encodeTerm,
@@ -201,7 +201,7 @@ public interface Modules {
               encodeTerm,
               v1)),
             types.get()),
-          (java.util.function.Function<java.util.List<hydra.compute.Coder<T0, T2, hydra.core.Term, T1>>, hydra.compute.Flow<hydra.graph.Graph, T3>>) (cdrs -> (((createModule).apply(mod)).apply(hydra.adapt.modules.Modules.transformModule_coders(
+          (java.util.function.Function<java.util.List<hydra.compute.Coder<T0, T2, hydra.core.Term, T1>>, hydra.compute.Flow<hydra.graph.Graph, T3>>) (cdrs -> (((createModule).apply(mod)).apply(hydra.adapt.modules.Modules.<T0, T1, T2>transformModule_coders(
             cdrs,
             types.get()))).apply(hydra.lib.lists.Zip.apply(
             els,

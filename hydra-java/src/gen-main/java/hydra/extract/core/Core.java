@@ -273,7 +273,7 @@ public interface Core {
   static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, hydra.util.Either<T0, T1>> eitherTerm(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> leftFun, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T1>> rightFun, hydra.core.Term term0) {
     return hydra.lib.flows.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(term0),
-      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Either<T0, T1>>>) (term -> hydra.extract.core.Core.eitherTerm_extract(
+      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Either<T0, T1>>>) (term -> hydra.extract.core.Core.<T0, T1>eitherTerm_extract(
         hydra.show.core.Core::term,
         leftFun,
         rightFun,
@@ -666,9 +666,9 @@ public interface Core {
   static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>> map(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> fk, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T1>> fv, hydra.core.Term term0) {
     return hydra.lib.flows.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(term0),
-      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>>>) (term -> hydra.extract.core.Core.map_extract(
+      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>>>) (term -> hydra.extract.core.Core.<T0, T1>map_extract(
         hydra.show.core.Core::term,
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T66720, T66721>>>) (v1 -> hydra.extract.core.Core.map_pair(
+        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>>>) (v1 -> hydra.extract.core.Core.<T0, T1>map_pair(
           fk,
           fv,
           v1)),
@@ -739,7 +739,7 @@ public interface Core {
   static <T0> hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<T0>> maybeTerm(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> f, hydra.core.Term term0) {
     return hydra.lib.flows.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(term0),
-      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<T0>>>) (term -> hydra.extract.core.Core.maybeTerm_extract(
+      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<T0>>>) (term -> hydra.extract.core.Core.<T0>maybeTerm_extract(
         f,
         hydra.show.core.Core::term,
         term)));
@@ -786,7 +786,7 @@ public interface Core {
   static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>> pair(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> kf, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T1>> vf, hydra.core.Term term0) {
     return hydra.lib.flows.Bind.apply(
       hydra.lexical.Lexical.stripAndDereferenceTerm(term0),
-      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>>>) (term -> hydra.extract.core.Core.pair_extract(
+      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>>>) (term -> hydra.extract.core.Core.<T0, T1>pair_extract(
         hydra.show.core.Core::term,
         kf,
         vf,

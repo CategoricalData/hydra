@@ -7,7 +7,7 @@ package hydra.annotations;
  */
 public interface Annotations {
   static <T0, T1, T2, T3> java.util.Map<T2, T3> aggregateAnnotations(java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, java.util.function.Function<T1, java.util.Map<T2, T3>> getAnns, T0 t) {
-    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat.apply(hydra.annotations.Annotations.aggregateAnnotations_toPairs(
+    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat.apply(hydra.annotations.Annotations.<T0, T1, T2, T3>aggregateAnnotations_toPairs(
       getAnns,
       getValue,
       getX,
@@ -18,7 +18,7 @@ public interface Annotations {
   static <T0, T1, T2, T3> java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>> aggregateAnnotations_toPairs(java.util.function.Function<T1, java.util.Map<T2, T3>> getAnns, java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>> rest, T0 t) {
     return hydra.lib.maybes.Maybe.apply(
       rest,
-      (java.util.function.Function<T1, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>>>) (yy -> hydra.annotations.Annotations.aggregateAnnotations_toPairs(
+      (java.util.function.Function<T1, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>>>) (yy -> hydra.annotations.Annotations.<T0, T1, T2, T3>aggregateAnnotations_toPairs(
         getAnns,
         getValue,
         getX,

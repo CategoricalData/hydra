@@ -217,7 +217,7 @@ public interface Inference {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(pairs),
       () -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.typing.TypeSubst>>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.typing.TypeSubst>>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.typing.TypeSubst>>((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()), (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.typing.TypeSubst>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.typing.TypeSubst>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.typing.TypeSubst>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), hydra.substitution.Substitution.idTypeSubst()))))))),
-      () -> hydra.inference.Inference.inferMany_dflt(
+      () -> hydra.inference.Inference.<T0>inferMany_dflt(
         cx,
         (java.util.function.Function<hydra.typing.TypeSubst, java.util.function.Function<hydra.typing.TypeSubst, hydra.typing.TypeSubst>>) (p0 -> p1 -> hydra.substitution.Substitution.composeTypeSubst(
           p0,
@@ -956,7 +956,7 @@ public interface Inference {
       hydra.lib.lists.Reverse.apply(groups.get())));
     return hydra.lib.flows.Map.apply(
       rewriteResult,
-      hydra.inference.Inference.inferTypeOfLet_res(
+      hydra.inference.Inference.<T0>inferTypeOfLet_res(
         cx,
         rewrittenLet.get()));
   }
@@ -1208,7 +1208,7 @@ public interface Inference {
   static <T0> hydra.compute.Flow<T0, hydra.typing.InferenceResult> inferTypeOfTerm(hydra.typing.InferenceContext cx, hydra.core.Term term, String desc) {
     return hydra.monads.Monads.withTrace(
       desc,
-      hydra.inference.Inference.inferTypeOfTerm_matchTerm(
+      hydra.inference.Inference.<T0>inferTypeOfTerm_matchTerm(
         cx,
         hydra.inference.Inference.inferTypeOfUnit(),
         term));
@@ -1446,7 +1446,7 @@ public interface Inference {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(bins),
       () -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.util.Tuple.Tuple2<hydra.typing.TypeSubst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>>>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.util.Tuple.Tuple2<hydra.typing.TypeSubst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>>>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.util.Tuple.Tuple2<hydra.typing.TypeSubst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>>>((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()), (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.util.Tuple.Tuple2<hydra.typing.TypeSubst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.util.Tuple.Tuple2<hydra.typing.TypeSubst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.util.Tuple.Tuple2<hydra.typing.TypeSubst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), (hydra.util.Tuple.Tuple2<hydra.typing.TypeSubst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) ((hydra.util.Tuple.Tuple2<hydra.typing.TypeSubst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (new hydra.util.Tuple.Tuple2<hydra.typing.TypeSubst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>(hydra.substitution.Substitution.idTypeSubst(), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())))))))))))),
-      () -> hydra.inference.Inference.inferTypesOfTemporaryBindings_dflt(
+      () -> hydra.inference.Inference.<T0>inferTypesOfTemporaryBindings_dflt(
         bins,
         cx,
         (java.util.function.Function<hydra.typing.TypeSubst, java.util.function.Function<hydra.typing.TypeSubst, hydra.typing.TypeSubst>>) (p0 -> p1 -> hydra.substitution.Substitution.composeTypeSubst(
@@ -1579,11 +1579,11 @@ public interface Inference {
   static <T0> java.util.Map<T0, hydra.core.TypeVariableMetadata> mergeClassConstraints(java.util.Map<T0, hydra.core.TypeVariableMetadata> m1, java.util.Map<T0, hydra.core.TypeVariableMetadata> m2) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<java.util.Map<T0, hydra.core.TypeVariableMetadata>, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.core.TypeVariableMetadata>, java.util.Map<T0, hydra.core.TypeVariableMetadata>>>) (acc -> (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.core.TypeVariableMetadata>, java.util.Map<T0, hydra.core.TypeVariableMetadata>>) (pair -> {
-        T0 k = hydra.inference.Inference.mergeClassConstraints_k(pair);
+        hydra.util.Lazy<T0> k = new hydra.util.Lazy<>(() -> hydra.inference.Inference.<T0>mergeClassConstraints_k(pair));
         hydra.util.Lazy<hydra.core.TypeVariableMetadata> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
         return hydra.lib.maybes.Maybe.apply(
           hydra.lib.maps.Insert.apply(
-            k,
+            k.get(),
             v.get(),
             acc),
           (java.util.function.Function<hydra.core.TypeVariableMetadata, java.util.Map<T0, hydra.core.TypeVariableMetadata>>) (existing -> {
@@ -1591,12 +1591,12 @@ public interface Inference {
               (existing).classes,
               (v.get()).classes)));
             return hydra.lib.maps.Insert.apply(
-              k,
+              k.get(),
               merged.get(),
               acc);
           }),
           hydra.lib.maps.Lookup.apply(
-            k,
+            k.get(),
             acc));
       })),
       m1,

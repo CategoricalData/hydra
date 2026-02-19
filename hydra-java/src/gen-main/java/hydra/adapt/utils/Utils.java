@@ -17,11 +17,11 @@ public interface Utils {
       () -> hydra.lib.flows.Bind.apply(
         (alts).apply(typ),
         (java.util.function.Function<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>, hydra.compute.Flow<T1, hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>>) (raw -> {
-          java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>> candidates = hydra.adapt.utils.Utils.chooseAdapter_candidates(
+          hydra.util.Lazy<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>> candidates = new hydra.util.Lazy<>(() -> hydra.adapt.utils.Utils.<T0, T2, T3, T4>chooseAdapter_candidates(
             raw,
-            supported);
+            supported));
           return hydra.lib.logic.IfElse.lazy(
-            hydra.lib.lists.Null.apply(candidates),
+            hydra.lib.lists.Null.apply(candidates.get()),
             () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no adapters found for ",
               (describe).apply(typ),
@@ -40,7 +40,7 @@ public interface Utils {
                   ")"))),
               ". Original type: ",
               (show).apply(typ)))),
-            () -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Head.apply(candidates)));
+            () -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Head.apply(candidates.get())));
         })));
   }
   

@@ -219,9 +219,9 @@ public interface Lexical {
           hydra.lib.equality.Equal.apply(
             (((injection).value).typeName).value,
             (tname).value),
-          () -> hydra.lexical.Lexical.matchUnion_exp(
+          () -> hydra.lexical.Lexical.<T0>matchUnion_exp(
             (injection).value,
-            hydra.lexical.Lexical.matchUnion_mapping(pairs),
+            hydra.lexical.Lexical.<T0>matchUnion_mapping(pairs),
             tname),
           () -> hydra.monads.Monads.unexpected(
             hydra.lib.strings.Cat2.apply(

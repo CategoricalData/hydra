@@ -117,7 +117,7 @@ public interface Templates {
         return new hydra.core.Literal.String_("");
       }
     }));
-    java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Term>> inst = (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Term>>) (v1 -> hydra.templates.Templates.instantiateTemplate_inst(
+    java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Term>> inst = (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.core.Term>>) (v1 -> hydra.templates.Templates.<T0>instantiateTemplate_inst(
       minimal,
       schema,
       v1));
@@ -189,7 +189,7 @@ public interface Templates {
         hydra.core.Name tname = ((rt).value).typeName;
         return hydra.lib.flows.Bind.apply(
           hydra.lib.flows.MapList.apply(
-            (java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<T0, hydra.core.Field>>) (v1 -> hydra.templates.Templates.instantiateTemplate_toField(
+            (java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<T0, hydra.core.Field>>) (v1 -> hydra.templates.Templates.<T0>instantiateTemplate_toField(
               inst,
               v1)),
             fields),

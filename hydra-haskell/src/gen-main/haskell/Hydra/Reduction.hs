@@ -8,7 +8,8 @@ import qualified Hydra.Arity as Arity
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Extract.Core as Core_
+import qualified Hydra.Encode.Core as Core_
+import qualified Hydra.Extract.Core as Core__
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -208,23 +209,29 @@ etaExpandTermNew tx0 term0 =
                         in  
                           let domains = (domainTypes needed remainingType)
                           in  
-                            let fullyApplied = (Lists.foldl (\body -> \i ->  
-                                    let vn = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
-                                    in (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = body,
-                                      Core.applicationArgument = (Core.TermVariable vn)}))) applied indices)
+                            let codomainType = (peelFunctionDomains remainingType needed)
                             in  
-                              let indexedDomains = (Lists.zip indices domains)
-                              in (Lists.foldl (\body -> \idPair ->  
-                                let i = (Pairs.first idPair)
+                              let fullyAppliedRaw = (Lists.foldl (\body -> \i ->  
+                                      let vn = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
+                                      in (Core.TermApplication (Core.Application {
+                                        Core.applicationFunction = body,
+                                        Core.applicationArgument = (Core.TermVariable vn)}))) applied indices)
+                              in  
+                                let fullyApplied = (Maybes.maybe fullyAppliedRaw (\ct -> Core.TermAnnotated (Core.AnnotatedTerm {
+                                        Core.annotatedTermBody = fullyAppliedRaw,
+                                        Core.annotatedTermAnnotation = (Maps.singleton (Core.Name "type") (Core_.type_ ct))})) codomainType)
                                 in  
-                                  let dom = (Pairs.second idPair)
-                                  in  
-                                    let vn = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
-                                    in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                      Core.lambdaParameter = vn,
-                                      Core.lambdaDomain = dom,
-                                      Core.lambdaBody = body})))) fullyApplied (Lists.reverse indexedDomains))) applied))
+                                  let indexedDomains = (Lists.zip indices domains)
+                                  in (Lists.foldl (\body -> \idPair ->  
+                                    let i = (Pairs.first idPair)
+                                    in  
+                                      let dom = (Pairs.second idPair)
+                                      in  
+                                        let vn = (Core.Name (Strings.cat2 "v" (Literals.showInt32 i)))
+                                        in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                          Core.lambdaParameter = vn,
+                                          Core.lambdaDomain = dom,
+                                          Core.lambdaBody = body})))) fullyApplied (Lists.reverse indexedDomains))) applied))
         in  
           let rewriteWithArgs = (\args -> \tx -> \term ->  
                   let recurse = (\tx1 -> \term1 -> rewriteWithArgs [] tx1 term1)
@@ -507,7 +514,7 @@ reduceTerm eager term =
                 Core.applicationArgument = (Lists.head args)})) (Lists.tail args)))
         in  
           let applyElimination = (\elm -> \reducedArg -> (\x -> case x of
-                  Core.EliminationRecord v1 -> (Flows.bind (Core_.record (Core.projectionTypeName v1) (Rewriting.deannotateTerm reducedArg)) (\fields ->  
+                  Core.EliminationRecord v1 -> (Flows.bind (Core__.record (Core.projectionTypeName v1) (Rewriting.deannotateTerm reducedArg)) (\fields ->  
                     let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v1)) fields)
                     in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat [
                       "no such field: ",
@@ -515,7 +522,7 @@ reduceTerm eager term =
                       " in ",
                       (Core.unName (Core.projectionTypeName v1)),
                       " record"])) (Flows.pure (Core.fieldTerm (Lists.head matchingFields))))))
-                  Core.EliminationUnion v1 -> (Flows.bind (Core_.injection (Core.caseStatementTypeName v1) reducedArg) (\field ->  
+                  Core.EliminationUnion v1 -> (Flows.bind (Core__.injection (Core.caseStatementTypeName v1) reducedArg) (\field ->  
                     let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v1))
                     in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Flows.fail (Strings.cat [
                       "no such field ",
@@ -525,7 +532,7 @@ reduceTerm eager term =
                       " case statement"])) Flows.pure (Core.caseStatementDefault v1)) (Flows.pure (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
                       Core.applicationArgument = (Core.fieldTerm field)}))))))
-                  Core.EliminationWrap v1 -> (Core_.wrap v1 reducedArg)) elm)
+                  Core.EliminationWrap v1 -> (Core__.wrap v1 reducedArg)) elm)
           in  
             let applyIfNullary = (\eager -> \original -> \args ->  
                     let stripped = (Rewriting.deannotateTerm original)
