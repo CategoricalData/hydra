@@ -520,13 +520,16 @@ class TestCaseUnifyTypes(Node["UnifyTypesTestCase"]):
 class TestCaseJoinTypes(Node["JoinTypesTestCase"]):
     r"""A join types test (produce type constraints)"""
 
+class TestCaseUnshadowVariables(Node["UnshadowVariablesTestCase"]):
+    r"""An unshadow variables test"""
+
 class _TestCaseMeta(type):
     def __getitem__(cls, item):
         return object
 
 # A simple test case with an input and an expected output.
 class TestCase(metaclass=_TestCaseMeta):
-    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings | TestCaseSubstInType | TestCaseVariableOccursInType | TestCaseUnifyTypes | TestCaseJoinTypes"""
+    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings | TestCaseSubstInType | TestCaseVariableOccursInType | TestCaseUnifyTypes | TestCaseJoinTypes | TestCaseUnshadowVariables"""
     
     TYPE_ = hydra.core.Name("hydra.testing.TestCase")
     ALPHA_CONVERSION = hydra.core.Name("alphaConversion")
@@ -567,6 +570,7 @@ class TestCase(metaclass=_TestCaseMeta):
     VARIABLE_OCCURS_IN_TYPE = hydra.core.Name("variableOccursInType")
     UNIFY_TYPES = hydra.core.Name("unifyTypes")
     JOIN_TYPES = hydra.core.Name("joinTypes")
+    UNSHADOW_VARIABLES = hydra.core.Name("unshadowVariables")
 
 @dataclass(frozen=True)
 class TestCaseWithMetadata:
@@ -733,6 +737,17 @@ class VariableOccursInTypeTestCase:
     VARIABLE = hydra.core.Name("variable")
     TYPE = hydra.core.Name("type")
     EXPECTED = hydra.core.Name("expected")
+
+@dataclass(frozen=True)
+class UnshadowVariablesTestCase:
+    r"""A test case which renames shadowed variables in a term and compares the result with the expected term."""
+    
+    input: Annotated[hydra.core.Term, "The term with potentially shadowed variables"]
+    output: Annotated[hydra.core.Term, "The expected term after unshadowing"]
+    
+    TYPE_ = hydra.core.Name("hydra.testing.UnshadowVariablesTestCase")
+    INPUT = hydra.core.Name("input")
+    OUTPUT = hydra.core.Name("output")
 
 @dataclass(frozen=True)
 class UnifyTypesTestCase:

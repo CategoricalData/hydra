@@ -48,10 +48,15 @@ public class Bind extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.bind(Expect.optional(Flows::pure, args.get(0)),
-            arg -> arg.isJust()
-                ? hydra.reduction.Reduction.reduceTerm(true, Terms.apply(args.get(1), arg.fromJust()))
-                : Flows.pure(Terms.optional(Maybe.nothing())));
+        return args -> Flows.bind(Flows.<Graph>getState(), graph ->
+            Flows.bind(Expect.optional(Flows::pure, args.get(0)), arg -> {
+                Function<Term, Maybe<Term>> f = val -> {
+                    Term reduced = Flows.fromFlow(graph,
+                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(args.get(1), val)));
+                    return Flows.fromFlow(graph, Expect.optional(Flows::pure, reduced));
+                };
+                return Flows.pure(Terms.optional(Bind.apply(arg, f)));
+            }));
     }
 
     /**

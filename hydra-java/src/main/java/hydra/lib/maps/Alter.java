@@ -53,22 +53,17 @@ public class Alter extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(2)), mp -> {
-            Term key = args.get(1);
-            Term f = args.get(0);
-            Maybe<Term> currentValue = Lookup.apply(key, mp);
-            Term newOptValue = Terms.apply(f, Terms.optional(currentValue));
-            return bind(hydra.reduction.Reduction.reduceTerm(true, newOptValue), reduced ->
-            bind(Expect.optional(Flows::pure, reduced), newValue -> {
-                Map<Term, Term> result = new HashMap<>(mp);
-                if (newValue.isJust()) {
-                    result.put(key, newValue.fromJust());
-                } else {
-                    result.remove(key);
-                }
-                return pure(Terms.map(result));
+        return args -> bind(Flows.<Graph>getState(), graph ->
+            bind(Expect.map(Flows::pure, Flows::pure, args.get(2)), mp -> {
+                Term f = args.get(0);
+                Term key = args.get(1);
+                Function<Maybe<Term>, Maybe<Term>> nativeF = opt -> {
+                    Term reduced = Flows.fromFlow(graph,
+                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(f, Terms.optional(opt))));
+                    return Flows.fromFlow(graph, Expect.optional(Flows::pure, reduced));
+                };
+                return pure(Terms.map(Alter.apply(nativeF, key, mp)));
             }));
-        });
     }
 
     /**

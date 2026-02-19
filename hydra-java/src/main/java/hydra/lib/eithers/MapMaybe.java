@@ -43,29 +43,23 @@ public class MapMaybe extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term fn = args.get(0);
-            return bind(Expect.optional(Flows::pure, args.get(1)), maybe -> {
-                if (maybe.isNothing()) {
-                    // Nothing -> Right(Nothing)
+        return args -> bind(Flows.<Graph>getState(), graph ->
+            bind(Expect.optional(Flows::pure, args.get(1)), maybe -> {
+                Term fn = args.get(0);
+                Function<Term, hydra.util.Either<Term, Term>> nativeFn = val -> {
+                    Term reduced = Flows.fromFlow(graph,
+                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(fn, val)));
+                    return Flows.fromFlow(graph, Expect.<Graph, Term, Term>either(reduced));
+                };
+                hydra.util.Either<Term, Maybe<Term>> result = MapMaybe.apply(nativeFn, maybe);
+                if (result.isLeft()) {
+                    return pure(new Term.Either(new hydra.util.Either.Left<>(
+                        ((hydra.util.Either.Left<Term, Maybe<Term>>) result).value)));
+                } else {
                     return pure(new Term.Either(new hydra.util.Either.Right<>(
-                        new Term.Maybe(Maybe.nothing()))));
+                        Terms.optional(((hydra.util.Either.Right<Term, Maybe<Term>>) result).value))));
                 }
-                Term val = maybe.fromJust();
-                Term application = Terms.apply(fn, val);
-                return bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
-                    bind(Expect.<Graph, Term, Term>either(reduced), e -> {
-                        if (e.isLeft()) {
-                            return pure(new Term.Either(new hydra.util.Either.Left<>(
-                                ((hydra.util.Either.Left<Term, Term>) e).value)));
-                        } else {
-                            return pure(new Term.Either(new hydra.util.Either.Right<>(
-                                new Term.Maybe(Maybe.just(
-                                    ((hydra.util.Either.Right<Term, Term>) e).value)))));
-                        }
-                    }));
-            });
-        };
+            }));
     }
 
     /**

@@ -51,21 +51,16 @@ public class MapMaybe extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.list(Flows::pure, args.get(1)), inputList -> {
-            Term f = args.get(0);
-            Flow<Graph, List<Term>> resultFlow = pure(new ArrayList<>());
-            for (Term item : inputList) {
-                resultFlow = Flows.bind(resultFlow, acc ->
-                    Flows.bind(hydra.reduction.Reduction.reduceTerm(true, Terms.apply(f, item)), reduced ->
-                        Flows.map(Expect.optional(Flows::pure, reduced), maybeVal -> {
-                            if (maybeVal.isJust()) {
-                                acc.add(maybeVal.fromJust());
-                            }
-                            return acc;
-                        })));
-            }
-            return Flows.map(resultFlow, Terms::list);
-        });
+        return args -> bind(Flows.<Graph>getState(), graph ->
+            bind(Expect.list(Flows::pure, args.get(1)), inputList -> {
+                Term f = args.get(0);
+                Function<Term, Maybe<Term>> nativeF = item -> {
+                    Term reduced = Flows.fromFlow(graph,
+                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(f, item)));
+                    return Flows.fromFlow(graph, Expect.optional(Flows::pure, reduced));
+                };
+                return pure(Terms.list(MapMaybe.apply(nativeF, inputList)));
+            }));
     }
 
     /**

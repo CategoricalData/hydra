@@ -39,18 +39,13 @@ public class Foldl extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term mapping = args.get(0);
-            Term init = args.get(1);
-            return Flows.bind(Expect.list(Flows::pure, args.get(2)), xs -> {
-                Flow<Graph, Term> cur = Flows.pure(init);
-                for (Term x : xs) {
-                    cur = Flows.bind(cur, acc ->
-                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(mapping, acc, x)));
-                }
-                return cur;
-            });
-        };
+        return args -> Flows.bind(Flows.<Graph>getState(), graph ->
+            Flows.bind(Expect.list(Flows::pure, args.get(2)), xs -> {
+                Function<Term, Function<Term, Term>> f = acc -> elem ->
+                    Flows.fromFlow(graph,
+                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(args.get(0), acc, elem)));
+                return Flows.pure(Foldl.apply(f, args.get(1), xs));
+            }));
     }
 
     /**

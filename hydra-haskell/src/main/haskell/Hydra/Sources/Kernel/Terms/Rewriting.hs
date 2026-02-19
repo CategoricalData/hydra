@@ -58,7 +58,8 @@ import Hydra.Kernel hiding (
   topologicalSortBindings,
   typeDependencyNames,
   typeNamesInType,
-  unshadowVariables)
+  unshadowVariables,
+  unshadowVariablesNew)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -184,7 +185,8 @@ module_ = Module ns elements
      toBinding topologicalSortBindings,
      toBinding typeDependencyNames,
      toBinding typeNamesInType,
-     toBinding unshadowVariables]
+     toBinding unshadowVariables,
+     toBinding unshadowVariablesNew]
 
 applyInsideTypeLambdasAndAnnotations :: TBinding ((Term -> Term) -> Term -> Term)
 applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotations" $
@@ -2274,3 +2276,59 @@ unshadowVariables = define "unshadowVariables" $
           (var "v")
           (Core.name $ Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "i")))]) $
   Pairs.second (rewriteAndFoldTerm @@ var "rewrite" @@ Maps.empty @@ var "term0")
+
+unshadowVariablesNew :: TBinding (Term -> Term)
+unshadowVariablesNew = define "unshadowVariablesNew" $
+  doc ("Rename all shadowed variables (both lambda parameters and let-bound variables"
+    <> " that shadow lambda parameters) in a term."
+    <> " This variant uses rewriteTermWithContext instead of rewriteAndFoldTerm,"
+    <> " avoiding pair allocations at every node.") $
+  "term0" ~>
+  "f" <~ ("recurse" ~> "m" ~> "term" ~>
+    cases _Term (var "term") Nothing [
+    _Term_function>>: "fn" ~> cases _Function (var "fn")
+      (Just $ Core.termFunction $ var "fn") [
+      _Function_lambda>>: "l" ~>
+        "v" <~ Core.lambdaParameter (var "l") $
+        "domain" <~ Core.lambdaDomain (var "l") $
+        "body" <~ Core.lambdaBody (var "l") $
+        optCases (Maps.lookup (var "v") (var "m"))
+          -- First occurrence: register v with count 1, recurse into body
+          (Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "domain")
+            (var "recurse" @@ (Maps.insert (var "v") (int32 1) (var "m")) @@ var "body"))
+          -- Shadowed: increment counter, rename parameter, recurse into body
+          ("i" ~>
+            "i2" <~ Math.add (var "i") (int32 1) $
+            "v2" <~ Core.name (Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "i2")) $
+            "m2" <~ Maps.insert (var "v") (var "i2") (var "m") $
+            Core.termFunction $ Core.functionLambda $ Core.lambda (var "v2") (var "domain")
+              (var "recurse" @@ var "m2" @@ var "body"))],
+    _Term_let>>: "lt" ~>
+      -- Register all let-bound names so inner lambdas with the same names get renamed
+      "m2" <~ Lists.foldl ("acc" ~> "b" ~>
+        Maps.insert (Core.bindingName $ var "b") (int32 1) (var "acc"))
+        (var "m") (Core.letBindings $ var "lt") $
+      -- Delegate to forSubterms (recurse) with updated map for structural descent
+      var "recurse" @@ var "m2" @@ var "term",
+    _Term_variable>>: "v" ~> Core.termVariable $ optCases (Maps.lookup (var "v") (var "m"))
+      (var "v")
+      ("i" ~> Logic.ifElse (Equality.equal (var "i") (int32 1))
+        (var "v")
+        (Core.name $ Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "i"))),
+    -- All other term variants: delegate structural descent to forSubterms
+    _Term_annotated>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_application>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_either>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_list>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_literal>>: "_" ~> var "term",
+    _Term_map>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_maybe>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_pair>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_record>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_set>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_typeApplication>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_typeLambda>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_union>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
+    _Term_unit>>: constant $ var "term",
+    _Term_wrap>>: "_" ~> var "recurse" @@ var "m" @@ var "term"]) $
+  rewriteTermWithContext @@ var "f" @@ Maps.empty @@ var "term0"

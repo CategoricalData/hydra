@@ -49,21 +49,19 @@ public class Compose extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term f = args.get(0);  // a -> Maybe b
-            Term g = args.get(1);  // b -> Maybe c
-            Term x = args.get(2);  // a
-            // Apply f(x) and reduce to get Maybe b
-            return Flows.bind(hydra.reduction.Reduction.reduceTerm(true, Terms.apply(f, x)), fResult ->
-                Flows.bind(Expect.optional(Flows::pure, fResult), maybeFResult -> {
-                    if (maybeFResult.isJust()) {
-                        // Apply g(b) and reduce to get Maybe c
-                        return hydra.reduction.Reduction.reduceTerm(true, Terms.apply(g, maybeFResult.fromJust()));
-                    } else {
-                        return Flows.pure(Terms.optional(Maybe.nothing()));
-                    }
-                }));
-        };
+        return args -> Flows.bind(Flows.<Graph>getState(), graph -> {
+            Function<Term, Maybe<Term>> nativeF = val -> {
+                Term reduced = Flows.fromFlow(graph,
+                    hydra.reduction.Reduction.reduceTerm(true, Terms.apply(args.get(0), val)));
+                return Flows.fromFlow(graph, Expect.optional(Flows::pure, reduced));
+            };
+            Function<Term, Maybe<Term>> nativeG = val -> {
+                Term reduced = Flows.fromFlow(graph,
+                    hydra.reduction.Reduction.reduceTerm(true, Terms.apply(args.get(1), val)));
+                return Flows.fromFlow(graph, Expect.optional(Flows::pure, reduced));
+            };
+            return Flows.pure(Terms.optional(Compose.apply(nativeF, nativeG, args.get(2))));
+        });
     }
 
     /**

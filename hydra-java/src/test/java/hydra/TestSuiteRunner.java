@@ -19,8 +19,14 @@ import org.junit.jupiter.api.DynamicNode;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 import static hydra.dsl.Flows.EMPTY_TRACE;
@@ -35,6 +41,12 @@ public class TestSuiteRunner {
 
     // Unit value used as state for flows that don't need state (equivalent to Haskell's ())
     private static final hydra.util.Unit UNIT = new hydra.util.Unit();
+
+    // Benchmark output support
+    private static final String BENCHMARK_OUTPUT = System.getenv("HYDRA_BENCHMARK_OUTPUT");
+    private static final Map<String, Long> benchmarkTimers = new ConcurrentHashMap<>();
+    private static final Map<String, Double> benchmarkResults = new ConcurrentHashMap<>();
+    private static TestGroup rootTestGroup;
 
     // Cached test infrastructure
     private static Graph testGraph;
@@ -562,11 +574,24 @@ public class TestSuiteRunner {
 
     @TestFactory
     Stream<DynamicNode> kernelTests() {
-        return collectTests(TestSuite.allTests());
+        TestGroup allTests = TestSuite.allTests();
+        rootTestGroup = allTests;
+        if (BENCHMARK_OUTPUT != null) {
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> writeBenchmarkJson(BENCHMARK_OUTPUT, allTests)));
+        }
+        return collectTests(allTests, allTests.name);
     }
 
-    private static Stream<DynamicNode> collectTests(TestGroup group) {
+    private static Stream<DynamicNode> collectTests(TestGroup group, String hydraPath) {
         List<DynamicNode> nodes = new ArrayList<>();
+
+        // Timer start sentinel
+        if (BENCHMARK_OUTPUT != null) {
+            final String path = hydraPath;
+            nodes.add(DynamicTest.dynamicTest("000_TIMER_START", () -> {
+                benchmarkTimers.put(path, System.nanoTime());
+            }));
+        }
 
         // Test cases
         int idx = 0;
@@ -585,7 +610,20 @@ public class TestSuiteRunner {
         // Subgroups
         for (TestGroup subgroup : group.subgroups) {
             String subName = subgroup.name + subgroup.description.map(d -> " (" + d + ")").orElse("");
-            nodes.add(DynamicContainer.dynamicContainer(subName, collectTests(subgroup)));
+            String subPath = hydraPath + "/" + subgroup.name;
+            nodes.add(DynamicContainer.dynamicContainer(subName, collectTests(subgroup, subPath)));
+        }
+
+        // Timer stop sentinel
+        if (BENCHMARK_OUTPUT != null) {
+            final String path = hydraPath;
+            nodes.add(DynamicTest.dynamicTest("999_TIMER_END", () -> {
+                Long startTime = benchmarkTimers.get(path);
+                if (startTime != null) {
+                    double elapsedMs = (System.nanoTime() - startTime) / 1_000_000.0;
+                    benchmarkResults.put(path, elapsedMs);
+                }
+            }));
         }
 
         return nodes.stream();
@@ -1156,6 +1194,13 @@ public class TestSuiteRunner {
                     });
                 });
             }
+
+            @Override
+            public DynamicTest visit(TestCase.UnshadowVariables instance) {
+                UnshadowVariablesTestCase tc = instance.value;
+                return withTimeout(name, () ->
+                    assertEquals(tc.output, hydra.rewriting.Rewriting.unshadowVariables(tc.input)));
+            }
         });
     }
 
@@ -1398,6 +1443,139 @@ public class TestSuiteRunner {
                 new FieldType(new Name("body"), new Type.Variable(typeName))))));
 
         return types;
+    }
+
+    // ---- Benchmark output ----
+
+    private static void writeBenchmarkJson(String outputPath, TestGroup root) {
+        try {
+            String json = buildBenchmarkJson(root);
+            try (FileWriter writer = new FileWriter(outputPath)) {
+                writer.write(json);
+            }
+            System.out.println("Benchmark results written to " + outputPath);
+        } catch (IOException e) {
+            System.err.println("Failed to write benchmark JSON: " + e.getMessage());
+        }
+    }
+
+    private static String buildBenchmarkJson(TestGroup root) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n");
+
+        // Metadata
+        sb.append("  \"metadata\": {\n");
+        sb.append("    \"timestamp\": \"").append(Instant.now().atOffset(ZoneOffset.UTC)
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))).append("\",\n");
+        sb.append("    \"language\": \"java\",\n");
+        sb.append("    \"branch\": ").append(jsonString(gitOutput("git", "rev-parse", "--abbrev-ref", "HEAD"))).append(",\n");
+        sb.append("    \"commit\": ").append(jsonString(gitOutput("git", "rev-parse", "--short", "HEAD"))).append(",\n");
+        sb.append("    \"commitMessage\": ").append(jsonString(gitOutput("git", "log", "-1", "--format=%s"))).append("\n");
+        sb.append("  },\n");
+
+        // Groups (children of root)
+        String rootPath = root.name;
+        sb.append("  \"groups\": [\n");
+        List<TestGroup> subgroups = root.subgroups;
+        int totalPassed = 0, totalFailed = 0, totalSkipped = 0;
+        double totalTimeMs = 0;
+        for (int i = 0; i < subgroups.size(); i++) {
+            TestGroup group = subgroups.get(i);
+            String groupPath = rootPath + "/" + group.name;
+            int[] counts = countTests(group);
+            double groupTime = benchmarkResults.getOrDefault(groupPath, 0.0);
+            totalPassed += counts[0];
+            totalFailed += counts[1];
+            totalSkipped += counts[2];
+            totalTimeMs += groupTime;
+
+            sb.append("    {\n");
+            sb.append("      \"failed\": ").append(counts[1]).append(",\n");
+            sb.append("      \"passed\": ").append(counts[0]).append(",\n");
+            sb.append("      \"path\": ").append(jsonString(groupPath)).append(",\n");
+            sb.append("      \"skipped\": ").append(counts[2]).append(",\n");
+
+            // Subgroups
+            if (!group.subgroups.isEmpty()) {
+                sb.append("      \"subgroups\": [\n");
+                for (int j = 0; j < group.subgroups.size(); j++) {
+                    TestGroup sub = group.subgroups.get(j);
+                    String subPath = groupPath + "/" + sub.name;
+                    int[] subCounts = countTests(sub);
+                    double subTime = benchmarkResults.getOrDefault(subPath, 0.0);
+
+                    sb.append("        {\n");
+                    sb.append("          \"failed\": ").append(subCounts[1]).append(",\n");
+                    sb.append("          \"passed\": ").append(subCounts[0]).append(",\n");
+                    sb.append("          \"path\": ").append(jsonString(subPath)).append(",\n");
+                    sb.append("          \"skipped\": ").append(subCounts[2]).append(",\n");
+                    sb.append("          \"totalTimeMs\": ").append(round1(subTime)).append("}");
+                    if (j < group.subgroups.size() - 1) sb.append(",");
+                    sb.append("\n");
+                }
+                sb.append("      ],\n");
+            }
+
+            sb.append("      \"totalTimeMs\": ").append(round1(groupTime)).append("}");
+            if (i < subgroups.size() - 1) sb.append(",");
+            sb.append("\n");
+        }
+        sb.append("  ],\n");
+
+        // Summary
+        sb.append("  \"summary\": {\n");
+        sb.append("    \"totalPassed\": ").append(totalPassed).append(",\n");
+        sb.append("    \"totalFailed\": ").append(totalFailed).append(",\n");
+        sb.append("    \"totalSkipped\": ").append(totalSkipped).append(",\n");
+        sb.append("    \"totalTimeMs\": ").append(round1(totalTimeMs)).append("\n");
+        sb.append("  }\n");
+
+        sb.append("}\n");
+        return sb.toString();
+    }
+
+    /**
+     * Count [passed, failed, skipped] tests in a group (recursive).
+     * "passed" = runnable (not skipped) tests; "failed" = 0 (we can't know at generation time).
+     */
+    private static int[] countTests(TestGroup group) {
+        int runnable = 0;
+        int skipped = 0;
+        for (TestCaseWithMetadata tc : group.cases) {
+            if (shouldSkip(tc)) {
+                skipped++;
+            } else {
+                runnable++;
+            }
+        }
+        for (TestGroup sub : group.subgroups) {
+            int[] subCounts = countTests(sub);
+            runnable += subCounts[0];
+            skipped += subCounts[2];
+        }
+        return new int[]{runnable, 0, skipped};
+    }
+
+    private static String round1(double value) {
+        return String.format("%.1f", value);
+    }
+
+    private static String jsonString(String value) {
+        if (value == null) return "\"\"";
+        return "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "").trim() + "\"";
+    }
+
+    private static String gitOutput(String... command) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder(command);
+            pb.redirectErrorStream(true);
+            Process p = pb.start();
+            String output = new String(p.getInputStream().readAllBytes()).trim();
+            p.waitFor();
+            return output;
+        } catch (Exception e) {
+            return "unknown";
+        }
     }
 
     private static hydra.typing.TypeContext emptyTypeContext() {

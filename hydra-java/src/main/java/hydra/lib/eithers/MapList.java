@@ -43,43 +43,23 @@ public class MapList extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term fn = args.get(0);
-            return bind(Expect.list(Flows::pure, args.get(1)), lst -> {
-                // Apply fn to each element, reduce, check if Left or Right
-                Flow<Graph, hydra.util.Either<Term, List<Term>>> result =
-                    pure(new hydra.util.Either.Right<>(new ArrayList<>()));
-                for (Term element : lst) {
-                    Term application = Terms.apply(fn, element);
-                    result = bind(result, acc -> {
-                        if (acc.isLeft()) {
-                            return pure(acc); // short-circuit on first failure
-                        }
-                        return bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
-                            bind(Expect.<Graph, Term, Term>either(reduced), e -> {
-                                if (e.isLeft()) {
-                                    return pure(new hydra.util.Either.Left<>(
-                                        ((hydra.util.Either.Left<Term, Term>) e).value));
-                                } else {
-                                    List<Term> newResults = new ArrayList<>(
-                                        ((hydra.util.Either.Right<Term, List<Term>>) acc).value);
-                                    newResults.add(((hydra.util.Either.Right<Term, Term>) e).value);
-                                    return pure(new hydra.util.Either.Right<>(newResults));
-                                }
-                            }));
-                    });
+        return args -> bind(Flows.<Graph>getState(), graph ->
+            bind(Expect.list(Flows::pure, args.get(1)), lst -> {
+                Term fn = args.get(0);
+                Function<Term, hydra.util.Either<Term, Term>> nativeFn = element -> {
+                    Term reduced = Flows.fromFlow(graph,
+                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(fn, element)));
+                    return Flows.fromFlow(graph, Expect.<Graph, Term, Term>either(reduced));
+                };
+                hydra.util.Either<Term, List<Term>> result = MapList.apply(nativeFn, lst);
+                if (result.isLeft()) {
+                    return pure(new Term.Either(new hydra.util.Either.Left<>(
+                        ((hydra.util.Either.Left<Term, List<Term>>) result).value)));
+                } else {
+                    return pure(new Term.Either(new hydra.util.Either.Right<>(
+                        Terms.list(((hydra.util.Either.Right<Term, List<Term>>) result).value))));
                 }
-                return Flows.map(result, r -> {
-                    if (r.isLeft()) {
-                        return new Term.Either(new hydra.util.Either.Left<>(
-                            ((hydra.util.Either.Left<Term, List<Term>>) r).value));
-                    } else {
-                        return new Term.Either(new hydra.util.Either.Right<>(
-                            Terms.list(((hydra.util.Either.Right<Term, List<Term>>) r).value)));
-                    }
-                });
-            });
-        };
+            }));
     }
 
     /**

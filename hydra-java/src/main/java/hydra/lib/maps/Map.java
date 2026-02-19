@@ -48,22 +48,9 @@ public class Map extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term f = args.get(0);
-            return Flows.bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
-                Flow<Graph, java.util.Map<Term, Term>> resultFlow = pure(new HashMap<>());
-                for (java.util.Map.Entry<Term, Term> entry : mp.entrySet()) {
-                    Term application = Terms.apply(f, entry.getValue());
-                    final Term key = entry.getKey();
-                    resultFlow = Flows.bind(resultFlow, acc ->
-                        Flows.map(hydra.reduction.Reduction.reduceTerm(true, application), newVal -> {
-                            acc.put(key, newVal);
-                            return acc;
-                        }));
-                }
-                return Flows.map(resultFlow, Terms::map);
-            });
-        };
+        return args -> Flows.bind(Expect.termFunction(args.get(0)), f ->
+            Flows.bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp ->
+                pure(Terms.map(Map.apply(f, mp)))));
     }
 
     /**

@@ -656,6 +656,9 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
         case hydra.testing.TestCaseJoinTypes(value=tc):
             return lambda: run_join_types_test(tc)
 
+        case hydra.testing.TestCaseUnshadowVariables(value=tc):
+            return lambda: run_unshadow_variables_test(tc)
+
         case _:
             # Fail on unhandled test case types to catch missing implementations
             case_type = type(tcase.case).__name__
@@ -916,6 +919,16 @@ def run_simplify_term_test(test_case: hydra.testing.SimplifyTermTestCase) -> Non
     result = hydra.rewriting.simplify_term(test_case.input)
     assert result == test_case.output, (
         f"Simplify term failed:\n"
+        f"  Expected: {hydra.show.core.term(test_case.output)}\n"
+        f"  Actual: {hydra.show.core.term(result)}"
+    )
+
+
+def run_unshadow_variables_test(test_case: hydra.testing.UnshadowVariablesTestCase) -> None:
+    """Execute an unshadow variables test."""
+    result = hydra.rewriting.unshadow_variables(test_case.input)
+    assert result == test_case.output, (
+        f"Unshadow variables failed:\n"
         f"  Expected: {hydra.show.core.term(test_case.output)}\n"
         f"  Actual: {hydra.show.core.term(result)}"
     )

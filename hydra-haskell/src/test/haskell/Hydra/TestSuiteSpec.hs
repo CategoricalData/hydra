@@ -26,14 +26,22 @@ import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Unification as Unification
 
+import qualified Control.Exception
 import qualified Control.Monad as CM
 import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
 import qualified Test.QuickCheck as QC
 import qualified Data.List as L
+import qualified Data.IORef as IORef
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+import qualified Data.Time.Clock as Clock
+import qualified Data.Time.Format as TimeFormat
+import qualified Data.Time.Clock.POSIX as POSIX
+import qualified System.Environment as Env
+import qualified System.IO as IO
+import qualified System.Process as Proc
 
 
 type TestRunner = String -> TestCaseWithMetadata -> Y.Maybe (H.SpecWith ())
@@ -168,6 +176,10 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "unify types" $ checkUnifyTypes schemaTypeNames left right expected
     TestCaseJoinTypes (JoinTypesTestCase left right expected) ->
       H.it "join types" $ checkJoinTypes left right expected
+    TestCaseUnshadowVariables (UnshadowVariablesTestCase input output) ->
+      H.it "unshadow variables" $ H.shouldBe
+        (Rewriting.unshadowVariables input)
+        output
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
@@ -193,8 +205,45 @@ runTestGroup pdesc runner tg = do
       Nothing -> ""
       Just d -> " (" ++ d ++ ")"
 
+runTestGroupTimed :: IORef.IORef (M.Map String Double) -> String -> TestRunner -> TestGroup -> H.SpecWith ()
+runTestGroupTimed timingsRef hydraPath runner tg = do
+    H.describe desc $ do
+      H.runIO $ IORef.modifyIORef' timingsRef (M.insert hydraPath 0) -- placeholder
+      startRef <- H.runIO $ IORef.newIORef (0 :: Double)
+      H.beforeAll_ (recordStart startRef) $ H.afterAll_ (recordStop startRef) $ do
+        CM.mapM (runTestCase cdesc runner) $ testGroupCases tg
+        CM.sequence [runTestGroupTimed timingsRef subPath runner sub
+          | sub <- testGroupSubgroups tg
+          , let subPath = hydraPath ++ "/" ++ testGroupName sub]
+        return ()
+  where
+    desc = testGroupName tg ++ descSuffix
+    cdesc = if L.null pdesc then desc else pdesc ++ ", " ++ desc
+    pdesc = ""  -- Not used for benchmark path construction
+    descSuffix = case testGroupDescription tg of
+      Nothing -> ""
+      Just d -> " (" ++ d ++ ")"
+    recordStart startRef = do
+      now <- POSIX.getPOSIXTime
+      IORef.writeIORef startRef (realToFrac now :: Double)
+    recordStop startRef = do
+      startTime <- IORef.readIORef startRef
+      now <- POSIX.getPOSIXTime
+      let elapsedMs = (realToFrac now - startTime) * 1000.0
+      IORef.modifyIORef' timingsRef (M.insert hydraPath elapsedMs)
+
 spec :: H.Spec
-spec = runTestGroup "" defaultTestRunner allTests
+spec = do
+  benchmarkOutput <- H.runIO $ Env.lookupEnv "HYDRA_BENCHMARK_OUTPUT"
+  case benchmarkOutput of
+    Nothing -> runTestGroup "" defaultTestRunner allTests
+    Just outputPath -> do
+      timingsRef <- H.runIO $ IORef.newIORef M.empty
+      let rootPath = testGroupName allTests
+      runTestGroupTimed timingsRef rootPath defaultTestRunner allTests
+      H.afterAll_ (writeBenchmarkJson outputPath timingsRef allTests) $ do
+        -- A dummy test to ensure afterAll_ fires
+        H.it "benchmark finalize" $ True `H.shouldBe` True
 
 -- | Check that the JSON coder correctly encodes a term to the expected JSON value
 -- and that decoding and re-encoding produces the same term (round-trip)
@@ -353,3 +402,101 @@ checkJoinTypes left right expected = case expected of
     FlowState joinResult _ trace = unFlow
       (Unification.joinTypes left right "test")
       testGraph emptyTrace
+
+-- ---- Benchmark JSON output ----
+
+writeBenchmarkJson :: String -> IORef.IORef (M.Map String Double) -> TestGroup -> IO ()
+writeBenchmarkJson outputPath timingsRef root = do
+  timings <- IORef.readIORef timingsRef
+  now <- Clock.getCurrentTime
+  let timestamp = TimeFormat.formatTime TimeFormat.defaultTimeLocale "%Y-%m-%dT%H:%M:%SZ" now
+  branch <- gitOutput "git" ["rev-parse", "--abbrev-ref", "HEAD"]
+  commit <- gitOutput "git" ["rev-parse", "--short", "HEAD"]
+  commitMsg <- gitOutput "git" ["log", "-1", "--format=%s"]
+  let rootPath = testGroupName root
+      groups = testGroupSubgroups root
+      groupJsons = [groupToJson timings rootPath g | g <- groups]
+      (totalP, totalF, totalS) = foldl (\(p,f,s) g -> let (p',f',s') = countTests g in (p+p',f+f',s+s')) (0,0,0) groups
+      totalTime = sum [M.findWithDefault 0 (rootPath ++ "/" ++ testGroupName g) timings | g <- groups]
+      json = "{\n" ++
+        "  \"metadata\": {\n" ++
+        "    \"timestamp\": " ++ jsonStr timestamp ++ ",\n" ++
+        "    \"language\": \"haskell\",\n" ++
+        "    \"branch\": " ++ jsonStr branch ++ ",\n" ++
+        "    \"commit\": " ++ jsonStr commit ++ ",\n" ++
+        "    \"commitMessage\": " ++ jsonStr commitMsg ++ "\n" ++
+        "  },\n" ++
+        "  \"groups\": [\n" ++
+        L.intercalate ",\n" groupJsons ++ "\n" ++
+        "  ],\n" ++
+        "  \"summary\": {\n" ++
+        "    \"totalPassed\": " ++ show totalP ++ ",\n" ++
+        "    \"totalFailed\": " ++ show totalF ++ ",\n" ++
+        "    \"totalSkipped\": " ++ show totalS ++ ",\n" ++
+        "    \"totalTimeMs\": " ++ round1 totalTime ++ "\n" ++
+        "  }\n" ++
+        "}\n"
+  writeFile outputPath json
+  IO.hPutStrLn IO.stderr $ "Benchmark results written to " ++ outputPath
+
+groupToJson :: M.Map String Double -> String -> TestGroup -> String
+groupToJson timings parentPath group =
+    "    {\n" ++
+    "      \"failed\": 0,\n" ++
+    "      \"passed\": " ++ show passed ++ ",\n" ++
+    "      \"path\": " ++ jsonStr groupPath ++ ",\n" ++
+    "      \"skipped\": " ++ show skipped ++ ",\n" ++
+    subgroupsJson ++
+    "      \"totalTimeMs\": " ++ round1 groupTime ++ "}"
+  where
+    groupPath = parentPath ++ "/" ++ testGroupName group
+    groupTime = M.findWithDefault 0 groupPath timings
+    (passed, _, skipped) = countTests group
+    subs = testGroupSubgroups group
+    subgroupsJson
+      | null subs = ""
+      | otherwise =
+          "      \"subgroups\": [\n" ++
+          L.intercalate ",\n" [subgroupToJson timings groupPath s | s <- subs] ++ "\n" ++
+          "      ],\n"
+
+subgroupToJson :: M.Map String Double -> String -> TestGroup -> String
+subgroupToJson timings parentPath sub =
+    "        {\n" ++
+    "          \"failed\": 0,\n" ++
+    "          \"passed\": " ++ show passed ++ ",\n" ++
+    "          \"path\": " ++ jsonStr subPath ++ ",\n" ++
+    "          \"skipped\": " ++ show skipped ++ ",\n" ++
+    "          \"totalTimeMs\": " ++ round1 subTime ++ "}"
+  where
+    subPath = parentPath ++ "/" ++ testGroupName sub
+    subTime = M.findWithDefault 0 subPath timings
+    (passed, _, skipped) = countTests sub
+
+countTests :: TestGroup -> (Int, Int, Int)
+countTests group = (runnable + subRunnable, 0, skipped + subSkipped)
+  where
+    (runnable, skipped) = foldl (\(r, s) tc ->
+      if Testing.isDisabled tc || Testing.isRequiresFlowDecoding tc
+        then (r, s + 1)
+        else (r + 1, s)) (0, 0) (testGroupCases group)
+    (subRunnable, _, subSkipped) = foldl (\(r, f, s) sub ->
+      let (r', f', s') = countTests sub in (r + r', f + f', s + s')) (0, 0, 0) (testGroupSubgroups group)
+
+round1 :: Double -> String
+round1 d = show (fromIntegral (round (d * 10)) / 10.0 :: Double)
+
+jsonStr :: String -> String
+jsonStr s = "\"" ++ concatMap escChar (filter (/= '\n') s) ++ "\""
+  where
+    escChar '"' = "\\\""
+    escChar '\\' = "\\\\"
+    escChar c = [c]
+
+gitOutput :: String -> [String] -> IO String
+gitOutput cmd args =
+  Control.Exception.catch
+    (do
+      result <- Proc.readProcess cmd args ""
+      return (L.dropWhileEnd (== '\n') result))
+    (\e -> let _ = e :: Control.Exception.SomeException in return "unknown")

@@ -121,3 +121,5 @@ tests:
       - HUnit
       - QuickCheck
       - mtl # For the Algorithm W reference implementation
+      - process # For git metadata in benchmark output
+      - time # For timestamps in benchmark output

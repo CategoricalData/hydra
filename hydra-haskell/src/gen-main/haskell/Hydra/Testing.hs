@@ -646,7 +646,9 @@ data TestCase =
   -- | A type unification test
   TestCaseUnifyTypes UnifyTypesTestCase |
   -- | A join types test (produce type constraints)
-  TestCaseJoinTypes JoinTypesTestCase
+  TestCaseJoinTypes JoinTypesTestCase |
+  -- | An unshadow variables test
+  TestCaseUnshadowVariables UnshadowVariablesTestCase
   deriving (Eq, Ord, Read, Show)
 
 _TestCase = (Core.Name "hydra.testing.TestCase")
@@ -726,6 +728,8 @@ _TestCase_variableOccursInType = (Core.Name "variableOccursInType")
 _TestCase_unifyTypes = (Core.Name "unifyTypes")
 
 _TestCase_joinTypes = (Core.Name "joinTypes")
+
+_TestCase_unshadowVariables = (Core.Name "unshadowVariables")
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 
@@ -960,6 +964,21 @@ _VariableOccursInTypeTestCase_variable = (Core.Name "variable")
 _VariableOccursInTypeTestCase_type = (Core.Name "type")
 
 _VariableOccursInTypeTestCase_expected = (Core.Name "expected")
+
+-- | A test case which renames shadowed variables in a term and compares the result with the expected term
+data UnshadowVariablesTestCase = 
+  UnshadowVariablesTestCase {
+    -- | The term with potentially shadowed variables
+    unshadowVariablesTestCaseInput :: Core.Term,
+    -- | The expected term after unshadowing
+    unshadowVariablesTestCaseOutput :: Core.Term}
+  deriving (Eq, Ord, Read, Show)
+
+_UnshadowVariablesTestCase = (Core.Name "hydra.testing.UnshadowVariablesTestCase")
+
+_UnshadowVariablesTestCase_input = (Core.Name "input")
+
+_UnshadowVariablesTestCase_output = (Core.Name "output")
 
 -- | A test case which attempts to unify two types and compares the result. The expected result is either Left (failure message substring) or Right (substitution).
 data UnifyTypesTestCase = 

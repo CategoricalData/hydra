@@ -53,22 +53,10 @@ public class Bimap extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(2)), mp -> {
-            Term kf = args.get(0);
-            Term vf = args.get(1);
-            Flow<Graph, Map<Term, Term>> resultFlow = pure(new HashMap<>());
-            for (Map.Entry<Term, Term> entry : mp.entrySet()) {
-                Term keyApp = Terms.apply(kf, entry.getKey());
-                Term valApp = Terms.apply(vf, entry.getValue());
-                resultFlow = bind(resultFlow, acc ->
-                    bind(hydra.reduction.Reduction.reduceTerm(true, keyApp), newKey ->
-                        Flows.map(hydra.reduction.Reduction.reduceTerm(true, valApp), newVal -> {
-                            acc.put(newKey, newVal);
-                            return acc;
-                        })));
-            }
-            return Flows.map(resultFlow, Terms::map);
-        });
+        return args -> bind(Expect.termFunction(args.get(0)), kf ->
+            bind(Expect.termFunction(args.get(1)), vf ->
+                bind(Expect.map(Flows::pure, Flows::pure, args.get(2)), mp ->
+                    pure(Terms.map(Bimap.apply(kf, vf, mp))))));
     }
 
     /**
