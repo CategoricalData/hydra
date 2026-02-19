@@ -18,15 +18,16 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
+HASKELL_RESOURCES="$SCRIPT_DIR/resources/haskell"
 
 # Step: Copy static resources
 echo "Copying static resources for Haskell target..."
 
 # Build files
 echo "  Copying build files..."
-cp "$HYDRA_HASKELL_DIR/stack.yaml" "$OUTPUT_DIR/"
-cp "$HYDRA_HASKELL_DIR/stack.yaml.lock" "$OUTPUT_DIR/" 2>/dev/null || true
-cp "$HYDRA_HASKELL_DIR/package.yaml" "$OUTPUT_DIR/"
+cp "$HASKELL_RESOURCES/stack.yaml" "$OUTPUT_DIR/"
+cp "$HASKELL_RESOURCES/package.yaml" "$OUTPUT_DIR/"
+cp "$HASKELL_RESOURCES/README.md" "$OUTPUT_DIR/"
 
 # Hand-written source files (primitive libraries, DSL, sources, etc.)
 echo "  Copying hand-written source files..."
@@ -53,14 +54,8 @@ if [ -d "$HYDRA_HASKELL_DIR/src/gen-test/haskell/Generation" ]; then
     cp -r "$HYDRA_HASKELL_DIR/src/gen-test/haskell/Generation" "$OUTPUT_DIR/src/gen-test/haskell/"
 fi
 
-# Executable source files (needed by package.yaml)
-echo "  Copying executable source files..."
-if [ -d "$HYDRA_HASKELL_DIR/src/exec" ]; then
-    cp -r "$HYDRA_HASKELL_DIR/src/exec" "$OUTPUT_DIR/src/"
-fi
-
-# License/README (needed by cabal)
-touch "$OUTPUT_DIR/LICENSE" "$OUTPUT_DIR/README.md"
+# License (needed by cabal)
+touch "$OUTPUT_DIR/LICENSE"
 
 # Summary
 MAIN_COUNT=$(find "$OUTPUT_DIR/src/gen-main" -name "*.hs" 2>/dev/null | wc -l | tr -d ' ')

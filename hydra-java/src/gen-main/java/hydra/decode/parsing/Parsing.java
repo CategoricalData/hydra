@@ -112,7 +112,7 @@ public interface Parsing {
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.parsing.ParseResult<T0>>>, hydra.util.Either<hydra.util.DecodingError, hydra.parsing.ParseResult<T0>>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
-              hydra.decode.parsing.Parsing.<T0>parseResult_variantMap(
+              hydra.decode.parsing.Parsing.parseResult_variantMap(
                 a,
                 cx,
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.parsing.ParseError>>>) (p0 -> p1 -> hydra.decode.parsing.Parsing.parseError(

@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
+import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Serialization as Serialization
@@ -34,10 +35,16 @@ colonOp = Ast.Op {
 -- | Escape and quote a string for JSON output
 jsonString :: (String -> String)
 jsonString s =  
-  let escape = (\c -> Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Strings.fromList (Lists.pure c)))))))
+  let hexEscape = (\c ->  
+          let hi = (Strings.fromList (Lists.pure (Strings.charAt (Math.div c 16) "0123456789abcdef")))
+          in  
+            let lo = (Strings.fromList (Lists.pure (Strings.charAt (Math.mod c 16) "0123456789abcdef")))
+            in (Strings.cat2 (Strings.cat2 "\\u00" hi) lo))
   in  
-    let escaped = (Strings.cat (Lists.map escape (Strings.toList s)))
-    in (Strings.cat2 (Strings.cat2 "\"" escaped) "\"")
+    let escape = (\c -> Logic.ifElse (Equality.equal c 34) "\\\"" (Logic.ifElse (Equality.equal c 92) "\\\\" (Logic.ifElse (Equality.equal c 8) "\\b" (Logic.ifElse (Equality.equal c 12) "\\f" (Logic.ifElse (Equality.equal c 10) "\\n" (Logic.ifElse (Equality.equal c 13) "\\r" (Logic.ifElse (Equality.equal c 9) "\\t" (Logic.ifElse (Equality.lt c 32) (hexEscape c) (Strings.fromList (Lists.pure c))))))))))
+    in  
+      let escaped = (Strings.cat (Lists.map escape (Strings.toList s)))
+      in (Strings.cat2 (Strings.cat2 "\"" escaped) "\"")
 
 -- | Convert a key-value pair to an AST expression
 keyValueToExpr :: ((String, Model.Value) -> Ast.Expr)

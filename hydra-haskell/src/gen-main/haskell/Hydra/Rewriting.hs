@@ -1471,6 +1471,19 @@ substituteVariables subst term =
           _ -> (recurse term)) term)
   in (rewriteTerm replace term)
 
+-- | Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations
+stripTypeLambdas :: (Core.Term -> Core.Term)
+stripTypeLambdas t = ((\x -> case x of
+  Core.TermAnnotated v1 ->  
+    let subj = (Core.annotatedTermBody v1)
+    in  
+      let ann = (Core.annotatedTermAnnotation v1)
+      in (Core.TermAnnotated (Core.AnnotatedTerm {
+        Core.annotatedTermBody = (stripTypeLambdas subj),
+        Core.annotatedTermAnnotation = ann}))
+  Core.TermTypeLambda v1 -> (stripTypeLambdas (Core.typeLambdaBody v1))
+  _ -> t) t)
+
 -- | Find the children of a given term
 subterms :: (Core.Term -> [Core.Term])
 subterms x = case x of

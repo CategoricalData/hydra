@@ -280,23 +280,23 @@ public interface Core {
         term)));
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T0, hydra.util.Either<T1, T2>> eitherTerm_extract(java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T1>> leftFun, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T2>> rightFun, hydra.core.Term term) {
+  static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, hydra.util.Either<T0, T1>> eitherTerm_extract(java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> leftFun, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T1>> rightFun, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T0, hydra.util.Either<T1, T2>> otherwise(hydra.core.Term instance) {
-        return hydra.monads.Monads.<T0, hydra.util.Either<T1, T2>>unexpected(
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Either<T0, T1>> otherwise(hydra.core.Term instance) {
+        return hydra.monads.Monads.unexpected(
           "either value",
           (hydra_show_core_term2).apply(term));
       }
       
       @Override
-      public hydra.compute.Flow<T0, hydra.util.Either<T1, T2>> visit(hydra.core.Term.Either et) {
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Either<T0, T1>> visit(hydra.core.Term.Either et) {
         return hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Either<T1, T2>>>) (l -> hydra.lib.flows.Map.apply(
-            (java.util.function.Function<T1, hydra.util.Either<T1, T2>>) (x -> (hydra.util.Either<T1, T2>) ((hydra.util.Either<T1, T2>) (hydra.util.Either.<T1, T2>left(x)))),
+          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Either<T0, T1>>>) (l -> hydra.lib.flows.Map.apply(
+            (java.util.function.Function<T0, hydra.util.Either<T0, T1>>) (x -> (hydra.util.Either<T0, T1>) ((hydra.util.Either<T0, T1>) (hydra.util.Either.<T0, T1>left(x)))),
             (leftFun).apply(l))),
-          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Either<T1, T2>>>) (r -> hydra.lib.flows.Map.apply(
-            (java.util.function.Function<T2, hydra.util.Either<T1, T2>>) (x -> (hydra.util.Either<T1, T2>) ((hydra.util.Either<T1, T2>) (hydra.util.Either.<T1, T2>right(x)))),
+          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Either<T0, T1>>>) (r -> hydra.lib.flows.Map.apply(
+            (java.util.function.Function<T1, hydra.util.Either<T0, T1>>) (x -> (hydra.util.Either<T0, T1>) ((hydra.util.Either<T0, T1>) (hydra.util.Either.<T0, T1>right(x)))),
             (rightFun).apply(r))),
           (et).value);
       }
@@ -668,36 +668,36 @@ public interface Core {
       hydra.lexical.Lexical.stripAndDereferenceTerm(term0),
       (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>>>) (term -> hydra.extract.core.Core.map_extract(
         hydra.show.core.Core::term,
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>>>) (v1 -> hydra.extract.core.Core.map_pair(
+        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.lang.Object, java.lang.Object>>>) (v1 -> hydra.extract.core.Core.map_pair(
           fk,
           fv,
           v1)),
         term)));
   }
   
-  static <T0, T1, T2, T3, T4> hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<T2, T4>> map_pair(java.util.function.Function<T0, hydra.compute.Flow<T1, T2>> fk, java.util.function.Function<T3, hydra.compute.Flow<T1, T4>> fv, hydra.util.Tuple.Tuple2<T0, T3> kvPair) {
-    hydra.util.Lazy<T0> kterm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(kvPair));
-    hydra.util.Lazy<T3> vterm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(kvPair));
+  static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>> map_pair(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> fk, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T1>> fv, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term> kvPair) {
+    hydra.util.Lazy<hydra.core.Term> kterm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(kvPair));
+    hydra.util.Lazy<hydra.core.Term> vterm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(kvPair));
     return hydra.lib.flows.Bind.apply(
       (fk).apply(kterm.get()),
-      (java.util.function.Function<T2, hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<T2, T4>>>) (kval -> hydra.lib.flows.Bind.apply(
+      (java.util.function.Function<T0, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>>>) (kval -> hydra.lib.flows.Bind.apply(
         (fv).apply(vterm.get()),
-        (java.util.function.Function<T4, hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<T2, T4>>>) (vval -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<T2, T4>) ((hydra.util.Tuple.Tuple2<T2, T4>) (new hydra.util.Tuple.Tuple2<T2, T4>(kval, vval))))))));
+        (java.util.function.Function<T1, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>>>) (vval -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<T0, T1>) ((hydra.util.Tuple.Tuple2<T0, T1>) (new hydra.util.Tuple.Tuple2<T0, T1>(kval, vval))))))));
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T0, java.util.Map<T1, T2>> map_extract(java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<T1, T2>>> pair, hydra.core.Term term) {
+  static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>> map_extract(java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>>> pair, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T0, java.util.Map<T1, T2>> otherwise(hydra.core.Term instance) {
-        return hydra.monads.Monads.<T0, java.util.Map<T1, T2>>unexpected(
+      public hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>> otherwise(hydra.core.Term instance) {
+        return hydra.monads.Monads.unexpected(
           "map",
           (hydra_show_core_term2).apply(term));
       }
       
       @Override
-      public hydra.compute.Flow<T0, java.util.Map<T1, T2>> visit(hydra.core.Term.Map m) {
+      public hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>> visit(hydra.core.Term.Map m) {
         return hydra.lib.flows.Map.apply(
-          (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<T1, T2>>, java.util.Map<T1, T2>>) ((java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<T1, T2>>, java.util.Map<T1, T2>>) (hydra.lib.maps.FromList::apply)),
+          (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>, java.util.Map<T0, T1>>) ((java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>, java.util.Map<T0, T1>>) (hydra.lib.maps.FromList::apply)),
           hydra.lib.flows.MapList.apply(
             pair,
             hydra.lib.maps.ToList.apply((m).value)));
@@ -745,21 +745,21 @@ public interface Core {
         term)));
   }
   
-  static <T0, T1> hydra.compute.Flow<T0, hydra.util.Maybe<T1>> maybeTerm_extract(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T1>> f, java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, hydra.core.Term term) {
+  static <T0> hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<T0>> maybeTerm_extract(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> f, java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T0, hydra.util.Maybe<T1>> otherwise(hydra.core.Term instance) {
-        return hydra.monads.Monads.<T0, hydra.util.Maybe<T1>>unexpected(
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<T0>> otherwise(hydra.core.Term instance) {
+        return hydra.monads.Monads.unexpected(
           "maybe value",
           (hydra_show_core_term2).apply(term));
       }
       
       @Override
-      public hydra.compute.Flow<T0, hydra.util.Maybe<T1>> visit(hydra.core.Term.Maybe mt) {
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<T0>> visit(hydra.core.Term.Maybe mt) {
         return hydra.lib.maybes.Maybe.apply(
-          hydra.lib.flows.Pure.apply((hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing())),
-          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<T1>>>) (t -> hydra.lib.flows.Map.apply(
-            (java.util.function.Function<T1, hydra.util.Maybe<T1>>) (hydra.lib.maybes.Pure::apply),
+          hydra.lib.flows.Pure.apply((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
+          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<T0>>>) (t -> hydra.lib.flows.Map.apply(
+            (java.util.function.Function<T0, hydra.util.Maybe<T0>>) (hydra.lib.maybes.Pure::apply),
             (f).apply(t))),
           (mt).value);
       }
@@ -793,22 +793,22 @@ public interface Core {
         term)));
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<T1, T2>> pair_extract(java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T1>> kf, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T2>> vf, hydra.core.Term term) {
+  static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>> pair_extract(java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>> kf, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T1>> vf, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<T1, T2>> otherwise(hydra.core.Term instance) {
-        return hydra.monads.Monads.<T0, hydra.util.Tuple.Tuple2<T1, T2>>unexpected(
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>> otherwise(hydra.core.Term instance) {
+        return hydra.monads.Monads.unexpected(
           "pair",
           (hydra_show_core_term2).apply(term));
       }
       
       @Override
-      public hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<T1, T2>> visit(hydra.core.Term.Pair p) {
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>> visit(hydra.core.Term.Pair p) {
         return hydra.lib.flows.Bind.apply(
           (kf).apply(hydra.lib.pairs.First.apply((p).value)),
-          (java.util.function.Function<T1, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<T1, T2>>>) (kVal -> hydra.lib.flows.Bind.apply(
+          (java.util.function.Function<T0, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>>>) (kVal -> hydra.lib.flows.Bind.apply(
             (vf).apply(hydra.lib.pairs.Second.apply((p).value)),
-            (java.util.function.Function<T2, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<T1, T2>>>) (vVal -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<T1, T2>) ((hydra.util.Tuple.Tuple2<T1, T2>) (new hydra.util.Tuple.Tuple2<T1, T2>(kVal, vVal))))))));
+            (java.util.function.Function<T1, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T0, T1>>>) (vVal -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<T0, T1>) ((hydra.util.Tuple.Tuple2<T0, T1>) (new hydra.util.Tuple.Tuple2<T0, T1>(kVal, vVal))))))));
       }
     });
   }

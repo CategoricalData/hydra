@@ -161,43 +161,47 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                   in  
                     let capturedTermVarTypePairs = (Lists.map (\v -> (v, (Maps.lookup v types))) capturedTermVars)
                     in  
-                      let capturedTypeVars = (Sets.toList (Sets.intersection (Typing.typeContextTypeVariables cx) (Maybes.maybe Sets.empty (\ts -> Rewriting.freeVariablesInType (Core.typeSchemeType ts)) (Core.bindingType b))))
+                      let capturedTermVarTypes = (Lists.map (\typ -> Rewriting.deannotateTypeParameters typ) (Maybes.cat (Lists.map Pairs.second capturedTermVarTypePairs)))
                       in  
-                        let globalBindingName = (Lexical.chooseUniqueName alreadyUsedNames (Core.Name (Strings.cat2 prefix (Core.unName (Core.bindingName b)))))
+                        let freeInBindingType = (Maybes.maybe Sets.empty (\ts -> Rewriting.freeVariablesInType (Core.typeSchemeType ts)) (Core.bindingType b))
                         in  
-                          let newUsedNames = (Sets.insert globalBindingName alreadyUsedNames)
+                          let freeInCapturedVarTypes = (Sets.unions (Lists.map (\t -> Rewriting.freeVariablesInType t) capturedTermVarTypes))
                           in  
-                            let capturedTermVarTypes = (Lists.map (\typ -> Rewriting.deannotateTypeParameters typ) (Maybes.cat (Lists.map Pairs.second capturedTermVarTypePairs)))
+                            let capturedTypeVars = (Sets.toList (Sets.intersection (Typing.typeContextTypeVariables cx) (Sets.union freeInBindingType freeInCapturedVarTypes)))
                             in  
-                              let newTypeScheme = (Logic.ifElse (Equality.equal (Lists.length capturedTermVarTypes) (Lists.length capturedTermVarTypePairs)) (Maybes.map (\ts -> Core.TypeScheme {
-                                      Core.typeSchemeVariables = (Lists.nub (Lists.concat2 capturedTypeVars (Core.typeSchemeVariables ts))),
-                                      Core.typeSchemeType = (Lists.foldl (\t -> \a -> Core.TypeFunction (Core.FunctionType {
-                                        Core.functionTypeDomain = a,
-                                        Core.functionTypeCodomain = t})) (Core.typeSchemeType ts) (Lists.reverse capturedTermVarTypes)),
-                                      Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingType b)) Nothing)
+                              let globalBindingName = (Lexical.chooseUniqueName alreadyUsedNames (Core.Name (Strings.cat2 prefix (Core.unName (Core.bindingName b)))))
                               in  
-                                let strippedTerm = (Rewriting.detypeTerm (Core.bindingTerm b))
+                                let newUsedNames = (Sets.insert globalBindingName alreadyUsedNames)
                                 in  
-                                  let termWithLambdas = (Lists.foldl (\t -> \p -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                          Core.lambdaParameter = (Pairs.first p),
-                                          Core.lambdaDomain = (Maybes.map (\dom -> Rewriting.deannotateTypeParameters dom) (Pairs.second p)),
-                                          Core.lambdaBody = t}))) strippedTerm (Lists.reverse capturedTermVarTypePairs))
+                                  let newTypeScheme = (Logic.ifElse (Equality.equal (Lists.length capturedTermVarTypes) (Lists.length capturedTermVarTypePairs)) (Maybes.map (\ts -> Core.TypeScheme {
+                                          Core.typeSchemeVariables = (Lists.nub (Lists.concat2 capturedTypeVars (Core.typeSchemeVariables ts))),
+                                          Core.typeSchemeType = (Lists.foldl (\t -> \a -> Core.TypeFunction (Core.FunctionType {
+                                            Core.functionTypeDomain = a,
+                                            Core.functionTypeCodomain = t})) (Core.typeSchemeType ts) (Lists.reverse capturedTermVarTypes)),
+                                          Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts)}) (Core.bindingType b)) Nothing)
                                   in  
-                                    let termWithTypeLambdas = (Lists.foldl (\t -> \v -> Core.TermTypeLambda (Core.TypeLambda {
-                                            Core.typeLambdaParameter = v,
-                                            Core.typeLambdaBody = t})) termWithLambdas (Lists.reverse (Maybes.maybe [] Core.typeSchemeVariables newTypeScheme)))
+                                    let strippedTerm = (Rewriting.stripTypeLambdas (Core.bindingTerm b))
                                     in  
-                                      let replacement = (Lists.foldl (\t -> \v -> Core.TermApplication (Core.Application {
-                                              Core.applicationFunction = t,
-                                              Core.applicationArgument = (Core.TermVariable v)})) (Core.TermVariable globalBindingName) capturedTermVars)
+                                      let termWithLambdas = (Lists.foldl (\t -> \p -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                              Core.lambdaParameter = (Pairs.first p),
+                                              Core.lambdaDomain = (Maybes.map (\dom -> Rewriting.deannotateTypeParameters dom) (Pairs.second p)),
+                                              Core.lambdaBody = t}))) strippedTerm (Lists.reverse capturedTermVarTypePairs))
                                       in  
-                                        let newBindingAndReplacement = (Core.Binding {
-                                                Core.bindingName = globalBindingName,
-                                                Core.bindingTerm = termWithTypeLambdas,
-                                                Core.bindingType = newTypeScheme}, replacement)
+                                        let termWithTypeLambdas = (Lists.foldl (\t -> \v -> Core.TermTypeLambda (Core.TypeLambda {
+                                                Core.typeLambdaParameter = v,
+                                                Core.typeLambdaBody = t})) termWithLambdas (Lists.reverse (Maybes.maybe [] Core.typeSchemeVariables newTypeScheme)))
                                         in  
-                                          let newPairs = (Lists.cons newBindingAndReplacement bindingAndReplacementPairs)
-                                          in (newPairs, newUsedNames))
+                                          let replacement = (Lists.foldl (\t -> \v -> Core.TermApplication (Core.Application {
+                                                  Core.applicationFunction = t,
+                                                  Core.applicationArgument = (Core.TermVariable v)})) (Core.TermVariable globalBindingName) capturedTermVars)
+                                          in  
+                                            let newBindingAndReplacement = (Core.Binding {
+                                                    Core.bindingName = globalBindingName,
+                                                    Core.bindingTerm = termWithTypeLambdas,
+                                                    Core.bindingType = newTypeScheme}, replacement)
+                                            in  
+                                              let newPairs = (Lists.cons newBindingAndReplacement bindingAndReplacementPairs)
+                                              in (newPairs, newUsedNames))
   in  
     let rewrite = (\prefix -> \recurse -> \cx -> \bindingsAndNames -> \term ->  
             let previouslyFinishedBindings = (Pairs.first bindingsAndNames)

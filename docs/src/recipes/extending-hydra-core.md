@@ -1189,7 +1189,7 @@ stack build
 
 - [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) - Core Hydra concepts and type system
 - [Testing](https://github.com/CategoricalData/hydra/wiki/Testing) - Common test suite architecture
-- [Hydra Developers](https://github.com/CategoricalData/hydra/wiki/Hydra-developers) - Source code organization
+- [Hydra Developers](https://github.com/CategoricalData/hydra/wiki/Developers) - Source code organization
 - [Main README](https://github.com/CategoricalData/hydra) - Project overview
 
 ---

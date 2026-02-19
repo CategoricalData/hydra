@@ -27367,6 +27367,114 @@
                   "values": {"variable": "hydra.core.Name"}}}}},
           "variables": []}]},
     {
+      "name": "hydra.rewriting.stripTypeLambdas",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "t"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "annotated",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "subj",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "at"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {"record": {"field": "body", "typeName": "hydra.core.AnnotatedTerm"}}}}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {"variable": "hydra.core.Term"},
+                                                  "variables": []}]}],
+                                          "body": {
+                                            "let": {
+                                              "bindings": [
+                                                {
+                                                  "name": "ann",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "at"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {
+                                                            "record": {"field": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}}}},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {
+                                                        "map": {
+                                                          "keys": {"variable": "hydra.core.Name"},
+                                                          "values": {"variable": "hydra.core.Term"}}},
+                                                      "variables": []}]}],
+                                              "body": {
+                                                "union": {
+                                                  "field": {
+                                                    "name": "annotated",
+                                                    "term": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "body",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "subj"},
+                                                                "function": {"variable": "hydra.rewriting.stripTypeLambdas"}}}},
+                                                          {"name": "annotation", "term": {"variable": "ann"}}],
+                                                        "typeName": "hydra.core.AnnotatedTerm"}}},
+                                                  "typeName": "hydra.core.Term"}}}}}},
+                                      "domain": [{"variable": "hydra.core.AnnotatedTerm"}],
+                                      "parameter": "at"}}}},
+                              {
+                                "name": "typeLambda",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "ta"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "body", "typeName": "hydra.core.TypeLambda"}}}}}},
+                                          "function": {"variable": "hydra.rewriting.stripTypeLambdas"}}},
+                                      "domain": [{"variable": "hydra.core.TypeLambda"}],
+                                      "parameter": "ta"}}}}],
+                            "default": [{"variable": "t"}],
+                            "typeName": "hydra.core.Term"}}}}}},
+                "domain": [{"variable": "hydra.core.Term"}],
+                "parameter": "t"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.core.Term"}}},
+          "variables": []}]},
+    {
       "name": "hydra.rewriting.subterms",
       "term": {
         "annotated": {

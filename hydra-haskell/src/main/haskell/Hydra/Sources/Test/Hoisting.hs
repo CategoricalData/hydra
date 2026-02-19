@@ -1500,7 +1500,63 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
             (lambdaTyped "sleft" T.int32
               (lambda "y" (apply (apply (var "wrapper_cannotUnify") (var "sleft")) (var "y")))),
           polyType ["b"] (T.function T.int32 (T.function (T.var "b") (T.var "b"))))]
-        (apply (var "wrapper") (int32 1)))]
+        (apply (var "wrapper") (int32 1))),
+
+    -- ============================================================
+    -- Regression test: polymorphic binding with pair term must preserve
+    -- type application wrappers after hoisting. This reproduces the
+    -- "pair type requires 2 type arguments, got 0" error in Java code
+    -- generation. The binding `init` (like in hoistLetBindingsWithPredicate)
+    -- contains a pair of empty list and a set. After inference, the pair
+    -- has TypeApplication wrappers. These wrappers must survive hoisting.
+    -- ============================================================
+
+    hoistPolyCase "polymorphic binding with pair: type applications preserved"
+      -- Input: let f = \b:Name ->
+      --          let init : forall t0. Pair<List<t0>, Set<Name>>
+      --                   = Λt0. @(Set<Name>) @(List<t0>) pair((@t0 []), singleton(b))
+      --          in init
+      --        in f (name "x")
+      -- The init binding is polymorphic (has type var t0 from empty list).
+      -- After hoisting, the pair must KEEP its TypeApplication wrappers.
+      (mkLet [(nm "f",
+        lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string) (Core.termLet $ mkLet [
+          (nm "init",
+            -- Term with type lambda and type applications (as inference would produce):
+            -- Λt0. TypeApp(TypeApp(Pair(TypeApp([], t0), singleton(b)), List<t0>), Set<Name>)
+            tylam "t0" (tyapp (tyapp
+              (pair
+                (tyapp (list ([] :: [TTerm Term])) (T.var "t0"))
+                (apply (var "singleton") (var "b")))
+              (T.list (T.var "t0")))
+              (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string))),
+            polyType ["t0"] (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string))))]
+          (var "init")),
+        monoType (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+          (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))))]
+        (apply (var "f") (var "name_x")))
+      -- Expected output: f first (original), then f_init hoisted.
+      -- The hoisted binding must retain TypeApplication wrappers on the pair.
+      -- Λt0 is stripped and re-added by hoisting, but inner type apps on pair are preserved.
+      (mkLet [
+        (nm "f",
+          lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+            (apply (var "f_init") (var "b")),
+          monoType (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+            (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string))))),
+        (nm "f_init",
+          -- After hoisting: captures b, re-adds type lambda for t0
+          -- The inner type applications on the pair MUST be preserved
+          tylam "t0" (lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+            (tyapp (tyapp
+              (pair
+                (tyapp (list ([] :: [TTerm Term])) (T.var "t0"))
+                (apply (var "singleton") (var "b")))
+              (T.list (T.var "t0")))
+              (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))),
+          polyType ["t0"] (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+            (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))))]
+        (apply (var "f") (var "name_x")))]
 
 -- | Test cases for hoistLetBindings with hoistAll=True
 -- This function hoists ALL let bindings (not just polymorphic ones) to the top level.

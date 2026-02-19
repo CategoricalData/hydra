@@ -232,11 +232,11 @@ public interface Lexical {
     });
   }
   
-  static <T0, T1> java.util.Map<T0, T1> matchUnion_mapping(java.util.List<hydra.util.Tuple.Tuple2<T0, T1>> pairs) {
+  static <T0> java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>> matchUnion_mapping(java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>> pairs) {
     return hydra.lib.maps.FromList.apply(pairs);
   }
   
-  static <T0, T1> hydra.compute.Flow<T0, T1> matchUnion_exp(hydra.core.Injection injection, java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T1>>> mapping, hydra.core.Name tname) {
+  static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> matchUnion_exp(hydra.core.Injection injection, java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>> mapping, hydra.core.Name tname) {
     hydra.core.Name fname = ((injection).field).name;
     hydra.core.Term val = ((injection).field).term;
     return hydra.lib.maybes.Maybe.apply(
@@ -247,7 +247,7 @@ public interface Lexical {
             (fname).value),
           "\" in union type "),
         (tname).value)),
-      (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T1>>, hydra.compute.Flow<T0, T1>>) (f -> (f).apply(val)),
+      (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>, hydra.compute.Flow<hydra.graph.Graph, T0>>) (f -> (f).apply(val)),
       hydra.lib.maps.Lookup.apply(
         fname,
         mapping));

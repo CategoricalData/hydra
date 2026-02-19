@@ -411,4 +411,4 @@ We welcome contributions! Please see:
 
 ## Release Process
 
-See the [Release Process](https://github.com/CategoricalData/hydra/wiki/Hydra-release-process) wiki page for information on how Hydra releases are created.
+See the [Release Process](https://github.com/CategoricalData/hydra/wiki/Release-process) wiki page for information on how Hydra releases are created.

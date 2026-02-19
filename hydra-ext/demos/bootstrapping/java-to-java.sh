@@ -72,8 +72,8 @@ echo "Step 4: Copying static resources..."
 # Build files (standalone build.gradle, not the multi-project one)
 echo "  Creating standalone build files..."
 cp "$HYDRA_JAVA_DIR/settings.gradle" "$OUTPUT_DIR/"
-cp "$HYDRA_JAVA_DIR/gradlew" "$OUTPUT_DIR/"
-cp -r "$HYDRA_JAVA_DIR/gradle" "$OUTPUT_DIR/"
+cp "$HYDRA_ROOT/gradlew" "$OUTPUT_DIR/"
+cp -r "$HYDRA_ROOT/gradle" "$OUTPUT_DIR/"
 cat > "$OUTPUT_DIR/build.gradle" << 'GRADLE_EOF'
 // Standalone build.gradle for bootstrapped Hydra Java
 plugins {

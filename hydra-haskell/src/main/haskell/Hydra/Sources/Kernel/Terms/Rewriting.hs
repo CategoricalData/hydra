@@ -12,6 +12,7 @@ import Hydra.Kernel hiding (
   deannotateTypeSchemeRecursive,
   detypeTerm,
   flattenLetTerms,
+  stripTypeLambdas,
   foldOverTerm,
   foldOverType,
   freeTypeVariablesInTerm,
@@ -173,6 +174,7 @@ module_ = Module ns elements
      toBinding substituteTypeVariables,
      toBinding substituteVariable,
      toBinding substituteVariables,
+     toBinding stripTypeLambdas,
      toBinding subterms,
      toBinding subtermsWithAccessors,
      toBinding subtypes,
@@ -255,6 +257,17 @@ detypeTerm = define "detypeTerm" $
        Core.termAnnotated $ Core.annotatedTerm (detypeTerm @@ var "subj") (var "ann"),
     _Term_typeApplication>>: "tt" ~> deannotateAndDetypeTerm @@ (Core.typeApplicationTermBody $ var "tt"),
     _Term_typeLambda>>: "ta" ~> deannotateAndDetypeTerm @@ (Core.typeLambdaBody $ var "ta")]
+
+stripTypeLambdas :: TBinding (Term -> Term)
+stripTypeLambdas = define "stripTypeLambdas" $
+  doc "Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations" $
+  "t" ~> cases _Term (var "t")
+    (Just $ var "t") [
+    _Term_annotated>>: "at" ~>
+       "subj" <~ Core.annotatedTermBody (var "at") $
+       "ann" <~ Core.annotatedTermAnnotation (var "at") $
+       Core.termAnnotated $ Core.annotatedTerm (stripTypeLambdas @@ var "subj") (var "ann"),
+    _Term_typeLambda>>: "ta" ~> stripTypeLambdas @@ (Core.typeLambdaBody $ var "ta")]
 
 flattenLetTerms :: TBinding (Term -> Term)
 flattenLetTerms = define "flattenLetTerms" $

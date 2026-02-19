@@ -7,7 +7,7 @@ package hydra.annotations;
  */
 public interface Annotations {
   static <T0, T1, T2, T3> java.util.Map<T2, T3> aggregateAnnotations(java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, java.util.function.Function<T1, java.util.Map<T2, T3>> getAnns, T0 t) {
-    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat.apply(hydra.annotations.Annotations.<T1, T2, T3, T0>aggregateAnnotations_toPairs(
+    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat.apply(hydra.annotations.Annotations.aggregateAnnotations_toPairs(
       getAnns,
       getValue,
       getX,
@@ -15,10 +15,10 @@ public interface Annotations {
       t)));
   }
   
-  static <T0, T1, T2, T3> java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T1, T2>>> aggregateAnnotations_toPairs(java.util.function.Function<T0, java.util.Map<T1, T2>> getAnns, java.util.function.Function<T3, hydra.util.Maybe<T0>> getValue, java.util.function.Function<T0, T3> getX, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T1, T2>>> rest, T3 t) {
+  static <T0, T1, T2, T3> java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>> aggregateAnnotations_toPairs(java.util.function.Function<T1, java.util.Map<T2, T3>> getAnns, java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>> rest, T0 t) {
     return hydra.lib.maybes.Maybe.apply(
       rest,
-      (java.util.function.Function<T0, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T1, T2>>>>) (yy -> hydra.annotations.Annotations.<T0, T1, T2, T3>aggregateAnnotations_toPairs(
+      (java.util.function.Function<T1, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>>>) (yy -> hydra.annotations.Annotations.aggregateAnnotations_toPairs(
         getAnns,
         getValue,
         getX,
@@ -37,7 +37,7 @@ public interface Annotations {
         v1)));
   }
   
-  static <T0> hydra.compute.Flow<T0, java.lang.Void> debugIf_checkAndFail(String message, hydra.util.Maybe<String> desc) {
+  static <T2> hydra.compute.Flow<T2, java.lang.Void> debugIf_checkAndFail(String message, hydra.util.Maybe<String> desc) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         desc,

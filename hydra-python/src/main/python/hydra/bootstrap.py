@@ -15,8 +15,7 @@ from hydra.generation import (
     filter_kernel_modules,
     filter_type_modules,
     kernel_modules,
-    load_all_modules_from_json_dir,
-    strip_all_term_types,
+    load_all_modules_from_json_dir_with,
     write_haskell,
     write_java,
     write_python,
@@ -99,14 +98,14 @@ def main():
     print(f"  Source: {args.json_dir}", flush=True)
     print(f"  JSON input files: {json_file_count}", flush=True)
     step_start = time.time()
-    raw_mods = load_all_modules_from_json_dir(args.json_dir, km)
+    raw_mods = load_all_modules_from_json_dir_with(False, args.json_dir, km)
     step_time = time.time() - step_start
     total_bindings = sum(len(m.elements) for m in raw_mods)
     print(f"  Loaded {len(raw_mods)} modules ({total_bindings} bindings).", flush=True)
     print(f"  Time: {_format_time(step_time)}", flush=True)
     print(flush=True)
 
-    # Main modules keep their type annotations from JSON (no stripping).
+    # Main modules keep their type annotations from JSON (strip_type_schemes=False).
     # This allows the pipeline to skip pre-adaptation inference (Step 3 in
     # data_graph_to_definitions), which is a major performance win.
     all_mods = raw_mods
@@ -166,8 +165,9 @@ def main():
     print("Step 5: Loading test modules from JSON...", flush=True)
     print(f"  Source: {test_json_dir}", flush=True)
     step_start = time.time()
-    raw_test_mods = load_all_modules_from_json_dir(test_json_dir, all_mods)
-    test_mods = strip_all_term_types(raw_test_mods)
+    # Load test modules WITHOUT stripping TypeSchemes (strip_type_schemes=False).
+    # Test modules need their types preserved so inference can be skipped.
+    test_mods = load_all_modules_from_json_dir_with(False, test_json_dir, all_mods)
     step_time = time.time() - step_start
     test_bindings = sum(len(m.elements) for m in test_mods)
     print(f"  Loaded {len(test_mods)} test modules ({test_bindings} bindings).", flush=True)

@@ -235,19 +235,23 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     "capturedTermVarTypePairs" <~ Lists.map
       ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types")))
       (var "capturedTermVars") $
+    -- We can only construct a new type scheme if all of the captured term variables have types
+    -- If there are any captured term variables, we create a function type
+    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Rewriting.deannotateTypeParameters @@ var "typ") (Maybes.cat (Lists.map (unaryFunction Pairs.second) (var "capturedTermVarTypePairs"))) $
+    -- Captured type vars include those free in the binding's type AND those free in captured term var types.
+    -- The latter is needed because wrapping with lambdas for captured term vars introduces their types
+    -- into the hoisted binding's type.
+    "freeInBindingType" <~ optCases (Core.bindingType $ var "b")
+      Sets.empty
+      ("ts" ~> Rewriting.freeVariablesInType @@ (Core.typeSchemeType $ var "ts")) $
+    "freeInCapturedVarTypes" <~ Sets.unions (Lists.map ("t" ~> Rewriting.freeVariablesInType @@ var "t") (var "capturedTermVarTypes")) $
     "capturedTypeVars" <~ Sets.toList (Sets.intersection
       (Typing.typeContextTypeVariables $ var "cx")
-      (optCases (Core.bindingType $ var "b")
-        Sets.empty
-        ("ts" ~> Rewriting.freeVariablesInType @@ (Core.typeSchemeType $ var "ts")))) $
+      (Sets.union (var "freeInBindingType") (var "freeInCapturedVarTypes"))) $
     "globalBindingName" <~ Lexical.chooseUniqueName
       @@ var "alreadyUsedNames"
       @@ (Core.name (Strings.cat2 (var "prefix") (Core.unName $ Core.bindingName $ var "b"))) $
     "newUsedNames" <~ Sets.insert (var "globalBindingName") (var "alreadyUsedNames") $
-
-    -- We can only construct a new type scheme if all of the captured term variables have types
-    -- If there are any captured term variables, we create a function type
-    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Rewriting.deannotateTypeParameters @@ var "typ") (Maybes.cat (Lists.map (unaryFunction Pairs.second) (var "capturedTermVarTypePairs"))) $
     "newTypeScheme" <~ Logic.ifElse
       (Equality.equal (Lists.length $ var "capturedTermVarTypes") (Lists.length $ var "capturedTermVarTypePairs"))
       (Maybes.map
@@ -261,13 +265,15 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
        (Core.bindingType $ var "b"))
       nothing $
 
-    -- Strip all type lambdas from the original term. We will add new ones at the right level.
-    "strippedTerm" <~ Rewriting.detypeTerm @@ (Core.bindingTerm $ var "b") $
+    -- Strip only outer type lambda wrappers from the original term (preserving type application wrappers).
+    -- Then re-add all type scheme variables as type lambdas.
+    "strippedTerm" <~ Rewriting.stripTypeLambdas @@ (Core.bindingTerm $ var "b") $
     "termWithLambdas" <~ Lists.foldl
       ("t" ~> "p" ~> Core.termFunction $ Core.functionLambda $
         Core.lambda (Pairs.first $ var "p") (Maybes.map ("dom" ~> Rewriting.deannotateTypeParameters @@ var "dom") (Pairs.second $ var "p")) (var "t"))
       (var "strippedTerm")
       (Lists.reverse $ var "capturedTermVarTypePairs") $
+    -- Add type lambdas for all new type scheme variables (captured + original scheme vars)
     "termWithTypeLambdas" <~ Lists.foldl
       ("t" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "t"))
       (var "termWithLambdas")

@@ -3,8 +3,9 @@ module Hydra.Sources.Kernel.Terms.Adapt.Simple where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  adaptFloatType, adaptDataGraph, adaptGraphSchema, adaptIntegerType, adaptLiteral, adaptLiteralType,
-  adaptLiteralTypesMap, adaptLiteralValue, adaptPrimitive, adaptTerm, adaptType, adaptTypeScheme,
+  adaptFloatType, adaptDataGraph, adaptGraphSchema, adaptIntegerType, adaptLambdaDomains, adaptLiteral,
+  adaptLiteralType, adaptLiteralTypesMap, adaptLiteralValue, adaptNestedTypes, adaptPrimitive,
+  adaptTerm, adaptType, adaptTypeScheme,
   dataGraphToDefinitions, literalTypeSupported, pushTypeAppsInward, schemaGraphToDefinitions,
   termAlternatives, typeAlternatives)
 import Hydra.Sources.Libraries
@@ -85,10 +86,12 @@ module_ = Module ns elements
       toBinding adaptDataGraph,
       toBinding adaptGraphSchema,
       toBinding adaptIntegerType,
+      toBinding adaptLambdaDomains,
       toBinding adaptLiteral,
       toBinding adaptLiteralType,
       toBinding adaptLiteralTypesMap,
       toBinding adaptLiteralValue,
+      toBinding adaptNestedTypes,
       toBinding adaptPrimitive,
       toBinding adaptTerm,
       toBinding adaptType,
@@ -159,53 +162,18 @@ adaptDataGraph = define "adaptDataGraph" $
   -- Adapt lambda domains in the adapted term.
   -- Lambda domains carry pre-adaptation types (e.g. bigfloat) that must be adapted to match
   -- the post-adaptation terms (e.g. float64). This preserves type annotations.
-  "adaptLambdaDomains" <~ ("recurse" ~> "term" ~>
-    "rewritten" <<~ var "recurse" @@ var "term" $
-    cases _Term (var "rewritten")
-      (Just $ produce $ var "rewritten") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ produce $ Core.termFunction $ var "f") [
-        _Function_lambda>>: "l" ~>
-          "adaptedDomain" <<~ optCases (Core.lambdaDomain $ var "l")
-            (produce nothing)
-            ("dom" ~>
-              "dom1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "dom" $
-              produce $ just $ var "dom1") $
-          produce $ Core.termFunction $ Core.functionLambda $ Core.lambda
-            (Core.lambdaParameter $ var "l")
-            (var "adaptedDomain")
-            (Core.lambdaBody $ var "l")]]) $
-  "gterm3" <<~ Rewriting.rewriteTermM @@ var "adaptLambdaDomains" @@ var "gterm2" $
+  "gterm3" <<~ Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "gterm2" $
   "els1Raw" <~ Schemas.termAsGraph @@ var "gterm3" $
 
   -- Adapt nested let binding TypeSchemes within each top-level binding's term.
   -- These TypeSchemes may carry stale types from JSON modules (e.g. bigfloat→float64).
   -- Applied per-binding AFTER termAsGraph so that top-level binding TypeSchemes
   -- (which carry type-class constraints like Ord) are preserved.
-  "adaptNestedTypes" <~ ("recurse" ~> "term" ~>
-    "rewritten" <<~ var "recurse" @@ var "term" $
-    cases _Term (var "rewritten")
-      (Just $ produce $ var "rewritten") [
-      _Term_let>>: "lt" ~>
-        "adaptB" <~ ("b" ~>
-          "adaptedBType" <<~ optCases (Core.bindingType $ var "b")
-            (produce nothing)
-            ("ts" ~>
-              "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
-              produce $ just $ var "ts1") $
-          produce $ Core.binding
-            (Core.bindingName $ var "b")
-            (Core.bindingTerm $ var "b")
-            (var "adaptedBType")) $
-        "adaptedBindings" <<~ Flows.mapList (var "adaptB") (Core.letBindings $ var "lt") $
-        produce $ Core.termLet $ Core.let_
-          (var "adaptedBindings")
-          (Core.letBody $ var "lt")]) $
   -- Process each binding: adapt nested let TypeSchemes AND adapt top-level TypeSchemes.
   -- Adapting (rather than stripping) TypeSchemes converts stale types like bigfloat→float64
   -- while preserving type-class constraints like Ord needed by decodeSet.
   "processBinding" <~ ("el" ~>
-    "newTerm" <<~ Rewriting.rewriteTermM @@ var "adaptNestedTypes" @@ (Core.bindingTerm $ var "el") $
+    "newTerm" <<~ Rewriting.rewriteTermM @@ (adaptNestedTypes @@ var "constraints" @@ var "litmap") @@ (Core.bindingTerm $ var "el") $
     "adaptedType" <<~ optCases (Core.bindingType $ var "el")
       (produce nothing)
       ("ts" ~>
@@ -225,6 +193,58 @@ adaptDataGraph = define "adaptDataGraph" $
     Core.termUnit
     (var "prims1")
     (var "schema1")
+
+-- | Rewrite callback for adapting lambda domains in a term.
+-- Dispatches on Term variants: for TermFunction, adapts the lambda domain type;
+-- for all other variants, returns the term unchanged.
+-- This is a top-level function (not inline) so the Python code generator can emit match statements.
+adaptLambdaDomains :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Flow s Term) -> Term -> Flow s Term)
+adaptLambdaDomains = define "adaptLambdaDomains" $
+  doc "Rewrite callback for adapting lambda domain types in a term" $
+  "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
+  "rewritten" <<~ var "recurse" @@ var "term" $
+  cases _Term (var "rewritten")
+    (Just $ produce $ var "rewritten") [
+    _Term_function>>: "f" ~>
+      cases _Function (var "f")
+        (Just $ produce $ Core.termFunction $ var "f") [
+        _Function_lambda>>: "l" ~>
+          "adaptedDomain" <<~ optCases (Core.lambdaDomain $ var "l")
+            (produce nothing)
+            ("dom" ~>
+              "dom1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "dom" $
+              produce $ just $ var "dom1") $
+          produce $ Core.termFunction $ Core.functionLambda $ Core.lambda
+            (Core.lambdaParameter $ var "l")
+            (var "adaptedDomain")
+            (Core.lambdaBody $ var "l")]]
+
+-- | Rewrite callback for adapting nested let binding TypeSchemes in a term.
+-- Dispatches on Term variants: for TermLet, adapts the binding TypeSchemes;
+-- for all other variants, returns the term unchanged.
+-- This is a top-level function (not inline) so the Python code generator can emit match statements.
+adaptNestedTypes :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Flow s Term) -> Term -> Flow s Term)
+adaptNestedTypes = define "adaptNestedTypes" $
+  doc "Rewrite callback for adapting nested let binding TypeSchemes in a term" $
+  "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
+  "rewritten" <<~ var "recurse" @@ var "term" $
+  cases _Term (var "rewritten")
+    (Just $ produce $ var "rewritten") [
+    _Term_let>>: "lt" ~>
+      "adaptB" <~ ("b" ~>
+        "adaptedBType" <<~ optCases (Core.bindingType $ var "b")
+          (produce nothing)
+          ("ts" ~>
+            "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
+            produce $ just $ var "ts1") $
+        produce $ Core.binding
+          (Core.bindingName $ var "b")
+          (Core.bindingTerm $ var "b")
+          (var "adaptedBType")) $
+      "adaptedBindings" <<~ Flows.mapList (var "adaptB") (Core.letBindings $ var "lt") $
+      produce $ Core.termLet $ Core.let_
+        (var "adaptedBindings")
+        (Core.letBody $ var "lt")]
 
 adaptGraphSchema :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Flow s (M.Map Name Type))
 adaptGraphSchema = define "adaptGraphSchema" $
@@ -523,8 +543,8 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints and a designated list of namespaces,"
     <> " adapt the graph to the language constraints,"
     <> " then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces)."
-    <> " Inference is performed before adaptation if bindings lack type annotations,"
-    <> " and again after hoisting if hoisting creates new untyped bindings."
+    <> " Inference is performed before adaptation if bindings lack type annotations."
+    <> " Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails."
     <> " Adaptation preserves type application/lambda wrappers and adapts embedded types."
     <> " Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent."
     <> " The doExpand flag controls eta expansion."
@@ -569,8 +589,9 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
      produce $ Graph.graphWithElements (var "graphh1") (var "newElements2"))
     (produce $ var "graphh1") $
 
-  -- Step 3: Infer types if needed (eta expansion and hoisting require type annotations).
-  -- Skip if all bindings already have types (e.g. modules loaded from inferred JSON).
+  -- Step 3: Infer types ONLY if the inputs are entirely untyped.
+  -- This is the single acceptable use of inference in the pipeline.
+  -- If inputs already have types (e.g. from JSON or prior inference), skip.
   "allHaveTypes" <~ Logic.ands (Lists.map ("b" ~> Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graphu1")) $
   "graphi1" <<~ Logic.ifElse (var "allHaveTypes")
     (produce $ var "graphu1")
@@ -589,13 +610,15 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     (var "hoistPoly" @@ var "graphi1")
     (var "graphi1") $
 
-  -- Step 4.5: Re-infer types after hoisting, but only if hoisting actually occurred.
-  -- Hoisting strips type application wrappers from terms (via detypeTerm), which means
-  -- typeOf cannot reconstruct types from the raw terms. Inference repairs this.
-  -- When hoisting is disabled (e.g. for Haskell), this step is skipped entirely.
-  "graphi2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
-    (Inference.inferGraphTypes @@ var "graphh")
-    (produce $ var "graphh") $
+  -- Step 4.5: Assert types are preserved after hoisting.
+  -- Poly hoisting restructures terms but preserves type annotations on all bindings.
+  -- If types are missing, fail rather than silently re-inferring.
+  "untypedAfterHoist" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
+    (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graphh")) $
+  "graphi2" <<~ Logic.ifElse (Lists.null $ var "untypedAfterHoist")
+    (produce $ var "graphh")
+    (Flows.fail $ Strings.concat [string "Poly hoisting removed types from bindings: ",
+      Strings.intercalate (string ", ") (var "untypedAfterHoist")]) $
 
   -- Step 5: Adapt the graph (includes eta expansion if enabled).
   -- Adaptation preserves type application/lambda wrappers and adapts embedded types

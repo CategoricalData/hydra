@@ -2078,6 +2078,25 @@ def simplify_term(term: hydra.core.Term) -> hydra.core.Term:
         return recurse(for_term(stripped()))
     return rewrite_term((lambda x1, x2: simplify(x1, x2)), term)
 
+def strip_type_lambdas(t: hydra.core.Term) -> hydra.core.Term:
+    r"""Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations."""
+    
+    match t:
+        case hydra.core.TermAnnotated(value=at):
+            @lru_cache(1)
+            def subj() -> hydra.core.Term:
+                return at.body
+            @lru_cache(1)
+            def ann() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                return at.annotation
+            return cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(strip_type_lambdas(subj()), ann())))
+        
+        case hydra.core.TermTypeLambda(value=ta):
+            return strip_type_lambdas(ta.body)
+        
+        case _:
+            return t
+
 def substitute_type_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], typ: hydra.core.Type) -> hydra.core.Type:
     r"""Substitute type variables in a type."""
     

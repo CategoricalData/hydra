@@ -113,17 +113,16 @@ but these web links are the canonical references:
 |------|-----|-------------|
 | Home | https://github.com/CategoricalData/hydra/wiki | Navigation hub linking to all wiki pages |
 | Concepts | https://github.com/CategoricalData/hydra/wiki/Concepts | Core concepts: Type, Term, Element, Graph, Module, Flow monad, primitives, coders, adapters. Type system (System F with HM inference). 7 design principles. Algebraic Property Graphs |
-| DSL guide (Haskell) | https://github.com/CategoricalData/hydra/wiki/DSL-guide | Comprehensive Haskell DSL reference. 4 DSL variants (direct, phantom-typed, meta, generated). Operators, precedence, import conventions. Library DSLs. Common errors |
-| DSL guide (Java) | https://github.com/CategoricalData/hydra/wiki/DSL-guide-java | Java DSL: `hydra.dsl.Types`, `hydra.dsl.Terms`. Visitor pattern for unions. Flow monad usage. Primitive function packages |
-| DSL guide (Python) | https://github.com/CategoricalData/hydra/wiki/DSL-guide-python | Python DSL: `hydra.dsl.types`, `hydra.dsl.terms`. Pattern matching via `match`/`isinstance`. `FrozenDict` for maps. Trailing underscores on reserved words |
-| Implementation | https://github.com/CategoricalData/hydra/wiki/Implementation | Detailed architecture guide. 20 kernel type modules, DSL system (3 levels, 33+ files), ~180+ primitive functions with `prim`/`primEval` registration. Cross-language coder architecture. Bootstrap process. Extension points |
+| DSL guide (Haskell) | https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide.md | Comprehensive Haskell DSL reference. 4 DSL variants (direct, phantom-typed, meta, generated). Operators, precedence, import conventions. Library DSLs. Common errors |
+| DSL guide (Java) | https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide-java.md | Java DSL: `hydra.dsl.Types`, `hydra.dsl.Terms`. Visitor pattern for unions. Flow monad usage. Primitive function packages |
+| DSL guide (Python) | https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide-python.md | Python DSL: `hydra.dsl.types`, `hydra.dsl.terms`. Pattern matching via `match`/`isinstance`. `FrozenDict` for maps. Trailing underscores on reserved words |
+| Implementation | https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md | Detailed architecture guide. 20 kernel type modules, DSL system (3 levels, 33+ files), ~180+ primitive functions with `prim`/`primEval` registration. Cross-language coder architecture. Bootstrap process. Extension points |
 | Code organization | https://github.com/CategoricalData/hydra/wiki/Code-organization | The `src/main/` vs `src/gen-main/` pattern explained per implementation. What goes where. Never edit generated files |
 | Testing | https://github.com/CategoricalData/hydra/wiki/Testing | Common test suite (`hydra.test.testSuite`). Kernel tests vs generation tests. Test categories (primitives, inference, checking, formatting). Per-language test runners. TestGenerator abstraction |
 | Benchmarking | https://github.com/CategoricalData/hydra/wiki/Benchmarking | Performance measurement across implementations. Python benchmark tool with CSV output. `hydra_path` for cross-language comparison. Known slow tests |
-| Hydra developers | https://github.com/CategoricalData/hydra/wiki/Hydra-developers | Source code organization guide. Kernel sources, extended sources, DSLs, primitives. Release processes for Hackage and Sonatype |
-| Release process | https://github.com/CategoricalData/hydra/wiki/Hydra-release-process | Full release workflow: sync Haskell -> sync Java -> sync Python -> verify -> publish to Hackage/Sonatype/PyPI -> tag. Version file locations. `verify-release.sh` |
+| Developers | https://github.com/CategoricalData/hydra/wiki/Developers | Source code organization guide. Kernel sources, extended sources, DSLs, primitives. Release processes for Hackage and Sonatype |
+| Release process | https://github.com/CategoricalData/hydra/wiki/Release-process | Full release workflow: sync Haskell -> sync Java -> sync Python -> verify -> publish to Hackage/Sonatype/PyPI -> tag. Version file locations. `verify-release.sh` |
 | Property graphs | https://github.com/CategoricalData/hydra/wiki/Property-graphs | Algebraic Property Graphs. Mapping annotation keys (`@label`, `@id`, `@key`, `@value`, `@outVertex`, `@inVertex`, etc.). Value patterns. Schema object definition |
-| New implementations | https://github.com/CategoricalData/hydra/wiki/New-Hydra-implementations | Redirect stub -- actual content moved to [new-implementation.md](recipes/new-implementation.md) |
 
 ## Architecture: how the pieces fit together
 
