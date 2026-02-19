@@ -26,17 +26,22 @@ Options:
 
 import argparse
 import json
-import os
+import math
+import statistics
 import sys
 from pathlib import Path
 
 
-def load_runs(runs_dir: str) -> list[dict]:
-    """Load all JSON run files from the directory.
+def load_runs(runs_dir):
+    """Load all benchmark run directories.
 
-    Supports two layouts:
-      - New: runs_dir/run_<timestamp>/<language>.json
-      - Legacy: runs_dir/<timestamp>_<language>_<commit>.json
+    Each run directory (run_<timestamp>) may contain:
+      - Single run: haskell.json, java.json, python.json
+      - Multi-run:  haskell_1.json, haskell_2.json, ..., java_1.json, ...
+
+    Returns a list of "aggregated run" dicts, one per (run_dir, language).
+    Each aggregated run has the same schema as a single run, but with
+    median timing and an additional 'stddev' field on each group.
     """
     runs = []
     runs_path = Path(runs_dir)
@@ -44,20 +49,115 @@ def load_runs(runs_dir: str) -> list[dict]:
         return runs
 
     for d in sorted(runs_path.iterdir()):
-        if d.is_dir() and d.name.startswith("run_"):
-            for f in sorted(d.glob("*.json")):
+        if not (d.is_dir() and d.name.startswith("run_")):
+            continue
+
+        # Group JSON files by language
+        lang_files = {}
+        for f in sorted(d.glob("*.json")):
+            name = f.stem  # e.g. "haskell", "haskell_1", "java_3"
+            parts = name.rsplit("_", 1)
+            if len(parts) == 2 and parts[1].isdigit():
+                lang = parts[0]
+            else:
+                lang = name
+            lang_files.setdefault(lang, []).append(f)
+
+        for lang, files in lang_files.items():
+            raw_runs = []
+            for f in files:
                 try:
                     with open(f) as fh:
                         data = json.load(fh)
-                        data["_file"] = f"{d.name}/{f.name}"
-                        runs.append(data)
+                        raw_runs.append(data)
                 except (json.JSONDecodeError, KeyError):
                     pass
+
+            if not raw_runs:
+                continue
+
+            aggregated = aggregate_runs(raw_runs, d.name)
+            runs.append(aggregated)
 
     return runs
 
 
-def index_groups(groups: list[dict]) -> dict[str, dict]:
+def aggregate_runs(raw_runs, dir_name):
+    """Aggregate multiple runs of the same language into one with median + stddev."""
+    if len(raw_runs) == 1:
+        run = raw_runs[0]
+        run["_file"] = dir_name
+        run["_repeat"] = 1
+        add_stddev(run.get("groups", []), {})
+        return run
+
+    # Use first run as the structural template
+    base = json.loads(json.dumps(raw_runs[0]))  # deep copy
+    base["_file"] = dir_name
+    base["_repeat"] = len(raw_runs)
+
+    # Build timing samples: path -> [time1, time2, ...]
+    all_samples = {}
+    for run in raw_runs:
+        collect_samples(run.get("groups", []), all_samples)
+
+    # Also collect summary-level samples
+    summary_times = [r.get("summary", {}).get("totalTimeMs", 0) for r in raw_runs]
+
+    # Apply median timing and stddev to base structure
+    apply_median(base.get("groups", []), all_samples)
+    add_stddev(base.get("groups", []), all_samples)
+
+    # Aggregate summary
+    if summary_times:
+        base["summary"]["totalTimeMs"] = round1(statistics.median(summary_times))
+        base["summary"]["_stddev"] = round1(statistics.stdev(summary_times)) if len(summary_times) > 1 else 0.0
+
+    # Aggregate pass/fail/skip counts (use max of passed, sum of failed — but really
+    # these should be identical across runs; use first run's counts)
+
+    return base
+
+
+def collect_samples(groups, samples):
+    """Recursively collect timing samples from a group tree."""
+    for g in groups:
+        path = g["path"]
+        samples.setdefault(path, []).append(g.get("totalTimeMs", 0))
+        if "subgroups" in g:
+            collect_samples(g["subgroups"], samples)
+
+
+def apply_median(groups, samples):
+    """Replace totalTimeMs with the median across runs."""
+    for g in groups:
+        path = g["path"]
+        times = samples.get(path, [])
+        if times:
+            g["totalTimeMs"] = round1(statistics.median(times))
+        if "subgroups" in g:
+            apply_median(g["subgroups"], samples)
+
+
+def add_stddev(groups, samples):
+    """Add _stddev field to each group."""
+    for g in groups:
+        path = g["path"]
+        times = samples.get(path, [])
+        if len(times) > 1:
+            g["_stddev"] = round1(statistics.stdev(times))
+        else:
+            g["_stddev"] = 0.0
+        if "subgroups" in g:
+            add_stddev(g["subgroups"], samples)
+
+
+def round1(x):
+    """Round to 1 decimal place."""
+    return round(x * 10) / 10
+
+
+def index_groups(groups):
     """Build a flat index from group path to group data."""
     result = {}
     for g in groups:
@@ -67,13 +167,22 @@ def index_groups(groups: list[dict]) -> dict[str, dict]:
     return result
 
 
-def fmt_time(ms: float) -> str:
-    """Format milliseconds consistently (always ms, no unit mixing)."""
+def fmt_time(ms):
+    """Format milliseconds consistently, without 'ms' suffix."""
     if ms >= 100:
-        return f"{ms:.0f}ms"
+        return f"{ms:.0f}"
     if ms >= 10:
-        return f"{ms:.1f}ms"
-    return f"{ms:.2f}ms"
+        return f"{ms:.1f}"
+    return f"{ms:.2f}"
+
+
+def fmt_stddev(sd):
+    """Format standard deviation as ±value."""
+    if sd >= 100:
+        return f"\u00b1{sd:.0f}"
+    if sd >= 10:
+        return f"\u00b1{sd:.1f}"
+    return f"\u00b1{sd:.2f}"
 
 
 # ANSI color codes
@@ -83,10 +192,10 @@ GRAY = "\033[90m"
 RESET = "\033[0m"
 
 # Width of each language column (visible characters, excluding ANSI codes)
-LANG_COL_WIDTH = 24
+LANG_COL_WIDTH = 32
 
 
-def fmt_counts(passed: int, failed: int, skipped: int) -> str:
+def fmt_counts(passed, failed, skipped):
     """Format test counts: passed in default, failed in red, skipped in gray.
     Returns a string with ANSI codes; visible width is always 12 chars."""
     passed_str = f"{passed:>4}" if passed > 0 else "    "
@@ -101,30 +210,31 @@ def fmt_counts(passed: int, failed: int, skipped: int) -> str:
     return passed_str + failed_str + skipped_str
 
 
-def fmt_counts_header(lang: str) -> str:
-    """Format the header for a language column. Visible width = 2 + 23 = 25."""
-    return f"  {lang.capitalize():>23}"
+def fmt_counts_header(lang):
+    """Format the header for a language column."""
+    return f"  {lang.capitalize():>31}"
 
 
-def fmt_cell(passed: int, failed: int, skipped: int, time_ms: float,
-             ref_time_ms=None, slowdown_threshold: float = 10.0) -> str:
-    """Format a full cell: counts + time. Visible width = 2 + 12 + 1 + 10 = 25.
-    If ref_time_ms is set: red if >= slowdown_threshold times slower, green if strictly faster."""
-    time_str = f"{fmt_time(time_ms):>10}"
+def fmt_cell(passed, failed, skipped, time_ms, stddev,
+             ref_time_ms=None, slowdown_threshold=10.0):
+    """Format a full cell: counts + time + ±stddev.
+    Visible width = 2 + 12 + 1 + 8 + 1 + 8 = 32."""
+    time_str = f"{fmt_time(time_ms):>8}"
+    sd_str = f"{GRAY}{fmt_stddev(stddev):>8}{RESET}"
     if ref_time_ms is not None and ref_time_ms > 0:
         if time_ms / ref_time_ms >= slowdown_threshold:
             time_str = f"{RED}{time_str}{RESET}"
         elif time_ms < ref_time_ms:
             time_str = f"{GREEN}{time_str}{RESET}"
-    return f"  {fmt_counts(passed, failed, skipped)} {time_str}"
+    return f"  {fmt_counts(passed, failed, skipped)} {time_str} {sd_str}"
 
 
-def fmt_cell_missing() -> str:
-    """Format a cell for a missing group. Visible width = 25."""
-    return f"  {'--':>12} {'--':>10}"
+def fmt_cell_missing():
+    """Format a cell for a missing group. Visible width = 32."""
+    return f"  {'--':>12} {'--':>8} {'':>8}"
 
 
-def latest_run_per_language(runs: list[dict]) -> dict[str, dict]:
+def latest_run_per_language(runs):
     """Find the most recent run for each language."""
     latest = {}
     for run in runs:
@@ -134,7 +244,7 @@ def latest_run_per_language(runs: list[dict]) -> dict[str, dict]:
     return latest
 
 
-def latest_run_per_language_branch(runs: list[dict], branch: str) -> dict[str, dict]:
+def latest_run_per_language_branch(runs, branch):
     """Find the most recent run for each language on a specific branch."""
     latest = {}
     for run in runs:
@@ -146,17 +256,19 @@ def latest_run_per_language_branch(runs: list[dict], branch: str) -> dict[str, d
     return latest
 
 
-def print_run_header(lang: str, run: dict):
+def print_run_header(lang, run):
     """Print metadata for a run."""
     meta = run.get("metadata", {})
     commit = meta.get("commit", "?")
     branch = meta.get("branch", "?")
     msg = meta.get("commitMessage", "")
     ts = meta.get("timestamp", "?")
-    print(f"  {lang.capitalize():<10} {ts[:16]} ({commit}, {branch}) \"{msg}\"")
+    repeat = run.get("_repeat", 1)
+    repeat_str = f" x{repeat}" if repeat > 1 else ""
+    print(f"  {lang.capitalize():<10} {ts[:16]} ({commit}, {branch}) \"{msg}\"{repeat_str}")
 
 
-def cmd_latest(args, runs: list[dict]):
+def cmd_latest(args, runs):
     """Show the most recent run for each language, side by side."""
     latest = latest_run_per_language(runs)
     if not latest:
@@ -190,7 +302,7 @@ def cmd_latest(args, runs: list[dict]):
     sep = "-" * len(header)
     print(sep)
 
-    totals = {lang: {"passed": 0, "failed": 0, "skipped": 0, "time": 0.0} for lang in langs}
+    totals = {lang: {"passed": 0, "failed": 0, "skipped": 0, "time": 0.0, "time_sq": []} for lang in langs}
 
     def print_group(tg, indent, remaining_depth):
         path = tg["path"]
@@ -213,13 +325,15 @@ def cmd_latest(args, runs: list[dict]):
                 f = g.get("failed", 0)
                 s = g.get("skipped", 0)
                 t = g.get("totalTimeMs", 0)
+                sd = g.get("_stddev", 0.0)
                 if indent == 0:
                     totals[lang]["passed"] += p
                     totals[lang]["failed"] += f
                     totals[lang]["skipped"] += s
                     totals[lang]["time"] += t
+                    totals[lang]["time_sq"].append((t, sd))
                 rt = ref_time if lang != "haskell" else None
-                cols += fmt_cell(p, f, s, t, rt, args.slowdown)
+                cols += fmt_cell(p, f, s, t, sd, rt, args.slowdown)
             else:
                 cols += fmt_cell_missing()
         print(f"{short:<40}{cols}")
@@ -237,11 +351,14 @@ def cmd_latest(args, runs: list[dict]):
     for lang in langs:
         t = totals[lang]
         rt = haskell_total_time if lang != "haskell" else None
-        total_cols += fmt_cell(t['passed'], t['failed'], t['skipped'], t['time'], rt, args.slowdown)
+        # Propagate stddev for total: sqrt(sum of variances)
+        total_sd = math.sqrt(sum(sd * sd for _, sd in t["time_sq"])) if t["time_sq"] else 0.0
+        total_cols += fmt_cell(t['passed'], t['failed'], t['skipped'], t['time'],
+                               round1(total_sd), rt, args.slowdown)
     print(f"{'TOTAL':<40}{total_cols}")
 
 
-def cmd_compare(args, runs: list[dict]):
+def cmd_compare(args, runs):
     """Compare the latest run on two branches for each language."""
     base_runs = latest_run_per_language_branch(runs, args.base_branch)
     feat_runs = latest_run_per_language_branch(runs, args.feature_branch)
@@ -297,7 +414,7 @@ def cmd_compare(args, runs: list[dict]):
         print()
 
 
-def cmd_history(args, runs: list[dict]):
+def cmd_history(args, runs):
     """Show timing history for a specific group across commits."""
     if not args.group:
         print("--group is required for history mode.")
@@ -394,10 +511,10 @@ def cmd_history(args, runs: list[dict]):
         print(line)
 
 
-def cmd_diff(args, runs: list[dict]):
+def cmd_diff(args, runs):
     """Compare the two most recent runs for each language."""
     # Group runs by language
-    by_lang: dict[str, list[dict]] = {}
+    by_lang = {}
     for r in runs:
         lang = r.get("metadata", {}).get("language", "")
         if lang:

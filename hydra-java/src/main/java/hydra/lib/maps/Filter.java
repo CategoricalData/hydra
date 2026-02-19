@@ -100,12 +100,12 @@ public class Filter extends PrimitiveFunction {
      * @return the filtered map
      */
     public static <K, V> Map<K, V> apply(Function<V, Boolean> pred, Map<K, V> mp) {
-        Map<K, V> result = new java.util.LinkedHashMap<>();
+        Map<K, V> result = FromList.emptyLike(mp);
         for (Map.Entry<K, V> entry : mp.entrySet()) {
             if (pred.apply(entry.getValue())) {
                 result.put(entry.getKey(), entry.getValue());
             }
         }
-        return FromList.orderedMap(result);
+        return result;
     }
 }

@@ -76,6 +76,7 @@ public class MapKeys extends PrimitiveFunction {
      * @return the map with transformed keys
      */
     public static <K1, K2, V> java.util.Map<K2, V> apply(Function<K1, K2> mapping, java.util.Map<K1, V> arg) {
+        // Build into a LinkedHashMap first since we don't know the output key type's ordering
         java.util.Map<K2, V> result = new java.util.LinkedHashMap<>();
         for (java.util.Map.Entry<K1, V> e : arg.entrySet()) {
             result.put(mapping.apply(e.getKey()), e.getValue());

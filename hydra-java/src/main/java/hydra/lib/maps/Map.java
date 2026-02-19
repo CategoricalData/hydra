@@ -75,10 +75,10 @@ public class Map extends PrimitiveFunction {
      * @return the transformed map
      */
     public static <K, V1, V2> java.util.Map<K, V2> apply(Function<V1, V2> mapping, java.util.Map<K, V1> arg) {
-        java.util.Map<K, V2> result = new java.util.LinkedHashMap<>();
+        java.util.Map<K, V2> result = FromList.emptyLike(arg);
         for (java.util.Map.Entry<K, V1> e : arg.entrySet()) {
             result.put(e.getKey(), mapping.apply(e.getValue()));
         }
-        return FromList.orderedMap(result);
+        return result;
     }
 }

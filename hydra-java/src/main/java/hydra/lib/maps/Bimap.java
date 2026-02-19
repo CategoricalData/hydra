@@ -86,6 +86,7 @@ public class Bimap extends PrimitiveFunction {
      */
     public static <K1, K2, V1, V2> Map<K2, V2> apply(
             Function<K1, K2> kf, Function<V1, V2> vf, Map<K1, V1> mp) {
+        // Key type changes, so we build into LinkedHashMap then let orderedMap sort
         Map<K2, V2> result = new java.util.LinkedHashMap<>();
         for (Map.Entry<K1, V1> entry : mp.entrySet()) {
             result.put(kf.apply(entry.getKey()), vf.apply(entry.getValue()));

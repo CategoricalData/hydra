@@ -90,9 +90,15 @@ public class FromList extends PrimitiveFunction {
     /**
      * Creates an ordered map from an existing map.
      * Uses TreeMap when keys are Comparable (matching Haskell's Data.Map behavior).
+     * If the source is already a TreeMap, returns a shallow copy using the same comparator.
      */
     @SuppressWarnings("unchecked")
     static <K, V> Map<K, V> orderedMap(Map<K, V> source) {
+        if (source instanceof TreeMap) {
+            TreeMap<K, V> result = new TreeMap<>(((TreeMap<K, V>) source).comparator());
+            result.putAll(source);
+            return result;
+        }
         if (source.isEmpty()) {
             return new LinkedHashMap<>();
         }
@@ -112,5 +118,33 @@ public class FromList extends PrimitiveFunction {
             }
         }
         return new LinkedHashMap<>(source);
+    }
+
+    /**
+     * Creates an empty ordered map with the same ordering strategy as the source map.
+     * If the source is a TreeMap, creates a new empty TreeMap with the same comparator.
+     * If the source has Comparable keys, creates a TreeMap.
+     * Otherwise creates a LinkedHashMap.
+     */
+    @SuppressWarnings("unchecked")
+    static <K, V1, V2> Map<K, V2> emptyLike(Map<K, V1> source) {
+        if (source instanceof TreeMap) {
+            return new TreeMap<>(((TreeMap<K, V1>) source).comparator());
+        }
+        if (!source.isEmpty()) {
+            for (K key : source.keySet()) {
+                if (key != null) {
+                    if (key instanceof Comparable) {
+                        try {
+                            return new TreeMap<>((a, b) -> ((Comparable<K>) a).compareTo(b));
+                        } catch (ClassCastException e) {
+                            return new LinkedHashMap<>();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return new LinkedHashMap<>();
     }
 }
