@@ -187,8 +187,11 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
         def term_with_type_lambdas() -> hydra.core.Term:
             return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(v, t)))), term_with_lambdas(), hydra.lib.lists.reverse(hydra.lib.maybes.maybe((), (lambda v1: v1.variables), new_type_scheme())))
         @lru_cache(1)
+        def with_type_apps() -> hydra.core.Term:
+            return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(t, cast(hydra.core.Type, hydra.core.TypeVariable(v)))))), cast(hydra.core.Term, hydra.core.TermVariable(global_binding_name())), captured_type_vars())
+        @lru_cache(1)
         def replacement() -> hydra.core.Term:
-            return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(t, cast(hydra.core.Term, hydra.core.TermVariable(v)))))), cast(hydra.core.Term, hydra.core.TermVariable(global_binding_name())), captured_term_vars())
+            return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(t, cast(hydra.core.Term, hydra.core.TermVariable(v)))))), with_type_apps(), captured_term_vars())
         @lru_cache(1)
         def new_binding_and_replacement() -> tuple[hydra.core.Binding, hydra.core.Term]:
             return (hydra.core.Binding(global_binding_name(), term_with_type_lambdas(), new_type_scheme()), replacement())

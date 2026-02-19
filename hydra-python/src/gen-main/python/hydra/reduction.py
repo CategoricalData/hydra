@@ -10,6 +10,7 @@ from typing import TypeVar, cast
 import hydra.arity
 import hydra.checking
 import hydra.core
+import hydra.encode.core
 import hydra.extract.core
 import hydra.graph
 import hydra.lexical
@@ -276,7 +277,7 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
         @lru_cache(1)
         def needed() -> int:
             return hydra.lib.math.sub(arity, num_args())
-        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.gt(needed(), 0), hydra.lib.logic.or_(always_pad, hydra.lib.equality.gt(num_args(), 0))), (lambda : (indices := hydra.lib.math.range_(1, needed()), (remaining_type := peel_function_domains(head_typ, num_args()), (domains := domain_types(needed(), remaining_type), (fully_applied := hydra.lib.lists.foldl((lambda body, i: (vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(vn))))))[1]), applied(), indices), (indexed_domains := hydra.lib.lists.zip(indices, domains), hydra.lib.lists.foldl((lambda body, id_pair: (i := hydra.lib.pairs.first(id_pair), dom := hydra.lib.pairs.second(id_pair), vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(vn, dom, body))))))[3]), fully_applied, hydra.lib.lists.reverse(indexed_domains)))[1])[1])[1])[1])[1]), (lambda : applied()))
+        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.gt(needed(), 0), hydra.lib.logic.or_(always_pad, hydra.lib.equality.gt(num_args(), 0))), (lambda : (indices := hydra.lib.math.range_(1, needed()), (remaining_type := peel_function_domains(head_typ, num_args()), (domains := domain_types(needed(), remaining_type), (codomain_type := peel_function_domains(remaining_type, needed()), (fully_applied_raw := hydra.lib.lists.foldl((lambda body, i: (vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(vn))))))[1]), applied(), indices), (fully_applied := hydra.lib.maybes.maybe(fully_applied_raw, (lambda ct: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(fully_applied_raw, hydra.lib.maps.singleton(hydra.core.Name("type"), hydra.encode.core.type(ct)))))), codomain_type), (indexed_domains := hydra.lib.lists.zip(indices, domains), hydra.lib.lists.foldl((lambda body, id_pair: (i := hydra.lib.pairs.first(id_pair), dom := hydra.lib.pairs.second(id_pair), vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(vn, dom, body))))))[3]), fully_applied, hydra.lib.lists.reverse(indexed_domains)))[1])[1])[1])[1])[1])[1])[1]), (lambda : applied()))
     def rewrite_with_args(args: frozenlist[hydra.core.Term], tx: hydra.typing.TypeContext, term: hydra.core.Term) -> hydra.core.Term:
         def recurse(tx1: hydra.typing.TypeContext, term1: hydra.core.Term) -> hydra.core.Term:
             return rewrite_with_args((), tx1, term1)

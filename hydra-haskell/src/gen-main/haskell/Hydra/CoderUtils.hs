@@ -161,13 +161,13 @@ analyzeFunctionTermWith_finish getTC fEnv tparams args bindings doms tapps body 
   let bodyWithTapps = (Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
           Core.typeApplicationTermBody = trm,
           Core.typeApplicationTermType = typ})) body tapps)
-  in (Flows.bind (tryTypeOf "analyzeFunctionTermWith" (getTC fEnv) bodyWithTapps) (\typ -> Flows.pure (Typing.FunctionStructure {
+  in (Flows.bind (Flows.withDefault Nothing (Flows.map Maybes.pure (tryTypeOf "analyzeFunctionTermWith" (getTC fEnv) bodyWithTapps))) (\mcod -> Flows.pure (Typing.FunctionStructure {
     Typing.functionStructureTypeParams = (Lists.reverse tparams),
     Typing.functionStructureParams = (Lists.reverse args),
     Typing.functionStructureBindings = bindings,
     Typing.functionStructureBody = bodyWithTapps,
     Typing.functionStructureDomains = (Lists.reverse doms),
-    Typing.functionStructureCodomain = (Just typ),
+    Typing.functionStructureCodomain = mcod,
     Typing.functionStructureEnvironment = fEnv})))
 
 analyzeFunctionTermWith_gather :: ((Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> (t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))

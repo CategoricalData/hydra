@@ -23,7 +23,7 @@ T3 = TypeVar("T3")
 def alt(p1: hydra.parsing.Parser[T0], p2: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T0]:
     r"""Try the first parser; if it fails without consuming input, try the second."""
     
-    def parse(input: str) -> hydra.parsing.ParseResult[T0]:
+    def parse(input: str):
         return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(p1.value(input))
     return hydra.parsing.Parser((lambda x1: parse(x1)))
 
@@ -46,24 +46,16 @@ def any_char() -> hydra.parsing.Parser[int]:
 def apply(pf: hydra.parsing.Parser[Callable[[T0], T1]], pa: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T1]:
     r"""Apply a parser containing a function to a parser containing a value."""
     
-    def parse(input: str) -> hydra.parsing.ParseResult[T1]:
-        def _hoist_parse_1(sf: hydra.parsing.ParseSuccess[Callable[[T2], T3]], v1: hydra.parsing.ParseResult) -> hydra.parsing.ParseResult[T3]:
-            match v1:
-                case hydra.parsing.ParseResultSuccess(value=sa):
-                    return cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(sf.value(sa.value), sa.remainder)))
-                
-                case hydra.parsing.ParseResultFailure(value=e):
-                    return cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(e))
-                
-                case _:
-                    raise AssertionError("Unreachable: all variants handled")
+    def parse(input: str):
+        def _hoist_parse_1(sf: hydra.parsing.ParseSuccess[Callable[[T2], T3]], v1: hydra.parsing.ParseResult):
+            return hydra.dsl.python.unsupported("inline match expressions are not yet supported")
         return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(pf.value(input))
     return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 def bind(pa: hydra.parsing.Parser[T0], f: Callable[[T0], hydra.parsing.Parser[T1]]) -> hydra.parsing.Parser[T1]:
     r"""Sequence two parsers, passing the result of the first to a function that produces the second."""
     
-    def parse(input: str) -> hydra.parsing.ParseResult[T1]:
+    def parse(input: str):
         return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(pa.value(input))
     return hydra.parsing.Parser((lambda x1: parse(x1)))
 
@@ -116,7 +108,7 @@ def some(p: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[frozenlist[T0]]:
 def map(f: Callable[[T0], T1], pa: hydra.parsing.Parser[T0]) -> hydra.parsing.Parser[T1]:
     r"""Apply a function to the result of a parser."""
     
-    def parse(input: str) -> hydra.parsing.ParseResult[T1]:
+    def parse(input: str):
         return (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported"))(pa.value(input))
     return hydra.parsing.Parser((lambda x1: parse(x1)))
 
