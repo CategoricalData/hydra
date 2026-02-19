@@ -668,7 +668,7 @@ public interface Core {
       hydra.lexical.Lexical.stripAndDereferenceTerm(term0),
       (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>>>) (term -> hydra.extract.core.Core.map_extract(
         hydra.show.core.Core::term,
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.lang.Object, java.lang.Object>>>) (v1 -> hydra.extract.core.Core.map_pair(
+        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<T66720, T66721>>>) (v1 -> hydra.extract.core.Core.map_pair(
           fk,
           fv,
           v1)),

@@ -1240,8 +1240,8 @@ public interface Rewriting {
       public hydra.util.Tuple.Tuple2<T1, hydra.core.Term> visit(hydra.core.Term.Function f) {
         return hydra.rewriting.Rewriting.rewriteAndFoldTerm_forSingle(
           (java.util.function.Function<T1, java.util.function.Function<hydra.core.Function, hydra.util.Tuple.Tuple2<T1, hydra.core.Function>>>) (v1 -> (java.util.function.Function<hydra.core.Function, hydra.util.Tuple.Tuple2<T1, hydra.core.Function>>) (v2 -> hydra.rewriting.Rewriting.rewriteAndFoldTerm_forFunction(
-            (java.util.function.Function<T1, java.util.function.Function<hydra.core.Elimination, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Elimination>>>) (v12 -> (java.util.function.Function<hydra.core.Elimination, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Elimination>>) (v22 -> hydra.rewriting.Rewriting.rewriteAndFoldTerm_forElimination(
-              (java.util.function.Function<T1, java.util.function.Function<java.util.List<hydra.core.Field>, hydra.util.Tuple.Tuple2<java.lang.Object, java.util.List<hydra.core.Field>>>>) (v13 -> (java.util.function.Function<java.util.List<hydra.core.Field>, hydra.util.Tuple.Tuple2<java.lang.Object, java.util.List<hydra.core.Field>>>) (v23 -> hydra.rewriting.Rewriting.rewriteAndFoldTerm_forFields(
+            (java.util.function.Function<T1, java.util.function.Function<hydra.core.Elimination, hydra.util.Tuple.Tuple2<T73708, hydra.core.Elimination>>>) (v12 -> (java.util.function.Function<hydra.core.Elimination, hydra.util.Tuple.Tuple2<T73708, hydra.core.Elimination>>) (v22 -> hydra.rewriting.Rewriting.rewriteAndFoldTerm_forElimination(
+              (java.util.function.Function<T1, java.util.function.Function<java.util.List<hydra.core.Field>, hydra.util.Tuple.Tuple2<T73713, java.util.List<hydra.core.Field>>>>) (v13 -> (java.util.function.Function<java.util.List<hydra.core.Field>, hydra.util.Tuple.Tuple2<T73713, java.util.List<hydra.core.Field>>>) (v23 -> hydra.rewriting.Rewriting.rewriteAndFoldTerm_forFields(
                 forField,
                 v13,
                 v23))),
@@ -1648,8 +1648,8 @@ public interface Rewriting {
       public hydra.compute.Flow<T3, hydra.util.Tuple.Tuple2<T2, hydra.core.Term>> visit(hydra.core.Term.Function f) {
         return hydra.rewriting.Rewriting.rewriteAndFoldTermM_forSingle(
           (java.util.function.Function<T2, java.util.function.Function<hydra.core.Function, hydra.compute.Flow<T3, hydra.util.Tuple.Tuple2<T2, hydra.core.Function>>>>) (v1 -> (java.util.function.Function<hydra.core.Function, hydra.compute.Flow<T3, hydra.util.Tuple.Tuple2<T2, hydra.core.Function>>>) (v2 -> hydra.rewriting.Rewriting.rewriteAndFoldTermM_forFunction(
-            (java.util.function.Function<T2, java.util.function.Function<hydra.core.Elimination, hydra.compute.Flow<java.lang.Object, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Elimination>>>>) (v12 -> (java.util.function.Function<hydra.core.Elimination, hydra.compute.Flow<java.lang.Object, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Elimination>>>) (v22 -> hydra.rewriting.Rewriting.rewriteAndFoldTermM_forElimination(
-              (java.util.function.Function<T2, java.util.function.Function<java.util.List<hydra.core.Field>, hydra.compute.Flow<java.lang.Object, hydra.util.Tuple.Tuple2<java.lang.Object, java.util.List<hydra.core.Field>>>>>) (v13 -> (java.util.function.Function<java.util.List<hydra.core.Field>, hydra.compute.Flow<java.lang.Object, hydra.util.Tuple.Tuple2<java.lang.Object, java.util.List<hydra.core.Field>>>>) (v23 -> hydra.rewriting.Rewriting.rewriteAndFoldTermM_forFields(
+            (java.util.function.Function<T2, java.util.function.Function<hydra.core.Elimination, hydra.compute.Flow<T74204, hydra.util.Tuple.Tuple2<T74203, hydra.core.Elimination>>>>) (v12 -> (java.util.function.Function<hydra.core.Elimination, hydra.compute.Flow<T74204, hydra.util.Tuple.Tuple2<T74203, hydra.core.Elimination>>>) (v22 -> hydra.rewriting.Rewriting.rewriteAndFoldTermM_forElimination(
+              (java.util.function.Function<T2, java.util.function.Function<java.util.List<hydra.core.Field>, hydra.compute.Flow<T74214, hydra.util.Tuple.Tuple2<T74213, java.util.List<hydra.core.Field>>>>>) (v13 -> (java.util.function.Function<java.util.List<hydra.core.Field>, hydra.compute.Flow<T74214, hydra.util.Tuple.Tuple2<T74213, java.util.List<hydra.core.Field>>>>) (v23 -> hydra.rewriting.Rewriting.rewriteAndFoldTermM_forFields(
                 forField,
                 v13,
                 v23))),
@@ -1976,8 +1976,8 @@ public interface Rewriting {
       public hydra.util.Tuple.Tuple2<T1, hydra.core.Term> visit(hydra.core.Term.Function f) {
         hydra.util.Tuple.Tuple2<T1, hydra.core.Function> rf = hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_rf(
           (f).value,
-          (java.util.function.Function<T1, java.util.function.Function<hydra.core.Function, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Function>>>) (v1 -> (java.util.function.Function<hydra.core.Function, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Function>>) (v2 -> hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forFunction(
-            (java.util.function.Function<T1, java.util.function.Function<hydra.core.Elimination, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Elimination>>>) (v12 -> (java.util.function.Function<hydra.core.Elimination, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Elimination>>) (v22 -> hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forElimination(
+          (java.util.function.Function<T1, java.util.function.Function<hydra.core.Function, hydra.util.Tuple.Tuple2<T74878, hydra.core.Function>>>) (v1 -> (java.util.function.Function<hydra.core.Function, hydra.util.Tuple.Tuple2<T74878, hydra.core.Function>>) (v2 -> hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forFunction(
+            (java.util.function.Function<T1, java.util.function.Function<hydra.core.Elimination, hydra.util.Tuple.Tuple2<T74883, hydra.core.Elimination>>>) (v12 -> (java.util.function.Function<hydra.core.Elimination, hydra.util.Tuple.Tuple2<T74883, hydra.core.Elimination>>) (v22 -> hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forElimination(
               path,
               recurse,
               v12,
@@ -1998,7 +1998,7 @@ public interface Rewriting {
           recurse,
           val0);
         hydra.util.Tuple.Tuple2<T1, java.util.List<hydra.core.Binding>> rbindings = hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_rbindings(
-          (java.util.function.Function<T1, java.util.function.Function<hydra.core.Binding, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Binding>>>) (v1 -> (java.util.function.Function<hydra.core.Binding, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Binding>>) (v2 -> hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forBindingWithAccessor(
+          (java.util.function.Function<T1, java.util.function.Function<hydra.core.Binding, hydra.util.Tuple.Tuple2<T74896, hydra.core.Binding>>>) (v1 -> (java.util.function.Function<hydra.core.Binding, hydra.util.Tuple.Tuple2<T74896, hydra.core.Binding>>) (v2 -> hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forBindingWithAccessor(
             path,
             recurse,
             v1,
@@ -2737,7 +2737,7 @@ public interface Rewriting {
       public hydra.compute.Flow<T1, hydra.core.Term> visit(hydra.core.Term.Function fun) {
         return hydra.lib.flows.Bind.apply(
           hydra.rewriting.Rewriting.rewriteTermM_forFun(
-            (java.util.function.Function<hydra.core.Elimination, hydra.compute.Flow<java.lang.Object, hydra.core.Function>>) (v1 -> hydra.rewriting.Rewriting.rewriteTermM_forElm(
+            (java.util.function.Function<hydra.core.Elimination, hydra.compute.Flow<T75843, hydra.core.Function>>) (v1 -> hydra.rewriting.Rewriting.rewriteTermM_forElm(
               forField,
               recurse,
               v1)),
@@ -3177,7 +3177,7 @@ public interface Rewriting {
       public hydra.compute.Flow<T3, hydra.core.Term> visit(hydra.core.Term.Function fun) {
         return hydra.lib.flows.Bind.apply(
           hydra.rewriting.Rewriting.rewriteTermWithContextM_forFunction(
-            (java.util.function.Function<hydra.core.Elimination, hydra.compute.Flow<java.lang.Object, hydra.core.Function>>) (v1 -> hydra.rewriting.Rewriting.rewriteTermWithContextM_forElimination(
+            (java.util.function.Function<hydra.core.Elimination, hydra.compute.Flow<T76500, hydra.core.Function>>) (v1 -> hydra.rewriting.Rewriting.rewriteTermWithContextM_forElimination(
               forField,
               recurse,
               v1)),

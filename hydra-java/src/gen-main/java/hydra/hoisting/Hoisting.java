@@ -787,7 +787,7 @@ public interface Hoisting {
     hydra.util.Tuple.Tuple2<T0, hydra.core.Term> fResult = hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContext_fResult(
       cx1.get(),
       f,
-      (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Term>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Term>>) (v2 -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContext_recurseForUser(
+      (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T68543, hydra.core.Term>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T68543, hydra.core.Term>>) (v2 -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContext_recurseForUser(
         cx1.get(),
         lowLevelRecurse,
         v1,
@@ -888,7 +888,7 @@ public interface Hoisting {
       cx1.get(),
       f,
       path,
-      (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Term>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<java.lang.Object, hydra.core.Term>>) (v2 -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContextAndPath_recurseForUser(
+      (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T68597, hydra.core.Term>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T68597, hydra.core.Term>>) (v2 -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContextAndPath_recurseForUser(
         cx1.get(),
         path,
         recurse,
@@ -938,7 +938,7 @@ public interface Hoisting {
   
   static <T0> T0 rewriteTermWithTypeContext(java.util.function.Function<java.util.function.Function<hydra.core.Term, T0>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>> f, hydra.typing.TypeContext cx0, hydra.core.Term term0) {
     return hydra.hoisting.Hoisting.rewriteTermWithTypeContext_rewrite(
-      (java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, java.lang.Object>>>) (v1 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, java.lang.Object>>) (v2 -> (java.util.function.Function<hydra.core.Term, java.lang.Object>) (v3 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_f2(
+      (java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T68634>>>) (v1 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T68634>>) (v2 -> (java.util.function.Function<hydra.core.Term, T68634>) (v3 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_f2(
         f,
         (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForLambda(
           p0,
@@ -979,7 +979,7 @@ public interface Hoisting {
           @Override
           public T0 visit(hydra.core.Function.Lambda l) {
             hydra.typing.TypeContext cx1 = ((hydra_schemas_extendTypeContextForLambda2).apply(cx)).apply((l).value);
-            return (((f).apply((java.util.function.Function<hydra.core.Term, java.lang.Object>) (v1 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_recurse2(
+            return (((f).apply((java.util.function.Function<hydra.core.Term, T68646>) (v1 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_recurse2(
               cx1,
               recurse,
               v1)))).apply(cx1)).apply(term);
@@ -990,7 +990,7 @@ public interface Hoisting {
       @Override
       public T0 visit(hydra.core.Term.Let l) {
         hydra.util.Lazy<hydra.typing.TypeContext> cx1 = new hydra.util.Lazy<>(() -> (((hydra_schemas_extendTypeContextForLet2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(cx)).apply((l).value));
-        return (((f).apply((java.util.function.Function<hydra.core.Term, java.lang.Object>) (v1 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_recurse22(
+        return (((f).apply((java.util.function.Function<hydra.core.Term, T68650>) (v1 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_recurse22(
           cx1.get(),
           recurse,
           v1)))).apply(cx1.get())).apply(term);
@@ -999,7 +999,7 @@ public interface Hoisting {
       @Override
       public T0 visit(hydra.core.Term.TypeLambda tl) {
         hydra.typing.TypeContext cx1 = ((hydra_schemas_extendTypeContextForTypeLambda2).apply(cx)).apply((tl).value);
-        return (((f).apply((java.util.function.Function<hydra.core.Term, java.lang.Object>) (v1 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_recurse23(
+        return (((f).apply((java.util.function.Function<hydra.core.Term, T68654>) (v1 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_recurse23(
           cx1,
           recurse,
           v1)))).apply(cx1)).apply(term);
@@ -1008,7 +1008,7 @@ public interface Hoisting {
   }
   
   static <T0> T0 rewriteTermWithTypeContext_rewrite(java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>> f2, hydra.typing.TypeContext cx, hydra.core.Term term) {
-    return (((f2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, java.lang.Object>>) (v1 -> (java.util.function.Function<hydra.core.Term, java.lang.Object>) (v2 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_rewrite(
+    return (((f2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T68658>>) (v1 -> (java.util.function.Function<hydra.core.Term, T68658>) (v2 -> hydra.hoisting.Hoisting.rewriteTermWithTypeContext_rewrite(
       f2,
       v1,
       v2))))).apply(cx)).apply(term);

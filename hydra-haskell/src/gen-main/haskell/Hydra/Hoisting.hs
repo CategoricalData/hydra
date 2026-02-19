@@ -191,17 +191,21 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                                                 Core.typeLambdaParameter = v,
                                                 Core.typeLambdaBody = t})) termWithLambdas (Lists.reverse (Maybes.maybe [] Core.typeSchemeVariables newTypeScheme)))
                                         in  
-                                          let replacement = (Lists.foldl (\t -> \v -> Core.TermApplication (Core.Application {
-                                                  Core.applicationFunction = t,
-                                                  Core.applicationArgument = (Core.TermVariable v)})) (Core.TermVariable globalBindingName) capturedTermVars)
+                                          let withTypeApps = (Lists.foldl (\t -> \v -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+                                                  Core.typeApplicationTermBody = t,
+                                                  Core.typeApplicationTermType = (Core.TypeVariable v)})) (Core.TermVariable globalBindingName) capturedTypeVars)
                                           in  
-                                            let newBindingAndReplacement = (Core.Binding {
-                                                    Core.bindingName = globalBindingName,
-                                                    Core.bindingTerm = termWithTypeLambdas,
-                                                    Core.bindingType = newTypeScheme}, replacement)
+                                            let replacement = (Lists.foldl (\t -> \v -> Core.TermApplication (Core.Application {
+                                                    Core.applicationFunction = t,
+                                                    Core.applicationArgument = (Core.TermVariable v)})) withTypeApps capturedTermVars)
                                             in  
-                                              let newPairs = (Lists.cons newBindingAndReplacement bindingAndReplacementPairs)
-                                              in (newPairs, newUsedNames))
+                                              let newBindingAndReplacement = (Core.Binding {
+                                                      Core.bindingName = globalBindingName,
+                                                      Core.bindingTerm = termWithTypeLambdas,
+                                                      Core.bindingType = newTypeScheme}, replacement)
+                                              in  
+                                                let newPairs = (Lists.cons newBindingAndReplacement bindingAndReplacementPairs)
+                                                in (newPairs, newUsedNames))
   in  
     let rewrite = (\prefix -> \recurse -> \cx -> \bindingsAndNames -> \term ->  
             let previouslyFinishedBindings = (Pairs.first bindingsAndNames)

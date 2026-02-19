@@ -2360,10 +2360,10 @@
                                                                                                                                     "let": {
                                                                                                                                       "bindings": [
                                                                                                                                         {
-                                                                                                                                          "name": "replacement",
+                                                                                                                                          "name": "withTypeApps",
                                                                                                                                           "term": {
                                                                                                                                             "application": {
-                                                                                                                                              "argument": {"variable": "capturedTermVars"},
+                                                                                                                                              "argument": {"variable": "capturedTypeVars"},
                                                                                                                                               "function": {
                                                                                                                                                 "application": {
                                                                                                                                                   "argument": {
@@ -2381,18 +2381,18 @@
                                                                                                                                                                   "body": {
                                                                                                                                                                     "union": {
                                                                                                                                                                       "field": {
-                                                                                                                                                                        "name": "application",
+                                                                                                                                                                        "name": "typeApplication",
                                                                                                                                                                         "term": {
                                                                                                                                                                           "record": {
                                                                                                                                                                             "fields": [
-                                                                                                                                                                              {"name": "function", "term": {"variable": "t"}},
+                                                                                                                                                                              {"name": "body", "term": {"variable": "t"}},
                                                                                                                                                                               {
-                                                                                                                                                                                "name": "argument",
+                                                                                                                                                                                "name": "type",
                                                                                                                                                                                 "term": {
                                                                                                                                                                                   "union": {
                                                                                                                                                                                     "field": {"name": "variable", "term": {"variable": "v"}},
-                                                                                                                                                                                    "typeName": "hydra.core.Term"}}}],
-                                                                                                                                                                            "typeName": "hydra.core.Application"}}},
+                                                                                                                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                                                                                                                            "typeName": "hydra.core.TypeApplicationTerm"}}},
                                                                                                                                                                       "typeName": "hydra.core.Term"}},
                                                                                                                                                                   "domain": [{"variable": "hydra.core.Name"}],
                                                                                                                                                                   "parameter": "v"}}},
@@ -2414,72 +2414,123 @@
                                                                                                                                         "let": {
                                                                                                                                           "bindings": [
                                                                                                                                             {
-                                                                                                                                              "name": "newBindingAndReplacement",
+                                                                                                                                              "name": "replacement",
                                                                                                                                               "term": {
-                                                                                                                                                "typeApplication": {
-                                                                                                                                                  "body": {
-                                                                                                                                                    "typeApplication": {
-                                                                                                                                                      "body": {
-                                                                                                                                                        "pair": {
-                                                                                                                                                          "@first": {
-                                                                                                                                                            "record": {
-                                                                                                                                                              "fields": [
-                                                                                                                                                                {"name": "name", "term": {"variable": "globalBindingName"}},
-                                                                                                                                                                {"name": "term", "term": {"variable": "termWithTypeLambdas"}},
-                                                                                                                                                                {"name": "type", "term": {"variable": "newTypeScheme"}}],
-                                                                                                                                                              "typeName": "hydra.core.Binding"}},
-                                                                                                                                                          "@second": {"variable": "replacement"}}},
-                                                                                                                                                      "type": {"variable": "hydra.core.Binding"}}},
-                                                                                                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                "application": {
+                                                                                                                                                  "argument": {"variable": "capturedTermVars"},
+                                                                                                                                                  "function": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "withTypeApps"},
+                                                                                                                                                      "function": {
+                                                                                                                                                        "application": {
+                                                                                                                                                          "argument": {
+                                                                                                                                                            "function": {
+                                                                                                                                                              "lambda": {
+                                                                                                                                                                "body": {
+                                                                                                                                                                  "function": {
+                                                                                                                                                                    "lambda": {
+                                                                                                                                                                      "body": {
+                                                                                                                                                                        "union": {
+                                                                                                                                                                          "field": {
+                                                                                                                                                                            "name": "application",
+                                                                                                                                                                            "term": {
+                                                                                                                                                                              "record": {
+                                                                                                                                                                                "fields": [
+                                                                                                                                                                                  {"name": "function", "term": {"variable": "t"}},
+                                                                                                                                                                                  {
+                                                                                                                                                                                    "name": "argument",
+                                                                                                                                                                                    "term": {
+                                                                                                                                                                                      "union": {
+                                                                                                                                                                                        "field": {"name": "variable", "term": {"variable": "v"}},
+                                                                                                                                                                                        "typeName": "hydra.core.Term"}}}],
+                                                                                                                                                                                "typeName": "hydra.core.Application"}}},
+                                                                                                                                                                          "typeName": "hydra.core.Term"}},
+                                                                                                                                                                      "domain": [{"variable": "hydra.core.Name"}],
+                                                                                                                                                                      "parameter": "v"}}},
+                                                                                                                                                                "domain": [{"variable": "hydra.core.Term"}],
+                                                                                                                                                                "parameter": "t"}}},
+                                                                                                                                                          "function": {
+                                                                                                                                                            "typeApplication": {
+                                                                                                                                                              "body": {
+                                                                                                                                                                "typeApplication": {
+                                                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                              "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                                                                                                               "type": [
                                                                                                                                                 {
                                                                                                                                                   "constraints": null,
-                                                                                                                                                  "type": {
-                                                                                                                                                    "pair": {
-                                                                                                                                                      "first": {"variable": "hydra.core.Binding"},
-                                                                                                                                                      "second": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                  "type": {"variable": "hydra.core.Term"},
                                                                                                                                                   "variables": []}]}],
                                                                                                                                           "body": {
                                                                                                                                             "let": {
                                                                                                                                               "bindings": [
                                                                                                                                                 {
-                                                                                                                                                  "name": "newPairs",
+                                                                                                                                                  "name": "newBindingAndReplacement",
                                                                                                                                                   "term": {
-                                                                                                                                                    "application": {
-                                                                                                                                                      "argument": {"variable": "bindingAndReplacementPairs"},
-                                                                                                                                                      "function": {
-                                                                                                                                                        "application": {
-                                                                                                                                                          "argument": {"variable": "newBindingAndReplacement"},
-                                                                                                                                                          "function": {
-                                                                                                                                                            "typeApplication": {
-                                                                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                                                                                                                                              "type": {
-                                                                                                                                                                "pair": {
-                                                                                                                                                                  "first": {"variable": "hydra.core.Binding"},
-                                                                                                                                                                  "second": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                                                                                                    "typeApplication": {
+                                                                                                                                                      "body": {
+                                                                                                                                                        "typeApplication": {
+                                                                                                                                                          "body": {
+                                                                                                                                                            "pair": {
+                                                                                                                                                              "@first": {
+                                                                                                                                                                "record": {
+                                                                                                                                                                  "fields": [
+                                                                                                                                                                    {"name": "name", "term": {"variable": "globalBindingName"}},
+                                                                                                                                                                    {"name": "term", "term": {"variable": "termWithTypeLambdas"}},
+                                                                                                                                                                    {"name": "type", "term": {"variable": "newTypeScheme"}}],
+                                                                                                                                                                  "typeName": "hydra.core.Binding"}},
+                                                                                                                                                              "@second": {"variable": "replacement"}}},
+                                                                                                                                                          "type": {"variable": "hydra.core.Binding"}}},
+                                                                                                                                                      "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                   "type": [
                                                                                                                                                     {
                                                                                                                                                       "constraints": null,
                                                                                                                                                       "type": {
-                                                                                                                                                        "list": {
-                                                                                                                                                          "pair": {
-                                                                                                                                                            "first": {"variable": "hydra.core.Binding"},
-                                                                                                                                                            "second": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                                        "pair": {
+                                                                                                                                                          "first": {"variable": "hydra.core.Binding"},
+                                                                                                                                                          "second": {"variable": "hydra.core.Term"}}},
                                                                                                                                                       "variables": []}]}],
                                                                                                                                               "body": {
-                                                                                                                                                "typeApplication": {
+                                                                                                                                                "let": {
+                                                                                                                                                  "bindings": [
+                                                                                                                                                    {
+                                                                                                                                                      "name": "newPairs",
+                                                                                                                                                      "term": {
+                                                                                                                                                        "application": {
+                                                                                                                                                          "argument": {"variable": "bindingAndReplacementPairs"},
+                                                                                                                                                          "function": {
+                                                                                                                                                            "application": {
+                                                                                                                                                              "argument": {"variable": "newBindingAndReplacement"},
+                                                                                                                                                              "function": {
+                                                                                                                                                                "typeApplication": {
+                                                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                                                                                                  "type": {
+                                                                                                                                                                    "pair": {
+                                                                                                                                                                      "first": {"variable": "hydra.core.Binding"},
+                                                                                                                                                                      "second": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                                                                                                      "type": [
+                                                                                                                                                        {
+                                                                                                                                                          "constraints": null,
+                                                                                                                                                          "type": {
+                                                                                                                                                            "list": {
+                                                                                                                                                              "pair": {
+                                                                                                                                                                "first": {"variable": "hydra.core.Binding"},
+                                                                                                                                                                "second": {"variable": "hydra.core.Term"}}}},
+                                                                                                                                                          "variables": []}]}],
                                                                                                                                                   "body": {
                                                                                                                                                     "typeApplication": {
                                                                                                                                                       "body": {
-                                                                                                                                                        "pair": {
-                                                                                                                                                          "@first": {"variable": "newPairs"},
-                                                                                                                                                          "@second": {"variable": "newUsedNames"}}},
-                                                                                                                                                      "type": {
-                                                                                                                                                        "list": {
-                                                                                                                                                          "pair": {
-                                                                                                                                                            "first": {"variable": "hydra.core.Binding"},
-                                                                                                                                                            "second": {"variable": "hydra.core.Term"}}}}}},
-                                                                                                                                                  "type": {"set": {"variable": "hydra.core.Name"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                                                                                                                                                        "typeApplication": {
+                                                                                                                                                          "body": {
+                                                                                                                                                            "pair": {
+                                                                                                                                                              "@first": {"variable": "newPairs"},
+                                                                                                                                                              "@second": {"variable": "newUsedNames"}}},
+                                                                                                                                                          "type": {
+                                                                                                                                                            "list": {
+                                                                                                                                                              "pair": {
+                                                                                                                                                                "first": {"variable": "hydra.core.Binding"},
+                                                                                                                                                                "second": {"variable": "hydra.core.Term"}}}}}},
+                                                                                                                                                      "type": {"set": {"variable": "hydra.core.Name"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
                                                                   "domain": [
                                                                     {
                                                                       "pair": {

@@ -279,9 +279,16 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
       (var "termWithLambdas")
       (Lists.reverse $ Maybes.maybe (list ([] :: [TTerm Name])) (unaryFunction Core.typeSchemeVariables) $ var "newTypeScheme") $
 
+    -- Build the replacement: first apply type variables for captured type vars,
+    -- then apply term variables for captured term vars.
+    -- E.g. if capturedTypeVars=[a,b] and capturedTermVars=[x], replacement is: f_q⟨a⟩⟨b⟩ x
+    "withTypeApps" <~ Lists.foldl
+      ("t" ~> "v" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeVariable $ var "v"))
+      (Core.termVariable $ var "globalBindingName")
+      (var "capturedTypeVars") $
     "replacement" <~ Lists.foldl
       ("t" ~> "v" ~> Core.termApplication $ Core.application (var "t") (Core.termVariable $ var "v"))
-      (Core.termVariable $ var "globalBindingName")
+      (var "withTypeApps")
       (var "capturedTermVars") $
 
     "newBindingAndReplacement" <~ pair

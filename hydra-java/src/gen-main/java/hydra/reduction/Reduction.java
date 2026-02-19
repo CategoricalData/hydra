@@ -964,13 +964,13 @@ public interface Reduction {
           @Override
           public hydra.compute.Flow<T1, hydra.core.Term> visit(hydra.core.Function.Elimination elm) {
             return hydra.reduction.Reduction.etaExpandTypedTerm_forElimination(
-              (java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<java.lang.Object, hydra.core.Term>>) (v1 -> hydra.reduction.Reduction.etaExpandTypedTerm_forCaseStatement(
+              (java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<T72364, hydra.core.Term>>) (v1 -> hydra.reduction.Reduction.etaExpandTypedTerm_forCaseStatement(
                 hydra_arity_typeArity2,
                 hydra_arity_typeSchemeArity2,
                 hydra_schemas_extendTypeContextForLambda2,
                 hydra_schemas_extendTypeContextForLet2,
                 hydra_schemas_extendTypeContextForTypeLambda2,
-                (java.util.function.Function<hydra.core.Field, hydra.compute.Flow<java.lang.Object, hydra.core.Field>>) (v12 -> hydra.reduction.Reduction.etaExpandTypedTerm_forCase(
+                (java.util.function.Function<hydra.core.Field, hydra.compute.Flow<T72369, hydra.core.Field>>) (v12 -> hydra.reduction.Reduction.etaExpandTypedTerm_forCase(
                   hydra_arity_typeArity2,
                   hydra_arity_typeSchemeArity2,
                   hydra_schemas_extendTypeContextForLambda2,

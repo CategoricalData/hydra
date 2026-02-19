@@ -7,7 +7,7 @@ package hydra.parsers;
  */
 public interface Parsers {
   static <T0> hydra.parsing.Parser<T0> alt(hydra.parsing.Parser<T0> p1, hydra.parsing.Parser<T0> p2) {
-    return (hydra.parsing.Parser<T0>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<java.lang.Object>>) (v1 -> hydra.parsers.Parsers.alt_parse(
+    return (hydra.parsing.Parser<T0>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T71483>>) (v1 -> hydra.parsers.Parsers.alt_parse(
       p1,
       p2,
       v1))));
@@ -37,7 +37,7 @@ public interface Parsers {
   }
   
   static <T0, T1> hydra.parsing.Parser<T1> apply(hydra.parsing.Parser<java.util.function.Function<T0, T1>> pf, hydra.parsing.Parser<T0> pa) {
-    return (hydra.parsing.Parser<T1>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<java.lang.Object>>) (v1 -> hydra.parsers.Parsers.apply_parse(
+    return (hydra.parsing.Parser<T1>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T71553>>) (v1 -> hydra.parsers.Parsers.apply_parse(
       pa,
       pf,
       v1))));
@@ -78,7 +78,7 @@ public interface Parsers {
   }
   
   static <T0, T1> hydra.parsing.Parser<T1> bind(hydra.parsing.Parser<T0> pa, java.util.function.Function<T0, hydra.parsing.Parser<T1>> f) {
-    return (hydra.parsing.Parser<T1>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<java.lang.Object>>) (v1 -> hydra.parsers.Parsers.bind_parse(
+    return (hydra.parsing.Parser<T1>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T71673>>) (v1 -> hydra.parsers.Parsers.bind_parse(
       f,
       pa,
       v1))));
@@ -137,7 +137,7 @@ public interface Parsers {
   }
   
   static <T0, T1> hydra.parsing.Parser<T1> map(java.util.function.Function<T0, T1> f, hydra.parsing.Parser<T0> pa) {
-    return (hydra.parsing.Parser<T1>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<java.lang.Object>>) (v1 -> hydra.parsers.Parsers.map_parse(
+    return (hydra.parsing.Parser<T1>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T71778>>) (v1 -> hydra.parsers.Parsers.map_parse(
       f,
       pa,
       v1))));

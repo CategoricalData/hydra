@@ -245,7 +245,7 @@ public interface Coder {
   
   static <T0, T1> hydra.compute.Flow<T1, hydra.core.Term> decodeRecord(hydra.core.RowType rt, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.FieldType, hydra.compute.Coder<T0, T1, hydra.core.Term, hydra.json.model.Value>>> coders, hydra.json.model.Value n) {
     return hydra.ext.org.json.coder.Coder.decodeRecord_result(
-      (java.util.function.Function<java.util.Map<String, hydra.json.model.Value>, hydra.compute.Flow<java.lang.Object, hydra.core.Term>>) (v1 -> hydra.ext.org.json.coder.Coder.decodeRecord_decodeObjectBody(
+      (java.util.function.Function<java.util.Map<String, hydra.json.model.Value>, hydra.compute.Flow<T96815, hydra.core.Term>>) (v1 -> hydra.ext.org.json.coder.Coder.decodeRecord_decodeObjectBody(
         coders,
         rt,
         v1)),
@@ -658,7 +658,7 @@ public interface Coder {
       (java.util.function.Function<String, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.json.model.Value>>>) (p0 -> p1 -> hydra.ext.org.json.coder.Coder.untypedTermToJson_asVariant(
         p0,
         p1)),
-      (java.util.function.Function<hydra.core.Field, hydra.compute.Flow<java.lang.Object, hydra.util.Maybe<hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>>) (v1 -> hydra.ext.org.json.coder.Coder.untypedTermToJson_fieldToKeyval(
+      (java.util.function.Function<hydra.core.Field, hydra.compute.Flow<T97564, hydra.util.Maybe<hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>>) (v1 -> hydra.ext.org.json.coder.Coder.untypedTermToJson_fieldToKeyval(
         (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.json.model.Value>>>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.json.model.Value>>>>) (p0 -> p1 -> hydra.ext.org.json.coder.Coder.untypedTermToJson_matchTermMaybe(
           p0,
           p1)),
@@ -898,7 +898,7 @@ public interface Coder {
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.util.Maybe<hydra.json.model.Value>> untypedTermToJson_forTerm(java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.json.model.Value>>>, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Maybe<hydra.json.model.Value>>>> matchTermMaybe, hydra.core.Term t) {
-    return ((matchTermMaybe).apply((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<java.lang.Object, hydra.util.Maybe<hydra.json.model.Value>>>) (v1 -> hydra.ext.org.json.coder.Coder.untypedTermToJson_forTerm(
+    return ((matchTermMaybe).apply((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T97826, hydra.util.Maybe<hydra.json.model.Value>>>) (v1 -> hydra.ext.org.json.coder.Coder.untypedTermToJson_forTerm(
       matchTermMaybe,
       v1)))).apply(t);
   }

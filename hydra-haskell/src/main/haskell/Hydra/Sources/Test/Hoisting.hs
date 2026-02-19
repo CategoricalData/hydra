@@ -1556,7 +1556,55 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
               (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))),
           polyType ["t0"] (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
             (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))))]
-        (apply (var "f") (var "name_x")))]
+        (apply (var "f") (var "name_x"))),
+
+    -- ============================================================
+    -- Regression test: monomorphic binding referencing outer type variables
+    -- must get type applications at the call site after hoisting.
+    -- This reproduces the Java "T70848" bug: without type apps on the
+    -- hoisted reference, the Java coder falls back to tryTypeOf which
+    -- generates fresh inference variables instead of using the correct
+    -- type parameters from the enclosing scope.
+    -- ============================================================
+
+    hoistPolyCase "monomorphic binding captures type vars: replacement includes type applications"
+      -- Input: let f = TypeLambda a (TypeLambda b (
+      --          \(x:a) -> let q : TypeScheme([], a -> b) = \(y:a) -> g y
+      --                    in q x))
+      --        in f
+      -- Here 'q' is monomorphic but references outer type vars 'a' and 'b'.
+      -- When hoisted, q becomes polymorphic in [a, b].
+      -- The replacement must include TypeApp(b, TypeApp(a, Var(f_q))) to instantiate
+      -- the hoisted binding with the correct type variables.
+      (mkLet [(nm "f",
+        tylam "a" (tylam "b" (
+          lambdaTyped "x" (T.var "a") (Core.termLet $ mkLet [
+            (nm "q",
+              lambdaTyped "y" (T.var "a") (apply (var "g") (var "y")),
+              monoType (T.function (T.var "a") (T.var "b")))]
+            (apply (var "q") (var "x"))))),
+        polyType ["a", "b"] (T.function (T.var "a") (T.var "b")))]
+        (var "f"))
+      -- Expected output: f first, then f_q hoisted with type lambdas for [a, b].
+      -- q does not reference x, so no lambda capture is needed.
+      -- The replacement for q SHOULD be TypeApp(b, TypeApp(a, Var(f_q)))
+      -- so that downstream code knows the type variable instantiation.
+      -- Using Core.termTypeApplication directly to avoid meta-encoding issues with tyapp.
+      (mkLet [
+        (nm "f",
+          tylam "a" (tylam "b" (
+            lambdaTyped "x" (T.var "a")
+              (apply
+                (Core.termTypeApplication $ Core.typeApplicationTerm
+                  (Core.termTypeApplication $ Core.typeApplicationTerm (var "f_q") (T.var "a"))
+                  (T.var "b"))
+                (var "x")))),
+          polyType ["a", "b"] (T.function (T.var "a") (T.var "b"))),
+        (nm "f_q",
+          tylam "a" (tylam "b" (
+            lambdaTyped "y" (T.var "a") (apply (var "g") (var "y")))),
+          polyType ["a", "b"] (T.function (T.var "a") (T.var "b")))]
+        (var "f"))]
 
 -- | Test cases for hoistLetBindings with hoistAll=True
 -- This function hoists ALL let bindings (not just polymorphic ones) to the top level.

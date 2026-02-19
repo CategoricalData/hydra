@@ -7,7 +7,7 @@ package hydra.monads;
  */
 public interface Monads {
   static <T0, T1, T2> hydra.compute.Flow<T0, T2> bind(hydra.compute.Flow<T0, T1> l, java.util.function.Function<T1, hydra.compute.Flow<T0, T2>> r) {
-    return (hydra.compute.Flow<T0, T2>) ((hydra.compute.Flow<T0, T2>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Object, java.lang.Object>>>) (v1 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Object, java.lang.Object>>) (v2 -> hydra.monads.Monads.bind_q(
+    return (hydra.compute.Flow<T0, T2>) ((hydra.compute.Flow<T0, T2>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T70848, T70850>>>) (v1 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T70848, T70850>>) (v2 -> hydra.monads.Monads.bind_q(
       l,
       r,
       v1,
@@ -107,7 +107,7 @@ public interface Monads {
   }
   
   static <T0, T1> hydra.compute.Flow<T0, T1> mutateTrace(java.util.function.Function<hydra.compute.Trace, hydra.util.Either<String, hydra.compute.Trace>> mutate, java.util.function.Function<hydra.compute.Trace, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>> restore, hydra.compute.Flow<T0, T1> f) {
-    return (hydra.compute.Flow<T0, T1>) ((hydra.compute.Flow<T0, T1>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Object, java.lang.Object>>>) (v1 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<java.lang.Object, java.lang.Object>>) (v2 -> hydra.monads.Monads.mutateTrace_flowFun(
+    return (hydra.compute.Flow<T0, T1>) ((hydra.compute.Flow<T0, T1>) (new hydra.compute.Flow((java.util.function.Function<T0, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T71159, T71160>>>) (v1 -> (java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<T71159, T71160>>) (v2 -> hydra.monads.Monads.mutateTrace_flowFun(
       f,
       (java.util.function.Function<String, java.util.function.Function<hydra.compute.Trace, hydra.compute.Trace>>) (p0 -> p1 -> hydra.monads.Monads.pushError(
         p0,
