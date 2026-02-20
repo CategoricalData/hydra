@@ -832,9 +832,11 @@ replaceTypedefs = define "replaceTypedefs" $
   doc "Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively" $
   "types" ~> "typ0" ~>
   "rewrite" <~ ("recurse" ~> "typ" ~>
-    "dflt" <~ (var "recurse" @@ var "typ") $
+    -- Note: dflt (recurse @@ typ) is NOT bound as a let here, because in strict languages (Java, Python)
+    -- this would eagerly recurse into Record/Union/Wrap fields, causing infinite recursion on recursive types.
+    -- Instead, we inline (recurse @@ typ) only where needed.
     cases _Type (var "typ")
-      (Just $ var "dflt") [
+      (Just $ var "recurse" @@ var "typ") [
 --      _Type_forall>>: "ft" ~> ... -- TODO: shadowing via forall-bound variables
       _Type_annotated>>: "at" ~> Core.typeAnnotated $ Core.annotatedType
         (var "rewrite" @@ var "recurse" @@ (Core.annotatedTypeBody $ var "at"))
@@ -844,16 +846,16 @@ replaceTypedefs = define "replaceTypedefs" $
       _Type_variable>>: "v" ~>
         "forMono" <~ ("t" ~> cases _Type (var "t")
           (Just $ var "rewrite" @@ var "recurse" @@ var "t") [
-          _Type_record>>: constant $ var "dflt",
-          _Type_union>>: constant $ var "dflt",
-          _Type_wrap>>: constant $ var "dflt"]) $
+          _Type_record>>: constant $ var "typ",
+          _Type_union>>: constant $ var "typ",
+          _Type_wrap>>: constant $ var "typ"]) $
         "forTypeScheme" <~ ("ts" ~>
           "t" <~ Core.typeSchemeType (var "ts") $
           Logic.ifElse (Lists.null $ Core.typeSchemeVariables $ var "ts")
             (var "forMono" @@ var "t")
-            (var "dflt")) $ -- TODO: this may be too simple
+            (var "typ")) $ -- TODO: this may be too simple
         optCases (Maps.lookup (var "v") (var "types"))
-        (var "dflt")
+        (var "typ")
         ("ts" ~> var "forTypeScheme" @@ var "ts"),
       _Type_wrap>>: constant $ var "typ"]) $
   rewriteType @@ var "rewrite" @@ var "typ0"

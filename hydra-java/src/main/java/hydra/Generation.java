@@ -742,9 +742,8 @@ public class Generation {
             case "typeApplication": {
                 Map<String, Value> obj = expectObject(payload, "typeApplication");
                 Term body = nativeDecodeTerm(obj.get("body"));
-                // Type argument stripped by removeTypesFromTerm anyway
-                return new Term.TypeApplication(new hydra.core.TypeApplicationTerm(
-                        body, new hydra.core.Type.Variable(new Name("_"))));
+                hydra.core.Type typ = nativeDecodeType(obj.get("type"));
+                return new Term.TypeApplication(new hydra.core.TypeApplicationTerm(body, typ));
             }
             case "typeLambda": {
                 Map<String, Value> obj = expectObject(payload, "typeLambda");

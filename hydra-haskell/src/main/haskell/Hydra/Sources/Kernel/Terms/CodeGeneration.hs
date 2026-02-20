@@ -541,9 +541,6 @@ decodeModuleFromJson = define "decodeModuleFromJson" $
   "graph" <~ modulesToGraph @@ var "bsGraph" @@ var "universeModules" @@ var "universeModules" $
   "schemaMap" <~ buildSchemaMap @@ var "graph" $
   "modType" <~ Core.typeVariable (wrap _Name (string "hydra.module.Module")) $
-  "postProcess" <~ Logic.ifElse (var "doStripTypeSchemes")
-    ("m" ~> stripModuleTypeSchemes @@ var "m")
-    ("m" ~> var "m") $
   -- Step 1: JSON -> Term
   Eithers.either_
     ("err" ~> left (var "err"))
@@ -551,7 +548,9 @@ decodeModuleFromJson = define "decodeModuleFromJson" $
       -- Step 2: Term -> Module (via decoderFor _Module)
       Eithers.either_
         ("decErr" ~> left (Util.unDecodingError @@ var "decErr"))
-        ("mod" ~> right (var "postProcess" @@ var "mod"))
+        ("mod" ~> right (Logic.ifElse (var "doStripTypeSchemes")
+          (stripModuleTypeSchemes @@ var "mod")
+          (var "mod")))
         (decoderFor _Module @@ var "graph" @@ var "term"))
     (var "hydra.json.decode.fromJson" @@ var "schemaMap" @@ var "modType" @@ var "jsonVal")
 
