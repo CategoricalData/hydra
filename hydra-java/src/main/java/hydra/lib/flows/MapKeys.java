@@ -33,7 +33,7 @@ public class MapKeys extends PrimitiveFunction {
     @Override
     public TypeScheme type() {
         return new TypeScheme(
-                Arrays.asList(new Name("s"), new Name("k1"), new Name("k2"), new Name("v")),
+                Arrays.asList(new Name("k1"), new Name("s"), new Name("k2"), new Name("v")),
                 Types.function(
                         Types.function("k1", Types.flow("s", "k2")),
                         Types.map("k1", "v"),

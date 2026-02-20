@@ -37,7 +37,7 @@ public class FindWithDefault extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k", "v",
+        return scheme("v", "k",
                 function("v", function("k", function(hydra.dsl.Types.map("k", "v"), "v"))));
     }
 

@@ -33,7 +33,7 @@ public class Map extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return Types.scheme("s", "x", "y",
+        return Types.scheme("x", "y", "s",
                 Types.function(Types.function("x", "y"), Types.flow("s", "x"), Types.flow("s", "y")));
     }
 

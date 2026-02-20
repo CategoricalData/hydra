@@ -212,13 +212,12 @@ def fmt_counts(passed, failed, skipped):
 
 def fmt_counts_header(lang):
     """Format the header for a language column."""
-    return f"  {lang.capitalize():>31}"
+    return f" | {lang.capitalize():<30}"
 
 
 def fmt_cell(passed, failed, skipped, time_ms, stddev,
              ref_time_ms=None, slowdown_threshold=10.0):
-    """Format a full cell: counts + time + ±stddev.
-    Visible width = 2 + 12 + 1 + 8 + 1 + 8 = 32."""
+    """Format a full cell: | counts time ±stddev."""
     time_str = f"{fmt_time(time_ms):>8}"
     sd_str = f"{GRAY}{fmt_stddev(stddev):>8}{RESET}"
     if ref_time_ms is not None and ref_time_ms > 0:
@@ -226,12 +225,12 @@ def fmt_cell(passed, failed, skipped, time_ms, stddev,
             time_str = f"{RED}{time_str}{RESET}"
         elif time_ms < ref_time_ms:
             time_str = f"{GREEN}{time_str}{RESET}"
-    return f"  {fmt_counts(passed, failed, skipped)} {time_str} {sd_str}"
+    return f" | {fmt_counts(passed, failed, skipped)} {time_str} {sd_str}"
 
 
 def fmt_cell_missing():
-    """Format a cell for a missing group. Visible width = 32."""
-    return f"  {'--':>12} {'--':>8} {'':>8}"
+    """Format a cell for a missing group."""
+    return f" | {'--':>12} {'--':>8} {'':>8}"
 
 
 def latest_run_per_language(runs):

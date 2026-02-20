@@ -42,7 +42,7 @@ public class Filter extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k", "v",
+        return scheme("v", "k",
                 function(function("v", boolean_()), map("k", "v"), map("k", "v")));
     }
 

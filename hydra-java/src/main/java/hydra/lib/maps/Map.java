@@ -38,7 +38,7 @@ public class Map extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k", "v1", "v2",
+        return scheme("v1", "v2", "k",
             function(function("v1", "v2"), map("k", "v1"), map("k", "v2")));
     }
 
