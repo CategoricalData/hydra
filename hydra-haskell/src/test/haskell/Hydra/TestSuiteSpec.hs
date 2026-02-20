@@ -178,8 +178,8 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "join types" $ checkJoinTypes left right expected
     TestCaseUnshadowVariables (UnshadowVariablesTestCase input output) ->
       H.it "unshadow variables" $ H.shouldBe
-        (Rewriting.unshadowVariables input)
-        output
+        (ShowCore.term $ Rewriting.unshadowVariables input)
+        (ShowCore.term output)
   where
     cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 

@@ -1199,7 +1199,8 @@ public class TestSuiteRunner {
             public DynamicTest visit(TestCase.UnshadowVariables instance) {
                 UnshadowVariablesTestCase tc = instance.value;
                 return withTimeout(name, () ->
-                    assertEquals(tc.output, hydra.rewriting.Rewriting.unshadowVariables(tc.input)));
+                    assertEquals(hydra.show.core.Core.term(tc.output),
+                        hydra.show.core.Core.term(hydra.rewriting.Rewriting.unshadowVariables(tc.input))));
             }
         });
     }

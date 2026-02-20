@@ -96,8 +96,8 @@ def adapt_type(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
             case _:
                 return Just(typ)
     def for_unsupported(typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
-        def try_alts(alts2: frozenlist[hydra.core.Type]) -> Maybe[hydra.core.Type]:
-            return hydra.lib.logic.if_else(hydra.lib.lists.null(alts2), (lambda : Nothing()), (lambda : hydra.lib.maybes.maybe(try_alts(hydra.lib.lists.tail(alts2)), (lambda t: Just(t)), try_type(hydra.lib.lists.head(alts2)))))
+        def try_alts(alts: frozenlist[hydra.core.Type]) -> Maybe[hydra.core.Type]:
+            return hydra.lib.logic.if_else(hydra.lib.lists.null(alts), (lambda : Nothing()), (lambda : hydra.lib.maybes.maybe(try_alts(hydra.lib.lists.tail(alts)), (lambda t: Just(t)), try_type(hydra.lib.lists.head(alts)))))
         @lru_cache(1)
         def alts() -> frozenlist[hydra.core.Type]:
             return type_alternatives(typ)

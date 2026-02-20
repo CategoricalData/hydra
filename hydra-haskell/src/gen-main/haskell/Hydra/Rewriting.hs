@@ -1694,12 +1694,14 @@ typeNamesInType typ0 =
           _ -> names) typ)
   in (foldOverType Coders.TraversalOrderPre addNames Sets.empty typ0)
 
--- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term
+-- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term.
 unshadowVariables :: (Core.Term -> Core.Term)
 unshadowVariables term0 =  
-  let rewrite = (\recurse -> \m -> \term ->  
-          let dflt = (recurse m term)
-          in ((\x -> case x of
+  let freshName = (\base -> \i -> \m ->  
+          let candidate = (Core.Name (Strings.cat2 (Core.unName base) (Literals.showInt32 i)))
+          in (Logic.ifElse (Maps.member candidate m) (freshName base (Math.add i 1) m) candidate))
+  in  
+    let f = (\recurse -> \m -> \term -> (\x -> case x of
             Core.TermFunction v1 -> ((\x -> case x of
               Core.FunctionLambda v2 ->  
                 let v = (Core.lambdaParameter v2)
@@ -1707,23 +1709,23 @@ unshadowVariables term0 =
                   let domain = (Core.lambdaDomain v2)
                   in  
                     let body = (Core.lambdaBody v2)
-                    in (m, (Maybes.maybe (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    in (Logic.ifElse (Maps.member v m) ( 
+                      let v2 = (freshName v 2 m)
+                      in  
+                        let m2 = (Maps.insert v v2 (Maps.insert v2 v2 m))
+                        in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaParameter = v2,
+                          Core.lambdaDomain = domain,
+                          Core.lambdaBody = (f recurse m2 body)})))) (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = v,
                       Core.lambdaDomain = domain,
-                      Core.lambdaBody = (Pairs.second (rewrite recurse (Maps.insert v 1 m) body))}))) (\i ->  
-                      let i2 = (Math.add i 1)
-                      in  
-                        let v2 = (Core.Name (Strings.cat2 (Core.unName v) (Literals.showInt32 i2)))
-                        in  
-                          let m2 = (Maps.insert v i2 m)
-                          in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                            Core.lambdaParameter = v2,
-                            Core.lambdaDomain = domain,
-                            Core.lambdaBody = (Pairs.second (rewrite recurse m2 body))})))) (Maps.lookup v m)))
-              _ -> dflt) v1)
+                      Core.lambdaBody = (f recurse (Maps.insert v v m) body)}))))
+              _ -> (recurse m term)) v1)
             Core.TermLet v1 ->  
-              let m2 = (Lists.foldl (\acc -> \b -> Maps.insert (Core.bindingName b) 1 acc) m (Core.letBindings v1))
+              let m2 = (Lists.foldl (\acc -> \b ->  
+                      let bname = (Core.bindingName b)
+                      in (Logic.ifElse (Maps.member bname acc) acc (Maps.insert bname bname acc))) m (Core.letBindings v1))
               in (recurse m2 term)
-            Core.TermVariable v1 -> (m, (Core.TermVariable (Maybes.maybe v1 (\i -> Logic.ifElse (Equality.equal i 1) v1 (Core.Name (Strings.cat2 (Core.unName v1) (Literals.showInt32 i)))) (Maps.lookup v1 m))))
-            _ -> dflt) term))
-  in (Pairs.second (rewriteAndFoldTerm rewrite Maps.empty term0))
+            Core.TermVariable v1 -> (Core.TermVariable (Maybes.maybe v1 (\renamed -> renamed) (Maps.lookup v1 m)))
+            _ -> (recurse m term)) term)
+    in (rewriteTermWithContext f Maps.empty term0)

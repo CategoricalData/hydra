@@ -563,13 +563,13 @@ public interface Simple {
     forUnsupported.set((java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (typ -> {
       java.util.List<hydra.core.Type> alts = hydra.adapt.simple.Simple.typeAlternatives(typ);
       java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>> tryAlts = new java.util.concurrent.atomic.AtomicReference<>();
-      tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>) (alts2 -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.lists.Null.apply(alts2),
+      tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>) (alts -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.lists.Null.apply(alts),
         () -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()),
         () -> hydra.lib.maybes.Maybe.apply(
-          (tryAlts.get()).apply(hydra.lib.lists.Tail.apply(alts2)),
+          (tryAlts.get()).apply(hydra.lib.lists.Tail.apply(alts)),
           (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (t -> hydra.util.Maybe.just(t)),
-          (tryType.get()).apply(hydra.lib.lists.Head.apply(alts2))))));
+          (tryType.get()).apply(hydra.lib.lists.Head.apply(alts))))));
       return (tryAlts.get()).apply(alts);
     }));
     tryType.set((java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (typ -> {

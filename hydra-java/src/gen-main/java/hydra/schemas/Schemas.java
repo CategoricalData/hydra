@@ -364,10 +364,10 @@ public interface Schemas {
   
   static hydra.core.Type fullyStripAndNormalizeType(hydra.core.Type typ) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Integer, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<Integer, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>) (depth -> (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>) (subst2 -> (java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>) (t -> (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+    go.set((java.util.function.Function<Integer, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>) (depth -> (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>) (subst -> (java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>) (t -> (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>(subst2, t)));
+        return (hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>(subst, t)));
       }
       
       @Override
@@ -381,7 +381,7 @@ public interface Schemas {
           1))).apply(hydra.lib.maps.Insert.apply(
           oldVar,
           newVar,
-          subst2))).apply(((ft).value).body);
+          subst))).apply(((ft).value).body);
       }
     })))));
     hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>> result = new hydra.util.Lazy<>(() -> (((go.get()).apply(0)).apply((java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())))).apply(typ));

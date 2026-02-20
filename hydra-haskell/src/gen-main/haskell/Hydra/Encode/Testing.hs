@@ -601,6 +601,11 @@ testCase x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "joinTypes"),
       Core.fieldTerm = (joinTypesTestCase v1)}}))
+  Testing.TestCaseUnshadowVariables v1 -> (Core.TermUnion (Core.Injection {
+    Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
+    Core.injectionField = Core.Field {
+      Core.fieldName = (Core.Name "unshadowVariables"),
+      Core.fieldTerm = (unshadowVariablesTestCase v1)}}))
 
 testCaseWithMetadata :: (Testing.TestCaseWithMetadata -> Core.Term)
 testCaseWithMetadata x = (Core.TermRecord (Core.Record {
@@ -773,6 +778,17 @@ variableOccursInTypeTestCase x = (Core.TermRecord (Core.Record {
     Core.Field {
       Core.fieldName = (Core.Name "expected"),
       Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Testing.variableOccursInTypeTestCaseExpected x))}]}))
+
+unshadowVariablesTestCase :: (Testing.UnshadowVariablesTestCase -> Core.Term)
+unshadowVariablesTestCase x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.testing.UnshadowVariablesTestCase"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "input"),
+      Core.fieldTerm = (Core_.term (Testing.unshadowVariablesTestCaseInput x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "output"),
+      Core.fieldTerm = (Core_.term (Testing.unshadowVariablesTestCaseOutput x))}]}))
 
 unifyTypesTestCase :: (Testing.UnifyTypesTestCase -> Core.Term)
 unifyTypesTestCase x = (Core.TermRecord (Core.Record {

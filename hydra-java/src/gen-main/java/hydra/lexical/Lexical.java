@@ -37,7 +37,7 @@ public interface Lexical {
       hydra.monads.Monads.<hydra.graph.Graph>getState());
   }
   
-  static hydra.util.Maybe<hydra.core.TypeScheme> dereferenceSchemaType(hydra.core.Name name, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types2) {
+  static hydra.util.Maybe<hydra.core.TypeScheme> dereferenceSchemaType(hydra.core.Name name, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>> forType = new java.util.concurrent.atomic.AtomicReference<>();
     forType.set((java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
@@ -63,13 +63,13 @@ public interface Lexical {
       public hydra.util.Maybe<hydra.core.TypeScheme> visit(hydra.core.Type.Variable v) {
         return hydra.lexical.Lexical.dereferenceSchemaType(
           (v).value,
-          types2);
+          types);
       }
     })));
     return hydra.lib.maybes.Bind.apply(
       hydra.lib.maps.Lookup.apply(
         name,
-        types2),
+        types),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Maybe<hydra.core.TypeScheme>>) (ts -> hydra.lib.maybes.Map.apply(
         (java.util.function.Function<hydra.core.TypeScheme, hydra.core.TypeScheme>) (ts2 -> new hydra.core.TypeScheme(hydra.lib.lists.Concat2.apply(
           (ts).variables,

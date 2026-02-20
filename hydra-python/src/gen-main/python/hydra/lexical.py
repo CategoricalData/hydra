@@ -47,7 +47,7 @@ def dereference_element(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph
     
     return hydra.lib.flows.map((lambda g: lookup_element(g, name)), hydra.monads.get_state())
 
-def dereference_schema_type(name: hydra.core.Name, types2: FrozenDict[hydra.core.Name, hydra.core.TypeScheme]) -> Maybe[hydra.core.TypeScheme]:
+def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme]) -> Maybe[hydra.core.TypeScheme]:
     r"""Resolve a schema type through a chain of zero or more typedefs."""
     
     def for_type(t: hydra.core.Type) -> Maybe[hydra.core.TypeScheme]:
@@ -59,11 +59,11 @@ def dereference_schema_type(name: hydra.core.Name, types2: FrozenDict[hydra.core
                 return hydra.lib.maybes.map((lambda ts: hydra.core.TypeScheme(hydra.lib.lists.cons(ft.parameter, ts.variables), ts.type, ts.constraints)), for_type(ft.body))
             
             case hydra.core.TypeVariable(value=v):
-                return dereference_schema_type(v, types2)
+                return dereference_schema_type(v, types)
             
             case _:
                 return Just(hydra.core.TypeScheme((), t, Nothing()))
-    return hydra.lib.maybes.bind(hydra.lib.maps.lookup(name, types2), (lambda ts: hydra.lib.maybes.map((lambda ts2: hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, ts2.variables), ts2.type, ts2.constraints)), for_type(ts.type))))
+    return hydra.lib.maybes.bind(hydra.lib.maps.lookup(name, types), (lambda ts: hydra.lib.maybes.map((lambda ts2: hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, ts2.variables), ts2.type, ts2.constraints)), for_type(ts.type))))
 
 def dereference_variable(g: hydra.graph.Graph, name: hydra.core.Name) -> Either[str, hydra.core.Binding]:
     r"""Look up an element by name in a graph, returning Either an error or the binding."""

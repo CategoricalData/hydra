@@ -58,8 +58,7 @@ import Hydra.Kernel hiding (
   topologicalSortBindings,
   typeDependencyNames,
   typeNamesInType,
-  unshadowVariables,
-  unshadowVariablesNew)
+  unshadowVariables)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -185,8 +184,7 @@ module_ = Module ns elements
      toBinding topologicalSortBindings,
      toBinding typeDependencyNames,
      toBinding typeNamesInType,
-     toBinding unshadowVariables,
-     toBinding unshadowVariablesNew]
+     toBinding unshadowVariables]
 
 applyInsideTypeLambdasAndAnnotations :: TBinding ((Term -> Term) -> Term -> Term)
 applyInsideTypeLambdasAndAnnotations = define "applyInsideTypeLambdasAndAnnotations" $
@@ -2240,95 +2238,42 @@ typeNamesInType = define "typeNamesInType" $
 
 unshadowVariables :: TBinding (Term -> Term)
 unshadowVariables = define "unshadowVariables" $
-  doc "Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term" $
-  "term0" ~>
-  "rewrite" <~ ("recurse" ~> "m" ~> "term"~>
-    "dflt" <~ var "recurse" @@ var "m" @@ var "term" $
-    cases _Term (var "term")
-      (Just $ var "dflt") [
-      _Term_function>>: "f" ~> cases _Function (var "f")
-        (Just $ var "dflt") [
-        _Function_lambda>>: "l" ~>
-          "v" <~ Core.lambdaParameter (var "l") $
-          "domain" <~ Core.lambdaDomain (var "l") $
-          "body" <~ Core.lambdaBody (var "l") $
-          pair (var "m") $ optCases (Maps.lookup (var "v") (var "m"))
-            (Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "domain")
-              (Pairs.second $ var "rewrite"
-                @@ var "recurse"
-                @@ (Maps.insert (var "v") (int32 1) (var "m"))
-                @@ (var "body")))
-            ("i" ~>
-              "i2" <~ Math.add (var "i") (int32 1) $
-              "v2" <~ Core.name (Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "i2")) $
-              "m2" <~ Maps.insert (var "v") (var "i2") (var "m") $
-              Core.termFunction $ Core.functionLambda $ Core.lambda (var "v2") (var "domain")
-                (Pairs.second $ var "rewrite" @@ var "recurse" @@ var "m2" @@ var "body"))],
-      -- Track let-bound variables so that inner lambdas with the same names get renamed
-      _Term_let>>: "lt" ~>
-        "m2" <~ Lists.foldl ("acc" ~> "b" ~>
-          Maps.insert (Core.bindingName $ var "b") (int32 1) (var "acc"))
-          (var "m") (Core.letBindings $ var "lt") $
-        var "recurse" @@ var "m2" @@ var "term",
-      _Term_variable>>: "v" ~> pair (var "m") $ Core.termVariable $ optCases (Maps.lookup (var "v") (var "m"))
-        (var "v")
-        ("i" ~> Logic.ifElse (Equality.equal (var "i") (int32 1))
-          (var "v")
-          (Core.name $ Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "i")))]) $
-  Pairs.second (rewriteAndFoldTerm @@ var "rewrite" @@ Maps.empty @@ var "term0")
-
-unshadowVariablesNew :: TBinding (Term -> Term)
-unshadowVariablesNew = define "unshadowVariablesNew" $
   doc ("Rename all shadowed variables (both lambda parameters and let-bound variables"
-    <> " that shadow lambda parameters) in a term."
-    <> " This variant uses rewriteTermWithContext instead of rewriteAndFoldTerm,"
-    <> " avoiding pair allocations at every node.") $
+    <> " that shadow lambda parameters) in a term.") $
   "term0" ~>
+  -- Find a fresh name not in the key set of the map, trying base2, base3, etc.
+  "freshName" <~ ("base" ~> "i" ~> "m" ~>
+    "candidate" <~ Core.name (Strings.cat2 (Core.unName $ var "base") (Literals.showInt32 $ var "i")) $
+    Logic.ifElse (Maps.member (var "candidate") (var "m"))
+      (var "freshName" @@ var "base" @@ Math.add (var "i") (int32 1) @@ var "m")
+      (var "candidate")) $
   "f" <~ ("recurse" ~> "m" ~> "term" ~>
-    cases _Term (var "term") Nothing [
+    cases _Term (var "term") (Just $ var "recurse" @@ var "m" @@ var "term") [
     _Term_function>>: "fn" ~> cases _Function (var "fn")
-      (Just $ Core.termFunction $ var "fn") [
+      (Just $ var "recurse" @@ var "m" @@ var "term") [
       _Function_lambda>>: "l" ~>
         "v" <~ Core.lambdaParameter (var "l") $
         "domain" <~ Core.lambdaDomain (var "l") $
         "body" <~ Core.lambdaBody (var "l") $
-        optCases (Maps.lookup (var "v") (var "m"))
-          -- First occurrence: register v with count 1, recurse into body
-          (Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "domain")
-            (var "recurse" @@ (Maps.insert (var "v") (int32 1) (var "m")) @@ var "body"))
-          -- Shadowed: increment counter, rename parameter, recurse into body
-          ("i" ~>
-            "i2" <~ Math.add (var "i") (int32 1) $
-            "v2" <~ Core.name (Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "i2")) $
-            "m2" <~ Maps.insert (var "v") (var "i2") (var "m") $
+        Logic.ifElse (Maps.member (var "v") (var "m"))
+          -- Shadowed: find a fresh name, add v -> fresh to map, recurse into body
+          ("v2" <~ var "freshName" @@ var "v" @@ int32 2 @@ var "m" $
+            "m2" <~ Maps.insert (var "v") (var "v2") (Maps.insert (var "v2") (var "v2") (var "m")) $
             Core.termFunction $ Core.functionLambda $ Core.lambda (var "v2") (var "domain")
-              (var "recurse" @@ var "m2" @@ var "body"))],
+              (var "f" @@ var "recurse" @@ var "m2" @@ var "body"))
+          -- First occurrence: register v -> v (identity), recurse into body
+          (Core.termFunction $ Core.functionLambda $ Core.lambda (var "v") (var "domain")
+            (var "f" @@ var "recurse" @@ Maps.insert (var "v") (var "v") (var "m") @@ var "body"))],
     _Term_let>>: "lt" ~>
-      -- Register all let-bound names so inner lambdas with the same names get renamed
+      -- Register all let-bound names as in-scope (identity mapping) so inner lambdas know about them
       "m2" <~ Lists.foldl ("acc" ~> "b" ~>
-        Maps.insert (Core.bindingName $ var "b") (int32 1) (var "acc"))
+        "bname" <~ Core.bindingName (var "b") $
+        Logic.ifElse (Maps.member (var "bname") (var "acc"))
+          (var "acc")
+          (Maps.insert (var "bname") (var "bname") (var "acc")))
         (var "m") (Core.letBindings $ var "lt") $
-      -- Delegate to forSubterms (recurse) with updated map for structural descent
       var "recurse" @@ var "m2" @@ var "term",
     _Term_variable>>: "v" ~> Core.termVariable $ optCases (Maps.lookup (var "v") (var "m"))
       (var "v")
-      ("i" ~> Logic.ifElse (Equality.equal (var "i") (int32 1))
-        (var "v")
-        (Core.name $ Strings.cat2 (Core.unName $ var "v") (Literals.showInt32 $ var "i"))),
-    -- All other term variants: delegate structural descent to forSubterms
-    _Term_annotated>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_application>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_either>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_list>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_literal>>: "_" ~> var "term",
-    _Term_map>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_maybe>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_pair>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_record>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_set>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_typeApplication>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_typeLambda>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_union>>: "_" ~> var "recurse" @@ var "m" @@ var "term",
-    _Term_unit>>: constant $ var "term",
-    _Term_wrap>>: "_" ~> var "recurse" @@ var "m" @@ var "term"]) $
+      ("renamed" ~> var "renamed")]) $
   rewriteTermWithContext @@ var "f" @@ Maps.empty @@ var "term0"
