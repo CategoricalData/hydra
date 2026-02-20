@@ -99,9 +99,9 @@ def adapt_type(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
         def try_alts(alts: frozenlist[hydra.core.Type]) -> Maybe[hydra.core.Type]:
             return hydra.lib.logic.if_else(hydra.lib.lists.null(alts), (lambda : Nothing()), (lambda : hydra.lib.maybes.maybe(try_alts(hydra.lib.lists.tail(alts)), (lambda t: Just(t)), try_type(hydra.lib.lists.head(alts)))))
         @lru_cache(1)
-        def alts() -> frozenlist[hydra.core.Type]:
+        def alts0() -> frozenlist[hydra.core.Type]:
             return type_alternatives(typ)
-        return try_alts(alts())
+        return try_alts(alts0())
     def try_type(typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
         @lru_cache(1)
         def supported_variant() -> bool:
@@ -390,7 +390,7 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
                 return hydra.lib.flows.bind(try_term(hydra.lib.lists.head(alts)), (lambda mterm: hydra.lib.maybes.maybe(try_alts(hydra.lib.lists.tail(alts)), (lambda t: hydra.lib.flows.pure(Just(t))), mterm)))
             def try_alts(alts: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
                 return hydra.lib.logic.if_else(hydra.lib.lists.null(alts), (lambda : hydra.lib.flows.pure(Nothing())), (lambda : for_non_null(alts)))
-            return hydra.lib.flows.bind(term_alternatives(term), (lambda alts: try_alts(alts)))
+            return hydra.lib.flows.bind(term_alternatives(term), (lambda alts0: try_alts(alts0)))
         def try_term(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
             @lru_cache(1)
             def supported_variant() -> bool:

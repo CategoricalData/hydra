@@ -1101,75 +1101,70 @@ public interface Rewriting {
   
   static hydra.core.Type replaceTypedefs(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Type typ0) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.core.Type>>> rewrite = new java.util.concurrent.atomic.AtomicReference<>();
-    rewrite.set((java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.core.Type>>) (recurse -> (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (typ -> {
-      // Note: dflt (recurse.apply(typ)) is NOT eagerly computed here, because in strict languages
-      // this would recurse into Record/Union/Wrap fields, causing infinite recursion on recursive types.
-      // Instead, (recurse).apply(typ) is inlined only in the otherwise case.
-      return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
-        @Override
-        public hydra.core.Type otherwise(hydra.core.Type instance) {
-          return (recurse).apply(typ);
-        }
-
-        @Override
-        public hydra.core.Type visit(hydra.core.Type.Annotated at) {
-          return new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(((rewrite.get()).apply(recurse)).apply(((at).value).body), ((at).value).annotation));
-        }
-
-        @Override
-        public hydra.core.Type visit(hydra.core.Type.Record ignored) {
-          return typ;
-        }
-
-        @Override
-        public hydra.core.Type visit(hydra.core.Type.Union ignored) {
-          return typ;
-        }
-
-        @Override
-        public hydra.core.Type visit(hydra.core.Type.Variable v) {
-          java.util.function.Function<hydra.core.Type, hydra.core.Type> forMono = (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
-            @Override
-            public hydra.core.Type otherwise(hydra.core.Type instance) {
-              return ((rewrite.get()).apply(recurse)).apply(t);
-            }
-
-            @Override
-            public hydra.core.Type visit(hydra.core.Type.Record ignored) {
-              return typ;
-            }
-
-            @Override
-            public hydra.core.Type visit(hydra.core.Type.Union ignored) {
-              return typ;
-            }
-
-            @Override
-            public hydra.core.Type visit(hydra.core.Type.Wrap ignored) {
-              return typ;
-            }
-          }));
-          java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> forTypeScheme = (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> {
-            hydra.core.Type t = (ts).type;
-            return hydra.lib.logic.IfElse.lazy(
-              hydra.lib.lists.Null.apply((ts).variables),
-              () -> (forMono).apply(t),
-              () -> typ);
-          });
-          return hydra.lib.maybes.Maybe.apply(
-            typ,
-            (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> (forTypeScheme).apply(ts)),
-            hydra.lib.maps.Lookup.apply(
-              (v).value,
-              types));
-        }
-        
-        @Override
-        public hydra.core.Type visit(hydra.core.Type.Wrap ignored) {
-          return typ;
-        }
-      });
-    })));
+    rewrite.set((java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.core.Type>>) (recurse -> (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (typ -> (typ).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.core.Type otherwise(hydra.core.Type instance) {
+        return (recurse).apply(typ);
+      }
+      
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Annotated at) {
+        return new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(((rewrite.get()).apply(recurse)).apply(((at).value).body), ((at).value).annotation));
+      }
+      
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Record ignored) {
+        return typ;
+      }
+      
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Union ignored) {
+        return typ;
+      }
+      
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Variable v) {
+        java.util.function.Function<hydra.core.Type, hydra.core.Type> forMono = (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public hydra.core.Type otherwise(hydra.core.Type instance) {
+            return ((rewrite.get()).apply(recurse)).apply(t);
+          }
+          
+          @Override
+          public hydra.core.Type visit(hydra.core.Type.Record ignored) {
+            return typ;
+          }
+          
+          @Override
+          public hydra.core.Type visit(hydra.core.Type.Union ignored) {
+            return typ;
+          }
+          
+          @Override
+          public hydra.core.Type visit(hydra.core.Type.Wrap ignored) {
+            return typ;
+          }
+        }));
+        java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> forTypeScheme = (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> {
+          hydra.core.Type t = (ts).type;
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.lists.Null.apply((ts).variables),
+            () -> (forMono).apply(t),
+            () -> typ);
+        });
+        return hydra.lib.maybes.Maybe.apply(
+          typ,
+          (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> (forTypeScheme).apply(ts)),
+          hydra.lib.maps.Lookup.apply(
+            (v).value,
+            types));
+      }
+      
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Wrap ignored) {
+        return typ;
+      }
+    }))));
     return hydra.rewriting.Rewriting.rewriteType(
       rewrite.get(),
       typ0);

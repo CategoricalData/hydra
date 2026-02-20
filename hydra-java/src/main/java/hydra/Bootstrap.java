@@ -84,7 +84,10 @@ public class Bootstrap {
 
         long stepStart = System.currentTimeMillis();
         List<Module> kernelModules = Collections.emptyList();
-        List<Module> rawMods = Generation.loadAllModulesFromJsonDir(jsonDir, kernelModules);
+        // Preserve TypeSchemes (stripTypeSchemes=false) so that the pipeline
+        // can skip pre-adaptation inference. Without types, inference fails on
+        // hoisted case-statement bindings (_hoist_*) that lack type annotations.
+        List<Module> rawMods = Generation.loadAllModulesFromJsonDirWith(false, jsonDir, kernelModules);
         long stepTime = System.currentTimeMillis() - stepStart;
 
         int totalBindings = 0;

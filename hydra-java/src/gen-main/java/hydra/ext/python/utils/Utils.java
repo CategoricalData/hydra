@@ -173,6 +173,11 @@ public interface Utils {
       hydra.ext.python.utils.Utils.pyExpressionToPyAnnotatedRhs(expr));
   }
   
+  static hydra.ext.python.syntax.Statement dottedAssignmentStatement(hydra.ext.python.syntax.Name obj, hydra.ext.python.syntax.Name attr, hydra.ext.python.syntax.Expression expr) {
+    hydra.ext.python.syntax.StarTarget target = new hydra.ext.python.syntax.StarTarget.Unstarred(new hydra.ext.python.syntax.TargetWithStarAtom.Project(new hydra.ext.python.syntax.TPrimaryAndName(new hydra.ext.python.syntax.TPrimary.Atom(new hydra.ext.python.syntax.Atom.Name(obj)), attr)));
+    return hydra.ext.python.utils.Utils.pyAssignmentToPyStatement(new hydra.ext.python.syntax.Assignment.Untyped(new hydra.ext.python.syntax.UntypedAssignment(java.util.List.of(target), hydra.ext.python.utils.Utils.pyExpressionToPyAnnotatedRhs(expr), (hydra.util.Maybe<hydra.ext.python.syntax.TypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.TypeComment>nothing()))));
+  }
+  
   static hydra.ext.python.syntax.Statement returnSingle(hydra.ext.python.syntax.Expression expr) {
     return hydra.ext.python.utils.Utils.pySimpleStatementToPyStatement(new hydra.ext.python.syntax.SimpleStatement.Return(new hydra.ext.python.syntax.ReturnStatement(java.util.List.of(new hydra.ext.python.syntax.StarExpression.Simple(expr)))));
   }
@@ -404,9 +409,20 @@ public interface Utils {
       new hydra.ext.python.syntax.ParamNoDefault(new hydra.ext.python.syntax.Param(new hydra.ext.python.syntax.Name("item"), (hydra.util.Maybe<hydra.ext.python.syntax.Annotation>) (hydra.util.Maybe.<hydra.ext.python.syntax.Annotation>nothing())), (hydra.util.Maybe<hydra.ext.python.syntax.TypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.TypeComment>nothing()))), (java.util.List<hydra.ext.python.syntax.ParamWithDefault>) (java.util.List.<hydra.ext.python.syntax.ParamWithDefault>of()), (hydra.util.Maybe<hydra.ext.python.syntax.StarEtc>) (hydra.util.Maybe.<hydra.ext.python.syntax.StarEtc>nothing())));
   }
   
-  static java.util.List<hydra.ext.python.syntax.Statement> unionTypeClassStatements310(hydra.ext.python.syntax.Name name, hydra.util.Maybe<String> mcomment, hydra.ext.python.syntax.Expression tyexpr) {
+  static java.util.List<hydra.ext.python.syntax.Statement> unionTypeClassStatements310(hydra.ext.python.syntax.Name name, hydra.util.Maybe<String> mcomment, hydra.ext.python.syntax.Expression tyexpr, java.util.List<hydra.ext.python.syntax.Statement> extraStmts) {
     String docString = hydra.serialization.Serialization.printExpr(hydra.ext.python.serde.Serde.encodeExpression(tyexpr));
     hydra.ext.python.syntax.Statement docStmt = hydra.ext.python.utils.Utils.pyExpressionToPyStatement(hydra.ext.python.utils.Utils.tripleQuotedString(docString));
+    hydra.util.Lazy<java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>> bodyGroups = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+      hydra.lib.lists.Null.apply(extraStmts),
+      () -> ((java.util.function.Supplier<java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
+        hydra.ext.python.syntax.Statement passStmt = hydra.ext.python.utils.Utils.pySimpleStatementToPyStatement(new hydra.ext.python.syntax.SimpleStatement.Pass());
+        return java.util.List.of(
+          java.util.List.of(docStmt),
+          java.util.List.of(passStmt));
+      })).get(),
+      () -> java.util.List.of(
+        java.util.List.of(docStmt),
+        extraStmts)));
     hydra.util.Lazy<hydra.ext.python.syntax.Statement> returnObject = new hydra.util.Lazy<>(() -> hydra.ext.python.utils.Utils.pySimpleStatementToPyStatement(new hydra.ext.python.syntax.SimpleStatement.Return(new hydra.ext.python.syntax.ReturnStatement(java.util.List.of(new hydra.ext.python.syntax.StarExpression.Simple(new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.List.of(new hydra.ext.python.syntax.Conjunction(java.util.List.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(new hydra.ext.python.syntax.Name("object")))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.List.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>of()))))))))))))));
     hydra.util.Lazy<hydra.ext.python.syntax.Statement> getItemMethod = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Statement.Compound(new hydra.ext.python.syntax.CompoundStatement.Function(new hydra.ext.python.syntax.FunctionDefinition((hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing()), new hydra.ext.python.syntax.FunctionDefRaw(false, new hydra.ext.python.syntax.Name("__getitem__"), (java.util.List<hydra.ext.python.syntax.TypeParameter>) (java.util.List.<hydra.ext.python.syntax.TypeParameter>of()), hydra.util.Maybe.just(hydra.ext.python.utils.Utils.getItemParams()), (hydra.util.Maybe<hydra.ext.python.syntax.Expression>) (hydra.util.Maybe.<hydra.ext.python.syntax.Expression>nothing()), (hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.FuncTypeComment>nothing()), hydra.ext.python.utils.Utils.indentedBlock(
       (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
@@ -421,14 +437,11 @@ public interface Utils {
       (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
       java.util.List.of(java.util.List.of(getItemMethod.get()))))));
     hydra.util.Lazy<hydra.ext.python.syntax.Kwarg> metaclassArg = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.Kwarg(new hydra.ext.python.syntax.Name("metaclass"), new hydra.ext.python.syntax.Expression.Simple(new hydra.ext.python.syntax.Disjunction(java.util.List.of(new hydra.ext.python.syntax.Conjunction(java.util.List.of(new hydra.ext.python.syntax.Inversion.Simple(new hydra.ext.python.syntax.Comparison(new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Name(metaName))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing()))))))))), (java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair>) (java.util.List.<hydra.ext.python.syntax.CompareOpBitwiseOrPair>of()))))))))));
-    hydra.ext.python.syntax.Statement passStmt = hydra.ext.python.utils.Utils.pySimpleStatementToPyStatement(new hydra.ext.python.syntax.SimpleStatement.Pass());
     hydra.util.Lazy<hydra.ext.python.syntax.Statement> unionClass = new hydra.util.Lazy<>(() -> hydra.ext.python.utils.Utils.annotatedStatement(
       mcomment,
       hydra.ext.python.utils.Utils.pyClassDefinitionToPyStatement(new hydra.ext.python.syntax.ClassDefinition((hydra.util.Maybe<hydra.ext.python.syntax.Decorators>) (hydra.util.Maybe.<hydra.ext.python.syntax.Decorators>nothing()), name, (java.util.List<hydra.ext.python.syntax.TypeParameter>) (java.util.List.<hydra.ext.python.syntax.TypeParameter>of()), hydra.util.Maybe.just(new hydra.ext.python.syntax.Args((java.util.List<hydra.ext.python.syntax.PosArg>) (java.util.List.<hydra.ext.python.syntax.PosArg>of()), java.util.List.of(new hydra.ext.python.syntax.KwargOrStarred.Kwarg(metaclassArg.get())), (java.util.List<hydra.ext.python.syntax.KwargOrDoubleStarred>) (java.util.List.<hydra.ext.python.syntax.KwargOrDoubleStarred>of()))), hydra.ext.python.utils.Utils.indentedBlock(
         (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
-        java.util.List.of(
-          java.util.List.of(docStmt),
-          java.util.List.of(passStmt)))))));
+        bodyGroups.get())))));
     return java.util.List.of(
       metaClass.get(),
       unionClass.get());

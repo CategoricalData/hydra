@@ -115,10 +115,7 @@ def decode_module_from_json(bs_graph: hydra.graph.Graph, universe_modules: froze
     def schema_map() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
         return build_schema_map(graph())
     mod_type = cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.module.Module")))
-    @lru_cache(1)
-    def post_process() -> Callable[[hydra.module.Module], hydra.module.Module]:
-        return hydra.lib.logic.if_else(do_strip_type_schemes, (lambda : (lambda m: strip_module_type_schemes(m))), (lambda : (lambda m: m)))
-    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda term: hydra.lib.eithers.either((lambda dec_err: Left(dec_err.value)), (lambda mod: Right(post_process(mod))), hydra.decode.module.module(graph(), term))), hydra.json.decode.from_json(schema_map(), mod_type, json_val))
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda term: hydra.lib.eithers.either((lambda dec_err: Left(dec_err.value)), (lambda mod: Right(hydra.lib.logic.if_else(do_strip_type_schemes, (lambda : strip_module_type_schemes(mod)), (lambda : mod)))), hydra.decode.module.module(graph(), term))), hydra.json.decode.from_json(schema_map(), mod_type, json_val))
 
 def escape_control_chars_in_json(input: frozenlist[int]) -> frozenlist[int]:
     r"""Escape unescaped control characters inside JSON string literals."""

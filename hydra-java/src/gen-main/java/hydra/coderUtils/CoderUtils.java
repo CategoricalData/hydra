@@ -320,11 +320,15 @@ public interface CoderUtils {
       body,
       tapps));
     return hydra.lib.flows.Bind.apply(
-      hydra.coderUtils.CoderUtils.<T1>tryTypeOf(
-        "analyzeFunctionTermWith",
-        (getTC).apply(fEnv),
-        bodyWithTapps.get()),
-      (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.FunctionStructure<T0>>>) (typ -> hydra.lib.flows.Pure.apply((hydra.typing.FunctionStructure<T0>) (new hydra.typing.FunctionStructure<T0>(hydra.lib.lists.Reverse.apply(tparams), hydra.lib.lists.Reverse.apply(args), bindings, bodyWithTapps.get(), hydra.lib.lists.Reverse.apply(doms), hydra.util.Maybe.just(typ), fEnv)))));
+      hydra.lib.flows.WithDefault.apply(
+        (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()),
+        hydra.lib.flows.Map.apply(
+          (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (x_ -> hydra.util.Maybe.just(x_)),
+          hydra.coderUtils.CoderUtils.<T1>tryTypeOf(
+            "analyzeFunctionTermWith",
+            (getTC).apply(fEnv),
+            bodyWithTapps.get()))),
+      (java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.compute.Flow<T1, hydra.typing.FunctionStructure<T0>>>) (mcod -> hydra.lib.flows.Pure.apply((hydra.typing.FunctionStructure<T0>) (new hydra.typing.FunctionStructure<T0>(hydra.lib.lists.Reverse.apply(tparams), hydra.lib.lists.Reverse.apply(args), bindings, bodyWithTapps.get(), hydra.lib.lists.Reverse.apply(doms), mcod, fEnv)))));
   }
   
   static <T0, T1> hydra.compute.Flow<T1, hydra.typing.FunctionStructure<T0>> analyzeFunctionTermWith_gather(java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, java.util.function.Function<T0, hydra.typing.TypeContext> getTC, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, T0>> setTC, Boolean argMode, T0 gEnv, java.util.List<hydra.core.Name> tparams, java.util.List<hydra.core.Name> args, java.util.List<hydra.core.Binding> bindings, java.util.List<hydra.core.Type> doms, java.util.List<hydra.core.Type> tapps, hydra.core.Term t) {

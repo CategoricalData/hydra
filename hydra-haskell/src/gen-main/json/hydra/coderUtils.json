@@ -1602,7 +1602,7 @@
                                                                                                   "typeApplication": {
                                                                                                     "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
                                                                                                     "type": {"variable": "hydra.core.Type"}}}}}},
-                                                                                          {"name": "codomain", "term": {"maybe": [{"variable": "typ"}]}},
+                                                                                          {"name": "codomain", "term": {"variable": "mcod"}},
                                                                                           {"name": "environment", "term": {"variable": "fEnv"}}],
                                                                                         "typeName": "hydra.typing.FunctionStructure"}},
                                                                                     "type": {"variable": "t0"}}},
@@ -1616,24 +1616,55 @@
                                                                                       "application": {
                                                                                         "argument": {"variable": "t0"},
                                                                                         "function": {"variable": "hydra.typing.FunctionStructure"}}}}}}},
-                                                                            "domain": [{"variable": "hydra.core.Type"}],
-                                                                            "parameter": "typ"}}},
+                                                                            "domain": [{"maybe": {"variable": "hydra.core.Type"}}],
+                                                                            "parameter": "mcod"}}},
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {
                                                                             "application": {
-                                                                              "argument": {"variable": "bodyWithTapps"},
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "bodyWithTapps"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "application": {"argument": {"variable": "fEnv"}, "function": {"variable": "getTC"}}},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"literal": {"string": "analyzeFunctionTermWith"}},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"variable": "hydra.coderUtils.tryTypeOf"},
+                                                                                                  "type": {"variable": "t1"}}}}}}}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.pure"}},
+                                                                                          "type": {"variable": "hydra.core.Type"}}},
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.flows.map"}},
+                                                                                                  "type": {"variable": "hydra.core.Type"}}},
+                                                                                              "type": {"maybe": {"variable": "hydra.core.Type"}}}},
+                                                                                          "type": {"variable": "t1"}}}}}}},
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {
-                                                                                    "application": {"argument": {"variable": "fEnv"}, "function": {"variable": "getTC"}}},
+                                                                                    "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}},
                                                                                   "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"literal": {"string": "analyzeFunctionTermWith"}},
-                                                                                      "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {"variable": "hydra.coderUtils.tryTypeOf"},
-                                                                                          "type": {"variable": "t1"}}}}}}}}},
+                                                                                          "body": {"function": {"primitive": "hydra.lib.flows.withDefault"}},
+                                                                                          "type": {"variable": "t1"}}},
+                                                                                      "type": {"maybe": {"variable": "hydra.core.Type"}}}}}}}},
                                                                           "function": {
                                                                             "typeApplication": {
                                                                               "body": {
@@ -1642,7 +1673,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {"function": {"primitive": "hydra.lib.flows.bind"}},
                                                                                       "type": {"variable": "t1"}}},
-                                                                                  "type": {"variable": "hydra.core.Type"}}},
+                                                                                  "type": {"maybe": {"variable": "hydra.core.Type"}}}},
                                                                               "type": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "t0"},

@@ -1163,9 +1163,6 @@ def replace_typedefs(types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], 
     r"""Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively."""
     
     def rewrite(recurse: Callable[[hydra.core.Type], hydra.core.Type], typ: hydra.core.Type) -> hydra.core.Type:
-        @lru_cache(1)
-        def dflt() -> hydra.core.Type:
-            return recurse(typ)
         match typ:
             case hydra.core.TypeAnnotated(value=at):
                 return cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(rewrite(recurse, at.body), at.annotation)))
@@ -1180,13 +1177,13 @@ def replace_typedefs(types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], 
                 def for_mono(t: hydra.core.Type) -> hydra.core.Type:
                     match t:
                         case hydra.core.TypeRecord():
-                            return dflt()
+                            return typ
                         
                         case hydra.core.TypeUnion():
-                            return dflt()
+                            return typ
                         
                         case hydra.core.TypeWrap():
-                            return dflt()
+                            return typ
                         
                         case _:
                             return rewrite(recurse, t)
@@ -1194,14 +1191,14 @@ def replace_typedefs(types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], 
                     @lru_cache(1)
                     def t() -> hydra.core.Type:
                         return ts.type
-                    return hydra.lib.logic.if_else(hydra.lib.lists.null(ts.variables), (lambda : for_mono(t())), (lambda : dflt()))
-                return hydra.lib.maybes.maybe(dflt(), (lambda ts: for_type_scheme(ts)), hydra.lib.maps.lookup(v, types))
+                    return hydra.lib.logic.if_else(hydra.lib.lists.null(ts.variables), (lambda : for_mono(t())), (lambda : typ))
+                return hydra.lib.maybes.maybe(typ, (lambda ts: for_type_scheme(ts)), hydra.lib.maps.lookup(v, types))
             
             case hydra.core.TypeWrap():
                 return typ
             
             case _:
-                return dflt()
+                return recurse(typ)
     return rewrite_type((lambda x1, x2: rewrite(x1, x2)), typ0)
 
 def rewrite_and_fold_term(f: Callable[[

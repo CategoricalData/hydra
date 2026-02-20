@@ -530,16 +530,15 @@ public interface CodeGeneration {
       universeModules,
       universeModules);
     hydra.core.Type modType = new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Module"));
-    java.util.function.Function<hydra.module.Module, hydra.module.Module> postProcess = hydra.lib.logic.IfElse.lazy(
-      doStripTypeSchemes,
-      () -> (java.util.function.Function<hydra.module.Module, hydra.module.Module>) (m -> hydra.codeGeneration.CodeGeneration.stripModuleTypeSchemes(m)),
-      () -> (java.util.function.Function<hydra.module.Module, hydra.module.Module>) (m -> m));
     java.util.Map<hydra.core.Name, hydra.core.Type> schemaMap = hydra.codeGeneration.CodeGeneration.buildSchemaMap(graph);
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<String, hydra.module.Module>>) (err -> (hydra.util.Either<String, hydra.module.Module>) ((hydra.util.Either<String, hydra.module.Module>) (hydra.util.Either.<String, hydra.module.Module>left(err)))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.module.Module>>) (term -> hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.util.DecodingError, hydra.util.Either<String, hydra.module.Module>>) (decErr -> (hydra.util.Either<String, hydra.module.Module>) ((hydra.util.Either<String, hydra.module.Module>) (hydra.util.Either.<String, hydra.module.Module>left((decErr).value)))),
-        (java.util.function.Function<hydra.module.Module, hydra.util.Either<String, hydra.module.Module>>) (mod -> (hydra.util.Either<String, hydra.module.Module>) ((hydra.util.Either<String, hydra.module.Module>) (hydra.util.Either.<String, hydra.module.Module>right((postProcess).apply(mod))))),
+        (java.util.function.Function<hydra.module.Module, hydra.util.Either<String, hydra.module.Module>>) (mod -> (hydra.util.Either<String, hydra.module.Module>) ((hydra.util.Either<String, hydra.module.Module>) (hydra.util.Either.<String, hydra.module.Module>right(hydra.lib.logic.IfElse.lazy(
+          doStripTypeSchemes,
+          () -> hydra.codeGeneration.CodeGeneration.stripModuleTypeSchemes(mod),
+          () -> mod))))),
         hydra.decode.module.Module.module(
           graph,
           term))),
