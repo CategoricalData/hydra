@@ -144,6 +144,7 @@ variantArgs ptype tparams = (Utils.pyExpressionsToPyArgs (Maybes.cat [
 environmentTypeParameters :: (Helpers.PythonEnvironment -> [Syntax.TypeParameter])
 environmentTypeParameters env = (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (Names.encodeTypeVariable arg_)) (Pairs.first (Helpers.pythonEnvironmentBoundTypeVariables env)))
 
+-- | Encode a float value to a Python expression
 encodeFloatValue :: (Core.FloatValue -> Compute.Flow t0 Syntax.Expression)
 encodeFloatValue fv = ((\x -> case x of
   Core.FloatValueBigfloat v1 -> (Flows.pure (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Decimal")) [
@@ -151,6 +152,7 @@ encodeFloatValue fv = ((\x -> case x of
   Core.FloatValueFloat32 v1 -> (Flows.pure (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float32ToBigfloat v1)))))
   Core.FloatValueFloat64 v1 -> (Flows.pure (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float64ToBigfloat v1)))))) fv)
 
+-- | Encode an integer value to a Python expression
 encodeIntegerValue :: (Core.IntegerValue -> Compute.Flow t0 Syntax.Expression)
 encodeIntegerValue iv =  
   let toPyInt = (\n -> Flows.pure (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberInteger n))))
@@ -165,6 +167,7 @@ encodeIntegerValue iv =
     Core.IntegerValueUint32 v1 -> (toPyInt (Literals.uint32ToBigint v1))
     Core.IntegerValueUint64 v1 -> (toPyInt (Literals.uint64ToBigint v1))) iv)
 
+-- | Encode a literal value to a Python expression
 encodeLiteral :: (Core.Literal -> Compute.Flow t0 Syntax.Expression)
 encodeLiteral lit = ((\x -> case x of
   Core.LiteralBinary v1 ->  
@@ -176,6 +179,7 @@ encodeLiteral lit = ((\x -> case x of
   Core.LiteralInteger v1 -> (encodeIntegerValue v1)
   Core.LiteralString v1 -> (Flows.pure (Utils.stringToPyExpression Syntax.QuoteStyleDouble v1))) lit)
 
+-- | Encode a literal type to a Python type expression
 encodeLiteralType :: (Core.LiteralType -> Compute.Flow t0 Syntax.Expression)
 encodeLiteralType lt =  
   let findName = ((\x -> case x of
@@ -209,6 +213,7 @@ encodeLiteralType lt =
                       Syntax.powerRhs = Nothing}))}}}}}},
         Syntax.comparisonRhs = []})]])))
 
+-- | Encode an application type to Python expression
 encodeApplicationType :: (Helpers.PythonEnvironment -> Core.ApplicationType -> Compute.Flow t0 Syntax.Expression)
 encodeApplicationType env at =  
   let gatherParams = (\t -> \ps -> (\x -> case x of
@@ -236,6 +241,7 @@ encodeApplicationType env at =
         let args = (Pairs.second bodyAndArgs)
         in (Flows.bind (encodeType env body) (\pyBody -> Flows.bind (Flows.mapList (encodeType env) args) (\pyArgs -> Flows.pure (Utils.primaryAndParams (Utils.pyExpressionToPyPrimary pyBody) pyArgs))))
 
+-- | Encode a forall type to Python expression
 encodeForallType :: (Helpers.PythonEnvironment -> Core.ForallType -> Compute.Flow t0 Syntax.Expression)
 encodeForallType env lt =  
   let gatherParams = (\t -> \ps -> (\x -> case x of
@@ -283,6 +289,7 @@ encodeForallType env lt =
                             Syntax.powerRhs = Nothing}))}}}}}},
               Syntax.comparisonRhs = []})]])) params))))
 
+-- | Encode a function type to Python Callable expression
 encodeFunctionType :: (Helpers.PythonEnvironment -> Core.FunctionType -> Compute.Flow t0 Syntax.Expression)
 encodeFunctionType env ft =  
   let gatherParams = (\rdoms -> \ftype ->  
@@ -315,6 +322,7 @@ encodeFunctionType env ft =
         in (Flows.bind (Flows.mapList (encodeType env) doms) (\pydoms -> Flows.bind (encodeType env cod) (\pycod -> Flows.pure (Utils.pyPrimaryToPyExpression (Utils.primaryWithSlices (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "Callable"))) (Utils.pyPrimaryToPySlice (Syntax.PrimarySimple (Syntax.AtomList (Utils.pyList pydoms)))) [
           Syntax.SliceOrStarredExpressionSlice (Utils.pyExpressionToPySlice pycod)])))))
 
+-- | Encode a Hydra type to a Python type expression
 encodeType :: (Helpers.PythonEnvironment -> Core.Type -> Compute.Flow t0 Syntax.Expression)
 encodeType env typ =  
   let dflt = (Flows.pure (Utils.doubleQuotedString (Strings.cat2 "type = " (Core_.type_ (Rewriting.deannotateType typ)))))
@@ -345,6 +353,7 @@ encodeType env typ =
     Core.TypeWrap v1 -> (Flows.pure (Names.typeVariableReference env (Core.wrappedTypeTypeName v1)))
     Core.TypeAnnotated _ -> dflt) (Rewriting.deannotateType typ))
 
+-- | Encode a type to a Python expression, quoting if the type has free variables
 encodeTypeQuoted :: (Helpers.PythonEnvironment -> Core.Type -> Compute.Flow t0 Syntax.Expression)
 encodeTypeQuoted env typ = (Flows.bind (encodeType env typ) (\pytype -> Flows.pure (Logic.ifElse (Sets.null (Rewriting.freeVariablesInType typ)) pytype (Utils.doubleQuotedString (Serialization.printExpr (Serde.encodeExpression pytype))))))
 
@@ -367,6 +376,7 @@ findTypeParams env typ =
     let isBound = (\v -> Maybes.isJust (Maps.lookup v boundVars))
     in (Lists.filter isBound (Sets.toList (Rewriting.freeVariablesInType typ)))
 
+-- | Encode a wrapped type (newtype) to a Python class definition
 encodeWrappedType :: (Helpers.PythonEnvironment -> Core.Name -> Core.Type -> Maybe String -> Compute.Flow t0 [Syntax.Statement])
 encodeWrappedType env name typ comment =  
   let tparamList = (Pairs.first (Helpers.pythonEnvironmentBoundTypeVariables env))
@@ -430,7 +440,7 @@ extendEnvWithLambdaParams env term =
                 let newEnv = (pythonEnvironmentSetTypeContext newTc e)
                 in (go newEnv (Core.lambdaBody v2))
             _ -> e) v1)
-          _ -> e) (Rewriting.deannotateTerm t))
+          _ -> e) (Rewriting.deannotateAndDetypeTerm t))
   in (go env term)
 
 -- | Wrap a bare reference to a polymorphic function in an uncurried lambda
@@ -532,6 +542,7 @@ classVariantPatternWithCapture env typeName fieldName varName =
         Syntax.classPatternKeywordPatterns = (Just (Syntax.KeywordPatterns [
           keywordPattern]))}))
 
+-- | Check if union cases are fully covered
 isCasesFull :: (Core.RowType -> [t0] -> Bool)
 isCasesFull rowType cases_ =  
   let numCases = (Lists.length cases_)
@@ -539,6 +550,7 @@ isCasesFull rowType cases_ =
     let numFields = (Lists.length (Core.rowTypeFields rowType))
     in (Logic.not (Equality.lt numCases numFields))
 
+-- | Create a ClosedPattern for a variant based on its characteristics
 variantClosedPattern :: (Helpers.PythonEnvironment -> Core.Name -> Core.Name -> t0 -> Bool -> Core.Name -> Bool -> Syntax.ClosedPattern)
 variantClosedPattern env typeName fieldName rowType isEnum varName shouldCapture = (Logic.ifElse isEnum (enumVariantPattern env typeName fieldName) (Logic.ifElse (Logic.not shouldCapture) (classVariantPatternUnit env typeName fieldName) (classVariantPatternWithCapture env typeName fieldName varName)))
 
@@ -580,7 +592,7 @@ deduplicateCaseVariables cases_ =
                                               Core.fieldTerm = newTerm}
                                       in (Maps.insert v count2 countByName, (Lists.cons newField done))) (Maps.lookup v countByName))
                     _ -> (countByName, (Lists.cons field done))) v1)
-                  _ -> (countByName, (Lists.cons field done))) (Rewriting.deannotateTerm fterm)))
+                  _ -> (countByName, (Lists.cons field done))) (Rewriting.deannotateAndDetypeTerm fterm)))
   in  
     let result = (Lists.foldl rewriteCase (Maps.empty, []) cases_)
     in (Lists.reverse (Pairs.second result))
@@ -641,11 +653,12 @@ eliminateUnitVar v term0 =
               Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
                 Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
                 Core.typeLambdaBody = (recurse (Core.typeLambdaBody v1))}))
-              _ -> term) (Rewriting.deannotateTerm term))
+              _ -> term) (Rewriting.deannotateAndDetypeTerm term))
       in  
         let go = (\term -> rewrite go term)
         in (go term0)
 
+-- | Encode the default (wildcard) case block for a match statement
 encodeDefaultCaseBlock :: ((t0 -> Compute.Flow t1 Syntax.Expression) -> Bool -> Maybe t0 -> Core.Name -> Compute.Flow t1 [Syntax.CaseBlock])
 encodeDefaultCaseBlock encodeTerm isFull mdflt tname = (Flows.bind (Maybes.maybe (Flows.pure (Logic.ifElse isFull (Utils.raiseAssertionError "Unreachable: all variants handled") (Utils.raiseTypeError (Strings.cat2 "Unsupported " (Names_.localNameOf tname))))) (\d -> Flows.bind (encodeTerm d) (\pyexpr -> Flows.pure (Utils.returnSingle pyexpr))) mdflt) (\stmt ->  
   let patterns = (Utils.pyClosedPatternToPyPatterns Syntax.ClosedPatternWildcard)
@@ -659,24 +672,45 @@ encodeDefaultCaseBlock encodeTerm isFull mdflt tname = (Flows.bind (Maybes.maybe
         Syntax.caseBlockGuard = Nothing,
         Syntax.caseBlockBody = body}])))
 
+-- | Encode a single case (Field) into a CaseBlock for a match statement
 encodeCaseBlock :: (Helpers.PythonEnvironment -> Core.Name -> Core.RowType -> Bool -> (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 [Syntax.Statement]) -> Core.Field -> Compute.Flow t0 Syntax.CaseBlock)
 encodeCaseBlock env tname rowType isEnum encodeBody field =  
   let fname = (Core.fieldName field)
   in  
     let fterm = (Core.fieldTerm field)
-    in ((\x -> case x of
-      Core.TermFunction v1 -> ((\x -> case x of
-        Core.FunctionLambda v2 ->  
-          let v = (Core.lambdaParameter v2)
+    in  
+      let stripped = (Rewriting.deannotateAndDetypeTerm fterm)
+      in  
+        let effectiveLambda = ((\x -> case x of
+                Core.TermFunction v1 -> ((\x -> case x of
+                  Core.FunctionLambda v2 -> v2
+                  _ ->  
+                    let syntheticVar2 = (Core.Name "_matchValue")
+                    in Core.Lambda {
+                      Core.lambdaParameter = syntheticVar2,
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = stripped,
+                        Core.applicationArgument = (Core.TermVariable syntheticVar2)}))}) v1)
+                _ ->  
+                  let syntheticVar = (Core.Name "_matchValue")
+                  in Core.Lambda {
+                    Core.lambdaParameter = syntheticVar,
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = stripped,
+                      Core.applicationArgument = (Core.TermVariable syntheticVar)}))}) stripped)
+        in  
+          let v = (Core.lambdaParameter effectiveLambda)
           in  
-            let rawBody = (Core.lambdaBody v2)
+            let rawBody = (Core.lambdaBody effectiveLambda)
             in  
               let isUnitVariant = (isVariantUnitType rowType fname)
               in  
                 let effectiveBody = (Logic.ifElse isUnitVariant (eliminateUnitVar v rawBody) rawBody)
                 in  
                   let shouldCapture = (Logic.not (Logic.or isUnitVariant (Logic.or (Rewriting.isFreeVariableInTerm v rawBody) (Schemas.isUnitTerm rawBody))))
-                  in (Flows.bind (Flows.pure (pythonEnvironmentSetTypeContext (Schemas.extendTypeContextForLambda (pythonEnvironmentGetTypeContext env) v2) env)) (\env2 ->  
+                  in (Flows.bind (Flows.pure (pythonEnvironmentSetTypeContext (Schemas.extendTypeContextForLambda (pythonEnvironmentGetTypeContext env) effectiveLambda) env)) (\env2 ->  
                     let pattern = (variantClosedPattern env2 tname fname rowType isEnum v shouldCapture)
                     in (Flows.bind (encodeBody env2 effectiveBody) (\stmts ->  
                       let pyBody = (Utils.indentedBlock Nothing [
@@ -684,7 +718,7 @@ encodeCaseBlock env tname rowType isEnum encodeBody field =
                       in (Flows.pure (Syntax.CaseBlock {
                         Syntax.caseBlockPatterns = (Utils.pyClosedPatternToPyPatterns pattern),
                         Syntax.caseBlockGuard = Nothing,
-                        Syntax.caseBlockBody = pyBody}))))))) v1)) (Rewriting.deannotateTerm fterm))
+                        Syntax.caseBlockBody = pyBody}))))))
 
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: (Helpers.PyGraph -> Graph.Graph)
@@ -700,6 +734,7 @@ makePyGraph g m = Helpers.PyGraph {
   Helpers.pyGraphGraph = g,
   Helpers.pyGraphMetadata = m}
 
+-- | Run a Flow Graph computation within a Flow PyGraph computation
 inGraphContext :: (Compute.Flow Graph.Graph t0 -> Compute.Flow Helpers.PyGraph t0)
 inGraphContext graphFlow = (CoderUtils.inCoderGraphContext pyGraphGraph pyGraphMetadata makePyGraph graphFlow)
 
@@ -927,6 +962,7 @@ makeUncurriedLambda params body = (Syntax.ExpressionLambda (Syntax.Lambda {
     Syntax.lambdaParametersStarEtc = Nothing},
   Syntax.lambdaBody = body}))
 
+-- | Encode a field (name-value pair) to a Python (Name, Expression) pair
 encodeField :: (Helpers.PythonEnvironment -> Core.Field -> (Core.Term -> Compute.Flow t0 t1) -> Compute.Flow t0 (Syntax.Name, t1))
 encodeField env field encodeTerm =  
   let fname = (Core.fieldName field)
@@ -944,6 +980,7 @@ extractCaseElimination term = ((\x -> case x of
     _ -> Nothing) v1)
   _ -> Nothing) (Rewriting.deannotateAndDetypeTerm term))
 
+-- | Encode bindings as function definitions
 encodeBindingsAsDefs :: (t0 -> (t0 -> t1 -> Compute.Flow t2 t3) -> [t1] -> Compute.Flow t2 [t3])
 encodeBindingsAsDefs env encodeBinding bindings = (Flows.mapList (encodeBinding env) bindings)
 
@@ -1154,9 +1191,11 @@ encodeDefinition env def_ = ((\x -> case x of
 updateMeta :: ((Helpers.PythonModuleMetadata -> Helpers.PythonModuleMetadata) -> Compute.Flow Helpers.PyGraph ())
 updateMeta = (CoderUtils.updateCoderMetadata pyGraphMetadata makePyGraph pyGraphGraph)
 
+-- | Execute a computation with bindings added to the graph context
 withBindings :: ([Core.Binding] -> Compute.Flow Helpers.PyGraph t0 -> Compute.Flow Helpers.PyGraph t0)
 withBindings = (CoderUtils.withGraphBindings pyGraphGraph makePyGraph pyGraphMetadata)
 
+-- | Execute a computation with an updated graph
 withUpdatedGraph :: ((Graph.Graph -> Graph.Graph) -> Compute.Flow Helpers.PyGraph t0 -> Compute.Flow Helpers.PyGraph t0)
 withUpdatedGraph = (CoderUtils.withUpdatedCoderGraph pyGraphGraph pyGraphMetadata makePyGraph)
 
@@ -1190,15 +1229,19 @@ pythonEnvironmentSetTypeContext tc env = Helpers.PythonEnvironment {
   Helpers.pythonEnvironmentSkipCasts = (Helpers.pythonEnvironmentSkipCasts env),
   Helpers.pythonEnvironmentInlineVariables = (Helpers.pythonEnvironmentInlineVariables env)}
 
+-- | Execute a computation with lambda context (adds lambda parameter to TypeContext)
 withLambda :: (Helpers.PythonEnvironment -> Core.Lambda -> (Helpers.PythonEnvironment -> t0) -> t0)
 withLambda = (Schemas.withLambdaContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
 
+-- | Execute a computation with type lambda context
 withTypeLambda :: (Helpers.PythonEnvironment -> Core.TypeLambda -> (Helpers.PythonEnvironment -> t0) -> t0)
 withTypeLambda = (Schemas.withTypeLambdaContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
 
+-- | Execute a computation with let context (adds let bindings to TypeContext)
 withLet :: (Helpers.PythonEnvironment -> Core.Let -> (Helpers.PythonEnvironment -> t0) -> t0)
 withLet = (Schemas.withLetContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext CoderUtils.bindingMetadata)
 
+-- | Execute a computation with inline let context (for walrus operators)
 withLetInline :: (Helpers.PythonEnvironment -> Core.Let -> (Helpers.PythonEnvironment -> t0) -> t0)
 withLetInline env lt body =  
   let bindingNames = (Lists.map (\b -> Core.bindingName b) (Core.letBindings lt))
@@ -1264,12 +1307,15 @@ initialEnvironment namespaces tcontext = Helpers.PythonEnvironment {
 targetPythonVersion :: Helpers.PythonVersion
 targetPythonVersion = Utils.targetPythonVersion
 
+-- | Analyze a function term with Python-specific TypeContext management
 analyzePythonFunction :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
 analyzePythonFunction = (CoderUtils.analyzeFunctionTerm pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
 
+-- | Analyze a function term without recording binding metadata (for inline lambdas)
 analyzePythonFunctionInline :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
 analyzePythonFunctionInline = (CoderUtils.analyzeFunctionTermInline pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
 
+-- | Execute a computation with definitions in scope
 withDefinitions :: (Helpers.PythonEnvironment -> [Module.Definition] -> (Helpers.PythonEnvironment -> t0) -> t0)
 withDefinitions env defs body =  
   let bindings = (Maybes.cat (Lists.map (\def_ -> (\x -> case x of
@@ -1403,24 +1449,35 @@ encodeFunction env f = ((\x -> case x of
       in  
         let innerBody = (Typing.functionStructureBody fs)
         in  
-          let innerEnv = (Typing.functionStructureEnvironment fs)
-          in (Flows.bind (encodeTermInline innerEnv False innerBody) (\pbody ->  
-            let pparams = (Lists.map (Names.encodeName False Util.CaseConventionLowerSnake innerEnv) params)
-            in (Logic.ifElse (Lists.null bindings) (Flows.pure (makeUncurriedLambda pparams pbody)) (Flows.bind (Flows.mapList (encodeBindingAsAssignment False innerEnv) bindings) (\pbindingExprs ->  
-              let pbindingStarExprs = (Lists.map (\ne -> Syntax.StarNamedExpressionSimple ne) pbindingExprs)
-              in  
-                let pbodyStarExpr = (Utils.pyExpressionToPyStarNamedExpression pbody)
-                in  
-                  let tupleElements = (Lists.concat2 pbindingStarExprs [
-                          pbodyStarExpr])
+          let innerEnv0 = (Typing.functionStructureEnvironment fs)
+          in  
+            let bindingNames = (Lists.map (\b -> Core.bindingName b) bindings)
+            in  
+              let innerEnv = Helpers.PythonEnvironment {
+                      Helpers.pythonEnvironmentNamespaces = (Helpers.pythonEnvironmentNamespaces innerEnv0),
+                      Helpers.pythonEnvironmentBoundTypeVariables = (Helpers.pythonEnvironmentBoundTypeVariables innerEnv0),
+                      Helpers.pythonEnvironmentTypeContext = (Helpers.pythonEnvironmentTypeContext innerEnv0),
+                      Helpers.pythonEnvironmentNullaryBindings = (Helpers.pythonEnvironmentNullaryBindings innerEnv0),
+                      Helpers.pythonEnvironmentVersion = (Helpers.pythonEnvironmentVersion innerEnv0),
+                      Helpers.pythonEnvironmentSkipCasts = (Helpers.pythonEnvironmentSkipCasts innerEnv0),
+                      Helpers.pythonEnvironmentInlineVariables = (Sets.union (Sets.fromList bindingNames) (Helpers.pythonEnvironmentInlineVariables innerEnv0))}
+              in (Flows.bind (encodeTermInline innerEnv False innerBody) (\pbody ->  
+                let pparams = (Lists.map (Names.encodeName False Util.CaseConventionLowerSnake innerEnv) params)
+                in (Logic.ifElse (Lists.null bindings) (Flows.pure (makeUncurriedLambda pparams pbody)) (Flows.bind (Flows.mapList (encodeBindingAsAssignment False innerEnv) bindings) (\pbindingExprs ->  
+                  let pbindingStarExprs = (Lists.map (\ne -> Syntax.StarNamedExpressionSimple ne) pbindingExprs)
                   in  
-                    let tupleExpr = (Utils.pyAtomToPyExpression (Syntax.AtomTuple (Syntax.Tuple tupleElements)))
+                    let pbodyStarExpr = (Utils.pyExpressionToPyStarNamedExpression pbody)
                     in  
-                      let indexValue = (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberInteger (Literals.int32ToBigint (Lists.length bindings)))))
+                      let tupleElements = (Lists.concat2 pbindingStarExprs [
+                              pbodyStarExpr])
                       in  
-                        let indexedExpr = (Utils.primaryWithExpressionSlices (Utils.pyExpressionToPyPrimary tupleExpr) [
-                                indexValue])
-                        in (Flows.pure (makeUncurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr))))))))))
+                        let tupleExpr = (Utils.pyAtomToPyExpression (Syntax.AtomTuple (Syntax.Tuple tupleElements)))
+                        in  
+                          let indexValue = (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberInteger (Literals.int32ToBigint (Lists.length bindings)))))
+                          in  
+                            let indexedExpr = (Utils.primaryWithExpressionSlices (Utils.pyExpressionToPyPrimary tupleExpr) [
+                                    indexValue])
+                            in (Flows.pure (makeUncurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr))))))))))
   Core.FunctionPrimitive v1 -> (encodeVariable env v1 [])
   Core.FunctionElimination v1 -> ((\x -> case x of
     Core.EliminationRecord v2 ->  
@@ -1552,7 +1609,7 @@ encodeVariable env name args = (Flows.bind Monads.getState (\pyg ->
                             let allArgs = (Lists.concat2 args remainingExprs)
                             in  
                               let fullCall = (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env name)) allArgs)
-                              in (Flows.pure (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Flows.fail (Strings.cat2 "Unknown variable: " (Core.unName name))) (\_ -> Flows.pure asFunctionCall) (Maps.lookup name tcMetadata)) (\el -> Maybes.maybe (Flows.pure asVariable) (\ts -> Logic.ifElse (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (CoderUtils.isComplexBinding tc el)) (Flows.pure asFunctionCall) ( 
+                              in (Flows.pure (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) (Flows.pure asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Flows.fail (Strings.cat2 "Unknown variable: " (Core.unName name))) (\_ -> Flows.pure asFunctionCall) (Maps.lookup name tcMetadata)) (\el -> Maybes.maybe (Flows.pure asVariable) (\ts -> Logic.ifElse (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (CoderUtils.isComplexBinding tc el)) (Flows.pure asFunctionCall) ( 
                     let asFunctionRef = (Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable)
                     in (Flows.pure asFunctionRef))) (Core.bindingType el)) (Lexical.lookupElement g name)) (\prim ->  
                     let primArity = (Arity.primitiveArity prim)
@@ -1560,7 +1617,7 @@ encodeVariable env name args = (Flows.bind Monads.getState (\pyg ->
                       let ts = (Graph.primitiveType prim)
                       in  
                         let asFunctionRef = (Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable)
-                        in (Flows.pure asFunctionRef)))) (Lexical.lookupPrimitive g name))) (\typ -> Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) ( 
+                        in (Flows.pure asFunctionRef)))) (Lexical.lookupPrimitive g name)))) (\typ -> Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) ( 
                     let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
                     in (Flows.pure asFunctionRef)) (Logic.ifElse (Logic.not (Maps.member name tcMetadata)) (Maybes.maybe ( 
                     let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
@@ -1646,7 +1703,7 @@ encodeApplicationInner env fun hargs rargs =
                     in  
                       let remainingArgs = (Lists.drop consumeCount allArgs)
                       in (Logic.ifElse (Lists.null consumedArgs) (Flows.bind (encodeVariable env v1 []) (\expr -> Flows.pure (expr, rargs))) (Flows.pure (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env v1)) consumedArgs, remainingArgs)))) (Core.bindingType el)) (Lexical.lookupElement g v1))))
-          _ -> defaultCase) (Rewriting.deannotateTerm fun))
+          _ -> defaultCase) (Rewriting.deannotateAndDetypeTerm fun))
 
 -- | Encode a term to a Python expression (inline form)
 encodeTermInline :: (Helpers.PythonEnvironment -> Bool -> Core.Term -> Compute.Flow Helpers.PyGraph Syntax.Expression)
@@ -1759,7 +1816,7 @@ encodeTermInline env noCast term =
           in  
             let inner = (Core.wrappedTermBody v1)
             in (Flows.bind (encode inner) (\parg -> Flows.pure (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeNameQualified env tname)) [
-              parg])))) (Rewriting.deannotateTerm term))
+              parg])))) (Rewriting.deannotateAndDetypeTerm term))
 
 -- | Extend metadata based on a term (used during module encoding)
 extendMetaForTerm :: (Bool -> Helpers.PythonModuleMetadata -> Core.Term -> Helpers.PythonModuleMetadata)
@@ -2515,6 +2572,7 @@ tvarStatement :: (Syntax.Name -> Syntax.Statement)
 tvarStatement name = (Utils.assignmentStatement name (Utils.functionCall (Syntax.PrimarySimple (Syntax.AtomName (Syntax.Name "TypeVar"))) [
   Utils.doubleQuotedString (Syntax.unName name)]))
 
+-- | Conditionally include a symbol name based on a boolean flag
 condImportSymbol :: (t0 -> Bool -> Maybe t0)
 condImportSymbol name flag = (Logic.ifElse flag (Just name) Nothing)
 

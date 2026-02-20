@@ -572,15 +572,15 @@ fieldTypeToFormalParam :: (Helpers.Aliases -> Core.FieldType -> Compute.Flow Gra
 fieldTypeToFormalParam aliases ft = (Flows.bind (encodeType aliases Sets.empty (Core.fieldTypeType ft)) (\jt -> Flows.pure (Utils_.javaTypeToJavaFormalParameter jt (Core.fieldTypeName ft))))
 
 applyCastIfSafe :: (Helpers.Aliases -> Core.Type -> Syntax.Expression -> Compute.Flow Graph.Graph Syntax.Expression)
-applyCastIfSafe aliases castType expr =
+applyCastIfSafe aliases castType expr =  
   let trusted = (Helpers.aliasesTrustedTypeVars aliases)
-  in
+  in  
     let inScope = (Helpers.aliasesInScopeTypeParams aliases)
-    in
+    in  
       let castVars = (collectTypeVars castType)
-      in
+      in  
         let javaTypeVars = (Sets.fromList (Lists.filter (\v -> Logic.or (Sets.member v inScope) (isLambdaBoundVariable v)) (Sets.toList castVars)))
-        in
+        in  
           let isSafe = (Logic.or (Sets.null trusted) (Logic.or (Sets.null javaTypeVars) (Sets.null (Sets.difference javaTypeVars trusted))))
           in (Logic.ifElse isSafe (Flows.bind (encodeType aliases Sets.empty castType) (\jtype -> Flows.bind (Utils_.javaTypeToJavaReferenceType jtype) (\rt -> Flows.pure (Utils_.javaCastExpressionToJavaExpression (Utils_.javaCastExpression rt (Utils_.javaExpressionToJavaUnaryExpression expr)))))) (Flows.pure expr))
 
@@ -900,7 +900,7 @@ decodeTypeFromTerm term = ((\x -> case x of
 
 tryInferFunctionType :: (Core.Function -> Maybe Core.Type)
 tryInferFunctionType fun = ((\x -> case x of
-  Core.FunctionLambda v1 -> (Maybes.bind (Core.lambdaDomain v1) (\dom ->
+  Core.FunctionLambda v1 -> (Maybes.bind (Core.lambdaDomain v1) (\dom ->  
     let mCod = ((\x -> case x of
             Core.TermAnnotated v2 -> (Maybes.bind (Maps.lookup Constants.key_type (Core.annotatedTermAnnotation v2)) (\typeTerm -> decodeTypeFromTerm typeTerm))
             Core.TermFunction v2 -> (tryInferFunctionType v2)
@@ -1670,7 +1670,7 @@ encodeTermInternal env anns tyapps term =
     Core.TermEither v1 -> (Flows.bind (takeTypeArgs "either" 2 tyapps) (\targs -> Eithers.either (\term1 -> Flows.bind (encode term1) (\expr -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "left") targs [
       expr])))) (\term1 -> Flows.bind (encode term1) (\expr -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "right") targs [
       expr])))) v1))
-    Core.TermFunction v1 -> (Monads.withTrace (Strings.cat2 "encode function (" (Strings.cat2 (Core___.function v1) ")")) (
+    Core.TermFunction v1 -> (Monads.withTrace (Strings.cat2 "encode function (" (Strings.cat2 (Core___.function v1) ")")) ( 
       let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
       in (Flows.bind (Annotations.getType combinedAnns) (\mt -> Flows.bind (Maybes.cases mt (Maybes.cases (tryInferFunctionType v1) (CoderUtils.tryTypeOf "4" tc term) (\inferredType -> Flows.pure inferredType)) (\t -> Flows.pure t)) (\typ -> (\x -> case x of
         Core.TypeFunction v2 -> (encodeFunction env (Core.functionTypeDomain v2) (Core.functionTypeCodomain v2) v1)

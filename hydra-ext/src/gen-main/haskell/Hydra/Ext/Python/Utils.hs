@@ -381,6 +381,7 @@ orExpression prims =
           Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Lists.head ps))})) (Lists.tail ps)))
   in (pyBitwiseOrToPyExpression (build Nothing prims))
 
+-- | Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = "TypeExpression"
 typeAliasStatement310 :: (Syntax.Name -> t0 -> Maybe String -> Syntax.Expression -> Syntax.Statement)
 typeAliasStatement310 name _tparams mcomment tyexpr =  
   let quotedExpr = (doubleQuotedString (Serialization.printExpr (Serde.encodeExpression tyexpr)))

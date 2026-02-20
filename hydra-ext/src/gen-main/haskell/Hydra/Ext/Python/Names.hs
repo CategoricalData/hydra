@@ -31,9 +31,11 @@ import qualified Data.Set as S
 useFutureAnnotations :: Bool
 useFutureAnnotations = True
 
+-- | Generate a constant name for a field definition
 encodeConstantForFieldName :: (t0 -> t1 -> Core.Name -> Syntax.Name)
 encodeConstantForFieldName env tname fname = (Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName fname)))
 
+-- | Generate a constant name for a type definition
 encodeConstantForTypeName :: (t0 -> t1 -> Syntax.Name)
 encodeConstantForTypeName env tname = (Syntax.Name "TYPE_")
 

@@ -1124,40 +1124,52 @@ encodeCaseBlock = def "encodeCaseBlock" $
   "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
     "fname" <~ Core.fieldName (var "field") $
     "fterm" <~ Core.fieldTerm (var "field") $
-    -- The field term should be a lambda; strip annotations and type wrappers to extract it
-    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") Nothing [
+    -- The field term should be a lambda; strip annotations and type wrappers to extract it.
+    -- After case-statement hoisting, field terms may be variable references to hoisted functions
+    -- instead of inline lambdas. The default case handles this by synthesizing a lambda wrapper.
+    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "fterm") $
+    "effectiveLambda" <~ (cases _Term (var "stripped")
+      -- Default: fterm is not a lambda (e.g. hoisted variable reference).
+      -- Wrap it in a synthetic lambda: \v -> fterm(v)
+      (Just $ "syntheticVar" <~ Core.name (string "_matchValue") $
+        Core.lambda (var "syntheticVar") nothing
+          (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar"))) [
       _Term_function>>: "f" ~>
-        cases _Function (var "f") Nothing [
-          _Function_lambda>>: "lam" ~>
-            -- Extract lambda components
-            "v" <~ Core.lambdaParameter (var "lam") $
-            "rawBody" <~ Core.lambdaBody (var "lam") $
-            -- Check if this variant has unit type
-            "isUnitVariant" <~ (isVariantUnitType @@ var "rowType" @@ var "fname") $
-            -- For unit variants, eliminate references to the lambda parameter
-            "effectiveBody" <~ (Logic.ifElse (var "isUnitVariant")
-              (eliminateUnitVar @@ var "v" @@ var "rawBody")
-              (var "rawBody")) $
-            -- Determine if we should capture the value
-            -- Don't capture if: unit variant, variable is free in body, or body is unit term
-            "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
-              (Logic.or (Rewriting.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
-                        (Schemas.isUnitTerm @@ var "rawBody"))) $
-            -- Extend the TypeContext with the lambda parameter inside a Flows.bind
-            -- to prevent the code generator from reducing it away
-            "env2" <<~ (Flows.pure $ pythonEnvironmentSetTypeContext
-              @@ (Schemas.extendTypeContextForLambda @@ (pythonEnvironmentGetTypeContext @@ var "env") @@ var "lam")
-              @@ var "env") $
-            -- Create the pattern using env2 (extended context)
-            "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname"
-              @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
-            -- Encode the body using the provided encoder with extended env
-            "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
-            "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
-            produce $ PyDsl.caseBlock
-              (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
-              nothing
-              (var "pyBody")]]
+        cases _Function (var "f")
+          -- Non-lambda function (e.g. primitive): wrap in lambda
+          (Just $ "syntheticVar2" <~ Core.name (string "_matchValue") $
+            Core.lambda (var "syntheticVar2") nothing
+              (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar2"))) [
+          _Function_lambda>>: "lam" ~> var "lam"]]) $
+    -- Now effectiveLambda is always a Lambda
+    "v" <~ Core.lambdaParameter (var "effectiveLambda") $
+    "rawBody" <~ Core.lambdaBody (var "effectiveLambda") $
+    -- Check if this variant has unit type
+    "isUnitVariant" <~ (isVariantUnitType @@ var "rowType" @@ var "fname") $
+    -- For unit variants, eliminate references to the lambda parameter
+    "effectiveBody" <~ (Logic.ifElse (var "isUnitVariant")
+      (eliminateUnitVar @@ var "v" @@ var "rawBody")
+      (var "rawBody")) $
+    -- Determine if we should capture the value
+    -- Don't capture if: unit variant, variable is free in body, or body is unit term
+    "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
+      (Logic.or (Rewriting.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
+                (Schemas.isUnitTerm @@ var "rawBody"))) $
+    -- Extend the TypeContext with the lambda parameter inside a Flows.bind
+    -- to prevent the code generator from reducing it away
+    "env2" <<~ (Flows.pure $ pythonEnvironmentSetTypeContext
+      @@ (Schemas.extendTypeContextForLambda @@ (pythonEnvironmentGetTypeContext @@ var "env") @@ var "effectiveLambda")
+      @@ var "env") $
+    -- Create the pattern using env2 (extended context)
+    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname"
+      @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
+    -- Encode the body using the provided encoder with extended env
+    "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
+    "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
+    produce $ PyDsl.caseBlock
+      (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
+      nothing
+      (var "pyBody")
 
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: TBinding (PyHelpers.PyGraph -> Graph)
@@ -1956,7 +1968,18 @@ encodeFunction = def "encodeFunction" $
         "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
         "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
         "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
-        "innerEnv" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
+        "innerEnv0" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
+        -- Add binding names to inlineVariables so they can be resolved during body encoding
+        "bindingNames" <~ (Lists.map ("b" ~> Core.bindingName (var "b")) (var "bindings")) $
+        "innerEnv" <~ (record PyHelpers._PythonEnvironment [
+          PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_typeContext>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_inlineVariables>>: Sets.union (Sets.fromList (var "bindingNames"))
+            (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv0")]) $
         "pbody" <<~ (encodeTermInline @@ var "innerEnv" @@ false @@ var "innerBody") $
         "pparams" <~ (Lists.map (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "innerEnv") (var "params")) $
         Logic.ifElse (Lists.null $ var "bindings")
@@ -2060,15 +2083,19 @@ encodeVariable = def "encodeVariable" $
         (Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
           -- Untyped lambda variable
           (produce $ var "asVariable")
-          -- Not a lambda var - check primitives
-          (Maybes.maybe
-            -- Not a primitive - check graph elements
+          -- Not a lambda var - check inline vars first
+          (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
+            -- Untyped inline variable (e.g. from hoisting with no type annotation)
+            (produce $ var "asVariable")
+            -- Not inline - check primitives
             (Maybes.maybe
-              -- Not in graph elements - check metadata
+              -- Not a primitive - check graph elements
               (Maybes.maybe
-                (Flows.fail $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name")))
-                (constant $ produce $ var "asFunctionCall")  -- Lifted case expression
-                (Maps.lookup (var "name") (var "tcMetadata")))
+                -- Not in graph elements - check metadata
+                (Maybes.maybe
+                  (Flows.fail $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name")))
+                  (constant $ produce $ var "asFunctionCall")  -- Lifted case expression
+                  (Maps.lookup (var "name") (var "tcMetadata")))
               -- In graph elements
               ("el" ~>
                 Maybes.maybe
@@ -2095,7 +2122,7 @@ encodeVariable = def "encodeVariable" $
                       (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
                       (var "asVariable")) $
                   produce $ var "asFunctionRef"))
-            (Lexical.lookupPrimitive @@ var "g" @@ var "name")))
+            (Lexical.lookupPrimitive @@ var "g" @@ var "name"))))
         -- Name is in typeContextTypes
         ("typ" ~>
           Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
