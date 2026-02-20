@@ -467,7 +467,7 @@ public interface Simple {
         () -> (forNonNull.get()).apply(alts))));
       return hydra.lib.flows.Bind.apply(
         (hydra_adapt_simple_termAlternatives2).apply(term),
-        (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Term>>>) (alts -> (tryAlts.get()).apply(alts)));
+        (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Term>>>) (alts0 -> (tryAlts.get()).apply(alts0)));
     }));
     tryTerm.set((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Term>>>) (term -> {
       hydra.util.Lazy<Boolean> supportedVariant = new hydra.util.Lazy<>(() -> hydra.lib.sets.Member.apply(
@@ -561,7 +561,7 @@ public interface Simple {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>> forUnsupported = new java.util.concurrent.atomic.AtomicReference<>();
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>> tryType = new java.util.concurrent.atomic.AtomicReference<>();
     forUnsupported.set((java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (typ -> {
-      java.util.List<hydra.core.Type> alts = hydra.adapt.simple.Simple.typeAlternatives(typ);
+      java.util.List<hydra.core.Type> alts0 = hydra.adapt.simple.Simple.typeAlternatives(typ);
       java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>> tryAlts = new java.util.concurrent.atomic.AtomicReference<>();
       tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>) (alts -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(alts),
@@ -570,7 +570,7 @@ public interface Simple {
           (tryAlts.get()).apply(hydra.lib.lists.Tail.apply(alts)),
           (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (t -> hydra.util.Maybe.just(t)),
           (tryType.get()).apply(hydra.lib.lists.Head.apply(alts))))));
-      return (tryAlts.get()).apply(alts);
+      return (tryAlts.get()).apply(alts0);
     }));
     tryType.set((java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (typ -> {
       hydra.util.Lazy<Boolean> supportedVariant = new hydra.util.Lazy<>(() -> hydra.lib.sets.Member.apply(

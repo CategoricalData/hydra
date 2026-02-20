@@ -3390,10 +3390,10 @@
                                                                               "lambda": {
                                                                                 "body": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "alts"},
+                                                                                    "argument": {"variable": "alts0"},
                                                                                     "function": {"variable": "tryAlts"}}},
                                                                                 "domain": [{"list": {"variable": "hydra.core.Term"}}],
-                                                                                "parameter": "alts"}}},
+                                                                                "parameter": "alts0"}}},
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {
@@ -3999,7 +3999,7 @@
                                                     "let": {
                                                       "bindings": [
                                                         {
-                                                          "name": "alts",
+                                                          "name": "alts0",
                                                           "term": {
                                                             "application": {
                                                               "argument": {"variable": "typ"},
@@ -4011,7 +4011,7 @@
                                                               "variables": []}]}],
                                                       "body": {
                                                         "application": {
-                                                          "argument": {"variable": "alts"},
+                                                          "argument": {"variable": "alts0"},
                                                           "function": {"variable": "tryAlts"}}}}}}},
                                               "domain": [{"variable": "hydra.core.Type"}],
                                               "parameter": "typ"}}},

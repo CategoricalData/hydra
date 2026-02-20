@@ -201,7 +201,7 @@ adaptTerm constraints litmap term0 =
               forUnsupported = (\term ->  
                       let forNonNull = (\alts -> Flows.bind (tryTerm (Lists.head alts)) (\mterm -> Maybes.maybe (tryAlts (Lists.tail alts)) (\t -> Flows.pure (Just t)) mterm)) 
                           tryAlts = (\alts -> Logic.ifElse (Lists.null alts) (Flows.pure Nothing) (forNonNull alts))
-                      in (Flows.bind (termAlternatives term) (\alts -> tryAlts alts)))
+                      in (Flows.bind (termAlternatives term) (\alts0 -> tryAlts alts0)))
               tryTerm = (\term ->  
                       let supportedVariant = (Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints))
                       in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term)))
@@ -222,8 +222,8 @@ adaptType constraints litmap type0 =
       forUnsupported = (\typ ->  
               let tryAlts = (\alts -> Logic.ifElse (Lists.null alts) Nothing (Maybes.maybe (tryAlts (Lists.tail alts)) (\t -> Just t) (tryType (Lists.head alts))))
               in  
-                let alts = (typeAlternatives typ)
-                in (tryAlts alts))
+                let alts0 = (typeAlternatives typ)
+                in (tryAlts alts0))
       tryType = (\typ ->  
               let supportedVariant = (Sets.member (Reflect.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints))
               in (Logic.ifElse supportedVariant (forSupported typ) (forUnsupported typ)))

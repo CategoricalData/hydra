@@ -365,8 +365,8 @@ adaptTerm = define "adaptTerm" $
       "tryAlts">: ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
         (produce nothing)
         (var "forNonNull" @@ var "alts"))] $
-      "alts" <<~ termAlternatives @@ var "term" $
-      var "tryAlts" @@ var "alts"),
+      "alts0" <<~ termAlternatives @@ var "term" $
+      var "tryAlts" @@ var "alts0"),
     "tryTerm">: ("term" ~>
       "supportedVariant" <~ Sets.member
         (Reflect.termVariant @@ var "term")
@@ -410,8 +410,8 @@ adaptType = define "adaptType" $
       (optCases (var "tryType" @@ Lists.head (var "alts"))
         (var "tryAlts" @@ Lists.tail (var "alts"))
         ("t" ~> just $ var "t"))) $
-    "alts" <~ typeAlternatives @@ var "typ" $
-    var "tryAlts" @@ var "alts"),
+    "alts0" <~ typeAlternatives @@ var "typ" $
+    var "tryAlts" @@ var "alts0"),
   "tryType">: ("typ" ~>
     "supportedVariant" <~ Sets.member
       (Reflect.typeVariant @@ var "typ")
