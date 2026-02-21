@@ -590,7 +590,7 @@ def for_inferred_term(cx: hydra.typing.InferenceContext, term: hydra.core.Term, 
 
 def infer_graph_types(g0: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.graph.Graph]:
     r"""Infer types for all elements in a graph."""
-
+    
     def from_let_term(l: hydra.core.Let) -> hydra.graph.Graph:
         @lru_cache(1)
         def bindings() -> frozenlist[hydra.core.Binding]:

@@ -1077,6 +1077,81 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
             [(nm "just", lambda "a"
               (apply (var "g") (apply (var "_hoist_f_1") (var "a")))),
              (nm "nothing", int32 0)]))
+        (var "f")),
+
+    -- ============================================================
+    -- Test: Case inside case default with let binding
+    -- This is the pattern from isSimpleAssignment in CoderUtils:
+    -- match term with
+    --   specific_case -> ...
+    --   _ -> let baseTerm = f(term) in match baseTerm with ...
+    -- The inner case in the default branch's let body must be hoisted
+    -- because Python can't encode match statements inline in case branches
+    -- ============================================================
+
+    hoistCaseStatementsCase "case in let body inside applied case default IS hoisted"
+      -- Input: let f = (case x of just a -> a | _ -> let b = g(x) in (case b of ...)(b)) x
+      -- The outer case is applied (through `cases`/`apply`), putting default branch
+      -- at non-top-level. Inner applied case in default > let body must be hoisted.
+      -- This is the pattern from isSimpleAssignment in CoderUtils.
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "a" (var "a")),
+             (nm "nothing",
+              letExpr "b" (apply (var "g") (var "x"))
+                (apply
+                  (match (nm "Result") nothing
+                    [(nm "ok", lambda "y" (var "y")),
+                     (nm "err", int32 0)])
+                  (var "b")))])
+          (var "x"))
+        (var "f"))
+      -- Output: inner applied case is hoisted within the inner let (preserving let-bound variable scoping)
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "a" (var "a")),
+             (nm "nothing",
+              letExpr "b" (apply (var "g") (var "x"))
+                (letExpr "_hoist__body_1"
+                  (match (nm "Result") nothing
+                    [(nm "ok", lambda "y" (var "y")),
+                     (nm "err", int32 0)])
+                  (apply (var "_hoist__body_1") (var "b"))))])
+          (var "x"))
+        (var "f")),
+
+    hoistCaseStatementsCase "case in let body inside applied case branch IS hoisted"
+      -- Input: let f = (case x of just a -> let b = h(a) in (case b of ...)(b) | nothing -> 0) x
+      -- Like above but inner case is in a named branch rather than default.
+      -- 'a' IS lambda-bound (from the case branch), so it IS captured.
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "a"
+              (letExpr "b" (apply (var "h") (var "a"))
+                (apply
+                  (match (nm "Result") nothing
+                    [(nm "ok", lambda "y" (var "y")),
+                     (nm "err", int32 0)])
+                  (var "b")))),
+             (nm "nothing", int32 0)])
+          (var "x"))
+        (var "f"))
+      -- Output: inner case is hoisted within the inner let (preserving let-bound variable scoping)
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "a"
+              (letExpr "b" (apply (var "h") (var "a"))
+                (letExpr "_hoist__body_1"
+                  (match (nm "Result") nothing
+                    [(nm "ok", lambda "y" (var "y")),
+                     (nm "err", int32 0)])
+                  (apply (var "_hoist__body_1") (var "b"))))),
+             (nm "nothing", int32 0)])
+          (var "x"))
         (var "f"))]
 
 -- | Test cases for hoistPolymorphicLetBindings

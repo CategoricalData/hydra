@@ -105,12 +105,14 @@ def contract_term(term: hydra.core.Term) -> hydra.core.Term:
                         
                         case _:
                             return rec()
-                match hydra.rewriting.deannotate_term(lhs()):
-                    case hydra.core.TermFunction(value=f):
-                        return _hoist_body_1(f)
-                    
-                    case _:
-                        return rec()
+                def _hoist_body_2(v1: hydra.core.Term) -> hydra.core.Term:
+                    match v1:
+                        case hydra.core.TermFunction(value=f):
+                            return _hoist_body_1(f)
+                        
+                        case _:
+                            return rec()
+                return _hoist_body_2(hydra.rewriting.deannotate_term(lhs()))
             
             case _:
                 return rec()
@@ -360,29 +362,33 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
                 case hydra.core.FunctionElimination(value=elm):
                     @lru_cache(1)
                     def pad_elim() -> bool:
-                        match elm:
-                            case hydra.core.EliminationRecord():
-                                return False
-                            
-                            case hydra.core.EliminationUnion():
-                                return True
-                            
-                            case hydra.core.EliminationWrap():
-                                return False
-                            
-                            case _:
-                                raise AssertionError("Unreachable: all variants handled")
+                        def _hoist_pad_elim_1(v12: hydra.core.Elimination) -> bool:
+                            match v12:
+                                case hydra.core.EliminationRecord():
+                                    return False
+                                
+                                case hydra.core.EliminationUnion():
+                                    return True
+                                
+                                case hydra.core.EliminationWrap():
+                                    return False
+                                
+                                case _:
+                                    raise AssertionError("Unreachable: all variants handled")
+                        return _hoist_pad_elim_1(elm)
                     @lru_cache(1)
                     def elim_term() -> hydra.core.Term:
                         return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(for_elimination(elm)))))
                     @lru_cache(1)
                     def elim_head_type() -> Maybe[hydra.core.Type]:
-                        match elm:
-                            case hydra.core.EliminationUnion(value=cs2):
-                                return Just(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(cast(hydra.core.Type, hydra.core.TypeVariable(cs2.type_name)), cast(hydra.core.Type, hydra.core.TypeUnit())))))
-                            
-                            case _:
-                                return Nothing()
+                        def _hoist_elim_head_type_1(v12: hydra.core.Elimination) -> Maybe[hydra.core.Type]:
+                            match v12:
+                                case hydra.core.EliminationUnion(value=cs2):
+                                    return Just(cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(cast(hydra.core.Type, hydra.core.TypeVariable(cs2.type_name)), cast(hydra.core.Type, hydra.core.TypeUnit())))))
+                                
+                                case _:
+                                    return Nothing()
+                        return _hoist_elim_head_type_1(elm)
                     return expand(pad_elim(), args, 1, elim_head_type(), elim_term())
                 
                 case hydra.core.FunctionLambda(value=lm):
@@ -666,15 +672,17 @@ def eta_reduce_term(term: hydra.core.Term) -> hydra.core.Term:
                 @lru_cache(1)
                 def rhs() -> hydra.core.Term:
                     return app.argument
-                match eta_reduce_term(rhs()):
-                    case hydra.core.TermAnnotated(value=at):
-                        return reduce_lambda(hydra.core.Lambda(v(), d(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs(), at.body)))))
-                    
-                    case hydra.core.TermVariable(value=v1):
-                        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(v().value, v1.value), hydra.lib.logic.not_(hydra.rewriting.is_free_variable_in_term(v(), lhs()))), (lambda : eta_reduce_term(lhs())), (lambda : no_change()))
-                    
-                    case _:
-                        return no_change()
+                def _hoist_body_1(v1: hydra.core.Term) -> hydra.core.Term:
+                    match v1:
+                        case hydra.core.TermAnnotated(value=at):
+                            return reduce_lambda(hydra.core.Lambda(v(), d(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(lhs(), at.body)))))
+                        
+                        case hydra.core.TermVariable(value=v12):
+                            return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(v().value, v12.value), hydra.lib.logic.not_(hydra.rewriting.is_free_variable_in_term(v(), lhs()))), (lambda : eta_reduce_term(lhs())), (lambda : no_change()))
+                        
+                        case _:
+                            return no_change()
+                return _hoist_body_1(eta_reduce_term(rhs()))
             
             case _:
                 return no_change()

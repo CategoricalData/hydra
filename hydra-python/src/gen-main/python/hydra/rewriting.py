@@ -1175,18 +1175,20 @@ def replace_typedefs(types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], 
             
             case hydra.core.TypeVariable(value=v):
                 def for_mono(t: hydra.core.Type) -> hydra.core.Type:
-                    match t:
-                        case hydra.core.TypeRecord():
-                            return typ
-                        
-                        case hydra.core.TypeUnion():
-                            return typ
-                        
-                        case hydra.core.TypeWrap():
-                            return typ
-                        
-                        case _:
-                            return rewrite(recurse, t)
+                    def _hoist_for_mono_1(t: hydra.core.Type, v1: hydra.core.Type) -> hydra.core.Type:
+                        match v1:
+                            case hydra.core.TypeRecord():
+                                return typ
+                            
+                            case hydra.core.TypeUnion():
+                                return typ
+                            
+                            case hydra.core.TypeWrap():
+                                return typ
+                            
+                            case _:
+                                return rewrite(recurse, t)
+                    return _hoist_for_mono_1(t, t)
                 def for_type_scheme(ts: hydra.core.TypeScheme) -> hydra.core.Type:
                     @lru_cache(1)
                     def t() -> hydra.core.Type:
@@ -1624,49 +1626,53 @@ def rewrite_term_m(f: Callable[[
             
             case hydra.core.TermFunction(value=fun):
                 def for_elm(e: hydra.core.Elimination) -> hydra.compute.Flow[T1, hydra.core.Function]:
-                    match e:
-                        case hydra.core.EliminationRecord(value=p):
-                            return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(p)))))
-                        
-                        case hydra.core.EliminationUnion(value=cs):
-                            @lru_cache(1)
-                            def n() -> hydra.core.Name:
-                                return cs.type_name
-                            @lru_cache(1)
-                            def def_() -> Maybe[hydra.core.Term]:
-                                return cs.default
-                            @lru_cache(1)
-                            def cases() -> frozenlist[hydra.core.Field]:
-                                return cs.cases
-                            return hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda t: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), recurse(t))), def_()), (lambda rdef: hydra.lib.flows.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n(), rdef, rcases)))))), hydra.lib.flows.map_list((lambda x1: for_field(x1)), cases()))))
-                        
-                        case hydra.core.EliminationWrap(value=name):
-                            return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(name)))))
-                        
-                        case _:
-                            raise AssertionError("Unreachable: all variants handled")
+                    def _hoist_for_elm_1(v1: hydra.core.Elimination) -> hydra.compute.Flow[T1, hydra.core.Function]:
+                        match v1:
+                            case hydra.core.EliminationRecord(value=p):
+                                return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(p)))))
+                            
+                            case hydra.core.EliminationUnion(value=cs):
+                                @lru_cache(1)
+                                def n() -> hydra.core.Name:
+                                    return cs.type_name
+                                @lru_cache(1)
+                                def def_() -> Maybe[hydra.core.Term]:
+                                    return cs.default
+                                @lru_cache(1)
+                                def cases() -> frozenlist[hydra.core.Field]:
+                                    return cs.cases
+                                return hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda t: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), recurse(t))), def_()), (lambda rdef: hydra.lib.flows.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n(), rdef, rcases)))))), hydra.lib.flows.map_list((lambda x1: for_field(x1)), cases()))))
+                            
+                            case hydra.core.EliminationWrap(value=name):
+                                return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(name)))))
+                            
+                            case _:
+                                raise AssertionError("Unreachable: all variants handled")
+                    return _hoist_for_elm_1(e)
                 def for_fun(fun2: hydra.core.Function) -> hydra.compute.Flow[T1, hydra.core.Function]:
-                    match fun2:
-                        case hydra.core.FunctionElimination(value=e):
-                            return for_elm(e)
-                        
-                        case hydra.core.FunctionLambda(value=l):
-                            @lru_cache(1)
-                            def v() -> hydra.core.Name:
-                                return l.parameter
-                            @lru_cache(1)
-                            def d() -> Maybe[hydra.core.Type]:
-                                return l.domain
-                            @lru_cache(1)
-                            def body() -> hydra.core.Term:
-                                return l.body
-                            return hydra.lib.flows.bind(recurse(body()), (lambda rbody: hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(v(), d(), rbody))))))
-                        
-                        case hydra.core.FunctionPrimitive(value=name):
-                            return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name)))
-                        
-                        case _:
-                            raise AssertionError("Unreachable: all variants handled")
+                    def _hoist_for_fun_1(v1: hydra.core.Function) -> hydra.compute.Flow[T1, hydra.core.Function]:
+                        match v1:
+                            case hydra.core.FunctionElimination(value=e):
+                                return for_elm(e)
+                            
+                            case hydra.core.FunctionLambda(value=l):
+                                @lru_cache(1)
+                                def v() -> hydra.core.Name:
+                                    return l.parameter
+                                @lru_cache(1)
+                                def d() -> Maybe[hydra.core.Type]:
+                                    return l.domain
+                                @lru_cache(1)
+                                def body() -> hydra.core.Term:
+                                    return l.body
+                                return hydra.lib.flows.bind(recurse(body()), (lambda rbody: hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(v(), d(), rbody))))))
+                            
+                            case hydra.core.FunctionPrimitive(value=name):
+                                return hydra.lib.flows.pure(cast(hydra.core.Function, hydra.core.FunctionPrimitive(name)))
+                            
+                            case _:
+                                raise AssertionError("Unreachable: all variants handled")
+                    return _hoist_for_fun_1(fun2)
                 return hydra.lib.flows.bind(for_fun(fun), (lambda rfun: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermFunction(rfun)))))
             
             case hydra.core.TermLet(value=lt):

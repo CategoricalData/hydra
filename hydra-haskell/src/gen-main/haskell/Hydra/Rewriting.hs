@@ -565,27 +565,25 @@ replaceFreeTypeVariable v rep typ =
 -- | Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively
 replaceTypedefs :: (M.Map Core.Name Core.TypeScheme -> Core.Type -> Core.Type)
 replaceTypedefs types typ0 =  
-  let rewrite = (\recurse -> \typ ->  
-          let dflt = (recurse typ)
-          in ((\x -> case x of
-            Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (rewrite recurse (Core.annotatedTypeBody v1)),
-              Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
-            Core.TypeRecord _ -> typ
-            Core.TypeUnion _ -> typ
-            Core.TypeVariable v1 ->  
-              let forMono = (\t -> (\x -> case x of
-                      Core.TypeRecord _ -> dflt
-                      Core.TypeUnion _ -> dflt
-                      Core.TypeWrap _ -> dflt
-                      _ -> (rewrite recurse t)) t)
-              in  
-                let forTypeScheme = (\ts ->  
-                        let t = (Core.typeSchemeType ts)
-                        in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) dflt))
-                in (Maybes.maybe dflt (\ts -> forTypeScheme ts) (Maps.lookup v1 types))
-            Core.TypeWrap _ -> typ
-            _ -> dflt) typ))
+  let rewrite = (\recurse -> \typ -> (\x -> case x of
+          Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
+            Core.annotatedTypeBody = (rewrite recurse (Core.annotatedTypeBody v1)),
+            Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
+          Core.TypeRecord _ -> typ
+          Core.TypeUnion _ -> typ
+          Core.TypeVariable v1 ->  
+            let forMono = (\t -> (\x -> case x of
+                    Core.TypeRecord _ -> typ
+                    Core.TypeUnion _ -> typ
+                    Core.TypeWrap _ -> typ
+                    _ -> (rewrite recurse t)) t)
+            in  
+              let forTypeScheme = (\ts ->  
+                      let t = (Core.typeSchemeType ts)
+                      in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) typ))
+              in (Maybes.maybe typ (\ts -> forTypeScheme ts) (Maps.lookup v1 types))
+          Core.TypeWrap _ -> typ
+          _ -> (recurse typ)) typ)
   in (rewriteType rewrite typ0)
 
 -- | Rewrite a term, and at the same time, fold a function over it, accumulating a value

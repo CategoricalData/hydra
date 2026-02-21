@@ -713,7 +713,11 @@ hoistSubterms = define "hoistSubterms" $
   -- Uses rewriteAndFoldTermWithTypeContextAndPath to track paths and type context
   -- The accumulator is (counter, [Binding])
   -- The namePrefix parameter is used to create stable hoisted binding names (e.g., the parent binding's name)
-  "processImmediateSubterm" <~ ("cx" ~> "counter" ~> "namePrefix" ~> "subterm" ~>
+  -- The pathPrefix parameter provides the path context from enclosing scopes, allowing
+  -- shouldHoist to correctly determine whether a term is at top-level or not.
+  -- For top-level lets this is empty []; for lets inside case branches of applied cases
+  -- it includes the enclosing path, so inner cases are correctly identified for hoisting.
+  "processImmediateSubterm" <~ ("cx" ~> "counter" ~> "namePrefix" ~> "pathPrefix" ~> "subterm" ~>
     -- Lambda variables that exist at the level of the let (before processing this subterm)
     -- These don't need to be captured since they're in scope at the hoisting site
     "baselineLambdaVars" <~ Typing.typeContextLambdaVariables (var "cx") $
@@ -740,8 +744,9 @@ hoistSubterms = define "hoistSubterms" $
           "processedTerm" <~ Pairs.second (var "result") $
           "newCounter" <~ Pairs.first (var "newAcc") $
           "newBindings" <~ Pairs.second (var "newAcc") $
-          -- Check if this term should be hoisted, passing the path
-          Logic.ifElse (var "shouldHoist" @@ pair (var "path") (var "processedTerm"))
+          -- Check if this term should be hoisted, passing the full path (prefix + local)
+          "fullPath" <~ Lists.concat2 (var "pathPrefix") (var "path") $
+          Logic.ifElse (var "shouldHoist" @@ pair (var "fullPath") (var "processedTerm"))
             -- Hoist: add to collected bindings, return reference
             -- Use the namePrefix to create stable names: _hoist_<prefix>_<counter>
             ("bindingName" <~ Core.name (Strings.cat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
@@ -775,8 +780,7 @@ hoistSubterms = define "hoistSubterms" $
                   (var "reference"))
             -- Don't hoist: return (acc, processedTerm) unchanged
             (pair (var "newAcc") (var "processedTerm")))
-        -- Don't recurse into these term types:
-        -- TermLet: nested lets are handled by the outer rewrite loop
+        -- TermLet: stop here; nested lets are handled by the outer rewrite loop
         -- TermTypeLambda: type lambdas introduce type variables that can't be properly captured
         [_Term_let>>: constant $ pair (var "acc") (var "term"),
          _Term_typeLambda>>: constant $ pair (var "acc") (var "term")]) $
@@ -803,18 +807,22 @@ hoistSubterms = define "hoistSubterms" $
   -- The prefix ensures uniqueness across siblings, so changes to one binding won't affect
   -- the hoisted names in other bindings.
   -- Each sibling uses the same starting counter (1), and the prefix prevents collisions.
-  "processLetTerm" <~ ("cx" ~> "counter" ~> "lt" ~>
+  "processLetTerm" <~ ("cx" ~> "counter" ~> "path" ~> "lt" ~>
     "bindings" <~ Core.letBindings (var "lt") $
     "body" <~ Core.letBody (var "lt") $
     -- Process each binding value using its name as the prefix
     -- Each binding starts with counter 1 (reset for each sibling) for stable naming
     -- The prefix ensures uniqueness across siblings
+    -- The path from the outer rewrite is passed as pathPrefix so that inner collectAndReplace
+    -- knows the full context (e.g., that we're inside a case branch of an applied case)
     "processBinding" <~ ("acc" ~> "binding" ~>
       -- Use the binding name as the prefix for hoisted binding names
       -- Replace dots with underscores to avoid creating module-like names
       "namePrefix" <~ Strings.intercalate (string "_") (Strings.splitOn (string ".") (Core.unName (Core.bindingName (var "binding")))) $
+      -- Build the pathPrefix for this binding: outer path + letBinding accessor
+      "bindingPathPrefix" <~ Lists.concat2 (var "path") (list [inject _TermAccessor _TermAccessor_letBinding (Core.bindingName $ var "binding")]) $
       -- Each sibling starts fresh with counter 1 - prefix makes names unique
-      "result" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "namePrefix" @@ (Core.bindingTerm (var "binding")) $
+      "result" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ var "namePrefix" @@ var "bindingPathPrefix" @@ (Core.bindingTerm (var "binding")) $
       "newValue" <~ Pairs.second (var "result") $
       "newBinding" <~ Core.binding (Core.bindingName (var "binding")) (var "newValue") (Core.bindingType (var "binding")) $
       Lists.cons (var "newBinding") (var "acc")) $
@@ -822,26 +830,31 @@ hoistSubterms = define "hoistSubterms" $
     "newBindingsReversed" <~ Lists.foldl (var "processBinding") (list ([] :: [TTerm Binding])) (var "bindings") $
     "newBindings" <~ Lists.reverse (var "newBindingsReversed") $
     -- Process the body with "_body" as the prefix, also starting with counter 1
-    "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ string "_body" @@ var "body" $
+    -- Build the pathPrefix for the body: outer path + letBody accessor
+    "bodyPathPrefix" <~ Lists.concat2 (var "path") (list [inject _TermAccessor _TermAccessor_letBody unit]) $
+    "bodyResult" <~ var "processImmediateSubterm" @@ var "cx" @@ int32 1 @@ string "_body" @@ var "bodyPathPrefix" @@ var "body" $
     "newBody" <~ Pairs.second (var "bodyResult") $
     -- Return the original counter (siblings are independent, so counter doesn't propagate)
     pair (var "counter") (Core.termLet (Core.let_ (var "newBindings") (var "newBody")))) $
 
   -- Main rewrite: find let terms and process them
-  "rewrite" <~ ("recurse" ~> "cx" ~> "counter" ~> "term" ~>
+  -- Uses rewriteAndFoldTermWithTypeContextAndPath so we have the path context.
+  -- The path is passed to processLetTerm, which forwards it as pathPrefix to
+  -- processImmediateSubterm, so inner collectAndReplace knows the full context
+  -- (e.g., that it's inside a case branch of an applied case).
+  "rewrite" <~ ("recurse" ~> "path" ~> "cx" ~> "counter" ~> "term" ~>
     cases _Term (var "term")
       (Just $ var "recurse" @@ var "counter" @@ var "term") [
       _Term_let>>: "lt" ~>
-        -- First recurse into the let to process any nested lets
+        -- Recurse first (bottom-up), then process the let
         "recursed" <~ var "recurse" @@ var "counter" @@ var "term" $
         "newCounter" <~ Pairs.first (var "recursed") $
         "recursedTerm" <~ Pairs.second (var "recursed") $
-        -- Extract the let from the recursed term and process its immediate subterms
         cases _Term (var "recursedTerm")
           (Just $ pair (var "newCounter") (var "recursedTerm")) [
-          _Term_let>>: "lt2" ~> var "processLetTerm" @@ var "cx" @@ var "newCounter" @@ var "lt2"]]) $
+          _Term_let>>: "lt2" ~> var "processLetTerm" @@ var "cx" @@ var "newCounter" @@ var "path" @@ var "lt2"]]) $
 
-  Pairs.second $ rewriteAndFoldTermWithTypeContext @@ var "rewrite" @@ var "cx0" @@ int32 1 @@ var "term0"
+  Pairs.second $ rewriteAndFoldTermWithTypeContextAndPath @@ var "rewrite" @@ var "cx0" @@ int32 1 @@ var "term0"
 
 rewriteAndFoldTermWithTypeContext :: TBinding (((a -> Term -> (a, Term)) -> TypeContext -> a -> Term -> (a, Term)) -> TypeContext -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithTypeContext = define "rewriteAndFoldTermWithTypeContext" $

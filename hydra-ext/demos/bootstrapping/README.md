@@ -62,7 +62,17 @@ hydra-python/
 
 ## Prerequisites
 
-- Stack is installed and configured (for Haskell bootstrapping)
+- The repository is checked out at a stable revision (e.g., the latest
+  `main` branch) and is fully synced. All generated code (Haskell, Java,
+  Python gen-main directories) and JSON exports should be up to date.
+
+- If you have made local changes to Sources or other DSL code, you may need
+  to re-synchronize before running the demo. Use the appropriate sync scripts:
+  - `hydra-haskell/bin/sync-haskell.sh` -- regenerate Haskell kernel, JSON, and tests
+  - `hydra-ext/bin/sync-ext.sh` -- regenerate ext Haskell gen-main and ext JSON
+  - `hydra-ext/bin/sync-java.sh` -- regenerate Java gen-main
+  - `hydra-ext/bin/sync-python.sh` -- regenerate Python gen-main
+
 - All three language environments are set up:
   - Haskell: `stack build` works in hydra-haskell and hydra-ext
   - Java: `./gradlew compileJava` works in hydra-java
@@ -151,15 +161,18 @@ language provides this differently:
 
 ### How it works
 
-#### Step 1: Export to JSON
+#### Step 1: JSON modules (pre-exported)
 
-Three executables export Hydra modules to JSON:
+The JSON modules are generated during synchronization and checked into the
+repository. The bootstrapping scripts assume they are already up to date.
+
+Three executables produce the JSON exports (run by the sync scripts):
 
 - `hydra-haskell:update-json-main` -- exports `mainModules` + `evalLibModules`
   to `hydra-haskell/src/gen-main/json/`
 - `hydra-haskell:update-json-test` -- exports `testModules` to
   `hydra-haskell/src/gen-test/json/`
-- `hydra-ext:update-json-main` -- exports `hydraExtModules` to
+- `hydra-ext:update-json-ext` -- exports `hydraExtModules` to
   `hydra-ext/src/gen-main/json/`
 
 The JSON includes System F type annotations.

@@ -364,7 +364,7 @@ hoistPolymorphicLetBindings isParentBinding let0 =
 -- | Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of TermAccessors from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables.
 hoistSubterms :: ((([Accessors.TermAccessor], Core.Term) -> Bool) -> Typing.TypeContext -> Core.Term -> Core.Term)
 hoistSubterms shouldHoist cx0 term0 =  
-  let processImmediateSubterm = (\cx -> \counter -> \namePrefix -> \subterm ->  
+  let processImmediateSubterm = (\cx -> \counter -> \namePrefix -> \pathPrefix -> \subterm ->  
           let baselineLambdaVars = (Typing.typeContextLambdaVariables cx)
           in  
             let collectAndReplace = (\recurse -> \path -> \cxInner -> \acc -> \term ->  
@@ -384,37 +384,39 @@ hoistSubterms shouldHoist cx0 term0 =
                                 let newCounter = (Pairs.first newAcc)
                                 in  
                                   let newBindings = (Pairs.second newAcc)
-                                  in (Logic.ifElse (shouldHoist (path, processedTerm)) ( 
-                                    let bindingName = (Core.Name (Strings.cat [
-                                            "_hoist_",
-                                            namePrefix,
-                                            "_",
-                                            (Literals.showInt32 newCounter)]))
-                                    in  
-                                      let allLambdaVars = (Typing.typeContextLambdaVariables cxInner)
+                                  in  
+                                    let fullPath = (Lists.concat2 pathPrefix path)
+                                    in (Logic.ifElse (shouldHoist (fullPath, processedTerm)) ( 
+                                      let bindingName = (Core.Name (Strings.cat [
+                                              "_hoist_",
+                                              namePrefix,
+                                              "_",
+                                              (Literals.showInt32 newCounter)]))
                                       in  
-                                        let newLambdaVars = (Sets.difference allLambdaVars baselineLambdaVars)
+                                        let allLambdaVars = (Typing.typeContextLambdaVariables cxInner)
                                         in  
-                                          let freeVars = (Rewriting.freeVariablesInTerm processedTerm)
+                                          let newLambdaVars = (Sets.difference allLambdaVars baselineLambdaVars)
                                           in  
-                                            let capturedVars = (Sets.toList (Sets.intersection newLambdaVars freeVars))
+                                            let freeVars = (Rewriting.freeVariablesInTerm processedTerm)
                                             in  
-                                              let typeMap = (Typing.typeContextTypes cxInner)
+                                              let capturedVars = (Sets.toList (Sets.intersection newLambdaVars freeVars))
                                               in  
-                                                let wrappedTerm = (Lists.foldl (\body -> \varName -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                                        Core.lambdaParameter = varName,
-                                                        Core.lambdaDomain = (Maps.lookup varName typeMap),
-                                                        Core.lambdaBody = body}))) processedTerm (Lists.reverse capturedVars))
+                                                let typeMap = (Typing.typeContextTypes cxInner)
                                                 in  
-                                                  let reference = (Lists.foldl (\fn -> \varName -> Core.TermApplication (Core.Application {
-                                                          Core.applicationFunction = fn,
-                                                          Core.applicationArgument = (Core.TermVariable varName)})) (Core.TermVariable bindingName) capturedVars)
+                                                  let wrappedTerm = (Lists.foldl (\body -> \varName -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                                          Core.lambdaParameter = varName,
+                                                          Core.lambdaDomain = (Maps.lookup varName typeMap),
+                                                          Core.lambdaBody = body}))) processedTerm (Lists.reverse capturedVars))
                                                   in  
-                                                    let newBinding = Core.Binding {
-                                                            Core.bindingName = bindingName,
-                                                            Core.bindingTerm = wrappedTerm,
-                                                            Core.bindingType = Nothing}
-                                                    in ((Math.add newCounter 1, (Lists.cons newBinding newBindings)), reference)) (newAcc, processedTerm))) term))
+                                                    let reference = (Lists.foldl (\fn -> \varName -> Core.TermApplication (Core.Application {
+                                                            Core.applicationFunction = fn,
+                                                            Core.applicationArgument = (Core.TermVariable varName)})) (Core.TermVariable bindingName) capturedVars)
+                                                    in  
+                                                      let newBinding = Core.Binding {
+                                                              Core.bindingName = bindingName,
+                                                              Core.bindingTerm = wrappedTerm,
+                                                              Core.bindingType = Nothing}
+                                                      in ((Math.add newCounter 1, (Lists.cons newBinding newBindings)), reference)) (newAcc, processedTerm))) term))
             in  
               let result = (rewriteAndFoldTermWithTypeContextAndPath collectAndReplace cx (counter, []) subterm)
               in  
@@ -431,7 +433,7 @@ hoistSubterms shouldHoist cx0 term0 =
                                 Core.letBody = transformedSubterm}))
                         in (finalCounter, localLet))))
   in  
-    let processLetTerm = (\cx -> \counter -> \lt ->  
+    let processLetTerm = (\cx -> \counter -> \path -> \lt ->  
             let bindings = (Core.letBindings lt)
             in  
               let body = (Core.letBody lt)
@@ -439,28 +441,34 @@ hoistSubterms shouldHoist cx0 term0 =
                 let processBinding = (\acc -> \binding ->  
                         let namePrefix = (Strings.intercalate "_" (Strings.splitOn "." (Core.unName (Core.bindingName binding))))
                         in  
-                          let result = (processImmediateSubterm cx 1 namePrefix (Core.bindingTerm binding))
+                          let bindingPathPrefix = (Lists.concat2 path [
+                                  Accessors.TermAccessorLetBinding (Core.bindingName binding)])
                           in  
-                            let newValue = (Pairs.second result)
+                            let result = (processImmediateSubterm cx 1 namePrefix bindingPathPrefix (Core.bindingTerm binding))
                             in  
-                              let newBinding = Core.Binding {
-                                      Core.bindingName = (Core.bindingName binding),
-                                      Core.bindingTerm = newValue,
-                                      Core.bindingType = (Core.bindingType binding)}
-                              in (Lists.cons newBinding acc))
+                              let newValue = (Pairs.second result)
+                              in  
+                                let newBinding = Core.Binding {
+                                        Core.bindingName = (Core.bindingName binding),
+                                        Core.bindingTerm = newValue,
+                                        Core.bindingType = (Core.bindingType binding)}
+                                in (Lists.cons newBinding acc))
                 in  
                   let newBindingsReversed = (Lists.foldl processBinding [] bindings)
                   in  
                     let newBindings = (Lists.reverse newBindingsReversed)
                     in  
-                      let bodyResult = (processImmediateSubterm cx 1 "_body" body)
+                      let bodyPathPrefix = (Lists.concat2 path [
+                              Accessors.TermAccessorLetBody])
                       in  
-                        let newBody = (Pairs.second bodyResult)
-                        in (counter, (Core.TermLet (Core.Let {
-                          Core.letBindings = newBindings,
-                          Core.letBody = newBody}))))
+                        let bodyResult = (processImmediateSubterm cx 1 "_body" bodyPathPrefix body)
+                        in  
+                          let newBody = (Pairs.second bodyResult)
+                          in (counter, (Core.TermLet (Core.Let {
+                            Core.letBindings = newBindings,
+                            Core.letBody = newBody}))))
     in  
-      let rewrite = (\recurse -> \cx -> \counter -> \term -> (\x -> case x of
+      let rewrite = (\recurse -> \path -> \cx -> \counter -> \term -> (\x -> case x of
               Core.TermLet _ ->  
                 let recursed = (recurse counter term)
                 in  
@@ -468,10 +476,10 @@ hoistSubterms shouldHoist cx0 term0 =
                   in  
                     let recursedTerm = (Pairs.second recursed)
                     in ((\x -> case x of
-                      Core.TermLet v2 -> (processLetTerm cx newCounter v2)
+                      Core.TermLet v2 -> (processLetTerm cx newCounter path v2)
                       _ -> (newCounter, recursedTerm)) recursedTerm)
               _ -> (recurse counter term)) term)
-      in (Pairs.second (rewriteAndFoldTermWithTypeContext rewrite cx0 1 term0))
+      in (Pairs.second (rewriteAndFoldTermWithTypeContextAndPath rewrite cx0 1 term0))
 
 isApplicationFunction :: (Accessors.TermAccessor -> Bool)
 isApplicationFunction acc = ((\x -> case x of

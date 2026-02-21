@@ -7,6 +7,7 @@
 module Main where
 
 import Hydra.Ext.Generation
+import Hydra.Sources.All (otherModules)
 import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
 
 main :: IO ()
@@ -20,7 +21,8 @@ main = do
 
   -- Universe provides all modules for dependency resolution
   -- modulesToGenerate specifies which modules to actually generate
-  writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
+  -- Include otherModules (CoderUtils, YamlModel) alongside kernel modules
+  writePython "../hydra-python/src/gen-main/python" mainModules (kernelModules ++ otherModules)
 
   putStrLn ""
   putStrLn "=== Done! ==="

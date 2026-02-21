@@ -467,7 +467,7 @@ public interface Hoisting {
   }
   
   static hydra.core.Term hoistSubterms(java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.accessors.TermAccessor>, hydra.core.Term>, Boolean> shouldHoist, hydra.typing.TypeContext cx0, hydra.core.Term term0) {
-    java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>> processImmediateSubterm = (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>) (cx -> (java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>) (counter -> (java.util.function.Function<String, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>) (namePrefix -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>) (subterm -> {
+    java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>> processImmediateSubterm = (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>>) (cx -> (java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>) (counter -> (java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>) (namePrefix -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>) (pathPrefix -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>) (subterm -> {
       java.util.Set<hydra.core.Name> baselineLambdaVars = (cx).lambdaVariables;
       java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>>> collectAndReplace = (java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>>>) (recurse -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>>) (path -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>) (cxInner -> (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (term -> {
         hydra.util.Lazy<java.util.List<hydra.core.Binding>> collectedBindings = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
@@ -475,13 +475,16 @@ public interface Hoisting {
         return (term).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+            hydra.util.Lazy<java.util.List<hydra.accessors.TermAccessor>> fullPath = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+              pathPrefix,
+              path));
             hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term> result2 = ((recurse).apply(acc)).apply(term);
             hydra.util.Lazy<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>> newAcc = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result2));
             hydra.util.Lazy<java.util.List<hydra.core.Binding>> newBindings = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(newAcc.get()));
             hydra.util.Lazy<Integer> newCounter = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(newAcc.get()));
             hydra.util.Lazy<hydra.core.Term> processedTerm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result2));
             return hydra.lib.logic.IfElse.lazy(
-              (shouldHoist).apply((hydra.util.Tuple.Tuple2<java.util.List<hydra.accessors.TermAccessor>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.accessors.TermAccessor>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.accessors.TermAccessor>, hydra.core.Term>(path, processedTerm.get())))),
+              (shouldHoist).apply((hydra.util.Tuple.Tuple2<java.util.List<hydra.accessors.TermAccessor>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.accessors.TermAccessor>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.accessors.TermAccessor>, hydra.core.Term>(fullPath.get(), processedTerm.get())))),
               () -> ((java.util.function.Supplier<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
                 hydra.core.Name bindingName = new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.List.of(
                   "_hoist_",
@@ -560,30 +563,37 @@ public interface Hoisting {
           hydra.util.Lazy<hydra.core.Term> localLet = new hydra.util.Lazy<>(() -> new hydra.core.Term.Let(new hydra.core.Let(hydra.lib.lists.Reverse.apply(bindings.get()), transformedSubterm.get())));
           return (hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>(finalCounter.get(), localLet.get())));
         })).get());
-    }))));
-    return hydra.lib.pairs.Second.apply(hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContext(
-      (java.util.function.Function<java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>) (v2 -> (java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>) (v4 -> hydra.hoisting.Hoisting.hoistSubterms_rewrite(
+    })))));
+    return hydra.lib.pairs.Second.apply(hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContextAndPath(
+      (java.util.function.Function<java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>) (v2 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>) (v3 -> (java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>) (v4 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>) (v5 -> hydra.hoisting.Hoisting.hoistSubterms_rewrite(
         processImmediateSubterm,
         v1,
         v2,
         v3,
-        v4))))),
+        v4,
+        v5)))))),
       cx0,
       1,
       term0));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> hoistSubterms_processLetTerm(java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>> processImmediateSubterm, hydra.typing.TypeContext cx, T0 counter, hydra.core.Let lt) {
+  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> hoistSubterms_processLetTerm(java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>> processImmediateSubterm, hydra.typing.TypeContext cx, T0 counter, java.util.List<hydra.accessors.TermAccessor> path, hydra.core.Let lt) {
     java.util.List<hydra.core.Binding> bindings = (lt).bindings;
     hydra.core.Term body = (lt).body;
-    hydra.util.Tuple.Tuple2<Integer, hydra.core.Term> bodyResult = ((((processImmediateSubterm).apply(cx)).apply(1)).apply("_body")).apply(body);
+    hydra.util.Lazy<java.util.List<hydra.accessors.TermAccessor>> bodyPathPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+      path,
+      java.util.List.of(new hydra.accessors.TermAccessor.LetBody())));
+    hydra.util.Tuple.Tuple2<Integer, hydra.core.Term> bodyResult = (((((processImmediateSubterm).apply(cx)).apply(1)).apply("_body")).apply(bodyPathPrefix.get())).apply(body);
     java.util.function.Function<java.util.List<hydra.core.Binding>, java.util.function.Function<hydra.core.Binding, java.util.List<hydra.core.Binding>>> processBinding = (java.util.function.Function<java.util.List<hydra.core.Binding>, java.util.function.Function<hydra.core.Binding, java.util.List<hydra.core.Binding>>>) (acc -> (java.util.function.Function<hydra.core.Binding, java.util.List<hydra.core.Binding>>) (binding -> {
+      hydra.util.Lazy<java.util.List<hydra.accessors.TermAccessor>> bindingPathPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+        path,
+        java.util.List.of(new hydra.accessors.TermAccessor.LetBinding((binding).name))));
       String namePrefix = hydra.lib.strings.Intercalate.apply(
         "_",
         hydra.lib.strings.SplitOn.apply(
           ".",
           ((binding).name).value));
-      hydra.util.Tuple.Tuple2<Integer, hydra.core.Term> result = ((((processImmediateSubterm).apply(cx)).apply(1)).apply(namePrefix)).apply((binding).term);
+      hydra.util.Tuple.Tuple2<Integer, hydra.core.Term> result = (((((processImmediateSubterm).apply(cx)).apply(1)).apply(namePrefix)).apply(bindingPathPrefix.get())).apply((binding).term);
       hydra.util.Lazy<hydra.core.Term> newValue = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
       hydra.core.Binding newBinding = new hydra.core.Binding((binding).name, newValue.get(), (binding).type);
       return hydra.lib.lists.Cons.apply(
@@ -599,7 +609,7 @@ public interface Hoisting {
     return (hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<T0, hydra.core.Term>(counter, new hydra.core.Term.Let(new hydra.core.Let(newBindings.get(), newBody.get())))));
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<T1, hydra.core.Term> hoistSubterms_rewrite(java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>> processImmediateSubterm, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T1, hydra.core.Term>>> recurse, hydra.typing.TypeContext cx, T0 counter, hydra.core.Term term) {
+  static <T0, T1> hydra.util.Tuple.Tuple2<T1, hydra.core.Term> hoistSubterms_rewrite(java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>> processImmediateSubterm, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T1, hydra.core.Term>>> recurse, java.util.List<hydra.accessors.TermAccessor> path, hydra.typing.TypeContext cx, T0 counter, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Tuple.Tuple2<T1, hydra.core.Term> otherwise(hydra.core.Term instance) {
@@ -626,6 +636,7 @@ public interface Hoisting {
               processImmediateSubterm,
               cx,
               newCounter.get(),
+              path,
               (lt2).value);
           }
         });

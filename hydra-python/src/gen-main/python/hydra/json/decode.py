@@ -215,15 +215,17 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
                 def len() -> int:
                     return hydra.lib.lists.length(arr)
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(len(), 0), (lambda : Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(len(), 1), (lambda : decode_just(arr)), (lambda : Left("expected single-element array for Just")))))
-            match value:
-                case hydra.json.model.ValueNull():
-                    return Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))
-                
-                case hydra.json.model.ValueArray(value=arr):
-                    return decode_maybe_array(arr)
-                
-                case _:
-                    return Left("expected null or single-element array for Maybe")
+            def _hoist_body_1(v1: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
+                match v1:
+                    case hydra.json.model.ValueNull():
+                        return Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))
+                    
+                    case hydra.json.model.ValueArray(value=arr):
+                        return decode_maybe_array(arr)
+                    
+                    case _:
+                        return Left("expected null or single-element array for Maybe")
+            return _hoist_body_1(value)
         
         case hydra.core.TypeRecord(value=rt):
             @lru_cache(1)
@@ -261,12 +263,14 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
         
         case hydra.core.TypeWrap(value=wn):
             def extract_inner_type(lt: hydra.core.Type) -> hydra.core.Type:
-                match lt:
-                    case hydra.core.TypeWrap(value=wt):
-                        return wt.body
-                    
-                    case _:
-                        return lt
+                def _hoist_extract_inner_type_1(lt: hydra.core.Type, v1: hydra.core.Type) -> hydra.core.Type:
+                    match v1:
+                        case hydra.core.TypeWrap(value=wt):
+                            return wt.body
+                        
+                        case _:
+                            return lt
+                return _hoist_extract_inner_type_1(lt, lt)
             def decode_and_wrap(lt: hydra.core.Type) -> Either[str, hydra.core.Term]:
                 @lru_cache(1)
                 def inner_type() -> hydra.core.Type:

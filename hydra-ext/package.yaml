@@ -131,7 +131,15 @@ executables:
     dependencies:
       - hydra-ext
 
-  update-json-main:
+  update-haskell-ext-main:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-haskell-ext-main
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
+  update-json-ext:
     main: Main.hs
     source-dirs:
       - src/exec/update-json-main
@@ -154,3 +162,4 @@ executables:
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
+      - time
