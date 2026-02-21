@@ -202,12 +202,13 @@ def register_flows_primitives() -> dict[Name, Primitive]:
         qname(namespace, "fail"), flows.fail, ["s", "x"],
         prims.string(), prims.flow(s, x)
     )
-    # Note: foldl needs a curried function, but prim3 expects uncurried.
-    # This may need special handling or interpreter support.
-    # primitives[qname(namespace, "foldl")] = prims.prim3(
-    #     qname(namespace, "foldl"), flows.foldl, ["y", "x", "s"],
-    #     prims.function(y, prims.function(x, prims.flow(s, y))), y, prims.list_(x), prims.flow(s, y)
-    # )
+    # foldl :: (a -> b -> Flow s a) -> a -> [b] -> Flow s a
+    primitives[qname(namespace, "foldl")] = prims.prim3(
+        qname(namespace, "foldl"),
+        lambda f, init, xs: flows.foldl(lambda acc, el: f(acc)(el), init, xs),
+        ["y", "x", "s"],
+        prims.function(y, prims.function(x, prims.flow(s, y))), y, prims.list_(x), prims.flow(s, y)
+    )
     # map :: (x -> y) -> Flow s x -> Flow s y
     primitives[qname(namespace, "map")] = prims.prim2_interp(
         qname(namespace, "map"), Just(eval_flows.map), ["x", "y", "s"],

@@ -81,23 +81,17 @@ def main():
     print("==========================================", flush=True)
     print(flush=True)
 
-    # Step 1: Load kernel modules (Source modules providing the type universe)
-    print("Step 1: Loading kernel source modules...", flush=True)
-    step_start = time.time()
-    km = kernel_modules()
-    step_time = time.time() - step_start
-    print(f"  Loaded {len(km)} kernel source modules.", flush=True)
-    print(f"  Time: {_format_time(step_time)}", flush=True)
-    print(flush=True)
-
     # Count JSON input files
     json_file_count = _count_files(args.json_dir, ".json")
 
-    # Step 2: Load all modules from JSON
-    print("Step 2: Loading modules from JSON...", flush=True)
+    # Step 1: Load all modules from JSON
+    # Use kernel_modules() as the universe for the generated schema-based decoder,
+    # matching the Haskell host's behavior (kernelTypesModules ++ kernelTermsModules ++ jsonModules).
+    print("Step 1: Loading modules from JSON...", flush=True)
     print(f"  Source: {args.json_dir}", flush=True)
     print(f"  JSON input files: {json_file_count}", flush=True)
     step_start = time.time()
+    km = kernel_modules()
     raw_mods = load_all_modules_from_json_dir_with(False, args.json_dir, km)
     step_time = time.time() - step_start
     total_bindings = sum(len(m.elements) for m in raw_mods)
@@ -115,12 +109,17 @@ def main():
     if args.kernel_only:
         before = len(mods_to_generate)
         mods_to_generate = filter_kernel_modules(mods_to_generate)
-        all_mods = filter_kernel_modules(all_mods)
+        # For main code generation, use kernel-only universe to match Java/Haskell host behavior.
+        # The full all_mods (including ext) is preserved for test code generation below,
+        # where test modules may reference ext bindings.
+        main_universe = filter_kernel_modules(all_mods)
         print("Step 3: Filtering to kernel modules...", flush=True)
         print(f"  Before: {before} modules", flush=True)
         print(f"  After:  {len(mods_to_generate)} kernel modules "
               f"(excluded {before - len(mods_to_generate)} ext modules)", flush=True)
         print(flush=True)
+    else:
+        main_universe = all_mods
     if args.types_only:
         before = len(mods_to_generate)
         mods_to_generate = filter_type_modules(mods_to_generate)
@@ -133,7 +132,7 @@ def main():
     # Step 5: Generate code for the target language
     out_main = os.path.join(out_dir, "src/gen-main")
     print(f"Step 4: Generating {args.target} code...", flush=True)
-    print(f"  Universe: {len(all_mods)} modules", flush=True)
+    print(f"  Universe: {len(main_universe)} modules", flush=True)
     print(f"  Generating: {len(mods_to_generate)} modules:", flush=True)
     for m in mods_to_generate:
         bindings = len(m.elements)
@@ -144,11 +143,11 @@ def main():
     step_start = time.time()
 
     if args.target == "haskell":
-        write_haskell(os.path.join(out_main, "haskell"), all_mods, mods_to_generate)
+        write_haskell(os.path.join(out_main, "haskell"), main_universe, mods_to_generate)
     elif args.target == "java":
-        write_java(os.path.join(out_main, "java"), all_mods, mods_to_generate)
+        write_java(os.path.join(out_main, "java"), main_universe, mods_to_generate)
     elif args.target == "python":
-        write_python(os.path.join(out_main, "python"), all_mods, mods_to_generate)
+        write_python(os.path.join(out_main, "python"), main_universe, mods_to_generate)
 
     step_time = time.time() - step_start
 
@@ -167,7 +166,7 @@ def main():
     step_start = time.time()
     # Load test modules WITHOUT stripping TypeSchemes (strip_type_schemes=False).
     # Test modules need their types preserved so inference can be skipped.
-    test_mods = load_all_modules_from_json_dir_with(False, test_json_dir, all_mods)
+    test_mods = load_all_modules_from_json_dir_with(False, test_json_dir, km)
     step_time = time.time() - step_start
     test_bindings = sum(len(m.elements) for m in test_mods)
     print(f"  Loaded {len(test_mods)} test modules ({test_bindings} bindings).", flush=True)

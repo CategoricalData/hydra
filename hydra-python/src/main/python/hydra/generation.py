@@ -305,7 +305,7 @@ def decode_module(bs_graph, universe_modules, do_strip_type_schemes, json_val):
 
 
 def load_modules_from_json(strip_type_schemes, base_path, universe_modules, namespaces):
-    """Load modules from JSON files."""
+    """Load modules from JSON files using the generated schema-based decoder."""
     bs_graph = bootstrap_graph()
     modules = []
     for ns in namespaces:
@@ -354,12 +354,16 @@ def load_all_modules_from_json_dir_with(strip_type_schemes, base_path, universe_
 def generate_sources(coder, language, do_expand, do_hoist_case, do_hoist_poly,
                      base_path, universe, modules_to_generate):
     """Generate source files and write them to disk."""
+    import time as _time
     bs_graph = bootstrap_graph()
     flow = generate_source_files(
         coder, language,
         do_expand, do_hoist_case, do_hoist_poly,
         bs_graph, tuple(universe), tuple(modules_to_generate))
+    _t0 = _time.time()
     files = run_flow(bs_graph, flow)
+    _t1 = _time.time()
+    print(f"  Code generation flow took {_t1-_t0:.1f}s for {len(files)} files", flush=True)
     for path, content in files:
         file_path = os.path.join(base_path, path)
         if not content.endswith("\n"):

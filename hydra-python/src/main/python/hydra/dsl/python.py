@@ -94,65 +94,96 @@ class Node(Generic[T]):
 
 def freeze(obj: Any) -> Any:
     """Recursively freeze an object into an immutable variant."""
-    match obj:
-        case dict():
-            obj = cast(dict[Any, Any], obj)
-            return FrozenDict(obj)
-        case set():
-            obj = cast(set[Any], obj)
-            return frozenset(freeze(item) for item in obj)
-        case tuple() | list():
-            obj = cast(tuple[Any, ...], obj)
+    if isinstance(obj, dict):
+        return FrozenDict(obj)
+    elif isinstance(obj, set):
+        return frozenset(freeze(item) for item in obj)
+    elif isinstance(obj, list):
+        return tuple(freeze(item) for item in obj)
+    elif isinstance(obj, tuple):
+        # Only recurse if there are mutable items (dicts/lists/sets) inside
+        needs_freeze = False
+        for item in obj:
+            if isinstance(item, (dict, list, set)):
+                needs_freeze = True
+                break
+        if needs_freeze:
             return tuple(freeze(item) for item in obj)
-        case _:
-            return obj
+        return obj
+    return obj
 
 
-@dataclass(frozen=True)
 class FrozenDict(Mapping[K, V]):
     """An immutable variant of the Python dict."""
 
-    data: Mapping[K, V] = field(default_factory=dict)
+    __slots__ = ("_data", "_hash")
 
-    def __post_init__(self) -> None:
-        """Convert the provided data dict into an immutable mapping."""
-        frozen_data: dict[Any, Any] = {}
-        for k, v in self.data.items():
-            frozen_data[k] = freeze(v)
-        object.__setattr__(self, "data", frozen_data)
+    def __init__(self, data: Any = None, *, _trusted: bool = False) -> None:
+        """Create a FrozenDict. If _trusted=True, data is used directly without freezing."""
+        if data is None:
+            d: dict[Any, Any] = {}
+        elif _trusted:
+            d = data if isinstance(data, dict) else dict(data)
+        elif isinstance(data, FrozenDict):
+            d = data._data  # type: ignore[attr-defined]
+        else:
+            d = {}
+            for k, v in (data.items() if isinstance(data, dict) else data):
+                d[k] = freeze(v)
+        object.__setattr__(self, "_data", d)
+        object.__setattr__(self, "_hash", None)
+
+    @property
+    def data(self) -> dict[Any, Any]:
+        return self._data  # type: ignore[attr-defined]
 
     def __getitem__(self, key: K) -> V:
-        """Get the value for a given key from the FrozenDict."""
-        return self.data[key]
+        return self._data[key]  # type: ignore[attr-defined]
 
     def __iter__(self) -> Iterator[K]:
-        """Get an iterator over the keys of the FrozenDict."""
-        return iter(self.data)
+        return iter(self._data)  # type: ignore[attr-defined]
 
     def __len__(self) -> int:
-        """Get the number of items in the FrozenDict."""
-        return len(self.data)
+        return len(self._data)  # type: ignore[attr-defined]
 
     def __hash__(self) -> int:
-        """Compute a hash based on the frozenset of items so that order does not matter."""
-        return hash(frozenset(self.data.items()))
+        h = self._hash  # type: ignore[attr-defined]
+        if h is None:
+            h = hash(frozenset(self._data.items()))  # type: ignore[attr-defined]
+            object.__setattr__(self, "_hash", h)
+        return h
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, FrozenDict):
+            return self._data == other._data  # type: ignore[attr-defined]
+        return NotImplemented
 
     def __or__(self, other: Mapping[K, V]) -> FrozenDict[K, V]:
-        """Merge two FrozenDicts."""
-        return FrozenDict[K, V]({**self.data, **other})
+        if isinstance(other, FrozenDict):
+            new = {**self._data, **other._data}  # type: ignore[attr-defined]
+        else:
+            new = {**self._data, **other}  # type: ignore[attr-defined]
+        return FrozenDict(new, _trusted=True)
 
     def copy(self, add_or_replace: dict[K, V] | None = None) -> FrozenDict[K, V]:
-        """Create a new FrozenDict with updated entries."""
-        if add_or_replace is None:
-            add_or_replace = {}
-
-        new_data = dict(self.data)
-        new_data.update(add_or_replace)
-        return FrozenDict(new_data)
+        new_data = dict(self._data)  # type: ignore[attr-defined]
+        if add_or_replace is not None:
+            new_data.update(add_or_replace)
+        return FrozenDict(new_data, _trusted=True)
 
     def __repr__(self) -> str:
-        """Get a string representation of the FrozenDict."""
-        return f"FrozenDict({dict(self.data)})"
+        return f"FrozenDict({self._data!r})"  # type: ignore[attr-defined]
+
+    def _insert(self, key: K, value: V) -> FrozenDict[K, V]:
+        """Fast insert without freeze overhead. Values must already be frozen."""
+        new = dict(self._data)  # type: ignore[attr-defined]
+        new[key] = value
+        return FrozenDict(new, _trusted=True)
+
+    def _union(self, other: FrozenDict[K, V]) -> FrozenDict[K, V]:
+        """Fast union of two FrozenDicts without freeze overhead."""
+        new = {**self._data, **other._data}  # type: ignore[attr-defined]
+        return FrozenDict(new, _trusted=True)
 
 
 def unsupported(message: str) -> None:
