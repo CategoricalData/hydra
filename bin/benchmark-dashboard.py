@@ -167,22 +167,9 @@ def index_groups(groups):
     return result
 
 
-def fmt_time(ms):
-    """Format milliseconds consistently, without 'ms' suffix."""
-    if ms >= 100:
-        return f"{ms:.0f}"
-    if ms >= 10:
-        return f"{ms:.1f}"
-    return f"{ms:.2f}"
-
-
-def fmt_stddev(sd):
-    """Format standard deviation as ±value."""
-    if sd >= 100:
-        return f"\u00b1{sd:.0f}"
-    if sd >= 10:
-        return f"\u00b1{sd:.1f}"
-    return f"\u00b1{sd:.2f}"
+def fmt_val(x):
+    """Format a numeric value with 2 decimal places."""
+    return f"{x:.2f}"
 
 
 # ANSI color codes
@@ -190,9 +177,6 @@ RED = "\033[31m"
 GREEN = "\033[32m"
 GRAY = "\033[90m"
 RESET = "\033[0m"
-
-# Width of each language column (visible characters, excluding ANSI codes)
-LANG_COL_WIDTH = 32
 
 
 def fmt_counts(passed, failed, skipped):
@@ -210,16 +194,12 @@ def fmt_counts(passed, failed, skipped):
     return passed_str + failed_str + skipped_str
 
 
-def fmt_counts_header(lang):
-    """Format the header for a language column."""
-    return f" | {lang.capitalize():<30}"
-
-
-def fmt_cell(passed, failed, skipped, time_ms, stddev,
+def fmt_cell(passed, failed, skipped, time_ms, stddev, time_w, sd_w,
              ref_time_ms=None, slowdown_threshold=10.0):
-    """Format a full cell: | counts time ±stddev."""
-    time_str = f"{fmt_time(time_ms):>8}"
-    sd_str = f"{GRAY}{fmt_stddev(stddev):>8}{RESET}"
+    """Format a full cell with dynamic column widths."""
+    time_str = f"{fmt_val(time_ms):>{time_w}}"
+    sd_raw = f"\u00b1{fmt_val(stddev)}"
+    sd_str = f"{GRAY}{sd_raw:<{sd_w}}{RESET}"
     if ref_time_ms is not None and ref_time_ms > 0:
         if time_ms / ref_time_ms >= slowdown_threshold:
             time_str = f"{RED}{time_str}{RESET}"
@@ -228,9 +208,24 @@ def fmt_cell(passed, failed, skipped, time_ms, stddev,
     return f" | {fmt_counts(passed, failed, skipped)} {time_str} {sd_str}"
 
 
-def fmt_cell_missing():
+def fmt_cell_missing(time_w, sd_w):
     """Format a cell for a missing group."""
-    return f" | {'--':>12} {'--':>8} {'':>8}"
+    return f" | {'--':>12} {'--':>{time_w}} {'':>{sd_w}}"
+
+
+def fmt_counts_header(lang, col_w):
+    """Format the header for a language column with dynamic width."""
+    return f" | {lang.capitalize():<{col_w}}"
+
+
+def compute_col_widths(all_time_vals, all_sd_vals):
+    """Compute the minimum column widths for time and stddev fields.
+    Returns (time_width, sd_width, total_col_width)."""
+    time_w = max((len(fmt_val(v)) for v in all_time_vals), default=4)
+    sd_w = max((len(f"\u00b1{fmt_val(v)}") for v in all_sd_vals), default=5)
+    # total visible: 12 (counts) + 1 (space) + time_w + 1 (space) + sd_w
+    col_w = 12 + 1 + time_w + 1 + sd_w
+    return time_w, sd_w, col_w
 
 
 def latest_run_per_language(runs):
@@ -294,14 +289,51 @@ def cmd_latest(args, runs):
     if args.group:
         top_groups = [g for g in top_groups if args.group in g["path"]]
 
-    # Header
-    lang_cols = "".join(fmt_counts_header(lang) for lang in langs)
+    # Pass 1: collect all time/stddev values per language to compute column widths
+    lang_vals = {lang: {"times": [], "sds": []} for lang in langs}
+    totals = {lang: {"passed": 0, "failed": 0, "skipped": 0, "time": 0.0, "time_sq": []} for lang in langs}
+
+    def collect_values(tg, indent, remaining_depth):
+        path = tg["path"]
+        for lang in langs:
+            g = indexes[lang].get(path)
+            if g is not None:
+                t = g.get("totalTimeMs", 0)
+                sd = g.get("_stddev", 0.0)
+                lang_vals[lang]["times"].append(t)
+                lang_vals[lang]["sds"].append(sd)
+                if indent == 0:
+                    totals[lang]["passed"] += g.get("passed", 0)
+                    totals[lang]["failed"] += g.get("failed", 0)
+                    totals[lang]["skipped"] += g.get("skipped", 0)
+                    totals[lang]["time"] += t
+                    totals[lang]["time_sq"].append((t, sd))
+        if remaining_depth > 1 and "subgroups" in tg:
+            for sg in tg.get("subgroups", []):
+                collect_values(sg, indent + 1, remaining_depth - 1)
+
+    for tg in top_groups:
+        collect_values(tg, 0, args.depth)
+
+    # Add total row values
+    for lang in langs:
+        t = totals[lang]
+        total_sd = math.sqrt(sum(sd * sd for _, sd in t["time_sq"])) if t["time_sq"] else 0.0
+        t["total_sd"] = round1(total_sd)
+        lang_vals[lang]["times"].append(t["time"])
+        lang_vals[lang]["sds"].append(total_sd)
+
+    # Compute per-language column widths
+    col_widths = {}
+    for lang in langs:
+        col_widths[lang] = compute_col_widths(lang_vals[lang]["times"], lang_vals[lang]["sds"])
+
+    # Pass 2: render
+    lang_cols = "".join(fmt_counts_header(lang, col_widths[lang][2]) for lang in langs)
     header = f"{'Group':<40}{lang_cols}"
     print(header)
     sep = "-" * len(header)
     print(sep)
-
-    totals = {lang: {"passed": 0, "failed": 0, "skipped": 0, "time": 0.0, "time_sq": []} for lang in langs}
 
     def print_group(tg, indent, remaining_depth):
         path = tg["path"]
@@ -318,6 +350,7 @@ def cmd_latest(args, runs):
 
         cols = ""
         for lang in langs:
+            tw, sw, _ = col_widths[lang]
             g = indexes[lang].get(path)
             if g is not None:
                 p = g.get("passed", 0)
@@ -325,16 +358,10 @@ def cmd_latest(args, runs):
                 s = g.get("skipped", 0)
                 t = g.get("totalTimeMs", 0)
                 sd = g.get("_stddev", 0.0)
-                if indent == 0:
-                    totals[lang]["passed"] += p
-                    totals[lang]["failed"] += f
-                    totals[lang]["skipped"] += s
-                    totals[lang]["time"] += t
-                    totals[lang]["time_sq"].append((t, sd))
                 rt = ref_time if lang != "haskell" else None
-                cols += fmt_cell(p, f, s, t, sd, rt, args.slowdown)
+                cols += fmt_cell(p, f, s, t, sd, tw, sw, rt, args.slowdown)
             else:
-                cols += fmt_cell_missing()
+                cols += fmt_cell_missing(tw, sw)
         print(f"{short:<40}{cols}")
 
         if remaining_depth > 1 and "subgroups" in tg:
@@ -348,12 +375,11 @@ def cmd_latest(args, runs):
     haskell_total_time = totals.get("haskell", {}).get("time")
     total_cols = ""
     for lang in langs:
+        tw, sw, _ = col_widths[lang]
         t = totals[lang]
         rt = haskell_total_time if lang != "haskell" else None
-        # Propagate stddev for total: sqrt(sum of variances)
-        total_sd = math.sqrt(sum(sd * sd for _, sd in t["time_sq"])) if t["time_sq"] else 0.0
         total_cols += fmt_cell(t['passed'], t['failed'], t['skipped'], t['time'],
-                               round1(total_sd), rt, args.slowdown)
+                               t['total_sd'], tw, sw, rt, args.slowdown)
     print(f"{'TOTAL':<40}{total_cols}")
 
 
@@ -408,7 +434,7 @@ def cmd_compare(args, runs):
                 delta_str = "-"
                 marker = ""
 
-            print(f"{short:<40}  {fmt_time(bt):>10}  {fmt_time(ft):>10}  {delta_str:>8}{marker}")
+            print(f"{short:<40}  {fmt_val(bt):>10}  {fmt_val(ft):>10}  {delta_str:>8}{marker}")
 
         print()
 
@@ -498,7 +524,7 @@ def cmd_history(args, runs):
                     else:
                         delta_str = ""
                     prev_times[lang] = t
-                    line += f"  {fmt_time(t):>10} {delta_str:>7}"
+                    line += f"  {fmt_val(t):>10} {delta_str:>7}"
                 else:
                     line += f"  {'':>10} {'':>7}"
             else:
@@ -573,7 +599,7 @@ def cmd_diff(args, runs):
             if pg is None:
                 pt_str = f"{'--':>10}"
             else:
-                pt_str = fmt_time(pt)
+                pt_str = fmt_val(pt)
             if pt > 0:
                 delta = (ct - pt) / pt * 100
                 delta_str = f"{delta:+.1f}%"
@@ -582,7 +608,7 @@ def cmd_diff(args, runs):
                 delta_str = "-"
                 marker = ""
 
-            print(f"{short:<40}  {pt_str:>10}  {fmt_time(ct):>10}  {delta_str:>8}{marker}")
+            print(f"{short:<40}  {pt_str:>10}  {fmt_val(ct):>10}  {delta_str:>8}{marker}")
 
             if remaining_depth > 1 and "subgroups" in tg:
                 for sg in tg.get("subgroups", []):
@@ -597,7 +623,7 @@ def cmd_diff(args, runs):
             total_delta_str = f"{total_delta:+.1f}%"
         else:
             total_delta_str = "-"
-        print(f"{'TOTAL':<40}  {fmt_time(prev_total):>10}  {fmt_time(curr_total):>10}  {total_delta_str:>8}")
+        print(f"{'TOTAL':<40}  {fmt_val(prev_total):>10}  {fmt_val(curr_total):>10}  {total_delta_str:>8}")
         print()
 
 

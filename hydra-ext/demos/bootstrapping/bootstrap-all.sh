@@ -150,6 +150,34 @@ compare_output() {
     fi
 }
 
+# Extract timing and file count data from a bootstrap log file.
+# Writes to /tmp/bootstrap_{main,test}_{time,files}_{host}_{target}
+parse_bootstrap_log() {
+    local host=$1
+    local target=$2
+    local logfile=$3
+
+    # Extract main generation time (line after "Generated N main ... files.")
+    local main_time
+    main_time=$(grep -A1 "Generated.*main.*files" "$logfile" | grep "Time:" | head -1 | sed 's/.*Time: *//')
+    echo "${main_time:-?}" > "/tmp/bootstrap_main_time_${host}_${target}"
+
+    # Extract test generation time
+    local test_time
+    test_time=$(grep -A1 "Generated.*test.*files" "$logfile" | grep "Time:" | head -1 | sed 's/.*Time: *//')
+    echo "${test_time:-?}" > "/tmp/bootstrap_test_time_${host}_${target}"
+
+    # Extract main file count
+    local main_files
+    main_files=$(grep "Generated.*main.*files" "$logfile" | head -1 | grep -o '[0-9]*' | head -1)
+    echo "${main_files:-0}" > "/tmp/bootstrap_main_files_${host}_${target}"
+
+    # Extract test file count
+    local test_files
+    test_files=$(grep "Generated.*test.*files" "$logfile" | head -1 | grep -o '[0-9]*' | head -1)
+    echo "${test_files:-0}" > "/tmp/bootstrap_test_files_${host}_${target}"
+}
+
 # Run a single bootstrapping path
 run_path() {
     local host=$1
@@ -166,23 +194,29 @@ run_path() {
 
     local exit_code=0
     local demo_dir="$OUTPUT_BASE/${host}-to-${target}"
+    local logfile="/tmp/bootstrap_log_${host}_${target}.txt"
+    set +e
     case "$host" in
         haskell)
-            "$SCRIPT_DIR/bootstrap-to-${target}.sh" $EXTRA_FLAGS 2>&1 || exit_code=$?
+            "$SCRIPT_DIR/bootstrap-to-${target}.sh" $EXTRA_FLAGS 2>&1 | tee "$logfile"
+            exit_code=${PIPESTATUS[0]}
             ;;
         java)
-            "$SCRIPT_DIR/java-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --kernel-only $EXTRA_FLAGS 2>&1 || exit_code=$?
+            "$SCRIPT_DIR/java-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
+            exit_code=${PIPESTATUS[0]}
             if [ $exit_code -eq 0 ]; then
                 "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 || exit_code=$?
             fi
             ;;
         python)
-            "$SCRIPT_DIR/python-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --kernel-only $EXTRA_FLAGS 2>&1 || exit_code=$?
+            "$SCRIPT_DIR/python-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
+            exit_code=${PIPESTATUS[0]}
             if [ $exit_code -eq 0 ]; then
                 "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 || exit_code=$?
             fi
             ;;
     esac
+    set -e
 
     local path_end
     path_end=$(date +%s)
@@ -194,6 +228,7 @@ run_path() {
         echo "FAIL" > "/tmp/bootstrap_result_${host}_${target}"
     else
         echo "  Status: completed"
+        parse_bootstrap_log "$host" "$target" "$logfile"
         compare_output "$host" "$target"
     fi
     echo "  Path time: $(format_time $path_secs)"
@@ -213,59 +248,148 @@ done
 OVERALL_END=$(date +%s)
 OVERALL_SECS=$((OVERALL_END - OVERALL_START))
 
-# Summary table
-echo "=========================================================================="
-echo "  Summary"
-echo "=========================================================================="
-echo ""
+# Summary matrix with box-drawing characters
+#
+# Each cell shows:
+#   Line 1: main gen time (test gen time)
+#   Line 2: main files (test files)
 
-# Header
-printf "  %-12s" ""
-for target in "${TARGET_LIST[@]}"; do
-    printf "%-20s" "→ $target"
-done
-echo ""
-printf "  %-12s" ""
-for target in "${TARGET_LIST[@]}"; do
-    printf "%-20s" "-------------------"
-done
-echo ""
+capitalize() {
+    echo "$1" | sed 's/^./\U&/'
+}
 
-# Rows
+# Pre-compute all cell contents into arrays.
+# Row 0 is the header; rows 1..N are hosts (two lines each: timing, files).
+NUM_COLS=$(( ${#TARGET_LIST[@]} + 1 ))  # +1 for the header column
+
+# Header row
+CELLS_0_0="Host \\ Target"
+for ci in "${!TARGET_LIST[@]}"; do
+    col=$((ci + 1))
+    eval "CELLS_0_${col}=\"$(capitalize "${TARGET_LIST[$ci]}")\""
+done
+
+# Data rows (two lines per host)
 ANY_FAIL=0
+ri=0
 for host in "${HOST_LIST[@]}"; do
-    printf "  %-12s" "$host"
-    for target in "${TARGET_LIST[@]}"; do
+    r1=$((ri * 2 + 1))
+    r2=$((ri * 2 + 2))
+
+    eval "CELLS_${r1}_0=\"$(capitalize "$host")\""
+    eval "CELLS_${r2}_0=\"\""
+
+    for ci in "${!TARGET_LIST[@]}"; do
+        target="${TARGET_LIST[$ci]}"
+        col=$((ci + 1))
+
         result_file="/tmp/bootstrap_result_${host}_${target}"
-        time_file="/tmp/bootstrap_time_${host}_${target}"
         if [ -f "$result_file" ]; then
             result=$(cat "$result_file")
-            t=""
-            if [ -f "$time_file" ]; then
-                t=" ($(format_time $(cat "$time_file")))"
-            fi
-            printf "%-20s" "${result}${t}"
             case "$result" in
-                FAIL*) ANY_FAIL=1 ;;
+                FAIL*)
+                    eval "CELLS_${r1}_${col}=\"FAILED\""
+                    eval "CELLS_${r2}_${col}=\"\""
+                    ANY_FAIL=1
+                    ;;
+                *)
+                    mt=$(cat "/tmp/bootstrap_main_time_${host}_${target}" 2>/dev/null || echo "?")
+                    tt=$(cat "/tmp/bootstrap_test_time_${host}_${target}" 2>/dev/null || echo "?")
+                    mf=$(cat "/tmp/bootstrap_main_files_${host}_${target}" 2>/dev/null || echo "?")
+                    tf=$(cat "/tmp/bootstrap_test_files_${host}_${target}" 2>/dev/null || echo "?")
+                    eval "CELLS_${r1}_${col}=\"$mt ($tt)\""
+                    eval "CELLS_${r2}_${col}=\"${mf} files (${tf} test)\""
+                    ;;
             esac
         else
-            printf "%-20s" "(not run)"
+            eval "CELLS_${r1}_${col}=\"(not run)\""
+            eval "CELLS_${r2}_${col}=\"\""
         fi
     done
-    echo ""
+    ri=$((ri + 1))
 done
 
+TOTAL_ROWS=$((${#HOST_LIST[@]} * 2 + 1))  # header + 2 lines per host
+
+# Compute column widths: max content length + 2 for padding
+COL_WIDTHS=()
+for c in $(seq 0 $((NUM_COLS - 1))); do
+    max_len=0
+    for r in $(seq 0 $((TOTAL_ROWS - 1))); do
+        val=$(eval "echo \"\${CELLS_${r}_${c}}\"")
+        len=${#val}
+        if [ "$len" -gt "$max_len" ]; then
+            max_len=$len
+        fi
+    done
+    COL_WIDTHS+=($((max_len + 2)))
+done
+
+# Draw a horizontal rule with given junction characters
+draw_rule() {
+    local left=$1 mid=$2 right=$3
+    printf "  %s" "$left"
+    for c in $(seq 0 $((NUM_COLS - 1))); do
+        if [ "$c" -gt 0 ]; then
+            printf "%s" "$mid"
+        fi
+        printf "─%.0s" $(seq 1 "${COL_WIDTHS[$c]}")
+    done
+    printf "%s\n" "$right"
+}
+
+# Draw a content row
+draw_row() {
+    local r=$1
+    printf "  │"
+    for c in $(seq 0 $((NUM_COLS - 1))); do
+        val=$(eval "echo \"\${CELLS_${r}_${c}}\"")
+        w=${COL_WIDTHS[$c]}
+        printf " %-$((w - 1))s│" "$val"
+    done
+    printf "\n"
+}
+
 echo ""
-echo "  Total time: $(format_time $OVERALL_SECS)"
-echo "  Output:     $OUTPUT_BASE"
+echo "  Each cell: main gen time (test gen time) / main files (test files)"
 echo ""
-echo "=========================================================================="
+
+# Top border
+draw_rule "┌" "┬" "┐"
+
+# Header row
+draw_row 0
+
+# Header separator
+draw_rule "├" "┼" "┤"
+
+# Data rows
+for hi in $(seq 0 $((${#HOST_LIST[@]} - 1))); do
+    if [ "$hi" -gt 0 ]; then
+        draw_rule "├" "┼" "┤"
+    fi
+    draw_row $((hi * 2 + 1))
+    draw_row $((hi * 2 + 2))
+done
+
+# Bottom border
+draw_rule "└" "┴" "┘"
+
+echo ""
+echo "  Total demo time: $(format_time $OVERALL_SECS)"
+echo "  Output:          $OUTPUT_BASE"
+echo ""
 
 # Clean up temp files
 for host in "${HOST_LIST[@]}"; do
     for target in "${TARGET_LIST[@]}"; do
         rm -f "/tmp/bootstrap_result_${host}_${target}"
         rm -f "/tmp/bootstrap_time_${host}_${target}"
+        rm -f "/tmp/bootstrap_main_time_${host}_${target}"
+        rm -f "/tmp/bootstrap_test_time_${host}_${target}"
+        rm -f "/tmp/bootstrap_main_files_${host}_${target}"
+        rm -f "/tmp/bootstrap_test_files_${host}_${target}"
+        rm -f "/tmp/bootstrap_log_${host}_${target}.txt"
     done
 done
 
