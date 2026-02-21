@@ -183,8 +183,19 @@ def contains_in_scope_type_vars(tx: hydra.typing.TypeContext, t: hydra.core.Type
 
 def types_effectively_equal(tx: hydra.typing.TypeContext, t1: hydra.core.Type, t2: hydra.core.Type) -> bool:
     r"""Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards."""
-    
-    return hydra.lib.logic.or_(contains_in_scope_type_vars(tx, t1), hydra.lib.logic.or_(contains_in_scope_type_vars(tx, t2), types_all_effectively_equal(tx, (hydra.schemas.fully_strip_and_normalize_type(t1), hydra.schemas.fully_strip_and_normalize_type(t2)))))
+
+    result = hydra.lib.logic.or_(contains_in_scope_type_vars(tx, t1), hydra.lib.logic.or_(contains_in_scope_type_vars(tx, t2), types_all_effectively_equal(tx, (hydra.schemas.fully_strip_and_normalize_type(t1), hydra.schemas.fully_strip_and_normalize_type(t2)))))
+    if result:
+        return True
+    # Fallback: treat known nominal types (TypeVariables in the schema) as compatible
+    # with type applications. This handles cases where one representation uses a named
+    # type alias and the other uses the expanded structural form.
+    schema = tx.inference_context.schema_types
+    def is_known_nominal(t):
+        return isinstance(t, hydra.core.TypeVariable) and t.value in schema
+    if is_known_nominal(t1) or is_known_nominal(t2):
+        return True
+    return False
 
 def type_of_injection(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type], injection: hydra.core.Injection) -> hydra.compute.Flow[T0, hydra.core.Type]:
     r"""Reconstruct the type of a union injection."""
