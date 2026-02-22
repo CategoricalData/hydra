@@ -76,7 +76,7 @@ This section links to every major document in the project with a brief descripti
 | Document | Path | Description |
 |----------|------|-------------|
 | Hydra lexicon | [docs/hydra-lexicon.txt](../hydra-lexicon.txt) | **The single most important LLM reference.** Complete listing of all kernel types, terms, and ~180+ primitive function signatures. Auto-generated from the kernel graph |
-| LLM prompts | [docs/prompts.txt](../prompts.txt) | Two ready-to-use LLM prompts: (1) promoting raw Haskell to DSL, (2) fully qualifying Haskell imports. Include context files listed in each prompt |
+| Promoting code | [promoting-code.md](recipes/promoting-code.md) | Detailed guide for converting raw Haskell to Hydra DSL modules. DSL translation reference, tips, checklist |
 | Documentation style guide | [docs/src/documentation-style-guide.md](documentation-style-guide.md) | Writing conventions for Hydra docs: sentence case headings, 120 char line length, active voice, backtick formatting rules, file naming |
 | GitHub Pages index | [docs/index.html](../index.html) | HTML landing page for https://categoricaldata.github.io/hydra/ |
 
@@ -358,8 +358,7 @@ import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
 
 ### Promoting code (raw Haskell -> DSL)
 
-This is a frequent task. See [promoting-code.md](recipes/promoting-code.md) and
-[docs/prompts.txt](../prompts.txt) for ready-made prompts. Key points:
+This is a frequent task. See [promoting-code.md](recipes/promoting-code.md) for a detailed guide. Key points:
 
 - Only pure code can be promoted (no I/O).
 - Use `<~` for let bindings, `match` for pattern matching, `project` for field access.
@@ -521,7 +520,7 @@ When starting a new session, consider:
 1. Check `git status` and recent commits for context on what's being worked on.
 2. If the task involves the kernel DSL, read the Hydra lexicon
    (`docs/hydra-lexicon.txt`) for the complete API surface.
-3. If promoting code, read `docs/prompts.txt` for the standard LLM prompts.
+3. If promoting code, read [promoting-code.md](recipes/promoting-code.md).
 4. If modifying kernel types/terms, read
    [extending-hydra-core.md](recipes/extending-hydra-core.md).
 5. If adding primitives, read [adding-primitives.md](recipes/adding-primitives.md).

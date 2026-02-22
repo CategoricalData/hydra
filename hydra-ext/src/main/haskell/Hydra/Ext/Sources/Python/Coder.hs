@@ -1527,7 +1527,9 @@ encodeBindingAs = def "encodeBindingAs" $
                 produce $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw")))
               (var "mcs"))
           -- Has lambda params: this is a hoisted binding
-          -- Encode as: def fname(lambdaParams..., matchArg): match matchArg: ...
+          -- The last lambda param is the case expression's own parameter (match subject).
+          -- Any preceding lambda params are captured variables from outer scopes.
+          -- Encode as: def fname(capturedParams..., matchParam): match matchParam: ...
           -- Extract components from the nested tuple: (tname, (dflt, (cases, arg)))
           ("tname" <~ (Pairs.first $ var "csa") $
             "rest1" <~ (Pairs.second $ var "csa") $
@@ -1537,16 +1539,20 @@ encodeBindingAs = def "encodeBindingAs" $
             "rt" <<~ (inGraphContext @@ (Schemas.requireUnionType @@ var "tname")) $
             "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
-            -- Create parameters for captured variables
+            -- Separate captured variables (all but last) from the match parameter (last).
+            -- The last lambda parameter is the case expression's own parameter.
+            "capturedVarNames" <~ (Lists.init $ var "lambdaParams") $
+            "matchLambdaParam" <~ (Lists.last $ var "lambdaParams") $
+            -- Create parameters for captured variables only
             "capturedParams" <~ (Lists.map
               ("n" ~> Phantoms.record Py._ParamNoDefault [
                 Phantoms.field Py._ParamNoDefault_param (PyDsl.param
                   (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "n")
                   nothing),
                 Phantoms.field Py._ParamNoDefault_typeComment nothing])
-              (var "lambdaParams")) $
-            -- Create the match argument parameter
-            "matchArgName" <~ (PyDsl.name $ string "x") $
+              (var "capturedVarNames")) $
+            -- Create the match argument parameter using the case lambda's parameter name
+            "matchArgName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "matchLambdaParam") $
             "matchParam" <~ (Phantoms.record Py._ParamNoDefault [
               Phantoms.field Py._ParamNoDefault_param (PyDsl.param (var "matchArgName") nothing),
               Phantoms.field Py._ParamNoDefault_typeComment nothing]) $
@@ -1646,7 +1652,18 @@ termArityWithPrimitives = def "termArityWithPrimitives" $
           (termArityWithPrimitives @@ var "graph" @@ (Core.applicationFunction $ var "app"))
           (Phantoms.int 1)),
       _Term_function>>: "f" ~>
-        functionArityWithPrimitives @@ var "graph" @@ var "f"]
+        functionArityWithPrimitives @@ var "graph" @@ var "f",
+      -- Look up variables in the graph to compute arity from the binding's type scheme or term.
+      -- This is important for hoisted case statement bindings which are local functions.
+      _Term_variable>>: "name" ~>
+        optCases (Lexical.lookupElement @@ var "graph" @@ var "name")
+          (Phantoms.int 0)
+          ("el" ~> optCases (Core.bindingType $ var "el")
+            -- No type scheme: compute arity from the binding's term structure.
+            -- Use Arity.termArity to avoid infinite recursion on self-referencing bindings.
+            (Arity.termArity @@ (Core.bindingTerm $ var "el"))
+            -- Has type scheme: use the type scheme's arity
+            ("ts" ~> Arity.typeSchemeArity @@ var "ts"))]
 
 -- | Calculate the arity of a function, with proper handling of primitives.
 functionArityWithPrimitives :: TBinding (Graph -> Function -> Int)

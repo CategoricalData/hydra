@@ -99,6 +99,15 @@ for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java; do
     fi
 done
 
+# Copy all ext modules from baseline if not generated (needed for tests in kernel-only mode)
+echo "  Copying ext modules from baseline (if missing)..."
+JAVA_GEN="$OUTPUT_DIR/src/gen-main/java"
+JAVA_BASELINE="$HYDRA_JAVA_DIR/src/gen-main/java"
+if [ ! -d "$JAVA_GEN/hydra/ext" ] && [ -d "$JAVA_BASELINE/hydra/ext" ]; then
+    cp -r "$JAVA_BASELINE/hydra/ext" "$JAVA_GEN/hydra/"
+    echo "    Copied hydra/ext from baseline"
+fi
+
 # Summary
 MAIN_COUNT=$(find "$OUTPUT_DIR/src/gen-main" -name "*.java" 2>/dev/null | wc -l | tr -d ' ')
 TEST_COUNT=$(find "$OUTPUT_DIR/src/gen-test" -name "*.java" 2>/dev/null | wc -l | tr -d ' ')

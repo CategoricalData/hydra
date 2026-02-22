@@ -7708,7 +7708,7 @@
                                       "argument": {"literal": {"string": "\\x00"}},
                                       "function": {
                                         "application": {
-                                          "argument": {"literal": {"string": " "}},
+                                          "argument": {"literal": {"string": "\u0000"}},
                                           "function": {"variable": "replace"}}}}}}},
                               "type": [
                                 {

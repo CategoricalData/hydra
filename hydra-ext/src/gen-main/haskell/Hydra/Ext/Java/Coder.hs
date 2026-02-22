@@ -1874,16 +1874,7 @@ functionCall env isPrim name args typeApps =
   let aliases = (Helpers.javaEnvironmentAliases env)
   in  
     let isLambdaBound = (isLambdaBoundIn name (Helpers.aliasesLambdaVars aliases))
-    in (Logic.ifElse (Logic.and isPrim (Logic.and (Lists.null args) (Logic.not isLambdaBound))) ( 
-      let classWithApply = (Syntax.unIdentifier (elementJavaIdentifier True False aliases name))
-      in  
-        let suffix = (Strings.cat2 "." Names.applyMethodName)
-        in  
-          let className = (Strings.fromList (Lists.take (Math.sub (Strings.length classWithApply) (Strings.length suffix)) (Strings.toList classWithApply)))
-          in (Flows.pure (Utils_.javaIdentifierToJavaExpression (Syntax.Identifier (Strings.cat [
-            className,
-            "::",
-            Names.applyMethodName]))))) (Flows.bind (Flows.mapList (\arg -> encodeTerm env arg) args) (\jargs0 ->  
+    in (Flows.bind (Flows.mapList (\arg -> encodeTerm env arg) args) (\jargs0 ->  
       let wrapResult = (wrapLazyArguments name jargs0)
       in  
         let jargs = (Pairs.first wrapResult)
@@ -1915,7 +1906,7 @@ functionCall env isPrim name args typeApps =
                       let methodId = (Logic.ifElse isPrim (overrideMethodName (Syntax.Identifier (Strings.cat2 (Syntax.unIdentifier (Utils_.nameToJavaName aliases (Names_.unqualifyName (Module.QualifiedName {
                               Module.qualifiedNameNamespace = (Just ns_),
                               Module.qualifiedNameLocal = (Formatting.capitalize localName)})))) (Strings.cat2 "." Names.applyMethodName)))) (Syntax.Identifier (Utils_.sanitizeJavaName localName)))
-                      in (Flows.bind (Flows.mapList (\t -> Flows.bind (encodeType aliases Sets.empty t) (\jt -> Flows.bind (Utils_.javaTypeToJavaReferenceType jt) (\rt -> Flows.pure (Syntax.TypeArgumentReference rt)))) typeApps) (\jTypeArgs -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs jargs)))))))))))))
+                      in (Flows.bind (Flows.mapList (\t -> Flows.bind (encodeType aliases Sets.empty t) (\jt -> Flows.bind (Utils_.javaTypeToJavaReferenceType jt) (\rt -> Flows.pure (Syntax.TypeArgumentReference rt)))) typeApps) (\jTypeArgs -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs jargs))))))))))))
 
 buildCurriedLambda :: ([Core.Name] -> Syntax.Expression -> Syntax.Expression)
 buildCurriedLambda params inner = (Lists.foldl (\acc -> \p -> Utils_.javaLambda p acc) inner (Lists.reverse params))

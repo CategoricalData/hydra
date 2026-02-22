@@ -68,6 +68,16 @@ if [ -d "$HYDRA_PYTHON_DIR/src/gen-main/python/hydra/sources" ]; then
     find "$OUTPUT_DIR/src/gen-main/python/hydra/sources" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 fi
 
+# Copy all ext modules from baseline if not generated (needed for tests in kernel-only mode)
+echo "  Copying ext modules from baseline (if missing)..."
+PY_GEN="$OUTPUT_DIR/src/gen-main/python/hydra"
+PY_BASELINE="$HYDRA_PYTHON_DIR/src/gen-main/python/hydra"
+if [ ! -d "$PY_GEN/ext" ] && [ -d "$PY_BASELINE/ext" ]; then
+    cp -r "$PY_BASELINE/ext" "$PY_GEN/"
+    find "$PY_GEN/ext" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+    echo "    Copied hydra/ext from baseline"
+fi
+
 # Test infrastructure
 echo "  Copying test infrastructure..."
 mkdir -p "$OUTPUT_DIR/src/test/python"

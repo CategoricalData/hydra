@@ -105,8 +105,8 @@ modulesToGraph bsGraph universeModules modules =
             in (Lexical.elementsToGraph bsGraph (Just schemaGraph) dataElements)
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs.
-generateSourceFiles :: Ord t0 => ((Module__.Module -> [Module__.Definition] -> Compute.Flow Graph.Graph (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Compute.Flow Graph.Graph [(t0, t1)])
-generateSourceFiles printDefinitions lang doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modsToGenerate =  
+generateSourceFiles :: Ord t0 => ((Module__.Module -> [Module__.Definition] -> Compute.Flow Graph.Graph (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Compute.Flow Graph.Graph [(t0, t1)])
+generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modsToGenerate =  
   let namespaceMap = (Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules modsToGenerate)))
   in  
     let constraints = (Coders.languageConstraints lang)
@@ -140,7 +140,7 @@ generateSourceFiles printDefinitions lang doExpand doHoistCaseStatements doHoist
                                 let defs = (Pairs.second p)
                                 in (Monads.withTrace (Strings.cat2 "type module " (Module__.unNamespace (Module__.moduleNamespace mod))) (Flows.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Module__.DefinitionType d) defs))))) (Lists.zip typeModulesToGenerate defLists))))))))) (\schemaFiles -> Flows.bind (Logic.ifElse (Lists.null termModulesToGenerate) (Flows.pure []) (Monads.withTrace "generate term modules" ( 
                           let namespaces = (Lists.map (\m -> Module__.moduleNamespace m) termModulesToGenerate)
-                          in (Flows.bind (Simple.dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataGraph namespaces) (\dataResult ->  
+                          in (Flows.bind (Simple.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataGraph namespaces) (\dataResult ->  
                             let g1 = (Pairs.first dataResult)
                             in  
                               let defLists = (Pairs.second dataResult)

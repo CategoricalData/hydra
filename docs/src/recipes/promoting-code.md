@@ -413,13 +413,22 @@ Eithers.mapList ("x" ~> ...) (var "xs")
 For code using the `Flow` monad (Hydra's effect system):
 
 ```haskell
--- Raw: pure x
--- Promoted:
+-- Raw: pure x / return x
+-- Promoted (either works):
 Flows.pure (var "x")
+produce (var "x")
 
 -- Raw: flow >>= f
 -- Promoted:
 Flows.bind (var "flow") ("x" ~> ...)
+-- Or using the bind operator:
+"x" <<~ var "flow" $
+...
+
+-- Raw: flow >> next (sequencing without binding)
+-- Promoted:
+exec (var "flow") $
+...
 
 -- Raw: fmap f flow
 -- Promoted:

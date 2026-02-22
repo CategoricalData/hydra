@@ -36,63 +36,12 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
--- | Pure core of code generation. Delegated to the generated Hydra.CodeGeneration module.
-generateSourceFiles
-  :: (Module -> [Definition] -> Flow Graph (M.Map FilePath String))
-  -> Language -> Bool -> Bool -> Bool
-  -> Graph -> [Module] -> [Module]
-  -> Flow Graph [(FilePath, String)]
-generateSourceFiles = Generated.generateSourceFiles
-
--- Original staging code (preserved as reference):
--- generateSourceFiles printDefinitions lang doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modulesToGenerate = do
---     schemaFiles <- generateTypeModules
---     termFiles <- generateTermModules
---     return $ schemaFiles ++ termFiles
---   where
---     namespaceMap = M.fromList [(moduleNamespace m, m) | m <- universeModules ++ modulesToGenerate]
---     schemaMods = moduleTypeDependenciesTransitive namespaceMap modulesToGenerate
---     schemaElements = L.filter isNativeType $ L.concat (moduleElements <$> (schemaMods ++ typeModulesToGenerate))
---     dataMods = moduleTermDependenciesTransitive namespaceMap modulesToGenerate
---     dataElements = L.concat (moduleElements <$> dataMods)
---     schemaGraph = elementsToGraph bsGraph Nothing schemaElements
---     dataGraph = elementsToGraph bsGraph (Just schemaGraph) dataElements
---     constraints = languageConstraints lang
---     isTypeModule mod = not $ L.null $ L.filter isNativeType $ moduleElements mod
---     (typeModulesToGenerate, termModulesToGenerate) = L.partition isTypeModule modulesToGenerate
---     generateTypeModules = withTrace "generate type modules" $ do
---         if L.null typeModulesToGenerate
---           then return []
---           else do
---             let nameLists = fmap (fmap bindingName . L.filter isNativeType . moduleElements) typeModulesToGenerate
---             (tmap, defLists) <- schemaGraphToDefinitions constraints schemaGraph nameLists
---             withState schemaGraph $ do
---               maps <- CM.zipWithM forEachModule typeModulesToGenerate defLists
---               return $ L.concat (M.toList <$> maps)
---       where
---         forEachModule m defs = withTrace ("type module " ++ unNamespace (moduleNamespace m)) $
---           printDefinitions m (fmap DefinitionType defs)
---     generateTermModules = do
---         if L.null termModulesToGenerate
---           then pure []
---           else withTrace "generate term modules" $ do
---             let namespaces = fmap moduleNamespace termModulesToGenerate
---             (g1, defLists) <- dataGraphToDefinitions constraints doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataGraph namespaces
---             withState g1 $ do
---               let refreshedMods = refreshModule (graphElements g1) <$> termModulesToGenerate
---               maps <- CM.zipWithM forEachModule refreshedMods defLists
---               return $ L.concat (M.toList <$> maps)
---       where
---         forEachModule m defs = withTrace ("term module " ++ unNamespace (moduleNamespace m)) $
---           printDefinitions m (fmap DefinitionTerm defs)
---         refreshModule els m = m {
---           moduleElements = Y.catMaybes ((\e -> L.find (\b -> bindingName b == bindingName e) els) <$> moduleElements m)}
-
 -- | Generate source files and write them to disk.
 -- This is a thin I/O wrapper around 'generateSourceFiles'.
 generateSources
   :: (Module -> [Definition] -> Flow Graph (M.Map FilePath String))
   -> Language
+  -> Bool  -- ^ doInfer
   -> Bool  -- ^ doExpand
   -> Bool  -- ^ doHoistCaseStatements
   -> Bool  -- ^ doHoistPolymorphicLetBindings
@@ -100,9 +49,9 @@ generateSources
   -> [Module]  -- ^ Universe
   -> [Module]  -- ^ Modules to generate
   -> IO ()
-generateSources printDefinitions lang doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
+generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
     mfiles <- runFlow bootstrapGraph $
-      generateSourceFiles printDefinitions lang doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate
+      Generated.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate
     case mfiles of
       Nothing -> fail "Failed to generate source files"
       Just files -> mapM_ writePair files
@@ -114,44 +63,10 @@ generateSources printDefinitions lang doExpand doHoistCaseStatements doHoistPoly
       where
         withNewline = if L.isSuffixOf "\n" s then s else s ++ "\n"
 
--- | Delegated to Generated.moduleTermDepsTransitive
-moduleTermDependenciesTransitive :: M.Map Namespace Module -> [Module] -> [Module]
-moduleTermDependenciesTransitive = Generated.moduleTermDepsTransitive
-
--- Original staging code (preserved as reference):
--- moduleTermDependenciesTransitive mapping modules = Y.catMaybes $ fmap (\n -> M.lookup n mapping) $ S.toList $ S.union
---   (transitiveClosure moduleTermDependencies mapping modules)
---   (S.fromList $ moduleNamespace <$> modules)
-
--- | Delegated to Generated.moduleTypeDepsTransitive
-moduleTypeDependenciesTransitive :: M.Map Namespace Module -> [Module] -> [Module]
-moduleTypeDependenciesTransitive = Generated.moduleTypeDepsTransitive
-
--- Original staging code (preserved as reference):
--- moduleTypeDependenciesTransitive mapping modules = Y.catMaybes $ fmap (\n -> M.lookup n mapping) typeNamespaces
---   where
---     termMods = moduleTermDependenciesTransitive mapping modules
---     typeNamespaces = S.toList $ transitiveClosure moduleTypeDependencies mapping termMods
-
--- | Build a graph from a list of modules, using an explicit bootstrap graph.
--- Delegated to Generated.modulesToGraph.
-modulesToGraphWith :: Graph -> [Module] -> [Module] -> Graph
-modulesToGraphWith = Generated.modulesToGraph
-
--- Original staging code (preserved as reference):
--- modulesToGraphWith bsGraph universeModules modules = elementsToGraph bsGraph (Just schemaGraph) dataElements
---   where
---     universe = M.fromList [(moduleNamespace m, m) | m <- universeModules ++ modules]
---     schemaModules = moduleTypeDependenciesTransitive universe modules
---     dataModules = moduleTermDependenciesTransitive universe modules
---     schemaElements = L.filter isNativeType $ L.concat (moduleElements <$> (schemaModules ++ modules))
---     dataElements = L.filter (not . isNativeType) $ L.concat (moduleElements <$> dataModules)
---     schemaGraph = elementsToGraph bsGraph Nothing schemaElements
-
 -- | Build a graph from a list of modules using the Haskell bootstrapGraph.
 -- Thin wrapper around modulesToGraphWith.
 modulesToGraph :: [Module] -> [Module] -> Graph
-modulesToGraph = modulesToGraphWith bootstrapGraph
+modulesToGraph = Generated.modulesToGraph bootstrapGraph
 
 printTrace :: Bool -> Trace -> IO ()
 printTrace isError t = do
@@ -166,30 +81,12 @@ runFlow s f = do
   where
     FlowState v _ t = unFlow f s emptyTrace
 
--- | Delegated to Generated.transitiveDeps
-transitiveClosure :: (Module -> [Namespace]) -> M.Map Namespace Module -> [Module] -> S.Set Namespace
-transitiveClosure = Generated.transitiveDeps
-
--- Original staging code (preserved as reference):
--- transitiveClosure getDeps namespaceMap startMods = go initialDeps S.empty
---   where
---     initialDeps = S.fromList $ concat
---       [L.filter (/= moduleNamespace m) (getDeps m) | m <- startMods]
---     go pending visited
---       | S.null pending = visited
---       | otherwise =
---           let newVisited = S.union visited pending
---               nextDeps = S.fromList $ concat
---                 [getDeps m | ns <- S.toList pending, Just m <- [M.lookup ns namespaceMap]]
---               newPending = S.difference nextDeps newVisited
---           in go newPending newVisited
-
 -- | Generate Haskell source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeHaskell :: FilePath -> [Module] -> [Module] -> IO ()
-writeHaskell = generateSources moduleToHaskell haskellLanguage False False False
+writeHaskell = generateSources moduleToHaskell haskellLanguage True False False False
 
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
@@ -239,7 +136,7 @@ writeYaml basePath universeModules modulesToGenerate = do
                 namespaces = fmap moduleNamespace dataModules
             -- Infer types on the data graph before adaptation (eta expansion requires types)
             g0' <- inferGraphTypes g0
-            (g1, defLists) <- dataGraphToDefinitions constraints True False False g0' namespaces
+            (g1, defLists) <- dataGraphToDefinitions constraints True True False False g0' namespaces
             withState g1 $ do
               maps <- CM.zipWithM forEachModule dataModules defLists
               return $ L.concat (M.toList <$> maps)
@@ -251,62 +148,6 @@ writeYaml basePath universeModules modulesToGenerate = do
       let fullPath = basePath FP.</> path
       SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
       writeFile fullPath contents
-
--- | Generate the lexicon content from a graph. Delegated to Generated.generateLexicon.
-generateLexicon :: Graph -> Flow Graph String
-generateLexicon = Generated.generateLexicon
-
--- Original staging code (preserved as reference):
--- generateLexicon graph = do
---   let bindings = graphElements graph
---       primitives = M.elems $ graphPrimitives graph
---       (typeBindings, termBindings) = L.partition isNativeType bindings
---       sortedPrimitives = L.sortBy comparePrimitiveNames primitives
---       sortedTypes = L.sortBy compareBindingNames typeBindings
---       sortedTerms = L.sortBy compareBindingNames termBindings
---   typeLines <- CM.mapM formatTypeBinding sortedTypes
---   let termLines = fmap formatTermBinding sortedTerms
---       primitiveLines = fmap formatPrimitive sortedPrimitives
---   return $ "Primitives:\n" ++ unlines primitiveLines ++
---     "\nTypes:\n" ++ unlines typeLines ++
---     "\nTerms:\n" ++ unlines termLines
---   where
---     compareBindingNames a b = compare (bindingName a) (bindingName b)
---     comparePrimitiveNames a b = compare (primitiveName a) (primitiveName b)
-
--- | Format a type binding for the lexicon. Delegated to Generated.formatTypeBinding.
-formatTypeBinding :: Binding -> Flow Graph String
-formatTypeBinding = Generated.formatTypeBinding
-
--- Original staging code (preserved as reference):
--- formatTypeBinding binding = do
---   g <- Monads.getState
---   typ <- Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g (bindingTerm binding)
---   return $ "  " ++ unName (bindingName binding) ++ " = " ++ ShowCore.type_ typ
-
--- | Format a term binding for the lexicon. Delegated to Generated.formatTermBinding.
-formatTermBinding :: Binding -> String
-formatTermBinding = Generated.formatTermBinding
-
--- Original staging code (preserved as reference):
--- formatTermBinding binding =
---   let name = unName $ bindingName binding
---       typeStr = Y.maybe "?" ShowCore.typeScheme (bindingType binding)
---   in "  " ++ name ++ " : " ++ typeStr
-
--- | Format a primitive for the lexicon. Delegated to Generated.formatPrimitive.
-formatPrimitive :: Primitive -> String
-formatPrimitive = Generated.formatPrimitive
-
--- Original staging code (preserved as reference):
--- formatPrimitive prim =
---   let name = unName $ primitiveName prim
---       typeStr = ShowCore.typeScheme (primitiveType prim)
---   in "  " ++ name ++ " : " ++ typeStr
-
--- | Perform type inference and generate the lexicon. Delegated to Generated.inferAndGenerateLexicon.
-inferAndGenerateLexicon :: Graph -> [Module] -> Flow Graph String
-inferAndGenerateLexicon = Generated.inferAndGenerateLexicon
 
 -- | Generate and write the lexicon file (IO wrapper).
 writeLexicon :: FilePath -> IO ()
@@ -323,41 +164,7 @@ writeLexicon path = do
 writeLexiconToStandardPath :: IO ()
 writeLexiconToStandardPath = writeLexicon "../docs/hydra-lexicon.txt"
 
-
--- | Convert a generated Module into a Source module. Delegated to Generated.moduleToSourceModule.
-moduleToSourceModule :: Module -> Module
-moduleToSourceModule = Generated.moduleToSourceModule
-
--- Original staging code (preserved as reference):
--- moduleToSourceModule m = Module {
---     moduleNamespace = sourceNamespace,
---     moduleElements = [moduleBinding],
---     moduleTermDependencies = [ModuleTypes.ns],
---     moduleTypeDependencies = [ModuleTypes.ns],
---     moduleDescription = Just $ "Source module for " ++ unNamespace (moduleNamespace m)
---   }
---   where
---     sourceNamespace = Namespace $ "hydra.sources." ++
---       L.intercalate "." (drop 1 $ LS.splitOn "." $ unNamespace $ moduleNamespace m)
---     moduleBinding = Binding {
---       bindingName = Name $ unNamespace sourceNamespace ++ ".module_",
---       bindingTerm = EncodeModule.module_ m,
---       bindingType = Nothing
---     }
-
 ----------------------------------------
-
--- | Pure Flow-based coder module generation. Delegated to Generated.generateCoderModules.
-generateCoderModules :: (Module -> Flow Graph (Maybe Module)) -> Graph -> [Module] -> [Module] -> Flow Graph [Module]
-generateCoderModules = Generated.generateCoderModules
-
--- Original staging code (preserved as reference):
--- generateCoderModules codec bsGraph universeModules typeModules =
---     let graph = modulesToGraph bsGraph universeModules universeModules
---     in case graphSchema graph of
---       Nothing -> Flows.fail "No schema graph available"
---       Just schemaGraph -> Monads.withState schemaGraph $
---         fmap catMaybes $ CM.mapM codec typeModules
 
 -- | IO wrapper for generateCoderModules. Evaluates the Flow and handles errors.
 generateCoderModulesIO :: (Module -> Flow Graph (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
@@ -384,7 +191,7 @@ generateEncoderModules = generateCoderModulesIO Encoding.encodeModule "encoder"
 generateCoderSourceModules :: ([Module] -> [Module] -> IO [Module]) -> [Module] -> [Module] -> IO [Module]
 generateCoderSourceModules generate universeModules typeModules = do
   sourceMods <- generate universeModules typeModules
-  return $ fmap moduleToSourceModule sourceMods
+  return $ fmap Generated.moduleToSourceModule sourceMods
 
 generateDecoderSourceModules :: [Module] -> [Module] -> IO [Module]
 generateDecoderSourceModules = generateCoderSourceModules generateDecoderModules
@@ -438,23 +245,6 @@ writeEncoderHaskell = writeCoderHaskell generateEncoderModules
 -- Module Inference
 ----------------------------------------
 
--- | Pure Flow-based type inference on modules. Delegated to Generated.inferModules.
-inferModules :: Graph -> [Module] -> [Module] -> Flow Graph [Module]
-inferModules = Generated.inferModules
-
--- Original staging code (preserved as reference):
--- inferModules bsGraph universeMods targetMods = do
---   let g0 = modulesToGraph universeMods universeMods
---   g1 <- Inference.inferGraphTypes g0
---   let inferredElements = graphElements g1
---       isTypeModule mod = all isNativeType (moduleElements mod)
---       refreshModule m
---         | isTypeModule m = m
---         | otherwise = m { moduleElements = catMaybes
---             ((\e -> find (\b -> bindingName b == bindingName e) inferredElements)
---               <$> moduleElements m) }
---   return $ fmap refreshModule targetMods
-
 -- | IO wrapper for inferModules. Evaluates the Flow and handles errors.
 inferModulesIO :: [Module] -> [Module] -> IO [Module]
 inferModulesIO universeMods targetMods = do
@@ -468,25 +258,14 @@ inferModulesIO universeMods targetMods = do
 -- JSON Module Export
 ----------------------------------------
 
--- | Convert a Module to a JSON string. Delegated to Generated.moduleToJson.
-moduleToJson :: Module -> Either String String
-moduleToJson = Generated.moduleToJson
-
--- Original staging code (preserved as reference):
--- moduleToJson mod =
---     let term = EncodeModule.module_ mod
---     in case JsonEncode.toJson term of
---       Left err -> Left err
---       Right json -> Right $ JsonWriter.printJson json
-
 -- | Write a single module to a JSON file.
 -- The file path is derived from the module namespace.
 writeModuleJson :: FilePath -> Module -> IO ()
 writeModuleJson basePath mod = do
-    case moduleToJson mod of
+    case Generated.moduleToJson mod of
       Left err -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod) ++ ": " ++ err
       Right jsonStr -> do
-        let filePath = basePath FP.</> namespaceToPath (moduleNamespace mod) ++ ".json"
+        let filePath = basePath FP.</> Generated.namespaceToPath (moduleNamespace mod) ++ ".json"
         SD.createDirectoryIfMissing True $ FP.takeDirectory filePath
         writeFile filePath (jsonStr ++ "\n")
         putStrLn $ "Wrote: " ++ filePath
@@ -500,14 +279,6 @@ writeModulesJson :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
 writeModulesJson doInfer basePath universeMods mods = do
   mods' <- if doInfer then inferModulesIO universeMods mods else return mods
   mapM_ (writeModuleJson basePath) mods'
-
--- | Convert a namespace to a file path (e.g., "hydra.monads" -> "hydra/monads").
--- Delegated to Generated.namespaceToPath.
-namespaceToPath :: Namespace -> FilePath
-namespaceToPath = Generated.namespaceToPath
-
--- Original staging code (preserved as reference):
--- namespaceToPath ns = L.intercalate "/" $ LS.splitOn "." $ unNamespace ns
 
 ----------------------------------------
 -- JSON Module Import
@@ -540,63 +311,6 @@ escapeControlCharsInJson :: BS.ByteString -> BS.ByteString
 escapeControlCharsInJson input =
   BS.pack $ fmap fromIntegral $ Generated.escapeControlCharsInJson $ fmap fromIntegral $ BS.unpack input
 
--- Original staging code (preserved as reference):
--- escapeControlCharsInJson input = BS.pack $ go False False (BS.unpack input)
---   where
---     go _ _ [] = []
---     go inStr esc (b:bs)
---       | esc = b : go inStr False bs
---       | b == 0x5C && inStr = b : go inStr True bs
---       | b == 0x22 = b : go (not inStr) False bs
---       | inStr && b < 0x20 = escapeToUnicode b ++ go inStr False bs
---       | otherwise = b : go inStr False bs
---     escapeToUnicode b =
---       [0x5C, 0x75, 0x30, 0x30, hexDigit (b `div` 16), hexDigit (b `mod` 16)]
---     hexDigit n
---       | n < 10 = 0x30 + n
---       | otherwise = 0x61 + n - 10
-
--- | Build a schema map (Name -> Type) from a graph's schema. Delegated to Generated.buildSchemaMap.
-buildSchemaMap :: Graph -> M.Map Name Type
-buildSchemaMap = Generated.buildSchemaMap
-
--- Original staging code (preserved as reference):
--- buildSchemaMap g = case graphSchema g of
---   Nothing -> M.empty
---   Just schemaGraph -> M.fromList $ Y.catMaybes $ fmap (extractType schemaGraph) $ graphElements schemaGraph
---   where
---     extractType sg binding = case DecodeCore.type_ sg (bindingTerm binding) of
---       Right typ -> Just (bindingName binding, Rewriting.deannotateType typ)
---       Left _ -> Nothing
-
--- | Strip TypeSchemes from term bindings in a module, preserving type binding TypeSchemes.
--- Delegated to Generated.stripModuleTypeSchemes.
-stripModuleTypeSchemes :: Module -> Module
-stripModuleTypeSchemes = Generated.stripModuleTypeSchemes
-
--- Original staging code (preserved as reference):
--- stripModuleTypeSchemes m = m { moduleElements = fmap stripIfTerm (moduleElements m) }
---   where
---     stripIfTerm b
---       | isNativeType b = b  -- Preserve TypeSchemes on type bindings
---       | otherwise = b { bindingType = Nothing }
-
--- | Decode a single module from a JSON value. Delegated to Generated.decodeModuleFromJson.
-decodeModuleFromJson :: Graph -> [Module] -> Bool -> Json.Value -> Either String Module
-decodeModuleFromJson = Generated.decodeModuleFromJson
-
--- Original staging code (preserved as reference):
--- decodeModuleFromJson bsGraph universeModules doStripTypeSchemes jsonVal =
---   let graph = modulesToGraph bsGraph universeModules universeModules
---       schemaMap = buildSchemaMap graph
---       modType = TypeVariable _Module
---       postProcess = if doStripTypeSchemes then stripModuleTypeSchemes else id
---   in case JsonDecode.fromJson schemaMap modType jsonVal of
---     Left err -> Left err
---     Right term -> case DecodeModule.module_ graph term of
---       Left (DecodingError err) -> Left (unDecodingError (DecodingError err))
---       Right mod -> Right (postProcess mod)
-
 -- | Load modules from JSON files.
 -- Takes a base path and a list of namespaces to load.
 -- The universeModules are used to build the graph for type resolution.
@@ -608,11 +322,11 @@ decodeModuleFromJson = Generated.decodeModuleFromJson
 loadModulesFromJson :: Bool -> FilePath -> [Module] -> [Namespace] -> IO [Module]
 loadModulesFromJson doStripTypeSchemes basePath universeModules namespaces = do
   CM.forM namespaces $ \ns -> do
-    let filePath = basePath FP.</> namespaceToPath ns ++ ".json"
+    let filePath = basePath FP.</> Generated.namespaceToPath ns ++ ".json"
     parseResult <- parseJsonFile filePath
     case parseResult of
       Left err -> fail $ "JSON parse error for " ++ unNamespace ns ++ ": " ++ err
-      Right jsonVal -> case decodeModuleFromJson bootstrapGraph universeModules doStripTypeSchemes jsonVal of
+      Right jsonVal -> case Generated.decodeModuleFromJson bootstrapGraph universeModules doStripTypeSchemes jsonVal of
         Left err -> fail $ "Module decode error for " ++ unNamespace ns ++ ": " ++ err
         Right mod -> do
           putStrLn $ "  Loaded: " ++ unNamespace ns

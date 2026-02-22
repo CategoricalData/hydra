@@ -66,7 +66,8 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
--- Dependencies on other kernel term modules
+-- Dependencies on other term modules
+import qualified Hydra.Sources.Json.Decode                  as JsonDecode
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple    as AdaptSimple
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
@@ -79,6 +80,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
 
 -- Dependencies on secondary generated modules (decode/encode)
 import qualified Hydra.Sources.Decode.Core                  as DecodeCore
+import qualified Hydra.Sources.Decode.Module                as DecodeModule
 import qualified Hydra.Sources.Encode.Module                as EncodeModule
 
 
@@ -87,11 +89,11 @@ ns = Namespace "hydra.codeGeneration"
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptSimple.ns, Annotations.ns, Inference.ns, Lexical.ns, Monads.ns, Names.ns,
+    [AdaptSimple.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Monads.ns, Names.ns,
      Rewriting.ns, Schemas.ns, ShowCore.ns,
      Namespace "hydra.decoding", Namespace "hydra.encoding",
      Namespace "hydra.json.decode", Namespace "hydra.json.encode", Namespace "hydra.json.writer",
-     moduleNamespace DecodeCore.module_, moduleNamespace EncodeModule.module_]
+     moduleNamespace DecodeCore.module_, moduleNamespace DecodeModule.module_, moduleNamespace EncodeModule.module_]
     kernelTypesNamespaces $
     Just "Pure code generation pipeline for bootstrapping Hydra across languages."
   where
@@ -234,13 +236,15 @@ modulesToGraph = define "modulesToGraph" $
 -- This function contains no I/O and can be generated to other languages.
 generateSourceFiles
   :: TBinding ((Module -> [Definition] -> Flow Graph (M.Map String String))
-    -> Language -> Bool -> Bool -> Bool -> Graph
-    -> [Module] -> [Module]
+    -> Language
+    -> Bool -> Bool -> Bool -> Bool
+    -> Graph -> [Module] -> [Module]
     -> Flow Graph [(String, String)])
 generateSourceFiles = define "generateSourceFiles" $
   doc ("Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,"
     <> " and modules to generate, produce a list of (filePath, content) pairs.") $
-  "printDefinitions" ~> "lang" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~>
+  "printDefinitions" ~> "lang" ~>
+  "doInfer" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~>
   "bsGraph" ~> "universeModules" ~> "modsToGenerate" ~>
 
   "namespaceMap" <~ Maps.fromList (Lists.map
@@ -292,8 +296,9 @@ generateSourceFiles = define "generateSourceFiles" $
     (trace (string "generate term modules") $
       "namespaces" <~ Lists.map ("m" ~> Module.moduleNamespace (var "m")) (var "termModulesToGenerate") $
       "dataResult" <<~ AdaptSimple.dataGraphToDefinitions
-        @@ var "constraints" @@ var "doExpand" @@ var "doHoistCaseStatements"
-        @@ var "doHoistPolymorphicLetBindings" @@ var "dataGraph" @@ var "namespaces" $
+        @@ var "constraints"
+        @@ var "doInfer" @@ var "doExpand" @@ var "doHoistCaseStatements" @@ var "doHoistPolymorphicLetBindings"
+        @@ var "dataGraph" @@ var "namespaces" $
       "g1" <~ Pairs.first (var "dataResult") $
       "defLists" <~ Pairs.second (var "dataResult") $
       -- Refresh modules with elements from the inferred graph
@@ -552,6 +557,4 @@ decodeModuleFromJson = define "decodeModuleFromJson" $
           (stripModuleTypeSchemes @@ var "mod")
           (var "mod")))
         (decoderFor _Module @@ var "graph" @@ var "term"))
-    (var "hydra.json.decode.fromJson" @@ var "schemaMap" @@ var "modType" @@ var "jsonVal")
-
-
+    (JsonDecode.fromJson @@ var "schemaMap" @@ var "modType" @@ var "jsonVal")

@@ -538,7 +538,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
         (var "go" @@ (Core.wrappedTermBody $ var "wt"))])] $
   var "go" @@ var "term"
 
-dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Bool -> Graph -> [Namespace] -> Flow s (Graph, [[TermDefinition]]))
+dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> Graph -> [Namespace] -> Flow s (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints and a designated list of namespaces,"
     <> " adapt the graph to the language constraints,"
@@ -550,7 +550,9 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     <> " The doExpand flag controls eta expansion."
     <> " The doHoistCaseStatements flag controls case statement hoisting (needed for Python)."
     <> " The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java).") $
-  "constraints" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~> "graph" ~> "namespaces" ~>
+  "constraints" ~>
+  "doInfer" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~>
+  "graph0" ~> "namespaces" ~>
 
   "namespacesSet" <~ Sets.fromList (var "namespaces") $
 
@@ -558,72 +560,45 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     false
     ("ns" ~> Sets.member (var "ns") (var "namespacesSet"))) $
 
+  -- Steps 0a-2: Case statement hoisting pipeline (only for Python target, currently).
+  -- 0a: Strip type lambdas so case expressions are visible to the hoister
+  --     (the hoister does not traverse into type lambdas).
+  -- 0b: Unshadow variables to prevent capture issues after hoisting.
+  -- 1:  Hoist case statements before inference.
+  -- 2:  Unshadow again after hoisting (hoisting introduces new lambda wrappers).
+  "hoistCases" <~ ("g" ~>
+    "graphDetyped" <~ Graph.graphWithElements (var "g")
+      (Lists.map ("b" ~>
+        Core.binding (Core.bindingName $ var "b")
+          (Rewriting.stripTypeLambdas @@ (Core.bindingTerm $ var "b"))
+          (Core.bindingType $ var "b"))
+        (Graph.graphElements $ var "g")) $
+    "gterm0" <~ Schemas.graphAsTerm @@ var "graphDetyped" $
+    "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm0" $
+    "newElements" <~ Schemas.termAsGraph @@ var "gterm1" $
+    "graphu0" <~ Graph.graphWithElements (var "graphDetyped") (var "newElements") $
+    "graphh1" <<~ Hoisting.hoistCaseStatementsInGraph @@ var "graphu0" $
+    "gterm2" <~ Schemas.graphAsTerm @@ var "graphh1" $
+    "gterm3" <~ Rewriting.unshadowVariables @@ var "gterm2" $
+    "newElements2" <~ Schemas.termAsGraph @@ var "gterm3" $
+    produce $ Graph.graphWithElements (var "graphh1") (var "newElements2")) $
+
   "hoistPoly" <~ ("graphBefore" ~>
 --    "typeContext" <<~ Schemas.graphToTypeContext @@ var "gBefore" $
     "letBefore" <~ Schemas.graphAsLet @@ var "graphBefore" $
     "letAfter" <~ Hoisting.hoistPolymorphicLetBindings @@ var "isParentBinding" @@ var "letBefore" $
     Graph.graphWithElements (var "graphBefore") (Core.letBindings $ var "letAfter")) $
 
-  -- Step 0: Unshadow variables BEFORE case statement hoisting
-  -- This prevents capture issues where hoisted code references the wrong variable
-  -- after code generators rename shadowed parameters
-  "graphu0" <<~ Logic.ifElse (var "doHoistCaseStatements")
-    ("gterm0" <~ Schemas.graphAsTerm @@ var "graph" $
-     "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm0" $
-     "newElements" <~ Schemas.termAsGraph @@ var "gterm1" $
-     produce $ Graph.graphWithElements (var "graph") (var "newElements"))
-    (produce $ var "graph") $
+  -- Note: this is a rough test of typedness, as it only checks that the top-level bindings are typed.
+  "checkTyped" <~ ("debugLabel" ~> "g" ~>
+    "untypedBindings" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
+      (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "g")) $
+    Logic.ifElse (Lists.null $ var "untypedBindings")
+      (produce $ var "g")
+      (Flows.fail $ Strings.concat [
+        string "Found untyped bindings (", var "debugLabel", string "): ",
+        Strings.intercalate (string ", ") (var "untypedBindings")])) $
 
-  -- Step 1: Hoist case statements BEFORE inference (case hoisting doesn't need types)
-  -- This ensures match expressions are applied to arguments before eta expansion
-  "graphh1" <<~ Logic.ifElse (var "doHoistCaseStatements")
-    (Hoisting.hoistCaseStatementsInGraph @@ var "graphu0")
-    (produce $ var "graphu0") $
-
-  -- Step 2: Unshadow variables AGAIN after case statement hoisting
-  -- Hoisting creates new lambda wrappers for captured variables, which can reintroduce shadowing
-  "graphu1" <<~ Logic.ifElse (var "doHoistCaseStatements")
-    ("gterm2" <~ Schemas.graphAsTerm @@ var "graphh1" $
-     "gterm3" <~ Rewriting.unshadowVariables @@ var "gterm2" $
-     "newElements2" <~ Schemas.termAsGraph @@ var "gterm3" $
-     produce $ Graph.graphWithElements (var "graphh1") (var "newElements2"))
-    (produce $ var "graphh1") $
-
-  -- Step 3: Infer types ONLY if the inputs are entirely untyped.
-  -- This is the single acceptable use of inference in the pipeline.
-  -- If inputs already have types (e.g. from JSON or prior inference), skip.
-  "allHaveTypes" <~ Logic.ands (Lists.map ("b" ~> Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graphu1")) $
-  "graphi1" <<~ Logic.ifElse (var "allHaveTypes")
-    (produce $ var "graphu1")
-    (Inference.inferGraphTypes @@ var "graphu1") $
-
---  "debug" <<~ Flows.fail (Strings.concat [
---    string "elements before: ",
---    Strings.intercalate (string ", ") (Lists.map ("b" ~> Core.unName $ Core.bindingName $ var "b") (Graph.graphElements $ var "graphi1"))]) $
-
---  "debug" <<~ Flows.fail (Strings.concat [
---    string "graph before hosting: ",
---    ShowCore.let_ @@ (Schemas.graphAsLet @@ var "graphi1")]) $
-
-  -- Step 4: Hoist let bindings (requires type annotations from pre-inference)
-  "graphh" <~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
-    (var "hoistPoly" @@ var "graphi1")
-    (var "graphi1") $
-
-  -- Step 4.5: Assert types are preserved after hoisting.
-  -- Poly hoisting restructures terms but preserves type annotations on all bindings.
-  -- If types are missing, fail rather than silently re-inferring.
-  "untypedAfterHoist" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
-    (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graphh")) $
-  "graphi2" <<~ Logic.ifElse (Lists.null $ var "untypedAfterHoist")
-    (produce $ var "graphh")
-    (Flows.fail $ Strings.concat [string "Poly hoisting removed types from bindings: ",
-      Strings.intercalate (string ", ") (var "untypedAfterHoist")]) $
-
-  -- Step 5: Adapt the graph (includes eta expansion if enabled).
-  -- Adaptation preserves type application/lambda wrappers and adapts embedded types
-  -- (literal types, lambda domains, TypeSchemes).
-  "graph1raw" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphi2" $
   -- Normalize: push type applications inward past applications and lambdas.
   -- This corrects structures where TypeApp wraps App/Lambda after adaptation and eta expansion.
   "normalizeGraph" <~ ("g" ~> Graph.graphWithElements (var "g")
@@ -632,16 +607,32 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       (pushTypeAppsInward @@ (Core.bindingTerm $ var "b"))
       (Core.bindingType $ var "b"))
     (Graph.graphElements $ var "g"))) $
-  "graph1" <~ var "normalizeGraph" @@ var "graph1raw" $
-  -- Step 6: Assert types are preserved after adaptation.
-  -- Adaptation should be type-preserving. If types are missing, fail rather than
-  -- silently re-inferring.
-  "untypedAfterAdapt" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
-    (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "graph1")) $
-  "graph2" <<~ Logic.ifElse (Lists.null $ var "untypedAfterAdapt")
-    (produce $ var "normalizeGraph" @@ var "graph1")
-    (Flows.fail $ Strings.concat [string "Adaptation removed types from bindings: ",
-      Strings.intercalate (string ", ") (var "untypedAfterAdapt")]) $
+
+  -- Step 1: hoist case statements if needed (currently, for the Python target)
+  "graph1" <<~ Logic.ifElse (var "doHoistCaseStatements")
+    (var "hoistCases" @@ var "graph0")
+    (produce $ var "graph0") $
+
+  -- Step 2: infer types if necessary
+  "graph2" <<~ Logic.ifElse (var "doInfer")
+     (Inference.inferGraphTypes @@ var "graph1")
+     (var "checkTyped" @@ string "after case hoisting" @@ var "graph1") $
+
+  -- Step 3: hoist let bindings if necessary (currently, for the Java target)
+  "graph3" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
+    (var "checkTyped" @@ string "after let hoisting"
+      @@ (var "hoistPoly" @@ var "graph2"))
+    (produce $ var "graph2") $
+
+  -- Step 4: adapt the graph (includes eta expansion if enabled).
+  -- Adaptation preserves type application/lambda wrappers and adapts embedded types
+  -- (literal types, lambda domains, TypeSchemes).
+  "graph4" <<~ Flows.bind
+    (adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graph3")
+    (var "checkTyped" @@ (string "after adaptation")) $
+
+  -- Step 5: normalize the adapted graph
+  "graph5" <~ var "normalizeGraph" @@ var "graph4" $
 
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>
@@ -656,7 +647,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     ("el" ~> optCases (Names.namespaceOf @@ (Core.bindingName $ var "el"))
       false
       ("ns" ~> Sets.member (var "ns") (var "namespacesSet")))
-    (Graph.graphElements $ var "graph2") $
+    (Graph.graphElements $ var "graph5") $
   -- Group elements by namespace
   "elementsByNamespace" <~ Lists.foldl
     ("acc" ~> "el" ~>
@@ -675,7 +666,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     (var "namespaces") $
 
   produce $ pair
-    (var "graph2")
+    (var "graph5")
     (var "defsGrouped")
 
 literalTypeSupported :: TBinding (LanguageConstraints -> LiteralType -> Bool)

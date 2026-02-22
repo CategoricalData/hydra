@@ -1115,53 +1115,57 @@ encodeBindingAs env binding =
                             in  
                               let isFull = (isCasesFull rt cases_)
                               in  
-                                let capturedParams = (Lists.map (\n -> Syntax.ParamNoDefault {
-                                        Syntax.paramNoDefaultParam = Syntax.Param {
-                                          Syntax.paramName = (Names.encodeName False Util.CaseConventionLowerSnake env n),
-                                          Syntax.paramAnnotation = Nothing},
-                                        Syntax.paramNoDefaultTypeComment = Nothing}) lambdaParams)
+                                let capturedVarNames = (Lists.init lambdaParams)
                                 in  
-                                  let matchArgName = (Syntax.Name "x")
+                                  let matchLambdaParam = (Lists.last lambdaParams)
                                   in  
-                                    let matchParam = Syntax.ParamNoDefault {
+                                    let capturedParams = (Lists.map (\n -> Syntax.ParamNoDefault {
                                             Syntax.paramNoDefaultParam = Syntax.Param {
-                                              Syntax.paramName = matchArgName,
+                                              Syntax.paramName = (Names.encodeName False Util.CaseConventionLowerSnake env n),
                                               Syntax.paramAnnotation = Nothing},
-                                            Syntax.paramNoDefaultTypeComment = Nothing}
+                                            Syntax.paramNoDefaultTypeComment = Nothing}) capturedVarNames)
                                     in  
-                                      let allParams = (Lists.concat2 capturedParams [
-                                              matchParam])
+                                      let matchArgName = (Names.encodeName False Util.CaseConventionLowerSnake env matchLambdaParam)
                                       in  
-                                        let params = (Syntax.ParametersParamNoDefault (Syntax.ParamNoDefaultParameters {
-                                                Syntax.paramNoDefaultParametersParamNoDefault = allParams,
-                                                Syntax.paramNoDefaultParametersParamWithDefault = [],
-                                                Syntax.paramNoDefaultParametersStarEtc = Nothing}))
+                                        let matchParam = Syntax.ParamNoDefault {
+                                                Syntax.paramNoDefaultParam = Syntax.Param {
+                                                  Syntax.paramName = matchArgName,
+                                                  Syntax.paramAnnotation = Nothing},
+                                                Syntax.paramNoDefaultTypeComment = Nothing}
                                         in  
-                                          let envWithParams = (extendEnvWithLambdaParams env term1)
-                                          in (Flows.bind (Flows.mapList (encodeCaseBlock envWithParams tname rt isEnum (\e -> \t -> encodeTermMultiline e t)) cases_) (\pyCases -> Flows.bind (encodeDefaultCaseBlock (\t -> encodeTermInline envWithParams False t) isFull dflt tname) (\pyDflt ->  
-                                            let subj = (Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple (Utils.pyNameToPyExpression matchArgName)))
+                                          let allParams = (Lists.concat2 capturedParams [
+                                                  matchParam])
+                                          in  
+                                            let params = (Syntax.ParametersParamNoDefault (Syntax.ParamNoDefaultParameters {
+                                                    Syntax.paramNoDefaultParametersParamNoDefault = allParams,
+                                                    Syntax.paramNoDefaultParametersParamWithDefault = [],
+                                                    Syntax.paramNoDefaultParametersStarEtc = Nothing}))
                                             in  
-                                              let allCases = (Lists.concat2 pyCases pyDflt)
-                                              in  
-                                                let matchStmt = (Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
-                                                        Syntax.matchStatementSubject = subj,
-                                                        Syntax.matchStatementCases = allCases})))
+                                              let envWithParams = (extendEnvWithLambdaParams env term1)
+                                              in (Flows.bind (Flows.mapList (encodeCaseBlock envWithParams tname rt isEnum (\e -> \t -> encodeTermMultiline e t)) cases_) (\pyCases -> Flows.bind (encodeDefaultCaseBlock (\t -> encodeTermInline envWithParams False t) isFull dflt tname) (\pyDflt ->  
+                                                let subj = (Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple (Utils.pyNameToPyExpression matchArgName)))
                                                 in  
-                                                  let body = (Utils.indentedBlock Nothing [
-                                                          [
-                                                            matchStmt]])
+                                                  let allCases = (Lists.concat2 pyCases pyDflt)
                                                   in  
-                                                    let funcDefRaw = Syntax.FunctionDefRaw {
-                                                            Syntax.functionDefRawAsync = False,
-                                                            Syntax.functionDefRawName = fname,
-                                                            Syntax.functionDefRawTypeParams = [],
-                                                            Syntax.functionDefRawParams = (Just params),
-                                                            Syntax.functionDefRawReturnType = Nothing,
-                                                            Syntax.functionDefRawFuncTypeComment = Nothing,
-                                                            Syntax.functionDefRawBlock = body}
-                                                    in (Flows.pure (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
-                                                      Syntax.functionDefinitionDecorators = Nothing,
-                                                      Syntax.functionDefinitionRaw = funcDefRaw}))))))))))) mcsa)) (\ts -> Flows.bind (inGraphContext (Annotations.getTermDescription term1)) (\comment ->  
+                                                    let matchStmt = (Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
+                                                            Syntax.matchStatementSubject = subj,
+                                                            Syntax.matchStatementCases = allCases})))
+                                                    in  
+                                                      let body = (Utils.indentedBlock Nothing [
+                                                              [
+                                                                matchStmt]])
+                                                      in  
+                                                        let funcDefRaw = Syntax.FunctionDefRaw {
+                                                                Syntax.functionDefRawAsync = False,
+                                                                Syntax.functionDefRawName = fname,
+                                                                Syntax.functionDefRawTypeParams = [],
+                                                                Syntax.functionDefRawParams = (Just params),
+                                                                Syntax.functionDefRawReturnType = Nothing,
+                                                                Syntax.functionDefRawFuncTypeComment = Nothing,
+                                                                Syntax.functionDefRawBlock = body}
+                                                        in (Flows.pure (Syntax.StatementCompound (Syntax.CompoundStatementFunction (Syntax.FunctionDefinition {
+                                                          Syntax.functionDefinitionDecorators = Nothing,
+                                                          Syntax.functionDefinitionRaw = funcDefRaw}))))))))))) mcsa)) (\ts -> Flows.bind (inGraphContext (Annotations.getTermDescription term1)) (\comment ->  
           let normComment = (Maybes.map CoderUtils.normalizeComment comment)
           in (encodeTermAssignment env name1 term1 ts normComment))) mts)
 
@@ -1204,6 +1208,7 @@ termArityWithPrimitives :: (Graph.Graph -> Core.Term -> Int)
 termArityWithPrimitives graph term = ((\x -> case x of
   Core.TermApplication v1 -> (Math.max 0 (Math.sub (termArityWithPrimitives graph (Core.applicationFunction v1)) 1))
   Core.TermFunction v1 -> (functionArityWithPrimitives graph v1)
+  Core.TermVariable v1 -> (Maybes.maybe 0 (\el -> Maybes.maybe (Arity.termArity (Core.bindingTerm el)) (\ts -> Arity.typeSchemeArity ts) (Core.bindingType el)) (Lexical.lookupElement graph v1))
   _ -> 0) (Rewriting.deannotateAndDetypeTerm term))
 
 -- | Calculate function arity with proper primitive handling

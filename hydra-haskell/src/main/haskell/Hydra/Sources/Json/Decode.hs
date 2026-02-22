@@ -52,7 +52,7 @@ import qualified Hydra.Sources.Kernel.Terms.Adapt.Modules  as AdaptModules
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple   as AdaptSimple
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Terms    as AdaptTerms
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils    as AdaptUtils
-import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
+--import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity          as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking       as Checking

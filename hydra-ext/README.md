@@ -361,7 +361,7 @@ For the sake of space, only generated Haskell is checked in to the repository, b
 ```haskell
 -- Universe provides all modules for dependency resolution
 -- modulesToGenerate specifies which modules to actually generate
-writeJava "src/gen-main/java" (hydraExtModules <> kernelModules) hydraExtModules
+writeJava "src/gen-main/java" mainModules hydraExtModules
 ```
 
 The generated Haskell can be updated using:

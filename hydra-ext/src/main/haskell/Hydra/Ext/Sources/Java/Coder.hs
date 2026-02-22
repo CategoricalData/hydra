@@ -4234,18 +4234,8 @@ functionCall = def "functionCall" $
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
     "isLambdaBound" <~ (isLambdaBoundIn @@ var "name"
       @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases")) $
-    -- When there are no arguments and it's a primitive, use a method reference
-    Logic.ifElse (Logic.and (var "isPrim") (Logic.and (Lists.null (var "args")) (Logic.not (var "isLambdaBound"))))
-      -- Generate method reference like ClassName::apply
-      ("classWithApply" <~ (JavaDsl.unIdentifier (elementJavaIdentifier @@ true @@ false @@ var "aliases" @@ var "name")) $
-        "suffix" <~ Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName) $
-        "className" <~ Strings.fromList (Lists.take
-          (Math.sub (Strings.length (var "classWithApply")) (Strings.length (var "suffix")))
-          (Strings.toList (var "classWithApply"))) $
-        Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@
-          (JavaDsl.identifier (Strings.cat (list [var "className", string "::", asTerm JavaNamesSource.applyMethodName])))))
-      -- Encode arguments
-      ("jargs0" <<~ (Flows.mapList (lambda "arg" $ encodeTerm @@ var "env" @@ var "arg") (var "args")) $
+    -- Encode arguments and generate method invocation
+    ("jargs0" <<~ (Flows.mapList (lambda "arg" $ encodeTerm @@ var "env" @@ var "arg") (var "args")) $
         "wrapResult" <~ (wrapLazyArguments @@ var "name" @@ var "jargs0") $
         "jargs" <~ Pairs.first (var "wrapResult") $
         "mMethodOverride" <~ Pairs.second (var "wrapResult") $
