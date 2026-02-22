@@ -80,6 +80,13 @@ executables:
     dependencies:
       - hydra
 
+  update-json-manifest:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-manifest
+    dependencies:
+      - hydra
+
   update-haskell-kernel:
     main: Main.hs
     source-dirs:

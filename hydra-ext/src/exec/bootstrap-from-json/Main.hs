@@ -73,7 +73,7 @@ main = do
 
   putStrLn "Loading main modules from JSON..."
   putStrLn $ "  Source: " ++ haskellMainJson
-  mainMods <- loadAllModulesFromJsonDirWith False haskellMainJson kernelModules
+  mainMods <- loadAllModulesFromJson False haskellMainJson kernelModules
   putStrLn $ "  Loaded " ++ show (length mainMods) ++ " main modules."
   putStrLn ""
 

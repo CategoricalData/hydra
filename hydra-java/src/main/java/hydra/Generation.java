@@ -37,8 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -1227,7 +1225,23 @@ public class Generation {
     }
 
     /**
-     * Load modules from JSON files.
+     * Read the manifest.json file from a JSON base directory and extract a named
+     * field (e.g. "kernelModules", "mainModules", "testModules") as a list of Namespaces.
+     */
+    public static List<Namespace> readManifestField(String basePath, String fieldName) throws IOException {
+        String manifestPath = basePath + File.separator + "manifest.json";
+        Value manifestVal = parseJsonFile(manifestPath);
+        Map<String, Value> obj = expectObject(manifestVal, "manifest.json");
+        List<Value> arr = expectArray(obj.get(fieldName), "manifest." + fieldName);
+        List<Namespace> result = new ArrayList<>(arr.size());
+        for (Value v : arr) {
+            result.add(new Namespace(expectString(v, fieldName + " entry")));
+        }
+        return result;
+    }
+
+    /**
+     * Load modules from JSON files for a given list of namespaces.
      * If universeModules is empty, uses native JSON decoding (no schema required).
      * Otherwise, uses the generated schema-based decoder.
      */
@@ -1253,56 +1267,12 @@ public class Generation {
     }
 
     /**
-     * Discover namespaces from JSON files in a directory tree.
-     */
-    public static List<Namespace> discoverJsonNamespaces(String basePath) throws IOException {
-        Path base = Paths.get(basePath);
-        if (!Files.isDirectory(base)) {
-            return Collections.emptyList();
-        }
-
-        List<Namespace> namespaces;
-        try (Stream<Path> walk = Files.walk(base)) {
-            namespaces = walk
-                    .filter(p -> p.toString().endsWith(".json"))
-                    .map(p -> {
-                        String rel = base.relativize(p).toString();
-                        // Remove .json extension and convert path separators to dots
-                        String withoutExt = rel.substring(0, rel.length() - 5);
-                        String ns = withoutExt.replace(File.separatorChar, '.').replace('/', '.');
-                        return new Namespace(ns);
-                    })
-                    .sorted()
-                    .collect(Collectors.toList());
-        }
-        return namespaces;
-    }
-
-    /**
-     * Load all modules from a JSON directory.
-     * TypeSchemes are stripped by default (suitable for main/kernel modules).
-     */
-    public static List<Module> loadAllModulesFromJsonDir(String basePath,
-            List<Module> universeModules) throws IOException {
-        return loadAllModulesFromJsonDirWith(true, basePath, universeModules);
-    }
-
-    /**
-     * Load all modules from a JSON directory with control over TypeScheme stripping.
-     */
-    public static List<Module> loadAllModulesFromJsonDirWith(boolean stripTypeSchemes,
-            String basePath, List<Module> universeModules) throws IOException {
-        List<Namespace> namespaces = discoverJsonNamespaces(basePath);
-        System.out.println("  Discovered " + namespaces.size() + " modules in " + basePath);
-        return loadModulesFromJson(stripTypeSchemes, basePath, universeModules, namespaces);
-    }
-
-    /**
      * Generate source files and write them to disk.
      */
     public static void generateSources(
             Function<Module, Function<List<Definition>, Flow<Graph, Map<String, String>>>> coder,
             hydra.coders.Language language,
+            boolean doInfer,
             boolean doExpand,
             boolean doHoistCase,
             boolean doHoistPoly,
@@ -1312,7 +1282,7 @@ public class Generation {
         Graph bsGraph = bootstrapGraph();
         Flow<Graph, List<Tuple.Tuple2<String, String>>> flow =
                 CodeGeneration.generateSourceFiles(coder, language,
-                        doExpand, doHoistCase, doHoistPoly,
+                        doInfer, doExpand, doHoistCase, doHoistPoly,
                         bsGraph, universe, modulesToGenerate);
         List<Tuple.Tuple2<String, String>> files;
         try {
@@ -1366,7 +1336,7 @@ public class Generation {
         generateSources(
                 mod -> defs -> hydra.ext.java.coder.Coder.moduleToJava(mod, defs),
                 hydra.ext.java.language.Language.javaLanguage(),
-                true, false, true,
+                false, true, false, true,
                 basePath, universe, mods);
     }
 
@@ -1377,7 +1347,7 @@ public class Generation {
         generateSources(
                 mod -> defs -> hydra.ext.python.coder.Coder.moduleToPython(mod, defs),
                 hydra.ext.python.language.Language.pythonLanguage(),
-                true, true, false,
+                false, true, true, false,
                 basePath, universe, mods);
     }
 
@@ -1388,7 +1358,7 @@ public class Generation {
         generateSources(
                 mod -> defs -> hydra.ext.haskell.coder.Coder.moduleToHaskell(mod, defs),
                 hydra.ext.haskell.language.Language.haskellLanguage(),
-                false, false, false,
+                false, false, false, false,
                 basePath, universe, mods);
     }
 

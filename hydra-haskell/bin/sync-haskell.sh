@@ -194,6 +194,18 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Phase 7b: Generate JSON manifest
+echo ""
+echo "Step 7b/$TOTAL_STEPS: Generating JSON manifest..."
+echo ""
+stack build hydra:exe:update-json-manifest
+stack exec update-json-manifest
+
+if [ $? -ne 0 ]; then
+    echo "ERROR: JSON manifest generation failed"
+    exit 1
+fi
+
 echo ""
 echo "=========================================="
 echo "Generation complete!"

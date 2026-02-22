@@ -9,14 +9,16 @@ import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Haskell.Language
 import Hydra.Module (_Module)
 import qualified Hydra.Json.Model as Json
+import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Sources.All as Sources
+import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
-import qualified Hydra.CodeGeneration as Generated
+import qualified Hydra.CodeGeneration as CodeGeneration
 
 import qualified Control.Monad as CM
 import qualified Data.Aeson as A
@@ -51,7 +53,7 @@ generateSources
   -> IO ()
 generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
     mfiles <- runFlow bootstrapGraph $
-      Generated.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate
+      CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate
     case mfiles of
       Nothing -> fail "Failed to generate source files"
       Just files -> mapM_ writePair files
@@ -66,7 +68,7 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
 -- | Build a graph from a list of modules using the Haskell bootstrapGraph.
 -- Thin wrapper around modulesToGraphWith.
 modulesToGraph :: [Module] -> [Module] -> Graph
-modulesToGraph = Generated.modulesToGraph bootstrapGraph
+modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
 
 printTrace :: Bool -> Trace -> IO ()
 printTrace isError t = do
@@ -153,7 +155,7 @@ writeYaml basePath universeModules modulesToGenerate = do
 writeLexicon :: FilePath -> IO ()
 writeLexicon path = do
   mcontent <- runFlow bootstrapGraph
-    (Generated.inferAndGenerateLexicon bootstrapGraph Sources.kernelModules)
+    (CodeGeneration.inferAndGenerateLexicon bootstrapGraph Sources.kernelModules)
   case mcontent of
     Nothing -> fail "Lexicon generation failed"
     Just content -> do
@@ -173,7 +175,7 @@ generateCoderModulesIO codec label universeModules typeModules = do
     case graphSchema graph of
       Nothing -> fail "No schema graph available"
       Just schemaGraph -> do
-        mresult <- runFlow schemaGraph (Generated.generateCoderModules codec bootstrapGraph universeModules typeModules)
+        mresult <- runFlow schemaGraph (CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules)
         case mresult of
           Nothing -> fail $ "Failed to generate " ++ label ++ " modules"
           Just results -> return results
@@ -191,7 +193,7 @@ generateEncoderModules = generateCoderModulesIO Encoding.encodeModule "encoder"
 generateCoderSourceModules :: ([Module] -> [Module] -> IO [Module]) -> [Module] -> [Module] -> IO [Module]
 generateCoderSourceModules generate universeModules typeModules = do
   sourceMods <- generate universeModules typeModules
-  return $ fmap Generated.moduleToSourceModule sourceMods
+  return $ fmap CodeGeneration.moduleToSourceModule sourceMods
 
 generateDecoderSourceModules :: [Module] -> [Module] -> IO [Module]
 generateDecoderSourceModules = generateCoderSourceModules generateDecoderModules
@@ -249,7 +251,7 @@ writeEncoderHaskell = writeCoderHaskell generateEncoderModules
 inferModulesIO :: [Module] -> [Module] -> IO [Module]
 inferModulesIO universeMods targetMods = do
   let g0 = modulesToGraph universeMods universeMods
-  mresult <- runFlow g0 (Generated.inferModules bootstrapGraph universeMods targetMods)
+  mresult <- runFlow g0 (CodeGeneration.inferModules bootstrapGraph universeMods targetMods)
   case mresult of
     Nothing -> fail "Type inference failed on modules"
     Just mods -> return mods
@@ -262,10 +264,10 @@ inferModulesIO universeMods targetMods = do
 -- The file path is derived from the module namespace.
 writeModuleJson :: FilePath -> Module -> IO ()
 writeModuleJson basePath mod = do
-    case Generated.moduleToJson mod of
+    case CodeGeneration.moduleToJson mod of
       Left err -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod) ++ ": " ++ err
       Right jsonStr -> do
-        let filePath = basePath FP.</> Generated.namespaceToPath (moduleNamespace mod) ++ ".json"
+        let filePath = basePath FP.</> CodeGeneration.namespaceToPath (moduleNamespace mod) ++ ".json"
         SD.createDirectoryIfMissing True $ FP.takeDirectory filePath
         writeFile filePath (jsonStr ++ "\n")
         putStrLn $ "Wrote: " ++ filePath
@@ -279,6 +281,22 @@ writeModulesJson :: Bool -> FilePath -> [Module] -> [Module] -> IO ()
 writeModulesJson doInfer basePath universeMods mods = do
   mods' <- if doInfer then inferModulesIO universeMods mods else return mods
   mapM_ (writeModuleJson basePath) mods'
+
+-- | Write a manifest.json listing module namespaces for kernelModules, mainModules, and testModules.
+-- This allows Java and Python hosts to load the correct set of modules without directory scanning.
+writeManifestJson :: FilePath -> IO ()
+writeManifestJson basePath = do
+    let jsonVal = Json.ValueObject $ M.fromList [
+            ("evalLibModules", namespacesJson EvalLib.evalLibModules),
+            ("kernelModules", namespacesJson Sources.kernelModules),
+            ("mainModules", namespacesJson Sources.mainModules),
+            ("testModules", namespacesJson Sources.testModules)]
+        jsonStr = JsonWriter.printJson jsonVal
+        filePath = basePath FP.</> "manifest.json"
+    writeFile filePath (jsonStr ++ "\n")
+    putStrLn $ "Wrote manifest: " ++ filePath
+  where
+    namespacesJson mods = Json.ValueArray $ fmap (Json.ValueString . unNamespace . moduleNamespace) mods
 
 ----------------------------------------
 -- JSON Module Import
@@ -306,10 +324,10 @@ parseJsonFile fp = do
   return $ aesonToHydra <$> A.eitherDecode escaped
 
 -- | Escape unescaped control characters (< 0x20) inside JSON string literals.
--- Thin ByteString wrapper around Generated.escapeControlCharsInJson (which operates on [Int]).
+-- Thin ByteString wrapper around CodeGeneration.escapeControlCharsInJson (which operates on [Int]).
 escapeControlCharsInJson :: BS.ByteString -> BS.ByteString
 escapeControlCharsInJson input =
-  BS.pack $ fmap fromIntegral $ Generated.escapeControlCharsInJson $ fmap fromIntegral $ BS.unpack input
+  BS.pack $ fmap fromIntegral $ CodeGeneration.escapeControlCharsInJson $ fmap fromIntegral $ BS.unpack input
 
 -- | Load modules from JSON files.
 -- Takes a base path and a list of namespaces to load.
@@ -319,55 +337,17 @@ escapeControlCharsInJson input =
 -- errors after adaptation. The inference engine will reconstruct correct TypeSchemes.
 -- When False, TypeSchemes are preserved (useful for ext modules that don't need
 -- type adaptation and where stripping would cause inference to loop on recursive types).
-loadModulesFromJson :: Bool -> FilePath -> [Module] -> [Namespace] -> IO [Module]
-loadModulesFromJson doStripTypeSchemes basePath universeModules namespaces = do
-  CM.forM namespaces $ \ns -> do
-    let filePath = basePath FP.</> Generated.namespaceToPath ns ++ ".json"
-    parseResult <- parseJsonFile filePath
-    case parseResult of
-      Left err -> fail $ "JSON parse error for " ++ unNamespace ns ++ ": " ++ err
-      Right jsonVal -> case Generated.decodeModuleFromJson bootstrapGraph universeModules doStripTypeSchemes jsonVal of
-        Left err -> fail $ "Module decode error for " ++ unNamespace ns ++ ": " ++ err
-        Right mod -> do
-          putStrLn $ "  Loaded: " ++ unNamespace ns
-          return mod
-
--- | Discover all JSON module files in a directory and load them.
--- Scans the directory tree for .json files, converts paths to namespaces,
--- then loads all discovered modules.
--- TypeSchemes are stripped by default (suitable for main/kernel modules).
-loadAllModulesFromJsonDir :: FilePath -> [Module] -> IO [Module]
-loadAllModulesFromJsonDir = loadAllModulesFromJsonDirWith True
-
--- | Like loadAllModulesFromJsonDir but with control over TypeScheme stripping.
-loadAllModulesFromJsonDirWith :: Bool -> FilePath -> [Module] -> IO [Module]
-loadAllModulesFromJsonDirWith doStripTypeSchemes basePath universeModules = do
-  namespaces <- discoverJsonNamespaces basePath
-  putStrLn $ "  Discovered " ++ show (length namespaces) ++ " modules in " ++ basePath
-  loadModulesFromJson doStripTypeSchemes basePath universeModules namespaces
-
--- | Discover namespaces from JSON files in a directory tree.
--- Converts file paths like "hydra/core.json" to Namespace "hydra.core".
-discoverJsonNamespaces :: FilePath -> IO [Namespace]
-discoverJsonNamespaces basePath = do
-  exists <- SD.doesDirectoryExist basePath
-  if not exists
-    then return []
-    else do
-      files <- findJsonFiles basePath basePath
-      return $ L.sort files
+loadModulesFromJson :: Bool -> FilePath -> [Module] -> IO [Module]
+loadModulesFromJson doStripTypeSchemes basePath universeModules = do
+    CM.forM namespaces $ \ns -> do
+      let filePath = basePath FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
+      parseResult <- parseJsonFile filePath
+      case parseResult of
+        Left err -> fail $ "JSON parse error for " ++ unNamespace ns ++ ": " ++ err
+        Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universeModules doStripTypeSchemes jsonVal of
+          Left err -> fail $ "Module decode error for " ++ unNamespace ns ++ ": " ++ err
+          Right mod -> do
+            putStrLn $ "  Loaded: " ++ unNamespace ns
+            return mod
   where
-    findJsonFiles root dir = do
-      entries <- SD.listDirectory dir
-      results <- CM.forM entries $ \entry -> do
-        let path = dir FP.</> entry
-        isDir <- SD.doesDirectoryExist path
-        if isDir
-          then findJsonFiles root path
-          else if FP.takeExtension entry == ".json"
-            then do
-              let relPath = FP.makeRelative root path
-                  ns = Namespace $ L.intercalate "." $ LS.splitOn "/" $ FP.dropExtension relPath
-              return [ns]
-            else return []
-      return $ L.concat results
+    namespaces = L.nub $ fmap moduleNamespace universeModules

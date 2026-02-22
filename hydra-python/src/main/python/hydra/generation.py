@@ -317,48 +317,22 @@ def load_modules_from_json(strip_type_schemes, base_path, universe_modules, name
     return modules
 
 
-def discover_json_namespaces(base_path):
-    """Discover namespaces from JSON files in a directory tree."""
-    if not os.path.isdir(base_path):
-        return []
-
-    namespaces = []
-    for root, _dirs, files in os.walk(base_path):
-        for filename in files:
-            if filename.endswith(".json"):
-                full_path = os.path.join(root, filename)
-                rel_path = os.path.relpath(full_path, base_path)
-                # Remove .json extension and convert path separators to dots
-                without_ext = rel_path[:-5]
-                ns = without_ext.replace(os.sep, ".").replace("/", ".")
-                namespaces.append(Namespace(ns))
-
-    namespaces.sort(key=lambda n: n.value)
-    return namespaces
+def read_manifest_field(base_path, field_name):
+    """Read a field from manifest.json as a list of Namespaces."""
+    manifest_path = os.path.join(base_path, "manifest.json")
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    return [Namespace(ns) for ns in manifest[field_name]]
 
 
-def load_all_modules_from_json_dir(base_path, universe_modules):
-    """Load all modules from a JSON directory.
-    TypeSchemes are stripped by default (suitable for main/kernel modules).
-    """
-    return load_all_modules_from_json_dir_with(True, base_path, universe_modules)
-
-
-def load_all_modules_from_json_dir_with(strip_type_schemes, base_path, universe_modules):
-    """Load all modules from a JSON directory with control over TypeScheme stripping."""
-    namespaces = discover_json_namespaces(base_path)
-    print(f"  Discovered {len(namespaces)} modules in {base_path}")
-    return load_modules_from_json(strip_type_schemes, base_path, universe_modules, namespaces)
-
-
-def generate_sources(coder, language, do_expand, do_hoist_case, do_hoist_poly,
+def generate_sources(coder, language, do_infer, do_expand, do_hoist_case, do_hoist_poly,
                      base_path, universe, modules_to_generate):
     """Generate source files and write them to disk."""
     import time as _time
     bs_graph = bootstrap_graph()
     flow = generate_source_files(
         coder, language,
-        do_expand, do_hoist_case, do_hoist_poly,
+        do_infer, do_expand, do_hoist_case, do_hoist_poly,
         bs_graph, tuple(universe), tuple(modules_to_generate))
     _t0 = _time.time()
     files = run_flow(bs_graph, flow)
@@ -411,7 +385,7 @@ def write_java(base_path, universe, mods):
     from hydra.ext.java.language import java_language
     generate_sources(
         module_to_java, java_language(),
-        True, False, True,
+        False, True, False, True,
         base_path, universe, mods)
 
 
@@ -421,7 +395,7 @@ def write_python(base_path, universe, mods):
     from hydra.ext.python.language import python_language
     generate_sources(
         module_to_python, python_language(),
-        True, True, False,
+        False, True, True, False,
         base_path, universe, mods)
 
 
@@ -431,5 +405,5 @@ def write_haskell(base_path, universe, mods):
     from hydra.ext.haskell.language import haskell_language
     generate_sources(
         module_to_haskell, haskell_language(),
-        False, False, False,
+        False, False, False, False,
         base_path, universe, mods)

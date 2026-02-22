@@ -14,8 +14,8 @@ import time
 from hydra.generation import (
     filter_kernel_modules,
     filter_type_modules,
-    kernel_modules,
-    load_all_modules_from_json_dir_with,
+    load_modules_from_json,
+    read_manifest_field,
     write_haskell,
     write_java,
     write_python,
@@ -81,18 +81,12 @@ def main():
     print("==========================================", flush=True)
     print(flush=True)
 
-    # Count JSON input files
-    json_file_count = _count_files(args.json_dir, ".json")
-
     # Step 1: Load all modules from JSON
-    # Use kernel_modules() as the universe for the generated schema-based decoder,
-    # matching the Haskell host's behavior (kernelTypesModules ++ kernelTermsModules ++ jsonModules).
     print("Step 1: Loading modules from JSON...", flush=True)
     print(f"  Source: {args.json_dir}", flush=True)
-    print(f"  JSON input files: {json_file_count}", flush=True)
     step_start = time.time()
-    km = kernel_modules()
-    raw_mods = load_all_modules_from_json_dir_with(False, args.json_dir, km)
+    main_namespaces = read_manifest_field(args.json_dir, "mainModules")
+    raw_mods = load_modules_from_json(False, args.json_dir, [], main_namespaces)
     step_time = time.time() - step_start
     total_bindings = sum(len(m.elements) for m in raw_mods)
     print(f"  Loaded {len(raw_mods)} modules ({total_bindings} bindings).", flush=True)
@@ -166,7 +160,8 @@ def main():
     step_start = time.time()
     # Load test modules WITHOUT stripping TypeSchemes (strip_type_schemes=False).
     # Test modules need their types preserved so inference can be skipped.
-    test_mods = load_all_modules_from_json_dir_with(False, test_json_dir, km)
+    test_namespaces = read_manifest_field(args.json_dir, "testModules")
+    test_mods = load_modules_from_json(False, test_json_dir, [], test_namespaces)
     step_time = time.time() - step_start
     test_bindings = sum(len(m.elements) for m in test_mods)
     print(f"  Loaded {len(test_mods)} test modules ({test_bindings} bindings).", flush=True)

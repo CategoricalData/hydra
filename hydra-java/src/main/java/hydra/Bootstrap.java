@@ -5,13 +5,10 @@ import hydra.module.Namespace;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -69,25 +66,17 @@ public class Bootstrap {
         System.out.println("==========================================");
         System.out.println();
 
-        // Count JSON input files
-        long jsonFileCount = 0;
-        try {
-            jsonFileCount = Files.walk(Paths.get(jsonDir))
-                    .filter(p -> p.toString().endsWith(".json"))
-                    .count();
-        } catch (Exception e) {
-            // ignore
-        }
         System.out.println("Step 1: Loading modules from JSON...");
         System.out.println("  Source: " + jsonDir);
-        System.out.println("  JSON input files: " + jsonFileCount);
 
         long stepStart = System.currentTimeMillis();
-        List<Module> kernelModules = Collections.emptyList();
+        // Load kernel modules from JSON using the known namespace list.
         // Preserve TypeSchemes (stripTypeSchemes=false) so that the pipeline
         // can skip pre-adaptation inference. Without types, inference fails on
         // hoisted case-statement bindings (_hoist_*) that lack type annotations.
-        List<Module> rawMods = Generation.loadAllModulesFromJsonDirWith(false, jsonDir, kernelModules);
+        List<Namespace> mainNamespaces = Generation.readManifestField(jsonDir, "mainModules");
+        List<Module> rawMods = Generation.loadModulesFromJson(false, jsonDir,
+                Collections.emptyList(), mainNamespaces);
         long stepTime = System.currentTimeMillis() - stepStart;
 
         int totalBindings = 0;
@@ -196,7 +185,9 @@ public class Bootstrap {
         stepStart = System.currentTimeMillis();
         // Load test modules WITHOUT stripping TypeSchemes (stripTypeSchemes=false).
         // Test modules need their types preserved so inference can be skipped.
-        List<Module> testMods = Generation.loadAllModulesFromJsonDirWith(false, testJsonDir, allMods);
+        List<Namespace> testNamespaces = Generation.readManifestField(jsonDir, "testModules");
+        List<Module> testMods = Generation.loadModulesFromJson(false, testJsonDir,
+                Collections.emptyList(), testNamespaces);
         stepTime = System.currentTimeMillis() - stepStart;
 
         int testBindings = 0;

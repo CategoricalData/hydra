@@ -129,7 +129,6 @@ namespaceToPath = define "namespaceToPath" $
   "ns" ~>
   Strings.intercalate (string "/") (Strings.splitOn (string ".") (Module.unNamespace $ var "ns"))
 
-
 -- | Strip TypeSchemes from term bindings in a module, preserving type binding TypeSchemes.
 stripModuleTypeSchemes :: TBinding (Module -> Module)
 stripModuleTypeSchemes = define "stripModuleTypeSchemes" $
@@ -151,7 +150,6 @@ stripModuleTypeSchemes = define "stripModuleTypeSchemes" $
     (Module.moduleTermDependencies $ var "m")
     (Module.moduleTypeDependencies $ var "m")
     (Module.moduleDescription $ var "m")
-
 
 -- | Compute transitive closure of dependencies.
 -- Given a function that extracts dependency namespaces from a module,
@@ -181,7 +179,6 @@ transitiveDeps = define "transitiveDeps" $
        var "go" @@ var "newPending" @@ var "newVisited")) $
   var "go" @@ var "initialDeps" @@ (Sets.empty :: TTerm (S.Set Namespace))
 
-
 -- | Compute the transitive closure of term dependencies for a set of modules.
 -- Returns the modules that are transitively depended upon (including the input modules).
 moduleTermDepsTransitive :: TBinding (M.Map Namespace Module -> [Module] -> [Module])
@@ -195,7 +192,6 @@ moduleTermDepsTransitive = define "moduleTermDepsTransitive" $
     ("n" ~> Maps.lookup (var "n") (var "nsMap"))
     (Sets.toList $ var "closure")
 
-
 -- | Compute the transitive closure of type dependencies for a set of modules.
 -- First computes transitive term deps, then type deps from those.
 moduleTypeDepsTransitive :: TBinding (M.Map Namespace Module -> [Module] -> [Module])
@@ -207,7 +203,6 @@ moduleTypeDepsTransitive = define "moduleTypeDepsTransitive" $
   Maybes.cat $ Lists.map
     ("n" ~> Maps.lookup (var "n") (var "nsMap"))
     (var "typeNamespaces")
-
 
 -- | Build a graph from a list of modules, using an explicit bootstrap graph.
 -- Elements are partitioned into schema (type definitions) and data (term definitions)
@@ -229,7 +224,6 @@ modulesToGraph = define "modulesToGraph" $
     (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m")) (var "dataModules")) $
   "schemaGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ nothing @@ var "schemaElements" $
   Lexical.elementsToGraph @@ var "bsGraph" @@ (just $ var "schemaGraph") @@ var "dataElements"
-
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
 -- and modules to generate, produce a list of (filePath, content) pairs.
@@ -325,7 +319,6 @@ generateSourceFiles = define "generateSourceFiles" $
   -- Combine results
   produce $ Lists.concat2 (var "schemaFiles") (var "termFiles")
 
-
 -- | Format a term binding for the lexicon: "  name : typeScheme"
 formatTermBinding :: TBinding (Binding -> String)
 formatTermBinding = define "formatTermBinding" $
@@ -337,7 +330,6 @@ formatTermBinding = define "formatTermBinding" $
     ("scheme" ~> ShowCore.typeScheme @@ var "scheme") $
   (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
 
-
 -- | Format a primitive for the lexicon: "  name : typeScheme"
 formatPrimitive :: TBinding (Primitive -> String)
 formatPrimitive = define "formatPrimitive" $
@@ -346,7 +338,6 @@ formatPrimitive = define "formatPrimitive" $
   "name" <~ Core.unName (Graph.primitiveName $ var "prim") $
   "typeStr" <~ ShowCore.typeScheme @@ (Graph.primitiveType $ var "prim") $
   (string "  ") ++ var "name" ++ (string " : ") ++ var "typeStr"
-
 
 -- | Format a type binding for the lexicon: "  name = type"
 formatTypeBinding :: TBinding (Binding -> Flow Graph String)
@@ -358,7 +349,6 @@ formatTypeBinding = define "formatTypeBinding" $
     @@ (decoderFor _Type @@ var "g" @@ (Core.bindingTerm $ var "binding")) $
   produce $
     (string "  ") ++ Core.unName (Core.bindingName $ var "binding") ++ (string " = ") ++ (ShowCore.type_ @@ var "typ")
-
 
 -- | Build a schema map (Name -> Type) from a graph's schema.
 -- Used by the JSON decoder to resolve type variables.
@@ -377,7 +367,6 @@ buildSchemaMap = define "buildSchemaMap" $
             ("typ" ~> just $ pair (Core.bindingName $ var "binding") (Rewriting.deannotateType @@ var "typ"))
             (var "result"))
         (Graph.graphElements $ var "schemaGraph"))
-
 
 -- | Convert a generated Module into a Source module.
 -- The Source module contains a single binding `module_` which holds the Module encoded as a Term.
@@ -404,7 +393,6 @@ moduleToSourceModule = define "moduleToSourceModule" $
     (list [var "modTypeNs"])
     (just $ (string "Source module for ") ++ Module.unNamespace (Module.moduleNamespace $ var "m"))
 
-
 -- | Generate the lexicon content from a graph.
 -- Lists all primitives, types, and terms with their types.
 generateLexicon :: TBinding (Graph -> Flow Graph String)
@@ -427,7 +415,6 @@ generateLexicon = define "generateLexicon" $
     ++ (string "\nTypes:\n") ++ Strings.unlines (var "typeLines")
     ++ (string "\nTerms:\n") ++ Strings.unlines (var "termLines")
 
-
 -- | Convert a Module to a JSON string.
 -- Encodes the Module as a Term, converts to JSON, then serializes to a string.
 moduleToJson :: TBinding (Module -> Either String String)
@@ -437,7 +424,6 @@ moduleToJson = define "moduleToJson" $
   "term" <~ encoderFor _Module @@ var "m" $
   Eithers.map ("json" ~> var "hydra.json.writer.printJson" @@ var "json")
     (var "hydra.json.encode.toJson" @@ var "term")
-
 
 -- | Perform type inference on a set of modules and reconstruct the target modules
 -- with inferred types. Type-only modules (containing only native type definitions)
@@ -466,7 +452,6 @@ inferModules = define "inferModules" $
         (Module.moduleDescription $ var "m"))) $
   produce $ Lists.map (var "refreshModule") (var "targetMods")
 
-
 -- | Generate encoder or decoder modules for a list of type modules.
 -- Takes a codec function, bootstrap graph, universe modules, and type modules.
 -- Returns the generated coder modules (Nothing results are filtered out).
@@ -484,7 +469,6 @@ generateCoderModules = define "generateCoderModules" $
         (Flows.map ("results" ~> Maybes.cat (var "results")) $
           Flows.mapList (var "codec") (var "typeModules")))
 
-
 -- | Perform type inference on a graph and generate its lexicon.
 -- Composes inferGraphTypes and generateLexicon into a single Flow.
 inferAndGenerateLexicon :: TBinding (Graph -> [Module] -> Flow Graph String)
@@ -494,7 +478,6 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "kernelModules" @@ var "kernelModules" $
   "g1" <<~ Inference.inferGraphTypes @@ var "g0" $
   Monads.withState @@ var "g1" @@ (generateLexicon @@ var "g1")
-
 
 -- | Escape unescaped control characters (< 0x20) inside JSON string literals.
 -- Operates on a list of int32 character codes (bytes).
@@ -533,7 +516,6 @@ escapeControlCharsInJson = define "escapeControlCharsInJson" $
                -- normal byte
                (Lists.cons (var "b") (var "go" @@ var "inStr" @@ boolean False @@ var "bs"))))))) $
   var "go" @@ boolean False @@ boolean False @@ var "input"
-
 
 -- | Decode a single module from a JSON value.
 -- Given a bootstrap graph, universe modules, whether to strip TypeSchemes,

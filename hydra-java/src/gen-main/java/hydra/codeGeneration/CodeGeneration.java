@@ -125,7 +125,7 @@ public interface CodeGeneration {
       dataElements.get());
   }
   
-  static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>> generateSourceFiles(java.util.function.Function<hydra.module.Module, java.util.function.Function<java.util.List<hydra.module.Definition>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>>>> printDefinitions, hydra.coders.Language lang, Boolean doExpand, Boolean doHoistCaseStatements, Boolean doHoistPolymorphicLetBindings, hydra.graph.Graph bsGraph, java.util.List<hydra.module.Module> universeModules, java.util.List<hydra.module.Module> modsToGenerate) {
+  static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>> generateSourceFiles(java.util.function.Function<hydra.module.Module, java.util.function.Function<java.util.List<hydra.module.Definition>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>>>> printDefinitions, hydra.coders.Language lang, Boolean doInfer, Boolean doExpand, Boolean doHoistCaseStatements, Boolean doHoistPolymorphicLetBindings, hydra.graph.Graph bsGraph, java.util.List<hydra.module.Module> universeModules, java.util.List<hydra.module.Module> modsToGenerate) {
     hydra.coders.LanguageConstraints constraints = (lang).constraints;
     hydra.util.Lazy<java.util.Map<hydra.module.Namespace, hydra.module.Module>> namespaceMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.module.Module, hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>>) (m -> (hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>) ((hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>) (new hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>((m).namespace, m)))),
@@ -221,6 +221,7 @@ public interface CodeGeneration {
               return hydra.lib.flows.Bind.apply(
                 hydra.adapt.simple.Simple.dataGraphToDefinitions(
                   constraints,
+                  doInfer,
                   doExpand,
                   doHoistCaseStatements,
                   doHoistPolymorphicLetBindings,
