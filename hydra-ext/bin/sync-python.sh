@@ -69,7 +69,7 @@ echo "Step 1/7: Building executables..."
 echo ""
 stack build \
     hydra-ext:exe:update-python-kernel \
-    hydra-ext:exe:update-python-kernel-sources \
+    hydra-ext:exe:update-python-kernel-types-sources \
     hydra-ext:exe:update-python-eval-lib \
     hydra-ext:exe:update-python-kernel-tests \
     hydra-ext:exe:update-python-generation-tests
@@ -90,9 +90,9 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "Step 3/7: Generating Python kernel sources modules..."
+echo "Step 3/7: Generating Python kernel type sources modules..."
 echo ""
-stack exec update-python-kernel-sources -- $RTS_FLAGS
+stack exec update-python-kernel-types-sources -- $RTS_FLAGS
 
 if [ $? -ne 0 ]; then
     echo "ERROR: Kernel sources generation failed"

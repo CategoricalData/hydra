@@ -79,10 +79,10 @@ executables:
     dependencies:
       - hydra-ext
 
-  update-java-kernel-sources:
+  update-java-kernel-types-sources:
     main: Main.hs
     source-dirs:
-      - src/exec/update-java-kernel-sources
+      - src/exec/update-java-kernel-types-sources
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
@@ -147,10 +147,10 @@ executables:
     dependencies:
       - hydra-ext
 
-  update-python-kernel-sources:
+  update-python-kernel-types-sources:
     main: Main.hs
     source-dirs:
-      - src/exec/update-python-kernel-sources
+      - src/exec/update-python-kernel-types-sources
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext

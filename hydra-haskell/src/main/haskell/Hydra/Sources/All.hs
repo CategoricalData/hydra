@@ -19,6 +19,7 @@ import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
+import qualified Hydra.Sources.Json.Bootstrap as JsonBootstrap
 import qualified Hydra.Sources.Json.Coder as JsonCoder
 import qualified Hydra.Sources.Json.Decode as JsonDecode
 import qualified Hydra.Sources.Json.Decoding as JsonDecoding
@@ -47,6 +48,7 @@ haskellModules = [
 
 jsonModules :: [Module]
 jsonModules = [
+  JsonBootstrap.module_,
   JsonCoder.module_,
   JsonDecode.module_,
   JsonDecoding.module_,

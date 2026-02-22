@@ -11,6 +11,12 @@ module Main where
 
 import Hydra.Kernel
 import Hydra.Ext.Generation
+import Hydra.Ext.Haskell.Coder (moduleToHaskell)
+import Hydra.Ext.Haskell.Language (haskellLanguage)
+import Hydra.Ext.Java.Coder (moduleToJava)
+import Hydra.Ext.Java.Language (javaLanguage)
+import Hydra.Ext.Python.Coder (moduleToPython)
+import Hydra.Ext.Python.Language (pythonLanguage)
 
 import Control.Exception (catch, IOException)
 import Data.Time.Clock (getCurrentTime, diffUTCTime)
@@ -71,21 +77,25 @@ main = do
   -- JSON directory (relative to hydra-ext working directory)
   let haskellMainJson = "../hydra-haskell/src/gen-main/json"
 
+  -- Read namespace lists from manifest.json
+  mainNamespaces <- readManifestField haskellMainJson "mainModules"
+
   putStrLn "Loading main modules from JSON..."
   putStrLn $ "  Source: " ++ haskellMainJson
-  mainMods <- loadAllModulesFromJson False haskellMainJson kernelModules
+  mainMods <- loadModulesFromJson False haskellMainJson kernelModules mainNamespaces
   putStrLn $ "  Loaded " ++ show (length mainMods) ++ " main modules."
   putStrLn ""
 
-  -- Generate code for the target language (kernel modules only)
+  -- Generate code for the target language.
+  -- doInfer=False because modules loaded from JSON already have type annotations.
   let outMain = outDir FP.</> ("src/gen-main/" ++ target)
   putStrLn $ "Generating " ++ target ++ " main code..."
 
   mainStart <- getCurrentTime
   case target of
-    "haskell" -> writeHaskell outMain mainMods mainMods
-    "java"    -> writeJava    outMain mainMods mainMods
-    "python"  -> writePython  outMain mainMods mainMods
+    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain mainMods mainMods
+    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain mainMods mainMods
+    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain mainMods mainMods
     _ -> do
       putStrLn $ "Unknown target: " ++ target
       exitFailure
@@ -99,22 +109,23 @@ main = do
 
   -- Load and generate test modules.
   let haskellTestJson = "../hydra-haskell/src/gen-test/json"
+  testNamespaces <- readManifestField haskellMainJson "testModules"
+
   putStrLn "Loading test modules from JSON..."
   putStrLn $ "  Source: " ++ haskellTestJson
-  let mainModsClean = fmap stripModuleTypeSchemes mainMods
-  testMods <- loadAllModulesFromJsonDirWith False haskellTestJson (kernelModules ++ mainModsClean)
+  testMods <- loadModulesFromJson False haskellTestJson kernelModules testNamespaces
   putStrLn $ "  Loaded " ++ show (length testMods) ++ " test modules."
   putStrLn ""
 
-  let allUniverse = mainModsClean ++ testMods
+  let allUniverse = mainMods ++ testMods
   let outTest = outDir FP.</> ("src/gen-test/" ++ target)
   putStrLn $ "Generating " ++ target ++ " test code..."
 
   testStart <- getCurrentTime
   case target of
-    "haskell" -> writeHaskell outTest allUniverse testMods
-    "java"    -> writeJava    outTest allUniverse testMods
-    "python"  -> writePython  outTest allUniverse testMods
+    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outTest allUniverse testMods
+    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outTest allUniverse testMods
+    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outTest allUniverse testMods
     _ -> return ()
   testEnd <- getCurrentTime
   let testSecs = realToFrac (diffUTCTime testEnd testStart) :: Double
@@ -129,4 +140,3 @@ main = do
   putStrLn $ "  Output files: " ++ show mainFileCount ++ " main + " ++ show testFileCount ++ " test"
   putStrLn $ "  Output:       " ++ outDir
   putStrLn "=========================================="
-

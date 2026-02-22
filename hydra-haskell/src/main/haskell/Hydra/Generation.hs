@@ -329,16 +329,28 @@ escapeControlCharsInJson :: BS.ByteString -> BS.ByteString
 escapeControlCharsInJson input =
   BS.pack $ fmap fromIntegral $ CodeGeneration.escapeControlCharsInJson $ fmap fromIntegral $ BS.unpack input
 
--- | Load modules from JSON files.
--- Takes a base path and a list of namespaces to load.
--- The universeModules are used to build the graph for type resolution.
--- When doStripTypeSchemes is True, TypeSchemes are stripped from term bindings
--- because they may contain stale types (e.g., bigfloat) that cause inference
--- errors after adaptation. The inference engine will reconstruct correct TypeSchemes.
--- When False, TypeSchemes are preserved (useful for ext modules that don't need
--- type adaptation and where stripping would cause inference to loop on recursive types).
-loadModulesFromJson :: Bool -> FilePath -> [Module] -> IO [Module]
-loadModulesFromJson doStripTypeSchemes basePath universeModules = do
+-- | Read a field from manifest.json as a list of Namespaces.
+readManifestField :: FilePath -> String -> IO [Namespace]
+readManifestField basePath fieldName = do
+    let manifestPath = basePath FP.</> "manifest.json"
+    parseResult <- parseJsonFile manifestPath
+    case parseResult of
+      Left err -> fail $ "Failed to parse manifest.json: " ++ err
+      Right jsonVal -> case jsonVal of
+        Json.ValueObject obj -> case M.lookup fieldName obj of
+          Nothing -> fail $ "manifest.json missing field: " ++ fieldName
+          Just (Json.ValueArray arr) -> return $ fmap toNamespace arr
+          Just _ -> fail $ "manifest.json field " ++ fieldName ++ " is not an array"
+        _ -> fail "manifest.json is not a JSON object"
+  where
+    toNamespace (Json.ValueString s) = Namespace s
+    toNamespace _ = error $ "manifest.json: expected string in " ++ fieldName
+
+-- | Load modules from JSON files for a list of namespaces.
+-- Uses the universe modules to build the graph for type resolution.
+-- When doStripTypeSchemes is True, TypeSchemes are stripped from term bindings.
+loadModulesFromJson :: Bool -> FilePath -> [Module] -> [Namespace] -> IO [Module]
+loadModulesFromJson doStripTypeSchemes basePath universeModules namespaces = do
     CM.forM namespaces $ \ns -> do
       let filePath = basePath FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
       parseResult <- parseJsonFile filePath
@@ -349,5 +361,3 @@ loadModulesFromJson doStripTypeSchemes basePath universeModules = do
           Right mod -> do
             putStrLn $ "  Loaded: " ++ unNamespace ns
             return mod
-  where
-    namespaces = L.nub $ fmap moduleNamespace universeModules

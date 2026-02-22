@@ -81,82 +81,50 @@ TestRunner = Callable[[str, hydra.testing.TestCaseWithMetadata], Optional[Callab
 
 def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     """
-    Load kernel term bindings from the generated sources modules.
+    Load kernel term bindings from JSON.
 
-    This loads bindings from hydra.sources.* modules which contain term-encoded
-    Module objects. These are the kernel term modules (hydra.monads, hydra.annotations,
-    etc.) that are needed for evaluation tests.
+    The test graph needs kernel term bindings (hydra.monads.pure,
+    hydra.monads.bind, etc.) so that the evaluator can resolve references
+    to these definitions at runtime. Without them, evaluation of expressions
+    like `unwrap(hydra.compute.Flow) @ (hydra.monads.pure @ 42)` would fail
+    because the evaluator cannot find the definition of `hydra.monads.pure`.
+
+    These are loaded from the JSON representation in hydra-haskell rather than
+    from generated Python Source modules. This works because term modules don't
+    contribute to the schema map (no chicken-and-egg problem) and modules loaded
+    from JSON already carry full type annotations (no inference needed).
 
     Returns:
         Dictionary mapping binding names to Binding objects
     """
+    import sys
+    from hydra.generation import kernel_modules, load_modules_from_json, read_manifest_field, strip_all_term_types
+
+    # Bump recursion limit for the recursive JSON decoder
+    old_limit = sys.getrecursionlimit()
+    sys.setrecursionlimit(10000)
+
+    json_dir = "../hydra-haskell/src/gen-main/json"
+    km = kernel_modules()
+    type_namespaces = {m.namespace.value for m in km}
+
+    # Load all kernel namespaces from the manifest, then exclude the 22 type modules
+    all_kernel_namespaces = read_manifest_field(json_dir, "kernelModules")
+    term_namespaces = [ns for ns in all_kernel_namespaces if ns.value not in type_namespaces]
+
+    term_mods = load_modules_from_json(False, json_dir, km, term_namespaces)
+
+    # Strip System F type annotations (TypeLambda, TypeApplication, etc.) from
+    # term bodies. The JSON representation preserves the full System F encoding,
+    # but the evaluator works at the simply-typed level.
+    term_mods = strip_all_term_types(term_mods)
+
+    sys.setrecursionlimit(old_limit)
+
     bindings = {}
-
-    # Import the kernel term sources modules
-    # These match kernelPrimaryTermsModules in Hydra.Sources.Kernel.Terms.All
-    kernel_term_source_modules = [
-        # Primary term modules
-        "hydra.sources.adapt.literals",
-        "hydra.sources.adapt.modules",
-        "hydra.sources.adapt.simple",
-        "hydra.sources.adapt.terms",
-        "hydra.sources.adapt.utils",
-        "hydra.sources.annotations",
-        "hydra.sources.arity",
-        "hydra.sources.checking",
-        "hydra.sources.constants",
-        "hydra.sources.decoding",
-        "hydra.sources.encoding",
-        "hydra.sources.extract.core",
-        "hydra.sources.extract.helpers",
-        "hydra.sources.extract.util",
-        "hydra.sources.formatting",
-        "hydra.sources.grammars",
-        "hydra.sources.inference",
-        "hydra.sources.languages",
-        "hydra.sources.lexical",
-        "hydra.sources.literals",
-        "hydra.sources.monads",
-        "hydra.sources.names",
-        "hydra.sources.parsers",
-        "hydra.sources.reduction",
-        "hydra.sources.reflect",
-        "hydra.sources.rewriting",
-        "hydra.sources.schemas",
-        "hydra.sources.serialization",
-        "hydra.sources.show.accessors",
-        "hydra.sources.show.core",
-        "hydra.sources.show.graph",
-        "hydra.sources.show.meta",
-        "hydra.sources.show.typing",
-        "hydra.sources.show.util",
-        "hydra.sources.sorting",
-        "hydra.sources.substitution",
-        "hydra.sources.tarjan",
-        "hydra.sources.templates",
-        "hydra.sources.unification",
-    ]
-
-    for module_name in kernel_term_source_modules:
-        try:
-            # Dynamically import the module
-            import importlib
-            source_module = importlib.import_module(module_name)
-
-            # Call module() to get the Module object
-            mod = source_module.module()
-
-            # Extract bindings from the module
-            for binding in mod.elements:
-                bindings[binding.name] = binding
-
-        except ImportError as e:
-            # Module not yet generated - skip silently
-            pass
-        except Exception as e:
-            # Log but don't fail - allows tests to run with partial kernel
-            import sys
-            print(f"Warning: Failed to load {module_name}: {e}", file=sys.stderr)
+    for mod in term_mods:
+        for binding in mod.elements:
+            bindings[binding.name] = binding
 
     return bindings
 
@@ -435,8 +403,9 @@ def build_test_graph() -> hydra.graph.Graph:
         )
 
     # Add kernel term bindings (hydra.monads.*, hydra.annotations.*, etc.)
-    # This mirrors how Haskell includes kernelTermsModules in testGraph
-    # Load from generated sources modules (hydra/sources/*.py)
+    # so the evaluator can resolve references to kernel definitions at runtime.
+    # This mirrors how Haskell includes kernelTermsModules in testGraph.
+    # Loaded from JSON (see _load_kernel_term_bindings for rationale).
     kernel_terms = _load_kernel_term_bindings()
     term_bindings.update(kernel_terms)
 

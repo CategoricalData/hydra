@@ -34,12 +34,21 @@ from hydra.sources.libraries import standard_library
 
 @lru_cache(1)
 def kernel_modules():
-    """Load all kernel Source modules (the Python equivalent of Haskell's kernelModules).
+    """Load the kernel type Source modules (the 22 kernelTypesModules).
 
     These provide the type universe needed for decoding modules from JSON.
-    Mirrors: kernelTypesModules ++ kernelTermsModules ++ jsonModules
+    Only type-defining modules are needed; term modules contribute nothing
+    to the schema map used for JSON decoding.
+
+    We keep generated Python Source modules for the kernel *type* modules
+    because they are needed to bootstrap the JSON decoder: you need a type
+    universe (schema map) before you can decode any JSON module, and the
+    type universe comes from these Source modules. Kernel *term* modules,
+    on the other hand, are loaded from JSON at runtime. This works because
+    (a) term modules don't contribute to the schema map, so they don't
+    create a chicken-and-egg problem, and (b) modules loaded from JSON
+    already carry full type annotations, so no further inference is needed.
     """
-    # Kernel types modules (22)
     from hydra.sources import accessors as src_accessors
     from hydra.sources import ast as src_ast
     from hydra.sources import classes as src_classes
@@ -63,106 +72,7 @@ def kernel_modules():
     from hydra.sources import variants as src_variants
     from hydra.sources import workflow as src_workflow
 
-    # Kernel primary terms modules (41 in Haskell, minus codeGeneration which has no Source module in Python)
-    from hydra.sources.adapt import literals as src_adapt_literals
-    from hydra.sources.adapt import modules as src_adapt_modules
-    from hydra.sources.adapt import simple as src_adapt_simple
-    from hydra.sources.adapt import terms as src_adapt_terms
-    from hydra.sources.adapt import utils as src_adapt_utils
-    from hydra.sources import annotations as src_annotations
-    from hydra.sources import arity as src_arity
-    from hydra.sources import checking as src_checking
-    from hydra.sources import constants as src_constants
-    # Note: hydra.sources.decoding is skipped (SyntaxError: too many nested parentheses)
-    from hydra.sources import encoding as src_encoding
-    from hydra.sources.extract import core as src_extract_core
-    from hydra.sources.extract import helpers as src_extract_helpers
-    from hydra.sources.extract import util as src_extract_util
-    from hydra.sources import formatting as src_formatting
-    from hydra.sources import grammars as src_grammars
-    # Note: hydra.sources.hoisting is skipped (SyntaxError: too many nested parentheses)
-    from hydra.sources import inference as src_inference
-    from hydra.sources import languages as src_languages
-    from hydra.sources import lexical as src_lexical
-    from hydra.sources import literals as src_literals
-    from hydra.sources import monads as src_monads
-    from hydra.sources import names as src_names
-    from hydra.sources import parsers as src_parsers
-    from hydra.sources import reduction as src_reduction
-    from hydra.sources import reflect as src_reflect
-    from hydra.sources import rewriting as src_rewriting
-    from hydra.sources import schemas as src_schemas
-    from hydra.sources import serialization as src_serialization
-    from hydra.sources.show import accessors as src_show_accessors
-    from hydra.sources.show import core as src_show_core
-    from hydra.sources.show import graph as src_show_graph
-    from hydra.sources.show import meta as src_show_meta
-    from hydra.sources.show import typing as src_show_typing
-    from hydra.sources.show import util as src_show_util
-    from hydra.sources import sorting as src_sorting
-    from hydra.sources import substitution as src_substitution
-    from hydra.sources import tarjan as src_tarjan
-    from hydra.sources import templates as src_templates
-    from hydra.sources import unification as src_unification
-
-    # Kernel decoding modules (21)
-    from hydra.sources.decode import accessors as src_dec_accessors
-    from hydra.sources.decode import ast as src_dec_ast
-    from hydra.sources.decode import classes as src_dec_classes
-    from hydra.sources.decode import coders as src_dec_coders
-    from hydra.sources.decode import compute as src_dec_compute
-    from hydra.sources.decode import constraints as src_dec_constraints
-    from hydra.sources.decode import core as src_dec_core
-    from hydra.sources.decode import grammar as src_dec_grammar
-    from hydra.sources.decode.json import model as src_dec_json
-    from hydra.sources.decode import module as src_dec_module
-    from hydra.sources.decode import parsing as src_dec_parsing
-    from hydra.sources.decode import phantoms as src_dec_phantoms
-    from hydra.sources.decode import query as src_dec_query
-    from hydra.sources.decode import relational as src_dec_relational
-    from hydra.sources.decode import tabular as src_dec_tabular
-    from hydra.sources.decode import testing as src_dec_testing
-    from hydra.sources.decode import topology as src_dec_topology
-    from hydra.sources.decode import typing as src_dec_typing
-    from hydra.sources.decode import util as src_dec_util
-    from hydra.sources.decode import variants as src_dec_variants
-    from hydra.sources.decode import workflow as src_dec_workflow
-
-    # Kernel encoding modules (21)
-    from hydra.sources.encode import accessors as src_enc_accessors
-    from hydra.sources.encode import ast as src_enc_ast
-    from hydra.sources.encode import classes as src_enc_classes
-    from hydra.sources.encode import coders as src_enc_coders
-    from hydra.sources.encode import compute as src_enc_compute
-    from hydra.sources.encode import constraints as src_enc_constraints
-    from hydra.sources.encode import core as src_enc_core
-    from hydra.sources.encode import grammar as src_enc_grammar
-    from hydra.sources.encode.json import model as src_enc_json
-    from hydra.sources.encode import module as src_enc_module
-    from hydra.sources.encode import parsing as src_enc_parsing
-    from hydra.sources.encode import phantoms as src_enc_phantoms
-    from hydra.sources.encode import query as src_enc_query
-    from hydra.sources.encode import relational as src_enc_relational
-    from hydra.sources.encode import tabular as src_enc_tabular
-    from hydra.sources.encode import testing as src_enc_testing
-    from hydra.sources.encode import topology as src_enc_topology
-    from hydra.sources.encode import typing as src_enc_typing
-    from hydra.sources.encode import util as src_enc_util
-    from hydra.sources.encode import variants as src_enc_variants
-    from hydra.sources.encode import workflow as src_enc_workflow
-
-    # JSON modules (8 in Haskell; in Python: 5 in sources/json + 3 in sources/ext/org/json)
-    from hydra.sources.json import decode as src_json_decode
-    from hydra.sources.json import encode as src_json_encode
-    from hydra.sources.json import parser as src_json_parser
-    from hydra.sources.json import writer as src_json_writer
-    from hydra.sources.extract import json as src_extract_json
-    from hydra.sources.ext.org.json import coder as src_org_json_coder
-    from hydra.sources.ext.org.json import decoding as src_org_json_decoding
-    from hydra.sources.ext.org.json import language as src_org_json_language
-
-    modules = [
-        # Types (22)
+    return [
         src_accessors.module(), src_ast.module(), src_classes.module(),
         src_coders.module(), src_compute.module(), src_constraints.module(),
         src_core.module(), src_grammar.module(), src_graph.module(),
@@ -171,45 +81,7 @@ def kernel_modules():
         src_tabular.module(), src_testing.module(), src_topology.module(),
         src_typing.module(), src_util.module(), src_variants.module(),
         src_workflow.module(),
-        # Primary terms (40, excluding codeGeneration)
-        src_adapt_literals.module(), src_adapt_modules.module(),
-        src_adapt_simple.module(), src_adapt_terms.module(), src_adapt_utils.module(),
-        src_annotations.module(), src_arity.module(), src_checking.module(),
-        src_constants.module(), src_encoding.module(),
-        src_extract_core.module(), src_extract_helpers.module(), src_extract_util.module(),
-        src_formatting.module(), src_grammars.module(),
-        src_inference.module(), src_languages.module(), src_lexical.module(),
-        src_literals.module(), src_monads.module(), src_names.module(),
-        src_parsers.module(), src_reduction.module(), src_reflect.module(),
-        src_rewriting.module(), src_schemas.module(), src_serialization.module(),
-        src_show_accessors.module(), src_show_core.module(), src_show_graph.module(),
-        src_show_meta.module(), src_show_typing.module(), src_show_util.module(),
-        src_sorting.module(), src_substitution.module(), src_tarjan.module(),
-        src_templates.module(), src_unification.module(),
-        # Decoding (21)
-        src_dec_accessors.module(), src_dec_ast.module(), src_dec_classes.module(),
-        src_dec_coders.module(), src_dec_compute.module(), src_dec_constraints.module(),
-        src_dec_core.module(), src_dec_grammar.module(), src_dec_json.module(),
-        src_dec_module.module(), src_dec_parsing.module(), src_dec_phantoms.module(),
-        src_dec_query.module(), src_dec_relational.module(), src_dec_tabular.module(),
-        src_dec_testing.module(), src_dec_topology.module(), src_dec_typing.module(),
-        src_dec_util.module(), src_dec_variants.module(), src_dec_workflow.module(),
-        # Encoding (21)
-        src_enc_accessors.module(), src_enc_ast.module(), src_enc_classes.module(),
-        src_enc_coders.module(), src_enc_compute.module(), src_enc_constraints.module(),
-        src_enc_core.module(), src_enc_grammar.module(), src_enc_json.module(),
-        src_enc_module.module(), src_enc_parsing.module(), src_enc_phantoms.module(),
-        src_enc_query.module(), src_enc_relational.module(), src_enc_tabular.module(),
-        src_enc_testing.module(), src_enc_topology.module(), src_enc_typing.module(),
-        src_enc_util.module(), src_enc_variants.module(), src_enc_workflow.module(),
-        # JSON (8)
-        src_json_decode.module(), src_json_encode.module(),
-        src_json_parser.module(), src_json_writer.module(),
-        src_extract_json.module(),
-        src_org_json_coder.module(), src_org_json_decoding.module(),
-        src_org_json_language.module(),
     ]
-    return modules
 
 
 def bootstrap_graph():
