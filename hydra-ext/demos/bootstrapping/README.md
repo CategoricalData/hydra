@@ -66,12 +66,12 @@ hydra-python/
   `main` branch) and is fully synced. All generated code (Haskell, Java,
   Python gen-main directories) and JSON exports should be up to date.
 
-- If you have made local changes to Sources or other DSL code, you may need
-  to re-synchronize before running the demo. Use the appropriate sync scripts:
-  - `hydra-haskell/bin/sync-haskell.sh` -- regenerate Haskell kernel, JSON, and tests
-  - `hydra-ext/bin/sync-ext.sh` -- regenerate ext Haskell gen-main and ext JSON
-  - `hydra-ext/bin/sync-java.sh` -- regenerate Java gen-main
-  - `hydra-ext/bin/sync-python.sh` -- regenerate Python gen-main
+- If you have made local changes to Sources or other DSL code, run the
+  top-level sync script before running the demo:
+  ```bash
+  ./bin/sync-all.sh    # from repo root; or --quick to skip tests
+  ```
+  This runs all sync scripts in the correct order (Haskell, Ext, Java, Python).
 
 - All three language environments are set up:
   - Haskell: `stack build` works in hydra-haskell and hydra-ext

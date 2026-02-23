@@ -314,39 +314,6 @@ checkTypeVariables = define "checkTypeVariables" $
   -- The inference pass has already validated type variables via checkForUnboundTypeVariables.
   Flows.pure unit
 
-checkTypeVariablesDisabled :: TBinding (TypeContext -> Type -> Flow s ())
-checkTypeVariablesDisabled = define "checkTypeVariablesDisabled" $
-  doc "Original checkTypeVariables implementation (disabled)" $
-  "tx" ~> "typ" ~>
-  "cx" <~ Typing.typeContextInferenceContext (var "tx") $
-  "vars" <~ Typing.typeContextTypeVariables (var "tx") $
-  "dflt" <~ (
-    exec (Flows.mapList (var "checkTypeVariablesDisabled" @@ var "tx") (Rewriting.subtypes @@ var "typ")) $
-    produce unit) $
-  "check" <~ (cases _Type (var "typ")
-    (Just $ var "dflt") [
-    _Type_forall>>: "ft" ~> var "checkTypeVariablesDisabled"
-      @@ (Typing.typeContextWithTypeVariables (var "tx") (Sets.insert (Core.forallTypeParameter $ var "ft") (var "vars")))
-      @@ (Core.forallTypeBody $ var "ft"),
-    _Type_variable>>: "v" ~> Logic.ifElse (Sets.member (var "v") (var "vars"))
-      (Flows.pure unit)
-      (Logic.ifElse (Maps.member (var "v") (Typing.inferenceContextSchemaTypes (var "cx")))
-        (Flows.pure unit)
-        (Flows.fail $ Strings.cat $ list [
-          string "unbound type variable \"",
-          Core.unName $ var "v",
-          string "\" in ",
-          ShowCore.type_ @@ var "typ",
-          string ". Local variables: {",
-          Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Sets.toList $ var "vars"),
-          string "}, schema variables: {",
-          Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Typing.inferenceContextSchemaTypes $ var "cx"),
-          string "}"]))]) $
-  trace (Strings.cat $ list [
-    string "checking variables of: ",
-    ShowCore.type_ @@ var "typ"]) $
-  var "check"
-
 -- TODO: unused (?). This function can be used to construct Typing.typeContextTypes from Typing.typeContextInferenceContext
 toFContext :: TBinding (InferenceContext -> M.Map Name Type)
 toFContext = define "toFContext" $

@@ -92,6 +92,9 @@ public class Bootstrap {
         // This allows the pipeline to skip pre-adaptation inference (Step 3 in
         // dataGraphToDefinitions), which is a major performance win.
         List<Module> allMods = rawMods;
+        // Keep the full (unfiltered) module list for test code generation,
+        // since test modules may reference ext bindings even in kernel-only mode.
+        List<Module> fullMods = rawMods;
 
         // Step 2: Filter modules
         List<Module> modsToGenerate = allMods;
@@ -199,7 +202,7 @@ public class Bootstrap {
         System.out.println("  Time: " + formatTime(stepTime));
         System.out.println();
 
-        List<Module> allUniverse = new ArrayList<>(allMods);
+        List<Module> allUniverse = new ArrayList<>(fullMods);
         allUniverse.addAll(testMods);
 
         String outTest = outDir + File.separator + "src/gen-test";

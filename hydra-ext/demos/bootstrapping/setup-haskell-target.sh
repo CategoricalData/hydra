@@ -41,6 +41,27 @@ if [ -d "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Sources" ]; then
     cp -r "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Sources/"* "$OUTPUT_DIR/src/gen-main/haskell/Hydra/Sources/"
 fi
 
+# Eval lib modules (Hydra.Eval.Lib.*) — these are a separate manifest category
+# (evalLibModules) not included in the main bootstrap generation. Copy from baseline.
+echo "  Copying eval lib modules from baseline..."
+if [ -d "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Eval" ]; then
+    mkdir -p "$OUTPUT_DIR/src/gen-main/haskell/Hydra/Eval"
+    cp -r "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Eval/"* "$OUTPUT_DIR/src/gen-main/haskell/Hydra/Eval/"
+    echo "    Copied Hydra/Eval from baseline"
+fi
+
+# Copy ext modules from baseline, replacing any generated versions.
+# The bootstrap only generates a subset of ext modules (haskell, json);
+# other ext modules (java, python, scala, yaml) must come from the baseline.
+echo "  Copying ext modules from baseline..."
+HS_GEN="$OUTPUT_DIR/src/gen-main/haskell"
+HS_BASELINE="$HYDRA_HASKELL_DIR/src/gen-main/haskell"
+if [ -d "$HS_BASELINE/Hydra/Ext" ]; then
+    rm -rf "$HS_GEN/Hydra/Ext"
+    cp -r "$HS_BASELINE/Hydra/Ext" "$HS_GEN/Hydra/"
+    echo "    Copied Hydra/Ext from baseline"
+fi
+
 # Test infrastructure
 echo "  Copying test infrastructure..."
 mkdir -p "$OUTPUT_DIR/src/test/haskell"

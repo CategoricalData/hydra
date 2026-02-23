@@ -242,7 +242,7 @@ def register_flows_primitives() -> dict[Name, Primitive]:
         prims.function(x, prims.flow(s, y)), prims.set_(x), prims.flow(s, prims.set_(y))
     )
     primitives[qname(namespace, "pure")] = prims.prim1(
-        qname(namespace, "pure"), flows.pure, ["x", "s"],
+        qname(namespace, "pure"), flows.pure, ["s", "x"],
         x, prims.flow(s, x)
     )
     primitives[qname(namespace, "sequence")] = prims.prim1(
@@ -251,7 +251,7 @@ def register_flows_primitives() -> dict[Name, Primitive]:
     )
     # withDefault :: x -> Flow s x -> Flow s x
     primitives[qname(namespace, "withDefault")] = prims.prim2_interp(
-        qname(namespace, "withDefault"), Just(eval_flows.with_default), ["x", "s"],
+        qname(namespace, "withDefault"), Just(eval_flows.with_default), ["s", "x"],
         x, prims.flow(s, x), prims.flow(s, x)
     )
 

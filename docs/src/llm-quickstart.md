@@ -255,7 +255,7 @@ stack ghci hydra:lib hydra:hydra-test
 ./gradlew test --tests "hydra.VisitorTest"
 ```
 
-Requires: **Java 18+**
+Requires: **Java 17+**
 
 ### Python (hydra-python)
 
@@ -472,14 +472,8 @@ source files.
 
 ## Version tracking
 
-The version number is synchronized across four files:
-
-| File | Format |
-|------|--------|
-| `hydra-haskell/package.yaml` | `version: '0.13.0'` |
-| `hydra-ext/package.yaml` | `version: '0.13.0'` |
-| `build.gradle` (root) | `version = '0.13.0'` |
-| `hydra-python/pyproject.toml` | `version = "0.13.0"` |
+The canonical version lives in the `VERSION` file at the repository root. Run `bin/bump-version.sh X.Y.Z`
+to set the version and propagate it to all config files. See the [Release process](https://github.com/CategoricalData/hydra/wiki/Release-process) wiki page for the full list of versioned files and the release workflow.
 
 ## Debugging tips
 

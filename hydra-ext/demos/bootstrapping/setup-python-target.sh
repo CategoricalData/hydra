@@ -48,7 +48,7 @@ PY_SRC="$HYDRA_PYTHON_DIR/src/main/python/hydra"
 PY_DST="$OUTPUT_DIR/src/main/python/hydra"
 mkdir -p "$PY_DST"
 
-for f in __init__.py tools.py py.typed; do
+for f in __init__.py tools.py py.typed generation.py bootstrap.py; do
     cp "$PY_SRC/$f" "$PY_DST/" 2>/dev/null || true
 done
 
@@ -67,11 +67,24 @@ if [ -d "$HYDRA_PYTHON_DIR/src/gen-main/python/hydra/sources" ]; then
     find "$OUTPUT_DIR/src/gen-main/python/hydra/sources" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 fi
 
-# Copy all ext modules from baseline if not generated (needed for tests in kernel-only mode)
-echo "  Copying ext modules from baseline (if missing)..."
+# Eval lib modules (hydra.eval.lib.*) — these are a separate manifest category
+# (evalLibModules) not included in the main bootstrap generation. Copy from baseline.
+echo "  Copying eval lib modules from baseline..."
 PY_GEN="$OUTPUT_DIR/src/gen-main/python/hydra"
 PY_BASELINE="$HYDRA_PYTHON_DIR/src/gen-main/python/hydra"
-if [ ! -d "$PY_GEN/ext" ] && [ -d "$PY_BASELINE/ext" ]; then
+if [ ! -d "$PY_GEN/eval" ] && [ -d "$PY_BASELINE/eval" ]; then
+    mkdir -p "$PY_GEN/eval"
+    cp -r "$PY_BASELINE/eval/"* "$PY_GEN/eval/"
+    find "$PY_GEN/eval" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+    echo "    Copied hydra/eval from baseline"
+fi
+
+# Copy ext modules from baseline, replacing any generated versions.
+# The bootstrap only generates a subset of ext modules (haskell, json);
+# other ext modules (java, python, scala) must come from the baseline.
+echo "  Copying ext modules from baseline..."
+if [ -d "$PY_BASELINE/ext" ]; then
+    rm -rf "$PY_GEN/ext"
     cp -r "$PY_BASELINE/ext" "$PY_GEN/"
     find "$PY_GEN/ext" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
     echo "    Copied hydra/ext from baseline"
@@ -87,6 +100,14 @@ for f in test_suite_runner.py test_python.py test_generated_code.py test_grammar
     fi
 done
 
+# Create symlink to hydra-haskell so that relative paths (../hydra-haskell/...)
+# used by test_suite_runner.py to find JSON modules resolve correctly.
+echo "  Creating hydra-haskell symlink..."
+if [ ! -e "$OUTPUT_DIR/../hydra-haskell" ]; then
+    ln -s "$HYDRA_ROOT/hydra-haskell" "$OUTPUT_DIR/../hydra-haskell"
+    echo "    Symlinked ../hydra-haskell -> $HYDRA_ROOT/hydra-haskell"
+fi
+
 # Summary
 MAIN_COUNT=$(find "$OUTPUT_DIR/src/gen-main" -name "*.py" 2>/dev/null | wc -l | tr -d ' ')
 TEST_COUNT=$(find "$OUTPUT_DIR/src/gen-test" -name "*.py" 2>/dev/null | wc -l | tr -d ' ')
@@ -100,7 +121,11 @@ echo ""
 echo "Running Python tests..."
 STEP_START=$(date +%s)
 cd "$OUTPUT_DIR"
-pytest src/test/ src/gen-test/ 2>&1
+if [ -d "src/gen-test" ]; then
+    pytest src/test/ src/gen-test/ 2>&1
+else
+    pytest src/test/ 2>&1
+fi
 TEST_EXIT=$?
 STEP_END=$(date +%s)
 echo "  Test time: $((STEP_END - STEP_START))s"

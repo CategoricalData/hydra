@@ -72,5 +72,12 @@ patch "$REPO_ROOT/hydra-python/pyproject.toml" \
 patch "$REPO_ROOT/hydra-ext/demos/bootstrapping/resources/python/pyproject.toml" \
     "s/^version = \".*\"/version = \"$VERSION\"/"
 
+# README.md: version references
+patch "$REPO_ROOT/README.md" \
+    "s/The current release is \*\*[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\*\*/The current release is \*\*$VERSION\*\*/"
+# Also patch Maven coordinates (hydra-java:X.Y.Z and hydra-ext:X.Y.Z)
+sed -i '' "s/hydra-java:[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/hydra-java:$VERSION/" "$REPO_ROOT/README.md" 2>/dev/null
+sed -i '' "s/hydra-ext:[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*/hydra-ext:$VERSION/" "$REPO_ROOT/README.md" 2>/dev/null
+
 echo
 echo "Done. Verify with: git diff"

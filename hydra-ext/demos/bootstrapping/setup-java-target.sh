@@ -37,7 +37,7 @@ JAVA_SRC="$HYDRA_JAVA_DIR/src/main/java/hydra"
 JAVA_DST="$OUTPUT_DIR/src/main/java/hydra"
 mkdir -p "$JAVA_DST"
 
-for f in Adapters.java Coders.java HydraTestBase.java Lexical.java; do
+for f in Adapters.java Bootstrap.java Coders.java Generation.java HydraTestBase.java Lexical.java; do
     cp "$JAVA_SRC/$f" "$JAVA_DST/"
 done
 
@@ -59,13 +59,35 @@ for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java; do
     fi
 done
 
-# Copy all ext modules from baseline if not generated (needed for tests in kernel-only mode)
-echo "  Copying ext modules from baseline (if missing)..."
+# Eval lib modules (hydra.eval.lib.*) — these are a separate manifest category
+# (evalLibModules) not included in the main bootstrap generation. Copy from baseline.
+echo "  Copying eval lib modules from baseline..."
 JAVA_GEN="$OUTPUT_DIR/src/gen-main/java"
 JAVA_BASELINE="$HYDRA_JAVA_DIR/src/gen-main/java"
-if [ ! -d "$JAVA_GEN/hydra/ext" ] && [ -d "$JAVA_BASELINE/hydra/ext" ]; then
+if [ ! -d "$JAVA_GEN/hydra/eval" ] && [ -d "$JAVA_BASELINE/hydra/eval" ]; then
+    mkdir -p "$JAVA_GEN/hydra/eval"
+    cp -r "$JAVA_BASELINE/hydra/eval/"* "$JAVA_GEN/hydra/eval/"
+    echo "    Copied hydra/eval from baseline"
+fi
+
+# Copy ext modules from baseline, replacing any generated versions.
+# The bootstrap may generate ext modules with incorrect file paths for the
+# Java target (e.g. hydra/ext/syntax/ instead of hydra/ext/java/syntax/).
+# Using the baseline ensures correct package/path alignment.
+echo "  Copying ext modules from baseline..."
+if [ -d "$JAVA_BASELINE/hydra/ext" ]; then
+    # Remove any incorrectly-generated ext directories first
+    rm -rf "$JAVA_GEN/hydra/ext"
     cp -r "$JAVA_BASELINE/hydra/ext" "$JAVA_GEN/hydra/"
     echo "    Copied hydra/ext from baseline"
+fi
+
+# Create symlink to hydra-haskell so that relative paths (../hydra-haskell/...)
+# used by TestSuiteRunner.java to find JSON modules resolve correctly.
+echo "  Creating hydra-haskell symlink..."
+if [ ! -e "$OUTPUT_DIR/../hydra-haskell" ]; then
+    ln -s "$HYDRA_ROOT/hydra-haskell" "$OUTPUT_DIR/../hydra-haskell"
+    echo "    Symlinked ../hydra-haskell -> $HYDRA_ROOT/hydra-haskell"
 fi
 
 # Summary
