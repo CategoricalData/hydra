@@ -6,10 +6,7 @@ authors = [
     "Joshua Shinavier <josh@fortytwo.net>",
     "Fred Eisele <fredrick.eisele@gmail.com>",
 ]
-channels = [
-    "conda-forge",
-    "file:///var/home/phreed/Projects/conda-forge-babeloff/build_artifacts",
-]
+channels = ["conda-forge"]
 platforms = ["linux-64"]
 
 [tasks.build-all]
@@ -61,7 +58,7 @@ cwd = "."
 cmd = "nu pixi-scripts/validate-setup.nu"
 
 [tasks.sync-all]
-cmd = "bash bin/sync-all.sh"
+cmd = "pixi run -e haskell _sync-all"
 cwd = "."
 
 [dependencies]
@@ -91,86 +88,37 @@ env = { JAVA_HOME = "$CONDA_PREFIX" }
 python = ">=3.12"
 pip = "*"
 
+# Haskell feature: uses GHCup (official installer) to manage GHC, Stack, and Cabal.
+# All Haskell tools are installed into ~/.ghcup during activation.
 [feature.haskell.dependencies]
-gxx = "*"
-gcc = "*"
 gmp = "*"
 zlib = "*"
 ncurses = "*"
 libffi = "*"
-ghcup = "*"
 
 [feature.haskell.activation]
-env = { PATH = "$CONDA_PREFIX/.ghcup/bin:$PATH" }
+scripts = ["bin/activate-haskell.sh"]
 
-# GHC and Stack setup using ghcup
-[feature.haskell.tasks.ghcup-install-ghc]
-cmd = "ghcup install ghc 9.10.1"
-cwd = "."
-
-[feature.haskell.tasks.ghcup-install-ghc.env]
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
+[feature.haskell.activation.env]
+GHCUP_INSTALL_BASE_PREFIX = "$PIXI_PROJECT_ROOT"
+PATH = "$PIXI_PROJECT_ROOT/.ghcup/bin:$PATH"
 LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
 LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
 CPATH = "$CONDA_PREFIX/include:$CPATH"
 PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-[feature.haskell.tasks.ghcup-set-ghc]
-cmd = "ghcup set ghc 9.10.1"
-cwd = "."
-env = { GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX" }
-
-[feature.haskell.tasks.ghcup-install-stack]
-cmd = "ghcup install stack 2.15.7"
-cwd = "."
-env = { GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX" }
-
-[feature.haskell.tasks.ghcup-set-stack]
-cmd = "ghcup set stack 2.15.7"
-cwd = "."
-env = { GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX" }
-
-[feature.haskell.tasks.haskell-setup]
-depends-on = [
-    "ghcup-install-ghc",
-    "ghcup-set-ghc",
-    "ghcup-install-stack",
-    "ghcup-set-stack",
-]
-
-# Stack tasks using ghcup-installed GHC
+# Stack tasks using GHCup-managed GHC
 [feature.haskell.tasks.stack-setup]
 cmd = "stack setup --system-ghc"
 cwd = "."
-
-[feature.haskell.tasks.stack-setup.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
 
 [feature.haskell.tasks.stack-build]
 cmd = "stack build --system-ghc"
 cwd = "."
 
-[feature.haskell.tasks.stack-build.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
-
 [feature.haskell.tasks.stack-test]
 cmd = "stack test --system-ghc"
 cwd = "."
-
-[feature.haskell.tasks.stack-test.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
 
 [feature.haskell.tasks.stack-clean]
 cmd = "stack clean"
@@ -180,95 +128,43 @@ cwd = "."
 cmd = "stack ghci --system-ghc"
 cwd = "."
 
-[feature.haskell.tasks.stack-ghci.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
-
 [feature.haskell.tasks.stack-install]
 cmd = "stack install --system-ghc"
 cwd = "."
-
-[feature.haskell.tasks.stack-install.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
 
 # Individual package builds for hydra-ext
 [feature.haskell.tasks.hydra-build]
 cmd = "stack build hydra-ext --system-ghc"
 cwd = "."
 
-[feature.haskell.tasks.hydra-build.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
-
 [feature.haskell.tasks.hydra-ghci]
 cmd = "stack ghci hydra-ext --system-ghc"
 cwd = "."
-
-[feature.haskell.tasks.hydra-ghci.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
 
 [feature.haskell.tasks.hydra-test]
 cmd = "stack test hydra-ext --system-ghc"
 cwd = "."
 
-[feature.haskell.tasks.hydra-test.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
-
 [feature.haskell.tasks.ext-ghci]
 cmd = "stack ghci hydra-ext --system-ghc"
 cwd = "."
-
-[feature.haskell.tasks.ext-ghci.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
 
 # Combined development tasks
 [feature.haskell.tasks.ghci-all]
 cmd = "nu pixi-scripts/ghci-all.nu"
 cwd = "."
-env = { GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX" }
 
 [feature.haskell.tasks.ghci-all-fixed]
 cmd = "nu pixi-scripts/ghci-all-fixed.nu"
 cwd = "."
-env = { GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX" }
 
 [feature.haskell.tasks.ghci-system]
 cmd = "nu pixi-scripts/ghci-system.nu"
 cwd = "."
-env = { GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX" }
 
 [feature.haskell.tasks.ghci-interactive]
 cmd = "stack ghci hydra-ext --system-ghc"
 cwd = "."
-
-[feature.haskell.tasks.ghci-interactive.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
 
 # Module and code exploration tasks
 [feature.haskell.tasks.haskell-modules]
@@ -283,34 +179,13 @@ cmd = "nu ../pixi-scripts/haskell-functions.nu"
 cmd = "ghc --make pixi-scripts/run-graphson.hs -o run-graphson && ./run-graphson"
 cwd = "."
 
-[feature.haskell.tasks.graphson-help.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
-
 [feature.haskell.tasks.run-copilot-graphson]
 cmd = "nu pixi-scripts/run-copilot-graphson.nu"
 cwd = "."
 
-[feature.haskell.tasks.run-copilot-graphson.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
-
 [feature.haskell.tasks.run-example-graphson]
 cmd = "nu pixi-scripts/run-example-graphson.nu"
 cwd = "."
-
-[feature.haskell.tasks.run-example-graphson.env]
-LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
-LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
-CPATH = "$CONDA_PREFIX/include:$CPATH"
-PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
-GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX"
 
 # Data checking tasks
 [feature.haskell.tasks.check-data]
@@ -344,7 +219,7 @@ cwd = "."
 
 # Unified Haskell tasks
 [feature.haskell.tasks.haskell-setup-all]
-depends-on = ["haskell-setup", "stack-setup"]
+depends-on = ["stack-setup"]
 
 [feature.haskell.tasks.haskell-build-all]
 depends-on = ["stack-build", "hydra-build"]
@@ -359,12 +234,10 @@ depends-on = ["stack-clean"]
 [feature.haskell.tasks.generate-java]
 cmd = "nu pixi-scripts/generate-java.nu"
 cwd = "."
-env = { GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX" }
 
 [feature.haskell.tasks.generate-haskell]
 cmd = "nu pixi-scripts/generate-haskell.nu"
 cwd = "."
-env = { GHCUP_INSTALL_BASE_PREFIX = "$CONDA_PREFIX" }
 
 # Alternative ghci task with minimal conda interference
 [feature.haskell.tasks.ghci-minimal]
@@ -372,8 +245,8 @@ cmd = "nu pixi-scripts/ghci-minimal.nu"
 cwd = "."
 
 # Sync tasks (run individual sync scripts from haskell environment)
-[feature.haskell.tasks.sync-all]
-cmd = "bash ../../bin/sync-all.sh"
+[feature.haskell.tasks._sync-all]
+cmd = "bash -c 'bash bin/sync-all.sh 2>&1 | tee sync-all.log'"
 cwd = "."
 
 [feature.haskell.tasks.sync-haskell]
