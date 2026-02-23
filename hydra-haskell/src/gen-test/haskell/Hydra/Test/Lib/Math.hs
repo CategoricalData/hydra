@@ -1258,7 +1258,7 @@ allTests = Testing.TestGroup {
             Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.atanh"))),
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.5)))})),
-            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.5493061443340549)))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.5493061443340548)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
