@@ -61,6 +61,10 @@ cmd = "nu pixi-scripts/validate-setup.nu"
 cmd = "pixi run -e haskell _sync-all"
 cwd = "."
 
+[tasks.benchmark]
+cmd = "pixi run -e haskell _benchmark"
+cwd = "."
+
 [dependencies]
 rattler-build = ">=0.20.0"
 nushell = ">=0.80.0"
@@ -242,6 +246,11 @@ cwd = "."
 # Alternative ghci task with minimal conda interference
 [feature.haskell.tasks.ghci-minimal]
 cmd = "nu pixi-scripts/ghci-minimal.nu"
+cwd = "."
+
+# Benchmark tasks
+[feature.haskell.tasks._benchmark]
+cmd = "bash bin/run-benchmark-tests.sh"
 cwd = "."
 
 # Sync tasks (run individual sync scripts from haskell environment)

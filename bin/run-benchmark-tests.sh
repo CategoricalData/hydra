@@ -58,8 +58,12 @@ run_lang() {
         python)
             echo "=== Running Python benchmark tests (run $i/$REPEAT) ==="
             cd "$REPO_ROOT/hydra-python"
+            local py="${REPO_ROOT}/hydra-python/.venv/bin/python"
+            if [ ! -x "$py" ]; then
+                py="python3"
+            fi
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
-                .venv/bin/python -m pytest src/test/python/test_suite_runner.py
+                "$py" -m pytest src/test/python/test_suite_runner.py
             ;;
         java)
             echo "=== Running Java benchmark tests (run $i/$REPEAT) ==="
