@@ -75,8 +75,9 @@ public class Bootstrap {
         // can skip pre-adaptation inference. Without types, inference fails on
         // hoisted case-statement bindings (_hoist_*) that lack type annotations.
         List<Namespace> mainNamespaces = Generation.readManifestField(jsonDir, "mainModules");
+        java.util.Map<hydra.core.Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
         List<Module> rawMods = Generation.loadModulesFromJson(false, jsonDir,
-                Collections.emptyList(), mainNamespaces);
+                schemaMap, mainNamespaces);
         long stepTime = System.currentTimeMillis() - stepStart;
 
         int totalBindings = 0;
@@ -187,7 +188,7 @@ public class Bootstrap {
         // Test modules need their types preserved so inference can be skipped.
         List<Namespace> testNamespaces = Generation.readManifestField(jsonDir, "testModules");
         List<Module> testMods = Generation.loadModulesFromJson(false, testJsonDir,
-                Collections.emptyList(), testNamespaces);
+                schemaMap, testNamespaces);
         stepTime = System.currentTimeMillis() - stepStart;
 
         int testBindings = 0;

@@ -1,6 +1,6 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- | A module which provides a minimal typing environment for decoding other Modules from JSON
+-- | A module which provides a minimal typing environment for decoding other modules from JSON. This avoids certain problems with generating entire source modules into target languages like Java, which is subject to method size limits for large modules like hydra.core.
 
 module Hydra.Json.Bootstrap where
 

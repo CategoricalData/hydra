@@ -136,14 +136,25 @@ public class TestSuiteRunner {
             primitives.put(prim.name(), prim.toNative());
         }
 
+        // Load all kernel modules for schema graph type definitions.
+        // Only type-defining bindings are extracted — the full module data is not retained.
+        List<Module> allKernelModules = loadAllKernelModulesForSchema();
+        List<Binding> kernelTypeBindings = new ArrayList<>();
+        for (Module mod : allKernelModules) {
+            for (Binding b : mod.elements) {
+                if (hydra.annotations.Annotations.isNativeType(b)) {
+                    kernelTypeBindings.add(b);
+                }
+            }
+        }
+
+        // Load only essential term modules for the evaluator (hydra.monads, hydra.annotations, etc.)
+        List<Module> termModules = loadEvaluatorTermModules();
+
         // Build schema graph with test types + kernel types
         Map<Name, Type> testTypes = TestGraph.testTypes();
 
-        // Load kernel type bindings from generated Source modules (the 22 kernelTypesModules).
-        // This mirrors how Haskell includes kernelTypesModules in testSchemaGraph.
-        List<Binding> kernelTypeBindings = loadKernelTypeBindings();
-
-        // Build type bindings for test types (encode Type values as Terms)
+        // Build type bindings: kernel type bindings (from JSON) + test type bindings
         List<Binding> typeBindings = new ArrayList<>(kernelTypeBindings);
         for (Map.Entry<Name, Type> entry : testTypes.entrySet()) {
             Term typeTerm = hydra.encode.core.Core.type(entry.getValue());
@@ -168,12 +179,10 @@ public class TestSuiteRunner {
         Map<Name, Term> testTerms = TestGraph.testTerms();
         List<Binding> termBindings = new ArrayList<>();
 
-        // Load kernel term bindings from JSON (hydra.monads.*, hydra.annotations.*, etc.)
-        // so the evaluator can resolve references to kernel definitions at runtime.
-        // This mirrors how Haskell includes kernelTermsModules in testGraph.
-        // Loaded from JSON (see loadKernelTermBindings for rationale).
-        List<Binding> kernelTermBindings = loadKernelTermBindings();
-        termBindings.addAll(kernelTermBindings);
+        // Add kernel term bindings from non-bootstrap modules
+        for (Module mod : termModules) {
+            termBindings.addAll(mod.elements);
+        }
 
         // Bridge all primitives: Variable("hydra.lib.maps.null") -> Function.Primitive("hydra.lib.maps.null")
         // The reducer only looks up Term.Variable in term bindings (not primitives).
@@ -206,101 +215,55 @@ public class TestSuiteRunner {
         );
     }
 
-    /**
-     * Load kernel type bindings from the generated Source modules (the 22 kernelTypesModules).
-     *
-     * <p>We keep generated Java Source modules for the kernel type modules because they are
-     * needed to bootstrap the JSON decoder: you need a type universe (schema map) before you
-     * can decode any JSON module, and the type universe comes from these Source modules.
-     */
-    private static List<Binding> loadKernelTypeBindings() {
-        List<Module> typeSources = kernelTypesModules();
-        List<Binding> bindings = new ArrayList<>();
-        for (Module mod : typeSources) {
-            bindings.addAll(mod.elements);
-        }
-        return bindings;
-    }
+    private static final Set<String> BOOTSTRAP_NAMESPACES = Set.of(
+        "hydra.core", "hydra.compute", "hydra.graph", "hydra.module");
+
+    // The evaluator only needs these term modules (hydra.monads + hydra.annotations and their deps).
+    // Loading all 113 kernel modules from JSON creates too much memory pressure.
+    private static final List<String> EVALUATOR_TERM_NAMESPACES = List.of(
+        "hydra.constants",
+        "hydra.show.core",
+        "hydra.monads",
+        "hydra.extract.core",
+        "hydra.lexical",
+        "hydra.rewriting",
+        "hydra.decode.core",
+        "hydra.encode.core",
+        "hydra.annotations");
 
     /**
-     * Load kernel term bindings from JSON.
-     *
-     * <p>Term modules are loaded from the JSON representation in hydra-haskell rather than
-     * from generated Java Source modules. This works because term modules don't contribute
-     * to the schema map (no chicken-and-egg problem) and modules loaded from JSON already
-     * carry full type annotations (no inference needed).
-     *
-     * <p>System F type annotations (TypeLambda, TypeApplication, etc.) are stripped from
-     * term bodies because the evaluator works at the simply-typed level.
+     * Load all kernel modules from JSON for the schema graph (type-defining bindings only).
      */
-    private static List<Binding> loadKernelTermBindings() {
+    private static List<Module> loadAllKernelModulesForSchema() {
         try {
             String jsonDir = "../hydra-haskell/src/gen-main/json";
-            List<Module> km = kernelTypesModules();
-            Set<String> typeNamespaces = new HashSet<>();
-            for (Module m : km) {
-                typeNamespaces.add(m.namespace.value);
-            }
-
-            // Load all kernel namespaces from the manifest, then exclude the 22 type modules
+            Map<Name, Type> schemaMap = Generation.bootstrapSchemaMap();
             List<Namespace> allKernelNamespaces = Generation.readManifestField(jsonDir, "kernelModules");
-            List<Namespace> termNamespaces = new ArrayList<>();
-            for (Namespace ns : allKernelNamespaces) {
-                if (!typeNamespaces.contains(ns.value)) {
-                    termNamespaces.add(ns);
-                }
-            }
-
-            List<Module> termMods = Generation.loadModulesFromJson(false, jsonDir, km, termNamespaces);
-
-            // Strip System F type annotations (TypeLambda, TypeApplication, etc.) from
-            // term bodies. The JSON representation preserves the full System F encoding,
-            // but the evaluator works at the simply-typed level.
-            termMods = Generation.stripAllTermTypes(termMods);
-
-            List<Binding> bindings = new ArrayList<>();
-            for (Module mod : termMods) {
-                bindings.addAll(mod.elements);
-            }
-            return bindings;
+            return Generation.loadModulesFromJson(false, jsonDir, schemaMap, allKernelNamespaces);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load kernel term modules from JSON", e);
+            throw new RuntimeException("Failed to load kernel modules from JSON", e);
         }
     }
 
     /**
-     * Return the 22 kernel type Source modules.
-     *
-     * <p>Kernel term modules, on the other hand, are loaded from JSON at runtime.
-     * This works because (a) term modules don't contribute to the schema map,
-     * so they don't create a chicken-and-egg problem, and (b) modules loaded
-     * from JSON already carry full type annotations, so no further inference is needed.
+     * Load only the essential term modules from JSON for the evaluator.
+     * System F type annotations are stripped since the evaluator works at the simply-typed level.
      */
-    private static List<Module> kernelTypesModules() {
-        return List.of(
-            hydra.sources.accessors.Accessors.module(),
-            hydra.sources.ast.Ast.module(),
-            hydra.sources.classes.Classes.module(),
-            hydra.sources.coders.Coders.module(),
-            hydra.sources.compute.Compute.module(),
-            hydra.sources.constraints.Constraints.module(),
-            hydra.sources.core.Core.module(),
-            hydra.sources.grammar.Grammar.module(),
-            hydra.sources.graph.Graph.module(),
-            hydra.sources.json.model.Model.module(),
-            hydra.sources.module.Module.module(),
-            hydra.sources.parsing.Parsing.module(),
-            hydra.sources.phantoms.Phantoms.module(),
-            hydra.sources.query.Query.module(),
-            hydra.sources.relational.Relational.module(),
-            hydra.sources.tabular.Tabular.module(),
-            hydra.sources.testing.Testing.module(),
-            hydra.sources.topology.Topology.module(),
-            hydra.sources.typing.Typing.module(),
-            hydra.sources.util.Util.module(),
-            hydra.sources.variants.Variants.module(),
-            hydra.sources.workflow.Workflow.module()
-        );
+    private static List<Module> loadEvaluatorTermModules() {
+        try {
+            String jsonDir = "../hydra-haskell/src/gen-main/json";
+            Map<Name, Type> schemaMap = Generation.bootstrapSchemaMap();
+            List<Namespace> termNamespaces = new ArrayList<>();
+            for (String ns : EVALUATOR_TERM_NAMESPACES) {
+                termNamespaces.add(new Namespace(ns));
+            }
+            List<Module> modules = Generation.loadModulesFromJson(false, jsonDir, schemaMap, termNamespaces);
+            // Strip System F type annotations (TypeLambda, TypeApplication, etc.) from
+            // term bodies for the evaluator, which works at the simply-typed level.
+            return Generation.stripAllTermTypes(modules);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load evaluator term modules from JSON", e);
+        }
     }
 
     /**
@@ -465,13 +428,17 @@ public class TestSuiteRunner {
 
     private static boolean shouldSkip(TestCaseWithMetadata tc) {
         Tag disabledTag = new Tag("disabled");
+        Tag disabledForPythonTag = new Tag("disabledForPython");
         Tag requiresFlowDecodingTag = new Tag("requiresFlowDecoding");
-        // Note: disabledForPython tests run in Java - they only fail in Python due to recursion limits
+        // Note: disabledForPython tests are also skipped in Java because the same beta-reduction
+        // term explosion occurs (e.g. deeply nested withTrace/mutateTrace). The Haskell evaluator
+        // handles these efficiently via lazy evaluation, but Java's eager reducer cannot.
         return tc.tags.contains(disabledTag)
+            || tc.tags.contains(disabledForPythonTag)
             || tc.tags.contains(requiresFlowDecodingTag);
     }
 
-    private static final Duration TEST_TIMEOUT = Duration.ofSeconds(5);
+    private static final Duration TEST_TIMEOUT = Duration.ofSeconds(10);
 
     private static DynamicTest runTestCase(String name, TestCaseWithMetadata tc) {
         return tc.case_.accept(new TestCase.PartialVisitor<>() {

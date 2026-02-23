@@ -18,58 +18,18 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_JAVA_DIR="$HYDRA_ROOT/hydra-java"
+JAVA_RESOURCES="$SCRIPT_DIR/resources/java"
 
 # Step: Copy static resources
 echo "Copying static resources for Java target..."
 
-# Build files (standalone build.gradle, not the multi-project one)
-echo "  Creating standalone build files..."
-cp "$HYDRA_JAVA_DIR/settings.gradle" "$OUTPUT_DIR/"
+# Build files
+echo "  Copying build files..."
+cp "$JAVA_RESOURCES/build.gradle" "$OUTPUT_DIR/"
+cp "$JAVA_RESOURCES/settings.gradle" "$OUTPUT_DIR/"
+cp "$JAVA_RESOURCES/README.md" "$OUTPUT_DIR/"
 cp "$HYDRA_ROOT/gradlew" "$OUTPUT_DIR/"
 cp -r "$HYDRA_ROOT/gradle" "$OUTPUT_DIR/"
-cat > "$OUTPUT_DIR/build.gradle" << 'GRADLE_EOF'
-// Standalone build.gradle for bootstrapped Hydra Java
-plugins {
-    id 'java-library'
-}
-
-group = 'net.fortytwo.hydra'
-version = '0.12.0'
-
-repositories {
-    mavenCentral()
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/gen-main/java', 'src/main/java']
-        }
-    }
-    test {
-        java {
-            srcDirs = ['src/gen-test/java', 'src/test/java']
-        }
-    }
-}
-
-dependencies {
-    api group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
-    api group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
-
-    api(platform(group: 'org.junit', name: 'junit-bom', version: '5.9.2'))
-    api('org.junit.jupiter:junit-jupiter')
-    api group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.9.2'
-}
-
-test {
-    useJUnitPlatform()
-    testLogging {
-        events "passed", "failed", "skipped"
-        exceptionFormat "short"
-    }
-}
-GRADLE_EOF
 
 # Hand-written source files
 echo "  Copying hand-written source files..."

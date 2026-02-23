@@ -3,7 +3,7 @@
 package hydra.json.bootstrap;
 
 /**
- * A module which provides a minimal typing environment for decoding other modules from JSON
+ * A module which provides a minimal typing environment for decoding other modules from JSON. This avoids certain problems with generating entire source modules into target languages like Java, which is subject to method size limits for large modules like hydra.core.
  */
 public interface Bootstrap {
   static java.util.Map<hydra.core.Name, hydra.core.Type> typesByName() {

@@ -44,6 +44,7 @@ executables:
     source-dirs:
       - src/exec/update-generation-tests
       - src/gen-test/haskell
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
       - hspec
@@ -53,6 +54,7 @@ executables:
     source-dirs:
       - src/exec/update-kernel-tests
       - src/gen-test/haskell
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
       - hspec
@@ -61,6 +63,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-json-kernel
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -84,6 +87,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-json-manifest
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -91,6 +95,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-haskell-kernel
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -98,6 +103,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-haskell-eval-lib
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -105,6 +111,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-haskell-sources
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -112,6 +119,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/verify-json-kernel
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 

@@ -14,7 +14,15 @@ import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
 import Hydra.Sources.Kernel.Types.All
-import Hydra.Sources.Kernel.Terms.All (kernelTermsModules)
+import qualified Hydra.Sources.Kernel.Terms.Annotations as TermAnnotations
+import qualified Hydra.Sources.Kernel.Terms.Constants as TermConstants
+import qualified Hydra.Sources.Kernel.Terms.Extract.Core as TermExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Lexical as TermLexical
+import qualified Hydra.Sources.Kernel.Terms.Monads as TermMonads
+import qualified Hydra.Sources.Kernel.Terms.Rewriting as TermRewriting
+import qualified Hydra.Sources.Kernel.Terms.Show.Core as TermShowCore
+import qualified Hydra.Sources.Decode.Core as TermDecodeCore
+import qualified Hydra.Sources.Encode.Core as TermEncodeCore
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Sources.Libraries
 import Hydra.Test.TestGraph
@@ -37,8 +45,19 @@ import qualified Data.ByteString.Lazy as BS
 testGraph :: Graph
 testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) (kernelTermBindings ++ dataBindings)
   where
-    -- Include kernel term definitions (like hydra.monads.pure) for interpreter tests
-    kernelTermBindings = L.concat $ fmap moduleElements kernelTermsModules
+    -- Include only essential kernel term definitions for interpreter tests.
+    -- The evaluator needs hydra.monads (and its dependencies) plus hydra.annotations (and its dependencies).
+    kernelTermBindings = L.concat $ fmap moduleElements
+      [ TermConstants.module_
+      , TermShowCore.module_
+      , TermMonads.module_
+      , TermExtractCore.module_
+      , TermLexical.module_
+      , TermRewriting.module_
+      , TermDecodeCore.module_
+      , TermEncodeCore.module_
+      , TermAnnotations.module_
+      ]
     dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
 
 testSchemaGraph :: Graph

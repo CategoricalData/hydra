@@ -106,13 +106,23 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     json_dir = "../hydra-haskell/src/gen-main/json"
     km = kernel_modules()
-    type_namespaces = {m.namespace.value for m in km}
 
-    # Load all kernel namespaces from the manifest, then exclude the 22 type modules
-    all_kernel_namespaces = read_manifest_field(json_dir, "kernelModules")
-    term_namespaces = [ns for ns in all_kernel_namespaces if ns.value not in type_namespaces]
+    # Load only the essential evaluator term modules (hydra.monads + hydra.annotations
+    # and their dependencies). Loading all 92 term modules from JSON is too slow.
+    # This matches the optimization in Haskell (TestUtils.hs) and Java (TestSuiteRunner.java).
+    evaluator_term_namespaces = [
+        hydra.core.Name("hydra.constants"),
+        hydra.core.Name("hydra.show.core"),
+        hydra.core.Name("hydra.monads"),
+        hydra.core.Name("hydra.extract.core"),
+        hydra.core.Name("hydra.lexical"),
+        hydra.core.Name("hydra.rewriting"),
+        hydra.core.Name("hydra.decode.core"),
+        hydra.core.Name("hydra.encode.core"),
+        hydra.core.Name("hydra.annotations"),
+    ]
 
-    term_mods = load_modules_from_json(False, json_dir, km, term_namespaces)
+    term_mods = load_modules_from_json(False, json_dir, km, evaluator_term_namespaces)
 
     # Strip System F type annotations (TypeLambda, TypeApplication, etc.) from
     # term bodies. The JSON representation preserves the full System F encoding,

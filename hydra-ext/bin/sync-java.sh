@@ -38,12 +38,11 @@ for arg in "$@"; do
             echo "Steps performed:"
             echo "  1. Build all executables"
             echo "  2. Generate Java kernel modules"
-            echo "  3. Generate Java kernel type sources modules"
-            echo "  4. Generate Java eval lib modules"
-            echo "  5. Generate Java kernel tests"
-            echo "  6. Generate Java generation tests"
-            echo "  7. Run Java build and tests (unless --quick)"
-            echo "  8. Report new files to git add"
+            echo "  3. Generate Java eval lib modules"
+            echo "  4. Generate Java kernel tests"
+            echo "  5. Generate Java generation tests"
+            echo "  6. Run Java build and tests (unless --quick)"
+            echo "  7. Report new files to git add"
             exit 0
             ;;
     esac
@@ -65,11 +64,10 @@ cd "$HYDRA_EXT_DIR"
 # RTS flags to avoid stack overflow during generation
 RTS_FLAGS="+RTS -K256M -A32M -RTS"
 
-echo "Step 1/7: Building executables..."
+echo "Step 1/6: Building executables..."
 echo ""
 stack build \
     hydra-ext:exe:update-java-kernel \
-    hydra-ext:exe:update-java-kernel-types-sources \
     hydra-ext:exe:update-java-eval-lib \
     hydra-ext:exe:update-java-kernel-tests \
     hydra-ext:exe:update-java-generation-tests
@@ -80,7 +78,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "Step 2/7: Generating Java kernel modules..."
+echo "Step 2/6: Generating Java kernel modules..."
 echo ""
 stack exec update-java-kernel -- $RTS_FLAGS
 
@@ -90,17 +88,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "Step 3/7: Generating Java kernel type sources modules..."
-echo ""
-stack exec update-java-kernel-types-sources -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: Kernel type sources generation failed"
-    exit 1
-fi
-
-echo ""
-echo "Step 4/7: Generating Java eval lib modules..."
+echo "Step 3/6: Generating Java eval lib modules..."
 echo ""
 stack exec update-java-eval-lib -- $RTS_FLAGS
 
@@ -110,7 +98,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "Step 5/7: Generating Java kernel tests..."
+echo "Step 4/6: Generating Java kernel tests..."
 echo ""
 stack exec update-java-kernel-tests -- $RTS_FLAGS
 
@@ -120,7 +108,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "Step 6/7: Generating Java generation tests..."
+echo "Step 5/6: Generating Java generation tests..."
 echo ""
 stack exec update-java-generation-tests -- $RTS_FLAGS
 
@@ -135,7 +123,7 @@ echo "=========================================="
 
 if [ "$QUICK_MODE" = false ]; then
     echo ""
-    echo "Step 7/7: Building and testing Java..."
+    echo "Step 6/6: Building and testing Java..."
     echo ""
 
     cd "$HYDRA_ROOT_DIR"
@@ -160,13 +148,12 @@ if [ "$QUICK_MODE" = false ]; then
     else
         echo ""
         echo "WARNING: Some tests failed (exit code $TEST_RESULT). Please review the output above."
-        echo "Known failures: BigInt->BigFloat precision, String->Binary encoding, transcendental math precision"
     fi
 
     cd "$HYDRA_EXT_DIR"
 else
     echo ""
-    echo "Step 7/7: Skipped (--quick mode)"
+    echo "Step 6/6: Skipped (--quick mode)"
 fi
 
 echo ""

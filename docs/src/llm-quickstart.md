@@ -102,7 +102,7 @@ This section links to every major document in the project with a brief descripti
 | Promoting code | [promoting-code.md](recipes/promoting-code.md) | Convert raw Haskell to Hydra DSL modules. Incremental hybrid approach. DSL construct mapping (`<~` for let, `match` for cases, `project` for fields). Common pitfalls with lambdas in higher-order functions |
 | Refactoring namespaces | [refactoring-namespaces.md](recipes/refactoring-namespaces.md) | Rename/move a Hydra namespace. 5-phase process across hydra-haskell, hydra-ext, hydra-python, hydra-java. Orphan file cleanup, decoder/encoder module moves |
 | Refactoring | [refactoring.md](recipes/refactoring.md) | Create, rename, move, delete kernel elements and modules. Detailed examples: creating `hydra.hoisting`, changing `Graph.elements` from Map to List |
-| Syncing Python | [syncing-python.md](recipes/syncing-python.md) | Regenerate Python from Haskell. 5 artifact categories, 7 manual steps, `sync-python.sh` script. Troubleshooting generation errors |
+| Syncing Python | [syncing-python.md](recipes/syncing-python.md) | Regenerate Python from Haskell. 4 artifact categories, `sync-python.sh` script. Troubleshooting generation errors |
 
 ### Wiki (GitHub wiki -- separate repository)
 
@@ -298,20 +298,31 @@ writeHaskell "../hydra-haskell/src/gen-main/haskell" mainModules mainModules
 After modifying Haskell sources, use these scripts to regenerate and test:
 
 ```bash
+# Full sync: Haskell -> Ext -> Java -> Python (from repo root)
+./bin/sync-all.sh              # or --quick to skip tests
+
+# Verify release (from repo root)
+./bin/verify-release.sh
+```
+
+Or run individual phases:
+
+```bash
 # Full Haskell self-regeneration (from hydra-haskell/)
 ./bin/sync-haskell.sh          # or --quick to skip tests
+
+# Regenerate ext Haskell modules and JSON exports (from hydra-ext/)
+./bin/sync-ext.sh
 
 # Regenerate Java (from hydra-ext/)
 ./bin/sync-java.sh             # or --quick to skip tests
 
 # Regenerate Python (from hydra-ext/)
 ./bin/sync-python.sh           # or --quick to skip tests
-
-# Verify release (from repo root)
-./bin/verify-release.sh
 ```
 
-The typical workflow order is: **Haskell first, then Java and Python.**
+The order is: **Haskell first, then Ext, then Java and Python.** The `sync-all.sh`
+script enforces this order and stops at the first error.
 
 ## DSL quick reference
 

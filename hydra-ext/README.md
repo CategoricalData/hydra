@@ -43,7 +43,7 @@ These coders generate complete, runnable code including type definitions and ter
 | **Python** | Production-ready | Complete Hydra implementation; generates full Python modules with generation tests |
 | **Java** | Production-ready | Complete Hydra implementation; generates full Java classes with visitor pattern for ADTs and generation tests |
 
-Both Python and Java coders support **generation tests** - tests where Hydra terms are generated to the target language and executed to verify correctness. Use `sync-python.sh` and `sync-java.sh` to regenerate code and run all tests.
+Both Python and Java coders support **generation tests** - tests where Hydra terms are generated to the target language and executed to verify correctness. Use `sync-all.sh` (from the repo root) or `sync-python.sh` / `sync-java.sh` (from hydra-ext) to regenerate code and run all tests.
 
 #### Type generation only
 
@@ -392,8 +392,9 @@ These are the primary scripts for regenerating implementations:
 
 | Script | Purpose |
 |--------|---------|
+| `sync-ext.sh` | Regenerate ext Haskell modules and JSON exports |
 | `sync-java.sh` | Full Java synchronization: regenerates kernel, eval lib, kernel tests, and generation tests; runs all tests |
-| `sync-python.sh` | Full Python synchronization: regenerates kernel, kernel sources, eval lib, kernel tests, and generation tests; runs all tests |
+| `sync-python.sh` | Full Python synchronization: regenerates kernel, eval lib, kernel tests, and generation tests; runs all tests |
 
 **Usage:**
 
@@ -416,7 +417,6 @@ For more granular control, individual update scripts are available:
 | `update-java-kernel.sh` | Regenerate Java kernel modules only |
 | `update-java-kernel-types.sh` | Regenerate Java kernel types only (without terms) |
 | `update-python-kernel.sh` | Regenerate Python kernel modules only |
-| `update-python-kernel-sources.sh` | Generate Python kernel source modules (Module AST as data) |
 | `update-python-generation-tests.sh` | Regenerate Python generation tests only |
 
 **Note:** These scripts use RTS flags (`-K256M -A32M`) to avoid stack overflow during generation. If running manually from GHCi, use `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.

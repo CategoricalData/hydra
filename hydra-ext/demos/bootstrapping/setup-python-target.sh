@@ -18,6 +18,7 @@ fi
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_PYTHON_DIR="$HYDRA_ROOT/hydra-python"
+PYTHON_RESOURCES="$SCRIPT_DIR/resources/python"
 
 # Create namespace package __init__.py files in generated directories.
 echo "Creating namespace package __init__.py files..."
@@ -37,11 +38,9 @@ done
 echo "Copying static resources for Python target..."
 
 # Build/config files
-echo "  Copying build configuration..."
-cp "$HYDRA_PYTHON_DIR/pyproject.toml" "$OUTPUT_DIR/"
-cp "$HYDRA_PYTHON_DIR/pyrightconfig.json" "$OUTPUT_DIR/" 2>/dev/null || true
-cp "$HYDRA_PYTHON_DIR/uv.lock" "$OUTPUT_DIR/" 2>/dev/null || true
-touch "$OUTPUT_DIR/README.md"
+echo "  Copying build files..."
+cp "$PYTHON_RESOURCES/pyproject.toml" "$OUTPUT_DIR/"
+cp "$PYTHON_RESOURCES/README.md" "$OUTPUT_DIR/"
 
 # Hand-written source files
 echo "  Copying hand-written source files..."
