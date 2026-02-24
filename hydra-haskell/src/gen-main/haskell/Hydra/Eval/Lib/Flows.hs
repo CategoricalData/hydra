@@ -22,6 +22,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Interpreter-friendly applicative apply for Flow.
 apply :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 apply flowFun flowArg = (Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -43,6 +44,7 @@ apply flowFun flowArg = (Flows.pure (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
             Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))})))})))
 
+-- | Interpreter-friendly monadic bind for Flow.
 bind :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 bind flowTerm funTerm = ((\x -> case x of
   Core.TermWrap v1 ->  
@@ -143,6 +145,7 @@ foldl funTerm initTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.flows.pure"))),
   Core.applicationArgument = initTerm})) elements)))
 
+-- | Interpreter-friendly functor map for Flow.
 map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 map funTerm flowTerm = ((\x -> case x of
   Core.TermWrap v1 ->  
@@ -202,6 +205,7 @@ map funTerm flowTerm = ((\x -> case x of
                     Core.applicationArgument = (Core.TermVariable (Core.Name "t"))}))}))}]}))})))})))})))
   _ -> (Monads.unexpected "flow term" (Core__.term flowTerm))) flowTerm)
 
+-- | Interpreter-friendly mapElems for Map with Flow.
 mapElems :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 mapElems funTerm mapTerm = ((\x -> case x of
   Core.TermMap v1 ->  
@@ -235,6 +239,7 @@ mapElems funTerm mapTerm = ((\x -> case x of
             Core.applicationArgument = (Core.TermVariable (Core.Name "newPairs"))}))}))})))})))
   _ -> (Monads.unexpected "map value" (Core__.term mapTerm))) mapTerm)
 
+-- | Interpreter-friendly mapKeys for Map with Flow.
 mapKeys :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 mapKeys funTerm mapTerm = ((\x -> case x of
   Core.TermMap v1 ->  
@@ -276,6 +281,7 @@ mapList funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
     Core.applicationFunction = funTerm,
     Core.applicationArgument = el})) elements))}))))
 
+-- | Interpreter-friendly mapMaybe for Maybe with Flow.
 mapMaybe :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 mapMaybe funTerm maybeTerm = ((\x -> case x of
   Core.TermMaybe v1 -> (Flows.pure (Core.TermApplication (Core.Application {
@@ -322,6 +328,7 @@ mapSet funTerm setTerm = (Flows.bind (Core_.set setTerm) (\elements -> Flows.pur
       Core.applicationFunction = funTerm,
       Core.applicationArgument = el})) (Sets.toList elements)))}))}))))
 
+-- | Interpreter-friendly withDefault for Flow.
 withDefault :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 withDefault fallbackTerm flowTerm = ((\x -> case x of
   Core.TermWrap v1 ->  

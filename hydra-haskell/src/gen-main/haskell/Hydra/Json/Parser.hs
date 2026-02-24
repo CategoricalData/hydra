@@ -29,6 +29,7 @@ whitespace = (Parsers.map (\_ -> ()) (Parsers.many (Parsers.satisfy (\c -> Lists
   (Equality.equal c 10),
   (Equality.equal c 13)]))))
 
+-- | Parse a token followed by optional whitespace
 token :: (Parsing.Parser t0 -> Parsing.Parser t0)
 token p = (Parsers.bind p (\x -> Parsers.bind whitespace (\_ -> Parsers.pure x)))
 

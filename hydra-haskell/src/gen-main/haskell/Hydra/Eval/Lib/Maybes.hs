@@ -20,6 +20,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Interpreter-friendly applicative apply for Maybe terms.
 apply :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 apply funOptTerm argOptTerm = ((\x -> case x of
   Core.TermMaybe v1 -> ((\x -> case x of
@@ -29,6 +30,7 @@ apply funOptTerm argOptTerm = ((\x -> case x of
     _ -> (Monads.unexpected "optional value" (Core__.term argOptTerm))) argOptTerm)
   _ -> (Monads.unexpected "optional function" (Core__.term funOptTerm))) funOptTerm)
 
+-- | Interpreter-friendly monadic bind for Maybe terms.
 bind :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 bind optTerm funTerm = ((\x -> case x of
   Core.TermMaybe v1 -> (Flows.pure (Maybes.maybe (Core.TermMaybe Nothing) (\val -> Core.TermApplication (Core.Application {
@@ -36,6 +38,7 @@ bind optTerm funTerm = ((\x -> case x of
     Core.applicationArgument = val})) v1))
   _ -> (Monads.unexpected "optional value" (Core__.term optTerm))) optTerm)
 
+-- | Interpreter-friendly case analysis for Maybe terms (cases argument order).
 cases :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 cases optTerm defaultTerm funTerm = ((\x -> case x of
   Core.TermMaybe v1 -> (Flows.pure (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {
@@ -43,6 +46,7 @@ cases optTerm defaultTerm funTerm = ((\x -> case x of
     Core.applicationArgument = val})) v1))
   _ -> (Monads.unexpected "optional value" (Core__.term optTerm))) optTerm)
 
+-- | Interpreter-friendly Kleisli composition for Maybe.
 compose :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 compose funF funG xTerm = (Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -52,6 +56,7 @@ compose funF funG xTerm = (Flows.pure (Core.TermApplication (Core.Application {
       Core.applicationArgument = xTerm}))})),
   Core.applicationArgument = funG})))
 
+-- | Interpreter-friendly map for Maybe terms.
 map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 map funTerm optTerm = ((\x -> case x of
   Core.TermMaybe v1 -> (Flows.pure (Core.TermMaybe (Maybes.map (\val -> Core.TermApplication (Core.Application {
@@ -67,6 +72,7 @@ mapMaybe funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flow
     Core.applicationFunction = funTerm,
     Core.applicationArgument = el})) elements))}))))
 
+-- | Interpreter-friendly case analysis for Maybe terms.
 maybe :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 maybe defaultTerm funTerm optTerm = ((\x -> case x of
   Core.TermMaybe v1 -> (Flows.pure (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {

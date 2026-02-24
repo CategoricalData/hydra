@@ -195,11 +195,13 @@ flattenLetTerms term =
                 _ -> rewritten) rewritten))
       in (rewriteTerm flatten term)
 
+-- | Fold over a term, traversing its subterms in the specified order
 foldOverTerm :: (Coders.TraversalOrder -> (t0 -> Core.Term -> t0) -> t0 -> Core.Term -> t0)
 foldOverTerm order fld b0 term = ((\x -> case x of
   Coders.TraversalOrderPre -> (Lists.foldl (foldOverTerm order fld) (fld b0 term) (subterms term))
   Coders.TraversalOrderPost -> (fld (Lists.foldl (foldOverTerm order fld) b0 (subterms term)) term)) order)
 
+-- | Fold over a type, traversing its subtypes in the specified order
 foldOverType :: (Coders.TraversalOrder -> (t0 -> Core.Type -> t0) -> t0 -> Core.Type -> t0)
 foldOverType order fld b0 typ = ((\x -> case x of
   Coders.TraversalOrderPre -> (Lists.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ))
@@ -288,6 +290,7 @@ freeVariablesInTypeSimple typ =
           _ -> types) typ)
   in (foldOverType Coders.TraversalOrderPre helper Sets.empty typ)
 
+-- | Inline all type variables in a type using the provided schema. Note: this function is only appropriate for nonrecursive type definitions
 inlineType :: (M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Type)
 inlineType schema typ =  
   let f = (\recurse -> \typ ->  
@@ -562,29 +565,28 @@ replaceFreeTypeVariable v rep typ =
 -- | Replace all occurrences of simple typedefs (type aliases) with the aliased types, recursively
 replaceTypedefs :: (M.Map Core.Name Core.TypeScheme -> Core.Type -> Core.Type)
 replaceTypedefs types typ0 =  
-  let rewrite = (\recurse -> \typ ->  
-          let dflt = (recurse typ)
-          in ((\x -> case x of
-            Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
-              Core.annotatedTypeBody = (rewrite recurse (Core.annotatedTypeBody v1)),
-              Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
-            Core.TypeRecord _ -> typ
-            Core.TypeUnion _ -> typ
-            Core.TypeVariable v1 ->  
-              let forMono = (\t -> (\x -> case x of
-                      Core.TypeRecord _ -> dflt
-                      Core.TypeUnion _ -> dflt
-                      Core.TypeWrap _ -> dflt
-                      _ -> (rewrite recurse t)) t)
-              in  
-                let forTypeScheme = (\ts ->  
-                        let t = (Core.typeSchemeType ts)
-                        in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) dflt))
-                in (Maybes.maybe dflt (\ts -> forTypeScheme ts) (Maps.lookup v1 types))
-            Core.TypeWrap _ -> typ
-            _ -> dflt) typ))
+  let rewrite = (\recurse -> \typ -> (\x -> case x of
+          Core.TypeAnnotated v1 -> (Core.TypeAnnotated (Core.AnnotatedType {
+            Core.annotatedTypeBody = (rewrite recurse (Core.annotatedTypeBody v1)),
+            Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v1)}))
+          Core.TypeRecord _ -> typ
+          Core.TypeUnion _ -> typ
+          Core.TypeVariable v1 ->  
+            let forMono = (\t -> (\x -> case x of
+                    Core.TypeRecord _ -> typ
+                    Core.TypeUnion _ -> typ
+                    Core.TypeWrap _ -> typ
+                    _ -> (rewrite recurse t)) t)
+            in  
+              let forTypeScheme = (\ts ->  
+                      let t = (Core.typeSchemeType ts)
+                      in (Logic.ifElse (Lists.null (Core.typeSchemeVariables ts)) (forMono t) typ))
+              in (Maybes.maybe typ (\ts -> forTypeScheme ts) (Maps.lookup v1 types))
+          Core.TypeWrap _ -> typ
+          _ -> (recurse typ)) typ)
   in (rewriteType rewrite typ0)
 
+-- | Rewrite a term, and at the same time, fold a function over it, accumulating a value
 rewriteAndFoldTerm :: (((t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term))
 rewriteAndFoldTerm f term0 =  
   let fsub = (\recurse -> \val0 -> \term0 ->  
@@ -700,6 +702,7 @@ rewriteAndFoldTerm f term0 =
     let recurse = (f (fsub recurse))
     in (recurse term0)
 
+-- | Monadic version: rewrite a term and fold a function over it, accumulating a value
 rewriteAndFoldTermM :: (((t0 -> Core.Term -> Compute.Flow t1 (t0, Core.Term)) -> t0 -> Core.Term -> Compute.Flow t1 (t0, Core.Term)) -> t0 -> Core.Term -> Compute.Flow t1 (t0, Core.Term))
 rewriteAndFoldTermM f term0 =  
   let fsub = (\recurse -> \val0 -> \term0 ->  
@@ -779,6 +782,7 @@ rewriteAndFoldTermM f term0 =
     let recurse = (f (fsub recurse))
     in (recurse term0)
 
+-- | Rewrite a term with path tracking, and fold a function over it, accumulating a value. The path is a list of TermAccessors from root to current position.
 rewriteAndFoldTermWithPath :: ((([Accessors.TermAccessor] -> t0 -> Core.Term -> (t0, Core.Term)) -> [Accessors.TermAccessor] -> t0 -> Core.Term -> (t0, Core.Term)) -> t0 -> Core.Term -> (t0, Core.Term))
 rewriteAndFoldTermWithPath f term0 =  
   let fsub = (\recurse -> \path -> \val0 -> \term0 ->  
@@ -1017,6 +1021,7 @@ rewriteTerm f term0 =
     let recurse = (f (fsub recurse))
     in (recurse term0)
 
+-- | Monadic term rewriting with custom transformation function
 rewriteTermM :: (((Core.Term -> Compute.Flow t0 Core.Term) -> Core.Term -> Compute.Flow t0 Core.Term) -> Core.Term -> Compute.Flow t0 Core.Term)
 rewriteTermM f term0 =  
   let fsub = (\recurse -> \term ->  
@@ -1117,6 +1122,7 @@ rewriteTermM f term0 =
     let recurse = (f (fsub recurse))
     in (recurse term0)
 
+-- | A variant of rewriteTerm which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting
 rewriteTermWithContext :: (((t0 -> Core.Term -> Core.Term) -> t0 -> Core.Term -> Core.Term) -> t0 -> Core.Term -> Core.Term)
 rewriteTermWithContext f cx0 term0 =  
   let forSubterms = (\recurse0 -> \cx -> \term ->  
@@ -1191,6 +1197,7 @@ rewriteTermWithContext f cx0 term0 =
     let rewrite = (\cx -> \term -> f (forSubterms rewrite) cx term)
     in (rewrite cx0 term0)
 
+-- | A variant of rewriteTermM which allows a context (e.g. a TypeContext) to be passed down to all subterms during rewriting
 rewriteTermWithContextM :: (((t0 -> Core.Term -> Compute.Flow t1 Core.Term) -> t0 -> Core.Term -> Compute.Flow t1 Core.Term) -> t0 -> Core.Term -> Compute.Flow t1 Core.Term)
 rewriteTermWithContextM f cx0 term0 =  
   let forSubterms = (\recurse0 -> \cx -> \term ->  
@@ -1340,6 +1347,7 @@ rewriteType f typ0 =
     let recurse = (f (fsub recurse))
     in (recurse typ0)
 
+-- | Monadic type rewriting
 rewriteTypeM :: (((Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type) -> Core.Type -> Compute.Flow t0 Core.Type)
 rewriteTypeM f typ0 =  
   let fsub = (\recurse -> \typ -> (\x -> case x of
@@ -1460,6 +1468,19 @@ substituteVariables subst term =
             _ -> (recurse term)) v1)
           _ -> (recurse term)) term)
   in (rewriteTerm replace term)
+
+-- | Strip outer type lambda wrappers from a term, preserving type application wrappers and annotations
+stripTypeLambdas :: (Core.Term -> Core.Term)
+stripTypeLambdas t = ((\x -> case x of
+  Core.TermAnnotated v1 ->  
+    let subj = (Core.annotatedTermBody v1)
+    in  
+      let ann = (Core.annotatedTermAnnotation v1)
+      in (Core.TermAnnotated (Core.AnnotatedTerm {
+        Core.annotatedTermBody = (stripTypeLambdas subj),
+        Core.annotatedTermAnnotation = ann}))
+  Core.TermTypeLambda v1 -> (stripTypeLambdas (Core.typeLambdaBody v1))
+  _ -> t) t)
 
 -- | Find the children of a given term
 subterms :: (Core.Term -> [Core.Term])
@@ -1671,12 +1692,14 @@ typeNamesInType typ0 =
           _ -> names) typ)
   in (foldOverType Coders.TraversalOrderPre addNames Sets.empty typ0)
 
--- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term
+-- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term.
 unshadowVariables :: (Core.Term -> Core.Term)
 unshadowVariables term0 =  
-  let rewrite = (\recurse -> \m -> \term ->  
-          let dflt = (recurse m term)
-          in ((\x -> case x of
+  let freshName = (\base -> \i -> \m ->  
+          let candidate = (Core.Name (Strings.cat2 (Core.unName base) (Literals.showInt32 i)))
+          in (Logic.ifElse (Maps.member candidate m) (freshName base (Math.add i 1) m) candidate))
+  in  
+    let f = (\recurse -> \m -> \term -> (\x -> case x of
             Core.TermFunction v1 -> ((\x -> case x of
               Core.FunctionLambda v2 ->  
                 let v = (Core.lambdaParameter v2)
@@ -1684,23 +1707,23 @@ unshadowVariables term0 =
                   let domain = (Core.lambdaDomain v2)
                   in  
                     let body = (Core.lambdaBody v2)
-                    in (m, (Maybes.maybe (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    in (Logic.ifElse (Maps.member v m) ( 
+                      let v2 = (freshName v 2 m)
+                      in  
+                        let m2 = (Maps.insert v v2 (Maps.insert v2 v2 m))
+                        in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                          Core.lambdaParameter = v2,
+                          Core.lambdaDomain = domain,
+                          Core.lambdaBody = (f recurse m2 body)})))) (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = v,
                       Core.lambdaDomain = domain,
-                      Core.lambdaBody = (Pairs.second (rewrite recurse (Maps.insert v 1 m) body))}))) (\i ->  
-                      let i2 = (Math.add i 1)
-                      in  
-                        let v2 = (Core.Name (Strings.cat2 (Core.unName v) (Literals.showInt32 i2)))
-                        in  
-                          let m2 = (Maps.insert v i2 m)
-                          in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                            Core.lambdaParameter = v2,
-                            Core.lambdaDomain = domain,
-                            Core.lambdaBody = (Pairs.second (rewrite recurse m2 body))})))) (Maps.lookup v m)))
-              _ -> dflt) v1)
+                      Core.lambdaBody = (f recurse (Maps.insert v v m) body)}))))
+              _ -> (recurse m term)) v1)
             Core.TermLet v1 ->  
-              let m2 = (Lists.foldl (\acc -> \b -> Maps.insert (Core.bindingName b) 1 acc) m (Core.letBindings v1))
+              let m2 = (Lists.foldl (\acc -> \b ->  
+                      let bname = (Core.bindingName b)
+                      in (Logic.ifElse (Maps.member bname acc) acc (Maps.insert bname bname acc))) m (Core.letBindings v1))
               in (recurse m2 term)
-            Core.TermVariable v1 -> (m, (Core.TermVariable (Maybes.maybe v1 (\i -> Logic.ifElse (Equality.equal i 1) v1 (Core.Name (Strings.cat2 (Core.unName v1) (Literals.showInt32 i)))) (Maps.lookup v1 m))))
-            _ -> dflt) term))
-  in (Pairs.second (rewriteAndFoldTerm rewrite Maps.empty term0))
+            Core.TermVariable v1 -> (Core.TermVariable (Maybes.maybe v1 (\renamed -> renamed) (Maps.lookup v1 m)))
+            _ -> (recurse m term)) term)
+    in (rewriteTermWithContext f Maps.empty term0)

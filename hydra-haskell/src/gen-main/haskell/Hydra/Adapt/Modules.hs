@@ -34,6 +34,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Given a target language, an encoding function, and a type, adapt and encode the type
 adaptTypeToLanguageAndEncode :: (Coders.Language -> (Core.Type -> Compute.Flow Graph.Graph t0) -> Core.Type -> Compute.Flow Graph.Graph t0)
 adaptTypeToLanguageAndEncode lang enc typ =  
   let dflt = (Flows.bind (adaptTypeToLanguage lang typ) (\adaptedType -> enc adaptedType))
@@ -41,9 +42,11 @@ adaptTypeToLanguageAndEncode lang enc typ =
     Core.TypeVariable _ -> (enc typ)
     _ -> dflt) (Rewriting.deannotateType typ))
 
+-- | Given a target language and a source type, find the target type to which the latter will be adapted
 adaptTypeToLanguage :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph Core.Type)
 adaptTypeToLanguage lang typ = (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (Compute.adapterTarget adapter)))
 
+-- | Map a Hydra module to a list of type and/or term definitions which have been adapted to the target language
 adaptedModuleDefinitions :: (Coders.Language -> Module.Module -> Compute.Flow Graph.Graph [Module.Definition])
 adaptedModuleDefinitions lang mod = (Flows.bind Monads.getState (\cx ->  
   let els = (Module.moduleElements mod)
@@ -70,9 +73,11 @@ adaptedModuleDefinitions lang mod = (Flows.bind Monads.getState (\cx ->
         let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Rewriting.deannotateType (Core.typeApplicationTermType arg_)) tterms)))
         in (Flows.bind (adaptersFor types) (\adapters -> Flows.mapList (classify adapters) (Lists.zip els tterms)))))))
 
+-- | Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type
 constructCoder :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> Core.Type -> Compute.Flow Graph.Graph (Compute.Coder t0 t2 Core.Term t1))
 constructCoder lang encodeTerm typ = (Monads.withTrace (Strings.cat2 "coder for " (Core__.type_ typ)) (Flows.bind (languageAdapter lang typ) (\adapter -> Flows.pure (Utils.composeCoders (Compute.adapterCoder adapter) (Utils.unidirectionalCoder encodeTerm)))))
 
+-- | Given a target language and a source type, produce an adapter, which rewrites the type and its terms according to the language's constraints
 languageAdapter :: (Coders.Language -> Core.Type -> Compute.Flow Graph.Graph (Compute.Adapter t0 t1 Core.Type Core.Type Core.Term Core.Term))
 languageAdapter lang typ =  
   let getPair = (\typ -> Flows.bind (Terms.termAdapter typ) (\ad -> Flows.bind Monads.getState (\cx -> Flows.pure (ad, cx))))
@@ -97,6 +102,7 @@ languageAdapter lang typ =
                 Compute.coderEncode = encode,
                 Compute.coderDecode = decode}}))))))
 
+-- | Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation
 transformModule :: (Coders.Language -> (Core.Term -> Compute.Flow t0 t1) -> (Module.Module -> M.Map Core.Type (Compute.Coder t0 t2 Core.Term t1) -> [(Core.Binding, Core.TypeApplicationTerm)] -> Compute.Flow Graph.Graph t3) -> Module.Module -> Compute.Flow Graph.Graph t3)
 transformModule lang encodeTerm createModule mod =  
   let els = (Module.moduleElements mod)

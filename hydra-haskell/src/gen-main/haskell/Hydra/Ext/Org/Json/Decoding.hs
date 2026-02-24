@@ -17,27 +17,33 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Decode a JSON array using a decoder for elements
 decodeArray :: ((Model.Value -> Compute.Flow t0 t1) -> Model.Value -> Compute.Flow t0 [t1])
 decodeArray decodeElem x = case x of
   Model.ValueArray v1 -> (Flows.mapList decodeElem v1)
   _ -> (Flows.fail "expected an array")
 
+-- | Decode a JSON boolean value
 decodeBoolean :: (Model.Value -> Compute.Flow t0 Bool)
 decodeBoolean x = case x of
   Model.ValueBoolean v1 -> (Flows.pure v1)
   _ -> (Flows.fail "expected a boolean")
 
+-- | Decode a required field from a JSON object
 decodeField :: ((t0 -> Compute.Flow t1 t2) -> String -> M.Map String t0 -> Compute.Flow t1 t2)
 decodeField decodeValue name m = (Flows.bind (decodeOptionalField decodeValue name m) (Maybes.maybe (Flows.fail (Strings.cat2 "missing field: " name)) (\f -> Flows.pure f)))
 
+-- | Decode a JSON object value
 decodeObject :: (Model.Value -> Compute.Flow t0 (M.Map String Model.Value))
 decodeObject x = case x of
   Model.ValueObject v1 -> (Flows.pure v1)
   _ -> (Flows.fail "expected an object")
 
+-- | Decode an optional field from a JSON object
 decodeOptionalField :: Ord t3 => ((t0 -> Compute.Flow t1 t2) -> t3 -> M.Map t3 t0 -> Compute.Flow t1 (Maybe t2))
 decodeOptionalField decodeValue name m = (Maybes.maybe (Flows.pure Nothing) (\v -> Flows.map (\x -> Just x) (decodeValue v)) (Maps.lookup name m))
 
+-- | Decode a JSON string value
 decodeString :: (Model.Value -> Compute.Flow t0 String)
 decodeString x = case x of
   Model.ValueString v1 -> (Flows.pure v1)

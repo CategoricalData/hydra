@@ -24,6 +24,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key.
 adjacencyListsToGraph :: Ord t0 => ([(t0, [t0])] -> (M.Map Int [Int], (Int -> t0)))
 adjacencyListsToGraph edges0 =  
   let sortedEdges = (Lists.sortOn Pairs.first edges0)

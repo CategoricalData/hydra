@@ -88,6 +88,7 @@ disclaimer lossy source target = (Strings.cat [
   target,
   (Logic.ifElse lossy " (lossy)" "")])
 
+-- | Create an adapter for literal types
 literalAdapter :: (Core.LiteralType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t0 Core.LiteralType Core.LiteralType Core.Literal Core.Literal))
 literalAdapter lt =  
   let forBinary = (\t ->  
@@ -200,6 +201,7 @@ literalAdapter lt =
             let supported = (Utils.literalTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
             in (Utils.chooseAdapter alts supported Core__.literalType Core__.literalType lt)))
 
+-- | Create an adapter for float types
 floatAdapter :: (Core.FloatType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.FloatType Core.FloatType Core.FloatValue Core.FloatValue))
 floatAdapter ft =  
   let makeAdapter = (\source -> \target ->  
@@ -232,6 +234,7 @@ floatAdapter ft =
         let supported = (Utils.floatTypeIsSupported (Coders.languageConstraints (Coders.adapterContextLanguage cx)))
         in (Utils.chooseAdapter alts supported Core__.floatType Core__.floatType ft)))
 
+-- | Create an adapter for integer types
 integerAdapter :: (Core.IntegerType -> Compute.Flow Coders.AdapterContext (Compute.Adapter t0 t1 Core.IntegerType Core.IntegerType Core.IntegerValue Core.IntegerValue))
 integerAdapter it =  
   let interleave = (\xs -> \ys -> Lists.concat (Lists.transpose [

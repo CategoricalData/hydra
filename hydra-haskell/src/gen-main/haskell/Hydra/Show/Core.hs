@@ -200,6 +200,7 @@ let_ l =
         " in ",
         (term env)])
 
+-- | Show a list using a given function to show each element
 list :: ((t0 -> String) -> [t0] -> String)
 list f xs =  
   let elementStrs = (Lists.map f xs)
