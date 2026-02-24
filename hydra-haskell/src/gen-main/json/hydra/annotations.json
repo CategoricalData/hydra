@@ -887,17 +887,81 @@
           "annotation": [
             {
               "@key": "description",
-              "@value": {"literal": {"string": "Get term description"}}}],
+              "@value": {
+                "literal": {
+                  "string": "Get term description. Peels through TermTypeLambda and TermTypeApplication wrappers (added by inference for polymorphic bindings) to find the description annotation underneath."}}}],
           "body": {
             "function": {
               "lambda": {
                 "body": {
-                  "application": {
-                    "argument": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "peel",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "t"},
+                                  "function": {
+                                    "function": {
+                                      "elimination": {
+                                        "union": {
+                                          "cases": [
+                                            {
+                                              "name": "typeLambda",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "tl"},
+                                                            "function": {
+                                                              "function": {
+                                                                "elimination": {"record": {"field": "body", "typeName": "hydra.core.TypeLambda"}}}}}},
+                                                        "function": {"variable": "peel"}}},
+                                                    "domain": [{"variable": "hydra.core.TypeLambda"}],
+                                                    "parameter": "tl"}}}},
+                                            {
+                                              "name": "typeApplication",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "ta"},
+                                                            "function": {
+                                                              "function": {
+                                                                "elimination": {
+                                                                  "record": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}}}},
+                                                        "function": {"variable": "peel"}}},
+                                                    "domain": [{"variable": "hydra.core.TypeApplicationTerm"}],
+                                                    "parameter": "ta"}}}}],
+                                          "default": [{"variable": "t"}],
+                                          "typeName": "hydra.core.Term"}}}}}},
+                              "domain": [{"variable": "hydra.core.Term"}],
+                              "parameter": "t"}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {
+                              "function": {
+                                "codomain": {"variable": "hydra.core.Term"},
+                                "domain": {"variable": "hydra.core.Term"}}},
+                            "variables": []}]}],
+                    "body": {
                       "application": {
-                        "argument": {"variable": "term"},
-                        "function": {"variable": "hydra.annotations.termAnnotationInternal"}}},
-                    "function": {"variable": "hydra.annotations.getDescription"}}},
+                        "argument": {
+                          "application": {
+                            "argument": {
+                              "application": {"argument": {"variable": "term"}, "function": {"variable": "peel"}}},
+                            "function": {"variable": "hydra.annotations.termAnnotationInternal"}}},
+                        "function": {"variable": "hydra.annotations.getDescription"}}}}},
                 "domain": [{"variable": "hydra.core.Term"}],
                 "parameter": "term"}}}}},
       "type": [
