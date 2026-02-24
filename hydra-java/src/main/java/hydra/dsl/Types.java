@@ -2,6 +2,7 @@ package hydra.dsl;
 
 import hydra.core.AnnotatedType;
 import hydra.core.ApplicationType;
+import hydra.core.Binding;
 import hydra.core.EitherType;
 import hydra.core.FieldType;
 import hydra.core.FloatType;
@@ -925,5 +926,184 @@ public interface Types {
      */
     static Type variable(String name) {
         return var(name);
+    }
+
+    // ===== Binding-as-Type coercion (mirrors Haskell's AsType typeclass) =====
+
+    /**
+     * Convert a Binding to a Type by extracting its name as a TypeVariable.
+     * This mirrors Haskell's {@code AsType Binding} instance, enabling type definitions
+     * to reference other types by their Binding directly.
+     * @param b the binding
+     * @return a TypeVariable referencing the binding's name
+     */
+    static Type use(Binding b) {
+        return new Type.Variable(b.name);
+    }
+
+    /**
+     * Create a field with the given name and type from a Binding.
+     * @param name the field name
+     * @param b the binding to use as a type reference
+     * @return the field type
+     */
+    static FieldType field(String name, Binding b) {
+        return field(name, use(b));
+    }
+
+    /**
+     * List type from a Binding.
+     * @param elements the element type binding
+     * @return the list type
+     */
+    static Type list(Binding elements) {
+        return list(use(elements));
+    }
+
+    /**
+     * Map type from Bindings.
+     * @param keys the key type binding
+     * @param values the value type binding
+     * @return the map type
+     */
+    static Type map(Binding keys, Binding values) {
+        return map(use(keys), use(values));
+    }
+
+    /**
+     * Map type from a Binding key and Type value.
+     * @param keys the key type binding
+     * @param values the value type
+     * @return the map type
+     */
+    static Type map(Binding keys, Type values) {
+        return map(use(keys), values);
+    }
+
+    /**
+     * Map type from a Type key and Binding value.
+     * @param keys the key type
+     * @param values the value type binding
+     * @return the map type
+     */
+    static Type map(Type keys, Binding values) {
+        return map(keys, use(values));
+    }
+
+    /**
+     * Maybe (optional) type from a Binding.
+     * @param elements the element type binding
+     * @return the maybe type
+     */
+    static Type optional(Binding elements) {
+        return optional(use(elements));
+    }
+
+    /**
+     * Set type from a Binding.
+     * @param elements the element type binding
+     * @return the set type
+     */
+    static Type set(Binding elements) {
+        return set(use(elements));
+    }
+
+    /**
+     * Either type from Bindings.
+     * @param left the left type binding
+     * @param right the right type binding
+     * @return the either type
+     */
+    static Type either_(Binding left, Binding right) {
+        return either(use(left), use(right));
+    }
+
+    /**
+     * Either type from a Binding and a Type.
+     * @param left the left type binding
+     * @param right the right type
+     * @return the either type
+     */
+    static Type either_(Binding left, Type right) {
+        return either(use(left), right);
+    }
+
+    /**
+     * Either type from a Type and a Binding.
+     * @param left the left type
+     * @param right the right type binding
+     * @return the either type
+     */
+    static Type either_(Type left, Binding right) {
+        return either(left, use(right));
+    }
+
+    /**
+     * Pair type from Bindings.
+     * @param first the first type binding
+     * @param second the second type binding
+     * @return the pair type
+     */
+    static Type pair(Binding first, Binding second) {
+        return pair(use(first), use(second));
+    }
+
+    /**
+     * Pair type from a Binding and a Type.
+     * @param first the first type binding
+     * @param second the second type
+     * @return the pair type
+     */
+    static Type pair(Binding first, Type second) {
+        return pair(use(first), second);
+    }
+
+    /**
+     * Pair type from a Type and a Binding.
+     * @param first the first type
+     * @param second the second type binding
+     * @return the pair type
+     */
+    static Type pair(Type first, Binding second) {
+        return pair(first, use(second));
+    }
+
+    /**
+     * Function type from Bindings.
+     * @param dom the domain type binding
+     * @param cod the codomain type binding
+     * @return the function type
+     */
+    static Type function(Binding dom, Binding cod) {
+        return function(use(dom), use(cod));
+    }
+
+    /**
+     * Function type from a Binding domain and Type codomain.
+     * @param dom the domain type binding
+     * @param cod the codomain type
+     * @return the function type
+     */
+    static Type function(Binding dom, Type cod) {
+        return function(use(dom), cod);
+    }
+
+    /**
+     * Function type from a Type domain and Binding codomain.
+     * @param dom the domain type
+     * @param cod the codomain type binding
+     * @return the function type
+     */
+    static Type function(Type dom, Binding cod) {
+        return function(dom, use(cod));
+    }
+
+    /**
+     * Wrap type from a Binding.
+     * @param b the base type binding
+     * @return the wrapped type
+     */
+    static Type wrap(Binding b) {
+        return wrap(use(b));
     }
 }

@@ -1201,10 +1201,10 @@ public interface Terms {
      * @return the flow state term
      */
     static Term flowState(Term value, Term state, Term trace) {
-        return record(FlowState.TYPE_NAME,
-                field("value", value),
-                field("state", state),
-                field("trace", trace));
+        return record(FlowState.TYPE_,
+                field(FlowState.VALUE, value),
+                field(FlowState.STATE, state),
+                field(FlowState.TRACE, trace));
     }
 
     /**
@@ -1212,7 +1212,7 @@ public interface Terms {
      * @return the value projection term
      */
     static Term flowStateValue() {
-        return project(FlowState.TYPE_NAME, name("value"));
+        return project(FlowState.TYPE_, FlowState.VALUE);
     }
 
     /**
@@ -1220,7 +1220,7 @@ public interface Terms {
      * @return the state projection term
      */
     static Term flowStateState() {
-        return project(FlowState.TYPE_NAME, name("state"));
+        return project(FlowState.TYPE_, FlowState.STATE);
     }
 
     /**
@@ -1228,6 +1228,6 @@ public interface Terms {
      * @return the trace projection term
      */
     static Term flowStateTrace() {
-        return project(FlowState.TYPE_NAME, name("trace"));
+        return project(FlowState.TYPE_, FlowState.TRACE);
     }
 }

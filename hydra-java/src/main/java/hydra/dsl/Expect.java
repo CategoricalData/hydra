@@ -225,16 +225,45 @@ public class Expect {
         }));
     }
 
-    // TODO: Uncomment when Reduction.reduce() is restored
-    // /**
-    //  * Decode a function.
-    //  */
-    // public static <X, Y> Function<X, Flow<Graph, Y>> function(
-    //         final Function<X, Term> fin,
-    //         final Function<Term, Flow<Graph, Y>> fout,
-    //         final Term func) {
-    //     return x -> bind(Reduction.reduce(false, Terms.apply(func, fin.apply(x))), fout);
-    // }
+    /**
+     * Decode a term-level function into a native Java Function.
+     * Captures the current Graph state and uses fromFlow to run reduction synchronously.
+     * @param <A> the domain type
+     * @param <B> the codomain type
+     * @param encodeDom encodes a native domain value to a Term
+     * @param decodeCod decodes a Term to a native codomain value
+     * @param funTerm the term-level function
+     * @return a Flow containing the decoded native Function
+     */
+    public static <A, B> Flow<hydra.graph.Graph, Function<A, B>> fun(
+            Function<A, Flow<hydra.graph.Graph, Term>> encodeDom,
+            Function<Term, Flow<hydra.graph.Graph, B>> decodeCod,
+            Term funTerm) {
+        return Flows.map(Flows.<hydra.graph.Graph>getState(), graph -> (Function<A, B>) x -> {
+            Term argTerm = Flows.fromFlow(graph, encodeDom.apply(x));
+            Term resultTerm = Flows.fromFlow(graph,
+                hydra.reduction.Reduction.reduceTerm(true, Terms.apply(funTerm, argTerm)));
+            return Flows.fromFlow(graph, decodeCod.apply(resultTerm));
+        });
+    }
+
+    /**
+     * Decode a term-level predicate (a -> Bool) into a native Function&lt;Term, Boolean&gt;.
+     * @param funTerm the term-level predicate
+     * @return a Flow containing the decoded predicate function
+     */
+    public static Flow<hydra.graph.Graph, Function<Term, Boolean>> predicate(Term funTerm) {
+        return fun(Flows::pure, Expect::boolean_, funTerm);
+    }
+
+    /**
+     * Decode a term-level function (a -> b) into a native Function&lt;Term, Term&gt;.
+     * @param funTerm the term-level function
+     * @return a Flow containing the decoded function
+     */
+    public static Flow<hydra.graph.Graph, Function<Term, Term>> termFunction(Term funTerm) {
+        return fun(Flows::pure, Flows::pure, funTerm);
+    }
 
     /**
      * Decode an int8 value.
