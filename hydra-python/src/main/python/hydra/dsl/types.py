@@ -2,12 +2,14 @@
 
 from collections.abc import Sequence
 from functools import reduce
+from typing import Union
 
 import hydra.constants
 import hydra.dsl.literal_types as lt
 from hydra.core import (
     AnnotatedType,
     ApplicationType,
+    Binding,
     EitherType,
     FieldType,
     FloatType,
@@ -41,6 +43,38 @@ from hydra.core import (
     WrappedType,
 )
 from hydra.dsl.python import FrozenDict, Nothing
+
+# Type alias: anything that can be used as a Type
+# Mirrors Haskell's AsType typeclass: Type, Binding, or str
+Typeable = Union[Type, Binding, str]
+
+
+def _as_type(t: Typeable):
+    """Coerce a Typeable to a Type.
+
+    - Binding is converted to TypeVariable(binding.name)
+    - str is converted to TypeVariable(Name(s))
+    - Everything else passes through unchanged (assumed to be a Type)
+
+    This mirrors Haskell's AsType typeclass.
+    """
+    if isinstance(t, Binding):
+        return TypeVariable(t.name)
+    elif isinstance(t, str):
+        return TypeVariable(Name(t))
+    else:
+        return t
+
+
+def use(b: Binding) -> Type:
+    """Convert a Binding to a Type by extracting its name as a TypeVariable.
+
+    This mirrors Haskell's AsType Binding instance, enabling type definitions
+    to reference other types by their Binding directly.
+
+    Example: use(name_binding)  # equivalent to variable("hydra.core.Name")
+    """
+    return TypeVariable(b.name)
 
 
 # Operators - TODO: find Python equivalents for these special syntax forms
@@ -96,12 +130,12 @@ def variable(name: str) -> Type:
     return TypeVariable(Name(name))
 
 
-def function(dom: Type, cod: Type) -> Type:
+def function(dom: Typeable, cod: Typeable) -> Type:
     """Create a function type.
 
     Example: function(int32(), string())
     """
-    return TypeFunction(FunctionType(dom, cod))
+    return TypeFunction(FunctionType(_as_type(dom), _as_type(cod)))
 
 
 def function_many(ts: Sequence[Type]) -> Type:
@@ -243,31 +277,33 @@ def uint64() -> Type:
     return literal(lt.uint64())
 
 
-def list_(t: Type) -> Type:
+def list_(t: Typeable) -> Type:
     """List type.
 
     Example: list_(string())
+    Example: list_(field_type_binding)  # reference another type by its Binding
     """
-    return TypeList(t)
+    return TypeList(_as_type(t))
 
 
-def map_(k: Type, v: Type) -> Type:
+def map_(k: Typeable, v: Typeable) -> Type:
     """Map/dictionary type with key and value types.
 
     Example: map_(string(), int32())
+    Example: map_(name_binding, term_binding)
     """
-    return TypeMap(MapType(k, v))
+    return TypeMap(MapType(_as_type(k), _as_type(v)))
 
 
-def maybe(t: Type) -> Type:
+def maybe(t: Typeable) -> Type:
     """Maybe (optional/nullable) type.
 
     Example: maybe(string())
     """
-    return TypeMaybe(t)
+    return TypeMaybe(_as_type(t))
 
 
-def optional(t: Type) -> Type:
+def optional(t: Typeable) -> Type:
     """Optional (nullable) type (alias for 'maybe').
 
     Example: optional(string())
@@ -275,12 +311,12 @@ def optional(t: Type) -> Type:
     return maybe(t)
 
 
-def set_(t: Type) -> Type:
+def set_(t: Typeable) -> Type:
     """Set type.
 
     Example: set_(string())
     """
-    return TypeSet(t)
+    return TypeSet(_as_type(t))
 
 
 def enum(names: Sequence[str]) -> Type:
@@ -291,12 +327,16 @@ def enum(names: Sequence[str]) -> Type:
     return union([field(n, unit()) for n in names])
 
 
-def field(fn: str, t: Type) -> FieldType:
+def field(fn: str, t: Typeable) -> FieldType:
     """Create a field with the given name and type.
 
+    The type argument can be a Type, a Binding (auto-coerced to TypeVariable),
+    or a string (auto-coerced to TypeVariable).
+
     Example: field("age", int32())
+    Example: field("name", name_binding)  # reference another type by its Binding
     """
-    return FieldType(Name(fn), t)
+    return FieldType(Name(fn), _as_type(t))
 
 
 def record(fields: Sequence[FieldType]) -> Type:
@@ -330,13 +370,13 @@ def union(fields: Sequence[FieldType]) -> Type:
     return TypeUnion(RowType(hydra.constants.placeholder_name, tuple(fields)))
 
 
-def wrap(t: Type) -> Type:
+def wrap(t: Typeable) -> Type:
     """Create a wrapped type (newtype) with a provided base type and the default type name.
 
     Example: wrap(string())
     Creates a newtype with placeholder name; use 'wrap_with_name' for custom names.
     """
-    return wrap_with_name(hydra.constants.placeholder_name, t)
+    return wrap_with_name(hydra.constants.placeholder_name, _as_type(t))
 
 
 def wrap_with_name(name: Name, t: Type) -> Type:
@@ -347,20 +387,20 @@ def wrap_with_name(name: Name, t: Type) -> Type:
     return TypeWrap(WrappedType(name, t))
 
 
-def pair(a: Type, b: Type) -> Type:
+def pair(a: Typeable, b: Typeable) -> Type:
     """Create a pair type.
 
     Example: pair(string(), int32())
     """
-    return TypePair(PairType(a, b))
+    return TypePair(PairType(_as_type(a), _as_type(b)))
 
 
-def either(left: Type, right: Type) -> Type:
+def either(left: Typeable, right: Typeable) -> Type:
     """Create an either type (a choice between two types).
 
     Example: either(string(), int32())
     """
-    return TypeEither(EitherType(left, right))
+    return TypeEither(EitherType(_as_type(left), _as_type(right)))
 
 
 def product(ts: Sequence[Type]) -> Type:
