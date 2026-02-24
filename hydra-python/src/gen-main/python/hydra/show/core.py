@@ -97,45 +97,33 @@ def field_type(ft: hydra.core.FieldType) -> str:
     @lru_cache(1)
     def fname() -> str:
         return ft.name.value
-    @lru_cache(1)
-    def ftyp() -> hydra.core.Type:
-        return ft.type
-    return hydra.lib.strings.cat((fname(), ":", type(ftyp())))
+    ftyp = ft.type
+    return hydra.lib.strings.cat((fname(), ":", type(ftyp)))
 
 def type(typ: hydra.core.Type) -> str:
     r"""Show a type as a string."""
     
     def show_row_type(rt: hydra.core.RowType) -> str:
-        @lru_cache(1)
-        def flds() -> frozenlist[hydra.core.FieldType]:
-            return rt.fields
+        flds = rt.fields
         @lru_cache(1)
         def field_strs() -> frozenlist[str]:
-            return hydra.lib.lists.map((lambda x1: field_type(x1)), flds())
+            return hydra.lib.lists.map((lambda x1: field_type(x1)), flds)
         return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", field_strs()), "}"))
     def gather_types(prev: frozenlist[hydra.core.Type], app: hydra.core.ApplicationType) -> frozenlist[hydra.core.Type]:
-        @lru_cache(1)
-        def lhs() -> hydra.core.Type:
-            return app.function
-        @lru_cache(1)
-        def rhs() -> hydra.core.Type:
-            return app.argument
-        match lhs():
+        lhs = app.function
+        rhs = app.argument
+        match lhs:
             case hydra.core.TypeApplication(value=app2):
-                return gather_types(hydra.lib.lists.cons(rhs(), prev), app2)
+                return gather_types(hydra.lib.lists.cons(rhs, prev), app2)
             
             case _:
-                return hydra.lib.lists.cons(lhs(), hydra.lib.lists.cons(rhs(), prev))
+                return hydra.lib.lists.cons(lhs, hydra.lib.lists.cons(rhs, prev))
     def gather_function_types(prev: frozenlist[hydra.core.Type], t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
         match t:
             case hydra.core.TypeFunction(value=ft):
-                @lru_cache(1)
-                def dom() -> hydra.core.Type:
-                    return ft.domain
-                @lru_cache(1)
-                def cod() -> hydra.core.Type:
-                    return ft.codomain
-                return gather_function_types(hydra.lib.lists.cons(dom(), prev), cod())
+                dom = ft.domain
+                cod = ft.codomain
+                return gather_function_types(hydra.lib.lists.cons(dom, prev), cod)
             
             case _:
                 return hydra.lib.lists.reverse(hydra.lib.lists.cons(t, prev))
@@ -153,22 +141,16 @@ def type(typ: hydra.core.Type) -> str:
             return hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(" @ ", type_strs()), ")"))
         
         case hydra.core.TypeEither(value=et):
-            @lru_cache(1)
-            def left_typ() -> hydra.core.Type:
-                return et.left
-            @lru_cache(1)
-            def right_typ() -> hydra.core.Type:
-                return et.right
-            return hydra.lib.strings.cat(("either<", type(left_typ()), ", ", type(right_typ()), ">"))
+            left_typ = et.left
+            right_typ = et.right
+            return hydra.lib.strings.cat(("either<", type(left_typ), ", ", type(right_typ), ">"))
         
         case hydra.core.TypeForall(value=ft):
             @lru_cache(1)
             def var() -> str:
                 return ft.parameter.value
-            @lru_cache(1)
-            def body() -> hydra.core.Type:
-                return ft.body
-            return hydra.lib.strings.cat(("(∀", var(), ".", type(body()), ")"))
+            body = ft.body
+            return hydra.lib.strings.cat(("(∀", var(), ".", type(body), ")"))
         
         case hydra.core.TypeFunction():
             @lru_cache(1)
@@ -186,25 +168,17 @@ def type(typ: hydra.core.Type) -> str:
             return literal_type(lt)
         
         case hydra.core.TypeMap(value=mt):
-            @lru_cache(1)
-            def key_typ() -> hydra.core.Type:
-                return mt.keys
-            @lru_cache(1)
-            def val_typ() -> hydra.core.Type:
-                return mt.values
-            return hydra.lib.strings.cat(("map<", type(key_typ()), ", ", type(val_typ()), ">"))
+            key_typ = mt.keys
+            val_typ = mt.values
+            return hydra.lib.strings.cat(("map<", type(key_typ), ", ", type(val_typ), ">"))
         
         case hydra.core.TypeMaybe(value=etyp2):
             return hydra.lib.strings.cat(("maybe<", type(etyp2), ">"))
         
         case hydra.core.TypePair(value=pt):
-            @lru_cache(1)
-            def first_typ() -> hydra.core.Type:
-                return pt.first
-            @lru_cache(1)
-            def second_typ() -> hydra.core.Type:
-                return pt.second
-            return hydra.lib.strings.cat(("(", type(first_typ()), ", ", type(second_typ()), ")"))
+            first_typ = pt.first
+            second_typ = pt.second
+            return hydra.lib.strings.cat(("(", type(first_typ), ", ", type(second_typ), ")"))
         
         case hydra.core.TypeRecord(value=rt):
             return hydra.lib.strings.cat2("record", show_row_type(rt))
@@ -225,10 +199,8 @@ def type(typ: hydra.core.Type) -> str:
             @lru_cache(1)
             def tname() -> str:
                 return wt.type_name.value
-            @lru_cache(1)
-            def typ1() -> hydra.core.Type:
-                return wt.body
-            return hydra.lib.strings.cat(("wrap[", tname(), "](", type(typ1()), ")"))
+            typ1 = wt.body
+            return hydra.lib.strings.cat(("wrap[", tname(), "](", type(typ1), ")"))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -308,19 +280,15 @@ def literal(l: hydra.core.Literal) -> str:
 def type_scheme(ts: hydra.core.TypeScheme) -> str:
     r"""Show a type scheme as a string."""
     
-    @lru_cache(1)
-    def vars() -> frozenlist[hydra.core.Name]:
-        return ts.variables
-    @lru_cache(1)
-    def body() -> hydra.core.Type:
-        return ts.type
+    vars = ts.variables
+    body = ts.type
     @lru_cache(1)
     def var_names() -> frozenlist[str]:
-        return hydra.lib.lists.map((lambda v1: v1.value), vars())
+        return hydra.lib.lists.map((lambda v1: v1.value), vars)
     @lru_cache(1)
     def fa() -> str:
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(vars()), (lambda : ""), (lambda : hydra.lib.strings.cat(("∀[", hydra.lib.strings.intercalate(",", var_names()), "]."))))
-    return hydra.lib.strings.cat(("(", fa(), type(body()), ")"))
+        return hydra.lib.logic.if_else(hydra.lib.lists.null(vars), (lambda : ""), (lambda : hydra.lib.strings.cat(("∀[", hydra.lib.strings.intercalate(",", var_names()), "]."))))
+    return hydra.lib.strings.cat(("(", fa(), type(body), ")"))
 
 def binding(el: hydra.core.Binding) -> str:
     r"""Show a binding as a string."""
@@ -328,13 +296,11 @@ def binding(el: hydra.core.Binding) -> str:
     @lru_cache(1)
     def name() -> str:
         return el.name.value
-    @lru_cache(1)
-    def t() -> hydra.core.Term:
-        return el.term
+    t = el.term
     @lru_cache(1)
     def type_str() -> str:
         return hydra.lib.maybes.maybe("", (lambda ts: hydra.lib.strings.cat((":(", type_scheme(ts), ")"))), el.type)
-    return hydra.lib.strings.cat((name(), type_str(), " = ", term(t())))
+    return hydra.lib.strings.cat((name(), type_str(), " = ", term(t)))
 
 def elimination(elm: hydra.core.Elimination) -> str:
     r"""Show an elimination as a string."""
@@ -353,18 +319,14 @@ def elimination(elm: hydra.core.Elimination) -> str:
             @lru_cache(1)
             def tname() -> str:
                 return cs.type_name.value
-            @lru_cache(1)
-            def mdef() -> Maybe[hydra.core.Term]:
-                return cs.default
-            @lru_cache(1)
-            def cases() -> frozenlist[hydra.core.Field]:
-                return cs.cases
+            mdef = cs.default
+            cases = cs.cases
             @lru_cache(1)
             def default_field() -> frozenlist[hydra.core.Field]:
-                return hydra.lib.maybes.maybe((), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef())
+                return hydra.lib.maybes.maybe((), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
             @lru_cache(1)
             def all_fields() -> frozenlist[hydra.core.Field]:
-                return hydra.lib.lists.concat((cases(), default_field()))
+                return hydra.lib.lists.concat((cases, default_field()))
             return hydra.lib.strings.cat(("case(", tname(), ")", fields(all_fields())))
         
         case hydra.core.EliminationWrap(value=tname):
@@ -377,10 +339,8 @@ def field(field: hydra.core.Field) -> str:
     @lru_cache(1)
     def fname() -> str:
         return field.name.value
-    @lru_cache(1)
-    def fterm() -> hydra.core.Term:
-        return field.term
-    return hydra.lib.strings.cat((fname(), "=", term(fterm())))
+    fterm = field.term
+    return hydra.lib.strings.cat((fname(), "=", term(fterm)))
 
 def fields(flds: frozenlist[hydra.core.Field]) -> str:
     r"""Show a list of fields as a string."""
@@ -409,13 +369,9 @@ def function(f: hydra.core.Function) -> str:
 def injection(inj: hydra.core.Injection) -> str:
     r"""Show an injection as a string."""
     
-    @lru_cache(1)
-    def tname() -> hydra.core.Name:
-        return inj.type_name
-    @lru_cache(1)
-    def f() -> hydra.core.Field:
-        return inj.field
-    return hydra.lib.strings.cat(("inject(", tname().value, ")", fields((f(),))))
+    tname = inj.type_name
+    f = inj.field
+    return hydra.lib.strings.cat(("inject(", tname.value, ")", fields((f,))))
 
 def lambda_(l: hydra.core.Lambda) -> str:
     r"""Show a lambda as a string."""
@@ -423,47 +379,35 @@ def lambda_(l: hydra.core.Lambda) -> str:
     @lru_cache(1)
     def v() -> str:
         return l.parameter.value
-    @lru_cache(1)
-    def mt() -> Maybe[hydra.core.Type]:
-        return l.domain
-    @lru_cache(1)
-    def body() -> hydra.core.Term:
-        return l.body
+    mt = l.domain
+    body = l.body
     @lru_cache(1)
     def type_str() -> str:
-        return hydra.lib.maybes.maybe("", (lambda t: hydra.lib.strings.cat2(":", type(t))), mt())
-    return hydra.lib.strings.cat(("λ", v(), type_str(), ".", term(body())))
+        return hydra.lib.maybes.maybe("", (lambda t: hydra.lib.strings.cat2(":", type(t))), mt)
+    return hydra.lib.strings.cat(("λ", v(), type_str(), ".", term(body)))
 
 def let(l: hydra.core.Let) -> str:
     r"""Show a let expression as a string."""
     
-    @lru_cache(1)
-    def bindings() -> frozenlist[hydra.core.Binding]:
-        return l.bindings
-    @lru_cache(1)
-    def env() -> hydra.core.Term:
-        return l.body
+    bindings = l.bindings
+    env = l.body
     @lru_cache(1)
     def binding_strs() -> frozenlist[str]:
-        return hydra.lib.lists.map((lambda x1: binding(x1)), bindings())
-    return hydra.lib.strings.cat(("let ", hydra.lib.strings.intercalate(", ", binding_strs()), " in ", term(env())))
+        return hydra.lib.lists.map((lambda x1: binding(x1)), bindings)
+    return hydra.lib.strings.cat(("let ", hydra.lib.strings.intercalate(", ", binding_strs()), " in ", term(env)))
 
 def term(t: hydra.core.Term) -> str:
     r"""Show a term as a string."""
     
     def gather_terms(prev: frozenlist[hydra.core.Term], app: hydra.core.Application) -> frozenlist[hydra.core.Term]:
-        @lru_cache(1)
-        def lhs() -> hydra.core.Term:
-            return app.function
-        @lru_cache(1)
-        def rhs() -> hydra.core.Term:
-            return app.argument
-        match lhs():
+        lhs = app.function
+        rhs = app.argument
+        match lhs:
             case hydra.core.TermApplication(value=app2):
-                return gather_terms(hydra.lib.lists.cons(rhs(), prev), app2)
+                return gather_terms(hydra.lib.lists.cons(rhs, prev), app2)
             
             case _:
-                return hydra.lib.lists.cons(lhs(), hydra.lib.lists.cons(rhs(), prev))
+                return hydra.lib.lists.cons(lhs, hydra.lib.lists.cons(rhs, prev))
     match t:
         case hydra.core.TermAnnotated(value=at):
             return term(at.body)
@@ -510,10 +454,8 @@ def term(t: hydra.core.Term) -> str:
             @lru_cache(1)
             def tname() -> str:
                 return rec.type_name.value
-            @lru_cache(1)
-            def flds() -> frozenlist[hydra.core.Field]:
-                return rec.fields
-            return hydra.lib.strings.cat(("record(", tname(), ")", fields(flds())))
+            flds = rec.fields
+            return hydra.lib.strings.cat(("record(", tname(), ")", fields(flds)))
         
         case hydra.core.TermSet(value=s):
             return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda x1: term(x1)), hydra.lib.sets.to_list(s))), "}"))
@@ -522,19 +464,13 @@ def term(t: hydra.core.Term) -> str:
             @lru_cache(1)
             def param() -> str:
                 return ta.parameter.value
-            @lru_cache(1)
-            def body() -> hydra.core.Term:
-                return ta.body
-            return hydra.lib.strings.cat(("Λ", param(), ".", term(body())))
+            body = ta.body
+            return hydra.lib.strings.cat(("Λ", param(), ".", term(body)))
         
         case hydra.core.TermTypeApplication(value=tt):
-            @lru_cache(1)
-            def t2() -> hydra.core.Term:
-                return tt.body
-            @lru_cache(1)
-            def typ() -> hydra.core.Type:
-                return tt.type
-            return hydra.lib.strings.cat((term(t2()), "⟨", type(typ()), "⟩"))
+            t2 = tt.body
+            typ = tt.type
+            return hydra.lib.strings.cat((term(t2), "⟨", type(typ), "⟩"))
         
         case hydra.core.TermUnion(value=v12):
             return injection(v12)
@@ -549,10 +485,8 @@ def term(t: hydra.core.Term) -> str:
             @lru_cache(1)
             def tname() -> str:
                 return wt.type_name.value
-            @lru_cache(1)
-            def term1() -> hydra.core.Term:
-                return wt.body
-            return hydra.lib.strings.cat(("wrap(", tname(), "){", term(term1()), "}"))
+            term1 = wt.body
+            return hydra.lib.strings.cat(("wrap(", tname(), "){", term(term1), "}"))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

@@ -16,6 +16,7 @@ import Hydra.Kernel hiding (
   isComplexTerm,
   isComplexVariable,
   isSimpleAssignment,
+  isTrivialTerm,
   normalizeComment)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations   as Annotations
@@ -99,6 +100,7 @@ module_ = Module ns elements
      toBinding isComplexTerm,
      toBinding isComplexVariable,
      toBinding isComplexBinding,
+     toBinding isTrivialTerm,
      -- Flow-based utilities
      toBinding commentsFromElement,
      toBinding commentsFromFieldType,
@@ -297,6 +299,43 @@ isComplexBinding = define "isComplexBinding" $
       -- Check if complex term
       "isComplex" <~ isComplexTerm @@ var "tc" @@ var "term" $
       Logic.or (Logic.or (var "isPolymorphic") (var "isNonNullary")) (var "isComplex")
+
+-- | Check if a term is trivially cheap to evaluate, meaning it needs no thunking.
+-- Trivial terms include: literals, plain variable references, field projections
+-- on trivial terms (e.g. app.function), unit values, maybe wrappers around trivial terms,
+-- and type wrappers around trivial terms.
+-- Field projections cause minor regressions in inference/hoisting (~200ms) but yield
+-- large gains in checking/annotations/strings (~1500ms), for a net 4.2% improvement.
+-- This is a conservative predicate: anything not explicitly recognized is non-trivial.
+isTrivialTerm :: TBinding (Term -> Bool)
+isTrivialTerm = define "isTrivialTerm" $
+  doc "Check if a term is trivially cheap (no thunking needed)" $
+  "t" ~>
+  cases _Term (Rewriting.deannotateTerm @@ var "t")
+    (Just $ boolean False) [
+    -- Literals are always trivial
+    _Term_literal>>: constant (boolean True),
+    -- Plain variables are trivial (the variable itself is cheap to reference)
+    _Term_variable>>: constant (boolean True),
+    -- Unit is trivial
+    _Term_unit>>: constant (boolean True),
+    -- Field projection on a trivial subterm is trivial (e.g. app.function)
+    _Term_application>>: "app" ~>
+      "fun" <~ Core.applicationFunction (var "app") $
+      "arg" <~ Core.applicationArgument (var "app") $
+      cases _Term (var "fun") (Just $ boolean False) [
+        _Term_function>>: "f" ~>
+          cases _Function (var "f") (Just $ boolean False) [
+            _Function_elimination>>: "e" ~>
+              cases _Elimination (var "e") (Just $ boolean False) [
+                -- record projection: trivial if the subject is trivial
+                _Elimination_record>>: constant (isTrivialTerm @@ var "arg")]]],
+    -- Maybe term (just x) where x is trivial; nothing is also trivial
+    _Term_maybe>>: "opt" ~>
+      Maybes.maybe (boolean True) ("inner" ~> isTrivialTerm @@ var "inner") (var "opt"),
+    -- Type applications/lambdas: check the inner term
+    _Term_typeApplication>>: "ta" ~> isTrivialTerm @@ (Core.typeApplicationTermBody $ var "ta"),
+    _Term_typeLambda>>: "tl" ~> isTrivialTerm @@ (Core.typeLambdaBody $ var "tl")]
 
 
 --------------------------------------------------------------------------------

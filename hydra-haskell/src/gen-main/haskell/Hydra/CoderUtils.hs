@@ -140,6 +140,28 @@ isComplexBinding tc b =
           let isComplex = (isComplexTerm tc term)
           in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)))
 
+-- | Check if a term is trivially cheap (no thunking needed)
+isTrivialTerm :: (Core.Term -> Bool)
+isTrivialTerm t = ((\x -> case x of
+  Core.TermLiteral _ -> True
+  Core.TermVariable _ -> True
+  Core.TermUnit -> True
+  Core.TermApplication v1 ->  
+    let fun = (Core.applicationFunction v1)
+    in  
+      let arg = (Core.applicationArgument v1)
+      in ((\x -> case x of
+        Core.TermFunction v2 -> ((\x -> case x of
+          Core.FunctionElimination v3 -> ((\x -> case x of
+            Core.EliminationRecord _ -> (isTrivialTerm arg)
+            _ -> False) v3)
+          _ -> False) v2)
+        _ -> False) fun)
+  Core.TermMaybe v1 -> (Maybes.maybe True (\inner -> isTrivialTerm inner) v1)
+  Core.TermTypeApplication v1 -> (isTrivialTerm (Core.typeApplicationTermBody v1))
+  Core.TermTypeLambda v1 -> (isTrivialTerm (Core.typeLambdaBody v1))
+  _ -> False) (Rewriting.deannotateTerm t))
+
 -- | Extract comments/description from a Binding
 commentsFromElement :: (Core.Binding -> Compute.Flow Graph.Graph (Maybe String))
 commentsFromElement b = (Annotations.getTermDescription (Core.bindingTerm b))

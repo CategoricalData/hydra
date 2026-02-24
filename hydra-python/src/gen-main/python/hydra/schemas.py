@@ -124,37 +124,27 @@ def elements_with_dependencies(original: frozenlist[hydra.core.Binding]) -> hydr
 def extend_type_context_for_lambda(tcontext: hydra.typing.TypeContext, lam: hydra.core.Lambda) -> hydra.typing.TypeContext:
     r"""Extend a type context by descending into a System F lambda body."""
     
-    @lru_cache(1)
-    def var() -> hydra.core.Name:
-        return lam.parameter
-    return hydra.typing.TypeContext(hydra.lib.maybes.maybe(tcontext.types, (lambda dom: hydra.lib.maps.insert(var(), dom, tcontext.types)), lam.domain), hydra.lib.maps.delete(var(), tcontext.metadata), tcontext.type_variables, hydra.lib.sets.insert(var(), tcontext.lambda_variables), hydra.lib.sets.delete(var(), tcontext.let_variables), tcontext.inference_context)
+    var = lam.parameter
+    return hydra.typing.TypeContext(hydra.lib.maybes.maybe(tcontext.types, (lambda dom: hydra.lib.maps.insert(var, dom, tcontext.types)), lam.domain), hydra.lib.maps.delete(var, tcontext.metadata), tcontext.type_variables, hydra.lib.sets.insert(var, tcontext.lambda_variables), hydra.lib.sets.delete(var, tcontext.let_variables), tcontext.inference_context)
 
 def type_scheme_to_f_type(ts: hydra.core.TypeScheme) -> hydra.core.Type:
     r"""Convert a type scheme to a forall type."""
     
-    @lru_cache(1)
-    def vars() -> frozenlist[hydra.core.Name]:
-        return ts.variables
-    @lru_cache(1)
-    def body() -> hydra.core.Type:
-        return ts.type
-    return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(v, t)))), body(), hydra.lib.lists.reverse(vars()))
+    vars = ts.variables
+    body = ts.type
+    return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(v, t)))), body, hydra.lib.lists.reverse(vars))
 
 def extend_type_context_for_let(for_binding: Callable[[hydra.typing.TypeContext, hydra.core.Binding], Maybe[hydra.core.Term]], tcontext: hydra.typing.TypeContext, letrec: hydra.core.Let) -> hydra.typing.TypeContext:
     r"""Extend a type context by descending into a let body."""
     
-    @lru_cache(1)
-    def bindings() -> frozenlist[hydra.core.Binding]:
-        return letrec.bindings
-    return hydra.typing.TypeContext(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, type_scheme_to_f_type(ts))), b.type)), bindings()))), tcontext.types), hydra.lib.lists.foldl((lambda m, b: hydra.lib.maybes.maybe(hydra.lib.maps.delete(b.name, m), (lambda t: hydra.lib.maps.insert(b.name, t, m)), for_binding(tcontext, b))), tcontext.metadata, bindings()), tcontext.type_variables, hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.delete(b.name, s)), tcontext.lambda_variables, bindings()), hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.insert(b.name, s)), tcontext.let_variables, bindings()), tcontext.inference_context)
+    bindings = letrec.bindings
+    return hydra.typing.TypeContext(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, type_scheme_to_f_type(ts))), b.type)), bindings))), tcontext.types), hydra.lib.lists.foldl((lambda m, b: hydra.lib.maybes.maybe(hydra.lib.maps.delete(b.name, m), (lambda t: hydra.lib.maps.insert(b.name, t, m)), for_binding(tcontext, b))), tcontext.metadata, bindings), tcontext.type_variables, hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.delete(b.name, s)), tcontext.lambda_variables, bindings), hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.insert(b.name, s)), tcontext.let_variables, bindings), tcontext.inference_context)
 
 def extend_type_context_for_type_lambda(tcontext: hydra.typing.TypeContext, tlam: hydra.core.TypeLambda) -> hydra.typing.TypeContext:
     r"""Extend a type context by descending into a System F type lambda body."""
     
-    @lru_cache(1)
-    def name() -> hydra.core.Name:
-        return tlam.parameter
-    return hydra.typing.TypeContext(tcontext.types, tcontext.metadata, hydra.lib.sets.insert(name(), tcontext.type_variables), tcontext.lambda_variables, tcontext.let_variables, tcontext.inference_context)
+    name = tlam.parameter
+    return hydra.typing.TypeContext(tcontext.types, tcontext.metadata, hydra.lib.sets.insert(name, tcontext.type_variables), tcontext.lambda_variables, tcontext.let_variables, tcontext.inference_context)
 
 def f_type_is_polymorphic(typ: hydra.core.Type) -> bool:
     r"""Test whether a given System F type is polymorphic (i.e., a forall type)."""
@@ -226,13 +216,11 @@ def fully_strip_and_normalize_type(typ: hydra.core.Type) -> hydra.core.Type:
     def go(depth: int, subst: FrozenDict[hydra.core.Name, hydra.core.Name], t: hydra.core.Type) -> tuple[FrozenDict[hydra.core.Name, hydra.core.Name], hydra.core.Type]:
         match hydra.rewriting.deannotate_type(t):
             case hydra.core.TypeForall(value=ft):
-                @lru_cache(1)
-                def old_var() -> hydra.core.Name:
-                    return ft.parameter
+                old_var = ft.parameter
                 @lru_cache(1)
                 def new_var() -> hydra.core.Name:
                     return hydra.core.Name(hydra.lib.strings.cat2("_", hydra.lib.literals.show_int32(depth)))
-                return go(hydra.lib.math.add(depth, 1), hydra.lib.maps.insert(old_var(), new_var(), subst), ft.body)
+                return go(hydra.lib.math.add(depth, 1), hydra.lib.maps.insert(old_var, new_var(), subst), ft.body)
             
             case _:
                 return (subst, t)
@@ -308,10 +296,8 @@ def graph_to_type_context(graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, hy
 def instantiate_type_scheme(scheme: hydra.core.TypeScheme) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
     r"""Instantiate a type scheme with fresh variables."""
     
-    @lru_cache(1)
-    def old_vars() -> frozenlist[hydra.core.Name]:
-        return scheme.variables
-    return hydra.lib.flows.bind(fresh_names(hydra.lib.lists.length(old_vars())), (lambda new_vars: (subst := hydra.typing.TypeSubst(hydra.lib.maps.from_list(hydra.lib.lists.zip(old_vars(), hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), new_vars)))), name_subst := hydra.lib.maps.from_list(hydra.lib.lists.zip(old_vars(), new_vars)), renamed_constraints := hydra.lib.maybes.map((lambda old_constraints: hydra.lib.maps.from_list(hydra.lib.lists.map((lambda kv: (hydra.lib.maybes.from_maybe(hydra.lib.pairs.first(kv), hydra.lib.maps.lookup(hydra.lib.pairs.first(kv), name_subst)), hydra.lib.pairs.second(kv))), hydra.lib.maps.to_list(old_constraints)))), scheme.constraints), hydra.lib.flows.pure(hydra.core.TypeScheme(new_vars, hydra.substitution.subst_in_type(subst, scheme.type), renamed_constraints)))[3]))
+    old_vars = scheme.variables
+    return hydra.lib.flows.bind(fresh_names(hydra.lib.lists.length(old_vars)), (lambda new_vars: (subst := hydra.typing.TypeSubst(hydra.lib.maps.from_list(hydra.lib.lists.zip(old_vars, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), new_vars)))), name_subst := hydra.lib.maps.from_list(hydra.lib.lists.zip(old_vars, new_vars)), renamed_constraints := hydra.lib.maybes.map((lambda old_constraints: hydra.lib.maps.from_list(hydra.lib.lists.map((lambda kv: (hydra.lib.maybes.from_maybe(hydra.lib.pairs.first(kv), hydra.lib.maps.lookup(hydra.lib.pairs.first(kv), name_subst)), hydra.lib.pairs.second(kv))), hydra.lib.maps.to_list(old_constraints)))), scheme.constraints), hydra.lib.flows.pure(hydra.core.TypeScheme(new_vars, hydra.substitution.subst_in_type(subst, scheme.type), renamed_constraints)))[3]))
 
 def type_to_type_scheme(t0: hydra.core.Type) -> hydra.core.TypeScheme:
     r"""Convert a (System F -style) type to a type scheme."""
@@ -514,10 +500,8 @@ def require_record_type(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph
 def require_schema_type(cx: hydra.typing.InferenceContext, tname: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
     r"""Look up a schema type in the context and instantiate it."""
     
-    @lru_cache(1)
-    def types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
-        return cx.schema_types
-    return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("No such schema type: ", tname.value, ". Available types are: ", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(types())))))), (lambda ts: instantiate_type_scheme(hydra.rewriting.deannotate_type_scheme_recursive(ts))), hydra.lib.maps.lookup(tname, types()))
+    types = cx.schema_types
+    return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("No such schema type: ", tname.value, ". Available types are: ", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(types)))))), (lambda ts: instantiate_type_scheme(hydra.rewriting.deannotate_type_scheme_recursive(ts))), hydra.lib.maps.lookup(tname, types))
 
 def require_union_type(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.RowType]:
     r"""Require a name to resolve to a union type."""

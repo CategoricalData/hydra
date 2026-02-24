@@ -57,37 +57,25 @@ def analyze_function_term_with_gather(for_binding: Callable[[hydra.typing.TypeCo
             return _hoist_hydra_coder_utils_analyze_function_term_with_gather_1(arg_mode, args, bindings, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, f)
         
         case hydra.core.TermLet(value=lt):
-            @lru_cache(1)
-            def new_bindings() -> frozenlist[hydra.core.Binding]:
-                return lt.bindings
-            @lru_cache(1)
-            def body() -> hydra.core.Term:
-                return lt.body
+            new_bindings = lt.bindings
+            body = lt.body
             @lru_cache(1)
             def new_env() -> T0:
                 return set_t_c(hydra.schemas.extend_type_context_for_let(for_binding, get_t_c(g_env), lt), g_env)
-            return analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, False, new_env(), tparams, args, hydra.lib.lists.concat2(bindings, new_bindings()), doms, tapps, body())
+            return analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, False, new_env(), tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body)
         
         case hydra.core.TermTypeApplication(value=ta):
-            @lru_cache(1)
-            def ta_body() -> hydra.core.Term:
-                return ta.body
-            @lru_cache(1)
-            def typ() -> hydra.core.Type:
-                return ta.type
-            return analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, arg_mode, g_env, tparams, args, bindings, doms, hydra.lib.lists.cons(typ(), tapps), ta_body())
+            ta_body = ta.body
+            typ = ta.type
+            return analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, arg_mode, g_env, tparams, args, bindings, doms, hydra.lib.lists.cons(typ, tapps), ta_body)
         
         case hydra.core.TermTypeLambda(value=tl):
-            @lru_cache(1)
-            def tvar() -> hydra.core.Name:
-                return tl.parameter
-            @lru_cache(1)
-            def tl_body() -> hydra.core.Term:
-                return tl.body
+            tvar = tl.parameter
+            tl_body = tl.body
             @lru_cache(1)
             def new_env() -> T0:
                 return set_t_c(hydra.schemas.extend_type_context_for_type_lambda(get_t_c(g_env), tl), g_env)
-            return analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env(), hydra.lib.lists.cons(tvar(), tparams), args, bindings, doms, tapps, tl_body())
+            return analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env(), hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body)
         
         case _:
             return analyze_function_term_with_finish(get_t_c, g_env, tparams, args, bindings, doms, tapps, t)
@@ -127,13 +115,9 @@ def is_complex_term(tc: hydra.typing.TypeContext, t: hydra.core.Term) -> bool:
 def is_complex_binding(tc: hydra.typing.TypeContext, b: hydra.core.Binding) -> bool:
     r"""Check if a binding needs to be treated as a function."""
     
-    @lru_cache(1)
-    def term() -> hydra.core.Term:
-        return b.term
-    @lru_cache(1)
-    def mts() -> Maybe[hydra.core.TypeScheme]:
-        return b.type
-    return hydra.lib.maybes.cases(mts(), is_complex_term(tc, term()), (lambda ts: (is_polymorphic := hydra.lib.logic.not_(hydra.lib.lists.null(ts.variables)), is_non_nullary := hydra.lib.equality.gt(hydra.arity.type_arity(ts.type), 0), is_complex := is_complex_term(tc, term()), hydra.lib.logic.or_(hydra.lib.logic.or_(is_polymorphic, is_non_nullary), is_complex))[3]))
+    term = b.term
+    mts = b.type
+    return hydra.lib.maybes.cases(mts, is_complex_term(tc, term), (lambda ts: (is_polymorphic := hydra.lib.logic.not_(hydra.lib.lists.null(ts.variables)), is_non_nullary := hydra.lib.equality.gt(hydra.arity.type_arity(ts.type), 0), is_complex := is_complex_term(tc, term), hydra.lib.logic.or_(hydra.lib.logic.or_(is_polymorphic, is_non_nullary), is_complex))[3]))
 
 def binding_metadata(tc: hydra.typing.TypeContext, b: hydra.core.Binding) -> Maybe[hydra.core.Term]:
     r"""Produces metadata for a binding if it is complex."""
@@ -169,37 +153,25 @@ def analyze_function_term_no_infer_with_gather(for_binding: Callable[[hydra.typi
             return _hoist_hydra_coder_utils_analyze_function_term_no_infer_with_gather_1(arg_mode, args, bindings, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, f)
         
         case hydra.core.TermLet(value=lt):
-            @lru_cache(1)
-            def new_bindings() -> frozenlist[hydra.core.Binding]:
-                return lt.bindings
-            @lru_cache(1)
-            def body() -> hydra.core.Term:
-                return lt.body
+            new_bindings = lt.bindings
+            body = lt.body
             @lru_cache(1)
             def new_env() -> T0:
                 return set_t_c(hydra.schemas.extend_type_context_for_let(for_binding, get_t_c(g_env), lt), g_env)
-            return analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, False, new_env(), tparams, args, hydra.lib.lists.concat2(bindings, new_bindings()), doms, tapps, body())
+            return analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, False, new_env(), tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body)
         
         case hydra.core.TermTypeApplication(value=ta):
-            @lru_cache(1)
-            def ta_body() -> hydra.core.Term:
-                return ta.body
-            @lru_cache(1)
-            def typ() -> hydra.core.Type:
-                return ta.type
-            return analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, g_env, tparams, args, bindings, doms, hydra.lib.lists.cons(typ(), tapps), ta_body())
+            ta_body = ta.body
+            typ = ta.type
+            return analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, g_env, tparams, args, bindings, doms, hydra.lib.lists.cons(typ, tapps), ta_body)
         
         case hydra.core.TermTypeLambda(value=tl):
-            @lru_cache(1)
-            def tvar() -> hydra.core.Name:
-                return tl.parameter
-            @lru_cache(1)
-            def tl_body() -> hydra.core.Term:
-                return tl.body
+            tvar = tl.parameter
+            tl_body = tl.body
             @lru_cache(1)
             def new_env() -> T0:
                 return set_t_c(hydra.schemas.extend_type_context_for_type_lambda(get_t_c(g_env), tl), g_env)
-            return analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env(), hydra.lib.lists.cons(tvar(), tparams), args, bindings, doms, tapps, tl_body())
+            return analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env(), hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body)
         
         case _:
             return analyze_function_term_no_infer_with_finish(g_env, tparams, args, bindings, doms, tapps, t)
@@ -230,13 +202,9 @@ def gather_applications(term: hydra.core.Term) -> tuple[frozenlist[hydra.core.Te
     def go(args: frozenlist[hydra.core.Term], t: hydra.core.Term) -> tuple[frozenlist[hydra.core.Term], hydra.core.Term]:
         match hydra.rewriting.deannotate_term(t):
             case hydra.core.TermApplication(value=app):
-                @lru_cache(1)
-                def lhs() -> hydra.core.Term:
-                    return app.function
-                @lru_cache(1)
-                def rhs() -> hydra.core.Term:
-                    return app.argument
-                return go(hydra.lib.lists.cons(rhs(), args), lhs())
+                lhs = app.function
+                rhs = app.argument
+                return go(hydra.lib.lists.cons(rhs, args), lhs)
             
             case _:
                 return (args, t)
@@ -247,25 +215,17 @@ def gather_args(term: hydra.core.Term, args: frozenlist[hydra.core.Term]) -> tup
     
     match hydra.rewriting.deannotate_term(term):
         case hydra.core.TermApplication(value=app):
-            @lru_cache(1)
-            def lhs() -> hydra.core.Term:
-                return app.function
-            @lru_cache(1)
-            def rhs() -> hydra.core.Term:
-                return app.argument
-            return gather_args(lhs(), hydra.lib.lists.cons(rhs(), args))
+            lhs = app.function
+            rhs = app.argument
+            return gather_args(lhs, hydra.lib.lists.cons(rhs, args))
         
         case hydra.core.TermTypeLambda(value=tl):
-            @lru_cache(1)
-            def body() -> hydra.core.Term:
-                return tl.body
-            return gather_args(body(), args)
+            body = tl.body
+            return gather_args(body, args)
         
         case hydra.core.TermTypeApplication(value=ta):
-            @lru_cache(1)
-            def body() -> hydra.core.Term:
-                return ta.body
-            return gather_args(body(), args)
+            body = ta.body
+            return gather_args(body, args)
         
         case _:
             return (term, args)
@@ -275,28 +235,18 @@ def gather_args_with_type_apps(term: hydra.core.Term, args: frozenlist[hydra.cor
     
     match hydra.rewriting.deannotate_term(term):
         case hydra.core.TermApplication(value=app):
-            @lru_cache(1)
-            def lhs() -> hydra.core.Term:
-                return app.function
-            @lru_cache(1)
-            def rhs() -> hydra.core.Term:
-                return app.argument
-            return gather_args_with_type_apps(lhs(), hydra.lib.lists.cons(rhs(), args), ty_args)
+            lhs = app.function
+            rhs = app.argument
+            return gather_args_with_type_apps(lhs, hydra.lib.lists.cons(rhs, args), ty_args)
         
         case hydra.core.TermTypeLambda(value=tl):
-            @lru_cache(1)
-            def body() -> hydra.core.Term:
-                return tl.body
-            return gather_args_with_type_apps(body(), args, ty_args)
+            body = tl.body
+            return gather_args_with_type_apps(body, args, ty_args)
         
         case hydra.core.TermTypeApplication(value=ta):
-            @lru_cache(1)
-            def body() -> hydra.core.Term:
-                return ta.body
-            @lru_cache(1)
-            def typ() -> hydra.core.Type:
-                return ta.type
-            return gather_args_with_type_apps(body(), args, hydra.lib.lists.cons(typ(), ty_args))
+            body = ta.body
+            typ = ta.type
+            return gather_args_with_type_apps(body, args, hydra.lib.lists.cons(typ, ty_args))
         
         case _:
             return (term, (args, ty_args))
@@ -332,6 +282,57 @@ def is_simple_assignment(term: hydra.core.Term):
         
         case _:
             return (base_term := hydra.lib.pairs.first(gather_args(term, ())), (_hoist_body_1 := (lambda v1: (lambda _: False)(v1.value) if isinstance(v1, hydra.core.EliminationUnion) else True), _hoist_body_2 := (lambda v1: (lambda elim: _hoist_body_1(elim))(v1.value) if isinstance(v1, hydra.core.FunctionElimination) else True), _hoist_body_3 := (lambda v1: (lambda f: _hoist_body_2(f))(v1.value) if isinstance(v1, hydra.core.TermFunction) else True), _hoist_body_3(base_term))[3])[1]
+
+def is_trivial_term(t: hydra.core.Term) -> bool:
+    r"""Check if a term is trivially cheap (no thunking needed)."""
+    
+    match hydra.rewriting.deannotate_term(t):
+        case hydra.core.TermLiteral():
+            return True
+        
+        case hydra.core.TermVariable():
+            return True
+        
+        case hydra.core.TermUnit():
+            return True
+        
+        case hydra.core.TermApplication(value=app):
+            fun = app.function
+            arg = app.argument
+            def _hoist_body_1(v1: hydra.core.Elimination) -> bool:
+                match v1:
+                    case hydra.core.EliminationRecord():
+                        return is_trivial_term(arg)
+                    
+                    case _:
+                        return False
+            def _hoist_body_2(v1: hydra.core.Function) -> bool:
+                match v1:
+                    case hydra.core.FunctionElimination(value=e):
+                        return _hoist_body_1(e)
+                    
+                    case _:
+                        return False
+            def _hoist_body_3(v1: hydra.core.Term) -> bool:
+                match v1:
+                    case hydra.core.TermFunction(value=f):
+                        return _hoist_body_2(f)
+                    
+                    case _:
+                        return False
+            return _hoist_body_3(fun)
+        
+        case hydra.core.TermMaybe(value=opt):
+            return hydra.lib.maybes.maybe(True, (lambda inner: is_trivial_term(inner)), opt)
+        
+        case hydra.core.TermTypeApplication(value=ta):
+            return is_trivial_term(ta.body)
+        
+        case hydra.core.TermTypeLambda(value=tl):
+            return is_trivial_term(tl.body)
+        
+        case _:
+            return False
 
 def normalize_comment(s: str) -> str:
     r"""Normalize a comment string for consistent output across coders."""

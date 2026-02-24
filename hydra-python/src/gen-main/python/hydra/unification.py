@@ -200,9 +200,7 @@ def unify_type_constraints(schema_types: FrozenDict[hydra.core.Name, T0], constr
         @lru_cache(1)
         def sright() -> hydra.core.Type:
             return hydra.rewriting.deannotate_type(c.right)
-        @lru_cache(1)
-        def comment() -> str:
-            return c.comment
+        comment = c.comment
         def bind(v: hydra.core.Name, t: hydra.core.Type) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
             @lru_cache(1)
             def subst() -> hydra.typing.TypeSubst:
@@ -211,12 +209,12 @@ def unify_type_constraints(schema_types: FrozenDict[hydra.core.Name, T0], constr
                 return hydra.substitution.compose_type_subst(subst(), s)
             return hydra.lib.flows.map((lambda x1: with_result(x1)), unify_type_constraints(schema_types, hydra.substitution.substitute_in_constraints(subst(), rest)))
         def try_binding(v: hydra.core.Name, t: hydra.core.Type) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
-            return hydra.lib.logic.if_else(variable_occurs_in_type(v, t), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Variable ", v.value), " appears free in type "), hydra.show.core.type(t)), " ("), comment()), ")"))), (lambda : bind(v, t)))
+            return hydra.lib.logic.if_else(variable_occurs_in_type(v, t), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Variable ", v.value), " appears free in type "), hydra.show.core.type(t)), " ("), comment), ")"))), (lambda : bind(v, t)))
         @lru_cache(1)
         def no_vars() -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
             def with_constraints(constraints2: frozenlist[hydra.typing.TypeConstraint]) -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
                 return unify_type_constraints(schema_types, hydra.lib.lists.concat2(constraints2, rest))
-            return hydra.lib.flows.bind(join_types(sleft(), sright(), comment()), (lambda x1: with_constraints(x1)))
+            return hydra.lib.flows.bind(join_types(sleft(), sright(), comment), (lambda x1: with_constraints(x1)))
         @lru_cache(1)
         def dflt() -> hydra.compute.Flow[T1, hydra.typing.TypeSubst]:
             match sright():
@@ -228,7 +226,7 @@ def unify_type_constraints(schema_types: FrozenDict[hydra.core.Name, T0], constr
         def _hoist_body_1(name, v1):
             match v1:
                 case hydra.core.TypeVariable(value=name2):
-                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(name.value, name2.value), (lambda : unify_type_constraints(schema_types, rest)), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name, schema_types)), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name2, schema_types)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Attempted to unify schema names ", name.value), " and "), name2.value), " ("), comment()), ")"))), (lambda : bind(name2, sleft())))), (lambda : bind(name, sright())))))
+                    return hydra.lib.logic.if_else(hydra.lib.equality.equal(name.value, name2.value), (lambda : unify_type_constraints(schema_types, rest)), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name, schema_types)), (lambda : hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.maps.lookup(name2, schema_types)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Attempted to unify schema names ", name.value), " and "), name2.value), " ("), comment), ")"))), (lambda : bind(name2, sleft())))), (lambda : bind(name, sright())))))
                 
                 case _:
                     return try_binding(name, sright())

@@ -55,13 +55,9 @@ def bind_unbound_type_variables(cx: hydra.typing.InferenceContext, term0: hydra.
         match term:
             case hydra.core.TermLet(value=l):
                 def for_binding(b: hydra.core.Binding) -> hydra.core.Binding:
-                    @lru_cache(1)
-                    def bname() -> hydra.core.Name:
-                        return b.name
-                    @lru_cache(1)
-                    def bterm() -> hydra.core.Term:
-                        return b.term
-                    return hydra.lib.maybes.maybe(hydra.core.Binding(bname(), bind_unbound_type_variables(cx, bterm()), Nothing()), (lambda ts: (bvars := hydra.lib.sets.from_list(ts.variables), unbound_in_type := hydra.rewriting.free_variables_in_type(ts.type), unbound_in_term := hydra.rewriting.free_type_variables_in_term(bterm()), unbound := hydra.lib.sets.to_list(hydra.lib.sets.difference(hydra.lib.sets.union(unbound_in_type, unbound_in_term), hydra.lib.sets.union(svars(), bvars))), ts2 := hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, unbound), ts.type, ts.constraints), bterm2 := hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(v, t)))), bterm(), unbound), hydra.core.Binding(bname(), bterm2, Just(ts2)))[6]), b.type)
+                    bname = b.name
+                    bterm = b.term
+                    return hydra.lib.maybes.maybe(hydra.core.Binding(bname, bind_unbound_type_variables(cx, bterm), Nothing()), (lambda ts: (bvars := hydra.lib.sets.from_list(ts.variables), unbound_in_type := hydra.rewriting.free_variables_in_type(ts.type), unbound_in_term := hydra.rewriting.free_type_variables_in_term(bterm), unbound := hydra.lib.sets.to_list(hydra.lib.sets.difference(hydra.lib.sets.union(unbound_in_type, unbound_in_term), hydra.lib.sets.union(svars(), bvars))), ts2 := hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, unbound), ts.type, ts.constraints), bterm2 := hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(v, t)))), bterm, unbound), hydra.core.Binding(bname, bterm2, Just(ts2)))[6]), b.type)
                 return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map((lambda x1: for_binding(x1)), l.bindings), bind_unbound_type_variables(cx, l.body))))
             
             case _:
@@ -127,13 +123,9 @@ def yield_(term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.Type
 def infer_type_of_projection(cx: hydra.typing.InferenceContext, proj: hydra.core.Projection) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a record projection."""
     
-    @lru_cache(1)
-    def tname() -> hydra.core.Name:
-        return proj.type_name
-    @lru_cache(1)
-    def fname() -> hydra.core.Name:
-        return proj.field
-    return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname()), (lambda schema_type: (svars := schema_type.variables, stype := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.record_type(tname(), stype), (lambda sfields: hydra.lib.flows.bind(hydra.schemas.find_field_type(fname(), sfields), (lambda ftyp: hydra.lib.flows.pure(yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(tname(), fname())))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname(), hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), ftyp))), hydra.substitution.id_type_subst())))))))[2]))
+    tname = proj.type_name
+    fname = proj.field
+    return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname), (lambda schema_type: (svars := schema_type.variables, stype := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.record_type(tname, stype), (lambda sfields: hydra.lib.flows.bind(hydra.schemas.find_field_type(fname, sfields), (lambda ftyp: hydra.lib.flows.pure(yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(tname, fname)))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), ftyp))), hydra.substitution.id_type_subst())))))))[2]))
 
 def infer_type_of_unwrap(cx: hydra.typing.InferenceContext, tname: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of an unwrap operation."""
@@ -180,12 +172,10 @@ def generalize(cx: hydra.typing.InferenceContext, typ: hydra.core.Type) -> hydra
     @lru_cache(1)
     def vars() -> frozenlist[hydra.core.Name]:
         return hydra.lib.lists.nub(hydra.lib.lists.filter((lambda v: hydra.lib.logic.and_(is_unbound(cx, v), is_type_var_name(v))), hydra.rewriting.free_variables_in_type_ordered(typ)))
-    @lru_cache(1)
-    def all_constraints() -> FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]:
-        return cx.class_constraints
+    all_constraints = cx.class_constraints
     @lru_cache(1)
     def relevant_constraints() -> FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]:
-        return hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda v: hydra.lib.maybes.map((lambda meta: (v, meta)), hydra.lib.maps.lookup(v, all_constraints()))), vars())))
+        return hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda v: hydra.lib.maybes.map((lambda meta: (v, meta)), hydra.lib.maps.lookup(v, all_constraints))), vars())))
     @lru_cache(1)
     def constraints_maybe() -> Maybe[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]:
         return hydra.lib.logic.if_else(hydra.lib.maps.null(relevant_constraints()), (lambda : Nothing()), (lambda : Just(relevant_constraints())))
@@ -227,41 +217,27 @@ def infer_many(cx: hydra.typing.InferenceContext, pairs: frozenlist[tuple[hydra.
 def infer_type_of_annotated_term(cx: hydra.typing.InferenceContext, at: hydra.core.AnnotatedTerm) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of an annotated term."""
     
-    @lru_cache(1)
-    def term() -> hydra.core.Term:
-        return at.body
-    @lru_cache(1)
-    def ann() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-        return at.annotation
-    return hydra.lib.flows.bind(infer_type_of_term(cx, term(), "annotated term"), (lambda result: (iterm := result.term, itype := result.type, isubst := result.subst, iconstraints := result.class_constraints, hydra.lib.flows.pure(hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(iterm, ann()))), itype, isubst, iconstraints)))[4]))
+    term = at.body
+    ann = at.annotation
+    return hydra.lib.flows.bind(infer_type_of_term(cx, term, "annotated term"), (lambda result: (iterm := result.term, itype := result.type, isubst := result.subst, iconstraints := result.class_constraints, hydra.lib.flows.pure(hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(iterm, ann))), itype, isubst, iconstraints)))[4]))
 
 def infer_type_of_application(cx: hydra.typing.InferenceContext, app: hydra.core.Application) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a function application."""
     
-    @lru_cache(1)
-    def e0() -> hydra.core.Term:
-        return app.function
-    @lru_cache(1)
-    def e1() -> hydra.core.Term:
-        return app.argument
-    return hydra.lib.flows.bind(infer_type_of_term(cx, e0(), "lhs"), (lambda lhs_result: (a := lhs_result.term, t0 := lhs_result.type, s0 := lhs_result.subst, c0 := lhs_result.class_constraints, hydra.lib.flows.bind(infer_type_of_term(hydra.substitution.subst_in_context(s0, cx), e1(), "rhs"), (lambda rhs_result: (b := rhs_result.term, t1 := rhs_result.type, s1 := rhs_result.subst, c1 := rhs_result.class_constraints, hydra.lib.flows.bind(hydra.schemas.fresh_name(), (lambda v: hydra.lib.flows.bind(hydra.unification.unify_types(cx.schema_types, hydra.substitution.subst_in_type(s1, t0), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(t1, cast(hydra.core.Type, hydra.core.TypeVariable(v))))), "application lhs"), (lambda s2: hydra.lib.flows.bind(hydra.checking.check_type_subst(cx, s2), (lambda _: (r_expr := cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.substitution.subst_types_in_term(hydra.substitution.compose_type_subst(s1, s2), a), hydra.substitution.subst_types_in_term(s2, b)))), r_type := hydra.substitution.subst_in_type(s2, cast(hydra.core.Type, hydra.core.TypeVariable(v))), r_subst := hydra.substitution.compose_type_subst_list((s0, s1, s2)), c0_subst := hydra.substitution.subst_in_class_constraints(s2, hydra.substitution.subst_in_class_constraints(s1, c0)), c1_subst := hydra.substitution.subst_in_class_constraints(s2, c1), r_constraints := merge_class_constraints(c0_subst, c1_subst), hydra.lib.flows.pure(hydra.typing.InferenceResult(r_expr, r_type, r_subst, r_constraints)))[6])))))))[4])))[4]))
+    e0 = app.function
+    e1 = app.argument
+    return hydra.lib.flows.bind(infer_type_of_term(cx, e0, "lhs"), (lambda lhs_result: (a := lhs_result.term, t0 := lhs_result.type, s0 := lhs_result.subst, c0 := lhs_result.class_constraints, hydra.lib.flows.bind(infer_type_of_term(hydra.substitution.subst_in_context(s0, cx), e1, "rhs"), (lambda rhs_result: (b := rhs_result.term, t1 := rhs_result.type, s1 := rhs_result.subst, c1 := rhs_result.class_constraints, hydra.lib.flows.bind(hydra.schemas.fresh_name(), (lambda v: hydra.lib.flows.bind(hydra.unification.unify_types(cx.schema_types, hydra.substitution.subst_in_type(s1, t0), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(t1, cast(hydra.core.Type, hydra.core.TypeVariable(v))))), "application lhs"), (lambda s2: hydra.lib.flows.bind(hydra.checking.check_type_subst(cx, s2), (lambda _: (r_expr := cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.substitution.subst_types_in_term(hydra.substitution.compose_type_subst(s1, s2), a), hydra.substitution.subst_types_in_term(s2, b)))), r_type := hydra.substitution.subst_in_type(s2, cast(hydra.core.Type, hydra.core.TypeVariable(v))), r_subst := hydra.substitution.compose_type_subst_list((s0, s1, s2)), c0_subst := hydra.substitution.subst_in_class_constraints(s2, hydra.substitution.subst_in_class_constraints(s1, c0)), c1_subst := hydra.substitution.subst_in_class_constraints(s2, c1), r_constraints := merge_class_constraints(c0_subst, c1_subst), hydra.lib.flows.pure(hydra.typing.InferenceResult(r_expr, r_type, r_subst, r_constraints)))[6])))))))[4])))[4]))
 
 def infer_type_of_case_statement(cx: hydra.typing.InferenceContext, case_stmt: hydra.core.CaseStatement) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a case statement."""
     
-    @lru_cache(1)
-    def tname() -> hydra.core.Name:
-        return case_stmt.type_name
-    @lru_cache(1)
-    def dflt() -> Maybe[hydra.core.Term]:
-        return case_stmt.default
-    @lru_cache(1)
-    def cases() -> frozenlist[hydra.core.Field]:
-        return case_stmt.cases
+    tname = case_stmt.type_name
+    dflt = case_stmt.default
+    cases = case_stmt.cases
     @lru_cache(1)
     def fnames() -> frozenlist[hydra.core.Name]:
-        return hydra.lib.lists.map((lambda v1: v1.name), cases())
-    return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname()), (lambda schema_type: (svars := schema_type.variables, stype := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.union_type(tname(), stype), (lambda sfields: hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda t: infer_type_of_term(cx, t, hydra.lib.strings.cat(("case ", tname().value, ".<default>")))), dflt()), (lambda dflt_result: hydra.lib.flows.bind(infer_many(cx, hydra.lib.lists.map((lambda f: (f.term, hydra.lib.strings.cat(("case ", tname().value, ".", f.name.value)))), cases())), (lambda case_results: (iterms := hydra.lib.pairs.first(case_results), itypes := hydra.lib.pairs.first(hydra.lib.pairs.second(case_results)), isubst := hydra.lib.pairs.second(hydra.lib.pairs.second(case_results)), hydra.lib.flows.bind(hydra.schemas.fresh_name(), (lambda codv: (cod := cast(hydra.core.Type, hydra.core.TypeVariable(codv)), case_map := hydra.lib.maps.from_list(hydra.lib.lists.map((lambda ft: (ft.name, ft.type)), sfields)), dflt_constraints := hydra.monads.maybe_to_list(hydra.lib.maybes.map((lambda r: hydra.typing.TypeConstraint(cod, hydra.substitution.subst_in_type(isubst, r.type), "match default")), dflt_result)), case_constraints := hydra.lib.maybes.cat(hydra.lib.lists.zip_with((lambda fname, itype: hydra.lib.maybes.map((lambda ftype: hydra.typing.TypeConstraint(itype, cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(ftype, cod))), "case type")), hydra.lib.maps.lookup(fname, case_map))), fnames(), itypes)), map_constraints(cx, (lambda subst: yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(tname(), hydra.lib.maybes.map((lambda v1: v1.term), dflt_result), hydra.lib.lists.zip_with((lambda n, t: hydra.core.Field(n, t)), fnames(), iterms))))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname(), hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), cod))), hydra.substitution.compose_type_subst_list(hydra.lib.lists.concat((hydra.monads.maybe_to_list(hydra.lib.maybes.map((lambda v1: v1.subst), dflt_result)), (isubst, subst)))))), hydra.lib.lists.concat((dflt_constraints, case_constraints))))[4])))[3])))))))[2]))
+        return hydra.lib.lists.map((lambda v1: v1.name), cases)
+    return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname), (lambda schema_type: (svars := schema_type.variables, stype := schema_type.type, hydra.lib.flows.bind(hydra.extract.core.union_type(tname, stype), (lambda sfields: hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda t: infer_type_of_term(cx, t, hydra.lib.strings.cat(("case ", tname.value, ".<default>")))), dflt), (lambda dflt_result: hydra.lib.flows.bind(infer_many(cx, hydra.lib.lists.map((lambda f: (f.term, hydra.lib.strings.cat(("case ", tname.value, ".", f.name.value)))), cases)), (lambda case_results: (iterms := hydra.lib.pairs.first(case_results), itypes := hydra.lib.pairs.first(hydra.lib.pairs.second(case_results)), isubst := hydra.lib.pairs.second(hydra.lib.pairs.second(case_results)), hydra.lib.flows.bind(hydra.schemas.fresh_name(), (lambda codv: (cod := cast(hydra.core.Type, hydra.core.TypeVariable(codv)), case_map := hydra.lib.maps.from_list(hydra.lib.lists.map((lambda ft: (ft.name, ft.type)), sfields)), dflt_constraints := hydra.monads.maybe_to_list(hydra.lib.maybes.map((lambda r: hydra.typing.TypeConstraint(cod, hydra.substitution.subst_in_type(isubst, r.type), "match default")), dflt_result)), case_constraints := hydra.lib.maybes.cat(hydra.lib.lists.zip_with((lambda fname, itype: hydra.lib.maybes.map((lambda ftype: hydra.typing.TypeConstraint(itype, cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(ftype, cod))), "case type")), hydra.lib.maps.lookup(fname, case_map))), fnames(), itypes)), map_constraints(cx, (lambda subst: yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(tname, hydra.lib.maybes.map((lambda v1: v1.term), dflt_result), hydra.lib.lists.zip_with((lambda n, t: hydra.core.Field(n, t)), fnames(), iterms))))))))), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), cod))), hydra.substitution.compose_type_subst_list(hydra.lib.lists.concat((hydra.monads.maybe_to_list(hydra.lib.maybes.map((lambda v1: v1.subst), dflt_result)), (isubst, subst)))))), hydra.lib.lists.concat((dflt_constraints, case_constraints))))[4])))[3])))))))[2]))
 
 def infer_type_of_collection(cx: hydra.typing.InferenceContext, typ_cons: Callable[[hydra.core.Type], hydra.core.Type], trm_cons: Callable[[frozenlist[hydra.core.Term]], hydra.core.Term], desc: str, els: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a collection."""
@@ -308,80 +284,56 @@ def infer_type_of_function(cx: hydra.typing.InferenceContext, f: hydra.core.Func
 def infer_type_of_injection(cx: hydra.typing.InferenceContext, injection: hydra.core.Injection) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a union injection."""
     
-    @lru_cache(1)
-    def tname() -> hydra.core.Name:
-        return injection.type_name
-    @lru_cache(1)
-    def field() -> hydra.core.Field:
-        return injection.field
-    @lru_cache(1)
-    def fname() -> hydra.core.Name:
-        return field().name
-    @lru_cache(1)
-    def term() -> hydra.core.Term:
-        return field().term
-    return hydra.lib.flows.bind(infer_type_of_term(cx, term(), "injected term"), (lambda result: hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname()), (lambda schema_type: (svars := schema_type.variables, stype := schema_type.type, iterm := result.term, ityp := result.type, isubst := result.subst, hydra.lib.flows.bind(hydra.extract.core.union_type(tname(), stype), (lambda sfields: hydra.lib.flows.bind(hydra.schemas.find_field_type(fname(), sfields), (lambda ftyp: map_constraints(cx, (lambda subst: yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(tname(), hydra.core.Field(fname(), iterm))))), hydra.schemas.nominal_application(tname(), hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), hydra.substitution.compose_type_subst(isubst, subst))), (hydra.typing.TypeConstraint(ftyp, ityp, "schema type of injected field"),)))))))[5]))))
+    tname = injection.type_name
+    field = injection.field
+    fname = field.name
+    term = field.term
+    return hydra.lib.flows.bind(infer_type_of_term(cx, term, "injected term"), (lambda result: hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname), (lambda schema_type: (svars := schema_type.variables, stype := schema_type.type, iterm := result.term, ityp := result.type, isubst := result.subst, hydra.lib.flows.bind(hydra.extract.core.union_type(tname, stype), (lambda sfields: hydra.lib.flows.bind(hydra.schemas.find_field_type(fname, sfields), (lambda ftyp: map_constraints(cx, (lambda subst: yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(tname, hydra.core.Field(fname, iterm))))), hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), hydra.substitution.compose_type_subst(isubst, subst))), (hydra.typing.TypeConstraint(ftyp, ityp, "schema type of injected field"),)))))))[5]))))
 
 def infer_type_of_lambda(cx: hydra.typing.InferenceContext, lambda_: hydra.core.Lambda) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a lambda function."""
     
-    @lru_cache(1)
-    def var() -> hydra.core.Name:
-        return lambda_.parameter
-    @lru_cache(1)
-    def body() -> hydra.core.Term:
-        return lambda_.body
-    return hydra.lib.flows.bind(hydra.schemas.fresh_name(), (lambda vdom: (dom := cast(hydra.core.Type, hydra.core.TypeVariable(vdom)), cx2 := extend_context(((var(), hydra.core.TypeScheme((), dom, Nothing())),), cx), hydra.lib.flows.bind(infer_type_of_term(cx2, body(), "lambda body"), (lambda result: (iterm := result.term, icod := result.type, isubst := result.subst, rdom := hydra.substitution.subst_in_type(isubst, dom), rterm := cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(var(), Just(rdom), iterm))))), rtype := cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(rdom, icod))), vars := hydra.lib.sets.unions((hydra.rewriting.free_variables_in_type(rdom), hydra.rewriting.free_variables_in_type(icod), free_variables_in_context(hydra.substitution.subst_in_context(isubst, cx2)))), cx3 := hydra.substitution.subst_in_context(isubst, cx), iconstraints := hydra.substitution.subst_in_class_constraints(isubst, result.class_constraints), hydra.lib.flows.pure(hydra.typing.InferenceResult(rterm, rtype, isubst, iconstraints)))[9])))[2]))
+    var = lambda_.parameter
+    body = lambda_.body
+    return hydra.lib.flows.bind(hydra.schemas.fresh_name(), (lambda vdom: (dom := cast(hydra.core.Type, hydra.core.TypeVariable(vdom)), cx2 := extend_context(((var, hydra.core.TypeScheme((), dom, Nothing())),), cx), hydra.lib.flows.bind(infer_type_of_term(cx2, body, "lambda body"), (lambda result: (iterm := result.term, icod := result.type, isubst := result.subst, rdom := hydra.substitution.subst_in_type(isubst, dom), rterm := cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(var, Just(rdom), iterm))))), rtype := cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(rdom, icod))), vars := hydra.lib.sets.unions((hydra.rewriting.free_variables_in_type(rdom), hydra.rewriting.free_variables_in_type(icod), free_variables_in_context(hydra.substitution.subst_in_context(isubst, cx2)))), cx3 := hydra.substitution.subst_in_context(isubst, cx), iconstraints := hydra.substitution.subst_in_class_constraints(isubst, result.class_constraints), hydra.lib.flows.pure(hydra.typing.InferenceResult(rterm, rtype, isubst, iconstraints)))[9])))[2]))
 
 def infer_type_of_let(cx: hydra.typing.InferenceContext, let0: hydra.core.Let) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Normalize a let term before inferring its type."""
     
-    @lru_cache(1)
-    def bindings0() -> frozenlist[hydra.core.Binding]:
-        return let0.bindings
-    @lru_cache(1)
-    def body0() -> hydra.core.Term:
-        return let0.body
+    bindings0 = let0.bindings
+    body0 = let0.body
     @lru_cache(1)
     def names() -> frozenlist[hydra.core.Name]:
-        return hydra.lib.lists.map((lambda v1: v1.name), bindings0())
+        return hydra.lib.lists.map((lambda v1: v1.name), bindings0)
     @lru_cache(1)
     def name_set() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.from_list(names())
     def to_pair(binding: hydra.core.Binding) -> tuple[hydra.core.Name, frozenlist[hydra.core.Name]]:
-        @lru_cache(1)
-        def name() -> hydra.core.Name:
-            return binding.name
-        @lru_cache(1)
-        def term() -> hydra.core.Term:
-            return binding.term
-        return (name(), hydra.lib.lists.filter((lambda n: hydra.lib.sets.member(n, name_set())), hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_term(term()))))
+        name = binding.name
+        term = binding.term
+        return (name, hydra.lib.lists.filter((lambda n: hydra.lib.sets.member(n, name_set())), hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_term(term))))
     @lru_cache(1)
     def adj_list() -> frozenlist[tuple[hydra.core.Name, frozenlist[hydra.core.Name]]]:
-        return hydra.lib.lists.map((lambda x1: to_pair(x1)), bindings0())
+        return hydra.lib.lists.map((lambda x1: to_pair(x1)), bindings0)
     @lru_cache(1)
     def groups() -> frozenlist[frozenlist[hydra.core.Name]]:
         return hydra.sorting.topological_sort_components(adj_list())
     @lru_cache(1)
     def binding_map() -> FrozenDict[hydra.core.Name, hydra.core.Binding]:
-        return hydra.lib.maps.from_list(hydra.lib.lists.zip(names(), bindings0()))
+        return hydra.lib.maps.from_list(hydra.lib.lists.zip(names(), bindings0))
     def create_let(e: hydra.core.Term, group: frozenlist[hydra.core.Name]) -> hydra.core.Term:
         return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda n: hydra.lib.maps.lookup(n, binding_map())), group)), e)))
     @lru_cache(1)
     def rewritten_let() -> hydra.core.Term:
-        return hydra.lib.lists.foldl((lambda x1, x2: create_let(x1, x2)), body0(), hydra.lib.lists.reverse(groups()))
+        return hydra.lib.lists.foldl((lambda x1, x2: create_let(x1, x2)), body0, hydra.lib.lists.reverse(groups()))
     def restore_let(iterm: hydra.core.Term) -> hydra.core.Term:
         def helper(level: int, bins: frozenlist[hydra.core.Binding], term: hydra.core.Term) -> tuple[frozenlist[hydra.core.Binding], hydra.core.Term]:
             def nonzero(term2: hydra.core.Term) -> tuple[frozenlist[hydra.core.Binding], hydra.core.Term]:
                 match term2:
                     case hydra.core.TermLet(value=l):
-                        @lru_cache(1)
-                        def bs() -> frozenlist[hydra.core.Binding]:
-                            return l.bindings
-                        @lru_cache(1)
-                        def let_body() -> hydra.core.Term:
-                            return l.body
-                        return helper(hydra.lib.math.sub(level, 1), hydra.lib.lists.concat((bs(), bins)), let_body())
+                        bs = l.bindings
+                        let_body = l.body
+                        return helper(hydra.lib.math.sub(level, 1), hydra.lib.lists.concat((bs, bins)), let_body)
                     
                     case _:
                         raise TypeError("Unsupported Term")
@@ -400,19 +352,11 @@ def infer_type_of_let(cx: hydra.typing.InferenceContext, let0: hydra.core.Let) -
             return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b)), binding_list()))
         return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda n: hydra.lib.maps.lookup(n, binding_map2())), names())), e())))
     def rewrite_result(result: hydra.typing.InferenceResult) -> hydra.typing.InferenceResult:
-        @lru_cache(1)
-        def iterm() -> hydra.core.Term:
-            return result.term
-        @lru_cache(1)
-        def itype() -> hydra.core.Type:
-            return result.type
-        @lru_cache(1)
-        def isubst() -> hydra.typing.TypeSubst:
-            return result.subst
-        @lru_cache(1)
-        def iconstraints() -> FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]:
-            return result.class_constraints
-        return hydra.typing.InferenceResult(restore_let(iterm()), itype(), isubst(), iconstraints())
+        iterm = result.term
+        itype = result.type
+        isubst = result.subst
+        iconstraints = result.class_constraints
+        return hydra.typing.InferenceResult(restore_let(iterm), itype, isubst, iconstraints)
     @lru_cache(1)
     def res() -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
         match rewritten_let():
@@ -426,16 +370,12 @@ def infer_type_of_let(cx: hydra.typing.InferenceContext, let0: hydra.core.Let) -
 def infer_type_of_let_normalized(cx0: hydra.typing.InferenceContext, let_term: hydra.core.Let) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a let (letrec) term which is already in a normal form."""
     
-    @lru_cache(1)
-    def bins0() -> frozenlist[hydra.core.Binding]:
-        return let_term.bindings
-    @lru_cache(1)
-    def body0() -> hydra.core.Term:
-        return let_term.body
+    bins0 = let_term.bindings
+    body0 = let_term.body
     @lru_cache(1)
     def bnames() -> frozenlist[hydra.core.Name]:
-        return hydra.lib.lists.map((lambda v1: v1.name), bins0())
-    return hydra.lib.flows.bind(hydra.schemas.fresh_names(hydra.lib.lists.length(bins0())), (lambda bvars: (tbins0 := hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), bvars), cx1 := extend_context(hydra.lib.lists.zip(bnames(), hydra.lib.lists.map((lambda t: hydra.core.TypeScheme((), t, Nothing())), tbins0)), cx0), hydra.lib.flows.bind(infer_types_of_temporary_bindings(cx1, bins0()), (lambda inferred_result: (bterms1 := hydra.lib.pairs.first(inferred_result), tbins1 := hydra.lib.pairs.first(hydra.lib.pairs.second(inferred_result)), subst_and_constraints := hydra.lib.pairs.second(hydra.lib.pairs.second(inferred_result)), s1 := hydra.lib.pairs.first(subst_and_constraints), inferred_constraints := hydra.lib.pairs.second(subst_and_constraints), hydra.lib.flows.bind(hydra.unification.unify_type_lists(cx0.schema_types, hydra.lib.lists.map((lambda v1: hydra.substitution.subst_in_type(s1, v1)), tbins0), tbins1, "temporary type bindings"), (lambda s2: hydra.lib.flows.bind(hydra.checking.check_type_subst(cx0, s2), (lambda _: (g2base := hydra.substitution.subst_in_context(hydra.substitution.compose_type_subst(s1, s2), cx0), constraints_with_s2 := hydra.substitution.subst_in_class_constraints(s2, inferred_constraints), composed_subst := hydra.substitution.compose_type_subst(s1, s2), original_binding_constraints := hydra.lib.lists.foldl((lambda acc, b: hydra.lib.maybes.maybe(acc, (lambda ts: hydra.lib.maybes.maybe(acc, (lambda c: merge_class_constraints(acc, c)), ts.constraints)), b.type)), hydra.lib.maps.empty(), bins0()), original_constraints_subst := hydra.substitution.subst_in_class_constraints(composed_subst, original_binding_constraints), all_inferred_constraints := merge_class_constraints(constraints_with_s2, original_constraints_subst), merged_constraints := merge_class_constraints(g2base.class_constraints, all_inferred_constraints), g2 := hydra.typing.InferenceContext(g2base.schema_types, g2base.primitive_types, g2base.data_types, merged_constraints, g2base.debug), bterms1_subst := hydra.lib.lists.map((lambda v1: hydra.substitution.subst_types_in_term(s2, v1)), bterms1), tsbins1 := hydra.lib.lists.zip(bnames(), hydra.lib.lists.map((lambda t: generalize(g2, hydra.substitution.subst_in_type(s2, t))), tbins1)), hydra.lib.flows.bind(infer_type_of_term(extend_context(tsbins1, g2), body0(), "let body"), (lambda body_result: (body1 := body_result.term, tbody := body_result.type, sbody := body_result.subst, st1 := hydra.typing.TermSubst(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda pair: (name := hydra.lib.pairs.first(pair), ts := hydra.lib.pairs.second(pair), (name, build_type_application_term(ts.variables, cast(hydra.core.Term, hydra.core.TermVariable(name)))))[2]), tsbins1))), create_binding := (lambda binding_pair: (name_ts_pair := hydra.lib.pairs.first(binding_pair), term := hydra.lib.pairs.second(binding_pair), name := hydra.lib.pairs.first(name_ts_pair), ts := hydra.lib.pairs.second(name_ts_pair), final_ts := hydra.substitution.subst_in_type_scheme(sbody, ts), type_lambda_term := hydra.lib.lists.foldl((lambda b, v: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(v, b)))), hydra.substitution.substitute_in_term(st1, term), hydra.lib.lists.reverse(final_ts.variables)), hydra.core.Binding(name, hydra.substitution.subst_types_in_term(hydra.substitution.compose_type_subst(sbody, s2), type_lambda_term), Just(final_ts)))[6]), bins1 := hydra.lib.lists.map((lambda x1: create_binding(x1)), hydra.lib.lists.zip(tsbins1, bterms1_subst)), body_constraints := hydra.substitution.subst_in_class_constraints(sbody, body_result.class_constraints), binding_constraints_subst := hydra.substitution.subst_in_class_constraints(sbody, constraints_with_s2), all_constraints := merge_class_constraints(binding_constraints_subst, body_constraints), ret := hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(bins1, body1))), tbody, hydra.substitution.compose_type_subst_list((s1, s2, sbody)), all_constraints), hydra.lib.flows.pure(ret))[10])))[10])))))[5])))[2]))
+        return hydra.lib.lists.map((lambda v1: v1.name), bins0)
+    return hydra.lib.flows.bind(hydra.schemas.fresh_names(hydra.lib.lists.length(bins0)), (lambda bvars: (tbins0 := hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), bvars), cx1 := extend_context(hydra.lib.lists.zip(bnames(), hydra.lib.lists.map((lambda t: hydra.core.TypeScheme((), t, Nothing())), tbins0)), cx0), hydra.lib.flows.bind(infer_types_of_temporary_bindings(cx1, bins0), (lambda inferred_result: (bterms1 := hydra.lib.pairs.first(inferred_result), tbins1 := hydra.lib.pairs.first(hydra.lib.pairs.second(inferred_result)), subst_and_constraints := hydra.lib.pairs.second(hydra.lib.pairs.second(inferred_result)), s1 := hydra.lib.pairs.first(subst_and_constraints), inferred_constraints := hydra.lib.pairs.second(subst_and_constraints), hydra.lib.flows.bind(hydra.unification.unify_type_lists(cx0.schema_types, hydra.lib.lists.map((lambda v1: hydra.substitution.subst_in_type(s1, v1)), tbins0), tbins1, "temporary type bindings"), (lambda s2: hydra.lib.flows.bind(hydra.checking.check_type_subst(cx0, s2), (lambda _: (g2base := hydra.substitution.subst_in_context(hydra.substitution.compose_type_subst(s1, s2), cx0), constraints_with_s2 := hydra.substitution.subst_in_class_constraints(s2, inferred_constraints), composed_subst := hydra.substitution.compose_type_subst(s1, s2), original_binding_constraints := hydra.lib.lists.foldl((lambda acc, b: hydra.lib.maybes.maybe(acc, (lambda ts: hydra.lib.maybes.maybe(acc, (lambda c: merge_class_constraints(acc, c)), ts.constraints)), b.type)), hydra.lib.maps.empty(), bins0), original_constraints_subst := hydra.substitution.subst_in_class_constraints(composed_subst, original_binding_constraints), all_inferred_constraints := merge_class_constraints(constraints_with_s2, original_constraints_subst), merged_constraints := merge_class_constraints(g2base.class_constraints, all_inferred_constraints), g2 := hydra.typing.InferenceContext(g2base.schema_types, g2base.primitive_types, g2base.data_types, merged_constraints, g2base.debug), bterms1_subst := hydra.lib.lists.map((lambda v1: hydra.substitution.subst_types_in_term(s2, v1)), bterms1), tsbins1 := hydra.lib.lists.zip(bnames(), hydra.lib.lists.map((lambda t: generalize(g2, hydra.substitution.subst_in_type(s2, t))), tbins1)), hydra.lib.flows.bind(infer_type_of_term(extend_context(tsbins1, g2), body0, "let body"), (lambda body_result: (body1 := body_result.term, tbody := body_result.type, sbody := body_result.subst, st1 := hydra.typing.TermSubst(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda pair: (name := hydra.lib.pairs.first(pair), ts := hydra.lib.pairs.second(pair), (name, build_type_application_term(ts.variables, cast(hydra.core.Term, hydra.core.TermVariable(name)))))[2]), tsbins1))), create_binding := (lambda binding_pair: (name_ts_pair := hydra.lib.pairs.first(binding_pair), term := hydra.lib.pairs.second(binding_pair), name := hydra.lib.pairs.first(name_ts_pair), ts := hydra.lib.pairs.second(name_ts_pair), final_ts := hydra.substitution.subst_in_type_scheme(sbody, ts), type_lambda_term := hydra.lib.lists.foldl((lambda b, v: cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(v, b)))), hydra.substitution.substitute_in_term(st1, term), hydra.lib.lists.reverse(final_ts.variables)), hydra.core.Binding(name, hydra.substitution.subst_types_in_term(hydra.substitution.compose_type_subst(sbody, s2), type_lambda_term), Just(final_ts)))[6]), bins1 := hydra.lib.lists.map((lambda x1: create_binding(x1)), hydra.lib.lists.zip(tsbins1, bterms1_subst)), body_constraints := hydra.substitution.subst_in_class_constraints(sbody, body_result.class_constraints), binding_constraints_subst := hydra.substitution.subst_in_class_constraints(sbody, constraints_with_s2), all_constraints := merge_class_constraints(binding_constraints_subst, body_constraints), ret := hydra.typing.InferenceResult(cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(bins1, body1))), tbody, hydra.substitution.compose_type_subst_list((s1, s2, sbody)), all_constraints), hydra.lib.flows.pure(ret))[10])))[10])))))[5])))[2]))
 
 def infer_type_of_list(cx: hydra.typing.InferenceContext, v1: frozenlist[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a list."""
@@ -462,16 +402,12 @@ def infer_type_of_pair(cx: hydra.typing.InferenceContext, p: tuple[hydra.core.Te
 def infer_type_of_record(cx: hydra.typing.InferenceContext, record: hydra.core.Record) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a record."""
     
-    @lru_cache(1)
-    def tname() -> hydra.core.Name:
-        return record.type_name
-    @lru_cache(1)
-    def fields() -> frozenlist[hydra.core.Field]:
-        return record.fields
+    tname = record.type_name
+    fields = record.fields
     @lru_cache(1)
     def fnames() -> frozenlist[hydra.core.Name]:
-        return hydra.lib.lists.map((lambda v1: v1.name), fields())
-    return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname()), (lambda schema_type: hydra.lib.flows.bind(infer_many(cx, hydra.lib.lists.map((lambda f: (f.term, hydra.lib.strings.cat2("field ", f.name.value))), fields())), (lambda results: (svars := schema_type.variables, stype := schema_type.type, iterms := hydra.lib.pairs.first(results), itypes := hydra.lib.pairs.first(hydra.lib.pairs.second(results)), isubst := hydra.lib.pairs.second(hydra.lib.pairs.second(results)), ityp := cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(tname(), hydra.lib.lists.zip_with((lambda n, t: hydra.core.FieldType(n, t)), fnames(), itypes)))), map_constraints(cx, (lambda subst: yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname(), hydra.lib.lists.zip_with((lambda n, t: hydra.core.Field(n, t)), fnames(), iterms))))), hydra.schemas.nominal_application(tname(), hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), hydra.substitution.compose_type_subst(isubst, subst))), (hydra.typing.TypeConstraint(stype, ityp, "schema type of record"),)))[6]))))
+        return hydra.lib.lists.map((lambda v1: v1.name), fields)
+    return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname), (lambda schema_type: hydra.lib.flows.bind(infer_many(cx, hydra.lib.lists.map((lambda f: (f.term, hydra.lib.strings.cat2("field ", f.name.value))), fields)), (lambda results: (svars := schema_type.variables, stype := schema_type.type, iterms := hydra.lib.pairs.first(results), itypes := hydra.lib.pairs.first(hydra.lib.pairs.second(results)), isubst := hydra.lib.pairs.second(hydra.lib.pairs.second(results)), ityp := cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(tname, hydra.lib.lists.zip_with((lambda n, t: hydra.core.FieldType(n, t)), fnames(), itypes)))), map_constraints(cx, (lambda subst: yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, hydra.lib.lists.zip_with((lambda n, t: hydra.core.Field(n, t)), fnames(), iterms))))), hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), hydra.substitution.compose_type_subst(isubst, subst))), (hydra.typing.TypeConstraint(stype, ityp, "schema type of record"),)))[6]))))
 
 def infer_type_of_set(cx: hydra.typing.InferenceContext, s: frozenset[hydra.core.Term]) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a set."""
@@ -555,13 +491,9 @@ def infer_type_of_type_lambda(cx: hydra.typing.InferenceContext, ta: hydra.core.
 def infer_type_of_wrapped_term(cx: hydra.typing.InferenceContext, wt: hydra.core.WrappedTerm) -> hydra.compute.Flow[T0, hydra.typing.InferenceResult]:
     r"""Infer the type of a wrapped term."""
     
-    @lru_cache(1)
-    def tname() -> hydra.core.Name:
-        return wt.type_name
-    @lru_cache(1)
-    def term() -> hydra.core.Term:
-        return wt.body
-    return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname()), (lambda schema_type: hydra.lib.flows.bind(infer_type_of_term(cx, term(), "wrapped term"), (lambda result: (svars := schema_type.variables, stype := schema_type.type, iterm := result.term, itype := result.type, isubst := result.subst, ityp := cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(tname(), itype))), map_constraints(cx, (lambda subst: yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(tname(), iterm)))), hydra.schemas.nominal_application(tname(), hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), hydra.substitution.compose_type_subst(isubst, subst))), (hydra.typing.TypeConstraint(stype, ityp, "schema type of wrapper"),)))[6]))))
+    tname = wt.type_name
+    term = wt.body
+    return hydra.lib.flows.bind(hydra.schemas.require_schema_type(cx, tname), (lambda schema_type: hydra.lib.flows.bind(infer_type_of_term(cx, term, "wrapped term"), (lambda result: (svars := schema_type.variables, stype := schema_type.type, iterm := result.term, itype := result.type, isubst := result.subst, ityp := cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(tname, itype))), map_constraints(cx, (lambda subst: yield_(build_type_application_term(svars, cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(tname, iterm)))), hydra.schemas.nominal_application(tname, hydra.lib.lists.map((lambda x: cast(hydra.core.Type, hydra.core.TypeVariable(x))), svars)), hydra.substitution.compose_type_subst(isubst, subst))), (hydra.typing.TypeConstraint(stype, ityp, "schema type of wrapper"),)))[6]))))
 
 def infer_types_of_temporary_bindings(cx: hydra.typing.InferenceContext, bins: frozenlist[hydra.core.Binding]) -> hydra.compute.Flow[T0, tuple[frozenlist[hydra.core.Term], tuple[frozenlist[hydra.core.Type], tuple[hydra.typing.TypeSubst, FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]]]]:
     r"""Infer types for temporary let bindings. Returns a 4-tuple of (terms, types, substitution, accumulated constraints)."""
@@ -571,16 +503,12 @@ def infer_types_of_temporary_bindings(cx: hydra.typing.InferenceContext, bins: f
         @lru_cache(1)
         def binding() -> hydra.core.Binding:
             return hydra.lib.lists.head(bins)
-        @lru_cache(1)
-        def k() -> hydra.core.Name:
-            return binding().name
-        @lru_cache(1)
-        def v() -> hydra.core.Term:
-            return binding().term
+        k = binding().name
+        v = binding().term
         @lru_cache(1)
         def tl() -> frozenlist[hydra.core.Binding]:
             return hydra.lib.lists.tail(bins)
-        return hydra.lib.flows.bind(infer_type_of_term(cx, v(), hydra.lib.strings.cat(("temporary let binding '", k().value, "'"))), (lambda result1: (j := result1.term, u_prime := result1.type, u := result1.subst, c1_inferred := result1.class_constraints, hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.pure(hydra.lib.maps.empty()), (lambda ts: hydra.lib.flows.bind(hydra.schemas.instantiate_type_scheme(ts), (lambda instantiated_ts: (fresh_constraints := hydra.lib.maybes.from_maybe(hydra.lib.maps.empty(), instantiated_ts.constraints), hydra.lib.flows.bind(hydra.unification.unify_types(cx.schema_types, instantiated_ts.type, u_prime, "original binding type"), (lambda unify_subst: hydra.lib.flows.pure(hydra.substitution.subst_in_class_constraints(unify_subst, fresh_constraints)))))[1]))), binding().type), (lambda original_binding_constraints: (c1 := merge_class_constraints(c1_inferred, original_binding_constraints), hydra.lib.flows.bind(infer_types_of_temporary_bindings(hydra.substitution.subst_in_context(u, cx), tl()), (lambda result2: (h := hydra.lib.pairs.first(result2), r_prime := hydra.lib.pairs.first(hydra.lib.pairs.second(result2)), rest_pair := hydra.lib.pairs.second(hydra.lib.pairs.second(result2)), r := hydra.lib.pairs.first(rest_pair), c2 := hydra.lib.pairs.second(rest_pair), c1_subst := hydra.substitution.subst_in_class_constraints(r, c1), merged_constraints := merge_class_constraints(c1_subst, c2), hydra.lib.flows.pure((hydra.lib.lists.cons(hydra.substitution.subst_types_in_term(r, j), h), (hydra.lib.lists.cons(hydra.substitution.subst_in_type(r, u_prime), r_prime), (hydra.substitution.compose_type_subst(u, r), merged_constraints)))))[7])))[1])))[4]))
+        return hydra.lib.flows.bind(infer_type_of_term(cx, v, hydra.lib.strings.cat(("temporary let binding '", k.value, "'"))), (lambda result1: (j := result1.term, u_prime := result1.type, u := result1.subst, c1_inferred := result1.class_constraints, hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.pure(hydra.lib.maps.empty()), (lambda ts: hydra.lib.flows.bind(hydra.schemas.instantiate_type_scheme(ts), (lambda instantiated_ts: (fresh_constraints := hydra.lib.maybes.from_maybe(hydra.lib.maps.empty(), instantiated_ts.constraints), hydra.lib.flows.bind(hydra.unification.unify_types(cx.schema_types, instantiated_ts.type, u_prime, "original binding type"), (lambda unify_subst: hydra.lib.flows.pure(hydra.substitution.subst_in_class_constraints(unify_subst, fresh_constraints)))))[1]))), binding().type), (lambda original_binding_constraints: (c1 := merge_class_constraints(c1_inferred, original_binding_constraints), hydra.lib.flows.bind(infer_types_of_temporary_bindings(hydra.substitution.subst_in_context(u, cx), tl()), (lambda result2: (h := hydra.lib.pairs.first(result2), r_prime := hydra.lib.pairs.first(hydra.lib.pairs.second(result2)), rest_pair := hydra.lib.pairs.second(hydra.lib.pairs.second(result2)), r := hydra.lib.pairs.first(rest_pair), c2 := hydra.lib.pairs.second(rest_pair), c1_subst := hydra.substitution.subst_in_class_constraints(r, c1), merged_constraints := merge_class_constraints(c1_subst, c2), hydra.lib.flows.pure((hydra.lib.lists.cons(hydra.substitution.subst_types_in_term(r, j), h), (hydra.lib.lists.cons(hydra.substitution.subst_in_type(r, u_prime), r_prime), (hydra.substitution.compose_type_subst(u, r), merged_constraints)))))[7])))[1])))[4]))
     return hydra.lib.logic.if_else(hydra.lib.lists.null(bins), (lambda : hydra.lib.flows.pure(((), ((), (hydra.substitution.id_type_subst(), hydra.lib.maps.empty()))))), (lambda : dflt()))
 
 def for_inferred_term(cx: hydra.typing.InferenceContext, term: hydra.core.Term, desc: str, f: Callable[[hydra.typing.InferenceResult], T0]) -> hydra.compute.Flow[T1, T0]:
@@ -592,13 +520,9 @@ def infer_graph_types(g0: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.gra
     r"""Infer types for all elements in a graph."""
     
     def from_let_term(l: hydra.core.Let) -> hydra.graph.Graph:
-        @lru_cache(1)
-        def bindings() -> frozenlist[hydra.core.Binding]:
-            return l.bindings
-        @lru_cache(1)
-        def body() -> hydra.core.Term:
-            return l.body
-        return hydra.graph.Graph(bindings(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), body(), g0.primitives, g0.schema)
+        bindings = l.bindings
+        body = l.body
+        return hydra.graph.Graph(bindings, hydra.lib.maps.empty(), hydra.lib.maps.empty(), body, g0.primitives, g0.schema)
     def to_let_term(g: hydra.graph.Graph) -> hydra.core.Term:
         def to_binding(el: hydra.core.Binding) -> hydra.core.Binding:
             return hydra.core.Binding(el.name, el.term, el.type)
@@ -630,17 +554,11 @@ def infer_type_of(cx: hydra.typing.InferenceContext, term: hydra.core.Term) -> h
         @lru_cache(1)
         def binding() -> hydra.core.Binding:
             return hydra.lib.lists.head(bindings)
-        @lru_cache(1)
-        def term1() -> hydra.core.Term:
-            return binding().term
-        @lru_cache(1)
-        def mts() -> Maybe[hydra.core.TypeScheme]:
-            return binding().type
-        return hydra.lib.maybes.maybe(hydra.lib.flows.fail("Expected a type scheme"), (lambda ts: hydra.lib.flows.pure((term1(), ts))), mts())
+        term1 = binding().term
+        mts = binding().type
+        return hydra.lib.maybes.maybe(hydra.lib.flows.fail("Expected a type scheme"), (lambda ts: hydra.lib.flows.pure((term1, ts))), mts)
     def unify_and_subst(result: hydra.typing.InferenceResult) -> hydra.compute.Flow[T1, tuple[hydra.core.Term, hydra.core.TypeScheme]]:
-        @lru_cache(1)
-        def subst() -> hydra.typing.TypeSubst:
-            return result.subst
+        subst = result.subst
         return hydra.lib.flows.bind(finalize_inferred_term(cx, result.term), (lambda finalized: hydra.lib.flows.bind(hydra.lexical.with_empty_graph(hydra.extract.core.let(finalized)), (lambda let_result: (bindings := let_result.bindings, hydra.lib.logic.if_else(hydra.lib.equality.equal(1, hydra.lib.lists.length(bindings)), (lambda : for_bindings(bindings)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("Expected a single binding with a type scheme, but got: ", hydra.lib.literals.show_int32(hydra.lib.lists.length(bindings)), " bindings"))))))[1]))))
     return hydra.lib.flows.bind(infer_type_of_term(cx, let_term(), "infer type of term"), (lambda result: unify_and_subst(result)))
 
@@ -648,25 +566,17 @@ def initial_type_context(g: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.t
     r"""Create an initial type context from a graph."""
     
     def to_pair(el: hydra.core.Binding) -> hydra.compute.Flow[T1, tuple[hydra.core.Name, hydra.core.Type]]:
-        @lru_cache(1)
-        def name() -> hydra.core.Name:
-            return el.name
-        return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("untyped element: ", name().value)), (lambda ts: hydra.lib.flows.pure((name(), hydra.schemas.type_scheme_to_f_type(ts)))), el.type)
+        name = el.name
+        return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("untyped element: ", name.value)), (lambda ts: hydra.lib.flows.pure((name, hydra.schemas.type_scheme_to_f_type(ts)))), el.type)
     return hydra.lib.flows.bind(hydra.schemas.graph_to_inference_context(g), (lambda ix: hydra.lib.flows.bind(hydra.lib.flows.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.flows.map_list((lambda x1: to_pair(x1)), g.elements)), (lambda types: hydra.lib.flows.pure(hydra.typing.TypeContext(types, hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), ix))))))
 
 def show_inference_result(result: hydra.typing.InferenceResult) -> str:
     r"""Show an inference result for debugging."""
     
-    @lru_cache(1)
-    def term() -> hydra.core.Term:
-        return result.term
-    @lru_cache(1)
-    def typ() -> hydra.core.Type:
-        return result.type
-    @lru_cache(1)
-    def subst() -> hydra.typing.TypeSubst:
-        return result.subst
-    return hydra.lib.strings.cat(("{term=", hydra.show.core.term(term()), ", type=", hydra.show.core.type(typ()), ", subst=", hydra.show.typing.type_subst(subst()), "}"))
+    term = result.term
+    typ = result.type
+    subst = result.subst
+    return hydra.lib.strings.cat(("{term=", hydra.show.core.term(term), ", type=", hydra.show.core.type(typ), ", subst=", hydra.show.typing.type_subst(subst), "}"))
 
 def yield_debug(cx: T0, debug_id: T1, term: hydra.core.Term, typ: hydra.core.Type, subst: hydra.typing.TypeSubst) -> hydra.compute.Flow[T2, hydra.typing.InferenceResult]:
     r"""Create an inference result with debug output."""
