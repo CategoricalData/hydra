@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class Listcomp implements Serializable, Comparable<Listcomp> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Listcomp");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Listcomp");
   
-  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
-  public static final hydra.core.Name FIELD_NAME_FOR_IF_CLAUSES = new hydra.core.Name("forIfClauses");
+  public static final hydra.core.Name FOR_IF_CLAUSES = new hydra.core.Name("forIfClauses");
   
   public final hydra.ext.python.syntax.NamedExpression expression;
   

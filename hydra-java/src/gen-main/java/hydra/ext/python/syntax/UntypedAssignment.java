@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class UntypedAssignment implements Serializable, Comparable<UntypedAssignment> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.UntypedAssignment");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.UntypedAssignment");
   
-  public static final hydra.core.Name FIELD_NAME_TARGETS = new hydra.core.Name("targets");
+  public static final hydra.core.Name TARGETS = new hydra.core.Name("targets");
   
-  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
+  public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_COMMENT = new hydra.core.Name("typeComment");
+  public static final hydra.core.Name TYPE_COMMENT = new hydra.core.Name("typeComment");
   
   public final java.util.List<hydra.ext.python.syntax.StarTarget> targets;
   

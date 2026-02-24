@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class AssertStatement implements Serializable, Comparable<AssertStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.AssertStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AssertStatement");
   
-  public static final hydra.core.Name FIELD_NAME_SINGLE = new hydra.core.Name("single");
+  public static final hydra.core.Name SINGLE = new hydra.core.Name("single");
   
-  public static final hydra.core.Name FIELD_NAME_PAIR = new hydra.core.Name("pair");
+  public static final hydra.core.Name PAIR = new hydra.core.Name("pair");
   
   private AssertStatement () {
   

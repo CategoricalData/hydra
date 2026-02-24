@@ -5,27 +5,27 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class CompareOp implements Serializable, Comparable<CompareOp> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.CompareOp");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.CompareOp");
   
-  public static final hydra.core.Name FIELD_NAME_EQ = new hydra.core.Name("eq");
+  public static final hydra.core.Name EQ = new hydra.core.Name("eq");
   
-  public static final hydra.core.Name FIELD_NAME_NOTEQ = new hydra.core.Name("noteq");
+  public static final hydra.core.Name NOTEQ = new hydra.core.Name("noteq");
   
-  public static final hydra.core.Name FIELD_NAME_LTE = new hydra.core.Name("lte");
+  public static final hydra.core.Name LTE = new hydra.core.Name("lte");
   
-  public static final hydra.core.Name FIELD_NAME_LT = new hydra.core.Name("lt");
+  public static final hydra.core.Name LT = new hydra.core.Name("lt");
   
-  public static final hydra.core.Name FIELD_NAME_GTE = new hydra.core.Name("gte");
+  public static final hydra.core.Name GTE = new hydra.core.Name("gte");
   
-  public static final hydra.core.Name FIELD_NAME_GT = new hydra.core.Name("gt");
+  public static final hydra.core.Name GT = new hydra.core.Name("gt");
   
-  public static final hydra.core.Name FIELD_NAME_NOTIN = new hydra.core.Name("notin");
+  public static final hydra.core.Name NOTIN = new hydra.core.Name("notin");
   
-  public static final hydra.core.Name FIELD_NAME_IN = new hydra.core.Name("in");
+  public static final hydra.core.Name IN = new hydra.core.Name("in");
   
-  public static final hydra.core.Name FIELD_NAME_ISNOT = new hydra.core.Name("isnot");
+  public static final hydra.core.Name ISNOT = new hydra.core.Name("isnot");
   
-  public static final hydra.core.Name FIELD_NAME_IS = new hydra.core.Name("is");
+  public static final hydra.core.Name IS = new hydra.core.Name("is");
   
   private CompareOp () {
   

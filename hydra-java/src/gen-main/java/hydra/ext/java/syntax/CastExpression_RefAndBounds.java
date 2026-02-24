@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class CastExpression_RefAndBounds implements Serializable, Comparable<CastExpression_RefAndBounds> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.CastExpression_RefAndBounds");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.CastExpression_RefAndBounds");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_BOUNDS = new hydra.core.Name("bounds");
+  public static final hydra.core.Name BOUNDS = new hydra.core.Name("bounds");
   
   public final hydra.ext.java.syntax.ReferenceType type;
   

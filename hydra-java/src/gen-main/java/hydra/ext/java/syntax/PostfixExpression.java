@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class PostfixExpression implements Serializable, Comparable<PostfixExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.PostfixExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.PostfixExpression");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
+  public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_POST_INCREMENT = new hydra.core.Name("postIncrement");
+  public static final hydra.core.Name POST_INCREMENT = new hydra.core.Name("postIncrement");
   
-  public static final hydra.core.Name FIELD_NAME_POST_DECREMENT = new hydra.core.Name("postDecrement");
+  public static final hydra.core.Name POST_DECREMENT = new hydra.core.Name("postDecrement");
   
   private PostfixExpression () {
   

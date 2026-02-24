@@ -17,7 +17,7 @@ public interface Utils {
       () -> hydra.lib.flows.Bind.apply(
         (alts).apply(typ),
         (java.util.function.Function<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>, hydra.compute.Flow<T1, hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>>) (raw -> {
-          hydra.util.Lazy<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>> candidates = new hydra.util.Lazy<>(() -> hydra.adapt.utils.Utils.<T2, T3, T0, T0, T4, T4>chooseAdapter_candidates(
+          hydra.util.Lazy<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>> candidates = new hydra.util.Lazy<>(() -> hydra.adapt.utils.Utils.<T0, T2, T3, T4>chooseAdapter_candidates(
             raw,
             supported));
           return hydra.lib.logic.IfElse.lazy(
@@ -44,9 +44,9 @@ public interface Utils {
         })));
   }
   
-  static <T0, T1, T2, T3, T4, T5> java.util.List<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>> chooseAdapter_candidates(java.util.List<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>> raw, java.util.function.Function<T3, Boolean> supported) {
+  static <T0, T2, T3, T4> java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>> chooseAdapter_candidates(java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>> raw, java.util.function.Function<T0, Boolean> supported) {
     return hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>, Boolean>) (adapter -> (supported).apply(((java.util.function.Function<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>, T3>) ((java.util.function.Function<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>, T3>) ((java.util.function.Function<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>, T3>) ((java.util.function.Function<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>, T3>) ((java.util.function.Function<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>, T3>) ((java.util.function.Function<hydra.compute.Adapter<T0, T1, T2, T3, T4, T5>, T3>) (projected -> projected.target))))))).apply(adapter))),
+      (java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, Boolean>) (adapter -> (supported).apply(((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) (projected -> projected.target))))))).apply(adapter))),
       raw);
   }
   
@@ -83,7 +83,7 @@ public interface Utils {
   }
   
   static <T0, T1, T2> hydra.compute.Coder<T0, T1, T2, T2> idCoder() {
-    return (hydra.compute.Coder<T0, T1, T2, T2>) ((hydra.compute.Coder<T0, T1, T2, T2>) ((hydra.compute.Coder<T0, T1, T2, T2>) ((hydra.compute.Coder<T0, T1, T2, T2>) (new hydra.compute.Coder<T0, T1, T2, T2>((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) (hydra.lib.flows.Pure::apply)), (java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) (hydra.lib.flows.Pure::apply)))))));
+    return new hydra.compute.Coder<T0, T1, T2, T2>((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) (hydra.lib.flows.Pure::apply)), (java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) (hydra.lib.flows.Pure::apply)));
   }
   
   static Boolean integerTypeIsSupported(hydra.coders.LanguageConstraints constraints, hydra.core.IntegerType it) {

@@ -5,19 +5,19 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class RelationalExpression implements Serializable, Comparable<RelationalExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.RelationalExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.RelationalExpression");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
-  public static final hydra.core.Name FIELD_NAME_LESS_THAN = new hydra.core.Name("lessThan");
+  public static final hydra.core.Name LESS_THAN = new hydra.core.Name("lessThan");
   
-  public static final hydra.core.Name FIELD_NAME_GREATER_THAN = new hydra.core.Name("greaterThan");
+  public static final hydra.core.Name GREATER_THAN = new hydra.core.Name("greaterThan");
   
-  public static final hydra.core.Name FIELD_NAME_LESS_THAN_EQUAL = new hydra.core.Name("lessThanEqual");
+  public static final hydra.core.Name LESS_THAN_EQUAL = new hydra.core.Name("lessThanEqual");
   
-  public static final hydra.core.Name FIELD_NAME_GREATER_THAN_EQUAL = new hydra.core.Name("greaterThanEqual");
+  public static final hydra.core.Name GREATER_THAN_EQUAL = new hydra.core.Name("greaterThanEqual");
   
-  public static final hydra.core.Name FIELD_NAME_INSTANCEOF = new hydra.core.Name("instanceof");
+  public static final hydra.core.Name INSTANCEOF = new hydra.core.Name("instanceof");
   
   private RelationalExpression () {
   

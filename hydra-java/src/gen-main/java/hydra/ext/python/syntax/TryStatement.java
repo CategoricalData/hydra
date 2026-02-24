@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class TryStatement implements Serializable, Comparable<TryStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.TryStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TryStatement");
   
-  public static final hydra.core.Name FIELD_NAME_FINALLY = new hydra.core.Name("finally");
+  public static final hydra.core.Name FINALLY = new hydra.core.Name("finally");
   
-  public static final hydra.core.Name FIELD_NAME_EXCEPT = new hydra.core.Name("except");
+  public static final hydra.core.Name EXCEPT = new hydra.core.Name("except");
   
-  public static final hydra.core.Name FIELD_NAME_EXCEPT_STAR = new hydra.core.Name("exceptStar");
+  public static final hydra.core.Name EXCEPT_STAR = new hydra.core.Name("exceptStar");
   
   private TryStatement () {
   

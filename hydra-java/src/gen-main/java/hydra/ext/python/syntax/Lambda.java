@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class Lambda implements Serializable, Comparable<Lambda> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Lambda");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Lambda");
   
-  public static final hydra.core.Name FIELD_NAME_PARAMS = new hydra.core.Name("params");
+  public static final hydra.core.Name PARAMS = new hydra.core.Name("params");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   public final hydra.ext.python.syntax.LambdaParameters params;
   

@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ForCond implements Serializable, Comparable<ForCond> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ForCond");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ForCond");
   
-  public static final hydra.core.Name FIELD_NAME_INIT = new hydra.core.Name("init");
+  public static final hydra.core.Name INIT = new hydra.core.Name("init");
   
-  public static final hydra.core.Name FIELD_NAME_COND = new hydra.core.Name("cond");
+  public static final hydra.core.Name COND = new hydra.core.Name("cond");
   
-  public static final hydra.core.Name FIELD_NAME_UPDATE = new hydra.core.Name("update");
+  public static final hydra.core.Name UPDATE = new hydra.core.Name("update");
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.ForInit> init;
   

@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A variant of the State monad with built-in logging and error handling
  */
 public class Flow<S, V> implements Serializable, Comparable<Flow<S, V>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.compute.Flow");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.Flow");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.util.function.Function<S, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<S, V>>> value;
   

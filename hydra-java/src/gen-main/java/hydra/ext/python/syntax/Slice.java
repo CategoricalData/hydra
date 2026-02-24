@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class Slice implements Serializable, Comparable<Slice> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Slice");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Slice");
   
-  public static final hydra.core.Name FIELD_NAME_NAMED = new hydra.core.Name("named");
+  public static final hydra.core.Name NAMED = new hydra.core.Name("named");
   
-  public static final hydra.core.Name FIELD_NAME_SLICE_ = new hydra.core.Name("slice_");
+  public static final hydra.core.Name SLICE_ = new hydra.core.Name("slice_");
   
   private Slice () {
   

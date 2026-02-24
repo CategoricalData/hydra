@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case which writes a value to a string and compares it to the expected string
  */
 public class WriterTestCase<A> implements Serializable, Comparable<WriterTestCase<A>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.WriterTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.WriterTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The input value to write

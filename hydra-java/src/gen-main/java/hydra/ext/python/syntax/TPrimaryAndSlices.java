@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class TPrimaryAndSlices implements Serializable, Comparable<TPrimaryAndSlices> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndSlices");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TPrimaryAndSlices");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
+  public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
   
-  public static final hydra.core.Name FIELD_NAME_SLICES = new hydra.core.Name("slices");
+  public static final hydra.core.Name SLICES = new hydra.core.Name("slices");
   
   public final hydra.ext.python.syntax.TPrimary primary;
   

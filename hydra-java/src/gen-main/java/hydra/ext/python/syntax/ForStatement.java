@@ -5,19 +5,19 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class ForStatement implements Serializable, Comparable<ForStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ForStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ForStatement");
   
-  public static final hydra.core.Name FIELD_NAME_ASYNC = new hydra.core.Name("async");
+  public static final hydra.core.Name ASYNC = new hydra.core.Name("async");
   
-  public static final hydra.core.Name FIELD_NAME_TARGETS = new hydra.core.Name("targets");
+  public static final hydra.core.Name TARGETS = new hydra.core.Name("targets");
   
-  public static final hydra.core.Name FIELD_NAME_EXPRESSIONS = new hydra.core.Name("expressions");
+  public static final hydra.core.Name EXPRESSIONS = new hydra.core.Name("expressions");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_COMMENT = new hydra.core.Name("typeComment");
+  public static final hydra.core.Name TYPE_COMMENT = new hydra.core.Name("typeComment");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_ELSE = new hydra.core.Name("else");
+  public static final hydra.core.Name ELSE = new hydra.core.Name("else");
   
   public final Boolean async;
   

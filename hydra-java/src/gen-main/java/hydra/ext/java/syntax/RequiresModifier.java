@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class RequiresModifier implements Serializable, Comparable<RequiresModifier> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.RequiresModifier");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.RequiresModifier");
   
-  public static final hydra.core.Name FIELD_NAME_TRANSITIVE = new hydra.core.Name("transitive");
+  public static final hydra.core.Name TRANSITIVE = new hydra.core.Name("transitive");
   
-  public static final hydra.core.Name FIELD_NAME_STATIC = new hydra.core.Name("static");
+  public static final hydra.core.Name STATIC = new hydra.core.Name("static");
   
   private RequiresModifier () {
   

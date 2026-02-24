@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A floating-point literal value
  */
 public abstract class FloatValue implements Serializable, Comparable<FloatValue> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.FloatValue");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.FloatValue");
   
-  public static final hydra.core.Name FIELD_NAME_BIGFLOAT = new hydra.core.Name("bigfloat");
+  public static final hydra.core.Name BIGFLOAT = new hydra.core.Name("bigfloat");
   
-  public static final hydra.core.Name FIELD_NAME_FLOAT32 = new hydra.core.Name("float32");
+  public static final hydra.core.Name FLOAT32 = new hydra.core.Name("float32");
   
-  public static final hydra.core.Name FIELD_NAME_FLOAT64 = new hydra.core.Name("float64");
+  public static final hydra.core.Name FLOAT64 = new hydra.core.Name("float64");
   
   private FloatValue () {
   

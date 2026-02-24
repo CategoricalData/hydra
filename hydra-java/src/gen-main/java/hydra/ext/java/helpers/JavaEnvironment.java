@@ -8,11 +8,11 @@ import java.io.Serializable;
  * Environment for Java code generation
  */
 public class JavaEnvironment implements Serializable, Comparable<JavaEnvironment> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.helpers.JavaEnvironment");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.helpers.JavaEnvironment");
   
-  public static final hydra.core.Name FIELD_NAME_ALIASES = new hydra.core.Name("aliases");
+  public static final hydra.core.Name ALIASES = new hydra.core.Name("aliases");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_CONTEXT = new hydra.core.Name("typeContext");
+  public static final hydra.core.Name TYPE_CONTEXT = new hydra.core.Name("typeContext");
   
   /**
    * Aliases and context state

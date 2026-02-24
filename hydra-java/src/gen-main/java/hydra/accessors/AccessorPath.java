@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A sequence of term accessors forming a path through a term
  */
 public class AccessorPath implements Serializable, Comparable<AccessorPath> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.accessors.AccessorPath");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.accessors.AccessorPath");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.accessors.TermAccessor> value;
   

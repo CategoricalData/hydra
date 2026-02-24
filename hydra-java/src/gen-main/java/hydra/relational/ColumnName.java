@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A name for a domain which serves to identify the role played by that domain in the given relation; a 'role name' in Codd
  */
 public class ColumnName implements Serializable, Comparable<ColumnName> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.ColumnName");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.relational.ColumnName");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   

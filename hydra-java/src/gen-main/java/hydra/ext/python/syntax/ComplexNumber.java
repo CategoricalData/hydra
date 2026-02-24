@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class ComplexNumber implements Serializable, Comparable<ComplexNumber> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ComplexNumber");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ComplexNumber");
   
-  public static final hydra.core.Name FIELD_NAME_REAL = new hydra.core.Name("real");
+  public static final hydra.core.Name REAL = new hydra.core.Name("real");
   
-  public static final hydra.core.Name FIELD_NAME_PLUS_OR_MINUS = new hydra.core.Name("plusOrMinus");
+  public static final hydra.core.Name PLUS_OR_MINUS = new hydra.core.Name("plusOrMinus");
   
-  public static final hydra.core.Name FIELD_NAME_IMAGINARY = new hydra.core.Name("imaginary");
+  public static final hydra.core.Name IMAGINARY = new hydra.core.Name("imaginary");
   
   public final hydra.ext.python.syntax.SignedRealNumber real;
   

@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A test case which performs type checking on a given term and compares the result with an expected annotated term and type
  */
 public class TypeCheckingTestCase implements Serializable, Comparable<TypeCheckingTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TypeCheckingTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TypeCheckingTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT_TERM = new hydra.core.Name("outputTerm");
+  public static final hydra.core.Name OUTPUT_TERM = new hydra.core.Name("outputTerm");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT_TYPE = new hydra.core.Name("outputType");
+  public static final hydra.core.Name OUTPUT_TYPE = new hydra.core.Name("outputType");
   
   /**
    * An untyped term on which to perform inference, then type check

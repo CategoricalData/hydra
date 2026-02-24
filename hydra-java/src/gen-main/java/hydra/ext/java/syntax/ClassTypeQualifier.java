@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassTypeQualifier implements Serializable, Comparable<ClassTypeQualifier> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassTypeQualifier");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassTypeQualifier");
   
-  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  public static final hydra.core.Name NONE = new hydra.core.Name("none");
   
-  public static final hydra.core.Name FIELD_NAME_PACKAGE = new hydra.core.Name("package");
+  public static final hydra.core.Name PACKAGE = new hydra.core.Name("package");
   
-  public static final hydra.core.Name FIELD_NAME_PARENT = new hydra.core.Name("parent");
+  public static final hydra.core.Name PARENT = new hydra.core.Name("parent");
   
   private ClassTypeQualifier () {
   

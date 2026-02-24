@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ElementValue implements Serializable, Comparable<ElementValue> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ElementValue");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ElementValue");
   
-  public static final hydra.core.Name FIELD_NAME_CONDITIONAL_EXPRESSION = new hydra.core.Name("conditionalExpression");
+  public static final hydra.core.Name CONDITIONAL_EXPRESSION = new hydra.core.Name("conditionalExpression");
   
-  public static final hydra.core.Name FIELD_NAME_ELEMENT_VALUE_ARRAY_INITIALIZER = new hydra.core.Name("elementValueArrayInitializer");
+  public static final hydra.core.Name ELEMENT_VALUE_ARRAY_INITIALIZER = new hydra.core.Name("elementValueArrayInitializer");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
+  public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
   
   private ElementValue () {
   

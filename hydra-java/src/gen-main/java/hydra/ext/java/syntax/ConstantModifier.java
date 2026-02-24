@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ConstantModifier implements Serializable, Comparable<ConstantModifier> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ConstantModifier");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ConstantModifier");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
+  public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
   
-  public static final hydra.core.Name FIELD_NAME_PUBLIC = new hydra.core.Name("public");
+  public static final hydra.core.Name PUBLIC = new hydra.core.Name("public");
   
-  public static final hydra.core.Name FIELD_NAME_STATIC = new hydra.core.Name("static");
+  public static final hydra.core.Name STATIC = new hydra.core.Name("static");
   
-  public static final hydra.core.Name FIELD_NAME_FINAL = new hydra.core.Name("final");
+  public static final hydra.core.Name FINAL = new hydra.core.Name("final");
   
   private ConstantModifier () {
   

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A data declaration together with any comments
  */
 public class DeclarationWithComments implements Serializable, Comparable<DeclarationWithComments> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.DeclarationWithComments");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.DeclarationWithComments");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_COMMENTS = new hydra.core.Name("comments");
+  public static final hydra.core.Name COMMENTS = new hydra.core.Name("comments");
   
   /**
    * The declaration

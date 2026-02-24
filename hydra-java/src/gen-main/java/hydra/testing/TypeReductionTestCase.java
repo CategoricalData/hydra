@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type
  */
 public class TypeReductionTestCase implements Serializable, Comparable<TypeReductionTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TypeReductionTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TypeReductionTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The type to reduce

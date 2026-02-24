@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class TypeDeclaration implements Serializable, Comparable<TypeDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.TypeDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.TypeDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  public static final hydra.core.Name CLASS = new hydra.core.Name("class");
   
-  public static final hydra.core.Name FIELD_NAME_INTERFACE = new hydra.core.Name("interface");
+  public static final hydra.core.Name INTERFACE = new hydra.core.Name("interface");
   
-  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  public static final hydra.core.Name NONE = new hydra.core.Name("none");
   
   private TypeDeclaration () {
   

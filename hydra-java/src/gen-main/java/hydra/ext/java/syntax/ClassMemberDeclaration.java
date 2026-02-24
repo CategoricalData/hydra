@@ -5,17 +5,17 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassMemberDeclaration implements Serializable, Comparable<ClassMemberDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassMemberDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassMemberDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_FIELD = new hydra.core.Name("field");
+  public static final hydra.core.Name FIELD = new hydra.core.Name("field");
   
-  public static final hydra.core.Name FIELD_NAME_METHOD = new hydra.core.Name("method");
+  public static final hydra.core.Name METHOD = new hydra.core.Name("method");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  public static final hydra.core.Name CLASS = new hydra.core.Name("class");
   
-  public static final hydra.core.Name FIELD_NAME_INTERFACE = new hydra.core.Name("interface");
+  public static final hydra.core.Name INTERFACE = new hydra.core.Name("interface");
   
-  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  public static final hydra.core.Name NONE = new hydra.core.Name("none");
   
   private ClassMemberDeclaration () {
   

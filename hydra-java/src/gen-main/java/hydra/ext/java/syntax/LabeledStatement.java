@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class LabeledStatement implements Serializable, Comparable<LabeledStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.LabeledStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.LabeledStatement");
   
-  public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
+  public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
   
-  public static final hydra.core.Name FIELD_NAME_STATEMENT = new hydra.core.Name("statement");
+  public static final hydra.core.Name STATEMENT = new hydra.core.Name("statement");
   
   public final hydra.ext.java.syntax.Identifier identifier;
   

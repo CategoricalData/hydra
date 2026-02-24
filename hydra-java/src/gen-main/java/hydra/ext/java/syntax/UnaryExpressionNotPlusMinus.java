@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class UnaryExpressionNotPlusMinus implements Serializable, Comparable<UnaryExpressionNotPlusMinus> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.UnaryExpressionNotPlusMinus");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.UnaryExpressionNotPlusMinus");
   
-  public static final hydra.core.Name FIELD_NAME_POSTFIX = new hydra.core.Name("postfix");
+  public static final hydra.core.Name POSTFIX = new hydra.core.Name("postfix");
   
-  public static final hydra.core.Name FIELD_NAME_TILDE = new hydra.core.Name("tilde");
+  public static final hydra.core.Name TILDE = new hydra.core.Name("tilde");
   
-  public static final hydra.core.Name FIELD_NAME_NOT = new hydra.core.Name("not");
+  public static final hydra.core.Name NOT = new hydra.core.Name("not");
   
-  public static final hydra.core.Name FIELD_NAME_CAST = new hydra.core.Name("cast");
+  public static final hydra.core.Name CAST = new hydra.core.Name("cast");
   
   private UnaryExpressionNotPlusMinus () {
   

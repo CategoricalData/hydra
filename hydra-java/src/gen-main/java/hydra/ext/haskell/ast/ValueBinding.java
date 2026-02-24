@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A value binding
  */
 public abstract class ValueBinding implements Serializable, Comparable<ValueBinding> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.ValueBinding");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ValueBinding");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
   private ValueBinding () {
   

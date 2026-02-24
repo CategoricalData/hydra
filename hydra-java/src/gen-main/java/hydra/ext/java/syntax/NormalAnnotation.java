@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class NormalAnnotation implements Serializable, Comparable<NormalAnnotation> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.NormalAnnotation");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.NormalAnnotation");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("typeName");
   
-  public static final hydra.core.Name FIELD_NAME_PAIRS = new hydra.core.Name("pairs");
+  public static final hydra.core.Name PAIRS = new hydra.core.Name("pairs");
   
   public final hydra.ext.java.syntax.TypeName typeName;
   

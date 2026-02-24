@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ArrayType implements Serializable, Comparable<ArrayType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ArrayType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ArrayType");
   
-  public static final hydra.core.Name FIELD_NAME_DIMS = new hydra.core.Name("dims");
+  public static final hydra.core.Name DIMS = new hydra.core.Name("dims");
   
-  public static final hydra.core.Name FIELD_NAME_VARIANT = new hydra.core.Name("variant");
+  public static final hydra.core.Name VARIANT = new hydra.core.Name("variant");
   
   public final hydra.ext.java.syntax.Dims dims;
   

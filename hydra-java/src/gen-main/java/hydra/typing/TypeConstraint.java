@@ -8,13 +8,13 @@ import java.io.Serializable;
  * An assertion that two types can be unified into a single type
  */
 public class TypeConstraint implements Serializable, Comparable<TypeConstraint> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.typing.TypeConstraint");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.typing.TypeConstraint");
   
-  public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
+  public static final hydra.core.Name LEFT = new hydra.core.Name("left");
   
-  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
+  public static final hydra.core.Name RIGHT = new hydra.core.Name("right");
   
-  public static final hydra.core.Name FIELD_NAME_COMMENT = new hydra.core.Name("comment");
+  public static final hydra.core.Name COMMENT = new hydra.core.Name("comment");
   
   /**
    * The left-hand side of the constraint

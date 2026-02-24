@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class MultiplicativeExpression implements Serializable, Comparable<MultiplicativeExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.MultiplicativeExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MultiplicativeExpression");
   
-  public static final hydra.core.Name FIELD_NAME_UNARY = new hydra.core.Name("unary");
+  public static final hydra.core.Name UNARY = new hydra.core.Name("unary");
   
-  public static final hydra.core.Name FIELD_NAME_TIMES = new hydra.core.Name("times");
+  public static final hydra.core.Name TIMES = new hydra.core.Name("times");
   
-  public static final hydra.core.Name FIELD_NAME_DIVIDE = new hydra.core.Name("divide");
+  public static final hydra.core.Name DIVIDE = new hydra.core.Name("divide");
   
-  public static final hydra.core.Name FIELD_NAME_MOD = new hydra.core.Name("mod");
+  public static final hydra.core.Name MOD = new hydra.core.Name("mod");
   
   private MultiplicativeExpression () {
   

@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ReferenceType implements Serializable, Comparable<ReferenceType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ReferenceType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ReferenceType");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS_OR_INTERFACE = new hydra.core.Name("classOrInterface");
+  public static final hydra.core.Name CLASS_OR_INTERFACE = new hydra.core.Name("classOrInterface");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
   
-  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  public static final hydra.core.Name ARRAY = new hydra.core.Name("array");
   
   private ReferenceType () {
   

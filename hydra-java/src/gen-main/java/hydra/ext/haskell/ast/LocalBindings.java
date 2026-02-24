@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A collection of local bindings
  */
 public class LocalBindings implements Serializable, Comparable<LocalBindings> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.LocalBindings");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.LocalBindings");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.ext.haskell.ast.LocalBinding> value;
   

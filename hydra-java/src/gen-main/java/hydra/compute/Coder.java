@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An encoder and decoder; a bidirectional flow between two types
  */
 public class Coder<S1, S2, V1, V2> implements Serializable, Comparable<Coder<S1, S2, V1, V2>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.compute.Coder");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.Coder");
   
-  public static final hydra.core.Name FIELD_NAME_ENCODE = new hydra.core.Name("encode");
+  public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
   
-  public static final hydra.core.Name FIELD_NAME_DECODE = new hydra.core.Name("decode");
+  public static final hydra.core.Name DECODE = new hydra.core.Name("decode");
   
   /**
    * A function from source values to a flow of target values

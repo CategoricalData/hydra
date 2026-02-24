@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class OrdinaryCompilationUnit implements Serializable, Comparable<OrdinaryCompilationUnit> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.OrdinaryCompilationUnit");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.OrdinaryCompilationUnit");
   
-  public static final hydra.core.Name FIELD_NAME_PACKAGE = new hydra.core.Name("package");
+  public static final hydra.core.Name PACKAGE = new hydra.core.Name("package");
   
-  public static final hydra.core.Name FIELD_NAME_IMPORTS = new hydra.core.Name("imports");
+  public static final hydra.core.Name IMPORTS = new hydra.core.Name("imports");
   
-  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
+  public static final hydra.core.Name TYPES = new hydra.core.Name("types");
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.PackageDeclaration> package_;
   

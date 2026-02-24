@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class AnnotationTypeElementModifier implements Serializable, Comparable<AnnotationTypeElementModifier> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeElementModifier");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AnnotationTypeElementModifier");
   
-  public static final hydra.core.Name FIELD_NAME_PUBLIC = new hydra.core.Name("public");
+  public static final hydra.core.Name PUBLIC = new hydra.core.Name("public");
   
-  public static final hydra.core.Name FIELD_NAME_ABSTRACT = new hydra.core.Name("abstract");
+  public static final hydra.core.Name ABSTRACT = new hydra.core.Name("abstract");
   
   private AnnotationTypeElementModifier () {
   

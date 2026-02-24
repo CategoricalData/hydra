@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An instance of a union type; i.e. a string-indexed generalization of inl() or inr()
  */
 public class Injection implements Serializable, Comparable<Injection> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Injection");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Injection");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("typeName");
   
-  public static final hydra.core.Name FIELD_NAME_FIELD = new hydra.core.Name("field");
+  public static final hydra.core.Name FIELD = new hydra.core.Name("field");
   
   /**
    * The name of the union type

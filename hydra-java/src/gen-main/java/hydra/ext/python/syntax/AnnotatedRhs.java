@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class AnnotatedRhs implements Serializable, Comparable<AnnotatedRhs> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.AnnotatedRhs");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.AnnotatedRhs");
   
-  public static final hydra.core.Name FIELD_NAME_YIELD = new hydra.core.Name("yield");
+  public static final hydra.core.Name YIELD = new hydra.core.Name("yield");
   
-  public static final hydra.core.Name FIELD_NAME_STAR = new hydra.core.Name("star");
+  public static final hydra.core.Name STAR = new hydra.core.Name("star");
   
   private AnnotatedRhs () {
   

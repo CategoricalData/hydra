@@ -5,15 +5,15 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class Factor implements Serializable, Comparable<Factor> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Factor");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Factor");
   
-  public static final hydra.core.Name FIELD_NAME_POSITIVE = new hydra.core.Name("positive");
+  public static final hydra.core.Name POSITIVE = new hydra.core.Name("positive");
   
-  public static final hydra.core.Name FIELD_NAME_NEGATIVE = new hydra.core.Name("negative");
+  public static final hydra.core.Name NEGATIVE = new hydra.core.Name("negative");
   
-  public static final hydra.core.Name FIELD_NAME_COMPLEMENT = new hydra.core.Name("complement");
+  public static final hydra.core.Name COMPLEMENT = new hydra.core.Name("complement");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
   private Factor () {
   

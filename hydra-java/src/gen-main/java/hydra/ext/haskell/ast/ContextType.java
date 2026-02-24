@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A type with a context (type class constraints)
  */
 public class ContextType implements Serializable, Comparable<ContextType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.ContextType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ContextType");
   
-  public static final hydra.core.Name FIELD_NAME_CTX = new hydra.core.Name("ctx");
+  public static final hydra.core.Name CTX = new hydra.core.Name("ctx");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
   /**
    * The type class context

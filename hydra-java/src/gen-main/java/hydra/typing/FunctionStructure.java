@@ -8,21 +8,21 @@ import java.io.Serializable;
  * A structured representation of a function term's components, replacing ad-hoc tuples. This captures all the information extracted from peeling lambdas, type lambdas, lets, and type applications from a term.
  */
 public class FunctionStructure<Env> implements Serializable, Comparable<FunctionStructure<Env>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.typing.FunctionStructure");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.typing.FunctionStructure");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_PARAMS = new hydra.core.Name("typeParams");
+  public static final hydra.core.Name TYPE_PARAMS = new hydra.core.Name("typeParams");
   
-  public static final hydra.core.Name FIELD_NAME_PARAMS = new hydra.core.Name("params");
+  public static final hydra.core.Name PARAMS = new hydra.core.Name("params");
   
-  public static final hydra.core.Name FIELD_NAME_BINDINGS = new hydra.core.Name("bindings");
+  public static final hydra.core.Name BINDINGS = new hydra.core.Name("bindings");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_DOMAINS = new hydra.core.Name("domains");
+  public static final hydra.core.Name DOMAINS = new hydra.core.Name("domains");
   
-  public static final hydra.core.Name FIELD_NAME_CODOMAIN = new hydra.core.Name("codomain");
+  public static final hydra.core.Name CODOMAIN = new hydra.core.Name("codomain");
   
-  public static final hydra.core.Name FIELD_NAME_ENVIRONMENT = new hydra.core.Name("environment");
+  public static final hydra.core.Name ENVIRONMENT = new hydra.core.Name("environment");
   
   /**
    * Type parameters (from type lambdas)

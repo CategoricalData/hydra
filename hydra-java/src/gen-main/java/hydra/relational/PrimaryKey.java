@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A primary key of a relation, specified either as a single column, or as a list of columns
  */
 public class PrimaryKey implements Serializable, Comparable<PrimaryKey> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.PrimaryKey");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.relational.PrimaryKey");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.relational.ColumnName> value;
   

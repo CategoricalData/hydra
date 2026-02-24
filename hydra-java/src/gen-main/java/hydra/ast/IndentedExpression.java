@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An expression indented in a certain style
  */
 public class IndentedExpression implements Serializable, Comparable<IndentedExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.IndentedExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ast.IndentedExpression");
   
-  public static final hydra.core.Name FIELD_NAME_STYLE = new hydra.core.Name("style");
+  public static final hydra.core.Name STYLE = new hydra.core.Name("style");
   
-  public static final hydra.core.Name FIELD_NAME_EXPR = new hydra.core.Name("expr");
+  public static final hydra.core.Name EXPR = new hydra.core.Name("expr");
   
   /**
    * The indentation style

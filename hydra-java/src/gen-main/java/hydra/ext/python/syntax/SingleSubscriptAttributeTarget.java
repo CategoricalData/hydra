@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class SingleSubscriptAttributeTarget implements Serializable, Comparable<SingleSubscriptAttributeTarget> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.SingleSubscriptAttributeTarget");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SingleSubscriptAttributeTarget");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY_AND_NAME = new hydra.core.Name("primaryAndName");
+  public static final hydra.core.Name PRIMARY_AND_NAME = new hydra.core.Name("primaryAndName");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY_AND_SLICES = new hydra.core.Name("primaryAndSlices");
+  public static final hydra.core.Name PRIMARY_AND_SLICES = new hydra.core.Name("primaryAndSlices");
   
   private SingleSubscriptAttributeTarget () {
   

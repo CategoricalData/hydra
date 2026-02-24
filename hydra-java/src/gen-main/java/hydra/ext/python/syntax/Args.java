@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class Args implements Serializable, Comparable<Args> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Args");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Args");
   
-  public static final hydra.core.Name FIELD_NAME_POSITIONAL = new hydra.core.Name("positional");
+  public static final hydra.core.Name POSITIONAL = new hydra.core.Name("positional");
   
-  public static final hydra.core.Name FIELD_NAME_KWARG_OR_STARRED = new hydra.core.Name("kwargOrStarred");
+  public static final hydra.core.Name KWARG_OR_STARRED = new hydra.core.Name("kwargOrStarred");
   
-  public static final hydra.core.Name FIELD_NAME_KWARG_OR_DOUBLE_STARRED = new hydra.core.Name("kwargOrDoubleStarred");
+  public static final hydra.core.Name KWARG_OR_DOUBLE_STARRED = new hydra.core.Name("kwargOrDoubleStarred");
   
   public final java.util.List<hydra.ext.python.syntax.PosArg> positional;
   

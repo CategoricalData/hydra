@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class EnumBody_Element implements Serializable, Comparable<EnumBody_Element> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.EnumBody_Element");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.EnumBody_Element");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTANTS = new hydra.core.Name("constants");
+  public static final hydra.core.Name CONSTANTS = new hydra.core.Name("constants");
   
-  public static final hydra.core.Name FIELD_NAME_BODY_DECLARATIONS = new hydra.core.Name("bodyDeclarations");
+  public static final hydra.core.Name BODY_DECLARATIONS = new hydra.core.Name("bodyDeclarations");
   
   public final java.util.List<hydra.ext.java.syntax.EnumConstant> constants;
   

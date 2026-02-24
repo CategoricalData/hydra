@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A test case providing a term for which type inference is expected to fail
  */
 public class InferenceFailureTestCase implements Serializable, Comparable<InferenceFailureTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.InferenceFailureTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.InferenceFailureTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
   /**
    * The term for which inference should fail

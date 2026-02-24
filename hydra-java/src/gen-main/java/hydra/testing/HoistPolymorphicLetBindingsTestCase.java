@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case for the hoistPolymorphicLetBindings function, which hoists polymorphic let bindings to the top level of a let term. This is used for targets like Java which don't support polymorphic lambdas.
  */
 public class HoistPolymorphicLetBindingsTestCase implements Serializable, Comparable<HoistPolymorphicLetBindingsTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.HoistPolymorphicLetBindingsTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.HoistPolymorphicLetBindingsTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The input let term

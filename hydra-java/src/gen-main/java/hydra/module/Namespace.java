@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A prefix for element names
  */
 public class Namespace implements Serializable, Comparable<Namespace> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.Namespace");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.module.Namespace");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   

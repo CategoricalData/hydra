@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A typed pattern
  */
 public class TypedPattern implements Serializable, Comparable<TypedPattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.TypedPattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.TypedPattern");
   
-  public static final hydra.core.Name FIELD_NAME_INNER = new hydra.core.Name("inner");
+  public static final hydra.core.Name INNER = new hydra.core.Name("inner");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
   /**
    * The inner pattern

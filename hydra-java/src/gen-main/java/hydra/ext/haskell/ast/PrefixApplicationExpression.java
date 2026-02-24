@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A prefix expression
  */
 public class PrefixApplicationExpression implements Serializable, Comparable<PrefixApplicationExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.PrefixApplicationExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.PrefixApplicationExpression");
   
-  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  public static final hydra.core.Name OPERATOR = new hydra.core.Name("operator");
   
-  public static final hydra.core.Name FIELD_NAME_RHS = new hydra.core.Name("rhs");
+  public static final hydra.core.Name RHS = new hydra.core.Name("rhs");
   
   /**
    * The prefix operator

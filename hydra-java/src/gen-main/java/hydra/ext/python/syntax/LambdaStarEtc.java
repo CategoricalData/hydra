@@ -5,15 +5,15 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class LambdaStarEtc implements Serializable, Comparable<LambdaStarEtc> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.LambdaStarEtc");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.LambdaStarEtc");
   
-  public static final hydra.core.Name FIELD_NAME_STAR = new hydra.core.Name("star");
+  public static final hydra.core.Name STAR = new hydra.core.Name("star");
   
-  public static final hydra.core.Name FIELD_NAME_PARAM_NO_DEFAULT = new hydra.core.Name("paramNoDefault");
+  public static final hydra.core.Name PARAM_NO_DEFAULT = new hydra.core.Name("paramNoDefault");
   
-  public static final hydra.core.Name FIELD_NAME_PARAM_MAYBE_DEFAULT = new hydra.core.Name("paramMaybeDefault");
+  public static final hydra.core.Name PARAM_MAYBE_DEFAULT = new hydra.core.Name("paramMaybeDefault");
   
-  public static final hydra.core.Name FIELD_NAME_KWDS = new hydra.core.Name("kwds");
+  public static final hydra.core.Name KWDS = new hydra.core.Name("kwds");
   
   private LambdaStarEtc () {
   

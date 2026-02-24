@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class IfStatement implements Serializable, Comparable<IfStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.IfStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.IfStatement");
   
-  public static final hydra.core.Name FIELD_NAME_CONDITION = new hydra.core.Name("condition");
+  public static final hydra.core.Name CONDITION = new hydra.core.Name("condition");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_CONTINUATION = new hydra.core.Name("continuation");
+  public static final hydra.core.Name CONTINUATION = new hydra.core.Name("continuation");
   
   public final hydra.ext.python.syntax.NamedExpression condition;
   

@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class FunctionDefinition implements Serializable, Comparable<FunctionDefinition> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.FunctionDefinition");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.FunctionDefinition");
   
-  public static final hydra.core.Name FIELD_NAME_DECORATORS = new hydra.core.Name("decorators");
+  public static final hydra.core.Name DECORATORS = new hydra.core.Name("decorators");
   
-  public static final hydra.core.Name FIELD_NAME_RAW = new hydra.core.Name("raw");
+  public static final hydra.core.Name RAW = new hydra.core.Name("raw");
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators;
   

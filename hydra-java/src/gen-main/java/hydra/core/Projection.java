@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A record elimination; a projection
  */
 public class Projection implements Serializable, Comparable<Projection> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Projection");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Projection");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("typeName");
   
-  public static final hydra.core.Name FIELD_NAME_FIELD = new hydra.core.Name("field");
+  public static final hydra.core.Name FIELD = new hydra.core.Name("field");
   
   /**
    * The name of the record type

@@ -8,17 +8,17 @@ import java.io.Serializable;
  * A union of scalars supported in the YAML failsafe and JSON schemas. Other scalars are not supported here
  */
 public abstract class Scalar implements Serializable, Comparable<Scalar> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.yaml.model.Scalar");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.yaml.model.Scalar");
   
-  public static final hydra.core.Name FIELD_NAME_BOOL = new hydra.core.Name("bool");
+  public static final hydra.core.Name BOOL = new hydra.core.Name("bool");
   
-  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  public static final hydra.core.Name FLOAT = new hydra.core.Name("float");
   
-  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
+  public static final hydra.core.Name INT = new hydra.core.Name("int");
   
-  public static final hydra.core.Name FIELD_NAME_NULL = new hydra.core.Name("null");
+  public static final hydra.core.Name NULL = new hydra.core.Name("null");
   
-  public static final hydra.core.Name FIELD_NAME_STR = new hydra.core.Name("str");
+  public static final hydra.core.Name STR = new hydra.core.Name("str");
   
   private Scalar () {
   

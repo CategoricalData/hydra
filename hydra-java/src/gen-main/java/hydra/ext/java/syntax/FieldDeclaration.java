@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class FieldDeclaration implements Serializable, Comparable<FieldDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.FieldDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.FieldDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_MODIFIERS = new hydra.core.Name("modifiers");
+  public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
   
-  public static final hydra.core.Name FIELD_NAME_UNANN_TYPE = new hydra.core.Name("unannType");
+  public static final hydra.core.Name UNANN_TYPE = new hydra.core.Name("unannType");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLE_DECLARATORS = new hydra.core.Name("variableDeclarators");
+  public static final hydra.core.Name VARIABLE_DECLARATORS = new hydra.core.Name("variableDeclarators");
   
   public final java.util.List<hydra.ext.java.syntax.FieldModifier> modifiers;
   

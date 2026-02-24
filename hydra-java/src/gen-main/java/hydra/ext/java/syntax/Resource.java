@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class Resource implements Serializable, Comparable<Resource> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.Resource");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.Resource");
   
-  public static final hydra.core.Name FIELD_NAME_LOCAL = new hydra.core.Name("local");
+  public static final hydra.core.Name LOCAL = new hydra.core.Name("local");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
   
   private Resource () {
   

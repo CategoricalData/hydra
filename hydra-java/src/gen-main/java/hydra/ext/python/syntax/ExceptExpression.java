@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class ExceptExpression implements Serializable, Comparable<ExceptExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ExceptExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ExceptExpression");
   
-  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
-  public static final hydra.core.Name FIELD_NAME_AS = new hydra.core.Name("as");
+  public static final hydra.core.Name AS = new hydra.core.Name("as");
   
   public final hydra.ext.python.syntax.Expression expression;
   

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A System F type abstraction term
  */
 public class TypeLambda implements Serializable, Comparable<TypeLambda> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.TypeLambda");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.TypeLambda");
   
-  public static final hydra.core.Name FIELD_NAME_PARAMETER = new hydra.core.Name("parameter");
+  public static final hydra.core.Name PARAMETER = new hydra.core.Name("parameter");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   /**
    * The type variable introduced by the abstraction

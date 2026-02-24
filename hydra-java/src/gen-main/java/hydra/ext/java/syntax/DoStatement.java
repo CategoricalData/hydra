@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class DoStatement implements Serializable, Comparable<DoStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.DoStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.DoStatement");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_CONDE = new hydra.core.Name("conde");
+  public static final hydra.core.Name CONDE = new hydra.core.Name("conde");
   
   public final hydra.ext.java.syntax.Statement body;
   

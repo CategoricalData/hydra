@@ -5,9 +5,9 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class MethodReference_Array implements Serializable, Comparable<MethodReference_Array> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_Array");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_Array");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final hydra.ext.java.syntax.ArrayType value;
   

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case which lifts lambda abstractions above let expressions and compares the result with the expected term
  */
 public class LiftLambdaAboveLetTestCase implements Serializable, Comparable<LiftLambdaAboveLetTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.LiftLambdaAboveLetTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.LiftLambdaAboveLetTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The term to transform

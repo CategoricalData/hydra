@@ -8,15 +8,15 @@ import java.io.Serializable;
  * The result of applying inference rules to a term.
  */
 public class InferenceResult implements Serializable, Comparable<InferenceResult> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.typing.InferenceResult");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.typing.InferenceResult");
   
-  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  public static final hydra.core.Name TERM = new hydra.core.Name("term");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_SUBST = new hydra.core.Name("subst");
+  public static final hydra.core.Name SUBST = new hydra.core.Name("subst");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS_CONSTRAINTS = new hydra.core.Name("classConstraints");
+  public static final hydra.core.Name CLASS_CONSTRAINTS = new hydra.core.Name("classConstraints");
   
   /**
    * The term which was inferred

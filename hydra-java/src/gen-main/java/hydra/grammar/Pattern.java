@@ -8,29 +8,29 @@ import java.io.Serializable;
  * A pattern which matches valid expressions in the language
  */
 public abstract class Pattern implements Serializable, Comparable<Pattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.grammar.Pattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.grammar.Pattern");
   
-  public static final hydra.core.Name FIELD_NAME_ALTERNATIVES = new hydra.core.Name("alternatives");
+  public static final hydra.core.Name ALTERNATIVES = new hydra.core.Name("alternatives");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTANT = new hydra.core.Name("constant");
+  public static final hydra.core.Name CONSTANT = new hydra.core.Name("constant");
   
-  public static final hydra.core.Name FIELD_NAME_IGNORED = new hydra.core.Name("ignored");
+  public static final hydra.core.Name IGNORED = new hydra.core.Name("ignored");
   
-  public static final hydra.core.Name FIELD_NAME_LABELED = new hydra.core.Name("labeled");
+  public static final hydra.core.Name LABELED = new hydra.core.Name("labeled");
   
-  public static final hydra.core.Name FIELD_NAME_NIL = new hydra.core.Name("nil");
+  public static final hydra.core.Name NIL = new hydra.core.Name("nil");
   
-  public static final hydra.core.Name FIELD_NAME_NONTERMINAL = new hydra.core.Name("nonterminal");
+  public static final hydra.core.Name NONTERMINAL = new hydra.core.Name("nonterminal");
   
-  public static final hydra.core.Name FIELD_NAME_OPTION = new hydra.core.Name("option");
+  public static final hydra.core.Name OPTION = new hydra.core.Name("option");
   
-  public static final hydra.core.Name FIELD_NAME_PLUS = new hydra.core.Name("plus");
+  public static final hydra.core.Name PLUS = new hydra.core.Name("plus");
   
-  public static final hydra.core.Name FIELD_NAME_REGEX = new hydra.core.Name("regex");
+  public static final hydra.core.Name REGEX = new hydra.core.Name("regex");
   
-  public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
+  public static final hydra.core.Name SEQUENCE = new hydra.core.Name("sequence");
   
-  public static final hydra.core.Name FIELD_NAME_STAR = new hydra.core.Name("star");
+  public static final hydra.core.Name STAR = new hydra.core.Name("star");
   
   private Pattern () {
   

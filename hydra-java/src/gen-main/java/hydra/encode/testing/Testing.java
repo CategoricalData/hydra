@@ -457,6 +457,11 @@ public interface Testing {
       public hydra.core.Term visit(hydra.testing.TestCase.JoinTypes y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("joinTypes"), hydra.encode.testing.Testing.joinTypesTestCase((y).value))));
       }
+      
+      @Override
+      public hydra.core.Term visit(hydra.testing.TestCase.UnshadowVariables y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("unshadowVariables"), hydra.encode.testing.Testing.unshadowVariablesTestCase((y).value))));
+      }
     });
   }
   
@@ -601,6 +606,12 @@ public interface Testing {
       new hydra.core.Field(new hydra.core.Name("variable"), hydra.encode.core.Core.name((x).variable)),
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.core.Core.type((x).type)),
       new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_((x).expected))))));
+  }
+  
+  static hydra.core.Term unshadowVariablesTestCase(hydra.testing.UnshadowVariablesTestCase x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.UnshadowVariablesTestCase"), java.util.List.of(
+      new hydra.core.Field(new hydra.core.Name("input"), hydra.encode.core.Core.term((x).input)),
+      new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.core.Core.term((x).output)))));
   }
   
   static hydra.core.Term unifyTypesTestCase(hydra.testing.UnifyTypesTestCase x) {

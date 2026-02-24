@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class SwitchBlock_Pair implements Serializable, Comparable<SwitchBlock_Pair> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.SwitchBlock_Pair");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.SwitchBlock_Pair");
   
-  public static final hydra.core.Name FIELD_NAME_STATEMENTS = new hydra.core.Name("statements");
+  public static final hydra.core.Name STATEMENTS = new hydra.core.Name("statements");
   
-  public static final hydra.core.Name FIELD_NAME_LABELS = new hydra.core.Name("labels");
+  public static final hydra.core.Name LABELS = new hydra.core.Name("labels");
   
   public final java.util.List<hydra.ext.java.syntax.SwitchBlockStatementGroup> statements;
   

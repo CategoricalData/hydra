@@ -8,13 +8,13 @@ import java.io.Serializable;
  * The result of evaluating a Flow
  */
 public class FlowState<S, V> implements Serializable, Comparable<FlowState<S, V>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.compute.FlowState");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.FlowState");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public static final hydra.core.Name FIELD_NAME_STATE = new hydra.core.Name("state");
+  public static final hydra.core.Name STATE = new hydra.core.Name("state");
   
-  public static final hydra.core.Name FIELD_NAME_TRACE = new hydra.core.Name("trace");
+  public static final hydra.core.Name TRACE = new hydra.core.Name("trace");
   
   /**
    * The resulting value, or nothing in the case of failure

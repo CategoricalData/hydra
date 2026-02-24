@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class ClassPattern implements Serializable, Comparable<ClassPattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ClassPattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ClassPattern");
   
-  public static final hydra.core.Name FIELD_NAME_NAME_OR_ATTRIBUTE = new hydra.core.Name("nameOrAttribute");
+  public static final hydra.core.Name NAME_OR_ATTRIBUTE = new hydra.core.Name("nameOrAttribute");
   
-  public static final hydra.core.Name FIELD_NAME_POSITIONAL_PATTERNS = new hydra.core.Name("positionalPatterns");
+  public static final hydra.core.Name POSITIONAL_PATTERNS = new hydra.core.Name("positionalPatterns");
   
-  public static final hydra.core.Name FIELD_NAME_KEYWORD_PATTERNS = new hydra.core.Name("keywordPatterns");
+  public static final hydra.core.Name KEYWORD_PATTERNS = new hydra.core.Name("keywordPatterns");
   
   public final hydra.ext.python.syntax.NameOrAttribute nameOrAttribute;
   

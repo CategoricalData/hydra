@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A graph of accessor nodes and edges, representing term access patterns
  */
 public class AccessorGraph implements Serializable, Comparable<AccessorGraph> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.accessors.AccessorGraph");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.accessors.AccessorGraph");
   
-  public static final hydra.core.Name FIELD_NAME_NODES = new hydra.core.Name("nodes");
+  public static final hydra.core.Name NODES = new hydra.core.Name("nodes");
   
-  public static final hydra.core.Name FIELD_NAME_EDGES = new hydra.core.Name("edges");
+  public static final hydra.core.Name EDGES = new hydra.core.Name("edges");
   
   /**
    * All nodes in the graph

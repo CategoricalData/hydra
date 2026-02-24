@@ -1393,12 +1393,50 @@ public interface Serde {
       }
       
       @Override
-      public hydra.ast.Expr visit(hydra.ext.python.syntax.TargetWithStarAtom.Project ignored) {
-        return hydra.serialization.Serialization.cst("...");
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.TargetWithStarAtom.Project pn) {
+        return hydra.ext.python.serde.Serde.encodeTPrimaryAndName((pn).value);
       }
       
       @Override
       public hydra.ast.Expr visit(hydra.ext.python.syntax.TargetWithStarAtom.Slices ignored) {
+        return hydra.serialization.Serialization.cst("...");
+      }
+    });
+  }
+  
+  static hydra.ast.Expr encodeTPrimaryAndName(hydra.ext.python.syntax.TPrimaryAndName pn) {
+    hydra.ext.python.syntax.Name name_ = (pn).name;
+    hydra.ext.python.syntax.TPrimary prim = (pn).primary;
+    return hydra.serialization.Serialization.noSep(java.util.List.of(
+      hydra.ext.python.serde.Serde.encodeTPrimary(prim),
+      hydra.serialization.Serialization.cst("."),
+      hydra.ext.python.serde.Serde.encodeName(name_)));
+  }
+  
+  static hydra.ast.Expr encodeTPrimary(hydra.ext.python.syntax.TPrimary tp) {
+    return (tp).accept(new hydra.ext.python.syntax.TPrimary.PartialVisitor<>() {
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.TPrimary.Atom a) {
+        return hydra.ext.python.serde.Serde.encodeAtom((a).value);
+      }
+      
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.TPrimary.PrimaryAndName pn) {
+        return hydra.ext.python.serde.Serde.encodeTPrimaryAndName((pn).value);
+      }
+      
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.TPrimary.PrimaryAndSlices ignored) {
+        return hydra.serialization.Serialization.cst("...");
+      }
+      
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.TPrimary.PrimaryAndGenexp ignored) {
+        return hydra.serialization.Serialization.cst("...");
+      }
+      
+      @Override
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.TPrimary.PrimaryAndArguments ignored) {
         return hydra.serialization.Serialization.cst("...");
       }
     });

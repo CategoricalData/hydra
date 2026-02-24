@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case for round-trip encoding/decoding using the Either-based JSON functions. Encodes a term, then decodes it back, verifying the result equals the original.
  */
 public class JsonRoundtripTestCase implements Serializable, Comparable<JsonRoundtripTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.JsonRoundtripTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.JsonRoundtripTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  public static final hydra.core.Name TERM = new hydra.core.Name("term");
   
   /**
    * The Hydra type for encoding/decoding

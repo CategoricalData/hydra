@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class StarPattern implements Serializable, Comparable<StarPattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.StarPattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.StarPattern");
   
-  public static final hydra.core.Name FIELD_NAME_CAPTURE = new hydra.core.Name("capture");
+  public static final hydra.core.Name CAPTURE = new hydra.core.Name("capture");
   
-  public static final hydra.core.Name FIELD_NAME_WILDCARD = new hydra.core.Name("wildcard");
+  public static final hydra.core.Name WILDCARD = new hydra.core.Name("wildcard");
   
   private StarPattern () {
   

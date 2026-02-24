@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class NoDefaultStarAnnotationStarEtc implements Serializable, Comparable<NoDefaultStarAnnotationStarEtc> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.NoDefaultStarAnnotationStarEtc");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.NoDefaultStarAnnotationStarEtc");
   
-  public static final hydra.core.Name FIELD_NAME_PARAM_NO_DEFAULT_STAR_ANNOTATION = new hydra.core.Name("paramNoDefaultStarAnnotation");
+  public static final hydra.core.Name PARAM_NO_DEFAULT_STAR_ANNOTATION = new hydra.core.Name("paramNoDefaultStarAnnotation");
   
-  public static final hydra.core.Name FIELD_NAME_PARAM_MAYBE_DEFAULT = new hydra.core.Name("paramMaybeDefault");
+  public static final hydra.core.Name PARAM_MAYBE_DEFAULT = new hydra.core.Name("paramMaybeDefault");
   
-  public static final hydra.core.Name FIELD_NAME_KEYWORDS = new hydra.core.Name("keywords");
+  public static final hydra.core.Name KEYWORDS = new hydra.core.Name("keywords");
   
   public final hydra.ext.python.syntax.ParamNoDefaultStarAnnotation paramNoDefaultStarAnnotation;
   

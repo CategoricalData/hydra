@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class Type implements Serializable, Comparable<Type> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.Type");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.Type");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMITIVE = new hydra.core.Name("primitive");
+  public static final hydra.core.Name PRIMITIVE = new hydra.core.Name("primitive");
   
-  public static final hydra.core.Name FIELD_NAME_REFERENCE = new hydra.core.Name("reference");
+  public static final hydra.core.Name REFERENCE = new hydra.core.Name("reference");
   
   private Type () {
   

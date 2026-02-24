@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class CastExpression_NotPlusMinus implements Serializable, Comparable<CastExpression_NotPlusMinus> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.CastExpression_NotPlusMinus");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.CastExpression_NotPlusMinus");
   
-  public static final hydra.core.Name FIELD_NAME_REF_AND_BOUNDS = new hydra.core.Name("refAndBounds");
+  public static final hydra.core.Name REF_AND_BOUNDS = new hydra.core.Name("refAndBounds");
   
-  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
   public final hydra.ext.java.syntax.CastExpression_RefAndBounds refAndBounds;
   

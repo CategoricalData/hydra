@@ -8,13 +8,13 @@ import java.io.Serializable;
  * An evaluation context together with a source language and a target language
  */
 public class AdapterContext implements Serializable, Comparable<AdapterContext> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.AdapterContext");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.coders.AdapterContext");
   
-  public static final hydra.core.Name FIELD_NAME_GRAPH = new hydra.core.Name("graph");
+  public static final hydra.core.Name GRAPH = new hydra.core.Name("graph");
   
-  public static final hydra.core.Name FIELD_NAME_LANGUAGE = new hydra.core.Name("language");
+  public static final hydra.core.Name LANGUAGE = new hydra.core.Name("language");
   
-  public static final hydra.core.Name FIELD_NAME_ADAPTERS = new hydra.core.Name("adapters");
+  public static final hydra.core.Name ADAPTERS = new hydra.core.Name("adapters");
   
   /**
    * The underlying graph of elements and primitives

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An application type
  */
 public class ApplicationType implements Serializable, Comparable<ApplicationType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.ApplicationType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ApplicationType");
   
-  public static final hydra.core.Name FIELD_NAME_CONTEXT = new hydra.core.Name("context");
+  public static final hydra.core.Name CONTEXT = new hydra.core.Name("context");
   
-  public static final hydra.core.Name FIELD_NAME_ARGUMENT = new hydra.core.Name("argument");
+  public static final hydra.core.Name ARGUMENT = new hydra.core.Name("argument");
   
   /**
    * The type being applied

@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class Expression implements Serializable, Comparable<Expression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.Expression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.Expression");
   
-  public static final hydra.core.Name FIELD_NAME_LAMBDA = new hydra.core.Name("lambda");
+  public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
   
-  public static final hydra.core.Name FIELD_NAME_ASSIGNMENT = new hydra.core.Name("assignment");
+  public static final hydra.core.Name ASSIGNMENT = new hydra.core.Name("assignment");
   
   private Expression () {
   

@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class WhileStatement implements Serializable, Comparable<WhileStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.WhileStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.WhileStatement");
   
-  public static final hydra.core.Name FIELD_NAME_COND = new hydra.core.Name("cond");
+  public static final hydra.core.Name COND = new hydra.core.Name("cond");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond;
   

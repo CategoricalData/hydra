@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class InterfaceDeclaration implements Serializable, Comparable<InterfaceDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.InterfaceDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.InterfaceDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_NORMAL_INTERFACE = new hydra.core.Name("normalInterface");
+  public static final hydra.core.Name NORMAL_INTERFACE = new hydra.core.Name("normalInterface");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION_TYPE = new hydra.core.Name("annotationType");
+  public static final hydra.core.Name ANNOTATION_TYPE = new hydra.core.Name("annotationType");
   
   private InterfaceDeclaration () {
   

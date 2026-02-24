@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class AdditiveExpression implements Serializable, Comparable<AdditiveExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.AdditiveExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AdditiveExpression");
   
-  public static final hydra.core.Name FIELD_NAME_UNARY = new hydra.core.Name("unary");
+  public static final hydra.core.Name UNARY = new hydra.core.Name("unary");
   
-  public static final hydra.core.Name FIELD_NAME_PLUS = new hydra.core.Name("plus");
+  public static final hydra.core.Name PLUS = new hydra.core.Name("plus");
   
-  public static final hydra.core.Name FIELD_NAME_MINUS = new hydra.core.Name("minus");
+  public static final hydra.core.Name MINUS = new hydra.core.Name("minus");
   
   private AdditiveExpression () {
   

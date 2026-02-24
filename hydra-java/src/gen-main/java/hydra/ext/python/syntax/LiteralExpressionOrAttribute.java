@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class LiteralExpressionOrAttribute implements Serializable, Comparable<LiteralExpressionOrAttribute> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.LiteralExpressionOrAttribute");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.LiteralExpressionOrAttribute");
   
-  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  public static final hydra.core.Name LITERAL = new hydra.core.Name("literal");
   
-  public static final hydra.core.Name FIELD_NAME_ATTRIBUTE = new hydra.core.Name("attribute");
+  public static final hydra.core.Name ATTRIBUTE = new hydra.core.Name("attribute");
   
   private LiteralExpressionOrAttribute () {
   

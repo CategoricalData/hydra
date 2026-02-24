@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case which flattens nested let terms, lifting inner bindings to the outer let, and compares the result with the expected term
  */
 public class FlattenLetTermsTestCase implements Serializable, Comparable<FlattenLetTermsTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.FlattenLetTermsTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.FlattenLetTermsTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The term to flatten

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A section expression
  */
 public class SectionExpression implements Serializable, Comparable<SectionExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.SectionExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.SectionExpression");
   
-  public static final hydra.core.Name FIELD_NAME_OPERATOR = new hydra.core.Name("operator");
+  public static final hydra.core.Name OPERATOR = new hydra.core.Name("operator");
   
-  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
   /**
    * The operator

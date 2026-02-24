@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ArrayCreationExpression implements Serializable, Comparable<ArrayCreationExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMITIVE = new hydra.core.Name("primitive");
+  public static final hydra.core.Name PRIMITIVE = new hydra.core.Name("primitive");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS_OR_INTERFACE = new hydra.core.Name("classOrInterface");
+  public static final hydra.core.Name CLASS_OR_INTERFACE = new hydra.core.Name("classOrInterface");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMITIVE_ARRAY = new hydra.core.Name("primitiveArray");
+  public static final hydra.core.Name PRIMITIVE_ARRAY = new hydra.core.Name("primitiveArray");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS_OR_INTERFACE_ARRAY = new hydra.core.Name("classOrInterfaceArray");
+  public static final hydra.core.Name CLASS_OR_INTERFACE_ARRAY = new hydra.core.Name("classOrInterfaceArray");
   
   private ArrayCreationExpression () {
   

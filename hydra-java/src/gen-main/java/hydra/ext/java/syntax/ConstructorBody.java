@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ConstructorBody implements Serializable, Comparable<ConstructorBody> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ConstructorBody");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ConstructorBody");
   
-  public static final hydra.core.Name FIELD_NAME_INVOCATION = new hydra.core.Name("invocation");
+  public static final hydra.core.Name INVOCATION = new hydra.core.Name("invocation");
   
-  public static final hydra.core.Name FIELD_NAME_STATEMENTS = new hydra.core.Name("statements");
+  public static final hydra.core.Name STATEMENTS = new hydra.core.Name("statements");
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.ExplicitConstructorInvocation> invocation;
   

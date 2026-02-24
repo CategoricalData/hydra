@@ -8,33 +8,33 @@ import java.io.Serializable;
  * Aliases and context for Java code generation
  */
 public class Aliases implements Serializable, Comparable<Aliases> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.helpers.Aliases");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.helpers.Aliases");
   
-  public static final hydra.core.Name FIELD_NAME_CURRENT_NAMESPACE = new hydra.core.Name("currentNamespace");
+  public static final hydra.core.Name CURRENT_NAMESPACE = new hydra.core.Name("currentNamespace");
   
-  public static final hydra.core.Name FIELD_NAME_PACKAGES = new hydra.core.Name("packages");
+  public static final hydra.core.Name PACKAGES = new hydra.core.Name("packages");
   
-  public static final hydra.core.Name FIELD_NAME_BRANCH_VARS = new hydra.core.Name("branchVars");
+  public static final hydra.core.Name BRANCH_VARS = new hydra.core.Name("branchVars");
   
-  public static final hydra.core.Name FIELD_NAME_RECURSIVE_VARS = new hydra.core.Name("recursiveVars");
+  public static final hydra.core.Name RECURSIVE_VARS = new hydra.core.Name("recursiveVars");
   
-  public static final hydra.core.Name FIELD_NAME_IN_SCOPE_TYPE_PARAMS = new hydra.core.Name("inScopeTypeParams");
+  public static final hydra.core.Name IN_SCOPE_TYPE_PARAMS = new hydra.core.Name("inScopeTypeParams");
   
-  public static final hydra.core.Name FIELD_NAME_POLYMORPHIC_LOCALS = new hydra.core.Name("polymorphicLocals");
+  public static final hydra.core.Name POLYMORPHIC_LOCALS = new hydra.core.Name("polymorphicLocals");
   
-  public static final hydra.core.Name FIELD_NAME_IN_SCOPE_JAVA_VARS = new hydra.core.Name("inScopeJavaVars");
+  public static final hydra.core.Name IN_SCOPE_JAVA_VARS = new hydra.core.Name("inScopeJavaVars");
   
-  public static final hydra.core.Name FIELD_NAME_VAR_RENAMES = new hydra.core.Name("varRenames");
+  public static final hydra.core.Name VAR_RENAMES = new hydra.core.Name("varRenames");
   
-  public static final hydra.core.Name FIELD_NAME_LAMBDA_VARS = new hydra.core.Name("lambdaVars");
+  public static final hydra.core.Name LAMBDA_VARS = new hydra.core.Name("lambdaVars");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_VAR_SUBST = new hydra.core.Name("typeVarSubst");
+  public static final hydra.core.Name TYPE_VAR_SUBST = new hydra.core.Name("typeVarSubst");
   
-  public static final hydra.core.Name FIELD_NAME_TRUSTED_TYPE_VARS = new hydra.core.Name("trustedTypeVars");
+  public static final hydra.core.Name TRUSTED_TYPE_VARS = new hydra.core.Name("trustedTypeVars");
   
-  public static final hydra.core.Name FIELD_NAME_METHOD_CODOMAIN = new hydra.core.Name("methodCodomain");
+  public static final hydra.core.Name METHOD_CODOMAIN = new hydra.core.Name("methodCodomain");
   
-  public static final hydra.core.Name FIELD_NAME_THUNKED_VARS = new hydra.core.Name("thunkedVars");
+  public static final hydra.core.Name THUNKED_VARS = new hydra.core.Name("thunkedVars");
   
   /**
    * Current module namespace context

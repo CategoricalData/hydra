@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class MethodHeader implements Serializable, Comparable<MethodHeader> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.MethodHeader");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodHeader");
   
-  public static final hydra.core.Name FIELD_NAME_PARAMETERS = new hydra.core.Name("parameters");
+  public static final hydra.core.Name PARAMETERS = new hydra.core.Name("parameters");
   
-  public static final hydra.core.Name FIELD_NAME_RESULT = new hydra.core.Name("result");
+  public static final hydra.core.Name RESULT = new hydra.core.Name("result");
   
-  public static final hydra.core.Name FIELD_NAME_DECLARATOR = new hydra.core.Name("declarator");
+  public static final hydra.core.Name DECLARATOR = new hydra.core.Name("declarator");
   
-  public static final hydra.core.Name FIELD_NAME_THROWS = new hydra.core.Name("throws");
+  public static final hydra.core.Name THROWS = new hydra.core.Name("throws");
   
   public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
   

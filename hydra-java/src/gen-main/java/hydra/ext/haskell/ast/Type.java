@@ -8,23 +8,23 @@ import java.io.Serializable;
  * A type expression
  */
 public abstract class Type implements Serializable, Comparable<Type> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Type");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Type");
   
-  public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
+  public static final hydra.core.Name APPLICATION = new hydra.core.Name("application");
   
-  public static final hydra.core.Name FIELD_NAME_CTX = new hydra.core.Name("ctx");
+  public static final hydra.core.Name CTX = new hydra.core.Name("ctx");
   
-  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
   
-  public static final hydra.core.Name FIELD_NAME_INFIX = new hydra.core.Name("infix");
+  public static final hydra.core.Name INFIX = new hydra.core.Name("infix");
   
-  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  public static final hydra.core.Name LIST = new hydra.core.Name("list");
   
-  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
+  public static final hydra.core.Name PARENS = new hydra.core.Name("parens");
   
-  public static final hydra.core.Name FIELD_NAME_TUPLE = new hydra.core.Name("tuple");
+  public static final hydra.core.Name TUPLE = new hydra.core.Name("tuple");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
   
   private Type () {
   

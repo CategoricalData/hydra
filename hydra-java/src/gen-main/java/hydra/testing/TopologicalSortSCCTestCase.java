@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case which performs topological sort with strongly connected component detection and compares the result with expected components
  */
 public class TopologicalSortSCCTestCase implements Serializable, Comparable<TopologicalSortSCCTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TopologicalSortSCCTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TopologicalSortSCCTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_ADJACENCY_LIST = new hydra.core.Name("adjacencyList");
+  public static final hydra.core.Name ADJACENCY_LIST = new hydra.core.Name("adjacencyList");
   
-  public static final hydra.core.Name FIELD_NAME_EXPECTED = new hydra.core.Name("expected");
+  public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
   
   /**
    * The directed graph as an adjacency list

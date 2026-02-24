@@ -8,15 +8,15 @@ import java.io.Serializable;
  * A test case which performs alpha conversion (variable renaming) on a term and compares the result with the expected term
  */
 public class AlphaConversionTestCase implements Serializable, Comparable<AlphaConversionTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.AlphaConversionTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.AlphaConversionTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  public static final hydra.core.Name TERM = new hydra.core.Name("term");
   
-  public static final hydra.core.Name FIELD_NAME_OLD_VARIABLE = new hydra.core.Name("oldVariable");
+  public static final hydra.core.Name OLD_VARIABLE = new hydra.core.Name("oldVariable");
   
-  public static final hydra.core.Name FIELD_NAME_NEW_VARIABLE = new hydra.core.Name("newVariable");
+  public static final hydra.core.Name NEW_VARIABLE = new hydra.core.Name("newVariable");
   
-  public static final hydra.core.Name FIELD_NAME_RESULT = new hydra.core.Name("result");
+  public static final hydra.core.Name RESULT = new hydra.core.Name("result");
   
   /**
    * The term on which to perform alpha conversion

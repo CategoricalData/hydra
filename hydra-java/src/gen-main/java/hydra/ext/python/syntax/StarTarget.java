@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class StarTarget implements Serializable, Comparable<StarTarget> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.StarTarget");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.StarTarget");
   
-  public static final hydra.core.Name FIELD_NAME_STARRED = new hydra.core.Name("starred");
+  public static final hydra.core.Name STARRED = new hydra.core.Name("starred");
   
-  public static final hydra.core.Name FIELD_NAME_UNSTARRED = new hydra.core.Name("unstarred");
+  public static final hydra.core.Name UNSTARRED = new hydra.core.Name("unstarred");
   
   private StarTarget () {
   

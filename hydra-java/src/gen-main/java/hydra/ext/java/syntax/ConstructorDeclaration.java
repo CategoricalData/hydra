@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ConstructorDeclaration implements Serializable, Comparable<ConstructorDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ConstructorDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ConstructorDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_MODIFIERS = new hydra.core.Name("modifiers");
+  public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTRUCTOR = new hydra.core.Name("constructor");
+  public static final hydra.core.Name CONSTRUCTOR = new hydra.core.Name("constructor");
   
-  public static final hydra.core.Name FIELD_NAME_THROWS = new hydra.core.Name("throws");
+  public static final hydra.core.Name THROWS = new hydra.core.Name("throws");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   public final java.util.List<hydra.ext.java.syntax.ConstructorModifier> modifiers;
   

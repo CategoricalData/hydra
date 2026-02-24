@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case which serializes an AST expression to a string and compares it with the expected output
  */
 public class SerializationTestCase implements Serializable, Comparable<SerializationTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.SerializationTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.SerializationTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The AST expression to serialize

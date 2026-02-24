@@ -8,15 +8,15 @@ import java.io.Serializable;
  * One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
  */
 public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWithMetadata> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TestCaseWithMetadata");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TestCaseWithMetadata");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_CASE = new hydra.core.Name("case");
+  public static final hydra.core.Name CASE = new hydra.core.Name("case");
   
-  public static final hydra.core.Name FIELD_NAME_DESCRIPTION = new hydra.core.Name("description");
+  public static final hydra.core.Name DESCRIPTION = new hydra.core.Name("description");
   
-  public static final hydra.core.Name FIELD_NAME_TAGS = new hydra.core.Name("tags");
+  public static final hydra.core.Name TAGS = new hydra.core.Name("tags");
   
   /**
    * The name of the test case

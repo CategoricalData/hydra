@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ClassInstanceCreationExpression implements Serializable, Comparable<ClassInstanceCreationExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassInstanceCreationExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassInstanceCreationExpression");
   
-  public static final hydra.core.Name FIELD_NAME_QUALIFIER = new hydra.core.Name("qualifier");
+  public static final hydra.core.Name QUALIFIER = new hydra.core.Name("qualifier");
   
-  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier> qualifier;
   

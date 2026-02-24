@@ -5,31 +5,31 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class AssignmentOperator implements Serializable, Comparable<AssignmentOperator> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.AssignmentOperator");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.AssignmentOperator");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
-  public static final hydra.core.Name FIELD_NAME_TIMES = new hydra.core.Name("times");
+  public static final hydra.core.Name TIMES = new hydra.core.Name("times");
   
-  public static final hydra.core.Name FIELD_NAME_DIV = new hydra.core.Name("div");
+  public static final hydra.core.Name DIV = new hydra.core.Name("div");
   
-  public static final hydra.core.Name FIELD_NAME_MOD = new hydra.core.Name("mod");
+  public static final hydra.core.Name MOD = new hydra.core.Name("mod");
   
-  public static final hydra.core.Name FIELD_NAME_PLUS = new hydra.core.Name("plus");
+  public static final hydra.core.Name PLUS = new hydra.core.Name("plus");
   
-  public static final hydra.core.Name FIELD_NAME_MINUS = new hydra.core.Name("minus");
+  public static final hydra.core.Name MINUS = new hydra.core.Name("minus");
   
-  public static final hydra.core.Name FIELD_NAME_SHIFT_LEFT = new hydra.core.Name("shiftLeft");
+  public static final hydra.core.Name SHIFT_LEFT = new hydra.core.Name("shiftLeft");
   
-  public static final hydra.core.Name FIELD_NAME_SHIFT_RIGHT = new hydra.core.Name("shiftRight");
+  public static final hydra.core.Name SHIFT_RIGHT = new hydra.core.Name("shiftRight");
   
-  public static final hydra.core.Name FIELD_NAME_SHIFT_RIGHT_ZERO_FILL = new hydra.core.Name("shiftRightZeroFill");
+  public static final hydra.core.Name SHIFT_RIGHT_ZERO_FILL = new hydra.core.Name("shiftRightZeroFill");
   
-  public static final hydra.core.Name FIELD_NAME_AND = new hydra.core.Name("and");
+  public static final hydra.core.Name AND = new hydra.core.Name("and");
   
-  public static final hydra.core.Name FIELD_NAME_XOR = new hydra.core.Name("xor");
+  public static final hydra.core.Name XOR = new hydra.core.Name("xor");
   
-  public static final hydra.core.Name FIELD_NAME_OR = new hydra.core.Name("or");
+  public static final hydra.core.Name OR = new hydra.core.Name("or");
   
   private AssignmentOperator () {
   

@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class SignedNumber implements Serializable, Comparable<SignedNumber> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.SignedNumber");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SignedNumber");
   
-  public static final hydra.core.Name FIELD_NAME_SIGN = new hydra.core.Name("sign");
+  public static final hydra.core.Name SIGN = new hydra.core.Name("sign");
   
-  public static final hydra.core.Name FIELD_NAME_NUMBER = new hydra.core.Name("number");
+  public static final hydra.core.Name NUMBER = new hydra.core.Name("number");
   
   private SignedNumber () {
   

@@ -5,35 +5,35 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class SimpleStatement implements Serializable, Comparable<SimpleStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.SimpleStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SimpleStatement");
   
-  public static final hydra.core.Name FIELD_NAME_ASSIGNMENT = new hydra.core.Name("assignment");
+  public static final hydra.core.Name ASSIGNMENT = new hydra.core.Name("assignment");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_ALIAS = new hydra.core.Name("typeAlias");
+  public static final hydra.core.Name TYPE_ALIAS = new hydra.core.Name("typeAlias");
   
-  public static final hydra.core.Name FIELD_NAME_STAR_EXPRESSIONS = new hydra.core.Name("starExpressions");
+  public static final hydra.core.Name STAR_EXPRESSIONS = new hydra.core.Name("starExpressions");
   
-  public static final hydra.core.Name FIELD_NAME_RETURN = new hydra.core.Name("return");
+  public static final hydra.core.Name RETURN = new hydra.core.Name("return");
   
-  public static final hydra.core.Name FIELD_NAME_IMPORT = new hydra.core.Name("import");
+  public static final hydra.core.Name IMPORT = new hydra.core.Name("import");
   
-  public static final hydra.core.Name FIELD_NAME_RAISE = new hydra.core.Name("raise");
+  public static final hydra.core.Name RAISE = new hydra.core.Name("raise");
   
-  public static final hydra.core.Name FIELD_NAME_PASS = new hydra.core.Name("pass");
+  public static final hydra.core.Name PASS = new hydra.core.Name("pass");
   
-  public static final hydra.core.Name FIELD_NAME_DEL = new hydra.core.Name("del");
+  public static final hydra.core.Name DEL = new hydra.core.Name("del");
   
-  public static final hydra.core.Name FIELD_NAME_YIELD = new hydra.core.Name("yield");
+  public static final hydra.core.Name YIELD = new hydra.core.Name("yield");
   
-  public static final hydra.core.Name FIELD_NAME_ASSERT = new hydra.core.Name("assert");
+  public static final hydra.core.Name ASSERT = new hydra.core.Name("assert");
   
-  public static final hydra.core.Name FIELD_NAME_BREAK = new hydra.core.Name("break");
+  public static final hydra.core.Name BREAK = new hydra.core.Name("break");
   
-  public static final hydra.core.Name FIELD_NAME_CONTINUE = new hydra.core.Name("continue");
+  public static final hydra.core.Name CONTINUE = new hydra.core.Name("continue");
   
-  public static final hydra.core.Name FIELD_NAME_GLOBAL = new hydra.core.Name("global");
+  public static final hydra.core.Name GLOBAL = new hydra.core.Name("global");
   
-  public static final hydra.core.Name FIELD_NAME_NONLOCAL = new hydra.core.Name("nonlocal");
+  public static final hydra.core.Name NONLOCAL = new hydra.core.Name("nonlocal");
   
   private SimpleStatement () {
   

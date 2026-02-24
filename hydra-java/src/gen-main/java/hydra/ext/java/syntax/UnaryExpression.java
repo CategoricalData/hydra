@@ -5,17 +5,17 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class UnaryExpression implements Serializable, Comparable<UnaryExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.UnaryExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.UnaryExpression");
   
-  public static final hydra.core.Name FIELD_NAME_PRE_INCREMENT = new hydra.core.Name("preIncrement");
+  public static final hydra.core.Name PRE_INCREMENT = new hydra.core.Name("preIncrement");
   
-  public static final hydra.core.Name FIELD_NAME_PRE_DECREMENT = new hydra.core.Name("preDecrement");
+  public static final hydra.core.Name PRE_DECREMENT = new hydra.core.Name("preDecrement");
   
-  public static final hydra.core.Name FIELD_NAME_PLUS = new hydra.core.Name("plus");
+  public static final hydra.core.Name PLUS = new hydra.core.Name("plus");
   
-  public static final hydra.core.Name FIELD_NAME_MINUS = new hydra.core.Name("minus");
+  public static final hydra.core.Name MINUS = new hydra.core.Name("minus");
   
-  public static final hydra.core.Name FIELD_NAME_OTHER = new hydra.core.Name("other");
+  public static final hydra.core.Name OTHER = new hydra.core.Name("other");
   
   private UnaryExpression () {
   

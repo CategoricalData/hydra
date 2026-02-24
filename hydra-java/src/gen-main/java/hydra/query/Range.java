@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A range from min to max, inclusive
  */
 public class Range implements Serializable, Comparable<Range> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Range");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.Range");
   
-  public static final hydra.core.Name FIELD_NAME_MIN = new hydra.core.Name("min");
+  public static final hydra.core.Name MIN = new hydra.core.Name("min");
   
-  public static final hydra.core.Name FIELD_NAME_MAX = new hydra.core.Name("max");
+  public static final hydra.core.Name MAX = new hydra.core.Name("max");
   
   /**
    * The minimum value (inclusive)

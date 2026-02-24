@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ArrayCreationExpression_ClassOrInterface implements Serializable, Comparable<ArrayCreationExpression_ClassOrInterface> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterface");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_ClassOrInterface");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_DIM_EXPRS = new hydra.core.Name("dimExprs");
+  public static final hydra.core.Name DIM_EXPRS = new hydra.core.Name("dimExprs");
   
-  public static final hydra.core.Name FIELD_NAME_DIMS = new hydra.core.Name("dims");
+  public static final hydra.core.Name DIMS = new hydra.core.Name("dims");
   
   public final hydra.ext.java.syntax.ClassOrInterfaceType type;
   

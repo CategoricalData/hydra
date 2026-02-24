@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class DoubleStarredKvpair implements Serializable, Comparable<DoubleStarredKvpair> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.DoubleStarredKvpair");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.DoubleStarredKvpair");
   
-  public static final hydra.core.Name FIELD_NAME_STARRED = new hydra.core.Name("starred");
+  public static final hydra.core.Name STARRED = new hydra.core.Name("starred");
   
-  public static final hydra.core.Name FIELD_NAME_PAIR = new hydra.core.Name("pair");
+  public static final hydra.core.Name PAIR = new hydra.core.Name("pair");
   
   private DoubleStarredKvpair () {
   

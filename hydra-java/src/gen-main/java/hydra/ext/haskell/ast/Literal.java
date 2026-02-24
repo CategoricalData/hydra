@@ -8,19 +8,19 @@ import java.io.Serializable;
  * A literal value
  */
 public abstract class Literal implements Serializable, Comparable<Literal> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Literal");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Literal");
   
-  public static final hydra.core.Name FIELD_NAME_CHAR = new hydra.core.Name("char");
+  public static final hydra.core.Name CHAR = new hydra.core.Name("char");
   
-  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  public static final hydra.core.Name DOUBLE = new hydra.core.Name("double");
   
-  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  public static final hydra.core.Name FLOAT = new hydra.core.Name("float");
   
-  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
+  public static final hydra.core.Name INT = new hydra.core.Name("int");
   
-  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  public static final hydra.core.Name INTEGER = new hydra.core.Name("integer");
   
-  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  public static final hydra.core.Name STRING = new hydra.core.Name("string");
   
   private Literal () {
   

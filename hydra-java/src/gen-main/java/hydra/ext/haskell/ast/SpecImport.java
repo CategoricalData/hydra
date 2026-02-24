@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An import specification
  */
 public abstract class SpecImport implements Serializable, Comparable<SpecImport> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.SpecImport");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.SpecImport");
   
-  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  public static final hydra.core.Name LIST = new hydra.core.Name("list");
   
-  public static final hydra.core.Name FIELD_NAME_HIDING = new hydra.core.Name("hiding");
+  public static final hydra.core.Name HIDING = new hydra.core.Name("hiding");
   
   private SpecImport () {
   
