@@ -230,6 +230,7 @@ BENCHMARK_OUTPUT = os.environ.get("HYDRA_BENCHMARK_OUTPUT", "")
 # Global state for benchmark timing
 _benchmark_timers: dict[str, int] = {}  # path -> start time (perf_counter_ns)
 _benchmark_results: dict[str, float] = {}  # path -> elapsed ms
+_init_start_ns: int = 0  # start time for test infrastructure initialization
 
 def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     """Check if a test case should be skipped.
@@ -428,8 +429,10 @@ _type_context: Optional[hydra.typing.TypeContext] = None
 
 def get_test_graph() -> hydra.graph.Graph:
     """Get the cached test graph, building it if necessary."""
-    global _test_graph
+    global _test_graph, _init_start_ns
     if _test_graph is None:
+        if BENCHMARK_OUTPUT and _init_start_ns == 0:
+            _init_start_ns = time.perf_counter_ns()
         _test_graph = build_test_graph()
     return _test_graph
 
@@ -479,6 +482,10 @@ def get_type_context() -> hydra.typing.TypeContext:
                 raise RuntimeError(f"Failed to create type context:\n{errors}")
             case Just(value=tx):
                 _type_context = tx
+        # Record initialization time (this is the last context to be built)
+        if BENCHMARK_OUTPUT and _init_start_ns > 0:
+            elapsed_ns = time.perf_counter_ns() - _init_start_ns
+            _benchmark_results["common/_initialization"] = elapsed_ns / 1_000_000.0
     return _type_context
 
 
@@ -1493,8 +1500,19 @@ def _write_benchmark_json(output_path: str, runner: TestRunner) -> None:
     total_runnable, total_skipped = _count_test_cases(root_group, runner)
     root_time = _benchmark_results.get(root_path, 0.0)
 
+    # Add initialization time as a separate group (not attributed to any test group)
+    init_time_ms = _benchmark_results.get("common/_initialization", 0.0)
+
     # Build group JSON values for children of root
     group_values = []
+    if init_time_ms > 0:
+        group_values.append(json.ValueObject(FrozenDict({
+            "path": json.ValueString("common/_initialization"),
+            "passed": json.ValueNumber(Decimal(0)),
+            "failed": json.ValueNumber(Decimal(0)),
+            "skipped": json.ValueNumber(Decimal(0)),
+            "totalTimeMs": json.ValueNumber(Decimal(str(round(init_time_ms, 1)))),
+        })))
     for subgroup_item in root_group.subgroups:
         if isinstance(subgroup_item, str):
             sg = getattr(test_suite, subgroup_item)
