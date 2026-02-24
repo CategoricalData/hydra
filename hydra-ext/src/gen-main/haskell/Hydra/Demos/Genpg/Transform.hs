@@ -33,6 +33,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Concatenate two pairs of lists
 concatPairs :: (([t0], [t1]) -> ([t0], [t1]) -> ([t0], [t1]))
 concatPairs acc p = (Lists.concat2 (Pairs.first acc) (Pairs.first p), (Lists.concat2 (Pairs.second acc) (Pairs.second p)))
 
@@ -96,11 +97,13 @@ decodeTable tableType table =
         Tabular.tableHeader = header,
         Tabular.tableData = decodedRows}) (Eithers.mapList (\row -> decodeRow colTypes row) rows))
 
+-- | Check if an element is an edge
 elementIsEdge :: (Model.Element t0 -> Bool)
 elementIsEdge el = ((\x -> case x of
   Model.ElementEdge _ -> True
   _ -> False) el)
 
+-- | Check if an element is a vertex
 elementIsVertex :: (Model.Element t0 -> Bool)
 elementIsVertex el = ((\x -> case x of
   Model.ElementVertex _ -> True
@@ -161,6 +164,7 @@ evaluateEdge edgeSpec record =
             Model.edgeIn = inId,
             Model.edgeProperties = props}) mInId)))))))
 
+-- | Evaluate property specifications against a record term
 evaluateProperties :: Ord t0 => (M.Map t0 Core.Term -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 Core.Term))
 evaluateProperties specs record =  
   let extractMaybe = (\k -> \term -> (\x -> case x of
@@ -202,9 +206,11 @@ findTablesInTerm term = (Rewriting.foldOverTerm Coders.TraversalOrderPre (\names
 findTablesInTerms :: ([Core.Term] -> S.Set String)
 findTablesInTerms terms = (Sets.unions (Lists.map findTablesInTerm terms))
 
+-- | Check if any element in a list satisfies a predicate
 listAny :: ((t0 -> Bool) -> [t0] -> Bool)
 listAny pred xs = (Logic.not (Lists.null (Lists.filter pred xs)))
 
+-- | Construct a LazyGraph from vertices and edges
 makeLazyGraph :: ([Model.Vertex t0] -> [Model.Edge t0] -> Model.LazyGraph t0)
 makeLazyGraph vertices edges = Model.LazyGraph {
   Model.lazyGraphVertices = vertices,

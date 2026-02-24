@@ -49,6 +49,7 @@ stringLiteralToExpr s =
     escaped,
     quote]))
 
+-- | Escape special characters in a string for JavaScript
 escapeString :: (t0 -> t1 -> t0)
 escapeString s singleQuote = s
 

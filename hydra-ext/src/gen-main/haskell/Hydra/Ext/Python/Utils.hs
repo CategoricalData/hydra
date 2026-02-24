@@ -223,6 +223,18 @@ assignment name rhs = (pyAssignmentToPyStatement (Syntax.AssignmentUntyped (Synt
 assignmentStatement :: (Syntax.Name -> Syntax.Expression -> Syntax.Statement)
 assignmentStatement name expr = (assignment name (pyExpressionToPyAnnotatedRhs expr))
 
+-- | Create a dotted assignment statement: obj.attr = expr
+dottedAssignmentStatement :: (Syntax.Name -> Syntax.Name -> Syntax.Expression -> Syntax.Statement)
+dottedAssignmentStatement obj attr expr =  
+  let target = (Syntax.StarTargetUnstarred (Syntax.TargetWithStarAtomProject (Syntax.TPrimaryAndName {
+          Syntax.tPrimaryAndNamePrimary = (Syntax.TPrimaryAtom (Syntax.AtomName obj)),
+          Syntax.tPrimaryAndNameName = attr})))
+  in (pyAssignmentToPyStatement (Syntax.AssignmentUntyped (Syntax.UntypedAssignment {
+    Syntax.untypedAssignmentTargets = [
+      target],
+    Syntax.untypedAssignmentRhs = (pyExpressionToPyAnnotatedRhs expr),
+    Syntax.untypedAssignmentTypeComment = Nothing})))
+
 -- | Create a return statement with a single expression
 returnSingle :: (Syntax.Expression -> Syntax.Statement)
 returnSingle expr = (pySimpleStatementToPyStatement (Syntax.SimpleStatementReturn (Syntax.ReturnStatement [
@@ -369,6 +381,7 @@ orExpression prims =
           Syntax.bitwiseOrRhs = (pyPrimaryToPyBitwiseXor (Lists.head ps))})) (Lists.tail ps)))
   in (pyBitwiseOrToPyExpression (build Nothing prims))
 
+-- | Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = "TypeExpression"
 typeAliasStatement310 :: (Syntax.Name -> t0 -> Maybe String -> Syntax.Expression -> Syntax.Statement)
 typeAliasStatement310 name _tparams mcomment tyexpr =  
   let quotedExpr = (doubleQuotedString (Serialization.printExpr (Serde.encodeExpression tyexpr)))
@@ -414,8 +427,8 @@ getItemParams = (Syntax.ParametersParamNoDefault (Syntax.ParamNoDefaultParameter
   Syntax.paramNoDefaultParametersStarEtc = Nothing}))
 
 -- | Generate a subscriptable union class for Python 3.10
-unionTypeClassStatements310 :: (Syntax.Name -> Maybe String -> Syntax.Expression -> [Syntax.Statement])
-unionTypeClassStatements310 name mcomment tyexpr =  
+unionTypeClassStatements310 :: (Syntax.Name -> Maybe String -> Syntax.Expression -> [Syntax.Statement] -> [Syntax.Statement])
+unionTypeClassStatements310 name mcomment tyexpr extraStmts =  
   let nameStr = (Syntax.unName name)
   in  
     let metaName = (Syntax.Name (Strings.cat2 (Strings.cat2 "_" nameStr) "Meta"))
@@ -488,9 +501,18 @@ unionTypeClassStatements310 name mcomment tyexpr =
                       [
                         getItemMethod]])}))
             in  
-              let passStmt = (pySimpleStatementToPyStatement Syntax.SimpleStatementPass)
+              let docStmt = (pyExpressionToPyStatement (tripleQuotedString docString))
               in  
-                let docStmt = (pyExpressionToPyStatement (tripleQuotedString docString))
+                let bodyGroups = (Logic.ifElse (Lists.null extraStmts) ( 
+                        let passStmt = (pySimpleStatementToPyStatement Syntax.SimpleStatementPass)
+                        in [
+                          [
+                            docStmt],
+                          [
+                            passStmt]]) [
+                        [
+                          docStmt],
+                        extraStmts])
                 in  
                   let metaclassArg = Syntax.Kwarg {
                           Syntax.kwargName = (Syntax.Name "metaclass"),
@@ -525,11 +547,7 @@ unionTypeClassStatements310 name mcomment tyexpr =
                               Syntax.argsKwargOrStarred = [
                                 Syntax.KwargOrStarredKwarg metaclassArg],
                               Syntax.argsKwargOrDoubleStarred = []})),
-                            Syntax.classDefinitionBody = (indentedBlock Nothing [
-                              [
-                                docStmt],
-                              [
-                                passStmt]])})))
+                            Syntax.classDefinitionBody = (indentedBlock Nothing bodyGroups)})))
                     in [
                       metaClass,
                       unionClass]

@@ -24,6 +24,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Convert a list of property graph elements to a list of vertices with their adjacent edges
 elementsToVerticesWithAdjacentEdges :: Ord t0 => ([Model_.Element t0] -> [Model_.VertexWithAdjacentEdges t0])
 elementsToVerticesWithAdjacentEdges els =  
   let partitioned = (Lists.foldl (\acc -> \el -> (\x -> case x of
@@ -72,9 +73,11 @@ elementsToVerticesWithAdjacentEdges els =
                                   Model_.vertexWithAdjacentEdgesOuts = (Model_.vertexWithAdjacentEdgesOuts vae)}) vmap1) (Maps.lookup inV vmap1))) vertexMap0 edges)
           in (Maps.elems vertexMap1)
 
+-- | Encode a String value as a GraphSON Value
 encodeStringValue :: (String -> Compute.Flow t0 Syntax.Value)
 encodeStringValue s = (Flows.pure (Syntax.ValueString s))
 
+-- | Encode a Hydra Term as a GraphSON Value. Supports literals and unit values.
 encodeTermValue :: (Core.Term -> Compute.Flow t0 Syntax.Value)
 encodeTermValue term = ((\x -> case x of
   Core.TermLiteral v1 -> ((\x -> case x of
@@ -95,5 +98,6 @@ encodeTermValue term = ((\x -> case x of
   Core.TermUnit -> (Flows.pure Syntax.ValueNull)
   _ -> (Flows.fail "unsupported term variant for GraphSON encoding")) (Rewriting.deannotateTerm term))
 
+-- | Convert property graph elements to a list of GraphSON JSON values
 pgElementsToGraphson :: Ord t0 => ((t0 -> Compute.Flow t1 Syntax.Value) -> [Model_.Element t0] -> Compute.Flow t1 [Model.Value])
 pgElementsToGraphson encodeValue els = (Flows.mapList (Construct.pgVertexWithAdjacentEdgesToJson encodeValue) (elementsToVerticesWithAdjacentEdges els))
