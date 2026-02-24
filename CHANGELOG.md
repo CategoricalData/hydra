@@ -26,7 +26,7 @@ Major release completing Hydra-Java as the third full implementation, with signi
   - All `optional` variants renamed to `maybe`
 - Removed deprecated `hydra.decoding` module
 - Removed old `hydra.mantle.Either` type (replaced by core `Either`)
-- Minimum Java version bumped to 18 (#249)
+- Minimum Java version bumped to 17 (#249)
 
 ### New Features
 
@@ -407,8 +407,7 @@ This initial release contains the complete foundation of Hydra:
 We welcome contributions! Please see:
 - [Developer Recipes](https://github.com/CategoricalData/hydra/tree/main/docs/src/recipes)
 - [LambdaGraph Discord](https://bit.ly/lg-discord)
-- [Contributing Guidelines](https://github.com/CategoricalData/hydra/blob/main/CONTRIBUTING.md)
 
 ## Release Process
 
-See the [Release Process](https://github.com/CategoricalData/hydra/wiki/Hydra-release-process) wiki page for information on how Hydra releases are created.
+See the [Release Process](https://github.com/CategoricalData/hydra/wiki/Release-process) wiki page for information on how Hydra releases are created.

@@ -247,11 +247,11 @@ Renaming a namespace requires updating all of these, plus any code that imports 
 
 ### Phase 4: Regenerate Python Implementation
 
-1. **Run the Python kernel generator**
-   From the hydra-ext directory, use the shell script (which includes proper RTS flags to avoid stack overflow):
+1. **Run the Python sync script**
+   From the hydra-ext directory:
    ```bash
    cd hydra-ext
-   ./bin/update-python-kernel.sh
+   ./bin/sync-python.sh --quick
    ```
 
 2. **Verify the new module structure**
@@ -358,10 +358,10 @@ Generated code contains function references that include the namespace, like `hy
 - [ ] JSON kernel regenerated (`./bin/update-json-kernel.sh`)
 - [ ] JSON kernel verified (`./bin/verify-json-kernel.sh`)
 - [ ] hydra-ext builds (`stack build` in hydra-ext)
-- [ ] Python kernel regenerated (`./bin/update-python-kernel.sh` in hydra-ext)
+- [ ] Python regenerated (`./bin/sync-python.sh` in hydra-ext)
 - [ ] Orphan Python files cleaned up (old `.py` files)
 - [ ] Python tests pass (or at least don't regress)
-- [ ] Java files updated (manual updates if generation fails)
+- [ ] Java regenerated (`./bin/sync-java.sh` in hydra-ext)
 
 ## Files Typically Affected
 

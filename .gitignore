@@ -9,7 +9,7 @@ stack.yaml.lock
 
 # Java / Gradle
 .gradle
-gradle.properties`
+gradle.properties
 build
 
 # IDEs
@@ -21,6 +21,13 @@ build
 # Python
 __pycache__/
 *.pyc
+.venv/
+.venv-*/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
 
 # Other
 *.swp

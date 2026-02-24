@@ -1,9 +1,17 @@
 # Creating a new Hydra implementation
 
-Hydra currently has implementations in Haskell ([Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell)), Java ([Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java)), and Python ([Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python)).
-Hydra-Haskell is the most *complete* implementation, as it implements the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Kernel.hs).
-Hydra-Python is complete and production-ready, while Hydra-Java is mature and widely used.
-Another criterion for completeness is that the implementation supports the entire [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Lib), which Hydra-Haskell, Hydra-Java, and Hydra-Python all do.
+Hydra currently has three complete implementations:
+[Hydra-Haskell](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell),
+[Hydra-Java](https://github.com/CategoricalData/hydra/tree/main/hydra-java), and
+[Hydra-Python](https://github.com/CategoricalData/hydra/tree/main/hydra-python).
+All three implement the entire [Hydra Kernel](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Kernel.hs),
+support the full [Hydra standard library](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Lib),
+and pass the [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
+The three implementations are mutually self-hosting: each can load Hydra modules from a
+language-independent JSON representation and regenerate code for any of the three target languages
+(see the [bootstrapping demo](https://github.com/CategoricalData/hydra/tree/main/hydra-ext/demos/bootstrapping)).
+Hydra-Haskell serves as the source of truth for the kernel, but the generated code in all three
+languages is semantically equivalent.
 
 The following is a guide to creating a Hydra implementation in a new host language, like [Scala](https://github.com/CategoricalData/hydra/tree/main/hydra-scala) or [C#](https://github.com/CategoricalData/hydra/issues/139).
 For this guide, we'll use a hypothetical language called `NewLang` as our example.
@@ -89,7 +97,8 @@ Add them to [Sources/All.hs](https://github.com/CategoricalData/hydra/blob/main/
 ```haskell
 -- In hydra-haskell REPL
 import Hydra.Generation
-writeHaskell "src/gen-main/haskell" [newLangSyntaxModule, newLangLanguageModule] Nothing
+-- writeHaskell takes: output dir, universe modules, modules to generate
+writeHaskell "src/gen-main/haskell" mainModules [newLangSyntaxModule, newLangLanguageModule]
 ```
 
 ### For extended languages
@@ -103,7 +112,8 @@ Add them to the appropriate registry in hydra-ext, then generate:
 ```haskell
 -- In hydra-ext REPL or script
 import Hydra.Ext.Generation
-writeHaskell "src/gen-main/haskell" [newLangSyntaxModule, newLangLanguageModule] Nothing
+let universeModules = kernelModules ++ hydraExtModules
+writeHaskell "src/gen-main/haskell" universeModules [newLangSyntaxModule, newLangLanguageModule]
 ```
 
 After generation, you will be able to import the generated code:
@@ -186,16 +196,20 @@ Add your language's code generation functions to the appropriate module:
 **For kernel languages**, add to [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Generation.hs):
 
 ```haskell
-writeNewLang :: FilePath -> [Module] -> IO ()
-writeNewLang = generateSources moduleToNewLang
+writeNewLang :: FilePath -> [Module] -> [Module] -> IO ()
+writeNewLang = generateSources moduleToNewLang newLangLanguage doExpand doHoistCase doHoistPoly
 ```
 
 **For extended languages**, add to [Hydra/Ext/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-ext/src/main/haskell/Hydra/Ext/Generation.hs):
 
 ```haskell
-writeNewLang :: FilePath -> [Module] -> IO ()
-writeNewLang = generateSources moduleToNewLang
+writeNewLang :: FilePath -> [Module] -> [Module] -> IO ()
+writeNewLang = generateSources moduleToNewLang newLangLanguage doExpand doHoistCase doHoistPoly
 ```
+
+The three boolean flags (`doExpand`, `doHoistCase`, `doHoistPoly`) control term transformations
+applied before code generation. See the existing definitions of `writeJava` and `writePython` for
+typical settings.
 
 See existing examples:
 - `writeHaskell` in [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Generation.hs)
@@ -208,10 +222,11 @@ Start by creating a new top-level directory for your implementation: `hydra-newl
 Using the `writeNewLang` function you just registered:
 
 ```haskell
--- In hydra-haskell or hydra-ext REPL
-import Hydra.Ext.Generation (or Hydra.Generation for kernel languages)
-writeNewLang "../hydra-newlang/src/gen-main/newlang" mainModules
-writeNewLang "../hydra-newlang/src/gen-test/newlang" testModules
+-- In hydra-ext REPL (or hydra-haskell for kernel languages)
+import Hydra.Ext.Generation
+let universeModules = kernelModules ++ hydraExtModules
+writeNewLang "../hydra-newlang/src/gen-main/newlang" universeModules mainModules
+writeNewLang "../hydra-newlang/src/gen-test/newlang" universeModules testModules
 ```
 
 Examples for existing implementations:
@@ -259,58 +274,90 @@ At a bare minimum, all of the primitives which are referenced in the Hydra kerne
 **Important**: Simply having implementation files is not enough — each primitive must also be *registered* in a central registry (e.g. `Libraries.java` in Java) so it can be looked up by name at runtime.
 Periodically compare your registry against the authoritative list in [Hydra/Sources/Libraries.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Sources/Libraries.hs) to catch any missing registrations.
 
-## Step 8: Implement essential utilities
+### Primitive infrastructure
 
-Good news: Hydra has "closed the loop" for its kernel! The entire kernel generates directly into your implementation.
+In addition to the implementations themselves, you need supporting infrastructure:
 
-However, you'll need to implement some essential utilities by hand. These fall into three categories:
+- A **base class or protocol** defining the `Primitive` interface (name, type scheme, implementation)
+- **TermCoder factories** that bridge between host-language values and Hydra `Term`s
+- A **registry** function that assembles all primitives into a `Graph`
 
-1. **Language-specific** (cannot be in kernel) - I/O operations, native type conversions. Hydra provides only the `Flow` monad; actual I/O must be implemented in each language.
-2. **Format-specific** (currently hand-written) - JSON, YAML serializers
-3. **Infrastructure** (optional) - Code generation utilities for self-hosting
+| Language | Key files |
+|----------|-----------|
+| Java | [PrimitiveFunction.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/tools/PrimitiveFunction.java), [Libraries.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/lib/Libraries.java) |
+| Python | [hydra/dsl/prims.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/main/python/hydra/dsl/prims.py), [hydra/sources/libraries.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/main/python/hydra/sources/libraries.py) |
 
-### What to implement
+## Step 8: Implement essential runtime support
 
-Start with these basics (needed for Step 9's test runner):
+Hydra is self-hosting, and its three existing implementations are mutually self-hosting.
+The entire kernel generates directly into your new implementation.
+However, the generated code depends on a set of hand-written runtime support modules that cannot
+themselves be generated. These must be implemented in each new language.
 
-**Flow monad helpers** - Convert between native types and `Flow` computations:
-- Haskell: [Hydra/Tools/Monads.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Tools/Monads.hs) (`fromEither`, `flowToIo`, `fromMaybe`)
-- Python: [hydra/tools.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/main/python/hydra/tools.py)
-- Java: [hydra/tools/](https://github.com/CategoricalData/hydra/tree/main/hydra-java/src/main/java/hydra/tools)
+The categories below are ordered roughly by priority: the first few are needed to compile the
+generated kernel at all, while the later ones are needed for specific use cases.
 
-**Native type conversions** - Convert between host language types and Hydra representations:
-- Haskell: [Hydra/Tools/Bytestrings.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Tools/Bytestrings.hs)
-- Python: [hydra/util.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/gen-main/python/hydra/util.py)
+### Runtime foundation types
 
-Add these later as your applications need them:
+The generated kernel code imports a small set of types that must exist before anything compiles.
+These are language-specific representations of Hydra's core algebraic types:
 
-**Serialization** - JSON/YAML coders:
-- Haskell: [Hydra/Staging/Json/Serde.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Staging/Json/Serde.hs), [Hydra/Staging/Yaml/](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Staging/Yaml)
-- Python: [hydra/coders.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/gen-main/python/hydra/coders.py)
-- Java: [hydra/json/](https://github.com/CategoricalData/hydra/tree/main/hydra-java/src/main/java/hydra/json)
+- **Maybe/Optional** (with explicit `Just`/`Nothing` or equivalent)
+- **Either** (with `Left`/`Right`)
+- **Unit** (the empty product type)
+- **Lazy** (memoized deferred evaluation — needed for recursive let bindings)
+- **Immutable collections** (if your language's standard collections are mutable)
 
-**Code generation** (optional, for self-hosting):
-- Haskell: [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Generation.hs)
+| Language | Module |
+|----------|--------|
+| Java | [hydra/util/](https://github.com/CategoricalData/hydra/tree/main/hydra-java/src/main/java/hydra/util) (`Maybe`, `Either`, `Lazy`, `Unit`, `Pair`, `Tuple`) |
+| Python | [hydra/dsl/python.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/main/python/hydra/dsl/python.py) (`Just`/`Nothing`, `Left`/`Right`, `FrozenDict`, `frozenlist`, `Node`) |
 
-Your application will tell you what's missing through compile/runtime errors. Implement utilities as needed.
+### Code generation I/O (for self-hosting)
 
-**Maintaining hand-written code**: As the generated API evolves (e.g. method signatures change from curried to uncurried, packages are reorganized), any hand-written code — including test files and utilities — must be updated to match.
-When the generated code is regenerated, run the full build (not just compilation) to catch test-level breakage early.
+If you want your implementation to generate code (i.e. participate in the bootstrapping demo),
+you need an I/O wrapper that loads modules from JSON, assembles a bootstrap `Graph` with all
+standard primitives, runs the generated code generation `Flow`, and writes output files.
 
-## Step 9: Create a test runner
+| Language | Module |
+|----------|--------|
+| Java | [hydra/Generation.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/Generation.java), [hydra/Bootstrap.java](https://github.com/CategoricalData/hydra/blob/main/hydra-java/src/main/java/hydra/Bootstrap.java) |
+| Python | [hydra/generation.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/main/python/hydra/generation.py), [hydra/bootstrap.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/main/python/hydra/bootstrap.py) |
+| Haskell | [Hydra/Generation.hs](https://github.com/CategoricalData/hydra/blob/main/hydra-haskell/src/main/haskell/Hydra/Generation.hs) |
 
-Hydra includes a suite of test cases which are intended to be evaluated in the same way across implementations, ensuring parity.
-The sources for the test suite can be found in the Haskell DSL at [Hydra/Sources/Test](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test).
+### Maintaining hand-written code
 
-See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for comprehensive documentation of the test suite.
+As the generated API evolves (e.g. method signatures change, packages are reorganized), hand-written
+code must be updated to match. When the generated code is regenerated, run the full build (not just
+compilation) to catch breakage early.
 
-The test suite currently includes:
-- **Primitive function tests**: List operations, string operations
-- **Case conversion tests**: CamelCase, snake_case, etc.
-- **Type inference tests**: Various inference scenarios
+## Step 9: Create test runners
 
-**Passing all test cases in the common test suite is the criterion for a true Hydra implementation.**
-A Hydra implementation must include a runner for the test suite which executes every time unit tests are run.
+Hydra includes a common test suite which is intended to be evaluated in the same way across
+implementations, ensuring parity. The sources for the test suite can be found in the Haskell DSL at
+[Hydra/Sources/Test](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test).
+
+See the [Testing wiki page](https://github.com/CategoricalData/hydra/wiki/Testing) for comprehensive documentation.
+
+### Kernel tests vs generation tests
+
+The common test suite gives rise to two kinds of tests:
+
+- **Kernel tests** validate that Hydra's runtime works correctly in your implementation. The test
+  cases are code-generated into the target language, and your implementation runs them against its
+  own kernel (primitives, type checker, reducer, etc.). This answers: *"Does the Hydra kernel behave
+  correctly in this language?"*
+
+- **Generation tests** validate that Hydra's code generators produce correct output for your
+  language. The same test cases are used to generate code in the target language, then verify that
+  the generated code compiles and produces the expected results. This answers: *"Does code generated
+  by Hydra work correctly in the target language?"*
+
+In other words, kernel tests exercise Hydra-as-interpreter, while generation tests exercise
+Hydra-as-compiler. Both are generated to `src/gen-test/` and both need a hand-written test runner.
+
+**Passing all test cases in the common test suite (both kernel and generation tests) is the criterion
+for a complete Hydra implementation.**
 
 ### Examples of test runners
 
@@ -326,7 +373,9 @@ A Hydra implementation must include a runner for the test suite which executes e
 - Generated suite: Generated to `hydra-python/src/gen-test/python/hydra/test/`
 - Runner: [src/test/python/test_suite_runner.py](https://github.com/CategoricalData/hydra/blob/main/hydra-python/src/test/python/test_suite_runner.py)
 
-The generated code should already be available (from step 6), and you can see that the new code you need to write by hand is quite simple -- less than 100 lines of code in each implementation.
+The generated test data should already be available (from step 6). The kernel test runner is
+typically straightforward (around 100 lines in Haskell and Java), though it can be more substantial
+depending on the host language's test framework. The generation test runner is similar in structure.
 
 ## Step 10: Create native DSLs and build applications
 
@@ -375,8 +424,8 @@ Creating a new Hydra implementation involves:
 5. ✅ Create a serializer (AST to concrete syntax)
 6. ✅ Register code generation functions and generate native sources
 7. ✅ Implement standard library primitives
-8. ✅ Fill gaps with hand-written code
-9. ✅ Create test runner for common test suite
+8. ✅ Implement essential runtime support (foundation types, Flow execution, JSON I/O, etc.)
+9. ✅ Create test runners for kernel tests and generation tests
 10. ✅ Create native DSLs and build applications
 
-The key insight: most of the implementation is **automatically generated** from DSL sources, ensuring parity across all Hydra implementations. Only primitives, gaps in the kernel, test runners, and DSLs need to be hand-written.
+The key insight: most of the implementation is **automatically generated** from DSL sources, ensuring parity across all Hydra implementations. The hand-written code falls into well-defined categories: runtime foundation types, primitive implementations and registry, DSLs, test runners, and (optionally) code generation I/O for self-hosting.

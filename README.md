@@ -53,10 +53,23 @@ and the original design document [here](https://bit.ly/hydra-design-doc).
 ## Documentation
 
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts, type system, and design principles
-- **[Implementation](https://github.com/CategoricalData/hydra/wiki/Implementation)** - Detailed implementation guide
-- **[DSL Guide](https://github.com/CategoricalData/hydra/wiki/DSL-guide)** - Domain-specific languages for Hydra
+- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md)** - Detailed implementation guide
+- **[DSL Guide](https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide.md)** - Domain-specific languages for Hydra
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite across implementations
-- **[Developer Recipes](docs/src/recipes/index.md)** - Step-by-step guides for common tasks
+- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md)** - Step-by-step guides for common tasks
 - **[CHANGELOG](CHANGELOG.md)** - Detailed history of changes
 
-Share and enjoy.
+## Releases
+
+All Hydra implementations share a single version number.
+The current release is **0.12.0**; see the [CHANGELOG](CHANGELOG.md) for details.
+
+| Implementation | Package | Install |
+|----------------|---------|---------|
+| Haskell | [hydra on Hackage](https://hackage.haskell.org/package/hydra) | `cabal install hydra` or add to `package.yaml` |
+| Java | [hydra-java on Maven Central](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-java) | `net.fortytwo.hydra:hydra-java:0.12.0` |
+| Java (extensions) | [hydra-ext on Maven Central](https://central.sonatype.com/artifact/net.fortytwo.hydra/hydra-ext) | `net.fortytwo.hydra:hydra-ext:0.12.0` |
+| Python | [conda-forge](https://github.com/conda-forge/staged-recipes/pull/30887) (in progress) | Coming soon |
+
+See the [release process](https://github.com/CategoricalData/hydra/wiki/Release-process)
+for how releases are built and published.
