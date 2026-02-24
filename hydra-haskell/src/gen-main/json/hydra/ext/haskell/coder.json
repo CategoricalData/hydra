@@ -8094,6 +8094,58 @@
                                                                                                     {
                                                                                                       "constraints": null,
                                                                                                       "type": {"list": {"variable": "hydra.ext.haskell.ast.LocalBinding"}},
+                                                                                                      "variables": []}]},
+                                                                                                {
+                                                                                                  "name": "prevBindings",
+                                                                                                  "term": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "bindings"},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {
+                                                                                                            "function": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "lb"},
+                                                                                                                    "function": {
+                                                                                                                      "function": {"elimination": {"wrap": "hydra.ext.haskell.ast.LocalBindings"}}}}},
+                                                                                                                "domain": [{"variable": "hydra.ext.haskell.ast.LocalBindings"}],
+                                                                                                                "parameter": "lb"}}},
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "argument": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"list": []},
+                                                                                                                  "type": {"variable": "hydra.ext.haskell.ast.LocalBinding"}}},
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                                      "type": {"list": {"variable": "hydra.ext.haskell.ast.LocalBinding"}}}},
+                                                                                                                  "type": {"variable": "hydra.ext.haskell.ast.LocalBindings"}}}}}}}}},
+                                                                                                  "type": [
+                                                                                                    {
+                                                                                                      "constraints": null,
+                                                                                                      "type": {"list": {"variable": "hydra.ext.haskell.ast.LocalBinding"}},
+                                                                                                      "variables": []}]},
+                                                                                                {
+                                                                                                  "name": "allBindings",
+                                                                                                  "term": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "hbindings"},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "prevBindings"},
+                                                                                                          "function": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                                                                              "type": {"variable": "hydra.ext.haskell.ast.LocalBinding"}}}}}}},
+                                                                                                  "type": [
+                                                                                                    {
+                                                                                                      "constraints": null,
+                                                                                                      "type": {"list": {"variable": "hydra.ext.haskell.ast.LocalBinding"}},
                                                                                                       "variables": []}]}],
                                                                                               "body": {
                                                                                                 "application": {
@@ -8101,7 +8153,7 @@
                                                                                                     "maybe": [
                                                                                                       {
                                                                                                         "wrap": {
-                                                                                                          "body": {"variable": "hbindings"},
+                                                                                                          "body": {"variable": "allBindings"},
                                                                                                           "typeName": "hydra.ext.haskell.ast.LocalBindings"}}]},
                                                                                                   "function": {
                                                                                                     "application": {
