@@ -96,6 +96,7 @@ forTypeReference name =
 functionProxyName :: Core.Name
 functionProxyName = (Core.Name "hydra.core.FunctionProxy")
 
+-- | Generate a function proxy type for a given domain type
 functionProxyType :: (t0 -> Core.Type)
 functionProxyType _ = (Core.TypeUnion (Core.RowType {
   Core.rowTypeTypeName = functionProxyName,
@@ -492,6 +493,7 @@ passUnion t = ((\x -> case x of
                   Core.rowTypeFields = sfields_})),
                 Compute.adapterCoder = (Utils.bidirectional (\dir -> \term -> Flows.pure term))}))))) t)
 
+-- | Pass through unit types
 passUnit :: (t0 -> Compute.Flow t1 (Compute.Adapter t2 t3 Core.Type Core.Type Core.Term Core.Term))
 passUnit _ = (Flows.pure (Compute.Adapter {
   Compute.adapterIsLossy = False,
@@ -711,6 +713,7 @@ unionTypeToRecordType rt =
     Core.rowTypeTypeName = (Core.rowTypeTypeName rt),
     Core.rowTypeFields = (Lists.map makeOptional (Core.rowTypeFields rt))}
 
+-- | Convert unit terms to records
 unitToRecord :: (t0 -> Compute.Flow t1 (Compute.Adapter t2 t3 Core.Type Core.Type Core.Term Core.Term))
 unitToRecord _ = (Flows.pure (Compute.Adapter {
   Compute.adapterIsLossy = False,
@@ -745,5 +748,6 @@ wrapToUnwrapped t = ((\x -> case x of
               Compute.coderEncode = (encode ad),
               Compute.coderDecode = (decode ad)}})))) t)
 
+-- | Execute a flow with graph context
 withGraphContext :: (Compute.Flow Graph.Graph t0 -> Compute.Flow Coders.AdapterContext t0)
 withGraphContext f = (Flows.bind Monads.getState (\cx -> Monads.withState (Coders.adapterContextGraph cx) f))

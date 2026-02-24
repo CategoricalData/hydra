@@ -423,7 +423,8 @@ testCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\str
                 (Core.Name "substInType", (\input -> Eithers.map (\t -> Testing.TestCaseSubstInType t) (substInTypeTestCase cx input))),
                 (Core.Name "variableOccursInType", (\input -> Eithers.map (\t -> Testing.TestCaseVariableOccursInType t) (variableOccursInTypeTestCase cx input))),
                 (Core.Name "unifyTypes", (\input -> Eithers.map (\t -> Testing.TestCaseUnifyTypes t) (unifyTypesTestCase cx input))),
-                (Core.Name "joinTypes", (\input -> Eithers.map (\t -> Testing.TestCaseJoinTypes t) (joinTypesTestCase cx input)))])
+                (Core.Name "joinTypes", (\input -> Eithers.map (\t -> Testing.TestCaseJoinTypes t) (joinTypesTestCase cx input))),
+                (Core.Name "unshadowVariables", (\input -> Eithers.map (\t -> Testing.TestCaseUnshadowVariables t) (unshadowVariablesTestCase cx input)))])
     in (Maybes.maybe (Left (Util_.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
@@ -632,6 +633,15 @@ variableOccursInTypeTestCase cx raw = (Eithers.either (\err -> Left (Util_.Decod
       Testing.variableOccursInTypeTestCaseType = field_type,
       Testing.variableOccursInTypeTestCaseExpected = field_expected})))))
   _ -> (Left (Util_.DecodingError "expected record of type hydra.testing.VariableOccursInTypeTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+
+unshadowVariablesTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError Testing.UnshadowVariablesTestCase)
+unshadowVariablesTestCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of
+  Core.TermRecord v1 ->  
+    let fieldMap = (Helpers.toFieldMap v1)
+    in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.UnshadowVariablesTestCase {
+      Testing.unshadowVariablesTestCaseInput = field_input,
+      Testing.unshadowVariablesTestCaseOutput = field_output}))))
+  _ -> (Left (Util_.DecodingError "expected record of type hydra.testing.UnshadowVariablesTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 unifyTypesTestCase :: (Graph.Graph -> Core.Term -> Either Util_.DecodingError Testing.UnifyTypesTestCase)
 unifyTypesTestCase cx raw = (Eithers.either (\err -> Left (Util_.DecodingError err)) (\stripped -> (\x -> case x of

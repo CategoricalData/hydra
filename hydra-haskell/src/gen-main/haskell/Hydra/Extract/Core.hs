@@ -32,6 +32,7 @@ import qualified Data.Set as S
 bigfloat :: (Core.Term -> Compute.Flow Graph.Graph Double)
 bigfloat t = (Flows.bind (literal t) (\l -> Flows.bind (floatLiteral l) (\f -> bigfloatValue f)))
 
+-- | Extract a bigfloat value from a FloatValue
 bigfloatValue :: (Core.FloatValue -> Compute.Flow t0 Double)
 bigfloatValue v = ((\x -> case x of
   Core.FloatValueBigfloat v1 -> (Flows.pure v1)
@@ -41,6 +42,7 @@ bigfloatValue v = ((\x -> case x of
 bigint :: (Core.Term -> Compute.Flow Graph.Graph Integer)
 bigint t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> bigintValue i)))
 
+-- | Extract a bigint value from an IntegerValue
 bigintValue :: (Core.IntegerValue -> Compute.Flow t0 Integer)
 bigintValue v = ((\x -> case x of
   Core.IntegerValueBigint v1 -> (Flows.pure v1)
@@ -50,6 +52,7 @@ bigintValue v = ((\x -> case x of
 binary :: (Core.Term -> Compute.Flow Graph.Graph B.ByteString)
 binary t = (Flows.bind (literal t) (\l -> binaryLiteral l))
 
+-- | Extract a binary literal from a Literal value
 binaryLiteral :: (Core.Literal -> Compute.Flow t0 B.ByteString)
 binaryLiteral v = ((\x -> case x of
   Core.LiteralBinary v1 -> (Flows.pure v1)
@@ -59,6 +62,7 @@ binaryLiteral v = ((\x -> case x of
 boolean :: (Core.Term -> Compute.Flow Graph.Graph Bool)
 boolean t = (Flows.bind (literal t) (\l -> booleanLiteral l))
 
+-- | Extract a boolean literal from a Literal value
 booleanLiteral :: (Core.Literal -> Compute.Flow t0 Bool)
 booleanLiteral v = ((\x -> case x of
   Core.LiteralBoolean v1 -> (Flows.pure v1)
@@ -84,6 +88,7 @@ cases name term0 =
           _ -> (Monads.unexpected "case statement" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
+-- | Extract a field value from a list of fields
 field :: (Core.Name -> (Core.Term -> Compute.Flow Graph.Graph t0) -> [Core.Field] -> Compute.Flow Graph.Graph t0)
 field fname mapping fields =  
   let matchingFields = (Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fname)) fields)
@@ -93,6 +98,7 @@ field fname mapping fields =
 float32 :: (Core.Term -> Compute.Flow Graph.Graph Float)
 float32 t = (Flows.bind (literal t) (\l -> Flows.bind (floatLiteral l) (\f -> float32Value f)))
 
+-- | Extract a float32 value from a FloatValue
 float32Value :: (Core.FloatValue -> Compute.Flow t0 Float)
 float32Value v = ((\x -> case x of
   Core.FloatValueFloat32 v1 -> (Flows.pure v1)
@@ -102,11 +108,13 @@ float32Value v = ((\x -> case x of
 float64 :: (Core.Term -> Compute.Flow Graph.Graph Double)
 float64 t = (Flows.bind (literal t) (\l -> Flows.bind (floatLiteral l) (\f -> float64Value f)))
 
+-- | Extract a float64 value from a FloatValue
 float64Value :: (Core.FloatValue -> Compute.Flow t0 Double)
 float64Value v = ((\x -> case x of
   Core.FloatValueFloat64 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "float64" (Core_.float v))) v)
 
+-- | Extract a floating-point literal from a Literal value
 floatLiteral :: (Core.Literal -> Compute.Flow t0 Core.FloatValue)
 floatLiteral lit = ((\x -> case x of
   Core.LiteralFloat v1 -> (Flows.pure v1)
@@ -116,6 +124,7 @@ floatLiteral lit = ((\x -> case x of
 floatValue :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatValue)
 floatValue t = (Flows.bind (literal t) (\l -> floatLiteral l))
 
+-- | Extract an either value from a term, applying functions to the left and right values
 eitherTerm :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (Either t0 t1))
 eitherTerm leftFun rightFun term0 =  
   let extract = (\term -> (\x -> case x of
@@ -123,6 +132,7 @@ eitherTerm leftFun rightFun term0 =
           _ -> (Monads.unexpected "either value" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
+-- | Extract the left and right types from an either type
 eitherType :: (Core.Type -> Compute.Flow t0 Core.EitherType)
 eitherType typ =  
   let stripped = (Rewriting.deannotateType typ)
@@ -130,6 +140,7 @@ eitherType typ =
     Core.TypeEither v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "either type" (Core_.type_ typ))) stripped)
 
+-- | Extract a function type from a type
 functionType :: (Core.Type -> Compute.Flow t0 Core.FunctionType)
 functionType typ =  
   let stripped = (Rewriting.deannotateType typ)
@@ -149,6 +160,7 @@ injection expected term0 =
 int16 :: (Core.Term -> Compute.Flow Graph.Graph I.Int16)
 int16 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int16Value i)))
 
+-- | Extract an int16 value from an IntegerValue
 int16Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int16)
 int16Value v = ((\x -> case x of
   Core.IntegerValueInt16 v1 -> (Flows.pure v1)
@@ -158,6 +170,7 @@ int16Value v = ((\x -> case x of
 int32 :: (Core.Term -> Compute.Flow Graph.Graph Int)
 int32 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int32Value i)))
 
+-- | Extract an int32 value from an IntegerValue
 int32Value :: (Core.IntegerValue -> Compute.Flow t0 Int)
 int32Value v = ((\x -> case x of
   Core.IntegerValueInt32 v1 -> (Flows.pure v1)
@@ -167,6 +180,7 @@ int32Value v = ((\x -> case x of
 int64 :: (Core.Term -> Compute.Flow Graph.Graph I.Int64)
 int64 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int64Value i)))
 
+-- | Extract an int64 value from an IntegerValue
 int64Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int64)
 int64Value v = ((\x -> case x of
   Core.IntegerValueInt64 v1 -> (Flows.pure v1)
@@ -176,11 +190,13 @@ int64Value v = ((\x -> case x of
 int8 :: (Core.Term -> Compute.Flow Graph.Graph I.Int8)
 int8 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int8Value i)))
 
+-- | Extract an int8 value from an IntegerValue
 int8Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int8)
 int8Value v = ((\x -> case x of
   Core.IntegerValueInt8 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "int8" (Core_.integer v))) v)
 
+-- | Extract an integer literal from a Literal value
 integerLiteral :: (Core.Literal -> Compute.Flow t0 Core.IntegerValue)
 integerLiteral lit = ((\x -> case x of
   Core.LiteralInteger v1 -> (Flows.pure v1)
@@ -232,9 +248,11 @@ list term =
 listHead :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
 listHead term = (Flows.bind (list term) (\l -> Logic.ifElse (Lists.null l) (Flows.fail "empty list") (Flows.pure (Lists.head l))))
 
+-- | Extract a list of values from a term, mapping a function over each element
 listOf :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph [t0])
 listOf f term = (Flows.bind (list term) (\els -> Flows.mapList f els))
 
+-- | Extract the element type from a list type
 listType :: (Core.Type -> Compute.Flow t0 Core.Type)
 listType typ =  
   let stripped = (Rewriting.deannotateType typ)
@@ -250,6 +268,7 @@ literal term0 =
           _ -> (Monads.unexpected "literal" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
+-- | Extract a map of key-value pairs from a term, mapping functions over each key and value
 map :: Ord t0 => ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 t1))
 map fk fv term0 =  
   let pair = (\kvPair ->  
@@ -263,6 +282,7 @@ map fk fv term0 =
             _ -> (Monads.unexpected "map" (Core_.term term))) term)
     in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
+-- | Extract the key and value types from a map type
 mapType :: (Core.Type -> Compute.Flow t0 Core.MapType)
 mapType typ =  
   let stripped = (Rewriting.deannotateType typ)
@@ -270,12 +290,14 @@ mapType typ =
     Core.TypeMap v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "map type" (Core_.type_ typ))) stripped)
 
+-- | Ensure a function has the expected number of arguments
 nArgs :: (Core.Name -> Int -> [t0] -> Compute.Flow t1 ())
 nArgs name n args = (Logic.ifElse (Equality.equal (Lists.length args) n) (Flows.pure ()) (Monads.unexpected (Strings.cat [
   Literals.showInt32 n,
   " arguments to primitive ",
   (Literals.showString (Core.unName name))]) (Literals.showInt32 (Lists.length args))))
 
+-- | Extract an optional value from a term, applying a function to the value if present
 maybeTerm :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph (Maybe t0))
 maybeTerm f term0 =  
   let extract = (\term -> (\x -> case x of
@@ -283,6 +305,7 @@ maybeTerm f term0 =
           _ -> (Monads.unexpected "maybe value" (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
+-- | Extract the base type from an optional type
 maybeType :: (Core.Type -> Compute.Flow t0 Core.Type)
 maybeType typ =  
   let stripped = (Rewriting.deannotateType typ)
@@ -290,6 +313,7 @@ maybeType typ =
     Core.TypeMaybe v1 -> (Flows.pure v1)
     _ -> (Monads.unexpected "maybe type" (Core_.type_ typ))) stripped)
 
+-- | Extract a pair of values from a term, applying functions to each component
 pair :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (t0, t1))
 pair kf vf term0 =  
   let extract = (\term -> (\x -> case x of
@@ -301,6 +325,7 @@ pair kf vf term0 =
 record :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph [Core.Field])
 record expected term0 = (Flows.bind (termRecord term0) (\record -> Logic.ifElse (Equality.equal (Core.recordTypeName record) expected) (Flows.pure (Core.recordFields record)) (Monads.unexpected (Strings.cat2 "record of type " (Core.unName expected)) (Core.unName (Core.recordTypeName record)))))
 
+-- | Extract the field types from a record type
 recordType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
 recordType ename typ =  
   let stripped = (Rewriting.deannotateType typ)
@@ -316,9 +341,11 @@ set term =
           _ -> (Monads.unexpected "set" (Core_.term stripped))) stripped)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term) (\stripped -> extract stripped))
 
+-- | Extract a set of values from a term, mapping a function over each element
 setOf :: Ord t0 => ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph (S.Set t0))
 setOf f term = (Flows.bind (set term) (\els -> Flows.mapSet f els))
 
+-- | Extract the element type from a set type
 setType :: (Core.Type -> Compute.Flow t0 Core.Type)
 setType typ =  
   let stripped = (Rewriting.deannotateType typ)
@@ -330,6 +357,7 @@ setType typ =
 string :: (Core.Term -> Compute.Flow Graph.Graph String)
 string t = (Flows.bind (literal t) (\l -> stringLiteral l))
 
+-- | Extract a string literal from a Literal value
 stringLiteral :: (Core.Literal -> Compute.Flow t0 String)
 stringLiteral v = ((\x -> case x of
   Core.LiteralString v1 -> (Flows.pure v1)
@@ -347,6 +375,7 @@ termRecord term0 =
 uint16 :: (Core.Term -> Compute.Flow Graph.Graph Int)
 uint16 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint16Value i)))
 
+-- | Extract a uint16 value from an IntegerValue
 uint16Value :: (Core.IntegerValue -> Compute.Flow t0 Int)
 uint16Value v = ((\x -> case x of
   Core.IntegerValueUint16 v1 -> (Flows.pure v1)
@@ -356,6 +385,7 @@ uint16Value v = ((\x -> case x of
 uint32 :: (Core.Term -> Compute.Flow Graph.Graph I.Int64)
 uint32 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint32Value i)))
 
+-- | Extract a uint32 value from an IntegerValue
 uint32Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int64)
 uint32Value v = ((\x -> case x of
   Core.IntegerValueUint32 v1 -> (Flows.pure v1)
@@ -365,6 +395,7 @@ uint32Value v = ((\x -> case x of
 uint64 :: (Core.Term -> Compute.Flow Graph.Graph Integer)
 uint64 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint64Value i)))
 
+-- | Extract a uint64 value from an IntegerValue
 uint64Value :: (Core.IntegerValue -> Compute.Flow t0 Integer)
 uint64Value v = ((\x -> case x of
   Core.IntegerValueUint64 v1 -> (Flows.pure v1)
@@ -374,11 +405,13 @@ uint64Value v = ((\x -> case x of
 uint8 :: (Core.Term -> Compute.Flow Graph.Graph I.Int16)
 uint8 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint8Value i)))
 
+-- | Extract a uint8 value from an IntegerValue
 uint8Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int16)
 uint8Value v = ((\x -> case x of
   Core.IntegerValueUint8 v1 -> (Flows.pure v1)
   _ -> (Monads.unexpected "uint8" (Core_.integer v))) v)
 
+-- | Extract the field types from a union type
 unionType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
 unionType ename typ =  
   let stripped = (Rewriting.deannotateType typ)
@@ -386,6 +419,7 @@ unionType ename typ =
     Core.TypeUnion v1 -> (Logic.ifElse (Equality.equal (Core.rowTypeTypeName v1) ename) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat2 "union of type " (Core.unName ename)) (Strings.cat2 "union of type " (Core.unName (Core.rowTypeTypeName v1)))))
     _ -> (Monads.unexpected "union type" (Core_.type_ typ))) stripped)
 
+-- | Extract a unit value from a term
 unit :: (Core.Term -> Compute.Flow t0 ())
 unit term = ((\x -> case x of
   Core.TermUnit -> (Flows.pure ())
@@ -403,6 +437,7 @@ wrap expected term0 =
           _ -> (Monads.unexpected (Strings.cat2 (Strings.cat2 "wrap(" (Core.unName expected)) ")") (Core_.term term))) term)
   in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
 
+-- | Extract the wrapped type from a wrapper type
 wrappedType :: (Core.Name -> Core.Type -> Compute.Flow t0 Core.Type)
 wrappedType ename typ =  
   let stripped = (Rewriting.deannotateType typ)

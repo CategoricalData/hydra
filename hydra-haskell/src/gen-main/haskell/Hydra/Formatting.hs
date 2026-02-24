@@ -102,6 +102,7 @@ nonAlnumToUnderscores input =
 sanitizeWithUnderscores :: (S.Set String -> String -> String)
 sanitizeWithUnderscores reserved s = (escapeWithUnderscore reserved (nonAlnumToUnderscores s))
 
+-- | Format a list of elements as a bracketed, comma-separated string
 showList :: ((t0 -> String) -> [t0] -> String)
 showList f els = (Strings.cat [
   "[",

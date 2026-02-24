@@ -33,31 +33,38 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Aggregate annotations from nested structures
 aggregateAnnotations :: Ord t2 => ((t0 -> Maybe t1) -> (t1 -> t0) -> (t1 -> M.Map t2 t3) -> t0 -> M.Map t2 t3)
 aggregateAnnotations getValue getX getAnns t =  
   let toPairs = (\rest -> \t -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t))
   in (Maps.fromList (Lists.concat (toPairs [] t)))
 
+-- | Debug if the debug ID matches
 debugIf :: (t0 -> String -> Compute.Flow t1 ())
 debugIf debugId message =  
   let checkAndFail = (\desc -> Logic.ifElse (Equality.equal desc (Just "debugId")) (Flows.fail message) (Flows.pure ()))
   in (Flows.bind getDebugId checkAndFail)
 
+-- | Fail if the given flag is set
 failOnFlag :: (Core.Name -> String -> Compute.Flow t0 ())
 failOnFlag flag msg = (Flows.bind (hasFlag flag) (\val -> Logic.ifElse val (Flows.fail msg) (Flows.pure ())))
 
+-- | Get the debug ID from flow state
 getDebugId :: (Compute.Flow t0 (Maybe String))
 getDebugId = (Lexical.withEmptyGraph (Flows.bind (getAttr Constants.key_debugId) (\desc -> Flows.mapMaybe Core___.string desc)))
 
+-- | Get an attribute from the trace
 getAttr :: (Core.Name -> Compute.Flow t0 (Maybe Core.Term))
 getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
   Compute.flowStateValue = (Just (Maps.lookup key (Compute.traceOther t0))),
   Compute.flowStateState = s0,
   Compute.flowStateTrace = t0}))
 
+-- | Get an attribute with a default value
 getAttrWithDefault :: (Core.Name -> Core.Term -> Compute.Flow t0 Core.Term)
 getAttrWithDefault key def = (Flows.map (\mval -> Maybes.fromMaybe def mval) (getAttr key))
 
+-- | Get a counter value
 getCount :: (Core.Name -> Compute.Flow t0 Int)
 getCount key = (Lexical.withEmptyGraph (Flows.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) Core___.int32))
 
@@ -69,9 +76,14 @@ getDescription anns = (Maybes.maybe (Flows.pure Nothing) (\term -> Flows.map May
 getTermAnnotation :: (Core.Name -> Core.Term -> Maybe Core.Term)
 getTermAnnotation key term = (Maps.lookup key (termAnnotationInternal term))
 
--- | Get term description
+-- | Get term description. Peels through TermTypeLambda and TermTypeApplication wrappers (added by inference for polymorphic bindings) to find the description annotation underneath.
 getTermDescription :: (Core.Term -> Compute.Flow Graph.Graph (Maybe String))
-getTermDescription term = (getDescription (termAnnotationInternal term))
+getTermDescription term =  
+  let peel = (\t -> (\x -> case x of
+          Core.TermTypeLambda v1 -> (peel (Core.typeLambdaBody v1))
+          Core.TermTypeApplication v1 -> (peel (Core.typeApplicationTermBody v1))
+          _ -> t) t)
+  in (getDescription (termAnnotationInternal (peel term)))
 
 -- | Get type from annotations
 getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))
@@ -104,9 +116,11 @@ isNativeType el =
     Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
     Core.typeSchemeConstraints = Nothing})) (Logic.not isFlaggedAsFirstClassType)) (Core.bindingType el))
 
+-- | Check if annotations contain description
 hasDescription :: (M.Map Core.Name t0 -> Bool)
 hasDescription anns = (Maybes.isJust (Maps.lookup Constants.key_description anns))
 
+-- | Check if flag is set
 hasFlag :: (Core.Name -> Compute.Flow t0 Bool)
 hasFlag flag = (Lexical.withEmptyGraph (Flows.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> Core___.boolean term)))
 
@@ -114,6 +128,7 @@ hasFlag flag = (Lexical.withEmptyGraph (Flows.bind (getAttrWithDefault flag (Cor
 hasTypeDescription :: (Core.Type -> Bool)
 hasTypeDescription typ = (hasDescription (typeAnnotationInternal typ))
 
+-- | Return a zero-indexed counter for the given key: 0, 1, 2, ...
 nextCount :: (Core.Name -> Compute.Flow t0 Int)
 nextCount key = (Flows.bind (getCount key) (\count -> Flows.map (\_ -> count) (putCount key (Math.add count 1))))
 
@@ -137,6 +152,7 @@ normalizeTypeAnnotations typ =
       Core.annotatedTypeBody = stripped,
       Core.annotatedTypeAnnotation = anns})))
 
+-- | Set an attribute in the trace
 putAttr :: (Core.Name -> Core.Term -> Compute.Flow t0 ())
 putAttr key val = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
   Compute.flowStateValue = (Just ()),
@@ -146,12 +162,15 @@ putAttr key val = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
     Compute.traceMessages = (Compute.traceMessages t0),
     Compute.traceOther = (Maps.insert key val (Compute.traceOther t0))}}))
 
+-- | Set counter value
 putCount :: (Core.Name -> Int -> Compute.Flow t0 ())
 putCount key count = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 count))))
 
+-- | Reset counter to zero
 resetCount :: (Core.Name -> Compute.Flow t0 ())
 resetCount key = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))))
 
+-- | Set annotation in map
 setAnnotation :: Ord t0 => (t0 -> Maybe t1 -> M.Map t0 t1 -> M.Map t0 t1)
 setAnnotation key val m = (Maps.alter (\_ -> val) key m)
 
@@ -248,9 +267,11 @@ typeElement name typ =
         Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
         Core.typeSchemeConstraints = Nothing}))}
 
+-- | Execute different flows based on flag
 whenFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
 whenFlag flag fthen felse = (Flows.bind (hasFlag flag) (\b -> Logic.ifElse b fthen felse))
 
+-- | Provide an one-indexed, integer-valued 'depth' to a flow, where the depth is the number of nested calls. This is useful for generating variable names while avoiding conflicts between the variables of parents and children. E.g. a variable in an outer case/match statement might be "v1", whereas the variable of another case/match statement inside of the first one becomes "v2". See also nextCount.
 withDepth :: (Core.Name -> (Int -> Compute.Flow t0 t1) -> Compute.Flow t0 t1)
 withDepth key f = (Flows.bind (getCount key) (\count ->  
   let inc = (Math.add count 1)

@@ -34,6 +34,7 @@ bind listTerm funTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pu
     Core.applicationFunction = funTerm,
     Core.applicationArgument = el})) elements))}))))
 
+-- | Interpreter-friendly dropWhile for List terms.
 dropWhile :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 dropWhile predTerm listTerm = (Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.pairs.second"))),
@@ -57,6 +58,7 @@ filter predTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows
       Core.applicationArgument = (Core.TermList (Lists.pure el))})),
     Core.applicationArgument = (Core.TermList [])})) elements))}))))
 
+-- | Interpreter-friendly find for List terms.
 find :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
 find predTerm listTerm = (Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.safeHead"))),

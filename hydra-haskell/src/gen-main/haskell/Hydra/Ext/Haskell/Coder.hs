@@ -200,6 +200,7 @@ encodeFunction namespaces fun = ((\x -> case x of
     in (Flows.bind (encodeTerm namespaces body) (\hbody -> Flows.pure (Utils.hslambda (Utils.elementReference namespaces v) hbody)))
   Core.FunctionPrimitive v1 -> (Flows.pure (Ast.ExpressionVariable (Utils.elementReference namespaces v1)))) fun)
 
+-- | Encode a Hydra literal as a Haskell expression
 encodeLiteral :: (Core.Literal -> Compute.Flow t0 Ast.Expression)
 encodeLiteral l = ((\x -> case x of
   Core.LiteralBinary v1 -> (Flows.pure (Utils.hsapp (Utils.hsvar "Literals.stringToBinary") (Utils.hslit (Ast.LiteralString (Literals.binaryToString v1)))))
@@ -307,6 +308,7 @@ encodeTerm namespaces term =
           in (Flows.bind (encode term_) (\rhs -> Flows.pure (Utils.hsapp lhs rhs)))
         _ -> (Flows.fail (Strings.cat2 "unexpected term: " (Core__.term term)))) (Rewriting.deannotateTerm term))
 
+-- | Encode a Hydra type as a Haskell type
 encodeType :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Compute.Flow t0 Ast.Type)
 encodeType namespaces typ =  
   let encode = (encodeType namespaces) 
@@ -446,6 +448,7 @@ moduleToHaskell mod defs = (Flows.bind (moduleToHaskellModule mod defs) (\hsmod 
       filepath = (Names.namespaceToFilePath Util.CaseConventionPascal (Module.FileExtension "hs") (Module.moduleNamespace mod))
   in (Flows.pure (Maps.singleton filepath s))))
 
+-- | Generate Haskell declarations for type and field name constants
 nameDecls :: (t0 -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> [Ast.DeclarationWithComments])
 nameDecls g namespaces name typ =  
   let nm = (Core.unName name) 
@@ -505,8 +508,10 @@ toDataDeclaration namespaces def =
                     hnames = (Lists.map (\binding -> Utils.simpleName (Core.unName (Core.bindingName binding))) lbindings)
                     terms = (Lists.map Core.bindingTerm lbindings)
                 in (Flows.bind (Flows.mapList (encodeTerm namespaces) terms) (\hterms ->  
-                  let hbindings = (Lists.zipWith toBinding hnames hterms)
-                  in (toDecl comments hname_ env (Just (Ast.LocalBindings hbindings)))))
+                  let hbindings = (Lists.zipWith toBinding hnames hterms) 
+                      prevBindings = (Maybes.maybe [] (\lb -> Ast.unLocalBindings lb) bindings)
+                      allBindings = (Lists.concat2 prevBindings hbindings)
+                  in (toDecl comments hname_ env (Just (Ast.LocalBindings allBindings)))))
               _ -> (Flows.bind (encodeTerm namespaces term_) (\hterm ->  
                 let vb = (Utils.simpleValueBinding hname_ hterm bindings) 
                     schemeConstraints = (Core.typeSchemeConstraints typ)
@@ -632,6 +637,7 @@ toTypeDeclarationsFrom namespaces elementName typ =
         nameDecls_,
         tdecls]))))))))))
 
+-- | Generate a Haskell declaration for a type definition constant
 typeDecl :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Compute.Flow Graph.Graph Ast.DeclarationWithComments)
 typeDecl namespaces name typ =  
   let typeName = (\ns -> \name_ -> Names.qname ns (typeNameLocal name_)) 
@@ -678,6 +684,7 @@ typeDecl namespaces name typ =
       Ast.declarationWithCommentsBody = decl,
       Ast.declarationWithCommentsComments = Nothing})))))
 
+-- | Convert type scheme constraints to a map of type variables to typeclasses
 typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Classes.TypeClass))
 typeSchemeConstraintsToClassMap maybeConstraints =  
   let nameToTypeClass = (\className ->  

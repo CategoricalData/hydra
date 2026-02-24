@@ -78,30 +78,39 @@ hsvar s = (Ast.ExpressionVariable (rawName s))
 -- | Compute the Haskell module namespaces for a Hydra module
 namespacesForModule :: (Module.Module -> Compute.Flow Graph.Graph (Module.Namespaces Ast.ModuleName))
 namespacesForModule mod = (Flows.bind (Schemas.moduleDependencyNamespaces True True True True mod) (\nss ->  
-  let ns = (Module.moduleNamespace mod) 
-      focusPair = (toPair ns)
-      nssAsList = (Sets.toList nss)
-      nssPairs = (Lists.map toPair nssAsList)
-      emptyState = (Maps.empty, Sets.empty)
-      finalState = (Lists.foldl addPair emptyState nssPairs)
-      resultMap = (Pairs.first finalState)
-      toModuleName = (\namespace ->  
-              let namespaceStr = (Module.unNamespace namespace) 
-                  parts = (Strings.splitOn "." namespaceStr)
-                  lastPart = (Lists.last parts)
-                  capitalized = (Formatting.capitalize lastPart)
-              in (Ast.ModuleName capitalized))
-      toPair = (\name -> (name, (toModuleName name)))
-      addPair = (\state -> \namePair ->  
-              let currentMap = (Pairs.first state) 
-                  currentSet = (Pairs.second state)
-                  name = (Pairs.first namePair)
-                  alias = (Pairs.second namePair)
-                  aliasStr = (Ast.unModuleName alias)
-              in (Logic.ifElse (Sets.member alias currentSet) (addPair state (name, (Ast.ModuleName (Strings.cat2 aliasStr "_")))) (Maps.insert name alias currentMap, (Sets.insert alias currentSet))))
-  in (Flows.pure (Module.Namespaces {
-    Module.namespacesFocus = focusPair,
-    Module.namespacesMapping = resultMap}))))
+  let ns = (Module.moduleNamespace mod)
+  in  
+    let toModuleName = (\namespace ->  
+            let namespaceStr = (Module.unNamespace namespace) 
+                parts = (Strings.splitOn "." namespaceStr)
+                lastPart = (Lists.last parts)
+                capitalized = (Formatting.capitalize lastPart)
+            in (Ast.ModuleName capitalized))
+    in  
+      let toPair = (\name -> (name, (toModuleName name)))
+      in  
+        let addPair = (\state -> \namePair ->  
+                let currentMap = (Pairs.first state) 
+                    currentSet = (Pairs.second state)
+                    name = (Pairs.first namePair)
+                    alias = (Pairs.second namePair)
+                    aliasStr = (Ast.unModuleName alias)
+                in (Logic.ifElse (Sets.member alias currentSet) (addPair state (name, (Ast.ModuleName (Strings.cat2 aliasStr "_")))) (Maps.insert name alias currentMap, (Sets.insert alias currentSet))))
+        in  
+          let focusPair = (toPair ns)
+          in  
+            let nssAsList = (Sets.toList nss)
+            in  
+              let nssPairs = (Lists.map toPair nssAsList)
+              in  
+                let emptyState = (Maps.empty, Sets.empty)
+                in  
+                  let finalState = (Lists.foldl addPair emptyState nssPairs)
+                  in  
+                    let resultMap = (Pairs.first finalState)
+                    in (Flows.pure (Module.Namespaces {
+                      Module.namespacesFocus = focusPair,
+                      Module.namespacesMapping = resultMap}))))
 
 -- | Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)
 newtypeAccessorName :: (Core.Name -> String)
@@ -185,6 +194,7 @@ unionFieldReference g namespaces sname fname =
       unqualName = (Names.unqualifyName qualName)
   in (elementReference namespaces unqualName)
 
+-- | Unpack nested forall types into a list of type variables and the inner type
 unpackForallType :: (t0 -> Core.Type -> ([Core.Name], Core.Type))
 unpackForallType cx t = ((\x -> case x of
   Core.TypeForall v1 ->  

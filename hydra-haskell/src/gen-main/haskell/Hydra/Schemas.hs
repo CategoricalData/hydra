@@ -42,6 +42,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Add names to existing namespaces mapping
 addNamesToNamespaces :: ((Module.Namespace -> t0) -> S.Set Core.Name -> Module.Namespaces t0 -> Module.Namespaces t0)
 addNamesToNamespaces encodeNamespace names ns0 =  
   let nss = (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names))))
@@ -87,6 +88,7 @@ dependencyNamespaces binds withPrims withNoms withSchema els = (Flows.bind Monad
 dereferenceType :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Type))
 dereferenceType name = (Flows.bind Monads.getState (\cx -> Flows.bind (Lexical.dereferenceElement name) (\mel -> Maybes.maybe (Flows.pure Nothing) (\el -> Flows.map Maybes.pure (Monads.withTrace "dereference type" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm el))))) mel)))
 
+-- | Convert an element to a typed term
 elementAsTypeApplicationTerm :: (Core.Binding -> Compute.Flow t0 Core.TypeApplicationTerm)
 elementAsTypeApplicationTerm el = (Maybes.maybe (Flows.fail "missing element type") (\ts -> Flows.pure (Core.TypeApplicationTerm {
   Core.typeApplicationTermBody = (Core.bindingTerm el),
@@ -157,14 +159,17 @@ fieldTypes t = (Flows.bind Monads.getState (\cx ->
     Core.TypeVariable v1 -> (Monads.withTrace (Strings.cat2 "field types of " (Core.unName v1)) (Flows.bind (Lexical.requireElement v1) (\el -> Flows.bind (Monads.withTrace "field types" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm el)))) fieldTypes)))
     _ -> (Monads.unexpected "record or union type" (Core___.type_ t))) (Rewriting.deannotateType t))))
 
+-- | Find a field type by name in a list of field types
 findFieldType :: (Core.Name -> [Core.FieldType] -> Compute.Flow t0 Core.Type)
 findFieldType fname fields =  
   let matchingFields = (Lists.filter (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) fields)
   in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat2 "No such field: " (Core.unName fname))) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Flows.pure (Core.fieldTypeType (Lists.head matchingFields))) (Flows.fail (Strings.cat2 "Multiple fields named " (Core.unName fname)))))
 
+-- | Generate a fresh type variable name
 freshName :: (Compute.Flow t0 Core.Name)
 freshName = (Flows.map normalTypeVariable (Annotations.nextCount Constants.key_freshTypeVariableCount))
 
+-- | Generate multiple fresh type variable names
 freshNames :: (Int -> Compute.Flow t0 [Core.Name])
 freshNames n = (Flows.sequence (Lists.replicate n freshName))
 
@@ -228,6 +233,7 @@ graphAsTypes sg = (Flows.bind Monads.getState (\cx ->
     let toPair = (\el -> Flows.bind (Monads.withTrace (Strings.cat2 "graph as types: " (Core.unName (Core.bindingName el))) (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm el)))) (\typ -> Flows.pure (Core.bindingName el, typ)))
     in (Flows.bind (Flows.mapList toPair els) (\pairs -> Flows.pure (Maps.fromList pairs)))))
 
+-- | Convert a graph to an inference context
 graphToInferenceContext :: (Graph.Graph -> Compute.Flow t0 Typing.InferenceContext)
 graphToInferenceContext graph =  
   let schema = (Maybes.fromMaybe graph (Graph.graphSchema graph))
@@ -242,6 +248,7 @@ graphToInferenceContext graph =
         Typing.inferenceContextClassConstraints = Maps.empty,
         Typing.inferenceContextDebug = False})))
 
+-- | Convert a graph to a type context including the graph's element types
 graphToTypeContext :: (Graph.Graph -> Compute.Flow t0 Typing.TypeContext)
 graphToTypeContext graph = (Flows.bind (graphToInferenceContext graph) (\ix ->  
   let elementTypes = (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, (typeSchemeToFType ts))) (Core.bindingType b)) (Graph.graphElements graph))))
@@ -253,9 +260,11 @@ graphToTypeContext graph = (Flows.bind (graphToInferenceContext graph) (\ix ->
     Typing.typeContextLetVariables = Sets.empty,
     Typing.typeContextInferenceContext = ix}))))
 
+-- | Instantiate a type by replacing all forall-bound type variables with fresh variables
 instantiateType :: (Core.Type -> Compute.Flow t0 Core.Type)
 instantiateType typ = (Flows.bind (instantiateTypeScheme (typeToTypeScheme typ)) (\ts -> Flows.pure (typeSchemeToFType ts)))
 
+-- | Instantiate a type scheme with fresh variables
 instantiateTypeScheme :: (Core.TypeScheme -> Compute.Flow t0 Core.TypeScheme)
 instantiateTypeScheme scheme =  
   let oldVars = (Core.typeSchemeVariables scheme)
@@ -353,6 +362,7 @@ moduleContainsBinaryLiterals mod =
 moduleDependencyNamespaces :: (Bool -> Bool -> Bool -> Bool -> Module.Module -> Compute.Flow Graph.Graph (S.Set Module.Namespace))
 moduleDependencyNamespaces binds withPrims withNoms withSchema mod = (Flows.bind (dependencyNamespaces binds withPrims withNoms withSchema (Module.moduleElements mod)) (\deps -> Flows.pure (Sets.delete (Module.moduleNamespace mod) deps)))
 
+-- | Create namespaces mapping for definitions
 namespacesForDefinitions :: ((Module.Namespace -> t0) -> Module.Namespace -> [Module.Definition] -> Module.Namespaces t0)
 namespacesForDefinitions encodeNamespace focusNs defs =  
   let nss = (Sets.delete focusNs (definitionDependencyNamespaces defs))
@@ -392,6 +402,7 @@ requireRecordType name =
           _ -> Nothing) t)
   in (requireRowType "record type" toRecord name)
 
+-- | Require a name to resolve to a row type
 requireRowType :: (String -> (Core.Type -> Maybe t0) -> Core.Name -> Compute.Flow Graph.Graph t0)
 requireRowType label getter name =  
   let rawType = (\t -> (\x -> case x of
@@ -405,6 +416,7 @@ requireRowType label getter name =
     " type: ",
     (Core___.type_ t)])) Flows.pure (getter (rawType t))))
 
+-- | Look up a schema type in the context and instantiate it
 requireSchemaType :: (Typing.InferenceContext -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
 requireSchemaType cx tname =  
   let types = (Typing.inferenceContextSchemaTypes cx)
@@ -444,6 +456,7 @@ resolveType typ = (Flows.bind Monads.getState (\cx -> (\x -> case x of
   Core.TypeVariable v1 -> (Lexical.withSchemaContext (Flows.bind (Lexical.resolveTerm v1) (\mterm -> Maybes.maybe (Flows.pure Nothing) (\t -> Flows.map Maybes.pure (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx t))) mterm)))
   _ -> (Flows.pure (Just typ))) (Rewriting.deannotateType typ)))
 
+-- | Convert a schema graph to a typing environment
 schemaGraphToTypingEnvironment :: (Graph.Graph -> Compute.Flow t0 (M.Map Core.Name Core.TypeScheme))
 schemaGraphToTypingEnvironment g =  
   let toTypeScheme = (\vars -> \typ -> (\x -> case x of
@@ -533,16 +546,19 @@ typesToElements typeMap =
             Core.bindingType = Nothing})
   in (Lists.map toElement (Maps.toList typeMap))
 
+-- | Execute a computation in the context of a lambda body, extending the type context with the lambda parameter
 withLambdaContext :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t1) -> t0 -> Core.Lambda -> (t1 -> t2) -> t2)
 withLambdaContext getContext setContext env lam body =  
   let newContext = (extendTypeContextForLambda (getContext env) lam)
   in (body (setContext newContext env))
 
+-- | Execute a computation in the context of a let body, extending the type context with the let bindings
 withLetContext :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t1) -> (Typing.TypeContext -> Core.Binding -> Maybe Core.Term) -> t0 -> Core.Let -> (t1 -> t2) -> t2)
 withLetContext getContext setContext forBinding env letrec body =  
   let newContext = (extendTypeContextForLet forBinding (getContext env) letrec)
   in (body (setContext newContext env))
 
+-- | Execute a computation in the context of a type lambda body, extending the type context with the type parameter
 withTypeLambdaContext :: ((t0 -> Typing.TypeContext) -> (Typing.TypeContext -> t0 -> t1) -> t0 -> Core.TypeLambda -> (t1 -> t2) -> t2)
 withTypeLambdaContext getContext setContext env tlam body =  
   let newContext = (extendTypeContextForTypeLambda (getContext env) tlam)

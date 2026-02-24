@@ -197,6 +197,7 @@ stripAndDereferenceTermEither g term =
     Core.TermVariable v1 -> (Eithers.either (\left_ -> Left left_) (\binding -> stripAndDereferenceTermEither g (Core.bindingTerm binding)) (dereferenceVariable g v1))
     _ -> (Right stripped)) stripped)
 
+-- | Execute flow with empty graph
 withEmptyGraph :: (Compute.Flow Graph.Graph t0 -> Compute.Flow t1 t0)
 withEmptyGraph = (Monads.withState emptyGraph)
 

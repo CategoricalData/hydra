@@ -34,9 +34,11 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Create a JSON coder for a given type
 jsonCoder :: (Core.Type -> Compute.Flow Graph.Graph (Compute.Coder Graph.Graph t0 Core.Term Model.Value))
 jsonCoder typ = (Flows.bind (Modules.languageAdapter Language.jsonLanguage typ) (\adapter -> Flows.bind (termCoder (Compute.adapterTarget adapter)) (\coder -> Flows.pure (Utils.composeCoders (Compute.adapterCoder adapter) coder))))
 
+-- | Create a JSON coder for literal types
 literalJsonCoder :: (Core.LiteralType -> Compute.Flow t0 (Compute.Coder t1 t2 Core.Literal Model.Value))
 literalJsonCoder lt =  
   let decodeBool = (\s -> (\x -> case x of
@@ -72,6 +74,7 @@ literalJsonCoder lt =
                     Compute.coderDecode = decodeString}) lt)
           in (Flows.pure encoded)
 
+-- | Create a JSON coder for record types
 recordCoder :: (Core.RowType -> Compute.Flow t0 (Compute.Coder Graph.Graph t1 Core.Term Model.Value))
 recordCoder rt =  
   let fields = (Core.rowTypeFields rt)
@@ -81,6 +84,7 @@ recordCoder rt =
       Compute.coderEncode = (encodeRecord coders),
       Compute.coderDecode = (decodeRecord rt coders)})))
 
+-- | Encode a record term to JSON
 encodeRecord :: ([(Core.FieldType, (Compute.Coder Graph.Graph t0 Core.Term Model.Value))] -> Core.Term -> Compute.Flow Graph.Graph Model.Value)
 encodeRecord coders term =  
   let stripped = (Rewriting.deannotateTerm term)
@@ -116,6 +120,7 @@ encodeRecord coders term =
           let fields = (Core.recordFields record)
           in (Flows.bind (Flows.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Flows.pure (Model.ValueObject (Maps.fromList (Maybes.cat maybeFields)))))))
 
+-- | Decode a JSON value to a record term
 decodeRecord :: (Core.RowType -> [(Core.FieldType, (Compute.Coder t0 t1 Core.Term Model.Value))] -> Model.Value -> Compute.Flow t1 Core.Term)
 decodeRecord rt coders n =  
   let decodeObjectBody = (\m ->  
@@ -141,6 +146,7 @@ decodeRecord rt coders n =
             _ -> (Monads.unexpected "object" (showValue n))) n)
     in result
 
+-- | Create a JSON coder for term types
 termCoder :: (Core.Type -> Compute.Flow t0 (Compute.Coder Graph.Graph t1 Core.Term Model.Value))
 termCoder typ =  
   let stripped = (Rewriting.deannotateType typ)
@@ -235,6 +241,7 @@ termCoder typ =
                                 (Core___.type_ typ)]))) stripped)
                       in result
 
+-- | JSON coder for unit values
 unitCoder :: (Compute.Coder t0 t1 Core.Term Model.Value)
 unitCoder =  
   let encodeUnit = (\term -> (\x -> case x of
@@ -248,6 +255,7 @@ unitCoder =
       Compute.coderEncode = encodeUnit,
       Compute.coderDecode = decodeUnit}
 
+-- | A simplistic, unidirectional encoding for terms as JSON values. Not type-aware; best used for human consumption.
 untypedTermToJson :: (Core.Term -> Compute.Flow t0 Model.Value)
 untypedTermToJson term =  
   let unexp = (\msg -> Flows.pure (Model.ValueString (Strings.cat2 "FAIL: " msg)))
@@ -376,5 +384,6 @@ untypedTermToJson term =
 readStringStub :: (String -> Core.Term)
 readStringStub s = (Core.TermLiteral (Core.LiteralString (Strings.cat2 "TODO: read " s)))
 
+-- | Show a JSON value as a string (placeholder implementation)
 showValue :: (t0 -> String)
 showValue value = "TODO: implement showValue"
