@@ -12,12 +12,36 @@ import hydra.constants
 import hydra.dsl.terms as terms
 import hydra.dsl.annotations as annotations
 import hydra.formatting
-import hydra.classes
-import hydra.util
-from hydra.core import Field, Name, Term, Type
+from hydra.classes import TypeClass
+from hydra.util import CaseConvention
+from hydra.core import Binding, Field, Name, Term, Type
 from hydra.module import Module, Namespace, QualifiedName
 from hydra.phantoms import TBinding, TTerm
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing
+
+
+def _tbinding_matmul(self, other):
+    """Apply a TBinding as a function reference to an argument."""
+    ref_term = TTerm(terms.TermVariable(self.name))
+    return ref_term @ other
+
+TBinding.__matmul__ = _tbinding_matmul
+
+
+def _name_rshift(self, val):
+    """Create a Field from a Name and a TTerm: name >> term."""
+    return Field(self, un_tterm(val))
+
+Name.__rshift__ = _name_rshift
+
+from enum import Enum
+
+def _enum_rshift(self, val):
+    """Create a Field from an enum member (whose value is a Name) and a TTerm: member >> term."""
+    return Field(self.value, un_tterm(val))
+
+Enum.__rshift__ = _enum_rshift
+
 
 # Re-export phantom literals
 from hydra.dsl.meta.phantom_literals import (
@@ -51,7 +75,7 @@ def un_tterm(t: TTerm[A]) -> Term:
 
 
 # Operators - Python equivalents for Haskell operators
-# (~>) :: String -> TTerm x -> TTerm (a -> b) - use lambda_(name, body)
+# (~>) :: String -> TTerm x -> TTerm (a -> b) - use lam(name, body)
 # (<~) :: String -> TTerm a -> TTerm b -> TTerm b - use let1(name, value, body)
 # (<<~) :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b) - use bind(name, def_, body)
 # (<.>) :: TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c) - use compose(f, g)
@@ -87,7 +111,7 @@ def bind(v: str, def_: TTerm[A], body: TTerm[B]) -> TTerm[B]:
     return primitive2(
         Name("hydra.lib.flows.bind"),
         def_,
-        lambda_(v, body)
+        lam(v, body)
     )
 
 
@@ -127,11 +151,41 @@ def definition_in_module(mod: Module, lname: str, term: TTerm[A]) -> TBinding[A]
     return definition_in_namespace(mod.namespace, lname, term)
 
 
-def definition_in_namespace(ns: Namespace, lname: str, term: TTerm[A]) -> TBinding[A]:
-    """Create a definition in a namespace."""
+def definition_in_namespace(ns: Namespace, lname: str, term: TTerm[A] | None = None) -> "TBinding[A] | DefineBuilder":
+    """Create a definition in a namespace.
+
+    With 3 arguments: returns a TBinding (direct definition).
+    With 2 arguments: returns a DefineBuilder for fluent chaining.
+    """
     qname = QualifiedName(Just(ns), lname)
     name = unqualify_name(qname)
-    return TBinding(name, term)
+    if term is not None:
+        return TBinding(name, term)
+    return DefineBuilder(name, [])
+
+
+def make_local(ns: Namespace):
+    """Create a local reference function for a namespace.
+
+    Returns a function that takes a local name and produces a TTerm variable
+    reference with the full qualified name. Use this for recursive or
+    forward references within a module.
+
+    Usage:
+        local = make_local(ns)
+        ...
+        .to(local("rewriteTerm") @ var("rewrite") @ var("term"))
+    """
+    prefix = ns.value + "."
+    return lambda lname: var(prefix + lname)
+
+
+def to_binding(tb: TBinding[A]) -> Binding:
+    """Convert a TBinding to an untyped Binding for use in module element lists.
+
+    This mirrors Haskell's toBinding and Java's Phantoms.toBinding().
+    """
+    return Binding(tb.name, tb.term.value, Nothing())
 
 
 def derive_primitive_name() -> Name:
@@ -162,8 +216,8 @@ def derive_primitive_name() -> Name:
     # Remove trailing underscore if present (e.g., abs_ -> abs), then convert snake_case to camelCase
     clean_name = func_name.rstrip('_')
     camel_name = hydra.formatting.convert_case(
-        hydra.util.CaseConvention.LOWER_SNAKE,
-        hydra.util.CaseConvention.CAMEL,
+        CaseConvention.LOWER_SNAKE,
+        CaseConvention.CAMEL,
         clean_name
     )
 
@@ -171,9 +225,15 @@ def derive_primitive_name() -> Name:
     return Name(f"hydra.lib.{lib_name}.{camel_name}")
 
 
-def doc(s: str, term: TTerm[A]) -> TTerm[A]:
-    """Add documentation to a term."""
-    return TTerm[A](annotations.set_term_description(Just(s), un_tterm(term)))
+def doc(s: str, term: TTerm[A] | None = None) -> "TTerm[A] | ExprBuilder":
+    """Add documentation to a term.
+
+    With 2 arguments: returns a TTerm (direct doc annotation).
+    With 1 argument: returns an ExprBuilder for fluent chaining.
+    """
+    if term is not None:
+        return TTerm[A](annotations.set_term_description(Just(s), un_tterm(term)))
+    return ExprBuilder([("doc", s, None)])
 
 
 def doc_wrapped(length: int, s: str, term: TTerm[A]) -> TTerm[A]:
@@ -191,7 +251,7 @@ def exec_(f: TTerm[A], b: TTerm[B]) -> TTerm[B]:
     return primitive2(
         Name("hydra.lib.flows.bind"),
         f,
-        lambda_(hydra.constants.ignored_variable, b)
+        lam(hydra.constants.ignored_variable, b)
     )
 
 
@@ -241,7 +301,7 @@ def inject(name: Name, fname: Name, term: TTerm[A]) -> TTerm[B]:
 
 def inject_lambda(name: Name, fname: Name) -> TTerm[A]:
     """Create a function that injects its argument into a union variant."""
-    return lambda_("injected_", inject(name, fname, var("injected_")))
+    return lam("injected_", inject(name, fname, var("injected_")))
 
 
 def just(term: TTerm[A]) -> TTerm[Maybe[A]]:
@@ -254,19 +314,124 @@ def just_() -> TTerm[A]:
     return TTerm[A](terms.lambda_("just_", terms.just(terms.var("just_"))))
 
 
-def lambda_(v: str, body: TTerm[X]) -> TTerm[A]:
-    """Create a lambda function with one parameter."""
-    return TTerm[A](terms.lambda_(v, un_tterm(body)))
-
-
 def lambdas(params: Sequence[str], body: TTerm[X]) -> TTerm[A]:
     """Create a multi-parameter lambda function."""
     return TTerm[A](terms.lambdas(params, un_tterm(body)))
 
 
-def let1(name: str, value: TTerm[A], env: TTerm[B]) -> TTerm[B]:
-    """Create a let expression with a single binding."""
-    return TTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(env)))
+def _build_term(intros: list[tuple[str, str, TTerm | None]], body: TTerm[B]) -> TTerm[B]:
+    """Build a nested term from a list of intro forms and a body."""
+    result = body
+    for kind, name, value in reversed(intros):
+        if kind == "doc":
+            result = TTerm[B](annotations.set_term_description(Just(name), un_tterm(result)))
+        elif kind == "lambda":
+            result = TTerm[B](terms.lambda_(name, un_tterm(result)))
+        else:
+            result = TTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(result)))
+    return result
+
+
+class ExprBuilder:
+    """Fluent builder for chaining doc, lambdas, and single-binding lets without nesting.
+
+    Usage:
+        (doc("description")
+          .lam("x")
+          .lam("y")
+          .let("z", expr)
+          .to(body))
+
+    Produces: doc "description" (lambda x -> lambda y -> let z = expr in body)
+    """
+
+    def __init__(self, intros: list[tuple[str, str, TTerm | None]]):
+        # Each intro is ("doc", description, None), ("lambda", param, None),
+        # or ("let", name, value)
+        self._intros = intros
+
+    def doc(self, s: str) -> "ExprBuilder":
+        """Add a doc annotation."""
+        return ExprBuilder(self._intros + [("doc", s, None)])
+
+    def lam(self, v: str) -> "ExprBuilder":
+        """Add a lambda parameter."""
+        return ExprBuilder(self._intros + [("lambda", v, None)])
+
+    def lams(self, *vs: str) -> "ExprBuilder":
+        """Add multiple lambda parameters."""
+        return ExprBuilder(self._intros + [("lambda", v, None) for v in vs])
+
+    def let(self, name: str, value: TTerm[A]) -> "ExprBuilder":
+        """Add a single-binding let."""
+        return ExprBuilder(self._intros + [("let", name, value)])
+
+    def to(self, body: TTerm[B]) -> TTerm[B]:
+        """Finalize the chain with a body."""
+        return _build_term(self._intros, body)
+
+
+class DefineBuilder:
+    """Fluent builder that starts with a definition name and produces a TBinding.
+
+    Usage:
+        define("freeVariablesInType")
+          .doc("Find the free variables...")
+          .lam("typ")
+          .let("dfltVars", expr)
+          .to(body)
+    """
+
+    def __init__(self, name: Name, intros: list[tuple[str, str, TTerm | None]]):
+        self._name = name
+        self._intros = intros
+
+    def doc(self, s: str) -> "DefineBuilder":
+        """Add a doc annotation."""
+        return DefineBuilder(self._name, self._intros + [("doc", s, None)])
+
+    def lam(self, v: str) -> "DefineBuilder":
+        """Add a lambda parameter."""
+        return DefineBuilder(self._name, self._intros + [("lambda", v, None)])
+
+    def lams(self, *vs: str) -> "DefineBuilder":
+        """Add multiple lambda parameters."""
+        return DefineBuilder(self._name, self._intros + [("lambda", v, None) for v in vs])
+
+    def let(self, name: str, value: TTerm[A]) -> "DefineBuilder":
+        """Add a single-binding let."""
+        return DefineBuilder(self._name, self._intros + [("let", name, value)])
+
+    def to(self, body: TTerm[B]) -> TBinding[B]:
+        """Finalize the chain with a body, producing a TBinding."""
+        return TBinding(self._name, _build_term(self._intros, body))
+
+
+def lam(v: str, body: TTerm[X] | None = None) -> TTerm[A] | ExprBuilder:
+    """Create a lambda function with one parameter.
+
+    With 2 arguments: returns a TTerm (direct lambda).
+    With 1 argument: returns an ExprBuilder for fluent chaining.
+    """
+    if body is not None:
+        return TTerm[A](terms.lambda_(v, un_tterm(body)))
+    return ExprBuilder([("lambda", v, None)])
+
+
+def lams(*vs: str) -> ExprBuilder:
+    """Create multiple lambda parameters as an ExprBuilder for fluent chaining."""
+    return ExprBuilder([("lambda", v, None) for v in vs])
+
+
+def let(name: str, value: TTerm[A], env: TTerm[B] | None = None) -> TTerm[B] | ExprBuilder:
+    """Create a let expression with a single binding.
+
+    With 3 arguments: returns a TTerm (direct let expression).
+    With 2 arguments: returns an ExprBuilder for fluent chaining.
+    """
+    if env is not None:
+        return TTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(env)))
+    return ExprBuilder([("let", name, value)])
 
 
 def lets(fields: Sequence[Field], env: TTerm[A]) -> TTerm[A]:
@@ -467,9 +632,9 @@ def unary_function(f) -> TTerm[A]:
         case terms.TermMaybe(Just(_)):
             return TTerm[A](terms.primitive(Name("hydra.lib.maybes.pure")))
         case terms.TermUnion(terms.Injection(tname, Field(fname, _))):
-            return lambda_("x", inject(tname, fname, var("x")))
+            return lam("x", inject(tname, fname, var("x")))
         case terms.TermWrap(terms.WrappedTerm(tname, _)):
-            return lambda_("x", wrap(tname, var("x")))
+            return lam("x", wrap(tname, var("x")))
         case _:
             raise ValueError(f"Cannot extract unary function from: {term}")
 
@@ -508,7 +673,7 @@ def var(v: str) -> TTerm[A]:
 def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
     """Associate the Eq type class with the inferred type of a term."""
     return with_type_classes(
-        FrozenDict({Name(v): frozenset([hydra.classes.TypeClass.EQUALITY])}),
+        FrozenDict({Name(v): frozenset([TypeClass.EQUALITY])}),
         term
     )
 
@@ -516,7 +681,7 @@ def with_eq(v: str, term: TTerm[A]) -> TTerm[A]:
 def with_ord(v: str, term: TTerm[A]) -> TTerm[A]:
     """Associate the Ord type class with the inferred type of a term."""
     return with_type_classes(
-        FrozenDict({Name(v): frozenset([hydra.classes.TypeClass.ORDERING])}),
+        FrozenDict({Name(v): frozenset([TypeClass.ORDERING])}),
         term
     )
 

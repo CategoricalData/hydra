@@ -5,7 +5,6 @@ from functools import reduce
 
 import hydra.constants
 import hydra.dsl.literals as lt
-import hydra.util
 from hydra.core import (
     AnnotatedTerm,
     Application,
@@ -54,6 +53,7 @@ from hydra.core import (
     WrappedTerm,
 )
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, Left, Right
+from hydra.util import Comparison
 
 
 # Operators - TODO: find Python equivalents for these special syntax forms
@@ -136,23 +136,23 @@ def char(value: str) -> Term:
     return int32(ord(value))
 
 
-def comparison(comp: hydra.util.Comparison) -> Term:
+def comparison(comp: Comparison) -> Term:
     """Create a comparison result term (lessThan, equalTo, or greaterThan)."""
     match comp:
-        case hydra.util.Comparison.EQUAL_TO:
+        case Comparison.EQUAL_TO:
             return inject_unit(
-                hydra.util.COMPARISON__NAME,
-                hydra.util.COMPARISON__EQUAL_TO__NAME
+                Comparison.TYPE_,
+                Comparison.EQUAL_TO.value
             )
-        case hydra.util.Comparison.LESS_THAN:
+        case Comparison.LESS_THAN:
             return inject_unit(
-                hydra.util.COMPARISON__NAME,
-                hydra.util.COMPARISON__LESS_THAN__NAME
+                Comparison.TYPE_,
+                Comparison.LESS_THAN.value
             )
-        case hydra.util.Comparison.GREATER_THAN:
+        case Comparison.GREATER_THAN:
             return inject_unit(
-                hydra.util.COMPARISON__NAME,
-                hydra.util.COMPARISON__GREATER_THAN__NAME
+                Comparison.TYPE_,
+                Comparison.GREATER_THAN.value
             )
 
 
