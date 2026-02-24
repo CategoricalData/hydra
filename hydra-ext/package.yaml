@@ -35,114 +35,29 @@ library:
   ghc-options: [-rtsopts]
 
 executables:
-  update-java-kernel:
+  update-haskell-ext-main:
     main: Main.hs
     source-dirs:
-      - src/exec/update-java-kernel
+      - src/exec/update-haskell-ext-main
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
 
-  update-java-kernel-types:
+  update-json-ext:
     main: Main.hs
     source-dirs:
-      - src/exec/update-java-kernel-types
+      - src/exec/update-json-ext
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
 
-  update-java-kernel-tests:
+  bootstrap-from-json:
     main: Main.hs
     source-dirs:
-      - src/exec/update-java-kernel-tests
+      - src/exec/bootstrap-from-json
       - ../hydra-haskell/src/gen-test/haskell
     ghc-options: [-rtsopts]
     dependencies:
       - hydra-ext
       - hspec
-
-  update-java-generation-tests:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-java-generation-tests
-      - ../hydra-haskell/src/gen-test/haskell
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
-      - hspec
-
-  update-java-eval-lib:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-java-eval-lib
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
-
-  update-java-kernel-sources:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-java-kernel-sources
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
-
-  update-python-kernel:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-python-kernel
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
-
-  update-python-eval-lib:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-python-eval-lib
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
-
-  update-python-kernel-tests:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-python-kernel-tests
-      - ../hydra-haskell/src/gen-test/haskell
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
-      - hspec
-
-  update-python-generation-tests:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-python-generation-tests
-      - ../hydra-haskell/src/gen-test/haskell
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
-      - hspec
-
-  test-java-modules:
-    main: Main.hs
-    source-dirs:
-      - src/exec/test-java-modules
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
-
-  update-json-main:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-json-main
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
-
-  update-python-kernel-sources:
-    main: Main.hs
-    source-dirs:
-      - src/exec/update-python-kernel-sources
-    ghc-options: [-rtsopts]
-    dependencies:
-      - hydra-ext
+      - time

@@ -293,13 +293,16 @@ typeAliasStatementFor = def "typeAliasStatementFor" $
 -- | Version-aware union type statement generation.
 --   Uses PEP 695 type alias syntax for Python 3.12+.
 --   For Python 3.10, generates a metaclass-based class that is subscriptable at runtime.
-unionTypeStatementsFor :: TBinding (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> [Py.Statement])
+unionTypeStatementsFor :: TBinding (PyHelpers.PythonEnvironment -> Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> [Py.Statement] -> [Py.Statement])
 unionTypeStatementsFor = def "unionTypeStatementsFor" $
   doc "Version-aware union type statement generation" $
-  "env" ~> "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~>
+  "env" ~> "name" ~> "tparams" ~> "mcomment" ~> "tyexpr" ~> "extraStmts" ~>
     Logic.ifElse (useInlineTypeParamsFor @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "env"))
-      (list [PyUtils.typeAliasStatement @@ var "name" @@ var "tparams" @@ var "mcomment" @@ var "tyexpr"])
-      (PyUtils.unionTypeClassStatements310 @@ var "name" @@ var "mcomment" @@ var "tyexpr")
+      -- For 3.12+, type alias has no class body; append constants as module-level statements
+      (Lists.concat2
+        (list [PyUtils.typeAliasStatement @@ var "name" @@ var "tparams" @@ var "mcomment" @@ var "tyexpr"])
+        (var "extraStmts"))
+      (PyUtils.unionTypeClassStatements310 @@ var "name" @@ var "mcomment" @@ var "tyexpr" @@ var "extraStmts")
 
 -- | Wrap a Python expression in a nullary lambda (thunk) for lazy evaluation
 wrapInNullaryLambda :: TBinding (Py.Expression -> Py.Expression)
@@ -688,12 +691,12 @@ encodeTypeQuoted = def "encodeTypeQuoted" $
       (var "pytype")
       (PyUtils.doubleQuotedString @@ (Serialization.printExpr @@ (PySerde.encodeExpression @@ var "pytype")))
 
--- | Generate name constants for a type: _TypeName and _TypeName_fieldName for each field.
---   These constants allow field access via string constants for serialization/deserialization.
-encodeNameConstants :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> [Py.Statement])
+-- | Generate name constants for a type as class-level attributes.
+--   Produces a TYPE_ constant for the type name, plus one constant per field.
+encodeNameConstants :: TBinding (PyHelpers.PythonEnvironment -> Name -> [FieldType] -> [Py.Statement])
 encodeNameConstants = def "encodeNameConstants" $
-  doc "Generate name constants for a type" $
-  "env" ~> "name" ~> "typ" ~>
+  doc "Generate name constants for a type as class-level attributes" $
+  "env" ~> "name" ~> "fields" ~>
     -- Helper to create a statement from a (pyName, hname) pair
     "toStmt" <~ ("pair" ~>
       PyUtils.assignmentStatement
@@ -701,34 +704,14 @@ encodeNameConstants = def "encodeNameConstants" $
         @@ (PyUtils.functionCall
               @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
               @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ Pairs.second $ var "pair")])) $
-    -- The name constant for the type itself
+    -- The name constant for the type itself (TYPE_)
     "namePair" <~ pair (PyNames.encodeConstantForTypeName @@ var "env" @@ var "name") (var "name") $
     -- Create field constant pairs from field types
-    "fieldPair" <~ ("field" ~>
+    "fieldPairs" <~ Lists.map ("field" ~>
       pair
         (PyNames.encodeConstantForFieldName @@ var "env" @@ var "name" @@ (project _FieldType _FieldType_name @@ var "field"))
-        (project _FieldType _FieldType_name @@ var "field")) $
-    -- Extract field pairs from the type by traversing foralls to get to record/union
-    "fieldPairs" <~ ("t" ~>
-      cases _Type (Rewriting.deannotateType @@ var "t") Nothing [
-        _Type_forall>>: "ft" ~> var "fieldPairs" @@ (project _ForallType _ForallType_body @@ var "ft"),
-        _Type_record>>: "rt" ~> Lists.map (var "fieldPair") (project _RowType _RowType_fields @@ var "rt"),
-        _Type_union>>: "rt" ~> Lists.map (var "fieldPair") (project _RowType _RowType_fields @@ var "rt"),
-        -- All other types have no fields
-        _Type_annotated>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_application>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_function>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_list>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_literal>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_map>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_maybe>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_either>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_pair>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_set>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_unit>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_variable>>: constant $ list ([] :: [TTerm (Py.Name, Name)]),
-        _Type_wrap>>: constant $ list ([] :: [TTerm (Py.Name, Name)])]) $
-    Lists.map (var "toStmt") (Lists.cons (var "namePair") (var "fieldPairs" @@ var "typ"))
+        (project _FieldType _FieldType_name @@ var "field")) (var "fields") $
+    Lists.map (var "toStmt") (Lists.cons (var "namePair") (var "fieldPairs"))
 
 -- | Find type parameters in a type that are bound in the environment.
 --   Returns the free type variables that are also in the bound type variables map.
@@ -742,20 +725,31 @@ findTypeParams = def "findTypeParams" $
 
 -- | Encode a wrapped type (newtype) to a Python class definition.
 --   Creates a class that extends Node[inner_type] with optional Generic[T] for polymorphic types.
-encodeWrappedType :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyHelpers.PyGraph Py.Statement)
+--   TYPE_ is assigned after the class to avoid self-reference issues (e.g., Name.TYPE_ = Name(...)).
+encodeWrappedType :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyHelpers.PyGraph [Py.Statement])
 encodeWrappedType = def "encodeWrappedType" $
   doc "Encode a wrapped type (newtype) to a Python class definition" $
   "env" ~> "name" ~> "typ" ~> "comment" ~>
     "tparamList" <~ (Pairs.first $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
     "ptypeQuoted" <<~ encodeTypeQuoted @@ var "env" @@ var "typ" $
+    "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
     "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list ([] :: [TTerm [Py.Statement]])) $
-    produce $ PyUtils.pyClassDefinitionToPyStatement @@
-      PyDsl.classDefinition
-        nothing
-        (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name")
-        (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (findTypeParams @@ var "env" @@ var "typ"))
-        (just (variantArgs @@ var "ptypeQuoted" @@ var "tparamList"))
-        (var "body")
+    -- Generate TYPE_ as a dotted assignment after the class: ClassName.TYPE_ = Name("...")
+    "typeConstStmt" <~ (PyUtils.dottedAssignmentStatement
+      @@ var "pyName"
+      @@ (PyNames.encodeConstantForTypeName @@ var "env" @@ var "name")
+      @@ (PyUtils.functionCall
+            @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+            @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ var "name")])) $
+    produce $ list [
+      PyUtils.pyClassDefinitionToPyStatement @@
+        PyDsl.classDefinition
+          nothing
+          (var "pyName")
+          (Lists.map (PyUtils.pyNameToPyTypeParameter <.> PyNames.encodeTypeVariable) (findTypeParams @@ var "env" @@ var "typ"))
+          (just (variantArgs @@ var "ptypeQuoted" @@ var "tparamList"))
+          (var "body"),
+      var "typeConstStmt"]
 
 -- | Extend a PythonEnvironment with a new bound type variable.
 --   This creates a new environment with the variable added to the type parameter list and map.
@@ -845,7 +839,7 @@ extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
   doc "Extend environment with lambda parameters from a term" $
   "env" ~> "term" ~>
     "go" <~ ("e" ~> "t" ~>
-      cases _Term (Rewriting.deannotateTerm @@ var "t") (Just $ var "e") [
+      cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "t") (Just $ var "e") [
         _Term_function>>: "f" ~>
           cases _Function (var "f") (Just $ var "e") [
             _Function_lambda>>: "lam" ~>
@@ -971,8 +965,8 @@ deduplicateCaseVariables = def "deduplicateCaseVariables" $
         "done" <~ Pairs.second (var "state") $
         "fname" <~ Core.fieldName (var "field") $
         "fterm" <~ Core.fieldTerm (var "field") $
-        -- Check if term is a lambda
-        cases _Term (Rewriting.deannotateTerm @@ var "fterm") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
+        -- Check if term is a lambda (strip annotations and type wrappers)
+        cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fterm") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
           _Term_function>>: "f" ~>
             cases _Function (var "f") (Just $ pair (var "countByName") (Lists.cons (var "field") (var "done"))) [
               _Function_lambda>>: "lam" ~>
@@ -1020,7 +1014,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
                    (Core.bindingType $ var "bnd")) $
     -- Main rewrite function as Y combinator style
     "rewrite" <~ ("recurse" ~> "term" ~>
-      cases _Term (Rewriting.deannotateTerm @@ var "term") (Just $ var "term") [
+      cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "term") (Just $ var "term") [
         -- Replace the variable with unit
         _Term_variable>>: "n" ~>
           Logic.ifElse (Equality.equal (var "n") (var "v"))
@@ -1130,40 +1124,52 @@ encodeCaseBlock = def "encodeCaseBlock" $
   "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
     "fname" <~ Core.fieldName (var "field") $
     "fterm" <~ Core.fieldTerm (var "field") $
-    -- The field term should be a lambda; extract its parameter and body
-    cases _Term (Rewriting.deannotateTerm @@ var "fterm") Nothing [
+    -- The field term should be a lambda; strip annotations and type wrappers to extract it.
+    -- After case-statement hoisting, field terms may be variable references to hoisted functions
+    -- instead of inline lambdas. The default case handles this by synthesizing a lambda wrapper.
+    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "fterm") $
+    "effectiveLambda" <~ (cases _Term (var "stripped")
+      -- Default: fterm is not a lambda (e.g. hoisted variable reference).
+      -- Wrap it in a synthetic lambda: \v -> fterm(v)
+      (Just $ "syntheticVar" <~ Core.name (string "_matchValue") $
+        Core.lambda (var "syntheticVar") nothing
+          (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar"))) [
       _Term_function>>: "f" ~>
-        cases _Function (var "f") Nothing [
-          _Function_lambda>>: "lam" ~>
-            -- Extract lambda components
-            "v" <~ Core.lambdaParameter (var "lam") $
-            "rawBody" <~ Core.lambdaBody (var "lam") $
-            -- Check if this variant has unit type
-            "isUnitVariant" <~ (isVariantUnitType @@ var "rowType" @@ var "fname") $
-            -- For unit variants, eliminate references to the lambda parameter
-            "effectiveBody" <~ (Logic.ifElse (var "isUnitVariant")
-              (eliminateUnitVar @@ var "v" @@ var "rawBody")
-              (var "rawBody")) $
-            -- Determine if we should capture the value
-            -- Don't capture if: unit variant, variable is free in body, or body is unit term
-            "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
-              (Logic.or (Rewriting.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
-                        (Schemas.isUnitTerm @@ var "rawBody"))) $
-            -- Extend the TypeContext with the lambda parameter inside a Flows.bind
-            -- to prevent the code generator from reducing it away
-            "env2" <<~ (Flows.pure $ pythonEnvironmentSetTypeContext
-              @@ (Schemas.extendTypeContextForLambda @@ (pythonEnvironmentGetTypeContext @@ var "env") @@ var "lam")
-              @@ var "env") $
-            -- Create the pattern using env2 (extended context)
-            "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname"
-              @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
-            -- Encode the body using the provided encoder with extended env
-            "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
-            "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
-            produce $ PyDsl.caseBlock
-              (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
-              nothing
-              (var "pyBody")]]
+        cases _Function (var "f")
+          -- Non-lambda function (e.g. primitive): wrap in lambda
+          (Just $ "syntheticVar2" <~ Core.name (string "_matchValue") $
+            Core.lambda (var "syntheticVar2") nothing
+              (Core.termApplication $ Core.application (var "stripped") (Core.termVariable $ var "syntheticVar2"))) [
+          _Function_lambda>>: "lam" ~> var "lam"]]) $
+    -- Now effectiveLambda is always a Lambda
+    "v" <~ Core.lambdaParameter (var "effectiveLambda") $
+    "rawBody" <~ Core.lambdaBody (var "effectiveLambda") $
+    -- Check if this variant has unit type
+    "isUnitVariant" <~ (isVariantUnitType @@ var "rowType" @@ var "fname") $
+    -- For unit variants, eliminate references to the lambda parameter
+    "effectiveBody" <~ (Logic.ifElse (var "isUnitVariant")
+      (eliminateUnitVar @@ var "v" @@ var "rawBody")
+      (var "rawBody")) $
+    -- Determine if we should capture the value
+    -- Don't capture if: unit variant, variable is free in body, or body is unit term
+    "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
+      (Logic.or (Rewriting.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
+                (Schemas.isUnitTerm @@ var "rawBody"))) $
+    -- Extend the TypeContext with the lambda parameter inside a Flows.bind
+    -- to prevent the code generator from reducing it away
+    "env2" <<~ (Flows.pure $ pythonEnvironmentSetTypeContext
+      @@ (Schemas.extendTypeContextForLambda @@ (pythonEnvironmentGetTypeContext @@ var "env") @@ var "effectiveLambda")
+      @@ var "env") $
+    -- Create the pattern using env2 (extended context)
+    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname"
+      @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
+    -- Encode the body using the provided encoder with extended env
+    "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
+    "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
+    produce $ PyDsl.caseBlock
+      (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
+      nothing
+      (var "pyBody")
 
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: TBinding (PyHelpers.PyGraph -> Graph)
@@ -1231,7 +1237,9 @@ encodeRecordType = def "encodeRecordType" $
   "env" ~> "name" ~> "rowType" ~> "comment" ~>
     "tfields" <~ Core.rowTypeFields (var "rowType") $
     "pyFields" <<~ (Flows.mapList (encodeFieldType @@ var "env") (var "tfields")) $
-    "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list [var "pyFields"]) $
+    -- Generate class-level name constants
+    "constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "tfields") $
+    "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list [var "pyFields", var "constStmts"]) $
     -- Get bound type variables for Generic args
     "boundVars" <~ (Phantoms.project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
     "tparamList" <~ Pairs.first (var "boundVars") $
@@ -1250,7 +1258,7 @@ encodeRecordType = def "encodeRecordType" $
         Phantoms.field Py._ClassDefinition_arguments (var "args"),
         Phantoms.field Py._ClassDefinition_body (var "body")]
 
--- | Encode an enum value assignment: ENUM_VALUE = "enum_value"
+-- | Encode an enum value assignment: ENUM_VALUE = Name("enum_value")
 encodeEnumValueAssignment :: TBinding (PyHelpers.PythonEnvironment -> FieldType -> Flow PyHelpers.PyGraph [Py.Statement])
 encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
   doc "Encode an enum value assignment statement with optional comment" $
@@ -1260,7 +1268,9 @@ encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
     "mcomment" <<~ (inGraphContext @@ (Annotations.getTypeDescription @@ var "ftype")) $
     "pyName" <~ (PyNames.encodeEnumValue @@ var "env" @@ var "fname") $
     "fnameStr" <~ (Core.unName $ var "fname") $
-    "pyValue" <~ (PyUtils.doubleQuotedString @@ var "fnameStr") $
+    "pyValue" <~ (PyUtils.functionCall
+      @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+      @@ list [PyUtils.doubleQuotedString @@ var "fnameStr"]) $
     "assignStmt" <~ (PyUtils.assignmentStatement @@ var "pyName" @@ var "pyValue") $
     produce $ optCases (var "mcomment")
       (list [var "assignStmt"])
@@ -1303,23 +1313,33 @@ encodeUnionType = def "encodeUnionType" $
   "env" ~> "name" ~> "rowType" ~> "comment" ~>
     "tfields" <~ Core.rowTypeFields (var "rowType") $
     Logic.ifElse (Schemas.isEnumRowType @@ var "rowType")
-      -- Enum case
+      -- Enum case: enum values are Name objects; TYPE_ assigned after class to avoid becoming a member
       ("vals" <<~ (Flows.mapList (encodeEnumValueAssignment @@ var "env") (var "tfields")) $
        "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ var "vals") $
        "enumName" <~ PyDsl.name (string "Enum") $
        "args" <~ (just $ PyUtils.pyExpressionsToPyArgs @@ list [PyUtils.pyNameToPyExpression @@ var "enumName"]) $
        "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
+       -- Generate TYPE_ as a dotted assignment after the class: ClassName.TYPE_ = Name("...")
+       "typeConstStmt" <~ (PyUtils.dottedAssignmentStatement
+         @@ var "pyName"
+         @@ (PyNames.encodeConstantForTypeName @@ var "env" @@ var "name")
+         @@ (PyUtils.functionCall
+               @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ (Core.name $ string "hydra.core.Name")))
+               @@ list [PyUtils.doubleQuotedString @@ (Core.unName $ var "name")])) $
        produce $ list [PyUtils.pyClassDefinitionToPyStatement @@
-         PyDsl.classDefinition nothing (var "pyName") (Phantoms.list ([] :: [TTerm Py.TypeParameter])) (var "args") (var "body")])
-      -- Union case
-      ("fieldStmts" <<~ (Flows.mapList (encodeUnionField @@ var "env" @@ var "name") (var "tfields")) $
+         PyDsl.classDefinition nothing (var "pyName") (Phantoms.list ([] :: [TTerm Py.TypeParameter])) (var "args") (var "body"),
+         var "typeConstStmt"])
+      -- Union case: pass constants to the union class body
+      ("constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "tfields") $
+       "fieldStmts" <<~ (Flows.mapList (encodeUnionField @@ var "env" @@ var "name") (var "tfields")) $
        "tparams" <~ (environmentTypeParameters @@ var "env") $
        "unionAlts" <~ Lists.map (encodeUnionFieldAlt @@ var "env" @@ var "name") (var "tfields") $
        "unionStmts" <~ (unionTypeStatementsFor @@ var "env" @@
          (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") @@
          (var "tparams") @@
          (var "comment") @@
-         (PyUtils.orExpression @@ var "unionAlts")) $
+         (PyUtils.orExpression @@ var "unionAlts") @@
+         (var "constStmts")) $
        produce $ Lists.concat2 (var "fieldStmts") (var "unionStmts"))
 
 -- | Encode a union field as an alternative expression for the union type alias
@@ -1347,15 +1367,13 @@ encodeTypeDefSingle = def "encodeTypeDefSingle" $
     list [typeAliasStatementFor @@ var "env" @@ var "pyName" @@ var "tparams" @@ var "comment" @@ var "typeExpr"]
 
 -- | Encode a type assignment (dispatches to record, union, wrap, or simple typedef)
+--   Name constants are now generated inside the class body by each type encoder.
 encodeTypeAssignment :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyHelpers.PyGraph [[Py.Statement]])
 encodeTypeAssignment = def "encodeTypeAssignment" $
   doc "Encode a type definition, dispatching based on type structure" $
   "env" ~> "name" ~> "typ" ~> "comment" ~>
     "defStmts" <<~ (encodeTypeAssignmentInner @@ var "env" @@ var "name" @@ var "typ" @@ var "comment") $
-    "constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "typ") $
-    produce $ Lists.concat2
-      (Lists.map ("s" ~> list [var "s"]) (var "defStmts"))
-      (list [var "constStmts"])
+    produce $ Lists.map ("s" ~> list [var "s"]) (var "defStmts")
 
 -- | Inner type assignment encoding that handles forall unwrapping
 encodeTypeAssignmentInner :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Flow PyHelpers.PyGraph [Py.Statement])
@@ -1385,7 +1403,7 @@ encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
       -- Wrapped type
       _Type_wrap>>: "wt" ~>
         "innerType" <~ (Core.wrappedTypeBody $ var "wt") $
-        Flows.map ("s" ~> list [var "s"]) (encodeWrappedType @@ var "env" @@ var "name" @@ var "innerType" @@ var "comment")]
+        encodeWrappedType @@ var "env" @@ var "name" @@ var "innerType" @@ var "comment"]
 
 -- | Encode a field (name-value pair) to a Python (Name, Expression) pair
 encodeField :: TBinding (PyHelpers.PythonEnvironment -> Field -> (TTerm Term -> Flow PyHelpers.PyGraph Py.Expression) -> Flow PyHelpers.PyGraph (Py.Name, Py.Expression))
@@ -1509,7 +1527,9 @@ encodeBindingAs = def "encodeBindingAs" $
                 produce $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw")))
               (var "mcs"))
           -- Has lambda params: this is a hoisted binding
-          -- Encode as: def fname(lambdaParams..., matchArg): match matchArg: ...
+          -- The last lambda param is the case expression's own parameter (match subject).
+          -- Any preceding lambda params are captured variables from outer scopes.
+          -- Encode as: def fname(capturedParams..., matchParam): match matchParam: ...
           -- Extract components from the nested tuple: (tname, (dflt, (cases, arg)))
           ("tname" <~ (Pairs.first $ var "csa") $
             "rest1" <~ (Pairs.second $ var "csa") $
@@ -1519,16 +1539,20 @@ encodeBindingAs = def "encodeBindingAs" $
             "rt" <<~ (inGraphContext @@ (Schemas.requireUnionType @@ var "tname")) $
             "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
-            -- Create parameters for captured variables
+            -- Separate captured variables (all but last) from the match parameter (last).
+            -- The last lambda parameter is the case expression's own parameter.
+            "capturedVarNames" <~ (Lists.init $ var "lambdaParams") $
+            "matchLambdaParam" <~ (Lists.last $ var "lambdaParams") $
+            -- Create parameters for captured variables only
             "capturedParams" <~ (Lists.map
               ("n" ~> Phantoms.record Py._ParamNoDefault [
                 Phantoms.field Py._ParamNoDefault_param (PyDsl.param
                   (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "n")
                   nothing),
                 Phantoms.field Py._ParamNoDefault_typeComment nothing])
-              (var "lambdaParams")) $
-            -- Create the match argument parameter
-            "matchArgName" <~ (PyDsl.name $ string "x") $
+              (var "capturedVarNames")) $
+            -- Create the match argument parameter using the case lambda's parameter name
+            "matchArgName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "matchLambdaParam") $
             "matchParam" <~ (Phantoms.record Py._ParamNoDefault [
               Phantoms.field Py._ParamNoDefault_param (PyDsl.param (var "matchArgName") nothing),
               Phantoms.field Py._ParamNoDefault_typeComment nothing]) $
@@ -1628,7 +1652,18 @@ termArityWithPrimitives = def "termArityWithPrimitives" $
           (termArityWithPrimitives @@ var "graph" @@ (Core.applicationFunction $ var "app"))
           (Phantoms.int 1)),
       _Term_function>>: "f" ~>
-        functionArityWithPrimitives @@ var "graph" @@ var "f"]
+        functionArityWithPrimitives @@ var "graph" @@ var "f",
+      -- Look up variables in the graph to compute arity from the binding's type scheme or term.
+      -- This is important for hoisted case statement bindings which are local functions.
+      _Term_variable>>: "name" ~>
+        optCases (Lexical.lookupElement @@ var "graph" @@ var "name")
+          (Phantoms.int 0)
+          ("el" ~> optCases (Core.bindingType $ var "el")
+            -- No type scheme: compute arity from the binding's term structure.
+            -- Use Arity.termArity to avoid infinite recursion on self-referencing bindings.
+            (Arity.termArity @@ (Core.bindingTerm $ var "el"))
+            -- Has type scheme: use the type scheme's arity
+            ("ts" ~> Arity.typeSchemeArity @@ var "ts"))]
 
 -- | Calculate the arity of a function, with proper handling of primitives.
 functionArityWithPrimitives :: TBinding (Graph -> Function -> Int)
@@ -1950,7 +1985,18 @@ encodeFunction = def "encodeFunction" $
         "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
         "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
         "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
-        "innerEnv" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
+        "innerEnv0" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
+        -- Add binding names to inlineVariables so they can be resolved during body encoding
+        "bindingNames" <~ (Lists.map ("b" ~> Core.bindingName (var "b")) (var "bindings")) $
+        "innerEnv" <~ (record PyHelpers._PythonEnvironment [
+          PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_typeContext>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_inlineVariables>>: Sets.union (Sets.fromList (var "bindingNames"))
+            (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv0")]) $
         "pbody" <<~ (encodeTermInline @@ var "innerEnv" @@ false @@ var "innerBody") $
         "pparams" <~ (Lists.map (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "innerEnv") (var "params")) $
         Logic.ifElse (Lists.null $ var "bindings")
@@ -2054,15 +2100,19 @@ encodeVariable = def "encodeVariable" $
         (Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
           -- Untyped lambda variable
           (produce $ var "asVariable")
-          -- Not a lambda var - check primitives
-          (Maybes.maybe
-            -- Not a primitive - check graph elements
+          -- Not a lambda var - check inline vars first
+          (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
+            -- Untyped inline variable (e.g. from hoisting with no type annotation)
+            (produce $ var "asVariable")
+            -- Not inline - check primitives
             (Maybes.maybe
-              -- Not in graph elements - check metadata
+              -- Not a primitive - check graph elements
               (Maybes.maybe
-                (Flows.fail $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name")))
-                (constant $ produce $ var "asFunctionCall")  -- Lifted case expression
-                (Maps.lookup (var "name") (var "tcMetadata")))
+                -- Not in graph elements - check metadata
+                (Maybes.maybe
+                  (Flows.fail $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name")))
+                  (constant $ produce $ var "asFunctionCall")  -- Lifted case expression
+                  (Maps.lookup (var "name") (var "tcMetadata")))
               -- In graph elements
               ("el" ~>
                 Maybes.maybe
@@ -2089,7 +2139,7 @@ encodeVariable = def "encodeVariable" $
                       (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
                       (var "asVariable")) $
                   produce $ var "asFunctionRef"))
-            (Lexical.lookupPrimitive @@ var "g" @@ var "name")))
+            (Lexical.lookupPrimitive @@ var "g" @@ var "name"))))
         -- Name is in typeContextTypes
         ("typ" ~>
           Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
@@ -2198,7 +2248,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
     -- Default case: encode function and apply
     "defaultCase" <~ ("pfun" <<~ (encodeTermInline @@ var "env" @@ false @@ var "fun") $
       produce $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")) $
-    cases _Term (Rewriting.deannotateTerm @@ var "fun") (Just $ var "defaultCase") [
+    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fun") (Just $ var "defaultCase") [
       _Term_function>>: "f" ~>
         cases _Function (var "f") (Just $ var "defaultCase") [
           _Function_elimination>>: "elm" ~>
@@ -2339,8 +2389,8 @@ encodeTermInline = def "encodeTermInline" $
                 PyHelpers._PythonModuleMetadata_usesTypeVar>>:
                   project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"])) $
             produce $ PyUtils.castTo @@ var "pytyp" @@ var "pyexp"))) $
-    -- Main case dispatch on term variant
-    cases _Term (Rewriting.deannotateTerm @@ var "term") Nothing [
+    -- Main case dispatch on term variant (strip annotations and type wrappers)
+    cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "term") Nothing [
       -- TermApplication
       _Term_application>>: "app" ~>
         encodeApplication @@ var "env" @@ var "app",

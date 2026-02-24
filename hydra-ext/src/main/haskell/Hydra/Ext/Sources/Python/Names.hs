@@ -139,23 +139,18 @@ useFutureAnnotations = def "useFutureAnnotations" $
   doc "Whether to use __future__ annotations for forward references" $
   true
 
--- | Encode a constant name for a field (e.g., TYPE_NAME__FIELD_NAME__NAME).
+-- | Encode a constant name for a field (e.g., FIELD_NAME as a class-level attribute).
 encodeConstantForFieldName :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name)
 encodeConstantForFieldName = def "encodeConstantForFieldName" $
   doc "Generate a constant name for a field definition" $
-  lambdas ["env", "tname", "fname"] $ wrap Py._Name $ Strings.cat $ list [
-    Formatting.convertCase @@ Util.caseConventionPascal @@ Util.caseConventionUpperSnake @@ (Names.localNameOf @@ var "tname"),
-    string "__",
-    Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ (Core.unName $ var "fname"),
-    string "__NAME"]
+  lambdas ["env", "tname", "fname"] $ wrap Py._Name $
+    Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ (Core.unName $ var "fname")
 
--- | Encode a constant name for a type (e.g., TYPE_NAME__NAME).
+-- | Encode a constant name for a type (always TYPE_ as a class-level attribute).
 encodeConstantForTypeName :: TBinding (PyHelpers.PythonEnvironment -> Name -> Py.Name)
 encodeConstantForTypeName = def "encodeConstantForTypeName" $
   doc "Generate a constant name for a type definition" $
-  lambdas ["env", "tname"] $ wrap Py._Name $ Strings.cat2
-    (Formatting.convertCase @@ Util.caseConventionPascal @@ Util.caseConventionUpperSnake @@ (Names.localNameOf @@ var "tname"))
-    (string "__NAME")
+  lambdas ["env", "tname"] $ wrap Py._Name $ string "TYPE_"
 
 -- | Encode an enum value name (UPPER_SNAKE case).
 encodeEnumValue :: TBinding (PyHelpers.PythonEnvironment -> Name -> Py.Name)

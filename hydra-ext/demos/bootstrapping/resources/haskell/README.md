@@ -1,0 +1,27 @@
+# Hydra (bootstrapped)
+
+This directory contains a bootstrapped copy of Hydra, generated from a
+language-independent JSON representation by a non-Haskell host. The generated
+Haskell code is combined with static resources (hand-written libraries and test
+infrastructure) to form a self-contained, buildable project.
+
+## Structure
+
+- `src/gen-main/haskell/` -- Generated main modules (from JSON)
+- `src/gen-test/haskell/` -- Generated test modules (from JSON) and generation test specs
+- `src/main/haskell/`     -- Hand-written source files (primitives, DSL, etc.)
+- `src/test/haskell/`     -- Test harness (Spec.hs, GenerationSpec.hs)
+
+## Prerequisites
+
+- [Stack](https://docs.haskellstack.org/) (tested with GHC 9.10.2)
+
+## Running the tests
+
+```
+stack test
+```
+
+This builds the library and runs the full test suite. All tests should pass,
+confirming that the bootstrapped code is functionally equivalent to the
+Haskell-hosted original.

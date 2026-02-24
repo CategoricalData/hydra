@@ -43,7 +43,7 @@ These coders generate complete, runnable code including type definitions and ter
 | **Python** | Production-ready | Complete Hydra implementation; generates full Python modules with generation tests |
 | **Java** | Production-ready | Complete Hydra implementation; generates full Java classes with visitor pattern for ADTs and generation tests |
 
-Both Python and Java coders support **generation tests** - tests where Hydra terms are generated to the target language and executed to verify correctness. Use `sync-python.sh` and `sync-java.sh` to regenerate code and run all tests.
+Both Python and Java coders support **generation tests** - tests where Hydra terms are generated to the target language and executed to verify correctness. Use `sync-all.sh` (from the repo root) or `sync-python.sh` / `sync-java.sh` (from hydra-ext) to regenerate code and run all tests.
 
 #### Type generation only
 
@@ -361,7 +361,7 @@ For the sake of space, only generated Haskell is checked in to the repository, b
 ```haskell
 -- Universe provides all modules for dependency resolution
 -- modulesToGenerate specifies which modules to actually generate
-writeJava "src/gen-main/java" (hydraExtModules <> kernelModules) hydraExtModules
+writeJava "src/gen-main/java" mainModules hydraExtModules
 ```
 
 The generated Haskell can be updated using:
@@ -392,8 +392,9 @@ These are the primary scripts for regenerating implementations:
 
 | Script | Purpose |
 |--------|---------|
+| `sync-ext.sh` | Regenerate ext Haskell modules and JSON exports |
 | `sync-java.sh` | Full Java synchronization: regenerates kernel, eval lib, kernel tests, and generation tests; runs all tests |
-| `sync-python.sh` | Full Python synchronization: regenerates kernel, kernel sources, eval lib, kernel tests, and generation tests; runs all tests |
+| `sync-python.sh` | Full Python synchronization: regenerates kernel, eval lib, kernel tests, and generation tests; runs all tests |
 
 **Usage:**
 
@@ -407,19 +408,7 @@ These are the primary scripts for regenerating implementations:
 ./bin/sync-python.sh --quick
 ```
 
-### Individual Update Scripts
-
-For more granular control, individual update scripts are available:
-
-| Script | Purpose |
-|--------|---------|
-| `update-java-kernel.sh` | Regenerate Java kernel modules only |
-| `update-java-kernel-types.sh` | Regenerate Java kernel types only (without terms) |
-| `update-python-kernel.sh` | Regenerate Python kernel modules only |
-| `update-python-kernel-sources.sh` | Generate Python kernel source modules (Module AST as data) |
-| `update-python-generation-tests.sh` | Regenerate Python generation tests only |
-
-**Note:** These scripts use RTS flags (`-K256M -A32M`) to avoid stack overflow during generation. If running manually from GHCi, use `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.
+All sync scripts use `bootstrap-from-json` under the hood, which generates all artifacts (kernel modules, eval lib, coder modules, kernel tests, generation tests) from JSON in a single invocation. The scripts include RTS flags (`-K256M -A32M`) to avoid stack overflow during generation.
 
 ### Hydra-Haskell Scripts
 
@@ -427,6 +416,7 @@ The following scripts in `hydra-haskell/bin/` are used for the bootstrapping imp
 
 | Script | Purpose |
 |--------|---------|
+| `sync-haskell.sh` | Full Haskell self-regeneration from DSL sources |
 | `update-kernel-tests.sh` | Regenerate Haskell kernel tests from test sources |
 | `update-generation-tests.sh` | Regenerate Haskell generation tests |
 | `update-json-kernel.sh` | Export kernel modules to JSON format |

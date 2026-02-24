@@ -2189,7 +2189,9 @@ tryInferFunctionType = def "tryInferFunctionType" $
               Maybes.bind
                 (Maps.lookup (Constants.key_type) (Core.annotatedTermAnnotation (var "at")))
                 (lambda "typeTerm" $
-                  decodeTypeFromTerm @@ var "typeTerm")]) $
+                  decodeTypeFromTerm @@ var "typeTerm"),
+            _Term_function>>: lambda "innerFun" $
+              tryInferFunctionType @@ var "innerFun"]) $
           Maybes.map (lambda "cod" $
             Core.typeFunction (Core.functionType (var "dom") (var "cod")))
             (var "mCod"))]
@@ -3317,7 +3319,7 @@ recordHashCodeMethod = def "recordHashCodeMethod" $
 -- Batch 22: constantDecl, declarationForRecordType, and entry-point functions
 -- =============================================================================
 
--- | Create a constant field declaration (e.g., public static final Name TYPE_NAME = new Name("..."))
+-- | Create a constant field declaration (e.g., public static final Name TYPE_ = new Name("..."))
 constantDecl :: TBinding (String -> JavaHelpers.Aliases -> Name -> Flow Graph Java.ClassBodyDeclarationWithComments)
 constantDecl = def "constantDecl" $
   lambda "javaName" $ lambda "aliases" $ lambda "name" $ lets [
@@ -3343,15 +3345,14 @@ constantDeclForFieldType :: TBinding (JavaHelpers.Aliases -> FieldType -> Flow G
 constantDeclForFieldType = def "constantDeclForFieldType" $
   lambda "aliases" $ lambda "ftyp" $ lets [
     "name">: Core.fieldTypeName (var "ftyp"),
-    "javaName">: Strings.cat2 (string "FIELD_NAME_")
-      (Formatting.nonAlnumToUnderscores @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ (unwrap _Name @@ var "name")))] $
+    "javaName">: Formatting.nonAlnumToUnderscores @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ (unwrap _Name @@ var "name"))] $
     constantDecl @@ var "javaName" @@ var "aliases" @@ var "name"
 
 -- | Create a constant field declaration for a type name.
 constantDeclForTypeName :: TBinding (JavaHelpers.Aliases -> Name -> Flow Graph Java.ClassBodyDeclarationWithComments)
 constantDeclForTypeName = def "constantDeclForTypeName" $
   lambda "aliases" $ lambda "name" $
-    constantDecl @@ string "TYPE_NAME" @@ var "aliases" @@ var "name"
+    constantDecl @@ string "TYPE_" @@ var "aliases" @@ var "name"
 
 -- | Create a record type class declaration (without parent class).
 declarationForRecordType :: TBinding (Bool -> Bool -> JavaHelpers.Aliases -> [Java.TypeParameter] -> Name
@@ -3502,11 +3503,11 @@ encodeTermInternal = def "encodeTermInternal" $
         ("bindings" <~ Core.letBindings (var "lt") $
         "body" <~ Core.letBody (var "lt") $
         Logic.ifElse (Lists.null (var "bindings"))
-          (var "encode" @@ var "body")
+          (encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "body")
           ("bindResult" <<~ (bindingsToStatements @@ var "env" @@ var "bindings") $
             "bindingStmts" <~ Pairs.first (var "bindResult") $
             "env2" <~ Pairs.second (var "bindResult") $
-            "jbody" <<~ (encodeTerm @@ var "env2" @@ var "body") $
+            "jbody" <<~ (encodeTermInternal @@ var "env2" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "body") $
             "returnSt" <~ JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody")) $
             "block" <~ (wrap Java._Block (Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))) $
             "nullaryLambda" <~ JavaDsl.expressionLambda
@@ -3598,15 +3599,32 @@ encodeTermInternal = def "encodeTermInternal" $
           @@ list [var "jterm1", var "jterm2"] @@ nothing),
 
       -- TermRecord: new RecordType(field1, field2, ...)
+      -- When tyapps is non-empty (from TermTypeApplication wrappers), use those directly.
+      -- When tyapps is empty, fall back to extracting type args from the annotation type.
+      -- This handles cases like unitCoder where the record has concrete type parameters
+      -- (e.g. Coder<Graph, Graph, Term, Value>) but no TermTypeApplication wrappers in the term.
       _Term_record>>: lambda "rec" $
         "recName" <~ Core.recordTypeName (var "rec") $
         "fieldExprs" <<~ (Flows.mapList (lambda "fld" $ var "encode" @@ Core.fieldTerm (var "fld")) (Core.recordFields (var "rec"))) $
         "consId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "recName") $
-        "mtargs" <<~ (Logic.ifElse (Lists.null (var "tyapps"))
-          (Flows.pure nothing)
+        "mtargs" <<~ (Logic.ifElse (Logic.not (Lists.null (var "tyapps")))
           ("rts" <<~ (Flows.mapList (lambda "jt" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt") (var "tyapps")) $
             Flows.pure (just (JavaDsl.typeArgumentsOrDiamondArguments
-              (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "rts")))))) $
+              (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "rts")))))
+          -- tyapps is empty: try to extract type args from annotation
+          ("combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
+           "mtyp" <<~ (Annotations.getType @@ var "combinedAnns") $
+           Maybes.cases (var "mtyp")
+             (Flows.pure nothing)
+             (lambda "annTyp" $
+               "typeArgs" <~ (extractTypeApplicationArgs @@ (Rewriting.deannotateType @@ var "annTyp")) $
+               Logic.ifElse (Lists.null (var "typeArgs"))
+                 (Flows.pure nothing)
+                 ("jTypeArgs" <<~ (Flows.mapList (lambda "t" $
+                   "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t") $
+                   JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt") (var "typeArgs")) $
+                  Flows.pure (just (JavaDsl.typeArgumentsOrDiamondArguments
+                    (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "jTypeArgs")))))))) $
         Flows.pure (JavaUtilsSource.javaConstructorCall
           @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ var "mtargs")
           @@ var "fieldExprs" @@ nothing),
@@ -4216,18 +4234,8 @@ functionCall = def "functionCall" $
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
     "isLambdaBound" <~ (isLambdaBoundIn @@ var "name"
       @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases")) $
-    -- When there are no arguments and it's a primitive, use a method reference
-    Logic.ifElse (Logic.and (var "isPrim") (Logic.and (Lists.null (var "args")) (Logic.not (var "isLambdaBound"))))
-      -- Generate method reference like ClassName::apply
-      ("classWithApply" <~ (JavaDsl.unIdentifier (elementJavaIdentifier @@ true @@ false @@ var "aliases" @@ var "name")) $
-        "suffix" <~ Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName) $
-        "className" <~ Strings.fromList (Lists.take
-          (Math.sub (Strings.length (var "classWithApply")) (Strings.length (var "suffix")))
-          (Strings.toList (var "classWithApply"))) $
-        Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@
-          (JavaDsl.identifier (Strings.cat (list [var "className", string "::", asTerm JavaNamesSource.applyMethodName])))))
-      -- Encode arguments
-      ("jargs0" <<~ (Flows.mapList (lambda "arg" $ encodeTerm @@ var "env" @@ var "arg") (var "args")) $
+    -- Encode arguments and generate method invocation
+    ("jargs0" <<~ (Flows.mapList (lambda "arg" $ encodeTerm @@ var "env" @@ var "arg") (var "args")) $
         "wrapResult" <~ (wrapLazyArguments @@ var "name" @@ var "jargs0") $
         "jargs" <~ Pairs.first (var "wrapResult") $
         "mMethodOverride" <~ Pairs.second (var "wrapResult") $
