@@ -43,6 +43,8 @@ def apply(f: Flow[S, Callable[[X], Y]], x: Flow[S, X]) -> Flow[S, Y]:
 
 def bind(mx: Flow[S, X], f: Callable[[X], Flow[S, Y]]) -> Flow[S, Y]:
     """Monadic bind for Flow."""
+    if mx is None:
+        raise TypeError(f"bind: received None as mx (first argument). f={f}")
     def run(state: S, trace: Trace) -> FlowState[S, Y]:
         x_state = mx.value(state, trace)
 
@@ -51,6 +53,8 @@ def bind(mx: Flow[S, X], f: Callable[[X], Flow[S, Y]]) -> Flow[S, Y]:
                 return FlowState(value=NOTHING, state=x_state.state, trace=x_state.trace)
             case Just(x):
                 my = f(x)
+                if my is None:
+                    raise TypeError(f"bind: continuation returned None for input {repr(x)[:200]}")
                 return my.value(x_state.state, x_state.trace)
 
     return Flow(run)
@@ -96,6 +100,8 @@ def foldl(f: Callable[[A, B], Flow[S, A]], initial: A, values: Sequence[B]) -> F
 
 def map(f: Callable[[X], Y], mx: Flow[S, X]) -> Flow[S, Y]:
     """Map a function over a Flow (functor)."""
+    if mx is None:
+        raise TypeError(f"map: received None as mx (second argument). f={f}")
     def run(state: S, trace: Trace) -> FlowState[S, Y]:
         x_state = mx.value(state, trace)
 
@@ -128,7 +134,7 @@ def map_elems(f: Callable[[V1], Flow[S, V2]], m: Mapping[K, V1]) -> Flow[S, Froz
                     current_state = v2_state.state
                     current_trace = v2_state.trace
 
-        return FlowState(value=Just(FrozenDict(result_dict)), state=current_state, trace=current_trace)
+        return FlowState(value=Just(FrozenDict(result_dict, _trusted=True)), state=current_state, trace=current_trace)
 
     return Flow(run)
 
@@ -152,7 +158,7 @@ def map_keys(f: Callable[[K1], Flow[S, K2]], m: Mapping[K1, V]) -> Flow[S, Froze
                     current_state = k2_state.state
                     current_trace = k2_state.trace
 
-        return FlowState(value=Just(FrozenDict(result_dict)), state=current_state, trace=current_trace)
+        return FlowState(value=Just(FrozenDict(result_dict, _trusted=True)), state=current_state, trace=current_trace)
 
     return Flow(run)
 
@@ -166,6 +172,8 @@ def map_list(f: Callable[[X], Flow[S, Y]], xs: Sequence[X]) -> Flow[S, frozenlis
 
         for x in xs:
             flow_result = f(x)
+            if flow_result is None:
+                raise TypeError(f"map_list: function {f} returned None for input {repr(x)[:200]}")
             y_state = flow_result.value(current_state, current_trace)
 
             match y_state.value:

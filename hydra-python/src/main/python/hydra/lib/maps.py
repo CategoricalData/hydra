@@ -84,7 +84,15 @@ def _structural_compare(x: Any, y: Any) -> int:
 
 def _sorted_by_key(items: Any) -> list[Any]:
     """Sort items using structural comparison."""
-    return sorted(items, key=cmp_to_key(lambda a, b: _structural_compare(a[0], b[0])))
+    item_list = list(items)
+    if not item_list:
+        return item_list
+    # Fast path: if keys support native comparison (Name, str, int, etc.), use it directly
+    try:
+        item_list.sort(key=lambda a: a[0])
+        return item_list
+    except TypeError:
+        return sorted(item_list, key=cmp_to_key(lambda a, b: _structural_compare(a[0], b[0])))
 
 
 def alter(
@@ -102,11 +110,15 @@ def alter(
 def bimap(
     f: Callable[[K1], K2], g: Callable[[V1], V2], mapping: Mapping[K1, V1]) -> FrozenDict[K2, V2]:
     """Map a function over the keys and values of a map."""
-    return FrozenDict({f(k): g(v) for k, v in mapping.items()})
+    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
+    return FrozenDict({f(k): g(v) for k, v in items}, _trusted=True)
 
 
 def delete(key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Remove a key from a map."""
+    if isinstance(mapping, FrozenDict):
+        new = {k: v for k, v in mapping._data.items() if k != key}  # type: ignore[attr-defined]
+        return FrozenDict(new, _trusted=True)
     return FrozenDict({k: v for k, v in mapping.items() if k != key})
 
 
@@ -122,13 +134,15 @@ def empty() -> FrozenDict[Any, Any]:
 
 def filter(predicate: Callable[[V], bool], mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Filter a map based on values."""
-    return FrozenDict({k: v for k, v in mapping.items() if predicate(v)})
+    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
+    return FrozenDict({k: v for k, v in items if predicate(v)}, _trusted=True)
 
 
 def filter_with_key(
     predicate: Callable[[K, V], bool], mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Filter a map based on key-value pairs."""
-    return FrozenDict({k: v for k, v in mapping.items() if predicate(k, v)})
+    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
+    return FrozenDict({k: v for k, v in items if predicate(k, v)}, _trusted=True)
 
 
 def find_with_default(default: V, key: K, mapping: Mapping[K, V]) -> V:
@@ -138,11 +152,13 @@ def find_with_default(default: V, key: K, mapping: Mapping[K, V]) -> V:
 
 def from_list(pairs: Sequence[tuple[K, V]]) -> FrozenDict[K, V]:
     """Create a map from a list of key-value pairs."""
-    return FrozenDict(dict(pairs))
+    return FrozenDict(dict(pairs), _trusted=True)
 
 
 def insert(key: K, value: V, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
     """Insert a key-value pair into a map."""
+    if isinstance(mapping, FrozenDict):
+        return mapping._insert(key, value)
     return FrozenDict({**mapping, key: value})
 
 
@@ -161,13 +177,15 @@ def lookup(key: K, mapping: Mapping[K, V]) -> Maybe[V]:
 
 def map(f: Callable[[V1], V2], mapping: Mapping[K, V1]) -> FrozenDict[K, V2]:
     """Map a function over a map."""
-    return FrozenDict[K, V2]({k: f(v) for k, v in mapping.items()})
+    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
+    return FrozenDict({k: f(v) for k, v in items}, _trusted=True)
 
 
 def map_keys(
     f: Callable[[K1], K2], mapping: Mapping[K1, V]) -> FrozenDict[K2, V]:
     """Map a function over the keys of a map."""
-    return FrozenDict({f(k): v for k, v in mapping.items()})
+    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
+    return FrozenDict({f(k): v for k, v in items}, _trusted=True)
 
 
 def member(key: K, mapping: Mapping[K, Any]) -> bool:
@@ -182,7 +200,7 @@ def null(mapping: Mapping[Any, Any]) -> bool:
 
 def singleton(key: K, value: V) -> FrozenDict[K, V]:
     """Create a map with a single key-value pair."""
-    return FrozenDict({key: value})
+    return FrozenDict({key: value}, _trusted=True)
 
 
 def size(mapping: Mapping[Any, Any]) -> int:
@@ -197,4 +215,7 @@ def to_list(mapping: Mapping[K, V]) -> frozenlist[tuple[K, V]]:
 
 def union(map1: Mapping[K, V], map2: Mapping[K, V]) -> FrozenDict[K, V]:
     """Union two maps, with the first taking precedence."""
+    if isinstance(map1, FrozenDict) and isinstance(map2, FrozenDict):
+        new = {**map2._data, **map1._data}  # type: ignore[attr-defined]
+        return FrozenDict(new, _trusted=True)
     return FrozenDict({**map2, **map1})
