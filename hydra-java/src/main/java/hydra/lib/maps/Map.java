@@ -16,7 +16,6 @@ import java.util.function.Function;
 
 import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.forall;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 
@@ -39,8 +38,8 @@ public class Map extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k", forall("v1", forall("v2",
-            function(function("v1", "v2"), map("k", "v1"), map("k", "v2")))));
+        return scheme("v1", "v2", "k",
+            function(function("v1", "v2"), map("k", "v1"), map("k", "v2")));
     }
 
     /**
@@ -49,22 +48,9 @@ public class Map extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term f = args.get(0);
-            return Flows.bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
-                Flow<Graph, java.util.Map<Term, Term>> resultFlow = pure(new HashMap<>());
-                for (java.util.Map.Entry<Term, Term> entry : mp.entrySet()) {
-                    Term application = Terms.apply(f, entry.getValue());
-                    final Term key = entry.getKey();
-                    resultFlow = Flows.bind(resultFlow, acc ->
-                        Flows.map(hydra.reduction.Reduction.reduceTerm(true, application), newVal -> {
-                            acc.put(key, newVal);
-                            return acc;
-                        }));
-                }
-                return Flows.map(resultFlow, Terms::map);
-            });
-        };
+        return args -> Flows.bind(Expect.termFunction(args.get(0)), f ->
+            Flows.bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp ->
+                pure(Terms.map(Map.apply(f, mp)))));
     }
 
     /**
@@ -89,10 +75,10 @@ public class Map extends PrimitiveFunction {
      * @return the transformed map
      */
     public static <K, V1, V2> java.util.Map<K, V2> apply(Function<V1, V2> mapping, java.util.Map<K, V1> arg) {
-        java.util.Map<K, V2> result = new java.util.LinkedHashMap<>();
+        java.util.Map<K, V2> result = FromList.emptyLike(arg);
         for (java.util.Map.Entry<K, V1> e : arg.entrySet()) {
             result.put(e.getKey(), mapping.apply(e.getValue()));
         }
-        return FromList.orderedMap(result);
+        return result;
     }
 }

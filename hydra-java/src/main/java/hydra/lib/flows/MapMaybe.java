@@ -29,7 +29,7 @@ public class MapMaybe extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return Types.scheme("s", "x", "y",
+        return Types.scheme("x", "s", "y",
                 Types.function(
                         Types.function("x", Types.flow("s", "y")),
                         Types.optional("x"),

@@ -41,30 +41,12 @@ public class Partition extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term pred = args.get(0);
-            return bind(Expect.list(Flows::pure, args.get(1)), lst -> {
-                Flow<Graph, Tuple.Tuple2<List<Term>, List<Term>>> partitioned =
-                    pure(new Tuple.Tuple2<>(new ArrayList<>(), new ArrayList<>()));
-                for (Term element : lst) {
-                    Term application = Terms.apply(pred, element);
-                    partitioned = bind(partitioned, acc ->
-                        bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
-                            bind(Expect.boolean_(reduced), b -> {
-                                List<Term> yes = new ArrayList<>(acc.object1);
-                                List<Term> no = new ArrayList<>(acc.object2);
-                                if (b) {
-                                    yes.add(element);
-                                } else {
-                                    no.add(element);
-                                }
-                                return pure(new Tuple.Tuple2<>(yes, no));
-                            })));
-                }
-                return Flows.map(partitioned, p ->
-                    Terms.pair(Terms.list(p.object1), Terms.list(p.object2)));
-            });
-        };
+        return args -> bind(Expect.predicate(args.get(0)), pred ->
+            bind(Expect.list(Flows::pure, args.get(1)), lst -> {
+                Tuple.Tuple2<List<Term>, List<Term>> result =
+                    Partition.apply((Function<Term, Boolean>) pred::apply, lst);
+                return pure(Terms.pair(Terms.list(result.object1), Terms.list(result.object2)));
+            }));
     }
 
     /**

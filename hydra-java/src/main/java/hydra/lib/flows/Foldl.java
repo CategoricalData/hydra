@@ -30,7 +30,7 @@ public class Foldl extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return Types.scheme("s", "a", "b",
+        return Types.scheme("a", "b", "s",
                 Types.function(
                         Types.function(Types.var("a"), Types.var("b"), Types.flow("s", "a")),
                         Types.var("a"),

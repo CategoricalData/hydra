@@ -33,7 +33,7 @@ public class Map extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return Types.scheme("s", "x", "y",
+        return Types.scheme("x", "y", "s",
                 Types.function(Types.function("x", "y"), Types.flow("s", "x"), Types.flow("s", "y")));
     }
 
@@ -42,13 +42,13 @@ public class Map extends PrimitiveFunction {
         return args -> {
             Term mapping = args.get(0);
             Term input = args.get(1);
-            Term output = wrap(Flow.TYPE_NAME, lambda("s", "t",
+            Term output = wrap(Flow.TYPE_, lambda("s", "t",
                     app(lambda("q", flowState(
-                                    app(Maybes.map(), mapping, app(project(FlowState.TYPE_NAME, "value"),
+                                    app(Maybes.map(), mapping, app(project(FlowState.TYPE_, FlowState.VALUE),
                                             variable("q"))),
-                                    app(project(FlowState.TYPE_NAME, "state"), variable("q")),
-                                    app(project(FlowState.TYPE_NAME, "trace"), variable("q")))),
-                            (app(unwrap(Flow.TYPE_NAME), input, variable("s"), variable("t"))))));
+                                    app(project(FlowState.TYPE_, FlowState.STATE), variable("q")),
+                                    app(project(FlowState.TYPE_, FlowState.TRACE), variable("q")))),
+                            (app(unwrap(Flow.TYPE_), input, variable("s"), variable("t"))))));
             return Flows.pure(output);
         };
     }

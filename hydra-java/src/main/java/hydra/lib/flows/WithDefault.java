@@ -49,13 +49,13 @@ public class WithDefault extends PrimitiveFunction {
             //   in maybe(FlowState{value=Just(fallback), state=s, trace=t})
             //           (\_ -> q)
             //           (project(FlowState, "value")(q)))
-            Term output = wrap(Flow.TYPE_NAME, lambda("s", "t",
+            Term output = wrap(Flow.TYPE_, lambda("s", "t",
                     app(lambda("q",
                             app(primitive("hydra.lib.maybes.maybe"),
                                     flowState(just(fallback), variable("s"), variable("t")),
                                     lambda("_", variable("q")),
-                                    app(project(FlowState.TYPE_NAME, "value"), variable("q")))),
-                            app(unwrap(Flow.TYPE_NAME), input, variable("s"), variable("t")))));
+                                    app(project(FlowState.TYPE_, FlowState.VALUE), variable("q")))),
+                            app(unwrap(Flow.TYPE_), input, variable("s"), variable("t")))));
             return Flows.pure(output);
         };
     }

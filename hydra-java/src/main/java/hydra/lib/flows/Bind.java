@@ -61,7 +61,7 @@ public class Bind extends PrimitiveFunction {
     //         Term output = lambda("s0", "t0", app(
     //                 lambda("fs1", app(foldOpt(
     //                         new OptionalCases(ifNothing, ifJust)),
-    //                         project(FlowState.TYPE_NAME, "value"))),
+    //                         project(FlowState.TYPE_, FlowState.VALUE))),
     //                 app(input, variable("s0"), variable("s1"))));
     //         return Flows.pure(output);
     //     };
