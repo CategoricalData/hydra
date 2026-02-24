@@ -19,15 +19,18 @@ hydra-ext/
 ├── demos/genpg/
 │   ├── README.md                 # This file
 │   ├── generate-python.ghci      # Script to generate Python modules
+│   ├── generate-java.ghci        # Script to generate Java modules
 │   ├── data/
 │   │   ├── sources/sales/        # CSV input files (sales example)
 │   │   └── sources/health/       # CSV input files (health example)
-│   └── output/                   # GraphSON output (shared by both modes)
+│   └── output/                   # GraphSON output (shared by all modes)
 ├── src/
 │   ├── main/
 │   │   ├── haskell/Hydra/Ext/Demos/GenPG/
 │   │   │   ├── Demo.hs           # Haskell demo driver
+│   │   │   ├── Modules.hs        # Shared module definitions (sales/health)
 │   │   │   ├── GeneratePython.hs # Python code generation
+│   │   │   ├── GenerateJava.hs   # Java code generation
 │   │   │   └── Examples/
 │   │   │       ├── Sales/        # Sales dataset definitions
 │   │   │       │   ├── DatabaseSchema.hs
@@ -37,17 +40,24 @@ hydra-ext/
 │   │   │           ├── DatabaseSchema.hs
 │   │   │           ├── GraphSchema.hs
 │   │   │           └── Mapping.hs
-│   │   └── python/hydra/demos/genpg/
-│   │       ├── demo.py           # Python demo driver
-│   │       └── generate_prompt.py # LLM prompt generator
+│   │   ├── python/hydra/demos/genpg/
+│   │   │   ├── demo.py           # Python demo driver
+│   │   │   └── generate_prompt.py # LLM prompt generator
+│   │   └── java/hydra/demos/genpg/
+│   │       └── Demo.java         # Java demo driver
 │   └── gen-main/
 │       ├── haskell/Hydra/Pg/
 │       │   ├── Model.hs          # Generated: property graph model
 │       │   ├── Mapping.hs        # Generated: mapping definitions
 │       │   └── Graphson/         # Generated: GraphSON coder, syntax, utils
-│       └── python/hydra/
-│           ├── pg/               # Generated: property graph models
-│           ├── demos/genpg/      # Generated: transform.py, sales.py, health.py
+│       ├── python/hydra/
+│       │   ├── pg/               # Generated: property graph models
+│       │   ├── demos/genpg/      # Generated: transform.py, sales.py, health.py
+│       │   ├── encode/pg/        # Generated: encoders
+│       │   └── decode/pg/        # Generated: decoders
+│       └── java/hydra/
+│           ├── pg/               # Generated: PG mapping, GraphSON modules
+│           ├── demos/genpg/      # Generated: Transform, Sales, Health
 │           ├── encode/pg/        # Generated: encoders
 │           └── decode/pg/        # Generated: decoders
 ```
@@ -56,6 +66,7 @@ hydra-ext/
 
 - GHC and Stack (for Haskell mode and code generation)
 - Python 3.10+ (for Python mode)
+- Java 17+ and Gradle (for Java mode)
 
 ## Running the demo
 
@@ -92,7 +103,26 @@ cd ../hydra-ext
 
 The `sales` argument is the default, so it can be omitted.
 
-Both modes read from `demos/genpg/data/sources/` and write to `demos/genpg/output/`.
+### Java mode
+
+Java 17+ is required. From the repository root:
+
+```bash
+./gradlew :hydra-ext:compileJava
+```
+
+Then run the demo:
+
+```bash
+cd hydra-ext
+java -cp $(../gradlew :hydra-ext:printClasspath -q 2>/dev/null || echo "build/classes/java/main") \
+  hydra.demos.genpg.Demo sales    # processes sales data
+  hydra.demos.genpg.Demo health   # processes health data
+```
+
+Or run directly via Gradle if an `application` plugin or JavaExec task is configured.
+
+All three modes read from `demos/genpg/data/sources/` and write to `demos/genpg/output/`.
 
 ## LLM-assisted schema generation
 
@@ -201,6 +231,31 @@ This generates to `hydra-ext/src/gen-main/python`:
 - `hydra.demos.genpg.transform` - Table-to-graph transformation logic
 - `hydra.demos.genpg.sales` - Sales demo schemas and mapping
 - `hydra.demos.genpg.health` - Health demo schemas and mapping
+
+### Step 4: Generate Java modules
+
+Generate all Java modules for the GenPG demo:
+
+```bash
+cd hydra-ext
+stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < demos/genpg/generate-java.ghci
+```
+
+Or interactively in GHCI:
+```haskell
+import Hydra.Ext.Demos.GenPG.GenerateJava
+generateJavaModules
+```
+
+This generates to `hydra-ext/src/gen-main/java`:
+- `hydra.pg.mapping` - Mapping definitions
+- `hydra.pg.graphson.*` - GraphSON coder, syntax, utilities
+- `hydra.encode.pg.*`, `hydra.decode.pg.*` - Encoders/decoders
+- `hydra.demos.genpg.transform` - Table-to-graph transformation logic
+- `hydra.demos.genpg.sales` - Sales demo schemas and mapping
+- `hydra.demos.genpg.health` - Health demo schemas and mapping
+
+Note: `hydra.pg.model` types are already generated in `hydra-java/src/gen-main/java/`.
 
 ## How it works
 

@@ -29,22 +29,40 @@ import Hydra.Ext.Staging.Protobuf.Coder
 import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Staging.Scala.Coder
 
+import qualified Hydra.Json.Model as Json
+import qualified Hydra.Json.Writer as JsonWriter
+
+import qualified Data.Map as M
 import qualified System.FilePath as FP
 
+
+-- | Write a manifest.json listing ext module namespaces.
+-- This mirrors writeManifestJson in Hydra.Generation but for hydra-ext module lists.
+writeExtManifestJson :: FilePath -> IO ()
+writeExtManifestJson basePath = do
+    let jsonVal = Json.ValueObject $ M.fromList [
+            ("hydraCoderModules", namespacesJson hydraCoderModules),
+            ("hydraExtModules", namespacesJson hydraExtModules)]
+        jsonStr = JsonWriter.printJson jsonVal
+        filePath = basePath FP.</> "manifest.json"
+    writeFile filePath (jsonStr ++ "\n")
+    putStrLn $ "Wrote manifest: " ++ filePath
+  where
+    namespacesJson mods = Json.ValueArray $ fmap (Json.ValueString . unNamespace . moduleNamespace) mods
 
 -- | Generate C++ source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeCpp = generateSources moduleToCpp cppLanguage False False False
+writeCpp = generateSources moduleToCpp cppLanguage True False False False
 
 -- | Generate GraphQL source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeGraphql :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeGraphql = generateSources moduleToGraphql graphqlLanguage False False False
+writeGraphql = generateSources moduleToGraphql graphqlLanguage True False False False
 
 -- | Generate Java source files from modules.
 -- First argument: output directory
@@ -52,28 +70,28 @@ writeGraphql = generateSources moduleToGraphql graphqlLanguage False False False
 -- Third argument: modules to transform and generate
 -- Note: Java uses doHoistPolymorphicLetBindings=True to hoist polymorphic let bindings to class level
 writeJava :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeJava = generateSources moduleToJava javaLanguage True False True
+writeJava = generateSources moduleToJava javaLanguage True True False True
 
 -- | Generate JSON Schema files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeJsonSchema :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeJsonSchema = generateSources (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage False False False
+writeJsonSchema = generateSources (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage True False False False
 
 -- | Generate PDL (Pegasus) source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writePdl :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writePdl = generateSources moduleToPdl pdlLanguage False False False
+writePdl = generateSources moduleToPdl pdlLanguage True False False False
 
 -- | Generate Protocol Buffers source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeProtobuf :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeProtobuf = generateSources moduleToProtobuf protobufLanguage False False False
+writeProtobuf = generateSources moduleToProtobuf protobufLanguage True False False False
 
 -- | Generate Python source files from modules.
 -- First argument: output directory
@@ -81,11 +99,11 @@ writeProtobuf = generateSources moduleToProtobuf protobufLanguage False False Fa
 -- Third argument: modules to transform and generate
 -- Note: Python uses doHoistCaseStatements=True to hoist case statements to let bindings
 writePython :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writePython = generateSources moduleToPython pythonLanguage True True False
+writePython = generateSources moduleToPython pythonLanguage True True True False
 
 -- | Generate Scala source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeScala = generateSources moduleToScala scalaLanguage True False False
+writeScala = generateSources moduleToScala scalaLanguage True True False False
