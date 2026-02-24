@@ -198,23 +198,17 @@ namespacesForModule :: TBinding (Module -> Flow Graph HaskellNamespaces)
 namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   doc "Compute the Haskell module namespaces for a Hydra module" $
   "mod" ~>
-    "nss" <<~ Schemas.moduleDependencyNamespaces @@ true @@ true @@ true @@ true @@ var "mod" $ lets [
-    "ns">: Module.moduleNamespace $ var "mod",
-    "focusPair">: var "toPair" @@ var "ns",
-    "nssAsList">: Sets.toList $ var "nss",
-    "nssPairs">: Lists.map (var "toPair") (var "nssAsList"),
-    "emptyState">: pair Maps.empty Sets.empty,
-    "finalState">: Lists.foldl (var "addPair") (var "emptyState") (var "nssPairs"),
-    "resultMap">: Pairs.first $ var "finalState",
-    "toModuleName">: "namespace" ~> lets [
+    "nss" <<~ Schemas.moduleDependencyNamespaces @@ true @@ true @@ true @@ true @@ var "mod" $
+    "ns" <~ (Module.moduleNamespace $ var "mod") $
+    "toModuleName" <~ ("namespace" ~> lets [
       "namespaceStr">: unwrap _Namespace @@ var "namespace",
       "parts">: Strings.splitOn (string ".") (var "namespaceStr"),
       "lastPart">: Lists.last $ var "parts",
       "capitalized">: Formatting.capitalize @@ var "lastPart"] $
-      wrap H._ModuleName $ var "capitalized",
-    "toPair">: "name" ~>
-      pair (var "name") (var "toModuleName" @@ var "name"),
-    "addPair">: "state" ~> "namePair" ~> lets [
+      wrap H._ModuleName $ var "capitalized") $
+    "toPair" <~ ("name" ~>
+      pair (var "name") (var "toModuleName" @@ var "name")) $
+    "addPair" <~ ("state" ~> "namePair" ~> lets [
       "currentMap">: Pairs.first $ var "state",
       "currentSet">: Pairs.second $ var "state",
       "name">: Pairs.first $ var "namePair",
@@ -222,7 +216,13 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
       "aliasStr">: unwrap H._ModuleName @@ var "alias"] $
       Logic.ifElse (Sets.member (var "alias") (var "currentSet"))
         (var "addPair" @@ var "state" @@ pair (var "name") (wrap H._ModuleName $ Strings.cat2 (var "aliasStr") (string "_")))
-        (pair (Maps.insert (var "name") (var "alias") (var "currentMap")) (Sets.insert (var "alias") (var "currentSet")))] $
+        (pair (Maps.insert (var "name") (var "alias") (var "currentMap")) (Sets.insert (var "alias") (var "currentSet")))) $
+    "focusPair" <~ (var "toPair" @@ var "ns") $
+    "nssAsList" <~ (Sets.toList $ var "nss") $
+    "nssPairs" <~ (Lists.map (var "toPair") (var "nssAsList")) $
+    "emptyState" <~ (pair Maps.empty Sets.empty) $
+    "finalState" <~ (Lists.foldl (var "addPair") (var "emptyState") (var "nssPairs")) $
+    "resultMap" <~ (Pairs.first $ var "finalState") $
     Flows.pure $ Module.namespaces (var "focusPair") (var "resultMap")
 
 newtypeAccessorName :: TBinding (Name -> String)
