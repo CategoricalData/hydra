@@ -404,8 +404,9 @@ charsIsAlphaNum = subgroup "isAlphaNum" [
 stack exec update-kernel-tests
 stack exec update-generation-tests
 
-# From hydra-ext (for Java and Python)
-stack exec update-python-generation-tests
+# From hydra-ext - regenerate Java and Python (including tests)
+./bin/sync-java.sh --quick
+./bin/sync-python.sh --quick
 ```
 
 5. Run tests in each language to verify the new test cases pass
