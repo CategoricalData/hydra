@@ -101,6 +101,9 @@ module_ = Module ns elements
      toBinding isComplexVariable,
      toBinding isComplexBinding,
      toBinding isTrivialTerm,
+     -- Tail-call optimization detection
+     toBinding isSelfTailRecursive,
+     toBinding isTailRecursiveInTailPosition,
      -- Flow-based utilities
      toBinding commentsFromElement,
      toBinding commentsFromFieldType,
@@ -336,6 +339,123 @@ isTrivialTerm = define "isTrivialTerm" $
     -- Type applications/lambdas: check the inner term
     _Term_typeApplication>>: "ta" ~> isTrivialTerm @@ (Core.typeApplicationTermBody $ var "ta"),
     _Term_typeLambda>>: "tl" ~> isTrivialTerm @@ (Core.typeLambdaBody $ var "tl")]
+
+
+--------------------------------------------------------------------------------
+-- Tail-call optimization detection
+--------------------------------------------------------------------------------
+
+-- | Check if a term body is self-tail-recursive with respect to a function name.
+--   Returns True if the function references itself AND all self-references are in tail position.
+--   Note: isFreeVariableInTerm returns True when the variable is NOT present (confusing API).
+isSelfTailRecursive :: TBinding (Name -> Term -> Bool)
+isSelfTailRecursive = define "isSelfTailRecursive" $
+  doc "Check if a term body is self-tail-recursive with respect to a function name" $
+  "funcName" ~> "body" ~>
+    -- isFreeVariableInTerm returns True when v is NOT free (not present).
+    -- So Logic.not means: the name IS present as a free variable.
+    "callsSelf" <~ Logic.not (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "body") $
+    Logic.ifElse (var "callsSelf")
+      (isTailRecursiveInTailPosition @@ var "funcName" @@ var "body")
+      false
+
+-- | Check that all occurrences of funcName in a term are in tail position.
+--   Called after confirming funcName IS present in the term.
+--   Returns True if the term is safe for TCO transformation.
+isTailRecursiveInTailPosition :: TBinding (Name -> Term -> Bool)
+isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
+  doc "Check that all self-references are in tail position" $
+  "funcName" ~> "term" ~>
+    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    cases _Term (var "stripped") (Just $
+      -- Default: funcName must NOT appear free in this term (not a recognized tail position)
+      Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+      -- Application: check if it's a self-tail-call or a case statement application
+      _Term_application>>: "app" ~>
+        "gathered" <~ (gatherApplications @@ var "stripped") $
+        "gatherArgs" <~ (Pairs.first $ var "gathered") $
+        "gatherFun" <~ (Pairs.second $ var "gathered") $
+        "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+        cases _Term (var "strippedFun") (Just $
+          -- Unknown function form: funcName must not appear anywhere
+          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+          -- Variable: check if self-call
+          _Term_variable>>: "vname" ~>
+            Logic.ifElse (Equality.equal (var "vname") (var "funcName"))
+              -- Self-call in tail position: args must not contain funcName
+              -- and must not contain lambdas (closures over parameters break TCO
+              -- because Python closures capture by reference, not by value)
+              ("argsNoFunc" <~ (Lists.foldl
+                ("ok" ~> "arg" ~>
+                  Logic.and (var "ok")
+                    (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
+                true
+                (var "gatherArgs")) $
+               "argsNoLambda" <~ (Lists.foldl
+                ("ok" ~> "arg" ~>
+                  Logic.and (var "ok")
+                    (Logic.not $ Rewriting.foldOverTerm @@ Coders.traversalOrderPre
+                      @@ ("found" ~> "t" ~>
+                        Logic.or (var "found")
+                          (cases _Term (var "t") (Just false) [
+                            _Term_function>>: "f2" ~>
+                              cases _Function (var "f2") (Just false) [
+                                _Function_lambda>>: "lam" ~>
+                                  -- Any lambda in an argument disqualifies from TCO
+                                  "ignore" <~ (Core.lambdaBody $ var "lam") $
+                                  true]]))
+                      @@ false
+                      @@ var "arg"))
+                true
+                (var "gatherArgs")) $
+               Logic.and (var "argsNoFunc") (var "argsNoLambda"))
+              -- Not a self-call: funcName must not appear anywhere in the term
+              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term"),
+          -- Function: check for case statement (union elimination)
+          _Term_function>>: "f" ~>
+            cases _Function (var "f") (Just $
+              Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+              _Function_elimination>>: "e" ~>
+                cases _Elimination (var "e") (Just $
+                  Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+                  _Elimination_union>>: "cs" ~>
+                    "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                    "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                    -- All case branches must have funcName only in tail position
+                    "branchesOk" <~ (Lists.foldl
+                      ("ok" ~> "field" ~>
+                        Logic.and (var "ok")
+                          (isTailRecursiveInTailPosition @@ var "funcName" @@ Core.fieldTerm (var "field")))
+                      true
+                      (var "cases_")) $
+                    -- Default branch (if present) must also be tail-recursive
+                    "dfltOk" <~ (Maybes.maybe true
+                      ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")
+                      (var "dflt")) $
+                    -- Arguments to the case statement must NOT contain funcName
+                    "argsOk" <~ (Lists.foldl
+                      ("ok" ~> "arg" ~>
+                        Logic.and (var "ok")
+                          (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
+                      true
+                      (var "gatherArgs")) $
+                    Logic.and (Logic.and (var "branchesOk") (var "dfltOk")) (var "argsOk")]]],
+      -- Lambda: tail position is the body
+      _Term_function>>: "f" ~>
+        cases _Function (var "f") (Just $
+          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+          _Function_lambda>>: "lam" ~>
+            isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.lambdaBody $ var "lam")],
+      -- Let: tail position is the body; bindings must not contain funcName
+      _Term_let>>: "lt" ~>
+        "bindingsOk" <~ (Lists.foldl
+          ("ok" ~> "b" ~>
+            Logic.and (var "ok")
+              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ Core.bindingTerm (var "b")))
+          true
+          (Core.letBindings $ var "lt")) $
+        Logic.and (var "bindingsOk")
+          (isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.letBody $ var "lt"))]
 
 
 --------------------------------------------------------------------------------

@@ -1410,61 +1410,6 @@ encodeBindingAsAssignment allowThunking env binding =
                     Syntax.assignmentExpressionName = pyName,
                     Syntax.assignmentExpressionExpression = pterm})))))
 
--- | Check if a term body is self-tail-recursive with respect to a function name
-isSelfTailRecursive :: (Core.Name -> Core.Term -> Bool)
-isSelfTailRecursive funcName body =  
-  let callsSelf = (Logic.not (Rewriting.isFreeVariableInTerm funcName body))
-  in (Logic.ifElse callsSelf (isTailRecursiveInTailPosition funcName body) False)
-
--- | Check that all self-references are in tail position
-isTailRecursiveInTailPosition :: (Core.Name -> Core.Term -> Bool)
-isTailRecursiveInTailPosition funcName term =  
-  let stripped = (Rewriting.deannotateAndDetypeTerm term)
-  in ((\x -> case x of
-    Core.TermApplication _ ->  
-      let gathered = (CoderUtils.gatherApplications stripped)
-      in  
-        let gatherArgs = (Pairs.first gathered)
-        in  
-          let gatherFun = (Pairs.second gathered)
-          in  
-            let strippedFun = (Rewriting.deannotateAndDetypeTerm gatherFun)
-            in ((\x -> case x of
-              Core.TermVariable v2 -> (Logic.ifElse (Equality.equal v2 funcName) ( 
-                let argsNoFunc = (Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs)
-                in  
-                  let argsNoLambda = (Lists.foldl (\ok -> \arg -> Logic.and ok (Logic.not (Rewriting.foldOverTerm Coders.TraversalOrderPre (\found -> \t -> Logic.or found ((\x -> case x of
-                          Core.TermFunction v3 -> ((\x -> case x of
-                            Core.FunctionLambda v4 ->  
-                              let ignore = (Core.lambdaBody v4)
-                              in True
-                            _ -> False) v3)
-                          _ -> False) t)) False arg))) True gatherArgs)
-                  in (Logic.and argsNoFunc argsNoLambda)) (Rewriting.isFreeVariableInTerm funcName term))
-              Core.TermFunction v2 -> ((\x -> case x of
-                Core.FunctionElimination v3 -> ((\x -> case x of
-                  Core.EliminationUnion v4 ->  
-                    let cases_ = (Core.caseStatementCases v4)
-                    in  
-                      let dflt = (Core.caseStatementDefault v4)
-                      in  
-                        let branchesOk = (Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_)
-                        in  
-                          let dfltOk = (Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt)
-                          in  
-                            let argsOk = (Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs)
-                            in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
-                  _ -> (Rewriting.isFreeVariableInTerm funcName term)) v3)
-                _ -> (Rewriting.isFreeVariableInTerm funcName term)) v2)
-              _ -> (Rewriting.isFreeVariableInTerm funcName term)) strippedFun)
-    Core.TermFunction v1 -> ((\x -> case x of
-      Core.FunctionLambda v2 -> (isTailRecursiveInTailPosition funcName (Core.lambdaBody v2))
-      _ -> (Rewriting.isFreeVariableInTerm funcName term)) v1)
-    Core.TermLet v1 ->  
-      let bindingsOk = (Lists.foldl (\ok -> \b -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v1))
-      in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v1)))
-    _ -> (Rewriting.isFreeVariableInTerm funcName term)) stripped)
-
 -- | Encode a term body for TCO: tail self-calls become param reassignment + continue
 encodeTermMultilineTCO :: (Helpers.PythonEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Compute.Flow Helpers.PyGraph [Syntax.Statement])
 encodeTermMultilineTCO env funcName paramNames term =  
@@ -1544,7 +1489,7 @@ encodeFunctionDefinition env name tparams args body doms mcod comment prefixes =
           Syntax.paramNoDefaultParametersParamWithDefault = [],
           Syntax.paramNoDefaultParametersStarEtc = Nothing}))
   in  
-    let isTCO = (Logic.and (Logic.not (Lists.null args)) (isSelfTailRecursive name body))
+    let isTCO = (Logic.and (Logic.not (Lists.null args)) (CoderUtils.isSelfTailRecursive name body))
     in (Flows.bind (Logic.ifElse isTCO (Flows.bind (encodeTermMultilineTCO env name args body) (\tcoStmts ->  
       let trueExpr = (Syntax.NamedExpressionSimple (Utils.pyAtomToPyExpression Syntax.AtomTrue))
       in  

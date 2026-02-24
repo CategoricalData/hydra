@@ -151,10 +151,10 @@ param2 = <encoded arg2>
 continue
 ----
 
-. *Case statement in tail position:* A `match` statement where individual
-  branches may contain tail calls. Each branch is recursively encoded
-  via `encodeTermMultilineTCO`, so branches with self-calls get
-  `continue` and branches without get `return`.
+. *Case statement in tail position:*
+  A `match` statement where individual branches may contain tail calls.
+  Each branch is recursively encoded via `encodeTermMultilineTCO`,
+  so branches with self-calls get `continue` and branches without get `return`.
 --
 
 ==== Generated Python Example
@@ -227,11 +227,10 @@ via `encodeTermTCO`.
 --
 
 NOTE: The Java TCO code generates `while` with `cond = Nothing`,
-serialized as `while (true)` by the Java Serde module. The current
-generated Java output under `hydra-java/src/gen-main/java/hydra/`
+serialized as `while (true)` by the Java Serde module.
+The current generated Java output under `hydra-java/src/gen-main/java/hydra/`
 uses Visitor-pattern recursive calls (not yet regenerated with TCO).
-The Python output has been regenerated and shows the `while True:`
-pattern throughout.
+The Python output has been regenerated and shows the `while True:` pattern throughout.
 
 ==== Java TCO Pseudocode
 
@@ -272,8 +271,9 @@ Both coders place let-binding prefix statements *inside* the `while` loop body:
 ----
 
 This is essential because let-bindings in the original Hydra term may depend
-on the function parameters. After reassignment (the TCO transformation of a
-tail call), the bindings must be recomputed with the new parameter values.
+on the function parameters.
+After reassignment (the TCO transformation of a tail call),
+the bindings must be recomputed with the new parameter values.
 
 === Lambda-in-Argument Guard
 
@@ -288,8 +288,9 @@ _Function_lambda>>: "lam" ~> true
 
 This guard exists because Python closures capture variables by *reference*.
 If a lambda in an argument closes over a parameter that gets reassigned by
-the while-loop transformation, the closure would observe the mutated value
-rather than the value at the time of the call. This would change semantics.
+the while-loop transformation,
+the closure would observe the mutated value rather than the value at the time of the call.
+This would change semantics.
 
 === Supported Patterns
 
@@ -336,10 +337,9 @@ describes a more general four-stage transformation:
   continuation is required -- the tail call *is* the return.
 
 | 2. Defunctionalization
-| Replace closure-valued parameters with data structures + `apply()`
-  dispatch
-| *Not needed.* Since only self-tail-calls are transformed, there are
-  no higher-order continuation values to defunctionalize.
+| Replace closure-valued parameters with data structures + `apply()` dispatch
+| *Not needed.* Since only self-tail-calls are transformed,
+  there are no higher-order continuation values to defunctionalize.
 
 | 3. Inlining
 | Inline the `apply()` function to expose optimization opportunities
@@ -348,8 +348,8 @@ describes a more general four-stage transformation:
 
 | 4. TCO
 | Convert tail calls to loops
-| *This is what Hydra implements.* The while-loop + continue pattern
-  is exactly stage 4 of the general pipeline.
+| *This is what Hydra implements.*
+  The while-loop + continue pattern is exactly stage 4 of the general pipeline.
 |===
 
 Hydra's approach is a *specialization* of the general technique.

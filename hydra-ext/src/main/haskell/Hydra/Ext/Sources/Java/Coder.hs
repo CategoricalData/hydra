@@ -318,8 +318,6 @@ module_ = Module ns elements
       toBinding rebuildApps,
       toBinding propagateTypesInAppChain,
       -- Tail-call optimization
-      toBinding isSelfTailRecursive,
-      toBinding isTailRecursiveInTailPosition,
       toBinding encodeTermTCO,
       toBinding encodeTermDefinition,
       toBinding encodeDefinitions,
@@ -4855,112 +4853,6 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
 -- Tail-call optimization (TCO) helpers
 -- =============================================================================
 
--- | Check if a term body is self-tail-recursive with respect to a function name
-isSelfTailRecursive :: TBinding (Name -> Term -> Bool)
-isSelfTailRecursive = def "isSelfTailRecursive" $
-  doc "Check if a term body is self-tail-recursive with respect to a function name" $
-  "funcName" ~> "body" ~>
-    -- isFreeVariableInTerm returns True when v is NOT free (not present).
-    -- So Logic.not means: the name IS present as a free variable.
-    "callsSelf" <~ Logic.not (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "body") $
-    Logic.ifElse (var "callsSelf")
-      (isTailRecursiveInTailPosition @@ var "funcName" @@ var "body")
-      false
-
--- | Check that all occurrences of funcName in a term are in tail position.
-isTailRecursiveInTailPosition :: TBinding (Name -> Term -> Bool)
-isTailRecursiveInTailPosition = def "isTailRecursiveInTailPosition" $
-  doc "Check that all self-references are in tail position" $
-  "funcName" ~> "term" ~>
-    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
-    cases _Term (var "stripped") (Just $
-      -- Default: funcName must NOT appear free in this term (not a recognized tail position)
-      Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
-      -- Application: check if it's a self-tail-call or a case statement application
-      _Term_application>>: "app" ~>
-        "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
-        "gatherArgs" <~ (Pairs.first $ var "gathered") $
-        "gatherFun" <~ (Pairs.second $ var "gathered") $
-        "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
-        cases _Term (var "strippedFun") (Just $
-          -- Unknown function form: funcName must not appear anywhere
-          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
-          -- Variable: check if self-call
-          _Term_variable>>: "vname" ~>
-            Logic.ifElse (Equality.equal (var "vname") (var "funcName"))
-              -- Self-call in tail position: args must not contain funcName
-              -- and must not contain lambdas (closures over parameters break TCO)
-              ("argsNoFunc" <~ (Lists.foldl
-                ("ok" ~> "arg" ~>
-                  Logic.and (var "ok")
-                    (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
-                true
-                (var "gatherArgs")) $
-               "argsNoLambda" <~ (Lists.foldl
-                ("ok" ~> "arg" ~>
-                  Logic.and (var "ok")
-                    (Logic.not $ Rewriting.foldOverTerm @@ Coders.traversalOrderPre
-                      @@ ("found" ~> "t" ~>
-                        Logic.or (var "found")
-                          (cases _Term (var "t") (Just false) [
-                            _Term_function>>: "f2" ~>
-                              cases _Function (var "f2") (Just false) [
-                                _Function_lambda>>: "lam" ~>
-                                  "ignore" <~ (Core.lambdaBody $ var "lam") $
-                                  true]]))
-                      @@ false
-                      @@ var "arg"))
-                true
-                (var "gatherArgs")) $
-               Logic.and (var "argsNoFunc") (var "argsNoLambda"))
-              -- Not a self-call: funcName must not appear anywhere in the term
-              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term"),
-          -- Function: check for case statement (union elimination)
-          _Term_function>>: "f" ~>
-            cases _Function (var "f") (Just $
-              Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
-              _Function_elimination>>: "e" ~>
-                cases _Elimination (var "e") (Just $
-                  Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
-                  _Elimination_union>>: "cs" ~>
-                    "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                    "dflt" <~ (Core.caseStatementDefault $ var "cs") $
-                    -- All case branches must have funcName only in tail position
-                    "branchesOk" <~ (Lists.foldl
-                      ("ok" ~> "field" ~>
-                        Logic.and (var "ok")
-                          (isTailRecursiveInTailPosition @@ var "funcName" @@ Core.fieldTerm (var "field")))
-                      true
-                      (var "cases_")) $
-                    -- Default branch (if present) must also be tail-recursive
-                    "dfltOk" <~ (Maybes.maybe true
-                      ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")
-                      (var "dflt")) $
-                    -- Arguments to the case statement must NOT contain funcName
-                    "argsOk" <~ (Lists.foldl
-                      ("ok" ~> "arg" ~>
-                        Logic.and (var "ok")
-                          (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
-                      true
-                      (var "gatherArgs")) $
-                    Logic.and (Logic.and (var "branchesOk") (var "dfltOk")) (var "argsOk")]]],
-      -- Lambda: tail position is the body
-      _Term_function>>: "f" ~>
-        cases _Function (var "f") (Just $
-          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
-          _Function_lambda>>: "lam" ~>
-            isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.lambdaBody $ var "lam")],
-      -- Let: tail position is the body; bindings must not contain funcName
-      _Term_let>>: "lt" ~>
-        "bindingsOk" <~ (Lists.foldl
-          ("ok" ~> "b" ~>
-            Logic.and (var "ok")
-              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ Core.bindingTerm (var "b")))
-          true
-          (Core.letBindings $ var "lt")) $
-        Logic.and (var "bindingsOk")
-          (isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.letBody $ var "lt"))]
-
 -- | Encode a term for TCO: self-tail-calls become param reassignment + continue.
 --   Returns a list of Java BlockStatements (if/instanceof checks + return/continue).
 encodeTermTCO :: TBinding (JavaHelpers.JavaEnvironment -> Name -> [Name] -> Term -> Flow Graph [Java.BlockStatement])
@@ -5048,7 +4940,7 @@ encodeTermTCO = def "encodeTermTCO" $
                                           @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "jArg"))) $
                                   "localDecl" <~ (JavaUtilsSource.varDeclarationStatement @@ var "varId" @@ var "castExpr") $
                                   -- Check if this branch body is a self-tail-call
-                                  "isBranchTailCall" <~ (isTailRecursiveInTailPosition @@ var "funcName" @@ var "branchBody") $
+                                  "isBranchTailCall" <~ (CoderUtils.isTailRecursiveInTailPosition @@ var "funcName" @@ var "branchBody") $
                                   "bodyStmts" <<~ (Logic.ifElse (var "isBranchTailCall")
                                     -- Self-call: emit assignment + continue via encodeTermTCO
                                     (encodeTermTCO @@ var "env3" @@ var "funcName" @@ var "paramNames" @@ var "branchBody")
@@ -5203,7 +5095,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
       -- Check for tail-call optimization opportunity
       "isTCO" <~ (Logic.and
         (Logic.not $ Lists.null (var "params"))
-        (isSelfTailRecursive @@ var "name" @@ var "body")) $
+        (CoderUtils.isSelfTailRecursive @@ var "name" @@ var "body")) $
       "methodBody" <<~ (Logic.ifElse (var "isTCO")
         -- TCO path: wrap body in while(true) loop
         -- Note: bindingStmts (let-binding prefixes) go INSIDE the while loop so they are
