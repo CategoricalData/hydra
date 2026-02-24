@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A local binding
  */
 public abstract class LocalBinding implements Serializable, Comparable<LocalBinding> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.LocalBinding");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.LocalBinding");
   
-  public static final hydra.core.Name FIELD_NAME_SIGNATURE = new hydra.core.Name("signature");
+  public static final hydra.core.Name SIGNATURE = new hydra.core.Name("signature");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   private LocalBinding () {
   

@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class TypeExpression implements Serializable, Comparable<TypeExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.TypeExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TypeExpression");
   
-  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
-  public static final hydra.core.Name FIELD_NAME_STARRED_EXPRESSION = new hydra.core.Name("starredExpression");
+  public static final hydra.core.Name STARRED_EXPRESSION = new hydra.core.Name("starredExpression");
   
-  public static final hydra.core.Name FIELD_NAME_DOUBLE_STARRED_EXPRESSION = new hydra.core.Name("doubleStarredExpression");
+  public static final hydra.core.Name DOUBLE_STARRED_EXPRESSION = new hydra.core.Name("doubleStarredExpression");
   
   private TypeExpression () {
   

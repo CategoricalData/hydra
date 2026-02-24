@@ -10,27 +10,15 @@ public interface Names {
     return true;
   }
   
-  static <T0> hydra.ext.python.syntax.Name encodeConstantForFieldName(T0 env, hydra.core.Name tname, hydra.core.Name fname) {
-    return new hydra.ext.python.syntax.Name(hydra.lib.strings.Cat.apply(java.util.List.of(
-      hydra.formatting.Formatting.convertCase(
-        new hydra.util.CaseConvention.Pascal(),
-        new hydra.util.CaseConvention.UpperSnake(),
-        hydra.names.Names.localNameOf(tname)),
-      "__",
-      hydra.formatting.Formatting.convertCase(
-        new hydra.util.CaseConvention.Camel(),
-        new hydra.util.CaseConvention.UpperSnake(),
-        (fname).value),
-      "__NAME")));
+  static <T0, T1> hydra.ext.python.syntax.Name encodeConstantForFieldName(T0 env, T1 tname, hydra.core.Name fname) {
+    return new hydra.ext.python.syntax.Name(hydra.formatting.Formatting.convertCase(
+      new hydra.util.CaseConvention.Camel(),
+      new hydra.util.CaseConvention.UpperSnake(),
+      (fname).value));
   }
   
-  static <T0> hydra.ext.python.syntax.Name encodeConstantForTypeName(T0 env, hydra.core.Name tname) {
-    return new hydra.ext.python.syntax.Name(hydra.lib.strings.Cat2.apply(
-      hydra.formatting.Formatting.convertCase(
-        new hydra.util.CaseConvention.Pascal(),
-        new hydra.util.CaseConvention.UpperSnake(),
-        hydra.names.Names.localNameOf(tname)),
-      "__NAME"));
+  static <T0, T1> hydra.ext.python.syntax.Name encodeConstantForTypeName(T0 env, T1 tname) {
+    return new hydra.ext.python.syntax.Name("TYPE_");
   }
   
   static hydra.ext.python.syntax.Name encodeEnumValue(hydra.ext.python.helpers.PythonEnvironment v1, hydra.core.Name v2) {

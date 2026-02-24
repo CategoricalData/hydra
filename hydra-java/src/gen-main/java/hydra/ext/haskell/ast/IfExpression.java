@@ -8,13 +8,13 @@ import java.io.Serializable;
  * An 'if' expression
  */
 public class IfExpression implements Serializable, Comparable<IfExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.IfExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.IfExpression");
   
-  public static final hydra.core.Name FIELD_NAME_CONDITION = new hydra.core.Name("condition");
+  public static final hydra.core.Name CONDITION = new hydra.core.Name("condition");
   
-  public static final hydra.core.Name FIELD_NAME_THEN = new hydra.core.Name("then");
+  public static final hydra.core.Name THEN = new hydra.core.Name("then");
   
-  public static final hydra.core.Name FIELD_NAME_ELSE = new hydra.core.Name("else");
+  public static final hydra.core.Name ELSE = new hydra.core.Name("else");
   
   /**
    * The condition expression

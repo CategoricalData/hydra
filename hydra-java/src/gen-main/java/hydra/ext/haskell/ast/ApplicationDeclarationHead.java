@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An application-style declaration head
  */
 public class ApplicationDeclarationHead implements Serializable, Comparable<ApplicationDeclarationHead> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.ApplicationDeclarationHead");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ApplicationDeclarationHead");
   
-  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
   
-  public static final hydra.core.Name FIELD_NAME_OPERAND = new hydra.core.Name("operand");
+  public static final hydra.core.Name OPERAND = new hydra.core.Name("operand");
   
   /**
    * The function being applied

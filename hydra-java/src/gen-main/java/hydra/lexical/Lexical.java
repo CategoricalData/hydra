@@ -37,7 +37,7 @@ public interface Lexical {
       hydra.monads.Monads.<hydra.graph.Graph>getState());
   }
   
-  static hydra.util.Maybe<hydra.core.TypeScheme> dereferenceSchemaType(hydra.core.Name name, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types2) {
+  static hydra.util.Maybe<hydra.core.TypeScheme> dereferenceSchemaType(hydra.core.Name name, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>> forType = new java.util.concurrent.atomic.AtomicReference<>();
     forType.set((java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
@@ -63,13 +63,13 @@ public interface Lexical {
       public hydra.util.Maybe<hydra.core.TypeScheme> visit(hydra.core.Type.Variable v) {
         return hydra.lexical.Lexical.dereferenceSchemaType(
           (v).value,
-          types2);
+          types);
       }
     })));
     return hydra.lib.maybes.Bind.apply(
       hydra.lib.maps.Lookup.apply(
         name,
-        types2),
+        types),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Maybe<hydra.core.TypeScheme>>) (ts -> hydra.lib.maybes.Map.apply(
         (java.util.function.Function<hydra.core.TypeScheme, hydra.core.TypeScheme>) (ts2 -> new hydra.core.TypeScheme(hydra.lib.lists.Concat2.apply(
           (ts).variables,
@@ -219,9 +219,9 @@ public interface Lexical {
           hydra.lib.equality.Equal.apply(
             (((injection).value).typeName).value,
             (tname).value),
-          () -> hydra.lexical.Lexical.matchUnion_exp(
+          () -> hydra.lexical.Lexical.<T0>matchUnion_exp(
             (injection).value,
-            hydra.lexical.Lexical.matchUnion_mapping(pairs),
+            hydra.lexical.Lexical.<T0>matchUnion_mapping(pairs),
             tname),
           () -> hydra.monads.Monads.unexpected(
             hydra.lib.strings.Cat2.apply(
@@ -232,11 +232,11 @@ public interface Lexical {
     });
   }
   
-  static <T0, T1> java.util.Map<T0, T1> matchUnion_mapping(java.util.List<hydra.util.Tuple.Tuple2<T0, T1>> pairs) {
+  static <T0> java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>> matchUnion_mapping(java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>> pairs) {
     return hydra.lib.maps.FromList.apply(pairs);
   }
   
-  static <T0, T1> hydra.compute.Flow<T0, T1> matchUnion_exp(hydra.core.Injection injection, java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T1>>> mapping, hydra.core.Name tname) {
+  static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> matchUnion_exp(hydra.core.Injection injection, java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>> mapping, hydra.core.Name tname) {
     hydra.core.Name fname = ((injection).field).name;
     hydra.core.Term val = ((injection).field).term;
     return hydra.lib.maybes.Maybe.apply(
@@ -247,7 +247,7 @@ public interface Lexical {
             (fname).value),
           "\" in union type "),
         (tname).value)),
-      (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T1>>, hydra.compute.Flow<T0, T1>>) (f -> (f).apply(val)),
+      (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>, hydra.compute.Flow<hydra.graph.Graph, T0>>) (f -> (f).apply(val)),
       hydra.lib.maps.Lookup.apply(
         fname,
         mapping));
@@ -276,10 +276,10 @@ public interface Lexical {
       (java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (mel -> hydra.lib.maybes.Maybe.apply(
         hydra.lib.flows.Bind.apply(
           hydra.monads.Monads.<hydra.graph.Graph>getState(),
-          (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (g -> ((java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (v1 -> hydra.lexical.Lexical.requireElement_err(
+          (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (g -> hydra.lexical.Lexical.requireElement_err(
             ellipsis,
             name,
-            v1))).apply(g))),
+            g))),
         (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) ((java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (hydra.lib.flows.Pure::apply)),
         mel)));
   }

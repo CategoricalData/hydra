@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class CommaStarEtc implements Serializable, Comparable<CommaStarEtc> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.CommaStarEtc");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.CommaStarEtc");
   
-  public static final hydra.core.Name FIELD_NAME_PARAM_MAYBE_DEFAULT = new hydra.core.Name("paramMaybeDefault");
+  public static final hydra.core.Name PARAM_MAYBE_DEFAULT = new hydra.core.Name("paramMaybeDefault");
   
-  public static final hydra.core.Name FIELD_NAME_KEYWORDS = new hydra.core.Name("keywords");
+  public static final hydra.core.Name KEYWORDS = new hydra.core.Name("keywords");
   
   public final java.util.List<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault;
   

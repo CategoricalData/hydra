@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A name
  */
 public abstract class Name implements Serializable, Comparable<Name> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Name");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Name");
   
-  public static final hydra.core.Name FIELD_NAME_IMPLICIT = new hydra.core.Name("implicit");
+  public static final hydra.core.Name IMPLICIT = new hydra.core.Name("implicit");
   
-  public static final hydra.core.Name FIELD_NAME_NORMAL = new hydra.core.Name("normal");
+  public static final hydra.core.Name NORMAL = new hydra.core.Name("normal");
   
-  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
+  public static final hydra.core.Name PARENS = new hydra.core.Name("parens");
   
   private Name () {
   

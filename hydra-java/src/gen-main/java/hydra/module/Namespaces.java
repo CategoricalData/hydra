@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A mapping from namespaces to values of type n, with a focus on one namespace
  */
 public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.Namespaces");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.module.Namespaces");
   
-  public static final hydra.core.Name FIELD_NAME_FOCUS = new hydra.core.Name("focus");
+  public static final hydra.core.Name FOCUS = new hydra.core.Name("focus");
   
-  public static final hydra.core.Name FIELD_NAME_MAPPING = new hydra.core.Name("mapping");
+  public static final hydra.core.Name MAPPING = new hydra.core.Name("mapping");
   
   /**
    * The namespace in focus, together with its associated value

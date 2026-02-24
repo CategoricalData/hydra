@@ -8,15 +8,15 @@ import java.io.Serializable;
  * A two-level bidirectional encoder which adapts types to types and terms to terms
  */
 public class Adapter<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable<Adapter<S1, S2, T1, T2, V1, V2>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.compute.Adapter");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.Adapter");
   
-  public static final hydra.core.Name FIELD_NAME_IS_LOSSY = new hydra.core.Name("isLossy");
+  public static final hydra.core.Name IS_LOSSY = new hydra.core.Name("isLossy");
   
-  public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
+  public static final hydra.core.Name SOURCE = new hydra.core.Name("source");
   
-  public static final hydra.core.Name FIELD_NAME_TARGET = new hydra.core.Name("target");
+  public static final hydra.core.Name TARGET = new hydra.core.Name("target");
   
-  public static final hydra.core.Name FIELD_NAME_CODER = new hydra.core.Name("coder");
+  public static final hydra.core.Name CODER = new hydra.core.Name("coder");
   
   /**
    * Whether information may be lost in the course of this adaptation

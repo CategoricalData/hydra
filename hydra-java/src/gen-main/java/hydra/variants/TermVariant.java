@@ -8,43 +8,43 @@ import java.io.Serializable;
  * The identifier of a term expression constructor
  */
 public abstract class TermVariant implements Serializable, Comparable<TermVariant> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.variants.TermVariant");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.variants.TermVariant");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
+  public static final hydra.core.Name ANNOTATED = new hydra.core.Name("annotated");
   
-  public static final hydra.core.Name FIELD_NAME_APPLICATION = new hydra.core.Name("application");
+  public static final hydra.core.Name APPLICATION = new hydra.core.Name("application");
   
-  public static final hydra.core.Name FIELD_NAME_EITHER = new hydra.core.Name("either");
+  public static final hydra.core.Name EITHER = new hydra.core.Name("either");
   
-  public static final hydra.core.Name FIELD_NAME_FUNCTION = new hydra.core.Name("function");
+  public static final hydra.core.Name FUNCTION = new hydra.core.Name("function");
   
-  public static final hydra.core.Name FIELD_NAME_LET = new hydra.core.Name("let");
+  public static final hydra.core.Name LET = new hydra.core.Name("let");
   
-  public static final hydra.core.Name FIELD_NAME_LIST = new hydra.core.Name("list");
+  public static final hydra.core.Name LIST = new hydra.core.Name("list");
   
-  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  public static final hydra.core.Name LITERAL = new hydra.core.Name("literal");
   
-  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  public static final hydra.core.Name MAP = new hydra.core.Name("map");
   
-  public static final hydra.core.Name FIELD_NAME_MAYBE = new hydra.core.Name("maybe");
+  public static final hydra.core.Name MAYBE = new hydra.core.Name("maybe");
   
-  public static final hydra.core.Name FIELD_NAME_PAIR = new hydra.core.Name("pair");
+  public static final hydra.core.Name PAIR = new hydra.core.Name("pair");
   
-  public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
+  public static final hydra.core.Name RECORD = new hydra.core.Name("record");
   
-  public static final hydra.core.Name FIELD_NAME_SET = new hydra.core.Name("set");
+  public static final hydra.core.Name SET = new hydra.core.Name("set");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_APPLICATION = new hydra.core.Name("typeApplication");
+  public static final hydra.core.Name TYPE_APPLICATION = new hydra.core.Name("typeApplication");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_LAMBDA = new hydra.core.Name("typeLambda");
+  public static final hydra.core.Name TYPE_LAMBDA = new hydra.core.Name("typeLambda");
   
-  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  public static final hydra.core.Name UNION = new hydra.core.Name("union");
   
-  public static final hydra.core.Name FIELD_NAME_UNIT = new hydra.core.Name("unit");
+  public static final hydra.core.Name UNIT = new hydra.core.Name("unit");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLE = new hydra.core.Name("variable");
+  public static final hydra.core.Name VARIABLE = new hydra.core.Name("variable");
   
-  public static final hydra.core.Name FIELD_NAME_WRAP = new hydra.core.Name("wrap");
+  public static final hydra.core.Name WRAP = new hydra.core.Name("wrap");
   
   private TermVariant () {
   

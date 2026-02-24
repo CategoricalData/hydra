@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class StarTypeParameter implements Serializable, Comparable<StarTypeParameter> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.StarTypeParameter");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.StarTypeParameter");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_DEFAULT = new hydra.core.Name("default");
+  public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
   
   public final hydra.ext.python.syntax.Name name;
   

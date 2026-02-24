@@ -11,6 +11,23 @@ public interface Writer {
   }
   
   static String jsonString(String s) {
+    java.util.function.Function<Integer, String> hexEscape = (java.util.function.Function<Integer, String>) (c -> {
+      hydra.util.Lazy<String> hi = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.strings.CharAt.apply(
+        hydra.lib.math.Div.apply(
+          c,
+          16),
+        "0123456789abcdef"))));
+      hydra.util.Lazy<String> lo = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(hydra.lib.strings.CharAt.apply(
+        hydra.lib.math.Mod.apply(
+          c,
+          16),
+        "0123456789abcdef"))));
+      return hydra.lib.strings.Cat2.apply(
+        hydra.lib.strings.Cat2.apply(
+          "\\u00",
+          hi.get()),
+        lo.get());
+    });
     java.util.function.Function<Integer, String> escape = (java.util.function.Function<Integer, String>) (c -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         c,
@@ -24,19 +41,34 @@ public interface Writer {
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             c,
-            10),
-          () -> "\\n",
+            8),
+          () -> "\\b",
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               c,
-              13),
-            () -> "\\r",
+              12),
+            () -> "\\f",
             () -> hydra.lib.logic.IfElse.lazy(
               hydra.lib.equality.Equal.apply(
                 c,
-                9),
-              () -> "\\t",
-              () -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(c))))))));
+                10),
+              () -> "\\n",
+              () -> hydra.lib.logic.IfElse.lazy(
+                hydra.lib.equality.Equal.apply(
+                  c,
+                  13),
+                () -> "\\r",
+                () -> hydra.lib.logic.IfElse.lazy(
+                  hydra.lib.equality.Equal.apply(
+                    c,
+                    9),
+                  () -> "\\t",
+                  () -> hydra.lib.logic.IfElse.lazy(
+                    hydra.lib.equality.Lt.apply(
+                      c,
+                      32),
+                    () -> (hexEscape).apply(c),
+                    () -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(c)))))))))));
     hydra.util.Lazy<String> escaped = new hydra.util.Lazy<>(() -> hydra.lib.strings.Cat.apply(hydra.lib.lists.Map.apply(
       escape,
       hydra.lib.strings.ToList.apply(s))));

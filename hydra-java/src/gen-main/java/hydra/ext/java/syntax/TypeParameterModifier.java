@@ -5,9 +5,9 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class TypeParameterModifier implements Serializable, Comparable<TypeParameterModifier> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.TypeParameterModifier");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.TypeParameterModifier");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final hydra.ext.java.syntax.Annotation value;
   

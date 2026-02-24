@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An abstract specification of the domain represented by a column in a relation; a role
  */
 public class ColumnSchema<T> implements Serializable, Comparable<ColumnSchema<T>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.relational.ColumnSchema");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.relational.ColumnSchema");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_DOMAIN = new hydra.core.Name("domain");
+  public static final hydra.core.Name DOMAIN = new hydra.core.Name("domain");
   
   /**
    * A unique name for the column

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case for the Either-based JSON encoder. Takes an input term and expected result (Either String Value).
  */
 public class JsonEncodeTestCase implements Serializable, Comparable<JsonEncodeTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.JsonEncodeTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.JsonEncodeTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  public static final hydra.core.Name TERM = new hydra.core.Name("term");
   
-  public static final hydra.core.Name FIELD_NAME_EXPECTED = new hydra.core.Name("expected");
+  public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
   
   /**
    * The Hydra term to encode

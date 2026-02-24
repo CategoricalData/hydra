@@ -5,21 +5,21 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class FunctionDefRaw implements Serializable, Comparable<FunctionDefRaw> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.FunctionDefRaw");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.FunctionDefRaw");
   
-  public static final hydra.core.Name FIELD_NAME_ASYNC = new hydra.core.Name("async");
+  public static final hydra.core.Name ASYNC = new hydra.core.Name("async");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_PARAMS = new hydra.core.Name("typeParams");
+  public static final hydra.core.Name TYPE_PARAMS = new hydra.core.Name("typeParams");
   
-  public static final hydra.core.Name FIELD_NAME_PARAMS = new hydra.core.Name("params");
+  public static final hydra.core.Name PARAMS = new hydra.core.Name("params");
   
-  public static final hydra.core.Name FIELD_NAME_RETURN_TYPE = new hydra.core.Name("returnType");
+  public static final hydra.core.Name RETURN_TYPE = new hydra.core.Name("returnType");
   
-  public static final hydra.core.Name FIELD_NAME_FUNC_TYPE_COMMENT = new hydra.core.Name("funcTypeComment");
+  public static final hydra.core.Name FUNC_TYPE_COMMENT = new hydra.core.Name("funcTypeComment");
   
-  public static final hydra.core.Name FIELD_NAME_BLOCK = new hydra.core.Name("block");
+  public static final hydra.core.Name BLOCK = new hydra.core.Name("block");
   
   public final Boolean async;
   

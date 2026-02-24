@@ -1425,8 +1425,8 @@ public interface Serde {
     });
   }
   
-  static hydra.ast.Expr writeLeftHandSide(hydra.ext.java.syntax.LeftHandSide lhs2) {
-    return (lhs2).accept(new hydra.ext.java.syntax.LeftHandSide.PartialVisitor<>() {
+  static hydra.ast.Expr writeLeftHandSide(hydra.ext.java.syntax.LeftHandSide lhs) {
+    return (lhs).accept(new hydra.ext.java.syntax.LeftHandSide.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.java.syntax.LeftHandSide.ExpressionName en) {
         return hydra.ext.java.serde.Serde.writeExpressionName((en).value);

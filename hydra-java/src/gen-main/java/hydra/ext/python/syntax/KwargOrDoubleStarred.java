@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class KwargOrDoubleStarred implements Serializable, Comparable<KwargOrDoubleStarred> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.KwargOrDoubleStarred");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.KwargOrDoubleStarred");
   
-  public static final hydra.core.Name FIELD_NAME_KWARG = new hydra.core.Name("kwarg");
+  public static final hydra.core.Name KWARG = new hydra.core.Name("kwarg");
   
-  public static final hydra.core.Name FIELD_NAME_DOUBLE_STARRED = new hydra.core.Name("doubleStarred");
+  public static final hydra.core.Name DOUBLE_STARRED = new hydra.core.Name("doubleStarred");
   
   private KwargOrDoubleStarred () {
   

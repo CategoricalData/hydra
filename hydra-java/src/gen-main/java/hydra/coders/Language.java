@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A named language together with language-specific constraints
  */
 public class Language implements Serializable, Comparable<Language> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.Language");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.coders.Language");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTRAINTS = new hydra.core.Name("constraints");
+  public static final hydra.core.Name CONSTRAINTS = new hydra.core.Name("constraints");
   
   /**
    * The unique name of the language

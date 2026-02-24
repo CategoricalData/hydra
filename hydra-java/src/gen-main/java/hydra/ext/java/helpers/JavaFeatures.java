@@ -8,9 +8,9 @@ import java.io.Serializable;
  * Feature flags for the target Java version
  */
 public class JavaFeatures implements Serializable, Comparable<JavaFeatures> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.helpers.JavaFeatures");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.helpers.JavaFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_DIAMOND_OPERATOR = new hydra.core.Name("supportsDiamondOperator");
+  public static final hydra.core.Name SUPPORTS_DIAMOND_OPERATOR = new hydra.core.Name("supportsDiamondOperator");
   
   /**
    * Whether the diamond operator (&lt;&gt;) is supported (Java 7+)

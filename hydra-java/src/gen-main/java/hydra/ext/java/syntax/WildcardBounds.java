@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class WildcardBounds implements Serializable, Comparable<WildcardBounds> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.WildcardBounds");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.WildcardBounds");
   
-  public static final hydra.core.Name FIELD_NAME_EXTENDS = new hydra.core.Name("extends");
+  public static final hydra.core.Name EXTENDS = new hydra.core.Name("extends");
   
-  public static final hydra.core.Name FIELD_NAME_SUPER = new hydra.core.Name("super");
+  public static final hydra.core.Name SUPER = new hydra.core.Name("super");
   
   private WildcardBounds () {
   

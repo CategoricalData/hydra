@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A class assertion
  */
 public class ClassAssertion implements Serializable, Comparable<ClassAssertion> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.ClassAssertion");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.ClassAssertion");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
+  public static final hydra.core.Name TYPES = new hydra.core.Name("types");
   
   /**
    * The name of the class

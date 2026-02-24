@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A record, or labeled tuple; a map of field names to terms
  */
 public class Record implements Serializable, Comparable<Record> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Record");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Record");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_NAME = new hydra.core.Name("typeName");
+  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("typeName");
   
-  public static final hydra.core.Name FIELD_NAME_FIELDS = new hydra.core.Name("fields");
+  public static final hydra.core.Name FIELDS = new hydra.core.Name("fields");
   
   /**
    * The name of the record type

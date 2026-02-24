@@ -5,19 +5,19 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class LiteralExpression implements Serializable, Comparable<LiteralExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.LiteralExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.LiteralExpression");
   
-  public static final hydra.core.Name FIELD_NAME_NUMBER = new hydra.core.Name("number");
+  public static final hydra.core.Name NUMBER = new hydra.core.Name("number");
   
-  public static final hydra.core.Name FIELD_NAME_COMPLEX = new hydra.core.Name("complex");
+  public static final hydra.core.Name COMPLEX = new hydra.core.Name("complex");
   
-  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  public static final hydra.core.Name STRING = new hydra.core.Name("string");
   
-  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  public static final hydra.core.Name NONE = new hydra.core.Name("none");
   
-  public static final hydra.core.Name FIELD_NAME_TRUE = new hydra.core.Name("true");
+  public static final hydra.core.Name TRUE = new hydra.core.Name("true");
   
-  public static final hydra.core.Name FIELD_NAME_FALSE = new hydra.core.Name("false");
+  public static final hydra.core.Name FALSE = new hydra.core.Name("false");
   
   private LiteralExpression () {
   

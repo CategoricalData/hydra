@@ -8,13 +8,13 @@ import java.io.Serializable;
  * An atomic function as part of a query. When applied to a graph, steps are typed by function types.
  */
 public abstract class Step implements Serializable, Comparable<Step> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Step");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.Step");
   
-  public static final hydra.core.Name FIELD_NAME_EDGE = new hydra.core.Name("edge");
+  public static final hydra.core.Name EDGE = new hydra.core.Name("edge");
   
-  public static final hydra.core.Name FIELD_NAME_PROJECT = new hydra.core.Name("project");
+  public static final hydra.core.Name PROJECT = new hydra.core.Name("project");
   
-  public static final hydra.core.Name FIELD_NAME_COMPARE = new hydra.core.Name("compare");
+  public static final hydra.core.Name COMPARE = new hydra.core.Name("compare");
   
   private Step () {
   

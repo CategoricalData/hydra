@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A YAML node (value)
  */
 public abstract class Node implements Serializable, Comparable<Node> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.yaml.model.Node");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.yaml.model.Node");
   
-  public static final hydra.core.Name FIELD_NAME_MAPPING = new hydra.core.Name("mapping");
+  public static final hydra.core.Name MAPPING = new hydra.core.Name("mapping");
   
-  public static final hydra.core.Name FIELD_NAME_SCALAR = new hydra.core.Name("scalar");
+  public static final hydra.core.Name SCALAR = new hydra.core.Name("scalar");
   
-  public static final hydra.core.Name FIELD_NAME_SEQUENCE = new hydra.core.Name("sequence");
+  public static final hydra.core.Name SEQUENCE = new hydra.core.Name("sequence");
   
   private Node () {
   

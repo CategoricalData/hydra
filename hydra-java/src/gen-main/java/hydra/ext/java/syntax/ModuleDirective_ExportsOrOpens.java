@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ModuleDirective_ExportsOrOpens implements Serializable, Comparable<ModuleDirective_ExportsOrOpens> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ModuleDirective_ExportsOrOpens");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ModuleDirective_ExportsOrOpens");
   
-  public static final hydra.core.Name FIELD_NAME_PACKAGE = new hydra.core.Name("package");
+  public static final hydra.core.Name PACKAGE = new hydra.core.Name("package");
   
-  public static final hydra.core.Name FIELD_NAME_MODULES = new hydra.core.Name("modules");
+  public static final hydra.core.Name MODULES = new hydra.core.Name("modules");
   
   public final hydra.ext.java.syntax.PackageName package_;
   

@@ -5,15 +5,15 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class SlashNoDefaultParameters implements Serializable, Comparable<SlashNoDefaultParameters> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.SlashNoDefaultParameters");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SlashNoDefaultParameters");
   
-  public static final hydra.core.Name FIELD_NAME_SLASH = new hydra.core.Name("slash");
+  public static final hydra.core.Name SLASH = new hydra.core.Name("slash");
   
-  public static final hydra.core.Name FIELD_NAME_PARAM_NO_DEFAULT = new hydra.core.Name("paramNoDefault");
+  public static final hydra.core.Name PARAM_NO_DEFAULT = new hydra.core.Name("paramNoDefault");
   
-  public static final hydra.core.Name FIELD_NAME_PARAM_WITH_DEFAULT = new hydra.core.Name("paramWithDefault");
+  public static final hydra.core.Name PARAM_WITH_DEFAULT = new hydra.core.Name("paramWithDefault");
   
-  public static final hydra.core.Name FIELD_NAME_STAR_ETC = new hydra.core.Name("starEtc");
+  public static final hydra.core.Name STAR_ETC = new hydra.core.Name("starEtc");
   
   public final hydra.ext.python.syntax.SlashNoDefault slash;
   

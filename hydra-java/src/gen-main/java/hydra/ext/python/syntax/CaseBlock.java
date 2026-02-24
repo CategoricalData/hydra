@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class CaseBlock implements Serializable, Comparable<CaseBlock> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.CaseBlock");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.CaseBlock");
   
-  public static final hydra.core.Name FIELD_NAME_PATTERNS = new hydra.core.Name("patterns");
+  public static final hydra.core.Name PATTERNS = new hydra.core.Name("patterns");
   
-  public static final hydra.core.Name FIELD_NAME_GUARD = new hydra.core.Name("guard");
+  public static final hydra.core.Name GUARD = new hydra.core.Name("guard");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   public final hydra.ext.python.syntax.Patterns patterns;
   

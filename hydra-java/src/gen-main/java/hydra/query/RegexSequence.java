@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A path with a regex quantifier
  */
 public class RegexSequence implements Serializable, Comparable<RegexSequence> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.RegexSequence");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.RegexSequence");
   
-  public static final hydra.core.Name FIELD_NAME_PATH = new hydra.core.Name("path");
+  public static final hydra.core.Name PATH = new hydra.core.Name("path");
   
-  public static final hydra.core.Name FIELD_NAME_QUANTIFIER = new hydra.core.Name("quantifier");
+  public static final hydra.core.Name QUANTIFIER = new hydra.core.Name("quantifier");
   
   /**
    * The path to which the quantifier applies

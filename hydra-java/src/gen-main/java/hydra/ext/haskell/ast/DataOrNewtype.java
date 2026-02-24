@@ -8,11 +8,11 @@ import java.io.Serializable;
  * The 'data' versus 'newtype keyword
  */
 public abstract class DataOrNewtype implements Serializable, Comparable<DataOrNewtype> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.DataOrNewtype");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.DataOrNewtype");
   
-  public static final hydra.core.Name FIELD_NAME_DATA = new hydra.core.Name("data");
+  public static final hydra.core.Name DATA = new hydra.core.Name("data");
   
-  public static final hydra.core.Name FIELD_NAME_NEWTYPE = new hydra.core.Name("newtype");
+  public static final hydra.core.Name NEWTYPE = new hydra.core.Name("newtype");
   
   private DataOrNewtype () {
   

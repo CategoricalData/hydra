@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ClassType implements Serializable, Comparable<ClassType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassType");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_QUALIFIER = new hydra.core.Name("qualifier");
+  public static final hydra.core.Name QUALIFIER = new hydra.core.Name("qualifier");
   
-  public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
+  public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
   
-  public static final hydra.core.Name FIELD_NAME_ARGUMENTS = new hydra.core.Name("arguments");
+  public static final hydra.core.Name ARGUMENTS = new hydra.core.Name("arguments");
   
   public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   

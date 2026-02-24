@@ -5,15 +5,15 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class ForIfClause implements Serializable, Comparable<ForIfClause> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ForIfClause");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ForIfClause");
   
-  public static final hydra.core.Name FIELD_NAME_ASYNC = new hydra.core.Name("async");
+  public static final hydra.core.Name ASYNC = new hydra.core.Name("async");
   
-  public static final hydra.core.Name FIELD_NAME_TARGETS = new hydra.core.Name("targets");
+  public static final hydra.core.Name TARGETS = new hydra.core.Name("targets");
   
-  public static final hydra.core.Name FIELD_NAME_IN = new hydra.core.Name("in");
+  public static final hydra.core.Name IN = new hydra.core.Name("in");
   
-  public static final hydra.core.Name FIELD_NAME_IFS = new hydra.core.Name("ifs");
+  public static final hydra.core.Name IFS = new hydra.core.Name("ifs");
   
   public final Boolean async;
   

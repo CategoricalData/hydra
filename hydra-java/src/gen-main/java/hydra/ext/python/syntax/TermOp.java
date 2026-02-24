@@ -5,17 +5,17 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class TermOp implements Serializable, Comparable<TermOp> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.TermOp");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TermOp");
   
-  public static final hydra.core.Name FIELD_NAME_MUL = new hydra.core.Name("mul");
+  public static final hydra.core.Name MUL = new hydra.core.Name("mul");
   
-  public static final hydra.core.Name FIELD_NAME_DIV = new hydra.core.Name("div");
+  public static final hydra.core.Name DIV = new hydra.core.Name("div");
   
-  public static final hydra.core.Name FIELD_NAME_FLOORDIV = new hydra.core.Name("floordiv");
+  public static final hydra.core.Name FLOORDIV = new hydra.core.Name("floordiv");
   
-  public static final hydra.core.Name FIELD_NAME_MOD = new hydra.core.Name("mod");
+  public static final hydra.core.Name MOD = new hydra.core.Name("mod");
   
-  public static final hydra.core.Name FIELD_NAME_MATMUL = new hydra.core.Name("matmul");
+  public static final hydra.core.Name MATMUL = new hydra.core.Name("matmul");
   
   private TermOp () {
   

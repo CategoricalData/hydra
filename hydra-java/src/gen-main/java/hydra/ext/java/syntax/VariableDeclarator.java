@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class VariableDeclarator implements Serializable, Comparable<VariableDeclarator> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.VariableDeclarator");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.VariableDeclarator");
   
-  public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
+  public static final hydra.core.Name ID = new hydra.core.Name("id");
   
-  public static final hydra.core.Name FIELD_NAME_INITIALIZER = new hydra.core.Name("initializer");
+  public static final hydra.core.Name INITIALIZER = new hydra.core.Name("initializer");
   
   public final hydra.ext.java.syntax.VariableDeclaratorId id;
   

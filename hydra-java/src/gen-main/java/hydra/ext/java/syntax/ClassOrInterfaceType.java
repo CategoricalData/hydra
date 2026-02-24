@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassOrInterfaceType implements Serializable, Comparable<ClassOrInterfaceType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassOrInterfaceType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassOrInterfaceType");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  public static final hydra.core.Name CLASS = new hydra.core.Name("class");
   
-  public static final hydra.core.Name FIELD_NAME_INTERFACE = new hydra.core.Name("interface");
+  public static final hydra.core.Name INTERFACE = new hydra.core.Name("interface");
   
   private ClassOrInterfaceType () {
   

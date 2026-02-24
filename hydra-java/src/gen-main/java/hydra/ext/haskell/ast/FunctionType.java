@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A function type
  */
 public class FunctionType implements Serializable, Comparable<FunctionType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.FunctionType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.FunctionType");
   
-  public static final hydra.core.Name FIELD_NAME_DOMAIN = new hydra.core.Name("domain");
+  public static final hydra.core.Name DOMAIN = new hydra.core.Name("domain");
   
-  public static final hydra.core.Name FIELD_NAME_CODOMAIN = new hydra.core.Name("codomain");
+  public static final hydra.core.Name CODOMAIN = new hydra.core.Name("codomain");
   
   /**
    * The domain type

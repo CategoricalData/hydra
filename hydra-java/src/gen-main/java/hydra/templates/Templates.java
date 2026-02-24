@@ -238,7 +238,7 @@ public interface Templates {
       v1);
   }
   
-  static <T0, T1> hydra.compute.Flow<T0, T1> instantiateTemplate_noPoly() {
+  static <T1, T2> hydra.compute.Flow<T1, T2> instantiateTemplate_noPoly() {
     return hydra.lib.flows.Fail.apply("Polymorphic and function types are not currently supported");
   }
   

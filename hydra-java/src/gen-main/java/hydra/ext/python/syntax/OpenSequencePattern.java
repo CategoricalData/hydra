@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class OpenSequencePattern implements Serializable, Comparable<OpenSequencePattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.OpenSequencePattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.OpenSequencePattern");
   
-  public static final hydra.core.Name FIELD_NAME_HEAD = new hydra.core.Name("head");
+  public static final hydra.core.Name HEAD = new hydra.core.Name("head");
   
-  public static final hydra.core.Name FIELD_NAME_TAIL = new hydra.core.Name("tail");
+  public static final hydra.core.Name TAIL = new hydra.core.Name("tail");
   
   public final hydra.ext.python.syntax.MaybeStarPattern head;
   

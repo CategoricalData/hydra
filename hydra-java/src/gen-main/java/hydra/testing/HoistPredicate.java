@@ -8,15 +8,15 @@ import java.io.Serializable;
  * A predefined predicate for testing hoistSubterms. Each predicate determines which subterms should be hoisted into let bindings.
  */
 public abstract class HoistPredicate implements Serializable, Comparable<HoistPredicate> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.HoistPredicate");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.HoistPredicate");
   
-  public static final hydra.core.Name FIELD_NAME_CASE_STATEMENTS = new hydra.core.Name("caseStatements");
+  public static final hydra.core.Name CASE_STATEMENTS = new hydra.core.Name("caseStatements");
   
-  public static final hydra.core.Name FIELD_NAME_APPLICATIONS = new hydra.core.Name("applications");
+  public static final hydra.core.Name APPLICATIONS = new hydra.core.Name("applications");
   
-  public static final hydra.core.Name FIELD_NAME_LISTS = new hydra.core.Name("lists");
+  public static final hydra.core.Name LISTS = new hydra.core.Name("lists");
   
-  public static final hydra.core.Name FIELD_NAME_NOTHING = new hydra.core.Name("nothing");
+  public static final hydra.core.Name NOTHING = new hydra.core.Name("nothing");
   
   private HoistPredicate () {
   

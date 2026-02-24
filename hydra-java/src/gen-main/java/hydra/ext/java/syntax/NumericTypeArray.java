@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class NumericTypeArray implements Serializable, Comparable<NumericTypeArray> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.NumericTypeArray");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.NumericTypeArray");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
-  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  public static final hydra.core.Name ARRAY = new hydra.core.Name("array");
   
   private NumericTypeArray () {
   

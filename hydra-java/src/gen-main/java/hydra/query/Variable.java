@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A query variable
  */
 public class Variable implements Serializable, Comparable<Variable> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.Variable");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.Variable");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * Target Python version for code generation
  */
 public abstract class PythonVersion implements Serializable, Comparable<PythonVersion> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.helpers.PythonVersion");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.helpers.PythonVersion");
   
-  public static final hydra.core.Name FIELD_NAME_PYTHON310 = new hydra.core.Name("python310");
+  public static final hydra.core.Name PYTHON310 = new hydra.core.Name("python310");
   
-  public static final hydra.core.Name FIELD_NAME_PYTHON312 = new hydra.core.Name("python312");
+  public static final hydra.core.Name PYTHON312 = new hydra.core.Name("python312");
   
   private PythonVersion () {
   

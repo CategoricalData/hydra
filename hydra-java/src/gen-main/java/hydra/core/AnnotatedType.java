@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A type together with an annotation
  */
 public class AnnotatedType implements Serializable, Comparable<AnnotatedType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.AnnotatedType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.AnnotatedType");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
+  public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
   
   /**
    * The type being annotated

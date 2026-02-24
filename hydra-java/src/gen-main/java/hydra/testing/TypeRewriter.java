@@ -8,9 +8,9 @@ import java.io.Serializable;
  * A predefined type rewriter for testing rewriteType
  */
 public abstract class TypeRewriter implements Serializable, Comparable<TypeRewriter> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TypeRewriter");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TypeRewriter");
   
-  public static final hydra.core.Name FIELD_NAME_REPLACE_STRING_WITH_INT32 = new hydra.core.Name("replaceStringWithInt32");
+  public static final hydra.core.Name REPLACE_STRING_WITH_INT32 = new hydra.core.Name("replaceStringWithInt32");
   
   private TypeRewriter () {
   

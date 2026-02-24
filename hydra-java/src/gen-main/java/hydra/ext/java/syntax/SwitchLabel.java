@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class SwitchLabel implements Serializable, Comparable<SwitchLabel> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.SwitchLabel");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.SwitchLabel");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTANT = new hydra.core.Name("constant");
+  public static final hydra.core.Name CONSTANT = new hydra.core.Name("constant");
   
-  public static final hydra.core.Name FIELD_NAME_ENUM_CONSTANT = new hydra.core.Name("enumConstant");
+  public static final hydra.core.Name ENUM_CONSTANT = new hydra.core.Name("enumConstant");
   
-  public static final hydra.core.Name FIELD_NAME_DEFAULT = new hydra.core.Name("default");
+  public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
   
   private SwitchLabel () {
   

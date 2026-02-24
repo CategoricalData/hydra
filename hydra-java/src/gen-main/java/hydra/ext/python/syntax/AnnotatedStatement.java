@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class AnnotatedStatement implements Serializable, Comparable<AnnotatedStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.AnnotatedStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.AnnotatedStatement");
   
-  public static final hydra.core.Name FIELD_NAME_COMMENT = new hydra.core.Name("comment");
+  public static final hydra.core.Name COMMENT = new hydra.core.Name("comment");
   
-  public static final hydra.core.Name FIELD_NAME_STATEMENT = new hydra.core.Name("statement");
+  public static final hydra.core.Name STATEMENT = new hydra.core.Name("statement");
   
   public final String comment;
   

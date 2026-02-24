@@ -8,15 +8,15 @@ import java.io.Serializable;
  * A test case which applies a fold operation over a term and compares the result
  */
 public class FoldOverTermTestCase implements Serializable, Comparable<FoldOverTermTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.FoldOverTermTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.FoldOverTermTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_TRAVERSAL_ORDER = new hydra.core.Name("traversalOrder");
+  public static final hydra.core.Name TRAVERSAL_ORDER = new hydra.core.Name("traversalOrder");
   
-  public static final hydra.core.Name FIELD_NAME_OPERATION = new hydra.core.Name("operation");
+  public static final hydra.core.Name OPERATION = new hydra.core.Name("operation");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The term to fold over

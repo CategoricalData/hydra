@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A node in an accessor graph, representing a term or subterm
  */
 public class AccessorNode implements Serializable, Comparable<AccessorNode> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.accessors.AccessorNode");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.accessors.AccessorNode");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
+  public static final hydra.core.Name LABEL = new hydra.core.Name("label");
   
-  public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
+  public static final hydra.core.Name ID = new hydra.core.Name("id");
   
   /**
    * The qualified name of the term

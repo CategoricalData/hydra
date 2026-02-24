@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An operator
  */
 public abstract class Operator implements Serializable, Comparable<Operator> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Operator");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Operator");
   
-  public static final hydra.core.Name FIELD_NAME_BACKTICK = new hydra.core.Name("backtick");
+  public static final hydra.core.Name BACKTICK = new hydra.core.Name("backtick");
   
-  public static final hydra.core.Name FIELD_NAME_NORMAL = new hydra.core.Name("normal");
+  public static final hydra.core.Name NORMAL = new hydra.core.Name("normal");
   
   private Operator () {
   

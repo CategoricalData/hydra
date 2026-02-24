@@ -8,21 +8,21 @@ import java.io.Serializable;
  * A regular expression quantifier
  */
 public abstract class RegexQuantifier implements Serializable, Comparable<RegexQuantifier> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.query.RegexQuantifier");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.RegexQuantifier");
   
-  public static final hydra.core.Name FIELD_NAME_ONE = new hydra.core.Name("one");
+  public static final hydra.core.Name ONE = new hydra.core.Name("one");
   
-  public static final hydra.core.Name FIELD_NAME_ZERO_OR_ONE = new hydra.core.Name("zeroOrOne");
+  public static final hydra.core.Name ZERO_OR_ONE = new hydra.core.Name("zeroOrOne");
   
-  public static final hydra.core.Name FIELD_NAME_ZERO_OR_MORE = new hydra.core.Name("zeroOrMore");
+  public static final hydra.core.Name ZERO_OR_MORE = new hydra.core.Name("zeroOrMore");
   
-  public static final hydra.core.Name FIELD_NAME_ONE_OR_MORE = new hydra.core.Name("oneOrMore");
+  public static final hydra.core.Name ONE_OR_MORE = new hydra.core.Name("oneOrMore");
   
-  public static final hydra.core.Name FIELD_NAME_EXACTLY = new hydra.core.Name("exactly");
+  public static final hydra.core.Name EXACTLY = new hydra.core.Name("exactly");
   
-  public static final hydra.core.Name FIELD_NAME_AT_LEAST = new hydra.core.Name("atLeast");
+  public static final hydra.core.Name AT_LEAST = new hydra.core.Name("atLeast");
   
-  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  public static final hydra.core.Name RANGE = new hydra.core.Name("range");
   
   private RegexQuantifier () {
   

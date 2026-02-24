@@ -5,15 +5,15 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class PrimaryRhs implements Serializable, Comparable<PrimaryRhs> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.PrimaryRhs");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.PrimaryRhs");
   
-  public static final hydra.core.Name FIELD_NAME_PROJECT = new hydra.core.Name("project");
+  public static final hydra.core.Name PROJECT = new hydra.core.Name("project");
   
-  public static final hydra.core.Name FIELD_NAME_GENEXP = new hydra.core.Name("genexp");
+  public static final hydra.core.Name GENEXP = new hydra.core.Name("genexp");
   
-  public static final hydra.core.Name FIELD_NAME_CALL = new hydra.core.Name("call");
+  public static final hydra.core.Name CALL = new hydra.core.Name("call");
   
-  public static final hydra.core.Name FIELD_NAME_SLICES = new hydra.core.Name("slices");
+  public static final hydra.core.Name SLICES = new hydra.core.Name("slices");
   
   private PrimaryRhs () {
   

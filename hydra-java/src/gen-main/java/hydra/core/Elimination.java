@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A corresponding elimination for an introduction term
  */
 public abstract class Elimination implements Serializable, Comparable<Elimination> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.Elimination");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.Elimination");
   
-  public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
+  public static final hydra.core.Name RECORD = new hydra.core.Name("record");
   
-  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  public static final hydra.core.Name UNION = new hydra.core.Name("union");
   
-  public static final hydra.core.Name FIELD_NAME_WRAP = new hydra.core.Name("wrap");
+  public static final hydra.core.Name WRAP = new hydra.core.Name("wrap");
   
   private Elimination () {
   

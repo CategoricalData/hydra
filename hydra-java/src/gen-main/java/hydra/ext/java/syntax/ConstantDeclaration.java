@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ConstantDeclaration implements Serializable, Comparable<ConstantDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ConstantDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ConstantDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_MODIFIERS = new hydra.core.Name("modifiers");
+  public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLES = new hydra.core.Name("variables");
+  public static final hydra.core.Name VARIABLES = new hydra.core.Name("variables");
   
   public final java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers;
   

@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class AsPattern implements Serializable, Comparable<AsPattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.AsPattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.AsPattern");
   
-  public static final hydra.core.Name FIELD_NAME_PATTERN = new hydra.core.Name("pattern");
+  public static final hydra.core.Name PATTERN = new hydra.core.Name("pattern");
   
-  public static final hydra.core.Name FIELD_NAME_AS = new hydra.core.Name("as");
+  public static final hydra.core.Name AS = new hydra.core.Name("as");
   
   public final hydra.ext.python.syntax.OrPattern pattern;
   

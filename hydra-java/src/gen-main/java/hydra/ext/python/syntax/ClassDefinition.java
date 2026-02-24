@@ -5,17 +5,17 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class ClassDefinition implements Serializable, Comparable<ClassDefinition> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ClassDefinition");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ClassDefinition");
   
-  public static final hydra.core.Name FIELD_NAME_DECORATORS = new hydra.core.Name("decorators");
+  public static final hydra.core.Name DECORATORS = new hydra.core.Name("decorators");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_PARAMS = new hydra.core.Name("typeParams");
+  public static final hydra.core.Name TYPE_PARAMS = new hydra.core.Name("typeParams");
   
-  public static final hydra.core.Name FIELD_NAME_ARGUMENTS = new hydra.core.Name("arguments");
+  public static final hydra.core.Name ARGUMENTS = new hydra.core.Name("arguments");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators;
   

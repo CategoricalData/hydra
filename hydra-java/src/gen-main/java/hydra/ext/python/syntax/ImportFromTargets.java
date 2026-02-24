@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class ImportFromTargets implements Serializable, Comparable<ImportFromTargets> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.ImportFromTargets");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.ImportFromTargets");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
-  public static final hydra.core.Name FIELD_NAME_PARENS = new hydra.core.Name("parens");
+  public static final hydra.core.Name PARENS = new hydra.core.Name("parens");
   
-  public static final hydra.core.Name FIELD_NAME_STAR = new hydra.core.Name("star");
+  public static final hydra.core.Name STAR = new hydra.core.Name("star");
   
   private ImportFromTargets () {
   

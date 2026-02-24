@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class TryStatement implements Serializable, Comparable<TryStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.TryStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.TryStatement");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
-  public static final hydra.core.Name FIELD_NAME_WITH_FINALLY = new hydra.core.Name("withFinally");
+  public static final hydra.core.Name WITH_FINALLY = new hydra.core.Name("withFinally");
   
-  public static final hydra.core.Name FIELD_NAME_WITH_RESOURCES = new hydra.core.Name("withResources");
+  public static final hydra.core.Name WITH_RESOURCES = new hydra.core.Name("withResources");
   
   private TryStatement () {
   

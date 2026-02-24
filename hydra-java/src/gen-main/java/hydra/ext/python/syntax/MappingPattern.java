@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class MappingPattern implements Serializable, Comparable<MappingPattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.MappingPattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.MappingPattern");
   
-  public static final hydra.core.Name FIELD_NAME_ITEMS = new hydra.core.Name("items");
+  public static final hydra.core.Name ITEMS = new hydra.core.Name("items");
   
-  public static final hydra.core.Name FIELD_NAME_DOUBLE_STAR = new hydra.core.Name("doubleStar");
+  public static final hydra.core.Name DOUBLE_STAR = new hydra.core.Name("doubleStar");
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.ItemsPattern> items;
   

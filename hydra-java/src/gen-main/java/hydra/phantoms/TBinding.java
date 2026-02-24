@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An association of a named term (element) with a phantom type
  */
 public class TBinding<A> implements Serializable, Comparable<TBinding<A>> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.phantoms.TBinding");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.phantoms.TBinding");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  public static final hydra.core.Name TERM = new hydra.core.Name("term");
   
   /**
    * The name of the term

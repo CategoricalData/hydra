@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A type expression together with free type variables occurring in the expression
  */
 public class TypeScheme implements Serializable, Comparable<TypeScheme> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.TypeScheme");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.TypeScheme");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLES = new hydra.core.Name("variables");
+  public static final hydra.core.Name VARIABLES = new hydra.core.Name("variables");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTRAINTS = new hydra.core.Name("constraints");
+  public static final hydra.core.Name CONSTRAINTS = new hydra.core.Name("constraints");
   
   /**
    * The free type variables

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * Specifies either a pre-order or post-order traversal
  */
 public abstract class TraversalOrder implements Serializable, Comparable<TraversalOrder> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.TraversalOrder");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.coders.TraversalOrder");
   
-  public static final hydra.core.Name FIELD_NAME_PRE = new hydra.core.Name("pre");
+  public static final hydra.core.Name PRE = new hydra.core.Name("pre");
   
-  public static final hydra.core.Name FIELD_NAME_POST = new hydra.core.Name("post");
+  public static final hydra.core.Name POST = new hydra.core.Name("post");
   
   private TraversalOrder () {
   

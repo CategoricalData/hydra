@@ -182,21 +182,21 @@ public interface Inference {
               hydra.inference.Inference.<T0>finalizeInferredTerm(
                 cx,
                 term),
-              (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.graph.Graph>>) (finalized -> ((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.graph.Graph>>) (v1 -> hydra.inference.Inference.inferGraphTypes_forFinal(
+              (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.graph.Graph>>) (finalized -> hydra.inference.Inference.<T0>inferGraphTypes_forFinal(
                 fromLetTerm,
-                v1))).apply(finalized)));
+                finalized)));
           })))));
   }
   
-  static <T0, T1> hydra.compute.Flow<T1, T0> inferGraphTypes_forFinal(java.util.function.Function<hydra.core.Let, T0> fromLetTerm, hydra.core.Term finalized) {
+  static <T1> hydra.compute.Flow<T1, hydra.graph.Graph> inferGraphTypes_forFinal(java.util.function.Function<hydra.core.Let, hydra.graph.Graph> fromLetTerm, hydra.core.Term finalized) {
     return (finalized).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T1, T0> visit(hydra.core.Term.Let l) {
+      public hydra.compute.Flow<T1, hydra.graph.Graph> visit(hydra.core.Term.Let l) {
         return hydra.lib.flows.Pure.apply((fromLetTerm).apply((l).value));
       }
       
       @Override
-      public hydra.compute.Flow<T1, T0> visit(hydra.core.Term.Variable ignored) {
+      public hydra.compute.Flow<T1, hydra.graph.Graph> visit(hydra.core.Term.Variable ignored) {
         return hydra.lib.flows.Fail.apply("Expected inferred graph as let term");
       }
     });
@@ -501,37 +501,37 @@ public interface Inference {
         cx,
         letTerm.get(),
         "infer type of term"),
-      (java.util.function.Function<hydra.typing.InferenceResult, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (result -> ((java.util.function.Function<hydra.typing.InferenceResult, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (v1 -> hydra.inference.Inference.<T0>inferTypeOf_unifyAndSubst(
+      (java.util.function.Function<hydra.typing.InferenceResult, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (result -> hydra.inference.Inference.<T0>inferTypeOf_unifyAndSubst(
         cx,
         hydra.extract.core.Core::let,
-        v1))).apply(result)));
+        result)));
   }
   
-  static <T0> hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>> inferTypeOf_forBindings(java.util.List<hydra.core.Binding> bindings) {
+  static <T1> hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>> inferTypeOf_forBindings(java.util.List<hydra.core.Binding> bindings) {
     hydra.util.Lazy<hydra.core.Binding> binding = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(bindings));
     hydra.util.Maybe<hydra.core.TypeScheme> mts = (binding.get()).type;
     hydra.core.Term term1 = (binding.get()).term;
     return hydra.lib.maybes.Maybe.apply(
       hydra.lib.flows.Fail.apply("Expected a type scheme"),
-      (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (ts -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>(term1, ts))))),
+      (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (ts -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>(term1, ts))))),
       mts);
   }
   
-  static <T0> hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>> inferTypeOf_unifyAndSubst(hydra.typing.InferenceContext cx, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Let>> hydra_extract_core_let2, hydra.typing.InferenceResult result) {
+  static <T1> hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>> inferTypeOf_unifyAndSubst(hydra.typing.InferenceContext cx, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Let>> hydra_extract_core_let2, hydra.typing.InferenceResult result) {
     hydra.typing.TypeSubst subst = (result).subst;
     return hydra.lib.flows.Bind.apply(
-      hydra.inference.Inference.<T0>finalizeInferredTerm(
+      hydra.inference.Inference.<T1>finalizeInferredTerm(
         cx,
         (result).term),
-      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (finalized -> hydra.lib.flows.Bind.apply(
+      (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (finalized -> hydra.lib.flows.Bind.apply(
         hydra.lexical.Lexical.withEmptyGraph((hydra_extract_core_let2).apply(finalized)),
-        (java.util.function.Function<hydra.core.Let, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (letResult -> {
+        (java.util.function.Function<hydra.core.Let, hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.TypeScheme>>>) (letResult -> {
           java.util.List<hydra.core.Binding> bindings = (letResult).bindings;
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               1,
               hydra.lib.lists.Length.apply(bindings)),
-            () -> hydra.inference.Inference.<T0>inferTypeOf_forBindings(bindings),
+            () -> hydra.inference.Inference.<T1>inferTypeOf_forBindings(bindings),
             () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
               "Expected a single binding with a type scheme, but got: ",
               hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Length.apply(bindings)),
@@ -1537,20 +1537,20 @@ public interface Inference {
         hydra.lib.flows.Map.apply(
           (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>, java.util.Map<hydra.core.Name, hydra.core.Type>>) ((java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>, java.util.Map<hydra.core.Name, hydra.core.Type>>) (hydra.lib.maps.FromList::apply)),
           hydra.lib.flows.MapList.apply(
-            (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (v1 -> hydra.inference.Inference.initialTypeContext_toPair(
+            (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (v1 -> hydra.inference.Inference.<T0>initialTypeContext_toPair(
               hydra.schemas.Schemas::typeSchemeToFType,
               v1)),
             (g).elements)),
         (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.compute.Flow<T0, hydra.typing.TypeContext>>) (types -> hydra.lib.flows.Pure.apply(new hydra.typing.TypeContext(types, (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), ix))))));
   }
   
-  static <T0, T1> hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<hydra.core.Name, T0>> initialTypeContext_toPair(java.util.function.Function<hydra.core.TypeScheme, T0> hydra_schemas_typeSchemeToFType2, hydra.core.Binding el) {
+  static <T1> hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>> initialTypeContext_toPair(java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> hydra_schemas_typeSchemeToFType2, hydra.core.Binding el) {
     hydra.core.Name name = (el).name;
     return hydra.lib.maybes.Maybe.apply(
       hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
         "untyped element: ",
         (name).value)),
-      (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<hydra.core.Name, T0>>>) (ts -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.core.Name, T0>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, T0>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, T0>(name, (hydra_schemas_typeSchemeToFType2).apply(ts)))))),
+      (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<T1, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (ts -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>(name, (hydra_schemas_typeSchemeToFType2).apply(ts)))))),
       (el).type);
   }
   
@@ -1579,7 +1579,7 @@ public interface Inference {
   static <T0> java.util.Map<T0, hydra.core.TypeVariableMetadata> mergeClassConstraints(java.util.Map<T0, hydra.core.TypeVariableMetadata> m1, java.util.Map<T0, hydra.core.TypeVariableMetadata> m2) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<java.util.Map<T0, hydra.core.TypeVariableMetadata>, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.core.TypeVariableMetadata>, java.util.Map<T0, hydra.core.TypeVariableMetadata>>>) (acc -> (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.core.TypeVariableMetadata>, java.util.Map<T0, hydra.core.TypeVariableMetadata>>) (pair -> {
-        hydra.util.Lazy<T0> k = new hydra.util.Lazy<>(() -> hydra.inference.Inference.mergeClassConstraints_k(pair));
+        hydra.util.Lazy<T0> k = new hydra.util.Lazy<>(() -> hydra.inference.Inference.<T0>mergeClassConstraints_k(pair));
         hydra.util.Lazy<hydra.core.TypeVariableMetadata> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
         return hydra.lib.maybes.Maybe.apply(
           hydra.lib.maps.Insert.apply(
@@ -1603,7 +1603,7 @@ public interface Inference {
       hydra.lib.maps.ToList.apply(m2));
   }
   
-  static <T0, T1> T0 mergeClassConstraints_k(hydra.util.Tuple.Tuple2<T0, T1> pair) {
+  static <T0> T0 mergeClassConstraints_k(hydra.util.Tuple.Tuple2<T0, hydra.core.TypeVariableMetadata> pair) {
     return hydra.lib.pairs.First.apply(pair);
   }
   

@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class FloatingPointType implements Serializable, Comparable<FloatingPointType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.FloatingPointType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.FloatingPointType");
   
-  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  public static final hydra.core.Name FLOAT = new hydra.core.Name("float");
   
-  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  public static final hydra.core.Name DOUBLE = new hydra.core.Name("double");
   
   private FloatingPointType () {
   

@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
  */
 public class PatternImplication implements Serializable, Comparable<PatternImplication> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.constraints.PatternImplication");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.constraints.PatternImplication");
   
-  public static final hydra.core.Name FIELD_NAME_ANTECEDENT = new hydra.core.Name("antecedent");
+  public static final hydra.core.Name ANTECEDENT = new hydra.core.Name("antecedent");
   
-  public static final hydra.core.Name FIELD_NAME_CONSEQUENT = new hydra.core.Name("consequent");
+  public static final hydra.core.Name CONSEQUENT = new hydra.core.Name("consequent");
   
   /**
    * The pattern which, if it matches, triggers the constraint

@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A test case which joins two types (producing type constraints or failing). The expected result is either Left (failure) or Right (list of constraints).
  */
 public class JoinTypesTestCase implements Serializable, Comparable<JoinTypesTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.JoinTypesTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.JoinTypesTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_LEFT = new hydra.core.Name("left");
+  public static final hydra.core.Name LEFT = new hydra.core.Name("left");
   
-  public static final hydra.core.Name FIELD_NAME_RIGHT = new hydra.core.Name("right");
+  public static final hydra.core.Name RIGHT = new hydra.core.Name("right");
   
-  public static final hydra.core.Name FIELD_NAME_EXPECTED = new hydra.core.Name("expected");
+  public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
   
   /**
    * The left type to join

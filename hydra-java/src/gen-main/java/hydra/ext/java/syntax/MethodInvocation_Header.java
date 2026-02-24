@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class MethodInvocation_Header implements Serializable, Comparable<MethodInvocation_Header> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.MethodInvocation_Header");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodInvocation_Header");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
-  public static final hydra.core.Name FIELD_NAME_COMPLEX = new hydra.core.Name("complex");
+  public static final hydra.core.Name COMPLEX = new hydra.core.Name("complex");
   
   private MethodInvocation_Header () {
   

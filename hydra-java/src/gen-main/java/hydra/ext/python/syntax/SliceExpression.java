@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class SliceExpression implements Serializable, Comparable<SliceExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.SliceExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SliceExpression");
   
-  public static final hydra.core.Name FIELD_NAME_START = new hydra.core.Name("start");
+  public static final hydra.core.Name START = new hydra.core.Name("start");
   
-  public static final hydra.core.Name FIELD_NAME_STOP = new hydra.core.Name("stop");
+  public static final hydra.core.Name STOP = new hydra.core.Name("stop");
   
-  public static final hydra.core.Name FIELD_NAME_STEP = new hydra.core.Name("step");
+  public static final hydra.core.Name STEP = new hydra.core.Name("step");
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Expression> start;
   

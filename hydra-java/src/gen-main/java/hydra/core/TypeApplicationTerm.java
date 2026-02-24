@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A term applied to a type; a type application
  */
 public class TypeApplicationTerm implements Serializable, Comparable<TypeApplicationTerm> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.TypeApplicationTerm");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.TypeApplicationTerm");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
   /**
    * The term being applied to a type

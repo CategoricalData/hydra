@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ConditionalExpression_TernaryCond implements Serializable, Comparable<ConditionalExpression_TernaryCond> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ConditionalExpression_TernaryCond");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ConditionalExpression_TernaryCond");
   
-  public static final hydra.core.Name FIELD_NAME_COND = new hydra.core.Name("cond");
+  public static final hydra.core.Name COND = new hydra.core.Name("cond");
   
-  public static final hydra.core.Name FIELD_NAME_IF_TRUE = new hydra.core.Name("ifTrue");
+  public static final hydra.core.Name IF_TRUE = new hydra.core.Name("ifTrue");
   
-  public static final hydra.core.Name FIELD_NAME_IF_FALSE = new hydra.core.Name("ifFalse");
+  public static final hydra.core.Name IF_FALSE = new hydra.core.Name("ifFalse");
   
   public final hydra.ext.java.syntax.ConditionalOrExpression cond;
   

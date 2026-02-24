@@ -1582,6 +1582,11 @@ public interface Testing {
               (java.util.function.Function<hydra.testing.JoinTypesTestCase, hydra.testing.TestCase>) (t -> new hydra.testing.TestCase.JoinTypes(t)),
               hydra.decode.testing.Testing.joinTypesTestCase(
                 cx,
+                input)))))),
+            (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.testing.TestCase>>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.testing.TestCase>>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.testing.TestCase>>>(new hydra.core.Name("unshadowVariables"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.testing.TestCase>>) (input -> hydra.lib.eithers.Map.apply(
+              (java.util.function.Function<hydra.testing.UnshadowVariablesTestCase, hydra.testing.TestCase>) (t -> new hydra.testing.TestCase.UnshadowVariables(t)),
+              hydra.decode.testing.Testing.unshadowVariablesTestCase(
+                cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.apply(
             (hydra.util.Either<hydra.util.DecodingError, hydra.testing.TestCase>) ((hydra.util.Either<hydra.util.DecodingError, hydra.testing.TestCase>) (hydra.util.Either.<hydra.util.DecodingError, hydra.testing.TestCase>left(new hydra.util.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
@@ -2625,6 +2630,42 @@ public interface Testing {
                   fieldMap,
                   cx),
                 (java.util.function.Function<Boolean, hydra.util.Either<hydra.util.DecodingError, hydra.testing.VariableOccursInTypeTestCase>>) (field_expected -> (hydra.util.Either<hydra.util.DecodingError, hydra.testing.VariableOccursInTypeTestCase>) ((hydra.util.Either<hydra.util.DecodingError, hydra.testing.VariableOccursInTypeTestCase>) (hydra.util.Either.<hydra.util.DecodingError, hydra.testing.VariableOccursInTypeTestCase>right(new hydra.testing.VariableOccursInTypeTestCase(field_variable, field_type, field_expected))))))))));
+        }
+      })),
+      hydra.lexical.Lexical.stripAndDereferenceTermEither(
+        cx,
+        raw));
+  }
+  
+  static hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase> unshadowVariablesTestCase(hydra.graph.Graph cx, hydra.core.Term raw) {
+    return hydra.lib.eithers.Either.apply(
+      (java.util.function.Function<String, hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>>) (err -> (hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>) ((hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>) (hydra.util.Either.<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>left(new hydra.util.DecodingError(err))))),
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
+        @Override
+        public hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase> otherwise(hydra.core.Term instance) {
+          return (hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>) ((hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>) (hydra.util.Either.<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>left(new hydra.util.DecodingError("expected record of type hydra.testing.UnshadowVariablesTestCase"))));
+        }
+        
+        @Override
+        public hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase> visit(hydra.core.Term.Record record) {
+          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          return hydra.lib.eithers.Bind.apply(
+            hydra.extract.helpers.Helpers.requireField(
+              "input",
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Term>>>) (p0 -> p1 -> hydra.decode.core.Core.term(
+                p0,
+                p1)),
+              fieldMap,
+              cx),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>>) (field_input -> hydra.lib.eithers.Bind.apply(
+              hydra.extract.helpers.Helpers.requireField(
+                "output",
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Term>>>) (p0 -> p1 -> hydra.decode.core.Core.term(
+                  p0,
+                  p1)),
+                fieldMap,
+                cx),
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>>) (field_output -> (hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>) ((hydra.util.Either<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>) (hydra.util.Either.<hydra.util.DecodingError, hydra.testing.UnshadowVariablesTestCase>right(new hydra.testing.UnshadowVariablesTestCase(field_input, field_output))))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

@@ -5,15 +5,15 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class TryExceptStarStatement implements Serializable, Comparable<TryExceptStarStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.TryExceptStarStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.TryExceptStarStatement");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_EXCEPTS = new hydra.core.Name("excepts");
+  public static final hydra.core.Name EXCEPTS = new hydra.core.Name("excepts");
   
-  public static final hydra.core.Name FIELD_NAME_ELSE = new hydra.core.Name("else");
+  public static final hydra.core.Name ELSE = new hydra.core.Name("else");
   
-  public static final hydra.core.Name FIELD_NAME_FINALLY = new hydra.core.Name("finally");
+  public static final hydra.core.Name FINALLY = new hydra.core.Name("finally");
   
   public final hydra.ext.python.syntax.Block body;
   

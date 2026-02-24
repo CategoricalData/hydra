@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class MethodReference_New implements Serializable, Comparable<MethodReference_New> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_New");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_New");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS_TYPE = new hydra.core.Name("classType");
+  public static final hydra.core.Name CLASS_TYPE = new hydra.core.Name("classType");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
+  public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
   
   public final hydra.ext.java.syntax.ClassType classType;
   

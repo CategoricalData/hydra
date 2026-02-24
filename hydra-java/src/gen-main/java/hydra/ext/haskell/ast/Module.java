@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A Haskell module
  */
 public class Module implements Serializable, Comparable<Module> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Module");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Module");
   
-  public static final hydra.core.Name FIELD_NAME_HEAD = new hydra.core.Name("head");
+  public static final hydra.core.Name HEAD = new hydra.core.Name("head");
   
-  public static final hydra.core.Name FIELD_NAME_IMPORTS = new hydra.core.Name("imports");
+  public static final hydra.core.Name IMPORTS = new hydra.core.Name("imports");
   
-  public static final hydra.core.Name FIELD_NAME_DECLARATIONS = new hydra.core.Name("declarations");
+  public static final hydra.core.Name DECLARATIONS = new hydra.core.Name("declarations");
   
   /**
    * Optional module head

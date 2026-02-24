@@ -8,15 +8,15 @@ import java.io.Serializable;
  * A naming convention for symbols, such as camelCase or snake_case
  */
 public abstract class CaseConvention implements Serializable, Comparable<CaseConvention> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.util.CaseConvention");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.util.CaseConvention");
   
-  public static final hydra.core.Name FIELD_NAME_CAMEL = new hydra.core.Name("camel");
+  public static final hydra.core.Name CAMEL = new hydra.core.Name("camel");
   
-  public static final hydra.core.Name FIELD_NAME_PASCAL = new hydra.core.Name("pascal");
+  public static final hydra.core.Name PASCAL = new hydra.core.Name("pascal");
   
-  public static final hydra.core.Name FIELD_NAME_LOWER_SNAKE = new hydra.core.Name("lowerSnake");
+  public static final hydra.core.Name LOWER_SNAKE = new hydra.core.Name("lowerSnake");
   
-  public static final hydra.core.Name FIELD_NAME_UPPER_SNAKE = new hydra.core.Name("upperSnake");
+  public static final hydra.core.Name UPPER_SNAKE = new hydra.core.Name("upperSnake");
   
   private CaseConvention () {
   

@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class MethodBody implements Serializable, Comparable<MethodBody> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.MethodBody");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodBody");
   
-  public static final hydra.core.Name FIELD_NAME_BLOCK = new hydra.core.Name("block");
+  public static final hydra.core.Name BLOCK = new hydra.core.Name("block");
   
-  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  public static final hydra.core.Name NONE = new hydra.core.Name("none");
   
   private MethodBody () {
   

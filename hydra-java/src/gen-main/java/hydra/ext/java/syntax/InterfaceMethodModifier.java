@@ -5,21 +5,21 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class InterfaceMethodModifier implements Serializable, Comparable<InterfaceMethodModifier> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.InterfaceMethodModifier");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.InterfaceMethodModifier");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
+  public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
   
-  public static final hydra.core.Name FIELD_NAME_PUBLIC = new hydra.core.Name("public");
+  public static final hydra.core.Name PUBLIC = new hydra.core.Name("public");
   
-  public static final hydra.core.Name FIELD_NAME_PRIVATE = new hydra.core.Name("private");
+  public static final hydra.core.Name PRIVATE = new hydra.core.Name("private");
   
-  public static final hydra.core.Name FIELD_NAME_ABSTRACT = new hydra.core.Name("abstract");
+  public static final hydra.core.Name ABSTRACT = new hydra.core.Name("abstract");
   
-  public static final hydra.core.Name FIELD_NAME_DEFAULT = new hydra.core.Name("default");
+  public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
   
-  public static final hydra.core.Name FIELD_NAME_STATIC = new hydra.core.Name("static");
+  public static final hydra.core.Name STATIC = new hydra.core.Name("static");
   
-  public static final hydra.core.Name FIELD_NAME_STRICTFP = new hydra.core.Name("strictfp");
+  public static final hydra.core.Name STRICTFP = new hydra.core.Name("strictfp");
   
   private InterfaceMethodModifier () {
   

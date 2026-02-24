@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class CastExpression implements Serializable, Comparable<CastExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.CastExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.CastExpression");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMITIVE = new hydra.core.Name("primitive");
+  public static final hydra.core.Name PRIMITIVE = new hydra.core.Name("primitive");
   
-  public static final hydra.core.Name FIELD_NAME_NOT_PLUS_MINUS = new hydra.core.Name("notPlusMinus");
+  public static final hydra.core.Name NOT_PLUS_MINUS = new hydra.core.Name("notPlusMinus");
   
-  public static final hydra.core.Name FIELD_NAME_LAMBDA = new hydra.core.Name("lambda");
+  public static final hydra.core.Name LAMBDA = new hydra.core.Name("lambda");
   
   private CastExpression () {
   

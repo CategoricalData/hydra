@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class TypeArgument implements Serializable, Comparable<TypeArgument> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.TypeArgument");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.TypeArgument");
   
-  public static final hydra.core.Name FIELD_NAME_REFERENCE = new hydra.core.Name("reference");
+  public static final hydra.core.Name REFERENCE = new hydra.core.Name("reference");
   
-  public static final hydra.core.Name FIELD_NAME_WILDCARD = new hydra.core.Name("wildcard");
+  public static final hydra.core.Name WILDCARD = new hydra.core.Name("wildcard");
   
   private TypeArgument () {
   

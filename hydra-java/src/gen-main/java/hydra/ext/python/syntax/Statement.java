@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class Statement implements Serializable, Comparable<Statement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Statement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Statement");
   
-  public static final hydra.core.Name FIELD_NAME_COMPOUND = new hydra.core.Name("compound");
+  public static final hydra.core.Name COMPOUND = new hydra.core.Name("compound");
   
-  public static final hydra.core.Name FIELD_NAME_SIMPLE = new hydra.core.Name("simple");
+  public static final hydra.core.Name SIMPLE = new hydra.core.Name("simple");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATED = new hydra.core.Name("annotated");
+  public static final hydra.core.Name ANNOTATED = new hydra.core.Name("annotated");
   
   private Statement () {
   

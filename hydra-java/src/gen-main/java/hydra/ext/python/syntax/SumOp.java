@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class SumOp implements Serializable, Comparable<SumOp> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.SumOp");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.SumOp");
   
-  public static final hydra.core.Name FIELD_NAME_ADD = new hydra.core.Name("add");
+  public static final hydra.core.Name ADD = new hydra.core.Name("add");
   
-  public static final hydra.core.Name FIELD_NAME_SUB = new hydra.core.Name("sub");
+  public static final hydra.core.Name SUB = new hydra.core.Name("sub");
   
   private SumOp () {
   

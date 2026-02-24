@@ -8,13 +8,13 @@ import java.io.Serializable;
  * The identifier of an elimination constructor
  */
 public abstract class EliminationVariant implements Serializable, Comparable<EliminationVariant> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.variants.EliminationVariant");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.variants.EliminationVariant");
   
-  public static final hydra.core.Name FIELD_NAME_RECORD = new hydra.core.Name("record");
+  public static final hydra.core.Name RECORD = new hydra.core.Name("record");
   
-  public static final hydra.core.Name FIELD_NAME_UNION = new hydra.core.Name("union");
+  public static final hydra.core.Name UNION = new hydra.core.Name("union");
   
-  public static final hydra.core.Name FIELD_NAME_WRAP = new hydra.core.Name("wrap");
+  public static final hydra.core.Name WRAP = new hydra.core.Name("wrap");
   
   private EliminationVariant () {
   

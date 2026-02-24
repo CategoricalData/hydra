@@ -5,17 +5,17 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class NormalInterfaceDeclaration implements Serializable, Comparable<NormalInterfaceDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.NormalInterfaceDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.NormalInterfaceDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_MODIFIERS = new hydra.core.Name("modifiers");
+  public static final hydra.core.Name MODIFIERS = new hydra.core.Name("modifiers");
   
-  public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
+  public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
   
-  public static final hydra.core.Name FIELD_NAME_PARAMETERS = new hydra.core.Name("parameters");
+  public static final hydra.core.Name PARAMETERS = new hydra.core.Name("parameters");
   
-  public static final hydra.core.Name FIELD_NAME_EXTENDS = new hydra.core.Name("extends");
+  public static final hydra.core.Name EXTENDS = new hydra.core.Name("extends");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
   public final java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers;
   

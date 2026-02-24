@@ -8,23 +8,23 @@ import java.io.Serializable;
  * A set of constraints on valid type and term expressions, characterizing a language
  */
 public class LanguageConstraints implements Serializable, Comparable<LanguageConstraints> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.coders.LanguageConstraints");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.coders.LanguageConstraints");
   
-  public static final hydra.core.Name FIELD_NAME_ELIMINATION_VARIANTS = new hydra.core.Name("eliminationVariants");
+  public static final hydra.core.Name ELIMINATION_VARIANTS = new hydra.core.Name("eliminationVariants");
   
-  public static final hydra.core.Name FIELD_NAME_LITERAL_VARIANTS = new hydra.core.Name("literalVariants");
+  public static final hydra.core.Name LITERAL_VARIANTS = new hydra.core.Name("literalVariants");
   
-  public static final hydra.core.Name FIELD_NAME_FLOAT_TYPES = new hydra.core.Name("floatTypes");
+  public static final hydra.core.Name FLOAT_TYPES = new hydra.core.Name("floatTypes");
   
-  public static final hydra.core.Name FIELD_NAME_FUNCTION_VARIANTS = new hydra.core.Name("functionVariants");
+  public static final hydra.core.Name FUNCTION_VARIANTS = new hydra.core.Name("functionVariants");
   
-  public static final hydra.core.Name FIELD_NAME_INTEGER_TYPES = new hydra.core.Name("integerTypes");
+  public static final hydra.core.Name INTEGER_TYPES = new hydra.core.Name("integerTypes");
   
-  public static final hydra.core.Name FIELD_NAME_TERM_VARIANTS = new hydra.core.Name("termVariants");
+  public static final hydra.core.Name TERM_VARIANTS = new hydra.core.Name("termVariants");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_VARIANTS = new hydra.core.Name("typeVariants");
+  public static final hydra.core.Name TYPE_VARIANTS = new hydra.core.Name("typeVariants");
   
-  public static final hydra.core.Name FIELD_NAME_TYPES = new hydra.core.Name("types");
+  public static final hydra.core.Name TYPES = new hydra.core.Name("types");
   
   /**
    * All supported elimination variants

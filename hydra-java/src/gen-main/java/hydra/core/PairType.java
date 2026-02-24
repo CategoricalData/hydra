@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A type which pairs a 'first' type and a 'second' type
  */
 public class PairType implements Serializable, Comparable<PairType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.PairType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.PairType");
   
-  public static final hydra.core.Name FIELD_NAME_FIRST = new hydra.core.Name("first");
+  public static final hydra.core.Name FIRST = new hydra.core.Name("first");
   
-  public static final hydra.core.Name FIELD_NAME_SECOND = new hydra.core.Name("second");
+  public static final hydra.core.Name SECOND = new hydra.core.Name("second");
   
   /**
    * The first component of the pair

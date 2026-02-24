@@ -7,7 +7,7 @@ package hydra.annotations;
  */
 public interface Annotations {
   static <T0, T1, T2, T3> java.util.Map<T2, T3> aggregateAnnotations(java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, java.util.function.Function<T1, java.util.Map<T2, T3>> getAnns, T0 t) {
-    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat.apply(hydra.annotations.Annotations.<T1, T2, T3, T0>aggregateAnnotations_toPairs(
+    return hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat.apply(hydra.annotations.Annotations.<T0, T1, T2, T3>aggregateAnnotations_toPairs(
       getAnns,
       getValue,
       getX,
@@ -15,10 +15,10 @@ public interface Annotations {
       t)));
   }
   
-  static <T0, T1, T2, T3> java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T1, T2>>> aggregateAnnotations_toPairs(java.util.function.Function<T0, java.util.Map<T1, T2>> getAnns, java.util.function.Function<T3, hydra.util.Maybe<T0>> getValue, java.util.function.Function<T0, T3> getX, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T1, T2>>> rest, T3 t) {
+  static <T0, T1, T2, T3> java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>> aggregateAnnotations_toPairs(java.util.function.Function<T1, java.util.Map<T2, T3>> getAnns, java.util.function.Function<T0, hydra.util.Maybe<T1>> getValue, java.util.function.Function<T1, T0> getX, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>> rest, T0 t) {
     return hydra.lib.maybes.Maybe.apply(
       rest,
-      (java.util.function.Function<T0, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T1, T2>>>>) (yy -> hydra.annotations.Annotations.<T0, T1, T2, T3>aggregateAnnotations_toPairs(
+      (java.util.function.Function<T1, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T2, T3>>>>) (yy -> hydra.annotations.Annotations.<T0, T1, T2, T3>aggregateAnnotations_toPairs(
         getAnns,
         getValue,
         getX,
@@ -37,7 +37,7 @@ public interface Annotations {
         v1)));
   }
   
-  static <T0> hydra.compute.Flow<T0, java.lang.Void> debugIf_checkAndFail(String message, hydra.util.Maybe<String> desc) {
+  static <T2> hydra.compute.Flow<T2, java.lang.Void> debugIf_checkAndFail(String message, hydra.util.Maybe<String> desc) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         desc,
@@ -103,7 +103,24 @@ public interface Annotations {
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>> getTermDescription(hydra.core.Term term) {
-    return hydra.annotations.Annotations.getDescription(hydra.annotations.Annotations.termAnnotationInternal(term));
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.core.Term>> peel = new java.util.concurrent.atomic.AtomicReference<>();
+    peel.set((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (t).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term otherwise(hydra.core.Term instance) {
+        return t;
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
+        return (peel.get()).apply(((tl).value).body);
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.TypeApplication ta) {
+        return (peel.get()).apply(((ta).value).body);
+      }
+    })));
+    return hydra.annotations.Annotations.getDescription(hydra.annotations.Annotations.termAnnotationInternal((peel.get()).apply(term)));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> getType(java.util.Map<hydra.core.Name, hydra.core.Term> anns) {

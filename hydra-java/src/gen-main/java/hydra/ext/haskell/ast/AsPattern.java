@@ -8,11 +8,11 @@ import java.io.Serializable;
  * An 'as' pattern
  */
 public class AsPattern implements Serializable, Comparable<AsPattern> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.AsPattern");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.AsPattern");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_INNER = new hydra.core.Name("inner");
+  public static final hydra.core.Name INNER = new hydra.core.Name("inner");
   
   /**
    * The bound name

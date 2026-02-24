@@ -5,11 +5,11 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class RelativeImportPrefix implements Serializable, Comparable<RelativeImportPrefix> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.RelativeImportPrefix");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.RelativeImportPrefix");
   
-  public static final hydra.core.Name FIELD_NAME_DOT = new hydra.core.Name("dot");
+  public static final hydra.core.Name DOT = new hydra.core.Name("dot");
   
-  public static final hydra.core.Name FIELD_NAME_ELLIPSIS = new hydra.core.Name("ellipsis");
+  public static final hydra.core.Name ELLIPSIS = new hydra.core.Name("ellipsis");
   
   private RelativeImportPrefix () {
   

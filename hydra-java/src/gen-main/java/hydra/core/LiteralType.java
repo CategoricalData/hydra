@@ -8,17 +8,17 @@ import java.io.Serializable;
  * Any of a fixed set of literal types, also called atomic types, base types, primitive types, or type constants
  */
 public abstract class LiteralType implements Serializable, Comparable<LiteralType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.core.LiteralType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.core.LiteralType");
   
-  public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
+  public static final hydra.core.Name BINARY = new hydra.core.Name("binary");
   
-  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  public static final hydra.core.Name BOOLEAN = new hydra.core.Name("boolean");
   
-  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  public static final hydra.core.Name FLOAT = new hydra.core.Name("float");
   
-  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  public static final hydra.core.Name INTEGER = new hydra.core.Name("integer");
   
-  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  public static final hydra.core.Name STRING = new hydra.core.Name("string");
   
   private LiteralType () {
   

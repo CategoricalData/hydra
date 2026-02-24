@@ -178,13 +178,13 @@ public interface Unification {
           
           @Override
           public hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Record r) {
-            return (((java.util.function.Function<hydra.core.RowType, java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>>>>) (v1 -> (java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>>>) (v2 -> hydra.unification.Unification.joinTypes_joinRowTypes(
+            return hydra.unification.Unification.<T0>joinTypes_joinRowTypes(
               hydra.show.core.Core::type,
               sleft,
               sright,
               joinOne,
-              v1,
-              v2)))).apply((l).value)).apply((r).value);
+              (l).value,
+              (r).value);
           }
         });
       }
@@ -220,13 +220,13 @@ public interface Unification {
           
           @Override
           public hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Union r) {
-            return (((java.util.function.Function<hydra.core.RowType, java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>>>>) (v1 -> (java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<T0, java.util.List<hydra.typing.TypeConstraint>>>) (v2 -> hydra.unification.Unification.joinTypes_joinRowTypes(
+            return hydra.unification.Unification.<T0>joinTypes_joinRowTypes(
               hydra.show.core.Core::type,
               sleft,
               sright,
               joinOne,
-              v1,
-              v2)))).apply((l).value)).apply((r).value);
+              (l).value,
+              (r).value);
           }
         });
       }
@@ -277,7 +277,7 @@ public interface Unification {
     });
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T1, T2> joinTypes_cannotUnify(java.util.function.Function<T0, String> hydra_show_core_type2, T0 sleft, T0 sright) {
+  static <T1, T2> hydra.compute.Flow<T1, T2> joinTypes_cannotUnify(java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.core.Type sleft, hydra.core.Type sright) {
     return hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
@@ -287,19 +287,19 @@ public interface Unification {
       (hydra_show_core_type2).apply(sright)));
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T1, java.util.List<T2>> joinTypes_assertEqual(java.util.function.Function<T0, String> hydra_show_core_type2, T0 sleft, T0 sright) {
+  static <T1, T2> hydra.compute.Flow<T1, java.util.List<T2>> joinTypes_assertEqual(java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.core.Type sleft, hydra.core.Type sright) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         sleft,
         sright),
       () -> hydra.lib.flows.Pure.apply((java.util.List<T2>) (java.util.List.<T2>of())),
-      () -> hydra.unification.Unification.<T0, T1, java.util.List<T2>>joinTypes_cannotUnify(
+      () -> hydra.unification.Unification.<T1, java.util.List<T2>>joinTypes_cannotUnify(
         hydra_show_core_type2,
         sleft,
         sright));
   }
   
-  static <T0, T1, T2, T3, T4> hydra.compute.Flow<T4, java.util.List<T3>> joinTypes_joinList(java.util.function.Function<T0, String> hydra_show_core_type2, T0 sleft, T0 sright, java.util.function.Function<T1, java.util.function.Function<T2, T3>> joinOne, java.util.List<T1> lefts, java.util.List<T2> rights) {
+  static <T1> hydra.compute.Flow<T1, java.util.List<hydra.typing.TypeConstraint>> joinTypes_joinList(java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.core.Type sleft, hydra.core.Type sright, java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.typing.TypeConstraint>> joinOne, java.util.List<hydra.core.Type> lefts, java.util.List<hydra.core.Type> rights) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         hydra.lib.lists.Length.apply(lefts),
@@ -308,13 +308,13 @@ public interface Unification {
         joinOne,
         lefts,
         rights)),
-      () -> hydra.unification.Unification.<T0, T4, java.util.List<T3>>joinTypes_cannotUnify(
+      () -> hydra.unification.Unification.joinTypes_cannotUnify(
         hydra_show_core_type2,
         sleft,
         sright));
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T2, java.util.List<T1>> joinTypes_joinRowTypes(java.util.function.Function<T0, String> hydra_show_core_type2, T0 sleft, T0 sright, java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, T1>> joinOne, hydra.core.RowType left, hydra.core.RowType right) {
+  static <T1> hydra.compute.Flow<T1, java.util.List<hydra.typing.TypeConstraint>> joinTypes_joinRowTypes(java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.core.Type sleft, hydra.core.Type sright, java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, hydra.typing.TypeConstraint>> joinOne, hydra.core.RowType left, hydra.core.RowType right) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
         hydra.lib.equality.Equal.apply(
@@ -343,18 +343,18 @@ public interface Unification {
               hydra.lib.lists.Map.apply(
                 projected -> projected.name,
                 (right).fields))))),
-      () -> (((java.util.function.Function<java.util.List<hydra.core.Type>, java.util.function.Function<java.util.List<hydra.core.Type>, hydra.compute.Flow<T2, java.util.List<T1>>>>) (v1 -> (java.util.function.Function<java.util.List<hydra.core.Type>, hydra.compute.Flow<T2, java.util.List<T1>>>) (v2 -> hydra.unification.Unification.joinTypes_joinList(
+      () -> hydra.unification.Unification.<T1>joinTypes_joinList(
         hydra_show_core_type2,
         sleft,
         sright,
         joinOne,
-        v1,
-        v2)))).apply(hydra.lib.lists.Map.apply(
-        projected -> projected.type,
-        (left).fields))).apply(hydra.lib.lists.Map.apply(
-        projected -> projected.type,
-        (right).fields)),
-      () -> hydra.unification.Unification.<T0, T2, java.util.List<T1>>joinTypes_cannotUnify(
+        hydra.lib.lists.Map.apply(
+          projected -> projected.type,
+          (left).fields),
+        hydra.lib.lists.Map.apply(
+          projected -> projected.type,
+          (right).fields)),
+      () -> hydra.unification.Unification.joinTypes_cannotUnify(
         hydra_show_core_type2,
         sleft,
         sright));
@@ -396,7 +396,7 @@ public interface Unification {
     String comment = (c).comment;
     hydra.core.Type sleft = (hydra_rewriting_deannotateType2).apply((c).left);
     hydra.core.Type sright = (hydra_rewriting_deannotateType2).apply((c).right);
-    java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>> tryBinding = (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>) (v2 -> hydra.unification.Unification.unifyTypeConstraints_tryBinding(
+    java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>> tryBinding = (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>) (v2 -> hydra.unification.Unification.<T1>unifyTypeConstraints_tryBinding(
       bind,
       comment,
       hydra_show_core_type2,
@@ -406,7 +406,7 @@ public interface Unification {
     return (sleft).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.compute.Flow<T1, hydra.typing.TypeSubst> otherwise(hydra.core.Type instance) {
-        return hydra.unification.Unification.unifyTypeConstraints_dflt(
+        return hydra.unification.Unification.<T1>unifyTypeConstraints_dflt(
           hydra.unification.Unification.<T0, T1>unifyTypeConstraints_noVars(
             comment,
             rest,
@@ -474,7 +474,7 @@ public interface Unification {
         ((hydra_substitution_substituteInConstraints2).apply(subst)).apply(rest)));
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T1, T2> unifyTypeConstraints_tryBinding(java.util.function.Function<hydra.core.Name, java.util.function.Function<T0, hydra.compute.Flow<T1, T2>>> bind, String comment, java.util.function.Function<T0, String> hydra_show_core_type2, java.util.function.Function<hydra.core.Name, java.util.function.Function<T0, Boolean>> hydra_unification_variableOccursInType2, hydra.core.Name v, T0 t) {
+  static <T1> hydra.compute.Flow<T1, hydra.typing.TypeSubst> unifyTypeConstraints_tryBinding(java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>> bind, String comment, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, Boolean>> hydra_unification_variableOccursInType2, hydra.core.Name v, hydra.core.Type t) {
     return hydra.lib.logic.IfElse.lazy(
       ((hydra_unification_variableOccursInType2).apply(v)).apply(t),
       () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
@@ -505,15 +505,15 @@ public interface Unification {
         v1)));
   }
   
-  static <T0, T1> T0 unifyTypeConstraints_dflt(T0 noVars, T1 sleft, hydra.core.Type sright, java.util.function.Function<hydra.core.Name, java.util.function.Function<T1, T0>> tryBinding) {
+  static <T1> hydra.compute.Flow<T1, hydra.typing.TypeSubst> unifyTypeConstraints_dflt(hydra.compute.Flow<T1, hydra.typing.TypeSubst> noVars, hydra.core.Type sleft, hydra.core.Type sright, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, hydra.typing.TypeSubst>>> tryBinding) {
     return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public T0 otherwise(hydra.core.Type instance) {
+      public hydra.compute.Flow<T1, hydra.typing.TypeSubst> otherwise(hydra.core.Type instance) {
         return noVars;
       }
       
       @Override
-      public T0 visit(hydra.core.Type.Variable name) {
+      public hydra.compute.Flow<T1, hydra.typing.TypeSubst> visit(hydra.core.Type.Variable name) {
         return ((tryBinding).apply((name).value)).apply(sleft);
       }
     });

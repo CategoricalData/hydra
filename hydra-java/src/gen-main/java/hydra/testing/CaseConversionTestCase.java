@@ -8,15 +8,15 @@ import java.io.Serializable;
  * A test case which checks that strings are converted between different case conventions correctly
  */
 public class CaseConversionTestCase implements Serializable, Comparable<CaseConversionTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.CaseConversionTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.CaseConversionTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_FROM_CONVENTION = new hydra.core.Name("fromConvention");
+  public static final hydra.core.Name FROM_CONVENTION = new hydra.core.Name("fromConvention");
   
-  public static final hydra.core.Name FIELD_NAME_TO_CONVENTION = new hydra.core.Name("toConvention");
+  public static final hydra.core.Name TO_CONVENTION = new hydra.core.Name("toConvention");
   
-  public static final hydra.core.Name FIELD_NAME_FROM_STRING = new hydra.core.Name("fromString");
+  public static final hydra.core.Name FROM_STRING = new hydra.core.Name("fromString");
   
-  public static final hydra.core.Name FIELD_NAME_TO_STRING = new hydra.core.Name("toString");
+  public static final hydra.core.Name TO_STRING = new hydra.core.Name("toString");
   
   /**
    * The source case convention

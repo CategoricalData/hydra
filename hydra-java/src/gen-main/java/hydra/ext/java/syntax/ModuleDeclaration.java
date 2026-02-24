@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ModuleDeclaration implements Serializable, Comparable<ModuleDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ModuleDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ModuleDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_OPEN = new hydra.core.Name("open");
+  public static final hydra.core.Name OPEN = new hydra.core.Name("open");
   
-  public static final hydra.core.Name FIELD_NAME_IDENTIFIERS = new hydra.core.Name("identifiers");
+  public static final hydra.core.Name IDENTIFIERS = new hydra.core.Name("identifiers");
   
-  public static final hydra.core.Name FIELD_NAME_DIRECTIVES = new hydra.core.Name("directives");
+  public static final hydra.core.Name DIRECTIVES = new hydra.core.Name("directives");
   
   public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   

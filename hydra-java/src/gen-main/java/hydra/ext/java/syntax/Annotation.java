@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class Annotation implements Serializable, Comparable<Annotation> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.Annotation");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.Annotation");
   
-  public static final hydra.core.Name FIELD_NAME_NORMAL = new hydra.core.Name("normal");
+  public static final hydra.core.Name NORMAL = new hydra.core.Name("normal");
   
-  public static final hydra.core.Name FIELD_NAME_MARKER = new hydra.core.Name("marker");
+  public static final hydra.core.Name MARKER = new hydra.core.Name("marker");
   
-  public static final hydra.core.Name FIELD_NAME_SINGLE_ELEMENT = new hydra.core.Name("singleElement");
+  public static final hydra.core.Name SINGLE_ELEMENT = new hydra.core.Name("singleElement");
   
   private Annotation () {
   

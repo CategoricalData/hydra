@@ -8,13 +8,13 @@ import java.io.Serializable;
  * A test case which hoists subterms into let bindings based on a predicate, and compares the result with the expected term. The predicate decides which subterms at which positions should be extracted into new bindings.
  */
 public class HoistSubtermsTestCase implements Serializable, Comparable<HoistSubtermsTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.HoistSubtermsTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.HoistSubtermsTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_PREDICATE = new hydra.core.Name("predicate");
+  public static final hydra.core.Name PREDICATE = new hydra.core.Name("predicate");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The predicate that determines which subterms to hoist

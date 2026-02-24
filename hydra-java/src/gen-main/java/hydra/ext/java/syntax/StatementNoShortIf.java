@@ -5,17 +5,17 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class StatementNoShortIf implements Serializable, Comparable<StatementNoShortIf> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.StatementNoShortIf");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.StatementNoShortIf");
   
-  public static final hydra.core.Name FIELD_NAME_WITHOUT_TRAILING = new hydra.core.Name("withoutTrailing");
+  public static final hydra.core.Name WITHOUT_TRAILING = new hydra.core.Name("withoutTrailing");
   
-  public static final hydra.core.Name FIELD_NAME_LABELED = new hydra.core.Name("labeled");
+  public static final hydra.core.Name LABELED = new hydra.core.Name("labeled");
   
-  public static final hydra.core.Name FIELD_NAME_IF_THEN_ELSE = new hydra.core.Name("ifThenElse");
+  public static final hydra.core.Name IF_THEN_ELSE = new hydra.core.Name("ifThenElse");
   
-  public static final hydra.core.Name FIELD_NAME_WHILE = new hydra.core.Name("while");
+  public static final hydra.core.Name WHILE = new hydra.core.Name("while");
   
-  public static final hydra.core.Name FIELD_NAME_FOR = new hydra.core.Name("for");
+  public static final hydra.core.Name FOR = new hydra.core.Name("for");
   
   private StatementNoShortIf () {
   

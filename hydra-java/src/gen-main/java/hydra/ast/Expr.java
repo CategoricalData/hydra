@@ -8,15 +8,15 @@ import java.io.Serializable;
  * An abstract expression
  */
 public abstract class Expr implements Serializable, Comparable<Expr> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Expr");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ast.Expr");
   
-  public static final hydra.core.Name FIELD_NAME_CONST = new hydra.core.Name("const");
+  public static final hydra.core.Name CONST = new hydra.core.Name("const");
   
-  public static final hydra.core.Name FIELD_NAME_INDENT = new hydra.core.Name("indent");
+  public static final hydra.core.Name INDENT = new hydra.core.Name("indent");
   
-  public static final hydra.core.Name FIELD_NAME_OP = new hydra.core.Name("op");
+  public static final hydra.core.Name OP = new hydra.core.Name("op");
   
-  public static final hydra.core.Name FIELD_NAME_BRACKETS = new hydra.core.Name("brackets");
+  public static final hydra.core.Name BRACKETS = new hydra.core.Name("brackets");
   
   private Expr () {
   

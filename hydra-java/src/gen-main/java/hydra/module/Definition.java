@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A definition, which may be either a term or type definition
  */
 public abstract class Definition implements Serializable, Comparable<Definition> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.module.Definition");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.module.Definition");
   
-  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  public static final hydra.core.Name TERM = new hydra.core.Name("term");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
   private Definition () {
   

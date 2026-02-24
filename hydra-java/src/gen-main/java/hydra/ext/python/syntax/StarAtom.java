@@ -5,15 +5,15 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public abstract class StarAtom implements Serializable, Comparable<StarAtom> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.StarAtom");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.StarAtom");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_TARGET_WITH_STAR_ATOM = new hydra.core.Name("targetWithStarAtom");
+  public static final hydra.core.Name TARGET_WITH_STAR_ATOM = new hydra.core.Name("targetWithStarAtom");
   
-  public static final hydra.core.Name FIELD_NAME_STAR_TARGETS_TUPLE_SEQ = new hydra.core.Name("starTargetsTupleSeq");
+  public static final hydra.core.Name STAR_TARGETS_TUPLE_SEQ = new hydra.core.Name("starTargetsTupleSeq");
   
-  public static final hydra.core.Name FIELD_NAME_STAR_TARGETS_LIST_SEQ = new hydra.core.Name("starTargetsListSeq");
+  public static final hydra.core.Name STAR_TARGETS_LIST_SEQ = new hydra.core.Name("starTargetsListSeq");
   
   private StarAtom () {
   

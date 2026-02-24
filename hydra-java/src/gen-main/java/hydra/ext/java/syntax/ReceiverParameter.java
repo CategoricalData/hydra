@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ReceiverParameter implements Serializable, Comparable<ReceiverParameter> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ReceiverParameter");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ReceiverParameter");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_UNANN_TYPE = new hydra.core.Name("unannType");
+  public static final hydra.core.Name UNANN_TYPE = new hydra.core.Name("unannType");
   
-  public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
+  public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
   
   public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
   

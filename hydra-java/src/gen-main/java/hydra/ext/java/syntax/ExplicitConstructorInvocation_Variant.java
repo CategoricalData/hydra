@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ExplicitConstructorInvocation_Variant implements Serializable, Comparable<ExplicitConstructorInvocation_Variant> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant");
   
-  public static final hydra.core.Name FIELD_NAME_THIS = new hydra.core.Name("this");
+  public static final hydra.core.Name THIS = new hydra.core.Name("this");
   
-  public static final hydra.core.Name FIELD_NAME_SUPER = new hydra.core.Name("super");
+  public static final hydra.core.Name SUPER = new hydra.core.Name("super");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
+  public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
   
   private ExplicitConstructorInvocation_Variant () {
   

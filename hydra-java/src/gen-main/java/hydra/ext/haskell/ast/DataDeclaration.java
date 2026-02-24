@@ -8,17 +8,17 @@ import java.io.Serializable;
  * A data type declaration
  */
 public class DataDeclaration implements Serializable, Comparable<DataDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.DataDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.DataDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_KEYWORD = new hydra.core.Name("keyword");
+  public static final hydra.core.Name KEYWORD = new hydra.core.Name("keyword");
   
-  public static final hydra.core.Name FIELD_NAME_CONTEXT = new hydra.core.Name("context");
+  public static final hydra.core.Name CONTEXT = new hydra.core.Name("context");
   
-  public static final hydra.core.Name FIELD_NAME_HEAD = new hydra.core.Name("head");
+  public static final hydra.core.Name HEAD = new hydra.core.Name("head");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTRUCTORS = new hydra.core.Name("constructors");
+  public static final hydra.core.Name CONSTRUCTORS = new hydra.core.Name("constructors");
   
-  public static final hydra.core.Name FIELD_NAME_DERIVING = new hydra.core.Name("deriving");
+  public static final hydra.core.Name DERIVING = new hydra.core.Name("deriving");
   
   /**
    * The 'data' or 'newtype' keyword

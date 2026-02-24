@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class IfThenStatement implements Serializable, Comparable<IfThenStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.IfThenStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.IfThenStatement");
   
-  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
-  public static final hydra.core.Name FIELD_NAME_STATEMENT = new hydra.core.Name("statement");
+  public static final hydra.core.Name STATEMENT = new hydra.core.Name("statement");
   
   public final hydra.ext.java.syntax.Expression expression;
   

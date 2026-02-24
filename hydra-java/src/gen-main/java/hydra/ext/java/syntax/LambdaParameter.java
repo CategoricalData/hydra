@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class LambdaParameter implements Serializable, Comparable<LambdaParameter> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.LambdaParameter");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.LambdaParameter");
   
-  public static final hydra.core.Name FIELD_NAME_NORMAL = new hydra.core.Name("normal");
+  public static final hydra.core.Name NORMAL = new hydra.core.Name("normal");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLE_ARITY = new hydra.core.Name("variableArity");
+  public static final hydra.core.Name VARIABLE_ARITY = new hydra.core.Name("variableArity");
   
   private LambdaParameter () {
   

@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class IfThenElseStatement implements Serializable, Comparable<IfThenElseStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.IfThenElseStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.IfThenElseStatement");
   
-  public static final hydra.core.Name FIELD_NAME_COND = new hydra.core.Name("cond");
+  public static final hydra.core.Name COND = new hydra.core.Name("cond");
   
-  public static final hydra.core.Name FIELD_NAME_THEN = new hydra.core.Name("then");
+  public static final hydra.core.Name THEN = new hydra.core.Name("then");
   
-  public static final hydra.core.Name FIELD_NAME_ELSE = new hydra.core.Name("else");
+  public static final hydra.core.Name ELSE = new hydra.core.Name("else");
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.Expression> cond;
   

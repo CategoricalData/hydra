@@ -8,17 +8,17 @@ import java.io.Serializable;
  * One of several classes of whitespace
  */
 public abstract class Ws implements Serializable, Comparable<Ws> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ast.Ws");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ast.Ws");
   
-  public static final hydra.core.Name FIELD_NAME_NONE = new hydra.core.Name("none");
+  public static final hydra.core.Name NONE = new hydra.core.Name("none");
   
-  public static final hydra.core.Name FIELD_NAME_SPACE = new hydra.core.Name("space");
+  public static final hydra.core.Name SPACE = new hydra.core.Name("space");
   
-  public static final hydra.core.Name FIELD_NAME_BREAK = new hydra.core.Name("break");
+  public static final hydra.core.Name BREAK = new hydra.core.Name("break");
   
-  public static final hydra.core.Name FIELD_NAME_BREAK_AND_INDENT = new hydra.core.Name("breakAndIndent");
+  public static final hydra.core.Name BREAK_AND_INDENT = new hydra.core.Name("breakAndIndent");
   
-  public static final hydra.core.Name FIELD_NAME_DOUBLE_BREAK = new hydra.core.Name("doubleBreak");
+  public static final hydra.core.Name DOUBLE_BREAK = new hydra.core.Name("doubleBreak");
   
   private Ws () {
   

@@ -5,13 +5,13 @@ package hydra.ext.python.syntax;
 import java.io.Serializable;
 
 public class Conditional implements Serializable, Comparable<Conditional> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.python.syntax.Conditional");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.python.syntax.Conditional");
   
-  public static final hydra.core.Name FIELD_NAME_BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public static final hydra.core.Name FIELD_NAME_IF = new hydra.core.Name("if");
+  public static final hydra.core.Name IF = new hydra.core.Name("if");
   
-  public static final hydra.core.Name FIELD_NAME_ELSE = new hydra.core.Name("else");
+  public static final hydra.core.Name ELSE = new hydra.core.Name("else");
   
   public final hydra.ext.python.syntax.Disjunction body;
   

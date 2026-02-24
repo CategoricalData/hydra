@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case for the hoistCaseStatements function, which hoists case statements into let bindings, but only when they appear inside a lambda body. This is used for targets like Python which don't support inline match expressions.
  */
 public class HoistCaseStatementsTestCase implements Serializable, Comparable<HoistCaseStatementsTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.HoistCaseStatementsTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.HoistCaseStatementsTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_INPUT = new hydra.core.Name("input");
+  public static final hydra.core.Name INPUT = new hydra.core.Name("input");
   
-  public static final hydra.core.Name FIELD_NAME_OUTPUT = new hydra.core.Name("output");
+  public static final hydra.core.Name OUTPUT = new hydra.core.Name("output");
   
   /**
    * The input term

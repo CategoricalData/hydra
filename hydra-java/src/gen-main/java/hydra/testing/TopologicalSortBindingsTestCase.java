@@ -8,11 +8,11 @@ import java.io.Serializable;
  * A test case which performs topological sort on a map of bindings (name -&gt; term) and compares the result with expected groups of bindings in topological order
  */
 public class TopologicalSortBindingsTestCase implements Serializable, Comparable<TopologicalSortBindingsTestCase> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.testing.TopologicalSortBindingsTestCase");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.testing.TopologicalSortBindingsTestCase");
   
-  public static final hydra.core.Name FIELD_NAME_BINDINGS = new hydra.core.Name("bindings");
+  public static final hydra.core.Name BINDINGS = new hydra.core.Name("bindings");
   
-  public static final hydra.core.Name FIELD_NAME_EXPECTED = new hydra.core.Name("expected");
+  public static final hydra.core.Name EXPECTED = new hydra.core.Name("expected");
   
   /**
    * The bindings as a list of (name, term) pairs

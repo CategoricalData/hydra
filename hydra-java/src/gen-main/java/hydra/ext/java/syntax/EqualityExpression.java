@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class EqualityExpression implements Serializable, Comparable<EqualityExpression> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.EqualityExpression");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.EqualityExpression");
   
-  public static final hydra.core.Name FIELD_NAME_UNARY = new hydra.core.Name("unary");
+  public static final hydra.core.Name UNARY = new hydra.core.Name("unary");
   
-  public static final hydra.core.Name FIELD_NAME_EQUAL = new hydra.core.Name("equal");
+  public static final hydra.core.Name EQUAL = new hydra.core.Name("equal");
   
-  public static final hydra.core.Name FIELD_NAME_NOT_EQUAL = new hydra.core.Name("notEqual");
+  public static final hydra.core.Name NOT_EQUAL = new hydra.core.Name("notEqual");
   
   private EqualityExpression () {
   

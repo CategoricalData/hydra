@@ -8,9 +8,9 @@ import java.io.Serializable;
  * An error that occurred during decoding of a term
  */
 public class DecodingError implements Serializable, Comparable<DecodingError> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.util.DecodingError");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.util.DecodingError");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   

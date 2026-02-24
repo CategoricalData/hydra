@@ -8,15 +8,15 @@ import java.io.Serializable;
  * An import statement
  */
 public class Import implements Serializable, Comparable<Import> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.haskell.ast.Import");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.haskell.ast.Import");
   
-  public static final hydra.core.Name FIELD_NAME_QUALIFIED = new hydra.core.Name("qualified");
+  public static final hydra.core.Name QUALIFIED = new hydra.core.Name("qualified");
   
-  public static final hydra.core.Name FIELD_NAME_MODULE = new hydra.core.Name("module");
+  public static final hydra.core.Name MODULE = new hydra.core.Name("module");
   
-  public static final hydra.core.Name FIELD_NAME_AS = new hydra.core.Name("as");
+  public static final hydra.core.Name AS = new hydra.core.Name("as");
   
-  public static final hydra.core.Name FIELD_NAME_SPEC = new hydra.core.Name("spec");
+  public static final hydra.core.Name SPEC = new hydra.core.Name("spec");
   
   /**
    * Whether the import is qualified
