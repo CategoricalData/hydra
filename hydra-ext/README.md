@@ -408,18 +408,7 @@ These are the primary scripts for regenerating implementations:
 ./bin/sync-python.sh --quick
 ```
 
-### Individual Update Scripts
-
-For more granular control, individual update scripts are available:
-
-| Script | Purpose |
-|--------|---------|
-| `update-java-kernel.sh` | Regenerate Java kernel modules only |
-| `update-java-kernel-types.sh` | Regenerate Java kernel types only (without terms) |
-| `update-python-kernel.sh` | Regenerate Python kernel modules only |
-| `update-python-generation-tests.sh` | Regenerate Python generation tests only |
-
-**Note:** These scripts use RTS flags (`-K256M -A32M`) to avoid stack overflow during generation. If running manually from GHCi, use `stack ghci --ghci-options='+RTS -K256M -A32M -RTS'`.
+All sync scripts use `bootstrap-from-json` under the hood, which generates all artifacts (kernel modules, eval lib, coder modules, kernel tests, generation tests) from JSON in a single invocation. The scripts include RTS flags (`-K256M -A32M`) to avoid stack overflow during generation.
 
 ### Hydra-Haskell Scripts
 
@@ -427,6 +416,7 @@ The following scripts in `hydra-haskell/bin/` are used for the bootstrapping imp
 
 | Script | Purpose |
 |--------|---------|
+| `sync-haskell.sh` | Full Haskell self-regeneration from DSL sources |
 | `update-kernel-tests.sh` | Regenerate Haskell kernel tests from test sources |
 | `update-generation-tests.sh` | Regenerate Haskell generation tests |
 | `update-json-kernel.sh` | Export kernel modules to JSON format |

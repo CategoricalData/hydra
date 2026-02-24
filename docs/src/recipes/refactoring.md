@@ -139,13 +139,10 @@ stack test
 ### Step 5: Regenerate Other Implementations
 
 ```bash
-# Python (from hydra-ext)
+# From hydra-ext
 cd ../hydra-ext
-./bin/update-python-kernel.sh
-
-# Java (from hydra-ext)
-./bin/update-java-kernel-types.sh  # for types
-./bin/update-java-kernel.sh        # for terms (may have issues)
+./bin/sync-python.sh --quick
+./bin/sync-java.sh --quick
 ```
 
 ---
@@ -405,15 +402,13 @@ stack build
 # Run tests
 stack test
 
-# Regenerate Python (from hydra-ext)
+# Regenerate Python and Java (from hydra-ext)
 cd ../hydra-ext
-./bin/update-python-kernel.sh
+./bin/sync-python.sh --quick
+./bin/sync-java.sh --quick
 
 # Clean up orphan Python files
 rm -f ../hydra-python/src/gen-main/python/hydra/foo.py
-
-# Regenerate Java
-./bin/update-java-kernel-types.sh
 ```
 
 ---

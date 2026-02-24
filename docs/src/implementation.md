@@ -1343,24 +1343,16 @@ Shell script wrappers live in `hydra-haskell/bin/`. Executables without shell wr
 | `update-haskell-eval-lib` | Regenerate Haskell eval lib modules (executable only, called by `sync-haskell.sh`) |
 | `update-haskell-sources` | Regenerate Haskell encoder/decoder source modules (executable only, called by `sync-haskell.sh`) |
 
-### Java and Python (`hydra-ext/`)
+### Ext, Java, and Python (`hydra-ext/`)
 
 Shell script wrappers live in `hydra-ext/bin/`. Executables without shell wrappers are run via `stack exec <name>`.
 
 | Script / Executable | Purpose |
 |---------------------|---------|
 | `bin/sync-ext.sh` | **Ext sync script.** Regenerate ext Haskell modules and JSON exports. |
+| `bin/sync-haskell.sh` | **Haskell sync script (from JSON).** Regenerate Haskell kernel tests and generation tests from JSON. Supports `--quick`. |
 | `bin/sync-java.sh` | **Main Java sync script.** Regenerate all Java artifacts, compile, and optionally run tests. Supports `--quick`. |
 | `bin/sync-python.sh` | **Main Python sync script.** Regenerate all Python artifacts and optionally run tests. Supports `--quick`. |
-| `bin/update-java-kernel.sh` | Regenerate Java kernel modules |
-| `bin/update-java-kernel-types.sh` | Regenerate Java kernel type classes only (without terms) |
-| `bin/update-json-main.sh` | Export main (non-kernel) modules to JSON (hydra-ext variant) |
-| `bin/update-python-kernel.sh` | Regenerate Python kernel modules |
-| `bin/update-python-generation-tests.sh` | Regenerate Python generation test files |
-| `update-java-kernel-tests` | Regenerate Java kernel test files (executable only, called by `sync-java.sh`) |
-| `update-java-generation-tests` | Regenerate Java generation test files (executable only, called by `sync-java.sh`) |
-| `update-java-eval-lib` | Regenerate Java eval lib modules (executable only, called by `sync-java.sh`) |
-| `update-python-eval-lib` | Regenerate Python eval lib modules (executable only, called by `sync-python.sh`) |
-| `update-python-kernel-tests` | Regenerate Python kernel test files (executable only, called by `sync-python.sh`) |
-| `test-java-modules` | Test Java module loading from Haskell (executable only) |
-| `bootstrap-from-json` | Bootstrap Hydra implementations from JSON module exports (executable only) |
+| `update-haskell-ext-main` | Regenerate ext Haskell gen-main modules (executable only, called by `sync-ext.sh`) |
+| `update-json-ext` | Export ext modules to JSON (executable only, called by `sync-ext.sh`) |
+| `bootstrap-from-json` | Bootstrap Hydra implementations from JSON module exports (executable only, called by all sync scripts) |

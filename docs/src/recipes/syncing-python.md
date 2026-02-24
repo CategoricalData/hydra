@@ -49,12 +49,9 @@ cd hydra-ext
 ```
 
 The `sync-python.sh` script:
-1. Builds all required executables
-2. Generates kernel modules
-3. Generates eval lib modules
-4. Generates kernel tests
-5. Generates generation tests
-6. Runs Python tests to verify (unless `--quick`)
+1. Builds the `bootstrap-from-json` executable
+2. Generates all Python artifacts (kernel modules, eval lib, coder modules, kernel tests, generation tests) from JSON
+3. Runs Python tests to verify (unless `--quick`)
 
 For faster iteration during development, skip tests:
 
@@ -66,72 +63,35 @@ For faster iteration during development, skip tests:
 
 If you prefer to run steps individually, or need to regenerate only specific parts:
 
-### Step 1: Build executables
+### Step 1: Build the bootstrap executable
 
 ```bash
 cd hydra-ext
-stack build hydra-ext:exe:update-python-kernel \
-            hydra-ext:exe:update-python-eval-lib \
-            hydra-ext:exe:update-python-kernel-tests \
-            hydra-ext:exe:update-python-generation-tests
+stack build hydra-ext:exe:bootstrap-from-json
 ```
 
-### Step 2: Generate kernel modules
+### Step 2: Generate all Python artifacts
+
+The `bootstrap-from-json` executable generates kernel modules, eval lib, coder modules, kernel tests, and generation tests in a single invocation:
 
 ```bash
-stack exec update-python-kernel -- +RTS -K256M -A32M -RTS
+stack exec bootstrap-from-json -- --target python --include-coders --include-tests --include-gentests +RTS -K256M -A32M -RTS
 ```
 
-Or interactively in GHCi:
-```bash
-stack ghci hydra-ext:lib hydra:hydra-test
-```
-```haskell
-writePython "../hydra-python/src/gen-main/python" kernelModules kernelModules
-```
+You can omit flags to generate only a subset:
+- Without `--include-coders`: skip coder modules
+- Without `--include-tests`: skip kernel tests
+- Without `--include-gentests`: skip generation tests
 
-### Step 3: Generate eval lib modules
-
-```bash
-stack exec update-python-eval-lib -- +RTS -K256M -A32M -RTS
-```
-
-Or in GHCi:
-```haskell
-writePython "../hydra-python/src/gen-main/python" mainModules evalLibModules
-```
-
-### Step 4: Generate kernel tests
-
-```bash
-stack exec update-python-kernel-tests -- +RTS -K256M -A32M -RTS
-```
-
-Or in GHCi:
-```haskell
-writePython "../hydra-python/src/gen-test/python" mainModules testModules
-```
-
-### Step 5: Generate generation tests
-
-```bash
-./bin/update-python-generation-tests.sh
-```
-
-Or using the executable directly:
-```bash
-stack exec update-python-generation-tests -- +RTS -K256M -A32M -RTS
-```
-
-### Step 6: Run Python tests
+### Step 3: Run Python tests
 
 ```bash
 cd ../hydra-python
 source .venv/bin/activate
-PYTHONPATH=src/main/python:src/gen-main/python:src/gen-test/python pytest src/gen-test/python/generation -q
+PYTHONPATH=src/main/python:src/gen-main/python:src/gen-test/python pytest src/test/python/test_suite_runner.py src/gen-test/python/generation -q
 ```
 
-### Step 7: Add new files to git
+### Step 4: Add new files to git
 
 ```bash
 git add src/main/python src/gen-main/python src/gen-test/python
