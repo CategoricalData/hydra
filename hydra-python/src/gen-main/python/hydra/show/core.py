@@ -110,23 +110,25 @@ def type(typ: hydra.core.Type) -> str:
             return hydra.lib.lists.map((lambda x1: field_type(x1)), flds)
         return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", field_strs()), "}"))
     def gather_types(prev: frozenlist[hydra.core.Type], app: hydra.core.ApplicationType) -> frozenlist[hydra.core.Type]:
-        lhs = app.function
-        rhs = app.argument
-        match lhs:
-            case hydra.core.TypeApplication(value=app2):
-                return gather_types(hydra.lib.lists.cons(rhs, prev), app2)
-            
-            case _:
-                return hydra.lib.lists.cons(lhs, hydra.lib.lists.cons(rhs, prev))
+        while True:
+            lhs = app.function
+            rhs = app.argument
+            match lhs:
+                case hydra.core.TypeApplication(value=app2):
+                    prev = hydra.lib.lists.cons(rhs, prev)
+                    app = app2
+                    continue
+                
+                case _:
+                    return hydra.lib.lists.cons(lhs, hydra.lib.lists.cons(rhs, prev))
     def gather_function_types(prev: frozenlist[hydra.core.Type], t: hydra.core.Type) -> frozenlist[hydra.core.Type]:
-        match t:
-            case hydra.core.TypeFunction(value=ft):
-                dom = ft.domain
-                cod = ft.codomain
-                return gather_function_types(hydra.lib.lists.cons(dom, prev), cod)
-            
-            case _:
-                return hydra.lib.lists.reverse(hydra.lib.lists.cons(t, prev))
+        while True:
+            match t:
+                case hydra.core.TypeFunction(value=ft):
+                    return (dom := ft.domain, (cod := ft.codomain, gather_function_types(hydra.lib.lists.cons(dom, prev), cod))[1])[1]
+                
+                case _:
+                    return hydra.lib.lists.reverse(hydra.lib.lists.cons(t, prev))
     match typ:
         case hydra.core.TypeAnnotated(value=at):
             return type(at.body)
@@ -400,14 +402,17 @@ def term(t: hydra.core.Term) -> str:
     r"""Show a term as a string."""
     
     def gather_terms(prev: frozenlist[hydra.core.Term], app: hydra.core.Application) -> frozenlist[hydra.core.Term]:
-        lhs = app.function
-        rhs = app.argument
-        match lhs:
-            case hydra.core.TermApplication(value=app2):
-                return gather_terms(hydra.lib.lists.cons(rhs, prev), app2)
-            
-            case _:
-                return hydra.lib.lists.cons(lhs, hydra.lib.lists.cons(rhs, prev))
+        while True:
+            lhs = app.function
+            rhs = app.argument
+            match lhs:
+                case hydra.core.TermApplication(value=app2):
+                    prev = hydra.lib.lists.cons(rhs, prev)
+                    app = app2
+                    continue
+                
+                case _:
+                    return hydra.lib.lists.cons(lhs, hydra.lib.lists.cons(rhs, prev))
     match t:
         case hydra.core.TermAnnotated(value=at):
             return term(at.body)

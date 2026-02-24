@@ -1410,6 +1410,124 @@ encodeBindingAsAssignment allowThunking env binding =
                     Syntax.assignmentExpressionName = pyName,
                     Syntax.assignmentExpressionExpression = pterm})))))
 
+-- | Check if a term body is self-tail-recursive with respect to a function name
+isSelfTailRecursive :: (Core.Name -> Core.Term -> Bool)
+isSelfTailRecursive funcName body =  
+  let callsSelf = (Logic.not (Rewriting.isFreeVariableInTerm funcName body))
+  in (Logic.ifElse callsSelf (isTailRecursiveInTailPosition funcName body) False)
+
+-- | Check that all self-references are in tail position
+isTailRecursiveInTailPosition :: (Core.Name -> Core.Term -> Bool)
+isTailRecursiveInTailPosition funcName term =  
+  let stripped = (Rewriting.deannotateAndDetypeTerm term)
+  in ((\x -> case x of
+    Core.TermApplication _ ->  
+      let gathered = (CoderUtils.gatherApplications stripped)
+      in  
+        let gatherArgs = (Pairs.first gathered)
+        in  
+          let gatherFun = (Pairs.second gathered)
+          in  
+            let strippedFun = (Rewriting.deannotateAndDetypeTerm gatherFun)
+            in ((\x -> case x of
+              Core.TermVariable v2 -> (Logic.ifElse (Equality.equal v2 funcName) ( 
+                let argsNoFunc = (Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs)
+                in  
+                  let argsNoLambda = (Lists.foldl (\ok -> \arg -> Logic.and ok (Logic.not (Rewriting.foldOverTerm Coders.TraversalOrderPre (\found -> \t -> Logic.or found ((\x -> case x of
+                          Core.TermFunction v3 -> ((\x -> case x of
+                            Core.FunctionLambda v4 ->  
+                              let ignore = (Core.lambdaBody v4)
+                              in True
+                            _ -> False) v3)
+                          _ -> False) t)) False arg))) True gatherArgs)
+                  in (Logic.and argsNoFunc argsNoLambda)) (Rewriting.isFreeVariableInTerm funcName term))
+              Core.TermFunction v2 -> ((\x -> case x of
+                Core.FunctionElimination v3 -> ((\x -> case x of
+                  Core.EliminationUnion v4 ->  
+                    let cases_ = (Core.caseStatementCases v4)
+                    in  
+                      let dflt = (Core.caseStatementDefault v4)
+                      in  
+                        let branchesOk = (Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_)
+                        in  
+                          let dfltOk = (Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt)
+                          in  
+                            let argsOk = (Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs)
+                            in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
+                  _ -> (Rewriting.isFreeVariableInTerm funcName term)) v3)
+                _ -> (Rewriting.isFreeVariableInTerm funcName term)) v2)
+              _ -> (Rewriting.isFreeVariableInTerm funcName term)) strippedFun)
+    Core.TermFunction v1 -> ((\x -> case x of
+      Core.FunctionLambda v2 -> (isTailRecursiveInTailPosition funcName (Core.lambdaBody v2))
+      _ -> (Rewriting.isFreeVariableInTerm funcName term)) v1)
+    Core.TermLet v1 ->  
+      let bindingsOk = (Lists.foldl (\ok -> \b -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v1))
+      in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v1)))
+    _ -> (Rewriting.isFreeVariableInTerm funcName term)) stripped)
+
+-- | Encode a term body for TCO: tail self-calls become param reassignment + continue
+encodeTermMultilineTCO :: (Helpers.PythonEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Compute.Flow Helpers.PyGraph [Syntax.Statement])
+encodeTermMultilineTCO env funcName paramNames term =  
+  let stripped = (Rewriting.deannotateAndDetypeTerm term)
+  in  
+    let gathered = (CoderUtils.gatherApplications stripped)
+    in  
+      let gatherArgs = (Pairs.first gathered)
+      in  
+        let gatherFun = (Pairs.second gathered)
+        in  
+          let strippedFun = (Rewriting.deannotateAndDetypeTerm gatherFun)
+          in  
+            let isSelfCall = ((\x -> case x of
+                    Core.TermVariable v1 -> (Equality.equal v1 funcName)
+                    _ -> False) strippedFun)
+            in (Logic.ifElse (Logic.and isSelfCall (Equality.equal (Lists.length gatherArgs) (Lists.length paramNames))) (Flows.bind (Flows.mapList (\a -> encodeTermInline env False a) gatherArgs) (\pyArgs ->  
+              let assignments = (Lists.map (\pair ->  
+                      let paramName = (Pairs.first pair)
+                      in  
+                        let pyArg = (Pairs.second pair)
+                        in (Utils.assignmentStatement (Names.encodeName False Util.CaseConventionLowerSnake env paramName) pyArg)) (Lists.zip paramNames pyArgs))
+              in  
+                let continueStmt = (Syntax.StatementSimple [
+                        Syntax.SimpleStatementContinue])
+                in (Flows.pure (Lists.concat2 assignments [
+                  continueStmt])))) ( 
+              let gathered2 = (CoderUtils.gatherApplications term)
+              in  
+                let args2 = (Pairs.first gathered2)
+                in  
+                  let body2 = (Pairs.second gathered2)
+                  in (Logic.ifElse (Equality.equal (Lists.length args2) 1) ( 
+                    let arg = (Lists.head args2)
+                    in ((\x -> case x of
+                      Core.TermFunction v1 -> ((\x -> case x of
+                        Core.FunctionElimination v2 -> ((\x -> case x of
+                          Core.EliminationUnion v3 ->  
+                            let tname = (Core.caseStatementTypeName v3)
+                            in  
+                              let dflt = (Core.caseStatementDefault v3)
+                              in  
+                                let cases_ = (Core.caseStatementCases v3)
+                                in (Flows.bind (inGraphContext (Schemas.requireUnionType tname)) (\rt ->  
+                                  let isEnum = (Schemas.isEnumRowType rt)
+                                  in  
+                                    let isFull = (isCasesFull rt cases_)
+                                    in (Flows.bind (encodeTermInline env False arg) (\pyArg -> Flows.bind (Flows.mapList (encodeCaseBlock env tname rt isEnum (\e2 -> \t2 -> encodeTermMultilineTCO e2 funcName paramNames t2)) (deduplicateCaseVariables cases_)) (\pyCases -> Flows.bind (encodeDefaultCaseBlock (\t2 -> encodeTermInline env False t2) isFull dflt tname) (\pyDflt ->  
+                                      let subj = (Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple pyArg))
+                                      in  
+                                        let matchStmt = (Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
+                                                Syntax.matchStatementSubject = subj,
+                                                Syntax.matchStatementCases = (Lists.concat2 pyCases pyDflt)})))
+                                        in (Flows.pure [
+                                          matchStmt])))))))
+                          _ -> (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
+                            Utils.returnSingle expr]))) v2)
+                        _ -> (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
+                          Utils.returnSingle expr]))) v1)
+                      _ -> (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
+                        Utils.returnSingle expr]))) (Rewriting.deannotateAndDetypeTerm body2))) (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
+                    Utils.returnSingle expr])))))
+
 -- | Encode a function definition with parameters and body
 encodeFunctionDefinition :: (Helpers.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Compute.Flow Helpers.PyGraph Syntax.Statement)
 encodeFunctionDefinition env name tparams args body doms mcod comment prefixes = (Flows.bind (Flows.mapList (\pair ->  
@@ -1425,10 +1543,22 @@ encodeFunctionDefinition env name tparams args body doms mcod comment prefixes =
           Syntax.paramNoDefaultParametersParamNoDefault = pyArgs,
           Syntax.paramNoDefaultParametersParamWithDefault = [],
           Syntax.paramNoDefaultParametersStarEtc = Nothing}))
-  in (Flows.bind (encodeTermMultiline env body) (\stmts ->  
-    let block = (Utils.indentedBlock comment [
-            Lists.concat2 prefixes stmts])
-    in (Flows.bind (Maybes.maybe (Flows.pure Nothing) (\cod -> Flows.bind (encodeType env cod) (\pytyp -> Flows.pure (Just pytyp))) mcod) (\mreturnType ->  
+  in  
+    let isTCO = (Logic.and (Logic.not (Lists.null args)) (isSelfTailRecursive name body))
+    in (Flows.bind (Logic.ifElse isTCO (Flows.bind (encodeTermMultilineTCO env name args body) (\tcoStmts ->  
+      let trueExpr = (Syntax.NamedExpressionSimple (Utils.pyAtomToPyExpression Syntax.AtomTrue))
+      in  
+        let whileBody = (Utils.indentedBlock Nothing [
+                Lists.concat2 prefixes tcoStmts])
+        in  
+          let whileStmt = (Syntax.StatementCompound (Syntax.CompoundStatementWhile (Syntax.WhileStatement {
+                  Syntax.whileStatementCondition = trueExpr,
+                  Syntax.whileStatementBody = whileBody,
+                  Syntax.whileStatementElse = Nothing})))
+          in (Flows.pure (Utils.indentedBlock comment [
+            [
+              whileStmt]])))) (Flows.bind (encodeTermMultiline env body) (\stmts -> Flows.pure (Utils.indentedBlock comment [
+      Lists.concat2 prefixes stmts])))) (\block -> Flows.bind (Maybes.maybe (Flows.pure Nothing) (\cod -> Flows.bind (encodeType env cod) (\pytyp -> Flows.pure (Just pytyp))) mcod) (\mreturnType ->  
       let pyTparams = (Logic.ifElse useInlineTypeParams (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (Names.encodeTypeVariable arg_)) tparams) [])
       in  
         let isThunk = (Lists.null args)
@@ -1446,7 +1576,7 @@ encodeFunctionDefinition env name tparams args body doms mcod comment prefixes =
                 Syntax.functionDefRawParams = (Just pyParams),
                 Syntax.functionDefRawReturnType = mreturnType,
                 Syntax.functionDefRawFuncTypeComment = Nothing,
-                Syntax.functionDefRawBlock = block}}))))))))))))
+                Syntax.functionDefRawBlock = block}})))))))))))
 
 -- | Encode a term to a list of statements with return as final statement
 encodeTermMultiline :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow Helpers.PyGraph [Syntax.Statement])

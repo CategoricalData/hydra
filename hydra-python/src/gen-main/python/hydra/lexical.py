@@ -89,21 +89,23 @@ def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydr
 def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
     r"""Extract the fields of a record or union type."""
     
-    @lru_cache(1)
-    def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(t)
-    match stripped():
-        case hydra.core.TypeForall(value=forall_type):
-            return fields_of(forall_type.body)
-        
-        case hydra.core.TypeRecord(value=rt):
-            return rt.fields
-        
-        case hydra.core.TypeUnion(value=rt2):
-            return rt2.fields
-        
-        case _:
-            return ()
+    while True:
+        @lru_cache(1)
+        def stripped() -> hydra.core.Type:
+            return hydra.rewriting.deannotate_type(t)
+        match stripped():
+            case hydra.core.TypeForall(value=forall_type):
+                t = forall_type.body
+                continue
+            
+            case hydra.core.TypeRecord(value=rt):
+                return rt.fields
+            
+            case hydra.core.TypeUnion(value=rt2):
+                return rt2.fields
+            
+            case _:
+                return ()
 
 def get_field(m: FrozenDict[hydra.core.Name, T0], fname: hydra.core.Name, decode: Callable[[T0], hydra.compute.Flow[T1, T2]]) -> hydra.compute.Flow[T1, T2]:
     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected field ", fname.value), " not found")), decode, hydra.lib.maps.lookup(fname, m))

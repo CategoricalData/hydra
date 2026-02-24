@@ -105,15 +105,18 @@ def get_term_description(term: hydra.core.Term) -> hydra.compute.Flow[hydra.grap
     r"""Get term description. Peels through TermTypeLambda and TermTypeApplication wrappers (added by inference for polymorphic bindings) to find the description annotation underneath."""
     
     def peel(t: hydra.core.Term) -> hydra.core.Term:
-        match t:
-            case hydra.core.TermTypeLambda(value=tl):
-                return peel(tl.body)
-            
-            case hydra.core.TermTypeApplication(value=ta):
-                return peel(ta.body)
-            
-            case _:
-                return t
+        while True:
+            match t:
+                case hydra.core.TermTypeLambda(value=tl):
+                    t = tl.body
+                    continue
+                
+                case hydra.core.TermTypeApplication(value=ta):
+                    t = ta.body
+                    continue
+                
+                case _:
+                    return t
     return get_description(term_annotation_internal(peel(term)))
 
 def get_type(anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
