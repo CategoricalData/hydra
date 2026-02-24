@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eo pipefail
 
 # Script to synchronize Hydra-Java with the source of truth in Hydra-Haskell/Hydra-Ext.
 #
@@ -64,20 +64,10 @@ echo "Step 1/3: Building executable..."
 echo ""
 stack build hydra-ext:exe:bootstrap-from-json
 
-if [ $? -ne 0 ]; then
-    echo "ERROR: Build failed"
-    exit 1
-fi
-
 echo ""
 echo "Step 2/3: Generating Java modules and tests from JSON..."
 echo ""
 stack exec bootstrap-from-json -- --target java --include-coders --include-tests --include-gentests $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: Java generation failed"
-    exit 1
-fi
 
 echo ""
 echo "=========================================="
@@ -91,27 +81,8 @@ if [ "$QUICK_MODE" = false ]; then
 
     cd "$HYDRA_ROOT_DIR"
 
-    # First compile to catch build errors (these should fail the script)
     ./gradlew :hydra-java:compileJava :hydra-java:compileTestJava
-
-    if [ $? -ne 0 ]; then
-        echo ""
-        echo "ERROR: Java compilation failed"
-        exit 1
-    fi
-
-    # Run tests - use || true to prevent set -e from exiting on test failures
-    # We handle the exit code manually below
-    ./gradlew :hydra-java:test || TEST_RESULT=$?
-    TEST_RESULT=${TEST_RESULT:-0}
-
-    if [ $TEST_RESULT -eq 0 ]; then
-        echo ""
-        echo "All tests passed!"
-    else
-        echo ""
-        echo "WARNING: Some tests failed (exit code $TEST_RESULT). Please review the output above."
-    fi
+    ./gradlew :hydra-java:test
 
     cd "$HYDRA_EXT_DIR"
 else
@@ -128,7 +99,7 @@ echo ""
 cd "$HYDRA_JAVA_DIR"
 
 # Find untracked Java files in gen directories
-NEW_FILES=$(git status --porcelain src/gen-main/java src/gen-test/java 2>/dev/null | grep "^??" | awk '{print $2}')
+NEW_FILES=$(git status --porcelain src/gen-main/java src/gen-test/java 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
     echo "New files were created. You may want to run:"

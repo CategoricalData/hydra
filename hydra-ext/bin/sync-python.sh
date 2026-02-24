@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eo pipefail
 
 # Script to synchronize Hydra-Python with the source of truth in Hydra-Haskell/Hydra-Ext.
 #
@@ -63,20 +63,10 @@ echo "Step 1/3: Building executable..."
 echo ""
 stack build hydra-ext:exe:bootstrap-from-json
 
-if [ $? -ne 0 ]; then
-    echo "ERROR: Build failed"
-    exit 1
-fi
-
 echo ""
 echo "Step 2/3: Generating Python modules and tests from JSON..."
 echo ""
 stack exec bootstrap-from-json -- --target python --include-coders --include-tests --include-gentests $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: Python generation failed"
-    exit 1
-fi
 
 echo ""
 echo "=========================================="
@@ -98,14 +88,6 @@ if [ "$QUICK_MODE" = false ]; then
     # Run pytest with PYTHONPATH set (kernel tests + generation tests)
     PYTHONPATH=src/main/python:src/gen-main/python:src/gen-test/python pytest src/test/python/test_suite_runner.py src/gen-test/python/generation -q
 
-    if [ $? -eq 0 ]; then
-        echo ""
-        echo "All tests passed!"
-    else
-        echo ""
-        echo "WARNING: Some tests failed. Please review the output above."
-    fi
-
     cd "$HYDRA_EXT_DIR"
 else
     echo ""
@@ -121,7 +103,7 @@ echo ""
 cd "$HYDRA_PYTHON_DIR"
 
 # Find untracked Python files in gen directories
-NEW_FILES=$(git status --porcelain src/main/python src/gen-main/python src/gen-test/python 2>/dev/null | grep "^??" | awk '{print $2}')
+NEW_FILES=$(git status --porcelain src/main/python src/gen-main/python src/gen-test/python 2>/dev/null | grep "^??" | awk '{print $2}' || true)
 
 if [ -n "$NEW_FILES" ]; then
     echo "New files were created. You may want to run:"

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eo pipefail
 
 # Top-level synchronization script for Hydra.
 #
@@ -165,10 +165,7 @@ if [ "$QUICK_MODE" = false ]; then
     echo ""
     echo "Step 1i: Running Haskell tests..."
     echo ""
-    stack test 2>&1 || {
-        echo ""
-        echo "WARNING: Some Haskell tests failed. Continuing..."
-    }
+    stack test 2>&1
 fi
 
 echo ""

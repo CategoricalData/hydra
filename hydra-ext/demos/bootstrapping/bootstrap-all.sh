@@ -196,26 +196,11 @@ run_path() {
     local demo_dir="$OUTPUT_BASE/${host}-to-${target}"
     local logfile="/tmp/bootstrap_log_${host}_${target}.txt"
     set +e
-    case "$host" in
-        haskell)
-            "$SCRIPT_DIR/haskell-to-${target}.sh" $EXTRA_FLAGS 2>&1 | tee "$logfile"
-            exit_code=${PIPESTATUS[0]}
-            ;;
-        java)
-            "$SCRIPT_DIR/java-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --include-tests --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
-            exit_code=${PIPESTATUS[0]}
-            if [ $exit_code -eq 0 ]; then
-                "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 || exit_code=$?
-            fi
-            ;;
-        python)
-            "$SCRIPT_DIR/python-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --include-tests --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
-            exit_code=${PIPESTATUS[0]}
-            if [ $exit_code -eq 0 ]; then
-                "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 || exit_code=$?
-            fi
-            ;;
-    esac
+    "$SCRIPT_DIR/${host}-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --include-tests --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
+    exit_code=${PIPESTATUS[0]}
+    if [ $exit_code -eq 0 ]; then
+        "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 || exit_code=$?
+    fi
     set -e
 
     local path_end

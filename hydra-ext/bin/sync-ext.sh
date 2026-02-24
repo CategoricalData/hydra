@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -eo pipefail
 
 # Script to regenerate hydra-ext's Haskell gen-main and JSON exports from Hydra sources.
 #
@@ -53,40 +53,20 @@ stack build \
     hydra-ext:exe:update-haskell-ext-main \
     hydra-ext:exe:update-json-ext
 
-if [ $? -ne 0 ]; then
-    echo "ERROR: Build failed"
-    exit 1
-fi
-
 echo ""
 echo "Step 2/4: Generating Haskell ext modules..."
 echo ""
 stack exec update-haskell-ext-main -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: Haskell ext generation failed"
-    exit 1
-fi
 
 echo ""
 echo "Step 3/4: Rebuilding..."
 echo ""
 stack build
 
-if [ $? -ne 0 ]; then
-    echo "ERROR: Rebuild failed"
-    exit 1
-fi
-
 echo ""
 echo "Step 4/4: Exporting ext modules to JSON..."
 echo ""
 stack exec update-json-ext -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: JSON export failed"
-    exit 1
-fi
 
 echo ""
 echo "=========================================="

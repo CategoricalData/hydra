@@ -8,7 +8,7 @@
 # The detailed step-by-step output (timing, file counts, etc.) is provided
 # by the Python bootstrap module itself.
 
-set -e
+set -eo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
