@@ -103,6 +103,7 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) = case tc of
     TestCaseTypeReduction _ -> Nothing
     TestCaseSubstInType _ -> Nothing
     TestCaseVariableOccursInType _ -> Nothing
+    TestCaseUnshadowVariables _ -> Nothing
     TestCaseUnifyTypes _ -> Nothing
     TestCaseJoinTypes _ -> Nothing
 
