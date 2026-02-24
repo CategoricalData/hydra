@@ -133,13 +133,9 @@ def match_union(tname: hydra.core.Name, pairs: frozenlist[tuple[hydra.core.Name,
         case hydra.core.TermUnion(value=injection):
             @lru_cache(1)
             def exp() -> hydra.compute.Flow[hydra.graph.Graph, T0]:
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return injection.field.name
-                @lru_cache(1)
-                def val() -> hydra.core.Term:
-                    return injection.field.term
-                return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no matching case for field \"", fname().value), "\" in union type "), tname.value)), (lambda f: f(val())), hydra.lib.maps.lookup(fname(), mapping()))
+                fname = injection.field.name
+                val = injection.field.term
+                return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no matching case for field \"", fname.value), "\" in union type "), tname.value)), (lambda f: f(val)), hydra.lib.maps.lookup(fname, mapping()))
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, tname.value), (lambda : exp()), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("injection for type ", tname.value), hydra.show.core.term(term))))
         
         case _:

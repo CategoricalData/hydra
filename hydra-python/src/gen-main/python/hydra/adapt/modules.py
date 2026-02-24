@@ -76,10 +76,8 @@ def transform_module(lang: hydra.coders.Language, encode_term: Callable[[hydra.c
   frozenlist[tuple[hydra.core.Binding, hydra.core.TypeApplicationTerm]]], hydra.compute.Flow[hydra.graph.Graph, T3]], mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, T3]:
     r"""Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation."""
     
-    @lru_cache(1)
-    def els() -> frozenlist[hydra.core.Binding]:
-        return mod.elements
+    els = mod.elements
     @lru_cache(1)
     def transform() -> hydra.compute.Flow[hydra.graph.Graph, T3]:
-        return hydra.lib.flows.bind(hydra.lexical.with_schema_context(hydra.lib.flows.map_list((lambda x1: hydra.schemas.element_as_type_application_term(x1)), els())), (lambda tterms: (types := hydra.lib.lists.nub(hydra.lib.lists.map((lambda v1: v1.type), tterms)), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: construct_coder(lang, encode_term, v1)), types), (lambda cdrs: (coders := hydra.lib.maps.from_list(hydra.lib.lists.zip(types, cdrs)), create_module(mod, coders, hydra.lib.lists.zip(els(), tterms)))[1])))[1]))
+        return hydra.lib.flows.bind(hydra.lexical.with_schema_context(hydra.lib.flows.map_list((lambda x1: hydra.schemas.element_as_type_application_term(x1)), els)), (lambda tterms: (types := hydra.lib.lists.nub(hydra.lib.lists.map((lambda v1: v1.type), tterms)), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: construct_coder(lang, encode_term, v1)), types), (lambda cdrs: (coders := hydra.lib.maps.from_list(hydra.lib.lists.zip(types, cdrs)), create_module(mod, coders, hydra.lib.lists.zip(els, tterms)))[1])))[1]))
     return hydra.monads.with_trace(hydra.lib.strings.cat2("transform module ", mod.namespace.value), transform())

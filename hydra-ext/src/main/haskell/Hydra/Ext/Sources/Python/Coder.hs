@@ -172,7 +172,6 @@ module_ = Module ns elements
       toBinding dataclassDecorator,
       toBinding encodeRecordType,
       toBinding encodeEnumValueAssignment,
-      toBinding deconflictVariantName,
       toBinding encodeUnionField,
       toBinding encodeUnionType,
       toBinding encodeUnionFieldAlt,
@@ -208,11 +207,8 @@ module_ = Module ns elements
       -- Initial environment creation
       toBinding initialEnvironment,
       toBinding targetPythonVersion,
-      toBinding isComplexVariableForPython,
-      toBinding isComplexTermForPython,
-      toBinding isComplexBindingForPython,
-      toBinding bindingMetadataForPython,
       -- Function analysis
+      toBinding pythonBindingMetadata,
       toBinding analyzePythonFunction,
       toBinding analyzePythonFunctionInline,
       -- withDefinitions context
@@ -226,7 +222,6 @@ module_ = Module ns elements
       toBinding encodeVariable,
       toBinding encodeApplication,
       toBinding encodeApplicationInner,
-      toBinding encodeUnionEliminationInline,
       toBinding encodeTermInline,
       -- Metadata extension (for module encoding)
       toBinding extendMetaForTerm,
@@ -906,27 +901,27 @@ enumVariantPattern = def "enumVariantPattern" $
       PyNames.encodeEnumValue @@ var "env" @@ var "fieldName"]
 
 -- | Create a CaseBlock pattern for a class variant with no capture (unit variant).
-classVariantPatternUnit :: TBinding (Py.Name -> Py.ClosedPattern)
+classVariantPatternUnit :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Py.ClosedPattern)
 classVariantPatternUnit = def "classVariantPatternUnit" $
   doc "Create a class pattern for a unit variant (no value captured)" $
-  "pyVariantName" ~>
+  "env" ~> "typeName" ~> "fieldName" ~>
     PyDsl.closedPatternClass $
       PyDsl.classPatternSimple
-        (PyDsl.nameOrAttribute $ list [var "pyVariantName"])
+        (PyDsl.nameOrAttribute $ list [PyNames.variantName @@ true @@ var "env" @@ var "typeName" @@ var "fieldName"])
 
 -- | Create a CaseBlock pattern for a class variant with value capture.
-classVariantPatternWithCapture :: TBinding (PyHelpers.PythonEnvironment -> Py.Name -> Name -> Py.ClosedPattern)
+classVariantPatternWithCapture :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Name -> Py.ClosedPattern)
 classVariantPatternWithCapture = def "classVariantPatternWithCapture" $
   doc "Create a class pattern for a variant with captured value" $
-  "env" ~> "pyVariantName" ~> "varName" ~>
-    "pyVarNameAttr" <~ (PyDsl.nameOrAttribute $ list [var "pyVariantName"]) $
+  "env" ~> "typeName" ~> "fieldName" ~> "varName" ~>
+    "pyVarName" <~ (PyDsl.nameOrAttribute $ list [PyNames.variantName @@ true @@ var "env" @@ var "typeName" @@ var "fieldName"]) $
     "capturePattern" <~ (PyDsl.closedPatternCapture $ PyDsl.capturePattern $
       PyDsl.patternCaptureTarget (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "varName")) $
     "keywordPattern" <~ (PyDsl.keywordPattern (PyDsl.name $ string "value") $
       PyDsl.patternOr $ PyDsl.orPattern $ list [var "capturePattern"]) $
     PyDsl.closedPatternClass $
       PyDsl.classPatternWithKeywords
-        (var "pyVarNameAttr")
+        (var "pyVarName")
         (PyDsl.keywordPatterns $ list [var "keywordPattern"])
 
 -- | Determine whether a union type's cases are fully covered.
@@ -942,15 +937,15 @@ isCasesFull = def "isCasesFull" $
 
 -- | Create a ClosedPattern for a variant, choosing the appropriate pattern type
 --   based on whether the variant is an enum, unit type, or has a value.
-variantClosedPattern :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name -> RowType -> Bool -> Name -> Bool -> Py.ClosedPattern)
+variantClosedPattern :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> RowType -> Bool -> Name -> Bool -> Py.ClosedPattern)
 variantClosedPattern = def "variantClosedPattern" $
   doc "Create a ClosedPattern for a variant based on its characteristics" $
-  "env" ~> "typeName" ~> "fieldName" ~> "pyVariantName" ~> "rowType" ~> "isEnum" ~> "varName" ~> "shouldCapture" ~>
+  "env" ~> "typeName" ~> "fieldName" ~> "rowType" ~> "isEnum" ~> "varName" ~> "shouldCapture" ~>
     Logic.ifElse (var "isEnum")
       (enumVariantPattern @@ var "env" @@ var "typeName" @@ var "fieldName")
       (Logic.ifElse (Logic.not $ var "shouldCapture")
-        (classVariantPatternUnit @@ var "pyVariantName")
-        (classVariantPatternWithCapture @@ var "env" @@ var "pyVariantName" @@ var "varName"))
+        (classVariantPatternUnit @@ var "env" @@ var "typeName" @@ var "fieldName")
+        (classVariantPatternWithCapture @@ var "env" @@ var "typeName" @@ var "fieldName" @@ var "varName"))
 
 -- =============================================================================
 -- Case statement helpers
@@ -1166,10 +1161,8 @@ encodeCaseBlock = def "encodeCaseBlock" $
     "env2" <<~ (Flows.pure $ pythonEnvironmentSetTypeContext
       @@ (Schemas.extendTypeContextForLambda @@ (pythonEnvironmentGetTypeContext @@ var "env") @@ var "effectiveLambda")
       @@ var "env") $
-    -- Deconflict the variant name in case it collides with a type name
-    "pyVariantName" <<~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname") $
     -- Create the pattern using env2 (extended context)
-    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname" @@ var "pyVariantName"
+    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname"
       @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
     -- Encode the body using the provided encoder with extended env
     "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
@@ -1285,26 +1278,6 @@ encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
       ("c" ~> list [var "assignStmt", PyUtils.pyExpressionToPyStatement @@ (PyUtils.tripleQuotedString @@ var "c")])
 
 -- | Encode a union field as a variant class
--- | Deconflict a variant name by appending '_' if the corresponding Hydra name
---   exists as an element in the graph. This prevents name collisions between
---   variant wrapper classes and union type metaclasses in generated Python.
-deconflictVariantName :: TBinding (Bool -> PyHelpers.PythonEnvironment -> Name -> Name -> Flow PyHelpers.PyGraph Py.Name)
-deconflictVariantName = def "deconflictVariantName" $
-  doc "Deconflict a variant name to avoid collisions with type names" $
-  "isQualified" ~> "env" ~> "unionName" ~> "fname" ~>
-    -- Compute the Hydra Name that the variant would correspond to
-    "candidateHydraName" <~ (wrap _Name $ Strings.cat2 (Core.unName $ var "unionName") (Formatting.capitalize @@ (Core.unName $ var "fname"))) $
-    -- Check if this name exists as an element in the graph
-    "pyg" <<~ Monads.getState $
-    "g" <~ (pyGraphGraph @@ var "pyg") $
-    "elements" <~ (Graph.graphElements $ var "g") $
-    "collision" <~ (Maybes.isJust $ Lists.find ("b" ~> Core.equalName_ (Core.bindingName $ var "b") (var "candidateHydraName")) (var "elements")) $
-    Logic.ifElse (var "collision")
-      -- Collision: append '_' to the Python name
-      (produce $ PyDsl.name $ Strings.cat2 (PyDsl.unName $ PyNames.variantName @@ var "isQualified" @@ var "env" @@ var "unionName" @@ var "fname") (string "_"))
-      -- No collision: use the normal variant name
-      (produce $ PyNames.variantName @@ var "isQualified" @@ var "env" @@ var "unionName" @@ var "fname")
-
 encodeUnionField :: TBinding (PyHelpers.PythonEnvironment -> Name -> FieldType -> Flow PyHelpers.PyGraph Py.Statement)
 encodeUnionField = def "encodeUnionField" $
   doc "Encode a union field as a variant class" $
@@ -1313,7 +1286,7 @@ encodeUnionField = def "encodeUnionField" $
     "ftype" <~ Core.fieldTypeType (var "fieldType") $
     "fcomment" <<~ (inGraphContext @@ (Annotations.getTypeDescription @@ var "ftype")) $
     "isUnit" <~ (Equality.equal (Rewriting.deannotateType @@ var "ftype") (Core.typeUnit)) $
-    "varName" <<~ (deconflictVariantName @@ false @@ var "env" @@ var "unionName" @@ var "fname") $
+    "varName" <~ (PyNames.variantName @@ false @@ var "env" @@ var "unionName" @@ var "fname") $
     "tparamNames" <~ (findTypeParams @@ var "env" @@ var "ftype") $
     "tparamPyNames" <~ Lists.map PyNames.encodeTypeVariable (var "tparamNames") $
     "fieldParams" <~ Lists.map PyUtils.pyNameToPyTypeParameter (var "tparamPyNames") $
@@ -1472,22 +1445,6 @@ encodeBindingAs = def "encodeBindingAs" $
         "innerBody" <~ (Pairs.second $ var "gathered") $
         -- Check for hoisted binding pattern: lambdas wrapping a case statement application
         "mcsa" <~ (isCaseStatementApplication @@ var "innerBody") $
-        -- Also check for bare case elimination with lambda params (hoisted bare case function).
-        -- In this pattern, gatherLambdas strips all lambdas including the case function's own lambda,
-        -- leaving the inner body as a bare Elimination(Union(cs)). The last lambda param is the match subject.
-        "mcsa2" <~ Logic.ifElse (Logic.and (Maybes.isNothing $ var "mcsa")
-                                           (Logic.not $ Lists.null $ var "lambdaParams"))
-          (Maybes.map ("cs" ~>
-            Phantoms.tuple4
-              (Core.caseStatementTypeName $ var "cs")
-              (Core.caseStatementDefault $ var "cs")
-              (Core.caseStatementCases $ var "cs")
-              -- Use a variable reference to the last lambda param as the synthetic argument
-              (Core.termVariable $ Lists.last $ var "lambdaParams"))
-            (extractCaseElimination @@ var "innerBody"))
-          nothing $
-        -- Combine both checks: mcsa (case application) takes priority, else mcsa2 (bare case with lambda params)
-        "mcsaCombined" <~ Maybes.maybe (var "mcsa2") ("x" ~> just (var "x")) (var "mcsa") $
         -- Try hoisted binding pattern first
         Maybes.maybe
           -- Not a hoisted binding, try simple case elimination
@@ -1625,7 +1582,7 @@ encodeBindingAs = def "encodeBindingAs" $
               Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
               Phantoms.field Py._FunctionDefRaw_block (var "body")]) $
             produce $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw"))))
-          (var "mcsaCombined"))
+          (var "mcsa"))
       -- Binding with type scheme - use encodeTermAssignment
       ("ts" ~>
         "comment" <<~ (inGraphContext @@ (Annotations.getTermDescription @@ var "term1")) $
@@ -1766,7 +1723,7 @@ withLet = def "withLet" $
   Schemas.withLetContext @@
     pythonEnvironmentGetTypeContext @@
     pythonEnvironmentSetTypeContext @@
-    bindingMetadataForPython
+    pythonBindingMetadata
 
 -- | Execute a computation with inline let context (no metadata, for walrus operators)
 --   Also adds binding names to inlineVariables so encodeVariable knows not to add call syntax.
@@ -1832,66 +1789,6 @@ targetPythonVersion = def "targetPythonVersion" $
   doc "The target Python version for code generation" $
   PyUtils.targetPythonVersion
 
--- | A Python-specific version of isComplexVariable that only flags nullary complex variables.
---   Non-nullary variables (functions with arity > 0) in applied positions produce values and
---   should not make the containing term "complex".
-isComplexVariableForPython :: TBinding (TypeContext -> Name -> Bool)
-isComplexVariableForPython = def "isComplexVariableForPython" $
-  doc "Check if a variable reference indicates complexity, excluding non-nullary functions" $
-  "tc" ~> "name" ~>
-    "metaLookup" <~ Maps.lookup (var "name") (Typing.typeContextMetadata $ var "tc") $
-    Logic.ifElse (Maybes.isJust $ var "metaLookup")
-      -- In metadata: check if it's a nullary binding (arity 0)
-      -- Non-nullary functions in metadata shouldn't propagate complexity
-      (Maybes.maybe
-        true  -- Not in types map → treat as complex (safe default)
-        ("typ" ~> Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
-        (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tc")))
-      -- Not in metadata: check lambda vars and types
-      (Logic.ifElse (Sets.member (var "name") (Typing.typeContextLambdaVariables $ var "tc"))
-        true
-        ("typeLookup" <~ Maps.lookup (var "name") (Typing.typeContextTypes $ var "tc") $
-          Logic.not $ Maybes.isJust $ var "typeLookup"))
-
--- | A Python-specific version of isComplexTerm that uses isComplexVariableForPython.
-isComplexTermForPython :: TBinding (TypeContext -> Term -> Bool)
-isComplexTermForPython = def "isComplexTermForPython" $
-  doc "Check if a term needs lazy evaluation, excluding non-nullary function references" $
-  "tc" ~> "t" ~>
-    cases _Term (var "t") (Just
-      (Lists.foldl ("b" ~> "sub" ~> Logic.or (var "b") (isComplexTermForPython @@ var "tc" @@ var "sub"))
-        false
-        (Rewriting.subterms @@ var "t"))) [
-      _Term_let>>: constant true,
-      _Term_typeApplication>>: constant true,
-      _Term_typeLambda>>: constant true,
-      _Term_variable>>: "name" ~> isComplexVariableForPython @@ var "tc" @@ var "name"]
-
--- | A Python-specific version of isComplexBinding that uses isComplexTermForPython.
-isComplexBindingForPython :: TBinding (TypeContext -> Binding -> Bool)
-isComplexBindingForPython = def "isComplexBindingForPython" $
-  doc "Check if a binding needs to be treated as a function (Python-specific)" $
-  "tc" ~> "b" ~>
-    "term" <~ Core.bindingTerm (var "b") $
-    "mts" <~ Core.bindingType (var "b") $
-    Maybes.maybe
-      (isComplexTermForPython @@ var "tc" @@ var "term")
-      ("ts" ~>
-        "isPolymorphic" <~ (Logic.not $ Lists.null $ Core.typeSchemeVariables $ var "ts") $
-        "isNonNullary" <~ (Equality.gt (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) (int32 0)) $
-        "isComplex" <~ (isComplexTermForPython @@ var "tc" @@ var "term") $
-        Logic.or (Logic.or (var "isPolymorphic") (var "isNonNullary")) (var "isComplex"))
-      (var "mts")
-
--- | Python-specific binding metadata that uses isComplexBindingForPython.
-bindingMetadataForPython :: TBinding (TypeContext -> Binding -> Maybe Term)
-bindingMetadataForPython = def "bindingMetadataForPython" $
-  doc "Produces metadata for a binding if it is complex (Python-specific)" $
-  "tc" ~> "b" ~>
-    Logic.ifElse (isComplexBindingForPython @@ var "tc" @@ var "b")
-      (just $ Core.termLiteral $ Core.literalBoolean true)
-      nothing
-
 -- | Create an initial Python environment for code generation
 initialEnvironment :: TBinding (Namespaces Py.DottedName -> TypeContext -> PyHelpers.PythonEnvironment)
 initialEnvironment = def "initialEnvironment" $
@@ -1906,14 +1803,26 @@ initialEnvironment = def "initialEnvironment" $
       PyHelpers._PythonEnvironment_skipCasts>>: true,
       PyHelpers._PythonEnvironment_inlineVariables>>: Sets.empty]
 
+-- | Python-specific binding metadata function.
+--   Like CoderUtils.bindingMetadata, but skips metadata for trivial bindings.
+--   This prevents trivial let-bindings (field accesses, literals, plain variables)
+--   from being thunked with @lru_cache(1) and from getting () call syntax at reference sites.
+pythonBindingMetadata :: TBinding (TypeContext -> Binding -> Maybe Term)
+pythonBindingMetadata = def "pythonBindingMetadata" $
+  doc "Like bindingMetadata, but skips metadata for trivial bindings" $
+  "tc" ~> "b" ~>
+  Logic.ifElse (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "b"))
+    nothing
+    (CoderUtils.bindingMetadata @@ var "tc" @@ var "b")
+
 -- | Analyze a function term with Python-specific TypeContext management.
---   This is a wrapper around CoderUtils.analyzeFunctionTerm that provides the Python-specific
---   TypeContext getter and setter functions.
+--   This is a wrapper around CoderUtils.analyzeFunctionTermWith that provides the Python-specific
+--   TypeContext getter/setter and Python-specific binding metadata (which skips trivial bindings).
 analyzePythonFunction :: TBinding (PyHelpers.PythonEnvironment -> Term -> Flow PyHelpers.PyGraph (FunctionStructure PyHelpers.PythonEnvironment))
 analyzePythonFunction = def "analyzePythonFunction" $
   doc "Analyze a function term with Python-specific TypeContext management" $
   CoderUtils.analyzeFunctionTermWith @@
-    bindingMetadataForPython @@
+    pythonBindingMetadata @@
     pythonEnvironmentGetTypeContext @@
     pythonEnvironmentSetTypeContext
 
@@ -1964,14 +1873,17 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env") $
     "isComplexVar" <~ (CoderUtils.isComplexVariable @@ var "tc" @@ var "name") $
     "termIsComplex" <~ (CoderUtils.isComplexTerm @@ var "tc" @@ var "term") $
+    "isTrivial" <~ (CoderUtils.isTrivialTerm @@ var "term") $
     -- Check if needs thunking based on type scheme arity and complexity
-    "needsThunk" <~ optCases (var "mts")
-      -- No type scheme: thunk if complex
-      (Logic.and (var "allowThunking") (Logic.or (var "isComplexVar") (var "termIsComplex")))
-      -- Has type scheme: thunk if arity == 0 and complex
-      ("ts" ~> Logic.and (var "allowThunking")
-        (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (Phantoms.int 0))
-                   (Logic.or (var "isComplexVar") (var "termIsComplex")))) $
+    -- Trivial terms (literals, variables, field projections) are never thunked
+    "needsThunk" <~ Logic.ifElse (var "isTrivial") (boolean False)
+      (optCases (var "mts")
+        -- No type scheme: thunk if complex
+        (Logic.and (var "allowThunking") (Logic.or (var "isComplexVar") (var "termIsComplex")))
+        -- Has type scheme: thunk if arity == 0 and complex
+        ("ts" ~> Logic.and (var "allowThunking")
+          (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (Phantoms.int 0))
+                     (Logic.or (var "isComplexVar") (var "termIsComplex"))))) $
     "pterm" <~ (Logic.ifElse (var "needsThunk") (makeThunk @@ var "pbody") (var "pbody")) $
     produce $ PyDsl.namedExpressionAssignment $ PyDsl.assignmentExpression (var "pyName") (var "pterm")
 
@@ -2034,15 +1946,17 @@ encodeTermMultiline = def "encodeTermMultiline" $
         "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
         "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
         "env2" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
-        Logic.ifElse (Lists.null $ var "bindings")
-          -- No bindings: encode inline and wrap in return
-          ("expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
-            produce $ list [PyUtils.returnSingle @@ var "expr"])
-          -- Has bindings: encode bindings as defs, then recurse on body
-          (withBindings @@ var "bindings" @@
-            ("bindingStmts" <<~ (Flows.mapList (encodeBindingAs @@ var "env2") (var "bindings")) $
-              "bodyStmts" <<~ (encodeTermMultiline @@ var "env2" @@ var "innerBody") $
-              produce $ Lists.concat2 (var "bindingStmts") (var "bodyStmts")))) $
+        Logic.ifElse (Logic.not $ Lists.null (var "params"))
+          (Flows.fail $ string "Functions currently unsupported in this context")
+          (Logic.ifElse (Lists.null $ var "bindings")
+            -- No bindings: encode inline and wrap in return
+            ("expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+              produce $ list [PyUtils.returnSingle @@ var "expr"])
+            -- Has bindings: encode bindings as defs, then recurse on body
+            (withBindings @@ var "bindings" @@
+              ("bindingStmts" <<~ (Flows.mapList (encodeBindingAs @@ var "env2") (var "bindings")) $
+                "bodyStmts" <<~ (encodeTermMultiline @@ var "env2" @@ var "innerBody") $
+                produce $ Lists.concat2 (var "bindingStmts") (var "bodyStmts"))))) $
     "gathered" <~ (CoderUtils.gatherApplications @@ var "term") $
     "args" <~ Pairs.first (var "gathered") $
     "body" <~ Pairs.second (var "gathered") $
@@ -2102,20 +2016,8 @@ encodeFunction = def "encodeFunction" $
             (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv0")]) $
         "pbody" <<~ (encodeTermInline @@ var "innerEnv" @@ false @@ var "innerBody") $
         "pparams" <~ (Lists.map (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "innerEnv") (var "params")) $
-        -- Use curried lambdas when the inner body involves a case elimination (bare case or case application).
-        -- Hoisted bindings are referenced with curried application: _hoist(capturedVar)(arg),
-        -- so the lambda must be curried to match. This covers both:
-        --   1. Bare case: \captured -> CaseElim (isBareCase)
-        --   2. Case application: \captured -> Application(CaseElim, arg) (isCaseApplication)
-        "isBareCase" <~ (Maybes.isJust $ extractCaseElimination @@ var "innerBody") $
-        "isCaseApplication" <~ cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "innerBody") (Just false) [
-          _Term_application>>: "app" ~>
-            Maybes.isJust (extractCaseElimination @@ (Core.applicationFunction $ var "app"))] $
-        "needsCurrying" <~ Logic.or (var "isBareCase") (var "isCaseApplication") $
         Logic.ifElse (Lists.null $ var "bindings")
-          (Logic.ifElse (var "needsCurrying")
-            (produce $ makeCurriedLambda @@ var "pparams" @@ var "pbody")
-            (produce $ makeUncurriedLambda @@ var "pparams" @@ var "pbody"))
+          (produce $ makeUncurriedLambda @@ var "pparams" @@ var "pbody")
           -- Has bindings: create walrus operator expressions
           ("pbindingExprs" <<~ (Flows.mapList (encodeBindingAsAssignment @@ false @@ var "innerEnv") (var "bindings")) $
             "pbindingStarExprs" <~ (Lists.map ("ne" ~> PyDsl.starNamedExpressionSimple (var "ne")) (var "pbindingExprs")) $
@@ -2124,9 +2026,7 @@ encodeFunction = def "encodeFunction" $
             "tupleExpr" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomTuple $ PyDsl.tuple $ var "tupleElements")) $
             "indexValue" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomNumber $ PyDsl.numberInteger $ Literals.int32ToBigint (Lists.length (var "bindings")))) $
             "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
-            Logic.ifElse (var "needsCurrying")
-              (produce $ makeCurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr"))
-              (produce $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr"))),
+            produce $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr")),
       -- Primitives: encode as variable reference
       _Function_primitive>>: "name" ~>
         encodeVariable @@ var "env" @@ var "name" @@ (Phantoms.list ([] :: [TTerm Py.Expression])),
@@ -2164,9 +2064,10 @@ encodeTermAssignment = def "encodeTermAssignment" $
     "env2" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env2") $
     "binding" <~ (Core.binding (var "name") (var "term") (just $ var "ts")) $
-    "isComplex" <~ (isComplexBindingForPython @@ var "tc" @@ var "binding") $
-    Logic.ifElse (var "isComplex")
-      -- Complex binding: use function definition
+    "isComplex" <~ (CoderUtils.isComplexBinding @@ var "tc" @@ var "binding") $
+    "isTrivial" <~ (CoderUtils.isTrivialTerm @@ var "term") $
+    Logic.ifElse (Logic.and (var "isComplex") (Logic.not (var "isTrivial")))
+      -- Complex binding (non-trivial): use function definition
       (withBindings @@ var "bindings" @@
         ("bindingStmts" <<~ (Flows.mapList (encodeBindingAs @@ var "env2") (var "bindings")) $
           encodeFunctionDefinition @@ var "env2" @@ var "name" @@ var "tparams" @@ var "params" @@ var "body" @@ var "doms" @@ var "mcod" @@ var "comment" @@ var "bindingStmts"))
@@ -2232,12 +2133,13 @@ encodeVariable = def "encodeVariable" $
                   (Maps.lookup (var "name") (var "tcMetadata")))
               -- In graph elements
               ("el" ~>
+                "elTrivial1" <~ (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
                 Maybes.maybe
-                  -- No type scheme: check if binding is complex (needs function call)
                   (produce $ var "asVariable")
                   ("ts" ~>
-                    Logic.ifElse (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (int32 0))
-                                            (isComplexBindingForPython @@ var "tc" @@ var "el"))
+                    Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (int32 0))
+                                                       (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                                            (Logic.not (var "elTrivial1")))
                       (produce $ var "asFunctionCall")
                       ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
                           (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
@@ -2281,16 +2183,19 @@ encodeVariable = def "encodeVariable" $
                     produce $ var "asFunctionRef")
                   -- In graph elements
                   ("el" ~>
+                    "elTrivial" <~ (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
                     Maybes.maybe
-                      (Logic.ifElse (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                      (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                                               (Logic.not (var "elTrivial")))
                         (produce $ var "asFunctionCall")
                         ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
                             (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                             (var "asVariable")) $
                           produce $ var "asFunctionRef"))
                       ("ts" ~>
-                        Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
-                                               (isComplexBindingForPython @@ var "tc" @@ var "el"))
+                        Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                                                           (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                                                (Logic.not (var "elTrivial")))
                           (produce $ var "asFunctionCall")
                           ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
                               (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
@@ -2376,10 +2281,9 @@ encodeApplicationInner = def "encodeApplicationInner" $
                 "fname" <~ (project _Projection _Projection_field @@ var "proj") $
                 "fieldExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")) $
                 produce $ pair (var "withRest" @@ var "fieldExpr") (var "rargs"),
-              -- Union elimination: encode as inline conditional chain (isinstance-based ternary)
-              _Elimination_union>>: "cs" ~>
-                "inlineExpr" <<~ (encodeUnionEliminationInline @@ var "env" @@ var "cs" @@ var "firstArg") $
-                produce $ pair (var "withRest" @@ var "inlineExpr") (var "rargs"),
+              -- Union elimination: not supported inline
+              _Elimination_union>>: constant $
+                produce $ pair (unsupportedExpression @@ string "inline match expressions are not yet supported") (var "rargs"),
               -- Wrap elimination: obj.value
               _Elimination_wrap>>: constant $
                 "valueExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyDsl.name $ string "value")) $
@@ -2426,74 +2330,6 @@ encodeApplicationInner = def "encodeApplicationInner" $
                     (var "remainingArgs")))
               (Core.bindingType $ var "el"))
           (Lexical.lookupElement @@ var "g" @@ var "name")]
-
--- | Encode a union elimination (case expression) applied to an argument as an inline
---   conditional expression chain:
---     branch1_result if isinstance(arg, T1) else branch2_result if isinstance(arg, T2) else ...
---   This is used when a case application appears in an expression context where a match
---   statement cannot be emitted (e.g., inside a lambda or walrus assignment).
-encodeUnionEliminationInline :: TBinding (PyHelpers.PythonEnvironment
-  -> CaseStatement -> Py.Expression
-  -> Flow PyHelpers.PyGraph Py.Expression)
-encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
-  doc "Encode a union elimination as an inline conditional chain (isinstance-based ternary)" $
-  "env" ~> "cs" ~> "pyArg" ~>
-    "tname" <~ (Core.caseStatementTypeName $ var "cs") $
-    "mdefault" <~ (Core.caseStatementDefault $ var "cs") $
-    "cases_" <~ (Core.caseStatementCases $ var "cs") $
-    -- Get the row type for isEnum and isUnit checks
-    "rt" <<~ (inGraphContext @@ (Schemas.requireUnionType @@ var "tname")) $
-    "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
-    -- Project .value from the argument for non-enum types
-    "valueExpr" <~ (PyUtils.projectFromExpression @@ var "pyArg" @@ (PyDsl.name $ string "value")) $
-    -- Build the isinstance function reference
-    "isinstancePrimary" <~ (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "isinstance")) $
-    -- Encode the default expression (used as final else)
-    "pyDefault" <<~ (Maybes.maybe
-      -- No default: produce an unsupported expression as fallback
-      (produce $ unsupportedExpression @@ string "no matching case in inline union elimination")
-      -- Has default: encode it inline (the default is a value, not a function to be applied)
-      ("dflt" ~>
-        encodeTermInline @@ var "env" @@ false @@ var "dflt")
-      (var "mdefault")) $
-    -- Encode each case branch into (isinstance_check_expression, result_expression) pairs
-    -- Then fold them into a chain of Conditional expressions from right to left
-    "encodeBranch" <~ (
-      "field" ~>
-        "fname" <~ Core.fieldName (var "field") $
-        "fterm" <~ Core.fieldTerm (var "field") $
-        -- Is this variant a unit type?
-        "isUnitVariant" <~ (isVariantUnitType @@ var "rt" @@ var "fname") $
-        -- Get the Python variant class name (deconflicted to avoid collisions)
-        "pyVariantName" <<~ (deconflictVariantName @@ true @@ var "env" @@ var "tname" @@ var "fname") $
-        -- Create isinstance(arg, VariantType) check
-        "isinstanceCheck" <~ (PyUtils.functionCall @@ var "isinstancePrimary"
-          @@ list [var "pyArg", PyUtils.pyNameToPyExpression @@ var "pyVariantName"]) $
-        -- Encode the branch term and apply it
-        "pyBranch" <<~ (encodeTermInline @@ var "env" @@ false @@ var "fterm") $
-        "pyResult" <~ (Logic.ifElse (var "isEnum")
-          -- Enum variant: the branch lambda expects nothing useful, just call with arg
-          (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "pyArg"])
-          (Logic.ifElse (var "isUnitVariant")
-            -- Unit variant: the branch lambda expects unit; pass the arg itself since unit types have no .value
-            (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "pyArg"])
-            -- Normal variant: apply branch function to arg.value
-            (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "valueExpr"]))) $
-        produce $ pair (var "isinstanceCheck") (var "pyResult")) $
-    -- Encode all branches
-    "encodedBranches" <<~ (Flows.mapList (var "encodeBranch") (var "cases_")) $
-    -- Fold branches into a conditional chain from right to left:
-    --   result_n if isinstance(arg, Tn) else ... else default
-    -- Use foldl on reversed branches: foldl (\acc branch -> cond(branch, acc)) default (reverse branches)
-    "buildChain" <~ (
-      "elseExpr" ~> "branchPair" ~>
-        "checkExpr" <~ Pairs.first (var "branchPair") $
-        "resultExpr" <~ Pairs.second (var "branchPair") $
-        PyDsl.expressionConditional $ PyDsl.conditional
-          (PyUtils.pyExpressionToDisjunction @@ var "resultExpr")
-          (PyUtils.pyExpressionToDisjunction @@ var "checkExpr")
-          (var "elseExpr")) $
-    produce $ Lists.foldl (var "buildChain") (var "pyDefault") (Lists.reverse $ var "encodedBranches")
 
 -- | Encode a term to a Python expression (inline form).
 --   This is the main term encoding function that handles all term variants.
@@ -2704,11 +2540,10 @@ encodeTermInline = def "encodeTermInline" $
                 produce $ list [var "parg"])) $
             -- Cast to union type - set usesCast flag
             "unit_" <<~ (updateMeta @@ (setMetaUsesCast @@ true)) $
-            "deconflictedName" <<~ (deconflictVariantName @@ true @@ var "env" @@ var "tname" @@ var "fname") $
             produce $
               PyUtils.castTo
                 @@ (PyNames.typeVariableReference @@ var "env" @@ var "tname")
-                @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ var "deconflictedName") @@ var "args")),
+                @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.variantName @@ true @@ var "env" @@ var "tname" @@ var "fname")) @@ var "args")),
 
       -- TermUnit
       _Term_unit>>: constant $
