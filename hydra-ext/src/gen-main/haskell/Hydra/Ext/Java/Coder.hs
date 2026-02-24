@@ -903,6 +903,7 @@ tryInferFunctionType fun = ((\x -> case x of
   Core.FunctionLambda v1 -> (Maybes.bind (Core.lambdaDomain v1) (\dom ->  
     let mCod = ((\x -> case x of
             Core.TermAnnotated v2 -> (Maybes.bind (Maps.lookup Constants.key_type (Core.annotatedTermAnnotation v2)) (\typeTerm -> decodeTypeFromTerm typeTerm))
+            Core.TermFunction v2 -> (tryInferFunctionType v2)
             _ -> Nothing) (Core.lambdaBody v1))
     in (Maybes.map (\cod -> Core.TypeFunction (Core.FunctionType {
       Core.functionTypeDomain = dom,
@@ -1619,11 +1620,11 @@ constantDecl javaName aliases name =
 constantDeclForFieldType :: (Helpers.Aliases -> Core.FieldType -> Compute.Flow Graph.Graph Syntax.ClassBodyDeclarationWithComments)
 constantDeclForFieldType aliases ftyp =  
   let name = (Core.fieldTypeName ftyp) 
-      javaName = (Strings.cat2 "FIELD_NAME_" (Formatting.nonAlnumToUnderscores (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name))))
+      javaName = (Formatting.nonAlnumToUnderscores (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName name)))
   in (constantDecl javaName aliases name)
 
 constantDeclForTypeName :: (Helpers.Aliases -> Core.Name -> Compute.Flow Graph.Graph Syntax.ClassBodyDeclarationWithComments)
-constantDeclForTypeName aliases name = (constantDecl "TYPE_NAME" aliases name)
+constantDeclForTypeName aliases name = (constantDecl "TYPE_" aliases name)
 
 declarationForRecordType :: (Bool -> Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Compute.Flow Graph.Graph Syntax.ClassDeclaration)
 declarationForRecordType isInner isSer aliases tparams elName fields = (declarationForRecordType_ isInner isSer aliases tparams elName Nothing fields)
@@ -1678,11 +1679,11 @@ encodeTermInternal env anns tyapps term =
       let bindings = (Core.letBindings v1)
       in  
         let body = (Core.letBody v1)
-        in (Logic.ifElse (Lists.null bindings) (encode body) (Flows.bind (bindingsToStatements env bindings) (\bindResult ->  
+        in (Logic.ifElse (Lists.null bindings) (encodeTermInternal env anns [] body) (Flows.bind (bindingsToStatements env bindings) (\bindResult ->  
           let bindingStmts = (Pairs.first bindResult)
           in  
             let env2 = (Pairs.second bindResult)
-            in (Flows.bind (encodeTerm env2 body) (\jbody ->  
+            in (Flows.bind (encodeTermInternal env2 anns [] body) (\jbody ->  
               let returnSt = (Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jbody)))
               in  
                 let block = (Syntax.Block (Lists.concat2 bindingStmts [
@@ -1719,7 +1720,11 @@ encodeTermInternal env anns tyapps term =
       let recName = (Core.recordTypeName v1)
       in (Flows.bind (Flows.mapList (\fld -> encode (Core.fieldTerm fld)) (Core.recordFields v1)) (\fieldExprs ->  
         let consId = (Utils_.nameToJavaName aliases recName)
-        in (Flows.bind (Logic.ifElse (Lists.null tyapps) (Flows.pure Nothing) (Flows.bind (Flows.mapList (\jt -> Utils_.javaTypeToJavaReferenceType jt) tyapps) (\rts -> Flows.pure (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts)))))) (\mtargs -> Flows.pure (Utils_.javaConstructorCall (Utils_.javaConstructorName consId mtargs) fieldExprs Nothing)))))
+        in (Flows.bind (Logic.ifElse (Logic.not (Lists.null tyapps)) (Flows.bind (Flows.mapList (\jt -> Utils_.javaTypeToJavaReferenceType jt) tyapps) (\rts -> Flows.pure (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts))))) ( 
+          let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
+          in (Flows.bind (Annotations.getType combinedAnns) (\mtyp -> Maybes.cases mtyp (Flows.pure Nothing) (\annTyp ->  
+            let typeArgs = (extractTypeApplicationArgs (Rewriting.deannotateType annTyp))
+            in (Logic.ifElse (Lists.null typeArgs) (Flows.pure Nothing) (Flows.bind (Flows.mapList (\t -> Flows.bind (encodeType aliases Sets.empty t) (\jt -> Utils_.javaTypeToJavaReferenceType jt)) typeArgs) (\jTypeArgs -> Flows.pure (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs))))))))))) (\mtargs -> Flows.pure (Utils_.javaConstructorCall (Utils_.javaConstructorName consId mtargs) fieldExprs Nothing)))))
     Core.TermSet v1 ->  
       let slist = (Sets.toList v1)
       in (Flows.bind (Flows.mapList encode slist) (\jels -> Logic.ifElse (Sets.null v1) (Flows.bind (takeTypeArgs "set" 1 tyapps) (\targs -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "java.util.Set") (Syntax.Identifier "of") targs [])))) ( 
@@ -1869,16 +1874,7 @@ functionCall env isPrim name args typeApps =
   let aliases = (Helpers.javaEnvironmentAliases env)
   in  
     let isLambdaBound = (isLambdaBoundIn name (Helpers.aliasesLambdaVars aliases))
-    in (Logic.ifElse (Logic.and isPrim (Logic.and (Lists.null args) (Logic.not isLambdaBound))) ( 
-      let classWithApply = (Syntax.unIdentifier (elementJavaIdentifier True False aliases name))
-      in  
-        let suffix = (Strings.cat2 "." Names.applyMethodName)
-        in  
-          let className = (Strings.fromList (Lists.take (Math.sub (Strings.length classWithApply) (Strings.length suffix)) (Strings.toList classWithApply)))
-          in (Flows.pure (Utils_.javaIdentifierToJavaExpression (Syntax.Identifier (Strings.cat [
-            className,
-            "::",
-            Names.applyMethodName]))))) (Flows.bind (Flows.mapList (\arg -> encodeTerm env arg) args) (\jargs0 ->  
+    in (Flows.bind (Flows.mapList (\arg -> encodeTerm env arg) args) (\jargs0 ->  
       let wrapResult = (wrapLazyArguments name jargs0)
       in  
         let jargs = (Pairs.first wrapResult)
@@ -1910,7 +1906,7 @@ functionCall env isPrim name args typeApps =
                       let methodId = (Logic.ifElse isPrim (overrideMethodName (Syntax.Identifier (Strings.cat2 (Syntax.unIdentifier (Utils_.nameToJavaName aliases (Names_.unqualifyName (Module.QualifiedName {
                               Module.qualifiedNameNamespace = (Just ns_),
                               Module.qualifiedNameLocal = (Formatting.capitalize localName)})))) (Strings.cat2 "." Names.applyMethodName)))) (Syntax.Identifier (Utils_.sanitizeJavaName localName)))
-                      in (Flows.bind (Flows.mapList (\t -> Flows.bind (encodeType aliases Sets.empty t) (\jt -> Flows.bind (Utils_.javaTypeToJavaReferenceType jt) (\rt -> Flows.pure (Syntax.TypeArgumentReference rt)))) typeApps) (\jTypeArgs -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs jargs)))))))))))))
+                      in (Flows.bind (Flows.mapList (\t -> Flows.bind (encodeType aliases Sets.empty t) (\jt -> Flows.bind (Utils_.javaTypeToJavaReferenceType jt) (\rt -> Flows.pure (Syntax.TypeArgumentReference rt)))) typeApps) (\jTypeArgs -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs jargs))))))))))))
 
 buildCurriedLambda :: ([Core.Name] -> Syntax.Expression -> Syntax.Expression)
 buildCurriedLambda params inner = (Lists.foldl (\acc -> \p -> Utils_.javaLambda p acc) inner (Lists.reverse params))

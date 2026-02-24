@@ -21,6 +21,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+-- | Aggregate a list of key-value pairs into a map where each key maps to a list of values
 aggregateMap :: Ord t0 => ([(t0, t1)] -> M.Map t0 [t1])
 aggregateMap pairs = (Lists.foldl (\m -> \p ->  
   let k = (Pairs.first p)
@@ -30,6 +31,7 @@ aggregateMap pairs = (Lists.foldl (\m -> \p ->
       let existing = (Maps.lookup k m)
       in (Maps.insert k (Maybes.maybe (Lists.pure v) (\vs -> Lists.cons v vs) existing) m)) Maps.empty pairs)
 
+-- | Convert a property graph adjacent edge to a GraphSON adjacent edge
 adjacentEdgeToGraphson :: ((t0 -> Compute.Flow t1 Syntax.Value) -> Model_.AdjacentEdge t0 -> Compute.Flow t1 (Syntax.EdgeLabel, Syntax.AdjacentEdge))
 adjacentEdgeToGraphson encodeValue edge =  
   let label = (Model_.adjacentEdgeLabel edge)
@@ -44,14 +46,17 @@ adjacentEdgeToGraphson encodeValue edge =
           Syntax.adjacentEdgeVertexId = gv,
           Syntax.adjacentEdgeProperties = (Maps.fromList propPairs)})))))
 
+-- | Convert a property graph edge property to a GraphSON property
 edgePropertyToGraphson :: ((t0 -> Compute.Flow t1 t2) -> (Model_.PropertyKey, t0) -> Compute.Flow t1 (Syntax.PropertyKey, t2))
 edgePropertyToGraphson encodeValue prop = (Flows.map (\gv -> (Syntax.PropertyKey (Model_.unPropertyKey (Pairs.first prop)), gv)) (encodeValue (Pairs.second prop)))
 
+-- | A coder that converts GraphSON vertices to JSON. Decoding is not supported.
 graphsonVertexToJsonCoder :: (Compute.Coder t0 t1 Syntax.Vertex Model.Value)
 graphsonVertexToJsonCoder = Compute.Coder {
   Compute.coderEncode = (\v -> Flows.pure (Coder.vertexToJson v)),
   Compute.coderDecode = (\_ -> Flows.fail "decoding GraphSON JSON is currently unsupported")}
 
+-- | Convert a property graph vertex with adjacent edges to a GraphSON vertex
 pgVertexWithAdjacentEdgesToGraphsonVertex :: ((t0 -> Compute.Flow t1 Syntax.Value) -> Model_.VertexWithAdjacentEdges t0 -> Compute.Flow t1 Syntax.Vertex)
 pgVertexWithAdjacentEdgesToGraphsonVertex encodeValue vae =  
   let vertex = (Model_.vertexWithAdjacentEdgesVertex vae)
@@ -72,9 +77,11 @@ pgVertexWithAdjacentEdgesToGraphsonVertex encodeValue vae =
               Syntax.vertexOutEdges = (aggregateMap outPairs),
               Syntax.vertexProperties = (aggregateMap propPairs)}))))))
 
+-- | Convert a property graph vertex with adjacent edges to JSON
 pgVertexWithAdjacentEdgesToJson :: ((t0 -> Compute.Flow t1 Syntax.Value) -> Model_.VertexWithAdjacentEdges t0 -> Compute.Flow t1 Model.Value)
 pgVertexWithAdjacentEdgesToJson encodeValue vertex = (Flows.bind (pgVertexWithAdjacentEdgesToGraphsonVertex encodeValue vertex) (\gVertex -> Flows.pure (Coder.vertexToJson gVertex)))
 
+-- | Convert a property graph vertex property to a GraphSON vertex property
 vertexPropertyToGraphson :: ((t0 -> Compute.Flow t1 Syntax.Value) -> (Model_.PropertyKey, t0) -> Compute.Flow t1 (Syntax.PropertyKey, Syntax.VertexPropertyValue))
 vertexPropertyToGraphson encodeValue prop = (Flows.map (\gv -> (Syntax.PropertyKey (Model_.unPropertyKey (Pairs.first prop)), Syntax.VertexPropertyValue {
   Syntax.vertexPropertyValueId = Nothing,

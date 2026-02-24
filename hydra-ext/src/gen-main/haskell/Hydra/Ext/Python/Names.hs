@@ -31,15 +31,13 @@ import qualified Data.Set as S
 useFutureAnnotations :: Bool
 useFutureAnnotations = True
 
-encodeConstantForFieldName :: (t0 -> Core.Name -> Core.Name -> Syntax.Name)
-encodeConstantForFieldName env tname fname = (Syntax.Name (Strings.cat [
-  Formatting.convertCase Util.CaseConventionPascal Util.CaseConventionUpperSnake (Names.localNameOf tname),
-  "__",
-  (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName fname)),
-  "__NAME"]))
+-- | Generate a constant name for a field definition
+encodeConstantForFieldName :: (t0 -> t1 -> Core.Name -> Syntax.Name)
+encodeConstantForFieldName env tname fname = (Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName fname)))
 
-encodeConstantForTypeName :: (t0 -> Core.Name -> Syntax.Name)
-encodeConstantForTypeName env tname = (Syntax.Name (Strings.cat2 (Formatting.convertCase Util.CaseConventionPascal Util.CaseConventionUpperSnake (Names.localNameOf tname)) "__NAME"))
+-- | Generate a constant name for a type definition
+encodeConstantForTypeName :: (t0 -> t1 -> Syntax.Name)
+encodeConstantForTypeName env tname = (Syntax.Name "TYPE_")
 
 -- | Encode a name as a Python enum value (UPPER_SNAKE case)
 encodeEnumValue :: (Helpers.PythonEnvironment -> Core.Name -> Syntax.Name)

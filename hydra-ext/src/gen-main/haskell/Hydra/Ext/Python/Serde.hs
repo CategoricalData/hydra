@@ -776,8 +776,27 @@ encodeTerm t = (encodeFactor (Syntax.termRhs t))
 encodeTargetWithStarAtom :: (Syntax.TargetWithStarAtom -> Ast.Expr)
 encodeTargetWithStarAtom t = ((\x -> case x of
   Syntax.TargetWithStarAtomAtom v1 -> (encodeStarAtom v1)
-  Syntax.TargetWithStarAtomProject _ -> (Serialization.cst "...")
+  Syntax.TargetWithStarAtomProject v1 -> (encodeTPrimaryAndName v1)
   Syntax.TargetWithStarAtomSlices _ -> (Serialization.cst "...")) t)
+
+-- | Serialize a TPrimaryAndName as primary.name
+encodeTPrimaryAndName :: (Syntax.TPrimaryAndName -> Ast.Expr)
+encodeTPrimaryAndName pn =  
+  let prim = (Syntax.tPrimaryAndNamePrimary pn) 
+      name_ = (Syntax.tPrimaryAndNameName pn)
+  in (Serialization.noSep [
+    encodeTPrimary prim,
+    (Serialization.cst "."),
+    (encodeName name_)])
+
+-- | Serialize a target-side primary expression
+encodeTPrimary :: (Syntax.TPrimary -> Ast.Expr)
+encodeTPrimary tp = ((\x -> case x of
+  Syntax.TPrimaryAtom v1 -> (encodeAtom v1)
+  Syntax.TPrimaryPrimaryAndName v1 -> (encodeTPrimaryAndName v1)
+  Syntax.TPrimaryPrimaryAndSlices _ -> (Serialization.cst "...")
+  Syntax.TPrimaryPrimaryAndGenexp _ -> (Serialization.cst "...")
+  Syntax.TPrimaryPrimaryAndArguments _ -> (Serialization.cst "...")) tp)
 
 -- | Serialize a Python tuple
 encodeTuple :: (Syntax.Tuple -> Ast.Expr)
