@@ -126,18 +126,20 @@ def is_nontrivial(is_record: bool, pats: frozenlist[hydra.grammar.Pattern]) -> b
 def is_complex(pat: hydra.grammar.Pattern) -> bool:
     r"""Check if pattern is complex."""
     
-    match pat:
-        case hydra.grammar.PatternLabeled(value=lp):
-            return is_complex(lp.pattern)
-        
-        case hydra.grammar.PatternSequence(value=pats):
-            return is_nontrivial(True, pats)
-        
-        case hydra.grammar.PatternAlternatives(value=pats2):
-            return is_nontrivial(False, pats2)
-        
-        case _:
-            return False
+    while True:
+        match pat:
+            case hydra.grammar.PatternLabeled(value=lp):
+                pat = lp.pattern
+                continue
+            
+            case hydra.grammar.PatternSequence(value=pats):
+                return is_nontrivial(True, pats)
+            
+            case hydra.grammar.PatternAlternatives(value=pats2):
+                return is_nontrivial(False, pats2)
+            
+            case _:
+                return False
 
 def to_name(ns: hydra.module.Namespace, local: str) -> hydra.core.Name:
     r"""Convert local name to qualified name."""
@@ -158,42 +160,44 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
     def mod(n: str, f: Callable[[hydra.core.Type], hydra.core.Type], p: hydra.grammar.Pattern) -> frozenlist[tuple[str, hydra.core.Type]]:
         return descend(n, (lambda pairs: hydra.lib.lists.cons((lname, f(hydra.lib.pairs.second(hydra.lib.lists.head(pairs)))), hydra.lib.lists.tail(pairs))), p)
     def for_pat(pat2: hydra.grammar.Pattern) -> frozenlist[tuple[str, hydra.core.Type]]:
-        match pat2:
-            case hydra.grammar.PatternAlternatives(value=pats):
-                return for_record_or_union(False, (lambda fields: cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(hydra.constants.placeholder_name, fields)))), pats)
-            
-            case hydra.grammar.PatternConstant():
-                return trivial()
-            
-            case hydra.grammar.PatternIgnored():
-                return ()
-            
-            case hydra.grammar.PatternLabeled(value=lp):
-                return for_pat(lp.pattern)
-            
-            case hydra.grammar.PatternNil():
-                return trivial()
-            
-            case hydra.grammar.PatternNonterminal(value=s):
-                return ((lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, s.value)))),)
-            
-            case hydra.grammar.PatternOption(value=p):
-                return mod("Option", (lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), p)
-            
-            case hydra.grammar.PatternPlus(value=p2):
-                return mod("Elmt", (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), p2)
-            
-            case hydra.grammar.PatternRegex():
-                return ((lname, cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))),)
-            
-            case hydra.grammar.PatternSequence(value=pats2):
-                return for_record_or_union(True, (lambda fields: cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(hydra.constants.placeholder_name, fields)))), pats2)
-            
-            case hydra.grammar.PatternStar(value=p3):
-                return mod("Elmt", (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), p3)
-            
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
+        while True:
+            match pat2:
+                case hydra.grammar.PatternAlternatives(value=pats):
+                    return for_record_or_union(False, (lambda fields: cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(hydra.constants.placeholder_name, fields)))), pats)
+                
+                case hydra.grammar.PatternConstant():
+                    return trivial()
+                
+                case hydra.grammar.PatternIgnored():
+                    return ()
+                
+                case hydra.grammar.PatternLabeled(value=lp):
+                    pat2 = lp.pattern
+                    continue
+                
+                case hydra.grammar.PatternNil():
+                    return trivial()
+                
+                case hydra.grammar.PatternNonterminal(value=s):
+                    return ((lname, cast(hydra.core.Type, hydra.core.TypeVariable(to_name(ns, s.value)))),)
+                
+                case hydra.grammar.PatternOption(value=p):
+                    return mod("Option", (lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), p)
+                
+                case hydra.grammar.PatternPlus(value=p2):
+                    return mod("Elmt", (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), p2)
+                
+                case hydra.grammar.PatternRegex():
+                    return ((lname, cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))),)
+                
+                case hydra.grammar.PatternSequence(value=pats2):
+                    return for_record_or_union(True, (lambda fields: cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(hydra.constants.placeholder_name, fields)))), pats2)
+                
+                case hydra.grammar.PatternStar(value=p3):
+                    return mod("Elmt", (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), p3)
+                
+                case _:
+                    raise AssertionError("Unreachable: all variants handled")
     def for_record_or_union(is_record: bool, construct: Callable[[frozenlist[hydra.core.FieldType]], hydra.core.Type], pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[tuple[str, hydra.core.Type]]:
         @lru_cache(1)
         def min_pats() -> frozenlist[hydra.grammar.Pattern]:

@@ -470,27 +470,31 @@ def decode_module(mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Gr
 def decoder_result_type(typ: hydra.core.Type) -> hydra.core.Name:
     r"""Compute the result type name for a decoder."""
     
-    match typ:
-        case hydra.core.TypeAnnotated(value=at):
-            return decoder_result_type(at.body)
-        
-        case hydra.core.TypeApplication(value=app_type):
-            return decoder_result_type(app_type.function)
-        
-        case hydra.core.TypeForall(value=ft):
-            return decoder_result_type(ft.body)
-        
-        case hydra.core.TypeLiteral():
-            return hydra.core.Name("hydra.core.Literal")
-        
-        case hydra.core.TypeRecord(value=rt):
-            return rt.type_name
-        
-        case hydra.core.TypeUnion(value=rt2):
-            return rt2.type_name
-        
-        case hydra.core.TypeWrap(value=wt):
-            return wt.type_name
-        
-        case _:
-            return hydra.core.Name("hydra.core.Term")
+    while True:
+        match typ:
+            case hydra.core.TypeAnnotated(value=at):
+                typ = at.body
+                continue
+            
+            case hydra.core.TypeApplication(value=app_type):
+                typ = app_type.function
+                continue
+            
+            case hydra.core.TypeForall(value=ft):
+                typ = ft.body
+                continue
+            
+            case hydra.core.TypeLiteral():
+                return hydra.core.Name("hydra.core.Literal")
+            
+            case hydra.core.TypeRecord(value=rt):
+                return rt.type_name
+            
+            case hydra.core.TypeUnion(value=rt2):
+                return rt2.type_name
+            
+            case hydra.core.TypeWrap(value=wt):
+                return wt.type_name
+            
+            case _:
+                return hydra.core.Name("hydra.core.Term")

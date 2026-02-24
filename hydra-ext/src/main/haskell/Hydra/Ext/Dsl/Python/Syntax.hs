@@ -105,6 +105,12 @@ simpleStatementRaise = inject Py._SimpleStatement Py._SimpleStatement_raise
 simpleStatementPass :: TTerm Py.SimpleStatement
 simpleStatementPass = injectUnit Py._SimpleStatement Py._SimpleStatement_pass
 
+simpleStatementBreak :: TTerm Py.SimpleStatement
+simpleStatementBreak = injectUnit Py._SimpleStatement Py._SimpleStatement_break
+
+simpleStatementContinue :: TTerm Py.SimpleStatement
+simpleStatementContinue = injectUnit Py._SimpleStatement Py._SimpleStatement_continue
+
 -- =============================================================================
 -- CompoundStatement (union type)
 -- =============================================================================
@@ -117,6 +123,19 @@ compoundStatementClassDef = inject Py._CompoundStatement Py._CompoundStatement_c
 
 compoundStatementMatch :: TTerm Py.MatchStatement -> TTerm Py.CompoundStatement
 compoundStatementMatch = inject Py._CompoundStatement Py._CompoundStatement_match
+
+compoundStatementWhile :: TTerm Py.WhileStatement -> TTerm Py.CompoundStatement
+compoundStatementWhile = inject Py._CompoundStatement Py._CompoundStatement_while
+
+-- =============================================================================
+-- WhileStatement (record type)
+-- =============================================================================
+
+whileStatement :: TTerm Py.NamedExpression -> TTerm Py.Block -> TTerm (Maybe Py.Block) -> TTerm Py.WhileStatement
+whileStatement cond body else_ = record Py._WhileStatement [
+  Py._WhileStatement_condition>>: cond,
+  Py._WhileStatement_body>>: body,
+  Py._WhileStatement_else>>: else_]
 
 -- =============================================================================
 -- FunctionDefinition (record type)

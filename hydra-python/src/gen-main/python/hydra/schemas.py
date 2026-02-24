@@ -73,28 +73,32 @@ def definition_dependency_namespaces(defs: frozenlist[hydra.module.Definition]) 
 def is_encoded_term(t: hydra.core.Term) -> bool:
     r"""Determines whether a given term is an encoded term (meta-level term)."""
     
-    match hydra.rewriting.deannotate_term(t):
-        case hydra.core.TermApplication(value=a):
-            return is_encoded_term(a.function)
-        
-        case hydra.core.TermUnion(value=i):
-            return hydra.lib.equality.equal("hydra.core.Term", i.type_name.value)
-        
-        case _:
-            return False
+    while True:
+        match hydra.rewriting.deannotate_term(t):
+            case hydra.core.TermApplication(value=a):
+                t = a.function
+                continue
+            
+            case hydra.core.TermUnion(value=i):
+                return hydra.lib.equality.equal("hydra.core.Term", i.type_name.value)
+            
+            case _:
+                return False
 
 def is_encoded_type(t: hydra.core.Term) -> bool:
     r"""Determines whether a given term is an encoded type."""
     
-    match hydra.rewriting.deannotate_term(t):
-        case hydra.core.TermApplication(value=a):
-            return is_encoded_type(a.function)
-        
-        case hydra.core.TermUnion(value=i):
-            return hydra.lib.equality.equal("hydra.core.Type", i.type_name.value)
-        
-        case _:
-            return False
+    while True:
+        match hydra.rewriting.deannotate_term(t):
+            case hydra.core.TermApplication(value=a):
+                t = a.function
+                continue
+            
+            case hydra.core.TermUnion(value=i):
+                return hydra.lib.equality.equal("hydra.core.Type", i.type_name.value)
+            
+            case _:
+                return False
 
 def dependency_namespaces(binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, els: frozenlist[hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, frozenset[hydra.module.Namespace]]:
     r"""Find dependency namespaces in all of a set of terms."""
@@ -149,26 +153,31 @@ def extend_type_context_for_type_lambda(tcontext: hydra.typing.TypeContext, tlam
 def f_type_is_polymorphic(typ: hydra.core.Type) -> bool:
     r"""Test whether a given System F type is polymorphic (i.e., a forall type)."""
     
-    match typ:
-        case hydra.core.TypeAnnotated(value=at):
-            return f_type_is_polymorphic(at.body)
-        
-        case hydra.core.TypeForall():
-            return True
-        
-        case _:
-            return False
+    while True:
+        match typ:
+            case hydra.core.TypeAnnotated(value=at):
+                typ = at.body
+                continue
+            
+            case hydra.core.TypeForall():
+                return True
+            
+            case _:
+                return False
 
 def f_type_to_type_scheme(typ: hydra.core.Type) -> hydra.core.TypeScheme:
     r"""Convert a forall type to a type scheme."""
     
     def gather_forall(vars: frozenlist[hydra.core.Name], typ2: hydra.core.Type) -> hydra.core.TypeScheme:
-        match hydra.rewriting.deannotate_type(typ2):
-            case hydra.core.TypeForall(value=ft):
-                return gather_forall(hydra.lib.lists.cons(ft.parameter, vars), ft.body)
-            
-            case _:
-                return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), typ2, Nothing())
+        while True:
+            match hydra.rewriting.deannotate_type(typ2):
+                case hydra.core.TypeForall(value=ft):
+                    vars = hydra.lib.lists.cons(ft.parameter, vars)
+                    typ2 = ft.body
+                    continue
+                
+                case _:
+                    return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), typ2, Nothing())
     return gather_forall((), typ)
 
 def field_map(fields: frozenlist[hydra.core.Field]) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
@@ -214,16 +223,13 @@ def fully_strip_and_normalize_type(typ: hydra.core.Type) -> hydra.core.Type:
     r"""Fully strip a type of forall quantifiers, normalizing bound variable names for alpha-equivalence comparison."""
     
     def go(depth: int, subst: FrozenDict[hydra.core.Name, hydra.core.Name], t: hydra.core.Type) -> tuple[FrozenDict[hydra.core.Name, hydra.core.Name], hydra.core.Type]:
-        match hydra.rewriting.deannotate_type(t):
-            case hydra.core.TypeForall(value=ft):
-                old_var = ft.parameter
-                @lru_cache(1)
-                def new_var() -> hydra.core.Name:
-                    return hydra.core.Name(hydra.lib.strings.cat2("_", hydra.lib.literals.show_int32(depth)))
-                return go(hydra.lib.math.add(depth, 1), hydra.lib.maps.insert(old_var, new_var(), subst), ft.body)
-            
-            case _:
-                return (subst, t)
+        while True:
+            match hydra.rewriting.deannotate_type(t):
+                case hydra.core.TypeForall(value=ft):
+                    return (old_var := ft.parameter, (new_var := hydra.core.Name(hydra.lib.strings.cat2("_", hydra.lib.literals.show_int32(depth))), go(hydra.lib.math.add(depth, 1), hydra.lib.maps.insert(old_var, new_var, subst), ft.body))[1])[1]
+                
+                case _:
+                    return (subst, t)
     @lru_cache(1)
     def result() -> tuple[FrozenDict[hydra.core.Name, hydra.core.Name], hydra.core.Type]:
         return go(0, hydra.lib.maps.empty(), typ)
@@ -238,12 +244,14 @@ def fully_strip_and_normalize_type(typ: hydra.core.Type) -> hydra.core.Type:
 def fully_strip_type(typ: hydra.core.Type) -> hydra.core.Type:
     r"""Fully strip a type of forall quantifiers."""
     
-    match hydra.rewriting.deannotate_type(typ):
-        case hydra.core.TypeForall(value=ft):
-            return fully_strip_type(ft.body)
-        
-        case _:
-            return typ
+    while True:
+        match hydra.rewriting.deannotate_type(typ):
+            case hydra.core.TypeForall(value=ft):
+                typ = ft.body
+                continue
+            
+            case _:
+                return typ
 
 def graph_as_let(g: hydra.graph.Graph) -> hydra.core.Let:
     r"""Convert a graph to a let expression."""
@@ -264,12 +272,15 @@ def schema_graph_to_typing_environment(g: hydra.graph.Graph) -> hydra.compute.Fl
     r"""Convert a schema graph to a typing environment."""
     
     def to_type_scheme(vars: frozenlist[hydra.core.Name], typ: hydra.core.Type) -> hydra.core.TypeScheme:
-        match hydra.rewriting.deannotate_type(typ):
-            case hydra.core.TypeForall(value=ft):
-                return to_type_scheme(hydra.lib.lists.cons(ft.parameter, vars), ft.body)
-            
-            case _:
-                return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), typ, Nothing())
+        while True:
+            match hydra.rewriting.deannotate_type(typ):
+                case hydra.core.TypeForall(value=ft):
+                    vars = hydra.lib.lists.cons(ft.parameter, vars)
+                    typ = ft.body
+                    continue
+                
+                case _:
+                    return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), typ, Nothing())
     def to_pair(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[tuple[hydra.core.Name, hydra.core.TypeScheme]]]:
         return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (for_term := (lambda term: (lambda r: hydra.lib.logic.if_else(hydra.lib.equality.equal(r.type_name, hydra.core.Name("hydra.core.TypeScheme")), (lambda : hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type_scheme(cx, el.term)))), (lambda : hydra.lib.flows.pure(Nothing()))))(term.value) if isinstance(term, hydra.core.TermRecord) else (lambda i: hydra.lib.logic.if_else(hydra.lib.equality.equal(i.type_name, hydra.core.Name("hydra.core.Type")), (lambda : hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term)))), (lambda : hydra.lib.flows.pure(Nothing()))))(term.value) if isinstance(term, hydra.core.TermUnion) else hydra.lib.flows.pure(Nothing())), hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda typ: Just(f_type_to_type_scheme(typ))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda ts: hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.TypeScheme"))), Nothing())), (lambda : hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type_scheme(cx, el.term)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())), (lambda : hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term)))), (lambda : for_term(hydra.rewriting.deannotate_term(el.term))))))), el.type), (lambda mts: hydra.lib.flows.pure(hydra.lib.maybes.map((lambda ts: (el.name, ts)), mts)))))[1]))
     return hydra.monads.with_trace("schema graph to typing environment", hydra.monads.with_state(g, hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: to_pair(x1)), g.elements), (lambda mpairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(hydra.lib.maybes.cat(mpairs)))))))
@@ -303,12 +314,15 @@ def type_to_type_scheme(t0: hydra.core.Type) -> hydra.core.TypeScheme:
     r"""Convert a (System F -style) type to a type scheme."""
     
     def helper(vars: frozenlist[hydra.core.Name], t: hydra.core.Type) -> hydra.core.TypeScheme:
-        match hydra.rewriting.deannotate_type(t):
-            case hydra.core.TypeForall(value=ft):
-                return helper(hydra.lib.lists.cons(ft.parameter, vars), ft.body)
-            
-            case _:
-                return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), t, Nothing())
+        while True:
+            match hydra.rewriting.deannotate_type(t):
+                case hydra.core.TypeForall(value=ft):
+                    vars = hydra.lib.lists.cons(ft.parameter, vars)
+                    t = ft.body
+                    continue
+                
+                case _:
+                    return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), t, Nothing())
     return helper((), t0)
 
 def instantiate_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
@@ -371,21 +385,24 @@ def is_serializable_type(typ: hydra.core.Type) -> bool:
 def is_type(t: hydra.core.Type) -> bool:
     r"""Check whether a type is a type (always true for non-encoded types)."""
     
-    match hydra.rewriting.deannotate_type(t):
-        case hydra.core.TypeApplication(value=a):
-            return is_type(a.function)
-        
-        case hydra.core.TypeForall(value=l):
-            return is_type(l.body)
-        
-        case hydra.core.TypeUnion(value=rt):
-            return hydra.lib.equality.equal("hydra.core.Type", rt.type_name.value)
-        
-        case hydra.core.TypeVariable(value=v):
-            return hydra.lib.equality.equal(v, hydra.core.Name("hydra.core.Type"))
-        
-        case _:
-            return False
+    while True:
+        match hydra.rewriting.deannotate_type(t):
+            case hydra.core.TypeApplication(value=a):
+                t = a.function
+                continue
+            
+            case hydra.core.TypeForall(value=l):
+                t = l.body
+                continue
+            
+            case hydra.core.TypeUnion(value=rt):
+                return hydra.lib.equality.equal("hydra.core.Type", rt.type_name.value)
+            
+            case hydra.core.TypeVariable(value=v):
+                return hydra.lib.equality.equal(v, hydra.core.Name("hydra.core.Type"))
+            
+            case _:
+                return False
 
 def is_unit_term(v1: hydra.core.Term) -> bool:
     r"""Check whether a term is the unit term."""
@@ -474,15 +491,18 @@ def require_row_type(label: str, getter: Callable[[hydra.core.Type], Maybe[T0]],
     r"""Require a name to resolve to a row type."""
     
     def raw_type(t: hydra.core.Type) -> hydra.core.Type:
-        match t:
-            case hydra.core.TypeAnnotated(value=at):
-                return raw_type(at.body)
-            
-            case hydra.core.TypeForall(value=ft):
-                return raw_type(ft.body)
-            
-            case _:
-                return t
+        while True:
+            match t:
+                case hydra.core.TypeAnnotated(value=at):
+                    t = at.body
+                    continue
+                
+                case hydra.core.TypeForall(value=ft):
+                    t = ft.body
+                    continue
+                
+                case _:
+                    return t
     return hydra.lib.flows.bind(require_type(name), (lambda t: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat((name.value, " does not resolve to a ", label, " type: ", hydra.show.core.type(t)))), (lambda x1: hydra.lib.flows.pure(x1)), getter(raw_type(t)))))
 
 def require_record_type(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.RowType]:

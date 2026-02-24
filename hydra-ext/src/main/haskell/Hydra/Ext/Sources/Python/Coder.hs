@@ -215,6 +215,10 @@ module_ = Module ns elements
       toBinding withDefinitions,
       -- Binding encoding
       toBinding encodeBindingAsAssignment,
+      -- Tail-call optimization
+      toBinding isSelfTailRecursive,
+      toBinding isTailRecursiveInTailPosition,
+      toBinding encodeTermMultilineTCO,
       toBinding encodeFunctionDefinition,
       toBinding encodeTermMultiline,
       toBinding encodeFunction,
@@ -1887,6 +1891,200 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
     "pterm" <~ (Logic.ifElse (var "needsThunk") (makeThunk @@ var "pbody") (var "pbody")) $
     produce $ PyDsl.namedExpressionAssignment $ PyDsl.assignmentExpression (var "pyName") (var "pterm")
 
+-- =============================================================================
+-- Tail-call optimization (TCO)
+-- =============================================================================
+
+-- | Check if a term body is self-tail-recursive with respect to a function name.
+--   Returns True if the function references itself AND all self-references are in tail position.
+--   Note: isFreeVariableInTerm returns True when the variable is NOT present (confusing API).
+isSelfTailRecursive :: TBinding (Name -> Term -> Bool)
+isSelfTailRecursive = def "isSelfTailRecursive" $
+  doc "Check if a term body is self-tail-recursive with respect to a function name" $
+  "funcName" ~> "body" ~>
+    -- isFreeVariableInTerm returns True when v is NOT free (not present).
+    -- So Logic.not means: the name IS present as a free variable.
+    "callsSelf" <~ Logic.not (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "body") $
+    Logic.ifElse (var "callsSelf")
+      (isTailRecursiveInTailPosition @@ var "funcName" @@ var "body")
+      false
+
+-- | Check that all occurrences of funcName in a term are in tail position.
+--   Called after confirming funcName IS present in the term.
+--   Returns True if the term is safe for TCO transformation.
+isTailRecursiveInTailPosition :: TBinding (Name -> Term -> Bool)
+isTailRecursiveInTailPosition = def "isTailRecursiveInTailPosition" $
+  doc "Check that all self-references are in tail position" $
+  "funcName" ~> "term" ~>
+    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    cases _Term (var "stripped") (Just $
+      -- Default: funcName must NOT appear free in this term (not a recognized tail position)
+      Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+      -- Application: check if it's a self-tail-call or a case statement application
+      _Term_application>>: "app" ~>
+        "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
+        "gatherArgs" <~ (Pairs.first $ var "gathered") $
+        "gatherFun" <~ (Pairs.second $ var "gathered") $
+        "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+        cases _Term (var "strippedFun") (Just $
+          -- Unknown function form: funcName must not appear anywhere
+          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+          -- Variable: check if self-call
+          _Term_variable>>: "vname" ~>
+            Logic.ifElse (Equality.equal (var "vname") (var "funcName"))
+              -- Self-call in tail position: args must not contain funcName
+              -- and must not contain lambdas (closures over parameters break TCO
+              -- because Python closures capture by reference, not by value)
+              ("argsNoFunc" <~ (Lists.foldl
+                ("ok" ~> "arg" ~>
+                  Logic.and (var "ok")
+                    (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
+                true
+                (var "gatherArgs")) $
+               "argsNoLambda" <~ (Lists.foldl
+                ("ok" ~> "arg" ~>
+                  Logic.and (var "ok")
+                    (Logic.not $ Rewriting.foldOverTerm @@ Coders.traversalOrderPre
+                      @@ ("found" ~> "t" ~>
+                        Logic.or (var "found")
+                          (cases _Term (var "t") (Just false) [
+                            _Term_function>>: "f2" ~>
+                              cases _Function (var "f2") (Just false) [
+                                _Function_lambda>>: "lam" ~>
+                                  -- Any lambda in an argument disqualifies from TCO
+                                  "ignore" <~ (Core.lambdaBody $ var "lam") $
+                                  true]]))
+                      @@ false
+                      @@ var "arg"))
+                true
+                (var "gatherArgs")) $
+               Logic.and (var "argsNoFunc") (var "argsNoLambda"))
+              -- Not a self-call: funcName must not appear anywhere in the term
+              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term"),
+          -- Function: check for case statement (union elimination)
+          _Term_function>>: "f" ~>
+            cases _Function (var "f") (Just $
+              Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+              _Function_elimination>>: "e" ~>
+                cases _Elimination (var "e") (Just $
+                  Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+                  _Elimination_union>>: "cs" ~>
+                    "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                    "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                    -- All case branches must have funcName only in tail position
+                    "branchesOk" <~ (Lists.foldl
+                      ("ok" ~> "field" ~>
+                        Logic.and (var "ok")
+                          (isTailRecursiveInTailPosition @@ var "funcName" @@ Core.fieldTerm (var "field")))
+                      true
+                      (var "cases_")) $
+                    -- Default branch (if present) must also be tail-recursive
+                    "dfltOk" <~ (Maybes.maybe true
+                      ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")
+                      (var "dflt")) $
+                    -- Arguments to the case statement must NOT contain funcName
+                    "argsOk" <~ (Lists.foldl
+                      ("ok" ~> "arg" ~>
+                        Logic.and (var "ok")
+                          (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
+                      true
+                      (var "gatherArgs")) $
+                    Logic.and (Logic.and (var "branchesOk") (var "dfltOk")) (var "argsOk")]]],
+      -- Lambda: tail position is the body
+      _Term_function>>: "f" ~>
+        cases _Function (var "f") (Just $
+          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+          _Function_lambda>>: "lam" ~>
+            isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.lambdaBody $ var "lam")],
+      -- Let: tail position is the body; bindings must not contain funcName
+      _Term_let>>: "lt" ~>
+        "bindingsOk" <~ (Lists.foldl
+          ("ok" ~> "b" ~>
+            Logic.and (var "ok")
+              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ Core.bindingTerm (var "b")))
+          true
+          (Core.letBindings $ var "lt")) $
+        Logic.and (var "bindingsOk")
+          (isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.letBody $ var "lt"))]
+
+-- | Encode a term body for TCO: tail self-calls become param reassignment + continue.
+--   Non-recursive returns stay as normal return statements.
+encodeTermMultilineTCO :: TBinding (PyHelpers.PythonEnvironment
+  -> Name -> [Name] -> TTerm Term
+  -> Flow PyHelpers.PyGraph [Py.Statement])
+encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
+  doc "Encode a term body for TCO: tail self-calls become param reassignment + continue" $
+  "env" ~> "funcName" ~> "paramNames" ~> "term" ~>
+    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    -- Check if this term is a direct self-tail-call: funcName(args...)
+    "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
+    "gatherArgs" <~ (Pairs.first $ var "gathered") $
+    "gatherFun" <~ (Pairs.second $ var "gathered") $
+    "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+    -- Check for self-call pattern: Variable(funcName)
+    "isSelfCall" <~ (cases _Term (var "strippedFun")
+      (Just false) [
+        _Term_variable>>: "n" ~> Equality.equal (var "n") (var "funcName")]) $
+    Logic.ifElse (Logic.and (var "isSelfCall")
+                            (Equality.equal (Lists.length $ var "gatherArgs") (Lists.length $ var "paramNames")))
+      -- TAIL CALL: emit param reassignment + continue
+      ("pyArgs" <<~ Flows.mapList ("a" ~> encodeTermInline @@ var "env" @@ false @@ var "a") (var "gatherArgs") $
+        "assignments" <~ (Lists.map ("pair" ~>
+          "paramName" <~ (Pairs.first $ var "pair") $
+          "pyArg" <~ (Pairs.second $ var "pair") $
+          PyUtils.assignmentStatement
+            @@ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "paramName")
+            @@ var "pyArg")
+          (Lists.zip (var "paramNames") (var "pyArgs"))) $
+        "continueStmt" <~ (PyDsl.statementSimple $ list [PyDsl.simpleStatementContinue]) $
+        produce $ Lists.concat2 (var "assignments") (list [var "continueStmt"]))
+      -- NOT a self-call: check for case statement application
+      ("gathered2" <~ (CoderUtils.gatherApplications @@ var "term") $
+        "args2" <~ (Pairs.first $ var "gathered2") $
+        "body2" <~ (Pairs.second $ var "gathered2") $
+        Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
+          -- Single argument: try to match as case statement
+          ("arg" <~ (Lists.head $ var "args2") $
+            cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body2") (Just $
+              -- Default: not a case statement, encode as return
+              "expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+              produce $ list [PyUtils.returnSingle @@ var "expr"]) [
+              _Term_function>>: "f" ~>
+                cases _Function (var "f") (Just $
+                  "expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+                  produce $ list [PyUtils.returnSingle @@ var "expr"]) [
+                  _Function_elimination>>: "e" ~>
+                    cases _Elimination (var "e") (Just $
+                      "expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+                      produce $ list [PyUtils.returnSingle @@ var "expr"]) [
+                      _Elimination_union>>: "cs" ~>
+                        -- Case statement: use encodeCaseBlock with TCO-aware body encoder
+                        "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+                        "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                        "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                        "rt" <<~ (inGraphContext @@ (Schemas.requireUnionType @@ var "tname")) $
+                        "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
+                        "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
+                        "pyArg" <<~ (encodeTermInline @@ var "env" @@ false @@ var "arg") $
+                        -- Use TCO body encoder for each case branch
+                        "pyCases" <<~ (Flows.mapList
+                          (encodeCaseBlock @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum"
+                            @@ ("e2" ~> "t2" ~> encodeTermMultilineTCO @@ var "e2" @@ var "funcName" @@ var "paramNames" @@ var "t2"))
+                          (deduplicateCaseVariables @@ var "cases_")) $
+                        -- Default case: uses normal return encoding (base case is never a tail call)
+                        "pyDflt" <<~ (encodeDefaultCaseBlock
+                          @@ ("t2" ~> encodeTermInline @@ var "env" @@ false @@ var "t2")
+                          @@ var "isFull" @@ var "dflt" @@ var "tname") $
+                        "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
+                        "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $
+                          Phantoms.record Py._MatchStatement [
+                            Phantoms.field Py._MatchStatement_subject (var "subj"),
+                            Phantoms.field Py._MatchStatement_cases (Lists.concat2 (var "pyCases") (var "pyDflt"))]) $
+                        produce $ list [var "matchStmt"]]]])
+          -- Not a single-arg application: fall back to normal return
+          ("expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+            produce $ list [PyUtils.returnSingle @@ var "expr"]))
+
 -- | Encode a function definition with parameters and body.
 --   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
 encodeFunctionDefinition :: TBinding (PyHelpers.PythonEnvironment
@@ -1906,8 +2104,23 @@ encodeFunctionDefinition = def "encodeFunctionDefinition" $
           (just $ PyDsl.annotation $ var "pyTyp"))
       (Lists.zip (var "args") (var "doms")) $
     "pyParams" <~ (PyDsl.parametersParamNoDefault $ PyDsl.paramNoDefaultParameters (var "pyArgs") (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])) nothing) $
-    "stmts" <<~ (encodeTermMultiline @@ var "env" @@ var "body") $
-    "block" <~ (PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")]) $
+    -- Check for tail-call optimization opportunity
+    "isTCO" <~ (Logic.and
+      (Logic.not $ Lists.null (var "args"))
+      (isSelfTailRecursive @@ var "name" @@ var "body")) $
+    "block" <<~ (Logic.ifElse (var "isTCO")
+      -- TCO path: wrap body in while True loop
+      -- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
+      -- re-evaluated each iteration when parameters change via reassignment + continue.
+      ("tcoStmts" <<~ (encodeTermMultilineTCO @@ var "env" @@ var "name" @@ var "args" @@ var "body") $
+        "trueExpr" <~ (PyDsl.namedExpressionSimple $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue) $
+        "whileBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [Lists.concat2 (var "prefixes") (var "tcoStmts")]) $
+        "whileStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementWhile $
+          PyDsl.whileStatement (var "trueExpr") (var "whileBody") nothing) $
+        produce $ PyUtils.indentedBlock @@ var "comment" @@ list [list [var "whileStmt"]])
+      -- Normal path: encode body as statements with return
+      ("stmts" <<~ (encodeTermMultiline @@ var "env" @@ var "body") $
+        produce $ PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")])) $
     -- Encode return type if present
     "mreturnType" <<~ optCases (var "mcod")
       (Flows.pure (nothing :: TTerm (Maybe Py.Expression)))
