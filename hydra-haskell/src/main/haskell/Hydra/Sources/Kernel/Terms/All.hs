@@ -11,6 +11,7 @@ import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils     as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
+import qualified Hydra.Sources.Kernel.Terms.CodeGeneration  as CodeGeneration
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decoding        as Decoding
 import qualified Hydra.Sources.Kernel.Terms.Encoding        as Encoding
@@ -104,6 +105,7 @@ kernelPrimaryTermsModules = [
   Annotations.module_,
   Arity.module_,
   Checking.module_,
+  CodeGeneration.module_,
   Constants.module_,
   Decoding.module_,
   Encoding.module_,

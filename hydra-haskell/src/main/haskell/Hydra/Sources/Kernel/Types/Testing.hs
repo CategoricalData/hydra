@@ -78,6 +78,7 @@ module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, JsonModel
       writerTestCase,
       substInTypeTestCase,
       variableOccursInTypeTestCase,
+      unshadowVariablesTestCase,
       unifyTypesTestCase,
       joinTypesTestCase]
 
@@ -620,7 +621,10 @@ testCase = define "TestCase" $
       unifyTypesTestCase,
     "joinTypes">:
       doc "A join types test (produce type constraints)"
-      joinTypesTestCase]
+      joinTypesTestCase,
+    "unshadowVariables">:
+      doc "An unshadow variables test"
+      unshadowVariablesTestCase]
 
 testCaseWithMetadata :: Binding
 testCaseWithMetadata = define "TestCaseWithMetadata" $
@@ -833,3 +837,15 @@ joinTypesTestCase = define "JoinTypesTestCase" $
     "expected">:
       doc "The expected result: Left for failure, Right for constraints" $
       T.either_ T.unit (T.list Typing.typeConstraint)]
+
+unshadowVariablesTestCase :: Binding
+unshadowVariablesTestCase = define "UnshadowVariablesTestCase" $
+  doc ("A test case which renames shadowed variables in a term"
+    <> " and compares the result with the expected term") $
+  T.record [
+    "input">:
+      doc "The term with potentially shadowed variables"
+      Core.term,
+    "output">:
+      doc "The expected term after unshadowing"
+      Core.term]

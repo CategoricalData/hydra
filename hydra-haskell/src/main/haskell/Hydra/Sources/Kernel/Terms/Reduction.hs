@@ -246,9 +246,51 @@ etaExpandTermNew = define "etaExpandTermNew" $
         optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
           (int32 0) Arity.typeArity]) $
 
+  -- domainTypes: extract domain types from a function type, returning a list of Maybe Type
+  -- For a type A -> B -> C with n=2, returns [Just A, Just B]
+  "domainTypes" <~ ("n" ~> "mt" ~>
+    Logic.ifElse (Equality.lte (var "n") (int32 0))
+      (list ([] :: [TTerm (Maybe Type)]))
+      (optCases (var "mt")
+        -- No type available: return n copies of Nothing
+        (Lists.map (constant nothing) (Math.range (int32 1) (var "n")))
+        ("typ" ~>
+          cases _Type (var "typ")
+            (Just $ Lists.map (constant nothing) (Math.range (int32 1) (var "n"))) [
+            _Type_function>>: "ftyp" ~>
+              Lists.cons (just $ Core.functionTypeDomain $ var "ftyp")
+                (var "domainTypes" @@ Math.sub (var "n") (int32 1) @@ just (Core.functionTypeCodomain $ var "ftyp")),
+            _Type_annotated>>: "at" ~>
+              var "domainTypes" @@ var "n" @@ just (Core.annotatedTypeBody $ var "at"),
+            _Type_application>>: "atyp" ~>
+              var "domainTypes" @@ var "n" @@ just (Core.applicationTypeFunction $ var "atyp"),
+            _Type_forall>>: "ft" ~>
+              var "domainTypes" @@ var "n" @@ just (Core.forallTypeBody $ var "ft")]))) $
+
+  -- peelFunctionDomains: given a Maybe Type and a count, peel n function type domains.
+  -- Returns the remaining type after stripping n arrow domains.
+  -- For Just (A -> B -> C) with n=1, returns Just (B -> C).
+  "peelFunctionDomains" <~ ("mtyp" ~> "n" ~>
+    Logic.ifElse (Equality.lte (var "n") (int32 0))
+      (var "mtyp")
+      (optCases (var "mtyp")
+        nothing
+        ("typ" ~>
+          cases _Type (var "typ")
+            (Just nothing) [
+            _Type_function>>: "ftyp" ~>
+              var "peelFunctionDomains" @@ just (Core.functionTypeCodomain $ var "ftyp") @@ Math.sub (var "n") (int32 1),
+            _Type_annotated>>: "at" ~>
+              var "peelFunctionDomains" @@ just (Core.annotatedTypeBody $ var "at") @@ var "n",
+            _Type_application>>: "atyp" ~>
+              var "peelFunctionDomains" @@ just (Core.applicationTypeFunction $ var "atyp") @@ var "n",
+            _Type_forall>>: "ft" ~>
+              var "peelFunctionDomains" @@ just (Core.forallTypeBody $ var "ft") @@ var "n"]))) $
+
   -- expand: apply args to head and pad with lambdas if needed
   -- alwaysPad: if true, pad even when args is empty (for eliminations)
-  "expand" <~ ("alwaysPad" ~> "args" ~> "arity" ~> "head" ~>
+  -- headTyp: Maybe Type of the head term (before args are applied)
+  "expand" <~ ("alwaysPad" ~> "args" ~> "arity" ~> "headTyp" ~> "head" ~>
     "applied" <~ Lists.foldl
       ("lhs" ~> "arg" ~> Core.termApplication (Core.application (var "lhs") (var "arg")))
       (var "head") (var "args") $
@@ -259,19 +301,33 @@ etaExpandTermNew = define "etaExpandTermNew" $
                             (Logic.or (var "alwaysPad") (Equality.gt (var "numArgs") (int32 0))))
       -- Pad with lambdas: first build fully applied term, then wrap with lambdas
       ("indices" <~ Math.range (int32 1) (var "needed") $
+       -- Compute domain types for the wrapper lambdas from the head's type after applying numArgs
+       "remainingType" <~ var "peelFunctionDomains" @@ var "headTyp" @@ var "numArgs" $
+       "domains" <~ var "domainTypes" @@ var "needed" @@ var "remainingType" $
        -- Step 1: Build fully applied term: applied v1 v2 ... vn
-       "fullyApplied" <~ Lists.foldl
+       -- Also compute the codomain type (type of fullyApplied) for annotation
+       "codomainType" <~ var "peelFunctionDomains" @@ var "remainingType" @@ var "needed" $
+       "fullyAppliedRaw" <~ Lists.foldl
          ("body" ~> "i" ~>
            "vn" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
            Core.termApplication $ Core.application (var "body") (Core.termVariable $ var "vn"))
          (var "applied") (var "indices") $
+       -- Annotate fullyApplied with its codomain type so downstream coders can determine the return type
+       "fullyApplied" <~ Maybes.maybe (var "fullyAppliedRaw")
+         ("ct" ~> Core.termAnnotated $ Core.annotatedTerm (var "fullyAppliedRaw")
+           (Maps.singleton (Core.name (string "type")) (Phantoms.encoderFor _Type @@ var "ct")))
+         (var "codomainType") $
        -- Step 2: Wrap with lambdas from inside out by reversing indices: \v1 -> \v2 -> ... -> fullyApplied
-       -- Using foldl with reversed indices gives us: for [2,1], wrap v2 first (innermost), then v1 (outermost)
+       -- Using foldl with reversed indices+domains gives us: for [2,1], wrap v2 first (innermost), then v1 (outermost)
+       -- Zip indices with domains to pair each lambda with its domain type
+       "indexedDomains" <~ Lists.zip (var "indices") (var "domains") $
        Lists.foldl
-         ("body" ~> "i" ~>
+         ("body" ~> "idPair" ~>
+           "i" <~ Pairs.first (var "idPair") $
+           "dom" <~ Pairs.second (var "idPair") $
            "vn" <~ Core.name (Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
-           Core.termFunction $ Core.functionLambda $ Core.lambda (var "vn") nothing (var "body"))
-         (var "fullyApplied") (Lists.reverse (var "indices")))
+           Core.termFunction $ Core.functionLambda $ Core.lambda (var "vn") (var "dom") (var "body"))
+         (var "fullyApplied") (Lists.reverse (var "indexedDomains")))
       (var "applied")) $
 
   -- rewriteWithArgs: tracks accumulated args as we descend into application spines
@@ -280,10 +336,43 @@ etaExpandTermNew = define "etaExpandTermNew" $
     -- recurse is shorthand for calling rewriteWithArgs with empty args
     "recurse" <~ ("tx1" ~> "term1" ~> var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ var "term1") $
 
+    -- termHeadType: extract the type of a term's "head" (the variable/primitive at its core)
+    -- by following annotations, lets, type applications, and type lambdas.
+    -- Returns Nothing for terms whose head type can't be determined from the context.
+    "termHeadType" <~ ("tx2" ~> "trm2" ~>
+      cases _Term (var "trm2")
+        (Just nothing) [
+        _Term_annotated>>: "at2" ~>
+          var "termHeadType" @@ var "tx2" @@ Core.annotatedTermBody (var "at2"),
+        _Term_function>>: "f2" ~> cases _Function (var "f2") (Just nothing) [
+          _Function_primitive>>: "pn2" ~>
+            Maybes.map ("ts2" ~> Core.typeSchemeType $ var "ts2")
+              (Maps.lookup (var "pn2") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx2"))],
+        _Term_let>>: "l2" ~>
+          var "termHeadType"
+            @@ (Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx2" @@ var "l2")
+            @@ Core.letBody (var "l2"),
+        _Term_typeLambda>>: "tl2" ~>
+          var "termHeadType"
+            @@ (Schemas.extendTypeContextForTypeLambda @@ var "tx2" @@ var "tl2")
+            @@ Core.typeLambdaBody (var "tl2"),
+        _Term_typeApplication>>: "tat2" ~>
+          -- Get the head type of the body, then substitute forall parameter with the type argument
+          Maybes.bind (var "termHeadType" @@ var "tx2" @@ Core.typeApplicationTermBody (var "tat2"))
+            ("htyp2" ~> cases _Type (var "htyp2") (Just $ just $ var "htyp2") [
+              _Type_forall>>: "ft2" ~>
+                just $ Rewriting.replaceFreeTypeVariable
+                  @@ Core.forallTypeParameter (var "ft2")
+                  @@ Core.typeApplicationTermType (var "tat2")
+                  @@ Core.forallTypeBody (var "ft2")]),
+        _Term_variable>>: "vn2" ~>
+          Maps.lookup (var "vn2") (Typing.typeContextTypes $ var "tx2")]) $
+
     -- afterRecursion: apply expansion logic after subterms have been processed
     "afterRecursion" <~ ("trm" ~>
       "arity" <~ var "termArityWithContext" @@ var "tx" @@ var "trm" $
-      var "expand" @@ false @@ var "args" @@ var "arity" @@ var "trm") $
+      "hType" <~ var "termHeadType" @@ var "tx" @@ var "trm" $
+      var "expand" @@ false @@ var "args" @@ var "arity" @@ var "hType" @@ var "trm") $
 
     -- Helper for processing fields (used in records, unions, but NOT case statement branches)
     "forField" <~ ("f" ~> Core.fieldWithTerm (var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f")) (var "f")) $
@@ -293,7 +382,8 @@ etaExpandTermNew = define "etaExpandTermNew" $
     "forCaseBranch" <~ ("f" ~>
       "branchBody" <~ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
       "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "branchBody" $
-      Core.fieldWithTerm (var "expand" @@ true @@ list ([] :: [TTerm Term]) @@ var "arty" @@ var "branchBody") (var "f")) $
+      "branchHType" <~ var "termHeadType" @@ var "tx" @@ var "branchBody" $
+      Core.fieldWithTerm (var "expand" @@ true @@ list ([] :: [TTerm Term]) @@ var "arty" @@ var "branchHType" @@ var "branchBody") (var "f")) $
 
     -- Helper for eliminations
     "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
@@ -337,19 +427,29 @@ etaExpandTermNew = define "etaExpandTermNew" $
             _Elimination_record>>: "_" ~> false,
             _Elimination_union>>: "_" ~> true,
             _Elimination_wrap>>: "_" ~> false] $
-          var "expand" @@ var "padElim" @@ var "args" @@ (int32 1) @@
-            (Core.termFunction $ Core.functionElimination $ var "forElimination" @@ var "elm"),
+          "elimTerm" <~ (Core.termFunction $ Core.functionElimination $ var "forElimination" @@ var "elm") $
+          -- For union eliminations, compute the head type as FunctionType(TypeVariable(typeName), TypeUnit)
+          -- This provides the domain type needed for eta-expanded lambda parameters
+          "elimHeadType" <~ cases _Elimination (var "elm") (Just nothing) [
+            _Elimination_union>>: "cs2" ~>
+              just $ Core.typeFunction $ Core.functionType
+                (Core.typeVariable $ Core.caseStatementTypeName $ var "cs2")
+                Core.typeUnit] $
+          var "expand" @@ var "padElim" @@ var "args" @@ (int32 1) @@ var "elimHeadType" @@ var "elimTerm",
         _Function_lambda>>: "lm" ~>
           "tx1" <~ Schemas.extendTypeContextForLambda @@ var "tx" @@ var "lm" $
           "body" <~ var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.lambdaBody (var "lm") $
           "result" <~ Core.termFunction (Core.functionLambda $
             Core.lambda (Core.lambdaParameter $ var "lm") (Core.lambdaDomain $ var "lm") (var "body")) $
           "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "result" $
-          var "expand" @@ false @@ var "args" @@ var "arty" @@ var "result",
+          -- Lambda type is not in the context; pass Nothing (lambdas have arity 0 so expand is a no-op anyway)
+          var "expand" @@ false @@ var "args" @@ var "arty" @@ nothing @@ var "result",
         _Function_primitive>>: "pn" ~>
-          -- Don't expand if bare
+          -- Don't expand if bare; look up primitive type for lambda domain annotations
           "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
-          var "expand" @@ false @@ var "args" @@ var "arty" @@ var "term"],
+          "primType" <~ Maybes.map ("ts" ~> Core.typeSchemeType $ var "ts")
+            (Maps.lookup (var "pn") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx")) $
+          var "expand" @@ false @@ var "args" @@ var "arty" @@ var "primType" @@ var "term"],
 
       -- Let: extend context for bindings and body
       _Term_let>>: "lt" ~>
@@ -412,10 +512,11 @@ etaExpandTermNew = define "etaExpandTermNew" $
       -- Unit: no recursion needed
       _Term_unit>>: constant Core.termUnit,
 
-      -- Variable: don't expand if bare
+      -- Variable: don't expand if bare; look up type for lambda domain annotations
       _Term_variable>>: "vn" ~>
         "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
-        var "expand" @@ false @@ var "args" @@ var "arty" @@ var "term",
+        "varType" <~ Maps.lookup (var "vn") (Typing.typeContextTypes $ var "tx") $
+        var "expand" @@ false @@ var "args" @@ var "arty" @@ var "varType" @@ var "term",
 
       -- Wrap: recurse into body
       _Term_wrap>>: "wt" ~> var "afterRecursion" @@ (Core.termWrap $ Core.wrappedTerm

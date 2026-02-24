@@ -762,8 +762,11 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
           "hnames">: Lists.map ("binding" ~> HaskellUtils.simpleName @@ (Core.unName $ Core.bindingName $ var "binding")) (var "lbindings"),
           "terms">: Lists.map (unaryFunction $ Core.bindingTerm) (var "lbindings")] $
           "hterms" <<~ Flows.mapList (encodeTerm @@ var "namespaces") (var "terms") $ lets [
-          "hbindings">: Lists.zipWith (var "toBinding") (var "hnames") (var "hterms")] $
-          var "toDecl" @@ var "comments" @@ var "hname'" @@ var "env" @@ (just $ wrap H._LocalBindings $ var "hbindings")]] $
+          "hbindings">: Lists.zipWith (var "toBinding") (var "hnames") (var "hterms"),
+          -- Merge new bindings with any previously accumulated bindings from outer lets
+          "prevBindings">: Maybes.maybe (list ([] :: [TTerm H.LocalBinding])) ("lb" ~> unwrap H._LocalBindings @@ var "lb") (var "bindings"),
+          "allBindings">: Lists.concat2 (var "prevBindings") (var "hbindings")] $
+          var "toDecl" @@ var "comments" @@ var "hname'" @@ var "env" @@ (just $ wrap H._LocalBindings $ var "allBindings")]] $
     "comments" <<~ Annotations.getTermDescription @@ var "term" $
     var "toDecl" @@ var "comments" @@ var "hname" @@ var "term" @@ nothing
 

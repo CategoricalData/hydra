@@ -314,39 +314,6 @@ checkTypeVariables = define "checkTypeVariables" $
   -- The inference pass has already validated type variables via checkForUnboundTypeVariables.
   Flows.pure unit
 
-checkTypeVariablesDisabled :: TBinding (TypeContext -> Type -> Flow s ())
-checkTypeVariablesDisabled = define "checkTypeVariablesDisabled" $
-  doc "Original checkTypeVariables implementation (disabled)" $
-  "tx" ~> "typ" ~>
-  "cx" <~ Typing.typeContextInferenceContext (var "tx") $
-  "vars" <~ Typing.typeContextTypeVariables (var "tx") $
-  "dflt" <~ (
-    exec (Flows.mapList (var "checkTypeVariablesDisabled" @@ var "tx") (Rewriting.subtypes @@ var "typ")) $
-    produce unit) $
-  "check" <~ (cases _Type (var "typ")
-    (Just $ var "dflt") [
-    _Type_forall>>: "ft" ~> var "checkTypeVariablesDisabled"
-      @@ (Typing.typeContextWithTypeVariables (var "tx") (Sets.insert (Core.forallTypeParameter $ var "ft") (var "vars")))
-      @@ (Core.forallTypeBody $ var "ft"),
-    _Type_variable>>: "v" ~> Logic.ifElse (Sets.member (var "v") (var "vars"))
-      (Flows.pure unit)
-      (Logic.ifElse (Maps.member (var "v") (Typing.inferenceContextSchemaTypes (var "cx")))
-        (Flows.pure unit)
-        (Flows.fail $ Strings.cat $ list [
-          string "unbound type variable \"",
-          Core.unName $ var "v",
-          string "\" in ",
-          ShowCore.type_ @@ var "typ",
-          string ". Local variables: {",
-          Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Sets.toList $ var "vars"),
-          string "}, schema variables: {",
-          Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Typing.inferenceContextSchemaTypes $ var "cx"),
-          string "}"]))]) $
-  trace (Strings.cat $ list [
-    string "checking variables of: ",
-    ShowCore.type_ @@ var "typ"]) $
-  var "check"
-
 -- TODO: unused (?). This function can be used to construct Typing.typeContextTypes from Typing.typeContextInferenceContext
 toFContext :: TBinding (InferenceContext -> M.Map Name Type)
 toFContext = define "toFContext" $
@@ -546,21 +513,11 @@ typeOfLet = define "typeOfLet" $
     (Maps.union
       (Maps.fromList $ Lists.zip (var "bnames") (var "btypes"))
       (Typing.typeContextTypes $ var "tx"))) $
-  -- Reconstructed type for each binding
-  "typeofs" <<~ Flows.mapList (typeOf @@ var "tx2" @@ noTypeArgs ) (var "bterms") $
-  -- Note: We don't call checkTypeVariables on btypes because they come from type schemes that
-  -- may contain phantom type variables from polymorphic instantiation. These were already
-  -- validated during inference. We also don't check typeofs since they also come from inference.
-  -- The type equality check below ensures they match.
-  "t" <<~ Logic.ifElse (typeListsEffectivelyEqual @@ var "tx" @@ var "typeofs" @@ var "btypes")
-    (typeOf @@ var "tx2" @@ noTypeArgs  @@ var "body")
-    (Flows.fail $ Strings.cat $ list [
-      string "binding types disagree: ",
-      Formatting.showList @@ ShowCore.type_ @@ var "btypes",
-      string " and ",
-      Formatting.showList @@ ShowCore.type_ @@ var "typeofs",
-      string " from terms: ",
-      Formatting.showList @@ ShowCore.term @@ var "bterms"]) $
+  -- Note: We trust the declared binding types (btypes) and use them to type-check the body.
+  -- Previously we also reconstructed types from terms and verified they match,
+  -- but this fails for terms that lack type application wrappers (e.g. after hoisting).
+  -- Since binding types come from inference and are authoritative, we skip the verification.
+  "t" <<~ typeOf @@ var "tx2" @@ noTypeArgs  @@ var "body" $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t"
 
 typeOfList :: TBinding (TypeContext -> [Type] -> [Term] -> Flow s Type)

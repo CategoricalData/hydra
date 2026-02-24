@@ -122,31 +122,48 @@ colonOp = jsonSerdeDefinition "colonOp" $
     Ast.associativityNone
 
 -- | ASCII codepoints for characters that need escaping
-quoteCode, backslashCode, newlineCode, returnCode, tabCode :: TTerm Int
+quoteCode, backslashCode, backspaceCode, formfeedCode, newlineCode, returnCode, tabCode :: TTerm Int
 quoteCode = int32 34      -- '"'
 backslashCode = int32 92  -- '\\'
+backspaceCode = int32 8   -- '\b'
+formfeedCode = int32 12   -- '\f'
 newlineCode = int32 10    -- '\n'
 returnCode = int32 13     -- '\r'
 tabCode = int32 9         -- '\t'
+
+hexDigits :: TTerm String
+hexDigits = string "0123456789abcdef"
 
 jsonString :: TBinding (String -> String)
 jsonString = jsonSerdeDefinition "jsonString" $
   doc "Escape and quote a string for JSON output" $
   "s" ~>
+  -- hexEscape: encode a control character as \\u00XX
+  "hexEscape" <~ ("c" ~>
+    "hi" <~ Strings.fromList (Lists.pure (Strings.charAt (Math.div (var "c") (int32 16)) hexDigits)) $
+    "lo" <~ Strings.fromList (Lists.pure (Strings.charAt (Math.mod (var "c") (int32 16)) hexDigits)) $
+    string "\\u00" ++ var "hi" ++ var "lo") $
   -- escape function takes a codepoint (Int) and returns a String
   "escape" <~ ("c" ~>
     Logic.ifElse (Equality.equal (var "c") quoteCode)
       (string "\\\"")
       (Logic.ifElse (Equality.equal (var "c") backslashCode)
         (string "\\\\")
-        (Logic.ifElse (Equality.equal (var "c") newlineCode)
-          (string "\\n")
-          (Logic.ifElse (Equality.equal (var "c") returnCode)
-            (string "\\r")
-            (Logic.ifElse (Equality.equal (var "c") tabCode)
-              (string "\\t")
-              -- Convert single codepoint back to string
-              (Strings.fromList (Lists.pure (var "c")))))))) $
+        (Logic.ifElse (Equality.equal (var "c") backspaceCode)
+          (string "\\b")
+          (Logic.ifElse (Equality.equal (var "c") formfeedCode)
+            (string "\\f")
+            (Logic.ifElse (Equality.equal (var "c") newlineCode)
+              (string "\\n")
+              (Logic.ifElse (Equality.equal (var "c") returnCode)
+                (string "\\r")
+                (Logic.ifElse (Equality.equal (var "c") tabCode)
+                  (string "\\t")
+                  -- Escape any other control character (< 0x20) as \u00XX
+                  (Logic.ifElse (Equality.lt (var "c") (int32 32))
+                    (var "hexEscape" @@ var "c")
+                    -- Non-control character: pass through as-is
+                    (Strings.fromList (Lists.pure (var "c"))))))))))) $
   "escaped" <~ Strings.cat (Lists.map (var "escape") (Strings.toList $ var "s")) $
   string "\"" ++ var "escaped" ++ string "\""
 
