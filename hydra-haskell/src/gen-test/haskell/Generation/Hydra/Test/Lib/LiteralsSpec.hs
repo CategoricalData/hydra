@@ -353,6 +353,48 @@ spec = H.describe "hydra.lib.literals primitives" $ do
     H.it "empty" $ H.shouldBe
       (Literals.showString "")
       ("\"\"")
+    H.it "latin accented" $ H.shouldBe
+      (Literals.showString "caf\233")
+      ("\"caf\\233\"")
+    H.it "greek lambda" $ H.shouldBe
+      (Literals.showString "\955")
+      ("\"\\955\"")
+    H.it "mixed ascii and non-ascii" $ H.shouldBe
+      (Literals.showString "A\233B")
+      ("\"A\\233B\"")
+    H.it "tab" $ H.shouldBe
+      (Literals.showString "\t")
+      ("\"\\t\"")
+    H.it "newline" $ H.shouldBe
+      (Literals.showString "\n")
+      ("\"\\n\"")
+    H.it "carriage return" $ H.shouldBe
+      (Literals.showString "\r")
+      ("\"\\r\"")
+    H.it "backslash" $ H.shouldBe
+      (Literals.showString "\\")
+      ("\"\\\\\"")
+    H.it "double quote" $ H.shouldBe
+      (Literals.showString "\"")
+      ("\"\\\"\"")
+    H.it "null" $ H.shouldBe
+      (Literals.showString "\NUL")
+      ("\"\\NUL\"")
+    H.it "bell" $ H.shouldBe
+      (Literals.showString "\a")
+      ("\"\\a\"")
+    H.it "backspace" $ H.shouldBe
+      (Literals.showString "\b")
+      ("\"\\b\"")
+    H.it "form feed" $ H.shouldBe
+      (Literals.showString "\f")
+      ("\"\\f\"")
+    H.it "vertical tab" $ H.shouldBe
+      (Literals.showString "\v")
+      ("\"\\v\"")
+    H.it "delete" $ H.shouldBe
+      (Literals.showString "\DEL")
+      ("\"\\DEL\"")
   H.describe "readInt8" $ do
     H.it "positive" $ H.shouldBe
       (Literals.readInt8 "42")

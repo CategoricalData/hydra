@@ -912,7 +912,7 @@
                                                                                       "name": "literal",
                                                                                       "term": {
                                                                                         "union": {
-                                                                                          "field": {"name": "string", "term": {"literal": {"string": " "}}},
+                                                                                          "field": {"name": "string", "term": {"literal": {"string": "\u0000"}}},
                                                                                           "typeName": "hydra.core.Literal"}}},
                                                                                     "typeName": "hydra.core.Term"}},
                                                                                 {
@@ -935,7 +935,9 @@
                                                               "name": "literal",
                                                               "term": {
                                                                 "union": {
-                                                                  "field": {"name": "string", "term": {"literal": {"string": "hello world"}}},
+                                                                  "field": {
+                                                                    "name": "string",
+                                                                    "term": {"literal": {"string": "hello\u0000world"}}},
                                                                   "typeName": "hydra.core.Literal"}}},
                                                             "typeName": "hydra.core.Term"}}}],
                                                     "typeName": "hydra.testing.EvaluationTestCase"}}},
@@ -1647,7 +1649,7 @@
                                                                                           "name": "literal",
                                                                                           "term": {
                                                                                             "union": {
-                                                                                              "field": {"name": "string", "term": {"literal": {"string": "hello "}}},
+                                                                                              "field": {"name": "string", "term": {"literal": {"string": "hello\u0000"}}},
                                                                                               "typeName": "hydra.core.Literal"}}},
                                                                                         "typeName": "hydra.core.Term"}}}],
                                                                                 "typeName": "hydra.core.Application"}}},
@@ -1673,7 +1675,9 @@
                                                               "name": "literal",
                                                               "term": {
                                                                 "union": {
-                                                                  "field": {"name": "string", "term": {"literal": {"string": "hello world"}}},
+                                                                  "field": {
+                                                                    "name": "string",
+                                                                    "term": {"literal": {"string": "hello\u0000world"}}},
                                                                   "typeName": "hydra.core.Literal"}}},
                                                             "typeName": "hydra.core.Term"}}}],
                                                     "typeName": "hydra.testing.EvaluationTestCase"}}},
@@ -3281,7 +3285,7 @@
                                                               "name": "literal",
                                                               "term": {
                                                                 "union": {
-                                                                  "field": {"name": "string", "term": {"literal": {"string": "h i"}}},
+                                                                  "field": {"name": "string", "term": {"literal": {"string": "h\u0000i"}}},
                                                                   "typeName": "hydra.core.Literal"}}},
                                                             "typeName": "hydra.core.Term"}}}],
                                                     "typeName": "hydra.testing.EvaluationTestCase"}}},
@@ -6202,7 +6206,7 @@
                                                                             "name": "literal",
                                                                             "term": {
                                                                               "union": {
-                                                                                "field": {"name": "string", "term": {"literal": {"string": " "}}},
+                                                                                "field": {"name": "string", "term": {"literal": {"string": "\u0000"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}}}],
                                                                   "typeName": "hydra.core.Application"}}},
@@ -9262,7 +9266,7 @@
                                                                             "name": "literal",
                                                                             "term": {
                                                                               "union": {
-                                                                                "field": {"name": "string", "term": {"literal": {"string": "h i"}}},
+                                                                                "field": {"name": "string", "term": {"literal": {"string": "h\u0000i"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}}}],
                                                                   "typeName": "hydra.core.Application"}}},

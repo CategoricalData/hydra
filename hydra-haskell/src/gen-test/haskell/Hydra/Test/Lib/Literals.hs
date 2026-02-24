@@ -1199,6 +1199,146 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ""))})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\""))})),
           Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "latin accented",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "caf\233"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"caf\\233\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "greek lambda",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\955"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\955\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "mixed ascii and non-ascii",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "A\233B"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"A\\233B\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "tab",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\t"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\t\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "newline",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\n"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\n\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "carriage return",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\r"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\r\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "backslash",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\\"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\\\\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "double quote",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\""))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\\"\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "null",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\NUL"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\NUL\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "bell",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\a"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\a\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "backspace",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\b"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\b\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "form feed",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\f"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\f\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "vertical tab",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\v"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\v\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "delete",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.literals.showString"))),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\DEL"))})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralString "\"\\DEL\""))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "readInt8",
