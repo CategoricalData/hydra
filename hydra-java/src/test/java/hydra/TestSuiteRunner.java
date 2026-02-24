@@ -136,13 +136,11 @@ public class TestSuiteRunner {
             primitives.put(prim.name(), prim.toNative());
         }
 
-        // Compute the bootstrap schema map once for both module loads
-        Map<Name, Type> schemaMap = Generation.bootstrapSchemaMap();
-
-        // Load only the kernel modules that define types referenced by the test suite
-        List<Module> schemaTypeModules = loadSchemaTypeModules(schemaMap);
+        // Load all kernel modules for schema graph type definitions.
+        // Only type-defining bindings are extracted — the full module data is not retained.
+        List<Module> allKernelModules = loadAllKernelModulesForSchema();
         List<Binding> kernelTypeBindings = new ArrayList<>();
-        for (Module mod : schemaTypeModules) {
+        for (Module mod : allKernelModules) {
             for (Binding b : mod.elements) {
                 if (hydra.annotations.Annotations.isNativeType(b)) {
                     kernelTypeBindings.add(b);
@@ -151,7 +149,7 @@ public class TestSuiteRunner {
         }
 
         // Load only essential term modules for the evaluator (hydra.monads, hydra.annotations, etc.)
-        List<Module> termModules = loadEvaluatorTermModules(schemaMap);
+        List<Module> termModules = loadEvaluatorTermModules();
 
         // Build schema graph with test types + kernel types
         Map<Name, Type> testTypes = TestGraph.testTypes();
@@ -233,26 +231,17 @@ public class TestSuiteRunner {
         "hydra.encode.core",
         "hydra.annotations");
 
-    // Only the modules that define types referenced by the test suite's schema graph.
-    private static final List<String> SCHEMA_TYPE_NAMESPACES = List.of(
-        "hydra.core",
-        "hydra.coders",
-        "hydra.compute");
-
     /**
-     * Load schema-relevant kernel modules from JSON for the schema graph (type-defining bindings only).
-     * Only the modules listed in SCHEMA_TYPE_NAMESPACES are loaded, not the entire kernel.
+     * Load all kernel modules from JSON for the schema graph (type-defining bindings only).
      */
-    private static List<Module> loadSchemaTypeModules(Map<Name, Type> schemaMap) {
+    private static List<Module> loadAllKernelModulesForSchema() {
         try {
             String jsonDir = "../hydra-haskell/src/gen-main/json";
-            List<Namespace> namespaces = new ArrayList<>();
-            for (String ns : SCHEMA_TYPE_NAMESPACES) {
-                namespaces.add(new Namespace(ns));
-            }
-            return Generation.loadModulesFromJson(false, jsonDir, schemaMap, namespaces);
+            Map<Name, Type> schemaMap = Generation.bootstrapSchemaMap();
+            List<Namespace> allKernelNamespaces = Generation.readManifestField(jsonDir, "kernelModules");
+            return Generation.loadModulesFromJson(false, jsonDir, schemaMap, allKernelNamespaces);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to load schema type modules from JSON", e);
+            throw new RuntimeException("Failed to load kernel modules from JSON", e);
         }
     }
 
@@ -260,9 +249,10 @@ public class TestSuiteRunner {
      * Load only the essential term modules from JSON for the evaluator.
      * System F type annotations are stripped since the evaluator works at the simply-typed level.
      */
-    private static List<Module> loadEvaluatorTermModules(Map<Name, Type> schemaMap) {
+    private static List<Module> loadEvaluatorTermModules() {
         try {
             String jsonDir = "../hydra-haskell/src/gen-main/json";
+            Map<Name, Type> schemaMap = Generation.bootstrapSchemaMap();
             List<Namespace> termNamespaces = new ArrayList<>();
             for (String ns : EVALUATOR_TERM_NAMESPACES) {
                 termNamespaces.add(new Namespace(ns));
@@ -384,14 +374,18 @@ public class TestSuiteRunner {
         TestGroup allTests = TestSuite.allTests();
         rootTestGroup = allTests;
 
-        // Eagerly initialize test infrastructure so that JSON module loading
-        // and graph construction are not counted inside the first test group's timer.
+        // Eagerly initialize test infrastructure and measure time.
+        // This ensures startup cost is not attributed to the first test group.
+        long initStart = System.nanoTime();
         getTestGraph();
         getInferenceContext();
-
+        getTypeContext();
+        double initMs = (System.nanoTime() - initStart) / 1_000_000.0;
         if (BENCHMARK_OUTPUT != null) {
+            benchmarkResults.put(allTests.name + "/_initialization", initMs);
             Runtime.getRuntime().addShutdownHook(new Thread(() -> writeBenchmarkJson(BENCHMARK_OUTPUT, allTests)));
         }
+
         return collectTests(allTests, allTests.name);
     }
 
@@ -1223,6 +1217,21 @@ public class TestSuiteRunner {
         List<TestGroup> subgroups = root.subgroups;
         int totalPassed = 0, totalFailed = 0, totalSkipped = 0;
         double totalTimeMs = 0;
+
+        // Add initialization group if present
+        double initTime = benchmarkResults.getOrDefault(rootPath + "/_initialization", 0.0);
+        if (initTime > 0) {
+            totalTimeMs += initTime;
+            sb.append("    {\n");
+            sb.append("      \"failed\": 0,\n");
+            sb.append("      \"passed\": 0,\n");
+            sb.append("      \"path\": ").append(jsonString(rootPath + "/_initialization")).append(",\n");
+            sb.append("      \"skipped\": 0,\n");
+            sb.append("      \"totalTimeMs\": ").append(round1(initTime)).append("}");
+            if (!subgroups.isEmpty()) sb.append(",");
+            sb.append("\n");
+        }
+
         for (int i = 0; i < subgroups.size(); i++) {
             TestGroup group = subgroups.get(i);
             String groupPath = rootPath + "/" + group.name;

@@ -1,0 +1,417 @@
+= Tail-Call Optimization in Hydra
+:toc: macro
+:toc-title: Contents
+:toclevels: 3
+:source-highlighter: rouge
+
+toc::[]
+
+== Overview
+
+Hydra is a typed, functional meta-programming language whose core data model is
+defined in `hydra.core.Term` -- a System F-based term algebra with lambdas,
+applications, let-bindings, case statements, and primitive references.
+The Hydra compiler generates code for multiple target languages including
+Haskell, Python, and Java.
+
+Because Hydra's core language is purely functional and relies heavily on
+recursion, the generated code must cope with the fact that most target
+languages (Python, Java, JavaScript, ...) do *not* guarantee tail-call
+optimization (TCO) at the runtime level.
+Unbounded recursive calls in generated code would exhaust the call stack.
+
+Hydra solves this at *code-generation time*:
+the Python and Java coders detect self-tail-recursive functions in
+the Hydra term graph and emit iterative `while` loops in the target language,
+replacing tail calls with parameter reassignment and `continue`.
+
+== The Hydra Core Term Model
+
+The term algebra is defined in
+`hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`.
+The variants relevant to TCO are:
+
+[source,haskell]
+----
+term = define "Term" $ T.union [
+    "application"    -- function application  (f x)
+    "function"       -- lambda, elimination, or primitive
+    "let"            -- let-bindings with body
+    "variable"       -- variable reference
+    -- ...other variants elided...
+  ]
+
+function = define "Function" $ T.union [
+    "elimination"    -- case statement, projection, unwrap
+    "lambda"         -- λ x . body
+    "primitive"      -- built-in function reference
+  ]
+
+elimination = define "Elimination" $ T.union [
+    "record"         -- field projection
+    "union"          -- case/match statement
+    "wrap"           -- newtype unwrap
+  ]
+----
+
+There is *no* explicit `TailCall` or `Loop` variant in the core term type.
+TCO is a *code generation concern*, not a language-level construct.
+
+== Detection: `isSelfTailRecursive`
+
+Both the Python and Java coders share an identical detection algorithm,
+defined as Hydra meta-programs in the Source DSL.
+
+=== Algorithm
+
+.isSelfTailRecursive(funcName, body) -> Bool
+[source]
+----
+1. Check if funcName appears as a free variable in body.
+   (Uses Rewriting.isFreeVariableInTerm -- returns True when NOT free,
+    so Logic.not means "IS present".)
+2. If funcName is NOT present: return False (not recursive at all).
+3. If funcName IS present: delegate to isTailRecursiveInTailPosition.
+----
+
+=== Tail-Position Analysis
+
+`isTailRecursiveInTailPosition(funcName, term)` walks the term structure
+and verifies that *every* occurrence of `funcName` is in a valid tail
+position. The analysis handles:
+
+Application (`Term.application`)::
+  Gathers the application chain `f arg1 arg2 ...` and checks:
+  - If `f` is `Variable(funcName)` -- a self-call -- the arguments must:
+    * Not contain `funcName` (no nested self-calls in arguments)
+    * Not contain lambda terms (closures over parameters would break TCO
+      because Python closures capture by reference, not by value)
+  - If `f` is a union elimination (case statement), each branch is
+    checked recursively for tail position, and the arguments to the
+    case statement must not contain `funcName`.
+
+Lambda (`Term.function.lambda`)::
+  The tail position of a lambda is its body. Recurse into the body.
+
+Let (`Term.let`)::
+  The bindings must *not* contain `funcName`; the tail position is the
+  `let` body.
+
+Default::
+  Any other term variant: `funcName` must not appear free (i.e., the
+  term is a non-recursive base case).
+
+=== Key Source Locations
+
+[cols="1,2"]
+|===
+| Language | File (line)
+
+| Python
+| `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Coder.hs` (line ~1898)
+
+| Java
+| `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Coder.hs` (line ~4859)
+|===
+
+== Transformation: Recursion to Iteration
+
+When `isSelfTailRecursive` returns `True`, the coder wraps the function
+body in a `while` loop and replaces tail calls with parameter
+reassignment followed by `continue`.
+
+=== Python Transformation
+
+The Python coder implements this in two functions:
+
+`encodeFunctionDefinition`::
+  At line ~2107, after detecting TCO applicability:
++
+[source,haskell]
+----
+"isTCO" <~ (Logic.and
+    (Logic.not $ Lists.null (var "args"))
+    (isSelfTailRecursive @@ var "name" @@ var "body"))
+----
++
+When `isTCO` is True, the body is wrapped in `while True:` and encoded
+via `encodeTermMultilineTCO`.
+
+`encodeTermMultilineTCO`::
+  Walks the term body and handles two cases:
++
+--
+. *Direct self-call:* `funcName(arg1, arg2, ...)`
+  is replaced with:
++
+[source,python]
+----
+param1 = <encoded arg1>
+param2 = <encoded arg2>
+continue
+----
+
+. *Case statement in tail position:* A `match` statement where individual
+  branches may contain tail calls. Each branch is recursively encoded
+  via `encodeTermMultilineTCO`, so branches with self-calls get
+  `continue` and branches without get `return`.
+--
+
+==== Generated Python Example
+
+A Hydra function like `deannotateAndDetypeTerm` that pattern-matches
+and recurses on sub-terms generates:
+
+[source,python]
+----
+def deannotate_and_detype_term(t: hydra.core.Term) -> hydra.core.Term:
+    r"""Strip type annotations from the top levels of a term."""
+
+    while True:
+        match t:
+            case hydra.core.TermAnnotated(value=at):
+                t = at.body
+                continue
+
+            case hydra.core.TermTypeApplication(value=tt):
+                t = tt.body
+                continue
+
+            case hydra.core.TermTypeLambda(value=ta):
+                t = ta.body
+                continue
+
+            case _:
+                return t
+----
+
+Other examples from generated output in `hydra-python/src/gen-main/python/hydra/`:
+
+- `rewriting.py`: `deannotate_term`, `deannotate_type`,
+  `deannotate_type_parameters`, `is_lambda`,
+  `unshadow_variables` (inner helper)
+- `reduction.py`, `schemas.py`, `annotations.py`, `checking.py`,
+  `lexical.py`, `grammars.py`, `decoding.py`, `coder_utils.py`,
+  `show/core.py`
+
+=== Java Transformation
+
+The Java coder implements the same pattern with Java-specific syntax.
+
+`encodeTermDefinition`::
+  At line ~5204, after detecting TCO:
++
+[source,haskell]
+----
+"isTCO" <~ (Logic.and
+    (Logic.not $ Lists.null (var "params"))
+    (isSelfTailRecursive @@ var "name" @@ var "body"))
+----
++
+When `isTCO` is True, the body is wrapped in `while(true) { ... }`
+(represented as `WhileStatement` with `cond = Nothing`) and encoded
+via `encodeTermTCO`.
+
+`encodeTermTCO`::
+  Structurally identical to the Python version, but generates Java AST
+  nodes:
++
+--
+. *Direct self-call:* emits assignment statements and a `continue`
+  statement (as a `ContinueStatement` Java AST node).
+
+. *Case statement:* generates `if (arg instanceof VariantType) { ... }`
+  chains instead of Python `match` statements, since Java uses the
+  Visitor pattern for union types. Each branch that is a tail call gets
+  assignment + continue; non-tail branches get normal `return`.
+--
+
+NOTE: The Java TCO code generates `while` with `cond = Nothing`,
+serialized as `while (true)` by the Java Serde module. The current
+generated Java output under `hydra-java/src/gen-main/java/hydra/`
+uses Visitor-pattern recursive calls (not yet regenerated with TCO).
+The Python output has been regenerated and shows the `while True:`
+pattern throughout.
+
+==== Java TCO Pseudocode
+
+A tail-recursive function `foo(x, acc)` would generate:
+
+[source,java]
+----
+static ReturnType foo(ParamType x, AccType acc) {
+    while (true) {
+        // let-binding prefixes re-evaluated each iteration
+        LocalType local = computeLocal(x, acc);
+
+        if (x instanceof BaseCase) {
+            return acc;
+        }
+        if (x instanceof RecursiveCase rc) {
+            RecursiveCase v = (RecursiveCase) x;
+            // Tail call: reassign + continue
+            x = v.next;
+            acc = combine(acc, v.value);
+            continue;
+        }
+        return acc; // default
+    }
+}
+----
+
+== Design Details
+
+=== Why Prefixes Go Inside the Loop
+
+Both coders place let-binding prefix statements *inside* the `while` loop body:
+
+[source]
+----
+-- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
+-- re-evaluated each iteration when parameters change via reassignment + continue.
+----
+
+This is essential because let-bindings in the original Hydra term may depend
+on the function parameters. After reassignment (the TCO transformation of a
+tail call), the bindings must be recomputed with the new parameter values.
+
+=== Lambda-in-Argument Guard
+
+The tail-position analysis rejects functions where arguments to tail calls
+contain lambda expressions:
+
+[source]
+----
+-- Any lambda in an argument disqualifies from TCO
+_Function_lambda>>: "lam" ~> true
+----
+
+This guard exists because Python closures capture variables by *reference*.
+If a lambda in an argument closes over a parameter that gets reassigned by
+the while-loop transformation, the closure would observe the mutated value
+rather than the value at the time of the call. This would change semantics.
+
+=== Supported Patterns
+
+The TCO transformation handles:
+
+[cols="1,2"]
+|===
+| Pattern | Treatment
+
+| Direct self-tail-call
+| Reassign parameters, `continue`
+
+| Case statement with tail calls in branches
+| Python: `match` with `continue` in recursive branches, `return` in base cases +
+  Java: `if/instanceof` chain with same logic
+
+| Let-bindings before tail call
+| Bindings placed inside loop body
+
+| Nested lambdas wrapping tail calls
+| Transparent: lambda body is the tail position
+|===
+
+=== Unsupported Patterns (Fall Back to Recursion)
+
+- Mutual recursion (only *self*-recursion is detected)
+- Continuation-passing style where the continuation is not statically resolved
+- Tail calls where arguments contain lambdas (closure capture issue)
+- Tail calls where arguments contain nested self-references
+
+== Comparison with General Recursion Elimination
+
+The blog post
+https://blog.grgz.me/posts/recursion_elimination.html[Recursion Elimination by grgz]
+describes a more general four-stage transformation:
+
+[cols="1,3,2"]
+|===
+| Stage | Description | Hydra's Approach
+
+| 1. CPS Conversion
+| Make continuations explicit by passing a `cont` parameter
+| *Not needed.* Hydra only handles self-tail-recursion where no
+  continuation is required -- the tail call *is* the return.
+
+| 2. Defunctionalization
+| Replace closure-valued parameters with data structures + `apply()`
+  dispatch
+| *Not needed.* Since only self-tail-calls are transformed, there are
+  no higher-order continuation values to defunctionalize.
+
+| 3. Inlining
+| Inline the `apply()` function to expose optimization opportunities
+| *Not applicable.* The transformation is direct: tail call becomes
+  assignment + continue.
+
+| 4. TCO
+| Convert tail calls to loops
+| *This is what Hydra implements.* The while-loop + continue pattern
+  is exactly stage 4 of the general pipeline.
+|===
+
+Hydra's approach is a *specialization* of the general technique.
+By restricting itself to self-tail-recursion
+(the most common pattern in functional code),
+Hydra avoids the complexity of CPS conversion and defunctionalization
+while still eliminating stack overflow for the vast majority of recursive
+functions in the generated code.
+
+The blog post's benchmarks also reveal an important insight:
+iterative transformations do not universally improve performance.
+For functions called very frequently (`dup` in the blog's example),
+heap allocation for explicit stack structures can outweigh the benefit.
+Hydra's approach sidesteps this by not allocating any auxiliary data structures,
+it reuses the existing local variables via reassignment.
+
+== Key Source Files
+
+[cols="1,3"]
+|===
+| Component | Path
+
+| Core term types
+| `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/Core.hs`
+
+| Term reduction (beta, eta)
+| `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Reduction.hs`
+
+| Term rewriting (free vars, annotation stripping)
+| `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Rewriting.hs`
+
+| Let-binding hoisting
+| `hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Terms/Hoisting.hs`
+
+| Python coder (TCO at ~line 1895)
+| `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Python/Coder.hs`
+
+| Python coder (generated)
+| `hydra-ext/src/gen-main/haskell/Hydra/Ext/Python/Coder.hs`
+
+| Java coder (TCO at ~line 4855)
+| `hydra-ext/src/main/haskell/Hydra/Ext/Sources/Java/Coder.hs`
+
+| Java coder (generated)
+| `hydra-ext/src/gen-main/haskell/Hydra/Ext/Java/Coder.hs`
+
+| Generated Python (shows TCO output)
+| `hydra-python/src/gen-main/python/hydra/rewriting.py`
+
+| Generated Java (Visitor pattern, pre-TCO regen)
+| `hydra-java/src/gen-main/java/hydra/rewriting/Rewriting.java`
+|===
+
+== Summary
+
+Hydra implements tail-call optimization as a code-generation transformation,
+not a language-level feature.
+The Python and Java coders share a common
+detection algorithm (`isSelfTailRecursive` / `isTailRecursiveInTailPosition`)
+that validates all self-references are in tail position,
+then emit iterative `while` loops
+with parameter reassignment and `continue` in place of recursive calls.
+This approach is a specialization of general
+recursion elimination (CPS + defunctionalization + TCO),
+achieving the practical benefit, stack safety, without the complexity of the full pipeline.
