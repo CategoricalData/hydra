@@ -10,6 +10,7 @@ import hydra.dsl.types as types
 import hydra.extract.core as extract
 from hydra.compute import Coder, Flow
 from hydra.core import (
+    Application,
     FloatType,
     FloatValue,
     IntegerType,
@@ -18,6 +19,7 @@ from hydra.core import (
     LiteralType,
     Name,
     Term,
+    TermApplication,
     Type,
 )
 from hydra.dsl.python import FrozenDict, Maybe, Just, Nothing, frozenlist, Either, Left, Right
@@ -454,6 +456,46 @@ def function(dom: TermCoder[X], cod: TermCoder[Y]) -> TermCoder[Callable[[X], Y]
         type=types.function(dom.type, cod.type),
         coder=Coder(
             encode=lambda term: flows.fail(f"cannot encode term to a function: {term}"),
+            decode=lambda _: flows.fail("cannot decode functions to terms")
+        ),
+    )
+
+
+def function_with_reduce(
+        reduce: Callable[[Term], Flow[Graph, Term]],
+        dom: TermCoder[X],
+        cod: TermCoder[Y],
+) -> TermCoder[Callable[[X], Y]]:
+    """TermCoder for function types, using a reducer to bridge term-level functions to native functions.
+
+    The reducer is called to evaluate function application at the term level.
+    Failures in reduction or encoding/decoding will result in a runtime error.
+    """
+    import hydra.monads as monads
+
+    def encode(fun_term: Term) -> Flow[Graph, Callable[[X], Y]]:
+        def with_graph(g: Graph) -> Flow[Graph, Callable[[X], Y]]:
+            def native_fun(x: X) -> Y:
+                arg_term = monads.from_flow(
+                    None, g, dom.coder.decode(x))  # type: ignore
+                if arg_term is None:
+                    raise RuntimeError("function_with_reduce: failed to encode argument")
+                result_term = monads.from_flow(
+                    None, g, reduce(TermApplication(Application(fun_term, arg_term))))
+                if result_term is None:
+                    raise RuntimeError("function_with_reduce: failed to reduce application")
+                result = monads.from_flow(
+                    None, g, cod.coder.encode(result_term))  # type: ignore
+                if result is None:
+                    raise RuntimeError("function_with_reduce: failed to decode result")
+                return result
+            return flows.pure(native_fun)
+        return flows.bind(monads.get_state(), with_graph)
+
+    return TermCoder(
+        type=types.function(dom.type, cod.type),
+        coder=Coder(
+            encode=encode,
             decode=lambda _: flows.fail("cannot decode functions to terms")
         ),
     )
