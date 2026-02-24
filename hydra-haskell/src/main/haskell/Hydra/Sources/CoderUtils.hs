@@ -358,14 +358,15 @@ analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
     ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
     (var "body")
     (var "tapps") $
-  "typ" <<~ tryTypeOf @@ string "analyzeFunctionTermWith" @@ (var "getTC" @@ var "fEnv") @@ var "bodyWithTapps" $
+  "mcod" <<~ Flows.withDefault (nothing :: TTerm (Maybe Type))
+    (Flows.map (primitive _maybes_pure) (tryTypeOf @@ string "analyzeFunctionTermWith" @@ (var "getTC" @@ var "fEnv") @@ var "bodyWithTapps")) $
   Flows.pure $ record _FunctionStructure [
     _FunctionStructure_typeParams>>: Lists.reverse (var "tparams"),
     _FunctionStructure_params>>: Lists.reverse (var "args"),
     _FunctionStructure_bindings>>: var "bindings",
     _FunctionStructure_body>>: var "bodyWithTapps",
     _FunctionStructure_domains>>: Lists.reverse (var "doms"),
-    _FunctionStructure_codomain>>: just (var "typ"),
+    _FunctionStructure_codomain>>: var "mcod",
     _FunctionStructure_environment>>: var "fEnv"]
 
 -- | Gather helper for analyzeFunctionTermWith: recursively collect function components

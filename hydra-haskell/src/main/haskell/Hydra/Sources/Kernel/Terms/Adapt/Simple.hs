@@ -3,9 +3,11 @@ module Hydra.Sources.Kernel.Terms.Adapt.Simple where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  adaptFloatType, adaptDataGraph, adaptGraphSchema, adaptIntegerType, adaptLiteral, adaptLiteralType,
-  adaptLiteralTypesMap, adaptLiteralValue, adaptPrimitive, adaptTerm, adaptType, adaptTypeScheme,
-  dataGraphToDefinitions, literalTypeSupported, schemaGraphToDefinitions, termAlternatives, typeAlternatives)
+  adaptFloatType, adaptDataGraph, adaptGraphSchema, adaptIntegerType, adaptLambdaDomains, adaptLiteral,
+  adaptLiteralType, adaptLiteralTypesMap, adaptLiteralValue, adaptNestedTypes, adaptPrimitive,
+  adaptTerm, adaptType, adaptTypeScheme,
+  dataGraphToDefinitions, literalTypeSupported, pushTypeAppsInward, schemaGraphToDefinitions,
+  termAlternatives, typeAlternatives)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -84,16 +86,19 @@ module_ = Module ns elements
       toBinding adaptDataGraph,
       toBinding adaptGraphSchema,
       toBinding adaptIntegerType,
+      toBinding adaptLambdaDomains,
       toBinding adaptLiteral,
       toBinding adaptLiteralType,
       toBinding adaptLiteralTypesMap,
       toBinding adaptLiteralValue,
+      toBinding adaptNestedTypes,
       toBinding adaptPrimitive,
       toBinding adaptTerm,
       toBinding adaptType,
       toBinding adaptTypeScheme,
       toBinding dataGraphToDefinitions,
       toBinding literalTypeSupported,
+      toBinding pushTypeAppsInward,
       toBinding schemaGraphToDefinitions,
       toBinding termAlternatives,
       toBinding typeAlternatives]
@@ -121,29 +126,20 @@ adaptDataGraph :: TBinding (LanguageConstraints -> Bool -> Graph -> Flow s Graph
 adaptDataGraph = define "adaptDataGraph" $
   doc ("Adapt a graph and its schema to the given language constraints."
     <> " The doExpand flag controls eta expansion of partial applications."
-    <> " Note: case statement hoisting is done separately, prior to inference.") $
+    <> " Adaptation is type-preserving: binding-level TypeSchemes are adapted (not stripped)."
+    <> " Note: case statement hoisting is done separately, prior to adaptation.") $
   "constraints" ~> "doExpand" ~> "graph0" ~>
   "transform" <~ ("graph" ~> "gterm" ~>
     "tx" <<~ Schemas.graphToTypeContext @@ var "graph" $
     -- Order of operations:
     -- 1. Unshadow variables first (prevents capture issues in eta expansion)
     -- 2. Eta expand (needs type annotations; creates fully-applied functions)
-    -- 3. Remove types (cleanup after eta expansion)
-    -- 4. Lift lambdas above lets (structural cleanup)
-    "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm" $
-
---    "debug" <<~ Flows.fail (Strings.concat [
---      string "graph after unshadowing: ",
---      ShowCore.term @@ var "gterm1"]) $
-
+    -- 3. Lift lambdas above lets (structural cleanup)
+    "gterm1" <~ Rewriting.unshadowVariables @@ (pushTypeAppsInward @@ var "gterm") $
     "gterm2" <~ Rewriting.unshadowVariables @@ (Logic.ifElse (var "doExpand")
-      (Reduction.etaExpandTermNew @@ var "tx" @@ var "gterm1")
+      (pushTypeAppsInward @@ (Reduction.etaExpandTermNew @@ var "tx" @@ var "gterm1"))
       (var "gterm1")) $
-
---    "debug" <<~ Flows.fail "made it here" $
-
-    "gterm3" <~ Rewriting.removeTypesFromTerm @@ var "gterm2" $
-    produce $ Rewriting.liftLambdaAboveLet @@ var "gterm3") $
+    produce $ Rewriting.liftLambdaAboveLet @@ var "gterm2") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "els0" <~ Graph.graphElements (var "graph0") $
   "env0" <~ Graph.graphEnvironment (var "graph0") $
@@ -163,50 +159,32 @@ adaptDataGraph = define "adaptDataGraph" $
     (var "transform" @@ var "graph0" @@ var "gterm0")
     (produce $ var "gterm0") $
   "gterm2" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
-  "els1Raw" <~ Schemas.termAsGraph @@ var "gterm2" $
+  -- Adapt lambda domains in the adapted term.
+  -- Lambda domains carry pre-adaptation types (e.g. bigfloat) that must be adapted to match
+  -- the post-adaptation terms (e.g. float64). This preserves type annotations.
+  "gterm3" <<~ Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "gterm2" $
+  "els1Raw" <~ Schemas.termAsGraph @@ var "gterm3" $
+
+  -- Adapt nested let binding TypeSchemes within each top-level binding's term.
+  -- These TypeSchemes may carry stale types from JSON modules (e.g. bigfloat→float64).
+  -- Applied per-binding AFTER termAsGraph so that top-level binding TypeSchemes
+  -- (which carry type-class constraints like Ord) are preserved.
+  -- Process each binding: adapt nested let TypeSchemes AND adapt top-level TypeSchemes.
+  -- Adapting (rather than stripping) TypeSchemes converts stale types like bigfloat→float64
+  -- while preserving type-class constraints like Ord needed by decodeSet.
+  "processBinding" <~ ("el" ~>
+    "newTerm" <<~ Rewriting.rewriteTermM @@ (adaptNestedTypes @@ var "constraints" @@ var "litmap") @@ (Core.bindingTerm $ var "el") $
+    "adaptedType" <<~ optCases (Core.bindingType $ var "el")
+      (produce nothing)
+      ("ts" ~>
+        "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
+        produce $ just $ var "ts1") $
+    produce $ Core.binding
+      (Core.bindingName $ var "el")
+      (var "newTerm")
+      (var "adaptedType")) $
+  "els1" <<~ Flows.mapList (var "processBinding") (var "els1Raw") $
   "prims1" <<~ Flows.mapElems (adaptPrimitive @@ var "constraints" @@ var "litmap") (var "prims0") $
-
-  -- Collect existing constraints from original bindings (keyed by binding name)
-  -- These need to be preserved through adaptation since termAsGraph doesn't preserve TypeScheme constraints
-  "originalConstraints" <~ Maps.fromList (Maybes.cat $ Lists.map
-    ("el" ~> Maybes.bind
-      (Core.bindingType $ var "el")
-      ("ts" ~> Maybes.map
-        ("c" ~> pair (Core.bindingName $ var "el") (var "c"))
-        (Core.typeSchemeConstraints $ var "ts")))
-    (var "els0")) $
-
-  -- Merge original constraints back into adapted bindings
-  "mergeConstraints" <~ ("el" ~>
-    "bname" <~ Core.bindingName (var "el") $
-    "origConstraints" <~ Maps.lookup (var "bname") (var "originalConstraints") $
-    Maybes.maybe
-      (var "el")  -- No original constraints, keep binding as-is
-      ("origC" ~> Maybes.maybe
-        -- No inferred type scheme, create one with just the constraints
-        (Core.binding
-          (var "bname")
-          (Core.bindingTerm $ var "el")
-          (just $ Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.name $ string "a") (just $ var "origC")))
-        ("ts" ~>
-          "inferredC" <~ Core.typeSchemeConstraints (var "ts") $
-          "mergedC" <~ Maybes.maybe
-            (just $ var "origC")  -- No inferred constraints, use original
-            ("infC" ~> just $ Maps.union (var "origC") (var "infC"))  -- Merge both
-            (var "inferredC") $
-          Core.binding
-            (var "bname")
-            (Core.bindingTerm $ var "el")
-            (just $ Core.typeScheme
-              (Core.typeSchemeVariables $ var "ts")
-              (Core.typeSchemeType $ var "ts")
-              (var "mergedC")))
-        (Core.bindingType $ var "el"))
-      (var "origConstraints")) $
-
-  "els1" <~ Lists.map
-    ("el" ~> var "mergeConstraints" @@ var "el")
-    (var "els1Raw") $
 
   produce $ Graph.graph
     (var "els1")
@@ -215,6 +193,58 @@ adaptDataGraph = define "adaptDataGraph" $
     Core.termUnit
     (var "prims1")
     (var "schema1")
+
+-- | Rewrite callback for adapting lambda domains in a term.
+-- Dispatches on Term variants: for TermFunction, adapts the lambda domain type;
+-- for all other variants, returns the term unchanged.
+-- This is a top-level function (not inline) so the Python code generator can emit match statements.
+adaptLambdaDomains :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Flow s Term) -> Term -> Flow s Term)
+adaptLambdaDomains = define "adaptLambdaDomains" $
+  doc "Rewrite callback for adapting lambda domain types in a term" $
+  "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
+  "rewritten" <<~ var "recurse" @@ var "term" $
+  cases _Term (var "rewritten")
+    (Just $ produce $ var "rewritten") [
+    _Term_function>>: "f" ~>
+      cases _Function (var "f")
+        (Just $ produce $ Core.termFunction $ var "f") [
+        _Function_lambda>>: "l" ~>
+          "adaptedDomain" <<~ optCases (Core.lambdaDomain $ var "l")
+            (produce nothing)
+            ("dom" ~>
+              "dom1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "dom" $
+              produce $ just $ var "dom1") $
+          produce $ Core.termFunction $ Core.functionLambda $ Core.lambda
+            (Core.lambdaParameter $ var "l")
+            (var "adaptedDomain")
+            (Core.lambdaBody $ var "l")]]
+
+-- | Rewrite callback for adapting nested let binding TypeSchemes in a term.
+-- Dispatches on Term variants: for TermLet, adapts the binding TypeSchemes;
+-- for all other variants, returns the term unchanged.
+-- This is a top-level function (not inline) so the Python code generator can emit match statements.
+adaptNestedTypes :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Flow s Term) -> Term -> Flow s Term)
+adaptNestedTypes = define "adaptNestedTypes" $
+  doc "Rewrite callback for adapting nested let binding TypeSchemes in a term" $
+  "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
+  "rewritten" <<~ var "recurse" @@ var "term" $
+  cases _Term (var "rewritten")
+    (Just $ produce $ var "rewritten") [
+    _Term_let>>: "lt" ~>
+      "adaptB" <~ ("b" ~>
+        "adaptedBType" <<~ optCases (Core.bindingType $ var "b")
+          (produce nothing)
+          ("ts" ~>
+            "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
+            produce $ just $ var "ts1") $
+        produce $ Core.binding
+          (Core.bindingName $ var "b")
+          (Core.bindingTerm $ var "b")
+          (var "adaptedBType")) $
+      "adaptedBindings" <<~ Flows.mapList (var "adaptB") (Core.letBindings $ var "lt") $
+      produce $ Core.termLet $ Core.let_
+        (var "adaptedBindings")
+        (Core.letBody $ var "lt")]
 
 adaptGraphSchema :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Flow s (M.Map Name Type))
 adaptGraphSchema = define "adaptGraphSchema" $
@@ -335,8 +365,8 @@ adaptTerm = define "adaptTerm" $
       "tryAlts">: ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
         (produce nothing)
         (var "forNonNull" @@ var "alts"))] $
-      "alts" <<~ termAlternatives @@ var "term" $
-      var "tryAlts" @@ var "alts"),
+      "alts0" <<~ termAlternatives @@ var "term" $
+      var "tryAlts" @@ var "alts0"),
     "tryTerm">: ("term" ~>
       "supportedVariant" <~ Sets.member
         (Reflect.termVariant @@ var "term")
@@ -345,10 +375,21 @@ adaptTerm = define "adaptTerm" $
         (var "forSupported" @@ var "term")
         (var "forUnsupported" @@ var "term"))] $
     "term1" <<~ var "recurse" @@ var "term0" $
-    "mterm" <<~ var "tryTerm" @@ var "term1" $
-    optCases (var "mterm")
-      (Flows.fail $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
-      ("term2" ~> produce $ var "term2")) $
+    -- Type application/lambda wrappers pass through unconditionally.
+    -- fsub already recursed into their bodies; we must not strip the wrappers
+    -- because they carry type information needed by typeOf in the coders.
+    cases _Term (var "term1")
+      (Just $
+        "mterm" <<~ var "tryTerm" @@ var "term1" $
+        optCases (var "mterm")
+          (Flows.fail $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
+          ("term2" ~> produce $ var "term2"))
+      [_Term_typeApplication>>: "ta" ~>
+         "atyp" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ (Core.typeApplicationTermType $ var "ta") $
+         produce $ Core.termTypeApplication $ Core.typeApplicationTerm
+           (Core.typeApplicationTermBody $ var "ta")
+           (var "atyp"),
+       _Term_typeLambda>>:      "_" ~> produce $ var "term1"]) $
   Rewriting.rewriteTermM @@ var "rewrite" @@ var "term0"
 
 adaptType :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Flow s Type)
@@ -369,8 +410,8 @@ adaptType = define "adaptType" $
       (optCases (var "tryType" @@ Lists.head (var "alts"))
         (var "tryAlts" @@ Lists.tail (var "alts"))
         ("t" ~> just $ var "t"))) $
-    "alts" <~ typeAlternatives @@ var "typ" $
-    var "tryAlts" @@ var "alts"),
+    "alts0" <~ typeAlternatives @@ var "typ" $
+    var "tryAlts" @@ var "alts0"),
   "tryType">: ("typ" ~>
     "supportedVariant" <~ Sets.member
       (Reflect.typeVariant @@ var "typ")
@@ -394,15 +435,124 @@ adaptTypeScheme = define "adaptTypeScheme" $
   "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
   produce $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
 
-dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Bool -> Graph -> [Namespace] -> Flow s (Graph, [[TermDefinition]]))
+pushTypeAppsInward :: TBinding (Term -> Term)
+pushTypeAppsInward = define "pushTypeAppsInward" $
+  doc ("Normalize a term by pushing TermTypeApplication inward past TermApplication and"
+    <> " TermFunction (Lambda). This corrects structures produced by poly-let hoisting and"
+    <> " eta expansion, where type applications from inference end up wrapping term"
+    <> " applications or lambda abstractions instead of being directly on the polymorphic variable.") $
+  "term" ~>
+  lets [
+  "push">: ("body" ~> "typ" ~> cases _Term (var "body")
+    -- Default: keep TypeApp as-is
+    (Just $ Core.termTypeApplication $ Core.typeApplicationTerm (var "body") (var "typ")) [
+    -- TypeApp(App(f, arg), τ) → go(App(TypeApp(f, τ), arg))
+    _Term_application>>: "a" ~> var "go" @@
+      (Core.termApplication $ Core.application
+        (Core.termTypeApplication $ Core.typeApplicationTerm
+          (Core.applicationFunction $ var "a")
+          (var "typ"))
+        (Core.applicationArgument $ var "a")),
+    -- TypeApp(Lambda(v, d, body), τ) → go(Lambda(v, d, TypeApp(body, τ)))
+    _Term_function>>: "f" ~> cases _Function (var "f")
+      (Just $ Core.termTypeApplication $ Core.typeApplicationTerm
+        (Core.termFunction $ var "f") (var "typ")) [
+      _Function_lambda>>: "l" ~> var "go" @@
+        (Core.termFunction $ Core.functionLambda $ Core.lambda
+          (Core.lambdaParameter $ var "l")
+          (Core.lambdaDomain $ var "l")
+          (Core.termTypeApplication $ Core.typeApplicationTerm
+            (Core.lambdaBody $ var "l")
+            (var "typ")))],
+    -- TypeApp(Let(bindings, body), τ) → go(Let(bindings, TypeApp(body, τ)))
+    _Term_let>>: "lt" ~> var "go" @@
+      (Core.termLet $ Core.let_
+        (Core.letBindings $ var "lt")
+        (Core.termTypeApplication $ Core.typeApplicationTerm
+          (Core.letBody $ var "lt")
+          (var "typ")))]),
+  "go">: ("t" ~>
+    "forField" <~ ("fld" ~> Core.fieldWithTerm (var "go" @@ (Core.fieldTerm $ var "fld")) (var "fld")) $
+    "forElimination" <~ ("elm" ~> cases _Elimination (var "elm") Nothing [
+      _Elimination_record>>: "p" ~> Core.eliminationRecord (var "p"),
+      _Elimination_union>>: "cs" ~> Core.eliminationUnion $ Core.caseStatement
+        (Core.caseStatementTypeName $ var "cs")
+        (Maybes.map (var "go") (Core.caseStatementDefault $ var "cs"))
+        (Lists.map (var "forField") (Core.caseStatementCases $ var "cs")),
+      _Elimination_wrap>>: "name" ~> Core.eliminationWrap $ var "name"]) $
+    "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
+      _Function_elimination>>: "elm" ~> Core.functionElimination $ var "forElimination" @@ var "elm",
+      _Function_lambda>>: "l" ~> Core.functionLambda $ Core.lambda
+        (Core.lambdaParameter $ var "l")
+        (Core.lambdaDomain $ var "l")
+        (var "go" @@ (Core.lambdaBody $ var "l")),
+      _Function_primitive>>: "name" ~> Core.functionPrimitive $ var "name"]) $
+    "forLet" <~ ("lt" ~>
+      "mapBinding" <~ ("b" ~> Core.binding
+        (Core.bindingName $ var "b")
+        (var "go" @@ (Core.bindingTerm $ var "b"))
+        (Core.bindingType $ var "b")) $
+      Core.let_
+        (Lists.map (var "mapBinding") (Core.letBindings $ var "lt"))
+        (var "go" @@ (Core.letBody $ var "lt"))) $
+    "forMap" <~ ("m" ~>
+      "forPair" <~ ("p" ~> pair (var "go" @@ (Pairs.first $ var "p")) (var "go" @@ (Pairs.second $ var "p"))) $
+      Maps.fromList $ Lists.map (var "forPair") $ Maps.toList $ var "m") $
+    cases _Term (var "t") Nothing [
+      _Term_annotated>>: "at" ~> Core.termAnnotated $ Core.annotatedTerm
+        (var "go" @@ (Core.annotatedTermBody $ var "at"))
+        (Core.annotatedTermAnnotation $ var "at"),
+      _Term_application>>: "a" ~> Core.termApplication $ Core.application
+        (var "go" @@ (Core.applicationFunction $ var "a"))
+        (var "go" @@ (Core.applicationArgument $ var "a")),
+      _Term_either>>: "e" ~> Core.termEither $ Eithers.either_
+        ("l" ~> left $ var "go" @@ var "l")
+        ("r" ~> right $ var "go" @@ var "r")
+        (var "e"),
+      _Term_function>>: "fun" ~> Core.termFunction $ var "forFunction" @@ var "fun",
+      _Term_let>>: "lt" ~> Core.termLet $ var "forLet" @@ var "lt",
+      _Term_list>>: "els" ~> Core.termList $ Lists.map (var "go") (var "els"),
+      _Term_literal>>: "v" ~> Core.termLiteral $ var "v",
+      _Term_map>>: "m" ~> Core.termMap $ var "forMap" @@ var "m",
+      _Term_maybe>>: "m" ~> Core.termMaybe $ Maybes.map (var "go") (var "m"),
+      _Term_pair>>: "p" ~> Core.termPair $ pair
+        (var "go" @@ (Pairs.first $ var "p"))
+        (var "go" @@ (Pairs.second $ var "p")),
+      _Term_record>>: "r" ~> Core.termRecord $ Core.record
+        (Core.recordTypeName $ var "r")
+        (Lists.map (var "forField") (Core.recordFields $ var "r")),
+      _Term_set>>: "s" ~> Core.termSet $ Sets.fromList $ Lists.map (var "go") $ Sets.toList (var "s"),
+      _Term_typeApplication>>: "tt" ~>
+        "body1" <~ var "go" @@ (Core.typeApplicationTermBody $ var "tt") $
+        var "push" @@ var "body1" @@ (Core.typeApplicationTermType $ var "tt"),
+      _Term_typeLambda>>: "ta" ~> Core.termTypeLambda $ Core.typeLambda
+        (Core.typeLambdaParameter $ var "ta")
+        (var "go" @@ (Core.typeLambdaBody $ var "ta")),
+      _Term_union>>: "i" ~> Core.termUnion $ Core.injection
+        (Core.injectionTypeName $ var "i")
+        (var "forField" @@ (Core.injectionField $ var "i")),
+      _Term_unit>>: constant Core.termUnit,
+      _Term_variable>>: "v" ~> Core.termVariable $ var "v",
+      _Term_wrap>>: "wt" ~> Core.termWrap $ Core.wrappedTerm
+        (Core.wrappedTermTypeName $ var "wt")
+        (var "go" @@ (Core.wrappedTermBody $ var "wt"))])] $
+  var "go" @@ var "term"
+
+dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> Graph -> [Namespace] -> Flow s (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints and a designated list of namespaces,"
-    <> " adapt the graph to the language constraints, perform inference,"
+    <> " adapt the graph to the language constraints,"
     <> " then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces)."
+    <> " Inference is performed before adaptation if bindings lack type annotations."
+    <> " Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails."
+    <> " Adaptation preserves type application/lambda wrappers and adapts embedded types."
+    <> " Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent."
     <> " The doExpand flag controls eta expansion."
     <> " The doHoistCaseStatements flag controls case statement hoisting (needed for Python)."
     <> " The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java).") $
-  "constraints" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~> "graph" ~> "namespaces" ~>
+  "constraints" ~>
+  "doInfer" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~>
+  "graph0" ~> "namespaces" ~>
 
   "namespacesSet" <~ Sets.fromList (var "namespaces") $
 
@@ -410,134 +560,79 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     false
     ("ns" ~> Sets.member (var "ns") (var "namespacesSet"))) $
 
+  -- Steps 0a-2: Case statement hoisting pipeline (only for Python target, currently).
+  -- 0a: Strip type lambdas so case expressions are visible to the hoister
+  --     (the hoister does not traverse into type lambdas).
+  -- 0b: Unshadow variables to prevent capture issues after hoisting.
+  -- 1:  Hoist case statements before inference.
+  -- 2:  Unshadow again after hoisting (hoisting introduces new lambda wrappers).
+  "hoistCases" <~ ("g" ~>
+    "graphDetyped" <~ Graph.graphWithElements (var "g")
+      (Lists.map ("b" ~>
+        Core.binding (Core.bindingName $ var "b")
+          (Rewriting.stripTypeLambdas @@ (Core.bindingTerm $ var "b"))
+          (Core.bindingType $ var "b"))
+        (Graph.graphElements $ var "g")) $
+    "gterm0" <~ Schemas.graphAsTerm @@ var "graphDetyped" $
+    "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm0" $
+    "newElements" <~ Schemas.termAsGraph @@ var "gterm1" $
+    "graphu0" <~ Graph.graphWithElements (var "graphDetyped") (var "newElements") $
+    "graphh1" <<~ Hoisting.hoistCaseStatementsInGraph @@ var "graphu0" $
+    "gterm2" <~ Schemas.graphAsTerm @@ var "graphh1" $
+    "gterm3" <~ Rewriting.unshadowVariables @@ var "gterm2" $
+    "newElements2" <~ Schemas.termAsGraph @@ var "gterm3" $
+    produce $ Graph.graphWithElements (var "graphh1") (var "newElements2")) $
+
   "hoistPoly" <~ ("graphBefore" ~>
 --    "typeContext" <<~ Schemas.graphToTypeContext @@ var "gBefore" $
     "letBefore" <~ Schemas.graphAsLet @@ var "graphBefore" $
     "letAfter" <~ Hoisting.hoistPolymorphicLetBindings @@ var "isParentBinding" @@ var "letBefore" $
     Graph.graphWithElements (var "graphBefore") (Core.letBindings $ var "letAfter")) $
 
-  -- Step 0: Unshadow variables BEFORE case statement hoisting
-  -- This prevents capture issues where hoisted code references the wrong variable
-  -- after code generators rename shadowed parameters
-  "graphu0" <<~ Logic.ifElse (var "doHoistCaseStatements")
-    ("gterm0" <~ Schemas.graphAsTerm @@ var "graph" $
-     "gterm1" <~ Rewriting.unshadowVariables @@ var "gterm0" $
-     "newElements" <~ Schemas.termAsGraph @@ var "gterm1" $
-     produce $ Graph.graphWithElements (var "graph") (var "newElements"))
-    (produce $ var "graph") $
+  -- Note: this is a rough test of typedness, as it only checks that the top-level bindings are typed.
+  "checkTyped" <~ ("debugLabel" ~> "g" ~>
+    "untypedBindings" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
+      (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (Graph.graphElements $ var "g")) $
+    Logic.ifElse (Lists.null $ var "untypedBindings")
+      (produce $ var "g")
+      (Flows.fail $ Strings.concat [
+        string "Found untyped bindings (", var "debugLabel", string "): ",
+        Strings.intercalate (string ", ") (var "untypedBindings")])) $
 
-  -- Step 1: Hoist case statements BEFORE inference (case hoisting doesn't need types)
-  -- This ensures match expressions are applied to arguments before eta expansion
-  "graphh1" <<~ Logic.ifElse (var "doHoistCaseStatements")
-    (Hoisting.hoistCaseStatementsInGraph @@ var "graphu0")
-    (produce $ var "graphu0") $
+  -- Normalize: push type applications inward past applications and lambdas.
+  -- This corrects structures where TypeApp wraps App/Lambda after adaptation and eta expansion.
+  "normalizeGraph" <~ ("g" ~> Graph.graphWithElements (var "g")
+    (Lists.map ("b" ~> Core.binding
+      (Core.bindingName $ var "b")
+      (pushTypeAppsInward @@ (Core.bindingTerm $ var "b"))
+      (Core.bindingType $ var "b"))
+    (Graph.graphElements $ var "g"))) $
 
-  -- Step 2: Unshadow variables AGAIN after case statement hoisting
-  -- Hoisting creates new lambda wrappers for captured variables, which can reintroduce shadowing
-  "graphu1" <<~ Logic.ifElse (var "doHoistCaseStatements")
-    ("gterm2" <~ Schemas.graphAsTerm @@ var "graphh1" $
-     "gterm3" <~ Rewriting.unshadowVariables @@ var "gterm2" $
-     "newElements2" <~ Schemas.termAsGraph @@ var "gterm3" $
-     produce $ Graph.graphWithElements (var "graphh1") (var "newElements2"))
-    (produce $ var "graphh1") $
+  -- Step 1: hoist case statements if needed (currently, for the Python target)
+  "graph1" <<~ Logic.ifElse (var "doHoistCaseStatements")
+    (var "hoistCases" @@ var "graph0")
+    (produce $ var "graph0") $
 
-  -- Step 3: Run first inference if eta expansion is needed (eta expansion needs types)
-  "graphi1" <<~ Logic.ifElse (Logic.or (var "doExpand") (var "doHoistPolymorphicLetBindings"))
-    (Inference.inferGraphTypes @@ var "graphu1")
-    (produce $ var "graphu1") $
+  -- Step 2: infer types if necessary
+  "graph2" <<~ Logic.ifElse (var "doInfer")
+     (Inference.inferGraphTypes @@ var "graph1")
+     (var "checkTyped" @@ string "after case hoisting" @@ var "graph1") $
 
---  "debug" <<~ Flows.fail (Strings.concat [
---    string "elements before: ",
---    Strings.intercalate (string ", ") (Lists.map ("b" ~> Core.unName $ Core.bindingName $ var "b") (Graph.graphElements $ var "graphi1"))]) $
+  -- Step 3: hoist let bindings if necessary (currently, for the Java target)
+  "graph3" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
+    (var "checkTyped" @@ string "after let hoisting"
+      @@ (var "hoistPoly" @@ var "graph2"))
+    (produce $ var "graph2") $
 
---  "debug" <<~ Flows.fail (Strings.concat [
---    string "graph before hosting: ",
---    ShowCore.let_ @@ (Schemas.graphAsLet @@ var "graphi1")]) $
+  -- Step 4: adapt the graph (includes eta expansion if enabled).
+  -- Adaptation preserves type application/lambda wrappers and adapts embedded types
+  -- (literal types, lambda domains, TypeSchemes).
+  "graph4" <<~ Flows.bind
+    (adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graph3")
+    (var "checkTyped" @@ (string "after adaptation")) $
 
-  -- Step 4: Hoist let bindings AFTER inference (requires type annotations)
-  "graphh" <~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
-    (var "hoistPoly" @@ var "graphi1")
-    (var "graphi1") $
-
---  "debug" <<~ Flows.fail (Strings.concat [
---    string "graph after hoisting: ",
---    ShowCore.let_ @@ (Schemas.graphAsLet @@ var "graphh")]) $
-
---  "debug" <<~ Flows.fail (Strings.concat [
---    string "elements after: ",
---    Strings.intercalate (string ", ") (Lists.map ("b" ~> Core.unName $ Core.bindingName $ var "b") (Graph.graphElements $ var "graphh"))]) $
-
---  "debug" <<~ Flows.fail (Strings.concat [
---    string "let before: ",
---    Strings.intercalate (string ", ") (Lists.map ("b" ~> Core.unName $ Core.bindingName $ var "b") $ Core.letBindings (Schemas.graphAsLet @@ var "graphi1")),
---    string ", let after: ",
---    Strings.intercalate (string ", ") (Lists.map ("b" ~> Core.unName $ Core.bindingName $ var "b") $ Core.letBindings (Hoisting.hoistPolymorphicLetBindings @@ var "isParentBinding" @@ (Schemas.graphAsLet @@ var "graphi1")))]) $
-
-  -- Step 5: Adapt the graph (includes eta expansion if enabled)
-  "graph1" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "graphh" $
-
---  "debug" <<~ Flows.fail (string "expanded") $
-
-  -- Step 6: Perform second inference on the adapted graph (eta expansion may introduce new terms)
-  "graph2" <<~ Inference.inferGraphTypes @@ var "graph1" $
-
-
---  -- Step 6: Hoist polymorphic let bindings AFTER all inference is complete
---  -- This ensures the hoisted type schemes won't be overwritten by inference
---  -- If doHoistPolymorphicLetBindings is True, polymorphic bindings are hoisted to TOP LEVEL (for Java)
---  -- Polymorphic bindings are those with type scheme variables, OR bindings whose types use
---  -- type variables from enclosing type lambdas - they need to become top-level methods.
---  -- Non-polymorphic nested lets will be handled by flattenLetTerms in Step 6b.
---  -- We process each module's elements separately, creating a module-level let term,
---  -- applying hoisting, then converting back. This ensures hoisted bindings stay in their module.
---  -- The hoistModule function returns a pair: (bindings, names) so we can track new names per module.
---  -- We use hoistLetBindingsWithContext which properly tracks type variables via TypeContext.
---  "typeContext" <<~ Schemas.graphToTypeContext @@ var "graph2" $
---
---  -- Helper to check if a name is qualified (contains a dot) - qualified names are original top-level bindings
---  "isQualifiedName" <~ ("name" ~>
---    "parts" <~ Strings.splitOn (string ".") (Core.unName $ var "name") $
---    Equality.gt (Lists.length $ var "parts") (int32 1)) $
---
---    "hoistModuleResult" <~ (-- When not hoisting, just return the original bindings and names for each module
---     Lists.map ("moduleNames" ~>
---       "moduleBindings" <~ Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (Graph.graphElements $ var "graph2")) (var "moduleNames")) $
---       pair (var "moduleBindings") (var "moduleNames"))
---     (var "nameLists")) $
---
---  -- Extract bindings and names from the hoistModuleResult
---  "allHoistedBindings" <~ Lists.concat (Lists.map ("p" ~> Pairs.first (var "p")) (var "hoistModuleResult")) $
---
---  -- Create new elements map from hoisted bindings, merged with original graph elements
---  -- The union preserves dependency module elements that are not being hoisted
---  "newElements3" <~ Maps.union
---    (Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "allHoistedBindings")))
---    (Graph.graphElements $ var "graph2") $
---
---  "graphh2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
---    (produce $ Graph.graphWithElements (var "graph2") (var "newElements3"))
---    (produce $ var "graph2") $
---
---  -- Step 6b: Flatten nested let terms for Java (when polymorphic let hoisting is enabled)
---  -- After polymorphic let hoisting, non-polymorphic nested lets remain, which Java doesn't support
---  "graphf2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
---    ("flattenBinding" <~ ("binding" ~>
---       Core.binding
---         (Core.bindingName $ var "binding")
---         (Rewriting.flattenLetTerms @@ (Core.bindingTerm $ var "binding"))
---         (Core.bindingType $ var "binding")) $
---     "newBindingsF" <~ Lists.map (var "flattenBinding") (Maps.elems $ Graph.graphElements $ var "graphh2") $
---     "newElementsF" <~ Maps.fromList (Lists.map ("b" ~> pair (Core.bindingName $ var "b") (var "b")) (var "newBindingsF")) $
---     produce $ Graph.graphWithElements (var "graphh2") (var "newElementsF"))
---    (produce $ var "graphh2") $
---
---  -- Step 7: Unshadow variables after polymorphic let hoisting and flattening (if it was done)
---  "graphu2" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
---    ("gterm4" <~ Schemas.graphAsTerm @@ var "graphf2" $
---     "gterm5" <~ Rewriting.unshadowVariables @@ var "gterm4" $
---     "newElements4" <~ Schemas.termAsGraph @@ var "gterm5" $
---     produce $ Graph.graphWithElements (var "graphf2") (var "newElements4"))
---    (produce $ var "graphf2") $
+  -- Step 5: normalize the adapted graph
+  "graph5" <~ var "normalizeGraph" @@ var "graph4" $
 
   -- Construct term definitions grouped by namespace
   "toDef" <~ ("el" ~>
@@ -552,7 +647,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     ("el" ~> optCases (Names.namespaceOf @@ (Core.bindingName $ var "el"))
       false
       ("ns" ~> Sets.member (var "ns") (var "namespacesSet")))
-    (Graph.graphElements $ var "graph2") $
+    (Graph.graphElements $ var "graph5") $
   -- Group elements by namespace
   "elementsByNamespace" <~ Lists.foldl
     ("acc" ~> "el" ~>
@@ -571,7 +666,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     (var "namespaces") $
 
   produce $ pair
-    (var "graph2")
+    (var "graph5")
     (var "defsGrouped")
 
 literalTypeSupported :: TBinding (LanguageConstraints -> LiteralType -> Bool)
@@ -620,7 +715,12 @@ termAlternatives = define "termAlternatives" $
       Core.termList $ optCases (var "ot")
         (list ([] :: [TTerm Term]))
         ("term2" ~> list [var "term2"])],
-    -- Note: no type abstractions or type applications, as we are not expecting System F terms here
+    _Term_typeLambda>>: "abs" ~>
+      "term2" <~ Core.typeLambdaBody (var "abs") $
+      produce $ list [var "term2"],
+    _Term_typeApplication>>: "ta" ~>
+      "term2" <~ Core.typeApplicationTermBody (var "ta") $
+      produce $ list [var "term2"],
     _Term_union>>: "inj" ~>
       "tname" <~ Core.injectionTypeName (var "inj") $
       "field" <~ Core.injectionField (var "inj") $
