@@ -67,17 +67,8 @@ if [ -d "$HYDRA_PYTHON_DIR/src/gen-main/python/hydra/sources" ]; then
     find "$OUTPUT_DIR/src/gen-main/python/hydra/sources" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
 fi
 
-# Eval lib modules (hydra.eval.lib.*) — these are a separate manifest category
-# (evalLibModules) not included in the main bootstrap generation. Copy from baseline.
-echo "  Copying eval lib modules from baseline..."
 PY_GEN="$OUTPUT_DIR/src/gen-main/python/hydra"
 PY_BASELINE="$HYDRA_PYTHON_DIR/src/gen-main/python/hydra"
-if [ ! -d "$PY_GEN/eval" ] && [ -d "$PY_BASELINE/eval" ]; then
-    mkdir -p "$PY_GEN/eval"
-    cp -r "$PY_BASELINE/eval/"* "$PY_GEN/eval/"
-    find "$PY_GEN/eval" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-    echo "    Copied hydra/eval from baseline"
-fi
 
 # Copy ext modules from baseline, replacing any generated versions.
 # The bootstrap only generates a subset of ext modules (haskell, json);

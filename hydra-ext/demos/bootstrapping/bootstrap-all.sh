@@ -198,7 +198,7 @@ run_path() {
     set +e
     case "$host" in
         haskell)
-            "$SCRIPT_DIR/bootstrap-to-${target}.sh" $EXTRA_FLAGS 2>&1 | tee "$logfile"
+            "$SCRIPT_DIR/haskell-to-${target}.sh" $EXTRA_FLAGS 2>&1 | tee "$logfile"
             exit_code=${PIPESTATUS[0]}
             ;;
         java)

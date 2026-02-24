@@ -59,16 +59,8 @@ for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java; do
     fi
 done
 
-# Eval lib modules (hydra.eval.lib.*) — these are a separate manifest category
-# (evalLibModules) not included in the main bootstrap generation. Copy from baseline.
-echo "  Copying eval lib modules from baseline..."
 JAVA_GEN="$OUTPUT_DIR/src/gen-main/java"
 JAVA_BASELINE="$HYDRA_JAVA_DIR/src/gen-main/java"
-if [ ! -d "$JAVA_GEN/hydra/eval" ] && [ -d "$JAVA_BASELINE/hydra/eval" ]; then
-    mkdir -p "$JAVA_GEN/hydra/eval"
-    cp -r "$JAVA_BASELINE/hydra/eval/"* "$JAVA_GEN/hydra/eval/"
-    echo "    Copied hydra/eval from baseline"
-fi
 
 # Copy ext modules from baseline, replacing any generated versions.
 # The bootstrap may generate ext modules with incorrect file paths for the
@@ -99,14 +91,17 @@ echo "  Generated test modules:   $TEST_COUNT files"
 echo "  Static resources:         $STATIC_COUNT files"
 echo ""
 
-# Run tests
-echo "Running Java tests..."
+# Build and run tests
+echo "Building and running Java tests..."
 STEP_START=$(date +%s)
 cd "$OUTPUT_DIR"
+./gradlew compileJava compileTestJava 2>&1
+BUILD_END=$(date +%s)
+echo "  Build time: $((BUILD_END - STEP_START))s"
 ./gradlew test 2>&1
 TEST_EXIT=$?
-STEP_END=$(date +%s)
-echo "  Test time: $((STEP_END - STEP_START))s"
+TEST_END=$(date +%s)
+echo "  Test time: $((TEST_END - BUILD_END))s"
 echo ""
 
 exit $TEST_EXIT

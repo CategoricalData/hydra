@@ -69,7 +69,7 @@ main = do
   let ext = case target of { "haskell" -> ".hs"; "java" -> ".java"; "python" -> ".py"; _ -> "" }
 
   putStrLn "=========================================="
-  putStrLn $ "Bootstrapping Hydra to " ++ target ++ " from JSON (via Haskell)"
+  putStrLn $ "Bootstrapping Hydra from JSON into " ++ target ++ " (via Haskell host)"
   putStrLn $ "Output directory: " ++ outDir
   putStrLn "=========================================="
   putStrLn ""
@@ -79,17 +79,20 @@ main = do
 
   -- Read namespace lists from manifest.json
   mainNamespaces <- readManifestField haskellMainJson "mainModules"
+  evalLibNamespaces <- readManifestField haskellMainJson "evalLibModules"
+  let allNamespaces = mainNamespaces ++ evalLibNamespaces
 
   putStrLn "Loading main modules from JSON..."
   putStrLn $ "  Source: " ++ haskellMainJson
-  mainMods <- loadModulesFromJson False haskellMainJson kernelModules mainNamespaces
+  mainMods <- loadModulesFromJson False haskellMainJson kernelModules allNamespaces
   putStrLn $ "  Loaded " ++ show (length mainMods) ++ " main modules."
   putStrLn ""
 
   -- Generate code for the target language.
   -- doInfer=False because modules loaded from JSON already have type annotations.
   let outMain = outDir FP.</> ("src/gen-main/" ++ target)
-  putStrLn $ "Generating " ++ target ++ " main code..."
+  putStrLn $ "Mapping modules from JSON to " ++ target ++ " (via Haskell host)..."
+  putStrLn "  Generating (this may take several minutes)..."
 
   mainStart <- getCurrentTime
   case target of
@@ -103,7 +106,7 @@ main = do
   let mainSecs = realToFrac (diffUTCTime mainEnd mainStart) :: Double
 
   mainFileCount <- countFiles outMain ext
-  putStrLn $ "  Generated " ++ show mainFileCount ++ " main " ++ target ++ " files."
+  putStrLn $ "  Haskell to " ++ target ++ ": done generating main modules (" ++ show mainFileCount ++ " files)."
   putStrLn $ "  Time: " ++ formatTime mainSecs
   putStrLn ""
 
@@ -119,7 +122,8 @@ main = do
 
   let allUniverse = mainMods ++ testMods
   let outTest = outDir FP.</> ("src/gen-test/" ++ target)
-  putStrLn $ "Generating " ++ target ++ " test code..."
+  putStrLn $ "Mapping test suite from JSON to " ++ target ++ " (via Haskell host)..."
+  putStrLn "  Generating (this may take several minutes)..."
 
   testStart <- getCurrentTime
   case target of
@@ -131,12 +135,12 @@ main = do
   let testSecs = realToFrac (diffUTCTime testEnd testStart) :: Double
 
   testFileCount <- countFiles outTest ext
-  putStrLn $ "  Generated " ++ show testFileCount ++ " test " ++ target ++ " files."
+  putStrLn $ "  Haskell to " ++ target ++ ": done generating test modules (" ++ show testFileCount ++ " files)."
   putStrLn $ "  Time: " ++ formatTime testSecs
   putStrLn ""
 
   putStrLn "=========================================="
-  putStrLn "Bootstrap complete!"
+  putStrLn $ "Haskell to " ++ target ++ ": done generating all modules"
   putStrLn $ "  Output files: " ++ show mainFileCount ++ " main + " ++ show testFileCount ++ " test"
   putStrLn $ "  Output:       " ++ outDir
   putStrLn "=========================================="

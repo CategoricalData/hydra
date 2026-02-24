@@ -43,9 +43,9 @@ hydra-ext/
 ├── demos/bootstrapping/
 │   ├── README.md                    # This file
 │   ├── bootstrap-all.sh             # Run all Haskell bootstrapping paths
-│   ├── bootstrap-to-haskell.sh      # Haskell -> JSON -> Haskell
-│   ├── bootstrap-to-java.sh         # Haskell -> JSON -> Java
-│   ├── bootstrap-to-python.sh       # Haskell -> JSON -> Python
+│   ├── haskell-to-haskell.sh      # Haskell -> JSON -> Haskell
+│   ├── haskell-to-java.sh         # Haskell -> JSON -> Java
+│   ├── haskell-to-python.sh       # Haskell -> JSON -> Python
 │   ├── java-bootstrap.sh            # Java -> JSON -> target
 │   └── python-bootstrap.sh          # Python -> JSON -> target
 ├── src/exec/bootstrap-from-json/
@@ -87,7 +87,7 @@ Run a single bootstrapping path:
 
 ```bash
 cd hydra-ext
-./demos/bootstrapping/bootstrap-to-java.sh
+./demos/bootstrapping/haskell-to-java.sh
 ```
 
 Run all Haskell bootstrapping paths:

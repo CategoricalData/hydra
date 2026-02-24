@@ -8,22 +8,21 @@
 # The detailed step-by-step output (timing, file counts, etc.) is provided
 # by the Java Bootstrap.main() class itself.
 
-set -e
+set -eo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_JAVA_DIR="$HYDRA_ROOT/hydra-java"
 
-echo "=========================================="
-echo "Java Bootstrapping Demo"
-echo "=========================================="
-echo ""
-
-# Step 0: Build hydra-java
+# Build hydra-java
 echo "Building hydra-java..."
 BUILD_START=$(date +%s)
 cd "$HYDRA_ROOT"
-./gradlew :hydra-java:compileJava 2>&1 | tail -3
+if ! ./gradlew :hydra-java:compileJava 2>&1; then
+    echo ""
+    echo "ERROR: Java compilation failed. See errors above."
+    exit 1
+fi
 BUILD_END=$(date +%s)
 echo "  Build time: $((BUILD_END - BUILD_START))s"
 echo ""

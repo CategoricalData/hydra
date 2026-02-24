@@ -55,7 +55,7 @@ public class Bootstrap {
         String outDir = outBase + File.separator + "java-to-" + target;
 
         System.out.println("==========================================");
-        System.out.println("Bootstrapping Hydra to " + target + " from JSON (via Java)");
+        System.out.println("Bootstrapping Hydra from JSON into " + target + " (via Java host)");
         System.out.println("==========================================");
         System.out.println("  Host language:   Java");
         System.out.println("  Target language: " + target);
@@ -70,14 +70,17 @@ public class Bootstrap {
         System.out.println("  Source: " + jsonDir);
 
         long stepStart = System.currentTimeMillis();
-        // Load kernel modules from JSON using the known namespace list.
+        // Load main and eval lib modules from JSON using the manifest.
         // Preserve TypeSchemes (stripTypeSchemes=false) so that the pipeline
         // can skip pre-adaptation inference. Without types, inference fails on
         // hoisted case-statement bindings (_hoist_*) that lack type annotations.
         List<Namespace> mainNamespaces = Generation.readManifestField(jsonDir, "mainModules");
+        List<Namespace> evalLibNamespaces = Generation.readManifestField(jsonDir, "evalLibModules");
+        List<Namespace> allNamespaces = new ArrayList<>(mainNamespaces);
+        allNamespaces.addAll(evalLibNamespaces);
         java.util.Map<hydra.core.Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
         List<Module> rawMods = Generation.loadModulesFromJson(false, jsonDir,
-                schemaMap, mainNamespaces);
+                schemaMap, allNamespaces);
         long stepTime = System.currentTimeMillis() - stepStart;
 
         int totalBindings = 0;
@@ -136,7 +139,7 @@ public class Bootstrap {
         }
 
         // List modules to generate
-        System.out.println("Step 3: Generating " + target + " code...");
+        System.out.println("Step 3: Mapping modules from JSON to " + target + " (via Java host)...");
         System.out.println("  Universe: " + allMods.size() + " modules");
         System.out.println("  Generating: " + modsToGenerate.size() + " modules:");
         for (Module m : modsToGenerate) {
@@ -145,6 +148,7 @@ public class Bootstrap {
         }
         System.out.println("  Output: " + outDir);
         System.out.println();
+        System.out.println("  Generating (this may take several minutes)...");
 
         String outMain = outDir + File.separator + "src/gen-main";
         stepStart = System.currentTimeMillis();
@@ -177,7 +181,7 @@ public class Bootstrap {
             // ignore
         }
 
-        System.out.println("  Generated " + mainFileCount + " main " + target + " files.");
+        System.out.println("  Java to " + target + ": done generating main modules (" + mainFileCount + " files).");
         System.out.println("  Time: " + formatTime(stepTime));
         System.out.println();
 
@@ -206,11 +210,12 @@ public class Bootstrap {
         allUniverse.addAll(testMods);
 
         String outTest = outDir + File.separator + "src/gen-test";
-        System.out.println("Step 5: Generating " + target + " test code...");
+        System.out.println("Step 5: Mapping test suite from JSON to " + target + " (via Java host)...");
         System.out.println("  Universe: " + allUniverse.size() + " modules");
         System.out.println("  Generating: " + testMods.size() + " test modules");
         System.out.println("  Output: " + outTest);
         System.out.println();
+        System.out.println("  Generating (this may take several minutes)...");
 
         stepStart = System.currentTimeMillis();
 
@@ -244,14 +249,14 @@ public class Bootstrap {
             // ignore
         }
 
-        System.out.println("  Generated " + testFileCount + " test " + target + " files.");
+        System.out.println("  Java to " + target + ": done generating test modules (" + testFileCount + " files).");
         System.out.println("  Time: " + formatTime(stepTime));
         System.out.println();
 
         long totalTime = System.currentTimeMillis() - totalStart;
 
         System.out.println("==========================================");
-        System.out.println("Bootstrap complete: java-to-" + target);
+        System.out.println("Java to " + target + ": done generating all modules");
         System.out.println("==========================================");
         System.out.println("  Modules loaded:    " + rawMods.size() + " main + " + testMods.size() + " test");
         System.out.println("  Modules generated: " + modsToGenerate.size() + " main + " + testMods.size() + " test");

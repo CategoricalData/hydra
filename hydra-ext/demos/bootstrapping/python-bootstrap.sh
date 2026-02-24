@@ -14,11 +14,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_PYTHON_DIR="$HYDRA_ROOT/hydra-python"
 
-echo "=========================================="
-echo "Python Bootstrapping Demo"
-echo "=========================================="
-echo ""
-
 # Locate Python interpreter
 # PyPy3 is strongly recommended for term-level generation (CPython is too slow).
 # For type-only generation, CPython works fine.

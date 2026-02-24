@@ -41,15 +41,6 @@ if [ -d "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Sources" ]; then
     cp -r "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Sources/"* "$OUTPUT_DIR/src/gen-main/haskell/Hydra/Sources/"
 fi
 
-# Eval lib modules (Hydra.Eval.Lib.*) — these are a separate manifest category
-# (evalLibModules) not included in the main bootstrap generation. Copy from baseline.
-echo "  Copying eval lib modules from baseline..."
-if [ -d "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Eval" ]; then
-    mkdir -p "$OUTPUT_DIR/src/gen-main/haskell/Hydra/Eval"
-    cp -r "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Eval/"* "$OUTPUT_DIR/src/gen-main/haskell/Hydra/Eval/"
-    echo "    Copied Hydra/Eval from baseline"
-fi
-
 # Copy ext modules from baseline, replacing any generated versions.
 # The bootstrap only generates a subset of ext modules (haskell, json);
 # other ext modules (java, python, scala, yaml) must come from the baseline.
@@ -87,14 +78,17 @@ echo "  Generated test modules:   $TEST_COUNT files"
 echo "  Static resources:         $STATIC_COUNT files"
 echo ""
 
-# Run tests
-echo "Running Haskell tests..."
+# Build and run tests
+echo "Building and running Haskell tests..."
 STEP_START=$(date +%s)
 cd "$OUTPUT_DIR"
+stack build 2>&1
+BUILD_END=$(date +%s)
+echo "  Build time: $((BUILD_END - STEP_START))s"
 stack test 2>&1
 TEST_EXIT=$?
-STEP_END=$(date +%s)
-echo "  Test time: $((STEP_END - STEP_START))s"
+TEST_END=$(date +%s)
+echo "  Test time: $((TEST_END - BUILD_END))s"
 echo ""
 
 exit $TEST_EXIT

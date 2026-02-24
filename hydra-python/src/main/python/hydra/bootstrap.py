@@ -69,7 +69,7 @@ def main():
     out_dir = os.path.join(args.output, f"python-to-{args.target}")
 
     print("==========================================", flush=True)
-    print(f"Bootstrapping Hydra to {args.target} from JSON (via Python)", flush=True)
+    print(f"Bootstrapping Hydra from JSON into {args.target} (via Python host)", flush=True)
     print("==========================================", flush=True)
     print(f"  Host language:   Python", flush=True)
     print(f"  Target language: {args.target}", flush=True)
@@ -82,13 +82,15 @@ def main():
     print("==========================================", flush=True)
     print(flush=True)
 
-    # Step 1: Load all modules from JSON
+    # Step 1: Load all modules from JSON (main + eval lib)
     print("Step 1: Loading modules from JSON...", flush=True)
     print(f"  Source: {args.json_dir}", flush=True)
     step_start = time.time()
     main_namespaces = read_manifest_field(args.json_dir, "mainModules")
+    eval_lib_namespaces = read_manifest_field(args.json_dir, "evalLibModules")
+    all_namespaces = main_namespaces + eval_lib_namespaces
     km = kernel_modules()
-    raw_mods = load_modules_from_json(False, args.json_dir, km, main_namespaces)
+    raw_mods = load_modules_from_json(False, args.json_dir, km, all_namespaces)
     step_time = time.time() - step_start
     total_bindings = sum(len(m.elements) for m in raw_mods)
     print(f"  Loaded {len(raw_mods)} modules ({total_bindings} bindings).", flush=True)
@@ -127,7 +129,7 @@ def main():
 
     # Step 5: Generate code for the target language
     out_main = os.path.join(out_dir, "src/gen-main")
-    print(f"Step 4: Generating {args.target} code...", flush=True)
+    print(f"Step 4: Mapping modules from JSON to {args.target} (via Python host)...", flush=True)
     print(f"  Universe: {len(main_universe)} modules", flush=True)
     print(f"  Generating: {len(mods_to_generate)} modules:", flush=True)
     for m in mods_to_generate:
@@ -135,6 +137,7 @@ def main():
         print(f"    - {m.namespace.value} ({bindings} bindings)", flush=True)
     print(f"  Output: {out_dir}", flush=True)
     print(flush=True)
+    print("  Generating (this may take several minutes)...", flush=True)
 
     step_start = time.time()
 
@@ -151,7 +154,7 @@ def main():
     ext = {"java": ".java", "python": ".py", "haskell": ".hs"}[args.target]
     main_file_count = _count_files(os.path.join(out_dir, "src/gen-main"), ext)
 
-    print(f"  Generated {main_file_count} main {args.target} files.", flush=True)
+    print(f"  Python to {args.target}: done generating main modules ({main_file_count} files).", flush=True)
     print(f"  Time: {_format_time(step_time)}", flush=True)
     print(flush=True)
 
@@ -172,11 +175,12 @@ def main():
 
     all_universe = all_mods + test_mods
     out_test = os.path.join(out_dir, "src/gen-test")
-    print(f"Step 6: Generating {args.target} test code...", flush=True)
+    print(f"Step 6: Mapping test suite from JSON to {args.target} (via Python host)...", flush=True)
     print(f"  Universe: {len(all_universe)} modules", flush=True)
     print(f"  Generating: {len(test_mods)} test modules", flush=True)
     print(f"  Output: {out_test}", flush=True)
     print(flush=True)
+    print("  Generating (this may take several minutes)...", flush=True)
 
     step_start = time.time()
 
@@ -190,14 +194,14 @@ def main():
     step_time = time.time() - step_start
     test_file_count = _count_files(out_test, ext)
 
-    print(f"  Generated {test_file_count} test {args.target} files.", flush=True)
+    print(f"  Python to {args.target}: done generating test modules ({test_file_count} files).", flush=True)
     print(f"  Time: {_format_time(step_time)}", flush=True)
     print(flush=True)
 
     total_time = time.time() - total_start
 
     print("==========================================", flush=True)
-    print(f"Bootstrap complete: python-to-{args.target}", flush=True)
+    print(f"Python to {args.target}: done generating all modules", flush=True)
     print("==========================================", flush=True)
     print(f"  Modules loaded:    {len(raw_mods)} main + {len(test_mods)} test", flush=True)
     print(f"  Modules generated: {len(mods_to_generate)} main + {len(test_mods)} test", flush=True)
