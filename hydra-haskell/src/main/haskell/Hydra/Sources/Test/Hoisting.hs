@@ -1077,6 +1077,81 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
             [(nm "just", lambda "a"
               (apply (var "g") (apply (var "_hoist_f_1") (var "a")))),
              (nm "nothing", int32 0)]))
+        (var "f")),
+
+    -- ============================================================
+    -- Test: Case inside case default with let binding
+    -- This is the pattern from isSimpleAssignment in CoderUtils:
+    -- match term with
+    --   specific_case -> ...
+    --   _ -> let baseTerm = f(term) in match baseTerm with ...
+    -- The inner case in the default branch's let body must be hoisted
+    -- because Python can't encode match statements inline in case branches
+    -- ============================================================
+
+    hoistCaseStatementsCase "case in let body inside applied case default IS hoisted"
+      -- Input: let f = (case x of just a -> a | _ -> let b = g(x) in (case b of ...)(b)) x
+      -- The outer case is applied (through `cases`/`apply`), putting default branch
+      -- at non-top-level. Inner applied case in default > let body must be hoisted.
+      -- This is the pattern from isSimpleAssignment in CoderUtils.
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "a" (var "a")),
+             (nm "nothing",
+              letExpr "b" (apply (var "g") (var "x"))
+                (apply
+                  (match (nm "Result") nothing
+                    [(nm "ok", lambda "y" (var "y")),
+                     (nm "err", int32 0)])
+                  (var "b")))])
+          (var "x"))
+        (var "f"))
+      -- Output: inner applied case is hoisted within the inner let (preserving let-bound variable scoping)
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "a" (var "a")),
+             (nm "nothing",
+              letExpr "b" (apply (var "g") (var "x"))
+                (letExpr "_hoist__body_1"
+                  (match (nm "Result") nothing
+                    [(nm "ok", lambda "y" (var "y")),
+                     (nm "err", int32 0)])
+                  (apply (var "_hoist__body_1") (var "b"))))])
+          (var "x"))
+        (var "f")),
+
+    hoistCaseStatementsCase "case in let body inside applied case branch IS hoisted"
+      -- Input: let f = (case x of just a -> let b = h(a) in (case b of ...)(b) | nothing -> 0) x
+      -- Like above but inner case is in a named branch rather than default.
+      -- 'a' IS lambda-bound (from the case branch), so it IS captured.
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "a"
+              (letExpr "b" (apply (var "h") (var "a"))
+                (apply
+                  (match (nm "Result") nothing
+                    [(nm "ok", lambda "y" (var "y")),
+                     (nm "err", int32 0)])
+                  (var "b")))),
+             (nm "nothing", int32 0)])
+          (var "x"))
+        (var "f"))
+      -- Output: inner case is hoisted within the inner let (preserving let-bound variable scoping)
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "a"
+              (letExpr "b" (apply (var "h") (var "a"))
+                (letExpr "_hoist__body_1"
+                  (match (nm "Result") nothing
+                    [(nm "ok", lambda "y" (var "y")),
+                     (nm "err", int32 0)])
+                  (apply (var "_hoist__body_1") (var "b"))))),
+             (nm "nothing", int32 0)])
+          (var "x"))
         (var "f"))]
 
 -- | Test cases for hoistPolymorphicLetBindings
@@ -1500,7 +1575,111 @@ hoistPolymorphicLetBindingsGroup = subgroup "hoistPolymorphicLetBindings" [
             (lambdaTyped "sleft" T.int32
               (lambda "y" (apply (apply (var "wrapper_cannotUnify") (var "sleft")) (var "y")))),
           polyType ["b"] (T.function T.int32 (T.function (T.var "b") (T.var "b"))))]
-        (apply (var "wrapper") (int32 1)))]
+        (apply (var "wrapper") (int32 1))),
+
+    -- ============================================================
+    -- Regression test: polymorphic binding with pair term must preserve
+    -- type application wrappers after hoisting. This reproduces the
+    -- "pair type requires 2 type arguments, got 0" error in Java code
+    -- generation. The binding `init` (like in hoistLetBindingsWithPredicate)
+    -- contains a pair of empty list and a set. After inference, the pair
+    -- has TypeApplication wrappers. These wrappers must survive hoisting.
+    -- ============================================================
+
+    hoistPolyCase "polymorphic binding with pair: type applications preserved"
+      -- Input: let f = \b:Name ->
+      --          let init : forall t0. Pair<List<t0>, Set<Name>>
+      --                   = Λt0. @(Set<Name>) @(List<t0>) pair((@t0 []), singleton(b))
+      --          in init
+      --        in f (name "x")
+      -- The init binding is polymorphic (has type var t0 from empty list).
+      -- After hoisting, the pair must KEEP its TypeApplication wrappers.
+      (mkLet [(nm "f",
+        lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string) (Core.termLet $ mkLet [
+          (nm "init",
+            -- Term with type lambda and type applications (as inference would produce):
+            -- Λt0. TypeApp(TypeApp(Pair(TypeApp([], t0), singleton(b)), List<t0>), Set<Name>)
+            tylam "t0" (tyapp (tyapp
+              (pair
+                (tyapp (list ([] :: [TTerm Term])) (T.var "t0"))
+                (apply (var "singleton") (var "b")))
+              (T.list (T.var "t0")))
+              (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string))),
+            polyType ["t0"] (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string))))]
+          (var "init")),
+        monoType (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+          (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))))]
+        (apply (var "f") (var "name_x")))
+      -- Expected output: f first (original), then f_init hoisted.
+      -- The hoisted binding must retain TypeApplication wrappers on the pair.
+      -- Λt0 is stripped and re-added by hoisting, but inner type apps on pair are preserved.
+      (mkLet [
+        (nm "f",
+          lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+            (apply (var "f_init") (var "b")),
+          monoType (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+            (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string))))),
+        (nm "f_init",
+          -- After hoisting: captures b, re-adds type lambda for t0
+          -- The inner type applications on the pair MUST be preserved
+          tylam "t0" (lambdaTyped "b" (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+            (tyapp (tyapp
+              (pair
+                (tyapp (list ([] :: [TTerm Term])) (T.var "t0"))
+                (apply (var "singleton") (var "b")))
+              (T.list (T.var "t0")))
+              (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))),
+          polyType ["t0"] (T.function (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)
+            (T.pair (T.list (T.var "t0")) (T.set (T.wrap (Core.name (Phantoms.string "hydra.core.Name")) T.string)))))]
+        (apply (var "f") (var "name_x"))),
+
+    -- ============================================================
+    -- Regression test: monomorphic binding referencing outer type variables
+    -- must get type applications at the call site after hoisting.
+    -- This reproduces the Java "T70848" bug: without type apps on the
+    -- hoisted reference, the Java coder falls back to tryTypeOf which
+    -- generates fresh inference variables instead of using the correct
+    -- type parameters from the enclosing scope.
+    -- ============================================================
+
+    hoistPolyCase "monomorphic binding captures type vars: replacement includes type applications"
+      -- Input: let f = TypeLambda a (TypeLambda b (
+      --          \(x:a) -> let q : TypeScheme([], a -> b) = \(y:a) -> g y
+      --                    in q x))
+      --        in f
+      -- Here 'q' is monomorphic but references outer type vars 'a' and 'b'.
+      -- When hoisted, q becomes polymorphic in [a, b].
+      -- The replacement must include TypeApp(b, TypeApp(a, Var(f_q))) to instantiate
+      -- the hoisted binding with the correct type variables.
+      (mkLet [(nm "f",
+        tylam "a" (tylam "b" (
+          lambdaTyped "x" (T.var "a") (Core.termLet $ mkLet [
+            (nm "q",
+              lambdaTyped "y" (T.var "a") (apply (var "g") (var "y")),
+              monoType (T.function (T.var "a") (T.var "b")))]
+            (apply (var "q") (var "x"))))),
+        polyType ["a", "b"] (T.function (T.var "a") (T.var "b")))]
+        (var "f"))
+      -- Expected output: f first, then f_q hoisted with type lambdas for [a, b].
+      -- q does not reference x, so no lambda capture is needed.
+      -- The replacement for q SHOULD be TypeApp(b, TypeApp(a, Var(f_q)))
+      -- so that downstream code knows the type variable instantiation.
+      -- Using Core.termTypeApplication directly to avoid meta-encoding issues with tyapp.
+      (mkLet [
+        (nm "f",
+          tylam "a" (tylam "b" (
+            lambdaTyped "x" (T.var "a")
+              (apply
+                (Core.termTypeApplication $ Core.typeApplicationTerm
+                  (Core.termTypeApplication $ Core.typeApplicationTerm (var "f_q") (T.var "a"))
+                  (T.var "b"))
+                (var "x")))),
+          polyType ["a", "b"] (T.function (T.var "a") (T.var "b"))),
+        (nm "f_q",
+          tylam "a" (tylam "b" (
+            lambdaTyped "y" (T.var "a") (apply (var "g") (var "y")))),
+          polyType ["a", "b"] (T.function (T.var "a") (T.var "b")))]
+        (var "f"))]
 
 -- | Test cases for hoistLetBindings with hoistAll=True
 -- This function hoists ALL let bindings (not just polymorphic ones) to the top level.

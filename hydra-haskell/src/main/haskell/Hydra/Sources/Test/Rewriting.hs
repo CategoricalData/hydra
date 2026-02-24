@@ -149,7 +149,8 @@ allTests = define "allTests" $
       foldOverTermGroup,
       rewriteTypeGroup,
       rewriteTermGroup,
-      rewriteAndFoldTermWithPathGroup]
+      rewriteAndFoldTermWithPathGroup,
+      unshadowVariablesGroup]
 
 -- Helper to build names
 nm :: String -> TTerm Name
@@ -1023,3 +1024,212 @@ rewriteTermGroup = subgroup "rewriteTerm" [
     rewriteTermCase "string in annotated wrapped record field"
       (annot emptyAnnMap (wrap (nm "User") (record (nm "UserData") [(nm "name", foo)])))
       (annot emptyAnnMap (wrap (nm "User") (record (nm "UserData") [(nm "name", bar)])))]
+
+-- | Test cases for unshadowVariables
+-- The function renames shadowed variables by appending a counter suffix.
+-- When a variable name is first introduced (lambda or let), it keeps its name.
+-- When the same name is introduced again in an inner scope (shadowing), the inner
+-- binding is renamed to name<counter> (e.g., x2, x3, ...), and references in
+-- the inner body are updated accordingly.
+unshadowVariablesGroup :: TTerm TestGroup
+unshadowVariablesGroup = subgroup "unshadowVariables" [
+
+    -- === No shadowing: terms should be unchanged ===
+
+    unshadowCase "literal unchanged"
+      (int32 42)
+      (int32 42),
+
+    unshadowCase "variable unchanged"
+      (var "x")
+      (var "x"),
+
+    unshadowCase "single lambda unchanged"
+      (lambda "x" (var "x"))
+      (lambda "x" (var "x")),
+
+    unshadowCase "distinct lambda parameters unchanged"
+      (lambda "x" (lambda "y" (list [var "x", var "y"])))
+      (lambda "x" (lambda "y" (list [var "x", var "y"]))),
+
+    unshadowCase "let with no shadowing unchanged"
+      (letExpr "x" (int32 1) (var "x"))
+      (letExpr "x" (int32 1) (var "x")),
+
+    unshadowCase "let and lambda with distinct names unchanged"
+      (letExpr "x" (int32 1) (lambda "y" (list [var "x", var "y"])))
+      (letExpr "x" (int32 1) (lambda "y" (list [var "x", var "y"]))),
+
+    -- === Simple lambda shadowing ===
+
+    unshadowCase "inner lambda shadows outer lambda"
+      (lambda "x" (lambda "x" (var "x")))
+      (lambda "x" (lambda "x2" (var "x2"))),
+
+    unshadowCase "inner lambda shadows outer - body references both"
+      (lambda "x" (list [var "x", lambda "x" (var "x")]))
+      (lambda "x" (list [var "x", lambda "x2" (var "x2")])),
+
+    unshadowCase "triple nested lambda same name"
+      (lambda "x" (lambda "x" (lambda "x" (var "x"))))
+      (lambda "x" (lambda "x2" (lambda "x3" (var "x3")))),
+
+    -- === Lambda shadowing with different parameters ===
+
+    unshadowCase "two parameters shadow sequentially"
+      (lambda "x" (lambda "y" (lambda "x" (lambda "y" (list [var "x", var "y"])))))
+      (lambda "x" (lambda "y" (lambda "x2" (lambda "y2" (list [var "x2", var "y2"]))))),
+
+    -- === Let introduces names that lambdas can shadow ===
+
+    unshadowCase "lambda shadows let-bound variable"
+      (letExpr "x" (int32 1) (lambda "x" (var "x")))
+      (letExpr "x" (int32 1) (lambda "x2" (var "x2"))),
+
+    unshadowCase "lambda shadows one of multiple let bindings"
+      (multiLet [("x", int32 1), ("y", int32 2)]
+        (lambda "x" (list [var "x", var "y"])))
+      (multiLet [("x", int32 1), ("y", int32 2)]
+        (lambda "x2" (list [var "x2", var "y"]))),
+
+    -- === Nested lets ===
+
+    unshadowCase "inner let body with lambda shadowing outer let"
+      (letExpr "x" (int32 1)
+        (letExpr "y" (int32 2)
+          (lambda "x" (var "x"))))
+      (letExpr "x" (int32 1)
+        (letExpr "y" (int32 2)
+          (lambda "x2" (var "x2")))),
+
+    -- === Shadowing inside application ===
+
+    unshadowCase "shadowed lambda in function position of application"
+      (lambda "f" (apply (lambda "f" (var "f")) (var "f")))
+      (lambda "f" (apply (lambda "f2" (var "f2")) (var "f"))),
+
+    -- === Shadowing inside list ===
+
+    unshadowCase "shadowed lambdas in list elements"
+      (lambda "x"
+        (list [
+          lambda "x" (var "x"),
+          lambda "x" (var "x")]))
+      (lambda "x"
+        (list [
+          lambda "x2" (var "x2"),
+          lambda "x2" (var "x2")])),
+
+    -- === Shadowing inside record ===
+
+    unshadowCase "shadowed lambda in record field"
+      (lambda "x"
+        (record (nm "Pair") [
+          (nm "fst", lambda "x" (var "x")),
+          (nm "snd", var "x")]))
+      (lambda "x"
+        (record (nm "Pair") [
+          (nm "fst", lambda "x2" (var "x2")),
+          (nm "snd", var "x")])),
+
+    -- === Shadowing inside case/match branches ===
+
+    unshadowCase "shadowed lambda in case branch"
+      (lambda "x"
+        (match (nm "Maybe") nothing [
+          (nm "nothing", int32 0),
+          (nm "just", lambda "x" (var "x"))]))
+      (lambda "x"
+        (match (nm "Maybe") nothing [
+          (nm "nothing", int32 0),
+          (nm "just", lambda "x2" (var "x2"))])),
+
+    -- === Shadowing inside pair ===
+
+    unshadowCase "shadowed lambda in pair"
+      (lambda "x" (pair (lambda "x" (var "x")) (var "x")))
+      (lambda "x" (pair (lambda "x2" (var "x2")) (var "x"))),
+
+    -- === Shadowing inside optional ===
+
+    unshadowCase "shadowed lambda inside optional"
+      (lambda "x" (optional (just (lambda "x" (var "x")))))
+      (lambda "x" (optional (just (lambda "x2" (var "x2"))))),
+
+    -- === Shadowing inside set ===
+
+    unshadowCase "shadowed lambda inside set element"
+      (lambda "x" (set [lambda "x" (var "x")]))
+      (lambda "x" (set [lambda "x2" (var "x2")])),
+
+    -- === Shadowing inside inject (union construction) ===
+
+    unshadowCase "shadowed lambda in union injection"
+      (lambda "x" (inject (nm "Result") "ok" (lambda "x" (var "x"))))
+      (lambda "x" (inject (nm "Result") "ok" (lambda "x2" (var "x2")))),
+
+    -- === Shadowing inside wrap ===
+
+    unshadowCase "shadowed lambda inside wrapped term"
+      (lambda "x" (wrap (nm "Age") (lambda "x" (var "x"))))
+      (lambda "x" (wrap (nm "Age") (lambda "x2" (var "x2")))),
+
+    -- === Shadowing inside type lambda ===
+
+    unshadowCase "shadowed lambda inside type lambda"
+      (lambda "x" (tylam "a" (lambda "x" (var "x"))))
+      (lambda "x" (tylam "a" (lambda "x2" (var "x2")))),
+
+    -- === Shadowing inside type application ===
+
+    unshadowCase "shadowed lambda inside type application"
+      (lambda "x" (tyapp (lambda "x" (var "x")) T.string))
+      (lambda "x" (tyapp (lambda "x2" (var "x2")) T.string)),
+
+    -- === Shadowing inside annotation ===
+
+    unshadowCase "shadowed lambda inside annotated term"
+      (lambda "x" (annot emptyAnnMap (lambda "x" (var "x"))))
+      (lambda "x" (annot emptyAnnMap (lambda "x2" (var "x2")))),
+
+    -- === Complex nesting ===
+
+    unshadowCase "shadowing at multiple depths"
+      (lambda "x"
+        (lambda "y"
+          (lambda "x"
+            (lambda "y"
+              (list [var "x", var "y"])))))
+      (lambda "x"
+        (lambda "y"
+          (lambda "x2"
+            (lambda "y2"
+              (list [var "x2", var "y2"]))))),
+
+    unshadowCase "let then lambda then lambda all same name"
+      (letExpr "x" (int32 1)
+        (lambda "x" (lambda "x" (var "x"))))
+      (letExpr "x" (int32 1)
+        (lambda "x2" (lambda "x3" (var "x3")))),
+
+    unshadowCase "lambda with shadowing in let binding value"
+      (lambda "x"
+        (letExpr "y" (lambda "x" (var "x"))
+          (apply (var "y") (var "x"))))
+      (lambda "x"
+        (letExpr "y" (lambda "x2" (var "x2"))
+          (apply (var "y") (var "x")))),
+
+    -- === No-op cases: terms without binding forms ===
+
+    unshadowCase "application without shadowing unchanged"
+      (apply (var "f") (int32 42))
+      (apply (var "f") (int32 42)),
+
+    unshadowCase "list of literals unchanged"
+      (list [int32 1, int32 2, int32 3])
+      (list [int32 1, int32 2, int32 3]),
+
+    unshadowCase "nested record unchanged"
+      (record (nm "Point") [(nm "x", int32 10), (nm "y", int32 20)])
+      (record (nm "Point") [(nm "x", int32 10), (nm "y", int32 20)])]
