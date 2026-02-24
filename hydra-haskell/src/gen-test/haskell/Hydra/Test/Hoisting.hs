@@ -2860,6 +2860,200 @@ allTests = Testing.TestGroup {
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "case in let body inside applied case default IS hoisted",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistCaseStatements (Testing.HoistCaseStatementsTestCase {
+            Testing.hoistCaseStatementsTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.Name "Optional"),
+                      Core.caseStatementDefault = Nothing,
+                      Core.caseStatementCases = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "just"),
+                          Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "a"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "a"))})))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "nothing"),
+                          Core.fieldTerm = (Core.TermLet (Core.Let {
+                            Core.letBindings = [
+                              Core.Binding {
+                                Core.bindingName = (Core.Name "b"),
+                                Core.bindingTerm = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                                Core.bindingType = Nothing}],
+                            Core.letBody = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                                Core.caseStatementTypeName = (Core.Name "Result"),
+                                Core.caseStatementDefault = Nothing,
+                                Core.caseStatementCases = [
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "ok"),
+                                    Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                      Core.lambdaParameter = (Core.Name "y"),
+                                      Core.lambdaDomain = Nothing,
+                                      Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "err"),
+                                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))}]})))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))})),
+            Testing.hoistCaseStatementsTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.Name "Optional"),
+                      Core.caseStatementDefault = Nothing,
+                      Core.caseStatementCases = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "just"),
+                          Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "a"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "a"))})))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "nothing"),
+                          Core.fieldTerm = (Core.TermLet (Core.Let {
+                            Core.letBindings = [
+                              Core.Binding {
+                                Core.bindingName = (Core.Name "b"),
+                                Core.bindingTerm = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                                Core.bindingType = Nothing}],
+                            Core.letBody = (Core.TermLet (Core.Let {
+                              Core.letBindings = [
+                                Core.Binding {
+                                  Core.bindingName = (Core.Name "_hoist__body_1"),
+                                  Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                                    Core.caseStatementTypeName = (Core.Name "Result"),
+                                    Core.caseStatementDefault = Nothing,
+                                    Core.caseStatementCases = [
+                                      Core.Field {
+                                        Core.fieldName = (Core.Name "ok"),
+                                        Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                          Core.lambdaParameter = (Core.Name "y"),
+                                          Core.lambdaDomain = Nothing,
+                                          Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                                      Core.Field {
+                                        Core.fieldName = (Core.Name "err"),
+                                        Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                                  Core.bindingType = Nothing}],
+                              Core.letBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermVariable (Core.Name "_hoist__body_1")),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))}))}]})))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "case in let body inside applied case branch IS hoisted",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistCaseStatements (Testing.HoistCaseStatementsTestCase {
+            Testing.hoistCaseStatementsTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.Name "Optional"),
+                      Core.caseStatementDefault = Nothing,
+                      Core.caseStatementCases = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "just"),
+                          Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "a"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermLet (Core.Let {
+                              Core.letBindings = [
+                                Core.Binding {
+                                  Core.bindingName = (Core.Name "b"),
+                                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+                                  Core.bindingType = Nothing}],
+                              Core.letBody = (Core.TermApplication (Core.Application {
+                                Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                                  Core.caseStatementTypeName = (Core.Name "Result"),
+                                  Core.caseStatementDefault = Nothing,
+                                  Core.caseStatementCases = [
+                                    Core.Field {
+                                      Core.fieldName = (Core.Name "ok"),
+                                      Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                        Core.lambdaParameter = (Core.Name "y"),
+                                        Core.lambdaDomain = Nothing,
+                                        Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                                    Core.Field {
+                                      Core.fieldName = (Core.Name "err"),
+                                      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                                Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))})))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "nothing"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))})),
+            Testing.hoistCaseStatementsTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.Name "Optional"),
+                      Core.caseStatementDefault = Nothing,
+                      Core.caseStatementCases = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "just"),
+                          Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "a"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermLet (Core.Let {
+                              Core.letBindings = [
+                                Core.Binding {
+                                  Core.bindingName = (Core.Name "b"),
+                                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermVariable (Core.Name "h")),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "a"))})),
+                                  Core.bindingType = Nothing}],
+                              Core.letBody = (Core.TermLet (Core.Let {
+                                Core.letBindings = [
+                                  Core.Binding {
+                                    Core.bindingName = (Core.Name "_hoist__body_1"),
+                                    Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                                      Core.caseStatementTypeName = (Core.Name "Result"),
+                                      Core.caseStatementDefault = Nothing,
+                                      Core.caseStatementCases = [
+                                        Core.Field {
+                                          Core.fieldName = (Core.Name "ok"),
+                                          Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                            Core.lambdaParameter = (Core.Name "y"),
+                                            Core.lambdaDomain = Nothing,
+                                            Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                                        Core.Field {
+                                          Core.fieldName = (Core.Name "err"),
+                                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                                    Core.bindingType = Nothing}],
+                                Core.letBody = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "_hoist__body_1")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))}))})))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "nothing"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "hoistLetBindings",
@@ -4457,6 +4651,213 @@ allTests = Testing.TestGroup {
               Core.letBody = (Core.TermApplication (Core.Application {
                 Core.applicationFunction = (Core.TermVariable (Core.Name "wrapper")),
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "polymorphic binding with pair: type applications preserved",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistPolymorphicLetBindings (Testing.HoistPolymorphicLetBindingsTestCase {
+            Testing.hoistPolymorphicLetBindingsTestCaseInput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "b"),
+                    Core.lambdaDomain = (Just (Core.TypeWrap (Core.WrappedType {
+                      Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                      Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)}))),
+                    Core.lambdaBody = (Core.TermLet (Core.Let {
+                      Core.letBindings = [
+                        Core.Binding {
+                          Core.bindingName = (Core.Name "init"),
+                          Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                            Core.typeLambdaParameter = (Core.Name "t0"),
+                            Core.typeLambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                              Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                                Core.typeApplicationTermBody = (Core.TermPair (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                                  Core.typeApplicationTermBody = (Core.TermList []),
+                                  Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}), (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})))),
+                                Core.typeApplicationTermType = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
+                              Core.typeApplicationTermType = (Core.TypeSet (Core.TypeWrap (Core.WrappedType {
+                                Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)})))}))})),
+                          Core.bindingType = (Just (Core.TypeScheme {
+                            Core.typeSchemeVariables = [
+                              Core.Name "t0"],
+                            Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                              Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                              Core.pairTypeSecond = (Core.TypeSet (Core.TypeWrap (Core.WrappedType {
+                                Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)})))})),
+                            Core.typeSchemeConstraints = Nothing}))}],
+                      Core.letBody = (Core.TermVariable (Core.Name "init"))}))}))),
+                  Core.bindingType = (Just (Core.TypeScheme {
+                    Core.typeSchemeVariables = [],
+                    Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                      Core.functionTypeDomain = (Core.TypeWrap (Core.WrappedType {
+                        Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)})),
+                      Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                        Core.pairTypeSecond = (Core.TypeSet (Core.TypeWrap (Core.WrappedType {
+                          Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                          Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)})))}))})),
+                    Core.typeSchemeConstraints = Nothing}))}],
+              Core.letBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "name_x"))}))},
+            Testing.hoistPolymorphicLetBindingsTestCaseOutput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "b"),
+                    Core.lambdaDomain = (Just (Core.TypeWrap (Core.WrappedType {
+                      Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                      Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)}))),
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "f_init")),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "b"))}))}))),
+                  Core.bindingType = (Just (Core.TypeScheme {
+                    Core.typeSchemeVariables = [],
+                    Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                      Core.functionTypeDomain = (Core.TypeWrap (Core.WrappedType {
+                        Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)})),
+                      Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                        Core.pairTypeSecond = (Core.TypeSet (Core.TypeWrap (Core.WrappedType {
+                          Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                          Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)})))}))})),
+                    Core.typeSchemeConstraints = Nothing}))},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f_init"),
+                  Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaParameter = (Core.Name "t0"),
+                    Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "b"),
+                      Core.lambdaDomain = (Just (Core.TypeWrap (Core.WrappedType {
+                        Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)}))),
+                      Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                        Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                          Core.typeApplicationTermBody = (Core.TermPair (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                            Core.typeApplicationTermBody = (Core.TermList []),
+                            Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}), (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})))),
+                          Core.typeApplicationTermType = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
+                        Core.typeApplicationTermType = (Core.TypeSet (Core.TypeWrap (Core.WrappedType {
+                          Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                          Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)})))}))})))})),
+                  Core.bindingType = (Just (Core.TypeScheme {
+                    Core.typeSchemeVariables = [
+                      Core.Name "t0"],
+                    Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                      Core.functionTypeDomain = (Core.TypeWrap (Core.WrappedType {
+                        Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                        Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)})),
+                      Core.functionTypeCodomain = (Core.TypePair (Core.PairType {
+                        Core.pairTypeFirst = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                        Core.pairTypeSecond = (Core.TypeSet (Core.TypeWrap (Core.WrappedType {
+                          Core.wrappedTypeTypeName = (Core.Name "hydra.core.Name"),
+                          Core.wrappedTypeBody = (Core.TypeLiteral Core.LiteralTypeString)})))}))})),
+                    Core.typeSchemeConstraints = Nothing}))}],
+              Core.letBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "name_x"))}))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "monomorphic binding captures type vars: replacement includes type applications",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistPolymorphicLetBindings (Testing.HoistPolymorphicLetBindingsTestCase {
+            Testing.hoistPolymorphicLetBindingsTestCaseInput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaParameter = (Core.Name "a"),
+                    Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
+                      Core.typeLambdaParameter = (Core.Name "b"),
+                      Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "a"))),
+                        Core.lambdaBody = (Core.TermLet (Core.Let {
+                          Core.letBindings = [
+                            Core.Binding {
+                              Core.bindingName = (Core.Name "q"),
+                              Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "y"),
+                                Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "a"))),
+                                Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}))),
+                              Core.bindingType = (Just (Core.TypeScheme {
+                                Core.typeSchemeVariables = [],
+                                Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
+                                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})),
+                                Core.typeSchemeConstraints = Nothing}))}],
+                          Core.letBody = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "q")),
+                            Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))}))})),
+                  Core.bindingType = (Just (Core.TypeScheme {
+                    Core.typeSchemeVariables = [
+                      Core.Name "a",
+                      (Core.Name "b")],
+                    Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
+                      Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})),
+                    Core.typeSchemeConstraints = Nothing}))}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))},
+            Testing.hoistPolymorphicLetBindingsTestCaseOutput = Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaParameter = (Core.Name "a"),
+                    Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
+                      Core.typeLambdaParameter = (Core.Name "b"),
+                      Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "x"),
+                        Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "a"))),
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                            Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                              Core.typeApplicationTermBody = (Core.TermVariable (Core.Name "f_q")),
+                              Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "a"))})),
+                            Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "b"))})),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})))}))})),
+                  Core.bindingType = (Just (Core.TypeScheme {
+                    Core.typeSchemeVariables = [
+                      Core.Name "a",
+                      (Core.Name "b")],
+                    Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
+                      Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})),
+                    Core.typeSchemeConstraints = Nothing}))},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f_q"),
+                  Core.bindingTerm = (Core.TermTypeLambda (Core.TypeLambda {
+                    Core.typeLambdaParameter = (Core.Name "a"),
+                    Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
+                      Core.typeLambdaParameter = (Core.Name "b"),
+                      Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "y"),
+                        Core.lambdaDomain = (Just (Core.TypeVariable (Core.Name "a"))),
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))})))}))})),
+                  Core.bindingType = (Just (Core.TypeScheme {
+                    Core.typeSchemeVariables = [
+                      Core.Name "a",
+                      (Core.Name "b")],
+                    Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                      Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
+                      Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})),
+                    Core.typeSchemeConstraints = Nothing}))}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {

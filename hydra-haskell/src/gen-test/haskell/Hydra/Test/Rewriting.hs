@@ -3215,5 +3215,759 @@ allTests = Testing.TestGroup {
               Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
               (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))])})),
           Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "unshadowVariables",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "literal unchanged",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "variable unchanged",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermVariable (Core.Name "x")),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermVariable (Core.Name "x"))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "single lambda unchanged",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "distinct lambda parameters unchanged",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "y"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermList [
+                  Core.TermVariable (Core.Name "x"),
+                  (Core.TermVariable (Core.Name "y"))])})))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "y"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermList [
+                  Core.TermVariable (Core.Name "x"),
+                  (Core.TermVariable (Core.Name "y"))])})))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "let with no shadowing unchanged",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "x"))})),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "x"))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "let and lambda with distinct names unchanged",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "y"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermList [
+                  Core.TermVariable (Core.Name "x"),
+                  (Core.TermVariable (Core.Name "y"))])})))})),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "y"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermList [
+                  Core.TermVariable (Core.Name "x"),
+                  (Core.TermVariable (Core.Name "y"))])})))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "inner lambda shadows outer lambda",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x2"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "inner lambda shadows outer - body references both",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermList [
+                Core.TermVariable (Core.Name "x"),
+                (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))])}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermList [
+                Core.TermVariable (Core.Name "x"),
+                (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))])})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "triple nested lambda same name",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x2"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x3"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x3"))})))})))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "two parameters shadow sequentially",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "y"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermList [
+                      Core.TermVariable (Core.Name "x"),
+                      (Core.TermVariable (Core.Name "y"))])})))})))})))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "y"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y2"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermList [
+                      Core.TermVariable (Core.Name "x2"),
+                      (Core.TermVariable (Core.Name "y2"))])})))})))})))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "lambda shadows let-bound variable",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x2"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "lambda shadows one of multiple let bindings",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "y"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermList [
+                  Core.TermVariable (Core.Name "x"),
+                  (Core.TermVariable (Core.Name "y"))])})))})),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing},
+                Core.Binding {
+                  Core.bindingName = (Core.Name "y"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x2"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermList [
+                  Core.TermVariable (Core.Name "x2"),
+                  (Core.TermVariable (Core.Name "y"))])})))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "inner let body with lambda shadowing outer let",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [
+                  Core.Binding {
+                    Core.bindingName = (Core.Name "y"),
+                    Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                    Core.bindingType = Nothing}],
+                Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))})),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [
+                  Core.Binding {
+                    Core.bindingName = (Core.Name "y"),
+                    Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                    Core.bindingType = Nothing}],
+                Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda in function position of application",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "f"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "f"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "f"))}))),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "f"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "f2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "f2"))}))),
+                Core.applicationArgument = (Core.TermVariable (Core.Name "f"))}))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambdas in list elements",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermList [
+                Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
+                (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))])}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermList [
+                Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})),
+                (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))])})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda in record field",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "Pair"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "fst"),
+                    Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "snd"),
+                    Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}]}))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermRecord (Core.Record {
+                Core.recordTypeName = (Core.Name "Pair"),
+                Core.recordFields = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "fst"),
+                    Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x2"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "snd"),
+                    Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}]}))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda in case branch",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                Core.caseStatementTypeName = (Core.Name "Maybe"),
+                Core.caseStatementDefault = Nothing,
+                Core.caseStatementCases = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "nothing"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "just"),
+                    Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}]}))))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                Core.caseStatementTypeName = (Core.Name "Maybe"),
+                Core.caseStatementDefault = Nothing,
+                Core.caseStatementCases = [
+                  Core.Field {
+                    Core.fieldName = (Core.Name "nothing"),
+                    Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))},
+                  Core.Field {
+                    Core.fieldName = (Core.Name "just"),
+                    Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x2"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}]}))))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda in pair",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})), (Core.TermVariable (Core.Name "x"))))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermPair (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x2"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})), (Core.TermVariable (Core.Name "x"))))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda inside optional",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermMaybe (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermMaybe (Just (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x2"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda inside set element",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermSet (S.fromList [
+                Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))]))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermSet (S.fromList [
+                Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}))]))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda in union injection",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                Core.injectionTypeName = (Core.Name "Result"),
+                Core.injectionField = Core.Field {
+                  Core.fieldName = (Core.Name "ok"),
+                  Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "x"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}}))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermUnion (Core.Injection {
+                Core.injectionTypeName = (Core.Name "Result"),
+                Core.injectionField = Core.Field {
+                  Core.fieldName = (Core.Name "ok"),
+                  Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "x2"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}}))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda inside wrapped term",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
+                Core.wrappedTermTypeName = (Core.Name "Age"),
+                Core.wrappedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
+                Core.wrappedTermTypeName = (Core.Name "Age"),
+                Core.wrappedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda inside type lambda",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
+                Core.typeLambdaParameter = (Core.Name "a"),
+                Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))}))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
+                Core.typeLambdaParameter = (Core.Name "a"),
+                Core.typeLambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))})))}))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda inside type application",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Core.typeApplicationTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}))),
+                Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowed lambda inside annotated term",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                Core.annotatedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                Core.annotatedTermAnnotation = M.empty}))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermAnnotated (Core.AnnotatedTerm {
+                Core.annotatedTermBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}))),
+                Core.annotatedTermAnnotation = M.empty}))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "shadowing at multiple depths",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "y"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermList [
+                      Core.TermVariable (Core.Name "x"),
+                      (Core.TermVariable (Core.Name "y"))])})))})))})))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "y"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x2"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y2"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermList [
+                      Core.TermVariable (Core.Name "x2"),
+                      (Core.TermVariable (Core.Name "y2"))])})))})))})))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "let then lambda then lambda all same name",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))})))})),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "x"),
+                  Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "x2"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "x3"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermVariable (Core.Name "x3"))})))})))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "lambda with shadowing in let binding value",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [
+                  Core.Binding {
+                    Core.bindingName = (Core.Name "y"),
+                    Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}))),
+                    Core.bindingType = Nothing}],
+                Core.letBody = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}))),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermLet (Core.Let {
+                Core.letBindings = [
+                  Core.Binding {
+                    Core.bindingName = (Core.Name "y"),
+                    Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x2"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}))),
+                    Core.bindingType = Nothing}],
+                Core.letBody = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermVariable (Core.Name "y")),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "application without shadowing unchanged",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
+              Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "list of literals unchanged",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "nested record unchanged",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseUnshadowVariables (Testing.UnshadowVariablesTestCase {
+            Testing.unshadowVariablesTestCaseInput = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "Point"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "x"),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "y"),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]})),
+            Testing.unshadowVariablesTestCaseOutput = (Core.TermRecord (Core.Record {
+              Core.recordTypeName = (Core.Name "Point"),
+              Core.recordFields = [
+                Core.Field {
+                  Core.fieldName = (Core.Name "x"),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))},
+                Core.Field {
+                  Core.fieldName = (Core.Name "y"),
+                  Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}
