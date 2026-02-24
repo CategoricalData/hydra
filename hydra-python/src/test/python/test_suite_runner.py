@@ -81,82 +81,60 @@ TestRunner = Callable[[str, hydra.testing.TestCaseWithMetadata], Optional[Callab
 
 def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     """
-    Load kernel term bindings from the generated sources modules.
+    Load kernel term bindings from JSON.
 
-    This loads bindings from hydra.sources.* modules which contain term-encoded
-    Module objects. These are the kernel term modules (hydra.monads, hydra.annotations,
-    etc.) that are needed for evaluation tests.
+    The test graph needs kernel term bindings (hydra.monads.pure,
+    hydra.monads.bind, etc.) so that the evaluator can resolve references
+    to these definitions at runtime. Without them, evaluation of expressions
+    like `unwrap(hydra.compute.Flow) @ (hydra.monads.pure @ 42)` would fail
+    because the evaluator cannot find the definition of `hydra.monads.pure`.
+
+    These are loaded from the JSON representation in hydra-haskell rather than
+    from generated Python Source modules. This works because term modules don't
+    contribute to the schema map (no chicken-and-egg problem) and modules loaded
+    from JSON already carry full type annotations (no inference needed).
 
     Returns:
         Dictionary mapping binding names to Binding objects
     """
-    bindings = {}
+    import sys
+    from hydra.generation import kernel_modules, load_modules_from_json, read_manifest_field, strip_all_term_types
 
-    # Import the kernel term sources modules
-    # These match kernelPrimaryTermsModules in Hydra.Sources.Kernel.Terms.All
-    kernel_term_source_modules = [
-        # Primary term modules
-        "hydra.sources.adapt.literals",
-        "hydra.sources.adapt.modules",
-        "hydra.sources.adapt.simple",
-        "hydra.sources.adapt.terms",
-        "hydra.sources.adapt.utils",
-        "hydra.sources.annotations",
-        "hydra.sources.arity",
-        "hydra.sources.checking",
-        "hydra.sources.constants",
-        "hydra.sources.decoding",
-        "hydra.sources.encoding",
-        "hydra.sources.extract.core",
-        "hydra.sources.extract.helpers",
-        "hydra.sources.extract.util",
-        "hydra.sources.formatting",
-        "hydra.sources.grammars",
-        "hydra.sources.inference",
-        "hydra.sources.languages",
-        "hydra.sources.lexical",
-        "hydra.sources.literals",
-        "hydra.sources.monads",
-        "hydra.sources.names",
-        "hydra.sources.parsers",
-        "hydra.sources.reduction",
-        "hydra.sources.reflect",
-        "hydra.sources.rewriting",
-        "hydra.sources.schemas",
-        "hydra.sources.serialization",
-        "hydra.sources.show.accessors",
-        "hydra.sources.show.core",
-        "hydra.sources.show.graph",
-        "hydra.sources.show.meta",
-        "hydra.sources.show.typing",
-        "hydra.sources.show.util",
-        "hydra.sources.sorting",
-        "hydra.sources.substitution",
-        "hydra.sources.tarjan",
-        "hydra.sources.templates",
-        "hydra.sources.unification",
+    # Bump recursion limit for the recursive JSON decoder
+    old_limit = sys.getrecursionlimit()
+    sys.setrecursionlimit(10000)
+
+    json_dir = "../hydra-haskell/src/gen-main/json"
+    km = kernel_modules()
+
+    # Load only the essential evaluator term modules (hydra.monads + hydra.annotations
+    # and their dependencies). Loading all 92 term modules from JSON is too slow.
+    # This matches the optimization in Haskell (TestUtils.hs) and Java (TestSuiteRunner.java).
+    evaluator_term_namespaces = [
+        hydra.core.Name("hydra.constants"),
+        hydra.core.Name("hydra.show.core"),
+        hydra.core.Name("hydra.monads"),
+        hydra.core.Name("hydra.extract.core"),
+        hydra.core.Name("hydra.lexical"),
+        hydra.core.Name("hydra.rewriting"),
+        hydra.core.Name("hydra.decode.core"),
+        hydra.core.Name("hydra.encode.core"),
+        hydra.core.Name("hydra.annotations"),
     ]
 
-    for module_name in kernel_term_source_modules:
-        try:
-            # Dynamically import the module
-            import importlib
-            source_module = importlib.import_module(module_name)
+    term_mods = load_modules_from_json(False, json_dir, km, evaluator_term_namespaces)
 
-            # Call module() to get the Module object
-            mod = source_module.module()
+    # Strip System F type annotations (TypeLambda, TypeApplication, etc.) from
+    # term bodies. The JSON representation preserves the full System F encoding,
+    # but the evaluator works at the simply-typed level.
+    term_mods = strip_all_term_types(term_mods)
 
-            # Extract bindings from the module
-            for binding in mod.elements:
-                bindings[binding.name] = binding
+    sys.setrecursionlimit(old_limit)
 
-        except ImportError as e:
-            # Module not yet generated - skip silently
-            pass
-        except Exception as e:
-            # Log but don't fail - allows tests to run with partial kernel
-            import sys
-            print(f"Warning: Failed to load {module_name}: {e}", file=sys.stderr)
+    bindings = {}
+    for mod in term_mods:
+        for binding in mod.elements:
+            bindings[binding.name] = binding
 
     return bindings
 
@@ -253,10 +231,22 @@ def requires_flow_decoding(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     return requires_flow_decoding_tag in tcase.tags
 
 import os
+import time
+import subprocess
+import atexit
+from decimal import Decimal
 
 # Environment variable to force running slow tests (disabledForPython)
 # Set HYDRA_RUN_SLOW_TESTS=1 to run these tests
 RUN_SLOW_TESTS = os.environ.get("HYDRA_RUN_SLOW_TESTS", "0") == "1"
+
+# Benchmark output path. When set, the test runner records group-level
+# wall-clock timing and writes a JSON benchmark file after all tests complete.
+BENCHMARK_OUTPUT = os.environ.get("HYDRA_BENCHMARK_OUTPUT", "")
+
+# Global state for benchmark timing
+_benchmark_timers: dict[str, int] = {}  # path -> start time (perf_counter_ns)
+_benchmark_results: dict[str, float] = {}  # path -> elapsed ms
 
 def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     """Check if a test case should be skipped.
@@ -423,8 +413,9 @@ def build_test_graph() -> hydra.graph.Graph:
         )
 
     # Add kernel term bindings (hydra.monads.*, hydra.annotations.*, etc.)
-    # This mirrors how Haskell includes kernelTermsModules in testGraph
-    # Load from generated sources modules (hydra/sources/*.py)
+    # so the evaluator can resolve references to kernel definitions at runtime.
+    # This mirrors how Haskell includes kernelTermsModules in testGraph.
+    # Loaded from JSON (see _load_kernel_term_bindings for rationale).
     kernel_terms = _load_kernel_term_bindings()
     term_bindings.update(kernel_terms)
 
@@ -643,6 +634,9 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
 
         case hydra.testing.TestCaseJoinTypes(value=tc):
             return lambda: run_join_types_test(tc)
+
+        case hydra.testing.TestCaseUnshadowVariables(value=tc):
+            return lambda: run_unshadow_variables_test(tc)
 
         case _:
             # Fail on unhandled test case types to catch missing implementations
@@ -904,6 +898,16 @@ def run_simplify_term_test(test_case: hydra.testing.SimplifyTermTestCase) -> Non
     result = hydra.rewriting.simplify_term(test_case.input)
     assert result == test_case.output, (
         f"Simplify term failed:\n"
+        f"  Expected: {hydra.show.core.term(test_case.output)}\n"
+        f"  Actual: {hydra.show.core.term(result)}"
+    )
+
+
+def run_unshadow_variables_test(test_case: hydra.testing.UnshadowVariablesTestCase) -> None:
+    """Execute an unshadow variables test."""
+    result = hydra.rewriting.unshadow_variables(test_case.input)
+    assert result == test_case.output, (
+        f"Unshadow variables failed:\n"
         f"  Expected: {hydra.show.core.term(test_case.output)}\n"
         f"  Actual: {hydra.show.core.term(result)}"
     )
@@ -1409,6 +1413,137 @@ def run_join_types_test(test_case: hydra.testing.JoinTypesTestCase) -> None:
                     )
 
 
+def _start_timer(path: str) -> None:
+    """Record the start time for a benchmark group."""
+    _benchmark_timers[path] = time.perf_counter_ns()
+
+def _stop_timer(path: str) -> None:
+    """Record the end time for a benchmark group and compute elapsed ms."""
+    if path in _benchmark_timers:
+        elapsed_ns = time.perf_counter_ns() - _benchmark_timers[path]
+        _benchmark_results[path] = elapsed_ns / 1_000_000.0  # convert to ms
+
+
+def _count_test_cases(group: hydra.testing.TestGroup, runner: TestRunner) -> tuple[int, int]:
+    """Count (runnable, skipped) test cases in a group and all subgroups."""
+    runnable = 0
+    skipped = 0
+    for tcase in group.cases:
+        if should_skip_test(tcase):
+            skipped += 1
+        elif runner(group.name, tcase) is not None:
+            runnable += 1
+        else:
+            skipped += 1
+    for subgroup_item in group.subgroups:
+        if isinstance(subgroup_item, str):
+            sg = getattr(test_suite, subgroup_item)
+        elif callable(subgroup_item):
+            sg = subgroup_item()
+        else:
+            sg = subgroup_item
+        r, s = _count_test_cases(sg, runner)
+        runnable += r
+        skipped += s
+    return runnable, skipped
+
+
+def _group_to_json_value(
+    group: hydra.testing.TestGroup,
+    parent_path: str,
+    runner: TestRunner,
+    results: dict[str, float]
+) -> "hydra.json.model.ValueObject":
+    """Convert a test group to a Hydra JSON value for benchmark output."""
+    import hydra.json.model as json
+
+    path = f"{parent_path}/{group.name}" if parent_path else group.name
+    runnable, skipped = _count_test_cases(group, runner)
+    time_ms = results.get(path, 0.0)
+
+    fields = {
+        "path": json.ValueString(path),
+        "passed": json.ValueNumber(Decimal(runnable)),
+        "failed": json.ValueNumber(Decimal(0)),
+        "skipped": json.ValueNumber(Decimal(skipped)),
+        "totalTimeMs": json.ValueNumber(Decimal(str(round(time_ms, 1)))),
+    }
+
+    subgroups = []
+    for subgroup_item in group.subgroups:
+        if isinstance(subgroup_item, str):
+            sg = getattr(test_suite, subgroup_item)
+        elif callable(subgroup_item):
+            sg = subgroup_item()
+        else:
+            sg = subgroup_item
+        subgroups.append(_group_to_json_value(sg, path, runner, results))
+
+    if subgroups:
+        fields["subgroups"] = json.ValueArray(tuple(subgroups))
+
+    return json.ValueObject(FrozenDict(fields))
+
+
+def _write_benchmark_json(output_path: str, runner: TestRunner) -> None:
+    """Write benchmark results as JSON using Hydra's JSON writer."""
+    import hydra.json.model as json
+    import hydra.json.writer as json_writer
+
+    root_group = test_suite.all_tests()
+    root_path = root_group.name
+
+    # Collect git metadata
+    def git_output(args: list[str]) -> str:
+        try:
+            result = subprocess.run(
+                ["git"] + args, capture_output=True, text=True, timeout=5)
+            return result.stdout.strip()
+        except Exception:
+            return ""
+
+    timestamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    branch = git_output(["rev-parse", "--abbrev-ref", "HEAD"])
+    commit = git_output(["rev-parse", "--short", "HEAD"])
+    commit_msg = git_output(["log", "-1", "--format=%s"])
+
+    total_runnable, total_skipped = _count_test_cases(root_group, runner)
+    root_time = _benchmark_results.get(root_path, 0.0)
+
+    # Build group JSON values for children of root
+    group_values = []
+    for subgroup_item in root_group.subgroups:
+        if isinstance(subgroup_item, str):
+            sg = getattr(test_suite, subgroup_item)
+        elif callable(subgroup_item):
+            sg = subgroup_item()
+        else:
+            sg = subgroup_item
+        group_values.append(_group_to_json_value(sg, root_path, runner, _benchmark_results))
+
+    json_value = json.ValueObject(FrozenDict({
+        "metadata": json.ValueObject(FrozenDict({
+            "timestamp": json.ValueString(timestamp),
+            "language": json.ValueString("python"),
+            "branch": json.ValueString(branch),
+            "commit": json.ValueString(commit),
+            "commitMessage": json.ValueString(commit_msg),
+        })),
+        "groups": json.ValueArray(tuple(group_values)),
+        "summary": json.ValueObject(FrozenDict({
+            "totalPassed": json.ValueNumber(Decimal(total_runnable)),
+            "totalFailed": json.ValueNumber(Decimal(0)),
+            "totalSkipped": json.ValueNumber(Decimal(total_skipped)),
+            "totalTimeMs": json.ValueNumber(Decimal(str(round(root_time, 1)))),
+        })),
+    }))
+
+    json_str = json_writer.print_json(json_value)
+    with open(output_path, "w") as f:
+        f.write(json_str)
+    print(f"Benchmark written to: {output_path}")
+
+
 def run_test_case(parent_desc: str, runner: TestRunner, tcase: hydra.testing.TestCaseWithMetadata) -> None:
     """
     Run a single test case using the provided runner.
@@ -1459,6 +1594,9 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
     This function generates individual pytest test functions for each test case,
     properly organized by test group hierarchy.
 
+    When HYDRA_BENCHMARK_OUTPUT is set, sentinel timer functions are inserted at
+    the start and end of each group to measure wall-clock time.
+
     Args:
         group: The test group to generate tests from
         runner: The test runner function
@@ -1476,6 +1614,13 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
 
     # Build the Hydra path (preserving original names with spaces/caps)
     new_hydra_path = f"{hydra_path}/{group.name}" if hydra_path else group.name
+
+    # Insert timer start sentinel for benchmark mode
+    if BENCHMARK_OUTPUT:
+        timer_start_name = f"{new_prefix}000_TIMER_START"
+        def make_start(p=new_hydra_path):
+            _start_timer(p)
+        tests.append((timer_start_name, new_hydra_path, make_start))
 
     # Generate tests for cases in this group
     for i, tcase in enumerate(group.cases, 1):
@@ -1519,6 +1664,13 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
             subgroup_obj = subgroup_item
         tests.extend(generate_pytest_tests(subgroup_obj, runner, new_prefix, new_hydra_path))
 
+    # Insert timer stop sentinel for benchmark mode
+    if BENCHMARK_OUTPUT:
+        timer_stop_name = f"{new_prefix}999_TIMER_END"
+        def make_stop(p=new_hydra_path):
+            _stop_timer(p)
+        tests.append((timer_stop_name, new_hydra_path, make_stop))
+
     return tests
 
 
@@ -1532,3 +1684,8 @@ HYDRA_PATH_MAP: dict[str, str] = {f"test_{name}": path for name, path, _ in _all
 # Dynamically add test functions to module namespace for pytest discovery
 for test_name, hydra_path, test_fn in _all_tests:
     globals()[f"test_{test_name}"] = test_fn
+
+# Register benchmark output writing if HYDRA_BENCHMARK_OUTPUT is set.
+# Uses atexit to write JSON after all tests complete.
+if BENCHMARK_OUTPUT:
+    atexit.register(_write_benchmark_json, BENCHMARK_OUTPUT, default_test_runner)
