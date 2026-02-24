@@ -149,6 +149,23 @@ function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType 
     encode term = fail $ "cannot encode term to a function: " ++ ShowCore.term term
     decode _ = fail $ "cannot decode functions to terms"
 
+-- | A TermCoder for function types, using a reducer to bridge term-level functions to native functions.
+--   The reducer is called to evaluate function application at the term level.
+--   Failures in reduction or encoding/decoding will result in a runtime error.
+functionWithReduce :: (Term -> Flow Graph Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
+functionWithReduce reduce dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
+  where
+    encode funTerm = do
+      g <- Monads.getState
+      pure $ \x ->
+        let argTerm = Monads.fromFlow (error "functionWithReduce: failed to encode argument") g
+                        (coderDecode (termCoderCoder dom) x)
+            resultTerm = Monads.fromFlow (error "functionWithReduce: failed to reduce application") g
+                           (reduce (TermApplication (Application funTerm argTerm)))
+        in Monads.fromFlow (error "functionWithReduce: failed to decode result") g
+             (coderEncode (termCoderCoder cod) resultTerm)
+    decode _ = fail $ "cannot decode functions to terms"
+
 integerType :: TermCoder IntegerType
 integerType = TermCoder (TypeVariable _IntegerType) $ Coder encode decode
   where
