@@ -26,12 +26,12 @@ class Adapter(Generic[S1, S2, T1, T2, V1, V2]):
     source: Annotated[T1, "The source type"]
     target: Annotated[T2, "The target type"]
     coder: Annotated[Coder[S1, S2, V1, V2], "The coder for transforming instances of the source type to instances of the target type"]
-
-ADAPTER__NAME = hydra.core.Name("hydra.compute.Adapter")
-ADAPTER__IS_LOSSY__NAME = hydra.core.Name("isLossy")
-ADAPTER__SOURCE__NAME = hydra.core.Name("source")
-ADAPTER__TARGET__NAME = hydra.core.Name("target")
-ADAPTER__CODER__NAME = hydra.core.Name("coder")
+    
+    TYPE_ = hydra.core.Name("hydra.compute.Adapter")
+    IS_LOSSY = hydra.core.Name("isLossy")
+    SOURCE = hydra.core.Name("source")
+    TARGET = hydra.core.Name("target")
+    CODER = hydra.core.Name("coder")
 
 @dataclass(frozen=True)
 class Bicoder(Generic[S1, S2, T1, T2, V1, V2]):
@@ -39,10 +39,10 @@ class Bicoder(Generic[S1, S2, T1, T2, V1, V2]):
     
     encode: Annotated[Callable[[T1], Adapter[S1, S2, T1, T2, V1, V2]], "A function from source types to adapters"]
     decode: Annotated[Callable[[T2], Adapter[S2, S1, T2, T1, V2, V1]], "A function from target types to adapters"]
-
-BICODER__NAME = hydra.core.Name("hydra.compute.Bicoder")
-BICODER__ENCODE__NAME = hydra.core.Name("encode")
-BICODER__DECODE__NAME = hydra.core.Name("decode")
+    
+    TYPE_ = hydra.core.Name("hydra.compute.Bicoder")
+    ENCODE = hydra.core.Name("encode")
+    DECODE = hydra.core.Name("decode")
 
 @dataclass(frozen=True)
 class Coder(Generic[S1, S2, V1, V2]):
@@ -50,15 +50,15 @@ class Coder(Generic[S1, S2, V1, V2]):
     
     encode: Annotated[Callable[[V1], Flow[S1, V2]], "A function from source values to a flow of target values"]
     decode: Annotated[Callable[[V2], Flow[S2, V1]], "A function from target values to a flow of source values"]
-
-CODER__NAME = hydra.core.Name("hydra.compute.Coder")
-CODER__ENCODE__NAME = hydra.core.Name("encode")
-CODER__DECODE__NAME = hydra.core.Name("decode")
+    
+    TYPE_ = hydra.core.Name("hydra.compute.Coder")
+    ENCODE = hydra.core.Name("encode")
+    DECODE = hydra.core.Name("decode")
 
 class Flow(Node["Callable[[S, Trace], FlowState[S, V]]"], Generic[S, V]):
     r"""A variant of the State monad with built-in logging and error handling."""
 
-FLOW__NAME = hydra.core.Name("hydra.compute.Flow")
+Flow.TYPE_ = hydra.core.Name("hydra.compute.Flow")
 
 @dataclass(frozen=True)
 class FlowState(Generic[S, V]):
@@ -67,11 +67,11 @@ class FlowState(Generic[S, V]):
     value: Annotated[Maybe[V], "The resulting value, or nothing in the case of failure"]
     state: Annotated[S, "The final state"]
     trace: Annotated[Trace, "The trace (log) produced during evaluation"]
-
-FLOW_STATE__NAME = hydra.core.Name("hydra.compute.FlowState")
-FLOW_STATE__VALUE__NAME = hydra.core.Name("value")
-FLOW_STATE__STATE__NAME = hydra.core.Name("state")
-FLOW_STATE__TRACE__NAME = hydra.core.Name("trace")
+    
+    TYPE_ = hydra.core.Name("hydra.compute.FlowState")
+    VALUE = hydra.core.Name("value")
+    STATE = hydra.core.Name("state")
+    TRACE = hydra.core.Name("trace")
 
 @dataclass(frozen=True)
 class Trace:
@@ -80,8 +80,8 @@ class Trace:
     stack: Annotated[frozenlist[str], "A stack of context labels"]
     messages: Annotated[frozenlist[str], "A log of warnings and/or info messages"]
     other: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term], "A map of string keys to arbitrary terms as values, for application-specific use"]
-
-TRACE__NAME = hydra.core.Name("hydra.compute.Trace")
-TRACE__STACK__NAME = hydra.core.Name("stack")
-TRACE__MESSAGES__NAME = hydra.core.Name("messages")
-TRACE__OTHER__NAME = hydra.core.Name("other")
+    
+    TYPE_ = hydra.core.Name("hydra.compute.Trace")
+    STACK = hydra.core.Name("stack")
+    MESSAGES = hydra.core.Name("messages")
+    OTHER = hydra.core.Name("other")

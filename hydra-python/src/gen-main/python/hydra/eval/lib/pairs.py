@@ -15,6 +15,8 @@ import hydra.show.core
 T0 = TypeVar("T0")
 
 def bimap(first_fun: hydra.core.Term, second_fun: hydra.core.Term, pair_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly bimap for Pair terms."""
+    
     match pair_term:
         case hydra.core.TermPair(value=p):
             @lru_cache(1)

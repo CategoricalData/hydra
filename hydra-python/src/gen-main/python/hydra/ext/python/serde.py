@@ -481,7 +481,7 @@ def encode_slice(s: hydra.ext.python.syntax.Slice) -> hydra.ast.Expr:
         case hydra.ext.python.syntax.SliceNamed(value=ne):
             return encode_named_expression(ne)
         
-        case hydra.ext.python.syntax.SliceSlice():
+        case hydra.ext.python.syntax.SliceSlice_():
             return hydra.serialization.cst(":")
         
         case _:
@@ -560,8 +560,8 @@ def encode_star_expression(se: hydra.ext.python.syntax.StarExpression) -> hydra.
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_annotated_rhs(arhs: hydra.ext.python.syntax.AnnotatedRhs) -> hydra.ast.Expr:
-    def _hoist_hydra_ext_python_serde_encode_annotated_rhs_1(v1: hydra.ext.python.syntax.AnnotatedRhs) -> hydra.ast.Expr:
+def encode_annotated_rhs(arhs: hydra.ext.python.syntax.AnnotatedRhs):
+    def _hoist_hydra_ext_python_serde_encode_annotated_rhs_1(v1):
         match v1:
             case hydra.ext.python.syntax.AnnotatedRhsStar(value=ses):
                 return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_star_expression(x1)), ses))
@@ -622,6 +622,39 @@ def encode_star_atom(sa: hydra.ext.python.syntax.StarAtom) -> hydra.ast.Expr:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+def encode_t_primary(tp: hydra.ext.python.syntax.TPrimary) -> hydra.ast.Expr:
+    r"""Serialize a target-side primary expression."""
+    
+    match tp:
+        case hydra.ext.python.syntax.TPrimaryAtom(value=a):
+            return encode_atom(a)
+        
+        case hydra.ext.python.syntax.TPrimaryPrimaryAndName(value=pn):
+            return encode_t_primary_and_name(pn)
+        
+        case hydra.ext.python.syntax.TPrimaryPrimaryAndSlices():
+            return hydra.serialization.cst("...")
+        
+        case hydra.ext.python.syntax.TPrimaryPrimaryAndGenexp():
+            return hydra.serialization.cst("...")
+        
+        case hydra.ext.python.syntax.TPrimaryPrimaryAndArguments():
+            return hydra.serialization.cst("...")
+        
+        case _:
+            raise AssertionError("Unreachable: all variants handled")
+
+def encode_t_primary_and_name(pn: hydra.ext.python.syntax.TPrimaryAndName) -> hydra.ast.Expr:
+    r"""Serialize a TPrimaryAndName as primary.name."""
+    
+    @lru_cache(1)
+    def prim() -> hydra.ext.python.syntax.TPrimary:
+        return pn.primary
+    @lru_cache(1)
+    def name_() -> hydra.ext.python.syntax.Name:
+        return pn.name
+    return hydra.serialization.no_sep((encode_t_primary(prim()), hydra.serialization.cst("."), encode_name(name_())))
+
 def encode_target_with_star_atom(t: hydra.ext.python.syntax.TargetWithStarAtom) -> hydra.ast.Expr:
     r"""Serialize a target with star atom."""
     
@@ -629,8 +662,8 @@ def encode_target_with_star_atom(t: hydra.ext.python.syntax.TargetWithStarAtom) 
         case hydra.ext.python.syntax.TargetWithStarAtomAtom(value=a):
             return encode_star_atom(a)
         
-        case hydra.ext.python.syntax.TargetWithStarAtomProject():
-            return hydra.serialization.cst("...")
+        case hydra.ext.python.syntax.TargetWithStarAtomProject(value=pn):
+            return encode_t_primary_and_name(pn)
         
         case hydra.ext.python.syntax.TargetWithStarAtomSlices():
             return hydra.serialization.cst("...")

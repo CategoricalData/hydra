@@ -40,28 +40,28 @@ def write_qualified_name(qname: hydra.ext.haskell.ast.QualifiedName) -> str:
         return hydra.lib.lists.concat2(hydra.lib.lists.map((lambda x1: h(x1)), qualifiers()), (h(unqual()),))
     return hydra.lib.strings.intercalate(".", all_parts())
 
-def name_to_expr(name: hydra.ext.haskell.ast.Name) -> hydra.ast.Expr:
-    def _hoist_hydra_ext_haskell_serde_name_to_expr_1(v1: hydra.ext.haskell.ast.Name) -> str:
+def name_to_expr(name: hydra.ext.haskell.ast.Name):
+    def _hoist_hydra_ext_haskell_serde_name_to_expr_1(v1):
         match v1:
             case hydra.ext.haskell.ast.NameImplicit(value=qn):
                 return hydra.lib.strings.cat2("?", write_qualified_name(qn))
             
-            case hydra.ext.haskell.ast.NameNormal(value=qn2):
-                return write_qualified_name(qn2)
+            case hydra.ext.haskell.ast.NameNormal(value=qn):
+                return write_qualified_name(qn)
             
-            case hydra.ext.haskell.ast.NameParens(value=qn3):
-                return hydra.lib.strings.cat(("(", write_qualified_name(qn3), ")"))
+            case hydra.ext.haskell.ast.NameParens(value=qn):
+                return hydra.lib.strings.cat(("(", write_qualified_name(qn), ")"))
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
     return hydra.serialization.cst(_hoist_hydra_ext_haskell_serde_name_to_expr_1(name))
 
-def literal_to_expr(lit: hydra.ext.haskell.ast.Literal) -> hydra.ast.Expr:
+def literal_to_expr(lit: hydra.ext.haskell.ast.Literal):
     r"""Convert a literal value to an AST expression."""
     
     def parens_if_neg(b: bool, e: str) -> str:
         return hydra.lib.logic.if_else(b, (lambda : hydra.lib.strings.cat(("(", e, ")"))), (lambda : e))
-    def _hoist_body_1(v1: hydra.ext.haskell.ast.Literal) -> str:
+    def _hoist_body_1(v1):
         match v1:
             case hydra.ext.haskell.ast.LiteralChar(value=c):
                 return hydra.lib.literals.show_string(hydra.lib.literals.show_uint16(c))
@@ -75,8 +75,8 @@ def literal_to_expr(lit: hydra.ext.haskell.ast.Literal) -> hydra.ast.Expr:
             case hydra.ext.haskell.ast.LiteralInt(value=i):
                 return parens_if_neg(hydra.lib.equality.lt(i, 0), hydra.lib.literals.show_int32(i))
             
-            case hydra.ext.haskell.ast.LiteralInteger(value=i2):
-                return parens_if_neg(hydra.lib.equality.lt(i2, 0), hydra.lib.literals.show_bigint(i2))
+            case hydra.ext.haskell.ast.LiteralInteger(value=i):
+                return parens_if_neg(hydra.lib.equality.lt(i, 0), hydra.lib.literals.show_bigint(i))
             
             case hydra.ext.haskell.ast.LiteralString(value=s):
                 return hydra.lib.literals.show_string(s)

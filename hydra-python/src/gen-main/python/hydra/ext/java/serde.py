@@ -1048,8 +1048,8 @@ def write_lambda_expression(le: hydra.ext.java.syntax.LambdaExpression) -> hydra
         return le.body
     return hydra.serialization.infix_ws("->", write_lambda_parameters(params()), write_lambda_body(body()))
 
-def write_left_hand_side(lhs2: hydra.ext.java.syntax.LeftHandSide) -> hydra.ast.Expr:
-    match lhs2:
+def write_left_hand_side(lhs: hydra.ext.java.syntax.LeftHandSide) -> hydra.ast.Expr:
+    match lhs:
         case hydra.ext.java.syntax.LeftHandSideExpressionName(value=en):
             return write_expression_name(en)
         
@@ -1152,7 +1152,7 @@ def write_method_invocation(mi: hydra.ext.java.syntax.MethodInvocation) -> hydra
     def arg_sec() -> hydra.ast.Expr:
         return hydra.serialization.paren_list(True, hydra.lib.lists.map((lambda x1: write_expression(x1)), args()))
     @lru_cache(1)
-    def header_sec() -> hydra.ast.Expr:
+    def header_sec():
         match header():
             case hydra.ext.java.syntax.MethodInvocation_HeaderSimple(value=mname):
                 return write_method_name(mname)
@@ -1170,24 +1170,26 @@ def write_method_invocation(mi: hydra.ext.java.syntax.MethodInvocation) -> hydra
                 @lru_cache(1)
                 def id_sec() -> hydra.ast.Expr:
                     return hydra.serialization.no_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(targs()), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_argument(x1)), targs()))))), Just(write_identifier(cid())))))
-                match cvar():
-                    case hydra.ext.java.syntax.MethodInvocation_VariantType(value=tname):
-                        return hydra.serialization.dot_sep((write_type_name(tname), id_sec()))
-                    
-                    case hydra.ext.java.syntax.MethodInvocation_VariantExpression(value=en):
-                        return hydra.serialization.dot_sep((write_expression_name(en), id_sec()))
-                    
-                    case hydra.ext.java.syntax.MethodInvocation_VariantPrimary(value=p):
-                        return hydra.serialization.dot_sep((write_primary(p), id_sec()))
-                    
-                    case hydra.ext.java.syntax.MethodInvocation_VariantSuper():
-                        return hydra.serialization.dot_sep((hydra.serialization.cst("super"), id_sec()))
-                    
-                    case hydra.ext.java.syntax.MethodInvocation_VariantTypeSuper(value=tname2):
-                        return hydra.serialization.dot_sep((write_type_name(tname2), hydra.serialization.cst("super"), id_sec()))
-                    
-                    case _:
-                        raise AssertionError("Unreachable: all variants handled")
+                def _hoist_body_1(v1):
+                    match v1:
+                        case hydra.ext.java.syntax.MethodInvocation_VariantType(value=tname):
+                            return hydra.serialization.dot_sep((write_type_name(tname), id_sec()))
+                        
+                        case hydra.ext.java.syntax.MethodInvocation_VariantExpression(value=en):
+                            return hydra.serialization.dot_sep((write_expression_name(en), id_sec()))
+                        
+                        case hydra.ext.java.syntax.MethodInvocation_VariantPrimary(value=p):
+                            return hydra.serialization.dot_sep((write_primary(p), id_sec()))
+                        
+                        case hydra.ext.java.syntax.MethodInvocation_VariantSuper():
+                            return hydra.serialization.dot_sep((hydra.serialization.cst("super"), id_sec()))
+                        
+                        case hydra.ext.java.syntax.MethodInvocation_VariantTypeSuper(value=tname):
+                            return hydra.serialization.dot_sep((write_type_name(tname), hydra.serialization.cst("super"), id_sec()))
+                        
+                        case _:
+                            raise AssertionError("Unreachable: all variants handled")
+                return _hoist_body_1(cvar())
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")

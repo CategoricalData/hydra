@@ -17,10 +17,10 @@ class ParseError:
     
     message: Annotated[str, "An error message"]
     remainder: Annotated[str, "The remaining input at the point of failure"]
-
-PARSE_ERROR__NAME = hydra.core.Name("hydra.parsing.ParseError")
-PARSE_ERROR__MESSAGE__NAME = hydra.core.Name("message")
-PARSE_ERROR__REMAINDER__NAME = hydra.core.Name("remainder")
+    
+    TYPE_ = hydra.core.Name("hydra.parsing.ParseError")
+    MESSAGE = hydra.core.Name("message")
+    REMAINDER = hydra.core.Name("remainder")
 
 class ParseResultSuccess(Node["ParseSuccess[A]"]):
     r"""A successful parse, with a value and the remaining unparsed input"""
@@ -36,11 +36,9 @@ class _ParseResultMeta(type):
 class ParseResult(metaclass=_ParseResultMeta):
     r"""ParseResultSuccess[A] | ParseResultFailure"""
     
-    pass
-
-PARSE_RESULT__NAME = hydra.core.Name("hydra.parsing.ParseResult")
-PARSE_RESULT__SUCCESS__NAME = hydra.core.Name("success")
-PARSE_RESULT__FAILURE__NAME = hydra.core.Name("failure")
+    TYPE_ = hydra.core.Name("hydra.parsing.ParseResult")
+    SUCCESS = hydra.core.Name("success")
+    FAILURE = hydra.core.Name("failure")
 
 @dataclass(frozen=True)
 class ParseSuccess(Generic[A]):
@@ -48,12 +46,12 @@ class ParseSuccess(Generic[A]):
     
     value: Annotated[A, "The parsed value"]
     remainder: Annotated[str, "The remaining unparsed input"]
-
-PARSE_SUCCESS__NAME = hydra.core.Name("hydra.parsing.ParseSuccess")
-PARSE_SUCCESS__VALUE__NAME = hydra.core.Name("value")
-PARSE_SUCCESS__REMAINDER__NAME = hydra.core.Name("remainder")
+    
+    TYPE_ = hydra.core.Name("hydra.parsing.ParseSuccess")
+    VALUE = hydra.core.Name("value")
+    REMAINDER = hydra.core.Name("remainder")
 
 class Parser(Node["Callable[[str], ParseResult[A]]"], Generic[A]):
     r"""A parser which consumes characters from a string and produces a value."""
 
-PARSER__NAME = hydra.core.Name("hydra.parsing.Parser")
+Parser.TYPE_ = hydra.core.Name("hydra.parsing.Parser")

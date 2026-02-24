@@ -18,6 +18,8 @@ import hydra.show.core
 T0 = TypeVar("T0")
 
 def alter(fun_term: hydra.core.Term, key_term: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly alter for Map terms."""
+    
     match map_term:
         case hydra.core.TermMap(value=m):
             @lru_cache(1)
@@ -32,6 +34,8 @@ def alter(fun_term: hydra.core.Term, key_term: hydra.core.Term, map_term: hydra.
             return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
 
 def bimap(key_fun: hydra.core.Term, val_fun: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly bimap for Map terms."""
+    
     match map_term:
         case hydra.core.TermMap(value=m):
             @lru_cache(1)
@@ -43,6 +47,8 @@ def bimap(key_fun: hydra.core.Term, val_fun: hydra.core.Term, map_term: hydra.co
             return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
 
 def filter(val_pred: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly filter for Map terms."""
+    
     match map_term:
         case hydra.core.TermMap(value=m):
             @lru_cache(1)
@@ -54,6 +60,8 @@ def filter(val_pred: hydra.core.Term, map_term: hydra.core.Term) -> hydra.comput
             return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
 
 def filter_with_key(pred: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly filterWithKey for Map terms."""
+    
     match map_term:
         case hydra.core.TermMap(value=m):
             @lru_cache(1)
@@ -65,6 +73,8 @@ def filter_with_key(pred: hydra.core.Term, map_term: hydra.core.Term) -> hydra.c
             return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
 
 def map(val_fun: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly map for Map terms."""
+    
     match map_term:
         case hydra.core.TermMap(value=m):
             @lru_cache(1)
@@ -76,6 +86,8 @@ def map(val_fun: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Fl
             return hydra.monads.unexpected("map value", hydra.show.core.term(map_term))
 
 def map_keys(key_fun: hydra.core.Term, map_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly mapKeys for Map terms."""
+    
     match map_term:
         case hydra.core.TermMap(value=m):
             @lru_cache(1)

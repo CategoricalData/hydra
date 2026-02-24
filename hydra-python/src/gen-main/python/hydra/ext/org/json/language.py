@@ -38,8 +38,8 @@ def json_language() -> hydra.coders.Language:
     @lru_cache(1)
     def type_variants() -> frozenset[hydra.variants.TypeVariant]:
         return hydra.lib.sets.from_list((hydra.variants.TypeVariant.LIST, hydra.variants.TypeVariant.LITERAL, hydra.variants.TypeVariant.MAP, hydra.variants.TypeVariant.MAYBE, hydra.variants.TypeVariant.RECORD))
-    def type_predicate(typ: hydra.core.Type) -> bool:
-        def _hoist_type_predicate_1(v1: hydra.core.Type) -> bool:
+    def type_predicate(typ: hydra.core.Type):
+        def _hoist_type_predicate_1(v1):
             match v1:
                 case hydra.core.TypeMaybe():
                     return False

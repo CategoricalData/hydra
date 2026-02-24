@@ -11,17 +11,17 @@ import hydra.core
 class Constant(Node[str]):
     r"""A constant pattern."""
 
-CONSTANT__NAME = hydra.core.Name("hydra.grammar.Constant")
+Constant.TYPE_ = hydra.core.Name("hydra.grammar.Constant")
 
 class Grammar(Node["frozenlist[Production]"]):
     r"""An enhanced Backus-Naur form (BNF) grammar."""
 
-GRAMMAR__NAME = hydra.core.Name("hydra.grammar.Grammar")
+Grammar.TYPE_ = hydra.core.Name("hydra.grammar.Grammar")
 
 class Label(Node[str]):
     r"""A name for a pattern."""
 
-LABEL__NAME = hydra.core.Name("hydra.grammar.Label")
+Label.TYPE_ = hydra.core.Name("hydra.grammar.Label")
 
 @dataclass(frozen=True)
 class LabeledPattern:
@@ -29,10 +29,10 @@ class LabeledPattern:
     
     label: Annotated[Label, "The label for the pattern"]
     pattern: Annotated[Pattern, "The pattern being labeled"]
-
-LABELED_PATTERN__NAME = hydra.core.Name("hydra.grammar.LabeledPattern")
-LABELED_PATTERN__LABEL__NAME = hydra.core.Name("label")
-LABELED_PATTERN__PATTERN__NAME = hydra.core.Name("pattern")
+    
+    TYPE_ = hydra.core.Name("hydra.grammar.LabeledPattern")
+    LABEL = hydra.core.Name("label")
+    PATTERN = hydra.core.Name("pattern")
 
 class PatternAlternatives(Node["frozenlist[Pattern]"]):
     r"""A choice between alternative patterns"""
@@ -81,20 +81,18 @@ class _PatternMeta(type):
 class Pattern(metaclass=_PatternMeta):
     r"""PatternAlternatives | PatternConstant | PatternIgnored | PatternLabeled | PatternNil | PatternNonterminal | PatternOption | PatternPlus | PatternRegex | PatternSequence | PatternStar"""
     
-    pass
-
-PATTERN__NAME = hydra.core.Name("hydra.grammar.Pattern")
-PATTERN__ALTERNATIVES__NAME = hydra.core.Name("alternatives")
-PATTERN__CONSTANT__NAME = hydra.core.Name("constant")
-PATTERN__IGNORED__NAME = hydra.core.Name("ignored")
-PATTERN__LABELED__NAME = hydra.core.Name("labeled")
-PATTERN__NIL__NAME = hydra.core.Name("nil")
-PATTERN__NONTERMINAL__NAME = hydra.core.Name("nonterminal")
-PATTERN__OPTION__NAME = hydra.core.Name("option")
-PATTERN__PLUS__NAME = hydra.core.Name("plus")
-PATTERN__REGEX__NAME = hydra.core.Name("regex")
-PATTERN__SEQUENCE__NAME = hydra.core.Name("sequence")
-PATTERN__STAR__NAME = hydra.core.Name("star")
+    TYPE_ = hydra.core.Name("hydra.grammar.Pattern")
+    ALTERNATIVES = hydra.core.Name("alternatives")
+    CONSTANT = hydra.core.Name("constant")
+    IGNORED = hydra.core.Name("ignored")
+    LABELED = hydra.core.Name("labeled")
+    NIL = hydra.core.Name("nil")
+    NONTERMINAL = hydra.core.Name("nonterminal")
+    OPTION = hydra.core.Name("option")
+    PLUS = hydra.core.Name("plus")
+    REGEX = hydra.core.Name("regex")
+    SEQUENCE = hydra.core.Name("sequence")
+    STAR = hydra.core.Name("star")
 
 @dataclass(frozen=True)
 class Production:
@@ -102,17 +100,17 @@ class Production:
     
     symbol: Annotated[Symbol, "The nonterminal symbol being defined"]
     pattern: Annotated[Pattern, "The pattern which defines the symbol"]
-
-PRODUCTION__NAME = hydra.core.Name("hydra.grammar.Production")
-PRODUCTION__SYMBOL__NAME = hydra.core.Name("symbol")
-PRODUCTION__PATTERN__NAME = hydra.core.Name("pattern")
+    
+    TYPE_ = hydra.core.Name("hydra.grammar.Production")
+    SYMBOL = hydra.core.Name("symbol")
+    PATTERN = hydra.core.Name("pattern")
 
 class Regex(Node[str]):
     r"""A regular expression."""
 
-REGEX__NAME = hydra.core.Name("hydra.grammar.Regex")
+Regex.TYPE_ = hydra.core.Name("hydra.grammar.Regex")
 
 class Symbol(Node[str]):
     r"""A nonterminal symbol."""
 
-SYMBOL__NAME = hydra.core.Name("hydra.grammar.Symbol")
+Symbol.TYPE_ = hydra.core.Name("hydra.grammar.Symbol")

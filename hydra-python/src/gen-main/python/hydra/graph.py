@@ -22,14 +22,14 @@ class Graph:
     body: Annotated[hydra.core.Term, "The body of the term which generated this context"]
     primitives: Annotated[FrozenDict[hydra.core.Name, Primitive], "All supported primitive constants and functions, by name"]
     schema: Annotated[Maybe[Graph], "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph."]
-
-GRAPH__NAME = hydra.core.Name("hydra.graph.Graph")
-GRAPH__ELEMENTS__NAME = hydra.core.Name("elements")
-GRAPH__ENVIRONMENT__NAME = hydra.core.Name("environment")
-GRAPH__TYPES__NAME = hydra.core.Name("types")
-GRAPH__BODY__NAME = hydra.core.Name("body")
-GRAPH__PRIMITIVES__NAME = hydra.core.Name("primitives")
-GRAPH__SCHEMA__NAME = hydra.core.Name("schema")
+    
+    TYPE_ = hydra.core.Name("hydra.graph.Graph")
+    ELEMENTS = hydra.core.Name("elements")
+    ENVIRONMENT = hydra.core.Name("environment")
+    TYPES = hydra.core.Name("types")
+    BODY = hydra.core.Name("body")
+    PRIMITIVES = hydra.core.Name("primitives")
+    SCHEMA = hydra.core.Name("schema")
 
 @dataclass(frozen=True)
 class Primitive:
@@ -38,11 +38,11 @@ class Primitive:
     name: Annotated[hydra.core.Name, "The unique name of the primitive function"]
     type: Annotated[hydra.core.TypeScheme, "The type signature of the primitive function"]
     implementation: Annotated[Callable[[frozenlist[hydra.core.Term]], hydra.compute.Flow[Graph, hydra.core.Term]], "A concrete implementation of the primitive function"]
-
-PRIMITIVE__NAME = hydra.core.Name("hydra.graph.Primitive")
-PRIMITIVE__NAME__NAME = hydra.core.Name("name")
-PRIMITIVE__TYPE__NAME = hydra.core.Name("type")
-PRIMITIVE__IMPLEMENTATION__NAME = hydra.core.Name("implementation")
+    
+    TYPE_ = hydra.core.Name("hydra.graph.Primitive")
+    NAME = hydra.core.Name("name")
+    TYPE = hydra.core.Name("type")
+    IMPLEMENTATION = hydra.core.Name("implementation")
 
 @dataclass(frozen=True)
 class TermCoder(Generic[A]):
@@ -50,7 +50,7 @@ class TermCoder(Generic[A]):
     
     type: Annotated[hydra.core.Type, "The Hydra type of encoded terms"]
     coder: Annotated[hydra.compute.Coder[Graph, Graph, hydra.core.Term, A], "A coder between Hydra terms and instances of the given type"]
-
-TERM_CODER__NAME = hydra.core.Name("hydra.graph.TermCoder")
-TERM_CODER__TYPE__NAME = hydra.core.Name("type")
-TERM_CODER__CODER__NAME = hydra.core.Name("coder")
+    
+    TYPE_ = hydra.core.Name("hydra.graph.TermCoder")
+    TYPE = hydra.core.Name("type")
+    CODER = hydra.core.Name("coder")

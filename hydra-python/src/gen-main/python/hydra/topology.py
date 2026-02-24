@@ -14,16 +14,14 @@ A = TypeVar("A")
 # A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors.
 Graph: TypeAlias = "FrozenDict[Vertex, frozenlist[Vertex]]"
 
-GRAPH__NAME = hydra.core.Name("hydra.topology.Graph")
-
 @dataclass(frozen=True)
 class OrderingIsomorphism(Generic[A]):
     encode: Annotated[Callable[[frozenlist[A]], frozenlist[A]], "Mapping from source ordering to target ordering"]
     decode: Annotated[Callable[[frozenlist[A]], frozenlist[A]], "Mapping from target ordering to source ordering"]
-
-ORDERING_ISOMORPHISM__NAME = hydra.core.Name("hydra.topology.OrderingIsomorphism")
-ORDERING_ISOMORPHISM__ENCODE__NAME = hydra.core.Name("encode")
-ORDERING_ISOMORPHISM__DECODE__NAME = hydra.core.Name("decode")
+    
+    TYPE_ = hydra.core.Name("hydra.topology.OrderingIsomorphism")
+    ENCODE = hydra.core.Name("encode")
+    DECODE = hydra.core.Name("decode")
 
 @dataclass(frozen=True)
 class TarjanState:
@@ -33,16 +31,14 @@ class TarjanState:
     stack: Annotated[frozenlist[Vertex], "Current DFS stack, with vertices in reverse order"]
     on_stack: Annotated[frozenset[Vertex], "Set of vertices currently on the stack, for quick lookup"]
     sccs: Annotated[frozenlist[frozenlist[Vertex]], "Accumulated strongly connected components, each a list of vertices"]
-
-TARJAN_STATE__NAME = hydra.core.Name("hydra.topology.TarjanState")
-TARJAN_STATE__COUNTER__NAME = hydra.core.Name("counter")
-TARJAN_STATE__INDICES__NAME = hydra.core.Name("indices")
-TARJAN_STATE__LOW_LINKS__NAME = hydra.core.Name("lowLinks")
-TARJAN_STATE__STACK__NAME = hydra.core.Name("stack")
-TARJAN_STATE__ON_STACK__NAME = hydra.core.Name("onStack")
-TARJAN_STATE__SCCS__NAME = hydra.core.Name("sccs")
+    
+    TYPE_ = hydra.core.Name("hydra.topology.TarjanState")
+    COUNTER = hydra.core.Name("counter")
+    INDICES = hydra.core.Name("indices")
+    LOW_LINKS = hydra.core.Name("lowLinks")
+    STACK = hydra.core.Name("stack")
+    ON_STACK = hydra.core.Name("onStack")
+    SCCS = hydra.core.Name("sccs")
 
 # A graph vertex, represented as a 32-bit integer identifier.
 Vertex: TypeAlias = "int"
-
-VERTEX__NAME = hydra.core.Name("hydra.topology.Vertex")

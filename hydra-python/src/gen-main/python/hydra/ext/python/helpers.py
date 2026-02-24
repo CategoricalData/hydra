@@ -16,13 +16,11 @@ import hydra.typing
 class PythonVersion(Enum):
     r"""Target Python version for code generation."""
     
-    PYTHON310 = "python310"
+    PYTHON310 = hydra.core.Name("python310")
     
-    PYTHON312 = "python312"
+    PYTHON312 = hydra.core.Name("python312")
 
-PYTHON_VERSION__NAME = hydra.core.Name("hydra.ext.python.helpers.PythonVersion")
-PYTHON_VERSION__PYTHON310__NAME = hydra.core.Name("python310")
-PYTHON_VERSION__PYTHON312__NAME = hydra.core.Name("python312")
+PythonVersion.TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PythonVersion")
 
 @dataclass(frozen=True)
 class PythonEnvironment:
@@ -35,15 +33,15 @@ class PythonEnvironment:
     version: Annotated[PythonVersion, "Target Python version"]
     skip_casts: Annotated[bool, "When True, skip generating cast() calls for reduced memory usage"]
     inline_variables: Annotated[frozenset[hydra.core.Name], "Variables that are inline let bindings (walrus operators)"]
-
-PYTHON_ENVIRONMENT__NAME = hydra.core.Name("hydra.ext.python.helpers.PythonEnvironment")
-PYTHON_ENVIRONMENT__NAMESPACES__NAME = hydra.core.Name("namespaces")
-PYTHON_ENVIRONMENT__BOUND_TYPE_VARIABLES__NAME = hydra.core.Name("boundTypeVariables")
-PYTHON_ENVIRONMENT__TYPE_CONTEXT__NAME = hydra.core.Name("typeContext")
-PYTHON_ENVIRONMENT__NULLARY_BINDINGS__NAME = hydra.core.Name("nullaryBindings")
-PYTHON_ENVIRONMENT__VERSION__NAME = hydra.core.Name("version")
-PYTHON_ENVIRONMENT__SKIP_CASTS__NAME = hydra.core.Name("skipCasts")
-PYTHON_ENVIRONMENT__INLINE_VARIABLES__NAME = hydra.core.Name("inlineVariables")
+    
+    TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PythonEnvironment")
+    NAMESPACES = hydra.core.Name("namespaces")
+    BOUND_TYPE_VARIABLES = hydra.core.Name("boundTypeVariables")
+    TYPE_CONTEXT = hydra.core.Name("typeContext")
+    NULLARY_BINDINGS = hydra.core.Name("nullaryBindings")
+    VERSION = hydra.core.Name("version")
+    SKIP_CASTS = hydra.core.Name("skipCasts")
+    INLINE_VARIABLES = hydra.core.Name("inlineVariables")
 
 @dataclass(frozen=True)
 class PythonModuleMetadata:
@@ -71,30 +69,30 @@ class PythonModuleMetadata:
     uses_nothing: bool
     uses_right: bool
     uses_type_var: bool
-
-PYTHON_MODULE_METADATA__NAME = hydra.core.Name("hydra.ext.python.helpers.PythonModuleMetadata")
-PYTHON_MODULE_METADATA__NAMESPACES__NAME = hydra.core.Name("namespaces")
-PYTHON_MODULE_METADATA__TYPE_VARIABLES__NAME = hydra.core.Name("typeVariables")
-PYTHON_MODULE_METADATA__USES_ANNOTATED__NAME = hydra.core.Name("usesAnnotated")
-PYTHON_MODULE_METADATA__USES_CALLABLE__NAME = hydra.core.Name("usesCallable")
-PYTHON_MODULE_METADATA__USES_CAST__NAME = hydra.core.Name("usesCast")
-PYTHON_MODULE_METADATA__USES_LRU_CACHE__NAME = hydra.core.Name("usesLruCache")
-PYTHON_MODULE_METADATA__USES_TYPE_ALIAS__NAME = hydra.core.Name("usesTypeAlias")
-PYTHON_MODULE_METADATA__USES_DATACLASS__NAME = hydra.core.Name("usesDataclass")
-PYTHON_MODULE_METADATA__USES_DECIMAL__NAME = hydra.core.Name("usesDecimal")
-PYTHON_MODULE_METADATA__USES_EITHER__NAME = hydra.core.Name("usesEither")
-PYTHON_MODULE_METADATA__USES_ENUM__NAME = hydra.core.Name("usesEnum")
-PYTHON_MODULE_METADATA__USES_FROZEN_DICT__NAME = hydra.core.Name("usesFrozenDict")
-PYTHON_MODULE_METADATA__USES_FROZEN_LIST__NAME = hydra.core.Name("usesFrozenList")
-PYTHON_MODULE_METADATA__USES_GENERIC__NAME = hydra.core.Name("usesGeneric")
-PYTHON_MODULE_METADATA__USES_JUST__NAME = hydra.core.Name("usesJust")
-PYTHON_MODULE_METADATA__USES_LEFT__NAME = hydra.core.Name("usesLeft")
-PYTHON_MODULE_METADATA__USES_MAYBE__NAME = hydra.core.Name("usesMaybe")
-PYTHON_MODULE_METADATA__USES_NAME__NAME = hydra.core.Name("usesName")
-PYTHON_MODULE_METADATA__USES_NODE__NAME = hydra.core.Name("usesNode")
-PYTHON_MODULE_METADATA__USES_NOTHING__NAME = hydra.core.Name("usesNothing")
-PYTHON_MODULE_METADATA__USES_RIGHT__NAME = hydra.core.Name("usesRight")
-PYTHON_MODULE_METADATA__USES_TYPE_VAR__NAME = hydra.core.Name("usesTypeVar")
+    
+    TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PythonModuleMetadata")
+    NAMESPACES = hydra.core.Name("namespaces")
+    TYPE_VARIABLES = hydra.core.Name("typeVariables")
+    USES_ANNOTATED = hydra.core.Name("usesAnnotated")
+    USES_CALLABLE = hydra.core.Name("usesCallable")
+    USES_CAST = hydra.core.Name("usesCast")
+    USES_LRU_CACHE = hydra.core.Name("usesLruCache")
+    USES_TYPE_ALIAS = hydra.core.Name("usesTypeAlias")
+    USES_DATACLASS = hydra.core.Name("usesDataclass")
+    USES_DECIMAL = hydra.core.Name("usesDecimal")
+    USES_EITHER = hydra.core.Name("usesEither")
+    USES_ENUM = hydra.core.Name("usesEnum")
+    USES_FROZEN_DICT = hydra.core.Name("usesFrozenDict")
+    USES_FROZEN_LIST = hydra.core.Name("usesFrozenList")
+    USES_GENERIC = hydra.core.Name("usesGeneric")
+    USES_JUST = hydra.core.Name("usesJust")
+    USES_LEFT = hydra.core.Name("usesLeft")
+    USES_MAYBE = hydra.core.Name("usesMaybe")
+    USES_NAME = hydra.core.Name("usesName")
+    USES_NODE = hydra.core.Name("usesNode")
+    USES_NOTHING = hydra.core.Name("usesNothing")
+    USES_RIGHT = hydra.core.Name("usesRight")
+    USES_TYPE_VAR = hydra.core.Name("usesTypeVar")
 
 @dataclass(frozen=True)
 class PyGraph:
@@ -102,7 +100,7 @@ class PyGraph:
     
     graph: Annotated[hydra.graph.Graph, "The Hydra graph being processed"]
     metadata: Annotated[PythonModuleMetadata, "Accumulated module metadata"]
-
-PY_GRAPH__NAME = hydra.core.Name("hydra.ext.python.helpers.PyGraph")
-PY_GRAPH__GRAPH__NAME = hydra.core.Name("graph")
-PY_GRAPH__METADATA__NAME = hydra.core.Name("metadata")
+    
+    TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PyGraph")
+    GRAPH = hydra.core.Name("graph")
+    METADATA = hydra.core.Name("metadata")

@@ -17,8 +17,8 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.util
 
-def type_class(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.classes.TypeClass]:
-    def _hoist_hydra_decode_classes_type_class_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.classes.TypeClass]:
+def type_class(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_classes_type_class_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)

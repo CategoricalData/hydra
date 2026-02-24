@@ -15,11 +15,11 @@ class AccessorEdge:
     source: Annotated[AccessorNode, "The source node of the edge"]
     path: Annotated[AccessorPath, "The accessor path connecting source to target"]
     target: Annotated[AccessorNode, "The target node of the edge"]
-
-ACCESSOR_EDGE__NAME = hydra.core.Name("hydra.accessors.AccessorEdge")
-ACCESSOR_EDGE__SOURCE__NAME = hydra.core.Name("source")
-ACCESSOR_EDGE__PATH__NAME = hydra.core.Name("path")
-ACCESSOR_EDGE__TARGET__NAME = hydra.core.Name("target")
+    
+    TYPE_ = hydra.core.Name("hydra.accessors.AccessorEdge")
+    SOURCE = hydra.core.Name("source")
+    PATH = hydra.core.Name("path")
+    TARGET = hydra.core.Name("target")
 
 @dataclass(frozen=True)
 class AccessorGraph:
@@ -27,10 +27,10 @@ class AccessorGraph:
     
     nodes: Annotated[frozenlist[AccessorNode], "All nodes in the graph"]
     edges: Annotated[frozenlist[AccessorEdge], "All edges in the graph"]
-
-ACCESSOR_GRAPH__NAME = hydra.core.Name("hydra.accessors.AccessorGraph")
-ACCESSOR_GRAPH__NODES__NAME = hydra.core.Name("nodes")
-ACCESSOR_GRAPH__EDGES__NAME = hydra.core.Name("edges")
+    
+    TYPE_ = hydra.core.Name("hydra.accessors.AccessorGraph")
+    NODES = hydra.core.Name("nodes")
+    EDGES = hydra.core.Name("edges")
 
 @dataclass(frozen=True)
 class AccessorNode:
@@ -39,16 +39,16 @@ class AccessorNode:
     name: Annotated[hydra.core.Name, "The qualified name of the term"]
     label: Annotated[str, "A human-readable label for the node"]
     id: Annotated[str, "A unique identifier for the node"]
-
-ACCESSOR_NODE__NAME = hydra.core.Name("hydra.accessors.AccessorNode")
-ACCESSOR_NODE__NAME__NAME = hydra.core.Name("name")
-ACCESSOR_NODE__LABEL__NAME = hydra.core.Name("label")
-ACCESSOR_NODE__ID__NAME = hydra.core.Name("id")
+    
+    TYPE_ = hydra.core.Name("hydra.accessors.AccessorNode")
+    NAME = hydra.core.Name("name")
+    LABEL = hydra.core.Name("label")
+    ID = hydra.core.Name("id")
 
 class AccessorPath(Node["frozenlist[TermAccessor]"]):
     r"""A sequence of term accessors forming a path through a term."""
 
-ACCESSOR_PATH__NAME = hydra.core.Name("hydra.accessors.AccessorPath")
+AccessorPath.TYPE_ = hydra.core.Name("hydra.accessors.AccessorPath")
 
 class TermAccessorAnnotatedBody:
     r"""Access the body of an annotated term"""
@@ -190,26 +190,24 @@ class _TermAccessorMeta(type):
 class TermAccessor(metaclass=_TermAccessorMeta):
     r"""TermAccessorAnnotatedBody | TermAccessorApplicationFunction | TermAccessorApplicationArgument | TermAccessorLambdaBody | TermAccessorUnionCasesDefault | TermAccessorUnionCasesBranch | TermAccessorLetBody | TermAccessorLetBinding | TermAccessorListElement | TermAccessorMapKey | TermAccessorMapValue | TermAccessorMaybeTerm | TermAccessorProductTerm | TermAccessorRecordField | TermAccessorSetElement | TermAccessorSumTerm | TermAccessorTypeLambdaBody | TermAccessorTypeApplicationTerm | TermAccessorInjectionTerm | TermAccessorWrappedTerm"""
     
-    pass
-
-TERM_ACCESSOR__NAME = hydra.core.Name("hydra.accessors.TermAccessor")
-TERM_ACCESSOR__ANNOTATED_BODY__NAME = hydra.core.Name("annotatedBody")
-TERM_ACCESSOR__APPLICATION_FUNCTION__NAME = hydra.core.Name("applicationFunction")
-TERM_ACCESSOR__APPLICATION_ARGUMENT__NAME = hydra.core.Name("applicationArgument")
-TERM_ACCESSOR__LAMBDA_BODY__NAME = hydra.core.Name("lambdaBody")
-TERM_ACCESSOR__UNION_CASES_DEFAULT__NAME = hydra.core.Name("unionCasesDefault")
-TERM_ACCESSOR__UNION_CASES_BRANCH__NAME = hydra.core.Name("unionCasesBranch")
-TERM_ACCESSOR__LET_BODY__NAME = hydra.core.Name("letBody")
-TERM_ACCESSOR__LET_BINDING__NAME = hydra.core.Name("letBinding")
-TERM_ACCESSOR__LIST_ELEMENT__NAME = hydra.core.Name("listElement")
-TERM_ACCESSOR__MAP_KEY__NAME = hydra.core.Name("mapKey")
-TERM_ACCESSOR__MAP_VALUE__NAME = hydra.core.Name("mapValue")
-TERM_ACCESSOR__MAYBE_TERM__NAME = hydra.core.Name("maybeTerm")
-TERM_ACCESSOR__PRODUCT_TERM__NAME = hydra.core.Name("productTerm")
-TERM_ACCESSOR__RECORD_FIELD__NAME = hydra.core.Name("recordField")
-TERM_ACCESSOR__SET_ELEMENT__NAME = hydra.core.Name("setElement")
-TERM_ACCESSOR__SUM_TERM__NAME = hydra.core.Name("sumTerm")
-TERM_ACCESSOR__TYPE_LAMBDA_BODY__NAME = hydra.core.Name("typeLambdaBody")
-TERM_ACCESSOR__TYPE_APPLICATION_TERM__NAME = hydra.core.Name("typeApplicationTerm")
-TERM_ACCESSOR__INJECTION_TERM__NAME = hydra.core.Name("injectionTerm")
-TERM_ACCESSOR__WRAPPED_TERM__NAME = hydra.core.Name("wrappedTerm")
+    TYPE_ = hydra.core.Name("hydra.accessors.TermAccessor")
+    ANNOTATED_BODY = hydra.core.Name("annotatedBody")
+    APPLICATION_FUNCTION = hydra.core.Name("applicationFunction")
+    APPLICATION_ARGUMENT = hydra.core.Name("applicationArgument")
+    LAMBDA_BODY = hydra.core.Name("lambdaBody")
+    UNION_CASES_DEFAULT = hydra.core.Name("unionCasesDefault")
+    UNION_CASES_BRANCH = hydra.core.Name("unionCasesBranch")
+    LET_BODY = hydra.core.Name("letBody")
+    LET_BINDING = hydra.core.Name("letBinding")
+    LIST_ELEMENT = hydra.core.Name("listElement")
+    MAP_KEY = hydra.core.Name("mapKey")
+    MAP_VALUE = hydra.core.Name("mapValue")
+    MAYBE_TERM = hydra.core.Name("maybeTerm")
+    PRODUCT_TERM = hydra.core.Name("productTerm")
+    RECORD_FIELD = hydra.core.Name("recordField")
+    SET_ELEMENT = hydra.core.Name("setElement")
+    SUM_TERM = hydra.core.Name("sumTerm")
+    TYPE_LAMBDA_BODY = hydra.core.Name("typeLambdaBody")
+    TYPE_APPLICATION_TERM = hydra.core.Name("typeApplicationTerm")
+    INJECTION_TERM = hydra.core.Name("injectionTerm")
+    WRAPPED_TERM = hydra.core.Name("wrappedTerm")

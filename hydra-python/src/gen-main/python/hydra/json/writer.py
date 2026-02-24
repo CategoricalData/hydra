@@ -15,6 +15,7 @@ import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
 import hydra.lib.maps
+import hydra.lib.math
 import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.serialization
@@ -25,8 +26,16 @@ colon_op = hydra.ast.Op(hydra.ast.Symbol(":"), hydra.ast.Padding(cast(hydra.ast.
 def json_string(s: str) -> str:
     r"""Escape and quote a string for JSON output."""
     
+    def hex_escape(c: int) -> str:
+        @lru_cache(1)
+        def hi() -> str:
+            return hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.strings.char_at(hydra.lib.math.div(c, 16), "0123456789abcdef")))
+        @lru_cache(1)
+        def lo() -> str:
+            return hydra.lib.strings.from_list(hydra.lib.lists.pure(hydra.lib.strings.char_at(hydra.lib.math.mod(c, 16), "0123456789abcdef")))
+        return hydra.lib.strings.cat2(hydra.lib.strings.cat2("\\u00", hi()), lo())
     def escape(c: int) -> str:
-        return hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 34), (lambda : "\\\""), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 92), (lambda : "\\\\"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 10), (lambda : "\\n"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 13), (lambda : "\\r"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 9), (lambda : "\\t"), (lambda : hydra.lib.strings.from_list(hydra.lib.lists.pure(c))))))))))))
+        return hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 34), (lambda : "\\\""), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 92), (lambda : "\\\\"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 8), (lambda : "\\b"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 12), (lambda : "\\f"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 10), (lambda : "\\n"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 13), (lambda : "\\r"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(c, 9), (lambda : "\\t"), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.lt(c, 32), (lambda : hex_escape(c)), (lambda : hydra.lib.strings.from_list(hydra.lib.lists.pure(c))))))))))))))))))
     @lru_cache(1)
     def escaped() -> str:
         return hydra.lib.strings.cat(hydra.lib.lists.map(escape, hydra.lib.strings.to_list(s)))

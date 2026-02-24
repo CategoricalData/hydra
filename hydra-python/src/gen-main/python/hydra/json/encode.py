@@ -22,6 +22,8 @@ import hydra.show.core
 T0 = TypeVar("T0")
 
 def encode_float(fv: hydra.core.FloatValue) -> Either[T0, hydra.json.model.Value]:
+    r"""Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string."""
+    
     match fv:
         case hydra.core.FloatValueBigfloat(value=bf):
             return Right(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(bf)))
@@ -36,6 +38,8 @@ def encode_float(fv: hydra.core.FloatValue) -> Either[T0, hydra.json.model.Value
             raise AssertionError("Unreachable: all variants handled")
 
 def encode_integer(iv: hydra.core.IntegerValue) -> Either[T0, hydra.json.model.Value]:
+    r"""Encode an integer value to JSON. Small ints use native numbers; large ints use strings."""
+    
     match iv:
         case hydra.core.IntegerValueBigint(value=bi):
             return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.show_bigint(bi))))
@@ -68,6 +72,8 @@ def encode_integer(iv: hydra.core.IntegerValue) -> Either[T0, hydra.json.model.V
             raise AssertionError("Unreachable: all variants handled")
 
 def encode_literal(lit: hydra.core.Literal) -> Either[T0, hydra.json.model.Value]:
+    r"""Encode a Hydra literal to a JSON value."""
+    
     match lit:
         case hydra.core.LiteralBinary(value=b):
             return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(hydra.lib.literals.binary_to_string(b))))

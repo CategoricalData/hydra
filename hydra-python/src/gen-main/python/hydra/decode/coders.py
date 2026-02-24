@@ -17,8 +17,8 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.util
 
-def coder_direction(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.coders.CoderDirection]:
-    def _hoist_hydra_decode_coders_coder_direction_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.coders.CoderDirection]:
+def coder_direction(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_coders_coder_direction_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -42,22 +42,22 @@ def coder_direction(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
                 return Left(hydra.util.DecodingError("expected union of type hydra.coders.CoderDirection"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_coders_coder_direction_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def language_name(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.coders.LanguageName]:
-    def _hoist_hydra_decode_coders_language_name_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+def language_name(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_coders_language_name_1(v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
             
             case _:
                 return Left(hydra.util.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_coders_language_name_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+    def _hoist_hydra_decode_coders_language_name_2(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_coders_language_name_1(v)
             
             case _:
                 return Left(hydra.util.DecodingError("expected literal"))
-    def _hoist_hydra_decode_coders_language_name_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.coders.LanguageName]:
+    def _hoist_hydra_decode_coders_language_name_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.coders.LanguageName(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_coders_language_name_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -66,8 +66,8 @@ def language_name(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.coders.LanguageName"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_coders_language_name_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def traversal_order(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.coders.TraversalOrder]:
-    def _hoist_hydra_decode_coders_traversal_order_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.coders.TraversalOrder]:
+def traversal_order(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_coders_traversal_order_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)

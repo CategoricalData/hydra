@@ -24,6 +24,8 @@ import hydra.topology
 T0 = TypeVar("T0")
 
 def adjacency_lists_to_graph(edges0: frozenlist[tuple[T0, frozenlist[T0]]]) -> tuple[FrozenDict[int, frozenlist[int]], Callable[[int], T0]]:
+    r"""Given a list of adjacency lists represented as (key, [key]) pairs, construct a graph along with a function mapping each vertex (an Int) back to its original key."""
+    
     @lru_cache(1)
     def sorted_edges() -> frozenlist[tuple[T0, frozenlist[T0]]]:
         return hydra.lib.lists.sort_on((lambda x1: hydra.lib.pairs.first(x1)), edges0)

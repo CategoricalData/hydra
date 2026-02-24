@@ -17,8 +17,8 @@ import hydra.lib.strings
 import hydra.util
 import hydra.variants
 
-def elimination_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.EliminationVariant]:
-    def _hoist_hydra_decode_variants_elimination_variant_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.EliminationVariant]:
+def elimination_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_variants_elimination_variant_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -42,8 +42,8 @@ def elimination_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[h
                 return Left(hydra.util.DecodingError("expected union of type hydra.variants.EliminationVariant"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_variants_elimination_variant_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def function_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.FunctionVariant]:
-    def _hoist_hydra_decode_variants_function_variant_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.FunctionVariant]:
+def function_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_variants_function_variant_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -67,8 +67,8 @@ def function_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydr
                 return Left(hydra.util.DecodingError("expected union of type hydra.variants.FunctionVariant"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_variants_function_variant_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def literal_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.LiteralVariant]:
-    def _hoist_hydra_decode_variants_literal_variant_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.LiteralVariant]:
+def literal_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_variants_literal_variant_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -92,8 +92,8 @@ def literal_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
                 return Left(hydra.util.DecodingError("expected union of type hydra.variants.LiteralVariant"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_variants_literal_variant_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def term_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.TermVariant]:
-    def _hoist_hydra_decode_variants_term_variant_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.TermVariant]:
+def term_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_variants_term_variant_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -117,8 +117,8 @@ def term_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.ut
                 return Left(hydra.util.DecodingError("expected union of type hydra.variants.TermVariant"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_variants_term_variant_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def type_variant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.TypeVariant]:
-    def _hoist_hydra_decode_variants_type_variant_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.variants.TypeVariant]:
+def type_variant(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_variants_type_variant_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)

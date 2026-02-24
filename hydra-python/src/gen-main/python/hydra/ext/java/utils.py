@@ -29,7 +29,6 @@ import hydra.module
 import hydra.names
 
 T0 = TypeVar("T0")
-T1 = TypeVar("T1")
 
 def add_expressions(exprs: frozenlist[hydra.ext.java.syntax.MultiplicativeExpression]) -> hydra.ext.java.syntax.AdditiveExpression:
     @lru_cache(1)
@@ -49,8 +48,8 @@ def add_in_scope_vars(names: frozenlist[hydra.core.Name], aliases: hydra.ext.jav
 def java_type_variable_to_type(tv: hydra.ext.java.syntax.TypeVariable) -> hydra.ext.java.syntax.Type:
     return cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeVariable(tv))))
 
-def add_java_type_parameter(rt: hydra.ext.java.syntax.ReferenceType, t: hydra.ext.java.syntax.Type) -> hydra.compute.Flow[T0, hydra.ext.java.syntax.Type]:
-    def _hoist_hydra_ext_java_utils_add_java_type_parameter_1(rt: hydra.ext.java.syntax.ReferenceType, v1: hydra.ext.java.syntax.ClassOrInterfaceType) -> hydra.compute.Flow[T1, hydra.ext.java.syntax.Type]:
+def add_java_type_parameter(rt: hydra.ext.java.syntax.ReferenceType, t: hydra.ext.java.syntax.Type):
+    def _hoist_hydra_ext_java_utils_add_java_type_parameter_1(rt, v1):
         match v1:
             case hydra.ext.java.syntax.ClassOrInterfaceTypeClass(value=ct):
                 @lru_cache(1)
@@ -72,7 +71,7 @@ def add_java_type_parameter(rt: hydra.ext.java.syntax.ReferenceType, t: hydra.ex
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def _hoist_hydra_ext_java_utils_add_java_type_parameter_2(rt: hydra.ext.java.syntax.ReferenceType, v1: hydra.ext.java.syntax.ReferenceType) -> hydra.compute.Flow[T1, hydra.ext.java.syntax.Type]:
+    def _hoist_hydra_ext_java_utils_add_java_type_parameter_2(rt, v1):
         match v1:
             case hydra.ext.java.syntax.ReferenceTypeClassOrInterface(value=cit):
                 return _hoist_hydra_ext_java_utils_add_java_type_parameter_1(rt, cit)
@@ -161,8 +160,8 @@ def java_array_creation(prim_type: hydra.ext.java.syntax.PrimitiveTypeWithAnnota
 def java_array_initializer(exprs: frozenlist[hydra.ext.java.syntax.Expression]) -> hydra.ext.java.syntax.ArrayInitializer:
     return hydra.ext.java.syntax.ArrayInitializer((hydra.lib.lists.map((lambda e: cast(hydra.ext.java.syntax.VariableInitializer, hydra.ext.java.syntax.VariableInitializerExpression(e))), exprs),))
 
-def java_assignment_statement(lhs2: hydra.ext.java.syntax.LeftHandSide, rhs2: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.Statement:
-    return cast(hydra.ext.java.syntax.Statement, hydra.ext.java.syntax.StatementWithoutTrailing(cast(hydra.ext.java.syntax.StatementWithoutTrailingSubstatement, hydra.ext.java.syntax.StatementWithoutTrailingSubstatementExpression(hydra.ext.java.syntax.ExpressionStatement(cast(hydra.ext.java.syntax.StatementExpression, hydra.ext.java.syntax.StatementExpressionAssignment(hydra.ext.java.syntax.Assignment(lhs2, hydra.ext.java.syntax.AssignmentOperator.SIMPLE, rhs2))))))))
+def java_assignment_statement(lhs: hydra.ext.java.syntax.LeftHandSide, rhs: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.Statement:
+    return cast(hydra.ext.java.syntax.Statement, hydra.ext.java.syntax.StatementWithoutTrailing(cast(hydra.ext.java.syntax.StatementWithoutTrailingSubstatement, hydra.ext.java.syntax.StatementWithoutTrailingSubstatementExpression(hydra.ext.java.syntax.ExpressionStatement(cast(hydra.ext.java.syntax.StatementExpression, hydra.ext.java.syntax.StatementExpressionAssignment(hydra.ext.java.syntax.Assignment(lhs, hydra.ext.java.syntax.AssignmentOperator.SIMPLE, rhs))))))))
 
 def java_boolean(b: bool) -> hydra.ext.java.syntax.Literal:
     return cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralBoolean(b))
@@ -282,14 +281,14 @@ def java_equality_expression_to_java_expression(ee: hydra.ext.java.syntax.Equali
 def java_equality_expression_to_java_inclusive_or_expression(ee: hydra.ext.java.syntax.EqualityExpression) -> hydra.ext.java.syntax.InclusiveOrExpression:
     return hydra.ext.java.syntax.InclusiveOrExpression((hydra.ext.java.syntax.ExclusiveOrExpression((hydra.ext.java.syntax.AndExpression((ee,)),)),))
 
-def java_equals(lhs2: hydra.ext.java.syntax.EqualityExpression, rhs2: hydra.ext.java.syntax.RelationalExpression) -> hydra.ext.java.syntax.EqualityExpression:
-    return cast(hydra.ext.java.syntax.EqualityExpression, hydra.ext.java.syntax.EqualityExpressionEqual(hydra.ext.java.syntax.EqualityExpression_Binary(lhs2, rhs2)))
+def java_equals(lhs: hydra.ext.java.syntax.EqualityExpression, rhs: hydra.ext.java.syntax.RelationalExpression) -> hydra.ext.java.syntax.EqualityExpression:
+    return cast(hydra.ext.java.syntax.EqualityExpression, hydra.ext.java.syntax.EqualityExpressionEqual(hydra.ext.java.syntax.EqualityExpression_Binary(lhs, rhs)))
 
 def java_literal_to_java_relational_expression(lit: hydra.ext.java.syntax.Literal) -> hydra.ext.java.syntax.RelationalExpression:
     return cast(hydra.ext.java.syntax.RelationalExpression, hydra.ext.java.syntax.RelationalExpressionSimple(cast(hydra.ext.java.syntax.ShiftExpression, hydra.ext.java.syntax.ShiftExpressionUnary(cast(hydra.ext.java.syntax.AdditiveExpression, hydra.ext.java.syntax.AdditiveExpressionUnary(cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionUnary(cast(hydra.ext.java.syntax.UnaryExpression, hydra.ext.java.syntax.UnaryExpressionOther(cast(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus, hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix(cast(hydra.ext.java.syntax.PostfixExpression, hydra.ext.java.syntax.PostfixExpressionPrimary(cast(hydra.ext.java.syntax.Primary, hydra.ext.java.syntax.PrimaryNoNewArray(cast(hydra.ext.java.syntax.PrimaryNoNewArray, hydra.ext.java.syntax.PrimaryNoNewArrayLiteral(lit))))))))))))))))))
 
-def java_equals_null(lhs2: hydra.ext.java.syntax.EqualityExpression) -> hydra.ext.java.syntax.EqualityExpression:
-    return java_equals(lhs2, java_literal_to_java_relational_expression(cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralNull())))
+def java_equals_null(lhs: hydra.ext.java.syntax.EqualityExpression) -> hydra.ext.java.syntax.EqualityExpression:
+    return java_equals(lhs, java_literal_to_java_relational_expression(cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralNull())))
 
 def java_expression_name_to_java_expression(en: hydra.ext.java.syntax.ExpressionName) -> hydra.ext.java.syntax.Expression:
     return cast(hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.ExpressionAssignment(cast(hydra.ext.java.syntax.AssignmentExpression, hydra.ext.java.syntax.AssignmentExpressionConditional(cast(hydra.ext.java.syntax.ConditionalExpression, hydra.ext.java.syntax.ConditionalExpressionSimple(hydra.ext.java.syntax.ConditionalOrExpression((hydra.ext.java.syntax.ConditionalAndExpression((hydra.ext.java.syntax.InclusiveOrExpression((hydra.ext.java.syntax.ExclusiveOrExpression((hydra.ext.java.syntax.AndExpression((cast(hydra.ext.java.syntax.EqualityExpression, hydra.ext.java.syntax.EqualityExpressionUnary(cast(hydra.ext.java.syntax.RelationalExpression, hydra.ext.java.syntax.RelationalExpressionSimple(cast(hydra.ext.java.syntax.ShiftExpression, hydra.ext.java.syntax.ShiftExpressionUnary(cast(hydra.ext.java.syntax.AdditiveExpression, hydra.ext.java.syntax.AdditiveExpressionUnary(cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionUnary(cast(hydra.ext.java.syntax.UnaryExpression, hydra.ext.java.syntax.UnaryExpressionOther(cast(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus, hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix(cast(hydra.ext.java.syntax.PostfixExpression, hydra.ext.java.syntax.PostfixExpressionName(en)))))))))))))))),)),)),)),)),))))))))
@@ -309,8 +308,8 @@ def java_identifier_to_java_relational_expression(id: hydra.ext.java.syntax.Iden
 def java_identifier_to_java_unary_expression(id: hydra.ext.java.syntax.Identifier) -> hydra.ext.java.syntax.UnaryExpression:
     return cast(hydra.ext.java.syntax.UnaryExpression, hydra.ext.java.syntax.UnaryExpressionOther(cast(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus, hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix(cast(hydra.ext.java.syntax.PostfixExpression, hydra.ext.java.syntax.PostfixExpressionName(hydra.ext.java.syntax.ExpressionName(Nothing(), id)))))))
 
-def java_instance_of(lhs2: hydra.ext.java.syntax.RelationalExpression, rhs2: hydra.ext.java.syntax.ReferenceType) -> hydra.ext.java.syntax.RelationalExpression:
-    return cast(hydra.ext.java.syntax.RelationalExpression, hydra.ext.java.syntax.RelationalExpressionInstanceof(hydra.ext.java.syntax.RelationalExpression_InstanceOf(lhs2, rhs2)))
+def java_instance_of(lhs: hydra.ext.java.syntax.RelationalExpression, rhs: hydra.ext.java.syntax.ReferenceType) -> hydra.ext.java.syntax.RelationalExpression:
+    return cast(hydra.ext.java.syntax.RelationalExpression, hydra.ext.java.syntax.RelationalExpressionInstanceof(hydra.ext.java.syntax.RelationalExpression_InstanceOf(lhs, rhs)))
 
 def java_int(i: int) -> hydra.ext.java.syntax.Literal:
     return cast(hydra.ext.java.syntax.Literal, hydra.ext.java.syntax.LiteralInteger(hydra.ext.java.syntax.IntegerLiteral(i)))
@@ -388,8 +387,8 @@ def java_primary_to_java_unary_expression(p: hydra.ext.java.syntax.Primary) -> h
 def java_ref_type(args: frozenlist[hydra.ext.java.syntax.ReferenceType], pkg: Maybe[hydra.ext.java.syntax.PackageName], id: str) -> hydra.ext.java.syntax.Type:
     return cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(java_class_type(args, pkg, id)))))))
 
-def java_reference_type_to_raw_type(rt: hydra.ext.java.syntax.ReferenceType) -> hydra.ext.java.syntax.ReferenceType:
-    def _hoist_hydra_ext_java_utils_java_reference_type_to_raw_type_1(v1: hydra.ext.java.syntax.ClassOrInterfaceType) -> hydra.ext.java.syntax.ReferenceType:
+def java_reference_type_to_raw_type(rt: hydra.ext.java.syntax.ReferenceType):
+    def _hoist_hydra_ext_java_utils_java_reference_type_to_raw_type_1(v1):
         match v1:
             case hydra.ext.java.syntax.ClassOrInterfaceTypeClass(value=ct):
                 @lru_cache(1)
@@ -532,10 +531,10 @@ def make_constructor(aliases: hydra.ext.java.helpers.Aliases, el_name: hydra.cor
 def method_declaration(mods: frozenlist[hydra.ext.java.syntax.MethodModifier], tparams: frozenlist[hydra.ext.java.syntax.TypeParameter], anns: frozenlist[hydra.ext.java.syntax.Annotation], method_name: str, params: frozenlist[hydra.ext.java.syntax.FormalParameter], result: hydra.ext.java.syntax.Result, stmts: Maybe[frozenlist[hydra.ext.java.syntax.BlockStatement]]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
     return java_method_declaration_to_java_class_body_declaration(hydra.ext.java.syntax.MethodDeclaration(anns, mods, java_method_header(tparams, method_name, params, result), java_method_body(stmts)))
 
-def method_invocation(lhs2: Maybe[Either[hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary]], method_name: hydra.ext.java.syntax.Identifier, args: frozenlist[hydra.ext.java.syntax.Expression]) -> hydra.ext.java.syntax.MethodInvocation:
+def method_invocation(lhs: Maybe[Either[hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary]], method_name: hydra.ext.java.syntax.Identifier, args: frozenlist[hydra.ext.java.syntax.Expression]) -> hydra.ext.java.syntax.MethodInvocation:
     @lru_cache(1)
     def header() -> hydra.ext.java.syntax.MethodInvocation_Header:
-        return hydra.lib.maybes.cases(lhs2, cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderSimple(hydra.ext.java.syntax.MethodName(method_name))), (lambda either: cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderComplex(hydra.ext.java.syntax.MethodInvocation_Complex(hydra.lib.eithers.either((lambda en: cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantExpression(en))), (lambda p: cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantPrimary(p))), either), (), method_name)))))
+        return hydra.lib.maybes.cases(lhs, cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderSimple(hydra.ext.java.syntax.MethodName(method_name))), (lambda either: cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderComplex(hydra.ext.java.syntax.MethodInvocation_Complex(hydra.lib.eithers.either((lambda en: cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantExpression(en))), (lambda p: cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantPrimary(p))), either), (), method_name)))))
     return hydra.ext.java.syntax.MethodInvocation(header(), args)
 
 def method_invocation_static(self: hydra.ext.java.syntax.Identifier, method_name: hydra.ext.java.syntax.Identifier, args: frozenlist[hydra.ext.java.syntax.Expression]) -> hydra.ext.java.syntax.MethodInvocation:
@@ -622,8 +621,8 @@ def to_assign_stmt(fname: hydra.core.Name) -> hydra.ext.java.syntax.Statement:
         return field_name_to_java_expression(fname)
     return java_assignment_statement(lhs(), rhs())
 
-def to_java_array_type(t: hydra.ext.java.syntax.Type) -> hydra.compute.Flow[T0, hydra.ext.java.syntax.Type]:
-    def _hoist_hydra_ext_java_utils_to_java_array_type_1(v1: hydra.ext.java.syntax.ReferenceType) -> hydra.compute.Flow[T1, hydra.ext.java.syntax.Type]:
+def to_java_array_type(t: hydra.ext.java.syntax.Type):
+    def _hoist_hydra_ext_java_utils_to_java_array_type_1(v1):
         match v1:
             case hydra.ext.java.syntax.ReferenceTypeClassOrInterface(value=cit):
                 return hydra.lib.flows.pure(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeArray(hydra.ext.java.syntax.ArrayType(hydra.ext.java.syntax.Dims(((),)), cast(hydra.ext.java.syntax.ArrayType_Variant, hydra.ext.java.syntax.ArrayType_VariantClassOrInterface(cit))))))))
@@ -670,13 +669,13 @@ def unique_var_name_go(aliases: hydra.ext.java.helpers.Aliases, base: str, n: in
 def unique_var_name(aliases: hydra.ext.java.helpers.Aliases, name: hydra.core.Name) -> hydra.core.Name:
     return hydra.lib.logic.if_else(hydra.lib.sets.member(name, aliases.in_scope_java_vars), (lambda : unique_var_name_go(aliases, name.value, 2)), (lambda : name))
 
-def var_declaration_statement(id: hydra.ext.java.syntax.Identifier, rhs2: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.BlockStatement:
-    return cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementLocalVariableDeclaration(hydra.ext.java.syntax.LocalVariableDeclarationStatement(hydra.ext.java.syntax.LocalVariableDeclaration((), cast(hydra.ext.java.syntax.LocalVariableType, hydra.ext.java.syntax.LocalVariableTypeVar()), (java_variable_declarator(id, Just(cast(hydra.ext.java.syntax.VariableInitializer, hydra.ext.java.syntax.VariableInitializerExpression(rhs2)))),)))))
+def var_declaration_statement(id: hydra.ext.java.syntax.Identifier, rhs: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.BlockStatement:
+    return cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementLocalVariableDeclaration(hydra.ext.java.syntax.LocalVariableDeclarationStatement(hydra.ext.java.syntax.LocalVariableDeclaration((), cast(hydra.ext.java.syntax.LocalVariableType, hydra.ext.java.syntax.LocalVariableTypeVar()), (java_variable_declarator(id, Just(cast(hydra.ext.java.syntax.VariableInitializer, hydra.ext.java.syntax.VariableInitializerExpression(rhs)))),)))))
 
-def variable_declaration_statement(aliases: T0, jtype: hydra.ext.java.syntax.Type, id: hydra.ext.java.syntax.Identifier, rhs2: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.BlockStatement:
+def variable_declaration_statement(aliases: T0, jtype: hydra.ext.java.syntax.Type, id: hydra.ext.java.syntax.Identifier, rhs: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.BlockStatement:
     @lru_cache(1)
     def init_() -> hydra.ext.java.syntax.VariableInitializer:
-        return cast(hydra.ext.java.syntax.VariableInitializer, hydra.ext.java.syntax.VariableInitializerExpression(rhs2))
+        return cast(hydra.ext.java.syntax.VariableInitializer, hydra.ext.java.syntax.VariableInitializerExpression(rhs))
     @lru_cache(1)
     def vdec() -> hydra.ext.java.syntax.VariableDeclarator:
         return java_variable_declarator(id, Just(init_()))

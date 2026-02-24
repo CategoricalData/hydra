@@ -35,32 +35,48 @@ T2 = TypeVar("T2")
 T3 = TypeVar("T3")
 
 def aggregate_annotations(get_value: Callable[[T0], Maybe[T1]], get_x: Callable[[T1], T0], get_anns: Callable[[T1], FrozenDict[T2, T3]], t: T0) -> FrozenDict[T2, T3]:
+    r"""Aggregate annotations from nested structures."""
+    
     def to_pairs(rest: frozenlist[frozenlist[tuple[T2, T3]]], t2: T0) -> frozenlist[frozenlist[tuple[T2, T3]]]:
         return hydra.lib.maybes.maybe(rest, (lambda yy: to_pairs(hydra.lib.lists.cons(hydra.lib.maps.to_list(get_anns(yy)), rest), get_x(yy))), get_value(t2))
     return hydra.lib.maps.from_list(hydra.lib.lists.concat(to_pairs((), t)))
 
 def get_attr(key: hydra.core.Name) -> hydra.compute.Flow[T0, Maybe[hydra.core.Term]]:
+    r"""Get an attribute from the trace."""
+    
     return hydra.compute.Flow((lambda s0, t0: hydra.compute.FlowState(Just(hydra.lib.maps.lookup(key, t0.other)), s0, t0)))
 
 @lru_cache(1)
 def get_debug_id() -> hydra.compute.Flow[T0, Maybe[str]]:
+    r"""Get the debug ID from flow state."""
+    
     return hydra.lexical.with_empty_graph(hydra.lib.flows.bind(get_attr(hydra.constants.key_debug_id), (lambda desc: hydra.lib.flows.map_maybe((lambda x1: hydra.extract.core.string(x1)), desc))))
 
 def debug_if(debug_id: T0, message: str) -> hydra.compute.Flow[T1, None]:
+    r"""Debug if the debug ID matches."""
+    
     def check_and_fail(desc: Maybe[str]) -> hydra.compute.Flow[T2, None]:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(desc, Just("debugId")), (lambda : hydra.lib.flows.fail(message)), (lambda : hydra.lib.flows.pure(None)))
     return hydra.lib.flows.bind(get_debug_id(), (lambda x1: check_and_fail(x1)))
 
 def get_attr_with_default(key: hydra.core.Name, def_: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Get an attribute with a default value."""
+    
     return hydra.lib.flows.map((lambda mval: hydra.lib.maybes.from_maybe(def_, mval)), get_attr(key))
 
 def has_flag(flag: hydra.core.Name) -> hydra.compute.Flow[T0, bool]:
+    r"""Check if flag is set."""
+    
     return hydra.lexical.with_empty_graph(hydra.lib.flows.bind(get_attr_with_default(flag, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(False))))), (lambda term: hydra.extract.core.boolean(term))))
 
 def fail_on_flag(flag: hydra.core.Name, msg: str) -> hydra.compute.Flow[T0, None]:
+    r"""Fail if the given flag is set."""
+    
     return hydra.lib.flows.bind(has_flag(flag), (lambda val: hydra.lib.logic.if_else(val, (lambda : hydra.lib.flows.fail(msg)), (lambda : hydra.lib.flows.pure(None)))))
 
 def get_count(key: hydra.core.Name) -> hydra.compute.Flow[T0, int]:
+    r"""Get a counter value."""
+    
     return hydra.lexical.with_empty_graph(hydra.lib.flows.bind(get_attr_with_default(key, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0))))))), (lambda x1: hydra.extract.core.int32(x1))))
 
 def get_description(anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[str]]:
@@ -86,9 +102,19 @@ def get_term_annotation(key: hydra.core.Name, term: hydra.core.Term) -> Maybe[hy
     return hydra.lib.maps.lookup(key, term_annotation_internal(term))
 
 def get_term_description(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[str]]:
-    r"""Get term description."""
+    r"""Get term description. Peels through TermTypeLambda and TermTypeApplication wrappers (added by inference for polymorphic bindings) to find the description annotation underneath."""
     
-    return get_description(term_annotation_internal(term))
+    def peel(t: hydra.core.Term) -> hydra.core.Term:
+        match t:
+            case hydra.core.TermTypeLambda(value=tl):
+                return peel(tl.body)
+            
+            case hydra.core.TermTypeApplication(value=ta):
+                return peel(ta.body)
+            
+            case _:
+                return t
+    return get_description(term_annotation_internal(peel(term)))
 
 def get_type(anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
     r"""Get type from annotations."""
@@ -123,6 +149,8 @@ def get_type_description(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph
     return get_description(type_annotation_internal(typ))
 
 def has_description(anns: FrozenDict[hydra.core.Name, T0]) -> bool:
+    r"""Check if annotations contain description."""
+    
     return hydra.lib.maybes.is_just(hydra.lib.maps.lookup(hydra.constants.key_description, anns))
 
 def has_type_description(typ: hydra.core.Type) -> bool:
@@ -139,12 +167,18 @@ def is_native_type(el: hydra.core.Binding) -> bool:
     return hydra.lib.maybes.maybe(False, (lambda ts: hydra.lib.logic.and_(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())), hydra.lib.logic.not_(is_flagged_as_first_class_type()))), el.type)
 
 def put_attr(key: hydra.core.Name, val: hydra.core.Term) -> hydra.compute.Flow[T0, None]:
+    r"""Set an attribute in the trace."""
+    
     return hydra.compute.Flow((lambda s0, t0: hydra.compute.FlowState(Just(None), s0, hydra.compute.Trace(t0.stack, t0.messages, hydra.lib.maps.insert(key, val, t0.other)))))
 
 def put_count(key: hydra.core.Name, count: int) -> hydra.compute.Flow[T0, None]:
+    r"""Set counter value."""
+    
     return put_attr(key, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(count)))))))
 
 def next_count(key: hydra.core.Name) -> hydra.compute.Flow[T0, int]:
+    r"""Return a zero-indexed counter for the given key: 0, 1, 2, ..."""
+    
     return hydra.lib.flows.bind(get_count(key), (lambda count: hydra.lib.flows.map((lambda _: count), put_count(key, hydra.lib.math.add(count, 1)))))
 
 def normalize_term_annotations(term: hydra.core.Term) -> hydra.core.Term:
@@ -170,9 +204,13 @@ def normalize_type_annotations(typ: hydra.core.Type) -> hydra.core.Type:
     return hydra.lib.logic.if_else(hydra.lib.maps.null(anns()), (lambda : stripped()), (lambda : cast(hydra.core.Type, hydra.core.TypeAnnotated(hydra.core.AnnotatedType(stripped(), anns())))))
 
 def reset_count(key: hydra.core.Name) -> hydra.compute.Flow[T0, None]:
+    r"""Reset counter to zero."""
+    
     return put_attr(key, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0)))))))
 
 def set_annotation(key: T0, val: Maybe[T1], m: FrozenDict[T0, T1]) -> FrozenDict[T0, T1]:
+    r"""Set annotation in map."""
+    
     return hydra.lib.maps.alter((lambda _: val), key, m)
 
 def set_description(d: Maybe[str], v1: FrozenDict[hydra.core.Name, hydra.core.Term]) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
@@ -253,7 +291,11 @@ def type_element(name: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Bind
     return hydra.core.Binding(name, data_term(), Just(hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())))
 
 def when_flag(flag: hydra.core.Name, fthen: hydra.compute.Flow[T0, T1], felse: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
+    r"""Execute different flows based on flag."""
+    
     return hydra.lib.flows.bind(has_flag(flag), (lambda b: hydra.lib.logic.if_else(b, (lambda : fthen), (lambda : felse))))
 
 def with_depth(key: hydra.core.Name, f: Callable[[int], hydra.compute.Flow[T0, T1]]) -> hydra.compute.Flow[T0, T1]:
+    r"""Provide an one-indexed, integer-valued 'depth' to a flow, where the depth is the number of nested calls. This is useful for generating variable names while avoiding conflicts between the variables of parents and children. E.g. a variable in an outer case/match statement might be "v1", whereas the variable of another case/match statement inside of the first one becomes "v2". See also nextCount."""
+    
     return hydra.lib.flows.bind(get_count(key), (lambda count: (inc := hydra.lib.math.add(count, 1), hydra.lib.flows.bind(put_count(key, inc), (lambda _: hydra.lib.flows.bind(f(inc), (lambda r: hydra.lib.flows.bind(put_count(key, count), (lambda _2: hydra.lib.flows.pure(r))))))))[1]))
