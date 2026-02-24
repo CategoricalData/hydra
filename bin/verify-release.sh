@@ -11,7 +11,7 @@ set -e
 #   5. JSON kernel is up to date and round-trips correctly
 #
 # Prerequisites:
-#   - Stack, Java 18+, Python 3.12+, and uv are installed
+#   - Stack, Java 17+, Python 3.12+, and uv are installed
 #   - Run from the repository root directory
 #
 # Usage:
@@ -57,36 +57,53 @@ echo ""
 echo "Step 1/6: Checking version synchronization..."
 echo ""
 
+CANONICAL_VERSION=$(tr -d '[:space:]' < VERSION 2>/dev/null || echo "")
 HASKELL_VERSION=$(grep '^version:' hydra-haskell/package.yaml | awk '{print $2}')
 EXT_VERSION=$(grep '^version:' hydra-ext/package.yaml | awk '{print $2}')
+BOOT_HASKELL_VERSION=$(grep '^version:' hydra-ext/demos/bootstrapping/resources/haskell/package.yaml | awk '{print $2}')
 JAVA_VERSION=$(grep "version = " build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
+BOOT_JAVA_VERSION=$(grep "version = " hydra-ext/demos/bootstrapping/resources/java/build.gradle | head -1 | sed "s/.*version = '\\(.*\\)'/\\1/")
 PYTHON_VERSION=$(grep '^version' hydra-python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
+BOOT_PYTHON_VERSION=$(grep '^version' hydra-ext/demos/bootstrapping/resources/python/pyproject.toml | sed 's/.*"\(.*\)"/\1/')
 
+echo "  VERSION:                     $CANONICAL_VERSION"
 echo "  hydra-haskell/package.yaml:  $HASKELL_VERSION"
 echo "  hydra-ext/package.yaml:      $EXT_VERSION"
+echo "  bootstrapping/haskell:       $BOOT_HASKELL_VERSION"
 echo "  build.gradle:                $JAVA_VERSION"
+echo "  bootstrapping/java:          $BOOT_JAVA_VERSION"
 echo "  hydra-python/pyproject.toml: $PYTHON_VERSION"
+echo "  bootstrapping/python:        $BOOT_PYTHON_VERSION"
 echo ""
 
-VERSION_MISMATCH=false
-if [ "$HASKELL_VERSION" != "$EXT_VERSION" ]; then
-    echo "  ERROR: hydra-haskell ($HASKELL_VERSION) != hydra-ext ($EXT_VERSION)"
-    VERSION_MISMATCH=true
-fi
-if [ "$HASKELL_VERSION" != "$JAVA_VERSION" ]; then
-    echo "  ERROR: hydra-haskell ($HASKELL_VERSION) != build.gradle ($JAVA_VERSION)"
-    VERSION_MISMATCH=true
-fi
-if [ "$HASKELL_VERSION" != "$PYTHON_VERSION" ]; then
-    echo "  ERROR: hydra-haskell ($HASKELL_VERSION) != pyproject.toml ($PYTHON_VERSION)"
-    VERSION_MISMATCH=true
+EXPECTED="$CANONICAL_VERSION"
+if [ -z "$EXPECTED" ]; then
+    echo "  ERROR: VERSION file is missing or empty"
+    EXPECTED="$HASKELL_VERSION"
 fi
 
+VERSION_MISMATCH=false
+for pair in \
+    "hydra-haskell/package.yaml:$HASKELL_VERSION" \
+    "hydra-ext/package.yaml:$EXT_VERSION" \
+    "bootstrapping/haskell:$BOOT_HASKELL_VERSION" \
+    "build.gradle:$JAVA_VERSION" \
+    "bootstrapping/java:$BOOT_JAVA_VERSION" \
+    "hydra-python/pyproject.toml:$PYTHON_VERSION" \
+    "bootstrapping/python:$BOOT_PYTHON_VERSION"; do
+    file="${pair%%:*}"
+    ver="${pair##*:}"
+    if [ "$ver" != "$EXPECTED" ]; then
+        echo "  ERROR: $file ($ver) != VERSION ($EXPECTED)"
+        VERSION_MISMATCH=true
+    fi
+done
+
 if [ "$VERSION_MISMATCH" = true ]; then
-    echo "  FAIL: Versions are not synchronized"
+    echo "  FAIL: Versions are not synchronized (run bin/bump-version.sh to fix)"
     ERRORS=$((ERRORS + 1))
 else
-    echo "  OK: All versions are $HASKELL_VERSION"
+    echo "  OK: All versions are $EXPECTED"
 fi
 
 # --- Step 2: Haskell tests (hydra-haskell) ---
@@ -188,7 +205,7 @@ echo "=========================================="
 echo "Verification Summary"
 echo "=========================================="
 echo ""
-echo "  Version: $HASKELL_VERSION"
+echo "  Version: $EXPECTED"
 echo "  Errors:  $ERRORS"
 echo "  Warnings: $WARNINGS"
 echo ""
@@ -199,7 +216,7 @@ if [ $ERRORS -eq 0 ]; then
     echo "Next steps:"
     echo "  1. Update CHANGELOG.md"
     echo "  2. Commit all changes"
-    echo "  3. Tag: git tag $HASKELL_VERSION -m '$HASKELL_VERSION release' HEAD"
+    echo "  3. Tag: git tag $EXPECTED -m '$EXPECTED release' HEAD"
     echo "  4. Push: git push && git push --tags"
     echo "  5. Publish to Hackage, Sonatype, and PyPI"
 else
