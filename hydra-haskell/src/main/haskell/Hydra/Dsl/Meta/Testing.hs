@@ -761,3 +761,20 @@ joinTypesFailCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMet
 joinTypesFailCase cname left right = testCaseWithMetadata (Phantoms.string cname)
   (testCaseJoinTypes $ joinTypesTestCase left right (Phantoms.left Phantoms.unit))
   nothing noTags
+
+----------------------------------------
+-- Unshadow variables test case helpers
+
+testCaseUnshadowVariables :: TTerm UnshadowVariablesTestCase -> TTerm TestCase
+testCaseUnshadowVariables = inject _TestCase _TestCase_unshadowVariables
+
+unshadowVariablesTestCase :: TTerm Term -> TTerm Term -> TTerm UnshadowVariablesTestCase
+unshadowVariablesTestCase input output = Phantoms.record _UnshadowVariablesTestCase [
+  _UnshadowVariablesTestCase_input>>: input,
+  _UnshadowVariablesTestCase_output>>: output]
+
+-- | Convenience function for creating unshadow variables test cases
+unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
+unshadowCase cname input output = testCaseWithMetadata (Phantoms.string cname)
+  (testCaseUnshadowVariables $ unshadowVariablesTestCase input output)
+  nothing noTags
