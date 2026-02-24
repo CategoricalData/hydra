@@ -35,7 +35,7 @@ JAVA_HOME=/path/to/java17/installation ./gradlew build
 For comprehensive documentation about Hydra's architecture and usage, see:
 
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts and type system
-- **[Implementation](https://github.com/CategoricalData/hydra/wiki/Implementation)** - Implementation guide
+- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md)** - Implementation guide
 - **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** - The src/main vs src/gen-main pattern
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite documentation
 - **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md)** - Step-by-step guides

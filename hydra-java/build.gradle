@@ -43,6 +43,7 @@ test {
         events "failed"
         exceptionFormat "short"
     }
+    jvmArgs '-Xmx512m'
 }
 
 publishing {
