@@ -30,7 +30,7 @@ public class MapSet extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return Types.scheme("s", "x", "y",
+        return Types.scheme("x", "s", "y",
                 Types.function(
                         Types.function("x", Types.flow("s", "y")),
                         Types.set("x"),

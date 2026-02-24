@@ -150,7 +150,7 @@ public class PrimitiveType<T> {
     public static  PrimitiveType<Term> term() {
         return new PrimitiveType<>(
                 "term",
-                hydra.dsl.Types.apply(variable(Term.TYPE_NAME), variable("a")),
+                hydra.dsl.Types.apply(variable(Term.TYPE_), variable("a")),
                 Expect::term,
                 (a, b) -> {
                     throw new UnsupportedOperationException("Term comparison is not yet supported");
@@ -165,7 +165,7 @@ public class PrimitiveType<T> {
     public static  PrimitiveType<Type> type() {
         return new PrimitiveType<>(
                 "type",
-                hydra.dsl.Types.apply(variable(Type.TYPE_NAME), variable("a")),
+                hydra.dsl.Types.apply(variable(Type.TYPE_), variable("a")),
                 Expect::type,
                 (a, b) -> {
                     throw new UnsupportedOperationException("Type comparison is not yet supported");

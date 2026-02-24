@@ -38,21 +38,16 @@ public class Apply extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.bind(Expect.list(Flows::pure, args.get(0)), functions ->
-            Flows.bind(Expect.list(Flows::pure, args.get(1)), arguments -> {
-                Flow<Graph, List<Term>> resultFlow = Flows.pure(new LinkedList<>());
-                for (Term f : functions) {
-                    for (Term a : arguments) {
-                        Term application = Terms.apply(f, a);
-                        resultFlow = Flows.bind(resultFlow, acc ->
-                            Flows.map(hydra.reduction.Reduction.reduceTerm(true, application), result -> {
-                                acc.add(result);
-                                return acc;
-                            }));
+        return args -> Flows.bind(Flows.<Graph>getState(), graph ->
+            Flows.bind(Expect.list(Flows::pure, args.get(0)), functions ->
+                Flows.bind(Expect.list(Flows::pure, args.get(1)), arguments -> {
+                    List<Function<Term, Term>> nativeFunctions = new LinkedList<>();
+                    for (Term f : functions) {
+                        nativeFunctions.add(a -> Flows.fromFlow(graph,
+                            hydra.reduction.Reduction.reduceTerm(true, Terms.apply(f, a))));
                     }
-                }
-                return Flows.map(resultFlow, Terms::list);
-            }));
+                    return Flows.pure(Terms.list(Apply.apply(nativeFunctions, arguments)));
+                })));
     }
 
     /**

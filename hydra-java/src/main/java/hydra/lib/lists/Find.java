@@ -39,27 +39,9 @@ public class Find extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term pred = args.get(0);
-            return bind(Expect.list(Flows::pure, args.get(1)), lst ->
-                findFlow(pred, lst, 0));
-        };
-    }
-
-    private static Flow<Graph, Term> findFlow(Term pred, List<Term> lst, int index) {
-        if (index >= lst.size()) {
-            return pure(new Term.Maybe(Maybe.nothing()));
-        }
-        Term element = lst.get(index);
-        Term application = Terms.apply(pred, element);
-        return bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
-            bind(Expect.boolean_(reduced), b -> {
-                if (b) {
-                    return pure(new Term.Maybe(Maybe.just(element)));
-                } else {
-                    return findFlow(pred, lst, index + 1);
-                }
-            }));
+        return args -> bind(Expect.predicate(args.get(0)), pred ->
+            bind(Expect.list(Flows::pure, args.get(1)), lst ->
+                pure(Terms.optional(Find.apply((Function<Term, Boolean>) pred::apply, lst)))));
     }
 
     /**

@@ -54,27 +54,51 @@ public class ShowString extends PrimitiveFunction {
      * @return the quoted and escaped string literal
      */
     public static String apply(String value) {
-        return "\"" + escapeJava(value) + "\"";
+        return "\"" + escapeHaskell(value) + "\"";
     }
 
-    private static String escapeJava(String str) {
+    // ASCII control character names matching Haskell's show for Char
+    private static final String[] ASCII_CONTROL_NAMES = {
+        "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "a",
+        "b",   "t",   "n",   "v",   "f",   "r",   "SO",  "SI",
+        "DLE", "DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB",
+        "CAN", "EM",  "SUB", "ESC", "FS",  "GS",  "RS",  "US"
+    };
+
+    /**
+     * Escapes a string following Haskell's `show` semantics for String.
+     * <ul>
+     *   <li>Control chars 0-31 use Haskell named escapes (\NUL, \a, \n, etc.)</li>
+     *   <li>DEL (127) becomes \DEL</li>
+     *   <li>Backslash and double quote are escaped</li>
+     *   <li>Characters above 127 are escaped as decimal codes (\233, \955, etc.)</li>
+     *   <li>A \&amp; gap is inserted after a numeric escape when the next char is a digit</li>
+     * </ul>
+     */
+    private static String escapeHaskell(String str) {
         StringBuilder sb = new StringBuilder();
+        boolean lastWasNumericEscape = false;
         for (int i = 0; i < str.length(); i++) {
             char c = str.charAt(i);
-            switch (c) {
-                case '\\': sb.append("\\\\"); break;
-                case '"': sb.append("\\\""); break;
-                case '\n': sb.append("\\n"); break;
-                case '\r': sb.append("\\r"); break;
-                case '\t': sb.append("\\t"); break;
-                case '\b': sb.append("\\b"); break;
-                case '\f': sb.append("\\f"); break;
-                default:
-                    if (c < 0x20) {
-                        sb.append(String.format("\\u%04x", (int) c));
-                    } else {
-                        sb.append(c);
-                    }
+            if (lastWasNumericEscape && c >= '0' && c <= '9') {
+                sb.append("\\&");
+            }
+            lastWasNumericEscape = false;
+            if (c == '\\') {
+                sb.append("\\\\");
+            } else if (c == '"') {
+                sb.append("\\\"");
+            } else if (c < 0x20) {
+                sb.append('\\');
+                sb.append(ASCII_CONTROL_NAMES[c]);
+            } else if (c == 0x7F) {
+                sb.append("\\DEL");
+            } else if (c > 0x7F) {
+                sb.append('\\');
+                sb.append((int) c);
+                lastWasNumericEscape = true;
+            } else {
+                sb.append(c);
             }
         }
         return sb.toString();

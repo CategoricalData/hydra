@@ -53,26 +53,16 @@ public class FilterWithKey extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term pred = args.get(0);
-            return bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
-                Flow<Graph, Map<Term, Term>> resultFlow = pure(new HashMap<>());
-                for (Map.Entry<Term, Term> entry : mp.entrySet()) {
-                    Term application = Terms.apply(Terms.apply(pred, entry.getKey()), entry.getValue());
-                    final Term key = entry.getKey();
-                    final Term value = entry.getValue();
-                    resultFlow = bind(resultFlow, acc ->
-                        bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
-                            bind(Expect.boolean_(reduced), b -> {
-                                if (b) {
-                                    acc.put(key, value);
-                                }
-                                return pure(acc);
-                            })));
-                }
-                return Flows.map(resultFlow, Terms::map);
-            });
-        };
+        return args -> bind(Flows.<Graph>getState(), graph ->
+            bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp -> {
+                Term pred = args.get(0);
+                Function<Term, Function<Term, Boolean>> nativePred = k -> v -> {
+                    Term reduced = Flows.fromFlow(graph,
+                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(Terms.apply(pred, k), v)));
+                    return Flows.fromFlow(graph, Expect.boolean_(reduced));
+                };
+                return pure(Terms.map(FilterWithKey.apply(nativePred, mp)));
+            }));
     }
 
     /**
@@ -95,12 +85,12 @@ public class FilterWithKey extends PrimitiveFunction {
      * @return the filtered map
      */
     public static <K, V> Map<K, V> apply(Function<K, Function<V, Boolean>> pred, Map<K, V> mp) {
-        Map<K, V> result = new java.util.LinkedHashMap<>();
+        Map<K, V> result = FromList.emptyLike(mp);
         for (Map.Entry<K, V> entry : mp.entrySet()) {
             if (pred.apply(entry.getKey()).apply(entry.getValue())) {
                 result.put(entry.getKey(), entry.getValue());
             }
         }
-        return FromList.orderedMap(result);
+        return result;
     }
 }

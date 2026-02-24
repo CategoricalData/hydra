@@ -42,21 +42,15 @@ public class ZipWith extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.list(Flows::pure, args.get(1)), lst1 ->
-            bind(Expect.list(Flows::pure, args.get(2)), lst2 -> {
-                Term f = args.get(0);
-                int minSize = Math.min(lst1.size(), lst2.size());
-                Flow<Graph, List<Term>> resultFlow = pure(new ArrayList<>());
-                for (int i = 0; i < minSize; i++) {
-                    Term application = Terms.apply(Terms.apply(f, lst1.get(i)), lst2.get(i));
-                    resultFlow = bind(resultFlow, acc ->
-                        Flows.map(hydra.reduction.Reduction.reduceTerm(true, application), result -> {
-                            acc.add(result);
-                            return acc;
-                        }));
-                }
-                return Flows.map(resultFlow, Terms::list);
-            }));
+        return args -> bind(Flows.<Graph>getState(), graph ->
+            bind(Expect.list(Flows::pure, args.get(1)), lst1 ->
+                bind(Expect.list(Flows::pure, args.get(2)), lst2 -> {
+                    Term f = args.get(0);
+                    BiFunction<Term, Term, Term> nativeF = (a, b) ->
+                        Flows.fromFlow(graph,
+                            hydra.reduction.Reduction.reduceTerm(true, Terms.apply(Terms.apply(f, a), b)));
+                    return pure(Terms.list(ZipWith.apply(nativeF, lst1, lst2)));
+                })));
     }
 
     /**

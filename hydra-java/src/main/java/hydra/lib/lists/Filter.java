@@ -40,28 +40,9 @@ public class Filter extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Term pred = args.get(0);
-            return bind(Expect.list(Flows::pure, args.get(1)), lst -> {
-                // Apply predicate to each element and collect results
-                Flow<Graph, List<Term>> filtered = pure(new ArrayList<>());
-                for (Term element : lst) {
-                    Term application = Terms.apply(pred, element);
-                    filtered = bind(filtered, acc ->
-                        bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
-                            bind(Expect.boolean_(reduced), b -> {
-                                if (b) {
-                                    List<Term> newAcc = new ArrayList<>(acc);
-                                    newAcc.add(element);
-                                    return pure(newAcc);
-                                } else {
-                                    return pure(acc);
-                                }
-                            })));
-                }
-                return Flows.map(filtered, Terms::list);
-            });
-        };
+        return args -> bind(Expect.predicate(args.get(0)), pred ->
+            bind(Expect.list(Flows::pure, args.get(1)), lst ->
+                pure(Terms.list(Filter.apply((Function<Term, Boolean>) pred::apply, lst)))));
     }
 
     /**

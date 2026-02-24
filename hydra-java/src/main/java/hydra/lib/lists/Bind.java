@@ -36,20 +36,16 @@ public class Bind extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.bind(Expect.list(Flows::pure, args.get(0)), argsArg -> {
-            Term mapping = args.get(1);
-            Flow<Graph, List<Term>> resultFlow = Flows.pure(new java.util.ArrayList<>());
-            for (Term a : argsArg) {
-                Term application = Terms.apply(mapping, a);
-                resultFlow = Flows.bind(resultFlow, acc ->
-                    Flows.bind(hydra.reduction.Reduction.reduceTerm(true, application), reduced ->
-                        Flows.map(Expect.list(Flows::pure, reduced), subList -> {
-                            acc.addAll(subList);
-                            return acc;
-                        })));
-            }
-            return Flows.map(resultFlow, Terms::list);
-        });
+        return args -> Flows.bind(Flows.<Graph>getState(), graph ->
+            Flows.bind(Expect.list(Flows::pure, args.get(0)), argsArg -> {
+                Term mapping = args.get(1);
+                Function<Term, List<Term>> f = a -> {
+                    Term reduced = Flows.fromFlow(graph,
+                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(mapping, a)));
+                    return Flows.fromFlow(graph, Expect.list(Flows::pure, reduced));
+                };
+                return Flows.pure(Terms.list(Bind.apply(argsArg, f)));
+            }));
     }
 
     /**
