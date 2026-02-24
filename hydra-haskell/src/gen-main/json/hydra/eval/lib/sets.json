@@ -1,0 +1,162 @@
+{
+  "description": [
+    "Evaluation-level implementations of Set functions for the Hydra interpreter."],
+  "elements": [
+    {
+      "name": "hydra.eval.lib.sets.map",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Interpreter-friendly map for Set terms."}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "union": {
+                                        "field": {
+                                          "name": "application",
+                                          "term": {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "function",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "function",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "primitive",
+                                                              "term": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "hydra.lib.sets.fromList"}},
+                                                                  "typeName": "hydra.core.Name"}}},
+                                                            "typeName": "hydra.core.Function"}}},
+                                                      "typeName": "hydra.core.Term"}}},
+                                                {
+                                                  "name": "argument",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "list",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "elements"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                                    "type": {"variable": "hydra.core.Term"}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "function": {
+                                                                    "lambda": {
+                                                                      "body": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "application",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {"name": "function", "term": {"variable": "fun"}},
+                                                                                  {"name": "argument", "term": {"variable": "el"}}],
+                                                                                "typeName": "hydra.core.Application"}}},
+                                                                          "typeName": "hydra.core.Term"}},
+                                                                      "domain": [{"variable": "hydra.core.Term"}],
+                                                                      "parameter": "el"}}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Application"}}},
+                                        "typeName": "hydra.core.Term"}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.flows.pure"}},
+                                            "type": {"variable": "hydra.graph.Graph"}}},
+                                        "type": {"variable": "hydra.core.Term"}}}}},
+                                "domain": [{"set": {"variable": "hydra.core.Term"}}],
+                                "parameter": "elements"}}},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "setTerm"},
+                                  "function": {"variable": "hydra.extract.core.set"}}},
+                              "function": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.flows.bind"}},
+                                          "type": {"variable": "hydra.graph.Graph"}}},
+                                      "type": {"set": {"variable": "hydra.core.Term"}}}},
+                                  "type": {"variable": "hydra.core.Term"}}}}}}},
+                      "domain": [{"variable": "hydra.core.Term"}],
+                      "parameter": "setTerm"}}},
+                "domain": [{"variable": "hydra.core.Term"}],
+                "parameter": "fun"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.core.Term"},
+                      "function": {
+                        "application": {
+                          "argument": {"variable": "hydra.graph.Graph"},
+                          "function": {"variable": "hydra.compute.Flow"}}}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.core.Term"}}},
+          "variables": []}]}],
+  "namespace": "hydra.eval.lib.sets",
+  "termDependencies": ["hydra.extract.core", "hydra.monads", "hydra.show.core"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.constraints",
+    "hydra.core",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}
