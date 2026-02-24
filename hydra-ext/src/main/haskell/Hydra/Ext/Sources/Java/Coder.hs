@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Module                     as Module
 import qualified Hydra.Dsl.Meta.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
@@ -316,6 +317,10 @@ module_ = Module ns elements
       toBinding collectLambdaDomains,
       toBinding rebuildApps,
       toBinding propagateTypesInAppChain,
+      -- Tail-call optimization
+      toBinding isSelfTailRecursive,
+      toBinding isTailRecursiveInTailPosition,
+      toBinding encodeTermTCO,
       toBinding encodeTermDefinition,
       toBinding encodeDefinitions,
       toBinding moduleToJava]
@@ -4846,6 +4851,245 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
             @@ just (encodeTypeAsTerm @@ var "resultType")
             @@ inject _Term _Term_application (Core.application (var "annotatedLhs") (var "rhs"))])
 
+-- =============================================================================
+-- Tail-call optimization (TCO) helpers
+-- =============================================================================
+
+-- | Check if a term body is self-tail-recursive with respect to a function name
+isSelfTailRecursive :: TBinding (Name -> Term -> Bool)
+isSelfTailRecursive = def "isSelfTailRecursive" $
+  doc "Check if a term body is self-tail-recursive with respect to a function name" $
+  "funcName" ~> "body" ~>
+    -- isFreeVariableInTerm returns True when v is NOT free (not present).
+    -- So Logic.not means: the name IS present as a free variable.
+    "callsSelf" <~ Logic.not (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "body") $
+    Logic.ifElse (var "callsSelf")
+      (isTailRecursiveInTailPosition @@ var "funcName" @@ var "body")
+      false
+
+-- | Check that all occurrences of funcName in a term are in tail position.
+isTailRecursiveInTailPosition :: TBinding (Name -> Term -> Bool)
+isTailRecursiveInTailPosition = def "isTailRecursiveInTailPosition" $
+  doc "Check that all self-references are in tail position" $
+  "funcName" ~> "term" ~>
+    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    cases _Term (var "stripped") (Just $
+      -- Default: funcName must NOT appear free in this term (not a recognized tail position)
+      Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+      -- Application: check if it's a self-tail-call or a case statement application
+      _Term_application>>: "app" ~>
+        "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
+        "gatherArgs" <~ (Pairs.first $ var "gathered") $
+        "gatherFun" <~ (Pairs.second $ var "gathered") $
+        "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+        cases _Term (var "strippedFun") (Just $
+          -- Unknown function form: funcName must not appear anywhere
+          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+          -- Variable: check if self-call
+          _Term_variable>>: "vname" ~>
+            Logic.ifElse (Equality.equal (var "vname") (var "funcName"))
+              -- Self-call in tail position: args must not contain funcName
+              -- and must not contain lambdas (closures over parameters break TCO)
+              ("argsNoFunc" <~ (Lists.foldl
+                ("ok" ~> "arg" ~>
+                  Logic.and (var "ok")
+                    (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
+                true
+                (var "gatherArgs")) $
+               "argsNoLambda" <~ (Lists.foldl
+                ("ok" ~> "arg" ~>
+                  Logic.and (var "ok")
+                    (Logic.not $ Rewriting.foldOverTerm @@ Coders.traversalOrderPre
+                      @@ ("found" ~> "t" ~>
+                        Logic.or (var "found")
+                          (cases _Term (var "t") (Just false) [
+                            _Term_function>>: "f2" ~>
+                              cases _Function (var "f2") (Just false) [
+                                _Function_lambda>>: "lam" ~>
+                                  "ignore" <~ (Core.lambdaBody $ var "lam") $
+                                  true]]))
+                      @@ false
+                      @@ var "arg"))
+                true
+                (var "gatherArgs")) $
+               Logic.and (var "argsNoFunc") (var "argsNoLambda"))
+              -- Not a self-call: funcName must not appear anywhere in the term
+              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term"),
+          -- Function: check for case statement (union elimination)
+          _Term_function>>: "f" ~>
+            cases _Function (var "f") (Just $
+              Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+              _Function_elimination>>: "e" ~>
+                cases _Elimination (var "e") (Just $
+                  Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+                  _Elimination_union>>: "cs" ~>
+                    "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                    "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                    -- All case branches must have funcName only in tail position
+                    "branchesOk" <~ (Lists.foldl
+                      ("ok" ~> "field" ~>
+                        Logic.and (var "ok")
+                          (isTailRecursiveInTailPosition @@ var "funcName" @@ Core.fieldTerm (var "field")))
+                      true
+                      (var "cases_")) $
+                    -- Default branch (if present) must also be tail-recursive
+                    "dfltOk" <~ (Maybes.maybe true
+                      ("d" ~> isTailRecursiveInTailPosition @@ var "funcName" @@ var "d")
+                      (var "dflt")) $
+                    -- Arguments to the case statement must NOT contain funcName
+                    "argsOk" <~ (Lists.foldl
+                      ("ok" ~> "arg" ~>
+                        Logic.and (var "ok")
+                          (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "arg"))
+                      true
+                      (var "gatherArgs")) $
+                    Logic.and (Logic.and (var "branchesOk") (var "dfltOk")) (var "argsOk")]]],
+      -- Lambda: tail position is the body
+      _Term_function>>: "f" ~>
+        cases _Function (var "f") (Just $
+          Rewriting.isFreeVariableInTerm @@ var "funcName" @@ var "term") [
+          _Function_lambda>>: "lam" ~>
+            isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.lambdaBody $ var "lam")],
+      -- Let: tail position is the body; bindings must not contain funcName
+      _Term_let>>: "lt" ~>
+        "bindingsOk" <~ (Lists.foldl
+          ("ok" ~> "b" ~>
+            Logic.and (var "ok")
+              (Rewriting.isFreeVariableInTerm @@ var "funcName" @@ Core.bindingTerm (var "b")))
+          true
+          (Core.letBindings $ var "lt")) $
+        Logic.and (var "bindingsOk")
+          (isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.letBody $ var "lt"))]
+
+-- | Encode a term for TCO: self-tail-calls become param reassignment + continue.
+--   Returns a list of Java BlockStatements (if/instanceof checks + return/continue).
+encodeTermTCO :: TBinding (JavaHelpers.JavaEnvironment -> Name -> [Name] -> Term -> Flow Graph [Java.BlockStatement])
+encodeTermTCO = def "encodeTermTCO" $
+  "env" ~> "funcName" ~> "paramNames" ~> "term" ~>
+    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    -- Check if this term is a direct self-tail-call: funcName(args...)
+    "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
+    "gatherArgs" <~ (Pairs.first $ var "gathered") $
+    "gatherFun" <~ (Pairs.second $ var "gathered") $
+    "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+    -- Check for self-call pattern: Variable(funcName)
+    "isSelfCall" <~ (cases _Term (var "strippedFun")
+      (Just false) [
+        _Term_variable>>: "n" ~> Equality.equal (var "n") (var "funcName")]) $
+    Logic.ifElse (Logic.and (var "isSelfCall")
+                            (Equality.equal (Lists.length $ var "gatherArgs") (Lists.length $ var "paramNames")))
+      -- TAIL CALL: emit param reassignment + continue
+      ("jArgs" <<~ Flows.mapList ("a" ~> encodeTerm @@ var "env" @@ var "a") (var "gatherArgs") $
+        "assignments" <~ (Lists.map ("pair" ~>
+          "paramName" <~ (Pairs.first $ var "pair") $
+          "jArg" <~ (Pairs.second $ var "pair") $
+          JavaDsl.blockStatementStatement
+            (JavaUtilsSource.javaAssignmentStatement
+              @@ (JavaDsl.leftHandSideExpressionName
+                    (JavaUtilsSource.javaIdentifierToJavaExpressionName
+                      @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "paramName")))
+              @@ var "jArg"))
+          (Lists.zip (var "paramNames") (var "jArgs"))) $
+        "continueStmt" <~ (JavaDsl.blockStatementStatement
+          (JavaDsl.statementWithoutTrailing
+            (inject Java._StatementWithoutTrailingSubstatement Java._StatementWithoutTrailingSubstatement_continue
+              (wrap Java._ContinueStatement (nothing :: TTerm (Maybe Java.Identifier)))))) $
+        produce $ Lists.concat2 (var "assignments") (list [var "continueStmt"]))
+      -- NOT a self-call: check for case statement application
+      ("gathered2" <~ (CoderUtils.gatherApplications @@ var "term") $
+        "args2" <~ (Pairs.first $ var "gathered2") $
+        "body2" <~ (Pairs.second $ var "gathered2") $
+        Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
+          -- Single argument: try to match as case statement
+          ("arg" <~ (Lists.head $ var "args2") $
+            cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body2") (Just $
+              -- Default: not a case statement, encode as return
+              "expr" <<~ (encodeTerm @@ var "env" @@ var "term") $
+              produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
+              _Term_function>>: "f" ~>
+                cases _Function (var "f") (Just $
+                  "expr" <<~ (encodeTerm @@ var "env" @@ var "term") $
+                  produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
+                  _Function_elimination>>: "e" ~>
+                    cases _Elimination (var "e") (Just $
+                      "expr" <<~ (encodeTerm @@ var "env" @@ var "term") $
+                      produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
+                      _Elimination_union>>: "cs" ~>
+                        -- Case statement: generate if/instanceof chain
+                        "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
+                        "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+                        "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                        "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                        "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ (Schemas.nominalApplication @@ var "tname" @@ list ([] :: [TTerm Type]))) $
+                        -- Encode the argument (the value being matched)
+                        "jArg" <<~ (encodeTerm @@ var "env" @@ var "arg") $
+                        -- Generate if/instanceof blocks for each case branch
+                        "ifBlocks" <<~ (Flows.mapList ("field" ~>
+                          "fieldName" <~ (Core.fieldName (var "field")) $
+                          -- Build the variant reference type for instanceof
+                          "variantRefType" <~ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ true @@ var "domArgs"
+                            @@ var "tname" @@ just (Formatting.capitalize @@ (Core.unName (var "fieldName")))) $
+                          -- Extract the lambda body from this case branch
+                          cases _Term (Rewriting.deannotateTerm @@ Core.fieldTerm (var "field"))
+                            (Just $ Monads.fail @@ string "TCO: case branch is not a lambda") [
+                            _Term_function>>: "f2" ~>
+                              cases _Function (var "f2")
+                                (Just $ Monads.fail @@ string "TCO: case branch is not a lambda") [
+                                _Function_lambda>>: "lam" ~>
+                                  -- Use withLambda to properly set up the lambda context
+                                  withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
+                                  "lambdaParam" <~ Core.lambdaParameter (var "lam") $
+                                  "branchBody" <~ Core.lambdaBody (var "lam") $
+                                  "env3" <~ (insertBranchVar @@ var "lambdaParam" @@ var "env2") $
+                                  -- Build local var: VariantType varName = (VariantType) arg;
+                                  "varId" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "lambdaParam") $
+                                  "castExpr" <~ (JavaUtilsSource.javaCastExpressionToJavaExpression
+                                    @@ (JavaUtilsSource.javaCastExpression @@ var "variantRefType"
+                                          @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "jArg"))) $
+                                  "localDecl" <~ (JavaUtilsSource.varDeclarationStatement @@ var "varId" @@ var "castExpr") $
+                                  -- Check if this branch body is a self-tail-call
+                                  "isBranchTailCall" <~ (isTailRecursiveInTailPosition @@ var "funcName" @@ var "branchBody") $
+                                  "bodyStmts" <<~ (Logic.ifElse (var "isBranchTailCall")
+                                    -- Self-call: emit assignment + continue via encodeTermTCO
+                                    (encodeTermTCO @@ var "env3" @@ var "funcName" @@ var "paramNames" @@ var "branchBody")
+                                    -- Not a self-call: use normal encoding with analyzeJavaFunction
+                                    ("fs" <<~ (analyzeJavaFunction @@ var "env3" @@ var "branchBody") $
+                                      "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
+                                      "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
+                                      "env4" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
+                                      "bindResult" <<~ (bindingsToStatements @@ var "env4" @@ var "bindings") $
+                                      "bindingStmts" <~ Pairs.first (var "bindResult") $
+                                      "env5" <~ Pairs.second (var "bindResult") $
+                                      "jret" <<~ (encodeTerm @@ var "env5" @@ var "innerBody") $
+                                      "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
+                                      produce $ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]))) $
+                                  -- Build: if (arg instanceof VariantType) { VariantType v = (VariantType) arg; stmts... }
+                                  "relExpr" <~ (JavaUtilsSource.javaInstanceOf
+                                    @@ (JavaUtilsSource.javaIdentifierToJavaRelationalExpression
+                                          @@ (JavaUtilsSource.variableToJavaIdentifier @@ Lists.head (var "paramNames")))
+                                    @@ var "variantRefType") $
+                                  "condExpr" <~ (JavaUtilsSource.javaRelationalExpressionToJavaExpression @@ var "relExpr") $
+                                  "blockStmts" <~ Lists.cons (var "localDecl") (var "bodyStmts") $
+                                  "ifBody" <~ (JavaDsl.statementWithoutTrailing
+                                    (JavaDsl.stmtBlock (JavaDsl.block (var "blockStmts")))) $
+                                  produce $ JavaDsl.blockStatementStatement
+                                    (JavaDsl.statementIfThen (JavaDsl.ifThenStatement (var "condExpr") (var "ifBody"))))]])
+                          (var "cases_")) $
+                        -- Default: return the expression (or the arg for otherwise)
+                        "defaultStmt" <<~ (Maybes.cases (var "dflt")
+                          -- No default: return the argument unchanged
+                          (produce $ list [JavaDsl.blockStatementStatement
+                            (JavaUtilsSource.javaReturnStatement @@ just (var "jArg"))])
+                          ("d" ~>
+                            "dApp" <~ inject _Term _Term_application (Core.application (var "d") (var "arg")) $
+                            "dExpr" <<~ (encodeTerm @@ var "env" @@ var "dApp") $
+                            produce $ list [JavaDsl.blockStatementStatement
+                              (JavaUtilsSource.javaReturnStatement @@ just (var "dExpr"))])) $
+                        produce $ Lists.concat2 (var "ifBlocks") (var "defaultStmt")]]])
+          -- Not a single-arg application: fall back to normal return
+          ("expr" <<~ (encodeTerm @@ var "env" @@ var "term") $
+            produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]))
+
 -- | Encode a term definition as a Java interface method declaration.
 -- This is the most complex function — it handles type parameters, lambda analysis,
 -- type variable substitution, accumulator unification, and body annotation.
@@ -4954,13 +5198,32 @@ encodeTermDefinition = def "encodeTermDefinition" $
         (Lists.zip (var "fixedDoms") (var "params"))) $
       "jcod" <<~ (encodeType @@ var "aliases2" @@ Sets.empty @@ var "fixedCod") $
       "result" <~ (JavaUtilsSource.javaTypeToJavaResult @@ var "jcod") $
-      "jbody" <<~ (encodeTerm @@ var "env3" @@ var "annotatedBody") $
       "mods" <~ list [inject Java._InterfaceMethodModifier Java._InterfaceMethodModifier_static unit] $
       "jname" <~ (JavaUtilsSource.sanitizeJavaName @@ (Formatting.decapitalize @@ (Names.localNameOf @@ var "name"))) $
-      "returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
+      -- Check for tail-call optimization opportunity
+      "isTCO" <~ (Logic.and
+        (Logic.not $ Lists.null (var "params"))
+        (isSelfTailRecursive @@ var "name" @@ var "body")) $
+      "methodBody" <<~ (Logic.ifElse (var "isTCO")
+        -- TCO path: wrap body in while(true) loop
+        -- Note: bindingStmts (let-binding prefixes) go INSIDE the while loop so they are
+        -- re-evaluated each iteration when parameters change via reassignment + continue.
+        ("tcoStmts" <<~ (encodeTermTCO @@ var "env3" @@ var "name" @@ var "params" @@ var "annotatedBody") $
+          "whileBodyStmts" <~ Lists.concat2 (var "bindingStmts") (var "tcoStmts") $
+          "whileBodyBlock" <~ (JavaDsl.statementWithoutTrailing (JavaDsl.stmtBlock (JavaDsl.block (var "whileBodyStmts")))) $
+          "noCond" <~ (nothing :: TTerm (Maybe Java.Expression)) $
+          "whileStmt" <~ (JavaDsl.blockStatementStatement
+            (JavaDsl.statementWhile (record Java._WhileStatement [
+              Java._WhileStatement_cond>>: var "noCond",
+              Java._WhileStatement_body>>: var "whileBodyBlock"]))) $
+          produce $ list [var "whileStmt"])
+        -- Normal path: encode body as expression with return
+        ("jbody" <<~ (encodeTerm @@ var "env3" @@ var "annotatedBody") $
+          "returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
+          produce $ Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))) $
       Flows.pure (JavaUtilsSource.interfaceMethodDeclaration @@ var "mods" @@ var "jparams"
         @@ var "jname" @@ var "jformalParams" @@ var "result"
-        @@ just (Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))))
+        @@ just (var "methodBody")))
 
 -- | Encode all definitions in a module to Java compilation units.
 encodeDefinitions :: TBinding (Module -> [Definition] -> Flow Graph (M.Map Name Java.CompilationUnit))
