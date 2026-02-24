@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassLiteral implements Serializable, Comparable<ClassLiteral> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassLiteral");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassLiteral");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_NUMERIC_TYPE = new hydra.core.Name("numericType");
+  public static final hydra.core.Name NUMERIC_TYPE = new hydra.core.Name("numericType");
   
-  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  public static final hydra.core.Name BOOLEAN = new hydra.core.Name("boolean");
   
-  public static final hydra.core.Name FIELD_NAME_VOID = new hydra.core.Name("void");
+  public static final hydra.core.Name VOID = new hydra.core.Name("void");
   
   private ClassLiteral () {
   

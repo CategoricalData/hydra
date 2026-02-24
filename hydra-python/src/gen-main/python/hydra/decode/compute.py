@@ -17,38 +17,36 @@ import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
-T2 = TypeVar("T2")
-T3 = TypeVar("T3")
 
-def trace(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.compute.Trace]:
-    def _hoist_hydra_decode_compute_trace_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.compute.Trace]:
+def trace(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_compute_trace_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_1(v12):
                     match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_2(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                def _hoist_body_3(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_3(v12):
                     match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_4(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_4(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_3(v)
@@ -61,8 +59,8 @@ def trace(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Deco
                 return Left(hydra.util.DecodingError("expected record of type hydra.compute.Trace"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_compute_trace_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def flow_state(s: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.compute.FlowState[T0, T1]]:
-    def _hoist_hydra_decode_compute_flow_state_1(cx: hydra.graph.Graph, s: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T2]], v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T3]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.compute.FlowState[T2, T3]]:
+def flow_state(s: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_compute_flow_state_1(cx, s, v, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)

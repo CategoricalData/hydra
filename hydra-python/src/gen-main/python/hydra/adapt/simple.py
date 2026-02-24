@@ -124,15 +124,15 @@ def adapt_graph_schema(constraints: hydra.coders.LanguageConstraints, litmap: Fr
         return hydra.lib.flows.bind(adapt_type(constraints, litmap, typ()), (lambda typ1: hydra.lib.flows.pure((name(), typ1))))
     return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: map_pair(x1)), hydra.lib.maps.to_list(types0)), (lambda pairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(pairs))))
 
-def adapt_lambda_domains(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], recurse: Callable[[T0], hydra.compute.Flow[T1, hydra.core.Term]], term: T0) -> hydra.compute.Flow[T1, hydra.core.Term]:
-    def _hoist_hydra_adapt_simple_adapt_lambda_domains_1(constraints: hydra.coders.LanguageConstraints, f: hydra.core.Function, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], v1: hydra.core.Function) -> hydra.compute.Flow[T2, hydra.core.Term]:
+def adapt_lambda_domains(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], recurse: Callable[[T0], hydra.compute.Flow[T1, hydra.core.Term]], term: T0):
+    def _hoist_hydra_adapt_simple_adapt_lambda_domains_1(constraints, f, litmap, v1):
         match v1:
             case hydra.core.FunctionLambda(value=l):
                 return hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda dom: hydra.lib.flows.bind(adapt_type(constraints, litmap, dom), (lambda dom1: hydra.lib.flows.pure(Just(dom1))))), l.domain), (lambda adapted_domain: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, adapted_domain, l.body))))))))
             
             case _:
                 return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermFunction(f)))
-    def _hoist_hydra_adapt_simple_adapt_lambda_domains_2(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], rewritten: hydra.core.Term, v1: hydra.core.Term) -> hydra.compute.Flow[T2, hydra.core.Term]:
+    def _hoist_hydra_adapt_simple_adapt_lambda_domains_2(constraints, litmap, rewritten, v1):
         match v1:
             case hydra.core.TermFunction(value=f):
                 return _hoist_hydra_adapt_simple_adapt_lambda_domains_1(constraints, f, litmap, f)
@@ -244,11 +244,11 @@ def adapt_type_scheme(constraints: hydra.coders.LanguageConstraints, litmap: Fro
         return ts0.type
     return hydra.lib.flows.bind(adapt_type(constraints, litmap, t0()), (lambda t1: hydra.lib.flows.pure(hydra.core.TypeScheme(vars0(), t1, ts0.constraints))))
 
-def adapt_nested_types(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], recurse: Callable[[T0], hydra.compute.Flow[T1, hydra.core.Term]], term: T0) -> hydra.compute.Flow[T1, hydra.core.Term]:
-    def _hoist_hydra_adapt_simple_adapt_nested_types_1(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], rewritten: hydra.core.Term, v1: hydra.core.Term) -> hydra.compute.Flow[T2, hydra.core.Term]:
+def adapt_nested_types(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], recurse: Callable[[T0], hydra.compute.Flow[T1, hydra.core.Term]], term: T0):
+    def _hoist_hydra_adapt_simple_adapt_nested_types_1(constraints, litmap, rewritten, v1):
         match v1:
             case hydra.core.TermLet(value=lt):
-                def adapt_b(b: hydra.core.Binding) -> hydra.compute.Flow[T3, hydra.core.Binding]:
+                def adapt_b(b: hydra.core.Binding) -> hydra.compute.Flow[T2, hydra.core.Binding]:
                     return hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda ts: hydra.lib.flows.bind(adapt_type_scheme(constraints, litmap, ts), (lambda ts1: hydra.lib.flows.pure(Just(ts1))))), b.type), (lambda adapted_b_type: hydra.lib.flows.pure(hydra.core.Binding(b.name, b.term, adapted_b_type))))
                 return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: adapt_b(x1)), lt.bindings), (lambda adapted_bindings: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(adapted_bindings, lt.body))))))
             
@@ -264,29 +264,29 @@ def adapt_primitive(constraints: hydra.coders.LanguageConstraints, litmap: Froze
         return prim0.type
     return hydra.lib.flows.bind(adapt_type_scheme(constraints, litmap, ts0()), (lambda ts1: hydra.lib.flows.pure(hydra.graph.Primitive(prim0.name, ts1, prim0.implementation))))
 
-def adapt_literal(lt: hydra.core.LiteralType, l: hydra.core.Literal) -> hydra.core.Literal:
-    def _hoist_hydra_adapt_simple_adapt_literal_1(b: bytes, v1: hydra.core.LiteralType) -> hydra.core.Literal:
+def adapt_literal(lt: hydra.core.LiteralType, l: hydra.core.Literal):
+    def _hoist_hydra_adapt_simple_adapt_literal_1(b, v1):
         match v1:
             case hydra.core.LiteralTypeString():
                 return cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.literals.binary_to_string(b)))
             
             case _:
                 raise TypeError("Unsupported LiteralType")
-    def _hoist_hydra_adapt_simple_adapt_literal_2(b: bool, v1: hydra.core.LiteralType) -> hydra.core.Literal:
+    def _hoist_hydra_adapt_simple_adapt_literal_2(b, v1):
         match v1:
             case hydra.core.LiteralTypeInteger(value=it):
                 return cast(hydra.core.Literal, hydra.core.LiteralInteger(hydra.literals.bigint_to_integer_value(it, hydra.lib.logic.if_else(b, (lambda : 1), (lambda : 0)))))
             
             case _:
                 raise TypeError("Unsupported LiteralType")
-    def _hoist_hydra_adapt_simple_adapt_literal_3(f: hydra.core.FloatValue, v1: hydra.core.LiteralType) -> hydra.core.Literal:
+    def _hoist_hydra_adapt_simple_adapt_literal_3(f, v1):
         match v1:
             case hydra.core.LiteralTypeFloat(value=ft):
                 return cast(hydra.core.Literal, hydra.core.LiteralFloat(hydra.literals.bigfloat_to_float_value(ft, hydra.literals.float_value_to_bigfloat(f))))
             
             case _:
                 raise TypeError("Unsupported LiteralType")
-    def _hoist_hydra_adapt_simple_adapt_literal_4(i: hydra.core.IntegerValue, v1: hydra.core.LiteralType) -> hydra.core.Literal:
+    def _hoist_hydra_adapt_simple_adapt_literal_4(i, v1):
         match v1:
             case hydra.core.LiteralTypeInteger(value=it):
                 return cast(hydra.core.Literal, hydra.core.LiteralInteger(hydra.literals.bigint_to_integer_value(it, hydra.literals.integer_value_to_bigint(i))))
@@ -374,7 +374,7 @@ def term_alternatives(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.G
 def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     r"""Adapt a term using the given language constraints."""
     
-    def rewrite(recurse: Callable[[T0], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], term02: T0) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+    def rewrite(recurse: Callable[[T0], hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]], term02: T0):
         def for_supported(term: hydra.core.Term) -> hydra.compute.Flow[T1, Maybe[hydra.core.Term]]:
             match term:
                 case hydra.core.TermLiteral(value=l):
@@ -396,7 +396,7 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
             def supported_variant() -> bool:
                 return hydra.lib.sets.member(hydra.reflect.term_variant(term), constraints.term_variants)
             return hydra.lib.logic.if_else(supported_variant(), (lambda : for_supported(term)), (lambda : for_unsupported(term)))
-        def _hoist_body_1(term1: hydra.core.Term, v1: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+        def _hoist_body_1(term1, v1):
             match v1:
                 case hydra.core.TermTypeApplication(value=ta):
                     return hydra.lib.flows.bind(adapt_type(constraints, litmap, ta.type), (lambda atyp: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(ta.body, atyp))))))
@@ -412,8 +412,8 @@ def adapt_term(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict
 def push_type_apps_inward(term: hydra.core.Term) -> hydra.core.Term:
     r"""Normalize a term by pushing TermTypeApplication inward past TermApplication and TermFunction (Lambda). This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable."""
     
-    def push(body: hydra.core.Term, typ: hydra.core.Type) -> hydra.core.Term:
-        def _hoist_push_1(f: hydra.core.Function, typ: hydra.core.Type, v1: hydra.core.Function) -> hydra.core.Term:
+    def push(body: hydra.core.Term, typ: hydra.core.Type):
+        def _hoist_push_1(f, typ, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=l):
                     return go(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, l.domain, cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(l.body, typ)))))))))

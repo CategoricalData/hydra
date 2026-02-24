@@ -70,7 +70,7 @@ def check_for_unbound_type_variables(cx: hydra.typing.InferenceContext, term0: h
     @lru_cache(1)
     def svars() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.from_list(hydra.lib.maps.keys(cx.schema_types))
-    def check_recursive(vars: frozenset[hydra.core.Name], trace: frozenlist[str], lbinding: Maybe[hydra.core.Binding], term: hydra.core.Term) -> hydra.compute.Flow[T1, None]:
+    def check_recursive(vars: frozenset[hydra.core.Name], trace: frozenlist[str], lbinding: Maybe[hydra.core.Binding], term: hydra.core.Term):
         def recurse(v1: hydra.core.Term) -> hydra.compute.Flow[T1, None]:
             return check_recursive(vars, trace, lbinding, v1)
         @lru_cache(1)
@@ -88,7 +88,7 @@ def check_for_unbound_type_variables(cx: hydra.typing.InferenceContext, term0: h
             return hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda x1: check(x1)), m), (lambda _: hydra.lib.flows.pure(None)))
         def check_optional_list(ml: Maybe[frozenlist[hydra.core.Type]]) -> hydra.compute.Flow[T2, None]:
             return hydra.lib.flows.bind(hydra.lib.flows.map_maybe((lambda l: hydra.lib.flows.map_list((lambda x1: check(x1)), l)), ml), (lambda _: hydra.lib.flows.pure(None)))
-        def _hoist_body_1(v1: hydra.core.Function) -> hydra.compute.Flow[T1, None]:
+        def _hoist_body_1(v1):
             match v1:
                 case hydra.core.FunctionElimination():
                     return dflt()
@@ -98,32 +98,34 @@ def check_for_unbound_type_variables(cx: hydra.typing.InferenceContext, term0: h
                 
                 case _:
                     return dflt()
-        match term:
-            case hydra.core.TermFunction(value=f):
-                return _hoist_body_1(f)
-            
-            case hydra.core.TermLet(value=l):
-                def for_binding(b: hydra.core.Binding) -> hydra.compute.Flow[T1, None]:
-                    @lru_cache(1)
-                    def bterm() -> hydra.core.Term:
-                        return b.term
-                    @lru_cache(1)
-                    def new_vars() -> frozenset[hydra.core.Name]:
-                        return hydra.lib.maybes.maybe(vars, (lambda ts: hydra.lib.sets.union(vars, hydra.lib.sets.from_list(ts.variables))), b.type)
-                    @lru_cache(1)
-                    def new_trace() -> frozenlist[str]:
-                        return hydra.lib.lists.cons(b.name.value, trace)
-                    return check_recursive(new_vars(), new_trace(), Just(b), bterm())
-                return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: for_binding(x1)), l.bindings), (lambda _: recurse(l.body)))
-            
-            case hydra.core.TermTypeApplication(value=tt):
-                return hydra.lib.flows.bind(check(tt.type), (lambda _: recurse(tt.body)))
-            
-            case hydra.core.TermTypeLambda(value=tl):
-                return hydra.lib.flows.bind(check(cast(hydra.core.Type, hydra.core.TypeVariable(tl.parameter))), (lambda _: recurse(tl.body)))
-            
-            case _:
-                return dflt()
+        def _hoist_body_2(v1):
+            match v1:
+                case hydra.core.TermFunction(value=f):
+                    return _hoist_body_1(f)
+                
+                case hydra.core.TermLet(value=l):
+                    def for_binding(b: hydra.core.Binding) -> hydra.compute.Flow[T1, None]:
+                        @lru_cache(1)
+                        def bterm() -> hydra.core.Term:
+                            return b.term
+                        @lru_cache(1)
+                        def new_vars() -> frozenset[hydra.core.Name]:
+                            return hydra.lib.maybes.maybe(vars, (lambda ts: hydra.lib.sets.union(vars, hydra.lib.sets.from_list(ts.variables))), b.type)
+                        @lru_cache(1)
+                        def new_trace() -> frozenlist[str]:
+                            return hydra.lib.lists.cons(b.name.value, trace)
+                        return check_recursive(new_vars(), new_trace(), Just(b), bterm())
+                    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: for_binding(x1)), l.bindings), (lambda _: recurse(l.body)))
+                
+                case hydra.core.TermTypeApplication(value=tt):
+                    return hydra.lib.flows.bind(check(tt.type), (lambda _: recurse(tt.body)))
+                
+                case hydra.core.TermTypeLambda(value=tl):
+                    return hydra.lib.flows.bind(check(cast(hydra.core.Type, hydra.core.TypeVariable(tl.parameter))), (lambda _: recurse(tl.body)))
+                
+                case _:
+                    return dflt()
+        return _hoist_body_2(term)
     return check_recursive(hydra.lib.sets.empty(), ("top level",), Nothing(), term0)
 
 def check_nominal_application(tx: hydra.typing.TypeContext, tname: hydra.core.Name, type_args: frozenlist[hydra.core.Type]) -> hydra.compute.Flow[T0, None]:
@@ -252,21 +254,21 @@ def type_of(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type]
     r"""Given a type context, reconstruct the type of a System F term."""
     
     @lru_cache(1)
-    def check() -> hydra.compute.Flow[T0, hydra.core.Type]:
-        def _hoist_check_1(v1: hydra.core.Elimination) -> hydra.compute.Flow[T0, hydra.core.Type]:
+    def check():
+        def _hoist_check_1(v1):
             match v1:
                 case hydra.core.EliminationRecord(value=v12):
                     return type_of_projection(tx, type_args, v12)
                 
-                case hydra.core.EliminationUnion(value=v122):
-                    return type_of_case_statement(tx, type_args, v122)
+                case hydra.core.EliminationUnion(value=v12):
+                    return type_of_case_statement(tx, type_args, v12)
                 
-                case hydra.core.EliminationWrap(value=v123):
-                    return type_of_unwrap(tx, type_args, v123)
+                case hydra.core.EliminationWrap(value=v12):
+                    return type_of_unwrap(tx, type_args, v12)
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        def _hoist_check_2(v1: hydra.core.Function) -> hydra.compute.Flow[T0, hydra.core.Type]:
+        def _hoist_check_2(v1):
             match v1:
                 case hydra.core.FunctionElimination(value=elm):
                     return _hoist_check_1(elm)
@@ -274,8 +276,8 @@ def type_of(tx: hydra.typing.TypeContext, type_args: frozenlist[hydra.core.Type]
                 case hydra.core.FunctionLambda(value=v12):
                     return type_of_lambda(tx, type_args, v12)
                 
-                case hydra.core.FunctionPrimitive(value=v122):
-                    return type_of_primitive(tx, type_args, v122)
+                case hydra.core.FunctionPrimitive(value=v12):
+                    return type_of_primitive(tx, type_args, v12)
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")

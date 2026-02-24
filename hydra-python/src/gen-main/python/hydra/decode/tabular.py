@@ -17,10 +17,9 @@ import hydra.tabular
 import hydra.util
 
 T0 = TypeVar("T0")
-T1 = TypeVar("T1")
 
-def column_type(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.ColumnType]:
-    def _hoist_hydra_decode_tabular_column_type_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.ColumnType]:
+def column_type(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_tabular_column_type_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -32,8 +31,8 @@ def column_type(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
                 return Left(hydra.util.DecodingError("expected record of type hydra.tabular.ColumnType"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_tabular_column_type_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def data_row(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.DataRow[T0]]:
-    def _hoist_hydra_decode_tabular_data_row_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.DataRow[T1]]:
+def data_row(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_tabular_data_row_1(cx, v, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.tabular.DataRow(b)), hydra.extract.helpers.decode_list((lambda v12, v2: hydra.extract.helpers.decode_maybe(v, v12, v2)), cx, wrapped_term.body))
@@ -42,22 +41,22 @@ def data_row(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.tabular.DataRow"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_tabular_data_row_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def header_row(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.HeaderRow]:
-    def _hoist_hydra_decode_tabular_header_row_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+def header_row(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_tabular_header_row_1(v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
             
             case _:
                 return Left(hydra.util.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_tabular_header_row_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+    def _hoist_hydra_decode_tabular_header_row_2(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_tabular_header_row_1(v)
             
             case _:
                 return Left(hydra.util.DecodingError("expected literal"))
-    def _hoist_hydra_decode_tabular_header_row_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.HeaderRow]:
+    def _hoist_hydra_decode_tabular_header_row_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.tabular.HeaderRow(b)), hydra.extract.helpers.decode_list((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_tabular_header_row_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), cx, wrapped_term.body))
@@ -66,8 +65,8 @@ def header_row(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.tabular.HeaderRow"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_tabular_header_row_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def table(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.Table[T0]]:
-    def _hoist_hydra_decode_tabular_table_1(cx: hydra.graph.Graph, v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.Table[T1]]:
+def table(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_tabular_table_1(cx, v, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -79,8 +78,8 @@ def table(v: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.De
                 return Left(hydra.util.DecodingError("expected record of type hydra.tabular.Table"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_tabular_table_1(cx, v, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def table_type(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.TableType]:
-    def _hoist_hydra_decode_tabular_table_type_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.tabular.TableType]:
+def table_type(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_tabular_table_type_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)

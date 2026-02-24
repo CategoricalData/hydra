@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class MethodReference_Super implements Serializable, Comparable<MethodReference_Super> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_Super");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodReference_Super");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
+  public static final hydra.core.Name TYPE_ARGUMENTS = new hydra.core.Name("typeArguments");
   
-  public static final hydra.core.Name FIELD_NAME_IDENTIFIER = new hydra.core.Name("identifier");
+  public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
   
-  public static final hydra.core.Name FIELD_NAME_SUPER = new hydra.core.Name("super");
+  public static final hydra.core.Name SUPER = new hydra.core.Name("super");
   
   public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
   

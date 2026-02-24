@@ -5,19 +5,19 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class MethodReference implements Serializable, Comparable<MethodReference> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.MethodReference");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.MethodReference");
   
-  public static final hydra.core.Name FIELD_NAME_EXPRESSION = new hydra.core.Name("expression");
+  public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
-  public static final hydra.core.Name FIELD_NAME_PRIMARY = new hydra.core.Name("primary");
+  public static final hydra.core.Name PRIMARY = new hydra.core.Name("primary");
   
-  public static final hydra.core.Name FIELD_NAME_REFERENCE_TYPE = new hydra.core.Name("referenceType");
+  public static final hydra.core.Name REFERENCE_TYPE = new hydra.core.Name("referenceType");
   
-  public static final hydra.core.Name FIELD_NAME_SUPER = new hydra.core.Name("super");
+  public static final hydra.core.Name SUPER = new hydra.core.Name("super");
   
-  public static final hydra.core.Name FIELD_NAME_NEW = new hydra.core.Name("new");
+  public static final hydra.core.Name NEW = new hydra.core.Name("new");
   
-  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  public static final hydra.core.Name ARRAY = new hydra.core.Name("array");
   
   private MethodReference () {
   

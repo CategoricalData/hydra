@@ -102,7 +102,7 @@ public interface Coder {
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
       (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Module>>) (g -> hydra.lib.flows.Bind.apply(
         hydra.lib.flows.MapList.apply(
-          ((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.module.Definition, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>>>>) (v1 -> (java.util.function.Function<hydra.module.Definition, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>>>) (v2 -> hydra.ext.haskell.coder.Coder.constructModule_createDeclarations(
+          (java.util.function.Function<hydra.module.Definition, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>>>) (v1 -> hydra.ext.haskell.coder.Coder.constructModule_createDeclarations(
             (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.module.TermDefinition, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.DeclarationWithComments>>>) (p0 -> p1 -> hydra.ext.haskell.coder.Coder.toDataDeclaration(
               p0,
               p1)),
@@ -111,8 +111,8 @@ public interface Coder {
               p1,
               p2)),
             namespaces,
-            v1,
-            v2)))).apply(g),
+            g,
+            v1)),
           defs),
         (java.util.function.Function<java.util.List<java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Module>>) (declLists -> {
           hydra.util.Lazy<java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>> decls = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(declLists));
@@ -121,20 +121,20 @@ public interface Coder {
         }))));
   }
   
-  static <T0, T1, T2, T3> hydra.compute.Flow<T1, java.util.List<T2>> constructModule_createDeclarations(java.util.function.Function<T0, java.util.function.Function<hydra.module.TermDefinition, hydra.compute.Flow<T1, T2>>> hydra_ext_haskell_coder_toDataDeclaration2, java.util.function.Function<T0, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T1, java.util.List<T2>>>>> hydra_ext_haskell_coder_toTypeDeclarationsFrom2, T0 namespaces, T3 g, hydra.module.Definition def) {
+  static <T0> hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>> constructModule_createDeclarations(java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.module.TermDefinition, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.DeclarationWithComments>>> hydra_ext_haskell_coder_toDataDeclaration2, java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>>>>> hydra_ext_haskell_coder_toTypeDeclarationsFrom2, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, T0 g, hydra.module.Definition def) {
     return (def).accept(new hydra.module.Definition.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T1, java.util.List<T2>> visit(hydra.module.Definition.Type type) {
+      public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>> visit(hydra.module.Definition.Type type) {
         hydra.core.Name name = ((type).value).name;
         hydra.core.Type typ = ((type).value).type;
         return (((hydra_ext_haskell_coder_toTypeDeclarationsFrom2).apply(namespaces)).apply(name)).apply(typ);
       }
       
       @Override
-      public hydra.compute.Flow<T1, java.util.List<T2>> visit(hydra.module.Definition.Term term) {
+      public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>> visit(hydra.module.Definition.Term term) {
         return hydra.lib.flows.Bind.apply(
           ((hydra_ext_haskell_coder_toDataDeclaration2).apply(namespaces)).apply((term).value),
-          (java.util.function.Function<T2, hydra.compute.Flow<T1, java.util.List<T2>>>) (d -> hydra.lib.flows.Pure.apply(java.util.List.of(d))));
+          (java.util.function.Function<hydra.ext.haskell.ast.DeclarationWithComments, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>>>) (d -> hydra.lib.flows.Pure.apply(java.util.List.of(d))));
       }
     });
   }
@@ -301,7 +301,7 @@ public interface Coder {
     return hydra.lib.flows.Pure.apply((java.util.List<T1>) (java.util.List.<T1>of()));
   }
   
-  static <T0, T1> hydra.compute.Flow<T1, java.util.List<hydra.ext.haskell.ast.Pattern>> encodeFunction_singleArg(java.util.function.Function<T0, hydra.ext.haskell.ast.Name> hydra_ext_haskell_utils_rawName2, T0 v1) {
+  static <T0> hydra.compute.Flow<T0, java.util.List<hydra.ext.haskell.ast.Pattern>> encodeFunction_singleArg(java.util.function.Function<String, hydra.ext.haskell.ast.Name> hydra_ext_haskell_utils_rawName2, String v1) {
     return hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.haskell.ast.Pattern.Name((hydra_ext_haskell_utils_rawName2).apply(v1))));
   }
   
@@ -849,12 +849,12 @@ public interface Coder {
         
         @Override
         public hydra.compute.Flow<T0, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Record rt) {
-          return ((java.util.function.Function<hydra.core.Name, hydra.compute.Flow<T0, hydra.ext.haskell.ast.Type>>) (v1 -> hydra.ext.haskell.coder.Coder.encodeType_ref(
+          return hydra.ext.haskell.coder.Coder.<T0>encodeType_ref(
             (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.ast.Name>>) (p0 -> p1 -> hydra.ext.haskell.utils.Utils.elementReference(
               p0,
               p1)),
             namespaces,
-            v1))).apply(((rt).value).typeName);
+            ((rt).value).typeName);
         }
         
         @Override
@@ -869,12 +869,12 @@ public interface Coder {
         @Override
         public hydra.compute.Flow<T0, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Union rt) {
           hydra.core.Name typeName = ((rt).value).typeName;
-          return ((java.util.function.Function<hydra.core.Name, hydra.compute.Flow<T0, hydra.ext.haskell.ast.Type>>) (v1 -> hydra.ext.haskell.coder.Coder.encodeType_ref(
+          return hydra.ext.haskell.coder.Coder.<T0>encodeType_ref(
             (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.ast.Name>>) (p0 -> p1 -> hydra.ext.haskell.utils.Utils.elementReference(
               p0,
               p1)),
             namespaces,
-            v1))).apply(typeName);
+            typeName);
         }
         
         @Override
@@ -884,23 +884,23 @@ public interface Coder {
         
         @Override
         public hydra.compute.Flow<T0, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Variable v1) {
-          return ((java.util.function.Function<hydra.core.Name, hydra.compute.Flow<T0, hydra.ext.haskell.ast.Type>>) (v12 -> hydra.ext.haskell.coder.Coder.encodeType_ref(
+          return hydra.ext.haskell.coder.Coder.<T0>encodeType_ref(
             (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.ast.Name>>) (p0 -> p1 -> hydra.ext.haskell.utils.Utils.elementReference(
               p0,
               p1)),
             namespaces,
-            v12))).apply((v1).value);
+            (v1).value);
         }
         
         @Override
         public hydra.compute.Flow<T0, hydra.ext.haskell.ast.Type> visit(hydra.core.Type.Wrap wrapped) {
           hydra.core.Name name = ((wrapped).value).typeName;
-          return ((java.util.function.Function<hydra.core.Name, hydra.compute.Flow<T0, hydra.ext.haskell.ast.Type>>) (v1 -> hydra.ext.haskell.coder.Coder.encodeType_ref(
+          return hydra.ext.haskell.coder.Coder.<T0>encodeType_ref(
             (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.ast.Name>>) (p0 -> p1 -> hydra.ext.haskell.utils.Utils.elementReference(
               p0,
               p1)),
             namespaces,
-            v1))).apply(name);
+            name);
         }
       }));
   }
@@ -911,7 +911,7 @@ public interface Coder {
       v1);
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T2, hydra.ext.haskell.ast.Type> encodeType_ref(java.util.function.Function<T0, java.util.function.Function<T1, hydra.ext.haskell.ast.Name>> hydra_ext_haskell_utils_elementReference2, T0 namespaces, T1 name) {
+  static <T1> hydra.compute.Flow<T1, hydra.ext.haskell.ast.Type> encodeType_ref(java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.function.Function<hydra.core.Name, hydra.ext.haskell.ast.Name>> hydra_ext_haskell_utils_elementReference2, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name name) {
     return hydra.lib.flows.Pure.apply(new hydra.ext.haskell.ast.Type.Variable(((hydra_ext_haskell_utils_elementReference2).apply(namespaces)).apply(name)));
   }
   
@@ -965,21 +965,21 @@ public interface Coder {
   
   static <T0, T1> java.util.List<hydra.util.Tuple.Tuple2<T0, T1>> encodeTypeWithClassAssertions_toPairs(hydra.util.Tuple.Tuple2<T0, java.util.Set<T1>> mapEntry) {
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<T1, hydra.util.Tuple.Tuple2<T0, T1>>) (v1 -> hydra.ext.haskell.coder.Coder.<T0, java.util.Set<T1>, T1>encodeTypeWithClassAssertions_toPair(
+      (java.util.function.Function<T1, hydra.util.Tuple.Tuple2<T0, T1>>) (v1 -> hydra.ext.haskell.coder.Coder.<T0, T1, T1>encodeTypeWithClassAssertions_toPair(
         mapEntry,
         v1)),
-      hydra.lib.sets.ToList.apply(hydra.ext.haskell.coder.Coder.<T0, java.util.Set<T1>>encodeTypeWithClassAssertions_clsSet(mapEntry)));
+      hydra.lib.sets.ToList.apply(hydra.ext.haskell.coder.Coder.<T0, T1>encodeTypeWithClassAssertions_clsSet(mapEntry)));
   }
   
-  static <T0, T1> T0 encodeTypeWithClassAssertions_name(hydra.util.Tuple.Tuple2<T0, T1> mapEntry) {
+  static <T0, T1> T0 encodeTypeWithClassAssertions_name(hydra.util.Tuple.Tuple2<T0, java.util.Set<T1>> mapEntry) {
     return hydra.lib.pairs.First.apply(mapEntry);
   }
   
-  static <T0, T1> T1 encodeTypeWithClassAssertions_clsSet(hydra.util.Tuple.Tuple2<T0, T1> mapEntry) {
+  static <T0, T1> java.util.Set<T1> encodeTypeWithClassAssertions_clsSet(hydra.util.Tuple.Tuple2<T0, java.util.Set<T1>> mapEntry) {
     return hydra.lib.pairs.Second.apply(mapEntry);
   }
   
-  static <T0, T1, T2> hydra.util.Tuple.Tuple2<T0, T2> encodeTypeWithClassAssertions_toPair(hydra.util.Tuple.Tuple2<T0, T1> mapEntry, T2 c) {
+  static <T0, T1, T2> hydra.util.Tuple.Tuple2<T0, T2> encodeTypeWithClassAssertions_toPair(hydra.util.Tuple.Tuple2<T0, java.util.Set<T1>> mapEntry, T2 c) {
     return (hydra.util.Tuple.Tuple2<T0, T2>) ((hydra.util.Tuple.Tuple2<T0, T2>) (new hydra.util.Tuple.Tuple2<T0, T2>(hydra.ext.haskell.coder.Coder.<T0, T1>encodeTypeWithClassAssertions_name(mapEntry), c)));
   }
   
@@ -1209,7 +1209,14 @@ public interface Coder {
               toBinding,
               hnames.get(),
               hterms));
-            return ((((toDecl.get()).apply(comments)).apply(hname_)).apply(env)).apply(hydra.util.Maybe.just(new hydra.ext.haskell.ast.LocalBindings(hbindings.get())));
+            hydra.util.Lazy<java.util.List<hydra.ext.haskell.ast.LocalBinding>> prevBindings = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
+              (java.util.List<hydra.ext.haskell.ast.LocalBinding>) (java.util.List.<hydra.ext.haskell.ast.LocalBinding>of()),
+              (java.util.function.Function<hydra.ext.haskell.ast.LocalBindings, java.util.List<hydra.ext.haskell.ast.LocalBinding>>) (lb -> (lb).value),
+              bindings));
+            hydra.util.Lazy<java.util.List<hydra.ext.haskell.ast.LocalBinding>> allBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+              prevBindings.get(),
+              hbindings.get()));
+            return ((((toDecl.get()).apply(comments)).apply(hname_)).apply(env)).apply(hydra.util.Maybe.just(new hydra.ext.haskell.ast.LocalBindings(allBindings.get())));
           }));
       }
     }))))));
@@ -1239,7 +1246,7 @@ public interface Coder {
           typ_),
         (java.util.function.Function<hydra.ext.haskell.ast.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>) (htype -> {
           hydra.ext.haskell.ast.Name constructorName = hydra.ext.haskell.utils.Utils.simpleName(hydra.names.Names.localNameOf(tname));
-          hydra.util.Lazy<hydra.ext.haskell.ast.FieldWithComments> hfield = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.ast.FieldWithComments(new hydra.ext.haskell.ast.Field(hname2, htype), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())));
+          hydra.util.Lazy<hydra.ext.haskell.ast.FieldWithComments> hfield = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.ast.FieldWithComments(new hydra.ext.haskell.ast.Field(hname, htype), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())));
           return hydra.lib.flows.Pure.apply(new hydra.ext.haskell.ast.ConstructorWithComments(new hydra.ext.haskell.ast.Constructor.Record(new hydra.ext.haskell.ast.RecordConstructor(constructorName, java.util.List.of(hfield.get()))), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())));
         }));
     }));

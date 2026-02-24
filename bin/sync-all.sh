@@ -3,11 +3,19 @@ set -e
 
 # Top-level synchronization script for Hydra.
 #
-# Runs all sync scripts in the correct order:
-#   1. sync-haskell.sh  (hydra-haskell) -- regenerate Haskell kernel, tests, JSON
-#   2. sync-ext.sh      (hydra-ext)     -- regenerate ext Haskell modules and JSON exports
-#   3. sync-java.sh     (hydra-ext)     -- regenerate Java kernel, tests, eval lib
-#   4. sync-python.sh   (hydra-ext)     -- regenerate Python kernel, tests, eval lib
+# Runs all generation and sync steps in the correct order:
+#
+#   Phase 1: Generate Haskell from DSL (hydra-haskell)
+#     - Kernel modules, test modules, eval lib, encoder/decoder sources
+#     - Regenerate kernel (picks up new sources)
+#     - Export and verify JSON, generate manifest
+#
+#   Phase 2: Generate ext modules (hydra-ext)
+#     - Ext Haskell modules (Java/Python coders, language syntaxes, etc.)
+#     - Export ext modules to JSON
+#
+#   Phase 3-5: Generate target languages from JSON (hydra-ext)
+#     - Haskell, Java, Python (all from JSON via bootstrap-from-json)
 #
 # Stops at the first error. Times the entire operation.
 #
@@ -20,28 +28,29 @@ set -e
 #   ./bin/sync-all.sh --quick  # Skip tests in each phase
 #   ./bin/sync-all.sh --help   # Show this help
 
-QUICK_FLAG=""
+QUICK_MODE=false
 
 for arg in "$@"; do
     case $arg in
         --quick)
-            QUICK_FLAG="--quick"
+            QUICK_MODE=true
             shift
             ;;
         --help|-h)
             echo "Usage: $0 [OPTIONS]"
             echo ""
-            echo "Run all Hydra sync scripts in the correct order."
+            echo "Run all Hydra sync steps in the correct order."
             echo ""
             echo "Options:"
-            echo "  --quick    Pass --quick to each sync script (skip tests)"
+            echo "  --quick    Skip tests in each phase"
             echo "  --help     Show this help message"
             echo ""
-            echo "Scripts run in order:"
-            echo "  1. hydra-haskell/bin/sync-haskell.sh"
-            echo "  2. hydra-ext/bin/sync-ext.sh"
-            echo "  3. hydra-ext/bin/sync-java.sh"
-            echo "  4. hydra-ext/bin/sync-python.sh"
+            echo "Phases:"
+            echo "  1. Generate Haskell from DSL (kernel, tests, eval lib, sources, JSON)"
+            echo "  2. Generate ext modules and JSON (hydra-ext)"
+            echo "  3. Sync Haskell from JSON"
+            echo "  4. Sync Java from JSON"
+            echo "  5. Sync Python from JSON"
             echo ""
             echo "Stops at the first error. Reports total elapsed time."
             exit 0
@@ -51,6 +60,8 @@ done
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
+HYDRA_EXT_DIR="$HYDRA_ROOT/hydra-ext"
 
 START_TIME=$SECONDS
 
@@ -65,29 +76,149 @@ print_elapsed() {
 # Trap to print elapsed time on exit (success or failure)
 trap print_elapsed EXIT
 
+# RTS flags to avoid stack overflow during generation
+RTS_FLAGS="+RTS -K256M -A32M -RTS"
+
 echo "============================================"
 echo "Hydra full sync"
 echo "============================================"
 echo ""
 
-echo "Phase 1/4: Synchronizing Haskell..."
+# ──────────────────────────────────────────────────
+# Phase 1: Generate Haskell from DSL (hydra-haskell)
+# ──────────────────────────────────────────────────
+
+echo "============================================"
+echo "Phase 1/5: Generating Haskell from DSL"
+echo "============================================"
 echo ""
-"$HYDRA_ROOT/hydra-haskell/bin/sync-haskell.sh" $QUICK_FLAG
+
+cd "$HYDRA_HASKELL_DIR"
+
+echo "Step 1a: Generating kernel modules..."
+echo ""
+stack build hydra:exe:update-haskell-kernel
+stack exec update-haskell-kernel -- $RTS_FLAGS
+echo ""
+echo "Rebuilding..."
+stack build
 
 echo ""
-echo "Phase 2/4: Synchronizing Hydra-Ext..."
+echo "Step 1b: Generating kernel test modules..."
 echo ""
-"$HYDRA_ROOT/hydra-ext/bin/sync-ext.sh"
+stack build hydra:exe:update-kernel-tests
+stack exec update-kernel-tests -- $RTS_FLAGS
+echo ""
+echo "Rebuilding..."
+stack build
 
 echo ""
-echo "Phase 3/4: Synchronizing Java..."
+echo "Step 1c: Generating eval lib modules..."
 echo ""
-"$HYDRA_ROOT/hydra-ext/bin/sync-java.sh" $QUICK_FLAG
+stack build hydra:exe:update-haskell-eval-lib
+stack exec update-haskell-eval-lib -- $RTS_FLAGS
+echo ""
+echo "Rebuilding..."
+stack build
 
 echo ""
-echo "Phase 4/4: Synchronizing Python..."
+echo "Step 1d: Generating encoder/decoder source modules..."
 echo ""
-"$HYDRA_ROOT/hydra-ext/bin/sync-python.sh" $QUICK_FLAG
+stack build hydra:exe:update-haskell-sources
+stack exec update-haskell-sources -- $RTS_FLAGS
+echo ""
+echo "Rebuilding..."
+stack build
+
+echo ""
+echo "Step 1e: Regenerating kernel modules (post encoder/decoder)..."
+echo ""
+stack exec update-haskell-kernel -- $RTS_FLAGS
+echo ""
+echo "Rebuilding..."
+stack build
+
+echo ""
+echo "Step 1f: Generating generation tests..."
+echo ""
+stack build hydra:exe:update-generation-tests
+stack exec update-generation-tests -- $RTS_FLAGS
+echo ""
+echo "Rebuilding..."
+stack build
+
+echo ""
+echo "Step 1g: Exporting and verifying JSON..."
+echo ""
+stack build hydra:exe:update-json-kernel hydra:exe:update-json-main hydra:exe:verify-json-kernel
+stack exec update-json-kernel -- $RTS_FLAGS
+stack exec update-json-main -- $RTS_FLAGS
+stack exec verify-json-kernel -- $RTS_FLAGS
+
+echo ""
+echo "Step 1h: Generating JSON manifest..."
+echo ""
+stack build hydra:exe:update-json-manifest
+stack exec update-json-manifest
+
+if [ "$QUICK_MODE" = false ]; then
+    echo ""
+    echo "Step 1i: Running Haskell tests..."
+    echo ""
+    stack test 2>&1 || {
+        echo ""
+        echo "WARNING: Some Haskell tests failed. Continuing..."
+    }
+fi
+
+echo ""
+echo "Phase 1 complete."
+echo ""
+
+# ──────────────────────────────────────────────────
+# Phase 2: Generate ext modules (hydra-ext)
+# ──────────────────────────────────────────────────
+
+echo "============================================"
+echo "Phase 2/5: Synchronizing Hydra-Ext"
+echo "============================================"
+echo ""
+
+"$HYDRA_EXT_DIR/bin/sync-ext.sh"
+
+echo ""
+
+# ──────────────────────────────────────────────────
+# Phases 3-5: Sync from JSON via bootstrap-from-json
+# ──────────────────────────────────────────────────
+
+QUICK_FLAG=""
+if [ "$QUICK_MODE" = true ]; then
+    QUICK_FLAG="--quick"
+fi
+
+echo "============================================"
+echo "Phase 3/5: Synchronizing Haskell (from JSON)"
+echo "============================================"
+echo ""
+
+"$HYDRA_EXT_DIR/bin/sync-haskell.sh" $QUICK_FLAG
+
+echo ""
+echo "============================================"
+echo "Phase 4/5: Synchronizing Java (from JSON)"
+echo "============================================"
+echo ""
+
+"$HYDRA_EXT_DIR/bin/sync-java.sh" $QUICK_FLAG
+
+echo ""
+echo "============================================"
+echo "Phase 5/5: Synchronizing Python (from JSON)"
+echo "============================================"
+echo ""
+
+"$HYDRA_EXT_DIR/bin/sync-python.sh" $QUICK_FLAG
 
 echo ""
 echo "============================================"

@@ -208,6 +208,8 @@ def union_field_reference(g: hydra.graph.Graph, namespaces: hydra.module.Namespa
     return element_reference(namespaces, unqual_name())
 
 def unpack_forall_type(cx: T0, t: hydra.core.Type) -> tuple[frozenlist[hydra.core.Name], hydra.core.Type]:
+    r"""Unpack nested forall types into a list of type variables and the inner type."""
+    
     match hydra.rewriting.deannotate_type(t):
         case hydra.core.TypeForall(value=fat):
             @lru_cache(1)

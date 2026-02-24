@@ -27,7 +27,7 @@ def encode_binding_name(n: hydra.core.Name) -> hydra.core.Name:
     return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.tail(hydra.lib.strings.split_on(".", n.value)))), (lambda : hydra.core.Name(hydra.lib.strings.intercalate(".", hydra.lib.lists.concat2(("hydra", "encode"), hydra.lib.lists.concat2(hydra.lib.lists.tail(hydra.lib.lists.init(hydra.lib.strings.split_on(".", n.value))), (hydra.formatting.decapitalize(hydra.names.local_name_of(n)),)))))), (lambda : hydra.core.Name(hydra.formatting.decapitalize(hydra.names.local_name_of(n)))))
 
 def encode_float_value(float_type: hydra.core.FloatType, val_term: hydra.core.Term) -> hydra.core.Term:
-    def _hoist_hydra_encoding_encode_float_value_1(v1: hydra.core.FloatType) -> hydra.core.Name:
+    def _hoist_hydra_encoding_encode_float_value_1(v1):
         match v1:
             case hydra.core.FloatType.BIGFLOAT:
                 return hydra.core.Name("bigfloat")
@@ -43,7 +43,7 @@ def encode_float_value(float_type: hydra.core.FloatType, val_term: hydra.core.Te
     return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.FloatValue"), hydra.core.Field(_hoist_hydra_encoding_encode_float_value_1(float_type), val_term))))
 
 def encode_integer_value(int_type: hydra.core.IntegerType, val_term: hydra.core.Term) -> hydra.core.Term:
-    def _hoist_hydra_encoding_encode_integer_value_1(v1: hydra.core.IntegerType) -> hydra.core.Name:
+    def _hoist_hydra_encoding_encode_integer_value_1(v1):
         match v1:
             case hydra.core.IntegerType.BIGINT:
                 return hydra.core.Name("bigint")

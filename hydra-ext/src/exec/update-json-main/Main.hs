@@ -1,6 +1,6 @@
 module Main where
 
-import Hydra.Ext.Generation (writeModulesJson)
+import Hydra.Ext.Generation (writeModulesJson, writeExtManifestJson)
 import Hydra.Ext.Sources.All (hydraExtModules, mainModules)
 import System.Exit (exitFailure)
 import Control.Exception (catch, SomeException)
@@ -21,6 +21,8 @@ main = do
 
   if result
     then do
+      putStrLn ""
+      writeExtManifestJson "src/gen-main/json"
       putStrLn ""
       putStrLn "=== Done! ==="
       putStrLn ""

@@ -8,17 +8,17 @@ import java.io.Serializable;
  * Classification of a Java symbol for code generation
  */
 public abstract class JavaSymbolClass implements Serializable, Comparable<JavaSymbolClass> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.helpers.JavaSymbolClass");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.helpers.JavaSymbolClass");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTANT = new hydra.core.Name("constant");
+  public static final hydra.core.Name CONSTANT = new hydra.core.Name("constant");
   
-  public static final hydra.core.Name FIELD_NAME_NULLARY_FUNCTION = new hydra.core.Name("nullaryFunction");
+  public static final hydra.core.Name NULLARY_FUNCTION = new hydra.core.Name("nullaryFunction");
   
-  public static final hydra.core.Name FIELD_NAME_HOISTED_LAMBDA = new hydra.core.Name("hoistedLambda");
+  public static final hydra.core.Name HOISTED_LAMBDA = new hydra.core.Name("hoistedLambda");
   
-  public static final hydra.core.Name FIELD_NAME_UNARY_FUNCTION = new hydra.core.Name("unaryFunction");
+  public static final hydra.core.Name UNARY_FUNCTION = new hydra.core.Name("unaryFunction");
   
-  public static final hydra.core.Name FIELD_NAME_LOCAL_VARIABLE = new hydra.core.Name("localVariable");
+  public static final hydra.core.Name LOCAL_VARIABLE = new hydra.core.Name("localVariable");
   
   private JavaSymbolClass () {
   

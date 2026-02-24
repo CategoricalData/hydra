@@ -3,7 +3,7 @@
 # Demonstrates that Java can independently load and process Hydra modules
 # from a language-independent JSON representation.
 #
-# Usage: ./java-bootstrap.sh --target <haskell|java|python> [--types-only] [--kernel-only] [--output <dir>]
+# Usage: ./java-bootstrap.sh --target <haskell|java|python> [--include-tests] [--kernel-only] [--types-only] [--output <dir>]
 #
 # The detailed step-by-step output (timing, file counts, etc.) is provided
 # by the Java Bootstrap.main() class itself.

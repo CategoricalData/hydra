@@ -323,7 +323,7 @@ public interface CoderUtils {
       hydra.lib.flows.WithDefault.apply(
         (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()),
         hydra.lib.flows.Map.apply(
-          (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (x_ -> hydra.util.Maybe.just(x_)),
+          (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (hydra.lib.maybes.Pure::apply),
           hydra.coderUtils.CoderUtils.<T1>tryTypeOf(
             "analyzeFunctionTermWith",
             (getTC).apply(fEnv),
@@ -380,7 +380,7 @@ public interface CoderUtils {
                       getTC,
                       setTC,
                       argMode,
-                      hydra.coderUtils.CoderUtils.analyzeFunctionTermWith_gather_newEnv(
+                      hydra.coderUtils.CoderUtils.<T0>analyzeFunctionTermWith_gather_newEnv(
                         gEnv,
                         getTC,
                         (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForLambda(
@@ -423,7 +423,7 @@ public interface CoderUtils {
           getTC,
           setTC,
           false,
-          hydra.coderUtils.CoderUtils.analyzeFunctionTermWith_gather_newEnv2(
+          hydra.coderUtils.CoderUtils.<T0>analyzeFunctionTermWith_gather_newEnv2(
             forBinding,
             gEnv,
             getTC,
@@ -472,7 +472,7 @@ public interface CoderUtils {
           getTC,
           setTC,
           argMode,
-          hydra.coderUtils.CoderUtils.analyzeFunctionTermWith_gather_newEnv3(
+          hydra.coderUtils.CoderUtils.<T0>analyzeFunctionTermWith_gather_newEnv3(
             gEnv,
             getTC,
             (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForTypeLambda(
@@ -492,15 +492,15 @@ public interface CoderUtils {
     });
   }
   
-  static <T0, T1, T2, T3, T4> T4 analyzeFunctionTermWith_gather_newEnv(T0 gEnv, java.util.function.Function<T0, T1> getTC, java.util.function.Function<T1, java.util.function.Function<T2, T3>> hydra_schemas_extendTypeContextForLambda2, T2 lam, java.util.function.Function<T3, java.util.function.Function<T0, T4>> setTC) {
+  static <T0> T0 analyzeFunctionTermWith_gather_newEnv(T0 gEnv, java.util.function.Function<T0, hydra.typing.TypeContext> getTC, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, hydra.core.Lambda lam, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, T0>> setTC) {
     return ((setTC).apply(((hydra_schemas_extendTypeContextForLambda2).apply((getTC).apply(gEnv))).apply(lam))).apply(gEnv);
   }
   
-  static <T0, T1, T2, T3, T4, T5> T5 analyzeFunctionTermWith_gather_newEnv2(T0 forBinding, T1 gEnv, java.util.function.Function<T1, T2> getTC, java.util.function.Function<T0, java.util.function.Function<T2, java.util.function.Function<T3, T4>>> hydra_schemas_extendTypeContextForLet2, T3 lt, java.util.function.Function<T4, java.util.function.Function<T1, T5>> setTC) {
+  static <T0> T0 analyzeFunctionTermWith_gather_newEnv2(java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, T0 gEnv, java.util.function.Function<T0, hydra.typing.TypeContext> getTC, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, hydra.core.Let lt, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, T0>> setTC) {
     return ((setTC).apply((((hydra_schemas_extendTypeContextForLet2).apply(forBinding)).apply((getTC).apply(gEnv))).apply(lt))).apply(gEnv);
   }
   
-  static <T0, T1, T2, T3, T4> T4 analyzeFunctionTermWith_gather_newEnv3(T0 gEnv, java.util.function.Function<T0, T1> getTC, java.util.function.Function<T1, java.util.function.Function<T2, T3>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<T3, java.util.function.Function<T0, T4>> setTC, T2 tl) {
+  static <T0> T0 analyzeFunctionTermWith_gather_newEnv3(T0 gEnv, java.util.function.Function<T0, hydra.typing.TypeContext> getTC, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, T0>> setTC, hydra.core.TypeLambda tl) {
     return ((setTC).apply(((hydra_schemas_extendTypeContextForTypeLambda2).apply((getTC).apply(gEnv))).apply(tl))).apply(gEnv);
   }
   
@@ -574,7 +574,7 @@ public interface CoderUtils {
                       getTC,
                       setTC,
                       argMode,
-                      hydra.coderUtils.CoderUtils.analyzeFunctionTermNoInferWith_gather_newEnv(
+                      hydra.coderUtils.CoderUtils.<T0>analyzeFunctionTermNoInferWith_gather_newEnv(
                         gEnv,
                         getTC,
                         (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForLambda(
@@ -616,7 +616,7 @@ public interface CoderUtils {
           getTC,
           setTC,
           false,
-          hydra.coderUtils.CoderUtils.analyzeFunctionTermNoInferWith_gather_newEnv2(
+          hydra.coderUtils.CoderUtils.<T0>analyzeFunctionTermNoInferWith_gather_newEnv2(
             forBinding,
             gEnv,
             getTC,
@@ -665,7 +665,7 @@ public interface CoderUtils {
           getTC,
           setTC,
           argMode,
-          hydra.coderUtils.CoderUtils.analyzeFunctionTermNoInferWith_gather_newEnv3(
+          hydra.coderUtils.CoderUtils.<T0>analyzeFunctionTermNoInferWith_gather_newEnv3(
             gEnv,
             getTC,
             (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForTypeLambda(
@@ -685,15 +685,15 @@ public interface CoderUtils {
     });
   }
   
-  static <T0, T1, T2, T3, T4> T4 analyzeFunctionTermNoInferWith_gather_newEnv(T0 gEnv, java.util.function.Function<T0, T1> getTC, java.util.function.Function<T1, java.util.function.Function<T2, T3>> hydra_schemas_extendTypeContextForLambda2, T2 lam, java.util.function.Function<T3, java.util.function.Function<T0, T4>> setTC) {
+  static <T0> T0 analyzeFunctionTermNoInferWith_gather_newEnv(T0 gEnv, java.util.function.Function<T0, hydra.typing.TypeContext> getTC, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, hydra.core.Lambda lam, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, T0>> setTC) {
     return ((setTC).apply(((hydra_schemas_extendTypeContextForLambda2).apply((getTC).apply(gEnv))).apply(lam))).apply(gEnv);
   }
   
-  static <T0, T1, T2, T3, T4, T5> T5 analyzeFunctionTermNoInferWith_gather_newEnv2(T0 forBinding, T1 gEnv, java.util.function.Function<T1, T2> getTC, java.util.function.Function<T0, java.util.function.Function<T2, java.util.function.Function<T3, T4>>> hydra_schemas_extendTypeContextForLet2, T3 lt, java.util.function.Function<T4, java.util.function.Function<T1, T5>> setTC) {
+  static <T0> T0 analyzeFunctionTermNoInferWith_gather_newEnv2(java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, T0 gEnv, java.util.function.Function<T0, hydra.typing.TypeContext> getTC, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, hydra.core.Let lt, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, T0>> setTC) {
     return ((setTC).apply((((hydra_schemas_extendTypeContextForLet2).apply(forBinding)).apply((getTC).apply(gEnv))).apply(lt))).apply(gEnv);
   }
   
-  static <T0, T1, T2, T3, T4> T4 analyzeFunctionTermNoInferWith_gather_newEnv3(T0 gEnv, java.util.function.Function<T0, T1> getTC, java.util.function.Function<T1, java.util.function.Function<T2, T3>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<T3, java.util.function.Function<T0, T4>> setTC, T2 tl) {
+  static <T0> T0 analyzeFunctionTermNoInferWith_gather_newEnv3(T0 gEnv, java.util.function.Function<T0, hydra.typing.TypeContext> getTC, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, T0>> setTC, hydra.core.TypeLambda tl) {
     return ((setTC).apply(((hydra_schemas_extendTypeContextForTypeLambda2).apply((getTC).apply(gEnv))).apply(tl))).apply(gEnv);
   }
   

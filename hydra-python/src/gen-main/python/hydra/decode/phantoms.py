@@ -17,11 +17,9 @@ import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
-T2 = TypeVar("T2")
-T3 = TypeVar("T3")
 
-def t_term(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.phantoms.TTerm[T1]]:
-    def _hoist_hydra_decode_phantoms_t_term_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.phantoms.TTerm[T2]]:
+def t_term(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_phantoms_t_term_1(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.phantoms.TTerm(b)), hydra.decode.core.term(cx, wrapped_term.body))
@@ -30,8 +28,8 @@ def t_term(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.phantoms.TTerm"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_term_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.phantoms.TBinding[T1]]:
-    def _hoist_hydra_decode_phantoms_t_binding_1(a: T2, cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.phantoms.TBinding[T3]]:
+def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_phantoms_t_binding_1(a, cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)

@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ModuleDirective_Provides implements Serializable, Comparable<ModuleDirective_Provides> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ModuleDirective_Provides");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ModuleDirective_Provides");
   
-  public static final hydra.core.Name FIELD_NAME_TO = new hydra.core.Name("to");
+  public static final hydra.core.Name TO = new hydra.core.Name("to");
   
-  public static final hydra.core.Name FIELD_NAME_WITH = new hydra.core.Name("with");
+  public static final hydra.core.Name WITH = new hydra.core.Name("with");
   
   public final hydra.ext.java.syntax.TypeName to;
   

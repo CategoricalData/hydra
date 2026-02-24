@@ -8,13 +8,26 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
  * Bootstrapping entry point: loads Hydra modules from JSON and generates
  * code for a target language. Demonstrates that Java can independently
  * regenerate Hydra from a language-independent JSON representation.
+ *
+ * Usage:
+ *   java hydra.Bootstrap --target <haskell|java|python> --json-dir <path> [OPTIONS]
+ *
+ * Options:
+ *   --output <dir>         Output base directory (default: /tmp/hydra-bootstrapping-demo)
+ *   --include-coders       Also load and generate ext coder modules
+ *   --include-tests        Also load and generate kernel test modules
+ *   --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)
+ *   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+ *   --types-only           Only generate type-defining modules
  */
 public class Bootstrap {
 
@@ -23,7 +36,10 @@ public class Bootstrap {
 
         String target = null;
         String jsonDir = null;
+        String extJsonDir = null;
         String outBase = "/tmp/hydra-bootstrapping-demo";
+        boolean includeCoders = false;
+        boolean includeTests = false;
         boolean typesOnly = false;
         boolean kernelOnly = false;
 
@@ -35,8 +51,17 @@ public class Bootstrap {
                 case "--json-dir":
                     if (i + 1 < args.length) jsonDir = args[++i];
                     break;
+                case "--ext-json-dir":
+                    if (i + 1 < args.length) extJsonDir = args[++i];
+                    break;
                 case "--output":
                     if (i + 1 < args.length) outBase = args[++i];
+                    break;
+                case "--include-coders":
+                    includeCoders = true;
+                    break;
+                case "--include-tests":
+                    includeTests = true;
                     break;
                 case "--types-only":
                     typesOnly = true;
@@ -48,120 +73,136 @@ public class Bootstrap {
         }
 
         if (target == null || jsonDir == null) {
-            System.out.println("Usage: java hydra.Bootstrap --target <haskell|java|python> --json-dir <path> [--output <dir>] [--types-only] [--kernel-only]");
+            System.out.println("Usage: java hydra.Bootstrap --target <haskell|java|python> --json-dir <path> [OPTIONS]");
+            System.out.println();
+            System.out.println("Options:");
+            System.out.println("  --output <dir>         Output base directory");
+            System.out.println("  --include-coders       Also load and generate ext coder modules");
+            System.out.println("  --include-tests        Also load and generate kernel test modules");
+            System.out.println("  --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)");
+            System.out.println("  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)");
+            System.out.println("  --types-only           Only generate type-defining modules");
             System.exit(1);
         }
 
+        if (includeCoders && extJsonDir == null) {
+            System.out.println("Error: --include-coders requires --ext-json-dir");
+            System.exit(1);
+        }
+
+        String targetCap = target.substring(0, 1).toUpperCase() + target.substring(1);
         String outDir = outBase + File.separator + "java-to-" + target;
 
         System.out.println("==========================================");
-        System.out.println("Bootstrapping Hydra from JSON into " + target + " (via Java host)");
+        System.out.println("Mapping JSON to " + targetCap + " (via Java host)");
         System.out.println("==========================================");
         System.out.println("  Host language:   Java");
-        System.out.println("  Target language: " + target);
+        System.out.println("  Target language: " + targetCap);
         System.out.println("  JSON directory:  " + jsonDir);
-        System.out.println("  Output directory:" + outDir);
+        System.out.println("  Output:          " + outDir);
+        System.out.println("  Include coders:  " + includeCoders);
+        System.out.println("  Include tests:   " + includeTests);
         if (typesOnly) System.out.println("  Filter:          types only");
-        if (kernelOnly) System.out.println("  Filter:          kernel only (excluding hydra.ext.*)");
+        if (kernelOnly) System.out.println("  Filter:          kernel only");
         System.out.println("==========================================");
         System.out.println();
 
-        System.out.println("Step 1: Loading modules from JSON...");
+        // Step 1: Load main + eval lib modules from JSON
+        System.out.println("Step 1: Loading main modules from JSON...");
         System.out.println("  Source: " + jsonDir);
 
         long stepStart = System.currentTimeMillis();
-        // Load main and eval lib modules from JSON using the manifest.
-        // Preserve TypeSchemes (stripTypeSchemes=false) so that the pipeline
-        // can skip pre-adaptation inference. Without types, inference fails on
-        // hoisted case-statement bindings (_hoist_*) that lack type annotations.
         List<Namespace> mainNamespaces = Generation.readManifestField(jsonDir, "mainModules");
         List<Namespace> evalLibNamespaces = Generation.readManifestField(jsonDir, "evalLibModules");
-        List<Namespace> allNamespaces = new ArrayList<>(mainNamespaces);
-        allNamespaces.addAll(evalLibNamespaces);
+        List<Namespace> allKernelNamespaces = new ArrayList<>(mainNamespaces);
+        allKernelNamespaces.addAll(evalLibNamespaces);
         java.util.Map<hydra.core.Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
-        List<Module> rawMods = Generation.loadModulesFromJson(false, jsonDir,
-                schemaMap, allNamespaces);
+        List<Module> mainMods = Generation.loadModulesFromJson(false, jsonDir,
+                schemaMap, allKernelNamespaces);
         long stepTime = System.currentTimeMillis() - stepStart;
 
         int totalBindings = 0;
-        for (Module m : rawMods) {
+        for (Module m : mainMods) {
             totalBindings += m.elements.size();
         }
-        System.out.println("  Loaded " + rawMods.size() + " modules (" + totalBindings + " bindings).");
+        System.out.println("  Loaded " + mainMods.size() + " modules (" + totalBindings + " bindings).");
         System.out.println("  Time: " + formatTime(stepTime));
         System.out.println();
 
-        // Main modules keep their type annotations from JSON (no stripping).
-        // This allows the pipeline to skip pre-adaptation inference (Step 3 in
-        // dataGraphToDefinitions), which is a major performance win.
-        List<Module> allMods = rawMods;
-        // Keep the full (unfiltered) module list for test code generation,
-        // since test modules may reference ext bindings even in kernel-only mode.
-        List<Module> fullMods = rawMods;
+        // Step 2: Optionally load ext coder modules
+        List<Module> coderMods = new ArrayList<>();
+        if (includeCoders) {
+            System.out.println("Step 2: Loading hydra-ext coder modules from JSON...");
+            List<Namespace> coderNamespaces = Generation.readManifestField(extJsonDir, "hydraCoderModules");
+            // Filter out modules already loaded as part of kernel
+            Set<String> kernelNsSet = new HashSet<>();
+            for (Namespace ns : allKernelNamespaces) {
+                kernelNsSet.add(ns.value);
+            }
+            List<Namespace> extCoderNamespaces = new ArrayList<>();
+            for (Namespace ns : coderNamespaces) {
+                if (!kernelNsSet.contains(ns.value)) {
+                    extCoderNamespaces.add(ns);
+                }
+            }
+            stepStart = System.currentTimeMillis();
+            coderMods = Generation.loadModulesFromJson(false, extJsonDir,
+                    schemaMap, extCoderNamespaces);
+            stepTime = System.currentTimeMillis() - stepStart;
+            System.out.println("  Loaded " + coderMods.size() + " modules.");
+            System.out.println("  Time: " + formatTime(stepTime));
+            System.out.println();
+        } else {
+            System.out.println("Step 2: Skipping ext coder modules");
+            System.out.println();
+        }
 
-        // Step 2: Filter modules
-        List<Module> modsToGenerate = allMods;
+        List<Module> allMainMods = new ArrayList<>(mainMods);
+        allMainMods.addAll(coderMods);
+
+        // Apply filters
+        List<Module> modsToGenerate = allMainMods;
         if (kernelOnly) {
             int before = modsToGenerate.size();
             modsToGenerate = Generation.filterKernelModules(modsToGenerate);
-            allMods = Generation.filterKernelModules(allMods);
-            System.out.println("Step 2: Filtering to kernel modules...");
+            allMainMods = Generation.filterKernelModules(allMainMods);
+            System.out.println("Filtering to kernel modules...");
             System.out.println("  Before: " + before + " modules");
-            System.out.println("  After:  " + modsToGenerate.size() + " kernel modules (excluded "
-                    + (before - modsToGenerate.size()) + " ext modules)");
+            System.out.println("  After:  " + modsToGenerate.size() + " kernel modules");
             System.out.println();
         }
         if (typesOnly) {
             int before = modsToGenerate.size();
             modsToGenerate = Generation.filterTypeModules(modsToGenerate);
-            System.out.println("Step 2b: Filtering to type modules...");
+            System.out.println("Filtering to type modules...");
             System.out.println("  Before: " + before + " modules");
-            System.out.println("  After:  " + modsToGenerate.size() + " type modules (excluded "
-                    + (before - modsToGenerate.size()) + " non-type modules)");
+            System.out.println("  After:  " + modsToGenerate.size() + " type modules");
             System.out.println();
         }
 
-        // Debug: dump term structures for a specific module
-        String dumpModule = System.getProperty("debug.dump");
-        if (dumpModule != null) {
-            for (Module mod : allMods) {
-                if (mod.namespace.value.equals(dumpModule)) {
-                    System.out.println("=== Dumping terms for " + dumpModule + " ===");
-                    for (hydra.core.Binding b : mod.elements) {
-                        System.out.println("--- " + b.name.value + " ---");
-                        System.out.println(hydra.show.core.Core.term(b.term));
-                        System.out.println();
-                    }
-                    System.out.println("=== End dump ===");
-                }
-            }
-            return;
-        }
+        // Keep the full (unfiltered) module list for test code generation,
+        // since test modules may reference ext bindings even in kernel-only mode.
+        List<Module> fullMods = new ArrayList<>(mainMods);
+        fullMods.addAll(coderMods);
 
-        // List modules to generate
-        System.out.println("Step 3: Mapping modules from JSON to " + target + " (via Java host)...");
-        System.out.println("  Universe: " + allMods.size() + " modules");
-        System.out.println("  Generating: " + modsToGenerate.size() + " modules:");
-        for (Module m : modsToGenerate) {
-            int bindings = m.elements.size();
-            System.out.println("    - " + m.namespace.value + " (" + bindings + " bindings)");
-        }
-        System.out.println("  Output: " + outDir);
-        System.out.println();
-        System.out.println("  Generating (this may take several minutes)...");
-
+        // Generate main modules
         String outMain = outDir + File.separator + "src/gen-main";
+        System.out.println("Mapping " + modsToGenerate.size() + " modules to " + targetCap + "...");
+        System.out.println("  Universe: " + allMainMods.size() + " modules");
+        System.out.println("  Output: " + outMain);
+        System.out.println();
+
         stepStart = System.currentTimeMillis();
 
         switch (target) {
             case "haskell":
-                Generation.writeHaskell(outMain + "/haskell", allMods, modsToGenerate);
+                Generation.writeHaskell(outMain + "/haskell", allMainMods, modsToGenerate);
                 break;
             case "java":
-                Generation.writeJava(outMain + "/java", allMods, modsToGenerate);
+                Generation.writeJava(outMain + "/java", allMainMods, modsToGenerate);
                 break;
             case "python":
-                Generation.writePython(outMain + "/python", allMods, modsToGenerate);
+                Generation.writePython(outMain + "/python", allMainMods, modsToGenerate);
                 break;
             default:
                 System.out.println("Unknown target: " + target);
@@ -170,9 +211,8 @@ public class Bootstrap {
 
         stepTime = System.currentTimeMillis() - stepStart;
 
-        // Count main output files
-        long mainFileCount = 0;
         String ext = target.equals("java") ? ".java" : target.equals("python") ? ".py" : ".hs";
+        long mainFileCount = 0;
         try {
             mainFileCount = Files.walk(Paths.get(outMain))
                     .filter(p -> p.toString().endsWith(ext))
@@ -181,88 +221,82 @@ public class Bootstrap {
             // ignore
         }
 
-        System.out.println("  Java to " + target + ": done generating main modules (" + mainFileCount + " files).");
+        System.out.println("  Generated " + mainFileCount + " files.");
         System.out.println("  Time: " + formatTime(stepTime));
         System.out.println();
 
-        // Step 4: Load and generate test modules
-        String testJsonDir = jsonDir.replace("gen-main/json", "gen-test/json");
-        System.out.println("Step 4: Loading test modules from JSON...");
-        System.out.println("  Source: " + testJsonDir);
-
-        stepStart = System.currentTimeMillis();
-        // Load test modules WITHOUT stripping TypeSchemes (stripTypeSchemes=false).
-        // Test modules need their types preserved so inference can be skipped.
-        List<Namespace> testNamespaces = Generation.readManifestField(jsonDir, "testModules");
-        List<Module> testMods = Generation.loadModulesFromJson(false, testJsonDir,
-                schemaMap, testNamespaces);
-        stepTime = System.currentTimeMillis() - stepStart;
-
-        int testBindings = 0;
-        for (Module m : testMods) {
-            testBindings += m.elements.size();
-        }
-        System.out.println("  Loaded " + testMods.size() + " test modules (" + testBindings + " bindings).");
-        System.out.println("  Time: " + formatTime(stepTime));
-        System.out.println();
-
-        List<Module> allUniverse = new ArrayList<>(fullMods);
-        allUniverse.addAll(testMods);
-
-        String outTest = outDir + File.separator + "src/gen-test";
-        System.out.println("Step 5: Mapping test suite from JSON to " + target + " (via Java host)...");
-        System.out.println("  Universe: " + allUniverse.size() + " modules");
-        System.out.println("  Generating: " + testMods.size() + " test modules");
-        System.out.println("  Output: " + outTest);
-        System.out.println();
-        System.out.println("  Generating (this may take several minutes)...");
-
-        stepStart = System.currentTimeMillis();
-
-        boolean testGenOk = true;
-        try {
-            switch (target) {
-                case "haskell":
-                    Generation.writeHaskell(outTest + "/haskell", allUniverse, testMods);
-                    break;
-                case "java":
-                    Generation.writeJava(outTest + "/java", allUniverse, testMods);
-                    break;
-                case "python":
-                    Generation.writePython(outTest + "/python", allUniverse, testMods);
-                    break;
-            }
-        } catch (Exception e) {
-            testGenOk = false;
-            System.out.println("  WARNING: Test generation failed: " + e.getMessage());
-            System.out.println("  (Main code generation succeeded; test generation is a known issue)");
-        }
-
-        stepTime = System.currentTimeMillis() - stepStart;
-
+        // Optionally load and generate test modules
         long testFileCount = 0;
-        try {
-            testFileCount = Files.walk(Paths.get(outTest))
-                    .filter(p -> p.toString().endsWith(ext))
-                    .count();
-        } catch (Exception e) {
-            // ignore
-        }
+        if (includeTests) {
+            String testJsonDir = jsonDir.replace("gen-main/json", "gen-test/json");
+            System.out.println("Loading test modules from JSON...");
+            System.out.println("  Source: " + testJsonDir);
 
-        System.out.println("  Java to " + target + ": done generating test modules (" + testFileCount + " files).");
-        System.out.println("  Time: " + formatTime(stepTime));
-        System.out.println();
+            stepStart = System.currentTimeMillis();
+            List<Namespace> testNamespaces = Generation.readManifestField(jsonDir, "testModules");
+            List<Module> testMods = Generation.loadModulesFromJson(false, testJsonDir,
+                    schemaMap, testNamespaces);
+            stepTime = System.currentTimeMillis() - stepStart;
+
+            int testBindings = 0;
+            for (Module m : testMods) {
+                testBindings += m.elements.size();
+            }
+            System.out.println("  Loaded " + testMods.size() + " test modules (" + testBindings + " bindings).");
+            System.out.println("  Time: " + formatTime(stepTime));
+            System.out.println();
+
+            List<Module> allUniverse = new ArrayList<>(fullMods);
+            allUniverse.addAll(testMods);
+
+            String outTest = outDir + File.separator + "src/gen-test";
+            System.out.println("Mapping test modules to " + targetCap + "...");
+            System.out.println("  Universe: " + allUniverse.size() + " modules");
+            System.out.println("  Generating: " + testMods.size() + " test modules");
+            System.out.println("  Output: " + outTest);
+            System.out.println();
+
+            stepStart = System.currentTimeMillis();
+
+            try {
+                switch (target) {
+                    case "haskell":
+                        Generation.writeHaskell(outTest + "/haskell", allUniverse, testMods);
+                        break;
+                    case "java":
+                        Generation.writeJava(outTest + "/java", allUniverse, testMods);
+                        break;
+                    case "python":
+                        Generation.writePython(outTest + "/python", allUniverse, testMods);
+                        break;
+                }
+            } catch (Exception e) {
+                System.out.println("  WARNING: Test generation failed: " + e.getMessage());
+            }
+
+            stepTime = System.currentTimeMillis() - stepStart;
+
+            try {
+                testFileCount = Files.walk(Paths.get(outTest))
+                        .filter(p -> p.toString().endsWith(ext))
+                        .count();
+            } catch (Exception e) {
+                // ignore
+            }
+
+            System.out.println("  Generated " + testFileCount + " test files.");
+            System.out.println("  Time: " + formatTime(stepTime));
+            System.out.println();
+        }
 
         long totalTime = System.currentTimeMillis() - totalStart;
 
         System.out.println("==========================================");
-        System.out.println("Java to " + target + ": done generating all modules");
-        System.out.println("==========================================");
-        System.out.println("  Modules loaded:    " + rawMods.size() + " main + " + testMods.size() + " test");
-        System.out.println("  Modules generated: " + modsToGenerate.size() + " main + " + testMods.size() + " test");
-        System.out.println("  Output files:      " + mainFileCount + " main + " + testFileCount + " test");
-        System.out.println("  Output directory:  " + outDir);
-        System.out.println("  Total time:        " + formatTime(totalTime));
+        System.out.println("Done: " + mainFileCount + " main"
+                + (includeTests ? " + " + testFileCount + " test" : "")
+                + " files");
+        System.out.println("  Output: " + outDir);
+        System.out.println("  Total time: " + formatTime(totalTime));
         System.out.println("==========================================");
     }
 

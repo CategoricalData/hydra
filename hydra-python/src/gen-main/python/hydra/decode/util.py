@@ -16,8 +16,8 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.util
 
-def case_convention(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.util.CaseConvention]:
-    def _hoist_hydra_decode_util_case_convention_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.util.CaseConvention]:
+def case_convention(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_util_case_convention_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -41,8 +41,8 @@ def case_convention(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
                 return Left(hydra.util.DecodingError("expected union of type hydra.util.CaseConvention"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_util_case_convention_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def comparison(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.util.Comparison]:
-    def _hoist_hydra_decode_util_comparison_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.util.Comparison]:
+def comparison(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_util_comparison_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -66,22 +66,22 @@ def comparison(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
                 return Left(hydra.util.DecodingError("expected union of type hydra.util.Comparison"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_util_comparison_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def decoding_error(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.util.DecodingError]:
-    def _hoist_hydra_decode_util_decoding_error_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+def decoding_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_util_decoding_error_1(v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
             
             case _:
                 return Left(hydra.util.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_util_decoding_error_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+    def _hoist_hydra_decode_util_decoding_error_2(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_util_decoding_error_1(v)
             
             case _:
                 return Left(hydra.util.DecodingError("expected literal"))
-    def _hoist_hydra_decode_util_decoding_error_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.util.DecodingError]:
+    def _hoist_hydra_decode_util_decoding_error_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.util.DecodingError(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_util_decoding_error_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -90,8 +90,8 @@ def decoding_error(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.util.DecodingError"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_util_decoding_error_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def precision(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.util.Precision]:
-    def _hoist_hydra_decode_util_precision_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.util.Precision]:
+def precision(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_util_precision_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -107,22 +107,22 @@ def precision(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.
                 def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
-                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.util.Precision]]]:
-                    def _hoist_variant_map_1(v12: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:
+                def variant_map():
+                    def _hoist_variant_map_1(v12):
                         match v12:
                             case hydra.core.IntegerValueInt32(value=i):
                                 return Right(i)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected int32 value"))
-                    def _hoist_variant_map_2(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, int]:
+                    def _hoist_variant_map_2(v12):
                         match v12:
-                            case hydra.core.LiteralInteger(value=v13):
-                                return _hoist_variant_map_1(v13)
+                            case hydra.core.LiteralInteger(value=_match_value):
+                                return _hoist_variant_map_1(_match_value)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected int32 literal"))
-                    def _hoist_variant_map_3(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, int]:
+                    def _hoist_variant_map_3(v12):
                         match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_2(v)

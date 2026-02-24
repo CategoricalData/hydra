@@ -434,10 +434,10 @@ def encode_primary(p: hydra.ext.python.syntax.Primary) -> hydra.ast.Expr:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_primary_rhs(rhs2: hydra.ext.python.syntax.PrimaryRhs) -> hydra.ast.Expr:
+def encode_primary_rhs(rhs: hydra.ext.python.syntax.PrimaryRhs) -> hydra.ast.Expr:
     r"""Serialize a primary RHS."""
     
-    match rhs2:
+    match rhs:
         case hydra.ext.python.syntax.PrimaryRhsCall(value=args):
             return hydra.serialization.no_sep((hydra.serialization.cst("("), encode_args(args), hydra.serialization.cst(")")))
         
@@ -560,8 +560,8 @@ def encode_star_expression(se: hydra.ext.python.syntax.StarExpression) -> hydra.
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_annotated_rhs(arhs: hydra.ext.python.syntax.AnnotatedRhs) -> hydra.ast.Expr:
-    def _hoist_hydra_ext_python_serde_encode_annotated_rhs_1(v1: hydra.ext.python.syntax.AnnotatedRhs) -> hydra.ast.Expr:
+def encode_annotated_rhs(arhs: hydra.ext.python.syntax.AnnotatedRhs):
+    def _hoist_hydra_ext_python_serde_encode_annotated_rhs_1(v1):
         match v1:
             case hydra.ext.python.syntax.AnnotatedRhsStar(value=ses):
                 return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_star_expression(x1)), ses))

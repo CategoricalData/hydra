@@ -58,7 +58,7 @@ echo ""
 # Step 3: Bootstrap from JSON via Java host
 echo "Step 3: Mapping JSON to Haskell (via Java host)..."
 STEP_START=$(date +%s)
-"$SCRIPT_DIR/java-bootstrap.sh" --target haskell --output "$OUTPUT_BASE" $EXTRA_FLAGS 2>&1
+"$SCRIPT_DIR/java-bootstrap.sh" --target haskell --output "$OUTPUT_BASE" --include-tests $EXTRA_FLAGS 2>&1
 STEP_END=$(date +%s)
 echo "  Time: $((STEP_END - STEP_START))s"
 echo ""

@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ForInit implements Serializable, Comparable<ForInit> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ForInit");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ForInit");
   
-  public static final hydra.core.Name FIELD_NAME_STATEMENTS = new hydra.core.Name("statements");
+  public static final hydra.core.Name STATEMENTS = new hydra.core.Name("statements");
   
-  public static final hydra.core.Name FIELD_NAME_LOCAL_VARIABLE = new hydra.core.Name("localVariable");
+  public static final hydra.core.Name LOCAL_VARIABLE = new hydra.core.Name("localVariable");
   
   private ForInit () {
   

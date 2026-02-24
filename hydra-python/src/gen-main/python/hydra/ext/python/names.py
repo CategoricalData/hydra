@@ -28,9 +28,13 @@ T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 
 def encode_constant_for_field_name(env: T0, tname: T1, fname: hydra.core.Name) -> hydra.ext.python.syntax.Name:
+    r"""Generate a constant name for a field definition."""
+    
     return hydra.ext.python.syntax.Name(hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.UPPER_SNAKE, fname.value))
 
 def encode_constant_for_type_name(env: T0, tname: T1) -> hydra.ext.python.syntax.Name:
+    r"""Generate a constant name for a type definition."""
+    
     return hydra.ext.python.syntax.Name("TYPE_")
 
 def sanitize_python_name(v1: str) -> str:

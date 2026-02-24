@@ -265,16 +265,18 @@ def term_coder(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.compute.Cod
             
             case _:
                 return hydra.monads.unexpected("mapping", show_value(n))
-    def encode_maybe(maybe_element_coder: hydra.compute.Coder[T2, T3, hydra.core.Term, hydra.json.model.Value], maybe_term: hydra.core.Term) -> hydra.compute.Flow[T2, hydra.json.model.Value]:
+    def encode_maybe(maybe_element_coder: hydra.compute.Coder[T2, T3, hydra.core.Term, hydra.json.model.Value], maybe_term: hydra.core.Term):
         @lru_cache(1)
         def stripped_maybe_term() -> hydra.core.Term:
             return hydra.rewriting.deannotate_term(maybe_term)
-        match stripped_maybe_term():
-            case hydra.core.TermMaybe(value=maybe_contents):
-                return hydra.lib.logic.if_else(hydra.lib.maybes.is_nothing(maybe_contents), (lambda : hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNull()))), (lambda : hydra.lib.flows.bind(maybe_element_coder.encode(hydra.lib.maybes.from_just(maybe_contents)), (lambda encoded_inner: hydra.lib.flows.pure(encoded_inner)))))
-            
-            case _:
-                return hydra.monads.unexpected("optional term", hydra.show.core.term(maybe_term))
+        def _hoist_body_1(v1):
+            match v1:
+                case hydra.core.TermMaybe(value=maybe_contents):
+                    return hydra.lib.logic.if_else(hydra.lib.maybes.is_nothing(maybe_contents), (lambda : hydra.lib.flows.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNull()))), (lambda : hydra.lib.flows.bind(maybe_element_coder.encode(hydra.lib.maybes.from_just(maybe_contents)), (lambda encoded_inner: hydra.lib.flows.pure(encoded_inner)))))
+                
+                case _:
+                    return hydra.monads.unexpected("optional term", hydra.show.core.term(maybe_term))
+        return _hoist_body_1(stripped_maybe_term())
     def decode_maybe(maybe_element_coder: hydra.compute.Coder[T2, T3, hydra.core.Term, hydra.json.model.Value], json_val: hydra.json.model.Value) -> hydra.compute.Flow[T3, hydra.core.Term]:
         match json_val:
             case hydra.json.model.ValueNull():

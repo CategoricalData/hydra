@@ -191,7 +191,7 @@ def field_type_map(fields: frozenlist[hydra.core.FieldType]) -> FrozenDict[hydra
         return (f.name, f.type)
     return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda x1: to_pair(x1)), fields))
 
-def field_types(t: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
+def field_types(t: hydra.core.Type):
     r"""Get field types from a record or union type."""
     
     return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (to_map := (lambda fields: hydra.lib.maps.from_list(hydra.lib.lists.map((lambda ft: (ft.name, ft.type)), fields))), _hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_1(hydra.rewriting.deannotate_type(t)))[2]))
@@ -283,7 +283,7 @@ def schema_graph_to_typing_environment(g: hydra.graph.Graph) -> hydra.compute.Fl
             case _:
                 return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), typ, Nothing())
     def to_pair(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[tuple[hydra.core.Name, hydra.core.TypeScheme]]]:
-        return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (for_term := (lambda term: (_hoist_for_term_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_for_term_1(term))[1]), hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda typ: Just(f_type_to_type_scheme(typ))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda ts: hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.TypeScheme"))), Nothing())), (lambda : hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type_scheme(cx, el.term)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())), (lambda : hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term)))), (lambda : for_term(hydra.rewriting.deannotate_term(el.term))))))), el.type), (lambda mts: hydra.lib.flows.pure(hydra.lib.maybes.map((lambda ts: (el.name, ts)), mts)))))[1]))
+        return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (for_term := (lambda term: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda typ: Just(f_type_to_type_scheme(typ))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda ts: hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.TypeScheme"))), Nothing())), (lambda : hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type_scheme(cx, el.term)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())), (lambda : hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term)))), (lambda : for_term(hydra.rewriting.deannotate_term(el.term))))))), el.type), (lambda mts: hydra.lib.flows.pure(hydra.lib.maybes.map((lambda ts: (el.name, ts)), mts)))))[1]))
     return hydra.monads.with_trace("schema graph to typing environment", hydra.monads.with_state(g, hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: to_pair(x1)), g.elements), (lambda mpairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(hydra.lib.maybes.cat(mpairs)))))))
 
 def graph_to_inference_context(graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.typing.InferenceContext]:
@@ -414,15 +414,15 @@ def is_unit_term(v1: hydra.core.Term) -> bool:
 def module_contains_binary_literals(mod: hydra.module.Module) -> bool:
     r"""Check whether a module contains any binary literal values."""
     
-    def check_term(found: bool, term: hydra.core.Term) -> bool:
-        def _hoist_check_term_1(v1: hydra.core.Literal) -> bool:
+    def check_term(found: bool, term: hydra.core.Term):
+        def _hoist_check_term_1(v1):
             match v1:
                 case hydra.core.LiteralBinary():
                     return True
                 
                 case _:
                     return False
-        def _hoist_check_term_2(v1: hydra.core.Term) -> bool:
+        def _hoist_check_term_2(v1):
             match v1:
                 case hydra.core.TermLiteral(value=lit):
                     return _hoist_check_term_1(lit)
@@ -541,8 +541,8 @@ def require_union_field(tname: hydra.core.Name, fname: hydra.core.Name) -> hydra
         return hydra.lib.logic.if_else(hydra.lib.lists.null(matches()), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("no field \"", fname.value, "\" in union type \"", tname.value)))), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matches()).type)))
     return hydra.lib.flows.bind(require_union_type(tname), (lambda x1: with_row_type(x1)))
 
-def resolve_type(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
-    def _hoist_hydra_schemas_resolve_type_1(cx: hydra.graph.Graph, typ: hydra.core.Type, v1: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
+def resolve_type(typ: hydra.core.Type):
+    def _hoist_hydra_schemas_resolve_type_1(cx, typ, v1):
         match v1:
             case hydra.core.TypeVariable(value=name):
                 return hydra.lexical.with_schema_context(hydra.lib.flows.bind(hydra.lexical.resolve_term(name), (lambda mterm: hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda t: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, t)))), mterm))))

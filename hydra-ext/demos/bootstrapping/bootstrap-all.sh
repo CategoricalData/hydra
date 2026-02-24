@@ -202,14 +202,14 @@ run_path() {
             exit_code=${PIPESTATUS[0]}
             ;;
         java)
-            "$SCRIPT_DIR/java-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
+            "$SCRIPT_DIR/java-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --include-tests --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
             exit_code=${PIPESTATUS[0]}
             if [ $exit_code -eq 0 ]; then
                 "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 || exit_code=$?
             fi
             ;;
         python)
-            "$SCRIPT_DIR/python-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
+            "$SCRIPT_DIR/python-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --include-tests --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
             exit_code=${PIPESTATUS[0]}
             if [ $exit_code -eq 0 ]; then
                 "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 || exit_code=$?

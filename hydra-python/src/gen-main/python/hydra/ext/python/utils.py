@@ -65,10 +65,10 @@ def double_quoted_string(s: str) -> hydra.ext.python.syntax.Expression:
     
     return string_to_py_expression(hydra.ext.python.syntax.QuoteStyle.DOUBLE, s)
 
-def primary_with_rhs(prim: hydra.ext.python.syntax.Primary, rhs2: hydra.ext.python.syntax.PrimaryRhs) -> hydra.ext.python.syntax.Primary:
+def primary_with_rhs(prim: hydra.ext.python.syntax.Primary, rhs: hydra.ext.python.syntax.PrimaryRhs) -> hydra.ext.python.syntax.Primary:
     r"""Combine a Primary with a PrimaryRhs."""
     
-    return cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimaryCompound(hydra.ext.python.syntax.PrimaryWithRhs(prim, rhs2)))
+    return cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimaryCompound(hydra.ext.python.syntax.PrimaryWithRhs(prim, rhs)))
 
 def primary_with_slices(prim: hydra.ext.python.syntax.Primary, first: hydra.ext.python.syntax.Slice, rest: frozenlist[hydra.ext.python.syntax.SliceOrStarredExpression]) -> hydra.ext.python.syntax.Primary:
     r"""Create a Primary with slices."""
@@ -115,10 +115,10 @@ def py_name_to_py_star_target(name: hydra.ext.python.syntax.Name) -> hydra.ext.p
     
     return cast(hydra.ext.python.syntax.StarTarget, hydra.ext.python.syntax.StarTargetUnstarred(cast(hydra.ext.python.syntax.TargetWithStarAtom, hydra.ext.python.syntax.TargetWithStarAtomAtom(cast(hydra.ext.python.syntax.StarAtom, hydra.ext.python.syntax.StarAtomName(name))))))
 
-def assignment(name: hydra.ext.python.syntax.Name, rhs2: hydra.ext.python.syntax.AnnotatedRhs) -> hydra.ext.python.syntax.Statement:
+def assignment(name: hydra.ext.python.syntax.Name, rhs: hydra.ext.python.syntax.AnnotatedRhs) -> hydra.ext.python.syntax.Statement:
     r"""Create an assignment statement from name and annotated rhs."""
     
-    return py_assignment_to_py_statement(cast(hydra.ext.python.syntax.Assignment, hydra.ext.python.syntax.AssignmentUntyped(hydra.ext.python.syntax.UntypedAssignment((py_name_to_py_star_target(name),), rhs2, Nothing()))))
+    return py_assignment_to_py_statement(cast(hydra.ext.python.syntax.Assignment, hydra.ext.python.syntax.AssignmentUntyped(hydra.ext.python.syntax.UntypedAssignment((py_name_to_py_star_target(name),), rhs, Nothing()))))
 
 def py_expression_to_py_annotated_rhs(expr: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.AnnotatedRhs:
     r"""Convert an Expression to an AnnotatedRhs."""
@@ -179,7 +179,7 @@ def decode_py_power_to_py_primary(p: hydra.ext.python.syntax.Power) -> Maybe[hyd
         return lhs().primary
     return hydra.lib.logic.if_else(await_(), (lambda : Nothing()), (lambda : Just(prim())))
 
-def decode_py_comparison_to_py_await_primary(c: hydra.ext.python.syntax.Comparison) -> Maybe[hydra.ext.python.syntax.Primary]:
+def decode_py_comparison_to_py_await_primary(c: hydra.ext.python.syntax.Comparison):
     r"""Decode a Comparison to a Primary if possible."""
     
     @lru_cache(1)
@@ -224,7 +224,7 @@ def decode_py_comparison_to_py_await_primary(c: hydra.ext.python.syntax.Comparis
     @lru_cache(1)
     def term_rhs() -> hydra.ext.python.syntax.Factor:
         return sum_rhs().rhs
-    def _hoist_body_1(v1: hydra.ext.python.syntax.Factor) -> Maybe[hydra.ext.python.syntax.Primary]:
+    def _hoist_body_1(v1):
         match v1:
             case hydra.ext.python.syntax.FactorSimple(value=power):
                 return decode_py_power_to_py_primary(power)
@@ -421,6 +421,8 @@ def type_alias_statement(name: hydra.ext.python.syntax.Name, tparams: frozenlist
     return annotated_statement(mcomment, py_simple_statement_to_py_statement(cast(hydra.ext.python.syntax.SimpleStatement, hydra.ext.python.syntax.SimpleStatementTypeAlias(hydra.ext.python.syntax.TypeAlias(name, tparams, tyexpr)))))
 
 def type_alias_statement310(name: hydra.ext.python.syntax.Name, _tparams: T0, mcomment: Maybe[str], tyexpr: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.Statement:
+    r"""Generate a type alias statement using Python 3.10-compatible syntax: Name: TypeAlias = "TypeExpression"."""
+    
     @lru_cache(1)
     def quoted_expr() -> hydra.ext.python.syntax.Expression:
         return double_quoted_string(hydra.serialization.print_expr(hydra.ext.python.serde.encode_expression(tyexpr)))

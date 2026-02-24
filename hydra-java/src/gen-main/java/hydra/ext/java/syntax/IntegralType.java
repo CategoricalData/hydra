@@ -5,17 +5,17 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class IntegralType implements Serializable, Comparable<IntegralType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.IntegralType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.IntegralType");
   
-  public static final hydra.core.Name FIELD_NAME_BYTE = new hydra.core.Name("byte");
+  public static final hydra.core.Name BYTE = new hydra.core.Name("byte");
   
-  public static final hydra.core.Name FIELD_NAME_SHORT = new hydra.core.Name("short");
+  public static final hydra.core.Name SHORT = new hydra.core.Name("short");
   
-  public static final hydra.core.Name FIELD_NAME_INT = new hydra.core.Name("int");
+  public static final hydra.core.Name INT = new hydra.core.Name("int");
   
-  public static final hydra.core.Name FIELD_NAME_LONG = new hydra.core.Name("long");
+  public static final hydra.core.Name LONG = new hydra.core.Name("long");
   
-  public static final hydra.core.Name FIELD_NAME_CHAR = new hydra.core.Name("char");
+  public static final hydra.core.Name CHAR = new hydra.core.Name("char");
   
   private IntegralType () {
   

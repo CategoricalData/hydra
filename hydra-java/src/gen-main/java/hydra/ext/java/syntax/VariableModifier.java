@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class VariableModifier implements Serializable, Comparable<VariableModifier> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.VariableModifier");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.VariableModifier");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION = new hydra.core.Name("annotation");
+  public static final hydra.core.Name ANNOTATION = new hydra.core.Name("annotation");
   
-  public static final hydra.core.Name FIELD_NAME_FINAL = new hydra.core.Name("final");
+  public static final hydra.core.Name FINAL = new hydra.core.Name("final");
   
   private VariableModifier () {
   

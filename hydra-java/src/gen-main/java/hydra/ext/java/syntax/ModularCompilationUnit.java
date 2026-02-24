@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ModularCompilationUnit implements Serializable, Comparable<ModularCompilationUnit> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ModularCompilationUnit");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ModularCompilationUnit");
   
-  public static final hydra.core.Name FIELD_NAME_IMPORTS = new hydra.core.Name("imports");
+  public static final hydra.core.Name IMPORTS = new hydra.core.Name("imports");
   
-  public static final hydra.core.Name FIELD_NAME_MODULE = new hydra.core.Name("module");
+  public static final hydra.core.Name MODULE = new hydra.core.Name("module");
   
   public final java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports;
   

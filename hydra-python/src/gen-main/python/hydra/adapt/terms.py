@@ -120,8 +120,8 @@ def for_type_reference(name: hydra.core.Name) -> hydra.compute.Flow[hydra.coders
 def function_to_union(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Convert function types to union types."""
     
-    def enc_term(term: hydra.core.Term, stripped_term: hydra.core.Term) -> hydra.core.Term:
-        def _hoist_enc_term_1(term: hydra.core.Term, v1: hydra.core.Elimination) -> hydra.core.Term:
+    def enc_term(term: hydra.core.Term, stripped_term: hydra.core.Term):
+        def _hoist_enc_term_1(term, v1):
             match v1:
                 case hydra.core.EliminationWrap(value=name):
                     return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(function_proxy_name, hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(name.value))))))))
@@ -134,7 +134,7 @@ def function_to_union(t: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.Ada
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
-        def _hoist_enc_term_2(term: hydra.core.Term, v1: hydra.core.Function) -> hydra.core.Term:
+        def _hoist_enc_term_2(term, v1):
             match v1:
                 case hydra.core.FunctionElimination(value=e):
                     return _hoist_enc_term_1(term, e)

@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ClassBodyDeclaration implements Serializable, Comparable<ClassBodyDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ClassBodyDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ClassBodyDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS_MEMBER = new hydra.core.Name("classMember");
+  public static final hydra.core.Name CLASS_MEMBER = new hydra.core.Name("classMember");
   
-  public static final hydra.core.Name FIELD_NAME_INSTANCE_INITIALIZER = new hydra.core.Name("instanceInitializer");
+  public static final hydra.core.Name INSTANCE_INITIALIZER = new hydra.core.Name("instanceInitializer");
   
-  public static final hydra.core.Name FIELD_NAME_STATIC_INITIALIZER = new hydra.core.Name("staticInitializer");
+  public static final hydra.core.Name STATIC_INITIALIZER = new hydra.core.Name("staticInitializer");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTRUCTOR_DECLARATION = new hydra.core.Name("constructorDeclaration");
+  public static final hydra.core.Name CONSTRUCTOR_DECLARATION = new hydra.core.Name("constructorDeclaration");
   
   private ClassBodyDeclaration () {
   

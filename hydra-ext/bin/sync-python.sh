@@ -4,13 +4,12 @@ set -e
 # Script to synchronize Hydra-Python with the source of truth in Hydra-Haskell/Hydra-Ext.
 #
 # This script regenerates all Python artifacts from the Hydra sources:
-#   1. Kernel modules (hydra/kernel/*)
-#   2. Eval lib modules (hydra/eval/lib/*)
-#   3. Kernel tests (hydra/test/*)
-#   4. Generation tests (generation/hydra/test/*)
+#   1. Main modules, eval lib, and coder modules (from JSON)
+#   2. Kernel test modules (from JSON)
+#   3. Generation tests (from Haskell DSL)
 #
 # Prerequisites:
-#   - Hydra-Haskell must be consistent (all Haskell artifacts regenerated, all tests passing)
+#   - JSON modules must be up to date (run sync-haskell.sh and sync-ext.sh first)
 #   - Run from the hydra-ext directory
 #
 # Usage:
@@ -36,13 +35,10 @@ for arg in "$@"; do
             echo "  --help     Show this help message"
             echo ""
             echo "Steps performed:"
-            echo "  1. Build all executables"
-            echo "  2. Generate Python kernel modules"
-            echo "  3. Generate Python eval lib modules"
-            echo "  4. Generate Python kernel tests"
-            echo "  5. Generate Python generation tests"
-            echo "  6. Run Python tests (unless --quick)"
-            echo "  7. Report new files to git add"
+            echo "  1. Build executable"
+            echo "  2. Generate Python modules and tests from JSON"
+            echo "  3. Run Python tests (unless --quick)"
+            echo "  4. Report new files to git add"
             exit 0
             ;;
     esac
@@ -63,13 +59,9 @@ cd "$HYDRA_EXT_DIR"
 # RTS flags to avoid stack overflow during generation
 RTS_FLAGS="+RTS -K256M -A32M -RTS"
 
-echo "Step 1/6: Building executables..."
+echo "Step 1/3: Building executable..."
 echo ""
-stack build \
-    hydra-ext:exe:update-python-kernel \
-    hydra-ext:exe:update-python-eval-lib \
-    hydra-ext:exe:update-python-kernel-tests \
-    hydra-ext:exe:update-python-generation-tests
+stack build hydra-ext:exe:bootstrap-from-json
 
 if [ $? -ne 0 ]; then
     echo "ERROR: Build failed"
@@ -77,42 +69,12 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "Step 2/6: Generating Python kernel modules..."
+echo "Step 2/3: Generating Python modules and tests from JSON..."
 echo ""
-stack exec update-python-kernel -- $RTS_FLAGS
+stack exec bootstrap-from-json -- --target python --include-coders --include-tests --include-gentests $RTS_FLAGS
 
 if [ $? -ne 0 ]; then
-    echo "ERROR: Kernel generation failed"
-    exit 1
-fi
-
-echo ""
-echo "Step 3/6: Generating Python eval lib modules..."
-echo ""
-stack exec update-python-eval-lib -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: Eval lib generation failed"
-    exit 1
-fi
-
-echo ""
-echo "Step 4/6: Generating Python kernel tests..."
-echo ""
-stack exec update-python-kernel-tests -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: Kernel tests generation failed"
-    exit 1
-fi
-
-echo ""
-echo "Step 5/6: Generating Python generation tests..."
-echo ""
-stack exec update-python-generation-tests -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: Generation tests generation failed"
+    echo "ERROR: Python generation failed"
     exit 1
 fi
 
@@ -123,7 +85,7 @@ echo "=========================================="
 
 if [ "$QUICK_MODE" = false ]; then
     echo ""
-    echo "Step 6/6: Running Python tests..."
+    echo "Step 3/3: Running Python tests..."
     echo ""
 
     cd "$HYDRA_PYTHON_DIR"
@@ -147,7 +109,7 @@ if [ "$QUICK_MODE" = false ]; then
     cd "$HYDRA_EXT_DIR"
 else
     echo ""
-    echo "Step 6/6: Skipped (--quick mode)"
+    echo "Step 3/3: Skipped (--quick mode)"
 fi
 
 echo ""

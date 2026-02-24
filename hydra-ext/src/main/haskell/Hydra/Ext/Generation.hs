@@ -29,8 +29,26 @@ import Hydra.Ext.Staging.Protobuf.Coder
 import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Staging.Scala.Coder
 
+import qualified Hydra.Json.Model as Json
+import qualified Hydra.Json.Writer as JsonWriter
+
+import qualified Data.Map as M
 import qualified System.FilePath as FP
 
+
+-- | Write a manifest.json listing ext module namespaces.
+-- This mirrors writeManifestJson in Hydra.Generation but for hydra-ext module lists.
+writeExtManifestJson :: FilePath -> IO ()
+writeExtManifestJson basePath = do
+    let jsonVal = Json.ValueObject $ M.fromList [
+            ("hydraCoderModules", namespacesJson hydraCoderModules),
+            ("hydraExtModules", namespacesJson hydraExtModules)]
+        jsonStr = JsonWriter.printJson jsonVal
+        filePath = basePath FP.</> "manifest.json"
+    writeFile filePath (jsonStr ++ "\n")
+    putStrLn $ "Wrote manifest: " ++ filePath
+  where
+    namespacesJson mods = Json.ValueArray $ fmap (Json.ValueString . unNamespace . moduleNamespace) mods
 
 -- | Generate C++ source files from modules.
 -- First argument: output directory

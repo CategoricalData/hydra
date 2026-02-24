@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class ArrayCreationExpression_PrimitiveArray implements Serializable, Comparable<ArrayCreationExpression_PrimitiveArray> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_DIMS = new hydra.core.Name("dims");
+  public static final hydra.core.Name DIMS = new hydra.core.Name("dims");
   
-  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  public static final hydra.core.Name ARRAY = new hydra.core.Name("array");
   
   public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
   

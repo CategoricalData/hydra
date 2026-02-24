@@ -2011,14 +2011,20 @@ public interface Coder {
                             return hydra.lib.flows.Bind.apply(
                               hydra.ext.python.coder.Coder.inGraphContext(hydra.schemas.Schemas.requireUnionType(tname.get())),
                               (java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, hydra.ext.python.syntax.Statement>>) (rt -> {
+                                hydra.util.Lazy<java.util.List<hydra.core.Name>> capturedVarNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Init.apply(lambdaParams.get()));
                                 hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.ParamNoDefault>> capturedParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                                   (java.util.function.Function<hydra.core.Name, hydra.ext.python.syntax.ParamNoDefault>) (n -> new hydra.ext.python.syntax.ParamNoDefault(new hydra.ext.python.syntax.Param(hydra.ext.python.names.Names.encodeName(
                                     false,
                                     new hydra.util.CaseConvention.LowerSnake(),
                                     env,
                                     n), (hydra.util.Maybe<hydra.ext.python.syntax.Annotation>) (hydra.util.Maybe.<hydra.ext.python.syntax.Annotation>nothing())), (hydra.util.Maybe<hydra.ext.python.syntax.TypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.TypeComment>nothing()))),
-                                  lambdaParams.get()));
-                                hydra.ext.python.syntax.Name matchArgName = new hydra.ext.python.syntax.Name("x");
+                                  capturedVarNames.get()));
+                                hydra.util.Lazy<hydra.core.Name> matchLambdaParam = new hydra.util.Lazy<>(() -> hydra.lib.lists.Last.apply(lambdaParams.get()));
+                                hydra.ext.python.syntax.Name matchArgName = hydra.ext.python.names.Names.encodeName(
+                                  false,
+                                  new hydra.util.CaseConvention.LowerSnake(),
+                                  env,
+                                  matchLambdaParam.get());
                                 hydra.util.Lazy<hydra.ext.python.syntax.ParamNoDefault> matchParam = new hydra.util.Lazy<>(() -> new hydra.ext.python.syntax.ParamNoDefault(new hydra.ext.python.syntax.Param(matchArgName, (hydra.util.Maybe<hydra.ext.python.syntax.Annotation>) (hydra.util.Maybe.<hydra.ext.python.syntax.Annotation>nothing())), (hydra.util.Maybe<hydra.ext.python.syntax.TypeComment>) (hydra.util.Maybe.<hydra.ext.python.syntax.TypeComment>nothing())));
                                 hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.ParamNoDefault>> allParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
                                   capturedParams.get(),
@@ -2190,6 +2196,19 @@ public interface Coder {
         return hydra.ext.python.coder.Coder.functionArityWithPrimitives(
           graph,
           (f).value);
+      }
+      
+      @Override
+      public Integer visit(hydra.core.Term.Variable name) {
+        return hydra.lib.maybes.Maybe.apply(
+          0,
+          (java.util.function.Function<hydra.core.Binding, Integer>) (el -> hydra.lib.maybes.Maybe.apply(
+            hydra.arity.Arity.termArity((el).term),
+            (java.util.function.Function<hydra.core.TypeScheme, Integer>) (ts -> hydra.arity.Arity.typeSchemeArity(ts)),
+            (el).type)),
+          hydra.lexical.Lexical.lookupElement(
+            graph,
+            (name).value));
       }
     });
   }

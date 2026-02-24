@@ -5,13 +5,13 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class BlockStatement implements Serializable, Comparable<BlockStatement> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.BlockStatement");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.BlockStatement");
   
-  public static final hydra.core.Name FIELD_NAME_LOCAL_VARIABLE_DECLARATION = new hydra.core.Name("localVariableDeclaration");
+  public static final hydra.core.Name LOCAL_VARIABLE_DECLARATION = new hydra.core.Name("localVariableDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  public static final hydra.core.Name CLASS = new hydra.core.Name("class");
   
-  public static final hydra.core.Name FIELD_NAME_STATEMENT = new hydra.core.Name("statement");
+  public static final hydra.core.Name STATEMENT = new hydra.core.Name("statement");
   
   private BlockStatement () {
   

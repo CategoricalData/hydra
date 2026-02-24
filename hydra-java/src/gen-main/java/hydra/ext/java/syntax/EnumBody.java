@@ -5,9 +5,9 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public class EnumBody implements Serializable, Comparable<EnumBody> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.EnumBody");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.EnumBody");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.ext.java.syntax.EnumBody_Element> value;
   

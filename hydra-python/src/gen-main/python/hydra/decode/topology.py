@@ -14,22 +14,22 @@ import hydra.lib.eithers
 import hydra.topology
 import hydra.util
 
-def vertex(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, int]:
-    def _hoist_hydra_decode_topology_vertex_1(v1: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:
+def vertex(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_topology_vertex_1(v1):
         match v1:
             case hydra.core.IntegerValueInt32(value=i):
                 return Right(i)
             
             case _:
                 return Left(hydra.util.DecodingError("expected int32 value"))
-    def _hoist_hydra_decode_topology_vertex_2(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, int]:
+    def _hoist_hydra_decode_topology_vertex_2(v1):
         match v1:
-            case hydra.core.LiteralInteger(value=v12):
-                return _hoist_hydra_decode_topology_vertex_1(v12)
+            case hydra.core.LiteralInteger(value=_match_value):
+                return _hoist_hydra_decode_topology_vertex_1(_match_value)
             
             case _:
                 return Left(hydra.util.DecodingError("expected int32 literal"))
-    def _hoist_hydra_decode_topology_vertex_3(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, int]:
+    def _hoist_hydra_decode_topology_vertex_3(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_topology_vertex_2(v)
@@ -41,70 +41,70 @@ def vertex(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Dec
 def graph(v1: hydra.graph.Graph, v2: hydra.core.Term) -> Either[hydra.util.DecodingError, FrozenDict[int, frozenlist[int]]]:
     return hydra.extract.helpers.decode_map((lambda x1, x2: vertex(x1, x2)), (lambda v12, v22: hydra.extract.helpers.decode_list((lambda x1, x2: vertex(x1, x2)), v12, v22)), v1, v2)
 
-def tarjan_state(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.topology.TarjanState]:
-    def _hoist_hydra_decode_topology_tarjan_state_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.topology.TarjanState]:
+def tarjan_state(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_topology_tarjan_state_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v12: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:
+                def _hoist_body_1(v12):
                     match v12:
                         case hydra.core.IntegerValueInt32(value=i):
                             return Right(i)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected int32 value"))
-                def _hoist_body_2(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, int]:
+                def _hoist_body_2(v12):
                     match v12:
-                        case hydra.core.LiteralInteger(value=v13):
-                            return _hoist_body_1(v13)
+                        case hydra.core.LiteralInteger(value=_match_value):
+                            return _hoist_body_1(_match_value)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected int32 literal"))
-                def _hoist_body_3(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, int]:
+                def _hoist_body_3(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_2(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                def _hoist_body_4(v12: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:
+                def _hoist_body_4(v12):
                     match v12:
                         case hydra.core.IntegerValueInt32(value=i):
                             return Right(i)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected int32 value"))
-                def _hoist_body_5(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, int]:
+                def _hoist_body_5(v12):
                     match v12:
-                        case hydra.core.LiteralInteger(value=v13):
-                            return _hoist_body_4(v13)
+                        case hydra.core.LiteralInteger(value=_match_value):
+                            return _hoist_body_4(_match_value)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected int32 literal"))
-                def _hoist_body_6(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, int]:
+                def _hoist_body_6(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_5(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                def _hoist_body_7(v12: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:
+                def _hoist_body_7(v12):
                     match v12:
                         case hydra.core.IntegerValueInt32(value=i):
                             return Right(i)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected int32 value"))
-                def _hoist_body_8(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, int]:
+                def _hoist_body_8(v12):
                     match v12:
-                        case hydra.core.LiteralInteger(value=v13):
-                            return _hoist_body_7(v13)
+                        case hydra.core.LiteralInteger(value=_match_value):
+                            return _hoist_body_7(_match_value)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected int32 literal"))
-                def _hoist_body_9(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, int]:
+                def _hoist_body_9(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_8(v)

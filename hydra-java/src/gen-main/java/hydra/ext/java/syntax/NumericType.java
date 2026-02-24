@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class NumericType implements Serializable, Comparable<NumericType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.NumericType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.NumericType");
   
-  public static final hydra.core.Name FIELD_NAME_INTEGRAL = new hydra.core.Name("integral");
+  public static final hydra.core.Name INTEGRAL = new hydra.core.Name("integral");
   
-  public static final hydra.core.Name FIELD_NAME_FLOATING_POINT = new hydra.core.Name("floatingPoint");
+  public static final hydra.core.Name FLOATING_POINT = new hydra.core.Name("floatingPoint");
   
   private NumericType () {
   

@@ -3,7 +3,15 @@ code for a target language. Demonstrates that Python can independently
 regenerate Hydra from a language-independent JSON representation.
 
 Usage:
-    python -m hydra.bootstrap --target <haskell|java|python> --json-dir <path> [--output <dir>] [--types-only] [--kernel-only]
+    python -m hydra.bootstrap --target <haskell|java|python> --json-dir <path> [OPTIONS]
+
+Options:
+    --output <dir>         Output base directory (default: /tmp/hydra-bootstrapping-demo)
+    --include-coders       Also load and generate ext coder modules
+    --include-tests        Also load and generate kernel test modules
+    --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)
+    --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+    --types-only           Only generate type-defining modules
 """
 
 import argparse
@@ -58,156 +66,170 @@ def main():
                         help="Target language for code generation")
     parser.add_argument("--json-dir", required=True,
                         help="Directory containing JSON module files")
+    parser.add_argument("--ext-json-dir", default=None,
+                        help="Directory containing ext JSON modules (for --include-coders)")
     parser.add_argument("--output", default="/tmp/hydra-bootstrapping-demo",
                         help="Output base directory")
+    parser.add_argument("--include-coders", action="store_true",
+                        help="Also load and generate ext coder modules")
+    parser.add_argument("--include-tests", action="store_true",
+                        help="Also load and generate kernel test modules")
     parser.add_argument("--types-only", action="store_true",
                         help="Only generate type-defining modules")
     parser.add_argument("--kernel-only", action="store_true",
                         help="Only generate kernel modules (exclude hydra.ext.*)")
     args = parser.parse_args()
 
+    if args.include_coders and not args.ext_json_dir:
+        print("Error: --include-coders requires --ext-json-dir")
+        sys.exit(1)
+
+    target_cap = args.target.capitalize()
     out_dir = os.path.join(args.output, f"python-to-{args.target}")
 
     print("==========================================", flush=True)
-    print(f"Bootstrapping Hydra from JSON into {args.target} (via Python host)", flush=True)
+    print(f"Mapping JSON to {target_cap} (via Python host)", flush=True)
     print("==========================================", flush=True)
     print(f"  Host language:   Python", flush=True)
-    print(f"  Target language: {args.target}", flush=True)
+    print(f"  Target language: {target_cap}", flush=True)
     print(f"  JSON directory:  {args.json_dir}", flush=True)
-    print(f"  Output directory:{out_dir}", flush=True)
+    print(f"  Output:          {out_dir}", flush=True)
+    print(f"  Include coders:  {args.include_coders}", flush=True)
+    print(f"  Include tests:   {args.include_tests}", flush=True)
     if args.types_only:
         print("  Filter:          types only", flush=True)
     if args.kernel_only:
-        print("  Filter:          kernel only (excluding hydra.ext.*)", flush=True)
+        print("  Filter:          kernel only", flush=True)
     print("==========================================", flush=True)
     print(flush=True)
 
-    # Step 1: Load all modules from JSON (main + eval lib)
-    print("Step 1: Loading modules from JSON...", flush=True)
+    # Step 1: Load main + eval lib modules from JSON
+    print("Step 1: Loading main modules from JSON...", flush=True)
     print(f"  Source: {args.json_dir}", flush=True)
     step_start = time.time()
     main_namespaces = read_manifest_field(args.json_dir, "mainModules")
     eval_lib_namespaces = read_manifest_field(args.json_dir, "evalLibModules")
-    all_namespaces = main_namespaces + eval_lib_namespaces
+    all_kernel_namespaces = main_namespaces + eval_lib_namespaces
     km = kernel_modules()
-    raw_mods = load_modules_from_json(False, args.json_dir, km, all_namespaces)
+    main_mods = load_modules_from_json(False, args.json_dir, km, all_kernel_namespaces)
     step_time = time.time() - step_start
-    total_bindings = sum(len(m.elements) for m in raw_mods)
-    print(f"  Loaded {len(raw_mods)} modules ({total_bindings} bindings).", flush=True)
+    total_bindings = sum(len(m.elements) for m in main_mods)
+    print(f"  Loaded {len(main_mods)} modules ({total_bindings} bindings).", flush=True)
     print(f"  Time: {_format_time(step_time)}", flush=True)
     print(flush=True)
 
-    # Main modules keep their type annotations from JSON (strip_type_schemes=False).
-    # This allows the pipeline to skip pre-adaptation inference (Step 3 in
-    # data_graph_to_definitions), which is a major performance win.
-    all_mods = raw_mods
+    # Step 2: Optionally load ext coder modules
+    coder_mods = []
+    if args.include_coders:
+        print("Step 2: Loading hydra-ext coder modules from JSON...", flush=True)
+        coder_namespaces = read_manifest_field(args.ext_json_dir, "hydraCoderModules")
+        # Filter out modules already loaded as part of kernel
+        kernel_ns_set = {ns.value for ns in all_kernel_namespaces}
+        ext_coder_namespaces = [ns for ns in coder_namespaces if ns.value not in kernel_ns_set]
+        step_start = time.time()
+        coder_mods = load_modules_from_json(False, args.ext_json_dir, km, ext_coder_namespaces)
+        step_time = time.time() - step_start
+        print(f"  Loaded {len(coder_mods)} modules.", flush=True)
+        print(f"  Time: {_format_time(step_time)}", flush=True)
+        print(flush=True)
+    else:
+        print("Step 2: Skipping ext coder modules", flush=True)
+        print(flush=True)
 
-    # Step 3: Filter modules
-    mods_to_generate = all_mods
+    all_main_mods = main_mods + coder_mods
+
+    # Apply filters
+    mods_to_generate = all_main_mods
     if args.kernel_only:
         before = len(mods_to_generate)
         mods_to_generate = filter_kernel_modules(mods_to_generate)
-        # For main code generation, use kernel-only universe to match Java/Haskell host behavior.
-        # The full all_mods (including ext) is preserved for test code generation below,
-        # where test modules may reference ext bindings.
-        main_universe = filter_kernel_modules(all_mods)
-        print("Step 3: Filtering to kernel modules...", flush=True)
+        all_main_mods = filter_kernel_modules(all_main_mods)
+        print("Filtering to kernel modules...", flush=True)
         print(f"  Before: {before} modules", flush=True)
-        print(f"  After:  {len(mods_to_generate)} kernel modules "
-              f"(excluded {before - len(mods_to_generate)} ext modules)", flush=True)
+        print(f"  After:  {len(mods_to_generate)} kernel modules", flush=True)
         print(flush=True)
-    else:
-        main_universe = all_mods
     if args.types_only:
         before = len(mods_to_generate)
         mods_to_generate = filter_type_modules(mods_to_generate)
-        print("Step 3b: Filtering to type modules...", flush=True)
+        print("Filtering to type modules...", flush=True)
         print(f"  Before: {before} modules", flush=True)
-        print(f"  After:  {len(mods_to_generate)} type modules "
-              f"(excluded {before - len(mods_to_generate)} non-type modules)", flush=True)
+        print(f"  After:  {len(mods_to_generate)} type modules", flush=True)
         print(flush=True)
 
-    # Step 5: Generate code for the target language
+    # Keep full module list for test universe
+    full_mods = main_mods + coder_mods
+
+    # Generate main modules
     out_main = os.path.join(out_dir, "src/gen-main")
-    print(f"Step 4: Mapping modules from JSON to {args.target} (via Python host)...", flush=True)
-    print(f"  Universe: {len(main_universe)} modules", flush=True)
-    print(f"  Generating: {len(mods_to_generate)} modules:", flush=True)
-    for m in mods_to_generate:
-        bindings = len(m.elements)
-        print(f"    - {m.namespace.value} ({bindings} bindings)", flush=True)
-    print(f"  Output: {out_dir}", flush=True)
+    print(f"Mapping {len(mods_to_generate)} modules to {target_cap}...", flush=True)
+    print(f"  Universe: {len(all_main_mods)} modules", flush=True)
+    print(f"  Output: {out_main}", flush=True)
     print(flush=True)
-    print("  Generating (this may take several minutes)...", flush=True)
 
     step_start = time.time()
 
     if args.target == "haskell":
-        write_haskell(os.path.join(out_main, "haskell"), main_universe, mods_to_generate)
+        write_haskell(os.path.join(out_main, "haskell"), all_main_mods, mods_to_generate)
     elif args.target == "java":
-        write_java(os.path.join(out_main, "java"), main_universe, mods_to_generate)
+        write_java(os.path.join(out_main, "java"), all_main_mods, mods_to_generate)
     elif args.target == "python":
-        write_python(os.path.join(out_main, "python"), main_universe, mods_to_generate)
+        write_python(os.path.join(out_main, "python"), all_main_mods, mods_to_generate)
 
     step_time = time.time() - step_start
 
-    # Count main output files
     ext = {"java": ".java", "python": ".py", "haskell": ".hs"}[args.target]
     main_file_count = _count_files(os.path.join(out_dir, "src/gen-main"), ext)
 
-    print(f"  Python to {args.target}: done generating main modules ({main_file_count} files).", flush=True)
+    print(f"  Generated {main_file_count} files.", flush=True)
     print(f"  Time: {_format_time(step_time)}", flush=True)
     print(flush=True)
 
-    # Step 6: Load and generate test modules
-    test_json_dir = args.json_dir.replace("gen-main/json", "gen-test/json")
-    print("Step 5: Loading test modules from JSON...", flush=True)
-    print(f"  Source: {test_json_dir}", flush=True)
-    step_start = time.time()
-    # Load test modules WITHOUT stripping TypeSchemes (strip_type_schemes=False).
-    # Test modules need their types preserved so inference can be skipped.
-    test_namespaces = read_manifest_field(args.json_dir, "testModules")
-    test_mods = load_modules_from_json(False, test_json_dir, km, test_namespaces)
-    step_time = time.time() - step_start
-    test_bindings = sum(len(m.elements) for m in test_mods)
-    print(f"  Loaded {len(test_mods)} test modules ({test_bindings} bindings).", flush=True)
-    print(f"  Time: {_format_time(step_time)}", flush=True)
-    print(flush=True)
+    # Optionally load and generate test modules
+    test_file_count = 0
+    if args.include_tests:
+        test_json_dir = args.json_dir.replace("gen-main/json", "gen-test/json")
+        print("Loading test modules from JSON...", flush=True)
+        print(f"  Source: {test_json_dir}", flush=True)
+        step_start = time.time()
+        test_namespaces = read_manifest_field(args.json_dir, "testModules")
+        test_mods = load_modules_from_json(False, test_json_dir, km, test_namespaces)
+        step_time = time.time() - step_start
+        test_bindings = sum(len(m.elements) for m in test_mods)
+        print(f"  Loaded {len(test_mods)} test modules ({test_bindings} bindings).", flush=True)
+        print(f"  Time: {_format_time(step_time)}", flush=True)
+        print(flush=True)
 
-    all_universe = all_mods + test_mods
-    out_test = os.path.join(out_dir, "src/gen-test")
-    print(f"Step 6: Mapping test suite from JSON to {args.target} (via Python host)...", flush=True)
-    print(f"  Universe: {len(all_universe)} modules", flush=True)
-    print(f"  Generating: {len(test_mods)} test modules", flush=True)
-    print(f"  Output: {out_test}", flush=True)
-    print(flush=True)
-    print("  Generating (this may take several minutes)...", flush=True)
+        all_universe = full_mods + test_mods
+        out_test = os.path.join(out_dir, "src/gen-test")
+        print(f"Mapping test modules to {target_cap}...", flush=True)
+        print(f"  Universe: {len(all_universe)} modules", flush=True)
+        print(f"  Generating: {len(test_mods)} test modules", flush=True)
+        print(f"  Output: {out_test}", flush=True)
+        print(flush=True)
 
-    step_start = time.time()
+        step_start = time.time()
 
-    if args.target == "haskell":
-        write_haskell(os.path.join(out_test, "haskell"), all_universe, test_mods)
-    elif args.target == "java":
-        write_java(os.path.join(out_test, "java"), all_universe, test_mods)
-    elif args.target == "python":
-        write_python(os.path.join(out_test, "python"), all_universe, test_mods)
+        if args.target == "haskell":
+            write_haskell(os.path.join(out_test, "haskell"), all_universe, test_mods)
+        elif args.target == "java":
+            write_java(os.path.join(out_test, "java"), all_universe, test_mods)
+        elif args.target == "python":
+            write_python(os.path.join(out_test, "python"), all_universe, test_mods)
 
-    step_time = time.time() - step_start
-    test_file_count = _count_files(out_test, ext)
+        step_time = time.time() - step_start
+        test_file_count = _count_files(os.path.join(out_dir, "src/gen-test"), ext)
 
-    print(f"  Python to {args.target}: done generating test modules ({test_file_count} files).", flush=True)
-    print(f"  Time: {_format_time(step_time)}", flush=True)
-    print(flush=True)
+        print(f"  Generated {test_file_count} test files.", flush=True)
+        print(f"  Time: {_format_time(step_time)}", flush=True)
+        print(flush=True)
 
     total_time = time.time() - total_start
 
     print("==========================================", flush=True)
-    print(f"Python to {args.target}: done generating all modules", flush=True)
-    print("==========================================", flush=True)
-    print(f"  Modules loaded:    {len(raw_mods)} main + {len(test_mods)} test", flush=True)
-    print(f"  Modules generated: {len(mods_to_generate)} main + {len(test_mods)} test", flush=True)
-    print(f"  Output files:      {main_file_count} main + {test_file_count} test", flush=True)
-    print(f"  Output directory:  {out_dir}", flush=True)
-    print(f"  Total time:        {_format_time(total_time)}", flush=True)
+    test_str = f" + {test_file_count} test" if args.include_tests else ""
+    print(f"Done: {main_file_count} main{test_str} files", flush=True)
+    print(f"  Output: {out_dir}", flush=True)
+    print(f"  Total time: {_format_time(total_time)}", flush=True)
     print("==========================================", flush=True)
 
 

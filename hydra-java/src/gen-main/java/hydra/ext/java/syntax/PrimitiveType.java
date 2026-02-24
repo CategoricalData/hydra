@@ -5,11 +5,11 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class PrimitiveType implements Serializable, Comparable<PrimitiveType> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.PrimitiveType");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.PrimitiveType");
   
-  public static final hydra.core.Name FIELD_NAME_NUMERIC = new hydra.core.Name("numeric");
+  public static final hydra.core.Name NUMERIC = new hydra.core.Name("numeric");
   
-  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  public static final hydra.core.Name BOOLEAN = new hydra.core.Name("boolean");
   
   private PrimitiveType () {
   

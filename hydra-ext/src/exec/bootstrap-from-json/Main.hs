@@ -1,10 +1,29 @@
--- | Bootstrapping demo executable: loads Hydra kernel modules from JSON and
--- generates code for a target language. This demonstrates that Hydra can
--- regenerate its kernel from a language-independent representation (JSON with
--- System F type annotations).
+-- | Unified executable for generating code from JSON modules.
 --
--- Output is written to a standalone directory (default: /tmp/hydra-bootstrapping-demo)
--- with subdirectories for each bootstrapping path.
+-- Loads Hydra modules from pre-built JSON (no Haskell DSL compilation or type
+-- inference needed) and generates code for a target language.
+--
+-- Used by both:
+--   - sync-java.sh / sync-python.sh (repo sync, writes to hydra-java / hydra-python)
+--   - haskell-to-*.sh (bootstrapping demo, writes to /tmp)
+--
+-- JSON sources:
+--   hydra-haskell/src/gen-main/json/  — kernel, eval lib, and other modules
+--   hydra-haskell/src/gen-test/json/  — test modules
+--   hydra-ext/src/gen-main/json/      — ext coder modules (Java/Python coders)
+--
+-- Usage:
+--   bootstrap-from-json --target <haskell|java|python> [OPTIONS]
+--
+-- Options:
+--   --output <dir>         Output base directory (default: repo target dir)
+--   --include-coders       Also load and generate ext coder modules
+--   --include-tests        Also load and generate kernel test modules
+--   --include-gentests     Also generate generation tests
+--   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
+--   --types-only           Only generate type-defining modules
+--   --json-dir <dir>       Override kernel JSON directory
+--   --ext-json-dir <dir>   Override ext JSON directory (for --include-coders)
 
 {-# LANGUAGE ScopedTypeVariables #-}
 module Main where
@@ -17,9 +36,17 @@ import Hydra.Ext.Java.Coder (moduleToJava)
 import Hydra.Ext.Java.Language (javaLanguage)
 import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Python.Language (pythonLanguage)
+import Hydra.Staging.Testing.Generation.Generate (TestGenerator, generateGenerationTestSuite, createTestGroupLookup)
+import Hydra.Staging.Testing.Generation.HaskellCodec (haskellTestGenerator)
+import Hydra.Ext.Staging.Java.TestCodec (javaTestGenerator)
+import Hydra.Ext.Staging.Python.TestCodec (pythonTestGenerator)
+import qualified Hydra.Sources.Test.TestSuite as TestSuite
+import qualified Hydra.Test.TestSuite as GenTests
 
 import Control.Exception (catch, IOException)
-import Data.Time.Clock (getCurrentTime, diffUTCTime)
+import Control.Monad (when)
+import Data.List (isPrefixOf, partition)
+import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
@@ -53,94 +80,240 @@ countFiles dir ext = go dir
           else go p) entries
       return (sum counts)
 
+data Options = Options
+  { optTarget          :: String
+  , optOutput          :: Maybe FilePath
+  , optIncludeCoders   :: Bool
+  , optIncludeTests    :: Bool
+  , optIncludeGenTests :: Bool
+  , optKernelOnly      :: Bool
+  , optTypesOnly       :: Bool
+  , optJsonDir         :: Maybe FilePath
+  , optExtJsonDir      :: Maybe FilePath
+  }
+
+defaultOptions :: Options
+defaultOptions = Options
+  { optTarget          = ""
+  , optOutput          = Nothing
+  , optIncludeCoders   = False
+  , optIncludeTests    = False
+  , optIncludeGenTests = False
+  , optKernelOnly      = False
+  , optTypesOnly       = False
+  , optJsonDir         = Nothing
+  , optExtJsonDir      = Nothing
+  }
+
+parseArgs :: [String] -> Either String Options
+parseArgs = go defaultOptions
+  where
+    go opts [] = if Prelude.null (optTarget opts)
+      then Left "Missing --target"
+      else Right opts
+    go opts ("--target" : t : rest) = go (opts { optTarget = t }) rest
+    go opts ("--output" : o : rest) = go (opts { optOutput = Just o }) rest
+    go opts ("--include-coders" : rest) = go (opts { optIncludeCoders = True }) rest
+    go opts ("--include-tests" : rest) = go (opts { optIncludeTests = True }) rest
+    go opts ("--include-gentests" : rest) = go (opts { optIncludeGenTests = True }) rest
+    go opts ("--kernel-only" : rest) = go (opts { optKernelOnly = True }) rest
+    go opts ("--types-only" : rest) = go (opts { optTypesOnly = True }) rest
+    go opts ("--json-dir" : d : rest) = go (opts { optJsonDir = Just d }) rest
+    go opts ("--ext-json-dir" : d : rest) = go (opts { optExtJsonDir = Just d }) rest
+    go _ (arg : _) = Left $ "Unknown argument: " ++ arg
+
+usage :: String
+usage = unlines
+  [ "Usage: bootstrap-from-json --target <haskell|java|python> [OPTIONS]"
+  , ""
+  , "Options:"
+  , "  --output <dir>         Output base directory"
+  , "  --include-coders       Also generate ext coder modules (Java/Python coders)"
+  , "  --include-tests        Also generate kernel test modules"
+  , "  --include-gentests     Also generate generation tests"
+  , "  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)"
+  , "  --types-only           Only generate type-defining modules"
+  , "  --json-dir <dir>       Override kernel JSON directory"
+  , "  --ext-json-dir <dir>   Override ext JSON directory (for --include-coders)"
+  ]
+
 main :: IO ()
 main = do
   hSetBuffering stdout NoBuffering
   args <- getArgs
 
-  (target, outBase) <- case args of
-    ["--target", t] -> return (t, "/tmp/hydra-bootstrapping-demo")
-    ["--target", t, "--output", o] -> return (t, o)
-    _ -> do
-      putStrLn "Usage: bootstrap-from-json --target <haskell|java|python> [--output <dir>]"
+  opts <- case parseArgs args of
+    Left err -> do
+      putStrLn $ "Error: " ++ err
+      putStrLn ""
+      putStrLn usage
       exitFailure
+    Right o -> return o
 
-  let outDir = outBase FP.</> ("haskell-to-" ++ target)
+  let target = optTarget opts
   let ext = case target of { "haskell" -> ".hs"; "java" -> ".java"; "python" -> ".py"; _ -> "" }
 
+  -- Determine output directories
+  let defaultOutput = case target of
+        "haskell" -> "/tmp/hydra-bootstrapping-demo/haskell-to-haskell"
+        "java"    -> "../hydra-java"
+        "python"  -> "../hydra-python"
+        _         -> "/tmp/hydra-bootstrapping-demo/haskell-to-" ++ target
+  let outBase = maybe defaultOutput id (optOutput opts)
+  let outMain = outBase FP.</> ("src/gen-main/" ++ target)
+  let outTest = outBase FP.</> ("src/gen-test/" ++ target)
+
+  -- JSON directories (relative to hydra-ext working directory)
+  let kernelJsonDir = maybe "../hydra-haskell/src/gen-main/json" id (optJsonDir opts)
+  let testJsonDir   = "../hydra-haskell/src/gen-test/json"
+  let extJsonDir    = maybe "src/gen-main/json" id (optExtJsonDir opts)
+
+  let targetCap = case target of { "haskell" -> "Haskell"; "java" -> "Java"; "python" -> "Python"; t -> t }
+
   putStrLn "=========================================="
-  putStrLn $ "Bootstrapping Hydra from JSON into " ++ target ++ " (via Haskell host)"
-  putStrLn $ "Output directory: " ++ outDir
+  putStrLn $ "Mapping JSON to " ++ targetCap
   putStrLn "=========================================="
   putStrLn ""
-
-  -- JSON directory (relative to hydra-ext working directory)
-  let haskellMainJson = "../hydra-haskell/src/gen-main/json"
-
-  -- Read namespace lists from manifest.json
-  mainNamespaces <- readManifestField haskellMainJson "mainModules"
-  evalLibNamespaces <- readManifestField haskellMainJson "evalLibModules"
-  let allNamespaces = mainNamespaces ++ evalLibNamespaces
-
-  putStrLn "Loading main modules from JSON..."
-  putStrLn $ "  Source: " ++ haskellMainJson
-  mainMods <- loadModulesFromJson False haskellMainJson kernelModules allNamespaces
-  putStrLn $ "  Loaded " ++ show (length mainMods) ++ " main modules."
+  putStrLn $ "  Target:            " ++ targetCap
+  putStrLn $ "  Output:            " ++ outBase
+  putStrLn $ "  Include coders:    " ++ show (optIncludeCoders opts)
+  putStrLn $ "  Include tests:     " ++ show (optIncludeTests opts)
+  putStrLn $ "  Include gen tests: " ++ show (optIncludeGenTests opts)
   putStrLn ""
 
-  -- Generate code for the target language.
-  -- doInfer=False because modules loaded from JSON already have type annotations.
-  let outMain = outDir FP.</> ("src/gen-main/" ++ target)
-  putStrLn $ "Mapping modules from JSON to " ++ target ++ " (via Haskell host)..."
-  putStrLn "  Generating (this may take several minutes)..."
+  -- Step 1: Load main + eval lib modules from kernel JSON
+  putStrLn "Step 1: Loading main modules from JSON..."
+  mainNamespaces <- readManifestField kernelJsonDir "mainModules"
+  evalLibNamespaces <- readManifestField kernelJsonDir "evalLibModules"
+  let allKernelNamespaces = mainNamespaces ++ evalLibNamespaces
 
-  mainStart <- getCurrentTime
+  loadStart <- getCurrentTime
+  mainMods <- loadModulesFromJson False kernelJsonDir kernelModules allKernelNamespaces
+  loadEnd <- getCurrentTime
+  putStrLn $ "  Loaded " ++ show (length mainMods) ++ " modules (" ++ formatTime (elapsed loadEnd loadStart) ++ ")"
+  putStrLn ""
+
+  -- Step 2: Optionally load ext coder modules
+  coderMods <- if optIncludeCoders opts
+    then do
+      putStrLn "Step 2: Loading hydra-ext coder modules from JSON..."
+      coderNamespaces <- readManifestField extJsonDir "hydraCoderModules"
+      -- Filter out haskell coder modules (already loaded as part of mainModules)
+      let kernelNsSet = fmap unNamespace allKernelNamespaces
+          (_, extCoderNamespaces) = partition (\ns -> unNamespace ns `elem` kernelNsSet) coderNamespaces
+      loadStart2 <- getCurrentTime
+      mods <- loadModulesFromJson False extJsonDir kernelModules extCoderNamespaces
+      loadEnd2 <- getCurrentTime
+      putStrLn $ "  Loaded " ++ show (length mods) ++ " modules (" ++ formatTime (elapsed loadEnd2 loadStart2) ++ ")"
+      putStrLn ""
+      return mods
+    else do
+      putStrLn "Step 2: Skipping ext coder modules"
+      putStrLn ""
+      return []
+
+  -- Apply filters
+  let allMods = mainMods ++ coderMods
+  let filtered1 = if optKernelOnly opts
+        then Prelude.filter (\m -> not $ isPrefixOf "hydra.ext." (unNamespace (moduleNamespace m))) allMods
+        else allMods
+  let filtered2 = if optTypesOnly opts
+        then Prelude.filter (\m -> any isNativeType (moduleElements m)) filtered1
+        else filtered1
+  let allMainMods = filtered2
+
+  when (optKernelOnly opts) $ do
+    putStrLn $ "Filtering to kernel modules: " ++ show (length allMainMods) ++ " of " ++ show (length allMods)
+    putStrLn ""
+  when (optTypesOnly opts) $ do
+    putStrLn $ "Filtering to type modules: " ++ show (length allMainMods) ++ " of " ++ show (length filtered1)
+    putStrLn ""
+
+  -- Generate main modules
+  let stepNum = if optIncludeCoders opts then "3" else "2"
+  putStrLn $ "Step " ++ stepNum ++ ": Mapping " ++ show (length allMainMods) ++ " modules to " ++ targetCap ++ "..."
+
+  genStart <- getCurrentTime
   case target of
-    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain mainMods mainMods
-    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain mainMods mainMods
-    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain mainMods mainMods
+    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allMainMods allMainMods
+    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain allMainMods allMainMods
+    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allMainMods allMainMods
     _ -> do
       putStrLn $ "Unknown target: " ++ target
       exitFailure
-  mainEnd <- getCurrentTime
-  let mainSecs = realToFrac (diffUTCTime mainEnd mainStart) :: Double
+  genEnd <- getCurrentTime
 
   mainFileCount <- countFiles outMain ext
-  putStrLn $ "  Haskell to " ++ target ++ ": done generating main modules (" ++ show mainFileCount ++ " files)."
-  putStrLn $ "  Time: " ++ formatTime mainSecs
+  putStrLn $ "  Generated " ++ show mainFileCount ++ " files (" ++ formatTime (elapsed genEnd genStart) ++ ")"
   putStrLn ""
 
-  -- Load and generate test modules.
-  let haskellTestJson = "../hydra-haskell/src/gen-test/json"
-  testNamespaces <- readManifestField haskellMainJson "testModules"
+  -- Optionally generate test modules
+  testFileCount <- if optIncludeTests opts
+    then do
+      putStrLn "Loading test modules from JSON..."
+      testNamespaces <- readManifestField kernelJsonDir "testModules"
+      testMods <- loadModulesFromJson False testJsonDir kernelModules testNamespaces
+      putStrLn $ "  Loaded " ++ show (length testMods) ++ " test modules"
+      putStrLn ""
 
-  putStrLn "Loading test modules from JSON..."
-  putStrLn $ "  Source: " ++ haskellTestJson
-  testMods <- loadModulesFromJson False haskellTestJson kernelModules testNamespaces
-  putStrLn $ "  Loaded " ++ show (length testMods) ++ " test modules."
-  putStrLn ""
+      let allUniverse = allMainMods ++ testMods
+      putStrLn $ "Mapping test modules to " ++ targetCap ++ "..."
 
-  let allUniverse = mainMods ++ testMods
-  let outTest = outDir FP.</> ("src/gen-test/" ++ target)
-  putStrLn $ "Mapping test suite from JSON to " ++ target ++ " (via Haskell host)..."
-  putStrLn "  Generating (this may take several minutes)..."
+      testStart <- getCurrentTime
+      case target of
+        "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outTest allUniverse testMods
+        "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outTest allUniverse testMods
+        "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outTest allUniverse testMods
+        _ -> return ()
+      testEnd <- getCurrentTime
 
-  testStart <- getCurrentTime
-  case target of
-    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outTest allUniverse testMods
-    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outTest allUniverse testMods
-    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outTest allUniverse testMods
-    _ -> return ()
-  testEnd <- getCurrentTime
-  let testSecs = realToFrac (diffUTCTime testEnd testStart) :: Double
+      count <- countFiles outTest ext
+      putStrLn $ "  Generated " ++ show count ++ " test files (" ++ formatTime (elapsed testEnd testStart) ++ ")"
+      putStrLn ""
+      return count
+    else return 0
 
-  testFileCount <- countFiles outTest ext
-  putStrLn $ "  Haskell to " ++ target ++ ": done generating test modules (" ++ show testFileCount ++ " files)."
-  putStrLn $ "  Time: " ++ formatTime testSecs
-  putStrLn ""
+  -- Optionally generate generation tests
+  genTestSuccess <- if optIncludeGenTests opts
+    then do
+      let (genTestDir, genTestExt) = case target of
+            "haskell" -> (outBase FP.</> "src/gen-test/haskell", ".hs")
+            "java"    -> (outBase FP.</> "src/gen-test/java/generation", ".java")
+            "python"  -> (outBase FP.</> "src/gen-test/python", ".py")
+            _         -> (outBase FP.</> "src/gen-test/" ++ target, "")
+      putStrLn $ "Generating " ++ targetCap ++ " generation tests..."
+      genTestStart <- getCurrentTime
+      success <- case target of
+        "haskell" -> runGenTests haskellTestGenerator genTestDir
+        "java"    -> runGenTests javaTestGenerator genTestDir
+        "python"  -> runGenTests pythonTestGenerator genTestDir
+        _ -> do
+          putStrLn $ "  WARNING: No generation test codec for target: " ++ target
+          return True
+      genTestEnd <- getCurrentTime
+      genTestCount <- countFiles genTestDir genTestExt
+      putStrLn $ "  Generated " ++ show genTestCount ++ " generation test files (" ++ formatTime (elapsed genTestEnd genTestStart) ++ ")"
+      putStrLn ""
+      return success
+    else return True
 
   putStrLn "=========================================="
-  putStrLn $ "Haskell to " ++ target ++ ": done generating all modules"
-  putStrLn $ "  Output files: " ++ show mainFileCount ++ " main + " ++ show testFileCount ++ " test"
-  putStrLn $ "  Output:       " ++ outDir
+  putStrLn $ "Done: " ++ show mainFileCount ++ " main"
+    ++ (if optIncludeTests opts then " + " ++ show testFileCount ++ " test" else "")
+    ++ " files"
+  putStrLn $ "  Output: " ++ outBase
   putStrLn "=========================================="
+
+  if not genTestSuccess
+    then exitFailure
+    else return ()
+
+elapsed :: UTCTime -> UTCTime -> Double
+elapsed end start = realToFrac (diffUTCTime end start)
+
+runGenTests :: TestGenerator a -> FilePath -> IO Bool
+runGenTests testGen outputDir = do
+  let testNamespaces = moduleTermDependencies TestSuite.module_
+  let lookupFn = createTestGroupLookup testNamespaces GenTests.allTests
+  let testModules = TestSuite.testSuiteModules
+  generateGenerationTestSuite testGen outputDir testModules lookupFn

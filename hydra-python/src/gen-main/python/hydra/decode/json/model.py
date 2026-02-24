@@ -18,8 +18,8 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.util
 
-def value(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.json.model.Value]:
-    def _hoist_hydra_decode_json_model_value_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.json.model.Value]:
+def value(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_json_model_value_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -35,64 +35,64 @@ def value(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Deco
                 def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
-                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.json.model.Value]]]:
-                    def _hoist_variant_map_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, bool]:
+                def variant_map():
+                    def _hoist_variant_map_1(v12):
                         match v12:
                             case hydra.core.LiteralBoolean(value=b):
                                 return Right(b)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected boolean literal"))
-                    def _hoist_variant_map_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, bool]:
+                    def _hoist_variant_map_2(v12):
                         match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_1(v)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected literal"))
-                    def _hoist_variant_map_3(v12: hydra.core.FloatValue) -> Either[hydra.util.DecodingError, Decimal]:
+                    def _hoist_variant_map_3(v12):
                         match v12:
                             case hydra.core.FloatValueBigfloat(value=f):
                                 return Right(f)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected bigfloat value"))
-                    def _hoist_variant_map_4(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, Decimal]:
+                    def _hoist_variant_map_4(v12):
                         match v12:
-                            case hydra.core.LiteralFloat(value=v13):
-                                return _hoist_variant_map_3(v13)
+                            case hydra.core.LiteralFloat(value=_match_value):
+                                return _hoist_variant_map_3(_match_value)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected bigfloat literal"))
-                    def _hoist_variant_map_5(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, Decimal]:
+                    def _hoist_variant_map_5(v12):
                         match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_4(v)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected literal"))
-                    def _hoist_variant_map_6(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    def _hoist_variant_map_6(v12):
                         match v12:
                             case hydra.core.LiteralString(value=s):
                                 return Right(s)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected string literal"))
-                    def _hoist_variant_map_7(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    def _hoist_variant_map_7(v12):
                         match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_6(v)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected literal"))
-                    def _hoist_variant_map_8(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    def _hoist_variant_map_8(v12):
                         match v12:
                             case hydra.core.LiteralString(value=s):
                                 return Right(s)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected string literal"))
-                    def _hoist_variant_map_9(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    def _hoist_variant_map_9(v12):
                         match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_8(v)

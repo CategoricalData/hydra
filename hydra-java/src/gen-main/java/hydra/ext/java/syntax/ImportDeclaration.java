@@ -5,15 +5,15 @@ package hydra.ext.java.syntax;
 import java.io.Serializable;
 
 public abstract class ImportDeclaration implements Serializable, Comparable<ImportDeclaration> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.java.syntax.ImportDeclaration");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.java.syntax.ImportDeclaration");
   
-  public static final hydra.core.Name FIELD_NAME_SINGLE_TYPE = new hydra.core.Name("singleType");
+  public static final hydra.core.Name SINGLE_TYPE = new hydra.core.Name("singleType");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE_IMPORT_ON_DEMAND = new hydra.core.Name("typeImportOnDemand");
+  public static final hydra.core.Name TYPE_IMPORT_ON_DEMAND = new hydra.core.Name("typeImportOnDemand");
   
-  public static final hydra.core.Name FIELD_NAME_SINGLE_STATIC_IMPORT = new hydra.core.Name("singleStaticImport");
+  public static final hydra.core.Name SINGLE_STATIC_IMPORT = new hydra.core.Name("singleStaticImport");
   
-  public static final hydra.core.Name FIELD_NAME_STATIC_IMPORT_ON_DEMAND = new hydra.core.Name("staticImportOnDemand");
+  public static final hydra.core.Name STATIC_IMPORT_ON_DEMAND = new hydra.core.Name("staticImportOnDemand");
   
   private ImportDeclaration () {
   

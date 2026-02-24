@@ -125,7 +125,7 @@ def dataclass_decorator() -> hydra.ext.python.syntax.NamedExpression:
 def deduplicate_case_variables(cases_: frozenlist[hydra.core.Field]) -> frozenlist[hydra.core.Field]:
     r"""Rewrite case statements to avoid variable name collisions."""
     
-    def rewrite_case(state: tuple[FrozenDict[hydra.core.Name, int], frozenlist[hydra.core.Field]], field: hydra.core.Field) -> tuple[FrozenDict[hydra.core.Name, int], frozenlist[hydra.core.Field]]:
+    def rewrite_case(state: tuple[FrozenDict[hydra.core.Name, int], frozenlist[hydra.core.Field]], field: hydra.core.Field):
         @lru_cache(1)
         def count_by_name() -> FrozenDict[hydra.core.Name, int]:
             return hydra.lib.pairs.first(state)
@@ -138,7 +138,7 @@ def deduplicate_case_variables(cases_: frozenlist[hydra.core.Field]) -> frozenli
         @lru_cache(1)
         def fterm() -> hydra.core.Term:
             return field.term
-        def _hoist_body_1(v1: hydra.core.Function) -> tuple[FrozenDict[hydra.core.Name, int], frozenlist[hydra.core.Field]]:
+        def _hoist_body_1(v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
                     @lru_cache(1)
@@ -188,15 +188,15 @@ def eliminate_unit_var(v: hydra.core.Name, term0: hydra.core.Term) -> hydra.core
         return hydra.core.Field(fld.name, rewrite(fld.term))
     def rewrite_binding(rewrite: Callable[[hydra.core.Term], hydra.core.Term], bnd: hydra.core.Binding) -> hydra.core.Binding:
         return hydra.core.Binding(bnd.name, rewrite(bnd.term), bnd.type)
-    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
-        def _hoist_rewrite_1(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term, v1: hydra.core.Elimination) -> hydra.core.Term:
+    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term):
+        def _hoist_rewrite_1(recurse, term, v1):
             match v1:
                 case hydra.core.EliminationUnion(value=cs):
                     return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(cs.type_name, hydra.lib.maybes.map(recurse, cs.default), hydra.lib.lists.map((lambda v12: rewrite_field(recurse, v12)), cs.cases))))))))
                 
                 case _:
                     return term
-        def _hoist_rewrite_2(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term, v1: hydra.core.Function) -> hydra.core.Term:
+        def _hoist_rewrite_2(recurse, term, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
                     return hydra.lib.logic.if_else(hydra.lib.equality.equal(lam.parameter, v), (lambda : term), (lambda : cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(lam.parameter, lam.domain, recurse(lam.body))))))))
@@ -395,8 +395,8 @@ def encode_literal_type(lt: hydra.core.LiteralType) -> hydra.compute.Flow[T0, hy
     r"""Encode a literal type to a Python type expression."""
     
     @lru_cache(1)
-    def find_name() -> str:
-        def _hoist_find_name_1(v1: hydra.core.FloatType) -> str:
+    def find_name():
+        def _hoist_find_name_1(v1):
             match v1:
                 case hydra.core.FloatType.BIGFLOAT:
                     return "Decimal"
@@ -763,6 +763,9 @@ def term_arity_with_primitives(graph: hydra.graph.Graph, term: hydra.core.Term) 
         case hydra.core.TermFunction(value=f):
             return function_arity_with_primitives(graph, f)
         
+        case hydra.core.TermVariable(value=name):
+            return hydra.lib.maybes.maybe(0, (lambda el: hydra.lib.maybes.maybe(hydra.arity.term_arity(el.term), (lambda ts: hydra.arity.type_scheme_arity(ts)), el.type)), hydra.lexical.lookup_element(graph, name))
+        
         case _:
             return 0
 
@@ -771,7 +774,7 @@ def encode_application(env: hydra.ext.python.helpers.PythonEnvironment, app: hyd
     
     return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda pyg: (g := py_graph_graph(pyg), tc := env.type_context, skip_casts := env.skip_casts, term := cast(hydra.core.Term, hydra.core.TermApplication(app)), gathered := hydra.coder_utils.gather_args(term, ()), fun := hydra.lib.pairs.first(gathered), args := hydra.lib.pairs.second(gathered), term_arity := term_arity_with_primitives(g, fun), hydra.lib.flows.bind(hydra.lib.flows.with_default(term_arity, hydra.lib.flows.map((lambda x1: hydra.arity.type_arity(x1)), in_graph_context(hydra.checking.type_of(tc, (), fun)))), (lambda arity: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda t: encode_term_inline(env, False, t)), args), (lambda pargs: (hargs := hydra.lib.lists.take(arity, pargs), rargs := hydra.lib.lists.drop(arity, pargs), hydra.lib.flows.bind(encode_application_inner(env, fun, hargs, rargs), (lambda result: (lhs := hydra.lib.pairs.first(result), remaining_rargs := hydra.lib.pairs.second(result), pyapp := hydra.lib.lists.foldl((lambda t, a: hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_expression_to_py_primary(t), (a,))), lhs, remaining_rargs), hydra.lib.flows.pure(pyapp))[3])))[2])))))[8]))
 
-def encode_application_inner(env: hydra.ext.python.helpers.PythonEnvironment, fun: hydra.core.Term, hargs: frozenlist[hydra.ext.python.syntax.Expression], rargs: frozenlist[hydra.ext.python.syntax.Expression]) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, tuple[hydra.ext.python.syntax.Expression, frozenlist[hydra.ext.python.syntax.Expression]]]:
+def encode_application_inner(env: hydra.ext.python.helpers.PythonEnvironment, fun: hydra.core.Term, hargs: frozenlist[hydra.ext.python.syntax.Expression], rargs: frozenlist[hydra.ext.python.syntax.Expression]):
     r"""Inner helper for encodeApplication."""
     
     @lru_cache(1)
@@ -785,7 +788,7 @@ def encode_application_inner(env: hydra.ext.python.helpers.PythonEnvironment, fu
     @lru_cache(1)
     def default_case() -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, tuple[hydra.ext.python.syntax.Expression, frozenlist[hydra.ext.python.syntax.Expression]]]:
         return hydra.lib.flows.bind(encode_term_inline(env, False, fun), (lambda pfun: hydra.lib.flows.pure((hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_expression_to_py_primary(pfun), hargs), rargs))))
-    def _hoist_body_1(v1: hydra.core.Elimination) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, tuple[hydra.ext.python.syntax.Expression, frozenlist[hydra.ext.python.syntax.Expression]]]:
+    def _hoist_body_1(v1):
         match v1:
             case hydra.core.EliminationRecord(value=proj):
                 @lru_cache(1)
@@ -810,7 +813,7 @@ def encode_application_inner(env: hydra.ext.python.helpers.PythonEnvironment, fu
             
             case _:
                 return default_case()
-    def _hoist_body_2(v1: hydra.core.Function) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, tuple[hydra.ext.python.syntax.Expression, frozenlist[hydra.ext.python.syntax.Expression]]]:
+    def _hoist_body_2(v1):
         match v1:
             case hydra.core.FunctionElimination(value=elm):
                 return _hoist_body_1(elm)
@@ -853,8 +856,8 @@ def encode_binding_as_assignment(allow_thunking: bool, env: hydra.ext.python.hel
         return hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.LOWER_SNAKE, env, name())
     return hydra.lib.flows.bind(encode_term_inline(env, False, term()), (lambda pbody: (tc := env.type_context, is_complex_var := hydra.coder_utils.is_complex_variable(tc, name()), term_is_complex := hydra.coder_utils.is_complex_term(tc, term()), needs_thunk := hydra.lib.maybes.maybe(hydra.lib.logic.and_(allow_thunking, hydra.lib.logic.or_(is_complex_var, term_is_complex)), (lambda ts: hydra.lib.logic.and_(allow_thunking, hydra.lib.logic.and_(hydra.lib.equality.equal(hydra.arity.type_scheme_arity(ts), 0), hydra.lib.logic.or_(is_complex_var, term_is_complex)))), mts()), pterm := hydra.lib.logic.if_else(needs_thunk, (lambda : make_thunk(pbody)), (lambda : pbody)), hydra.lib.flows.pure(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionAssignment(hydra.ext.python.syntax.AssignmentExpression(py_name(), pterm)))))[5]))
 
-def encode_function(env: hydra.ext.python.helpers.PythonEnvironment, f: hydra.core.Function) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, hydra.ext.python.syntax.Expression]:
-    def _hoist_hydra_ext_python_coder_encode_function_1(env: hydra.ext.python.helpers.PythonEnvironment, v1: hydra.core.Elimination) -> hydra.compute.Flow[T0, hydra.ext.python.syntax.Expression]:
+def encode_function(env: hydra.ext.python.helpers.PythonEnvironment, f: hydra.core.Function):
+    def _hoist_hydra_ext_python_coder_encode_function_1(env, v1):
         match v1:
             case hydra.core.EliminationRecord(value=proj):
                 @lru_cache(1)
@@ -1025,8 +1028,8 @@ def encode_case_block(env: hydra.ext.python.helpers.PythonEnvironment, tname: hy
     def stripped() -> hydra.core.Term:
         return hydra.rewriting.deannotate_and_detype_term(fterm())
     @lru_cache(1)
-    def effective_lambda() -> hydra.core.Lambda:
-        def _hoist_effective_lambda_1(v1: hydra.core.Function) -> hydra.core.Lambda:
+    def effective_lambda():
+        def _hoist_effective_lambda_1(v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
                     return lam
@@ -1100,8 +1103,8 @@ def use_inline_type_params() -> bool:
 def extend_env_with_lambda_params(env: hydra.ext.python.helpers.PythonEnvironment, term: hydra.core.Term) -> hydra.ext.python.helpers.PythonEnvironment:
     r"""Extend environment with lambda parameters from a term."""
     
-    def go(e: hydra.ext.python.helpers.PythonEnvironment, t: hydra.core.Term) -> hydra.ext.python.helpers.PythonEnvironment:
-        def _hoist_go_1(e: hydra.ext.python.helpers.PythonEnvironment, v1: hydra.core.Function) -> hydra.ext.python.helpers.PythonEnvironment:
+    def go(e: hydra.ext.python.helpers.PythonEnvironment, t: hydra.core.Term):
+        def _hoist_go_1(e, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
                     @lru_cache(1)
@@ -1122,15 +1125,15 @@ def extend_env_with_lambda_params(env: hydra.ext.python.helpers.PythonEnvironmen
                 return e
     return go(env, term)
 
-def extract_case_elimination(term: hydra.core.Term) -> Maybe[hydra.core.CaseStatement]:
-    def _hoist_hydra_ext_python_coder_extract_case_elimination_1(v1: hydra.core.Elimination) -> Maybe[hydra.core.CaseStatement]:
+def extract_case_elimination(term: hydra.core.Term):
+    def _hoist_hydra_ext_python_coder_extract_case_elimination_1(v1):
         match v1:
             case hydra.core.EliminationUnion(value=cs):
                 return Just(cs)
             
             case _:
                 return Nothing()
-    def _hoist_hydra_ext_python_coder_extract_case_elimination_2(v1: hydra.core.Function) -> Maybe[hydra.core.CaseStatement]:
+    def _hoist_hydra_ext_python_coder_extract_case_elimination_2(v1):
         match v1:
             case hydra.core.FunctionElimination(value=e):
                 return _hoist_hydra_ext_python_coder_extract_case_elimination_1(e)
@@ -1147,8 +1150,8 @@ def extract_case_elimination(term: hydra.core.Term) -> Maybe[hydra.core.CaseStat
 def gather_lambdas(term: hydra.core.Term) -> tuple[frozenlist[hydra.core.Name], hydra.core.Term]:
     r"""Extract lambdas and their bodies from a term."""
     
-    def go(params: frozenlist[hydra.core.Name], t: hydra.core.Term) -> tuple[frozenlist[hydra.core.Name], hydra.core.Term]:
-        def _hoist_go_1(params: frozenlist[hydra.core.Name], t: hydra.core.Term, v1: hydra.core.Function) -> tuple[frozenlist[hydra.core.Name], hydra.core.Term]:
+    def go(params: frozenlist[hydra.core.Name], t: hydra.core.Term):
+        def _hoist_go_1(params, t, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=l):
                     return go(hydra.lib.lists.concat2(params, (l.parameter,)), l.body)
@@ -1163,7 +1166,7 @@ def gather_lambdas(term: hydra.core.Term) -> tuple[frozenlist[hydra.core.Name], 
                 return (params, t)
     return go((), term)
 
-def is_case_statement_application(term: hydra.core.Term) -> Maybe[tuple[hydra.core.Name, tuple[Maybe[hydra.core.Term], tuple[frozenlist[hydra.core.Field], hydra.core.Term]]]]:
+def is_case_statement_application(term: hydra.core.Term):
     r"""Check if a term is a case statement applied to exactly one argument."""
     
     @lru_cache(1)
@@ -1175,14 +1178,7 @@ def is_case_statement_application(term: hydra.core.Term) -> Maybe[tuple[hydra.co
     @lru_cache(1)
     def body() -> hydra.core.Term:
         return hydra.lib.pairs.second(gathered())
-    def _else_branch() -> Maybe[tuple[hydra.core.Name, tuple[Maybe[hydra.core.Term], tuple[frozenlist[hydra.core.Field], hydra.core.Term]]]]:
-        arg = hydra.lib.lists.head(args())
-        match hydra.rewriting.deannotate_and_detype_term(body()):
-            case hydra.core.TermFunction(hydra.core.FunctionElimination(hydra.core.EliminationUnion(cs))):
-                return Just((cs.type_name, (cs.default, (cs.cases, arg))))
-            case _:
-                return Nothing()
-    return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.lib.lists.length(args()), 1)), (lambda : Nothing()), _else_branch)
+    return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.lib.lists.length(args()), 1)), (lambda : Nothing()), (lambda : (arg := hydra.lib.lists.head(args()), (_hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3(hydra.rewriting.deannotate_and_detype_term(body())))[3])[1]))
 
 def encode_binding_as(env: hydra.ext.python.helpers.PythonEnvironment, binding: hydra.core.Binding) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, hydra.ext.python.syntax.Statement]:
     r"""Encode a binding as a Python statement (function definition or assignment)."""
@@ -1199,7 +1195,7 @@ def encode_binding_as(env: hydra.ext.python.helpers.PythonEnvironment, binding: 
     @lru_cache(1)
     def fname() -> hydra.ext.python.syntax.Name:
         return hydra.ext.python.names.encode_name(True, hydra.util.CaseConvention.LOWER_SNAKE, env, name1())
-    return hydra.lib.maybes.maybe((gathered := gather_lambdas(term1()), (lambda_params := hydra.lib.pairs.first(gathered), (inner_body := hydra.lib.pairs.second(gathered), (mcsa := is_case_statement_application(inner_body), hydra.lib.maybes.maybe((mcs := extract_case_elimination(term1()), hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda stmts: hydra.lib.lists.head(stmts)), encode_term_multiline(env, term1())), (lambda cs: (tname := cs.type_name, dflt := cs.default, cases_ := cs.cases, hydra.lib.flows.bind(in_graph_context(hydra.schemas.require_union_type(tname)), (lambda rt: (is_enum := hydra.schemas.is_enum_row_type(rt), is_full := is_cases_full(rt, cases_), inner_param := hydra.ext.python.syntax.Param(hydra.ext.python.syntax.Name("x"), Nothing()), param := hydra.ext.python.syntax.ParamNoDefault(inner_param, Nothing()), params := cast(hydra.ext.python.syntax.Parameters, hydra.ext.python.syntax.ParametersParamNoDefault(hydra.ext.python.syntax.ParamNoDefaultParameters((param,), (), Nothing()))), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_case_block(env, tname, rt, is_enum, (lambda e, t: encode_term_multiline(e, t)), v1)), cases_), (lambda py_cases: hydra.lib.flows.bind(encode_default_case_block((lambda t: encode_term_inline(env, False, t)), is_full, dflt, tname), (lambda py_dflt: (subj := cast(hydra.ext.python.syntax.SubjectExpression, hydra.ext.python.syntax.SubjectExpressionSimple(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.syntax.Name("x")))))), all_cases := hydra.lib.lists.concat2(py_cases, py_dflt), match_stmt := cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementMatch(hydra.ext.python.syntax.MatchStatement(subj, all_cases))))), body := hydra.ext.python.utils.indented_block(Nothing(), ((match_stmt,),)), func_def_raw := hydra.ext.python.syntax.FunctionDefRaw(False, fname(), (), Just(params), Nothing(), Nothing(), body), hydra.lib.flows.pure(cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementFunction(hydra.ext.python.syntax.FunctionDefinition(Nothing(), func_def_raw)))))))[5])))))[5])))[3]), mcs))[1], (lambda csa: hydra.lib.logic.if_else(hydra.lib.lists.null(lambda_params), (lambda : (mcs := extract_case_elimination(term1()), hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda stmts: hydra.lib.lists.head(stmts)), encode_term_multiline(env, term1())), (lambda cs: (tname := cs.type_name, dflt := cs.default, cases_ := cs.cases, hydra.lib.flows.bind(in_graph_context(hydra.schemas.require_union_type(tname)), (lambda rt: (is_enum := hydra.schemas.is_enum_row_type(rt), is_full := is_cases_full(rt, cases_), inner_param := hydra.ext.python.syntax.Param(hydra.ext.python.syntax.Name("x"), Nothing()), param := hydra.ext.python.syntax.ParamNoDefault(inner_param, Nothing()), params := cast(hydra.ext.python.syntax.Parameters, hydra.ext.python.syntax.ParametersParamNoDefault(hydra.ext.python.syntax.ParamNoDefaultParameters((param,), (), Nothing()))), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_case_block(env, tname, rt, is_enum, (lambda e, t: encode_term_multiline(e, t)), v1)), cases_), (lambda py_cases: hydra.lib.flows.bind(encode_default_case_block((lambda t: encode_term_inline(env, False, t)), is_full, dflt, tname), (lambda py_dflt: (subj := cast(hydra.ext.python.syntax.SubjectExpression, hydra.ext.python.syntax.SubjectExpressionSimple(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.syntax.Name("x")))))), all_cases := hydra.lib.lists.concat2(py_cases, py_dflt), match_stmt := cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementMatch(hydra.ext.python.syntax.MatchStatement(subj, all_cases))))), body := hydra.ext.python.utils.indented_block(Nothing(), ((match_stmt,),)), func_def_raw := hydra.ext.python.syntax.FunctionDefRaw(False, fname(), (), Just(params), Nothing(), Nothing(), body), hydra.lib.flows.pure(cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementFunction(hydra.ext.python.syntax.FunctionDefinition(Nothing(), func_def_raw)))))))[5])))))[5])))[3]), mcs))[1]), (lambda : (tname := hydra.lib.pairs.first(csa), (rest1 := hydra.lib.pairs.second(csa), (dflt := hydra.lib.pairs.first(rest1), (rest2 := hydra.lib.pairs.second(rest1), (cases_ := hydra.lib.pairs.first(rest2), hydra.lib.flows.bind(in_graph_context(hydra.schemas.require_union_type(tname)), (lambda rt: (is_enum := hydra.schemas.is_enum_row_type(rt), is_full := is_cases_full(rt, cases_), captured_params := hydra.lib.lists.map((lambda n: hydra.ext.python.syntax.ParamNoDefault(hydra.ext.python.syntax.Param(hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.LOWER_SNAKE, env, n), Nothing()), Nothing())), lambda_params), match_arg_name := hydra.ext.python.syntax.Name("x"), match_param := hydra.ext.python.syntax.ParamNoDefault(hydra.ext.python.syntax.Param(match_arg_name, Nothing()), Nothing()), all_params := hydra.lib.lists.concat2(captured_params, (match_param,)), params := cast(hydra.ext.python.syntax.Parameters, hydra.ext.python.syntax.ParametersParamNoDefault(hydra.ext.python.syntax.ParamNoDefaultParameters(all_params, (), Nothing()))), env_with_params := extend_env_with_lambda_params(env, term1()), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_case_block(env_with_params, tname, rt, is_enum, (lambda e, t: encode_term_multiline(e, t)), v1)), cases_), (lambda py_cases: hydra.lib.flows.bind(encode_default_case_block((lambda t: encode_term_inline(env_with_params, False, t)), is_full, dflt, tname), (lambda py_dflt: (subj := cast(hydra.ext.python.syntax.SubjectExpression, hydra.ext.python.syntax.SubjectExpressionSimple(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(hydra.ext.python.utils.py_name_to_py_expression(match_arg_name))))), all_cases := hydra.lib.lists.concat2(py_cases, py_dflt), match_stmt := cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementMatch(hydra.ext.python.syntax.MatchStatement(subj, all_cases))))), body := hydra.ext.python.utils.indented_block(Nothing(), ((match_stmt,),)), func_def_raw := hydra.ext.python.syntax.FunctionDefRaw(False, fname(), (), Just(params), Nothing(), Nothing(), body), hydra.lib.flows.pure(cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementFunction(hydra.ext.python.syntax.FunctionDefinition(Nothing(), func_def_raw)))))))[5])))))[8])))[1])[1])[1])[1])[1]))), mcsa))[1])[1])[1])[1], (lambda ts: hydra.lib.flows.bind(in_graph_context(hydra.annotations.get_term_description(term1())), (lambda comment: (norm_comment := hydra.lib.maybes.map(hydra.coder_utils.normalize_comment, comment), encode_term_assignment(env, name1(), term1(), ts, norm_comment))[1]))), mts())
+    return hydra.lib.maybes.maybe((gathered := gather_lambdas(term1()), (lambda_params := hydra.lib.pairs.first(gathered), (inner_body := hydra.lib.pairs.second(gathered), (mcsa := is_case_statement_application(inner_body), hydra.lib.maybes.maybe((mcs := extract_case_elimination(term1()), hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda stmts: hydra.lib.lists.head(stmts)), encode_term_multiline(env, term1())), (lambda cs: (tname := cs.type_name, dflt := cs.default, cases_ := cs.cases, hydra.lib.flows.bind(in_graph_context(hydra.schemas.require_union_type(tname)), (lambda rt: (is_enum := hydra.schemas.is_enum_row_type(rt), is_full := is_cases_full(rt, cases_), inner_param := hydra.ext.python.syntax.Param(hydra.ext.python.syntax.Name("x"), Nothing()), param := hydra.ext.python.syntax.ParamNoDefault(inner_param, Nothing()), params := cast(hydra.ext.python.syntax.Parameters, hydra.ext.python.syntax.ParametersParamNoDefault(hydra.ext.python.syntax.ParamNoDefaultParameters((param,), (), Nothing()))), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_case_block(env, tname, rt, is_enum, (lambda e, t: encode_term_multiline(e, t)), v1)), cases_), (lambda py_cases: hydra.lib.flows.bind(encode_default_case_block((lambda t: encode_term_inline(env, False, t)), is_full, dflt, tname), (lambda py_dflt: (subj := cast(hydra.ext.python.syntax.SubjectExpression, hydra.ext.python.syntax.SubjectExpressionSimple(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.syntax.Name("x")))))), all_cases := hydra.lib.lists.concat2(py_cases, py_dflt), match_stmt := cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementMatch(hydra.ext.python.syntax.MatchStatement(subj, all_cases))))), body := hydra.ext.python.utils.indented_block(Nothing(), ((match_stmt,),)), func_def_raw := hydra.ext.python.syntax.FunctionDefRaw(False, fname(), (), Just(params), Nothing(), Nothing(), body), hydra.lib.flows.pure(cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementFunction(hydra.ext.python.syntax.FunctionDefinition(Nothing(), func_def_raw)))))))[5])))))[5])))[3]), mcs))[1], (lambda csa: hydra.lib.logic.if_else(hydra.lib.lists.null(lambda_params), (lambda : (mcs := extract_case_elimination(term1()), hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda stmts: hydra.lib.lists.head(stmts)), encode_term_multiline(env, term1())), (lambda cs: (tname := cs.type_name, dflt := cs.default, cases_ := cs.cases, hydra.lib.flows.bind(in_graph_context(hydra.schemas.require_union_type(tname)), (lambda rt: (is_enum := hydra.schemas.is_enum_row_type(rt), is_full := is_cases_full(rt, cases_), inner_param := hydra.ext.python.syntax.Param(hydra.ext.python.syntax.Name("x"), Nothing()), param := hydra.ext.python.syntax.ParamNoDefault(inner_param, Nothing()), params := cast(hydra.ext.python.syntax.Parameters, hydra.ext.python.syntax.ParametersParamNoDefault(hydra.ext.python.syntax.ParamNoDefaultParameters((param,), (), Nothing()))), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_case_block(env, tname, rt, is_enum, (lambda e, t: encode_term_multiline(e, t)), v1)), cases_), (lambda py_cases: hydra.lib.flows.bind(encode_default_case_block((lambda t: encode_term_inline(env, False, t)), is_full, dflt, tname), (lambda py_dflt: (subj := cast(hydra.ext.python.syntax.SubjectExpression, hydra.ext.python.syntax.SubjectExpressionSimple(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.syntax.Name("x")))))), all_cases := hydra.lib.lists.concat2(py_cases, py_dflt), match_stmt := cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementMatch(hydra.ext.python.syntax.MatchStatement(subj, all_cases))))), body := hydra.ext.python.utils.indented_block(Nothing(), ((match_stmt,),)), func_def_raw := hydra.ext.python.syntax.FunctionDefRaw(False, fname(), (), Just(params), Nothing(), Nothing(), body), hydra.lib.flows.pure(cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementFunction(hydra.ext.python.syntax.FunctionDefinition(Nothing(), func_def_raw)))))))[5])))))[5])))[3]), mcs))[1]), (lambda : (tname := hydra.lib.pairs.first(csa), (rest1 := hydra.lib.pairs.second(csa), (dflt := hydra.lib.pairs.first(rest1), (rest2 := hydra.lib.pairs.second(rest1), (cases_ := hydra.lib.pairs.first(rest2), hydra.lib.flows.bind(in_graph_context(hydra.schemas.require_union_type(tname)), (lambda rt: (is_enum := hydra.schemas.is_enum_row_type(rt), is_full := is_cases_full(rt, cases_), captured_var_names := hydra.lib.lists.init(lambda_params), match_lambda_param := hydra.lib.lists.last(lambda_params), captured_params := hydra.lib.lists.map((lambda n: hydra.ext.python.syntax.ParamNoDefault(hydra.ext.python.syntax.Param(hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.LOWER_SNAKE, env, n), Nothing()), Nothing())), captured_var_names), match_arg_name := hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.LOWER_SNAKE, env, match_lambda_param), match_param := hydra.ext.python.syntax.ParamNoDefault(hydra.ext.python.syntax.Param(match_arg_name, Nothing()), Nothing()), all_params := hydra.lib.lists.concat2(captured_params, (match_param,)), params := cast(hydra.ext.python.syntax.Parameters, hydra.ext.python.syntax.ParametersParamNoDefault(hydra.ext.python.syntax.ParamNoDefaultParameters(all_params, (), Nothing()))), env_with_params := extend_env_with_lambda_params(env, term1()), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_case_block(env_with_params, tname, rt, is_enum, (lambda e, t: encode_term_multiline(e, t)), v1)), cases_), (lambda py_cases: hydra.lib.flows.bind(encode_default_case_block((lambda t: encode_term_inline(env_with_params, False, t)), is_full, dflt, tname), (lambda py_dflt: (subj := cast(hydra.ext.python.syntax.SubjectExpression, hydra.ext.python.syntax.SubjectExpressionSimple(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(hydra.ext.python.utils.py_name_to_py_expression(match_arg_name))))), all_cases := hydra.lib.lists.concat2(py_cases, py_dflt), match_stmt := cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementMatch(hydra.ext.python.syntax.MatchStatement(subj, all_cases))))), body := hydra.ext.python.utils.indented_block(Nothing(), ((match_stmt,),)), func_def_raw := hydra.ext.python.syntax.FunctionDefRaw(False, fname(), (), Just(params), Nothing(), Nothing(), body), hydra.lib.flows.pure(cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementFunction(hydra.ext.python.syntax.FunctionDefinition(Nothing(), func_def_raw)))))))[5])))))[10])))[1])[1])[1])[1])[1]))), mcsa))[1])[1])[1])[1], (lambda ts: hydra.lib.flows.bind(in_graph_context(hydra.annotations.get_term_description(term1())), (lambda comment: (norm_comment := hydra.lib.maybes.map(hydra.coder_utils.normalize_comment, comment), encode_term_assignment(env, name1(), term1(), ts, norm_comment))[1]))), mts())
 
 def encode_function_definition(env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name, tparams: frozenlist[hydra.core.Name], args: frozenlist[hydra.core.Name], body: hydra.core.Term, doms: frozenlist[hydra.core.Type], mcod: Maybe[hydra.core.Type], comment: Maybe[str], prefixes: frozenlist[hydra.ext.python.syntax.Statement]) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, hydra.ext.python.syntax.Statement]:
     r"""Encode a function definition with parameters and body."""
@@ -1211,7 +1207,7 @@ def encode_term_assignment(env: hydra.ext.python.helpers.PythonEnvironment, name
     
     return hydra.lib.flows.bind(analyze_python_function(env, term), (lambda fs: (tparams := fs.type_params, params := fs.params, bindings := fs.bindings, body := fs.body, doms := fs.domains, mcod := fs.codomain, env2 := fs.environment, tc := env2.type_context, binding := hydra.core.Binding(name, term, Just(ts)), is_complex := hydra.coder_utils.is_complex_binding(tc, binding), hydra.lib.logic.if_else(is_complex, (lambda : with_bindings(bindings, hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_binding_as(env2, v1)), bindings), (lambda binding_stmts: encode_function_definition(env2, name, tparams, params, body, doms, mcod, comment, binding_stmts))))), (lambda : hydra.lib.flows.bind(encode_term_inline(env2, False, body), (lambda body_expr: (py_name := hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.LOWER_SNAKE, env2, name), hydra.lib.flows.pure(hydra.ext.python.utils.annotated_statement(comment, hydra.ext.python.utils.assignment_statement(py_name, body_expr))))[1])))))[10]))
 
-def encode_term_multiline(env: hydra.ext.python.helpers.PythonEnvironment, term: hydra.core.Term) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, frozenlist[hydra.ext.python.syntax.Statement]]:
+def encode_term_multiline(env: hydra.ext.python.helpers.PythonEnvironment, term: hydra.core.Term):
     r"""Encode a term to a list of statements with return as final statement."""
     
     @lru_cache(1)
@@ -1226,29 +1222,7 @@ def encode_term_multiline(env: hydra.ext.python.helpers.PythonEnvironment, term:
     @lru_cache(1)
     def body() -> hydra.core.Term:
         return hydra.lib.pairs.second(gathered())
-    def _match_branch():
-        arg = hydra.lib.lists.head(args())
-        match hydra.rewriting.deannotate_and_detype_term(body()):
-            case hydra.core.TermFunction(hydra.core.FunctionElimination(hydra.core.EliminationUnion(v3))):
-                tname = v3.type_name
-                dflt = v3.default
-                cases_ = v3.cases
-                def _on_rt(rt):
-                    is_enum = hydra.schemas.is_enum_row_type(rt)
-                    is_full = is_cases_full(rt, cases_)
-                    def _on_py_arg(py_arg):
-                        def _on_py_cases(py_cases):
-                            def _on_py_dflt(py_dflt):
-                                subj = cast(hydra.ext.python.syntax.SubjectExpression, hydra.ext.python.syntax.SubjectExpressionSimple(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(py_arg))))
-                                match_stmt = cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementMatch(hydra.ext.python.syntax.MatchStatement(subj, hydra.lib.lists.concat2(py_cases, py_dflt))))))
-                                return hydra.lib.flows.pure((match_stmt,))
-                            return hydra.lib.flows.bind(encode_default_case_block((lambda t: encode_term_inline(env, False, t)), is_full, dflt, tname), _on_py_dflt)
-                        return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_case_block(env, tname, rt, is_enum, (lambda e, t: encode_term_multiline(e, t)), v1)), deduplicate_case_variables(cases_)), _on_py_cases)
-                    return hydra.lib.flows.bind(encode_term_inline(env, False, arg), _on_py_arg)
-                return hydra.lib.flows.bind(in_graph_context(hydra.schemas.require_union_type(tname)), _on_rt)
-            case _:
-                return dflt_logic()
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(args()), 1), _match_branch, (lambda : dflt_logic()))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(args()), 1), (lambda : (arg := hydra.lib.lists.head(args()), (_hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3(hydra.rewriting.deannotate_and_detype_term(body())))[3])[1]), (lambda : dflt_logic()))
 
 def encode_bindings_as_defs(env: T0, encode_binding: Callable[[T0, T1], hydra.compute.Flow[T2, T3]], bindings: frozenlist[T1]) -> hydra.compute.Flow[T2, frozenlist[T3]]:
     r"""Encode bindings as function definitions."""
@@ -1530,7 +1504,7 @@ def set_meta_uses_generic(m: hydra.ext.python.helpers.PythonModuleMetadata, b: b
 def set_meta_uses_maybe(m: hydra.ext.python.helpers.PythonModuleMetadata, b: bool) -> hydra.ext.python.helpers.PythonModuleMetadata:
     return hydra.ext.python.helpers.PythonModuleMetadata(m.namespaces, m.type_variables, m.uses_annotated, m.uses_callable, m.uses_cast, m.uses_lru_cache, m.uses_type_alias, m.uses_dataclass, m.uses_decimal, m.uses_either, m.uses_enum, m.uses_frozen_dict, m.uses_frozen_list, m.uses_generic, m.uses_just, m.uses_left, b, m.uses_name, m.uses_node, m.uses_nothing, m.uses_right, m.uses_type_var)
 
-def extend_meta_for_type(top_level: bool, is_term_annot: bool, typ: hydra.core.Type, meta: hydra.ext.python.helpers.PythonModuleMetadata) -> hydra.ext.python.helpers.PythonModuleMetadata:
+def extend_meta_for_type(top_level: bool, is_term_annot: bool, typ: hydra.core.Type, meta: hydra.ext.python.helpers.PythonModuleMetadata):
     r"""Extend metadata based on a type (used during module encoding)."""
     
     @lru_cache(1)
@@ -1545,14 +1519,14 @@ def extend_meta_for_type(top_level: bool, is_term_annot: bool, typ: hydra.core.T
     @lru_cache(1)
     def meta_with_subtypes() -> hydra.ext.python.helpers.PythonModuleMetadata:
         return hydra.lib.lists.foldl((lambda m, t: extend_meta_for_type(False, is_term_annot, t, m)), meta_with_tvars(), hydra.rewriting.subtypes(typ))
-    def _hoist_body_1(v1: hydra.core.FloatType) -> hydra.ext.python.helpers.PythonModuleMetadata:
+    def _hoist_body_1(v1):
         match v1:
             case hydra.core.FloatType.BIGFLOAT:
                 return set_meta_uses_decimal(meta_with_subtypes(), True)
             
             case _:
                 return meta_with_subtypes()
-    def _hoist_body_2(v1: hydra.core.LiteralType) -> hydra.ext.python.helpers.PythonModuleMetadata:
+    def _hoist_body_2(v1):
         match v1:
             case hydra.core.LiteralTypeFloat(value=ft):
                 return _hoist_body_1(ft)
@@ -1600,12 +1574,14 @@ def extend_meta_for_type(top_level: bool, is_term_annot: bool, typ: hydra.core.T
             @lru_cache(1)
             def meta_for_wrap() -> hydra.ext.python.helpers.PythonModuleMetadata:
                 return dig_for_wrap(is_term_annot, meta_with_subtypes(), body())
-            match hydra.rewriting.deannotate_type(body()):
-                case hydra.core.TypeRecord():
-                    return set_meta_uses_generic(meta_for_wrap(), True)
-                
-                case _:
-                    return meta_for_wrap()
+            def _hoist_body_1(v1):
+                match v1:
+                    case hydra.core.TypeRecord():
+                        return set_meta_uses_generic(meta_for_wrap(), True)
+                    
+                    case _:
+                        return meta_for_wrap()
+            return _hoist_body_1(hydra.rewriting.deannotate_type(body()))
         
         case hydra.core.TypeRecord(value=rt2):
             @lru_cache(1)
@@ -1640,22 +1616,22 @@ def set_meta_uses_right(m: hydra.ext.python.helpers.PythonModuleMetadata, b: boo
 def extend_meta_for_term(top_level: bool, meta0: hydra.ext.python.helpers.PythonModuleMetadata, term: hydra.core.Term) -> hydra.ext.python.helpers.PythonModuleMetadata:
     r"""Extend metadata based on a term (used during module encoding)."""
     
-    def step(meta: hydra.ext.python.helpers.PythonModuleMetadata, t: hydra.core.Term) -> hydra.ext.python.helpers.PythonModuleMetadata:
-        def _hoist_step_1(meta: hydra.ext.python.helpers.PythonModuleMetadata, v1: hydra.core.Function) -> hydra.ext.python.helpers.PythonModuleMetadata:
+    def step(meta: hydra.ext.python.helpers.PythonModuleMetadata, t: hydra.core.Term):
+        def _hoist_step_1(meta, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
                     return hydra.lib.maybes.maybe(meta, (lambda dom: hydra.lib.logic.if_else(top_level, (lambda : extend_meta_for_type(True, False, dom, meta)), (lambda : meta))), lam.domain)
                 
                 case _:
                     return meta
-        def _hoist_step_2(meta: hydra.ext.python.helpers.PythonModuleMetadata, v1: hydra.core.FloatValue) -> hydra.ext.python.helpers.PythonModuleMetadata:
+        def _hoist_step_2(meta, v1):
             match v1:
                 case hydra.core.FloatValueBigfloat():
                     return set_meta_uses_decimal(meta, True)
                 
                 case _:
                     return meta
-        def _hoist_step_3(meta: hydra.ext.python.helpers.PythonModuleMetadata, v1: hydra.core.Literal) -> hydra.ext.python.helpers.PythonModuleMetadata:
+        def _hoist_step_3(meta, v1):
             match v1:
                 case hydra.core.LiteralFloat(value=fv):
                     return _hoist_step_2(meta, fv)
@@ -1750,8 +1726,8 @@ def initial_environment(namespaces: hydra.module.Namespaces[hydra.ext.python.syn
     
     return hydra.ext.python.helpers.PythonEnvironment(namespaces, ((), hydra.lib.maps.empty()), tcontext, hydra.lib.sets.empty(), target_python_version, True, hydra.lib.sets.empty())
 
-def is_type_module_check(defs: frozenlist[hydra.module.Definition]) -> bool:
-    def _hoist_hydra_ext_python_coder_is_type_module_check_1(v1: hydra.module.Definition) -> bool:
+def is_type_module_check(defs: frozenlist[hydra.module.Definition]):
+    def _hoist_hydra_ext_python_coder_is_type_module_check_1(v1):
         match v1:
             case hydra.module.DefinitionType():
                 return True
@@ -1814,15 +1790,15 @@ def reorder_defs(defs: frozenlist[hydra.module.Definition]) -> frozenlist[hydra.
     def term_defs() -> frozenlist[hydra.module.Definition]:
         return hydra.lib.lists.map((lambda td: cast(hydra.module.Definition, hydra.module.DefinitionTerm(td))), term_defs_raw())
     @lru_cache(1)
-    def sorted_term_defs() -> frozenlist[hydra.module.Definition]:
-        def _hoist_sorted_term_defs_1(v1: hydra.module.Definition) -> hydra.core.Name:
+    def sorted_term_defs():
+        def _hoist_sorted_term_defs_1(v1):
             match v1:
                 case hydra.module.DefinitionTerm(value=td):
                     return td.name
                 
                 case _:
                     raise TypeError("Unsupported Definition")
-        def _hoist_sorted_term_defs_2(v1: hydra.module.Definition) -> frozenlist[hydra.core.Name]:
+        def _hoist_sorted_term_defs_2(v1):
             match v1:
                 case hydra.module.DefinitionTerm(value=td):
                     return hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_term(td.term))
@@ -1849,8 +1825,8 @@ def with_definitions(env: hydra.ext.python.helpers.PythonEnvironment, defs: froz
     r"""Execute a computation with definitions in scope."""
     
     @lru_cache(1)
-    def bindings() -> frozenlist[hydra.core.Binding]:
-        def _hoist_bindings_1(v1: hydra.module.Definition) -> Maybe[hydra.core.Binding]:
+    def bindings():
+        def _hoist_bindings_1(v1):
             match v1:
                 case hydra.module.DefinitionTerm(value=td):
                     return Just(hydra.core.Binding(td.name, td.term, Just(td.type)))

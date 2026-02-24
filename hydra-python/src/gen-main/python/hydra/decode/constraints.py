@@ -15,8 +15,8 @@ import hydra.lexical
 import hydra.lib.eithers
 import hydra.util
 
-def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.constraints.PathEquation]:
-    def _hoist_hydra_decode_constraints_path_equation_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.constraints.PathEquation]:
+def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_constraints_path_equation_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -28,8 +28,8 @@ def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
                 return Left(hydra.util.DecodingError("expected record of type hydra.constraints.PathEquation"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_constraints_path_equation_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def pattern_implication(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.constraints.PatternImplication]:
-    def _hoist_hydra_decode_constraints_pattern_implication_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.constraints.PatternImplication]:
+def pattern_implication(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_constraints_pattern_implication_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
