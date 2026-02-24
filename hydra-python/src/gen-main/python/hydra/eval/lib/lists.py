@@ -25,6 +25,8 @@ def bind(list_term: hydra.core.Term, fun_term: hydra.core.Term) -> hydra.compute
     return hydra.lib.flows.bind(hydra.extract.core.list(list_term), (lambda elements: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el)))), elements)))))))))
 
 def drop_while(pred_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly dropWhile for List terms."""
+    
     return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.pairs.second"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.span"))))), pred_term))), list_term)))))))
 
 def filter(pred_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
@@ -33,6 +35,8 @@ def filter(pred_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.comp
     return hydra.lib.flows.bind(hydra.extract.core.list(list_term), (lambda elements: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.concat"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.logic.ifElse"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(pred_term, el)))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.pure(el)))))), cast(hydra.core.Term, hydra.core.TermList(())))))), elements)))))))))
 
 def find(pred_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly find for List terms."""
+    
     return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.safeHead"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.filter"))))), pred_term))), list_term)))))))
 
 def foldl(fun_term: hydra.core.Term, init_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:

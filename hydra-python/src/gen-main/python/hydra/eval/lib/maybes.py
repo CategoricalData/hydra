@@ -15,10 +15,9 @@ import hydra.monads
 import hydra.show.core
 
 T0 = TypeVar("T0")
-T1 = TypeVar("T1")
 
-def apply(fun_opt_term: hydra.core.Term, arg_opt_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
-    def _hoist_hydra_eval_lib_maybes_apply_1(arg_opt_term: hydra.core.Term, mf: Maybe[hydra.core.Term], v1: hydra.core.Term) -> hydra.compute.Flow[hydra.core.Term, hydra.core.Term]:
+def apply(fun_opt_term: hydra.core.Term, arg_opt_term: hydra.core.Term):
+    def _hoist_hydra_eval_lib_maybes_apply_1(arg_opt_term, mf, v1):
         match v1:
             case hydra.core.TermMaybe(value=mx):
                 return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.bind(mf, (lambda f: hydra.lib.maybes.map((lambda x: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(f, x)))), mx))))))
@@ -33,6 +32,8 @@ def apply(fun_opt_term: hydra.core.Term, arg_opt_term: hydra.core.Term) -> hydra
             return hydra.monads.unexpected("optional function", hydra.show.core.term(fun_opt_term))
 
 def bind(opt_term: hydra.core.Term, fun_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly monadic bind for Maybe terms."""
+    
     match opt_term:
         case hydra.core.TermMaybe(value=m):
             return hydra.lib.flows.pure(hydra.lib.maybes.maybe(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
@@ -41,6 +42,8 @@ def bind(opt_term: hydra.core.Term, fun_term: hydra.core.Term) -> hydra.compute.
             return hydra.monads.unexpected("optional value", hydra.show.core.term(opt_term))
 
 def cases(opt_term: hydra.core.Term, default_term: hydra.core.Term, fun_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly case analysis for Maybe terms (cases argument order)."""
+    
     match opt_term:
         case hydra.core.TermMaybe(value=m):
             return hydra.lib.flows.pure(hydra.lib.maybes.maybe(default_term, (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
@@ -49,9 +52,13 @@ def cases(opt_term: hydra.core.Term, default_term: hydra.core.Term, fun_term: hy
             return hydra.monads.unexpected("optional value", hydra.show.core.term(opt_term))
 
 def compose(fun_f: hydra.core.Term, fun_g: hydra.core.Term, x_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly Kleisli composition for Maybe."""
+    
     return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.bind"))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_f, x_term)))))), fun_g))))
 
 def map(fun_term: hydra.core.Term, opt_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly map for Maybe terms."""
+    
     match opt_term:
         case hydra.core.TermMaybe(value=m):
             return hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.maybes.map((lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))))
@@ -65,6 +72,8 @@ def map_maybe(fun_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.co
     return hydra.lib.flows.bind(hydra.extract.core.list(list_term), (lambda elements: hydra.lib.flows.pure(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.maybes.cat"))))), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el)))), elements)))))))))
 
 def maybe(default_term: hydra.core.Term, fun_term: hydra.core.Term, opt_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly case analysis for Maybe terms."""
+    
     match opt_term:
         case hydra.core.TermMaybe(value=m):
             return hydra.lib.flows.pure(hydra.lib.maybes.maybe(default_term, (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))

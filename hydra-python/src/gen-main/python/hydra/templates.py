@@ -36,6 +36,8 @@ def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Grap
     return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: to_pair(x1)), g.elements), (lambda pairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(pairs))))
 
 def instantiate_template(minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals."""
+    
     def inst(v1: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
         return instantiate_template(minimal, schema, v1)
     @lru_cache(1)

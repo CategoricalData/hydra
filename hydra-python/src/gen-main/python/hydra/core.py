@@ -12,7 +12,7 @@ from typing import Annotated, TypeAlias
 class Name(Node[str]):
     r"""A unique identifier in some context; a string-valued key."""
 
-NAME__NAME = Name("hydra.core.Name")
+Name.TYPE_ = Name("hydra.core.Name")
 
 @dataclass(frozen=True)
 class AnnotatedTerm:
@@ -20,10 +20,10 @@ class AnnotatedTerm:
     
     body: Annotated[Term, "The term being annotated"]
     annotation: Annotated[FrozenDict[Name, Term], "The annotation as a map from keys to values"]
-
-ANNOTATED_TERM__NAME = Name("hydra.core.AnnotatedTerm")
-ANNOTATED_TERM__BODY__NAME = Name("body")
-ANNOTATED_TERM__ANNOTATION__NAME = Name("annotation")
+    
+    TYPE_ = Name("hydra.core.AnnotatedTerm")
+    BODY = Name("body")
+    ANNOTATION = Name("annotation")
 
 @dataclass(frozen=True)
 class AnnotatedType:
@@ -31,10 +31,10 @@ class AnnotatedType:
     
     body: Annotated[Type, "The type being annotated"]
     annotation: Annotated[FrozenDict[Name, Term], "The annotation as a map from keys to values"]
-
-ANNOTATED_TYPE__NAME = Name("hydra.core.AnnotatedType")
-ANNOTATED_TYPE__BODY__NAME = Name("body")
-ANNOTATED_TYPE__ANNOTATION__NAME = Name("annotation")
+    
+    TYPE_ = Name("hydra.core.AnnotatedType")
+    BODY = Name("body")
+    ANNOTATION = Name("annotation")
 
 @dataclass(frozen=True)
 class Application:
@@ -42,10 +42,10 @@ class Application:
     
     function: Annotated[Term, "The left-hand side of the application"]
     argument: Annotated[Term, "The right-hand side of the application"]
-
-APPLICATION__NAME = Name("hydra.core.Application")
-APPLICATION__FUNCTION__NAME = Name("function")
-APPLICATION__ARGUMENT__NAME = Name("argument")
+    
+    TYPE_ = Name("hydra.core.Application")
+    FUNCTION = Name("function")
+    ARGUMENT = Name("argument")
 
 @dataclass(frozen=True)
 class ApplicationType:
@@ -53,10 +53,10 @@ class ApplicationType:
     
     function: Annotated[Type, "The left-hand side of the application"]
     argument: Annotated[Type, "The right-hand side of the application"]
-
-APPLICATION_TYPE__NAME = Name("hydra.core.ApplicationType")
-APPLICATION_TYPE__FUNCTION__NAME = Name("function")
-APPLICATION_TYPE__ARGUMENT__NAME = Name("argument")
+    
+    TYPE_ = Name("hydra.core.ApplicationType")
+    FUNCTION = Name("function")
+    ARGUMENT = Name("argument")
 
 @dataclass(frozen=True)
 class Binding:
@@ -65,11 +65,11 @@ class Binding:
     name: Annotated[Name, "The name of the bound variable"]
     term: Annotated[Term, "The term to which the variable is bound"]
     type: Annotated[Maybe[TypeScheme], "The optional type of the bound term"]
-
-BINDING__NAME = Name("hydra.core.Binding")
-BINDING__NAME__NAME = Name("name")
-BINDING__TERM__NAME = Name("term")
-BINDING__TYPE__NAME = Name("type")
+    
+    TYPE_ = Name("hydra.core.Binding")
+    NAME = Name("name")
+    TERM = Name("term")
+    TYPE = Name("type")
 
 @dataclass(frozen=True)
 class CaseStatement:
@@ -78,11 +78,11 @@ class CaseStatement:
     type_name: Annotated[Name, "The name of the union type"]
     default: Annotated[Maybe[Term], "An optional default case, used if none of the explicit cases match"]
     cases: Annotated[frozenlist[Field], "A list of case alternatives, one per union field"]
-
-CASE_STATEMENT__NAME = Name("hydra.core.CaseStatement")
-CASE_STATEMENT__TYPE_NAME__NAME = Name("typeName")
-CASE_STATEMENT__DEFAULT__NAME = Name("default")
-CASE_STATEMENT__CASES__NAME = Name("cases")
+    
+    TYPE_ = Name("hydra.core.CaseStatement")
+    TYPE_NAME = Name("typeName")
+    DEFAULT = Name("default")
+    CASES = Name("cases")
 
 @dataclass(frozen=True)
 class EitherType:
@@ -90,10 +90,10 @@ class EitherType:
     
     left: Annotated[Type, "The 'left' alternative"]
     right: Annotated[Type, "The 'right' alternative"]
-
-EITHER_TYPE__NAME = Name("hydra.core.EitherType")
-EITHER_TYPE__LEFT__NAME = Name("left")
-EITHER_TYPE__RIGHT__NAME = Name("right")
+    
+    TYPE_ = Name("hydra.core.EitherType")
+    LEFT = Name("left")
+    RIGHT = Name("right")
 
 @dataclass(frozen=True)
 class PairType:
@@ -101,10 +101,10 @@ class PairType:
     
     first: Annotated[Type, "The first component of the pair"]
     second: Annotated[Type, "The second component of the pair"]
-
-PAIR_TYPE__NAME = Name("hydra.core.PairType")
-PAIR_TYPE__FIRST__NAME = Name("first")
-PAIR_TYPE__SECOND__NAME = Name("second")
+    
+    TYPE_ = Name("hydra.core.PairType")
+    FIRST = Name("first")
+    SECOND = Name("second")
 
 class EliminationRecord(Node["Projection"]):
     r"""Eliminates a record by projecting a given field"""
@@ -123,12 +123,10 @@ class _EliminationMeta(type):
 class Elimination(metaclass=_EliminationMeta):
     r"""EliminationRecord | EliminationUnion | EliminationWrap"""
     
-    pass
-
-ELIMINATION__NAME = Name("hydra.core.Elimination")
-ELIMINATION__RECORD__NAME = Name("record")
-ELIMINATION__UNION__NAME = Name("union")
-ELIMINATION__WRAP__NAME = Name("wrap")
+    TYPE_ = Name("hydra.core.Elimination")
+    RECORD = Name("record")
+    UNION = Name("union")
+    WRAP = Name("wrap")
 
 @dataclass(frozen=True)
 class Field:
@@ -136,10 +134,10 @@ class Field:
     
     name: Annotated[Name, "The name of the field"]
     term: Annotated[Term, "The term value of the field"]
-
-FIELD__NAME = Name("hydra.core.Field")
-FIELD__NAME__NAME = Name("name")
-FIELD__TERM__NAME = Name("term")
+    
+    TYPE_ = Name("hydra.core.Field")
+    NAME = Name("name")
+    TERM = Name("term")
 
 @dataclass(frozen=True)
 class FieldType:
@@ -147,27 +145,24 @@ class FieldType:
     
     name: Annotated[Name, "The name of the field"]
     type: Annotated[Type, "The type of the field"]
-
-FIELD_TYPE__NAME = Name("hydra.core.FieldType")
-FIELD_TYPE__NAME__NAME = Name("name")
-FIELD_TYPE__TYPE__NAME = Name("type")
+    
+    TYPE_ = Name("hydra.core.FieldType")
+    NAME = Name("name")
+    TYPE = Name("type")
 
 class FloatType(Enum):
     r"""A floating-point type."""
     
-    BIGFLOAT = "bigfloat"
+    BIGFLOAT = Name("bigfloat")
     r"""An arbitrary-precision floating-point type"""
     
-    FLOAT32 = "float32"
+    FLOAT32 = Name("float32")
     r"""A 32-bit floating-point type"""
     
-    FLOAT64 = "float64"
+    FLOAT64 = Name("float64")
     r"""A 64-bit floating-point type"""
 
-FLOAT_TYPE__NAME = Name("hydra.core.FloatType")
-FLOAT_TYPE__BIGFLOAT__NAME = Name("bigfloat")
-FLOAT_TYPE__FLOAT32__NAME = Name("float32")
-FLOAT_TYPE__FLOAT64__NAME = Name("float64")
+FloatType.TYPE_ = Name("hydra.core.FloatType")
 
 class FloatValueBigfloat(Node[Decimal]):
     r"""An arbitrary-precision floating-point value"""
@@ -186,12 +181,10 @@ class _FloatValueMeta(type):
 class FloatValue(metaclass=_FloatValueMeta):
     r"""FloatValueBigfloat | FloatValueFloat32 | FloatValueFloat64"""
     
-    pass
-
-FLOAT_VALUE__NAME = Name("hydra.core.FloatValue")
-FLOAT_VALUE__BIGFLOAT__NAME = Name("bigfloat")
-FLOAT_VALUE__FLOAT32__NAME = Name("float32")
-FLOAT_VALUE__FLOAT64__NAME = Name("float64")
+    TYPE_ = Name("hydra.core.FloatValue")
+    BIGFLOAT = Name("bigfloat")
+    FLOAT32 = Name("float32")
+    FLOAT64 = Name("float64")
 
 @dataclass(frozen=True)
 class ForallType:
@@ -199,10 +192,10 @@ class ForallType:
     
     parameter: Annotated[Name, "The variable which is bound by the lambda"]
     body: Annotated[Type, "The body of the lambda"]
-
-FORALL_TYPE__NAME = Name("hydra.core.ForallType")
-FORALL_TYPE__PARAMETER__NAME = Name("parameter")
-FORALL_TYPE__BODY__NAME = Name("body")
+    
+    TYPE_ = Name("hydra.core.ForallType")
+    PARAMETER = Name("parameter")
+    BODY = Name("body")
 
 class FunctionElimination(Node["Elimination"]):
     r"""An elimination for any of a few term variants"""
@@ -221,12 +214,10 @@ class _FunctionMeta(type):
 class Function(metaclass=_FunctionMeta):
     r"""FunctionElimination | FunctionLambda | FunctionPrimitive"""
     
-    pass
-
-FUNCTION__NAME = Name("hydra.core.Function")
-FUNCTION__ELIMINATION__NAME = Name("elimination")
-FUNCTION__LAMBDA__NAME = Name("lambda")
-FUNCTION__PRIMITIVE__NAME = Name("primitive")
+    TYPE_ = Name("hydra.core.Function")
+    ELIMINATION = Name("elimination")
+    LAMBDA = Name("lambda")
+    PRIMITIVE = Name("primitive")
 
 @dataclass(frozen=True)
 class FunctionType:
@@ -234,10 +225,10 @@ class FunctionType:
     
     domain: Annotated[Type, "The domain (input) type of the function"]
     codomain: Annotated[Type, "The codomain (output) type of the function"]
-
-FUNCTION_TYPE__NAME = Name("hydra.core.FunctionType")
-FUNCTION_TYPE__DOMAIN__NAME = Name("domain")
-FUNCTION_TYPE__CODOMAIN__NAME = Name("codomain")
+    
+    TYPE_ = Name("hydra.core.FunctionType")
+    DOMAIN = Name("domain")
+    CODOMAIN = Name("codomain")
 
 @dataclass(frozen=True)
 class Injection:
@@ -245,51 +236,42 @@ class Injection:
     
     type_name: Annotated[Name, "The name of the union type"]
     field: Annotated[Field, "The field being injected, including its name and value"]
-
-INJECTION__NAME = Name("hydra.core.Injection")
-INJECTION__TYPE_NAME__NAME = Name("typeName")
-INJECTION__FIELD__NAME = Name("field")
+    
+    TYPE_ = Name("hydra.core.Injection")
+    TYPE_NAME = Name("typeName")
+    FIELD = Name("field")
 
 class IntegerType(Enum):
     r"""An integer type."""
     
-    BIGINT = "bigint"
+    BIGINT = Name("bigint")
     r"""An arbitrary-precision integer type"""
     
-    INT8 = "int8"
+    INT8 = Name("int8")
     r"""An 8-bit signed integer type"""
     
-    INT16 = "int16"
+    INT16 = Name("int16")
     r"""A 16-bit signed integer type"""
     
-    INT32 = "int32"
+    INT32 = Name("int32")
     r"""A 32-bit signed integer type"""
     
-    INT64 = "int64"
+    INT64 = Name("int64")
     r"""A 64-bit signed integer type"""
     
-    UINT8 = "uint8"
+    UINT8 = Name("uint8")
     r"""An 8-bit unsigned integer type"""
     
-    UINT16 = "uint16"
+    UINT16 = Name("uint16")
     r"""A 16-bit unsigned integer type"""
     
-    UINT32 = "uint32"
+    UINT32 = Name("uint32")
     r"""A 32-bit unsigned integer type"""
     
-    UINT64 = "uint64"
+    UINT64 = Name("uint64")
     r"""A 64-bit unsigned integer type"""
 
-INTEGER_TYPE__NAME = Name("hydra.core.IntegerType")
-INTEGER_TYPE__BIGINT__NAME = Name("bigint")
-INTEGER_TYPE__INT8__NAME = Name("int8")
-INTEGER_TYPE__INT16__NAME = Name("int16")
-INTEGER_TYPE__INT32__NAME = Name("int32")
-INTEGER_TYPE__INT64__NAME = Name("int64")
-INTEGER_TYPE__UINT8__NAME = Name("uint8")
-INTEGER_TYPE__UINT16__NAME = Name("uint16")
-INTEGER_TYPE__UINT32__NAME = Name("uint32")
-INTEGER_TYPE__UINT64__NAME = Name("uint64")
+IntegerType.TYPE_ = Name("hydra.core.IntegerType")
 
 class IntegerValueBigint(Node[int]):
     r"""An arbitrary-precision integer value"""
@@ -326,18 +308,16 @@ class _IntegerValueMeta(type):
 class IntegerValue(metaclass=_IntegerValueMeta):
     r"""IntegerValueBigint | IntegerValueInt8 | IntegerValueInt16 | IntegerValueInt32 | IntegerValueInt64 | IntegerValueUint8 | IntegerValueUint16 | IntegerValueUint32 | IntegerValueUint64"""
     
-    pass
-
-INTEGER_VALUE__NAME = Name("hydra.core.IntegerValue")
-INTEGER_VALUE__BIGINT__NAME = Name("bigint")
-INTEGER_VALUE__INT8__NAME = Name("int8")
-INTEGER_VALUE__INT16__NAME = Name("int16")
-INTEGER_VALUE__INT32__NAME = Name("int32")
-INTEGER_VALUE__INT64__NAME = Name("int64")
-INTEGER_VALUE__UINT8__NAME = Name("uint8")
-INTEGER_VALUE__UINT16__NAME = Name("uint16")
-INTEGER_VALUE__UINT32__NAME = Name("uint32")
-INTEGER_VALUE__UINT64__NAME = Name("uint64")
+    TYPE_ = Name("hydra.core.IntegerValue")
+    BIGINT = Name("bigint")
+    INT8 = Name("int8")
+    INT16 = Name("int16")
+    INT32 = Name("int32")
+    INT64 = Name("int64")
+    UINT8 = Name("uint8")
+    UINT16 = Name("uint16")
+    UINT32 = Name("uint32")
+    UINT64 = Name("uint64")
 
 @dataclass(frozen=True)
 class Lambda:
@@ -346,11 +326,11 @@ class Lambda:
     parameter: Annotated[Name, "The parameter of the lambda"]
     domain: Annotated[Maybe[Type], "An optional domain type for the lambda"]
     body: Annotated[Term, "The body of the lambda"]
-
-LAMBDA__NAME = Name("hydra.core.Lambda")
-LAMBDA__PARAMETER__NAME = Name("parameter")
-LAMBDA__DOMAIN__NAME = Name("domain")
-LAMBDA__BODY__NAME = Name("body")
+    
+    TYPE_ = Name("hydra.core.Lambda")
+    PARAMETER = Name("parameter")
+    DOMAIN = Name("domain")
+    BODY = Name("body")
 
 @dataclass(frozen=True)
 class Let:
@@ -358,10 +338,10 @@ class Let:
     
     bindings: Annotated[frozenlist[Binding], "The list of variable bindings"]
     body: Annotated[Term, "The body term in which the variables are bound"]
-
-LET__NAME = Name("hydra.core.Let")
-LET__BINDINGS__NAME = Name("bindings")
-LET__BODY__NAME = Name("body")
+    
+    TYPE_ = Name("hydra.core.Let")
+    BINDINGS = Name("bindings")
+    BODY = Name("body")
 
 class LiteralBinary(Node[bytes]):
     r"""A binary literal"""
@@ -386,14 +366,12 @@ class _LiteralMeta(type):
 class Literal(metaclass=_LiteralMeta):
     r"""LiteralBinary | LiteralBoolean | LiteralFloat | LiteralInteger | LiteralString"""
     
-    pass
-
-LITERAL__NAME = Name("hydra.core.Literal")
-LITERAL__BINARY__NAME = Name("binary")
-LITERAL__BOOLEAN__NAME = Name("boolean")
-LITERAL__FLOAT__NAME = Name("float")
-LITERAL__INTEGER__NAME = Name("integer")
-LITERAL__STRING__NAME = Name("string")
+    TYPE_ = Name("hydra.core.Literal")
+    BINARY = Name("binary")
+    BOOLEAN = Name("boolean")
+    FLOAT = Name("float")
+    INTEGER = Name("integer")
+    STRING = Name("string")
 
 class LiteralTypeBinary:
     r"""The type of a binary (byte string) value"""
@@ -436,14 +414,12 @@ class _LiteralTypeMeta(type):
 class LiteralType(metaclass=_LiteralTypeMeta):
     r"""LiteralTypeBinary | LiteralTypeBoolean | LiteralTypeFloat | LiteralTypeInteger | LiteralTypeString"""
     
-    pass
-
-LITERAL_TYPE__NAME = Name("hydra.core.LiteralType")
-LITERAL_TYPE__BINARY__NAME = Name("binary")
-LITERAL_TYPE__BOOLEAN__NAME = Name("boolean")
-LITERAL_TYPE__FLOAT__NAME = Name("float")
-LITERAL_TYPE__INTEGER__NAME = Name("integer")
-LITERAL_TYPE__STRING__NAME = Name("string")
+    TYPE_ = Name("hydra.core.LiteralType")
+    BINARY = Name("binary")
+    BOOLEAN = Name("boolean")
+    FLOAT = Name("float")
+    INTEGER = Name("integer")
+    STRING = Name("string")
 
 @dataclass(frozen=True)
 class MapType:
@@ -451,10 +427,10 @@ class MapType:
     
     keys: Annotated[Type, "The type of keys in the map"]
     values: Annotated[Type, "The type of values in the map"]
-
-MAP_TYPE__NAME = Name("hydra.core.MapType")
-MAP_TYPE__KEYS__NAME = Name("keys")
-MAP_TYPE__VALUES__NAME = Name("values")
+    
+    TYPE_ = Name("hydra.core.MapType")
+    KEYS = Name("keys")
+    VALUES = Name("values")
 
 @dataclass(frozen=True)
 class Projection:
@@ -462,10 +438,10 @@ class Projection:
     
     type_name: Annotated[Name, "The name of the record type"]
     field: Annotated[Name, "The name of the projected field"]
-
-PROJECTION__NAME = Name("hydra.core.Projection")
-PROJECTION__TYPE_NAME__NAME = Name("typeName")
-PROJECTION__FIELD__NAME = Name("field")
+    
+    TYPE_ = Name("hydra.core.Projection")
+    TYPE_NAME = Name("typeName")
+    FIELD = Name("field")
 
 @dataclass(frozen=True)
 class Record:
@@ -473,10 +449,10 @@ class Record:
     
     type_name: Annotated[Name, "The name of the record type"]
     fields: Annotated[frozenlist[Field], "The fields of the record, as a list of name/term pairs"]
-
-RECORD__NAME = Name("hydra.core.Record")
-RECORD__TYPE_NAME__NAME = Name("typeName")
-RECORD__FIELDS__NAME = Name("fields")
+    
+    TYPE_ = Name("hydra.core.Record")
+    TYPE_NAME = Name("typeName")
+    FIELDS = Name("fields")
 
 @dataclass(frozen=True)
 class RowType:
@@ -484,10 +460,10 @@ class RowType:
     
     type_name: Annotated[Name, "The name of the row type, which must correspond to the name of a Type element"]
     fields: Annotated[frozenlist[FieldType], "The fields of this row type, excluding any inherited fields"]
-
-ROW_TYPE__NAME = Name("hydra.core.RowType")
-ROW_TYPE__TYPE_NAME__NAME = Name("typeName")
-ROW_TYPE__FIELDS__NAME = Name("fields")
+    
+    TYPE_ = Name("hydra.core.RowType")
+    TYPE_NAME = Name("typeName")
+    FIELDS = Name("fields")
 
 class TermAnnotated(Node["AnnotatedTerm"]):
     r"""A term annotated with metadata"""
@@ -557,27 +533,25 @@ class _TermMeta(type):
 class Term(metaclass=_TermMeta):
     r"""TermAnnotated | TermApplication | TermEither | TermFunction | TermLet | TermList | TermLiteral | TermMap | TermMaybe | TermPair | TermRecord | TermSet | TermTypeApplication | TermTypeLambda | TermUnion | TermUnit | TermVariable | TermWrap"""
     
-    pass
-
-TERM__NAME = Name("hydra.core.Term")
-TERM__ANNOTATED__NAME = Name("annotated")
-TERM__APPLICATION__NAME = Name("application")
-TERM__EITHER__NAME = Name("either")
-TERM__FUNCTION__NAME = Name("function")
-TERM__LET__NAME = Name("let")
-TERM__LIST__NAME = Name("list")
-TERM__LITERAL__NAME = Name("literal")
-TERM__MAP__NAME = Name("map")
-TERM__MAYBE__NAME = Name("maybe")
-TERM__PAIR__NAME = Name("pair")
-TERM__RECORD__NAME = Name("record")
-TERM__SET__NAME = Name("set")
-TERM__TYPE_APPLICATION__NAME = Name("typeApplication")
-TERM__TYPE_LAMBDA__NAME = Name("typeLambda")
-TERM__UNION__NAME = Name("union")
-TERM__UNIT__NAME = Name("unit")
-TERM__VARIABLE__NAME = Name("variable")
-TERM__WRAP__NAME = Name("wrap")
+    TYPE_ = Name("hydra.core.Term")
+    ANNOTATED = Name("annotated")
+    APPLICATION = Name("application")
+    EITHER = Name("either")
+    FUNCTION = Name("function")
+    LET = Name("let")
+    LIST = Name("list")
+    LITERAL = Name("literal")
+    MAP = Name("map")
+    MAYBE = Name("maybe")
+    PAIR = Name("pair")
+    RECORD = Name("record")
+    SET = Name("set")
+    TYPE_APPLICATION = Name("typeApplication")
+    TYPE_LAMBDA = Name("typeLambda")
+    UNION = Name("union")
+    UNIT = Name("unit")
+    VARIABLE = Name("variable")
+    WRAP = Name("wrap")
 
 class TypeAnnotated(Node["AnnotatedType"]):
     r"""An annotated type"""
@@ -641,25 +615,23 @@ class _TypeMeta(type):
 class Type(metaclass=_TypeMeta):
     r"""TypeAnnotated | TypeApplication | TypeEither | TypeForall | TypeFunction | TypeList | TypeLiteral | TypeMap | TypeMaybe | TypePair | TypeRecord | TypeSet | TypeUnion | TypeUnit | TypeVariable | TypeWrap"""
     
-    pass
-
-TYPE__NAME = Name("hydra.core.Type")
-TYPE__ANNOTATED__NAME = Name("annotated")
-TYPE__APPLICATION__NAME = Name("application")
-TYPE__EITHER__NAME = Name("either")
-TYPE__FORALL__NAME = Name("forall")
-TYPE__FUNCTION__NAME = Name("function")
-TYPE__LIST__NAME = Name("list")
-TYPE__LITERAL__NAME = Name("literal")
-TYPE__MAP__NAME = Name("map")
-TYPE__MAYBE__NAME = Name("maybe")
-TYPE__PAIR__NAME = Name("pair")
-TYPE__RECORD__NAME = Name("record")
-TYPE__SET__NAME = Name("set")
-TYPE__UNION__NAME = Name("union")
-TYPE__UNIT__NAME = Name("unit")
-TYPE__VARIABLE__NAME = Name("variable")
-TYPE__WRAP__NAME = Name("wrap")
+    TYPE_ = Name("hydra.core.Type")
+    ANNOTATED = Name("annotated")
+    APPLICATION = Name("application")
+    EITHER = Name("either")
+    FORALL = Name("forall")
+    FUNCTION = Name("function")
+    LIST = Name("list")
+    LITERAL = Name("literal")
+    MAP = Name("map")
+    MAYBE = Name("maybe")
+    PAIR = Name("pair")
+    RECORD = Name("record")
+    SET = Name("set")
+    UNION = Name("union")
+    UNIT = Name("unit")
+    VARIABLE = Name("variable")
+    WRAP = Name("wrap")
 
 @dataclass(frozen=True)
 class TypeApplicationTerm:
@@ -667,10 +639,10 @@ class TypeApplicationTerm:
     
     body: Annotated[Term, "The term being applied to a type"]
     type: Annotated[Type, "The type argument"]
-
-TYPE_APPLICATION_TERM__NAME = Name("hydra.core.TypeApplicationTerm")
-TYPE_APPLICATION_TERM__BODY__NAME = Name("body")
-TYPE_APPLICATION_TERM__TYPE__NAME = Name("type")
+    
+    TYPE_ = Name("hydra.core.TypeApplicationTerm")
+    BODY = Name("body")
+    TYPE = Name("type")
 
 @dataclass(frozen=True)
 class TypeLambda:
@@ -678,10 +650,10 @@ class TypeLambda:
     
     parameter: Annotated[Name, "The type variable introduced by the abstraction"]
     body: Annotated[Term, "The body of the abstraction"]
-
-TYPE_LAMBDA__NAME = Name("hydra.core.TypeLambda")
-TYPE_LAMBDA__PARAMETER__NAME = Name("parameter")
-TYPE_LAMBDA__BODY__NAME = Name("body")
+    
+    TYPE_ = Name("hydra.core.TypeLambda")
+    PARAMETER = Name("parameter")
+    BODY = Name("body")
 
 @dataclass(frozen=True)
 class TypeScheme:
@@ -690,20 +662,20 @@ class TypeScheme:
     variables: Annotated[frozenlist[Name], "The free type variables"]
     type: Annotated[Type, "The type expression"]
     constraints: Annotated[Maybe[FrozenDict[Name, TypeVariableMetadata]], "Optional metadata for type variables, including typeclass constraints. The map keys are type variable names."]
-
-TYPE_SCHEME__NAME = Name("hydra.core.TypeScheme")
-TYPE_SCHEME__VARIABLES__NAME = Name("variables")
-TYPE_SCHEME__TYPE__NAME = Name("type")
-TYPE_SCHEME__CONSTRAINTS__NAME = Name("constraints")
+    
+    TYPE_ = Name("hydra.core.TypeScheme")
+    VARIABLES = Name("variables")
+    TYPE = Name("type")
+    CONSTRAINTS = Name("constraints")
 
 @dataclass(frozen=True)
 class TypeVariableMetadata:
     r"""Metadata associated with a type variable, including typeclass constraints."""
     
     classes: Annotated[frozenset[Name], "The set of typeclass constraints on this type variable"]
-
-TYPE_VARIABLE_METADATA__NAME = Name("hydra.core.TypeVariableMetadata")
-TYPE_VARIABLE_METADATA__CLASSES__NAME = Name("classes")
+    
+    TYPE_ = Name("hydra.core.TypeVariableMetadata")
+    CLASSES = Name("classes")
 
 @dataclass(frozen=True)
 class WrappedTerm:
@@ -711,10 +683,10 @@ class WrappedTerm:
     
     type_name: Annotated[Name, "The name of the wrapper type"]
     body: Annotated[Term, "The wrapped term"]
-
-WRAPPED_TERM__NAME = Name("hydra.core.WrappedTerm")
-WRAPPED_TERM__TYPE_NAME__NAME = Name("typeName")
-WRAPPED_TERM__BODY__NAME = Name("body")
+    
+    TYPE_ = Name("hydra.core.WrappedTerm")
+    TYPE_NAME = Name("typeName")
+    BODY = Name("body")
 
 @dataclass(frozen=True)
 class WrappedType:
@@ -722,7 +694,7 @@ class WrappedType:
     
     type_name: Annotated[Name, "The name of the wrapper (newtype)"]
     body: Annotated[Type, "The wrapped type"]
-
-WRAPPED_TYPE__NAME = Name("hydra.core.WrappedType")
-WRAPPED_TYPE__TYPE_NAME__NAME = Name("typeName")
-WRAPPED_TYPE__BODY__NAME = Name("body")
+    
+    TYPE_ = Name("hydra.core.WrappedType")
+    TYPE_NAME = Name("typeName")
+    BODY = Name("body")

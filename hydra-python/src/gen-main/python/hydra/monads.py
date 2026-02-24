@@ -28,6 +28,8 @@ T3 = TypeVar("T3")
 T4 = TypeVar("T4")
 
 def bind(l: hydra.compute.Flow[T0, T1], r: Callable[[T1], hydra.compute.Flow[T0, T2]]) -> hydra.compute.Flow[T0, T2]:
+    r"""Monadic bind for flows."""
+    
     def q(s0: T0, t0: hydra.compute.Trace) -> hydra.compute.FlowState[T0, T2]:
         @lru_cache(1)
         def fs1() -> hydra.compute.FlowState[T0, T1]:
@@ -54,12 +56,18 @@ def push_error(msg: str, t: hydra.compute.Trace) -> hydra.compute.Trace:
     return hydra.compute.Trace(t.stack, hydra.lib.lists.cons(error_msg(), t.messages), t.other)
 
 def fail(msg: str) -> hydra.compute.Flow[T0, T1]:
+    r"""Fail a flow with an error message."""
+    
     return hydra.compute.Flow((lambda s, t: hydra.compute.FlowState(Nothing(), s, push_error(msg, t))))
 
 def pure(xp: T0) -> hydra.compute.Flow[T1, T0]:
+    r"""Lift a value into a flow."""
+    
     return hydra.compute.Flow((lambda s, t: hydra.compute.FlowState(Just(xp), s, t)))
 
 def either_to_flow(format_error: Callable[[T0], str], e: Either[T0, T1]) -> hydra.compute.Flow[T2, T1]:
+    r"""Adapt an either to a flow; a left value is mapped to a failure using the provided function."""
+    
     return hydra.lib.eithers.either((lambda l: fail(format_error(l))), (lambda r: pure(r)), e)
 
 @lru_cache(1)
@@ -69,31 +77,49 @@ def empty_trace() -> hydra.compute.Trace:
     return hydra.compute.Trace((), (), hydra.lib.maps.empty())
 
 def exec(f: hydra.compute.Flow[T0, T1], s0: T0) -> T0:
+    r"""Execute a flow and return the final state."""
+    
     return f.value(s0, empty_trace()).state
 
 def flow_succeeds(s: T0, f: hydra.compute.Flow[T0, T1]) -> bool:
+    r"""Check whether a flow succeeds."""
+    
     return hydra.lib.maybes.is_just(f.value(s, empty_trace()).value)
 
 def from_flow(def_: T0, cx: T1, f: hydra.compute.Flow[T1, T0]) -> T0:
+    r"""Get the value of a flow, or a default value if the flow fails."""
+    
     return hydra.lib.maybes.maybe(def_, (lambda xmo: xmo), f.value(cx, empty_trace()).value)
 
 @lru_cache(1)
 def get_state() -> hydra.compute.Flow[T0, T0]:
+    r"""Get the state of the current flow."""
+    
     return hydra.compute.Flow((lambda s0, t0: (fs1 := pure(None).value(s0, t0), v := fs1.value, s := fs1.state, t := fs1.trace, hydra.lib.maybes.maybe(hydra.compute.FlowState(Nothing(), s, t), (lambda _: hydra.compute.FlowState(Just(s), s, t)), v))[4]))
 
 def map(f: Callable[[T0], T1], f1: hydra.compute.Flow[T2, T0]) -> hydra.compute.Flow[T2, T1]:
+    r"""Map a function over a flow."""
+    
     return hydra.compute.Flow((lambda s0, t0: (f2 := f1.value(s0, t0), hydra.compute.FlowState(hydra.lib.maybes.map(f, f2.value), f2.state, f2.trace))[1]))
 
 def maybe_to_list(mx: Maybe[T0]) -> frozenlist[T0]:
+    r"""Converts an optional value either to an empty list (if nothing) or a singleton list (if just)."""
+    
     return hydra.lib.maybes.maybe((), (lambda x1: hydra.lib.lists.pure(x1)), mx)
 
 def put_state(cx: T0) -> hydra.compute.Flow[T0, None]:
+    r"""Set the state of a flow."""
+    
     return hydra.compute.Flow((lambda s0, t0: (f1 := pure(None).value(s0, t0), hydra.compute.FlowState(f1.value, cx, f1.trace))[1]))
 
 def modify(f: Callable[[T0], T0]) -> hydra.compute.Flow[T0, None]:
+    r"""Modify the state of a flow using a given function."""
+    
     return bind(get_state(), (lambda s: put_state(f(s))))
 
 def mutate_trace(mutate: Callable[[hydra.compute.Trace], Either[str, hydra.compute.Trace]], restore: Callable[[hydra.compute.Trace, hydra.compute.Trace], hydra.compute.Trace], f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
+    r"""Temporarily mutate the trace for the duration of a flow."""
+    
     def choose(for_left: Callable[[T2], T3], for_right: Callable[[T4], T3], e: Either[T2, T4]) -> T3:
         return hydra.lib.eithers.either((lambda l: for_left(l)), (lambda r: for_right(r)), e)
     def flow_fun(s0: T0, t0: hydra.compute.Trace) -> hydra.compute.FlowState[T0, T1]:
@@ -121,12 +147,18 @@ def trace_summary(t: hydra.compute.Trace) -> str:
     return hydra.lib.strings.intercalate("\n", hydra.lib.lists.concat2(message_lines(), keyval_lines()))
 
 def unexpected(expected: str, actual: str) -> hydra.compute.Flow[T0, T1]:
+    r"""Fail if an actual value does not match an expected value."""
+    
     return fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", expected), " but found "), actual))
 
 def warn(msg: str, b: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
+    r"""Continue the current flow after adding a warning message."""
+    
     return hydra.compute.Flow((lambda s0, t0: (f1 := b.value(s0, t0), add_message := (lambda t: hydra.compute.Trace(t.stack, hydra.lib.lists.cons(hydra.lib.strings.cat2("Warning: ", msg), t.messages), t.other)), hydra.compute.FlowState(f1.value, f1.state, add_message(f1.trace)))[2]))
 
 def with_flag(flag: hydra.core.Name, f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
+    r"""Continue the current flow after setting a flag."""
+    
     def mutate(t: hydra.compute.Trace) -> Either[str, hydra.compute.Trace]:
         return hydra.lib.logic.if_else(False, (lambda : Left("never happens")), (lambda : Right(hydra.compute.Trace(t.stack, t.messages, hydra.lib.maps.insert(flag, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))), t.other)))))
     def restore(ignored: T2, t1: hydra.compute.Trace) -> hydra.compute.Trace:
@@ -134,9 +166,13 @@ def with_flag(flag: hydra.core.Name, f: hydra.compute.Flow[T0, T1]) -> hydra.com
     return mutate_trace((lambda x1: mutate(x1)), (lambda x1, x2: restore(x1, x2)), f)
 
 def with_state(cx0: T0, f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T2, T1]:
+    r"""Continue a flow using a given state."""
+    
     return hydra.compute.Flow((lambda cx1, t1: (f1 := f.value(cx0, t1), hydra.compute.FlowState(f1.value, cx1, f1.trace))[1]))
 
 def with_trace(msg: str, f: hydra.compute.Flow[T0, T1]) -> hydra.compute.Flow[T0, T1]:
+    r"""Continue the current flow after augmenting the trace."""
+    
     def mutate(t: hydra.compute.Trace) -> Either[str, hydra.compute.Trace]:
         return hydra.lib.logic.if_else(hydra.lib.equality.gte(hydra.lib.lists.length(t.stack), hydra.constants.max_trace_depth), (lambda : Left("maximum trace depth exceeded. This may indicate an infinite loop")), (lambda : Right(hydra.compute.Trace(hydra.lib.lists.cons(msg, t.stack), t.messages, t.other))))
     def restore(t0: hydra.compute.Trace, t1: hydra.compute.Trace) -> hydra.compute.Trace:

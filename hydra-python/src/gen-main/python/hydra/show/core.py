@@ -558,6 +558,8 @@ def term(t: hydra.core.Term) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def list(f: Callable[[T0], str], xs: frozenlist[T0]) -> str:
+    r"""Show a list using a given function to show each element."""
+    
     @lru_cache(1)
     def element_strs() -> frozenlist[str]:
         return hydra.lib.lists.map(f, xs)

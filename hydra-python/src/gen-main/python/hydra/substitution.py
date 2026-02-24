@@ -18,6 +18,7 @@ import hydra.rewriting
 import hydra.typing
 
 T0 = TypeVar("T0")
+X = TypeVar("X")
 
 def subst_in_type(subst: hydra.typing.TypeSubst, typ0: hydra.core.Type) -> hydra.core.Type:
     r"""Apply a type substitution to a type."""
@@ -62,7 +63,7 @@ def id_type_subst() -> hydra.typing.TypeSubst:
     
     return hydra.typing.TypeSubst(hydra.lib.maps.empty())
 
-def compose_type_subst_list(v1: frozenlist[hydra.typing.TypeSubst]) -> hydra.typing.TypeSubst:
+def compose_type_subst_list(v1: frozenlist[X]) -> hydra.typing.TypeSubst:
     r"""Compose a list of type substitutions."""
     
     return hydra.lib.lists.foldl((lambda x1, x2: compose_type_subst(x1, x2)), id_type_subst(), v1)
@@ -154,7 +155,7 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
     @lru_cache(1)
     def s() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
         return subst.value
-    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
+    def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term):
         def with_lambda(l: hydra.core.Lambda) -> hydra.core.Term:
             @lru_cache(1)
             def v() -> hydra.core.Name:
@@ -176,7 +177,7 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
             def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                 return hydra.core.Binding(b.name, substitute_in_term(subst2(), b.term), b.type)
             return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map((lambda x1: rewrite_binding(x1)), bindings()), substitute_in_term(subst2(), lt.body))))
-        def _hoist_body_1(v1: hydra.core.Function) -> hydra.core.Term:
+        def _hoist_body_1(v1):
             match v1:
                 case hydra.core.FunctionLambda(value=l):
                     return with_lambda(l)

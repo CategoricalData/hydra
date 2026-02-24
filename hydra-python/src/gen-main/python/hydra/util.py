@@ -11,38 +11,31 @@ import hydra.core
 class CaseConvention(Enum):
     r"""A naming convention for symbols, such as camelCase or snake_case."""
     
-    CAMEL = "camel"
+    CAMEL = hydra.core.Name("camel")
     
-    PASCAL = "pascal"
+    PASCAL = hydra.core.Name("pascal")
     
-    LOWER_SNAKE = "lowerSnake"
+    LOWER_SNAKE = hydra.core.Name("lowerSnake")
     
-    UPPER_SNAKE = "upperSnake"
+    UPPER_SNAKE = hydra.core.Name("upperSnake")
 
-CASE_CONVENTION__NAME = hydra.core.Name("hydra.util.CaseConvention")
-CASE_CONVENTION__CAMEL__NAME = hydra.core.Name("camel")
-CASE_CONVENTION__PASCAL__NAME = hydra.core.Name("pascal")
-CASE_CONVENTION__LOWER_SNAKE__NAME = hydra.core.Name("lowerSnake")
-CASE_CONVENTION__UPPER_SNAKE__NAME = hydra.core.Name("upperSnake")
+CaseConvention.TYPE_ = hydra.core.Name("hydra.util.CaseConvention")
 
 class Comparison(Enum):
     r"""An equality judgement: less than, equal to, or greater than."""
     
-    LESS_THAN = "lessThan"
+    LESS_THAN = hydra.core.Name("lessThan")
     
-    EQUAL_TO = "equalTo"
+    EQUAL_TO = hydra.core.Name("equalTo")
     
-    GREATER_THAN = "greaterThan"
+    GREATER_THAN = hydra.core.Name("greaterThan")
 
-COMPARISON__NAME = hydra.core.Name("hydra.util.Comparison")
-COMPARISON__LESS_THAN__NAME = hydra.core.Name("lessThan")
-COMPARISON__EQUAL_TO__NAME = hydra.core.Name("equalTo")
-COMPARISON__GREATER_THAN__NAME = hydra.core.Name("greaterThan")
+Comparison.TYPE_ = hydra.core.Name("hydra.util.Comparison")
 
 class DecodingError(Node[str]):
     r"""An error that occurred during decoding of a term."""
 
-DECODING_ERROR__NAME = hydra.core.Name("hydra.util.DecodingError")
+DecodingError.TYPE_ = hydra.core.Name("hydra.util.DecodingError")
 
 class PrecisionArbitrary:
     r"""Arbitrary precision"""
@@ -64,8 +57,6 @@ class _PrecisionMeta(type):
 class Precision(metaclass=_PrecisionMeta):
     r"""PrecisionArbitrary | PrecisionBits"""
     
-    pass
-
-PRECISION__NAME = hydra.core.Name("hydra.util.Precision")
-PRECISION__ARBITRARY__NAME = hydra.core.Name("arbitrary")
-PRECISION__BITS__NAME = hydra.core.Name("bits")
+    TYPE_ = hydra.core.Name("hydra.util.Precision")
+    ARBITRARY = hydra.core.Name("arbitrary")
+    BITS = hydra.core.Name("bits")

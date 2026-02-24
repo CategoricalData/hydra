@@ -16,10 +16,9 @@ import hydra.typing
 import hydra.util
 
 T0 = TypeVar("T0")
-T1 = TypeVar("T1")
 
-def function_structure(env: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.FunctionStructure[T0]]:
-    def _hoist_hydra_decode_typing_function_structure_1(cx: hydra.graph.Graph, env: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.FunctionStructure[T1]]:
+def function_structure(env: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_typing_function_structure_1(cx, env, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -31,21 +30,21 @@ def function_structure(env: Callable[[hydra.graph.Graph, hydra.core.Term], Eithe
                 return Left(hydra.util.DecodingError("expected record of type hydra.typing.FunctionStructure"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_function_structure_1(cx, env, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def inference_context(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceContext]:
-    def _hoist_hydra_decode_typing_inference_context_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceContext]:
+def inference_context(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_typing_inference_context_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, bool]:
+                def _hoist_body_1(v12):
                     match v12:
                         case hydra.core.LiteralBoolean(value=b):
                             return Right(b)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected boolean literal"))
-                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, bool]:
+                def _hoist_body_2(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
@@ -58,8 +57,8 @@ def inference_context(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hyd
                 return Left(hydra.util.DecodingError("expected record of type hydra.typing.InferenceContext"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_inference_context_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def type_subst(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeSubst]:
-    def _hoist_hydra_decode_typing_type_subst_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeSubst]:
+def type_subst(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_typing_type_subst_1(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.typing.TypeSubst(b)), hydra.extract.helpers.decode_map((lambda x1, x2: hydra.decode.core.name(x1, x2)), (lambda x1, x2: hydra.decode.core.type(x1, x2)), cx, wrapped_term.body))
@@ -68,8 +67,8 @@ def type_subst(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.typing.TypeSubst"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_type_subst_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def inference_result(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceResult]:
-    def _hoist_hydra_decode_typing_inference_result_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.InferenceResult]:
+def inference_result(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_typing_inference_result_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -81,8 +80,8 @@ def inference_result(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydr
                 return Left(hydra.util.DecodingError("expected record of type hydra.typing.InferenceResult"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_inference_result_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def term_subst(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TermSubst]:
-    def _hoist_hydra_decode_typing_term_subst_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TermSubst]:
+def term_subst(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_typing_term_subst_1(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.typing.TermSubst(b)), hydra.extract.helpers.decode_map((lambda x1, x2: hydra.decode.core.name(x1, x2)), (lambda x1, x2: hydra.decode.core.term(x1, x2)), cx, wrapped_term.body))
@@ -91,21 +90,21 @@ def term_subst(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.typing.TermSubst"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_term_subst_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def type_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeConstraint]:
-    def _hoist_hydra_decode_typing_type_constraint_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeConstraint]:
+def type_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_typing_type_constraint_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_1(v12):
                     match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_2(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
@@ -118,8 +117,8 @@ def type_constraint(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
                 return Left(hydra.util.DecodingError("expected record of type hydra.typing.TypeConstraint"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_typing_type_constraint_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def type_context(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeContext]:
-    def _hoist_hydra_decode_typing_type_context_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.typing.TypeContext]:
+def type_context(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_typing_type_context_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)

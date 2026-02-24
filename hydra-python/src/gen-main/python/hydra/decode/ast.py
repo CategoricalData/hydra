@@ -17,8 +17,8 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.util
 
-def associativity(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Associativity]:
-    def _hoist_hydra_decode_ast_associativity_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Associativity]:
+def associativity(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_associativity_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -42,49 +42,49 @@ def associativity(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.u
                 return Left(hydra.util.DecodingError("expected union of type hydra.ast.Associativity"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_associativity_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def block_style(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.BlockStyle]:
-    def _hoist_hydra_decode_ast_block_style_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.BlockStyle]:
+def block_style(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_block_style_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_1(v12):
                     match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_2(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                def _hoist_body_3(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, bool]:
+                def _hoist_body_3(v12):
                     match v12:
                         case hydra.core.LiteralBoolean(value=b):
                             return Right(b)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected boolean literal"))
-                def _hoist_body_4(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, bool]:
+                def _hoist_body_4(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_3(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                def _hoist_body_5(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, bool]:
+                def _hoist_body_5(v12):
                     match v12:
                         case hydra.core.LiteralBoolean(value=b):
                             return Right(b)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected boolean literal"))
-                def _hoist_body_6(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, bool]:
+                def _hoist_body_6(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_5(v)
@@ -97,22 +97,22 @@ def block_style(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.BlockStyle"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_block_style_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def symbol(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Symbol]:
-    def _hoist_hydra_decode_ast_symbol_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+def symbol(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_symbol_1(v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
             
             case _:
                 return Left(hydra.util.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_ast_symbol_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+    def _hoist_hydra_decode_ast_symbol_2(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_ast_symbol_1(v)
             
             case _:
                 return Left(hydra.util.DecodingError("expected literal"))
-    def _hoist_hydra_decode_ast_symbol_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Symbol]:
+    def _hoist_hydra_decode_ast_symbol_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.ast.Symbol(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_ast_symbol_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -121,8 +121,8 @@ def symbol(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Dec
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.ast.Symbol"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_symbol_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def brackets(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Brackets]:
-    def _hoist_hydra_decode_ast_brackets_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Brackets]:
+def brackets(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_brackets_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -134,8 +134,8 @@ def brackets(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.D
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.Brackets"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_brackets_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def indent_style(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.IndentStyle]:
-    def _hoist_hydra_decode_ast_indent_style_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.IndentStyle]:
+def indent_style(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_indent_style_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -151,29 +151,29 @@ def indent_style(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.ut
                 def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
-                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.ast.IndentStyle]]]:
-                    def _hoist_variant_map_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                def variant_map():
+                    def _hoist_variant_map_1(v12):
                         match v12:
                             case hydra.core.LiteralString(value=s):
                                 return Right(s)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected string literal"))
-                    def _hoist_variant_map_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    def _hoist_variant_map_2(v12):
                         match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_1(v)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected literal"))
-                    def _hoist_variant_map_3(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                    def _hoist_variant_map_3(v12):
                         match v12:
                             case hydra.core.LiteralString(value=s):
                                 return Right(s)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected string literal"))
-                    def _hoist_variant_map_4(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    def _hoist_variant_map_4(v12):
                         match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_3(v)
@@ -187,8 +187,8 @@ def indent_style(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.ut
                 return Left(hydra.util.DecodingError("expected union of type hydra.ast.IndentStyle"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_indent_style_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def ws(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Ws]:
-    def _hoist_hydra_decode_ast_ws_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Ws]:
+def ws(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_ws_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -204,15 +204,15 @@ def ws(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Decodin
                 def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
-                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.ast.Ws]]]:
-                    def _hoist_variant_map_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                def variant_map():
+                    def _hoist_variant_map_1(v12):
                         match v12:
                             case hydra.core.LiteralString(value=s):
                                 return Right(s)
                             
                             case _:
                                 return Left(hydra.util.DecodingError("expected string literal"))
-                    def _hoist_variant_map_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                    def _hoist_variant_map_2(v12):
                         match v12:
                             case hydra.core.TermLiteral(value=v):
                                 return _hoist_variant_map_1(v)
@@ -226,8 +226,8 @@ def ws(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Decodin
                 return Left(hydra.util.DecodingError("expected union of type hydra.ast.Ws"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_ws_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def padding(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Padding]:
-    def _hoist_hydra_decode_ast_padding_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Padding]:
+def padding(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_padding_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -239,29 +239,29 @@ def padding(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.De
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.Padding"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_padding_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def precedence(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Precedence]:
-    def _hoist_hydra_decode_ast_precedence_1(v1: hydra.core.IntegerValue) -> Either[hydra.util.DecodingError, int]:
+def precedence(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_precedence_1(v1):
         match v1:
             case hydra.core.IntegerValueInt32(value=i):
                 return Right(i)
             
             case _:
                 return Left(hydra.util.DecodingError("expected int32 value"))
-    def _hoist_hydra_decode_ast_precedence_2(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, int]:
+    def _hoist_hydra_decode_ast_precedence_2(v1):
         match v1:
-            case hydra.core.LiteralInteger(value=v12):
-                return _hoist_hydra_decode_ast_precedence_1(v12)
+            case hydra.core.LiteralInteger(value=_match_value):
+                return _hoist_hydra_decode_ast_precedence_1(_match_value)
             
             case _:
                 return Left(hydra.util.DecodingError("expected int32 literal"))
-    def _hoist_hydra_decode_ast_precedence_3(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, int]:
+    def _hoist_hydra_decode_ast_precedence_3(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_ast_precedence_2(v)
             
             case _:
                 return Left(hydra.util.DecodingError("expected literal"))
-    def _hoist_hydra_decode_ast_precedence_4(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Precedence]:
+    def _hoist_hydra_decode_ast_precedence_4(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.ast.Precedence(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_ast_precedence_3(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -270,8 +270,8 @@ def precedence(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.ast.Precedence"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_precedence_4(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def op(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Op]:
-    def _hoist_hydra_decode_ast_op_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Op]:
+def op(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_op_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -283,8 +283,8 @@ def op(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Decodin
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.Op"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_op_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def bracket_expr(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.BracketExpr]:
-    def _hoist_hydra_decode_ast_bracket_expr_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.BracketExpr]:
+def bracket_expr(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_bracket_expr_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -296,8 +296,8 @@ def bracket_expr(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.ut
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.BracketExpr"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_bracket_expr_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def expr(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Expr]:
-    def _hoist_hydra_decode_ast_expr_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.Expr]:
+def expr(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_expr_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -321,8 +321,8 @@ def expr(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Decod
                 return Left(hydra.util.DecodingError("expected union of type hydra.ast.Expr"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_expr_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def indented_expression(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.IndentedExpression]:
-    def _hoist_hydra_decode_ast_indented_expression_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.IndentedExpression]:
+def indented_expression(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_indented_expression_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -334,8 +334,8 @@ def indented_expression(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[h
                 return Left(hydra.util.DecodingError("expected record of type hydra.ast.IndentedExpression"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_indented_expression_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def op_expr(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.OpExpr]:
-    def _hoist_hydra_decode_ast_op_expr_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.ast.OpExpr]:
+def op_expr(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_op_expr_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)

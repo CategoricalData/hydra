@@ -47,7 +47,9 @@ T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 
-def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.ext.haskell.ast.Type]:
+def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type):
+    r"""Encode a Hydra type as a Haskell type."""
+    
     def encode(v1: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.ext.haskell.ast.Type]:
         return encode_type(namespaces, v1)
     def ref(name: hydra.core.Name) -> hydra.compute.Flow[T1, hydra.ext.haskell.ast.Type]:
@@ -55,7 +57,7 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
     @lru_cache(1)
     def unit_tuple() -> hydra.ext.haskell.ast.Type:
         return cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeTuple(()))
-    def _hoist_body_1(v1: hydra.core.FloatType) -> hydra.compute.Flow[T1, hydra.ext.haskell.ast.Type]:
+    def _hoist_body_1(v1):
         match v1:
             case hydra.core.FloatType.FLOAT32:
                 return hydra.lib.flows.pure(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeVariable(hydra.ext.haskell.utils.raw_name("Float"))))
@@ -68,7 +70,7 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def _hoist_body_2(it: hydra.core.IntegerType, v1: hydra.core.IntegerType) -> hydra.compute.Flow[T1, hydra.ext.haskell.ast.Type]:
+    def _hoist_body_2(it, v1):
         match v1:
             case hydra.core.IntegerType.BIGINT:
                 return hydra.lib.flows.pure(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeVariable(hydra.ext.haskell.utils.raw_name("Integer"))))
@@ -87,7 +89,7 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
             
             case _:
                 return hydra.lib.flows.fail(hydra.lib.strings.cat2("unexpected integer type: ", hydra.show.core.integer_type(it)))
-    def _hoist_body_3(lt: hydra.core.LiteralType, v1: hydra.core.LiteralType) -> hydra.compute.Flow[T1, hydra.ext.haskell.ast.Type]:
+    def _hoist_body_3(lt, v1):
         match v1:
             case hydra.core.LiteralTypeBinary():
                 return hydra.lib.flows.pure(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeVariable(hydra.ext.haskell.utils.raw_name("B.ByteString"))))
@@ -106,7 +108,7 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
             
             case _:
                 return hydra.lib.flows.fail(hydra.lib.strings.cat2("unexpected literal type: ", hydra.show.core.literal_type(lt)))
-    def _hoist_body_4(v1: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.ext.haskell.ast.Type]:
+    def _hoist_body_4(v1):
         match v1:
             case hydra.core.TypeApplication(value=app):
                 @lru_cache(1)
@@ -147,8 +149,8 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
             case hydra.core.TypeList(value=lt):
                 return hydra.lib.flows.bind(encode(lt), (lambda hlt: hydra.lib.flows.pure(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeList(hlt)))))
             
-            case hydra.core.TypeLiteral(value=lt2):
-                return _hoist_body_3(lt2, lt2)
+            case hydra.core.TypeLiteral(value=lt):
+                return _hoist_body_3(lt, lt)
             
             case hydra.core.TypeMap(value=map_type):
                 @lru_cache(1)
@@ -171,10 +173,10 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
             case hydra.core.TypeSet(value=st):
                 return hydra.lib.flows.map((lambda x1: hydra.ext.haskell.utils.to_type_application(x1)), hydra.lib.flows.sequence((hydra.lib.flows.pure(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeVariable(hydra.ext.haskell.utils.raw_name("S.Set")))), encode(st))))
             
-            case hydra.core.TypeUnion(value=rt2):
+            case hydra.core.TypeUnion(value=rt):
                 @lru_cache(1)
                 def type_name() -> hydra.core.Name:
-                    return rt2.type_name
+                    return rt.type_name
                 return ref(type_name())
             
             case hydra.core.TypeUnit():
@@ -211,48 +213,48 @@ def constant_for_type_name(tname: hydra.core.Name) -> str:
 # The key used to track Haskell variable depth in annotations.
 key_haskell_var = hydra.core.Name("haskellVar")
 
-def encode_literal(l: hydra.core.Literal) -> hydra.compute.Flow[T0, hydra.ext.haskell.ast.Expression]:
-    def _hoist_hydra_ext_haskell_coder_encode_literal_1(v1: hydra.core.FloatValue) -> hydra.compute.Flow[T1, hydra.ext.haskell.ast.Expression]:
+def encode_literal(l: hydra.core.Literal):
+    def _hoist_hydra_ext_haskell_coder_encode_literal_1(v1):
         match v1:
             case hydra.core.FloatValueFloat32(value=f):
                 return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralFloat(f))))
             
-            case hydra.core.FloatValueFloat64(value=f2):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralDouble(f2))))
+            case hydra.core.FloatValueFloat64(value=f):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralDouble(f))))
             
-            case hydra.core.FloatValueBigfloat(value=f3):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralDouble(hydra.lib.literals.bigfloat_to_float64(f3)))))
+            case hydra.core.FloatValueBigfloat(value=f):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralDouble(hydra.lib.literals.bigfloat_to_float64(f)))))
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def _hoist_hydra_ext_haskell_coder_encode_literal_2(v1: hydra.core.IntegerValue) -> hydra.compute.Flow[T1, hydra.ext.haskell.ast.Expression]:
+    def _hoist_hydra_ext_haskell_coder_encode_literal_2(v1):
         match v1:
             case hydra.core.IntegerValueBigint(value=i):
                 return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(i))))
             
-            case hydra.core.IntegerValueInt8(value=i2):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.int8_to_bigint(i2)))))
+            case hydra.core.IntegerValueInt8(value=i):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.int8_to_bigint(i)))))
             
-            case hydra.core.IntegerValueInt16(value=i3):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.int16_to_bigint(i3)))))
+            case hydra.core.IntegerValueInt16(value=i):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.int16_to_bigint(i)))))
             
-            case hydra.core.IntegerValueInt32(value=i4):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInt(i4))))
+            case hydra.core.IntegerValueInt32(value=i):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInt(i))))
             
-            case hydra.core.IntegerValueInt64(value=i5):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.int64_to_bigint(i5)))))
+            case hydra.core.IntegerValueInt64(value=i):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.int64_to_bigint(i)))))
             
-            case hydra.core.IntegerValueUint8(value=i6):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.uint8_to_bigint(i6)))))
+            case hydra.core.IntegerValueUint8(value=i):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.uint8_to_bigint(i)))))
             
-            case hydra.core.IntegerValueUint16(value=i7):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.uint16_to_bigint(i7)))))
+            case hydra.core.IntegerValueUint16(value=i):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.uint16_to_bigint(i)))))
             
-            case hydra.core.IntegerValueUint32(value=i8):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.uint32_to_bigint(i8)))))
+            case hydra.core.IntegerValueUint32(value=i):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.uint32_to_bigint(i)))))
             
-            case hydra.core.IntegerValueUint64(value=i9):
-                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.uint64_to_bigint(i9)))))
+            case hydra.core.IntegerValueUint64(value=i):
+                return hydra.lib.flows.pure(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralInteger(hydra.lib.literals.uint64_to_bigint(i)))))
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -275,8 +277,8 @@ def encode_literal(l: hydra.core.Literal) -> hydra.compute.Flow[T0, hydra.ext.ha
         case _:
             return hydra.lib.flows.fail(hydra.lib.strings.cat2("literal value ", hydra.show.core.literal(l)))
 
-def encode_function(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], fun: hydra.core.Function) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.haskell.ast.Expression]:
-    def _hoist_hydra_ext_haskell_coder_encode_function_1(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], v1: hydra.core.Elimination) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.haskell.ast.Expression]:
+def encode_function(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], fun: hydra.core.Function):
+    def _hoist_hydra_ext_haskell_coder_encode_function_1(namespaces, v1):
         match v1:
             case hydra.core.EliminationWrap(value=name):
                 return hydra.lib.flows.pure(cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionVariable(hydra.ext.haskell.utils.element_reference(namespaces, hydra.names.qname(hydra.lib.maybes.from_just(hydra.names.namespace_of(name)), hydra.ext.haskell.utils.newtype_accessor_name(name))))))
@@ -303,14 +305,14 @@ def encode_function(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Mo
                 @lru_cache(1)
                 def case_expr() -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.haskell.ast.Expression]:
                     return hydra.lib.flows.bind(hydra.lexical.with_schema_context(hydra.schemas.require_union_type(dn())), (lambda rt: (field_map := hydra.lib.maps.from_list(hydra.lib.lists.map((lambda x1: to_field_map_entry(x1)), rt.fields)), to_field_map_entry := (lambda f: (f.name, f)), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v12: to_alt(field_map, v12)), fields()), (lambda ecases: hydra.lib.flows.bind(hydra.lib.maybes.cases(def_(), hydra.lib.flows.pure(()), (lambda d: hydra.lib.flows.bind(hydra.lib.flows.map((lambda x: hydra.ext.haskell.ast.CaseRhs(x)), encode_term(namespaces, d)), (lambda cs: (lhs := cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternName(hydra.ext.haskell.utils.raw_name(hydra.constants.ignored_variable))), alt := hydra.ext.haskell.ast.Alternative(lhs, cs, Nothing()), hydra.lib.flows.pure((alt,)))[2])))), (lambda dcases: hydra.lib.flows.pure(cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionCase(hydra.ext.haskell.ast.CaseExpression(hydra.ext.haskell.utils.hsvar("x"), hydra.lib.lists.concat2(ecases, dcases))))))))))[2]))
-                def to_alt(field_map: FrozenDict[hydra.core.Name, hydra.core.FieldType], field: hydra.core.Field) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.haskell.ast.Alternative]:
+                def to_alt(field_map: FrozenDict[hydra.core.Name, hydra.core.FieldType], field: hydra.core.Field):
                     @lru_cache(1)
                     def fn() -> hydra.core.Name:
                         return field.name
                     @lru_cache(1)
                     def fun_() -> hydra.core.Term:
                         return field.term
-                    return hydra.annotations.with_depth(key_haskell_var, (lambda depth: (v0 := hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(depth)), raw := cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name(v0)))))), rhs_term := hydra.rewriting.simplify_term(raw), v1 := hydra.lib.logic.if_else(hydra.rewriting.is_free_variable_in_term(hydra.core.Name(v0), rhs_term), (lambda : hydra.constants.ignored_variable), (lambda : v0)), hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g_ufr: (hname := hydra.ext.haskell.utils.union_field_reference(g_ufr, namespaces, dn(), fn()), hydra.lib.flows.bind(hydra.lib.maybes.cases(hydra.lib.maps.lookup(fn(), field_map), hydra.lib.flows.fail(hydra.lib.strings.cat(("field ", hydra.lib.literals.show_string(fn().value), " not found in ", hydra.lib.literals.show_string(dn().value)))), (lambda field_type: (ft := field_type.type, no_args := hydra.lib.flows.pure(()), single_arg := hydra.lib.flows.pure((cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternName(hydra.ext.haskell.utils.raw_name(v1))),)), hydra.dsl.python.unsupported("inline match expressions are not yet supported"))[3])), (lambda args: (lhs := hydra.ext.haskell.utils.application_pattern(hname, args), hydra.lib.flows.bind(hydra.lib.flows.map((lambda x: hydra.ext.haskell.ast.CaseRhs(x)), encode_term(namespaces, rhs_term)), (lambda rhs: hydra.lib.flows.pure(hydra.ext.haskell.ast.Alternative(lhs, rhs, Nothing())))))[1])))[1])))[4]))
+                    return hydra.annotations.with_depth(key_haskell_var, (lambda depth: (v0 := hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(depth)), raw := cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name(v0)))))), rhs_term := hydra.rewriting.simplify_term(raw), v1 := hydra.lib.logic.if_else(hydra.rewriting.is_free_variable_in_term(hydra.core.Name(v0), rhs_term), (lambda : hydra.constants.ignored_variable), (lambda : v0)), hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g_ufr: (hname := hydra.ext.haskell.utils.union_field_reference(g_ufr, namespaces, dn(), fn()), hydra.lib.flows.bind(hydra.lib.maybes.cases(hydra.lib.maps.lookup(fn(), field_map), hydra.lib.flows.fail(hydra.lib.strings.cat(("field ", hydra.lib.literals.show_string(fn().value), " not found in ", hydra.lib.literals.show_string(dn().value)))), (lambda field_type: (ft := field_type.type, no_args := hydra.lib.flows.pure(()), single_arg := hydra.lib.flows.pure((cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternName(hydra.ext.haskell.utils.raw_name(v1))),)), _hoist_body_1 := (lambda v12: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_1(hydra.rewriting.deannotate_type(ft)))[4])), (lambda args: (lhs := hydra.ext.haskell.utils.application_pattern(hname, args), hydra.lib.flows.bind(hydra.lib.flows.map((lambda x: hydra.ext.haskell.ast.CaseRhs(x)), encode_term(namespaces, rhs_term)), (lambda rhs: hydra.lib.flows.pure(hydra.ext.haskell.ast.Alternative(lhs, rhs, Nothing())))))[1])))[1])))[4]))
                 return hydra.lib.flows.map((lambda v12: hydra.ext.haskell.utils.hslambda(hydra.ext.haskell.utils.raw_name("x"), v12)), case_expr())
             
             case _:
@@ -334,7 +336,7 @@ def encode_function(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Mo
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def encode_term(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.haskell.ast.Expression]:
+def encode_term(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], term: hydra.core.Term):
     r"""Encode a Hydra term as a Haskell expression."""
     
     def encode(v1: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.haskell.ast.Expression]:
@@ -544,8 +546,8 @@ def encode_type_with_class_assertions(namespaces: hydra.module.Namespaces[hydra.
         def cls() -> hydra.classes.TypeClass:
             return hydra.lib.pairs.second(pair)
         @lru_cache(1)
-        def hname() -> hydra.ext.haskell.ast.Name:
-            def _hoist_hname_1(v1: hydra.classes.TypeClass) -> str:
+        def hname():
+            def _hoist_hname_1(v1):
                 match v1:
                     case hydra.classes.TypeClass.EQUALITY:
                         return "Eq"
@@ -576,6 +578,8 @@ def encode_type_with_class_assertions(namespaces: hydra.module.Namespaces[hydra.
     return hydra.monads.with_trace("encode with assertions", hydra.lib.flows.bind(adapt_type_to_haskell_and_encode(namespaces, typ), (lambda htyp: hydra.lib.logic.if_else(hydra.lib.lists.null(assert_pairs()), (lambda : hydra.lib.flows.pure(htyp)), (lambda : (encoded := hydra.lib.lists.map((lambda x1: encode_assertion(x1)), assert_pairs()), hassert := hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(encoded), 1), (lambda : hydra.lib.lists.head(encoded)), (lambda : cast(hydra.ext.haskell.ast.Assertion, hydra.ext.haskell.ast.AssertionTuple(encoded)))), hydra.lib.flows.pure(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeCtx(hydra.ext.haskell.ast.ContextType(hassert, htyp)))))[2])))))
 
 def type_scheme_constraints_to_class_map(maybe_constraints: Maybe[FrozenDict[T0, hydra.core.TypeVariableMetadata]]) -> FrozenDict[T0, frozenset[hydra.classes.TypeClass]]:
+    r"""Convert type scheme constraints to a map of type variables to typeclasses."""
+    
     def name_to_type_class(class_name: hydra.core.Name) -> Maybe[hydra.classes.TypeClass]:
         @lru_cache(1)
         def class_name_str() -> str:
@@ -604,7 +608,7 @@ def to_data_declaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.as
     @lru_cache(1)
     def hname() -> hydra.ext.haskell.ast.Name:
         return hydra.ext.haskell.utils.simple_name(hydra.names.local_name_of(name()))
-    def rewrite_value_binding(vb: hydra.ext.haskell.ast.ValueBinding) -> hydra.ext.haskell.ast.ValueBinding:
+    def rewrite_value_binding(vb: hydra.ext.haskell.ast.ValueBinding):
         match vb:
             case hydra.ext.haskell.ast.ValueBindingSimple(value=simple):
                 @lru_cache(1)
@@ -616,38 +620,42 @@ def to_data_declaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.as
                 @lru_cache(1)
                 def bindings() -> Maybe[hydra.ext.haskell.ast.LocalBindings]:
                     return simple.local_bindings
-                match pattern_():
-                    case hydra.ext.haskell.ast.PatternApplication(value=app_pat):
-                        @lru_cache(1)
-                        def name_() -> hydra.ext.haskell.ast.Name:
-                            return app_pat.name
-                        @lru_cache(1)
-                        def args() -> frozenlist[hydra.ext.haskell.ast.Pattern]:
-                            return app_pat.args
-                        @lru_cache(1)
-                        def rhs_expr() -> hydra.ext.haskell.ast.Expression:
-                            return rhs().value
-                        match rhs_expr():
-                            case hydra.ext.haskell.ast.ExpressionLambda(value=lambda_):
-                                @lru_cache(1)
-                                def vars() -> frozenlist[hydra.ext.haskell.ast.Pattern]:
-                                    return lambda_.bindings
-                                @lru_cache(1)
-                                def body() -> hydra.ext.haskell.ast.Expression:
-                                    return lambda_.inner
-                                @lru_cache(1)
-                                def new_pattern() -> hydra.ext.haskell.ast.Pattern:
-                                    return hydra.ext.haskell.utils.application_pattern(name_(), hydra.lib.lists.concat2(args(), vars()))
-                                @lru_cache(1)
-                                def new_rhs() -> hydra.ext.haskell.ast.RightHandSide:
-                                    return hydra.ext.haskell.ast.RightHandSide(body())
-                                return rewrite_value_binding(cast(hydra.ext.haskell.ast.ValueBinding, hydra.ext.haskell.ast.ValueBindingSimple(hydra.ext.haskell.ast.SimpleValueBinding(new_pattern(), new_rhs(), bindings()))))
-                            
-                            case _:
-                                return vb
-                    
-                    case _:
-                        return vb
+                def _hoist_body_1(v1):
+                    match v1:
+                        case hydra.ext.haskell.ast.PatternApplication(value=app_pat):
+                            @lru_cache(1)
+                            def name_() -> hydra.ext.haskell.ast.Name:
+                                return app_pat.name
+                            @lru_cache(1)
+                            def args() -> frozenlist[hydra.ext.haskell.ast.Pattern]:
+                                return app_pat.args
+                            @lru_cache(1)
+                            def rhs_expr() -> hydra.ext.haskell.ast.Expression:
+                                return rhs().value
+                            def _hoist_body_1(v12):
+                                match v12:
+                                    case hydra.ext.haskell.ast.ExpressionLambda(value=lambda_):
+                                        @lru_cache(1)
+                                        def vars() -> frozenlist[hydra.ext.haskell.ast.Pattern]:
+                                            return lambda_.bindings
+                                        @lru_cache(1)
+                                        def body() -> hydra.ext.haskell.ast.Expression:
+                                            return lambda_.inner
+                                        @lru_cache(1)
+                                        def new_pattern() -> hydra.ext.haskell.ast.Pattern:
+                                            return hydra.ext.haskell.utils.application_pattern(name_(), hydra.lib.lists.concat2(args(), vars()))
+                                        @lru_cache(1)
+                                        def new_rhs() -> hydra.ext.haskell.ast.RightHandSide:
+                                            return hydra.ext.haskell.ast.RightHandSide(body())
+                                        return rewrite_value_binding(cast(hydra.ext.haskell.ast.ValueBinding, hydra.ext.haskell.ast.ValueBindingSimple(hydra.ext.haskell.ast.SimpleValueBinding(new_pattern(), new_rhs(), bindings()))))
+                                    
+                                    case _:
+                                        return vb
+                            return _hoist_body_1(rhs_expr())
+                        
+                        case _:
+                            return vb
+                return _hoist_body_1(pattern_())
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -668,7 +676,7 @@ def to_data_declaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.as
                 @lru_cache(1)
                 def terms() -> frozenlist[hydra.core.Term]:
                     return hydra.lib.lists.map((lambda v1: v1.term), lbindings())
-                return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_term(namespaces, v1)), terms()), (lambda hterms: (hbindings := hydra.lib.lists.zip_with((lambda x1, x2: to_binding(x1, x2)), hnames(), hterms), to_decl(comments, hname_, env(), Just(hydra.ext.haskell.ast.LocalBindings(hbindings))))[1]))
+                return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: encode_term(namespaces, v1)), terms()), (lambda hterms: (hbindings := hydra.lib.lists.zip_with((lambda x1, x2: to_binding(x1, x2)), hnames(), hterms), prev_bindings := hydra.lib.maybes.maybe((), (lambda lb: lb.value), bindings), all_bindings := hydra.lib.lists.concat2(prev_bindings, hbindings), to_decl(comments, hname_, env(), Just(hydra.ext.haskell.ast.LocalBindings(all_bindings))))[3]))
             
             case _:
                 return hydra.lib.flows.bind(encode_term(namespaces, term_), (lambda hterm: (vb := hydra.ext.haskell.utils.simple_value_binding(hname_, hterm, bindings), scheme_constraints := typ().constraints, scheme_classes := type_scheme_constraints_to_class_map(scheme_constraints), hydra.lib.flows.bind(hydra.annotations.get_type_classes(hydra.rewriting.remove_types_from_term(term())), (lambda explicit_classes: (combined_classes := hydra.lib.maps.union(scheme_classes, explicit_classes), hydra.lib.flows.bind(encode_type_with_class_assertions(namespaces, combined_classes, typ().type), (lambda htype: (decl := cast(hydra.ext.haskell.ast.Declaration, hydra.ext.haskell.ast.DeclarationTypedBinding(hydra.ext.haskell.ast.TypedBinding(hydra.ext.haskell.ast.TypeSignature(hname_, htype), rewrite_value_binding(vb)))), hydra.lib.flows.pure(hydra.ext.haskell.ast.DeclarationWithComments(decl, comments)))[1])))[1])))[3]))
@@ -681,6 +689,8 @@ include_type_definitions = False
 use_core_import = True
 
 def name_decls(g: T0, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], name: hydra.core.Name, typ: hydra.core.Type) -> frozenlist[hydra.ext.haskell.ast.DeclarationWithComments]:
+    r"""Generate Haskell declarations for type and field name constants."""
+    
     @lru_cache(1)
     def nm() -> str:
         return name.value
@@ -709,6 +719,8 @@ def name_decls(g: T0, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.
     return hydra.lib.logic.if_else(use_core_import, (lambda : hydra.lib.lists.cons(to_decl(hydra.core.Name("hydra.core.Name"), name_decl()), hydra.lib.lists.map((lambda v1: to_decl(hydra.core.Name("hydra.core.Name"), v1)), field_decls()))), (lambda : ()))
 
 def type_decl(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], name: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.ext.haskell.ast.DeclarationWithComments]:
+    r"""Generate a Haskell declaration for a type definition constant."""
+    
     def type_name(ns: hydra.module.Namespace, name_: hydra.core.Name) -> hydra.core.Name:
         return hydra.names.qname(ns, type_name_local(name_))
     def type_name_local(name_: hydra.core.Name) -> str:
@@ -725,8 +737,8 @@ def type_decl(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleNa
                 
                 case _:
                     return Nothing()
-        def decode_string(term2: hydra.core.Term) -> Maybe[str]:
-            def _hoist_decode_string_1(v1: hydra.core.Literal) -> Maybe[str]:
+        def decode_string(term2: hydra.core.Term):
+            def _hoist_decode_string_1(v1):
                 match v1:
                     case hydra.core.LiteralString(value=s):
                         return Just(s)
@@ -771,7 +783,7 @@ def type_decl(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleNa
         return hydra.rewriting.rewrite_term((lambda x1, x2: rewrite(x1, x2)), raw_term())
     return hydra.lib.flows.bind(hydra.adapt.modules.construct_coder(hydra.ext.haskell.language.haskell_language(), (lambda v1: encode_term(namespaces, v1)), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")))), (lambda coder: hydra.lib.flows.bind(coder.encode(final_term()), (lambda expr: (rhs := hydra.ext.haskell.ast.RightHandSide(expr), hname := hydra.ext.haskell.utils.simple_name(type_name_local(name)), pat := hydra.ext.haskell.utils.application_pattern(hname, ()), decl := cast(hydra.ext.haskell.ast.Declaration, hydra.ext.haskell.ast.DeclarationValueBinding(cast(hydra.ext.haskell.ast.ValueBinding, hydra.ext.haskell.ast.ValueBindingSimple(hydra.ext.haskell.ast.SimpleValueBinding(pat, rhs, Nothing()))))), hydra.lib.flows.pure(hydra.ext.haskell.ast.DeclarationWithComments(decl, Nothing())))[4]))))
 
-def to_type_declarations_from(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], element_name: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.ext.haskell.ast.DeclarationWithComments]]:
+def to_type_declarations_from(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], element_name: hydra.core.Name, typ: hydra.core.Type):
     r"""Convert a Hydra type definition to Haskell declarations."""
     
     @lru_cache(1)

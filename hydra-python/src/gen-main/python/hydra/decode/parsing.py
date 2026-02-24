@@ -18,37 +18,36 @@ import hydra.parsing
 import hydra.util
 
 T0 = TypeVar("T0")
-T1 = TypeVar("T1")
 
-def parse_error(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.parsing.ParseError]:
-    def _hoist_hydra_decode_parsing_parse_error_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.parsing.ParseError]:
+def parse_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_parsing_parse_error_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_1(v12):
                     match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_2(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected literal"))
-                def _hoist_body_3(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_3(v12):
                     match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_4(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_4(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_3(v)
@@ -61,21 +60,21 @@ def parse_error(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.uti
                 return Left(hydra.util.DecodingError("expected record of type hydra.parsing.ParseError"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_parsing_parse_error_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def parse_success(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.parsing.ParseSuccess[T0]]:
-    def _hoist_hydra_decode_parsing_parse_success_1(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.parsing.ParseSuccess[T1]]:
+def parse_success(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_parsing_parse_success_1(a, cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
                 def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
                     return hydra.extract.helpers.to_field_map(record)
-                def _hoist_body_1(v12: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_1(v12):
                     match v12:
                         case hydra.core.LiteralString(value=s):
                             return Right(s)
                         
                         case _:
                             return Left(hydra.util.DecodingError("expected string literal"))
-                def _hoist_body_2(v12: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+                def _hoist_body_2(v12):
                     match v12:
                         case hydra.core.TermLiteral(value=v):
                             return _hoist_body_1(v)
@@ -88,8 +87,8 @@ def parse_success(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
                 return Left(hydra.util.DecodingError("expected record of type hydra.parsing.ParseSuccess"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_parsing_parse_success_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def parse_result(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.parsing.ParseResult[T0]]:
-    def _hoist_hydra_decode_parsing_parse_result_1(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T1]], cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.parsing.ParseResult[T1]]:
+def parse_result(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.util.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_parsing_parse_result_1(a, cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -105,7 +104,7 @@ def parse_result(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.
                 def fterm() -> hydra.core.Term:
                     return field().term
                 @lru_cache(1)
-                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.parsing.ParseResult[T1]]]]:
+                def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.parsing.ParseResult[T0]]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("success"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(t))), parse_success(a, cx, input)))), (hydra.core.Name("failure"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(t))), parse_error(cx, input))))))
                 return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
             

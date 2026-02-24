@@ -142,6 +142,8 @@ def sanitize_with_underscores(reserved: frozenset[str], s: str) -> str:
     return escape_with_underscore(reserved, non_alnum_to_underscores(s))
 
 def show_list(f: Callable[[T0], str], els: frozenlist[T0]) -> str:
+    r"""Format a list of elements as a bracketed, comma-separated string."""
+    
     return hydra.lib.strings.cat(("[", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map(f, els)), "]"))
 
 def strip_leading_and_trailing_whitespace(s: str) -> str:

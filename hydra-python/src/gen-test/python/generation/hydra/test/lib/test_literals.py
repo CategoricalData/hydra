@@ -521,6 +521,62 @@ def test_showstring__empty():
 
     assert (hydra.lib.literals.show_string("")) == ("\"\"")
 
+def test_showstring__latin_accented():
+
+    assert (hydra.lib.literals.show_string("café")) == ("\"caf\\233\"")
+
+def test_showstring__greek_lambda():
+
+    assert (hydra.lib.literals.show_string("λ")) == ("\"\\955\"")
+
+def test_showstring__mixed_ascii_and_non_ascii():
+
+    assert (hydra.lib.literals.show_string("AéB")) == ("\"A\\233B\"")
+
+def test_showstring__tab():
+
+    assert (hydra.lib.literals.show_string("\t")) == ("\"\\t\"")
+
+def test_showstring__newline():
+
+    assert (hydra.lib.literals.show_string("\n")) == ("\"\\n\"")
+
+def test_showstring__carriage_return():
+
+    assert (hydra.lib.literals.show_string("\r")) == ("\"\\r\"")
+
+def test_showstring__backslash():
+
+    assert (hydra.lib.literals.show_string("\\")) == ("\"\\\\\"")
+
+def test_showstring__double_quote():
+
+    assert (hydra.lib.literals.show_string("\"")) == ("\"\\\"\"")
+
+def test_showstring__null():
+
+    assert (hydra.lib.literals.show_string("\x00")) == ("\"\\NUL\"")
+
+def test_showstring__bell():
+
+    assert (hydra.lib.literals.show_string("")) == ("\"\\a\"")
+
+def test_showstring__backspace():
+
+    assert (hydra.lib.literals.show_string("")) == ("\"\\b\"")
+
+def test_showstring__form_feed():
+
+    assert (hydra.lib.literals.show_string("")) == ("\"\\f\"")
+
+def test_showstring__vertical_tab():
+
+    assert (hydra.lib.literals.show_string("")) == ("\"\\v\"")
+
+def test_showstring__delete():
+
+    assert (hydra.lib.literals.show_string("")) == ("\"\\DEL\"")
+
 # readInt8
 
 def test_readint8__positive():

@@ -18,6 +18,8 @@ import hydra.show.core
 T0 = TypeVar("T0")
 
 def bimap(left_fun: hydra.core.Term, right_fun: hydra.core.Term, either_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly bimap for Either terms."""
+    
     match either_term:
         case hydra.core.TermEither(value=e):
             return hydra.lib.flows.pure(hydra.lib.eithers.either((lambda val: cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(left_fun, val))))))), (lambda val: cast(hydra.core.Term, hydra.core.TermEither(Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(right_fun, val))))))), e))
@@ -26,6 +28,8 @@ def bimap(left_fun: hydra.core.Term, right_fun: hydra.core.Term, either_term: hy
             return hydra.monads.unexpected("either value", hydra.show.core.term(either_term))
 
 def bind(either_term: hydra.core.Term, fun_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly bind for Either terms."""
+    
     match either_term:
         case hydra.core.TermEither(value=e):
             return hydra.lib.flows.pure(hydra.lib.eithers.either((lambda val: cast(hydra.core.Term, hydra.core.TermEither(Left(val)))), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), e))
@@ -34,6 +38,8 @@ def bind(either_term: hydra.core.Term, fun_term: hydra.core.Term) -> hydra.compu
             return hydra.monads.unexpected("either value", hydra.show.core.term(either_term))
 
 def either(left_fun: hydra.core.Term, right_fun: hydra.core.Term, either_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly case analysis for Either terms."""
+    
     match either_term:
         case hydra.core.TermEither(value=e):
             return hydra.lib.flows.pure(hydra.lib.eithers.either((lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(left_fun, val)))), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(right_fun, val)))), e))
@@ -42,6 +48,8 @@ def either(left_fun: hydra.core.Term, right_fun: hydra.core.Term, either_term: h
             return hydra.monads.unexpected("either value", hydra.show.core.term(either_term))
 
 def map(right_fun: hydra.core.Term, either_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly map for Either terms."""
+    
     match either_term:
         case hydra.core.TermEither(value=e):
             return hydra.lib.flows.pure(hydra.lib.eithers.either((lambda val: cast(hydra.core.Term, hydra.core.TermEither(Left(val)))), (lambda val: cast(hydra.core.Term, hydra.core.TermEither(Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(right_fun, val))))))), e))
@@ -55,6 +63,8 @@ def map_list(fun_term: hydra.core.Term, list_term: hydra.core.Term) -> hydra.com
     return hydra.lib.flows.bind(hydra.extract.core.list(list_term), (lambda elements: hydra.lib.flows.pure(hydra.lib.lists.foldl((lambda acc, el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.eithers.either"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("err"), Nothing(), cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("err")))))))))))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("y"), Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.eithers.either"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("accErr"), Nothing(), cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("accErr")))))))))))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("ys"), Nothing(), cast(hydra.core.Term, hydra.core.TermEither(Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.lists.cons"))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("y")))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("ys"))))))))))))))))), acc))))))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el))))))), cast(hydra.core.Term, hydra.core.TermEither(Right(cast(hydra.core.Term, hydra.core.TermList(()))))), hydra.lib.lists.reverse(elements)))))
 
 def map_maybe(fun_term: hydra.core.Term, maybe_term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+    r"""Interpreter-friendly mapMaybe for Either (traverse over Maybe)."""
+    
     match maybe_term:
         case hydra.core.TermMaybe(value=opt):
             return hydra.lib.flows.pure(hydra.lib.maybes.maybe(cast(hydra.core.Term, hydra.core.TermEither(Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing()))))), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.eithers.either"))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("err"), Nothing(), cast(hydra.core.Term, hydra.core.TermEither(Left(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("err")))))))))))))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("y"), Nothing(), cast(hydra.core.Term, hydra.core.TermEither(Right(cast(hydra.core.Term, hydra.core.TermMaybe(Just(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("y"))))))))))))))))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val))))))), opt))

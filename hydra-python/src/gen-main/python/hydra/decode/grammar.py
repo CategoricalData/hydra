@@ -17,22 +17,22 @@ import hydra.lib.maybes
 import hydra.lib.strings
 import hydra.util
 
-def constant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Constant]:
-    def _hoist_hydra_decode_grammar_constant_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+def constant(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_grammar_constant_1(v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
             
             case _:
                 return Left(hydra.util.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_grammar_constant_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+    def _hoist_hydra_decode_grammar_constant_2(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_grammar_constant_1(v)
             
             case _:
                 return Left(hydra.util.DecodingError("expected literal"))
-    def _hoist_hydra_decode_grammar_constant_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Constant]:
+    def _hoist_hydra_decode_grammar_constant_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.grammar.Constant(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_grammar_constant_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -41,22 +41,22 @@ def constant(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.D
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.grammar.Constant"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_grammar_constant_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def label(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Label]:
-    def _hoist_hydra_decode_grammar_label_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+def label(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_grammar_label_1(v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
             
             case _:
                 return Left(hydra.util.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_grammar_label_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+    def _hoist_hydra_decode_grammar_label_2(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_grammar_label_1(v)
             
             case _:
                 return Left(hydra.util.DecodingError("expected literal"))
-    def _hoist_hydra_decode_grammar_label_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Label]:
+    def _hoist_hydra_decode_grammar_label_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.grammar.Label(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_grammar_label_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -65,22 +65,22 @@ def label(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Deco
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.grammar.Label"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_grammar_label_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def regex(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Regex]:
-    def _hoist_hydra_decode_grammar_regex_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+def regex(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_grammar_regex_1(v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
             
             case _:
                 return Left(hydra.util.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_grammar_regex_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+    def _hoist_hydra_decode_grammar_regex_2(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_grammar_regex_1(v)
             
             case _:
                 return Left(hydra.util.DecodingError("expected literal"))
-    def _hoist_hydra_decode_grammar_regex_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Regex]:
+    def _hoist_hydra_decode_grammar_regex_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.grammar.Regex(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_grammar_regex_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -89,22 +89,22 @@ def regex(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Deco
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.grammar.Regex"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_grammar_regex_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def symbol(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Symbol]:
-    def _hoist_hydra_decode_grammar_symbol_1(v1: hydra.core.Literal) -> Either[hydra.util.DecodingError, str]:
+def symbol(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_grammar_symbol_1(v1):
         match v1:
             case hydra.core.LiteralString(value=s):
                 return Right(s)
             
             case _:
                 return Left(hydra.util.DecodingError("expected string literal"))
-    def _hoist_hydra_decode_grammar_symbol_2(v1: hydra.core.Term) -> Either[hydra.util.DecodingError, str]:
+    def _hoist_hydra_decode_grammar_symbol_2(v1):
         match v1:
             case hydra.core.TermLiteral(value=v):
                 return _hoist_hydra_decode_grammar_symbol_1(v)
             
             case _:
                 return Left(hydra.util.DecodingError("expected literal"))
-    def _hoist_hydra_decode_grammar_symbol_3(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Symbol]:
+    def _hoist_hydra_decode_grammar_symbol_3(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.grammar.Symbol(b)), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_hydra_decode_grammar_symbol_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, wrapped_term.body)))
@@ -113,8 +113,8 @@ def symbol(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.Dec
                 return Left(hydra.util.DecodingError("expected wrapped type hydra.grammar.Symbol"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_grammar_symbol_3(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def labeled_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.LabeledPattern]:
-    def _hoist_hydra_decode_grammar_labeled_pattern_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.LabeledPattern]:
+def labeled_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_grammar_labeled_pattern_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -126,8 +126,8 @@ def labeled_pattern(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra
                 return Left(hydra.util.DecodingError("expected record of type hydra.grammar.LabeledPattern"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_grammar_labeled_pattern_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Pattern]:
-    def _hoist_hydra_decode_grammar_pattern_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Pattern]:
+def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_grammar_pattern_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
                 @lru_cache(1)
@@ -151,8 +151,8 @@ def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.De
                 return Left(hydra.util.DecodingError("expected union of type hydra.grammar.Pattern"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_grammar_pattern_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def production(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Production]:
-    def _hoist_hydra_decode_grammar_production_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Production]:
+def production(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_grammar_production_1(cx, v1):
         match v1:
             case hydra.core.TermRecord(value=record):
                 @lru_cache(1)
@@ -164,8 +164,8 @@ def production(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util
                 return Left(hydra.util.DecodingError("expected record of type hydra.grammar.Production"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_grammar_production_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
-def grammar(cx: hydra.graph.Graph, raw: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Grammar]:
-    def _hoist_hydra_decode_grammar_grammar_1(cx: hydra.graph.Graph, v1: hydra.core.Term) -> Either[hydra.util.DecodingError, hydra.grammar.Grammar]:
+def grammar(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_grammar_grammar_1(cx, v1):
         match v1:
             case hydra.core.TermWrap(value=wrapped_term):
                 return hydra.lib.eithers.map((lambda b: hydra.grammar.Grammar(b)), hydra.extract.helpers.decode_list((lambda x1, x2: production(x1, x2)), cx, wrapped_term.body))

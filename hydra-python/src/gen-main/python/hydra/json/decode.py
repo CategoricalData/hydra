@@ -128,8 +128,8 @@ def decode_integer(it: hydra.core.IntegerType, value: hydra.json.model.Value) ->
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def decode_literal(lt: hydra.core.LiteralType, value: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
-    def _hoist_hydra_json_decode_decode_literal_1(v1: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
+def decode_literal(lt: hydra.core.LiteralType, value: hydra.json.model.Value):
+    def _hoist_hydra_json_decode_decode_literal_1(v1):
         match v1:
             case hydra.json.model.ValueBoolean(value=b):
                 return Right(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(b)))))
@@ -181,7 +181,7 @@ def expect_object(value: hydra.json.model.Value) -> Either[str, FrozenDict[str, 
         case _:
             return Left("expected object")
 
-def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.core.Type, value: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
+def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.core.Type, value: hydra.json.model.Value):
     r"""Decode a JSON value to a Hydra term given a type. Returns Left for type mismatches."""
     
     @lru_cache(1)
@@ -215,15 +215,17 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
                 def len() -> int:
                     return hydra.lib.lists.length(arr)
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(len(), 0), (lambda : Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(len(), 1), (lambda : decode_just(arr)), (lambda : Left("expected single-element array for Just")))))
-            match value:
-                case hydra.json.model.ValueNull():
-                    return Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))
-                
-                case hydra.json.model.ValueArray(value=arr):
-                    return decode_maybe_array(arr)
-                
-                case _:
-                    return Left("expected null or single-element array for Maybe")
+            def _hoist_body_1(v1):
+                match v1:
+                    case hydra.json.model.ValueNull():
+                        return Right(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())))
+                    
+                    case hydra.json.model.ValueArray(value=arr):
+                        return decode_maybe_array(arr)
+                    
+                    case _:
+                        return Left("expected null or single-element array for Maybe")
+            return _hoist_body_1(value)
         
         case hydra.core.TypeRecord(value=rt):
             @lru_cache(1)
@@ -260,13 +262,15 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
             return hydra.lib.eithers.map((lambda _2: cast(hydra.core.Term, hydra.core.TermUnit())), obj_result())
         
         case hydra.core.TypeWrap(value=wn):
-            def extract_inner_type(lt: hydra.core.Type) -> hydra.core.Type:
-                match lt:
-                    case hydra.core.TypeWrap(value=wt):
-                        return wt.body
-                    
-                    case _:
-                        return lt
+            def extract_inner_type(lt: hydra.core.Type):
+                def _hoist_extract_inner_type_1(lt, v1):
+                    match v1:
+                        case hydra.core.TypeWrap(value=wt):
+                            return wt.body
+                        
+                        case _:
+                            return lt
+                return _hoist_extract_inner_type_1(lt, lt)
             def decode_and_wrap(lt: hydra.core.Type) -> Either[str, hydra.core.Term]:
                 @lru_cache(1)
                 def inner_type() -> hydra.core.Type:

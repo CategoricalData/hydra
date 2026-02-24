@@ -33,19 +33,29 @@ T3 = TypeVar("T3")
 T4 = TypeVar("T4")
 
 def bidirectional(f: Callable[[hydra.coders.CoderDirection, T0], hydra.compute.Flow[T1, T0]]) -> hydra.compute.Coder[T1, T1, T0, T0]:
+    r"""Create a bidirectional coder from a direction-aware function."""
+    
     return hydra.compute.Coder((lambda v1: f(hydra.coders.CoderDirection.ENCODE, v1)), (lambda v1: f(hydra.coders.CoderDirection.DECODE, v1)))
 
 @lru_cache(1)
 def id_coder() -> hydra.compute.Coder[T0, T1, T2, T2]:
+    r"""Identity coder."""
+    
     return hydra.compute.Coder((lambda x1: hydra.lib.flows.pure(x1)), (lambda x1: hydra.lib.flows.pure(x1)))
 
 def choose_adapter(alts: Callable[[T0], hydra.compute.Flow[T1, frozenlist[hydra.compute.Adapter[T2, T3, T0, T0, T4, T4]]]], supported: Callable[[T0], bool], show: Callable[[T0], str], describe: Callable[[T0], str], typ: T0) -> hydra.compute.Flow[T1, hydra.compute.Adapter[T2, T3, T0, T0, T4, T4]]:
+    r"""Choose an appropriate adapter for a type."""
+    
     return hydra.lib.logic.if_else(supported(typ), (lambda : hydra.lib.flows.pure(hydra.compute.Adapter(False, typ, typ, id_coder()))), (lambda : hydra.lib.flows.bind(alts(typ), (lambda raw: (candidates := hydra.lib.lists.filter((lambda adapter: supported(adapter.target)), raw), hydra.lib.logic.if_else(hydra.lib.lists.null(candidates), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat(("no adapters found for ", describe(typ), hydra.lib.logic.if_else(hydra.lib.lists.null(raw), (lambda : ""), (lambda : hydra.lib.strings.cat((" (discarded ", hydra.lib.literals.show_int32(hydra.lib.lists.length(raw)), " unsupported candidate types: ", hydra.show.core.list(show, hydra.lib.lists.map((lambda v1: v1.target), raw)), ")")))), ". Original type: ", show(typ))))), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(candidates)))))[1]))))
 
 def compose_coders(c1: hydra.compute.Coder[T0, T1, T2, T3], c2: hydra.compute.Coder[T0, T1, T3, T4]) -> hydra.compute.Coder[T0, T1, T2, T4]:
+    r"""Compose two coders."""
+    
     return hydra.compute.Coder((lambda a: hydra.lib.flows.bind(c1.encode(a), (lambda b1: c2.encode(b1)))), (lambda c: hydra.lib.flows.bind(c2.decode(c), (lambda b2: c1.decode(b2)))))
 
 def encode_decode(dir: hydra.coders.CoderDirection, coder: hydra.compute.Coder[T0, T0, T1, T1], term: T1) -> hydra.compute.Flow[T0, T1]:
+    r"""Apply coder in the specified direction."""
+    
     match dir:
         case hydra.coders.CoderDirection.ENCODE:
             return coder.encode(term)
@@ -62,6 +72,8 @@ def float_type_is_supported(constraints: hydra.coders.LanguageConstraints, ft: h
     return hydra.lib.sets.member(ft, constraints.float_types)
 
 def id_adapter(t: T0) -> hydra.compute.Adapter[T1, T2, T0, T0, T3, T3]:
+    r"""Identity adapter."""
+    
     return hydra.compute.Adapter(False, t, t, id_coder())
 
 def integer_type_is_supported(constraints: hydra.coders.LanguageConstraints, it: hydra.core.IntegerType) -> bool:
@@ -176,4 +188,6 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
     return hydra.lib.logic.and_(constraints.types(base()), hydra.lib.logic.and_(is_supported_variant(hydra.reflect.type_variant(base())), is_supported(base())))
 
 def unidirectional_coder(m: Callable[[T0], hydra.compute.Flow[T1, T2]]) -> hydra.compute.Coder[T1, T3, T0, T2]:
+    r"""Create a unidirectional coder."""
+    
     return hydra.compute.Coder(m, (lambda _: hydra.lib.flows.fail("inbound mapping is unsupported")))

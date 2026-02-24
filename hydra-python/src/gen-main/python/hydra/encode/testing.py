@@ -204,6 +204,9 @@ def type_reduction_test_case(x: hydra.testing.TypeReductionTestCase) -> hydra.co
 def unify_types_test_case(x: hydra.testing.UnifyTypesTestCase) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UnifyTypesTestCase"), (hydra.core.Field(hydra.core.Name("schemaTypes"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: hydra.encode.core.name(x1)), x.schema_types)))), hydra.core.Field(hydra.core.Name("left"), hydra.encode.core.type(x.left)), hydra.core.Field(hydra.core.Name("right"), hydra.encode.core.type(x.right)), hydra.core.Field(hydra.core.Name("expected"), cast(hydra.core.Term, hydra.core.TermEither(hydra.lib.eithers.bimap((lambda x2: cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x2))))), (lambda x1: hydra.encode.typing.type_subst(x1)), x.expected))))))))
 
+def unshadow_variables_test_case(x: hydra.testing.UnshadowVariablesTestCase) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.UnshadowVariablesTestCase"), (hydra.core.Field(hydra.core.Name("input"), hydra.encode.core.term(x.input)), hydra.core.Field(hydra.core.Name("output"), hydra.encode.core.term(x.output))))))
+
 def variable_occurs_in_type_test_case(x: hydra.testing.VariableOccursInTypeTestCase) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.testing.VariableOccursInTypeTestCase"), (hydra.core.Field(hydra.core.Name("variable"), hydra.encode.core.name(x.variable)), hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("expected"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(x.expected)))))))))
 
@@ -322,6 +325,9 @@ def test_case(v1: hydra.testing.TestCase) -> hydra.core.Term:
         
         case hydra.testing.TestCaseJoinTypes(value=y38):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("joinTypes"), join_types_test_case(y38)))))
+        
+        case hydra.testing.TestCaseUnshadowVariables(value=y39):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.testing.TestCase"), hydra.core.Field(hydra.core.Name("unshadowVariables"), unshadow_variables_test_case(y39)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
