@@ -2,18 +2,20 @@ module Main where
 
 import Hydra.Generation (writeModulesJson)
 import Hydra.Sources.All (kernelModules)
+import Hydra.Sources.Eval.Lib.All (evalLibModules)
 import System.Exit (exitFailure)
 import Control.Exception (catch, SomeException)
 
 
 main :: IO ()
 main = do
+  let allMods = kernelModules ++ evalLibModules
   putStrLn "=== Generate Hydra kernel JSON ==="
   putStrLn ""
-  putStrLn $ "Generating " ++ show (length kernelModules) ++ " kernel modules to JSON..."
+  putStrLn $ "Generating " ++ show (length allMods) ++ " kernel + eval lib modules to JSON..."
   putStrLn ""
 
-  result <- catch (writeModulesJson True "src/gen-main/json" kernelModules kernelModules >> return True)
+  result <- catch (writeModulesJson True "src/gen-main/json" allMods allMods >> return True)
                   (\e -> do
                     putStrLn $ "Error: " ++ show (e :: SomeException)
                     return False)

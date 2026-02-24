@@ -21,6 +21,7 @@ extra-source-files:
 
 dependencies:
   - HsYAML                        >= 0.2.1 && < 0.3
+  - aeson                         >= 2.2.0 && < 2.3
   - base                          >= 4.20.0 && < 4.21
   - base64-bytestring             >= 1.2.1 && < 1.3
   - bytestring                    >= 0.12.0 && < 0.13
@@ -43,6 +44,7 @@ executables:
     source-dirs:
       - src/exec/update-generation-tests
       - src/gen-test/haskell
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
       - hspec
@@ -52,6 +54,7 @@ executables:
     source-dirs:
       - src/exec/update-kernel-tests
       - src/gen-test/haskell
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
       - hspec
@@ -60,6 +63,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-json-kernel
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -67,6 +71,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-json-main
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -74,6 +79,15 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-json-test
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+
+  update-json-manifest:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-json-manifest
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -81,6 +95,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-haskell-kernel
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -88,6 +103,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-haskell-eval-lib
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -95,6 +111,7 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/update-haskell-sources
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
 
@@ -102,10 +119,9 @@ executables:
     main: Main.hs
     source-dirs:
       - src/exec/verify-json-kernel
+    ghc-options: [-rtsopts]
     dependencies:
       - hydra
-      - aeson                         >= 2.2.0 && < 2.3
-      - scientific                    >= 0.3.7 && < 0.4
 
 tests:
   hydra-test:
@@ -115,9 +131,10 @@ tests:
       - src/gen-test/haskell
     dependencies:
       - hydra
-      - aeson                         >= 2.2.0 && < 2.3
       - hspec
       - hspec-discover
       - HUnit
       - QuickCheck
       - mtl # For the Algorithm W reference implementation
+      - process # For git metadata in benchmark output
+      - time # For timestamps in benchmark output
