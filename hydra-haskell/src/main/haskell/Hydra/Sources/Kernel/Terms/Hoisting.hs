@@ -6,7 +6,7 @@ import Hydra.Kernel hiding (
   bindingIsPolymorphic, bindingUsesContextTypeVars,
   countVarOccurrences,
   hoistAllLetBindings, hoistCaseStatements, hoistCaseStatementsInGraph, hoistLetBindingsWithContext, hoistLetBindingsWithPredicate, hoistPolymorphicLetBindings, hoistSubterms,
-  isApplicationFunction, isEliminationUnion, isLambdaBody, isUnionElimination,
+  isApplicationFunction, isEliminationUnion, isLambdaBody, isUnionElimination, isUnionEliminationApplication,
   normalizePathForHoisting,
   rewriteAndFoldTermWithTypeContext, rewriteAndFoldTermWithTypeContextAndPath, rewriteTermWithTypeContext,
   shouldHoistAll, shouldHoistCaseStatement, shouldHoistPolymorphic, updateHoistState)
@@ -96,6 +96,7 @@ module_ = Module ns elements
      toBinding isEliminationUnion,
      toBinding isLambdaBody,
      toBinding isUnionElimination,
+     toBinding isUnionEliminationApplication,
      toBinding normalizePathForHoisting,
      toBinding rewriteAndFoldTermWithTypeContext,
      toBinding rewriteAndFoldTermWithTypeContextAndPath,
@@ -569,6 +570,37 @@ isEliminationUnion = define "isEliminationUnion" $
       (Just false) [
       _Elimination_union>>: constant true]]
 
+-- | Check if a term is a case statement applied to an argument (i.e. Application where the function is a union elimination).
+-- This is used for hoisting: we want to hoist the entire application, not just the bare case function.
+isUnionEliminationApplication :: TBinding (Term -> Bool)
+isUnionEliminationApplication = define "isUnionEliminationApplication" $
+  doc "Check if a term is an application of a union elimination (case statement applied to an argument)" $
+  "term" ~> cases _Term (var "term")
+    (Just false) [
+    _Term_application>>: "app" ~>
+      isUnionElimination @@ (Rewriting.deannotateAndDetypeTerm @@ (Core.applicationFunction $ var "app"))]
+
+-- | Wrap a list of bindings in a let term, pushing the let inside any leading lambdas.
+-- This ensures that hoisted bindings don't break function analysis, which expects
+-- lambdas before lets (not the other way around).
+-- e.g., instead of Let([h=...], Lambda(p, body)), this produces Lambda(p, Let([h=...], body))
+wrapLetInsideLambdas :: TBinding ([Binding] -> Term -> Term)
+wrapLetInsideLambdas = define "wrapLetInsideLambdas" $
+  doc "Wrap bindings in a let term, pushing the let inside leading lambdas" $
+  "bindings" ~> "term" ~>
+  cases _Term (var "term") (Just $ Core.termLet $ Core.let_ (var "bindings") (var "term")) [
+    _Term_function>>: "f" ~>
+      cases _Function (var "f") (Just $ Core.termLet $ Core.let_ (var "bindings") (var "term")) [
+        _Function_lambda>>: "lam" ~>
+          Core.termFunction $ Core.functionLambda $ Core.lambda
+            (Core.lambdaParameter $ var "lam")
+            (Core.lambdaDomain $ var "lam")
+            (wrapLetInsideLambdas @@ var "bindings" @@ Core.lambdaBody (var "lam"))],
+    _Term_annotated>>: "ann" ~>
+      Core.termAnnotated $ Core.annotatedTerm
+        (wrapLetInsideLambdas @@ var "bindings" @@ Core.annotatedTermBody (var "ann"))
+        (Core.annotatedTermAnnotation $ var "ann")]
+
 -- | Update state when traversing an accessor in the path for hoisting logic.
 -- State is (stillAtTopLevel, haveUsedAppLHS).
 -- Returns updated state after processing one accessor.
@@ -656,8 +688,8 @@ isLambdaBody = define "isLambdaBody" $
     (Just false) [
     _TermAccessor_lambdaBody>>: constant true]
 
--- | Predicate for hoisting case statements (union eliminations).
--- Returns True if the term is a case statement AND it is NOT at "top level".
+-- | Predicate for hoisting case statement applications (union elimination applied to an argument).
+-- Returns True if the term is a case statement application AND it is NOT at "top level".
 --
 -- Top level means: reachable from root through ONLY these accessor types:
 --   - Annotations (transparent, always pass through)
@@ -676,14 +708,15 @@ isLambdaBody = define "isLambdaBody" $
 shouldHoistCaseStatement :: TBinding (([TermAccessor], Term) -> Bool)
 shouldHoistCaseStatement = define "shouldHoistCaseStatement" $
   doc ("Predicate for case statement hoisting."
-    <> " Returns True if term is a case statement AND not at top level."
+    <> " Returns True if term is a union elimination (bare case function) or a case statement application"
+    <> " (union elimination applied to an argument) AND not at top level."
     <> " Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS."
     <> " Once through an app LHS, lambda bodies no longer pass through.") $
   "pathAndTerm" ~>
   "path" <~ Pairs.first (var "pathAndTerm") $
   "term" <~ Pairs.second (var "pathAndTerm") $
-  -- If not a case statement, don't hoist
-  Logic.ifElse (Logic.not $ isUnionElimination @@ var "term")
+  -- If not a union elimination or case statement application, don't hoist
+  Logic.ifElse (Logic.not $ Logic.or (isUnionElimination @@ var "term") (isUnionEliminationApplication @@ var "term"))
     false
     -- Walk the path from root to deepest, tracking whether we're still at top level
     -- State is (stillAtTopLevel, haveUsedAppLHS)

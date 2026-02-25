@@ -130,6 +130,7 @@ module_ = Module ns elements
       toBinding encodeClassPattern,
       toBinding encodeClosedPattern,
       toBinding encodeComparison,
+      toBinding encodeConditional,
       toBinding encodeCompoundStatement,
       toBinding encodeConjunction,
       toBinding encodeDecorators,
@@ -293,8 +294,23 @@ encodeExpression = def "encodeExpression" $
   lambda "expr" $
     cases Py._Expression (var "expr") Nothing [
       Py._Expression_simple>>: lambda "d" $ encodeDisjunction @@ var "d",
-      Py._Expression_conditional>>: lambda "_" $ Serialization.cst @@ string "... if ... else ...",
+      Py._Expression_conditional>>: lambda "c" $ encodeConditional @@ var "c",
       Py._Expression_lambda>>: lambda "l" $ encodeLambda @@ var "l"]
+
+-- | Serialize a conditional expression: body if condition else elseExpr
+encodeConditional :: TBinding (Py.Conditional -> Expr)
+encodeConditional = def "encodeConditional" $
+  doc "Serialize a conditional expression (ternary)" $
+  lambda "c" $ lets [
+    "body">: project Py._Conditional Py._Conditional_body @@ var "c",
+    "cond">: project Py._Conditional Py._Conditional_if @@ var "c",
+    "elseExpr">: project Py._Conditional Py._Conditional_else @@ var "c"] $
+    Serialization.spaceSep @@ list [
+      encodeDisjunction @@ var "body",
+      Serialization.cst @@ string "if",
+      encodeDisjunction @@ var "cond",
+      Serialization.cst @@ string "else",
+      encodeExpression @@ var "elseExpr"]
 
 encodeDisjunction :: TBinding (Py.Disjunction -> Expr)
 encodeDisjunction = def "encodeDisjunction" $

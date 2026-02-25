@@ -221,6 +221,7 @@ module_ = Module ns elements
       toBinding encodeVariable,
       toBinding encodeApplication,
       toBinding encodeApplicationInner,
+      toBinding encodeUnionEliminationInline,
       toBinding encodeTermInline,
       -- Metadata extension (for module encoding)
       toBinding extendMetaForTerm,
@@ -1929,17 +1930,15 @@ encodeTermMultiline = def "encodeTermMultiline" $
         "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
         "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
         "env2" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
-        Logic.ifElse (Logic.not $ Lists.null (var "params"))
-          (Flows.fail $ string "Functions currently unsupported in this context")
-          (Logic.ifElse (Lists.null $ var "bindings")
-            -- No bindings: encode inline and wrap in return
-            ("expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
-              produce $ list [PyUtils.returnSingle @@ var "expr"])
-            -- Has bindings: encode bindings as defs, then recurse on body
-            (withBindings @@ var "bindings" @@
-              ("bindingStmts" <<~ (Flows.mapList (encodeBindingAs @@ var "env2") (var "bindings")) $
-                "bodyStmts" <<~ (encodeTermMultiline @@ var "env2" @@ var "innerBody") $
-                produce $ Lists.concat2 (var "bindingStmts") (var "bodyStmts"))))) $
+        Logic.ifElse (Lists.null $ var "bindings")
+          -- No bindings: encode inline and wrap in return
+          ("expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+            produce $ list [PyUtils.returnSingle @@ var "expr"])
+          -- Has bindings: encode bindings as defs, then recurse on body
+          (withBindings @@ var "bindings" @@
+            ("bindingStmts" <<~ (Flows.mapList (encodeBindingAs @@ var "env2") (var "bindings")) $
+              "bodyStmts" <<~ (encodeTermMultiline @@ var "env2" @@ var "innerBody") $
+              produce $ Lists.concat2 (var "bindingStmts") (var "bodyStmts")))) $
     "gathered" <~ (CoderUtils.gatherApplications @@ var "term") $
     "args" <~ Pairs.first (var "gathered") $
     "body" <~ Pairs.second (var "gathered") $
@@ -2258,9 +2257,10 @@ encodeApplicationInner = def "encodeApplicationInner" $
                 "fname" <~ (project _Projection _Projection_field @@ var "proj") $
                 "fieldExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")) $
                 produce $ pair (var "withRest" @@ var "fieldExpr") (var "rargs"),
-              -- Union elimination: not supported inline
-              _Elimination_union>>: constant $
-                produce $ pair (unsupportedExpression @@ string "inline match expressions are not yet supported") (var "rargs"),
+              -- Union elimination: encode as inline conditional chain (isinstance-based ternary)
+              _Elimination_union>>: "cs" ~>
+                "inlineExpr" <<~ (encodeUnionEliminationInline @@ var "env" @@ var "cs" @@ var "firstArg") $
+                produce $ pair (var "withRest" @@ var "inlineExpr") (var "rargs"),
               -- Wrap elimination: obj.value
               _Elimination_wrap>>: constant $
                 "valueExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyDsl.name $ string "value")) $
@@ -2307,6 +2307,74 @@ encodeApplicationInner = def "encodeApplicationInner" $
                     (var "remainingArgs")))
               (Core.bindingType $ var "el"))
           (Lexical.lookupElement @@ var "g" @@ var "name")]
+
+-- | Encode a union elimination (case expression) applied to an argument as an inline
+--   conditional expression chain:
+--     branch1_result if isinstance(arg, T1) else branch2_result if isinstance(arg, T2) else ...
+--   This is used when a case application appears in an expression context where a match
+--   statement cannot be emitted (e.g., inside a lambda or walrus assignment).
+encodeUnionEliminationInline :: TBinding (PyHelpers.PythonEnvironment
+  -> CaseStatement -> Py.Expression
+  -> Flow PyHelpers.PyGraph Py.Expression)
+encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
+  doc "Encode a union elimination as an inline conditional chain (isinstance-based ternary)" $
+  "env" ~> "cs" ~> "pyArg" ~>
+    "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+    "mdefault" <~ (Core.caseStatementDefault $ var "cs") $
+    "cases_" <~ (Core.caseStatementCases $ var "cs") $
+    -- Get the row type for isEnum and isUnit checks
+    "rt" <<~ (inGraphContext @@ (Schemas.requireUnionType @@ var "tname")) $
+    "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
+    -- Project .value from the argument for non-enum types
+    "valueExpr" <~ (PyUtils.projectFromExpression @@ var "pyArg" @@ (PyDsl.name $ string "value")) $
+    -- Build the isinstance function reference
+    "isinstancePrimary" <~ (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "isinstance")) $
+    -- Encode the default expression (used as final else)
+    "pyDefault" <<~ (Maybes.maybe
+      -- No default: produce an unsupported expression as fallback
+      (produce $ unsupportedExpression @@ string "no matching case in inline union elimination")
+      -- Has default: encode it inline (the default is a value, not a function to be applied)
+      ("dflt" ~>
+        encodeTermInline @@ var "env" @@ false @@ var "dflt")
+      (var "mdefault")) $
+    -- Encode each case branch into (isinstance_check_expression, result_expression) pairs
+    -- Then fold them into a chain of Conditional expressions from right to left
+    "encodeBranch" <~ (
+      "field" ~>
+        "fname" <~ Core.fieldName (var "field") $
+        "fterm" <~ Core.fieldTerm (var "field") $
+        -- Is this variant a unit type?
+        "isUnitVariant" <~ (isVariantUnitType @@ var "rt" @@ var "fname") $
+        -- Get the Python variant class name
+        "pyVariantName" <~ (PyNames.variantName @@ true @@ var "env" @@ var "tname" @@ var "fname") $
+        -- Create isinstance(arg, VariantType) check
+        "isinstanceCheck" <~ (PyUtils.functionCall @@ var "isinstancePrimary"
+          @@ list [var "pyArg", PyUtils.pyNameToPyExpression @@ var "pyVariantName"]) $
+        -- Encode the branch term and apply it
+        "pyBranch" <<~ (encodeTermInline @@ var "env" @@ false @@ var "fterm") $
+        "pyResult" <~ (Logic.ifElse (var "isEnum")
+          -- Enum variant: the branch lambda expects nothing useful, just call with arg
+          (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "pyArg"])
+          (Logic.ifElse (var "isUnitVariant")
+            -- Unit variant: the branch lambda expects unit, apply with unit-like arg
+            (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "valueExpr"])
+            -- Normal variant: apply branch function to arg.value
+            (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "valueExpr"]))) $
+        produce $ pair (var "isinstanceCheck") (var "pyResult")) $
+    -- Encode all branches
+    "encodedBranches" <<~ (Flows.mapList (var "encodeBranch") (var "cases_")) $
+    -- Fold branches into a conditional chain from right to left:
+    --   result_n if isinstance(arg, Tn) else ... else default
+    -- Use foldl on reversed branches: foldl (\acc branch -> cond(branch, acc)) default (reverse branches)
+    "buildChain" <~ (
+      "elseExpr" ~> "branchPair" ~>
+        "checkExpr" <~ Pairs.first (var "branchPair") $
+        "resultExpr" <~ Pairs.second (var "branchPair") $
+        PyDsl.expressionConditional $ PyDsl.conditional
+          (PyUtils.pyExpressionToDisjunction @@ var "resultExpr")
+          (PyUtils.pyExpressionToDisjunction @@ var "checkExpr")
+          (var "elseExpr")) $
+    produce $ Lists.foldl (var "buildChain") (var "pyDefault") (Lists.reverse $ var "encodedBranches")
 
 -- | Encode a term to a Python expression (inline form).
 --   This is the main term encoding function that handles all term variants.
