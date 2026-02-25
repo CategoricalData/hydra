@@ -351,6 +351,18 @@ public interface Serde {
     return hydra.ext.python.serde.Serde.encodeBitwiseOr((cmp).lhs);
   }
   
+  static hydra.ast.Expr encodeConditional(hydra.ext.python.syntax.Conditional c) {
+    hydra.ext.python.syntax.Disjunction body = (c).body;
+    hydra.ext.python.syntax.Disjunction cond = (c).if_;
+    hydra.ext.python.syntax.Expression elseExpr = (c).else_;
+    return hydra.serialization.Serialization.spaceSep(java.util.List.of(
+      hydra.ext.python.serde.Serde.encodeDisjunction(body),
+      hydra.serialization.Serialization.cst("if"),
+      hydra.ext.python.serde.Serde.encodeDisjunction(cond),
+      hydra.serialization.Serialization.cst("else"),
+      hydra.ext.python.serde.Serde.encodeExpression(elseExpr)));
+  }
+  
   static hydra.ast.Expr encodeCompoundStatement(hydra.ext.python.syntax.CompoundStatement cs) {
     return (cs).accept(new hydra.ext.python.syntax.CompoundStatement.PartialVisitor<>() {
       @Override
@@ -474,8 +486,8 @@ public interface Serde {
       }
       
       @Override
-      public hydra.ast.Expr visit(hydra.ext.python.syntax.Expression.Conditional ignored) {
-        return hydra.serialization.Serialization.cst("... if ... else ...");
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.Expression.Conditional c) {
+        return hydra.ext.python.serde.Serde.encodeConditional((c).value);
       }
       
       @Override

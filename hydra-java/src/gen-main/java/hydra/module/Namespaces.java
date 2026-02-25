@@ -51,9 +51,7 @@ public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
   @SuppressWarnings("unchecked")
   public int compareTo(Namespaces other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      focus.hashCode(),
-      other.focus.hashCode());
+    cmp = ((Comparable) focus).compareTo(other.focus);
     if (cmp != 0) {
       return cmp;
     }

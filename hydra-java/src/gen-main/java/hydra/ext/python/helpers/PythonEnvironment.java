@@ -105,9 +105,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      boundTypeVariables.hashCode(),
-      other.boundTypeVariables.hashCode());
+    cmp = ((Comparable) boundTypeVariables).compareTo(other.boundTypeVariables);
     if (cmp != 0) {
       return cmp;
     }
