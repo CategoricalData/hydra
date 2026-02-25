@@ -294,7 +294,7 @@ def indented_block(mcomment: Maybe[str], stmts: frozenlist[frozenlist[hydra.ext.
     @lru_cache(1)
     def groups() -> frozenlist[frozenlist[hydra.ext.python.syntax.Statement]]:
         return hydra.lib.lists.filter((lambda g: hydra.lib.logic.not_(hydra.lib.lists.null(g))), hydra.lib.lists.cons(comment_group(), stmts))
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(groups()), (lambda : cast(hydra.ext.python.syntax.Block, hydra.ext.python.syntax.BlockSimple((py_expression_to_py_simple_statement(py_atom_to_py_expression(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomEllipsis()))),)))), (lambda : cast(hydra.ext.python.syntax.Block, hydra.ext.python.syntax.BlockIndented(groups()))))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(groups()), (lambda : cast(hydra.ext.python.syntax.Block, hydra.ext.python.syntax.BlockIndented(((cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementSimple((py_expression_to_py_simple_statement(py_atom_to_py_expression(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomEllipsis()))),))),),)))), (lambda : cast(hydra.ext.python.syntax.Block, hydra.ext.python.syntax.BlockIndented(groups()))))
 
 def primary_and_params(prim: hydra.ext.python.syntax.Primary, params: frozenlist[hydra.ext.python.syntax.Expression]) -> hydra.ext.python.syntax.Expression:
     r"""Create a primary with parameters (subscript)."""
@@ -345,6 +345,16 @@ def py_closed_pattern_to_py_patterns(p: hydra.ext.python.syntax.ClosedPattern) -
     r"""Convert a ClosedPattern to Patterns."""
     
     return cast(hydra.ext.python.syntax.Patterns, hydra.ext.python.syntax.PatternsPattern(cast(hydra.ext.python.syntax.Pattern, hydra.ext.python.syntax.PatternOr(hydra.ext.python.syntax.OrPattern((p,))))))
+
+def py_expression_to_disjunction(e: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.Disjunction:
+    r"""Convert an Expression to a Disjunction, wrapping in parens if needed."""
+    
+    match e:
+        case hydra.ext.python.syntax.ExpressionSimple(value=disj):
+            return disj
+        
+        case _:
+            return hydra.ext.python.syntax.Disjunction((py_primary_to_py_conjunction(cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomGroup(cast(hydra.ext.python.syntax.Group, hydra.ext.python.syntax.GroupExpression(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(e))))))))),))
 
 def py_expression_to_py_primary(e: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.Primary:
     r"""Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary."""

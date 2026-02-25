@@ -1311,7 +1311,7 @@ def write_postfix_expression(e: hydra.ext.java.syntax.PostfixExpression) -> hydr
 
 def write_primary(p: hydra.ext.java.syntax.Primary) -> hydra.ast.Expr:
     match p:
-        case hydra.ext.java.syntax.PrimaryNoNewArray(value=n):
+        case hydra.ext.java.syntax.PrimaryNoNewArray_(value=n):
             return write_primary_no_new_array(n)
         
         case hydra.ext.java.syntax.PrimaryArrayCreation(value=a):
