@@ -1152,6 +1152,97 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
                   (apply (var "_hoist__body_1") (var "b"))))),
              (nm "nothing", int32 0)])
           (var "x"))
+        (var "f")),
+
+    -- ============================================================
+    -- Test: Case applications (case function applied to argument)
+    -- ============================================================
+
+    hoistCaseStatementsCase "case application at top level of binding is NOT hoisted"
+      -- Input: let f = (match Optional with ...) x in f
+      -- The case application is at top level (one app LHS)
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "y" (var "y")),
+             (nm "nothing", int32 0)])
+          (var "x"))
+        (var "f"))
+      -- Output: unchanged
+      (letExpr "f"
+        (apply
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "y" (var "y")),
+             (nm "nothing", int32 0)])
+          (var "x"))
+        (var "f")),
+
+    hoistCaseStatementsCase "case application in arg position IS hoisted"
+      -- Input: let f = g ((match Optional with ...) x) in f
+      -- The bare case function is hoisted first (bottom-up), then the application
+      -- uses the hoisted reference. 'x' is not lambda-bound so not captured.
+      (letExpr "f"
+        (apply (var "g")
+          (apply
+            (match (nm "Optional") nothing
+              [(nm "just", lambda "y" (var "y")),
+               (nm "nothing", int32 0)])
+            (var "x")))
+        (var "f"))
+      -- Output: bare case function is hoisted, application becomes _hoist_f_1(x)
+      (letExpr "f"
+        (letExpr "_hoist_f_1"
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "y" (var "y")),
+             (nm "nothing", int32 0)])
+          (apply (var "g") (apply (var "_hoist_f_1") (var "x"))))
+        (var "f")),
+
+    hoistCaseStatementsCase "case application inside immediately-applied lambda IS hoisted"
+      -- Input: let f = (\a -> (match Optional with ...) a) x in f
+      -- The bare case function is inside \a -> (case ...) a. Bottom-up processing:
+      -- The bare case function at path [LetBinding f, ApplicationFunction, LambdaBody, ApplicationFunction]
+      -- gets hoisted. No captured variables (case function has no free vars).
+      (letExpr "f"
+        (apply
+          (lambda "a"
+            (apply
+              (match (nm "Optional") nothing
+                [(nm "just", lambda "y" (var "y")),
+                 (nm "nothing", int32 0)])
+              (var "a")))
+          (var "x"))
+        (var "f"))
+      -- Output: bare case function is hoisted
+      (letExpr "f"
+        (letExpr "_hoist_f_1"
+          (match (nm "Optional") nothing
+            [(nm "just", lambda "y" (var "y")),
+             (nm "nothing", int32 0)])
+          (apply
+            (lambda "a" (apply (var "_hoist_f_1") (var "a")))
+            (var "x")))
+        (var "f")),
+
+    hoistCaseStatementsCase "case application in lambda body is NOT hoisted"
+      -- Input: let f = \a -> (match Optional with ...) a in f
+      -- Lambda body + one app LHS = still at top level
+      (letExpr "f"
+        (lambda "a"
+          (apply
+            (match (nm "Optional") nothing
+              [(nm "just", lambda "y" (var "y")),
+               (nm "nothing", int32 0)])
+            (var "a")))
+        (var "f"))
+      -- Output: unchanged
+      (letExpr "f"
+        (lambda "a"
+          (apply
+            (match (nm "Optional") nothing
+              [(nm "just", lambda "y" (var "y")),
+               (nm "nothing", int32 0)])
+            (var "a")))
         (var "f"))]
 
 -- | Test cases for hoistPolymorphicLetBindings
