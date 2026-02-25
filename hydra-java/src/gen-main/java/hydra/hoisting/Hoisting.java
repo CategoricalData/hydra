@@ -718,6 +718,20 @@ public interface Hoisting {
     });
   }
   
+  static Boolean isUnionEliminationApplication(hydra.core.Term term) {
+    return (term).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Term instance) {
+        return false;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Application app) {
+        return hydra.hoisting.Hoisting.isUnionElimination(hydra.rewriting.Rewriting.deannotateAndDetypeTerm(((app).value).function));
+      }
+    });
+  }
+  
   static java.util.List<hydra.accessors.TermAccessor> normalizePathForHoisting(java.util.List<hydra.accessors.TermAccessor> path) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.List<hydra.accessors.TermAccessor>>> go = new java.util.concurrent.atomic.AtomicReference<>();
     go.set((java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.List<hydra.accessors.TermAccessor>>) (remaining -> hydra.lib.logic.IfElse.lazy(
@@ -1053,7 +1067,9 @@ public interface Hoisting {
     hydra.util.Lazy<java.util.List<hydra.accessors.TermAccessor>> path = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pathAndTerm));
     hydra.util.Lazy<hydra.core.Term> term = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pathAndTerm));
     return hydra.lib.logic.IfElse.lazy(
-      hydra.lib.logic.Not.apply(hydra.hoisting.Hoisting.isUnionElimination(term.get())),
+      hydra.lib.logic.Not.apply(hydra.lib.logic.Or.apply(
+        hydra.hoisting.Hoisting.isUnionElimination(term.get()),
+        hydra.hoisting.Hoisting.isUnionEliminationApplication(term.get()))),
       () -> false,
       () -> ((java.util.function.Supplier<Boolean>) (() -> {
         hydra.util.Lazy<hydra.util.Tuple.Tuple2<Boolean, Boolean>> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
