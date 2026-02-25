@@ -603,7 +603,6 @@ isNonComparableType = def "isNonComparableType" $
     _Type_set>>: constant $ boolean True,
     _Type_map>>: constant $ boolean True,
     _Type_maybe>>: constant $ boolean True,
-    _Type_pair>>: constant $ boolean True,
     _Type_either>>: constant $ boolean True,
     _Type_function>>: constant $ boolean True,
     _Type_literal>>: lambda "lt" $

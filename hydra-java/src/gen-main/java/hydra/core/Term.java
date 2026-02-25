@@ -597,9 +597,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
         return tagCmp;
       }
       Pair o = (Pair) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

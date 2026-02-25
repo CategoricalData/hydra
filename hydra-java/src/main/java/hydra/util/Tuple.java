@@ -48,7 +48,7 @@ public abstract class Tuple {
      * @param <T1> the type
      * @param <T2> the type
      */
-    public static class Tuple2<T1, T2> extends Tuple1<T1> {
+    public static class Tuple2<T1, T2> extends Tuple1<T1> implements Comparable<Tuple2<T1, T2>> {
         public final T2 object2;
 
         /**
@@ -74,6 +74,16 @@ public abstract class Tuple {
         @Override
         public int hashCode() {
             return java.util.Objects.hash(object1, object2);
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public int compareTo(Tuple2<T1, T2> other) {
+            int cmp = ((Comparable<T1>) object1).compareTo(other.object1);
+            if (cmp != 0) {
+                return cmp;
+            }
+            return ((Comparable<T2>) object2).compareTo(other.object2);
         }
     }
 
