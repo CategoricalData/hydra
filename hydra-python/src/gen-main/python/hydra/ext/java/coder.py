@@ -2050,9 +2050,6 @@ def is_non_comparable_type(typ: hydra.core.Type):
         case hydra.core.TypeMaybe():
             return True
         
-        case hydra.core.TypePair():
-            return True
-        
         case hydra.core.TypeEither():
             return True
         

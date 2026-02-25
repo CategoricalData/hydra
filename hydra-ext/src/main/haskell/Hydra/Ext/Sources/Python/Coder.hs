@@ -1468,6 +1468,22 @@ encodeBindingAs = def "encodeBindingAs" $
         "innerBody" <~ (Pairs.second $ var "gathered") $
         -- Check for hoisted binding pattern: lambdas wrapping a case statement application
         "mcsa" <~ (isCaseStatementApplication @@ var "innerBody") $
+        -- Also check for bare case elimination with lambda params (hoisted bare case function).
+        -- In this pattern, gatherLambdas strips all lambdas including the case function's own lambda,
+        -- leaving the inner body as a bare Elimination(Union(cs)). The last lambda param is the match subject.
+        "mcsa2" <~ Logic.ifElse (Logic.and (Maybes.isNothing $ var "mcsa")
+                                           (Logic.not $ Lists.null $ var "lambdaParams"))
+          (Maybes.map ("cs" ~>
+            Phantoms.tuple4
+              (Core.caseStatementTypeName $ var "cs")
+              (Core.caseStatementDefault $ var "cs")
+              (Core.caseStatementCases $ var "cs")
+              -- Use a variable reference to the last lambda param as the synthetic argument
+              (Core.termVariable $ Lists.last $ var "lambdaParams"))
+            (extractCaseElimination @@ var "innerBody"))
+          nothing $
+        -- Combine both checks: mcsa (case application) takes priority, else mcsa2 (bare case with lambda params)
+        "mcsaCombined" <~ Maybes.maybe (var "mcsa2") ("x" ~> just (var "x")) (var "mcsa") $
         -- Try hoisted binding pattern first
         Maybes.maybe
           -- Not a hoisted binding, try simple case elimination
@@ -1605,7 +1621,7 @@ encodeBindingAs = def "encodeBindingAs" $
               Phantoms.field Py._FunctionDefRaw_funcTypeComment nothing,
               Phantoms.field Py._FunctionDefRaw_block (var "body")]) $
             produce $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw"))))
-          (var "mcsa"))
+          (var "mcsaCombined"))
       -- Binding with type scheme - use encodeTermAssignment
       ("ts" ~>
         "comment" <<~ (inGraphContext @@ (Annotations.getTermDescription @@ var "term1")) $
@@ -2021,8 +2037,14 @@ encodeFunction = def "encodeFunction" $
             (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv0")]) $
         "pbody" <<~ (encodeTermInline @@ var "innerEnv" @@ false @@ var "innerBody") $
         "pparams" <~ (Lists.map (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "innerEnv") (var "params")) $
+        -- Use curried lambdas when the inner body is a bare union elimination (hoisted case function).
+        -- Hoisted bindings are referenced with curried application: _hoist(capturedVar)(arg),
+        -- so the lambda must be curried to match.
+        "isBareCase" <~ (Maybes.isJust $ extractCaseElimination @@ var "innerBody") $
         Logic.ifElse (Lists.null $ var "bindings")
-          (produce $ makeUncurriedLambda @@ var "pparams" @@ var "pbody")
+          (Logic.ifElse (var "isBareCase")
+            (produce $ makeCurriedLambda @@ var "pparams" @@ var "pbody")
+            (produce $ makeUncurriedLambda @@ var "pparams" @@ var "pbody"))
           -- Has bindings: create walrus operator expressions
           ("pbindingExprs" <<~ (Flows.mapList (encodeBindingAsAssignment @@ false @@ var "innerEnv") (var "bindings")) $
             "pbindingStarExprs" <~ (Lists.map ("ne" ~> PyDsl.starNamedExpressionSimple (var "ne")) (var "pbindingExprs")) $
@@ -2031,7 +2053,9 @@ encodeFunction = def "encodeFunction" $
             "tupleExpr" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomTuple $ PyDsl.tuple $ var "tupleElements")) $
             "indexValue" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomNumber $ PyDsl.numberInteger $ Literals.int32ToBigint (Lists.length (var "bindings")))) $
             "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
-            produce $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr")),
+            Logic.ifElse (var "isBareCase")
+              (produce $ makeCurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr"))
+              (produce $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr"))),
       -- Primitives: encode as variable reference
       _Function_primitive>>: "name" ~>
         encodeVariable @@ var "env" @@ var "name" @@ (Phantoms.list ([] :: [TTerm Py.Expression])),
@@ -2379,8 +2403,8 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
           -- Enum variant: the branch lambda expects nothing useful, just call with arg
           (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "pyArg"])
           (Logic.ifElse (var "isUnitVariant")
-            -- Unit variant: the branch lambda expects unit, apply with unit-like arg
-            (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "valueExpr"])
+            -- Unit variant: the branch lambda expects unit; pass the arg itself since unit types have no .value
+            (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "pyArg"])
             -- Normal variant: apply branch function to arg.value
             (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "valueExpr"]))) $
         produce $ pair (var "isinstanceCheck") (var "pyResult")) $

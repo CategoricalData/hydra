@@ -322,11 +322,6 @@ public interface Coder {
       }
       
       @Override
-      public Boolean visit(hydra.core.Type.Pair ignored) {
-        return true;
-      }
-      
-      @Override
       public Boolean visit(hydra.core.Type.Either ignored) {
         return true;
       }
