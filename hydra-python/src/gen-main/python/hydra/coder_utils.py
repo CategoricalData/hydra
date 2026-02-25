@@ -331,20 +331,7 @@ def is_simple_assignment(term: hydra.core.Term):
             return is_simple_assignment(ta.body)
         
         case _:
-            base_term = hydra.lib.pairs.first(gather_args(term, ()))
-            match base_term:
-                case hydra.core.TermFunction(value=v1):
-                    match v1:
-                        case hydra.core.FunctionElimination(value=v2):
-                            match v2:
-                                case hydra.core.EliminationUnion():
-                                    return False
-                                case _:
-                                    return True
-                        case _:
-                            return True
-                case _:
-                    return True
+            return (base_term := hydra.lib.pairs.first(gather_args(term, ())), (_hoist_body_1 := (lambda v1: (lambda _: False)(v1.value) if isinstance(v1, hydra.core.EliminationUnion) else True), _hoist_body_2 := (lambda v1: (lambda elim: _hoist_body_1(elim))(v1.value) if isinstance(v1, hydra.core.FunctionElimination) else True), _hoist_body_3 := (lambda v1: (lambda f: _hoist_body_2(f))(v1.value) if isinstance(v1, hydra.core.TermFunction) else True), _hoist_body_3(base_term))[3])[1]
 
 def normalize_comment(s: str) -> str:
     r"""Normalize a comment string for consistent output across coders."""

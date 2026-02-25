@@ -228,6 +228,20 @@ def encode_comparison(cmp: hydra.ext.python.syntax.Comparison) -> hydra.ast.Expr
     
     return encode_bitwise_or(cmp.lhs)
 
+def encode_conditional(c: hydra.ext.python.syntax.Conditional) -> hydra.ast.Expr:
+    r"""Serialize a conditional expression (ternary)."""
+    
+    @lru_cache(1)
+    def body() -> hydra.ext.python.syntax.Disjunction:
+        return c.body
+    @lru_cache(1)
+    def cond() -> hydra.ext.python.syntax.Disjunction:
+        return c.if_
+    @lru_cache(1)
+    def else_expr() -> hydra.ext.python.syntax.Expression:
+        return c.else_
+    return hydra.serialization.space_sep((encode_disjunction(body()), hydra.serialization.cst("if"), encode_disjunction(cond()), hydra.serialization.cst("else"), encode_expression(else_expr())))
+
 def encode_conjunction(c: hydra.ext.python.syntax.Conjunction) -> hydra.ast.Expr:
     r"""Serialize a conjunction (and expression)."""
     
@@ -263,8 +277,8 @@ def encode_expression(expr: hydra.ext.python.syntax.Expression) -> hydra.ast.Exp
         case hydra.ext.python.syntax.ExpressionSimple(value=d):
             return encode_disjunction(d)
         
-        case hydra.ext.python.syntax.ExpressionConditional():
-            return hydra.serialization.cst("... if ... else ...")
+        case hydra.ext.python.syntax.ExpressionConditional(value=c):
+            return encode_conditional(c)
         
         case hydra.ext.python.syntax.ExpressionLambda(value=l):
             return encode_lambda(l)
