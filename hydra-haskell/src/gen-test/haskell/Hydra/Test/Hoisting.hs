@@ -3054,6 +3054,226 @@ allTests = Testing.TestGroup {
                   Core.bindingType = Nothing}],
               Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
           Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "case application at top level of binding is NOT hoisted",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistCaseStatements (Testing.HoistCaseStatementsTestCase {
+            Testing.hoistCaseStatementsTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.Name "Optional"),
+                      Core.caseStatementDefault = Nothing,
+                      Core.caseStatementCases = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "just"),
+                          Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "y"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "nothing"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))})),
+            Testing.hoistCaseStatementsTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                      Core.caseStatementTypeName = (Core.Name "Optional"),
+                      Core.caseStatementDefault = Nothing,
+                      Core.caseStatementCases = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "just"),
+                          Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.Name "y"),
+                            Core.lambdaDomain = Nothing,
+                            Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "nothing"),
+                          Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "case application in arg position IS hoisted",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistCaseStatements (Testing.HoistCaseStatementsTestCase {
+            Testing.hoistCaseStatementsTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                        Core.caseStatementTypeName = (Core.Name "Optional"),
+                        Core.caseStatementDefault = Nothing,
+                        Core.caseStatementCases = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "just"),
+                            Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "y"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "nothing"),
+                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))})),
+            Testing.hoistCaseStatementsTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermLet (Core.Let {
+                    Core.letBindings = [
+                      Core.Binding {
+                        Core.bindingName = (Core.Name "_hoist_f_1"),
+                        Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                          Core.caseStatementTypeName = (Core.Name "Optional"),
+                          Core.caseStatementDefault = Nothing,
+                          Core.caseStatementCases = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "just"),
+                              Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "y"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "nothing"),
+                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                        Core.bindingType = Nothing}],
+                    Core.letBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
+                      Core.applicationArgument = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "_hoist_f_1")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "case application inside immediately-applied lambda IS hoisted",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistCaseStatements (Testing.HoistCaseStatementsTestCase {
+            Testing.hoistCaseStatementsTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "a"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                          Core.caseStatementTypeName = (Core.Name "Optional"),
+                          Core.caseStatementDefault = Nothing,
+                          Core.caseStatementCases = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "just"),
+                              Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "y"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "nothing"),
+                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))}))),
+                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))})),
+            Testing.hoistCaseStatementsTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermLet (Core.Let {
+                    Core.letBindings = [
+                      Core.Binding {
+                        Core.bindingName = (Core.Name "_hoist_f_1"),
+                        Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                          Core.caseStatementTypeName = (Core.Name "Optional"),
+                          Core.caseStatementDefault = Nothing,
+                          Core.caseStatementCases = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "just"),
+                              Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                Core.lambdaParameter = (Core.Name "y"),
+                                Core.lambdaDomain = Nothing,
+                                Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "nothing"),
+                              Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                        Core.bindingType = Nothing}],
+                    Core.letBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "a"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermVariable (Core.Name "_hoist_f_1")),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))}))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))})),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "case application in lambda body is NOT hoisted",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseHoistCaseStatements (Testing.HoistCaseStatementsTestCase {
+            Testing.hoistCaseStatementsTestCaseInput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "a"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                        Core.caseStatementTypeName = (Core.Name "Optional"),
+                        Core.caseStatementDefault = Nothing,
+                        Core.caseStatementCases = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "just"),
+                            Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "y"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "nothing"),
+                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))}))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))})),
+            Testing.hoistCaseStatementsTestCaseOutput = (Core.TermLet (Core.Let {
+              Core.letBindings = [
+                Core.Binding {
+                  Core.bindingName = (Core.Name "f"),
+                  Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "a"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
+                        Core.caseStatementTypeName = (Core.Name "Optional"),
+                        Core.caseStatementDefault = Nothing,
+                        Core.caseStatementCases = [
+                          Core.Field {
+                            Core.fieldName = (Core.Name "just"),
+                            Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                              Core.lambdaParameter = (Core.Name "y"),
+                              Core.lambdaDomain = Nothing,
+                              Core.lambdaBody = (Core.TermVariable (Core.Name "y"))})))},
+                          Core.Field {
+                            Core.fieldName = (Core.Name "nothing"),
+                            Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))}]})))),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "a"))}))}))),
+                  Core.bindingType = Nothing}],
+              Core.letBody = (Core.TermVariable (Core.Name "f"))}))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "hoistLetBindings",
