@@ -201,6 +201,30 @@ def main():
 
         all_universe = full_mods + test_mods
         out_test = os.path.join(out_dir, "src/gen-test")
+
+        # When --kernel-only is active, ext modules are excluded from the main
+        # generation targets. But test modules may depend on ext modules (e.g.
+        # hydra.test.serialization depends on hydra.ext.haskell.operators).
+        # Generate those ext modules to outMain so test code can reference them.
+        if args.kernel_only:
+            test_ext_deps = set()
+            for m in test_mods:
+                for ns in m.term_dependencies:
+                    if ns.value.startswith("hydra.ext."):
+                        test_ext_deps.add(ns.value)
+            if test_ext_deps:
+                ext_mods_for_tests = [m for m in full_mods if m.namespace.value in test_ext_deps]
+                if ext_mods_for_tests:
+                    print(f"Generating {len(ext_mods_for_tests)} ext module(s) needed by tests...", flush=True)
+                    out_main_sub = os.path.join(out_dir, "src/gen-main")
+                    if args.target == "haskell":
+                        write_haskell(os.path.join(out_main_sub, "haskell"), all_universe, ext_mods_for_tests)
+                    elif args.target == "java":
+                        write_java(os.path.join(out_main_sub, "java"), all_universe, ext_mods_for_tests)
+                    elif args.target == "python":
+                        write_python(os.path.join(out_main_sub, "python"), all_universe, ext_mods_for_tests)
+                    print(flush=True)
+
         print(f"Mapping test modules to {target_cap}...", flush=True)
         print(f"  Universe: {len(all_universe)} modules", flush=True)
         print(f"  Generating: {len(test_mods)} test modules", flush=True)

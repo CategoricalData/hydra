@@ -256,7 +256,25 @@ main = do
       putStrLn $ "  Loaded " ++ show (length testMods) ++ " test modules"
       putStrLn ""
 
-      let allUniverse = allMainMods ++ testMods
+      let allUniverse = allMods ++ testMods
+
+      -- When --kernel-only is active, ext modules are excluded from allMainMods.
+      -- But test modules may depend on ext modules (e.g. hydra.test.serialization
+      -- depends on hydra.ext.haskell.operators). Generate those ext modules to outMain
+      -- so test code can reference them.
+      when (optKernelOnly opts) $ do
+        let testExtDeps = Prelude.filter (\ns -> isPrefixOf "hydra.ext." (unNamespace ns))
+              $ concatMap moduleTermDependencies testMods
+            extModsForTests = Prelude.filter (\m -> moduleNamespace m `elem` testExtDeps) allMods
+        when (not (Prelude.null extModsForTests)) $ do
+          putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."
+          case target of
+            "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allUniverse extModsForTests
+            "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain allUniverse extModsForTests
+            "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allUniverse extModsForTests
+            _ -> return ()
+          putStrLn ""
+
       putStrLn $ "Mapping test modules to " ++ targetCap ++ "..."
 
       testStart <- getCurrentTime
