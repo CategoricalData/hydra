@@ -172,6 +172,7 @@ module_ = Module ns elements
       toBinding dataclassDecorator,
       toBinding encodeRecordType,
       toBinding encodeEnumValueAssignment,
+      toBinding deconflictVariantName,
       toBinding encodeUnionField,
       toBinding encodeUnionType,
       toBinding encodeUnionFieldAlt,
@@ -901,27 +902,27 @@ enumVariantPattern = def "enumVariantPattern" $
       PyNames.encodeEnumValue @@ var "env" @@ var "fieldName"]
 
 -- | Create a CaseBlock pattern for a class variant with no capture (unit variant).
-classVariantPatternUnit :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Py.ClosedPattern)
+classVariantPatternUnit :: TBinding (Py.Name -> Py.ClosedPattern)
 classVariantPatternUnit = def "classVariantPatternUnit" $
   doc "Create a class pattern for a unit variant (no value captured)" $
-  "env" ~> "typeName" ~> "fieldName" ~>
+  "pyVariantName" ~>
     PyDsl.closedPatternClass $
       PyDsl.classPatternSimple
-        (PyDsl.nameOrAttribute $ list [PyNames.variantName @@ true @@ var "env" @@ var "typeName" @@ var "fieldName"])
+        (PyDsl.nameOrAttribute $ list [var "pyVariantName"])
 
 -- | Create a CaseBlock pattern for a class variant with value capture.
-classVariantPatternWithCapture :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Name -> Py.ClosedPattern)
+classVariantPatternWithCapture :: TBinding (PyHelpers.PythonEnvironment -> Py.Name -> Name -> Py.ClosedPattern)
 classVariantPatternWithCapture = def "classVariantPatternWithCapture" $
   doc "Create a class pattern for a variant with captured value" $
-  "env" ~> "typeName" ~> "fieldName" ~> "varName" ~>
-    "pyVarName" <~ (PyDsl.nameOrAttribute $ list [PyNames.variantName @@ true @@ var "env" @@ var "typeName" @@ var "fieldName"]) $
+  "env" ~> "pyVariantName" ~> "varName" ~>
+    "pyVarNameAttr" <~ (PyDsl.nameOrAttribute $ list [var "pyVariantName"]) $
     "capturePattern" <~ (PyDsl.closedPatternCapture $ PyDsl.capturePattern $
       PyDsl.patternCaptureTarget (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "varName")) $
     "keywordPattern" <~ (PyDsl.keywordPattern (PyDsl.name $ string "value") $
       PyDsl.patternOr $ PyDsl.orPattern $ list [var "capturePattern"]) $
     PyDsl.closedPatternClass $
       PyDsl.classPatternWithKeywords
-        (var "pyVarName")
+        (var "pyVarNameAttr")
         (PyDsl.keywordPatterns $ list [var "keywordPattern"])
 
 -- | Determine whether a union type's cases are fully covered.
@@ -937,15 +938,15 @@ isCasesFull = def "isCasesFull" $
 
 -- | Create a ClosedPattern for a variant, choosing the appropriate pattern type
 --   based on whether the variant is an enum, unit type, or has a value.
-variantClosedPattern :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> RowType -> Bool -> Name -> Bool -> Py.ClosedPattern)
+variantClosedPattern :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name -> RowType -> Bool -> Name -> Bool -> Py.ClosedPattern)
 variantClosedPattern = def "variantClosedPattern" $
   doc "Create a ClosedPattern for a variant based on its characteristics" $
-  "env" ~> "typeName" ~> "fieldName" ~> "rowType" ~> "isEnum" ~> "varName" ~> "shouldCapture" ~>
+  "env" ~> "typeName" ~> "fieldName" ~> "pyVariantName" ~> "rowType" ~> "isEnum" ~> "varName" ~> "shouldCapture" ~>
     Logic.ifElse (var "isEnum")
       (enumVariantPattern @@ var "env" @@ var "typeName" @@ var "fieldName")
       (Logic.ifElse (Logic.not $ var "shouldCapture")
-        (classVariantPatternUnit @@ var "env" @@ var "typeName" @@ var "fieldName")
-        (classVariantPatternWithCapture @@ var "env" @@ var "typeName" @@ var "fieldName" @@ var "varName"))
+        (classVariantPatternUnit @@ var "pyVariantName")
+        (classVariantPatternWithCapture @@ var "env" @@ var "pyVariantName" @@ var "varName"))
 
 -- =============================================================================
 -- Case statement helpers
@@ -1161,8 +1162,10 @@ encodeCaseBlock = def "encodeCaseBlock" $
     "env2" <<~ (Flows.pure $ pythonEnvironmentSetTypeContext
       @@ (Schemas.extendTypeContextForLambda @@ (pythonEnvironmentGetTypeContext @@ var "env") @@ var "effectiveLambda")
       @@ var "env") $
+    -- Deconflict the variant name in case it collides with a type name
+    "pyVariantName" <<~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname") $
     -- Create the pattern using env2 (extended context)
-    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname"
+    "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname" @@ var "pyVariantName"
       @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
     -- Encode the body using the provided encoder with extended env
     "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
@@ -1278,6 +1281,26 @@ encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
       ("c" ~> list [var "assignStmt", PyUtils.pyExpressionToPyStatement @@ (PyUtils.tripleQuotedString @@ var "c")])
 
 -- | Encode a union field as a variant class
+-- | Deconflict a variant name by appending '_' if the corresponding Hydra name
+--   exists as an element in the graph. This prevents name collisions between
+--   variant wrapper classes and union type metaclasses in generated Python.
+deconflictVariantName :: TBinding (Bool -> PyHelpers.PythonEnvironment -> Name -> Name -> Flow PyHelpers.PyGraph Py.Name)
+deconflictVariantName = def "deconflictVariantName" $
+  doc "Deconflict a variant name to avoid collisions with type names" $
+  "isQualified" ~> "env" ~> "unionName" ~> "fname" ~>
+    -- Compute the Hydra Name that the variant would correspond to
+    "candidateHydraName" <~ (wrap _Name $ Strings.cat2 (Core.unName $ var "unionName") (Formatting.capitalize @@ (Core.unName $ var "fname"))) $
+    -- Check if this name exists as an element in the graph
+    "pyg" <<~ Monads.getState $
+    "g" <~ (pyGraphGraph @@ var "pyg") $
+    "elements" <~ (Graph.graphElements $ var "g") $
+    "collision" <~ (Maybes.isJust $ Lists.find ("b" ~> Core.equalName_ (Core.bindingName $ var "b") (var "candidateHydraName")) (var "elements")) $
+    Logic.ifElse (var "collision")
+      -- Collision: append '_' to the Python name
+      (produce $ PyDsl.name $ Strings.cat2 (PyDsl.unName $ PyNames.variantName @@ var "isQualified" @@ var "env" @@ var "unionName" @@ var "fname") (string "_"))
+      -- No collision: use the normal variant name
+      (produce $ PyNames.variantName @@ var "isQualified" @@ var "env" @@ var "unionName" @@ var "fname")
+
 encodeUnionField :: TBinding (PyHelpers.PythonEnvironment -> Name -> FieldType -> Flow PyHelpers.PyGraph Py.Statement)
 encodeUnionField = def "encodeUnionField" $
   doc "Encode a union field as a variant class" $
@@ -1286,7 +1309,7 @@ encodeUnionField = def "encodeUnionField" $
     "ftype" <~ Core.fieldTypeType (var "fieldType") $
     "fcomment" <<~ (inGraphContext @@ (Annotations.getTypeDescription @@ var "ftype")) $
     "isUnit" <~ (Equality.equal (Rewriting.deannotateType @@ var "ftype") (Core.typeUnit)) $
-    "varName" <~ (PyNames.variantName @@ false @@ var "env" @@ var "unionName" @@ var "fname") $
+    "varName" <<~ (deconflictVariantName @@ false @@ var "env" @@ var "unionName" @@ var "fname") $
     "tparamNames" <~ (findTypeParams @@ var "env" @@ var "ftype") $
     "tparamPyNames" <~ Lists.map PyNames.encodeTypeVariable (var "tparamNames") $
     "fieldParams" <~ Lists.map PyUtils.pyNameToPyTypeParameter (var "tparamPyNames") $
@@ -2345,8 +2368,8 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
         "fterm" <~ Core.fieldTerm (var "field") $
         -- Is this variant a unit type?
         "isUnitVariant" <~ (isVariantUnitType @@ var "rt" @@ var "fname") $
-        -- Get the Python variant class name
-        "pyVariantName" <~ (PyNames.variantName @@ true @@ var "env" @@ var "tname" @@ var "fname") $
+        -- Get the Python variant class name (deconflicted to avoid collisions)
+        "pyVariantName" <<~ (deconflictVariantName @@ true @@ var "env" @@ var "tname" @@ var "fname") $
         -- Create isinstance(arg, VariantType) check
         "isinstanceCheck" <~ (PyUtils.functionCall @@ var "isinstancePrimary"
           @@ list [var "pyArg", PyUtils.pyNameToPyExpression @@ var "pyVariantName"]) $
@@ -2585,10 +2608,11 @@ encodeTermInline = def "encodeTermInline" $
                 produce $ list [var "parg"])) $
             -- Cast to union type - set usesCast flag
             "unit_" <<~ (updateMeta @@ (setMetaUsesCast @@ true)) $
+            "deconflictedName" <<~ (deconflictVariantName @@ true @@ var "env" @@ var "tname" @@ var "fname") $
             produce $
               PyUtils.castTo
                 @@ (PyNames.typeVariableReference @@ var "env" @@ var "tname")
-                @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.variantName @@ true @@ var "env" @@ var "tname" @@ var "fname")) @@ var "args")),
+                @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ var "deconflictedName") @@ var "args")),
 
       -- TermUnit
       _Term_unit>>: constant $

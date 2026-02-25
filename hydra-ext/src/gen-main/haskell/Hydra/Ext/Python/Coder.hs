@@ -16,6 +16,7 @@ import qualified Hydra.Ext.Python.Names as Names
 import qualified Hydra.Ext.Python.Serde as Serde
 import qualified Hydra.Ext.Python.Syntax as Syntax
 import qualified Hydra.Ext.Python.Utils as Utils
+import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lexical as Lexical
@@ -517,18 +518,18 @@ enumVariantPattern env typeName fieldName = (Syntax.ClosedPatternValue (Syntax.V
   (Names.encodeEnumValue env fieldName)])))
 
 -- | Create a class pattern for a unit variant (no value captured)
-classVariantPatternUnit :: (Helpers.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.ClosedPattern)
-classVariantPatternUnit env typeName fieldName = (Syntax.ClosedPatternClass (Syntax.ClassPattern {
+classVariantPatternUnit :: (Syntax.Name -> Syntax.ClosedPattern)
+classVariantPatternUnit pyVariantName = (Syntax.ClosedPatternClass (Syntax.ClassPattern {
   Syntax.classPatternNameOrAttribute = (Syntax.NameOrAttribute [
-    Names.variantName True env typeName fieldName]),
+    pyVariantName]),
   Syntax.classPatternPositionalPatterns = Nothing,
   Syntax.classPatternKeywordPatterns = Nothing}))
 
 -- | Create a class pattern for a variant with captured value
-classVariantPatternWithCapture :: (Helpers.PythonEnvironment -> Core.Name -> Core.Name -> Core.Name -> Syntax.ClosedPattern)
-classVariantPatternWithCapture env typeName fieldName varName =  
-  let pyVarName = (Syntax.NameOrAttribute [
-          Names.variantName True env typeName fieldName])
+classVariantPatternWithCapture :: (Helpers.PythonEnvironment -> Syntax.Name -> Core.Name -> Syntax.ClosedPattern)
+classVariantPatternWithCapture env pyVariantName varName =  
+  let pyVarNameAttr = (Syntax.NameOrAttribute [
+          pyVariantName])
   in  
     let capturePattern = (Syntax.ClosedPatternCapture (Syntax.CapturePattern (Syntax.PatternCaptureTarget (Names.encodeName False Util.CaseConventionLowerSnake env varName))))
     in  
@@ -537,7 +538,7 @@ classVariantPatternWithCapture env typeName fieldName varName =
               Syntax.keywordPatternPattern = (Syntax.PatternOr (Syntax.OrPattern [
                 capturePattern]))}
       in (Syntax.ClosedPatternClass (Syntax.ClassPattern {
-        Syntax.classPatternNameOrAttribute = pyVarName,
+        Syntax.classPatternNameOrAttribute = pyVarNameAttr,
         Syntax.classPatternPositionalPatterns = Nothing,
         Syntax.classPatternKeywordPatterns = (Just (Syntax.KeywordPatterns [
           keywordPattern]))}))
@@ -551,8 +552,8 @@ isCasesFull rowType cases_ =
     in (Logic.not (Equality.lt numCases numFields))
 
 -- | Create a ClosedPattern for a variant based on its characteristics
-variantClosedPattern :: (Helpers.PythonEnvironment -> Core.Name -> Core.Name -> t0 -> Bool -> Core.Name -> Bool -> Syntax.ClosedPattern)
-variantClosedPattern env typeName fieldName rowType isEnum varName shouldCapture = (Logic.ifElse isEnum (enumVariantPattern env typeName fieldName) (Logic.ifElse (Logic.not shouldCapture) (classVariantPatternUnit env typeName fieldName) (classVariantPatternWithCapture env typeName fieldName varName)))
+variantClosedPattern :: (Helpers.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.Name -> t0 -> Bool -> Core.Name -> Bool -> Syntax.ClosedPattern)
+variantClosedPattern env typeName fieldName pyVariantName rowType isEnum varName shouldCapture = (Logic.ifElse isEnum (enumVariantPattern env typeName fieldName) (Logic.ifElse (Logic.not shouldCapture) (classVariantPatternUnit pyVariantName) (classVariantPatternWithCapture env pyVariantName varName)))
 
 -- | Rewrite case statements to avoid variable name collisions
 deduplicateCaseVariables :: ([Core.Field] -> [Core.Field])
@@ -673,7 +674,7 @@ encodeDefaultCaseBlock encodeTerm isFull mdflt tname = (Flows.bind (Maybes.maybe
         Syntax.caseBlockBody = body}])))
 
 -- | Encode a single case (Field) into a CaseBlock for a match statement
-encodeCaseBlock :: (Helpers.PythonEnvironment -> Core.Name -> Core.RowType -> Bool -> (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 [Syntax.Statement]) -> Core.Field -> Compute.Flow t0 Syntax.CaseBlock)
+encodeCaseBlock :: (Helpers.PythonEnvironment -> Core.Name -> Core.RowType -> Bool -> (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow Helpers.PyGraph [Syntax.Statement]) -> Core.Field -> Compute.Flow Helpers.PyGraph Syntax.CaseBlock)
 encodeCaseBlock env tname rowType isEnum encodeBody field =  
   let fname = (Core.fieldName field)
   in  
@@ -710,15 +711,15 @@ encodeCaseBlock env tname rowType isEnum encodeBody field =
                 let effectiveBody = (Logic.ifElse isUnitVariant (eliminateUnitVar v rawBody) rawBody)
                 in  
                   let shouldCapture = (Logic.not (Logic.or isUnitVariant (Logic.or (Rewriting.isFreeVariableInTerm v rawBody) (Schemas.isUnitTerm rawBody))))
-                  in (Flows.bind (Flows.pure (pythonEnvironmentSetTypeContext (Schemas.extendTypeContextForLambda (pythonEnvironmentGetTypeContext env) effectiveLambda) env)) (\env2 ->  
-                    let pattern = (variantClosedPattern env2 tname fname rowType isEnum v shouldCapture)
+                  in (Flows.bind (Flows.pure (pythonEnvironmentSetTypeContext (Schemas.extendTypeContextForLambda (pythonEnvironmentGetTypeContext env) effectiveLambda) env)) (\env2 -> Flows.bind (deconflictVariantName True env2 tname fname) (\pyVariantName ->  
+                    let pattern = (variantClosedPattern env2 tname fname pyVariantName rowType isEnum v shouldCapture)
                     in (Flows.bind (encodeBody env2 effectiveBody) (\stmts ->  
                       let pyBody = (Utils.indentedBlock Nothing [
                               stmts])
                       in (Flows.pure (Syntax.CaseBlock {
                         Syntax.caseBlockPatterns = (Utils.pyClosedPatternToPyPatterns pattern),
                         Syntax.caseBlockGuard = Nothing,
-                        Syntax.caseBlockBody = pyBody}))))))
+                        Syntax.caseBlockBody = pyBody})))))))
 
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: (Helpers.PyGraph -> Graph.Graph)
@@ -816,6 +817,18 @@ encodeEnumValueAssignment env fieldType =
               assignStmt,
               (Utils.pyExpressionToPyStatement (Utils.tripleQuotedString c))]) mcomment))))
 
+-- | Deconflict a variant name to avoid collisions with type names
+deconflictVariantName :: (Bool -> Helpers.PythonEnvironment -> Core.Name -> Core.Name -> Compute.Flow Helpers.PyGraph Syntax.Name)
+deconflictVariantName isQualified env unionName fname =  
+  let candidateHydraName = (Core.Name (Strings.cat2 (Core.unName unionName) (Formatting.capitalize (Core.unName fname))))
+  in (Flows.bind Monads.getState (\pyg ->  
+    let g = (pyGraphGraph pyg)
+    in  
+      let elements = (Graph.graphElements g)
+      in  
+        let collision = (Maybes.isJust (Lists.find (\b -> Equality.equal (Core.unName (Core.bindingName b)) (Core.unName candidateHydraName)) elements))
+        in (Logic.ifElse collision (Flows.pure (Syntax.Name (Strings.cat2 (Syntax.unName (Names.variantName isQualified env unionName fname)) "_"))) (Flows.pure (Names.variantName isQualified env unionName fname)))))
+
 -- | Encode a union field as a variant class
 encodeUnionField :: (Helpers.PythonEnvironment -> Core.Name -> Core.FieldType -> Compute.Flow Helpers.PyGraph Syntax.Statement)
 encodeUnionField env unionName fieldType =  
@@ -824,23 +837,21 @@ encodeUnionField env unionName fieldType =
     let ftype = (Core.fieldTypeType fieldType)
     in (Flows.bind (inGraphContext (Annotations.getTypeDescription ftype)) (\fcomment ->  
       let isUnit = (Equality.equal (Rewriting.deannotateType ftype) Core.TypeUnit)
-      in  
-        let varName = (Names.variantName False env unionName fname)
+      in (Flows.bind (deconflictVariantName False env unionName fname) (\varName ->  
+        let tparamNames = (findTypeParams env ftype)
         in  
-          let tparamNames = (findTypeParams env ftype)
+          let tparamPyNames = (Lists.map Names.encodeTypeVariable tparamNames)
           in  
-            let tparamPyNames = (Lists.map Names.encodeTypeVariable tparamNames)
+            let fieldParams = (Lists.map Utils.pyNameToPyTypeParameter tparamPyNames)
             in  
-              let fieldParams = (Lists.map Utils.pyNameToPyTypeParameter tparamPyNames)
-              in  
-                let body = (Logic.ifElse isUnit (Utils.indentedBlock fcomment [
-                        Utils.unitVariantMethods varName]) (Utils.indentedBlock fcomment []))
-                in (Flows.bind (Logic.ifElse isUnit (Flows.pure Nothing) (Flows.bind (encodeTypeQuoted env ftype) (\quotedType -> Flows.pure (Just (variantArgs quotedType []))))) (\margs -> Flows.pure (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
-                  Syntax.classDefinitionDecorators = Nothing,
-                  Syntax.classDefinitionName = varName,
-                  Syntax.classDefinitionTypeParams = fieldParams,
-                  Syntax.classDefinitionArguments = margs,
-                  Syntax.classDefinitionBody = body}))))))
+              let body = (Logic.ifElse isUnit (Utils.indentedBlock fcomment [
+                      Utils.unitVariantMethods varName]) (Utils.indentedBlock fcomment []))
+              in (Flows.bind (Logic.ifElse isUnit (Flows.pure Nothing) (Flows.bind (encodeTypeQuoted env ftype) (\quotedType -> Flows.pure (Just (variantArgs quotedType []))))) (\margs -> Flows.pure (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
+                Syntax.classDefinitionDecorators = Nothing,
+                Syntax.classDefinitionName = varName,
+                Syntax.classDefinitionTypeParams = fieldParams,
+                Syntax.classDefinitionArguments = margs,
+                Syntax.classDefinitionBody = body}))))))))
 
 -- | Encode a union type as an enum (for unit-only fields) or variant classes
 encodeUnionType :: (Helpers.PythonEnvironment -> Core.Name -> Core.RowType -> Maybe String -> Compute.Flow Helpers.PyGraph [Syntax.Statement])
@@ -1731,18 +1742,16 @@ encodeUnionEliminationInline env cs pyArg =
                         let fterm = (Core.fieldTerm field)
                         in  
                           let isUnitVariant = (isVariantUnitType rt fname)
-                          in  
-                            let pyVariantName = (Names.variantName True env tname fname)
-                            in  
-                              let isinstanceCheck = (Utils.functionCall isinstancePrimary [
-                                      pyArg,
-                                      (Utils.pyNameToPyExpression pyVariantName)])
-                              in (Flows.bind (encodeTermInline env False fterm) (\pyBranch ->  
-                                let pyResult = (Logic.ifElse isEnum (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
-                                        pyArg]) (Logic.ifElse isUnitVariant (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
-                                        valueExpr]) (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
-                                        valueExpr])))
-                                in (Flows.pure (isinstanceCheck, pyResult)))))
+                          in (Flows.bind (deconflictVariantName True env tname fname) (\pyVariantName ->  
+                            let isinstanceCheck = (Utils.functionCall isinstancePrimary [
+                                    pyArg,
+                                    (Utils.pyNameToPyExpression pyVariantName)])
+                            in (Flows.bind (encodeTermInline env False fterm) (\pyBranch ->  
+                              let pyResult = (Logic.ifElse isEnum (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
+                                      pyArg]) (Logic.ifElse isUnitVariant (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
+                                      valueExpr]) (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
+                                      valueExpr])))
+                              in (Flows.pure (isinstanceCheck, pyResult)))))))
               in (Flows.bind (Flows.mapList encodeBranch cases_) (\encodedBranches ->  
                 let buildChain = (\elseExpr -> \branchPair ->  
                         let checkExpr = (Pairs.first branchPair)
@@ -1857,7 +1866,7 @@ encodeTermInline env noCast term =
                 in  
                   let isUnitVariant = (Maybes.maybe False (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft))) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) ftypes))
                   in (Flows.bind (Logic.ifElse (Logic.or (Schemas.isUnitTerm (Core.fieldTerm field)) isUnitVariant) (Flows.pure []) (Flows.bind (encode (Core.fieldTerm field)) (\parg -> Flows.pure [
-                    parg]))) (\args -> Flows.bind (updateMeta (setMetaUsesCast True)) (\unit_ -> Flows.pure (Utils.castTo (Names.typeVariableReference env tname) (Utils.functionCall (Utils.pyNameToPyPrimary (Names.variantName True env tname fname)) args))))))))
+                    parg]))) (\args -> Flows.bind (updateMeta (setMetaUsesCast True)) (\unit_ -> Flows.bind (deconflictVariantName True env tname fname) (\deconflictedName -> Flows.pure (Utils.castTo (Names.typeVariableReference env tname) (Utils.functionCall (Utils.pyNameToPyPrimary deconflictedName) args)))))))))
         Core.TermUnit -> (Flows.pure (Utils.pyNameToPyExpression Utils.pyNone))
         Core.TermVariable v1 -> (encodeVariable env v1 [])
         Core.TermWrap v1 ->  

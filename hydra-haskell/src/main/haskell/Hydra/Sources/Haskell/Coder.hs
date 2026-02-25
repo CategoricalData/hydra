@@ -262,9 +262,9 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
             "fields">: Core.caseStatementCases $ var "stmt",
             "caseExpr">:
               "rt" <<~ Lexical.withSchemaContext @@ (Schemas.requireUnionType @@ var "dn") $ lets [
-              "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (Core.rowTypeFields $ var "rt"),
               "toFieldMapEntry">: "f" ~>
-                pair (Core.fieldTypeName $ var "f") (var "f")] $
+                pair (Core.fieldTypeName $ var "f") (var "f"),
+              "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (Core.rowTypeFields $ var "rt")] $
               "ecases" <<~ Flows.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
               "dcases" <<~ (Maybes.cases (var "def")
                 (Flows.pure $ list ([] :: [TTerm H.CaseRhs])) $
