@@ -363,6 +363,20 @@ public interface Utils {
       hydra.ext.python.utils.Utils.decodePyExpressionToPyPrimary(e));
   }
   
+  static hydra.ext.python.syntax.Disjunction pyExpressionToDisjunction(hydra.ext.python.syntax.Expression e) {
+    return (e).accept(new hydra.ext.python.syntax.Expression.PartialVisitor<>() {
+      @Override
+      public hydra.ext.python.syntax.Disjunction otherwise(hydra.ext.python.syntax.Expression instance) {
+        return new hydra.ext.python.syntax.Disjunction(java.util.List.of(hydra.ext.python.utils.Utils.pyPrimaryToPyConjunction(new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Group(new hydra.ext.python.syntax.Group.Expression(new hydra.ext.python.syntax.NamedExpression.Simple(e)))))));
+      }
+      
+      @Override
+      public hydra.ext.python.syntax.Disjunction visit(hydra.ext.python.syntax.Expression.Simple disj) {
+        return (disj).value;
+      }
+    });
+  }
+  
   static hydra.ext.python.syntax.Slice pyPrimaryToPySlice(hydra.ext.python.syntax.Primary prim) {
     return hydra.ext.python.utils.Utils.pyExpressionToPySlice(hydra.ext.python.utils.Utils.pyPrimaryToPyExpression(prim));
   }
@@ -383,7 +397,7 @@ public interface Utils {
         stmts)));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(groups.get()),
-      () -> new hydra.ext.python.syntax.Block.Simple(java.util.List.of(hydra.ext.python.utils.Utils.pyExpressionToPySimpleStatement(hydra.ext.python.utils.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Ellipsis())))),
+      () -> new hydra.ext.python.syntax.Block.Indented(java.util.List.of(java.util.List.of(new hydra.ext.python.syntax.Statement.Simple(java.util.List.of(hydra.ext.python.utils.Utils.pyExpressionToPySimpleStatement(hydra.ext.python.utils.Utils.pyAtomToPyExpression(new hydra.ext.python.syntax.Atom.Ellipsis()))))))),
       () -> new hydra.ext.python.syntax.Block.Indented(groups.get()));
   }
   
