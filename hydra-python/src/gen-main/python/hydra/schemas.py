@@ -194,7 +194,21 @@ def field_type_map(fields: frozenlist[hydra.core.FieldType]) -> FrozenDict[hydra
 def field_types(t: hydra.core.Type):
     r"""Get field types from a record or union type."""
     
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (to_map := (lambda fields: hydra.lib.maps.from_list(hydra.lib.lists.map((lambda ft: (ft.name, ft.type)), fields))), _hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_1(hydra.rewriting.deannotate_type(t)))[2]))
+    def _field_types_inner(cx):
+        to_map = lambda fields: hydra.lib.maps.from_list(hydra.lib.lists.map((lambda ft: (ft.name, ft.type)), fields))
+        dt = hydra.rewriting.deannotate_type(t)
+        match dt:
+            case hydra.core.TypeForall(value=v1):
+                return field_types(v1.body)
+            case hydra.core.TypeRecord(value=v1):
+                return hydra.lib.flows.pure(to_map(v1.fields))
+            case hydra.core.TypeUnion(value=v1):
+                return hydra.lib.flows.pure(to_map(v1.fields))
+            case hydra.core.TypeVariable(value=v1):
+                return hydra.monads.with_trace(hydra.lib.strings.cat2("field types of ", v1.value), hydra.lib.flows.bind(hydra.lexical.require_element(v1), (lambda el: hydra.lib.flows.bind(hydra.monads.with_trace("field types", hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), field_types))))
+            case _:
+                return hydra.monads.unexpected("record or union type", hydra.show.core.type_(dt))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), _field_types_inner)
 
 def find_field_type(fname: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> hydra.compute.Flow[T0, hydra.core.Type]:
     r"""Find a field type by name in a list of field types."""
@@ -283,7 +297,17 @@ def schema_graph_to_typing_environment(g: hydra.graph.Graph) -> hydra.compute.Fl
             case _:
                 return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), typ, Nothing())
     def to_pair(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[tuple[hydra.core.Name, hydra.core.TypeScheme]]]:
-        return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (for_term := (lambda term: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda typ: Just(f_type_to_type_scheme(typ))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda ts: hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.TypeScheme"))), Nothing())), (lambda : hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type_scheme(cx, el.term)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())), (lambda : hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term)))), (lambda : for_term(hydra.rewriting.deannotate_term(el.term))))))), el.type), (lambda mts: hydra.lib.flows.pure(hydra.lib.maybes.map((lambda ts: (el.name, ts)), mts)))))[1]))
+        def _to_pair_inner(cx):
+            def for_term(term):
+                match term:
+                    case hydra.core.TermRecord(value=v1):
+                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(v1.type_name, hydra.core.Name("hydra.core.TypeScheme")), (lambda : hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type_scheme(cx, el.term)))), (lambda : hydra.lib.flows.pure(Nothing())))
+                    case hydra.core.TermUnion(value=v1):
+                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(v1.type_name, hydra.core.Name("hydra.core.Type")), (lambda : hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term)))), (lambda : hydra.lib.flows.pure(Nothing())))
+                    case _:
+                        return hydra.lib.flows.pure(Nothing())
+            return hydra.lib.flows.bind(hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda typ: Just(f_type_to_type_scheme(typ))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda ts: hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.TypeScheme"))), Nothing())), (lambda : hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type_scheme(cx, el.term)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())), (lambda : hydra.lib.flows.map((lambda decoded: Just(to_type_scheme((), decoded))), hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term)))), (lambda : for_term(hydra.rewriting.deannotate_term(el.term))))))), el.type), (lambda mts: hydra.lib.flows.pure(hydra.lib.maybes.map((lambda ts: (el.name, ts)), mts))))
+        return hydra.lib.flows.bind(hydra.monads.get_state(), _to_pair_inner)
     return hydra.monads.with_trace("schema graph to typing environment", hydra.monads.with_state(g, hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: to_pair(x1)), g.elements), (lambda mpairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(hydra.lib.maybes.cat(mpairs)))))))
 
 def graph_to_inference_context(graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, hydra.typing.InferenceContext]:

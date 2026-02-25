@@ -331,7 +331,20 @@ def is_simple_assignment(term: hydra.core.Term):
             return is_simple_assignment(ta.body)
         
         case _:
-            return (base_term := hydra.lib.pairs.first(gather_args(term, ())), (_hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3(base_term))[3])[1]
+            base_term = hydra.lib.pairs.first(gather_args(term, ()))
+            match base_term:
+                case hydra.core.TermFunction(value=v1):
+                    match v1:
+                        case hydra.core.FunctionElimination(value=v2):
+                            match v2:
+                                case hydra.core.EliminationUnion():
+                                    return False
+                                case _:
+                                    return True
+                        case _:
+                            return True
+                case _:
+                    return True
 
 def normalize_comment(s: str) -> str:
     r"""Normalize a comment string for consistent output across coders."""
