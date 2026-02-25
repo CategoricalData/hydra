@@ -326,22 +326,24 @@ public interface Schemas {
   }
   
   static Boolean fTypeIsPolymorphic(hydra.core.Type typ) {
-    return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
-      @Override
-      public Boolean otherwise(hydra.core.Type instance) {
+    while (true) {
+      {
+        if ((typ) instanceof hydra.core.Type.Annotated) {
+          {
+            var at = (hydra.core.Type.Annotated) (typ);
+            typ = ((at).value).body;
+            continue;
+          }
+        }
+        if ((typ) instanceof hydra.core.Type.Forall) {
+          {
+            var ft = (hydra.core.Type.Forall) (typ);
+            return true;
+          }
+        }
         return false;
       }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Annotated at) {
-        return hydra.schemas.Schemas.fTypeIsPolymorphic(((at).value).body);
-      }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Forall ft) {
-        return true;
-      }
-    });
+    }
   }
   
   static hydra.core.TypeScheme fTypeToTypeScheme(hydra.core.Type typ) {
@@ -393,17 +395,18 @@ public interface Schemas {
   }
   
   static hydra.core.Type fullyStripType(hydra.core.Type typ) {
-    return (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
-      @Override
-      public hydra.core.Type otherwise(hydra.core.Type instance) {
+    while (true) {
+      {
+        if ((hydra.rewriting.Rewriting.deannotateType(typ)) instanceof hydra.core.Type.Forall) {
+          {
+            var ft = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(typ));
+            typ = ((ft).value).body;
+            continue;
+          }
+        }
         return typ;
       }
-      
-      @Override
-      public hydra.core.Type visit(hydra.core.Type.Forall ft) {
-        return hydra.schemas.Schemas.fullyStripType(((ft).value).body);
-      }
-    });
+    }
   }
   
   static hydra.core.Let graphAsLet(hydra.graph.Graph g) {
@@ -509,45 +512,49 @@ public interface Schemas {
   }
   
   static Boolean isEncodedTerm(hydra.core.Term t) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
-      @Override
-      public Boolean otherwise(hydra.core.Term instance) {
+    while (true) {
+      {
+        if ((hydra.rewriting.Rewriting.deannotateTerm(t)) instanceof hydra.core.Term.Application) {
+          {
+            var a = (hydra.core.Term.Application) (hydra.rewriting.Rewriting.deannotateTerm(t));
+            t = ((a).value).function;
+            continue;
+          }
+        }
+        if ((hydra.rewriting.Rewriting.deannotateTerm(t)) instanceof hydra.core.Term.Union) {
+          {
+            var i = (hydra.core.Term.Union) (hydra.rewriting.Rewriting.deannotateTerm(t));
+            return hydra.lib.equality.Equal.apply(
+              "hydra.core.Term",
+              (((i).value).typeName).value);
+          }
+        }
         return false;
       }
-      
-      @Override
-      public Boolean visit(hydra.core.Term.Application a) {
-        return hydra.schemas.Schemas.isEncodedTerm(((a).value).function);
-      }
-      
-      @Override
-      public Boolean visit(hydra.core.Term.Union i) {
-        return hydra.lib.equality.Equal.apply(
-          "hydra.core.Term",
-          (((i).value).typeName).value);
-      }
-    });
+    }
   }
   
   static Boolean isEncodedType(hydra.core.Term t) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
-      @Override
-      public Boolean otherwise(hydra.core.Term instance) {
+    while (true) {
+      {
+        if ((hydra.rewriting.Rewriting.deannotateTerm(t)) instanceof hydra.core.Term.Application) {
+          {
+            var a = (hydra.core.Term.Application) (hydra.rewriting.Rewriting.deannotateTerm(t));
+            t = ((a).value).function;
+            continue;
+          }
+        }
+        if ((hydra.rewriting.Rewriting.deannotateTerm(t)) instanceof hydra.core.Term.Union) {
+          {
+            var i = (hydra.core.Term.Union) (hydra.rewriting.Rewriting.deannotateTerm(t));
+            return hydra.lib.equality.Equal.apply(
+              "hydra.core.Type",
+              (((i).value).typeName).value);
+          }
+        }
         return false;
       }
-      
-      @Override
-      public Boolean visit(hydra.core.Term.Application a) {
-        return hydra.schemas.Schemas.isEncodedType(((a).value).function);
-      }
-      
-      @Override
-      public Boolean visit(hydra.core.Term.Union i) {
-        return hydra.lib.equality.Equal.apply(
-          "hydra.core.Type",
-          (((i).value).typeName).value);
-      }
-    });
+    }
   }
   
   static Boolean isEnumRowType(hydra.core.RowType rt) {
@@ -641,36 +648,41 @@ public interface Schemas {
   }
   
   static Boolean isType(hydra.core.Type t) {
-    return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
-      @Override
-      public Boolean otherwise(hydra.core.Type instance) {
+    while (true) {
+      {
+        if ((hydra.rewriting.Rewriting.deannotateType(t)) instanceof hydra.core.Type.Application) {
+          {
+            var a = (hydra.core.Type.Application) (hydra.rewriting.Rewriting.deannotateType(t));
+            t = ((a).value).function;
+            continue;
+          }
+        }
+        if ((hydra.rewriting.Rewriting.deannotateType(t)) instanceof hydra.core.Type.Forall) {
+          {
+            var l = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(t));
+            t = ((l).value).body;
+            continue;
+          }
+        }
+        if ((hydra.rewriting.Rewriting.deannotateType(t)) instanceof hydra.core.Type.Union) {
+          {
+            var rt = (hydra.core.Type.Union) (hydra.rewriting.Rewriting.deannotateType(t));
+            return hydra.lib.equality.Equal.apply(
+              "hydra.core.Type",
+              (((rt).value).typeName).value);
+          }
+        }
+        if ((hydra.rewriting.Rewriting.deannotateType(t)) instanceof hydra.core.Type.Variable) {
+          {
+            var v = (hydra.core.Type.Variable) (hydra.rewriting.Rewriting.deannotateType(t));
+            return hydra.lib.equality.Equal.apply(
+              (v).value,
+              new hydra.core.Name("hydra.core.Type"));
+          }
+        }
         return false;
       }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Application a) {
-        return hydra.schemas.Schemas.isType(((a).value).function);
-      }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Forall l) {
-        return hydra.schemas.Schemas.isType(((l).value).body);
-      }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Union rt) {
-        return hydra.lib.equality.Equal.apply(
-          "hydra.core.Type",
-          (((rt).value).typeName).value);
-      }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Variable v) {
-        return hydra.lib.equality.Equal.apply(
-          (v).value,
-          new hydra.core.Name("hydra.core.Type"));
-      }
-    });
+    }
   }
   
   static Boolean isUnitTerm(hydra.core.Term v1) {
