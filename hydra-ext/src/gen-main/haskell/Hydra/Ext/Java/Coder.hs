@@ -1815,7 +1815,7 @@ encodeApplication env app =
           let args = (Pairs.first (Pairs.second gathered))
           in  
             let typeApps = (Pairs.second (Pairs.second gathered))
-            in (Flows.bind (Annotations.getType (Annotations.termAnnotationInternal fun)) (\mfunTyp -> Flows.bind (Maybes.cases mfunTyp (CoderUtils.tryTypeOf "1" tc fun) (\t -> Flows.pure t)) (\funTyp ->  
+            in (Flows.bind (Annotations.getType (Annotations.termAnnotationInternal fun)) (\mfunTyp -> Flows.bind (Maybes.cases mfunTyp (Flows.withDefault (Core.TypeVariable (Core.Name "unknown")) (CoderUtils.tryTypeOf "1" tc fun)) (\t -> Flows.pure t)) (\funTyp ->  
               let arity = (Arity.typeArity funTyp)
               in  
                 let deannotatedFun = (Rewriting.deannotateTerm fun)
@@ -1864,9 +1864,7 @@ encodeApplication_fallback env aliases tc typeApps lhs rhs = (Monads.withTrace "
           Core.FunctionElimination v3 -> (Flows.bind (encodeTerm env rhs) (\jarg -> Flows.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Flows.pure dom) (Flows.bind (Annotations.getType (Annotations.termAnnotationInternal rhs)) (\mrt -> Maybes.cases mrt (Flows.bind (CoderUtils.tryTypeOf "dom-enrich" tc rhs) (\rt -> Flows.pure (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))) (\rt -> Flows.pure (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))))) (\enrichedDom -> encodeElimination env (Just jarg) enrichedDom cod v3)))
           _ -> (Flows.bind (encodeTerm env lhs) (\jfun -> Flows.bind (encodeTerm env rhs) (\jarg -> Flows.pure (applyJavaArg jfun jarg))))) v2)
         _ -> (Flows.bind (encodeTerm env lhs) (\jfun -> Flows.bind (encodeTerm env rhs) (\jarg -> Flows.pure (applyJavaArg jfun jarg))))) (Rewriting.deannotateTerm lhs))
-  _ -> (Monads.fail (Strings.cat [
-    "Unexpected type: ",
-    (Core___.type_ t)]))) (Rewriting.deannotateTypeParameters (Rewriting.deannotateType t))))))
+  _ -> (Flows.bind (encodeTerm env lhs) (\jfun -> Flows.bind (encodeTerm env rhs) (\jarg -> Flows.pure (applyJavaArg jfun jarg))))) (Rewriting.deannotateTypeParameters (Rewriting.deannotateType t))))))
 
 functionCall :: (Helpers.JavaEnvironment -> Bool -> Core.Name -> [Core.Term] -> [Core.Type] -> Compute.Flow Graph.Graph Syntax.Expression)
 functionCall env isPrim name args typeApps =  
@@ -2614,16 +2612,22 @@ encodeTermTCO env funcName paramNames term =
             let isSelfCall = ((\x -> case x of
                     Core.TermVariable v1 -> (Equality.equal v1 funcName)
                     _ -> False) strippedFun)
-            in (Logic.ifElse (Logic.and isSelfCall (Equality.equal (Lists.length gatherArgs) (Lists.length paramNames))) (Flows.bind (Flows.mapList (\a -> encodeTerm env a) gatherArgs) (\jArgs ->  
-              let assignments = (Lists.map (\pair ->  
-                      let paramName = (Pairs.first pair)
-                      in  
-                        let jArg = (Pairs.second pair)
-                        in (Syntax.BlockStatementStatement (Utils_.javaAssignmentStatement (Syntax.LeftHandSideExpressionName (Utils_.javaIdentifierToJavaExpressionName (Utils_.variableToJavaIdentifier paramName))) jArg))) (Lists.zip paramNames jArgs))
+            in (Logic.ifElse (Logic.and isSelfCall (Equality.equal (Lists.length gatherArgs) (Lists.length paramNames))) ( 
+              let changePairs = (Lists.filter (\pair -> Logic.not ((\x -> case x of
+                      Core.TermVariable v1 -> (Equality.equal v1 (Pairs.first pair))
+                      _ -> False) (Rewriting.deannotateAndDetypeTerm (Pairs.second pair)))) (Lists.zip paramNames gatherArgs))
               in  
-                let continueStmt = (Syntax.BlockStatementStatement (Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementContinue (Syntax.ContinueStatement Nothing))))
-                in (Flows.pure (Lists.concat2 assignments [
-                  continueStmt])))) ( 
+                let changedParams = (Lists.map Pairs.first changePairs)
+                in (Flows.bind (Flows.mapList (\pair -> encodeTerm env (Pairs.second pair)) changePairs) (\jChangedArgs ->  
+                  let assignments = (Lists.map (\pair ->  
+                          let paramName = (Pairs.first pair)
+                          in  
+                            let jArg = (Pairs.second pair)
+                            in (Syntax.BlockStatementStatement (Utils_.javaAssignmentStatement (Syntax.LeftHandSideExpressionName (Utils_.javaIdentifierToJavaExpressionName (Utils_.variableToJavaIdentifier paramName))) jArg))) (Lists.zip changedParams jChangedArgs))
+                  in  
+                    let continueStmt = (Syntax.BlockStatementStatement (Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementContinue (Syntax.ContinueStatement Nothing))))
+                    in (Flows.pure (Lists.concat2 assignments [
+                      continueStmt]))))) ( 
               let gathered2 = (CoderUtils.gatherApplications term)
               in  
                 let args2 = (Pairs.first gathered2)
@@ -2676,7 +2680,7 @@ encodeTermTCO env funcName paramNames term =
                                                                     let returnStmt = (Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jret)))
                                                                     in (Flows.pure (Lists.concat2 bindingStmts [
                                                                       returnStmt]))))))))) (\bodyStmts ->  
-                                                          let relExpr = (Utils_.javaInstanceOf (Utils_.javaIdentifierToJavaRelationalExpression (Utils_.variableToJavaIdentifier (Lists.head paramNames))) variantRefType)
+                                                          let relExpr = (Utils_.javaInstanceOf (Utils_.javaUnaryExpressionToJavaRelationalExpression (Utils_.javaExpressionToJavaUnaryExpression jArg)) variantRefType)
                                                           in  
                                                             let condExpr = (Utils_.javaRelationalExpressionToJavaExpression relExpr)
                                                             in  
@@ -2688,12 +2692,8 @@ encodeTermTCO env funcName paramNames term =
                                                                   Syntax.ifThenStatementStatement = ifBody}))))))))
                                           _ -> (Monads.fail "TCO: case branch is not a lambda")) v4)
                                         _ -> (Monads.fail "TCO: case branch is not a lambda")) (Rewriting.deannotateTerm (Core.fieldTerm field)))) cases_) (\ifBlocks -> Flows.bind (Maybes.cases dflt (Flows.pure [
-                                    Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jArg))]) (\d ->  
-                                    let dApp = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = d,
-                                            Core.applicationArgument = arg}))
-                                    in (Flows.bind (encodeTerm env dApp) (\dExpr -> Flows.pure [
-                                      Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just dExpr))])))) (\defaultStmt -> Flows.pure (Lists.concat2 ifBlocks defaultStmt))))))
+                                    Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jArg))]) (\d -> Flows.bind (encodeTerm env d) (\dExpr -> Flows.pure [
+                                    Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just dExpr))]))) (\defaultStmt -> Flows.pure (Lists.concat2 ifBlocks defaultStmt))))))
                           _ -> (Flows.bind (encodeTerm env term) (\expr -> Flows.pure [
                             Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just expr))]))) v2)
                         _ -> (Flows.bind (encodeTerm env term) (\expr -> Flows.pure [

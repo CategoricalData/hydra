@@ -690,47 +690,56 @@ public interface Decoding {
   }
   
   static hydra.core.Name decoderResultType(hydra.core.Type typ) {
-    return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
-      @Override
-      public hydra.core.Name otherwise(hydra.core.Type instance) {
+    while (true) {
+      {
+        if ((typ) instanceof hydra.core.Type.Annotated) {
+          {
+            var at = (hydra.core.Type.Annotated) (typ);
+            typ = ((at).value).body;
+            continue;
+          }
+        }
+        if ((typ) instanceof hydra.core.Type.Application) {
+          {
+            var appType = (hydra.core.Type.Application) (typ);
+            typ = ((appType).value).function;
+            continue;
+          }
+        }
+        if ((typ) instanceof hydra.core.Type.Forall) {
+          {
+            var ft = (hydra.core.Type.Forall) (typ);
+            typ = ((ft).value).body;
+            continue;
+          }
+        }
+        if ((typ) instanceof hydra.core.Type.Literal) {
+          {
+            var ignored = (hydra.core.Type.Literal) (typ);
+            return new hydra.core.Name("hydra.core.Literal");
+          }
+        }
+        if ((typ) instanceof hydra.core.Type.Record) {
+          {
+            var rt = (hydra.core.Type.Record) (typ);
+            return ((rt).value).typeName;
+          }
+        }
+        if ((typ) instanceof hydra.core.Type.Union) {
+          {
+            var rt = (hydra.core.Type.Union) (typ);
+            return ((rt).value).typeName;
+          }
+        }
+        if ((typ) instanceof hydra.core.Type.Wrap) {
+          {
+            var wt = (hydra.core.Type.Wrap) (typ);
+            return ((wt).value).typeName;
+          }
+        }
         return new hydra.core.Name("hydra.core.Term");
       }
-      
-      @Override
-      public hydra.core.Name visit(hydra.core.Type.Annotated at) {
-        return hydra.decoding.Decoding.decoderResultType(((at).value).body);
-      }
-      
-      @Override
-      public hydra.core.Name visit(hydra.core.Type.Application appType) {
-        return hydra.decoding.Decoding.decoderResultType(((appType).value).function);
-      }
-      
-      @Override
-      public hydra.core.Name visit(hydra.core.Type.Forall ft) {
-        return hydra.decoding.Decoding.decoderResultType(((ft).value).body);
-      }
-      
-      @Override
-      public hydra.core.Name visit(hydra.core.Type.Literal ignored) {
-        return new hydra.core.Name("hydra.core.Literal");
-      }
-      
-      @Override
-      public hydra.core.Name visit(hydra.core.Type.Record rt) {
-        return ((rt).value).typeName;
-      }
-      
-      @Override
-      public hydra.core.Name visit(hydra.core.Type.Union rt) {
-        return ((rt).value).typeName;
-      }
-      
-      @Override
-      public hydra.core.Name visit(hydra.core.Type.Wrap wt) {
-        return ((wt).value).typeName;
-      }
-    });
+    }
   }
   
   static hydra.core.Type decoderType(hydra.core.Type typ) {

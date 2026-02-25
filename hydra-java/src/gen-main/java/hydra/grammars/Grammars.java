@@ -78,31 +78,34 @@ public interface Grammars {
   }
   
   static Boolean isComplex(hydra.grammar.Pattern pat) {
-    return (pat).accept(new hydra.grammar.Pattern.PartialVisitor<>() {
-      @Override
-      public Boolean otherwise(hydra.grammar.Pattern instance) {
+    while (true) {
+      {
+        if ((pat) instanceof hydra.grammar.Pattern.Labeled) {
+          {
+            var lp = (hydra.grammar.Pattern.Labeled) (pat);
+            pat = ((lp).value).pattern;
+            continue;
+          }
+        }
+        if ((pat) instanceof hydra.grammar.Pattern.Sequence) {
+          {
+            var pats = (hydra.grammar.Pattern.Sequence) (pat);
+            return hydra.grammars.Grammars.isNontrivial(
+              true,
+              (pats).value);
+          }
+        }
+        if ((pat) instanceof hydra.grammar.Pattern.Alternatives) {
+          {
+            var pats = (hydra.grammar.Pattern.Alternatives) (pat);
+            return hydra.grammars.Grammars.isNontrivial(
+              false,
+              (pats).value);
+          }
+        }
         return false;
       }
-      
-      @Override
-      public Boolean visit(hydra.grammar.Pattern.Labeled lp) {
-        return hydra.grammars.Grammars.isComplex(((lp).value).pattern);
-      }
-      
-      @Override
-      public Boolean visit(hydra.grammar.Pattern.Sequence pats) {
-        return hydra.grammars.Grammars.isNontrivial(
-          true,
-          (pats).value);
-      }
-      
-      @Override
-      public Boolean visit(hydra.grammar.Pattern.Alternatives pats) {
-        return hydra.grammars.Grammars.isNontrivial(
-          false,
-          (pats).value);
-      }
-    });
+    }
   }
   
   static Boolean isNontrivial(Boolean isRecord, java.util.List<hydra.grammar.Pattern> pats) {

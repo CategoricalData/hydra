@@ -3799,7 +3799,10 @@ encodeApplication = def "encodeApplication" $
     -- Get the function's arity from its type
     "mfunTyp" <<~ (Annotations.getType @@ (Annotations.termAnnotationInternal @@ var "fun")) $
     "funTyp" <<~ (Maybes.cases (var "mfunTyp")
-      (CoderUtils.tryTypeOf @@ string "1" @@ var "tc" @@ var "fun")
+      -- Use withDefault so that if type inference fails (e.g. empty list without type args),
+      -- we fall through to encodeApplication_fallback via the default dispatch paths
+      (Flows.withDefault (Core.typeVariable (Core.name (string "unknown")))
+        (CoderUtils.tryTypeOf @@ string "1" @@ var "tc" @@ var "fun"))
       (lambda "t" $ Flows.pure (var "t"))) $
     "arity" <~ (Arity.typeArity @@ var "funTyp") $
     -- Determine callee name for type annotation correction
@@ -3879,7 +3882,11 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
       (CoderUtils.tryTypeOf @@ string "2" @@ var "tc" @@ var "lhs")
       (lambda "typ" $ Flows.pure (var "typ"))) $
     cases _Type (Rewriting.deannotateTypeParameters @@ (Rewriting.deannotateType @@ var "t"))
-      (Just $ Monads.fail @@ (Strings.cat (list [string "Unexpected type: ", ShowCore.type_ @@ var "t"]))) [
+      (Just $
+        -- Non-function type: encode as generic .apply() call
+        "jfun" <<~ (encodeTerm @@ var "env" @@ var "lhs") $
+        "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs") $
+        Flows.pure (applyJavaArg @@ var "jfun" @@ var "jarg")) [
       _Type_function>>: lambda "ft" $
         "dom" <~ Core.functionTypeDomain (var "ft") $
         "cod" <~ Core.functionTypeCodomain (var "ft") $
@@ -4871,7 +4878,15 @@ encodeTermTCO = def "encodeTermTCO" $
     Logic.ifElse (Logic.and (var "isSelfCall")
                             (Equality.equal (Lists.length $ var "gatherArgs") (Lists.length $ var "paramNames")))
       -- TAIL CALL: emit param reassignment + continue
-      ("jArgs" <<~ Flows.mapList ("a" ~> encodeTerm @@ var "env" @@ var "a") (var "gatherArgs") $
+      (-- Filter out self-assignments (e.g. x = x) so params remain effectively final for lambdas
+        "changePairs" <~ Lists.filter ("pair" ~>
+          Logic.not (cases _Term (Rewriting.deannotateAndDetypeTerm @@ Pairs.second (var "pair"))
+            (Just false) [
+            _Term_variable>>: "n" ~> Equality.equal (var "n") (Pairs.first (var "pair"))]))
+          (Lists.zip (var "paramNames") (var "gatherArgs")) $
+        "changedParams" <~ Lists.map (unaryFunction Pairs.first) (var "changePairs") $
+        "jChangedArgs" <<~ Flows.mapList ("pair" ~> encodeTerm @@ var "env" @@ Pairs.second (var "pair"))
+          (var "changePairs") $
         "assignments" <~ (Lists.map ("pair" ~>
           "paramName" <~ (Pairs.first $ var "pair") $
           "jArg" <~ (Pairs.second $ var "pair") $
@@ -4881,7 +4896,7 @@ encodeTermTCO = def "encodeTermTCO" $
                     (JavaUtilsSource.javaIdentifierToJavaExpressionName
                       @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "paramName")))
               @@ var "jArg"))
-          (Lists.zip (var "paramNames") (var "jArgs"))) $
+          (Lists.zip (var "changedParams") (var "jChangedArgs"))) $
         "continueStmt" <~ (JavaDsl.blockStatementStatement
           (JavaDsl.statementWithoutTrailing
             (inject Java._StatementWithoutTrailingSubstatement Java._StatementWithoutTrailingSubstatement_continue
@@ -4956,9 +4971,11 @@ encodeTermTCO = def "encodeTermTCO" $
                                       "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
                                       produce $ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]))) $
                                   -- Build: if (arg instanceof VariantType) { VariantType v = (VariantType) arg; stmts... }
+                                  -- Use jArg (the encoded case argument) for the instanceof check,
+                                  -- not paramNames[0], which may differ from the actual matched variable
                                   "relExpr" <~ (JavaUtilsSource.javaInstanceOf
-                                    @@ (JavaUtilsSource.javaIdentifierToJavaRelationalExpression
-                                          @@ (JavaUtilsSource.variableToJavaIdentifier @@ Lists.head (var "paramNames")))
+                                    @@ (JavaUtilsSource.javaUnaryExpressionToJavaRelationalExpression
+                                          @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "jArg"))
                                     @@ var "variantRefType") $
                                   "condExpr" <~ (JavaUtilsSource.javaRelationalExpressionToJavaExpression @@ var "relExpr") $
                                   "blockStmts" <~ Lists.cons (var "localDecl") (var "bodyStmts") $
@@ -4973,8 +4990,8 @@ encodeTermTCO = def "encodeTermTCO" $
                           (produce $ list [JavaDsl.blockStatementStatement
                             (JavaUtilsSource.javaReturnStatement @@ just (var "jArg"))])
                           ("d" ~>
-                            "dApp" <~ inject _Term _Term_application (Core.application (var "d") (var "arg")) $
-                            "dExpr" <<~ (encodeTerm @@ var "env" @@ var "dApp") $
+                            -- Default is a value to return, not a function to apply to the argument
+                            "dExpr" <<~ (encodeTerm @@ var "env" @@ var "d") $
                             produce $ list [JavaDsl.blockStatementStatement
                               (JavaUtilsSource.javaReturnStatement @@ just (var "dExpr"))])) $
                         produce $ Lists.concat2 (var "ifBlocks") (var "defaultStmt")]]])
