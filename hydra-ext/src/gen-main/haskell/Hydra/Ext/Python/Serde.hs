@@ -213,6 +213,19 @@ encodeClosedPattern cp = ((\x -> case x of
 encodeComparison :: (Syntax.Comparison -> Ast.Expr)
 encodeComparison cmp = (encodeBitwiseOr (Syntax.comparisonLhs cmp))
 
+-- | Serialize a conditional expression (ternary)
+encodeConditional :: (Syntax.Conditional -> Ast.Expr)
+encodeConditional c =  
+  let body = (Syntax.conditionalBody c) 
+      cond = (Syntax.conditionalIf c)
+      elseExpr = (Syntax.conditionalElse c)
+  in (Serialization.spaceSep [
+    encodeDisjunction body,
+    (Serialization.cst "if"),
+    (encodeDisjunction cond),
+    (Serialization.cst "else"),
+    (encodeExpression elseExpr)])
+
 -- | Serialize a compound (multi-line) Python statement
 encodeCompoundStatement :: (Syntax.CompoundStatement -> Ast.Expr)
 encodeCompoundStatement cs = ((\x -> case x of
@@ -270,7 +283,7 @@ encodeDoubleStarredKvpair dskv = ((\x -> case x of
 encodeExpression :: (Syntax.Expression -> Ast.Expr)
 encodeExpression expr = ((\x -> case x of
   Syntax.ExpressionSimple v1 -> (encodeDisjunction v1)
-  Syntax.ExpressionConditional _ -> (Serialization.cst "... if ... else ...")
+  Syntax.ExpressionConditional v1 -> (encodeConditional v1)
   Syntax.ExpressionLambda v1 -> (encodeLambda v1)) expr)
 
 -- | Serialize a factor expression

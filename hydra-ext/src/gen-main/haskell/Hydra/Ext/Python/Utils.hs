@@ -354,6 +354,13 @@ decodePyExpressionToPyPrimary e = ((\x -> case x of
 pyExpressionToPyPrimary :: (Syntax.Expression -> Syntax.Primary)
 pyExpressionToPyPrimary e = (Maybes.maybe (Syntax.PrimarySimple (Syntax.AtomGroup (Syntax.GroupExpression (Syntax.NamedExpressionSimple e)))) (\prim -> prim) (decodePyExpressionToPyPrimary e))
 
+-- | Convert an Expression to a Disjunction, wrapping in parens if needed
+pyExpressionToDisjunction :: (Syntax.Expression -> Syntax.Disjunction)
+pyExpressionToDisjunction e = ((\x -> case x of
+  Syntax.ExpressionSimple v1 -> v1
+  _ -> (Syntax.Disjunction [
+    pyPrimaryToPyConjunction (Syntax.PrimarySimple (Syntax.AtomGroup (Syntax.GroupExpression (Syntax.NamedExpressionSimple e))))])) e)
+
 -- | Convert a Primary to a Slice
 pyPrimaryToPySlice :: (Syntax.Primary -> Syntax.Slice)
 pyPrimaryToPySlice prim = (pyExpressionToPySlice (pyPrimaryToPyExpression prim))
@@ -368,8 +375,10 @@ indentedBlock mcomment stmts =
   let commentGroup = (Maybes.maybe [] (\s -> [
           commentStatement s]) mcomment) 
       groups = (Lists.filter (\g -> Logic.not (Lists.null g)) (Lists.cons commentGroup stmts))
-  in (Logic.ifElse (Lists.null groups) (Syntax.BlockSimple [
-    pyExpressionToPySimpleStatement (pyAtomToPyExpression Syntax.AtomEllipsis)]) (Syntax.BlockIndented groups))
+  in (Logic.ifElse (Lists.null groups) (Syntax.BlockIndented [
+    [
+      Syntax.StatementSimple [
+        pyExpressionToPySimpleStatement (pyAtomToPyExpression Syntax.AtomEllipsis)]]]) (Syntax.BlockIndented groups))
 
 -- | Build an or-expression from multiple primaries
 orExpression :: ([Syntax.Primary] -> Syntax.Expression)

@@ -1798,6 +1798,98 @@
               "domain": {"variable": "hydra.ext.python.syntax.Comparison"}}},
           "variables": []}]},
     {
+      "name": "hydra.ext.python.serde.encodeConditional",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Serialize a conditional expression (ternary)"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "body",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {"field": "body", "typeName": "hydra.ext.python.syntax.Conditional"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ext.python.syntax.Disjunction"},
+                            "variables": []}]},
+                      {
+                        "name": "cond",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {"field": "if", "typeName": "hydra.ext.python.syntax.Conditional"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ext.python.syntax.Disjunction"},
+                            "variables": []}]},
+                      {
+                        "name": "elseExpr",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {"field": "else", "typeName": "hydra.ext.python.syntax.Conditional"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ext.python.syntax.Expression"},
+                            "variables": []}]}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "list": [
+                            {
+                              "application": {
+                                "argument": {"variable": "body"},
+                                "function": {"variable": "hydra.ext.python.serde.encodeDisjunction"}}},
+                            {
+                              "application": {
+                                "argument": {"literal": {"string": "if"}},
+                                "function": {"variable": "hydra.serialization.cst"}}},
+                            {
+                              "application": {
+                                "argument": {"variable": "cond"},
+                                "function": {"variable": "hydra.ext.python.serde.encodeDisjunction"}}},
+                            {
+                              "application": {
+                                "argument": {"literal": {"string": "else"}},
+                                "function": {"variable": "hydra.serialization.cst"}}},
+                            {
+                              "application": {
+                                "argument": {"variable": "elseExpr"},
+                                "function": {"variable": "hydra.ext.python.serde.encodeExpression"}}}]},
+                        "function": {"variable": "hydra.serialization.spaceSep"}}}}},
+                "domain": [{"variable": "hydra.ext.python.syntax.Conditional"}],
+                "parameter": "c"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.python.syntax.Conditional"}}},
+          "variables": []}]},
+    {
       "name": "hydra.ext.python.serde.encodeCompoundStatement",
       "term": {
         "annotated": {
@@ -2372,10 +2464,10 @@
                                     "lambda": {
                                       "body": {
                                         "application": {
-                                          "argument": {"literal": {"string": "... if ... else ..."}},
-                                          "function": {"variable": "hydra.serialization.cst"}}},
+                                          "argument": {"variable": "c"},
+                                          "function": {"variable": "hydra.ext.python.serde.encodeConditional"}}},
                                       "domain": [{"variable": "hydra.ext.python.syntax.Conditional"}],
-                                      "parameter": "_"}}}},
+                                      "parameter": "c"}}}},
                               {
                                 "name": "lambda",
                                 "term": {
