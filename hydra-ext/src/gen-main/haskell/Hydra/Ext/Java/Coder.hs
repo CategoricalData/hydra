@@ -204,7 +204,6 @@ isNonComparableType typ = ((\x -> case x of
   Core.TypeSet _ -> True
   Core.TypeMap _ -> True
   Core.TypeMaybe _ -> True
-  Core.TypePair _ -> True
   Core.TypeEither _ -> True
   Core.TypeFunction _ -> True
   Core.TypeLiteral v1 -> ((\x -> case x of
