@@ -155,31 +155,14 @@ def _load_kernel_type_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     """
     bindings = {}
 
-    # Import the kernel type sources modules
-    # These match kernelTypesModules in Hydra.Sources.Kernel.Types.All
+    # Load only the kernel type modules that define the 5 types referenced by
+    # the test suite schema graph: CoderDirection (hydra.coders), Coder (hydra.compute),
+    # and Type/Name/ForallType (hydra.core). Loading all 21 kernel type modules is
+    # unnecessary and slow.
     kernel_type_source_modules = [
-        "hydra.sources.accessors",
-        "hydra.sources.ast",
-        "hydra.sources.classes",
         "hydra.sources.coders",
         "hydra.sources.compute",
-        "hydra.sources.constraints",
         "hydra.sources.core",       # Contains hydra.core.Type, hydra.core.Name, etc.
-        "hydra.sources.grammar",
-        "hydra.sources.graph",
-        "hydra.sources.json.model",
-        "hydra.sources.module",
-        "hydra.sources.parsing",
-        "hydra.sources.phantoms",
-        "hydra.sources.query",
-        "hydra.sources.relational",
-        "hydra.sources.tabular",
-        "hydra.sources.testing",
-        "hydra.sources.topology",
-        "hydra.sources.typing",
-        "hydra.sources.util",
-        "hydra.sources.variants",
-        "hydra.sources.workflow",
     ]
 
     for module_name in kernel_type_source_modules:
@@ -1676,6 +1659,11 @@ def generate_pytest_tests(group: hydra.testing.TestGroup, runner: TestRunner, pr
 
 # Generate all test functions from the test suite
 _all_tests = generate_pytest_tests(test_suite.all_tests(), default_test_runner)
+
+# Eagerly initialize test infrastructure so that JSON module loading
+# and graph construction are not counted inside the first test group's timer.
+get_test_graph()
+get_inference_context()
 
 # Build a mapping from Python test names to Hydra paths for cross-language benchmarking
 # This can be imported by benchmark tools to correlate test results across implementations
