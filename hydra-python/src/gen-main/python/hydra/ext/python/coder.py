@@ -1178,7 +1178,23 @@ def is_case_statement_application(term: hydra.core.Term):
     @lru_cache(1)
     def body() -> hydra.core.Term:
         return hydra.lib.pairs.second(gathered())
-    return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.lib.lists.length(args()), 1)), (lambda : Nothing()), (lambda : (arg := hydra.lib.lists.head(args()), (_hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3(hydra.rewriting.deannotate_and_detype_term(body())))[3])[1]))
+    if hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.lib.lists.length(args()), 1)):
+        return Nothing()
+    arg = hydra.lib.lists.head(args())
+    dt = hydra.rewriting.deannotate_and_detype_term(body())
+    match dt:
+        case hydra.core.TermFunction(value=v1):
+            match v1:
+                case hydra.core.FunctionElimination(value=v2):
+                    match v2:
+                        case hydra.core.EliminationUnion(value=v3):
+                            return Just((v3.type_name, (v3.default, (v3.cases, arg))))
+                        case _:
+                            return Nothing()
+                case _:
+                    return Nothing()
+        case _:
+            return Nothing()
 
 def encode_binding_as(env: hydra.ext.python.helpers.PythonEnvironment, binding: hydra.core.Binding) -> hydra.compute.Flow[hydra.ext.python.helpers.PyGraph, hydra.ext.python.syntax.Statement]:
     r"""Encode a binding as a Python statement (function definition or assignment)."""
@@ -1222,7 +1238,26 @@ def encode_term_multiline(env: hydra.ext.python.helpers.PythonEnvironment, term:
     @lru_cache(1)
     def body() -> hydra.core.Term:
         return hydra.lib.pairs.second(gathered())
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(args()), 1), (lambda : (arg := hydra.lib.lists.head(args()), (_hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3(hydra.rewriting.deannotate_and_detype_term(body())))[3])[1]), (lambda : dflt_logic()))
+    if not hydra.lib.equality.equal(hydra.lib.lists.length(args()), 1):
+        return dflt_logic()
+    arg = hydra.lib.lists.head(args())
+    dt = hydra.rewriting.deannotate_and_detype_term(body())
+    match dt:
+        case hydra.core.TermFunction(value=v1):
+            match v1:
+                case hydra.core.FunctionElimination(value=v2):
+                    match v2:
+                        case hydra.core.EliminationUnion(value=v3):
+                            tname = v3.type_name
+                            dflt = v3.default
+                            cases_ = v3.cases
+                            return hydra.lib.flows.bind(in_graph_context(hydra.schemas.require_union_type(tname)), (lambda rt: (is_enum := hydra.schemas.is_enum_row_type(rt), is_full := is_cases_full(rt, cases_), hydra.lib.flows.bind(encode_term_inline(env, False, arg), (lambda py_arg: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: encode_case_block(env, tname, rt, is_enum, (lambda e, t: encode_term_multiline(e, t)), x1)), deduplicate_case_variables(cases_)), (lambda py_cases: hydra.lib.flows.bind(encode_default_case_block((lambda t: encode_term_inline(env, False, t)), is_full, dflt, tname), (lambda py_dflt: (subj := hydra.ext.python.syntax.SubjectExpressionSimple(hydra.ext.python.syntax.NamedExpressionSimple(py_arg)), match_stmt := hydra.ext.python.syntax.StatementCompound(hydra.ext.python.syntax.CompoundStatementMatch(hydra.ext.python.syntax.MatchStatement(subj, hydra.lib.lists.concat2(py_cases, py_dflt)))), hydra.lib.flows.pure((match_stmt,)))[2])))))))[2]))
+                        case _:
+                            return dflt_logic()
+                case _:
+                    return dflt_logic()
+        case _:
+            return dflt_logic()
 
 def encode_bindings_as_defs(env: T0, encode_binding: Callable[[T0, T1], hydra.compute.Flow[T2, T3]], bindings: frozenlist[T1]) -> hydra.compute.Flow[T2, frozenlist[T3]]:
     r"""Encode bindings as function definitions."""
