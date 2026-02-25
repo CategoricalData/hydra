@@ -2448,7 +2448,7 @@ class VariableAccess(metaclass=_VariableAccessMeta):
     EXPRESSION_NAME = hydra.core.Name("expressionName")
     FIELD_ACCESS = hydra.core.Name("fieldAccess")
 
-class _PrimaryNoNewArrayNode(Node["PrimaryNoNewArray"]):
+class PrimaryNoNewArray(Node["PrimaryNoNewArray"]):
     ...
 
 class PrimaryArrayCreation(Node["ArrayCreationExpression"]):
@@ -2502,16 +2502,10 @@ class PrimaryNoNewArrayMethodReference(Node["MethodReference"]):
 class _PrimaryNoNewArrayMeta(type):
     def __getitem__(cls, item):
         return object
-    def __instancecheck__(cls, instance):
-        return type.__instancecheck__(cls, instance) or isinstance(instance, _PrimaryNoNewArrayNode)
-    def __call__(cls, *args, **kwargs):
-        if args or kwargs:
-            return _PrimaryNoNewArrayNode(*args, **kwargs)
-        return super().__call__()
 
 class PrimaryNoNewArray(metaclass=_PrimaryNoNewArrayMeta):
     r"""PrimaryNoNewArrayLiteral | PrimaryNoNewArrayClassLiteral | PrimaryNoNewArrayThis | PrimaryNoNewArrayDotThis | PrimaryNoNewArrayParens | PrimaryNoNewArrayClassInstance | PrimaryNoNewArrayFieldAccess | PrimaryNoNewArrayArrayAccess | PrimaryNoNewArrayMethodInvocation | PrimaryNoNewArrayMethodReference"""
-
+    
     TYPE_ = hydra.core.Name("hydra.ext.java.syntax.PrimaryNoNewArray")
     LITERAL = hydra.core.Name("literal")
     CLASS_LITERAL = hydra.core.Name("classLiteral")
@@ -2523,7 +2517,6 @@ class PrimaryNoNewArray(metaclass=_PrimaryNoNewArrayMeta):
     ARRAY_ACCESS = hydra.core.Name("arrayAccess")
     METHOD_INVOCATION = hydra.core.Name("methodInvocation")
     METHOD_REFERENCE = hydra.core.Name("methodReference")
-
 
 class ClassLiteralType(Node["TypeNameArray"]):
     ...

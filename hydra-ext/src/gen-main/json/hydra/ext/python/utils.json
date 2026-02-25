@@ -2969,6 +2969,74 @@
               "domain": {"variable": "hydra.ext.python.syntax.Expression"}}},
           "variables": []}]},
     {
+      "name": "hydra.ext.python.utils.pyExpressionToDisjunction",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Convert an Expression to a Disjunction, wrapping in parens if needed"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "e"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "simple",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {"variable": "disj"},
+                                      "domain": [{"variable": "hydra.ext.python.syntax.Disjunction"}],
+                                      "parameter": "disj"}}}}],
+                            "default": [
+                              {
+                                "wrap": {
+                                  "body": {
+                                    "list": [
+                                      {
+                                        "application": {
+                                          "argument": {
+                                            "union": {
+                                              "field": {
+                                                "name": "simple",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "group",
+                                                      "term": {
+                                                        "union": {
+                                                          "field": {
+                                                            "name": "expression",
+                                                            "term": {
+                                                              "union": {
+                                                                "field": {"name": "simple", "term": {"variable": "e"}},
+                                                                "typeName": "hydra.ext.python.syntax.NamedExpression"}}},
+                                                          "typeName": "hydra.ext.python.syntax.Group"}}},
+                                                    "typeName": "hydra.ext.python.syntax.Atom"}}},
+                                              "typeName": "hydra.ext.python.syntax.Primary"}},
+                                          "function": {"variable": "hydra.ext.python.utils.pyPrimaryToPyConjunction"}}}]},
+                                  "typeName": "hydra.ext.python.syntax.Disjunction"}}],
+                            "typeName": "hydra.ext.python.syntax.Expression"}}}}}},
+                "domain": [{"variable": "hydra.ext.python.syntax.Expression"}],
+                "parameter": "e"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.python.syntax.Disjunction"},
+              "domain": {"variable": "hydra.ext.python.syntax.Expression"}}},
+          "variables": []}]},
+    {
       "name": "hydra.ext.python.utils.pyPrimaryToPySlice",
       "term": {
         "annotated": {
@@ -3129,19 +3197,28 @@
                                   "argument": {
                                     "union": {
                                       "field": {
-                                        "name": "simple",
+                                        "name": "indented",
                                         "term": {
                                           "list": [
                                             {
-                                              "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "union": {
-                                                        "field": {"name": "ellipsis", "term": {"unit": {}}},
-                                                        "typeName": "hydra.ext.python.syntax.Atom"}},
-                                                    "function": {"variable": "hydra.ext.python.utils.pyAtomToPyExpression"}}},
-                                                "function": {"variable": "hydra.ext.python.utils.pyExpressionToPySimpleStatement"}}}]}},
+                                              "list": [
+                                                {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "simple",
+                                                      "term": {
+                                                        "list": [
+                                                          {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "union": {
+                                                                      "field": {"name": "ellipsis", "term": {"unit": {}}},
+                                                                      "typeName": "hydra.ext.python.syntax.Atom"}},
+                                                                  "function": {"variable": "hydra.ext.python.utils.pyAtomToPyExpression"}}},
+                                                              "function": {"variable": "hydra.ext.python.utils.pyExpressionToPySimpleStatement"}}}]}},
+                                                    "typeName": "hydra.ext.python.syntax.Statement"}}]}]}},
                                       "typeName": "hydra.ext.python.syntax.Block"}},
                                   "function": {
                                     "application": {

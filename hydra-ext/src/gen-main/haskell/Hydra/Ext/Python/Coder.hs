@@ -1409,8 +1409,8 @@ encodeTermMultiline env term =
               let innerBody = (Typing.functionStructureBody fs)
               in  
                 let env2 = (Typing.functionStructureEnvironment fs)
-                in (Logic.ifElse (Logic.not (Lists.null params)) (Flows.fail "Functions currently unsupported in this context") (Logic.ifElse (Lists.null bindings) (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
-                  Utils.returnSingle expr])) (withBindings bindings (Flows.bind (Flows.mapList (encodeBindingAs env2) bindings) (\bindingStmts -> Flows.bind (encodeTermMultiline env2 innerBody) (\bodyStmts -> Flows.pure (Lists.concat2 bindingStmts bodyStmts)))))))))
+                in (Logic.ifElse (Lists.null bindings) (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
+                  Utils.returnSingle expr])) (withBindings bindings (Flows.bind (Flows.mapList (encodeBindingAs env2) bindings) (\bindingStmts -> Flows.bind (encodeTermMultiline env2 innerBody) (\bodyStmts -> Flows.pure (Lists.concat2 bindingStmts bodyStmts))))))))
   in  
     let gathered = (CoderUtils.gatherApplications term)
     in  
@@ -1683,7 +1683,7 @@ encodeApplicationInner env fun hargs rargs =
                 in  
                   let fieldExpr = (Utils.projectFromExpression firstArg (Names.encodeFieldName env fname))
                   in (Flows.pure (withRest fieldExpr, rargs))
-              Core.EliminationUnion _ -> (Flows.pure (unsupportedExpression "inline match expressions are not yet supported", rargs))
+              Core.EliminationUnion v3 -> (Flows.bind (encodeUnionEliminationInline env v3 firstArg) (\inlineExpr -> Flows.pure (withRest inlineExpr, rargs)))
               Core.EliminationWrap _ ->  
                 let valueExpr = (Utils.projectFromExpression firstArg (Syntax.Name "value"))
                 in  
@@ -1709,6 +1709,50 @@ encodeApplicationInner env fun hargs rargs =
                       let remainingArgs = (Lists.drop consumeCount allArgs)
                       in (Logic.ifElse (Lists.null consumedArgs) (Flows.bind (encodeVariable env v1 []) (\expr -> Flows.pure (expr, rargs))) (Flows.pure (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env v1)) consumedArgs, remainingArgs)))) (Core.bindingType el)) (Lexical.lookupElement g v1))))
           _ -> defaultCase) (Rewriting.deannotateAndDetypeTerm fun))
+
+-- | Encode a union elimination as an inline conditional chain (isinstance-based ternary)
+encodeUnionEliminationInline :: (Helpers.PythonEnvironment -> Core.CaseStatement -> Syntax.Expression -> Compute.Flow Helpers.PyGraph Syntax.Expression)
+encodeUnionEliminationInline env cs pyArg =  
+  let tname = (Core.caseStatementTypeName cs)
+  in  
+    let mdefault = (Core.caseStatementDefault cs)
+    in  
+      let cases_ = (Core.caseStatementCases cs)
+      in (Flows.bind (inGraphContext (Schemas.requireUnionType tname)) (\rt ->  
+        let isEnum = (Schemas.isEnumRowType rt)
+        in  
+          let valueExpr = (Utils.projectFromExpression pyArg (Syntax.Name "value"))
+          in  
+            let isinstancePrimary = (Utils.pyNameToPyPrimary (Syntax.Name "isinstance"))
+            in (Flows.bind (Maybes.maybe (Flows.pure (unsupportedExpression "no matching case in inline union elimination")) (\dflt -> encodeTermInline env False dflt) mdefault) (\pyDefault ->  
+              let encodeBranch = (\field ->  
+                      let fname = (Core.fieldName field)
+                      in  
+                        let fterm = (Core.fieldTerm field)
+                        in  
+                          let isUnitVariant = (isVariantUnitType rt fname)
+                          in  
+                            let pyVariantName = (Names.variantName True env tname fname)
+                            in  
+                              let isinstanceCheck = (Utils.functionCall isinstancePrimary [
+                                      pyArg,
+                                      (Utils.pyNameToPyExpression pyVariantName)])
+                              in (Flows.bind (encodeTermInline env False fterm) (\pyBranch ->  
+                                let pyResult = (Logic.ifElse isEnum (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
+                                        pyArg]) (Logic.ifElse isUnitVariant (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
+                                        valueExpr]) (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
+                                        valueExpr])))
+                                in (Flows.pure (isinstanceCheck, pyResult)))))
+              in (Flows.bind (Flows.mapList encodeBranch cases_) (\encodedBranches ->  
+                let buildChain = (\elseExpr -> \branchPair ->  
+                        let checkExpr = (Pairs.first branchPair)
+                        in  
+                          let resultExpr = (Pairs.second branchPair)
+                          in (Syntax.ExpressionConditional (Syntax.Conditional {
+                            Syntax.conditionalBody = (Utils.pyExpressionToDisjunction resultExpr),
+                            Syntax.conditionalIf = (Utils.pyExpressionToDisjunction checkExpr),
+                            Syntax.conditionalElse = elseExpr})))
+                in (Flows.pure (Lists.foldl buildChain pyDefault (Lists.reverse encodedBranches)))))))))
 
 -- | Encode a term to a Python expression (inline form)
 encodeTermInline :: (Helpers.PythonEnvironment -> Bool -> Core.Term -> Compute.Flow Helpers.PyGraph Syntax.Expression)

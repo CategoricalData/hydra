@@ -6802,6 +6802,59 @@
               "domain": {"variable": "hydra.core.Term"}}},
           "variables": []}]},
     {
+      "name": "hydra.hoisting.isUnionEliminationApplication",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Check if a term is an application of a union elimination (case statement applied to an argument)"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "term"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "application",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "app"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {
+                                                        "record": {"field": "function", "typeName": "hydra.core.Application"}}}}}},
+                                              "function": {"variable": "hydra.rewriting.deannotateAndDetypeTerm"}}},
+                                          "function": {"variable": "hydra.hoisting.isUnionElimination"}}},
+                                      "domain": [{"variable": "hydra.core.Application"}],
+                                      "parameter": "app"}}}}],
+                            "default": [{"literal": {"boolean": false}}],
+                            "typeName": "hydra.core.Term"}}}}}},
+                "domain": [{"variable": "hydra.core.Term"}],
+                "parameter": "term"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"literal": {"boolean": {}}},
+              "domain": {"variable": "hydra.core.Term"}}},
+          "variables": []}]},
+    {
       "name": "hydra.hoisting.normalizePathForHoisting",
       "term": {
         "annotated": {
@@ -8570,7 +8623,7 @@
               "@key": "description",
               "@value": {
                 "literal": {
-                  "string": "Predicate for case statement hoisting. Returns True if term is a case statement AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through."}}}],
+                  "string": "Predicate for case statement hoisting. Returns True if term is a union elimination (bare case function) or a case statement application (union elimination applied to an argument) AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through."}}}],
           "body": {
             "function": {
               "lambda": {
@@ -8699,8 +8752,17 @@
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"variable": "term"},
-                                            "function": {"variable": "hydra.hoisting.isUnionElimination"}}},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "term"},
+                                                "function": {"variable": "hydra.hoisting.isUnionEliminationApplication"}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "term"},
+                                                    "function": {"variable": "hydra.hoisting.isUnionElimination"}}},
+                                                "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
                                         "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
                                     "function": {
                                       "typeApplication": {

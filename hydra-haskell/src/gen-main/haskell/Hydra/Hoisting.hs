@@ -505,6 +505,12 @@ isUnionElimination term = ((\x -> case x of
   Core.TermFunction v1 -> (isEliminationUnion v1)
   _ -> False) term)
 
+-- | Check if a term is an application of a union elimination (case statement applied to an argument)
+isUnionEliminationApplication :: (Core.Term -> Bool)
+isUnionEliminationApplication term = ((\x -> case x of
+  Core.TermApplication v1 -> (isUnionElimination (Rewriting.deannotateAndDetypeTerm (Core.applicationFunction v1)))
+  _ -> False) term)
+
 -- | Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...].
 normalizePathForHoisting :: ([Accessors.TermAccessor] -> [Accessors.TermAccessor])
 normalizePathForHoisting path =  
@@ -601,13 +607,13 @@ rewriteTermWithTypeContext f cx0 term0 =
 shouldHoistAll :: (t0 -> t1 -> Bool)
 shouldHoistAll _ _ = True
 
--- | Predicate for case statement hoisting. Returns True if term is a case statement AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through.
+-- | Predicate for case statement hoisting. Returns True if term is a union elimination (bare case function) or a case statement application (union elimination applied to an argument) AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through.
 shouldHoistCaseStatement :: (([Accessors.TermAccessor], Core.Term) -> Bool)
 shouldHoistCaseStatement pathAndTerm =  
   let path = (Pairs.first pathAndTerm)
   in  
     let term = (Pairs.second pathAndTerm)
-    in (Logic.ifElse (Logic.not (isUnionElimination term)) False ( 
+    in (Logic.ifElse (Logic.not (Logic.or (isUnionElimination term) (isUnionEliminationApplication term))) False ( 
       let finalState = (Lists.foldl (\st -> \acc -> updateHoistState acc st) (True, False) path)
       in (Logic.not (Pairs.first finalState))))
 

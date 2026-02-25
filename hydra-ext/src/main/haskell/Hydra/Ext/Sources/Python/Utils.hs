@@ -170,6 +170,7 @@ module_ = Module ns elements
       toBinding decodePyConjunctionToPyPrimary,
       toBinding decodePyExpressionToPyPrimary,
       toBinding pyExpressionToPyPrimary,
+      toBinding pyExpressionToDisjunction,
       -- Additional conversions
       toBinding pyPrimaryToPySlice,
       toBinding pyBitwiseOrToPyExpression,
@@ -659,6 +660,22 @@ pyExpressionToPyPrimary = def "pyExpressionToPyPrimary" $
       (lambda "prim" $ var "prim")
       (decodePyExpressionToPyPrimary @@ var "e")
 
+-- | Convert an Expression to a Disjunction.
+--   For ExpressionSimple(disj), extracts the disjunction.
+--   For other expressions (Conditional, Lambda), wraps in parentheses.
+pyExpressionToDisjunction :: TBinding (Py.Expression -> Py.Disjunction)
+pyExpressionToDisjunction = def "pyExpressionToDisjunction" $
+  doc "Convert an Expression to a Disjunction, wrapping in parens if needed" $
+  lambda "e" $
+    cases Py._Expression (var "e")
+      -- Default for non-simple expressions: wrap in parens to get a primary, then to disjunction
+      (Just $ PyDsl.disjunction $ list [
+        pyPrimaryToPyConjunction @@
+          (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
+            PyDsl.namedExpressionSimple $ var "e")]) [
+      -- Simple expressions already contain a disjunction
+      Py._Expression_simple>>: "disj" ~> var "disj"]
+
 -- | Convert a Primary to a Slice
 pyPrimaryToPySlice :: TBinding (Py.Primary -> Py.Slice)
 pyPrimaryToPySlice = def "pyPrimaryToPySlice" $
@@ -685,8 +702,9 @@ indentedBlock = def "indentedBlock" $
     "groups">: Lists.filter (lambda "g" $ Logic.not $ Lists.null $ var "g")
       (Lists.cons (var "commentGroup") (var "stmts"))] $
     Logic.ifElse (Lists.null $ var "groups")
-      (PyDsl.blockSimple $ list [
-        pyExpressionToPySimpleStatement @@ (pyAtomToPyExpression @@ PyDsl.atomEllipsis)])
+      (PyDsl.blockIndented $ list [list [
+        PyDsl.statementSimple $ list [
+          pyExpressionToPySimpleStatement @@ (pyAtomToPyExpression @@ PyDsl.atomEllipsis)]]])
       (PyDsl.blockIndented $ var "groups")
 
 -- | Build an or-expression from multiple primaries

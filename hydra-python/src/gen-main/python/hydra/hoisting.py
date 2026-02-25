@@ -577,6 +577,16 @@ def is_union_elimination(term: hydra.core.Term) -> bool:
         case _:
             return False
 
+def is_union_elimination_application(term: hydra.core.Term) -> bool:
+    r"""Check if a term is an application of a union elimination (case statement applied to an argument)."""
+    
+    match term:
+        case hydra.core.TermApplication(value=app):
+            return is_union_elimination(hydra.rewriting.deannotate_and_detype_term(app.function))
+        
+        case _:
+            return False
+
 def update_hoist_state(accessor: hydra.accessors.TermAccessor, state: tuple[bool, bool]):
     r"""Update hoisting state when traversing an accessor. State is (atTopLevel, usedAppLHS). Returns updated state."""
     
@@ -617,7 +627,7 @@ def update_hoist_state(accessor: hydra.accessors.TermAccessor, state: tuple[bool
     return hydra.lib.logic.if_else(hydra.lib.logic.not_(at_top()), (lambda : (False, used_app())), (lambda : _hoist_body_1(accessor)))
 
 def should_hoist_case_statement(path_and_term: tuple[frozenlist[hydra.accessors.TermAccessor], hydra.core.Term]) -> bool:
-    r"""Predicate for case statement hoisting. Returns True if term is a case statement AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through."""
+    r"""Predicate for case statement hoisting. Returns True if term is a union elimination (bare case function) or a case statement application (union elimination applied to an argument) AND not at top level. Top level = reachable through annotations, let body/binding, lambda bodies, or ONE app LHS. Once through an app LHS, lambda bodies no longer pass through."""
     
     @lru_cache(1)
     def path() -> frozenlist[hydra.accessors.TermAccessor]:
@@ -625,7 +635,7 @@ def should_hoist_case_statement(path_and_term: tuple[frozenlist[hydra.accessors.
     @lru_cache(1)
     def term() -> hydra.core.Term:
         return hydra.lib.pairs.second(path_and_term)
-    return hydra.lib.logic.if_else(hydra.lib.logic.not_(is_union_elimination(term())), (lambda : False), (lambda : (final_state := hydra.lib.lists.foldl((lambda st, acc: update_hoist_state(acc, st)), (True, False), path()), hydra.lib.logic.not_(hydra.lib.pairs.first(final_state)))[1]))
+    return hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.logic.or_(is_union_elimination(term()), is_union_elimination_application(term()))), (lambda : False), (lambda : (final_state := hydra.lib.lists.foldl((lambda st, acc: update_hoist_state(acc, st)), (True, False), path()), hydra.lib.logic.not_(hydra.lib.pairs.first(final_state)))[1]))
 
 def hoist_case_statements(v1: hydra.typing.TypeContext, v2: hydra.core.Term) -> hydra.core.Term:
     r"""Hoist case statements into local let bindings. This is useful for targets such as Python which only support case statements (match) at the top level. Case statements are hoisted only when they appear at non-top-level positions. Top level = root, or reachable through annotations, let body/binding, lambda bodies, or ONE application LHS. Once through an application LHS, lambda bodies no longer count as pass-through."""

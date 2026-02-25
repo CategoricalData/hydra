@@ -255,7 +255,7 @@ def construct_record_expression_to_expr(construct_record: hydra.ext.haskell.ast.
     @lru_cache(1)
     def body() -> hydra.ast.Expr:
         return hydra.serialization.comma_sep(hydra.serialization.half_block_style, hydra.lib.lists.map((lambda x1: from_update(x1)), updates()))
-    return hydra.serialization.space_sep(hydra.lib.lists.cons(name_to_expr(name()), (hydra.serialization.brackets(hydra.serialization.curly_braces(), hydra.serialization.half_block_style, body()),)))
+    return hydra.serialization.space_sep(hydra.lib.lists.cons(name_to_expr(name()), (hydra.serialization.brackets(hydra.serialization.curly_braces, hydra.serialization.half_block_style, body()),)))
 
 def expression_to_expr(expr: hydra.ext.haskell.ast.Expression) -> hydra.ast.Expr:
     r"""Convert a Haskell expression to an AST expression."""

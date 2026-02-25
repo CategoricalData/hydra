@@ -165,11 +165,25 @@ blockSimple = inject Py._Block Py._Block_simple
 -- Expression (union type)
 -- =============================================================================
 
+expressionConditional :: TTerm Py.Conditional -> TTerm Py.Expression
+expressionConditional = inject Py._Expression Py._Expression_conditional
+
 expressionLambda :: TTerm Py.Lambda -> TTerm Py.Expression
 expressionLambda = inject Py._Expression Py._Expression_lambda
 
 expressionSimple :: TTerm Py.Disjunction -> TTerm Py.Expression
 expressionSimple = inject Py._Expression Py._Expression_simple
+
+-- =============================================================================
+-- Conditional (record type)
+-- =============================================================================
+
+-- | Construct a Conditional expression: body if condition else elseExpr
+conditional :: TTerm Py.Disjunction -> TTerm Py.Disjunction -> TTerm Py.Expression -> TTerm Py.Conditional
+conditional body cond elseExpr = record Py._Conditional [
+  Py._Conditional_body>>: body,
+  Py._Conditional_if>>: cond,
+  Py._Conditional_else>>: elseExpr]
 
 -- =============================================================================
 -- NamedExpression (union type)
