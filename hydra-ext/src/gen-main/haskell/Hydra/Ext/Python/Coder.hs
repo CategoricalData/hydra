@@ -1259,7 +1259,7 @@ withTypeLambda = (Schemas.withTypeLambdaContext pythonEnvironmentGetTypeContext 
 
 -- | Execute a computation with let context (adds let bindings to TypeContext)
 withLet :: (Helpers.PythonEnvironment -> Core.Let -> (Helpers.PythonEnvironment -> t0) -> t0)
-withLet = (Schemas.withLetContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext CoderUtils.bindingMetadata)
+withLet = (Schemas.withLetContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext bindingMetadataForPython)
 
 -- | Execute a computation with inline let context (for walrus operators)
 withLetInline :: (Helpers.PythonEnvironment -> Core.Let -> (Helpers.PythonEnvironment -> t0) -> t0)
@@ -1327,9 +1327,44 @@ initialEnvironment namespaces tcontext = Helpers.PythonEnvironment {
 targetPythonVersion :: Helpers.PythonVersion
 targetPythonVersion = Utils.targetPythonVersion
 
+-- | Check if a variable reference indicates complexity, excluding non-nullary functions
+isComplexVariableForPython :: (Typing.TypeContext -> Core.Name -> Bool)
+isComplexVariableForPython tc name =  
+  let metaLookup = (Maps.lookup name (Typing.typeContextMetadata tc))
+  in (Logic.ifElse (Maybes.isJust metaLookup) (Maybes.maybe True (\typ -> Equality.equal (Arity.typeArity typ) 0) (Maps.lookup name (Typing.typeContextTypes tc))) (Logic.ifElse (Sets.member name (Typing.typeContextLambdaVariables tc)) True ( 
+    let typeLookup = (Maps.lookup name (Typing.typeContextTypes tc))
+    in (Logic.not (Maybes.isJust typeLookup)))))
+
+-- | Check if a term needs lazy evaluation, excluding non-nullary function references
+isComplexTermForPython :: (Typing.TypeContext -> Core.Term -> Bool)
+isComplexTermForPython tc t = ((\x -> case x of
+  Core.TermLet _ -> True
+  Core.TermTypeApplication _ -> True
+  Core.TermTypeLambda _ -> True
+  Core.TermVariable v1 -> (isComplexVariableForPython tc v1)
+  _ -> (Lists.foldl (\b -> \sub -> Logic.or b (isComplexTermForPython tc sub)) False (Rewriting.subterms t))) t)
+
+-- | Check if a binding needs to be treated as a function (Python-specific)
+isComplexBindingForPython :: (Typing.TypeContext -> Core.Binding -> Bool)
+isComplexBindingForPython tc b =  
+  let term = (Core.bindingTerm b)
+  in  
+    let mts = (Core.bindingType b)
+    in (Maybes.maybe (isComplexTermForPython tc term) (\ts ->  
+      let isPolymorphic = (Logic.not (Lists.null (Core.typeSchemeVariables ts)))
+      in  
+        let isNonNullary = (Equality.gt (Arity.typeArity (Core.typeSchemeType ts)) 0)
+        in  
+          let isComplex = (isComplexTermForPython tc term)
+          in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)) mts)
+
+-- | Produces metadata for a binding if it is complex (Python-specific)
+bindingMetadataForPython :: (Typing.TypeContext -> Core.Binding -> Maybe Core.Term)
+bindingMetadataForPython tc b = (Logic.ifElse (isComplexBindingForPython tc b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing)
+
 -- | Analyze a function term with Python-specific TypeContext management
 analyzePythonFunction :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
-analyzePythonFunction = (CoderUtils.analyzeFunctionTerm pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
+analyzePythonFunction = (CoderUtils.analyzeFunctionTermWith bindingMetadataForPython pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
 
 -- | Analyze a function term without recording binding metadata (for inline lambdas)
 analyzePythonFunctionInline :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
@@ -1485,21 +1520,27 @@ encodeFunction env f = ((\x -> case x of
                 let pparams = (Lists.map (Names.encodeName False Util.CaseConventionLowerSnake innerEnv) params)
                 in  
                   let isBareCase = (Maybes.isJust (extractCaseElimination innerBody))
-                  in (Logic.ifElse (Lists.null bindings) (Logic.ifElse isBareCase (Flows.pure (makeCurriedLambda pparams pbody)) (Flows.pure (makeUncurriedLambda pparams pbody))) (Flows.bind (Flows.mapList (encodeBindingAsAssignment False innerEnv) bindings) (\pbindingExprs ->  
-                    let pbindingStarExprs = (Lists.map (\ne -> Syntax.StarNamedExpressionSimple ne) pbindingExprs)
+                  in  
+                    let isCaseApplication = ((\x -> case x of
+                            Core.TermApplication v2 -> (Maybes.isJust (extractCaseElimination (Core.applicationFunction v2)))
+                            _ -> False) (Rewriting.deannotateAndDetypeTerm innerBody))
                     in  
-                      let pbodyStarExpr = (Utils.pyExpressionToPyStarNamedExpression pbody)
-                      in  
-                        let tupleElements = (Lists.concat2 pbindingStarExprs [
-                                pbodyStarExpr])
+                      let needsCurrying = (Logic.or isBareCase isCaseApplication)
+                      in (Logic.ifElse (Lists.null bindings) (Logic.ifElse needsCurrying (Flows.pure (makeCurriedLambda pparams pbody)) (Flows.pure (makeUncurriedLambda pparams pbody))) (Flows.bind (Flows.mapList (encodeBindingAsAssignment False innerEnv) bindings) (\pbindingExprs ->  
+                        let pbindingStarExprs = (Lists.map (\ne -> Syntax.StarNamedExpressionSimple ne) pbindingExprs)
                         in  
-                          let tupleExpr = (Utils.pyAtomToPyExpression (Syntax.AtomTuple (Syntax.Tuple tupleElements)))
+                          let pbodyStarExpr = (Utils.pyExpressionToPyStarNamedExpression pbody)
                           in  
-                            let indexValue = (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberInteger (Literals.int32ToBigint (Lists.length bindings)))))
+                            let tupleElements = (Lists.concat2 pbindingStarExprs [
+                                    pbodyStarExpr])
                             in  
-                              let indexedExpr = (Utils.primaryWithExpressionSlices (Utils.pyExpressionToPyPrimary tupleExpr) [
-                                      indexValue])
-                              in (Logic.ifElse isBareCase (Flows.pure (makeCurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr))) (Flows.pure (makeUncurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr)))))))))))
+                              let tupleExpr = (Utils.pyAtomToPyExpression (Syntax.AtomTuple (Syntax.Tuple tupleElements)))
+                              in  
+                                let indexValue = (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberInteger (Literals.int32ToBigint (Lists.length bindings)))))
+                                in  
+                                  let indexedExpr = (Utils.primaryWithExpressionSlices (Utils.pyExpressionToPyPrimary tupleExpr) [
+                                          indexValue])
+                                  in (Logic.ifElse needsCurrying (Flows.pure (makeCurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr))) (Flows.pure (makeUncurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr)))))))))))
   Core.FunctionPrimitive v1 -> (encodeVariable env v1 [])
   Core.FunctionElimination v1 -> ((\x -> case x of
     Core.EliminationRecord v2 ->  
@@ -1574,7 +1615,7 @@ encodeTermAssignment env name term ts comment = (Flows.bind (analyzePythonFuncti
                           Core.bindingTerm = term,
                           Core.bindingType = (Just ts)}
                   in  
-                    let isComplex = (CoderUtils.isComplexBinding tc binding)
+                    let isComplex = (isComplexBindingForPython tc binding)
                     in (Logic.ifElse isComplex (withBindings bindings (Flows.bind (Flows.mapList (encodeBindingAs env2) bindings) (\bindingStmts -> encodeFunctionDefinition env2 name tparams params body doms mcod comment bindingStmts))) (Flows.bind (encodeTermInline env2 False body) (\bodyExpr ->  
                       let pyName = (Names.encodeName False Util.CaseConventionLowerSnake env2 name)
                       in (Flows.pure (Utils.annotatedStatement comment (Utils.assignmentStatement pyName bodyExpr))))))))
@@ -1631,7 +1672,7 @@ encodeVariable env name args = (Flows.bind Monads.getState (\pyg ->
                             let allArgs = (Lists.concat2 args remainingExprs)
                             in  
                               let fullCall = (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env name)) allArgs)
-                              in (Flows.pure (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) (Flows.pure asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Flows.fail (Strings.cat2 "Unknown variable: " (Core.unName name))) (\_ -> Flows.pure asFunctionCall) (Maps.lookup name tcMetadata)) (\el -> Maybes.maybe (Flows.pure asVariable) (\ts -> Logic.ifElse (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (CoderUtils.isComplexBinding tc el)) (Flows.pure asFunctionCall) ( 
+                              in (Flows.pure (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) (Flows.pure asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Flows.fail (Strings.cat2 "Unknown variable: " (Core.unName name))) (\_ -> Flows.pure asFunctionCall) (Maps.lookup name tcMetadata)) (\el -> Maybes.maybe (Flows.pure asVariable) (\ts -> Logic.ifElse (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (isComplexBindingForPython tc el)) (Flows.pure asFunctionCall) ( 
                     let asFunctionRef = (Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable)
                     in (Flows.pure asFunctionRef))) (Core.bindingType el)) (Lexical.lookupElement g name)) (\prim ->  
                     let primArity = (Arity.primitiveArity prim)
@@ -1645,7 +1686,7 @@ encodeVariable env name args = (Flows.bind Monads.getState (\pyg ->
                     let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
                     in (Flows.pure asFunctionRef)) (\el -> Maybes.maybe (Logic.ifElse (Equality.equal (Arity.typeArity typ) 0) (Flows.pure asFunctionCall) ( 
                     let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
-                    in (Flows.pure asFunctionRef))) (\ts -> Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexBinding tc el)) (Flows.pure asFunctionCall) ( 
+                    in (Flows.pure asFunctionRef))) (\ts -> Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (isComplexBindingForPython tc el)) (Flows.pure asFunctionCall) ( 
                     let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
                     in (Flows.pure asFunctionRef))) (Core.bindingType el)) (Lexical.lookupElement g name)) (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexVariable tc name)) (Flows.pure asFunctionCall) ( 
                     let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)

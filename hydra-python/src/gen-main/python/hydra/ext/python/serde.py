@@ -1300,10 +1300,8 @@ def encode_lambda_star_etc(lse: hydra.ext.python.syntax.LambdaStarEtc) -> hydra.
 def encode_module(mod: hydra.ext.python.syntax.Module) -> hydra.ast.Expr:
     r"""Serialize a Python module to an AST expression."""
     
-    @lru_cache(1)
-    def warning() -> hydra.ast.Expr:
-        return hydra.serialization.cst(to_python_comments(hydra.constants.warning_auto_generated_file))
+    warning = hydra.serialization.cst(to_python_comments(hydra.constants.warning_auto_generated_file))
     @lru_cache(1)
     def groups() -> frozenlist[hydra.ast.Expr]:
         return hydra.lib.lists.map((lambda group: hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: encode_statement(x1)), group))), mod.value)
-    return hydra.serialization.double_newline_sep(hydra.lib.lists.cons(warning(), groups()))
+    return hydra.serialization.double_newline_sep(hydra.lib.lists.cons(warning, groups()))

@@ -629,9 +629,7 @@ def module_to_expr(module: hydra.ext.haskell.ast.Module) -> hydra.ast.Expr:
     @lru_cache(1)
     def decls() -> frozenlist[hydra.ext.haskell.ast.DeclarationWithComments]:
         return module.declarations
-    @lru_cache(1)
-    def warning() -> frozenlist[hydra.ast.Expr]:
-        return (hydra.serialization.cst(to_simple_comments(hydra.constants.warning_auto_generated_file)),)
+    warning = (hydra.serialization.cst(to_simple_comments(hydra.constants.warning_auto_generated_file)),)
     @lru_cache(1)
     def header_line() -> frozenlist[hydra.ast.Expr]:
         return hydra.lib.maybes.maybe((), (lambda h: (module_head_to_expr(h),)), mh())
@@ -641,4 +639,4 @@ def module_to_expr(module: hydra.ext.haskell.ast.Module) -> hydra.ast.Expr:
     @lru_cache(1)
     def import_lines() -> frozenlist[hydra.ast.Expr]:
         return hydra.lib.logic.if_else(hydra.lib.lists.null(imports()), (lambda : ()), (lambda : (hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: import_to_expr(x1)), imports())),)))
-    return hydra.serialization.double_newline_sep(hydra.lib.lists.concat((warning(), header_line(), import_lines(), decl_lines())))
+    return hydra.serialization.double_newline_sep(hydra.lib.lists.concat((warning, header_line(), import_lines(), decl_lines())))
