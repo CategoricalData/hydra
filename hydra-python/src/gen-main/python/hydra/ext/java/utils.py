@@ -175,9 +175,7 @@ def java_boolean_expression(b: bool) -> hydra.ext.java.syntax.Expression:
 def java_primitive_type_to_java_type(pt: hydra.ext.java.syntax.PrimitiveType) -> hydra.ext.java.syntax.Type:
     return cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypePrimitive(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations(pt, ())))
 
-@lru_cache(1)
-def java_boolean_type() -> hydra.ext.java.syntax.Type:
-    return java_primitive_type_to_java_type(cast(hydra.ext.java.syntax.PrimitiveType, hydra.ext.java.syntax.PrimitiveTypeBoolean()))
+java_boolean_type = java_primitive_type_to_java_type(cast(hydra.ext.java.syntax.PrimitiveType, hydra.ext.java.syntax.PrimitiveTypeBoolean()))
 
 @lru_cache(1)
 def java_byte_primitive_type() -> hydra.ext.java.syntax.PrimitiveTypeWithAnnotations:
@@ -317,9 +315,7 @@ def java_int(i: int) -> hydra.ext.java.syntax.Literal:
 def java_int_expression(i: int) -> hydra.ext.java.syntax.Expression:
     return java_primary_to_java_expression(java_literal_to_java_primary(java_int(i)))
 
-@lru_cache(1)
-def java_int_type() -> hydra.ext.java.syntax.Type:
-    return java_primitive_type_to_java_type(cast(hydra.ext.java.syntax.PrimitiveType, hydra.ext.java.syntax.PrimitiveTypeNumeric(cast(hydra.ext.java.syntax.NumericType, hydra.ext.java.syntax.NumericTypeIntegral(hydra.ext.java.syntax.IntegralType.INT)))))
+java_int_type = java_primitive_type_to_java_type(cast(hydra.ext.java.syntax.PrimitiveType, hydra.ext.java.syntax.PrimitiveTypeNumeric(cast(hydra.ext.java.syntax.NumericType, hydra.ext.java.syntax.NumericTypeIntegral(hydra.ext.java.syntax.IntegralType.INT)))))
 
 def java_interface_declaration_to_java_class_body_declaration(nid: hydra.ext.java.syntax.NormalInterfaceDeclaration) -> hydra.ext.java.syntax.ClassBodyDeclaration:
     return cast(hydra.ext.java.syntax.ClassBodyDeclaration, hydra.ext.java.syntax.ClassBodyDeclarationClassMember(cast(hydra.ext.java.syntax.ClassMemberDeclaration, hydra.ext.java.syntax.ClassMemberDeclarationInterface(cast(hydra.ext.java.syntax.InterfaceDeclaration, hydra.ext.java.syntax.InterfaceDeclarationNormalInterface(nid))))))
@@ -561,53 +557,41 @@ def name_to_java_name(aliases: hydra.ext.java.helpers.Aliases, name: hydra.core.
 def name_to_java_reference_type(aliases: hydra.ext.java.helpers.Aliases, qualify: bool, args: frozenlist[hydra.ext.java.syntax.TypeArgument], name: hydra.core.Name, mlocal: Maybe[str]) -> hydra.ext.java.syntax.ReferenceType:
     return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(name_to_java_class_type(aliases, qualify, args, name, mlocal)))))
 
-@lru_cache(1)
-def override_annotation() -> hydra.ext.java.syntax.Annotation:
-    return cast(hydra.ext.java.syntax.Annotation, hydra.ext.java.syntax.AnnotationMarker(hydra.ext.java.syntax.MarkerAnnotation(java_type_name(hydra.ext.java.syntax.Identifier("Override")))))
+override_annotation = cast(hydra.ext.java.syntax.Annotation, hydra.ext.java.syntax.AnnotationMarker(hydra.ext.java.syntax.MarkerAnnotation(java_type_name(hydra.ext.java.syntax.Identifier("Override")))))
 
 def reference_type_to_result(rt: hydra.ext.java.syntax.ReferenceType) -> hydra.ext.java.syntax.Result:
     return java_type_to_java_result(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(rt)))
 
-@lru_cache(1)
-def suppress_warnings_unchecked_annotation() -> hydra.ext.java.syntax.Annotation:
-    return cast(hydra.ext.java.syntax.Annotation, hydra.ext.java.syntax.AnnotationSingleElement(hydra.ext.java.syntax.SingleElementAnnotation(java_type_name(hydra.ext.java.syntax.Identifier("SuppressWarnings")), Just(cast(hydra.ext.java.syntax.ElementValue, hydra.ext.java.syntax.ElementValueConditionalExpression(cast(hydra.ext.java.syntax.ConditionalExpression, hydra.ext.java.syntax.ConditionalExpressionSimple(hydra.ext.java.syntax.ConditionalOrExpression((hydra.ext.java.syntax.ConditionalAndExpression((java_postfix_expression_to_java_inclusive_or_expression(cast(hydra.ext.java.syntax.PostfixExpression, hydra.ext.java.syntax.PostfixExpressionPrimary(java_literal_to_java_primary(java_string("unchecked"))))),)),))))))))))
+suppress_warnings_unchecked_annotation = cast(hydra.ext.java.syntax.Annotation, hydra.ext.java.syntax.AnnotationSingleElement(hydra.ext.java.syntax.SingleElementAnnotation(java_type_name(hydra.ext.java.syntax.Identifier("SuppressWarnings")), Just(cast(hydra.ext.java.syntax.ElementValue, hydra.ext.java.syntax.ElementValueConditionalExpression(cast(hydra.ext.java.syntax.ConditionalExpression, hydra.ext.java.syntax.ConditionalExpressionSimple(hydra.ext.java.syntax.ConditionalOrExpression((hydra.ext.java.syntax.ConditionalAndExpression((java_postfix_expression_to_java_inclusive_or_expression(cast(hydra.ext.java.syntax.PostfixExpression, hydra.ext.java.syntax.PostfixExpressionPrimary(java_literal_to_java_primary(java_string("unchecked"))))),)),))))))))))
 
 def type_parameter_to_reference_type(tp: hydra.ext.java.syntax.TypeParameter) -> hydra.ext.java.syntax.ReferenceType:
     return java_type_variable(tp.identifier.value.value)
 
-@lru_cache(1)
-def visitor_type_variable() -> hydra.ext.java.syntax.ReferenceType:
-    return java_type_variable("r")
+visitor_type_variable = java_type_variable("r")
 
 def to_accept_method(abstract: bool, vtparams: frozenlist[hydra.ext.java.syntax.TypeParameter]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
     @lru_cache(1)
     def mods() -> frozenlist[hydra.ext.java.syntax.MethodModifier]:
         return hydra.lib.logic.if_else(abstract, (lambda : (cast(hydra.ext.java.syntax.MethodModifier, hydra.ext.java.syntax.MethodModifierPublic()), cast(hydra.ext.java.syntax.MethodModifier, hydra.ext.java.syntax.MethodModifierAbstract()))), (lambda : (cast(hydra.ext.java.syntax.MethodModifier, hydra.ext.java.syntax.MethodModifierPublic()),)))
-    @lru_cache(1)
-    def tparams() -> frozenlist[hydra.ext.java.syntax.TypeParameter]:
-        return (java_type_parameter(hydra.ext.java.names.visitor_return_parameter),)
+    tparams = (java_type_parameter(hydra.ext.java.names.visitor_return_parameter),)
     @lru_cache(1)
     def anns() -> frozenlist[hydra.ext.java.syntax.Annotation]:
-        return hydra.lib.logic.if_else(abstract, (lambda : ()), (lambda : (override_annotation(),)))
+        return hydra.lib.logic.if_else(abstract, (lambda : ()), (lambda : (override_annotation,)))
     @lru_cache(1)
     def type_args() -> frozenlist[hydra.ext.java.syntax.TypeArgument]:
         return hydra.lib.lists.map((lambda tp: cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(type_parameter_to_reference_type(tp)))), vtparams)
     @lru_cache(1)
     def ref() -> hydra.ext.java.syntax.Type:
-        return java_class_type_to_java_type(hydra.ext.java.syntax.ClassType((), cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone()), java_type_identifier(hydra.ext.java.names.visitor_name), hydra.lib.lists.concat2(type_args(), (cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(visitor_type_variable())),))))
+        return java_class_type_to_java_type(hydra.ext.java.syntax.ClassType((), cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone()), java_type_identifier(hydra.ext.java.names.visitor_name), hydra.lib.lists.concat2(type_args(), (cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(visitor_type_variable)),))))
     @lru_cache(1)
     def param() -> hydra.ext.java.syntax.FormalParameter:
         return java_type_to_java_formal_parameter(ref(), hydra.core.Name("visitor"))
-    @lru_cache(1)
-    def result() -> hydra.ext.java.syntax.Result:
-        return java_type_to_java_result(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(visitor_type_variable())))
-    @lru_cache(1)
-    def return_expr() -> hydra.ext.java.syntax.Expression:
-        return java_method_invocation_to_java_expression(method_invocation_static(hydra.ext.java.syntax.Identifier("visitor"), hydra.ext.java.syntax.Identifier(hydra.ext.java.names.visit_method_name), (java_this,)))
+    result = java_type_to_java_result(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(visitor_type_variable)))
+    return_expr = java_method_invocation_to_java_expression(method_invocation_static(hydra.ext.java.syntax.Identifier("visitor"), hydra.ext.java.syntax.Identifier(hydra.ext.java.names.visit_method_name), (java_this,)))
     @lru_cache(1)
     def body() -> Maybe[frozenlist[hydra.ext.java.syntax.BlockStatement]]:
-        return hydra.lib.logic.if_else(abstract, (lambda : Nothing()), (lambda : Just((cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(java_return_statement(Just(return_expr())))),))))
-    return method_declaration(mods(), tparams(), anns(), hydra.ext.java.names.accept_method_name, (param(),), result(), body())
+        return hydra.lib.logic.if_else(abstract, (lambda : Nothing()), (lambda : Just((cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(java_return_statement(Just(return_expr)))),))))
+    return method_declaration(mods(), tparams, anns(), hydra.ext.java.names.accept_method_name, (param(),), result, body())
 
 def to_assign_stmt(fname: hydra.core.Name) -> hydra.ext.java.syntax.Statement:
     @lru_cache(1)

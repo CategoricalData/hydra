@@ -1799,9 +1799,7 @@ def write_compilation_unit(u: hydra.ext.java.syntax.CompilationUnit) -> hydra.as
             @lru_cache(1)
             def types() -> frozenlist[hydra.ext.java.syntax.TypeDeclarationWithComments]:
                 return ocu.types
-            @lru_cache(1)
-            def warning() -> Maybe[hydra.ast.Expr]:
-                return Just(single_line_comment(hydra.constants.warning_auto_generated_file))
+            warning = Just(single_line_comment(hydra.constants.warning_auto_generated_file))
             @lru_cache(1)
             def pkg_sec() -> Maybe[hydra.ast.Expr]:
                 return hydra.lib.maybes.map((lambda x1: write_package_declaration(x1)), mpkg())
@@ -1811,7 +1809,7 @@ def write_compilation_unit(u: hydra.ext.java.syntax.CompilationUnit) -> hydra.as
             @lru_cache(1)
             def types_sec() -> Maybe[hydra.ast.Expr]:
                 return hydra.lib.logic.if_else(hydra.lib.lists.null(types()), (lambda : Nothing()), (lambda : Just(hydra.serialization.double_newline_sep(hydra.lib.lists.map((lambda x1: write_type_declaration_with_comments(x1)), types())))))
-            return hydra.serialization.double_newline_sep(hydra.lib.maybes.cat((warning(), pkg_sec(), imports_sec(), types_sec())))
+            return hydra.serialization.double_newline_sep(hydra.lib.maybes.cat((warning, pkg_sec(), imports_sec(), types_sec())))
         
         case _:
             raise TypeError("Unsupported CompilationUnit")
