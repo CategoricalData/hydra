@@ -31,10 +31,8 @@ def encode_lambda_param_no_default(p: hydra.ext.python.syntax.LambdaParamNoDefau
 def encode_lambda_parameters(lp: hydra.ext.python.syntax.LambdaParameters) -> hydra.ast.Expr:
     r"""Serialize lambda parameters."""
     
-    @lru_cache(1)
-    def nodef() -> frozenlist[hydra.ext.python.syntax.LambdaParamNoDefault]:
-        return lp.param_no_default
-    return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_lambda_param_no_default(x1)), nodef()))
+    nodef = lp.param_no_default
+    return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_lambda_param_no_default(x1)), nodef))
 
 def encode_number(num: hydra.ext.python.syntax.Number) -> hydra.ast.Expr:
     r"""Serialize a Python number literal."""
@@ -80,21 +78,17 @@ def escape_python_string(double_quoted: bool, s: str) -> str:
 def encode_string(s: hydra.ext.python.syntax.String) -> hydra.ast.Expr:
     r"""Serialize a Python string literal."""
     
-    @lru_cache(1)
-    def content() -> str:
-        return s.value
-    @lru_cache(1)
-    def style() -> hydra.ext.python.syntax.QuoteStyle:
-        return s.quote_style
-    match style():
+    content = s.value
+    style = s.quote_style
+    match style:
         case hydra.ext.python.syntax.QuoteStyle.SINGLE:
-            return hydra.serialization.cst(escape_python_string(False, content()))
+            return hydra.serialization.cst(escape_python_string(False, content))
         
         case hydra.ext.python.syntax.QuoteStyle.DOUBLE:
-            return hydra.serialization.cst(escape_python_string(True, content()))
+            return hydra.serialization.cst(escape_python_string(True, content))
         
         case hydra.ext.python.syntax.QuoteStyle.TRIPLE:
-            return hydra.serialization.no_sep((hydra.serialization.cst("r\"\"\""), hydra.serialization.cst(content()), hydra.serialization.cst("\"\"\"")))
+            return hydra.serialization.no_sep((hydra.serialization.cst("r\"\"\""), hydra.serialization.cst(content), hydra.serialization.cst("\"\"\"")))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -102,27 +96,17 @@ def encode_string(s: hydra.ext.python.syntax.String) -> hydra.ast.Expr:
 def encode_args(args: hydra.ext.python.syntax.Args) -> hydra.ast.Expr:
     r"""Serialize function arguments."""
     
-    @lru_cache(1)
-    def pos() -> frozenlist[hydra.ext.python.syntax.PosArg]:
-        return args.positional
-    @lru_cache(1)
-    def ks() -> frozenlist[hydra.ext.python.syntax.KwargOrStarred]:
-        return args.kwarg_or_starred
-    @lru_cache(1)
-    def kss() -> frozenlist[hydra.ext.python.syntax.KwargOrDoubleStarred]:
-        return args.kwarg_or_double_starred
-    return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.concat((hydra.lib.lists.map((lambda x1: encode_pos_arg(x1)), pos()), hydra.lib.lists.map((lambda x1: encode_kwarg_or_starred(x1)), ks()), hydra.lib.lists.map((lambda x1: encode_kwarg_or_double_starred(x1)), kss()))))
+    pos = args.positional
+    ks = args.kwarg_or_starred
+    kss = args.kwarg_or_double_starred
+    return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.concat((hydra.lib.lists.map((lambda x1: encode_pos_arg(x1)), pos), hydra.lib.lists.map((lambda x1: encode_kwarg_or_starred(x1)), ks), hydra.lib.lists.map((lambda x1: encode_kwarg_or_double_starred(x1)), kss))))
 
 def encode_assignment_expression(ae: hydra.ext.python.syntax.AssignmentExpression) -> hydra.ast.Expr:
     r"""Serialize an assignment expression (walrus operator)."""
     
-    @lru_cache(1)
-    def name() -> hydra.ext.python.syntax.Name:
-        return ae.name
-    @lru_cache(1)
-    def expr() -> hydra.ext.python.syntax.Expression:
-        return ae.expression
-    return hydra.serialization.space_sep((encode_name(name()), hydra.serialization.cst(":="), encode_expression(expr())))
+    name = ae.name
+    expr = ae.expression
+    return hydra.serialization.space_sep((encode_name(name), hydra.serialization.cst(":="), encode_expression(expr)))
 
 def encode_atom(atom: hydra.ext.python.syntax.Atom) -> hydra.ast.Expr:
     r"""Serialize a Python atom (literal or basic expression)."""
@@ -182,46 +166,30 @@ def encode_atom(atom: hydra.ext.python.syntax.Atom) -> hydra.ast.Expr:
 def encode_await_primary(ap: hydra.ext.python.syntax.AwaitPrimary) -> hydra.ast.Expr:
     r"""Serialize an await primary expression."""
     
-    @lru_cache(1)
-    def await_() -> bool:
-        return ap.await_
-    @lru_cache(1)
-    def primary() -> hydra.ext.python.syntax.Primary:
-        return ap.primary
-    return hydra.lib.logic.if_else(await_(), (lambda : hydra.serialization.space_sep((hydra.serialization.cst("await"), encode_primary(primary())))), (lambda : encode_primary(primary())))
+    await_ = ap.await_
+    primary = ap.primary
+    return hydra.lib.logic.if_else(await_, (lambda : hydra.serialization.space_sep((hydra.serialization.cst("await"), encode_primary(primary)))), (lambda : encode_primary(primary)))
 
 def encode_bitwise_and(band: hydra.ext.python.syntax.BitwiseAnd) -> hydra.ast.Expr:
     r"""Serialize a bitwise AND expression."""
     
-    @lru_cache(1)
-    def lhs() -> Maybe[hydra.ext.python.syntax.BitwiseAnd]:
-        return band.lhs
-    @lru_cache(1)
-    def rhs() -> hydra.ext.python.syntax.ShiftExpression:
-        return band.rhs
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda l: hydra.serialization.space_sep((encode_bitwise_and(l), hydra.serialization.cst("&")))), lhs()), Just(encode_shift_expression(rhs())))))
+    lhs = band.lhs
+    rhs = band.rhs
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda l: hydra.serialization.space_sep((encode_bitwise_and(l), hydra.serialization.cst("&")))), lhs), Just(encode_shift_expression(rhs)))))
 
 def encode_bitwise_or(bor: hydra.ext.python.syntax.BitwiseOr) -> hydra.ast.Expr:
     r"""Serialize a bitwise OR expression."""
     
-    @lru_cache(1)
-    def lhs() -> Maybe[hydra.ext.python.syntax.BitwiseOr]:
-        return bor.lhs
-    @lru_cache(1)
-    def rhs() -> hydra.ext.python.syntax.BitwiseXor:
-        return bor.rhs
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda l: hydra.serialization.space_sep((encode_bitwise_or(l), hydra.serialization.cst("|")))), lhs()), Just(encode_bitwise_xor(rhs())))))
+    lhs = bor.lhs
+    rhs = bor.rhs
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda l: hydra.serialization.space_sep((encode_bitwise_or(l), hydra.serialization.cst("|")))), lhs), Just(encode_bitwise_xor(rhs)))))
 
 def encode_bitwise_xor(bxor: hydra.ext.python.syntax.BitwiseXor) -> hydra.ast.Expr:
     r"""Serialize a bitwise XOR expression."""
     
-    @lru_cache(1)
-    def lhs() -> Maybe[hydra.ext.python.syntax.BitwiseXor]:
-        return bxor.lhs
-    @lru_cache(1)
-    def rhs() -> hydra.ext.python.syntax.BitwiseAnd:
-        return bxor.rhs
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda l: hydra.serialization.space_sep((encode_bitwise_xor(l), hydra.serialization.cst("^")))), lhs()), Just(encode_bitwise_and(rhs())))))
+    lhs = bxor.lhs
+    rhs = bxor.rhs
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda l: hydra.serialization.space_sep((encode_bitwise_xor(l), hydra.serialization.cst("^")))), lhs), Just(encode_bitwise_and(rhs)))))
 
 def encode_comparison(cmp: hydra.ext.python.syntax.Comparison) -> hydra.ast.Expr:
     r"""Serialize a comparison expression."""
@@ -231,16 +199,10 @@ def encode_comparison(cmp: hydra.ext.python.syntax.Comparison) -> hydra.ast.Expr
 def encode_conditional(c: hydra.ext.python.syntax.Conditional) -> hydra.ast.Expr:
     r"""Serialize a conditional expression (ternary)."""
     
-    @lru_cache(1)
-    def body() -> hydra.ext.python.syntax.Disjunction:
-        return c.body
-    @lru_cache(1)
-    def cond() -> hydra.ext.python.syntax.Disjunction:
-        return c.if_
-    @lru_cache(1)
-    def else_expr() -> hydra.ext.python.syntax.Expression:
-        return c.else_
-    return hydra.serialization.space_sep((encode_disjunction(body()), hydra.serialization.cst("if"), encode_disjunction(cond()), hydra.serialization.cst("else"), encode_expression(else_expr())))
+    body = c.body
+    cond = c.if_
+    else_expr = c.else_
+    return hydra.serialization.space_sep((encode_disjunction(body), hydra.serialization.cst("if"), encode_disjunction(cond), hydra.serialization.cst("else"), encode_expression(else_expr)))
 
 def encode_conjunction(c: hydra.ext.python.syntax.Conjunction) -> hydra.ast.Expr:
     r"""Serialize a conjunction (and expression)."""
@@ -334,24 +296,16 @@ def encode_inversion(i: hydra.ext.python.syntax.Inversion) -> hydra.ast.Expr:
 def encode_kvpair(kv: hydra.ext.python.syntax.Kvpair) -> hydra.ast.Expr:
     r"""Serialize a key-value pair."""
     
-    @lru_cache(1)
-    def k() -> hydra.ext.python.syntax.Expression:
-        return kv.key
-    @lru_cache(1)
-    def v() -> hydra.ext.python.syntax.Expression:
-        return kv.value
-    return hydra.serialization.space_sep((hydra.serialization.no_sep((encode_expression(k()), hydra.serialization.cst(":"))), encode_expression(v())))
+    k = kv.key
+    v = kv.value
+    return hydra.serialization.space_sep((hydra.serialization.no_sep((encode_expression(k), hydra.serialization.cst(":"))), encode_expression(v)))
 
 def encode_kwarg(k: hydra.ext.python.syntax.Kwarg) -> hydra.ast.Expr:
     r"""Serialize a keyword argument."""
     
-    @lru_cache(1)
-    def name() -> hydra.ext.python.syntax.Name:
-        return k.name
-    @lru_cache(1)
-    def expr() -> hydra.ext.python.syntax.Expression:
-        return k.value
-    return hydra.serialization.no_sep((encode_name(name()), hydra.serialization.cst("="), encode_expression(expr())))
+    name = k.name
+    expr = k.value
+    return hydra.serialization.no_sep((encode_name(name), hydra.serialization.cst("="), encode_expression(expr)))
 
 def encode_kwarg_or_double_starred(kds: hydra.ext.python.syntax.KwargOrDoubleStarred) -> hydra.ast.Expr:
     r"""Serialize a kwarg or double starred."""
@@ -382,13 +336,9 @@ def encode_kwarg_or_starred(ks: hydra.ext.python.syntax.KwargOrStarred) -> hydra
 def encode_lambda(l: hydra.ext.python.syntax.Lambda) -> hydra.ast.Expr:
     r"""Serialize a lambda expression."""
     
-    @lru_cache(1)
-    def params() -> hydra.ext.python.syntax.LambdaParameters:
-        return l.params
-    @lru_cache(1)
-    def body() -> hydra.ext.python.syntax.Expression:
-        return l.body
-    return hydra.serialization.parens(hydra.serialization.space_sep((hydra.serialization.cst("lambda"), hydra.serialization.no_sep((encode_lambda_parameters(params()), hydra.serialization.cst(":"))), encode_expression(body()))))
+    params = l.params
+    body = l.body
+    return hydra.serialization.parens(hydra.serialization.space_sep((hydra.serialization.cst("lambda"), hydra.serialization.no_sep((encode_lambda_parameters(params), hydra.serialization.cst(":"))), encode_expression(body))))
 
 def encode_list(l: hydra.ext.python.syntax.List) -> hydra.ast.Expr:
     r"""Serialize a Python list."""
@@ -427,13 +377,9 @@ def encode_pos_arg(pa: hydra.ext.python.syntax.PosArg) -> hydra.ast.Expr:
 def encode_power(p: hydra.ext.python.syntax.Power) -> hydra.ast.Expr:
     r"""Serialize a power expression."""
     
-    @lru_cache(1)
-    def lhs() -> hydra.ext.python.syntax.AwaitPrimary:
-        return p.lhs
-    @lru_cache(1)
-    def rhs() -> Maybe[hydra.ext.python.syntax.Factor]:
-        return p.rhs
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(encode_await_primary(lhs())), hydra.lib.maybes.map((lambda r: hydra.serialization.space_sep((hydra.serialization.cst("**"), encode_factor(r)))), rhs()))))
+    lhs = p.lhs
+    rhs = p.rhs
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(encode_await_primary(lhs)), hydra.lib.maybes.map((lambda r: hydra.serialization.space_sep((hydra.serialization.cst("**"), encode_factor(r)))), rhs))))
 
 def encode_primary(p: hydra.ext.python.syntax.Primary) -> hydra.ast.Expr:
     r"""Serialize a primary expression."""
@@ -470,13 +416,9 @@ def encode_primary_rhs(rhs: hydra.ext.python.syntax.PrimaryRhs) -> hydra.ast.Exp
 def encode_primary_with_rhs(pwr: hydra.ext.python.syntax.PrimaryWithRhs) -> hydra.ast.Expr:
     r"""Serialize a primary with RHS."""
     
-    @lru_cache(1)
-    def prim() -> hydra.ext.python.syntax.Primary:
-        return pwr.primary
-    @lru_cache(1)
-    def rhs() -> hydra.ext.python.syntax.PrimaryRhs:
-        return pwr.rhs
-    return hydra.serialization.no_sep((encode_primary(prim()), encode_primary_rhs(rhs())))
+    prim = pwr.primary
+    rhs = pwr.rhs
+    return hydra.serialization.no_sep((encode_primary(prim), encode_primary_rhs(rhs)))
 
 def encode_set(s: hydra.ext.python.syntax.Set) -> hydra.ast.Expr:
     r"""Serialize a Python set."""
@@ -517,13 +459,9 @@ def encode_slice_or_starred_expression(s: hydra.ext.python.syntax.SliceOrStarred
 def encode_slices(s: hydra.ext.python.syntax.Slices) -> hydra.ast.Expr:
     r"""Serialize slices."""
     
-    @lru_cache(1)
-    def hd() -> hydra.ext.python.syntax.Slice:
-        return s.head
-    @lru_cache(1)
-    def tl() -> frozenlist[hydra.ext.python.syntax.SliceOrStarredExpression]:
-        return s.tail
-    return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.cons(encode_slice(hd()), hydra.lib.lists.map((lambda x1: encode_slice_or_starred_expression(x1)), tl())))
+    hd = s.head
+    tl = s.tail
+    return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.cons(encode_slice(hd), hydra.lib.lists.map((lambda x1: encode_slice_or_starred_expression(x1)), tl)))
 
 def encode_star_named_expression(sne: hydra.ext.python.syntax.StarNamedExpression) -> hydra.ast.Expr:
     r"""Serialize a star named expression."""
@@ -606,16 +544,10 @@ def encode_single_target(st: hydra.ext.python.syntax.SingleTarget) -> hydra.ast.
 def encode_typed_assignment(ta: hydra.ext.python.syntax.TypedAssignment) -> hydra.ast.Expr:
     r"""Serialize a typed assignment."""
     
-    @lru_cache(1)
-    def lhs() -> hydra.ext.python.syntax.SingleTarget:
-        return ta.lhs
-    @lru_cache(1)
-    def typ() -> hydra.ext.python.syntax.Expression:
-        return ta.type
-    @lru_cache(1)
-    def rhs() -> Maybe[hydra.ext.python.syntax.AnnotatedRhs]:
-        return ta.rhs
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(hydra.serialization.no_sep((encode_single_target(lhs()), hydra.serialization.cst(":")))), Just(encode_expression(typ())), hydra.lib.maybes.map((lambda x1: encode_annotated_rhs(x1)), rhs()))))
+    lhs = ta.lhs
+    typ = ta.type
+    rhs = ta.rhs
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(hydra.serialization.no_sep((encode_single_target(lhs), hydra.serialization.cst(":")))), Just(encode_expression(typ)), hydra.lib.maybes.map((lambda x1: encode_annotated_rhs(x1)), rhs))))
 
 def encode_star_atom(sa: hydra.ext.python.syntax.StarAtom) -> hydra.ast.Expr:
     r"""Serialize a star atom."""
@@ -661,13 +593,9 @@ def encode_t_primary(tp: hydra.ext.python.syntax.TPrimary) -> hydra.ast.Expr:
 def encode_t_primary_and_name(pn: hydra.ext.python.syntax.TPrimaryAndName) -> hydra.ast.Expr:
     r"""Serialize a TPrimaryAndName as primary.name."""
     
-    @lru_cache(1)
-    def prim() -> hydra.ext.python.syntax.TPrimary:
-        return pn.primary
-    @lru_cache(1)
-    def name_() -> hydra.ext.python.syntax.Name:
-        return pn.name
-    return hydra.serialization.no_sep((encode_t_primary(prim()), hydra.serialization.cst("."), encode_name(name_())))
+    prim = pn.primary
+    name_ = pn.name
+    return hydra.serialization.no_sep((encode_t_primary(prim), hydra.serialization.cst("."), encode_name(name_)))
 
 def encode_target_with_star_atom(t: hydra.ext.python.syntax.TargetWithStarAtom) -> hydra.ast.Expr:
     r"""Serialize a target with star atom."""
@@ -701,13 +629,9 @@ def encode_star_target(st: hydra.ext.python.syntax.StarTarget) -> hydra.ast.Expr
 def encode_untyped_assignment(ua: hydra.ext.python.syntax.UntypedAssignment) -> hydra.ast.Expr:
     r"""Serialize an untyped assignment."""
     
-    @lru_cache(1)
-    def targets() -> frozenlist[hydra.ext.python.syntax.StarTarget]:
-        return ua.targets
-    @lru_cache(1)
-    def rhs() -> hydra.ext.python.syntax.AnnotatedRhs:
-        return ua.rhs
-    return hydra.serialization.space_sep(hydra.lib.lists.concat((hydra.lib.lists.map((lambda x1: encode_star_target(x1)), targets()), (encode_annotated_rhs(rhs()),))))
+    targets = ua.targets
+    rhs = ua.rhs
+    return hydra.serialization.space_sep(hydra.lib.lists.concat((hydra.lib.lists.map((lambda x1: encode_star_target(x1)), targets), (encode_annotated_rhs(rhs),))))
 
 def encode_assignment(a: hydra.ext.python.syntax.Assignment) -> hydra.ast.Expr:
     r"""Serialize an assignment."""
@@ -733,13 +657,9 @@ def encode_dotted_name(dn: hydra.ext.python.syntax.DottedName) -> hydra.ast.Expr
 def encode_import_from_as_name(ifan: hydra.ext.python.syntax.ImportFromAsName) -> hydra.ast.Expr:
     r"""Serialize an import from as name."""
     
-    @lru_cache(1)
-    def name() -> hydra.ext.python.syntax.Name:
-        return ifan.name
-    @lru_cache(1)
-    def alias() -> Maybe[hydra.ext.python.syntax.Name]:
-        return ifan.as_
-    return hydra.lib.maybes.maybe(encode_name(name()), (lambda a: hydra.serialization.space_sep((encode_name(name()), hydra.serialization.cst("as"), encode_name(a)))), alias())
+    name = ifan.name
+    alias = ifan.as_
+    return hydra.lib.maybes.maybe(encode_name(name), (lambda a: hydra.serialization.space_sep((encode_name(name), hydra.serialization.cst("as"), encode_name(a)))), alias)
 
 def encode_import_from_targets(t: hydra.ext.python.syntax.ImportFromTargets) -> hydra.ast.Expr:
     r"""Serialize import from targets."""
@@ -773,30 +693,20 @@ def encode_relative_import_prefix(p: hydra.ext.python.syntax.RelativeImportPrefi
 def encode_import_from(if_: hydra.ext.python.syntax.ImportFrom) -> hydra.ast.Expr:
     r"""Serialize an import from statement."""
     
-    @lru_cache(1)
-    def prefixes() -> frozenlist[hydra.ext.python.syntax.RelativeImportPrefix]:
-        return if_.prefixes
-    @lru_cache(1)
-    def name() -> Maybe[hydra.ext.python.syntax.DottedName]:
-        return if_.dotted_name
-    @lru_cache(1)
-    def targets() -> hydra.ext.python.syntax.ImportFromTargets:
-        return if_.targets
+    prefixes = if_.prefixes
+    name = if_.dotted_name
+    targets = if_.targets
     @lru_cache(1)
     def lhs() -> hydra.ast.Expr:
-        return hydra.serialization.no_sep(hydra.lib.maybes.cat(hydra.lib.lists.concat((hydra.lib.lists.map((lambda p: Just(encode_relative_import_prefix(p))), prefixes()), (hydra.lib.maybes.map((lambda x1: encode_dotted_name(x1)), name()),)))))
-    return hydra.serialization.space_sep((hydra.serialization.cst("from"), lhs(), hydra.serialization.cst("import"), encode_import_from_targets(targets())))
+        return hydra.serialization.no_sep(hydra.lib.maybes.cat(hydra.lib.lists.concat((hydra.lib.lists.map((lambda p: Just(encode_relative_import_prefix(p))), prefixes), (hydra.lib.maybes.map((lambda x1: encode_dotted_name(x1)), name),)))))
+    return hydra.serialization.space_sep((hydra.serialization.cst("from"), lhs(), hydra.serialization.cst("import"), encode_import_from_targets(targets)))
 
 def encode_dotted_as_name(dan: hydra.ext.python.syntax.DottedAsName) -> hydra.ast.Expr:
     r"""Serialize a dotted as name."""
     
-    @lru_cache(1)
-    def name() -> hydra.ext.python.syntax.DottedName:
-        return dan.name
-    @lru_cache(1)
-    def alias() -> Maybe[hydra.ext.python.syntax.Name]:
-        return dan.as_
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(encode_dotted_name(name())), hydra.lib.maybes.map((lambda a: hydra.serialization.space_sep((hydra.serialization.cst("as"), encode_name(a)))), alias()))))
+    name = dan.name
+    alias = dan.as_
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(encode_dotted_name(name)), hydra.lib.maybes.map((lambda a: hydra.serialization.space_sep((hydra.serialization.cst("as"), encode_name(a)))), alias))))
 
 def encode_import_name(in_: hydra.ext.python.syntax.ImportName) -> hydra.ast.Expr:
     r"""Serialize an import name."""
@@ -819,13 +729,9 @@ def encode_import_statement(is_: hydra.ext.python.syntax.ImportStatement) -> hyd
 def encode_raise_expression(re: hydra.ext.python.syntax.RaiseExpression) -> hydra.ast.Expr:
     r"""Serialize a raise expression."""
     
-    @lru_cache(1)
-    def expr() -> hydra.ext.python.syntax.Expression:
-        return re.expression
-    @lru_cache(1)
-    def from_() -> Maybe[hydra.ext.python.syntax.Expression]:
-        return re.from_
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(encode_expression(expr())), hydra.lib.maybes.map((lambda f: hydra.serialization.space_sep((hydra.serialization.cst("from"), encode_expression(f)))), from_()))))
+    expr = re.expression
+    from_ = re.from_
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(encode_expression(expr)), hydra.lib.maybes.map((lambda f: hydra.serialization.space_sep((hydra.serialization.cst("from"), encode_expression(f)))), from_))))
 
 def encode_raise_statement(rs: hydra.ext.python.syntax.RaiseStatement) -> hydra.ast.Expr:
     r"""Serialize a raise statement."""
@@ -861,19 +767,13 @@ def encode_type_parameter(tp: hydra.ext.python.syntax.TypeParameter) -> hydra.as
 def encode_type_alias(ta: hydra.ext.python.syntax.TypeAlias) -> hydra.ast.Expr:
     r"""Serialize a type alias."""
     
-    @lru_cache(1)
-    def name() -> hydra.ext.python.syntax.Name:
-        return ta.name
-    @lru_cache(1)
-    def tparams() -> frozenlist[hydra.ext.python.syntax.TypeParameter]:
-        return ta.type_params
-    @lru_cache(1)
-    def expr() -> hydra.ext.python.syntax.Expression:
-        return ta.expression
+    name = ta.name
+    tparams = ta.type_params
+    expr = ta.expression
     @lru_cache(1)
     def alias() -> hydra.ast.Expr:
-        return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(encode_name(name())), hydra.lib.logic.if_else(hydra.lib.lists.null(tparams()), (lambda : Nothing()), (lambda : Just(hydra.serialization.bracket_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_type_parameter(x1)), tparams()))))))))
-    return hydra.serialization.space_sep((hydra.serialization.cst("type"), alias(), hydra.serialization.cst("="), encode_expression(expr())))
+        return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(encode_name(name)), hydra.lib.logic.if_else(hydra.lib.lists.null(tparams), (lambda : Nothing()), (lambda : Just(hydra.serialization.bracket_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_type_parameter(x1)), tparams))))))))
+    return hydra.serialization.space_sep((hydra.serialization.cst("type"), alias(), hydra.serialization.cst("="), encode_expression(expr)))
 
 def encode_simple_statement(ss: hydra.ext.python.syntax.SimpleStatement) -> hydra.ast.Expr:
     r"""Serialize a simple (single-line) Python statement."""
@@ -934,13 +834,9 @@ def encode_annotation(ann: hydra.ext.python.syntax.Annotation) -> hydra.ast.Expr
 def encode_param(p: hydra.ext.python.syntax.Param) -> hydra.ast.Expr:
     r"""Serialize a parameter."""
     
-    @lru_cache(1)
-    def name() -> hydra.ext.python.syntax.Name:
-        return p.name
-    @lru_cache(1)
-    def ann() -> Maybe[hydra.ext.python.syntax.Annotation]:
-        return p.annotation
-    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(encode_name(name())), hydra.lib.maybes.map((lambda x1: encode_annotation(x1)), ann()))))
+    name = p.name
+    ann = p.annotation
+    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(encode_name(name)), hydra.lib.maybes.map((lambda x1: encode_annotation(x1)), ann))))
 
 def encode_param_no_default(pnd: hydra.ext.python.syntax.ParamNoDefault) -> hydra.ast.Expr:
     r"""Serialize a parameter without default."""
@@ -950,10 +846,8 @@ def encode_param_no_default(pnd: hydra.ext.python.syntax.ParamNoDefault) -> hydr
 def encode_param_no_default_parameters(pndp: hydra.ext.python.syntax.ParamNoDefaultParameters) -> hydra.ast.Expr:
     r"""Serialize parameters without defaults."""
     
-    @lru_cache(1)
-    def nodef() -> frozenlist[hydra.ext.python.syntax.ParamNoDefault]:
-        return pndp.param_no_default
-    return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_param_no_default(x1)), nodef()))
+    nodef = pndp.param_no_default
+    return hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_param_no_default(x1)), nodef))
 
 def encode_parameters(p: hydra.ext.python.syntax.Parameters) -> hydra.ast.Expr:
     r"""Serialize function parameters."""
@@ -1004,16 +898,10 @@ def encode_value_pattern(vp: hydra.ext.python.syntax.ValuePattern) -> hydra.ast.
 def encode_class_pattern(cp: hydra.ext.python.syntax.ClassPattern) -> hydra.ast.Expr:
     r"""Serialize a class pattern."""
     
-    @lru_cache(1)
-    def noa() -> hydra.ext.python.syntax.NameOrAttribute:
-        return cp.name_or_attribute
-    @lru_cache(1)
-    def pos() -> Maybe[hydra.ext.python.syntax.PositionalPatterns]:
-        return cp.positional_patterns
-    @lru_cache(1)
-    def kw() -> Maybe[hydra.ext.python.syntax.KeywordPatterns]:
-        return cp.keyword_patterns
-    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(encode_name_or_attribute(noa())), Just(hydra.serialization.cst("(")), hydra.lib.maybes.map((lambda x1: encode_positional_patterns(x1)), pos()), hydra.lib.maybes.map((lambda x1: encode_keyword_patterns(x1)), kw()), Just(hydra.serialization.cst(")")))))
+    noa = cp.name_or_attribute
+    pos = cp.positional_patterns
+    kw = cp.keyword_patterns
+    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(encode_name_or_attribute(noa)), Just(hydra.serialization.cst("(")), hydra.lib.maybes.map((lambda x1: encode_positional_patterns(x1)), pos), hydra.lib.maybes.map((lambda x1: encode_keyword_patterns(x1)), kw), Just(hydra.serialization.cst(")")))))
 
 def encode_closed_pattern(cp: hydra.ext.python.syntax.ClosedPattern) -> hydra.ast.Expr:
     r"""Serialize a closed pattern."""
@@ -1049,13 +937,9 @@ def encode_closed_pattern(cp: hydra.ext.python.syntax.ClosedPattern) -> hydra.as
 def encode_keyword_pattern(kp: hydra.ext.python.syntax.KeywordPattern) -> hydra.ast.Expr:
     r"""Serialize a keyword pattern."""
     
-    @lru_cache(1)
-    def name() -> hydra.ext.python.syntax.Name:
-        return kp.name
-    @lru_cache(1)
-    def pat() -> hydra.ext.python.syntax.Pattern:
-        return kp.pattern
-    return hydra.serialization.no_sep((encode_name(name()), hydra.serialization.cst("="), encode_pattern(pat())))
+    name = kp.name
+    pat = kp.pattern
+    return hydra.serialization.no_sep((encode_name(name), hydra.serialization.cst("="), encode_pattern(pat)))
 
 def encode_keyword_patterns(kp: hydra.ext.python.syntax.KeywordPatterns) -> hydra.ast.Expr:
     r"""Serialize keyword patterns."""
@@ -1119,13 +1003,9 @@ def to_python_comments(doc_: str) -> str:
 def encode_annotated_statement(as_: hydra.ext.python.syntax.AnnotatedStatement) -> hydra.ast.Expr:
     r"""Serialize an annotated statement (with optional doc comment)."""
     
-    @lru_cache(1)
-    def doc_() -> str:
-        return as_.comment
-    @lru_cache(1)
-    def stmt() -> hydra.ext.python.syntax.Statement:
-        return as_.statement
-    return hydra.serialization.newline_sep((hydra.serialization.cst(to_python_comments(doc_())), encode_statement(stmt())))
+    doc_ = as_.comment
+    stmt = as_.statement
+    return hydra.serialization.newline_sep((hydra.serialization.cst(to_python_comments(doc_)), encode_statement(stmt)))
 
 def encode_block(b: hydra.ext.python.syntax.Block) -> hydra.ast.Expr:
     r"""Serialize a block."""
@@ -1143,36 +1023,22 @@ def encode_block(b: hydra.ext.python.syntax.Block) -> hydra.ast.Expr:
 def encode_case_block(cb: hydra.ext.python.syntax.CaseBlock) -> hydra.ast.Expr:
     r"""Serialize a case block."""
     
-    @lru_cache(1)
-    def patterns() -> hydra.ext.python.syntax.Patterns:
-        return cb.patterns
-    @lru_cache(1)
-    def guard() -> Maybe[hydra.ext.python.syntax.Guard]:
-        return cb.guard
-    @lru_cache(1)
-    def body() -> hydra.ext.python.syntax.Block:
-        return cb.body
-    return hydra.serialization.newline_sep((hydra.serialization.no_sep((hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(hydra.serialization.cst("case")), Just(encode_patterns(patterns())), hydra.lib.maybes.map((lambda x1: encode_guard(x1)), guard())))), hydra.serialization.cst(":"))), encode_block(body())))
+    patterns = cb.patterns
+    guard = cb.guard
+    body = cb.body
+    return hydra.serialization.newline_sep((hydra.serialization.no_sep((hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(hydra.serialization.cst("case")), Just(encode_patterns(patterns)), hydra.lib.maybes.map((lambda x1: encode_guard(x1)), guard)))), hydra.serialization.cst(":"))), encode_block(body)))
 
 def encode_class_definition(cd: hydra.ext.python.syntax.ClassDefinition) -> hydra.ast.Expr:
     r"""Serialize a class definition."""
     
-    @lru_cache(1)
-    def decs() -> Maybe[hydra.ext.python.syntax.Decorators]:
-        return cd.decorators
-    @lru_cache(1)
-    def name() -> hydra.ext.python.syntax.Name:
-        return cd.name
-    @lru_cache(1)
-    def args() -> Maybe[hydra.ext.python.syntax.Args]:
-        return cd.arguments
-    @lru_cache(1)
-    def body() -> hydra.ext.python.syntax.Block:
-        return cd.body
+    decs = cd.decorators
+    name = cd.name
+    args = cd.arguments
+    body = cd.body
     @lru_cache(1)
     def arg_part() -> Maybe[hydra.ast.Expr]:
-        return hydra.lib.maybes.map((lambda a: hydra.serialization.no_sep((hydra.serialization.cst("("), encode_args(a), hydra.serialization.cst(")")))), args())
-    return hydra.serialization.newline_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: encode_decorators(x1)), decs()), Just(hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(hydra.serialization.space_sep((hydra.serialization.cst("class"), encode_name(name())))), arg_part(), Just(hydra.serialization.cst(":")))))), Just(encode_block(body())))))
+        return hydra.lib.maybes.map((lambda a: hydra.serialization.no_sep((hydra.serialization.cst("("), encode_args(a), hydra.serialization.cst(")")))), args)
+    return hydra.serialization.newline_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: encode_decorators(x1)), decs), Just(hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(hydra.serialization.space_sep((hydra.serialization.cst("class"), encode_name(name)))), arg_part(), Just(hydra.serialization.cst(":")))))), Just(encode_block(body)))))
 
 def encode_compound_statement(cs: hydra.ext.python.syntax.CompoundStatement) -> hydra.ast.Expr:
     r"""Serialize a compound (multi-line) Python statement."""
@@ -1196,8 +1062,8 @@ def encode_compound_statement(cs: hydra.ext.python.syntax.CompoundStatement) -> 
         case hydra.ext.python.syntax.CompoundStatementTry():
             return hydra.serialization.cst("try ...")
         
-        case hydra.ext.python.syntax.CompoundStatementWhile():
-            return hydra.serialization.cst("while ...")
+        case hydra.ext.python.syntax.CompoundStatementWhile(value=w):
+            return encode_while_statement(w)
         
         case hydra.ext.python.syntax.CompoundStatementMatch(value=m):
             return encode_match_statement(m)
@@ -1208,59 +1074,39 @@ def encode_compound_statement(cs: hydra.ext.python.syntax.CompoundStatement) -> 
 def encode_function_def_raw(fdr: hydra.ext.python.syntax.FunctionDefRaw) -> hydra.ast.Expr:
     r"""Serialize a raw function definition."""
     
-    @lru_cache(1)
-    def async_() -> bool:
-        return fdr.async_
-    @lru_cache(1)
-    def name() -> hydra.ext.python.syntax.Name:
-        return fdr.name
-    @lru_cache(1)
-    def tparams() -> frozenlist[hydra.ext.python.syntax.TypeParameter]:
-        return fdr.type_params
-    @lru_cache(1)
-    def params() -> Maybe[hydra.ext.python.syntax.Parameters]:
-        return fdr.params
-    @lru_cache(1)
-    def ret_type() -> Maybe[hydra.ext.python.syntax.Expression]:
-        return fdr.return_type
-    @lru_cache(1)
-    def block() -> hydra.ext.python.syntax.Block:
-        return fdr.block
+    async_ = fdr.async_
+    name = fdr.name
+    tparams = fdr.type_params
+    params = fdr.params
+    ret_type = fdr.return_type
+    block = fdr.block
     @lru_cache(1)
     def async_kw() -> Maybe[hydra.ast.Expr]:
-        return hydra.lib.logic.if_else(async_(), (lambda : Just(hydra.serialization.cst("async"))), (lambda : Nothing()))
+        return hydra.lib.logic.if_else(async_, (lambda : Just(hydra.serialization.cst("async"))), (lambda : Nothing()))
     @lru_cache(1)
     def tparam_part() -> Maybe[hydra.ast.Expr]:
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(tparams()), (lambda : Nothing()), (lambda : Just(hydra.serialization.bracket_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_type_parameter(x1)), tparams())))))
+        return hydra.lib.logic.if_else(hydra.lib.lists.null(tparams), (lambda : Nothing()), (lambda : Just(hydra.serialization.bracket_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: encode_type_parameter(x1)), tparams)))))
     @lru_cache(1)
     def param_part() -> Maybe[hydra.ast.Expr]:
-        return hydra.lib.maybes.map((lambda x1: encode_parameters(x1)), params())
+        return hydra.lib.maybes.map((lambda x1: encode_parameters(x1)), params)
     @lru_cache(1)
     def ret_part() -> Maybe[hydra.ast.Expr]:
-        return hydra.lib.maybes.map((lambda t: hydra.serialization.space_sep((hydra.serialization.cst("->"), encode_expression(t)))), ret_type())
-    return hydra.serialization.newline_sep((hydra.serialization.no_sep((hydra.serialization.space_sep(hydra.lib.maybes.cat((async_kw(), Just(hydra.serialization.cst("def")), Just(hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(encode_name(name())), tparam_part(), Just(hydra.serialization.cst("(")), param_part(), Just(hydra.serialization.cst(")")))))), ret_part()))), hydra.serialization.cst(":"))), encode_block(block())))
+        return hydra.lib.maybes.map((lambda t: hydra.serialization.space_sep((hydra.serialization.cst("->"), encode_expression(t)))), ret_type)
+    return hydra.serialization.newline_sep((hydra.serialization.no_sep((hydra.serialization.space_sep(hydra.lib.maybes.cat((async_kw(), Just(hydra.serialization.cst("def")), Just(hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(encode_name(name)), tparam_part(), Just(hydra.serialization.cst("(")), param_part(), Just(hydra.serialization.cst(")")))))), ret_part()))), hydra.serialization.cst(":"))), encode_block(block)))
 
 def encode_function_definition(fd: hydra.ext.python.syntax.FunctionDefinition) -> hydra.ast.Expr:
     r"""Serialize a function definition."""
     
-    @lru_cache(1)
-    def decs() -> Maybe[hydra.ext.python.syntax.Decorators]:
-        return fd.decorators
-    @lru_cache(1)
-    def raw() -> hydra.ext.python.syntax.FunctionDefRaw:
-        return fd.raw
-    return hydra.serialization.newline_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: encode_decorators(x1)), decs()), Just(encode_function_def_raw(raw())))))
+    decs = fd.decorators
+    raw = fd.raw
+    return hydra.serialization.newline_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: encode_decorators(x1)), decs), Just(encode_function_def_raw(raw)))))
 
 def encode_match_statement(ms: hydra.ext.python.syntax.MatchStatement) -> hydra.ast.Expr:
     r"""Serialize a match statement."""
     
-    @lru_cache(1)
-    def subj() -> hydra.ext.python.syntax.SubjectExpression:
-        return ms.subject
-    @lru_cache(1)
-    def cases() -> frozenlist[hydra.ext.python.syntax.CaseBlock]:
-        return ms.cases
-    return hydra.serialization.newline_sep((hydra.serialization.space_sep((hydra.serialization.cst("match"), hydra.serialization.no_sep((encode_subject_expression(subj()), hydra.serialization.cst(":"))))), hydra.serialization.tab_indent_double_space(hydra.lib.lists.map((lambda x1: encode_case_block(x1)), cases()))))
+    subj = ms.subject
+    cases = ms.cases
+    return hydra.serialization.newline_sep((hydra.serialization.space_sep((hydra.serialization.cst("match"), hydra.serialization.no_sep((encode_subject_expression(subj), hydra.serialization.cst(":"))))), hydra.serialization.tab_indent_double_space(hydra.lib.lists.map((lambda x1: encode_case_block(x1)), cases))))
 
 def encode_statement(stmt: hydra.ext.python.syntax.Statement) -> hydra.ast.Expr:
     r"""Serialize a Python statement."""
@@ -1277,6 +1123,14 @@ def encode_statement(stmt: hydra.ext.python.syntax.Statement) -> hydra.ast.Expr:
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
+
+def encode_while_statement(ws: hydra.ext.python.syntax.WhileStatement) -> hydra.ast.Expr:
+    r"""Serialize a while statement."""
+    
+    cond = ws.condition
+    body = ws.body
+    else_ = ws.else_
+    return hydra.serialization.newline_sep(hydra.lib.maybes.cat((Just(hydra.serialization.newline_sep((hydra.serialization.space_sep((hydra.serialization.cst("while"), hydra.serialization.no_sep((encode_named_expression(cond), hydra.serialization.cst(":"))))), encode_block(body)))), hydra.lib.maybes.map((lambda eb: hydra.serialization.newline_sep((hydra.serialization.cst("else:"), encode_block(eb)))), else_))))
 
 def encode_lambda_star_etc(lse: hydra.ext.python.syntax.LambdaStarEtc) -> hydra.ast.Expr:
     r"""Serialize lambda star etc."""
@@ -1300,8 +1154,10 @@ def encode_lambda_star_etc(lse: hydra.ext.python.syntax.LambdaStarEtc) -> hydra.
 def encode_module(mod: hydra.ext.python.syntax.Module) -> hydra.ast.Expr:
     r"""Serialize a Python module to an AST expression."""
     
-    warning = hydra.serialization.cst(to_python_comments(hydra.constants.warning_auto_generated_file))
+    @lru_cache(1)
+    def warning() -> hydra.ast.Expr:
+        return hydra.serialization.cst(to_python_comments(hydra.constants.warning_auto_generated_file))
     @lru_cache(1)
     def groups() -> frozenlist[hydra.ast.Expr]:
         return hydra.lib.lists.map((lambda group: hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: encode_statement(x1)), group))), mod.value)
-    return hydra.serialization.double_newline_sep(hydra.lib.lists.cons(warning, groups()))
+    return hydra.serialization.double_newline_sep(hydra.lib.lists.cons(warning(), groups()))

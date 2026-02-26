@@ -328,16 +328,17 @@ public interface Schemas {
   static Boolean fTypeIsPolymorphic(hydra.core.Type typ) {
     while (true) {
       {
-        if ((typ) instanceof hydra.core.Type.Annotated) {
+        final var typ_tco = typ;
+        if ((typ_tco) instanceof hydra.core.Type.Annotated) {
           {
-            var at = (hydra.core.Type.Annotated) (typ);
+            var at = (hydra.core.Type.Annotated) (typ_tco);
             typ = ((at).value).body;
             continue;
           }
         }
-        if ((typ) instanceof hydra.core.Type.Forall) {
+        if ((typ_tco) instanceof hydra.core.Type.Forall) {
           {
-            var ft = (hydra.core.Type.Forall) (typ);
+            var ft = (hydra.core.Type.Forall) (typ_tco);
             return true;
           }
         }
@@ -397,14 +398,15 @@ public interface Schemas {
   static hydra.core.Type fullyStripType(hydra.core.Type typ) {
     while (true) {
       {
-        if ((hydra.rewriting.Rewriting.deannotateType(typ)) instanceof hydra.core.Type.Forall) {
+        final var typ_tco = typ;
+        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Forall) {
           {
-            var ft = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(typ));
+            var ft = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
             typ = ((ft).value).body;
             continue;
           }
         }
-        return typ;
+        return typ_tco;
       }
     }
   }
@@ -514,16 +516,17 @@ public interface Schemas {
   static Boolean isEncodedTerm(hydra.core.Term t) {
     while (true) {
       {
-        if ((hydra.rewriting.Rewriting.deannotateTerm(t)) instanceof hydra.core.Term.Application) {
+        final var t_tco = t;
+        if ((hydra.rewriting.Rewriting.deannotateTerm(t_tco)) instanceof hydra.core.Term.Application) {
           {
-            var a = (hydra.core.Term.Application) (hydra.rewriting.Rewriting.deannotateTerm(t));
+            var a = (hydra.core.Term.Application) (hydra.rewriting.Rewriting.deannotateTerm(t_tco));
             t = ((a).value).function;
             continue;
           }
         }
-        if ((hydra.rewriting.Rewriting.deannotateTerm(t)) instanceof hydra.core.Term.Union) {
+        if ((hydra.rewriting.Rewriting.deannotateTerm(t_tco)) instanceof hydra.core.Term.Union) {
           {
-            var i = (hydra.core.Term.Union) (hydra.rewriting.Rewriting.deannotateTerm(t));
+            var i = (hydra.core.Term.Union) (hydra.rewriting.Rewriting.deannotateTerm(t_tco));
             return hydra.lib.equality.Equal.apply(
               "hydra.core.Term",
               (((i).value).typeName).value);
@@ -537,16 +540,17 @@ public interface Schemas {
   static Boolean isEncodedType(hydra.core.Term t) {
     while (true) {
       {
-        if ((hydra.rewriting.Rewriting.deannotateTerm(t)) instanceof hydra.core.Term.Application) {
+        final var t_tco = t;
+        if ((hydra.rewriting.Rewriting.deannotateTerm(t_tco)) instanceof hydra.core.Term.Application) {
           {
-            var a = (hydra.core.Term.Application) (hydra.rewriting.Rewriting.deannotateTerm(t));
+            var a = (hydra.core.Term.Application) (hydra.rewriting.Rewriting.deannotateTerm(t_tco));
             t = ((a).value).function;
             continue;
           }
         }
-        if ((hydra.rewriting.Rewriting.deannotateTerm(t)) instanceof hydra.core.Term.Union) {
+        if ((hydra.rewriting.Rewriting.deannotateTerm(t_tco)) instanceof hydra.core.Term.Union) {
           {
-            var i = (hydra.core.Term.Union) (hydra.rewriting.Rewriting.deannotateTerm(t));
+            var i = (hydra.core.Term.Union) (hydra.rewriting.Rewriting.deannotateTerm(t_tco));
             return hydra.lib.equality.Equal.apply(
               "hydra.core.Type",
               (((i).value).typeName).value);
@@ -650,31 +654,32 @@ public interface Schemas {
   static Boolean isType(hydra.core.Type t) {
     while (true) {
       {
-        if ((hydra.rewriting.Rewriting.deannotateType(t)) instanceof hydra.core.Type.Application) {
+        final var t_tco = t;
+        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Application) {
           {
-            var a = (hydra.core.Type.Application) (hydra.rewriting.Rewriting.deannotateType(t));
+            var a = (hydra.core.Type.Application) (hydra.rewriting.Rewriting.deannotateType(t_tco));
             t = ((a).value).function;
             continue;
           }
         }
-        if ((hydra.rewriting.Rewriting.deannotateType(t)) instanceof hydra.core.Type.Forall) {
+        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Forall) {
           {
-            var l = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(t));
+            var l = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(t_tco));
             t = ((l).value).body;
             continue;
           }
         }
-        if ((hydra.rewriting.Rewriting.deannotateType(t)) instanceof hydra.core.Type.Union) {
+        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Union) {
           {
-            var rt = (hydra.core.Type.Union) (hydra.rewriting.Rewriting.deannotateType(t));
+            var rt = (hydra.core.Type.Union) (hydra.rewriting.Rewriting.deannotateType(t_tco));
             return hydra.lib.equality.Equal.apply(
               "hydra.core.Type",
               (((rt).value).typeName).value);
           }
         }
-        if ((hydra.rewriting.Rewriting.deannotateType(t)) instanceof hydra.core.Type.Variable) {
+        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Variable) {
           {
-            var v = (hydra.core.Type.Variable) (hydra.rewriting.Rewriting.deannotateType(t));
+            var v = (hydra.core.Type.Variable) (hydra.rewriting.Rewriting.deannotateType(t_tco));
             return hydra.lib.equality.Equal.apply(
               (v).value,
               new hydra.core.Name("hydra.core.Type"));

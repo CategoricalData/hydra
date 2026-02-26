@@ -106,6 +106,7 @@ public interface Lexical {
     while (true) {
       {
         hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(t);
+        final var t_tco = t;
         if ((stripped) instanceof hydra.core.Type.Forall) {
           {
             var forallType = (hydra.core.Type.Forall) (stripped);

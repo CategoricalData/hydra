@@ -1563,7 +1563,9 @@ encodeVariable :: TBinding (JavaHelpers.JavaEnvironment -> Name -> Flow Graph Ja
 encodeVariable = def "encodeVariable" $
   lambda "env" $ lambda "name" $
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    "jid" <~ (JavaUtilsSource.javaIdentifier @@ (unwrap _Name @@ var "name")) $
+    -- Apply varRenames to get the Java-level variable name (for TCO snapshot support)
+    "resolvedName" <~ (JavaUtilsSource.lookupJavaVarName @@ var "aliases" @@ var "name") $
+    "jid" <~ (JavaUtilsSource.javaIdentifier @@ (unwrap _Name @@ var "resolvedName")) $
     -- Branch vars: access .value field
     Logic.ifElse (Sets.member (var "name") (project JavaHelpers._Aliases JavaHelpers._Aliases_branchVars @@ var "aliases"))
       (Flows.pure (JavaUtilsSource.javaFieldAccessToJavaExpression @@
@@ -1600,14 +1602,15 @@ encodeVariable = def "encodeVariable" $
             -- Lambda-bound variables
             (Logic.ifElse (isLambdaBoundIn @@ var "name" @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases"))
               ("actualName" <~ (findMatchingLambdaVar @@ var "name" @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases")) $
-               Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "actualName")))
+               "resolvedActual" <~ (JavaUtilsSource.lookupJavaVarName @@ var "aliases" @@ var "actualName") $
+               Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "resolvedActual")))
               -- Classify and encode
               ("cls" <<~ (classifyDataReference @@ var "name") $
                cases JavaHelpers._JavaSymbolClass (var "cls") Nothing [
                  JavaHelpers._JavaSymbolClass_hoistedLambda>>: "arity" ~>
                    encodeVariable_hoistedLambdaCase @@ var "aliases" @@ var "name" @@ var "arity",
                  JavaHelpers._JavaSymbolClass_localVariable>>: lambda "_" $
-                   Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (elementJavaIdentifier @@ boolean False @@ boolean False @@ var "aliases" @@ var "name")),
+                   Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (elementJavaIdentifier @@ boolean False @@ boolean False @@ var "aliases" @@ var "resolvedName")),
                  JavaHelpers._JavaSymbolClass_constant>>: lambda "_" $
                    Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (elementJavaIdentifier @@ boolean False @@ boolean False @@ var "aliases" @@ var "name")),
                  JavaHelpers._JavaSymbolClass_nullaryFunction>>: lambda "_" $
@@ -4862,9 +4865,43 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
 
 -- | Encode a term for TCO: self-tail-calls become param reassignment + continue.
 --   Returns a list of Java BlockStatements (if/instanceof checks + return/continue).
-encodeTermTCO :: TBinding (JavaHelpers.JavaEnvironment -> Name -> [Name] -> Term -> Flow Graph [Java.BlockStatement])
+--   tcoVarRenames maps original parameter names to snapshot names (e.g. term -> term_tco).
+--   Non-continue paths use the snapshot names so lambdas capture effectively-final variables.
+encodeTermTCO :: TBinding (JavaHelpers.JavaEnvironment -> Name -> [Name] -> M.Map Name Name -> Term -> Flow Graph [Java.BlockStatement])
 encodeTermTCO = def "encodeTermTCO" $
-  "env" ~> "funcName" ~> "paramNames" ~> "term" ~>
+  "env0" ~> "funcName" ~> "paramNames" ~> "tcoVarRenames" ~> "term" ~>
+    -- Apply varRenames to the environment so encodeTerm uses snapshot variable names
+    "aliases0" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env0") $
+    "env" <~ (record JavaHelpers._JavaEnvironment [
+      JavaHelpers._JavaEnvironment_aliases>>: record JavaHelpers._Aliases [
+        JavaHelpers._Aliases_currentNamespace>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_currentNamespace @@ var "aliases0",
+        JavaHelpers._Aliases_packages>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_packages @@ var "aliases0",
+        JavaHelpers._Aliases_branchVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_branchVars @@ var "aliases0",
+        JavaHelpers._Aliases_recursiveVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_recursiveVars @@ var "aliases0",
+        JavaHelpers._Aliases_inScopeTypeParams>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeTypeParams @@ var "aliases0",
+        JavaHelpers._Aliases_polymorphicLocals>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_polymorphicLocals @@ var "aliases0",
+        JavaHelpers._Aliases_inScopeJavaVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeJavaVars @@ var "aliases0",
+        JavaHelpers._Aliases_varRenames>>:
+          Maps.union (var "tcoVarRenames") (project JavaHelpers._Aliases JavaHelpers._Aliases_varRenames @@ var "aliases0"),
+        JavaHelpers._Aliases_lambdaVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases0",
+        JavaHelpers._Aliases_typeVarSubst>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_typeVarSubst @@ var "aliases0",
+        JavaHelpers._Aliases_trustedTypeVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_trustedTypeVars @@ var "aliases0",
+        JavaHelpers._Aliases_methodCodomain>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_methodCodomain @@ var "aliases0",
+        JavaHelpers._Aliases_thunkedVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases0"],
+      JavaHelpers._JavaEnvironment_typeContext>>:
+        project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env0"]) $
     "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
     -- Check if this term is a direct self-tail-call: funcName(args...)
     "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
@@ -4958,7 +4995,7 @@ encodeTermTCO = def "encodeTermTCO" $
                                   "isBranchTailCall" <~ (CoderUtils.isTailRecursiveInTailPosition @@ var "funcName" @@ var "branchBody") $
                                   "bodyStmts" <<~ (Logic.ifElse (var "isBranchTailCall")
                                     -- Self-call: emit assignment + continue via encodeTermTCO
-                                    (encodeTermTCO @@ var "env3" @@ var "funcName" @@ var "paramNames" @@ var "branchBody")
+                                    (encodeTermTCO @@ var "env3" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ var "branchBody")
                                     -- Not a self-call: use normal encoding with analyzeJavaFunction
                                     ("fs" <<~ (analyzeJavaFunction @@ var "env3" @@ var "branchBody") $
                                       "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
@@ -5117,8 +5154,20 @@ encodeTermDefinition = def "encodeTermDefinition" $
         -- TCO path: wrap body in while(true) loop
         -- Note: bindingStmts (let-binding prefixes) go INSIDE the while loop so they are
         -- re-evaluated each iteration when parameters change via reassignment + continue.
-        ("tcoStmts" <<~ (encodeTermTCO @@ var "env3" @@ var "name" @@ var "params" @@ var "annotatedBody") $
-          "whileBodyStmts" <~ Lists.concat2 (var "bindingStmts") (var "tcoStmts") $
+        -- Create snapshot names for each parameter (e.g. term -> term_tco) so that
+        -- non-continue branches can capture effectively-final variables in lambdas.
+        ("tcoSuffix" <~ string "_tco" $
+          "snapshotNames" <~ Lists.map ("p" ~> wrap _Name (Strings.cat2 (unwrap _Name @@ var "p") (var "tcoSuffix"))) (var "params") $
+          "tcoVarRenames" <~ (Maps.fromList (Lists.zip (var "params") (var "snapshotNames"))) $
+          -- Generate: final var param_tco = param;
+          "snapshotDecls" <~ Lists.map ("pair" ~>
+            JavaUtilsSource.finalVarDeclarationStatement
+              @@ (JavaUtilsSource.variableToJavaIdentifier @@ Pairs.second (var "pair"))
+              @@ (JavaUtilsSource.javaIdentifierToJavaExpression
+                    @@ (JavaUtilsSource.variableToJavaIdentifier @@ Pairs.first (var "pair"))))
+            (Lists.zip (var "params") (var "snapshotNames")) $
+          "tcoStmts" <<~ (encodeTermTCO @@ var "env3" @@ var "name" @@ var "params" @@ var "tcoVarRenames" @@ var "annotatedBody") $
+          "whileBodyStmts" <~ Lists.concat (list [var "bindingStmts", var "snapshotDecls", var "tcoStmts"]) $
           "whileBodyBlock" <~ (JavaDsl.statementWithoutTrailing (JavaDsl.stmtBlock (JavaDsl.block (var "whileBodyStmts")))) $
           "noCond" <~ (nothing :: TTerm (Maybe Java.Expression)) $
           "whileStmt" <~ (JavaDsl.blockStatementStatement
