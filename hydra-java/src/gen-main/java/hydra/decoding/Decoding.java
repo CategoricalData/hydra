@@ -692,48 +692,49 @@ public interface Decoding {
   static hydra.core.Name decoderResultType(hydra.core.Type typ) {
     while (true) {
       {
-        if ((typ) instanceof hydra.core.Type.Annotated) {
+        final var typ_tco = typ;
+        if ((typ_tco) instanceof hydra.core.Type.Annotated) {
           {
-            var at = (hydra.core.Type.Annotated) (typ);
+            var at = (hydra.core.Type.Annotated) (typ_tco);
             typ = ((at).value).body;
             continue;
           }
         }
-        if ((typ) instanceof hydra.core.Type.Application) {
+        if ((typ_tco) instanceof hydra.core.Type.Application) {
           {
-            var appType = (hydra.core.Type.Application) (typ);
+            var appType = (hydra.core.Type.Application) (typ_tco);
             typ = ((appType).value).function;
             continue;
           }
         }
-        if ((typ) instanceof hydra.core.Type.Forall) {
+        if ((typ_tco) instanceof hydra.core.Type.Forall) {
           {
-            var ft = (hydra.core.Type.Forall) (typ);
+            var ft = (hydra.core.Type.Forall) (typ_tco);
             typ = ((ft).value).body;
             continue;
           }
         }
-        if ((typ) instanceof hydra.core.Type.Literal) {
+        if ((typ_tco) instanceof hydra.core.Type.Literal) {
           {
-            var ignored = (hydra.core.Type.Literal) (typ);
+            var ignored = (hydra.core.Type.Literal) (typ_tco);
             return new hydra.core.Name("hydra.core.Literal");
           }
         }
-        if ((typ) instanceof hydra.core.Type.Record) {
+        if ((typ_tco) instanceof hydra.core.Type.Record) {
           {
-            var rt = (hydra.core.Type.Record) (typ);
+            var rt = (hydra.core.Type.Record) (typ_tco);
             return ((rt).value).typeName;
           }
         }
-        if ((typ) instanceof hydra.core.Type.Union) {
+        if ((typ_tco) instanceof hydra.core.Type.Union) {
           {
-            var rt = (hydra.core.Type.Union) (typ);
+            var rt = (hydra.core.Type.Union) (typ_tco);
             return ((rt).value).typeName;
           }
         }
-        if ((typ) instanceof hydra.core.Type.Wrap) {
+        if ((typ_tco) instanceof hydra.core.Type.Wrap) {
           {
-            var wt = (hydra.core.Type.Wrap) (typ);
+            var wt = (hydra.core.Type.Wrap) (typ_tco);
             return ((wt).value).typeName;
           }
         }

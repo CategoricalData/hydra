@@ -608,6 +608,14 @@ variableDeclarationStatement aliases jtype id rhs =
     Syntax.localVariableDeclarationDeclarators = [
       vdec]})))
 
+finalVarDeclarationStatement :: (Syntax.Identifier -> Syntax.Expression -> Syntax.BlockStatement)
+finalVarDeclarationStatement id rhs = (Syntax.BlockStatementLocalVariableDeclaration (Syntax.LocalVariableDeclarationStatement (Syntax.LocalVariableDeclaration {
+  Syntax.localVariableDeclarationModifiers = [
+    Syntax.VariableModifierFinal],
+  Syntax.localVariableDeclarationType = Syntax.LocalVariableTypeVar,
+  Syntax.localVariableDeclarationDeclarators = [
+    javaVariableDeclarator id (Just (Syntax.VariableInitializerExpression rhs))]})))
+
 javaStringMultiplicativeExpression :: (String -> Syntax.MultiplicativeExpression)
 javaStringMultiplicativeExpression s = (javaLiteralToJavaMultiplicativeExpression (javaString s))
 

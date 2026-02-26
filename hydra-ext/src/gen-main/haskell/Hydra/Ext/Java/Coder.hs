@@ -587,28 +587,32 @@ encodeVariable :: (Helpers.JavaEnvironment -> Core.Name -> Compute.Flow Graph.Gr
 encodeVariable env name =  
   let aliases = (Helpers.javaEnvironmentAliases env)
   in  
-    let jid = (Utils_.javaIdentifier (Core.unName name))
-    in (Logic.ifElse (Sets.member name (Helpers.aliasesBranchVars aliases)) (Flows.pure (Utils_.javaFieldAccessToJavaExpression (Syntax.FieldAccess {
-      Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Utils_.javaExpressionToJavaPrimary (Utils_.javaIdentifierToJavaExpression jid))),
-      Syntax.fieldAccessIdentifier = (Utils_.javaIdentifier Names.valueFieldName)}))) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name (Strings.cat [
-      Names.instanceName,
-      "_",
-      Names.valueFieldName]))) (isRecursiveVariable aliases name)) ( 
-      let instanceExpr = (Utils_.javaIdentifierToJavaExpression (Utils_.javaIdentifier Names.instanceName))
-      in (Flows.pure (Utils_.javaFieldAccessToJavaExpression (Syntax.FieldAccess {
-        Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Utils_.javaExpressionToJavaPrimary instanceExpr)),
-        Syntax.fieldAccessIdentifier = (Utils_.javaIdentifier Names.valueFieldName)})))) (Logic.ifElse (Logic.and (isRecursiveVariable aliases name) (Logic.not (isLambdaBoundIn name (Helpers.aliasesLambdaVars aliases)))) (Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocation (Just (Left (Syntax.ExpressionName {
-      Syntax.expressionNameQualifier = Nothing,
-      Syntax.expressionNameIdentifier = jid}))) (Syntax.Identifier Names.getMethodName) []))) (Logic.ifElse (Logic.and (Sets.member name (Helpers.aliasesThunkedVars aliases)) (Logic.not (isLambdaBoundIn name (Helpers.aliasesLambdaVars aliases)))) (Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocation (Just (Left (Syntax.ExpressionName {
-      Syntax.expressionNameQualifier = Nothing,
-      Syntax.expressionNameIdentifier = jid}))) (Syntax.Identifier Names.getMethodName) []))) (Logic.ifElse (isLambdaBoundIn name (Helpers.aliasesLambdaVars aliases)) ( 
-      let actualName = (findMatchingLambdaVar name (Helpers.aliasesLambdaVars aliases))
-      in (Flows.pure (Utils_.javaIdentifierToJavaExpression (Utils_.variableToJavaIdentifier actualName)))) (Flows.bind (classifyDataReference name) (\cls -> (\x -> case x of
-      Helpers.JavaSymbolClassHoistedLambda v1 -> (encodeVariable_hoistedLambdaCase aliases name v1)
-      Helpers.JavaSymbolClassLocalVariable -> (Flows.pure (Utils_.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases name)))
-      Helpers.JavaSymbolClassConstant -> (Flows.pure (Utils_.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases name)))
-      Helpers.JavaSymbolClassNullaryFunction -> (Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocation Nothing (elementJavaIdentifier False False aliases name) [])))
-      Helpers.JavaSymbolClassUnaryFunction -> (Flows.pure (Utils_.javaIdentifierToJavaExpression (elementJavaIdentifier False True aliases name)))) cls)))))))
+    let resolvedName = (Utils_.lookupJavaVarName aliases name)
+    in  
+      let jid = (Utils_.javaIdentifier (Core.unName resolvedName))
+      in (Logic.ifElse (Sets.member name (Helpers.aliasesBranchVars aliases)) (Flows.pure (Utils_.javaFieldAccessToJavaExpression (Syntax.FieldAccess {
+        Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Utils_.javaExpressionToJavaPrimary (Utils_.javaIdentifierToJavaExpression jid))),
+        Syntax.fieldAccessIdentifier = (Utils_.javaIdentifier Names.valueFieldName)}))) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name (Strings.cat [
+        Names.instanceName,
+        "_",
+        Names.valueFieldName]))) (isRecursiveVariable aliases name)) ( 
+        let instanceExpr = (Utils_.javaIdentifierToJavaExpression (Utils_.javaIdentifier Names.instanceName))
+        in (Flows.pure (Utils_.javaFieldAccessToJavaExpression (Syntax.FieldAccess {
+          Syntax.fieldAccessQualifier = (Syntax.FieldAccess_QualifierPrimary (Utils_.javaExpressionToJavaPrimary instanceExpr)),
+          Syntax.fieldAccessIdentifier = (Utils_.javaIdentifier Names.valueFieldName)})))) (Logic.ifElse (Logic.and (isRecursiveVariable aliases name) (Logic.not (isLambdaBoundIn name (Helpers.aliasesLambdaVars aliases)))) (Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocation (Just (Left (Syntax.ExpressionName {
+        Syntax.expressionNameQualifier = Nothing,
+        Syntax.expressionNameIdentifier = jid}))) (Syntax.Identifier Names.getMethodName) []))) (Logic.ifElse (Logic.and (Sets.member name (Helpers.aliasesThunkedVars aliases)) (Logic.not (isLambdaBoundIn name (Helpers.aliasesLambdaVars aliases)))) (Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocation (Just (Left (Syntax.ExpressionName {
+        Syntax.expressionNameQualifier = Nothing,
+        Syntax.expressionNameIdentifier = jid}))) (Syntax.Identifier Names.getMethodName) []))) (Logic.ifElse (isLambdaBoundIn name (Helpers.aliasesLambdaVars aliases)) ( 
+        let actualName = (findMatchingLambdaVar name (Helpers.aliasesLambdaVars aliases))
+        in  
+          let resolvedActual = (Utils_.lookupJavaVarName aliases actualName)
+          in (Flows.pure (Utils_.javaIdentifierToJavaExpression (Utils_.variableToJavaIdentifier resolvedActual)))) (Flows.bind (classifyDataReference name) (\cls -> (\x -> case x of
+        Helpers.JavaSymbolClassHoistedLambda v1 -> (encodeVariable_hoistedLambdaCase aliases name v1)
+        Helpers.JavaSymbolClassLocalVariable -> (Flows.pure (Utils_.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases resolvedName)))
+        Helpers.JavaSymbolClassConstant -> (Flows.pure (Utils_.javaIdentifierToJavaExpression (elementJavaIdentifier False False aliases name)))
+        Helpers.JavaSymbolClassNullaryFunction -> (Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocation Nothing (elementJavaIdentifier False False aliases name) [])))
+        Helpers.JavaSymbolClassUnaryFunction -> (Flows.pure (Utils_.javaIdentifierToJavaExpression (elementJavaIdentifier False True aliases name)))) cls)))))))
 
 encodeVariable_buildCurried :: ([Core.Name] -> Syntax.Expression -> Syntax.Expression)
 encodeVariable_buildCurried params inner = (Logic.ifElse (Lists.null params) inner (Utils_.javaLambda (Lists.head params) (encodeVariable_buildCurried (Lists.tail params) inner)))
@@ -2597,110 +2601,129 @@ propagateTypesInAppChain fixedCod resultType t =
                         Core.applicationArgument = rhs})))
                 _ -> (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ resultType)) t)) (Rewriting.deannotateTerm t)))
 
-encodeTermTCO :: (Helpers.JavaEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Compute.Flow Graph.Graph [Syntax.BlockStatement])
-encodeTermTCO env funcName paramNames term =  
-  let stripped = (Rewriting.deannotateAndDetypeTerm term)
+encodeTermTCO :: (Helpers.JavaEnvironment -> Core.Name -> [Core.Name] -> M.Map Core.Name Core.Name -> Core.Term -> Compute.Flow Graph.Graph [Syntax.BlockStatement])
+encodeTermTCO env0 funcName paramNames tcoVarRenames term =  
+  let aliases0 = (Helpers.javaEnvironmentAliases env0)
   in  
-    let gathered = (CoderUtils.gatherApplications stripped)
+    let env = Helpers.JavaEnvironment {
+            Helpers.javaEnvironmentAliases = Helpers.Aliases {
+              Helpers.aliasesCurrentNamespace = (Helpers.aliasesCurrentNamespace aliases0),
+              Helpers.aliasesPackages = (Helpers.aliasesPackages aliases0),
+              Helpers.aliasesBranchVars = (Helpers.aliasesBranchVars aliases0),
+              Helpers.aliasesRecursiveVars = (Helpers.aliasesRecursiveVars aliases0),
+              Helpers.aliasesInScopeTypeParams = (Helpers.aliasesInScopeTypeParams aliases0),
+              Helpers.aliasesPolymorphicLocals = (Helpers.aliasesPolymorphicLocals aliases0),
+              Helpers.aliasesInScopeJavaVars = (Helpers.aliasesInScopeJavaVars aliases0),
+              Helpers.aliasesVarRenames = (Maps.union tcoVarRenames (Helpers.aliasesVarRenames aliases0)),
+              Helpers.aliasesLambdaVars = (Helpers.aliasesLambdaVars aliases0),
+              Helpers.aliasesTypeVarSubst = (Helpers.aliasesTypeVarSubst aliases0),
+              Helpers.aliasesTrustedTypeVars = (Helpers.aliasesTrustedTypeVars aliases0),
+              Helpers.aliasesMethodCodomain = (Helpers.aliasesMethodCodomain aliases0),
+              Helpers.aliasesThunkedVars = (Helpers.aliasesThunkedVars aliases0)},
+            Helpers.javaEnvironmentTypeContext = (Helpers.javaEnvironmentTypeContext env0)}
     in  
-      let gatherArgs = (Pairs.first gathered)
+      let stripped = (Rewriting.deannotateAndDetypeTerm term)
       in  
-        let gatherFun = (Pairs.second gathered)
+        let gathered = (CoderUtils.gatherApplications stripped)
         in  
-          let strippedFun = (Rewriting.deannotateAndDetypeTerm gatherFun)
+          let gatherArgs = (Pairs.first gathered)
           in  
-            let isSelfCall = ((\x -> case x of
-                    Core.TermVariable v1 -> (Equality.equal v1 funcName)
-                    _ -> False) strippedFun)
-            in (Logic.ifElse (Logic.and isSelfCall (Equality.equal (Lists.length gatherArgs) (Lists.length paramNames))) ( 
-              let changePairs = (Lists.filter (\pair -> Logic.not ((\x -> case x of
-                      Core.TermVariable v1 -> (Equality.equal v1 (Pairs.first pair))
-                      _ -> False) (Rewriting.deannotateAndDetypeTerm (Pairs.second pair)))) (Lists.zip paramNames gatherArgs))
+            let gatherFun = (Pairs.second gathered)
+            in  
+              let strippedFun = (Rewriting.deannotateAndDetypeTerm gatherFun)
               in  
-                let changedParams = (Lists.map Pairs.first changePairs)
-                in (Flows.bind (Flows.mapList (\pair -> encodeTerm env (Pairs.second pair)) changePairs) (\jChangedArgs ->  
-                  let assignments = (Lists.map (\pair ->  
-                          let paramName = (Pairs.first pair)
-                          in  
-                            let jArg = (Pairs.second pair)
-                            in (Syntax.BlockStatementStatement (Utils_.javaAssignmentStatement (Syntax.LeftHandSideExpressionName (Utils_.javaIdentifierToJavaExpressionName (Utils_.variableToJavaIdentifier paramName))) jArg))) (Lists.zip changedParams jChangedArgs))
+                let isSelfCall = ((\x -> case x of
+                        Core.TermVariable v1 -> (Equality.equal v1 funcName)
+                        _ -> False) strippedFun)
+                in (Logic.ifElse (Logic.and isSelfCall (Equality.equal (Lists.length gatherArgs) (Lists.length paramNames))) ( 
+                  let changePairs = (Lists.filter (\pair -> Logic.not ((\x -> case x of
+                          Core.TermVariable v1 -> (Equality.equal v1 (Pairs.first pair))
+                          _ -> False) (Rewriting.deannotateAndDetypeTerm (Pairs.second pair)))) (Lists.zip paramNames gatherArgs))
                   in  
-                    let continueStmt = (Syntax.BlockStatementStatement (Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementContinue (Syntax.ContinueStatement Nothing))))
-                    in (Flows.pure (Lists.concat2 assignments [
-                      continueStmt]))))) ( 
-              let gathered2 = (CoderUtils.gatherApplications term)
-              in  
-                let args2 = (Pairs.first gathered2)
-                in  
-                  let body2 = (Pairs.second gathered2)
-                  in (Logic.ifElse (Equality.equal (Lists.length args2) 1) ( 
-                    let arg = (Lists.head args2)
-                    in ((\x -> case x of
-                      Core.TermFunction v1 -> ((\x -> case x of
-                        Core.FunctionElimination v2 -> ((\x -> case x of
-                          Core.EliminationUnion v3 ->  
-                            let aliases = (Helpers.javaEnvironmentAliases env)
-                            in  
-                              let tname = (Core.caseStatementTypeName v3)
+                    let changedParams = (Lists.map Pairs.first changePairs)
+                    in (Flows.bind (Flows.mapList (\pair -> encodeTerm env (Pairs.second pair)) changePairs) (\jChangedArgs ->  
+                      let assignments = (Lists.map (\pair ->  
+                              let paramName = (Pairs.first pair)
                               in  
-                                let dflt = (Core.caseStatementDefault v3)
+                                let jArg = (Pairs.second pair)
+                                in (Syntax.BlockStatementStatement (Utils_.javaAssignmentStatement (Syntax.LeftHandSideExpressionName (Utils_.javaIdentifierToJavaExpressionName (Utils_.variableToJavaIdentifier paramName))) jArg))) (Lists.zip changedParams jChangedArgs))
+                      in  
+                        let continueStmt = (Syntax.BlockStatementStatement (Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementContinue (Syntax.ContinueStatement Nothing))))
+                        in (Flows.pure (Lists.concat2 assignments [
+                          continueStmt]))))) ( 
+                  let gathered2 = (CoderUtils.gatherApplications term)
+                  in  
+                    let args2 = (Pairs.first gathered2)
+                    in  
+                      let body2 = (Pairs.second gathered2)
+                      in (Logic.ifElse (Equality.equal (Lists.length args2) 1) ( 
+                        let arg = (Lists.head args2)
+                        in ((\x -> case x of
+                          Core.TermFunction v1 -> ((\x -> case x of
+                            Core.FunctionElimination v2 -> ((\x -> case x of
+                              Core.EliminationUnion v3 ->  
+                                let aliases = (Helpers.javaEnvironmentAliases env)
                                 in  
-                                  let cases_ = (Core.caseStatementCases v3)
-                                  in (Flows.bind (domTypeArgs aliases (Schemas.nominalApplication tname [])) (\domArgs -> Flows.bind (encodeTerm env arg) (\jArg -> Flows.bind (Flows.mapList (\field ->  
-                                    let fieldName = (Core.fieldName field)
+                                  let tname = (Core.caseStatementTypeName v3)
+                                  in  
+                                    let dflt = (Core.caseStatementDefault v3)
                                     in  
-                                      let variantRefType = (Utils_.nameToJavaReferenceType aliases True domArgs tname (Just (Formatting.capitalize (Core.unName fieldName))))
-                                      in ((\x -> case x of
-                                        Core.TermFunction v4 -> ((\x -> case x of
-                                          Core.FunctionLambda v5 -> (withLambda env v5 (\env2 ->  
-                                            let lambdaParam = (Core.lambdaParameter v5)
-                                            in  
-                                              let branchBody = (Core.lambdaBody v5)
-                                              in  
-                                                let env3 = (insertBranchVar lambdaParam env2)
+                                      let cases_ = (Core.caseStatementCases v3)
+                                      in (Flows.bind (domTypeArgs aliases (Schemas.nominalApplication tname [])) (\domArgs -> Flows.bind (encodeTerm env arg) (\jArg -> Flows.bind (Flows.mapList (\field ->  
+                                        let fieldName = (Core.fieldName field)
+                                        in  
+                                          let variantRefType = (Utils_.nameToJavaReferenceType aliases True domArgs tname (Just (Formatting.capitalize (Core.unName fieldName))))
+                                          in ((\x -> case x of
+                                            Core.TermFunction v4 -> ((\x -> case x of
+                                              Core.FunctionLambda v5 -> (withLambda env v5 (\env2 ->  
+                                                let lambdaParam = (Core.lambdaParameter v5)
                                                 in  
-                                                  let varId = (Utils_.variableToJavaIdentifier lambdaParam)
+                                                  let branchBody = (Core.lambdaBody v5)
                                                   in  
-                                                    let castExpr = (Utils_.javaCastExpressionToJavaExpression (Utils_.javaCastExpression variantRefType (Utils_.javaExpressionToJavaUnaryExpression jArg)))
+                                                    let env3 = (insertBranchVar lambdaParam env2)
                                                     in  
-                                                      let localDecl = (Utils_.varDeclarationStatement varId castExpr)
+                                                      let varId = (Utils_.variableToJavaIdentifier lambdaParam)
                                                       in  
-                                                        let isBranchTailCall = (CoderUtils.isTailRecursiveInTailPosition funcName branchBody)
-                                                        in (Flows.bind (Logic.ifElse isBranchTailCall (encodeTermTCO env3 funcName paramNames branchBody) (Flows.bind (analyzeJavaFunction env3 branchBody) (\fs ->  
-                                                          let bindings = (Typing.functionStructureBindings fs)
+                                                        let castExpr = (Utils_.javaCastExpressionToJavaExpression (Utils_.javaCastExpression variantRefType (Utils_.javaExpressionToJavaUnaryExpression jArg)))
+                                                        in  
+                                                          let localDecl = (Utils_.varDeclarationStatement varId castExpr)
                                                           in  
-                                                            let innerBody = (Typing.functionStructureBody fs)
-                                                            in  
-                                                              let env4 = (Typing.functionStructureEnvironment fs)
-                                                              in (Flows.bind (bindingsToStatements env4 bindings) (\bindResult ->  
-                                                                let bindingStmts = (Pairs.first bindResult)
-                                                                in  
-                                                                  let env5 = (Pairs.second bindResult)
-                                                                  in (Flows.bind (encodeTerm env5 innerBody) (\jret ->  
-                                                                    let returnStmt = (Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jret)))
-                                                                    in (Flows.pure (Lists.concat2 bindingStmts [
-                                                                      returnStmt]))))))))) (\bodyStmts ->  
-                                                          let relExpr = (Utils_.javaInstanceOf (Utils_.javaUnaryExpressionToJavaRelationalExpression (Utils_.javaExpressionToJavaUnaryExpression jArg)) variantRefType)
-                                                          in  
-                                                            let condExpr = (Utils_.javaRelationalExpressionToJavaExpression relExpr)
-                                                            in  
-                                                              let blockStmts = (Lists.cons localDecl bodyStmts)
+                                                            let isBranchTailCall = (CoderUtils.isTailRecursiveInTailPosition funcName branchBody)
+                                                            in (Flows.bind (Logic.ifElse isBranchTailCall (encodeTermTCO env3 funcName paramNames tcoVarRenames branchBody) (Flows.bind (analyzeJavaFunction env3 branchBody) (\fs ->  
+                                                              let bindings = (Typing.functionStructureBindings fs)
                                                               in  
-                                                                let ifBody = (Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementBlock (Syntax.Block blockStmts)))
-                                                                in (Flows.pure (Syntax.BlockStatementStatement (Syntax.StatementIfThen (Syntax.IfThenStatement {
-                                                                  Syntax.ifThenStatementExpression = condExpr,
-                                                                  Syntax.ifThenStatementStatement = ifBody}))))))))
-                                          _ -> (Monads.fail "TCO: case branch is not a lambda")) v4)
-                                        _ -> (Monads.fail "TCO: case branch is not a lambda")) (Rewriting.deannotateTerm (Core.fieldTerm field)))) cases_) (\ifBlocks -> Flows.bind (Maybes.cases dflt (Flows.pure [
-                                    Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jArg))]) (\d -> Flows.bind (encodeTerm env d) (\dExpr -> Flows.pure [
-                                    Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just dExpr))]))) (\defaultStmt -> Flows.pure (Lists.concat2 ifBlocks defaultStmt))))))
+                                                                let innerBody = (Typing.functionStructureBody fs)
+                                                                in  
+                                                                  let env4 = (Typing.functionStructureEnvironment fs)
+                                                                  in (Flows.bind (bindingsToStatements env4 bindings) (\bindResult ->  
+                                                                    let bindingStmts = (Pairs.first bindResult)
+                                                                    in  
+                                                                      let env5 = (Pairs.second bindResult)
+                                                                      in (Flows.bind (encodeTerm env5 innerBody) (\jret ->  
+                                                                        let returnStmt = (Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jret)))
+                                                                        in (Flows.pure (Lists.concat2 bindingStmts [
+                                                                          returnStmt]))))))))) (\bodyStmts ->  
+                                                              let relExpr = (Utils_.javaInstanceOf (Utils_.javaUnaryExpressionToJavaRelationalExpression (Utils_.javaExpressionToJavaUnaryExpression jArg)) variantRefType)
+                                                              in  
+                                                                let condExpr = (Utils_.javaRelationalExpressionToJavaExpression relExpr)
+                                                                in  
+                                                                  let blockStmts = (Lists.cons localDecl bodyStmts)
+                                                                  in  
+                                                                    let ifBody = (Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementBlock (Syntax.Block blockStmts)))
+                                                                    in (Flows.pure (Syntax.BlockStatementStatement (Syntax.StatementIfThen (Syntax.IfThenStatement {
+                                                                      Syntax.ifThenStatementExpression = condExpr,
+                                                                      Syntax.ifThenStatementStatement = ifBody}))))))))
+                                              _ -> (Monads.fail "TCO: case branch is not a lambda")) v4)
+                                            _ -> (Monads.fail "TCO: case branch is not a lambda")) (Rewriting.deannotateTerm (Core.fieldTerm field)))) cases_) (\ifBlocks -> Flows.bind (Maybes.cases dflt (Flows.pure [
+                                        Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jArg))]) (\d -> Flows.bind (encodeTerm env d) (\dExpr -> Flows.pure [
+                                        Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just dExpr))]))) (\defaultStmt -> Flows.pure (Lists.concat2 ifBlocks defaultStmt))))))
+                              _ -> (Flows.bind (encodeTerm env term) (\expr -> Flows.pure [
+                                Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just expr))]))) v2)
+                            _ -> (Flows.bind (encodeTerm env term) (\expr -> Flows.pure [
+                              Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just expr))]))) v1)
                           _ -> (Flows.bind (encodeTerm env term) (\expr -> Flows.pure [
-                            Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just expr))]))) v2)
-                        _ -> (Flows.bind (encodeTerm env term) (\expr -> Flows.pure [
-                          Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just expr))]))) v1)
-                      _ -> (Flows.bind (encodeTerm env term) (\expr -> Flows.pure [
-                        Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just expr))]))) (Rewriting.deannotateAndDetypeTerm body2))) (Flows.bind (encodeTerm env term) (\expr -> Flows.pure [
-                    Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just expr))])))))
+                            Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just expr))]))) (Rewriting.deannotateAndDetypeTerm body2))) (Flows.bind (encodeTerm env term) (\expr -> Flows.pure [
+                        Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just expr))])))))
 
 encodeTermDefinition :: (Helpers.JavaEnvironment -> Module.TermDefinition -> Compute.Flow Graph.Graph Syntax.InterfaceMemberDeclaration)
 encodeTermDefinition env tdef =  
@@ -2804,18 +2827,29 @@ encodeTermDefinition env tdef =
                                                                             let jname = (Utils_.sanitizeJavaName (Formatting.decapitalize (Names_.localNameOf name)))
                                                                             in  
                                                                               let isTCO = (Logic.and (Logic.not (Lists.null params)) (CoderUtils.isSelfTailRecursive name body))
-                                                                              in (Flows.bind (Logic.ifElse isTCO (Flows.bind (encodeTermTCO env3 name params annotatedBody) (\tcoStmts ->  
-                                                                                let whileBodyStmts = (Lists.concat2 bindingStmts tcoStmts)
+                                                                              in (Flows.bind (Logic.ifElse isTCO ( 
+                                                                                let tcoSuffix = "_tco"
                                                                                 in  
-                                                                                  let whileBodyBlock = (Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementBlock (Syntax.Block whileBodyStmts)))
+                                                                                  let snapshotNames = (Lists.map (\p -> Core.Name (Strings.cat2 (Core.unName p) tcoSuffix)) params)
                                                                                   in  
-                                                                                    let noCond = Nothing
+                                                                                    let tcoVarRenames = (Maps.fromList (Lists.zip params snapshotNames))
                                                                                     in  
-                                                                                      let whileStmt = (Syntax.BlockStatementStatement (Syntax.StatementWhile (Syntax.WhileStatement {
-                                                                                              Syntax.whileStatementCond = noCond,
-                                                                                              Syntax.whileStatementBody = whileBodyBlock})))
-                                                                                      in (Flows.pure [
-                                                                                        whileStmt]))) (Flows.bind (encodeTerm env3 annotatedBody) (\jbody ->  
+                                                                                      let snapshotDecls = (Lists.map (\pair -> Utils_.finalVarDeclarationStatement (Utils_.variableToJavaIdentifier (Pairs.second pair)) (Utils_.javaIdentifierToJavaExpression (Utils_.variableToJavaIdentifier (Pairs.first pair)))) (Lists.zip params snapshotNames))
+                                                                                      in (Flows.bind (encodeTermTCO env3 name params tcoVarRenames annotatedBody) (\tcoStmts ->  
+                                                                                        let whileBodyStmts = (Lists.concat [
+                                                                                                bindingStmts,
+                                                                                                snapshotDecls,
+                                                                                                tcoStmts])
+                                                                                        in  
+                                                                                          let whileBodyBlock = (Syntax.StatementWithoutTrailing (Syntax.StatementWithoutTrailingSubstatementBlock (Syntax.Block whileBodyStmts)))
+                                                                                          in  
+                                                                                            let noCond = Nothing
+                                                                                            in  
+                                                                                              let whileStmt = (Syntax.BlockStatementStatement (Syntax.StatementWhile (Syntax.WhileStatement {
+                                                                                                      Syntax.whileStatementCond = noCond,
+                                                                                                      Syntax.whileStatementBody = whileBodyBlock})))
+                                                                                              in (Flows.pure [
+                                                                                                whileStmt])))) (Flows.bind (encodeTerm env3 annotatedBody) (\jbody ->  
                                                                                 let returnSt = (Syntax.BlockStatementStatement (Utils_.javaReturnStatement (Just jbody)))
                                                                                 in (Flows.pure (Lists.concat2 bindingStmts [
                                                                                   returnSt]))))) (\methodBody -> Flows.pure (Utils_.interfaceMethodDeclaration mods jparams jname jformalParams result (Just methodBody)))))))))))))))))

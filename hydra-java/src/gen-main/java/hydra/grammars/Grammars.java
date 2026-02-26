@@ -80,24 +80,25 @@ public interface Grammars {
   static Boolean isComplex(hydra.grammar.Pattern pat) {
     while (true) {
       {
-        if ((pat) instanceof hydra.grammar.Pattern.Labeled) {
+        final var pat_tco = pat;
+        if ((pat_tco) instanceof hydra.grammar.Pattern.Labeled) {
           {
-            var lp = (hydra.grammar.Pattern.Labeled) (pat);
+            var lp = (hydra.grammar.Pattern.Labeled) (pat_tco);
             pat = ((lp).value).pattern;
             continue;
           }
         }
-        if ((pat) instanceof hydra.grammar.Pattern.Sequence) {
+        if ((pat_tco) instanceof hydra.grammar.Pattern.Sequence) {
           {
-            var pats = (hydra.grammar.Pattern.Sequence) (pat);
+            var pats = (hydra.grammar.Pattern.Sequence) (pat_tco);
             return hydra.grammars.Grammars.isNontrivial(
               true,
               (pats).value);
           }
         }
-        if ((pat) instanceof hydra.grammar.Pattern.Alternatives) {
+        if ((pat_tco) instanceof hydra.grammar.Pattern.Alternatives) {
           {
-            var pats = (hydra.grammar.Pattern.Alternatives) (pat);
+            var pats = (hydra.grammar.Pattern.Alternatives) (pat_tco);
             return hydra.grammars.Grammars.isNontrivial(
               false,
               (pats).value);

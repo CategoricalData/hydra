@@ -32,28 +32,29 @@ public interface Rewriting {
   static hydra.core.Term deannotateAndDetypeTerm(hydra.core.Term t) {
     while (true) {
       {
-        if ((t) instanceof hydra.core.Term.Annotated) {
+        final var t_tco = t;
+        if ((t_tco) instanceof hydra.core.Term.Annotated) {
           {
-            var at = (hydra.core.Term.Annotated) (t);
+            var at = (hydra.core.Term.Annotated) (t_tco);
             t = ((at).value).body;
             continue;
           }
         }
-        if ((t) instanceof hydra.core.Term.TypeApplication) {
+        if ((t_tco) instanceof hydra.core.Term.TypeApplication) {
           {
-            var tt = (hydra.core.Term.TypeApplication) (t);
+            var tt = (hydra.core.Term.TypeApplication) (t_tco);
             t = ((tt).value).body;
             continue;
           }
         }
-        if ((t) instanceof hydra.core.Term.TypeLambda) {
+        if ((t_tco) instanceof hydra.core.Term.TypeLambda) {
           {
-            var ta = (hydra.core.Term.TypeLambda) (t);
+            var ta = (hydra.core.Term.TypeLambda) (t_tco);
             t = ((ta).value).body;
             continue;
           }
         }
-        return t;
+        return t_tco;
       }
     }
   }
@@ -61,14 +62,15 @@ public interface Rewriting {
   static hydra.core.Term deannotateTerm(hydra.core.Term t) {
     while (true) {
       {
-        if ((t) instanceof hydra.core.Term.Annotated) {
+        final var t_tco = t;
+        if ((t_tco) instanceof hydra.core.Term.Annotated) {
           {
-            var at = (hydra.core.Term.Annotated) (t);
+            var at = (hydra.core.Term.Annotated) (t_tco);
             t = ((at).value).body;
             continue;
           }
         }
-        return t;
+        return t_tco;
       }
     }
   }
@@ -76,14 +78,15 @@ public interface Rewriting {
   static hydra.core.Type deannotateType(hydra.core.Type t) {
     while (true) {
       {
-        if ((t) instanceof hydra.core.Type.Annotated) {
+        final var t_tco = t;
+        if ((t_tco) instanceof hydra.core.Type.Annotated) {
           {
-            var arg_ = (hydra.core.Type.Annotated) (t);
+            var arg_ = (hydra.core.Type.Annotated) (t_tco);
             t = ((arg_).value).body;
             continue;
           }
         }
-        return t;
+        return t_tco;
       }
     }
   }
@@ -91,14 +94,15 @@ public interface Rewriting {
   static hydra.core.Type deannotateTypeParameters(hydra.core.Type t) {
     while (true) {
       {
-        if ((hydra.rewriting.Rewriting.deannotateType(t)) instanceof hydra.core.Type.Forall) {
+        final var t_tco = t;
+        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Forall) {
           {
-            var lt = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(t));
+            var lt = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(t_tco));
             t = ((lt).value).body;
             continue;
           }
         }
-        return t;
+        return t_tco;
       }
     }
   }
@@ -600,9 +604,10 @@ public interface Rewriting {
   static Boolean isLambda(hydra.core.Term term) {
     while (true) {
       {
-        if ((hydra.rewriting.Rewriting.deannotateTerm(term)) instanceof hydra.core.Term.Function) {
+        final var term_tco = term;
+        if ((hydra.rewriting.Rewriting.deannotateTerm(term_tco)) instanceof hydra.core.Term.Function) {
           {
-            var v1 = (hydra.core.Term.Function) (hydra.rewriting.Rewriting.deannotateTerm(term));
+            var v1 = (hydra.core.Term.Function) (hydra.rewriting.Rewriting.deannotateTerm(term_tco));
             if (((v1).value) instanceof hydra.core.Function.Lambda) {
               {
                 var ignored = (hydra.core.Function.Lambda) ((v1).value);
@@ -612,9 +617,9 @@ public interface Rewriting {
             return false;
           }
         }
-        if ((hydra.rewriting.Rewriting.deannotateTerm(term)) instanceof hydra.core.Term.Let) {
+        if ((hydra.rewriting.Rewriting.deannotateTerm(term_tco)) instanceof hydra.core.Term.Let) {
           {
-            var lt = (hydra.core.Term.Let) (hydra.rewriting.Rewriting.deannotateTerm(term));
+            var lt = (hydra.core.Term.Let) (hydra.rewriting.Rewriting.deannotateTerm(term_tco));
             term = ((lt).value).body;
             continue;
           }
