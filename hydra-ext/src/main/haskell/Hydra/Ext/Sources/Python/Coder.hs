@@ -208,6 +208,10 @@ module_ = Module ns elements
       -- Initial environment creation
       toBinding initialEnvironment,
       toBinding targetPythonVersion,
+      toBinding isComplexVariableForPython,
+      toBinding isComplexTermForPython,
+      toBinding isComplexBindingForPython,
+      toBinding bindingMetadataForPython,
       -- Function analysis
       toBinding analyzePythonFunction,
       toBinding analyzePythonFunctionInline,
@@ -1762,7 +1766,7 @@ withLet = def "withLet" $
   Schemas.withLetContext @@
     pythonEnvironmentGetTypeContext @@
     pythonEnvironmentSetTypeContext @@
-    CoderUtils.bindingMetadata
+    bindingMetadataForPython
 
 -- | Execute a computation with inline let context (no metadata, for walrus operators)
 --   Also adds binding names to inlineVariables so encodeVariable knows not to add call syntax.
@@ -1828,6 +1832,66 @@ targetPythonVersion = def "targetPythonVersion" $
   doc "The target Python version for code generation" $
   PyUtils.targetPythonVersion
 
+-- | A Python-specific version of isComplexVariable that only flags nullary complex variables.
+--   Non-nullary variables (functions with arity > 0) in applied positions produce values and
+--   should not make the containing term "complex".
+isComplexVariableForPython :: TBinding (TypeContext -> Name -> Bool)
+isComplexVariableForPython = def "isComplexVariableForPython" $
+  doc "Check if a variable reference indicates complexity, excluding non-nullary functions" $
+  "tc" ~> "name" ~>
+    "metaLookup" <~ Maps.lookup (var "name") (Typing.typeContextMetadata $ var "tc") $
+    Logic.ifElse (Maybes.isJust $ var "metaLookup")
+      -- In metadata: check if it's a nullary binding (arity 0)
+      -- Non-nullary functions in metadata shouldn't propagate complexity
+      (Maybes.maybe
+        true  -- Not in types map → treat as complex (safe default)
+        ("typ" ~> Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+        (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tc")))
+      -- Not in metadata: check lambda vars and types
+      (Logic.ifElse (Sets.member (var "name") (Typing.typeContextLambdaVariables $ var "tc"))
+        true
+        ("typeLookup" <~ Maps.lookup (var "name") (Typing.typeContextTypes $ var "tc") $
+          Logic.not $ Maybes.isJust $ var "typeLookup"))
+
+-- | A Python-specific version of isComplexTerm that uses isComplexVariableForPython.
+isComplexTermForPython :: TBinding (TypeContext -> Term -> Bool)
+isComplexTermForPython = def "isComplexTermForPython" $
+  doc "Check if a term needs lazy evaluation, excluding non-nullary function references" $
+  "tc" ~> "t" ~>
+    cases _Term (var "t") (Just
+      (Lists.foldl ("b" ~> "sub" ~> Logic.or (var "b") (isComplexTermForPython @@ var "tc" @@ var "sub"))
+        false
+        (Rewriting.subterms @@ var "t"))) [
+      _Term_let>>: constant true,
+      _Term_typeApplication>>: constant true,
+      _Term_typeLambda>>: constant true,
+      _Term_variable>>: "name" ~> isComplexVariableForPython @@ var "tc" @@ var "name"]
+
+-- | A Python-specific version of isComplexBinding that uses isComplexTermForPython.
+isComplexBindingForPython :: TBinding (TypeContext -> Binding -> Bool)
+isComplexBindingForPython = def "isComplexBindingForPython" $
+  doc "Check if a binding needs to be treated as a function (Python-specific)" $
+  "tc" ~> "b" ~>
+    "term" <~ Core.bindingTerm (var "b") $
+    "mts" <~ Core.bindingType (var "b") $
+    Maybes.maybe
+      (isComplexTermForPython @@ var "tc" @@ var "term")
+      ("ts" ~>
+        "isPolymorphic" <~ (Logic.not $ Lists.null $ Core.typeSchemeVariables $ var "ts") $
+        "isNonNullary" <~ (Equality.gt (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) (int32 0)) $
+        "isComplex" <~ (isComplexTermForPython @@ var "tc" @@ var "term") $
+        Logic.or (Logic.or (var "isPolymorphic") (var "isNonNullary")) (var "isComplex"))
+      (var "mts")
+
+-- | Python-specific binding metadata that uses isComplexBindingForPython.
+bindingMetadataForPython :: TBinding (TypeContext -> Binding -> Maybe Term)
+bindingMetadataForPython = def "bindingMetadataForPython" $
+  doc "Produces metadata for a binding if it is complex (Python-specific)" $
+  "tc" ~> "b" ~>
+    Logic.ifElse (isComplexBindingForPython @@ var "tc" @@ var "b")
+      (just $ Core.termLiteral $ Core.literalBoolean true)
+      nothing
+
 -- | Create an initial Python environment for code generation
 initialEnvironment :: TBinding (Namespaces Py.DottedName -> TypeContext -> PyHelpers.PythonEnvironment)
 initialEnvironment = def "initialEnvironment" $
@@ -1848,7 +1912,8 @@ initialEnvironment = def "initialEnvironment" $
 analyzePythonFunction :: TBinding (PyHelpers.PythonEnvironment -> Term -> Flow PyHelpers.PyGraph (FunctionStructure PyHelpers.PythonEnvironment))
 analyzePythonFunction = def "analyzePythonFunction" $
   doc "Analyze a function term with Python-specific TypeContext management" $
-  CoderUtils.analyzeFunctionTerm @@
+  CoderUtils.analyzeFunctionTermWith @@
+    bindingMetadataForPython @@
     pythonEnvironmentGetTypeContext @@
     pythonEnvironmentSetTypeContext
 
@@ -2037,12 +2102,18 @@ encodeFunction = def "encodeFunction" $
             (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv0")]) $
         "pbody" <<~ (encodeTermInline @@ var "innerEnv" @@ false @@ var "innerBody") $
         "pparams" <~ (Lists.map (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "innerEnv") (var "params")) $
-        -- Use curried lambdas when the inner body is a bare union elimination (hoisted case function).
+        -- Use curried lambdas when the inner body involves a case elimination (bare case or case application).
         -- Hoisted bindings are referenced with curried application: _hoist(capturedVar)(arg),
-        -- so the lambda must be curried to match.
+        -- so the lambda must be curried to match. This covers both:
+        --   1. Bare case: \captured -> CaseElim (isBareCase)
+        --   2. Case application: \captured -> Application(CaseElim, arg) (isCaseApplication)
         "isBareCase" <~ (Maybes.isJust $ extractCaseElimination @@ var "innerBody") $
+        "isCaseApplication" <~ cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "innerBody") (Just false) [
+          _Term_application>>: "app" ~>
+            Maybes.isJust (extractCaseElimination @@ (Core.applicationFunction $ var "app"))] $
+        "needsCurrying" <~ Logic.or (var "isBareCase") (var "isCaseApplication") $
         Logic.ifElse (Lists.null $ var "bindings")
-          (Logic.ifElse (var "isBareCase")
+          (Logic.ifElse (var "needsCurrying")
             (produce $ makeCurriedLambda @@ var "pparams" @@ var "pbody")
             (produce $ makeUncurriedLambda @@ var "pparams" @@ var "pbody"))
           -- Has bindings: create walrus operator expressions
@@ -2053,7 +2124,7 @@ encodeFunction = def "encodeFunction" $
             "tupleExpr" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomTuple $ PyDsl.tuple $ var "tupleElements")) $
             "indexValue" <~ (PyUtils.pyAtomToPyExpression @@ (PyDsl.atomNumber $ PyDsl.numberInteger $ Literals.int32ToBigint (Lists.length (var "bindings")))) $
             "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
-            Logic.ifElse (var "isBareCase")
+            Logic.ifElse (var "needsCurrying")
               (produce $ makeCurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr"))
               (produce $ makeUncurriedLambda @@ var "pparams" @@ (PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr"))),
       -- Primitives: encode as variable reference
@@ -2093,7 +2164,7 @@ encodeTermAssignment = def "encodeTermAssignment" $
     "env2" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env2") $
     "binding" <~ (Core.binding (var "name") (var "term") (just $ var "ts")) $
-    "isComplex" <~ (CoderUtils.isComplexBinding @@ var "tc" @@ var "binding") $
+    "isComplex" <~ (isComplexBindingForPython @@ var "tc" @@ var "binding") $
     Logic.ifElse (var "isComplex")
       -- Complex binding: use function definition
       (withBindings @@ var "bindings" @@
@@ -2162,10 +2233,11 @@ encodeVariable = def "encodeVariable" $
               -- In graph elements
               ("el" ~>
                 Maybes.maybe
+                  -- No type scheme: check if binding is complex (needs function call)
                   (produce $ var "asVariable")
                   ("ts" ~>
                     Logic.ifElse (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (int32 0))
-                                            (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                                            (isComplexBindingForPython @@ var "tc" @@ var "el"))
                       (produce $ var "asFunctionCall")
                       ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
                           (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
@@ -2218,7 +2290,7 @@ encodeVariable = def "encodeVariable" $
                           produce $ var "asFunctionRef"))
                       ("ts" ~>
                         Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
-                                                (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                                               (isComplexBindingForPython @@ var "tc" @@ var "el"))
                           (produce $ var "asFunctionCall")
                           ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
                               (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
