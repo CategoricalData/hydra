@@ -9,28 +9,34 @@ def _format_float_like_haskell(x: float) -> str:
     """Format a float to match Haskell's show behavior.
 
     Haskell uses exponential notation for small numbers (abs < 0.1, except 0).
+    Uses repr() for full round-trip precision in all cases.
     """
     if x == 0.0:
         return "0.0"
 
     abs_x = abs(x)
 
-    # Haskell uses exponential notation for small numbers
     if abs_x < 0.1:
-        # Format in exponential notation like Haskell
-        # Haskell produces "5.0e-2" for 0.05
-        formatted = f"{x:.1e}"
-        # Ensure the format matches Haskell's (e.g., "5.0e-2" not "5.0e-02")
-        # Python produces "5.0e-02", Haskell produces "5.0e-2"
-        if 'e-0' in formatted:
-            formatted = formatted.replace('e-0', 'e-')
-        elif 'e+0' in formatted:
-            formatted = formatted.replace('e+0', 'e')
-        return formatted
+        # Haskell uses exponential notation for small numbers
+        r = repr(x)
+        if 'e' in r or 'E' in r:
+            # Already exponential; normalize Python's e-05 to Haskell's e-5
+            r = r.replace('e-0', 'e-').replace('e+0', 'e+').replace('e+', 'e')
+            parts = r.split('e')
+            if '.' not in parts[0]:
+                parts[0] += '.0'
+            return 'e'.join(parts)
+        else:
+            # repr gave non-exponential (e.g. 0.05), convert to exponential
+            import math
+            exp = math.floor(math.log10(abs_x))
+            mantissa = x / (10 ** exp)
+            m_str = repr(mantissa)
+            if '.' not in m_str:
+                m_str += '.0'
+            return f'{m_str}e{exp}'
     else:
-        # Use repr for normal numbers to match Haskell's precision
         result = repr(x)
-        # Ensure there's a decimal point
         if '.' not in result and 'e' not in result:
             result += '.0'
         return result
