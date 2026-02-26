@@ -147,8 +147,15 @@ echo ""
 echo "Rebuilding..."
 stack build
 
+if [ "$QUICK_MODE" = false ]; then
+    echo ""
+    echo "Step 1g: Running Haskell tests..."
+    echo ""
+    stack test 2>&1
+fi
+
 echo ""
-echo "Step 1g: Exporting and verifying JSON..."
+echo "Step 1h: Exporting and verifying JSON..."
 echo ""
 stack build hydra:exe:update-json-kernel hydra:exe:update-json-main hydra:exe:verify-json-kernel
 stack exec update-json-kernel -- $RTS_FLAGS
@@ -156,17 +163,10 @@ stack exec update-json-main -- $RTS_FLAGS
 stack exec verify-json-kernel -- $RTS_FLAGS
 
 echo ""
-echo "Step 1h: Generating JSON manifest..."
+echo "Step 1i: Generating JSON manifest..."
 echo ""
 stack build hydra:exe:update-json-manifest
 stack exec update-json-manifest
-
-if [ "$QUICK_MODE" = false ]; then
-    echo ""
-    echo "Step 1i: Running Haskell tests..."
-    echo ""
-    stack test 2>&1
-fi
 
 echo ""
 echo "Phase 1 complete."
