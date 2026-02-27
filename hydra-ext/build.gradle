@@ -35,7 +35,7 @@ publishing {
                 }
                 scm {
                     url = 'https://github.com/CategoricalData/hydra'
-                    connection = 'scm:git://github.com/ConnectedData/hydra.git'
+                    connection = 'scm:git://github.com/CategoricalData/hydra.git'
                     developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
                 }
 

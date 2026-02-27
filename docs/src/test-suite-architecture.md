@@ -273,35 +273,48 @@ allTestsDef = definitionInModule module_ "allTests" $
 The top-level `TestSuite` module aggregates all test categories:
 
 ```haskell
--- Hydra/Sources/Test/TestSuite.hs
+-- Hydra/Sources/Test/TestSuite.hs (simplified)
 module_ :: Module
-module_ = Module (Namespace "hydra.test.testSuite") elements modules kernelTypesModules $
+module_ = Module ns elements namespaces kernelTypesNamespaces $
     Just "Hydra's common test suite..."
   where
-    elements = [Phantoms.el allTestsDef]
-    modules = [
-      CheckingAll.module_,
-      EtaExpansion.module_,
-      Formatting.module_,
-      InferenceAll.module_,
-      Lists.module_,
-      Strings.module_]
+    elements = [Phantoms.toBinding allTests]
+    namespaces = fst <$> testPairs
 
-allTestsDef :: TBinding TestGroup
-allTestsDef = definitionInModule module_ "allTests" $
+allTests :: TBinding TestGroup
+allTests = definitionInModule module_ "allTests" $
     doc "The group of all common tests" $
-    Testing.testGroup "common" nothing (list subgroups) (list [])
+    Testing.testGroup (string "common") nothing (list subgroups) (list [])
   where
-    subgroups = [
-      ref CheckingAll.allTestsDef,
-      ref EtaExpansion.allTestsDef,
-      ref Formatting.allTestsDef,
-      ref InferenceAll.allTestsDef]
+    subgroups = snd <$> testPairs
+
+-- Test pairs organized into library and other categories
+libPairs :: [(Namespace, TBinding TestGroup)]
+libPairs = [
+  (Chars.ns, Chars.allTests),
+  (Eithers.ns, Eithers.allTests),
+  (Lists.ns, Lists.allTests),
+  (Strings.ns, Strings.allTests),
+  -- ... plus Equality, Flows, Literals, Logic, Maps, Math, Maybes, Pairs, Sets
+  ]
+
+otherPairs :: [(Namespace, TBinding TestGroup)]
+otherPairs = [
+  (CheckingAll.ns, CheckingAll.allTests),
+  (InferenceAll.ns, InferenceAll.allTests),
+  (EtaExpansion.ns, EtaExpansion.allTests),
+  (Formatting.ns, Formatting.allTests),
+  -- ... plus Annotations, Hoisting, Json.*, Monads, Reduction, Rewriting,
+  --   Serialization, Sorting, Substitution, Unification
+  ]
+
+testPairs = libPairs ++ otherPairs
 ```
 
 This creates a hierarchy:
 ```
 TestSuite (common)
+├── Lib tests (Chars, Eithers, Equality, Flows, Lists, Literals, Logic, Maps, ...)
 ├── Checking (all checking tests)
 │   ├── Fundamentals
 │   ├── Algebraic Types
@@ -311,8 +324,11 @@ TestSuite (common)
 │   ├── Fundamentals
 │   ├── Algebraic Types
 │   └── ...
+├── JSON tests (Coder, Parser, Roundtrip, Writer)
 ├── Eta Expansion
-└── Formatting
+├── Formatting
+├── Reduction, Rewriting, Hoisting
+└── Substitution, Unification, ...
 ```
 
 ## Code Generation

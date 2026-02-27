@@ -95,7 +95,7 @@ hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/
 
 ### Module organization
 
-Hydra's kernel consists of **20 type modules** organized into logical categories:
+Hydra's kernel consists of **21 type modules** organized into logical categories:
 
 #### Core Foundation (3 modules)
 
@@ -105,7 +105,7 @@ Hydra's kernel consists of **20 type modules** organized into logical categories
 - All other modules depend on Core directly or transitively
 - Special property: imports itself as a type-level dependency
 
-**Mantle.hs** - `hydra.mantle` namespace
+**Variants.hs** - `hydra.variants` namespace
 - Supplements Core with metadata types NOT referenced by Core
 - Defines variant enums: `TermVariant`, `TypeVariant`, `LiteralVariant`, etc.
 - Provides introspection capabilities: `Precision`, `Comparison`
@@ -239,7 +239,7 @@ def "Table" $
   ]
 ```
 
-#### Example: Enum Type (from Mantle.hs)
+#### Example: Enum Type (from Variants.hs)
 
 ```haskell
 def "TermVariant" $
@@ -256,7 +256,7 @@ def "TermVariant" $
 
 ```
 Core (hydra.core) - Foundation
-  ├─ Mantle - Supplements with variants
+  ├─ Variants - Supplements with variants
   ├─ Compute - Transformation abstractions
   ├─ Typing - Type system support
   ├─ Accessors - Term access patterns
@@ -282,7 +282,7 @@ Query
 
 **Key Properties:**
 - No circular dependencies at type level
-- Clear separation: foundation (Core/Mantle) vs. extensions
+- Clear separation: foundation (Core/Variants) vs. extensions
 - Layered architecture: Atomic → Composite → Integrative → Specialized
 
 ---
@@ -295,7 +295,7 @@ The DSL system provides multiple levels of abstraction for different use cases.
 ### DSL module locations
 
 ```
-hydra-haskell/src/main/haskell/Hydra/Dsl/     # Core DSLs (33 files)
+hydra-haskell/src/main/haskell/Hydra/Dsl/     # Core DSLs (34 files)
 hydra-haskell/src/main/haskell/Hydra/Dsl/Meta/Lib/ # Library DSLs (13 files)
 hydra-ext/src/main/haskell/Hydra/Ext/Dsl/     # Extension DSLs
 ```
@@ -338,12 +338,12 @@ badFunc = lambda "x" (int32 42)  -- Expected String, got Int
 
 **Use Case:** Write Hydra code with Haskell's type checking as a safety net
 
-#### Level 3: Term-Encoded DSLs (TTerms.hs, TTypes.hs)
+#### Level 3: Term-Encoded DSLs (Meta/Terms.hs, Meta/Types.hs)
 
 Write programs that build programs (meta-programming):
 
 ```haskell
--- TTerms.hs - terms that construct terms
+-- Meta/Terms.hs - terms that construct terms
 buildAddFunction :: TTerm (Int -> Int -> Int)
 buildAddFunction =
   lambda "x" $ lambda "y" $
@@ -364,16 +364,16 @@ buildAddFunction =
 
 #### Term Construction
 - **Terms.hs** - Plain DSL for terms (`apply`, `lambda`, `record`, `inject`)
-- **TTerms.hs** - Phantom-typed term-encoded terms
+- **Meta/Terms.hs** - Phantom-typed term-encoded terms
 
 #### Type Construction
 - **Types.hs** - Plain DSL for types (operators `-->`, `@@`)
-- **TTypes.hs** - Phantom-typed term-encoded types
+- **Meta/Types.hs** - Phantom-typed term-encoded types
 - **ShorthandTypes.hs** - Convenient aliases (`tInt32`, `tString`, `tList`)
 
 #### High-Level Construction
 - **Core.hs** - High-level constructors for core concepts
-- **Mantle.hs** - Metadata variants and introspection
+- **Variants.hs** - Metadata variants and introspection
 - **Bootstrap.hs** - Bootstrapping utilities
 
 #### Structure Definition
@@ -1199,7 +1199,7 @@ hydra-haskell/
 └── src/gen-main/haskell/       # Generated code
     ├── Hydra/
     │   ├── Core.hs             # Generated Core types
-    │   ├── Mantle.hs           # Generated Mantle types
+    │   ├── Variants.hs         # Generated Variants types
     │   ├── Inference.hs        # Generated type inference
     │   ├── Checking.hs         # Generated type checking
     │   └── ...                 # All kernel modules
@@ -1237,11 +1237,11 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 [`hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types/`](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Kernel/Types)
 ```
 ├── Core.hs              # hydra.core - foundation
-├── Mantle.hs            # hydra.mantle - metadata
+├── Variants.hs          # hydra.variants - metadata
 ├── Compute.hs           # hydra.compute - Flow monad
 ├── Graph.hs             # hydra.graph - primitives
 ├── Module.hs            # hydra.module - namespaces
-└── ...                  # 15 more modules
+└── ...                  # 16 more modules
 ```
 
 ### DSL system
@@ -1251,7 +1251,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 ├── Terms.hs             # Untyped term DSL
 ├── Types.hs             # Untyped type DSL
 ├── Phantoms.hs          # Phantom-typed DSL
-├── TTerms.hs            # Term-encoded terms
+├── Meta/Terms.hs        # Term-encoded terms
 ├── Core.hs              # High-level constructors
 ├── Bootstrap.hs         # Bootstrapping utilities
 └── Lib/                 # Library DSLs
@@ -1282,7 +1282,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 ### Generated code
 
 [`hydra-haskell/src/gen-main/haskell/`](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/gen-main/haskell) — Generated Haskell
-[`hydra-java/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/hydra-java/src/main/java) — Generated Java
+[`hydra-java/src/gen-main/java/`](https://github.com/CategoricalData/hydra/tree/main/hydra-java/src/gen-main/java) — Generated Java
 [`hydra-python/src/gen-main/python/`](https://github.com/CategoricalData/hydra/tree/main/hydra-python/src/gen-main/python) — Generated Python
 
 ---
