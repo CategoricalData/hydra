@@ -22,14 +22,40 @@ Options:
     --last N            Show only the N most recent runs (history mode)
     --depth N           How many levels deep to display (default: 2)
     --slowdown N        Highlight times exceeding Nx Haskell's in red (default: 10)
+    --old RUN           Run directory for 'previous' in diff mode (default: run before --new)
+    --new RUN           Run directory for 'current' in diff mode (default: latest)
+
+Run directories can be renamed with a tag suffix for easier tracking, e.g.
+run_2026-02-26_063120_353_baseline.  Chronological ordering uses only the
+timestamp portion.  The --old and --new flags accept exact names, names
+without the run_ prefix, or substring matches (e.g. just 'baseline').
 """
 
 import argparse
 import json
 import math
+import re
 import statistics
 import sys
 from pathlib import Path
+
+
+# Pattern for run directory names: run_YYYY-MM-DD_HHMMSS_mmm[_tag]
+# The timestamp portion (YYYY-MM-DD_HHMMSS_mmm) is used for chronological sorting.
+_RUN_DIR_RE = re.compile(r"^run_(\d{4}-\d{2}-\d{2}_\d{6}_\d{3})(_.+)?$")
+
+
+def _run_sort_key(dirname):
+    """Extract the timestamp portion of a run directory name for sorting.
+
+    Supports optional human-readable tags after the timestamp, e.g.
+    run_2026-02-26_063120_353_baseline.  Falls back to the full name
+    so that unrecognised directories still sort deterministically.
+    """
+    m = _RUN_DIR_RE.match(dirname)
+    if m:
+        return m.group(1)
+    return dirname
 
 
 def load_runs(runs_dir):
@@ -48,7 +74,7 @@ def load_runs(runs_dir):
     if not runs_path.exists():
         return runs
 
-    for d in sorted(runs_path.iterdir()):
+    for d in sorted(runs_path.iterdir(), key=lambda p: _run_sort_key(p.name)):
         if not (d.is_dir() and d.name.startswith("run_")):
             continue
 
@@ -77,9 +103,22 @@ def load_runs(runs_dir):
                 continue
 
             aggregated = aggregate_runs(raw_runs, d.name)
+            filter_excluded_groups(aggregated)
             runs.append(aggregated)
 
     return runs
+
+
+# Groups that are excluded from all dashboard views and totals.
+# _initialization measures test framework startup, not Hydra kernel performance.
+_EXCLUDED_GROUPS = {"_initialization"}
+
+
+def filter_excluded_groups(run):
+    """Remove excluded groups (e.g. _initialization) from a run."""
+    groups = run.get("groups", [])
+    run["groups"] = [g for g in groups
+                     if g["path"].rsplit("/", 1)[-1] not in _EXCLUDED_GROUPS]
 
 
 def aggregate_runs(raw_runs, dir_name):
@@ -198,19 +237,23 @@ def fmt_cell(passed, failed, skipped, time_ms, stddev, time_w, sd_w,
              ref_time_ms=None, slowdown_threshold=10.0):
     """Format a full cell with dynamic column widths."""
     time_str = f"{fmt_val(time_ms):>{time_w}}"
-    sd_raw = f"\u00b1{fmt_val(stddev)}"
-    sd_str = f"{GRAY}{sd_raw:<{sd_w}}{RESET}"
+    if sd_w > 0:
+        sd_raw = f"\u00b1{fmt_val(stddev)}"
+        sd_str = f" {GRAY}{sd_raw:<{sd_w}}{RESET}"
+    else:
+        sd_str = ""
     if ref_time_ms is not None and ref_time_ms > 0:
         if time_ms / ref_time_ms >= slowdown_threshold:
             time_str = f"{RED}{time_str}{RESET}"
         elif time_ms < ref_time_ms:
             time_str = f"{GREEN}{time_str}{RESET}"
-    return f" | {fmt_counts(passed, failed, skipped)} {time_str} {sd_str}"
+    return f" | {fmt_counts(passed, failed, skipped)} {time_str}{sd_str}"
 
 
 def fmt_cell_missing(time_w, sd_w):
     """Format a cell for a missing group."""
-    return f" | {'--':>12} {'--':>{time_w}} {'':>{sd_w}}"
+    sd_pad = f" {'':>{sd_w}}" if sd_w > 0 else ""
+    return f" | {'--':>12} {'--':>{time_w}}{sd_pad}"
 
 
 def fmt_counts_header(lang, col_w):
@@ -218,13 +261,17 @@ def fmt_counts_header(lang, col_w):
     return f" | {lang.capitalize():<{col_w}}"
 
 
-def compute_col_widths(all_time_vals, all_sd_vals):
+def compute_col_widths(all_time_vals, all_sd_vals, show_stddev=True):
     """Compute the minimum column widths for time and stddev fields.
-    Returns (time_width, sd_width, total_col_width)."""
+    Returns (time_width, sd_width, total_col_width).
+    When show_stddev is False, sd_width is 0 and the column is omitted."""
     time_w = max((len(fmt_val(v)) for v in all_time_vals), default=4)
-    sd_w = max((len(f"\u00b1{fmt_val(v)}") for v in all_sd_vals), default=5)
-    # total visible: 12 (counts) + 1 (space) + time_w + 1 (space) + sd_w
-    col_w = 12 + 1 + time_w + 1 + sd_w
+    if show_stddev:
+        sd_w = max((len(f"\u00b1{fmt_val(v)}") for v in all_sd_vals), default=5)
+        col_w = 12 + 1 + time_w + 1 + sd_w
+    else:
+        sd_w = 0
+        col_w = 12 + 1 + time_w
     return time_w, sd_w, col_w
 
 
@@ -323,10 +370,11 @@ def cmd_latest(args, runs):
         lang_vals[lang]["times"].append(t["time"])
         lang_vals[lang]["sds"].append(total_sd)
 
-    # Compute per-language column widths
+    # Compute per-language column widths (hide stddev for single-run languages)
     col_widths = {}
     for lang in langs:
-        col_widths[lang] = compute_col_widths(lang_vals[lang]["times"], lang_vals[lang]["sds"])
+        show_sd = latest[lang].get("_repeat", 1) > 1
+        col_widths[lang] = compute_col_widths(lang_vals[lang]["times"], lang_vals[lang]["sds"], show_sd)
 
     # Pass 2: render
     lang_cols = "".join(fmt_counts_header(lang, col_widths[lang][2]) for lang in langs)
@@ -405,7 +453,6 @@ def cmd_compare(args, runs):
     for lang in langs:
         base = base_runs[lang]
         feat = feat_runs[lang]
-        base_idx = index_groups(base.get("groups", []))
         feat_idx = index_groups(feat.get("groups", []))
 
         print(f"{lang.capitalize()}:")
@@ -516,8 +563,9 @@ def cmd_history(args, runs):
                         break
                 if g:
                     t = g.get("totalTimeMs", 0)
-                    if prev_times[lang] is not None and prev_times[lang] > 0:
-                        delta = (t - prev_times[lang]) / prev_times[lang] * 100
+                    prev_t = prev_times[lang]
+                    if prev_t is not None and prev_t > 0:
+                        delta = (t - prev_t) / prev_t * 100
                         delta_str = f"{delta:+.1f}%"
                         if abs(delta) >= args.threshold:
                             show_msg = True
@@ -536,8 +584,32 @@ def cmd_history(args, runs):
         print(line)
 
 
+def _match_run_dir(file_field, query):
+    """Check if a run's _file field matches a query string.
+
+    Accepts exact match, with/without 'run_' prefix, or a substring match
+    (e.g. a tag like 'baseline' matches 'run_2026-02-26_063120_353_baseline').
+    """
+    if not file_field or not query:
+        return False
+    normalized = query if query.startswith("run_") else "run_" + query
+    if file_field == normalized or file_field == query:
+        return True
+    # Substring match (e.g. tag name or partial timestamp)
+    return query in file_field
+
+
+def find_run_by_dir(runs, dir_name):
+    """Find runs matching a directory name (with or without 'run_' prefix)."""
+    return [r for r in runs if _match_run_dir(r.get("_file", ""), dir_name)]
+
+
 def cmd_diff(args, runs):
-    """Compare the two most recent runs for each language."""
+    """Compare two runs for each language.
+
+    By default, compares the two most recent runs. Use --old and --new to
+    select specific run directories by name.
+    """
     # Group runs by language
     by_lang = {}
     for r in runs:
@@ -551,13 +623,34 @@ def cmd_diff(args, runs):
     threshold = args.threshold
 
     for lang, lang_runs in sorted(by_lang.items()):
-        if len(lang_runs) < 2:
-            print(f"{lang.capitalize()}: only one run available, nothing to diff.")
-            print()
-            continue
+        # Select previous and current runs
+        # Resolve --new first (default: latest)
+        if args.new:
+            new_matches = [r for r in lang_runs if _match_run_dir(r.get("_file", ""), args.new)]
+            if not new_matches:
+                print(f"{lang.capitalize()}: no run found matching --new '{args.new}'")
+                print()
+                continue
+            curr_run = new_matches[-1]
+        else:
+            curr_run = lang_runs[-1]
 
-        prev_run = lang_runs[-2]
-        curr_run = lang_runs[-1]
+        # Resolve --old (default: the run immediately preceding --new)
+        if args.old:
+            old_matches = [r for r in lang_runs if _match_run_dir(r.get("_file", ""), args.old)]
+            if not old_matches:
+                print(f"{lang.capitalize()}: no run found matching --old '{args.old}'")
+                print()
+                continue
+            prev_run = old_matches[-1]
+        else:
+            # Find the run immediately before curr_run in chronological order
+            curr_pos = next((i for i, r in enumerate(lang_runs) if r is curr_run), None)
+            if curr_pos is None or curr_pos < 1:
+                print(f"{lang.capitalize()}: no earlier run available to diff against.")
+                print()
+                continue
+            prev_run = lang_runs[curr_pos - 1]
 
         print(f"{lang.capitalize()} diff:")
         print(f"  previous: ", end="")
@@ -567,7 +660,6 @@ def cmd_diff(args, runs):
         print()
 
         prev_idx = index_groups(prev_run.get("groups", []))
-        curr_idx = index_groups(curr_run.get("groups", []))
 
         header = f"{'Group':<40}  {'previous':>10}  {'current':>10}  {'Delta':>8}"
         print(header)
@@ -646,6 +738,10 @@ def main():
                         help="How many levels deep to display (default: 2)")
     parser.add_argument("--slowdown", type=float, default=10.0,
                         help="Highlight times exceeding N times Haskell's (default: 10)")
+    parser.add_argument("--old",
+                        help="Run directory name for 'previous' in diff mode (e.g. run_2026-02-26_063120_353)")
+    parser.add_argument("--new",
+                        help="Run directory name for 'current' in diff mode (default: latest)")
 
     args = parser.parse_args()
 
