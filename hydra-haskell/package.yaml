@@ -47,7 +47,7 @@ executables:
     ghc-options: [-rtsopts]
     dependencies:
       - hydra
-      - hspec
+      - hspec                      >= 2.11.0 && < 2.12
 
   update-kernel-tests:
     main: Main.hs
@@ -57,7 +57,7 @@ executables:
     ghc-options: [-rtsopts]
     dependencies:
       - hydra
-      - hspec
+      - hspec                      >= 2.11.0 && < 2.12
 
   update-json-kernel:
     main: Main.hs
@@ -131,8 +131,8 @@ tests:
       - src/gen-test/haskell
     dependencies:
       - hydra
-      - hspec
-      - hspec-discover
+      - hspec                      >= 2.11.0 && < 2.12
+      - hspec-discover              >= 2.11.0 && < 2.12
       - HUnit
       - QuickCheck
       - mtl # For the Algorithm W reference implementation

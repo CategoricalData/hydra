@@ -41,8 +41,8 @@ tests:
       - src/gen-test/haskell
     dependencies:
       - hydra
-      - hspec
-      - hspec-discover
+      - hspec                      >= 2.11.0 && < 2.12
+      - hspec-discover              >= 2.11.0 && < 2.12
       - HUnit
       - QuickCheck
       - mtl
