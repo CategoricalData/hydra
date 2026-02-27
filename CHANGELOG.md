@@ -2,33 +2,50 @@
 
 All notable changes to the Hydra project are documented in this file.
 
-This changelog tracks changes across all Hydra implementations (Haskell, Java, Python, Scala) and supporting infrastructure.
+This changelog tracks changes across all Hydra implementations (Haskell, Java, Python) and supporting infrastructure.
 
 The format is inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Apache TinkerPop](https://github.com/apache/tinkerpop/blob/master/CHANGELOG.asciidoc).
 
 ---
 
-## [0.13.0] - 2026-02-05
+## [0.13.0] - 2026-02-27
 
-Major release completing Hydra-Java as the third full implementation, with significant improvements to let hoisting, type inference, and documentation.
+Major release completing Hydra-Python and Hydra-Java as self-hosting Hydra implementations, and demonstrating mutual self-hosting across all three languages. Significant improvements to type inference, type checking, rewriting, and adaptation. New language features include first-class Either types, typeclass inference, binary data support, and a native JSON parser/writer. Comprehensive tooling for cross-implementation bootstrapping and provisional support for Go, Rust, and JavaScript targets.
 
 ### Highlights
 
-- **Hydra-Java is now complete** (#166): All kernel and generation tests pass. Hydra now has three full implementations (Haskell, Java, Python) that pass the common test suite.
+- **Mutual self-hosting across three implementations**: Hydra is now fully self-hosting in Haskell, Java, and Python, and can cross-generate between every combination of host and target language (9 paths total). This is the project's most significant self-hosting milestone to date.
+- **Hydra-Java is now complete** (#166): All kernel and generation tests pass. Hydra now has three full implementations that pass the common test suite.
+- **Hydra-Python is now complete** (#66): 100% test parity with Haskell. All kernel and generation tests pass.
+- **Language coders promoted into the Hydra kernel** (#176): The Haskell, Java, and Python coders are now defined as Hydra DSL modules rather than hand-written staging code, making them self-hosting.
 - **Either type support** (#210): First-class Either types in the core type system with full inference, checking, and library support.
-- **Let hoisting improvements**: Deep changes to support hoisting polymorphic let terms with associated inference and type checking fixes.
-- **Comprehensive documentation**: New developer recipes, updated READMEs, and improved cross-linking between documents.
+- **Native JSON parser and writer** (#188, #242): Hydra's own JSON parser and writer replace the Aeson dependency, enabling language-independent JSON processing.
 
 ### Breaking Changes
 
 - Renamed `Optional` to `Maybe` throughout the codebase (#204)
   - `hydra.lib.optionals` → `hydra.lib.maybes`
   - All `optional` variants renamed to `maybe`
+- Removed unlabeled product and sum types; replaced with pair types (#212)
+- Renamed `hydra.core.TypedTerm` to `hydra.core.TypeApplicationTerm`
+- Renamed `hydra.json` to `hydra.json.model`
+- Renamed `hydra.lib.maps.remove` to `hydra.lib.maps.delete`
 - Removed deprecated `hydra.decoding` module
 - Removed old `hydra.mantle.Either` type (replaced by core `Either`)
-- Minimum Java version bumped to 17 (#249)
+- Removed `hydra.lib.tuples` library
+- Removed C# coder stub (C# syntax model remains)
+- Minimum Java version bumped to 18 (#249)
+- DSL syntax migration: removed OverloadedStrings for term expressions (#238)
 
 ### New Features
+
+- **Self-Hosting and Bootstrapping**
+  - Hydra is now fully self-hosting in all three implementations (Haskell, Java, Python)
+  - Mutual cross-generation between every combination of host and target language (Haskell→Java, Haskell→Python, Java→Haskell, Java→Python, Python→Haskell, Python→Java, plus self-generation for each)
+  - New bootstrapping demo validating all 9 paths across 249 modules
+  - Promoted Haskell, Java, and Python coders from staging code into Hydra DSL sources (#176)
+  - JSON-as-source-of-truth bootstrapping architecture (#243, #253): new executables and scripts enabling `bootstrap-from-json` for cross-implementation code generation
+  - Generated term encoders and decoders replace legacy hand-coded modules (#47)
 
 - **Hydra-Java Completion** (#166, #131)
   - All kernel tests pass
@@ -39,31 +56,85 @@ Major release completing Hydra-Java as the third full implementation, with signi
   - Support for unit type and term in Java language constraints
   - Added `Lazy` utility class for delayed evaluation
   - Array type support in Java serde
+  - Tail-call optimization in the Java coder
+  - `Tuple` implements `Comparable`
+
+- **Hydra-Python Completion** (#66)
+  - 100% test pass rate and parity with Haskell
+  - Restructured project layout with `src/main` and `src/gen-main` pattern (#191)
+  - Full library implementations including `hydra.lib.flows`
+  - `@lru_cache` optimization for nullary bindings
+  - PyPy compatibility: Python coder can produce Python 3.10 code for a 65% performance boost with PyPy
+  - Generation and bootstrapping logic in Python
 
 - **Either Type Support** (#210)
   - Added `EitherType` to core type system
   - Added `either` term constructor
-  - New `hydra.lib.eithers` library with `map`, `mapList`, `mapMaybe`, `bimap`
+  - New `hydra.lib.eithers` library with `either`, `map`, `mapList`, `mapMaybe`, `bimap`, `bind`, `fromLeft`, `fromRight`, `isLeft`, `isRight`, `lefts`, `rights`, `partitionEithers`
   - Full support in type inference, type checking, rewriting, encoding/decoding
   - Either support in all three implementations
   - Comprehensive test coverage
+
+- **Native JSON Parser and Writer** (#188, #242)
+  - New bidirectional JSON encoder/decoder
+  - Replaced Aeson dependency with Hydra's own JSON parser and writer
+  - Cross-checked against Aeson via a special test runner
+  - Output round numbers without `.0`
+
+- **Typeclass Inference** (#164)
+  - Type schemes with typeclass constraints via `TypeVariableMetadata`
+  - Typeclass metadata on primitive definitions
+  - Haskell coder uses typeclass information when available
+
+- **Binary/ByteString Support** (#172)
+  - Binary data represented using `ByteString` instead of `String`
+  - Haskell coder uses `Data.ByteString` for binary literals
+  - New `hydra.lib.literals.binaryToBytes` primitive
+
+- **Parser Combinators**
+  - New `hydra.parsing` module with parser combinator types
+  - Parser combinator implementations
+  - DSL for `hydra.parsing`
+
+- **Higher-Order Primitive Interpreter** (#198)
+  - All primitives are now fully interpretable across all three implementations
+  - Removed legacy `requiresInterp` tag; every primitive is compatible with the interpreter
 
 - **Let Hoisting and Flattening**
   - Deep changes to support hoisting polymorphic let terms
   - Refined let hoisting for monomorphic bindings inside polymorphic ones
   - More efficient `liftLambdaAboveLet` implementation (#202)
+  - Case statement hoisting: multipurpose subterm hoisting functions for moving deeply nested subterms up to the level of let bindings
   - New test cases for let hoisting focusing on polymorphic bindings
+
+- **Provisional Language Targets**
+  - Go: syntax model, serde, and generated sources
+  - Rust: syntax model, serde, generated sources, and experimental type-level coder
+  - JavaScript: syntax model, serde, DSL, and generated sources
+  - Java syntax DSL
+  - Python syntax DSL
+
+- **New Adapter Framework** (#236)
+  - All external coders (Haskell, YAML, Scala, JSON Schema, C++, PDL, Protobuf, GraphQL) refactored to use the new framework
 
 - **New Primitives**
   - `hydra.lib.lists.find` and `hydra.lib.lists.partition` (all implementations)
-  - New math functions: `abs`, `pred`, `signum`, `succ`, `even`, `odd`
-  - `hydra.lib.flows.foldl`
+  - `hydra.lib.flows.withDefault` and `hydra.lib.flows.foldl`
+  - `hydra.lib.math.max`, `hydra.lib.math.min`, `hydra.lib.math.abs`, `hydra.lib.math.pred`, `hydra.lib.math.signum`, `hydra.lib.math.succ`, `hydra.lib.math.even`, `hydra.lib.math.odd`
+  - `hydra.lib.pairs.bimap`
+  - `hydra.lib.eithers.bind`
+  - `hydra.lib.literals.binaryToBytes`
+  - Complete `hydra.lib.literals.readXxx` and `hydra.lib.literals.showXxx` families
+  - `hydra.lexical.chooseUniqueName`
   - Renamed `neg` to `negate` for consistency with Haskell Prelude
   - Completed floating-point math primitives in Python (#208)
 
+- **DeepCore DSL**
+  - New DSL layer one level deeper than the Meta DSLs, for programs that construct programs that construct terms
+
 - **Developer Documentation**
-  - Added developer recipes: extending Hydra Core, adding primitives, syncing Python, promoting code
-  - Recipe for LLM-assisted development
+  - Added developer recipes: extending Hydra Core, adding primitives, syncing Python, promoting code, refactoring, JSON kernel
+  - LLM quickstart guide and recipe for LLM-assisted development
   - Updated all implementation READMEs with documentation sections
   - Comprehensive cross-linking between wiki pages, READMEs, and recipes
 
@@ -75,39 +146,66 @@ Major release completing Hydra-Java as the third full implementation, with signi
   - Type application terms preserved when preparing application terms for Python
   - Sanity-check tuple projection index against arity during inference
   - Enabled inference logic to check for and bind lost type variables in term annotations
+  - Made `extendTypeContextForLet` tolerant of untyped bindings
 
 - **Code Generation**
-  - Python: Partitioned code into `src/main` and `src/gen-main` pattern
-  - Python: Support for deeply-nested match statements
-  - Python: More complete `let` support
+  - Python: support for deeply-nested match statements
+  - Python: more complete `let` support
   - Python: Pythonic syntax for polymorphic function definitions
-  - Java: Method declaration style consistent with calling style
+  - Python: refinements for complex case hoisting scenarios
+  - Java: method declaration style consistent with calling style
   - Haskell coder updated to use standardized typeclass names
+  - Increased maximum trace depth to support more complex sources
 
 - **Kernel Improvements**
+  - Common test suite promotion: all tests promoted into a shared, implementation-independent test kernel (#213)
   - Included all Hydra kernel types in test schema (#205)
   - Reorganized Haskell DSL definitions for better clarity
+  - Standardized imports across all kernel sources
   - Added TODO comments to all unsafe primitives (#201)
   - New `rewriteAndFoldTerm` utility for simultaneous rewriting and folding
   - Lexical helper for dereferencing schema types through aliases
   - Made JSON parser lazy with new `lazy` parser combinator
+  - More efficient substitution helpers for empty substitutions
+  - Precomputed type/inference context in kernel test runner for performance
+  - Property graph encoding and decoding modules promoted into DSL
+  - `hydra.tabular` and `hydra.pg.graphson` modules promoted into DSL
+  - `hydra.show.*` modules generated into Java and Python
 
 - **GenPG Demo**
-  - Refactored to support both Haskell and Python modes
-  - Added Python runner for the demo
+  - Refactored to support Haskell, Python, and Java modes
+  - Added Python runner and Java generation for the demo
   - Command-line helper for generating Python
+  - Finalized output format
 
 - **Testing**
   - Extended test runners for let hoisting test cases (Haskell, Python, Java)
   - Test cases for floating-point precision in show primitives
   - Tests for `hydra.lib.maps` and `hydra.lib.sets` enforcing ordering in `toList`
   - Inference tests for inferred System F terms
+  - Test cases specifically for case statement hoisting
+  - New JSON coder tests
+
+- **Infrastructure**
+  - GitHub Actions workflow for automatic JavaDoc deployment on tag push
+  - Central `VERSION` file and `bin/bump-version.sh` for version synchronization
+  - `bin/sync-all.sh` for full cross-implementation regeneration
+  - `bin/verify-release.sh` for pre-release verification
+  - Pixi build environment for `sync-all.sh`
+  - Benchmarking scripts and dashboard
+  - Added `LICENSE` file for hydra-python
 
 ### Bug Fixes
 
+- Fixed interpreter bugs causing test failures (#235)
 - Fixed bug in type checking in connection with dead code
 - Fixed bug in `removeTypesFromTerm`
 - Fixed bug in `typeOfMap`
+- Fixed 32-bit max int value in `hydra.constants`
+- Fixed numeric precision in Python
+- Added `BigDecimal` support and fixed `uint8` (short) support in Java
+- Fixed Haskell coder with respect to imports for binary literals
+- Excluded `Prelude.encodeFloat` and `Prelude.decodeFloat` from generated Haskell due to name collisions
 - Fixed consistency issues in Python primitives:
   - `hydra.lib.sets.toList`
   - `hydra.lib.maps.union` (precedence)
@@ -128,12 +226,18 @@ Major release completing Hydra-Java as the third full implementation, with signi
 - Fixed incorrect code paths in Implementation.md
 - Added Java section to Testing wiki
 - Comprehensive developer recipes in `docs/src/recipes/`
+- Documentation for tail-call optimization implementation
+- Added Haddock comments to Haskell primitives
+
+### Community
+
+- Accepted babeloff's `isTrivialTerm` changes
 
 ---
 
 ## [0.12.0] - 2025-08-28
 
-Major release focused on completing Hydra-Python and architectural improvements.
+Major release focused on Python development progress and architectural improvements.
 
 ### Breaking Changes
 
@@ -144,9 +248,7 @@ Major release focused on completing Hydra-Python and architectural improvements.
 
 ### New Features
 
-- **Python Implementation**: Hydra-Python is now complete and being tested for production readiness
-  - Restructured Python project layout (#191)
-  - Full library implementations including `hydra.lib.flows`, `hydra.lib.equality`, `hydra.lib.lists`, `hydra.lib.strings`, `hydra.lib.chars`
+- **Python Implementation**: Significant progress toward Hydra-Python completion
   - Generated all kernel types and terms into Python
   - Added Decimal support for bigfloat values
   - Environment tracking for proper variable scoping
@@ -390,8 +492,8 @@ This initial release contains the complete foundation of Hydra:
 
 ## Version History
 
-- **0.13.0** (2026-02-05) - Java completion, Either type, let hoisting, documentation
-- **0.12.0** (2025-08-28) - Python completion, architectural improvements
+- **0.13.0** (2026-02-27) - Self-hosting in three languages, mutual cross-generation, Java and Python completion, Either type, native JSON, coder promotion
+- **0.12.0** (2025-08-28) - Python progress, architectural improvements
 - **0.8.1** (2024-09-24) - Property graph utilities
 - **0.8.0** (2024-09-09) - C# support, Graphviz DOT, breaking changes
 - **0.7.0** (2024-08-21) - Module reorganization
