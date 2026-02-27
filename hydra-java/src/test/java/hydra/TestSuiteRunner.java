@@ -10,8 +10,6 @@ import hydra.test.testGraph.TestGraph;
 import hydra.testing.*;
 import hydra.tools.PrettyPrinter;
 import hydra.lib.Libraries;
-import hydra.module.Module;
-import hydra.module.Namespace;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 import hydra.util.Tuple;
@@ -32,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 import static hydra.dsl.Flows.EMPTY_TRACE;
+import static hydra.dsl.Terms.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -136,27 +135,13 @@ public class TestSuiteRunner {
             primitives.put(prim.name(), prim.toNative());
         }
 
-        // Load all kernel modules for schema graph type definitions.
-        // Only type-defining bindings are extracted — the full module data is not retained.
-        List<Module> allKernelModules = loadAllKernelModulesForSchema();
-        List<Binding> kernelTypeBindings = new ArrayList<>();
-        for (Module mod : allKernelModules) {
-            for (Binding b : mod.elements) {
-                if (hydra.annotations.Annotations.isNativeType(b)) {
-                    kernelTypeBindings.add(b);
-                }
-            }
-        }
-
-        // Load only essential term modules for the evaluator (hydra.monads, hydra.annotations, etc.)
-        List<Module> termModules = loadEvaluatorTermModules();
-
         // Build schema graph with test types + kernel types
         Map<Name, Type> testTypes = TestGraph.testTypes();
-
-        // Build type bindings: kernel type bindings (from JSON) + test type bindings
-        List<Binding> typeBindings = new ArrayList<>(kernelTypeBindings);
-        for (Map.Entry<Name, Type> entry : testTypes.entrySet()) {
+        Map<Name, Type> kernelTypes = buildKernelTypes();
+        Map<Name, Type> allSchemaTypes = new HashMap<>(kernelTypes);
+        allSchemaTypes.putAll(testTypes); // test types override kernel types if any overlap
+        List<Binding> typeBindings = new ArrayList<>();
+        for (Map.Entry<Name, Type> entry : allSchemaTypes.entrySet()) {
             Term typeTerm = hydra.encode.core.Core.type(entry.getValue());
             TypeScheme typeScheme = new TypeScheme(
                 List.of(),
@@ -179,17 +164,19 @@ public class TestSuiteRunner {
         Map<Name, Term> testTerms = TestGraph.testTerms();
         List<Binding> termBindings = new ArrayList<>();
 
-        // Add kernel term bindings from non-bootstrap modules
-        for (Module mod : termModules) {
-            termBindings.addAll(mod.elements);
-        }
-
-        // Bridge all primitives: Variable("hydra.lib.maps.null") -> Function.Primitive("hydra.lib.maps.null")
+        // The source module ASTs reference external functions as Term.Variable.
         // The reducer only looks up Term.Variable in term bindings (not primitives).
+        // Bridge all primitives: Variable("hydra.lib.maps.null") -> Function.Primitive("hydra.lib.maps.null")
         Set<String> existingBindingNames = new HashSet<>();
         for (Binding b : termBindings) {
             existingBindingNames.add(b.name.value);
         }
+        // Exclude annotation/rewriting primitives from the bridge — they operate at the Java level
+        // (producing Term.Annotated) rather than at the meta level (producing Term.Union injections).
+        // Hand-written term bindings are added below instead.
+        existingBindingNames.add("hydra.annotations.setTermAnnotation");
+        existingBindingNames.add("hydra.annotations.setTermDescription");
+        existingBindingNames.add("hydra.rewriting.deannotateTerm");
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
             String primName = prim.name().value;
             if (!existingBindingNames.contains(primName)) {
@@ -199,6 +186,29 @@ public class TestSuiteRunner {
                     Maybe.nothing()));
             }
         }
+
+        // Add non-primitive kernel constants needed by annotation source module
+        addConstantBinding(termBindings, "hydra.constants.key_classes",
+            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
+                new Term.Literal(new hydra.core.Literal.String_("classes")))));
+        addConstantBinding(termBindings, "hydra.constants.key_description",
+            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
+                new Term.Literal(new hydra.core.Literal.String_("description")))));
+        addConstantBinding(termBindings, "hydra.constants.key_type",
+            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
+                new Term.Literal(new hydra.core.Literal.String_("type")))));
+        addConstantBinding(termBindings, "hydra.constants.key_debugId",
+            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
+                new Term.Literal(new hydra.core.Literal.String_("debugId")))));
+        addConstantBinding(termBindings, "hydra.constants.key_firstClassType",
+            new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
+                new Term.Literal(new hydra.core.Literal.String_("firstClassType")))));
+
+        // Add kernel monads term bindings (hand-written since generated sources exceed JVM method size limits)
+        addMonadsBindings(termBindings);
+
+        // Add kernel annotation/rewriting term bindings
+        addAnnotationsBindings(termBindings);
 
         // Add test term bindings
         for (Map.Entry<Name, Term> entry : testTerms.entrySet()) {
@@ -215,55 +225,238 @@ public class TestSuiteRunner {
         );
     }
 
-    private static final Set<String> BOOTSTRAP_NAMESPACES = Set.of(
-        "hydra.core", "hydra.compute", "hydra.graph", "hydra.module");
-
-    // The evaluator only needs these term modules (hydra.monads + hydra.annotations and their deps).
-    // Loading all 113 kernel modules from JSON creates too much memory pressure.
-    private static final List<String> EVALUATOR_TERM_NAMESPACES = List.of(
-        "hydra.constants",
-        "hydra.show.core",
-        "hydra.monads",
-        "hydra.extract.core",
-        "hydra.lexical",
-        "hydra.rewriting",
-        "hydra.decode.core",
-        "hydra.encode.core",
-        "hydra.annotations");
-
-    /**
-     * Load all kernel modules from JSON for the schema graph (type-defining bindings only).
-     */
-    private static List<Module> loadAllKernelModulesForSchema() {
-        try {
-            String jsonDir = "../hydra-haskell/src/gen-main/json";
-            Map<Name, Type> schemaMap = Generation.bootstrapSchemaMap();
-            List<Namespace> allKernelNamespaces = Generation.readManifestField(jsonDir, "kernelModules");
-            return Generation.loadModulesFromJson(false, jsonDir, schemaMap, allKernelNamespaces);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load kernel modules from JSON", e);
-        }
+    private static void addConstantBinding(List<Binding> bindings, String name, Term value) {
+        bindings.add(new Binding(new Name(name), value, Maybe.nothing()));
     }
 
     /**
-     * Load only the essential term modules from JSON for the evaluator.
-     * System F type annotations are stripped since the evaluator works at the simply-typed level.
+     * Add term-level bindings for hydra.monads functions needed by tests.
+     * These are hand-written because the generated source modules exceed JVM method size limits.
      */
-    private static List<Module> loadEvaluatorTermModules() {
-        try {
-            String jsonDir = "../hydra-haskell/src/gen-main/json";
-            Map<Name, Type> schemaMap = Generation.bootstrapSchemaMap();
-            List<Namespace> termNamespaces = new ArrayList<>();
-            for (String ns : EVALUATOR_TERM_NAMESPACES) {
-                termNamespaces.add(new Namespace(ns));
-            }
-            List<Module> modules = Generation.loadModulesFromJson(false, jsonDir, schemaMap, termNamespaces);
-            // Strip System F type annotations (TypeLambda, TypeApplication, etc.) from
-            // term bodies for the evaluator, which works at the simply-typed level.
-            return Generation.stripAllTermTypes(modules);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load evaluator term modules from JSON", e);
-        }
+    private static void addMonadsBindings(List<Binding> bindings) {
+        // Helper terms for Flow wrap/unwrap
+        Term wrapFlow = wrap("hydra.compute.Flow", var("__body"));
+        Term unwrapFlowApp = apply(apply(apply(unwrap("hydra.compute.Flow"), var("__f")), var("__s")), var("__t"));
+
+        // hydra.monads.emptyTrace = record(hydra.compute.Trace){stack=[], messages=[], other={}}
+        addConstantBinding(bindings, "hydra.monads.emptyTrace",
+            record("hydra.compute.Trace",
+                field("stack", list()),
+                field("messages", list()),
+                field("other", new Term.Map(Collections.emptyMap()))));
+
+        // hydra.monads.pure = \xp -> wrap(Flow, \s -> \t -> FlowState{value=Just(xp), state=s, trace=t})
+        addConstantBinding(bindings, "hydra.monads.pure",
+            lambda("xp",
+                wrap("hydra.compute.Flow",
+                    lambda("s", "t",
+                        flowState(just(var("xp")), var("s"), var("t"))))));
+
+        // hydra.monads.map = \f -> \f1 -> wrap(Flow, \s0 -> \t0 ->
+        //   let f2 = unwrap(Flow)(f1)(s0)(t0) in
+        //   FlowState{value=maybes.map(f, f2.value), state=f2.state, trace=f2.trace})
+        addConstantBinding(bindings, "hydra.monads.map",
+            lambda("f",
+                lambda("f1",
+                    wrap("hydra.compute.Flow",
+                        lambda("s0", "t0",
+                            let_("f2", apply(apply(apply(unwrap("hydra.compute.Flow"), var("f1")), var("s0")), var("t0")),
+                                flowState(
+                                    apply(apply(primitive("hydra.lib.maybes.map"), var("f")),
+                                        apply(flowStateValue(), var("f2"))),
+                                    apply(flowStateState(), var("f2")),
+                                    apply(flowStateTrace(), var("f2")))))))));
+
+        // hydra.monads.bind = \l -> \r -> wrap(Flow, \s0 -> \t0 ->
+        //   let fs1 = unwrap(Flow)(l)(s0)(t0) in
+        //   maybe(FlowState{nothing, fs1.state, fs1.trace},
+        //         \v -> unwrap(Flow)(r(v))(fs1.state)(fs1.trace),
+        //         fs1.value))
+        addConstantBinding(bindings, "hydra.monads.bind",
+            lambda("l",
+                lambda("r",
+                    wrap("hydra.compute.Flow",
+                        lambda("s0", "t0",
+                            let_("fs1", apply(apply(apply(unwrap("hydra.compute.Flow"), var("l")), var("s0")), var("t0")),
+                                apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
+                                    // default: FlowState{nothing, fs1.state, fs1.trace}
+                                    flowState(nothing(), apply(flowStateState(), var("fs1")), apply(flowStateTrace(), var("fs1")))),
+                                    // function: \v -> unwrap(Flow)(r(v))(fs1.state)(fs1.trace)
+                                    lambda("v",
+                                        apply(apply(apply(unwrap("hydra.compute.Flow"),
+                                            apply(var("r"), var("v"))),
+                                            apply(flowStateState(), var("fs1"))),
+                                            apply(flowStateTrace(), var("fs1"))))),
+                                    // maybe value: fs1.value
+                                    apply(flowStateValue(), var("fs1")))))))));
+
+        // hydra.monads.pushError = \msg -> \t ->
+        //   let errorMsg = concat ["Error: ", msg, " (", intercalate(" > ", reverse(t.stack)), ")"] in
+        //   Trace{stack=t.stack, messages=cons(errorMsg, t.messages), other=t.other}
+        addConstantBinding(bindings, "hydra.monads.pushError",
+            lambda("msg",
+                lambda("t",
+                    let_("errorMsg",
+                        apply(primitive("hydra.lib.strings.cat"),
+                            list(string("Error: "), var("msg"), string(" ("),
+                                apply(apply(primitive("hydra.lib.strings.intercalate"), string(" > ")),
+                                    apply(primitive("hydra.lib.lists.reverse"),
+                                        apply(project("hydra.compute.Trace", "stack"), var("t")))),
+                                string(")"))),
+                        record("hydra.compute.Trace",
+                            field("stack", apply(project("hydra.compute.Trace", "stack"), var("t"))),
+                            field("messages", apply(apply(primitive("hydra.lib.lists.cons"), var("errorMsg")),
+                                apply(project("hydra.compute.Trace", "messages"), var("t")))),
+                            field("other", apply(project("hydra.compute.Trace", "other"), var("t"))))))));
+
+        // hydra.monads.fail = \msg -> wrap(Flow, \s -> \t ->
+        //   FlowState{value=nothing, state=s, trace=pushError(msg, t)})
+        addConstantBinding(bindings, "hydra.monads.fail",
+            lambda("msg",
+                wrap("hydra.compute.Flow",
+                    lambda("s", "t",
+                        flowState(nothing(), var("s"),
+                            apply(apply(var("hydra.monads.pushError"), var("msg")), var("t")))))));
+
+        // hydra.monads.withTrace = \msg -> \f ->
+        //   mutateTrace(\t -> right(Trace{cons(msg,t.stack), t.messages, t.other}),
+        //               \t0 -> \t1 -> Trace{t0.stack, t1.messages, t1.other},
+        //               f)
+        addConstantBinding(bindings, "hydra.monads.withTrace",
+            lambda("msg",
+                lambda("f",
+                    apply(apply(apply(var("hydra.monads.mutateTrace"),
+                        // mutate: \t -> right(Trace{cons(msg, t.stack), t.messages, t.other})
+                        lambda("t",
+                            right(
+                                record("hydra.compute.Trace",
+                                    field("stack", apply(apply(primitive("hydra.lib.lists.cons"), var("msg")),
+                                        apply(project("hydra.compute.Trace", "stack"), var("t")))),
+                                    field("messages", apply(project("hydra.compute.Trace", "messages"), var("t"))),
+                                    field("other", apply(project("hydra.compute.Trace", "other"), var("t"))))))),
+                        // restore: \t0 -> \t1 -> Trace{t0.stack, t1.messages, t1.other}
+                        lambda("t0",
+                            lambda("t1",
+                                record("hydra.compute.Trace",
+                                    field("stack", apply(project("hydra.compute.Trace", "stack"), var("t0"))),
+                                    field("messages", apply(project("hydra.compute.Trace", "messages"), var("t1"))),
+                                    field("other", apply(project("hydra.compute.Trace", "other"), var("t1"))))))),
+                        var("f")))));
+
+        // hydra.monads.mutateTrace = \mutate -> \restore -> \f -> wrap(Flow, \s0 -> \t0 ->
+        //   either(\msg -> FlowState{nothing, s0, pushError(msg, t0)},
+        //          \t1 -> let f2 = unwrap(Flow)(f)(s0)(t1) in
+        //                 FlowState{f2.value, f2.state, restore(t0, f2.trace)},
+        //          mutate(t0)))
+        addConstantBinding(bindings, "hydra.monads.mutateTrace",
+            lambda("mutate",
+                lambda("restore",
+                    lambda("f",
+                        wrap("hydra.compute.Flow",
+                            lambda("s0", "t0",
+                                apply(apply(apply(primitive("hydra.lib.eithers.either"),
+                                    // left case: \msg -> FlowState{nothing, s0, pushError(msg, t0)}
+                                    lambda("msg",
+                                        flowState(nothing(), var("s0"),
+                                            apply(apply(var("hydra.monads.pushError"), var("msg")), var("t0"))))),
+                                    // right case: \t1 -> let f2 = ... in FlowState{...}
+                                    lambda("t1",
+                                        let_("f2",
+                                            apply(apply(apply(unwrap("hydra.compute.Flow"), var("f")), var("s0")), var("t1")),
+                                            flowState(
+                                                apply(flowStateValue(), var("f2")),
+                                                apply(flowStateState(), var("f2")),
+                                                apply(apply(var("restore"), var("t0")),
+                                                    apply(flowStateTrace(), var("f2"))))))),
+                                    // the either value: mutate(t0)
+                                    apply(var("mutate"), var("t0")))))))));
+
+        // hydra.constants.maxTraceDepth = 50
+        addConstantBinding(bindings, "hydra.constants.maxTraceDepth", int32(50));
+    }
+
+    /**
+     * Add term-level bindings for annotation and rewriting functions needed by tests.
+     * These are hand-written because the generated source modules exceed JVM method size limits.
+     */
+    private static void addAnnotationsBindings(List<Binding> bindings) {
+        // hydra.rewriting.deannotateTerm = \t -> case t of
+        //   annotated(at) -> deannotateTerm(at.body)
+        //   _ -> t
+        addConstantBinding(bindings, "hydra.rewriting.deannotateTerm",
+            lambda("t",
+                apply(
+                    match("hydra.core.Term", Maybe.just(var("t")),
+                        field("annotated", lambda("at",
+                            apply(var("hydra.rewriting.deannotateTerm"),
+                                apply(project("hydra.core.AnnotatedTerm", "body"), var("at")))))),
+                    var("t"))));
+
+        // hydra.annotations.termAnnotationInternal = \term ->
+        //   Recursively collect annotations from nested Annotated nodes.
+        addConstantBinding(bindings, "hydra.annotations.termAnnotationInternal",
+            lambda("term",
+                let_("toPairs",
+                    lambda("rest", "t",
+                        apply(
+                            match("hydra.core.Term",
+                                Maybe.just(var("rest")),
+                                field("annotated", lambda("at",
+                                    apply(apply(var("toPairs"),
+                                        apply(apply(primitive("hydra.lib.lists.cons"),
+                                            apply(primitive("hydra.lib.maps.toList"),
+                                                apply(project("hydra.core.AnnotatedTerm", "annotation"), var("at")))),
+                                            var("rest"))),
+                                        apply(project("hydra.core.AnnotatedTerm", "body"), var("at")))))),
+                            var("t"))),
+                    apply(primitive("hydra.lib.maps.fromList"),
+                        apply(primitive("hydra.lib.lists.concat"),
+                            apply(apply(var("toPairs"), list()), var("term")))))));
+
+        // hydra.annotations.setAnnotation = \key -> \val -> \m ->
+        //   maybe(delete(key, m), \v -> insert(key, v, m), val)
+        addConstantBinding(bindings, "hydra.annotations.setAnnotation",
+            lambda("key",
+                lambda("val",
+                    lambda("m",
+                        apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
+                            apply(apply(primitive("hydra.lib.maps.delete"), var("key")), var("m"))),
+                            lambda("v",
+                                apply(apply(apply(primitive("hydra.lib.maps.insert"),
+                                    var("key")), var("v")), var("m")))),
+                            var("val"))))));
+
+        // hydra.annotations.setTermAnnotation = \key -> \val -> \term ->
+        //   let stripped = deannotateTerm(term)
+        //       anns = setAnnotation(key, val, termAnnotationInternal(term))
+        //   in if null(anns) then stripped else inject(Term){annotated=record(AnnotatedTerm){body=stripped, annotation=anns}}
+        addConstantBinding(bindings, "hydra.annotations.setTermAnnotation",
+            lambda("key",
+                lambda("val",
+                    lambda("term",
+                        let_("stripped", apply(var("hydra.rewriting.deannotateTerm"), var("term")),
+                            let_("anns",
+                                apply(apply(apply(var("hydra.annotations.setAnnotation"), var("key")), var("val")),
+                                    apply(var("hydra.annotations.termAnnotationInternal"), var("term"))),
+                                apply(apply(apply(primitive("hydra.lib.logic.ifElse"),
+                                    apply(primitive("hydra.lib.maps.null"), var("anns"))),
+                                    var("stripped")),
+                                    inject("hydra.core.Term", "annotated",
+                                        record("hydra.core.AnnotatedTerm",
+                                            field("body", var("stripped")),
+                                            field("annotation", var("anns")))))))))));
+
+        // hydra.annotations.setTermDescription = \d ->
+        //   setTermAnnotation(key_description, maybes.map(\s -> inject(Term){literal=inject(Literal){string=s}}, d))
+        addConstantBinding(bindings, "hydra.annotations.setTermDescription",
+            lambda("d",
+                apply(apply(var("hydra.annotations.setTermAnnotation"),
+                    var("hydra.constants.key_description")),
+                    apply(apply(primitive("hydra.lib.maybes.map"),
+                        lambda("s",
+                            inject("hydra.core.Term", "literal",
+                                inject("hydra.core.Literal", "string", var("s"))))),
+                        var("d")))));
     }
 
     /**
@@ -379,7 +572,6 @@ public class TestSuiteRunner {
         long initStart = System.nanoTime();
         getTestGraph();
         getInferenceContext();
-        getTypeContext();
         double initMs = (System.nanoTime() - initStart) / 1_000_000.0;
         if (BENCHMARK_OUTPUT != null) {
             benchmarkResults.put(allTests.name + "/_initialization", initMs);
@@ -1183,6 +1375,81 @@ public class TestSuiteRunner {
      * Build kernel type definitions needed by inference/checking tests.
      * These types are normally provided by kernelTypesModules in Haskell.
      */
+    // ---- Benchmark output ----
+
+    private static Map<Name, Type> buildKernelTypes() {
+        Map<Name, Type> types = new HashMap<>();
+
+        // CoderDirection: enum with encode, decode
+        types.put(new Name("hydra.coders.CoderDirection"),
+            new Type.Union(new RowType(new Name("hydra.coders.CoderDirection"), List.of(
+                new FieldType(new Name("encode"), new Type.Unit()),
+                new FieldType(new Name("decode"), new Type.Unit())))));
+
+        // Coder: ∀s1.∀s2.∀v1.∀v2. {encode: v1 -> Flow s1 v2, decode: v2 -> Flow s2 v1}
+        Name coderName = new Name("hydra.compute.Coder");
+        Name flowName = new Name("hydra.compute.Flow");
+        Type coderBody = new Type.Record(new RowType(coderName, List.of(
+            new FieldType(new Name("encode"),
+                new Type.Function(new FunctionType(
+                    new Type.Variable(new Name("v1")),
+                    new Type.Application(new ApplicationType(
+                        new Type.Application(new ApplicationType(
+                            new Type.Variable(flowName),
+                            new Type.Variable(new Name("s1")))),
+                        new Type.Variable(new Name("v2"))))))),
+            new FieldType(new Name("decode"),
+                new Type.Function(new FunctionType(
+                    new Type.Variable(new Name("v2")),
+                    new Type.Application(new ApplicationType(
+                        new Type.Application(new ApplicationType(
+                            new Type.Variable(flowName),
+                            new Type.Variable(new Name("s2")))),
+                        new Type.Variable(new Name("v1"))))))))));
+        // Wrap in foralls: ∀s1.∀s2.∀v1.∀v2. coderBody
+        types.put(coderName,
+            new Type.Forall(new ForallType(new Name("s1"),
+                new Type.Forall(new ForallType(new Name("s2"),
+                    new Type.Forall(new ForallType(new Name("v1"),
+                        new Type.Forall(new ForallType(new Name("v2"), coderBody)))))))));
+
+        // Type: the hydra.core.Type union — large recursive type
+        Name typeName = new Name("hydra.core.Type");
+        types.put(typeName,
+            new Type.Union(new RowType(typeName, List.of(
+                new FieldType(new Name("annotated"), new Type.Variable(new Name("annotatedType"))),
+                new FieldType(new Name("application"), new Type.Variable(new Name("applicationElim"))),
+                new FieldType(new Name("either"), new Type.Variable(new Name("eitherType"))),
+                new FieldType(new Name("forall"), new Type.Variable(new Name("forallType"))),
+                new FieldType(new Name("function"), new Type.Variable(new Name("functionType"))),
+                new FieldType(new Name("list"), new Type.Variable(typeName)),
+                new FieldType(new Name("literal"), new Type.Variable(new Name("literalType"))),
+                new FieldType(new Name("map"), new Type.Variable(new Name("mapType"))),
+                new FieldType(new Name("maybe"), new Type.Variable(typeName)),
+                new FieldType(new Name("pair"), new Type.Variable(new Name("pairType"))),
+                new FieldType(new Name("record"), new Type.Variable(new Name("rowType"))),
+                new FieldType(new Name("set"), new Type.Variable(typeName)),
+                new FieldType(new Name("union"), new Type.Variable(new Name("rowType"))),
+                new FieldType(new Name("unit"), new Type.Unit()),
+                new FieldType(new Name("variable"), new Type.Variable(new Name("name"))),
+                new FieldType(new Name("wrap"), new Type.Variable(new Name("wrappedType")))))));
+
+        // Name: wrapper over string
+        Name nameName = new Name("hydra.core.Name");
+        types.put(nameName,
+            new Type.Wrap(new WrappedType(nameName,
+                new Type.Literal(new LiteralType.String_()))));
+
+        // ForallType: record with parameter (Name) and body (Type)
+        Name forallTypeName = new Name("hydra.core.ForallType");
+        types.put(forallTypeName,
+            new Type.Record(new RowType(forallTypeName, List.of(
+                new FieldType(new Name("parameter"), new Type.Variable(nameName)),
+                new FieldType(new Name("body"), new Type.Variable(typeName))))));
+
+        return types;
+    }
+
     // ---- Benchmark output ----
 
     private static void writeBenchmarkJson(String outputPath, TestGroup root) {
