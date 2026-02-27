@@ -89,21 +89,23 @@ def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydr
 def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
     r"""Extract the fields of a record or union type."""
     
-    @lru_cache(1)
-    def stripped() -> hydra.core.Type:
-        return hydra.rewriting.deannotate_type(t)
-    match stripped():
-        case hydra.core.TypeForall(value=forall_type):
-            return fields_of(forall_type.body)
-        
-        case hydra.core.TypeRecord(value=rt):
-            return rt.fields
-        
-        case hydra.core.TypeUnion(value=rt2):
-            return rt2.fields
-        
-        case _:
-            return ()
+    while True:
+        @lru_cache(1)
+        def stripped() -> hydra.core.Type:
+            return hydra.rewriting.deannotate_type(t)
+        match stripped():
+            case hydra.core.TypeForall(value=forall_type):
+                t = forall_type.body
+                continue
+            
+            case hydra.core.TypeRecord(value=rt):
+                return rt.fields
+            
+            case hydra.core.TypeUnion(value=rt2):
+                return rt2.fields
+            
+            case _:
+                return ()
 
 def get_field(m: FrozenDict[hydra.core.Name, T0], fname: hydra.core.Name, decode: Callable[[T0], hydra.compute.Flow[T1, T2]]) -> hydra.compute.Flow[T1, T2]:
     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected field ", fname.value), " not found")), decode, hydra.lib.maps.lookup(fname, m))
@@ -133,13 +135,9 @@ def match_union(tname: hydra.core.Name, pairs: frozenlist[tuple[hydra.core.Name,
         case hydra.core.TermUnion(value=injection):
             @lru_cache(1)
             def exp() -> hydra.compute.Flow[hydra.graph.Graph, T0]:
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return injection.field.name
-                @lru_cache(1)
-                def val() -> hydra.core.Term:
-                    return injection.field.term
-                return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no matching case for field \"", fname().value), "\" in union type "), tname.value)), (lambda f: f(val())), hydra.lib.maps.lookup(fname(), mapping()))
+                fname = injection.field.name
+                val = injection.field.term
+                return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no matching case for field \"", fname.value), "\" in union type "), tname.value)), (lambda f: f(val)), hydra.lib.maps.lookup(fname, mapping()))
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, tname.value), (lambda : exp()), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("injection for type ", tname.value), hydra.show.core.term(term))))
         
         case _:

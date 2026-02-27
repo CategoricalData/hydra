@@ -546,7 +546,17 @@ writeVariableArityParameter = def "writeVariableArityParameter" $
 
 writeWhileStatement :: TBinding (Java.WhileStatement -> Expr)
 writeWhileStatement = def "writeWhileStatement" $
-  lambda "_" $ Serialization.cst @@ string "STUB:WhileStatement"
+  lambda "ws" $ lets [
+    "mcond">: project Java._WhileStatement Java._WhileStatement_cond @@ var "ws",
+    "body">: project Java._WhileStatement Java._WhileStatement_body @@ var "ws",
+    "condSer">: Maybes.maybe
+      (Serialization.cst @@ string "true")
+      (lambda "c" $ writeExpression @@ var "c")
+      (var "mcond")] $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ string "while",
+      Serialization.parenList @@ false @@ list [var "condSer"],
+      Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (writeStatement @@ var "body")]
 
 -- =============================================================================
 -- Simple union dispatch functions

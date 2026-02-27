@@ -89,6 +89,7 @@
     "hydra.ext.org.w3.rdf.syntax",
     "hydra.ext.org.w3.shacl.model",
     "hydra.ext.io.shex.syntax",
+    "hydra.ext.rust.coder",
     "hydra.ext.rust.language",
     "hydra.ext.rust.operators",
     "hydra.ext.rust.serde",

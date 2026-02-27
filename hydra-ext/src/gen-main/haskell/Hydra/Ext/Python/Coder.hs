@@ -1255,7 +1255,7 @@ withTypeLambda = (Schemas.withTypeLambdaContext pythonEnvironmentGetTypeContext 
 
 -- | Execute a computation with let context (adds let bindings to TypeContext)
 withLet :: (Helpers.PythonEnvironment -> Core.Let -> (Helpers.PythonEnvironment -> t0) -> t0)
-withLet = (Schemas.withLetContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext CoderUtils.bindingMetadata)
+withLet = (Schemas.withLetContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext pythonBindingMetadata)
 
 -- | Execute a computation with inline let context (for walrus operators)
 withLetInline :: (Helpers.PythonEnvironment -> Core.Let -> (Helpers.PythonEnvironment -> t0) -> t0)
@@ -1323,9 +1323,13 @@ initialEnvironment namespaces tcontext = Helpers.PythonEnvironment {
 targetPythonVersion :: Helpers.PythonVersion
 targetPythonVersion = Utils.targetPythonVersion
 
+-- | Like bindingMetadata, but skips metadata for trivial bindings
+pythonBindingMetadata :: (Typing.TypeContext -> Core.Binding -> Maybe Core.Term)
+pythonBindingMetadata tc b = (Logic.ifElse (CoderUtils.isTrivialTerm (Core.bindingTerm b)) Nothing (CoderUtils.bindingMetadata tc b))
+
 -- | Analyze a function term with Python-specific TypeContext management
 analyzePythonFunction :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
-analyzePythonFunction = (CoderUtils.analyzeFunctionTerm pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
+analyzePythonFunction = (CoderUtils.analyzeFunctionTermWith pythonBindingMetadata pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
 
 -- | Analyze a function term without recording binding metadata (for inline lambdas)
 analyzePythonFunctionInline :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
@@ -1364,12 +1368,77 @@ encodeBindingAsAssignment allowThunking env binding =
             in  
               let termIsComplex = (CoderUtils.isComplexTerm tc term)
               in  
-                let needsThunk = (Maybes.maybe (Logic.and allowThunking (Logic.or isComplexVar termIsComplex)) (\ts -> Logic.and allowThunking (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (Logic.or isComplexVar termIsComplex))) mts)
+                let isTrivial = (CoderUtils.isTrivialTerm term)
                 in  
-                  let pterm = (Logic.ifElse needsThunk (makeThunk pbody) pbody)
-                  in (Flows.pure (Syntax.NamedExpressionAssignment (Syntax.AssignmentExpression {
-                    Syntax.assignmentExpressionName = pyName,
-                    Syntax.assignmentExpressionExpression = pterm})))))
+                  let needsThunk = (Logic.ifElse isTrivial False (Maybes.maybe (Logic.and allowThunking (Logic.or isComplexVar termIsComplex)) (\ts -> Logic.and allowThunking (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (Logic.or isComplexVar termIsComplex))) mts))
+                  in  
+                    let pterm = (Logic.ifElse needsThunk (makeThunk pbody) pbody)
+                    in (Flows.pure (Syntax.NamedExpressionAssignment (Syntax.AssignmentExpression {
+                      Syntax.assignmentExpressionName = pyName,
+                      Syntax.assignmentExpressionExpression = pterm})))))
+
+-- | Encode a term body for TCO: tail self-calls become param reassignment + continue
+encodeTermMultilineTCO :: (Helpers.PythonEnvironment -> Core.Name -> [Core.Name] -> Core.Term -> Compute.Flow Helpers.PyGraph [Syntax.Statement])
+encodeTermMultilineTCO env funcName paramNames term =  
+  let stripped = (Rewriting.deannotateAndDetypeTerm term)
+  in  
+    let gathered = (CoderUtils.gatherApplications stripped)
+    in  
+      let gatherArgs = (Pairs.first gathered)
+      in  
+        let gatherFun = (Pairs.second gathered)
+        in  
+          let strippedFun = (Rewriting.deannotateAndDetypeTerm gatherFun)
+          in  
+            let isSelfCall = ((\x -> case x of
+                    Core.TermVariable v1 -> (Equality.equal v1 funcName)
+                    _ -> False) strippedFun)
+            in (Logic.ifElse (Logic.and isSelfCall (Equality.equal (Lists.length gatherArgs) (Lists.length paramNames))) (Flows.bind (Flows.mapList (\a -> encodeTermInline env False a) gatherArgs) (\pyArgs ->  
+              let assignments = (Lists.map (\pair ->  
+                      let paramName = (Pairs.first pair)
+                      in  
+                        let pyArg = (Pairs.second pair)
+                        in (Utils.assignmentStatement (Names.encodeName False Util.CaseConventionLowerSnake env paramName) pyArg)) (Lists.zip paramNames pyArgs))
+              in  
+                let continueStmt = (Syntax.StatementSimple [
+                        Syntax.SimpleStatementContinue])
+                in (Flows.pure (Lists.concat2 assignments [
+                  continueStmt])))) ( 
+              let gathered2 = (CoderUtils.gatherApplications term)
+              in  
+                let args2 = (Pairs.first gathered2)
+                in  
+                  let body2 = (Pairs.second gathered2)
+                  in (Logic.ifElse (Equality.equal (Lists.length args2) 1) ( 
+                    let arg = (Lists.head args2)
+                    in ((\x -> case x of
+                      Core.TermFunction v1 -> ((\x -> case x of
+                        Core.FunctionElimination v2 -> ((\x -> case x of
+                          Core.EliminationUnion v3 ->  
+                            let tname = (Core.caseStatementTypeName v3)
+                            in  
+                              let dflt = (Core.caseStatementDefault v3)
+                              in  
+                                let cases_ = (Core.caseStatementCases v3)
+                                in (Flows.bind (inGraphContext (Schemas.requireUnionType tname)) (\rt ->  
+                                  let isEnum = (Schemas.isEnumRowType rt)
+                                  in  
+                                    let isFull = (isCasesFull rt cases_)
+                                    in (Flows.bind (encodeTermInline env False arg) (\pyArg -> Flows.bind (Flows.mapList (encodeCaseBlock env tname rt isEnum (\e2 -> \t2 -> encodeTermMultilineTCO e2 funcName paramNames t2)) (deduplicateCaseVariables cases_)) (\pyCases -> Flows.bind (encodeDefaultCaseBlock (\t2 -> encodeTermInline env False t2) isFull dflt tname) (\pyDflt ->  
+                                      let subj = (Syntax.SubjectExpressionSimple (Syntax.NamedExpressionSimple pyArg))
+                                      in  
+                                        let matchStmt = (Syntax.StatementCompound (Syntax.CompoundStatementMatch (Syntax.MatchStatement {
+                                                Syntax.matchStatementSubject = subj,
+                                                Syntax.matchStatementCases = (Lists.concat2 pyCases pyDflt)})))
+                                        in (Flows.pure [
+                                          matchStmt])))))))
+                          _ -> (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
+                            Utils.returnSingle expr]))) v2)
+                        _ -> (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
+                          Utils.returnSingle expr]))) v1)
+                      _ -> (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
+                        Utils.returnSingle expr]))) (Rewriting.deannotateAndDetypeTerm body2))) (Flows.bind (encodeTermInline env False term) (\expr -> Flows.pure [
+                    Utils.returnSingle expr])))))
 
 -- | Encode a function definition with parameters and body
 encodeFunctionDefinition :: (Helpers.PythonEnvironment -> Core.Name -> [Core.Name] -> [Core.Name] -> Core.Term -> [Core.Type] -> Maybe Core.Type -> Maybe String -> [Syntax.Statement] -> Compute.Flow Helpers.PyGraph Syntax.Statement)
@@ -1386,10 +1455,22 @@ encodeFunctionDefinition env name tparams args body doms mcod comment prefixes =
           Syntax.paramNoDefaultParametersParamNoDefault = pyArgs,
           Syntax.paramNoDefaultParametersParamWithDefault = [],
           Syntax.paramNoDefaultParametersStarEtc = Nothing}))
-  in (Flows.bind (encodeTermMultiline env body) (\stmts ->  
-    let block = (Utils.indentedBlock comment [
-            Lists.concat2 prefixes stmts])
-    in (Flows.bind (Maybes.maybe (Flows.pure Nothing) (\cod -> Flows.bind (encodeType env cod) (\pytyp -> Flows.pure (Just pytyp))) mcod) (\mreturnType ->  
+  in  
+    let isTCO = (Logic.and (Logic.not (Lists.null args)) (CoderUtils.isSelfTailRecursive name body))
+    in (Flows.bind (Logic.ifElse isTCO (Flows.bind (encodeTermMultilineTCO env name args body) (\tcoStmts ->  
+      let trueExpr = (Syntax.NamedExpressionSimple (Utils.pyAtomToPyExpression Syntax.AtomTrue))
+      in  
+        let whileBody = (Utils.indentedBlock Nothing [
+                Lists.concat2 prefixes tcoStmts])
+        in  
+          let whileStmt = (Syntax.StatementCompound (Syntax.CompoundStatementWhile (Syntax.WhileStatement {
+                  Syntax.whileStatementCondition = trueExpr,
+                  Syntax.whileStatementBody = whileBody,
+                  Syntax.whileStatementElse = Nothing})))
+          in (Flows.pure (Utils.indentedBlock comment [
+            [
+              whileStmt]])))) (Flows.bind (encodeTermMultiline env body) (\stmts -> Flows.pure (Utils.indentedBlock comment [
+      Lists.concat2 prefixes stmts])))) (\block -> Flows.bind (Maybes.maybe (Flows.pure Nothing) (\cod -> Flows.bind (encodeType env cod) (\pytyp -> Flows.pure (Just pytyp))) mcod) (\mreturnType ->  
       let pyTparams = (Logic.ifElse useInlineTypeParams (Lists.map (\arg_ -> Utils.pyNameToPyTypeParameter (Names.encodeTypeVariable arg_)) tparams) [])
       in  
         let isThunk = (Lists.null args)
@@ -1407,7 +1488,7 @@ encodeFunctionDefinition env name tparams args body doms mcod comment prefixes =
                 Syntax.functionDefRawParams = (Just pyParams),
                 Syntax.functionDefRawReturnType = mreturnType,
                 Syntax.functionDefRawFuncTypeComment = Nothing,
-                Syntax.functionDefRawBlock = block}}))))))))))))
+                Syntax.functionDefRawBlock = block}})))))))))))
 
 -- | Encode a term to a list of statements with return as final statement
 encodeTermMultiline :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow Helpers.PyGraph [Syntax.Statement])
@@ -1569,9 +1650,11 @@ encodeTermAssignment env name term ts comment = (Flows.bind (analyzePythonFuncti
                           Core.bindingType = (Just ts)}
                   in  
                     let isComplex = (CoderUtils.isComplexBinding tc binding)
-                    in (Logic.ifElse isComplex (withBindings bindings (Flows.bind (Flows.mapList (encodeBindingAs env2) bindings) (\bindingStmts -> encodeFunctionDefinition env2 name tparams params body doms mcod comment bindingStmts))) (Flows.bind (encodeTermInline env2 False body) (\bodyExpr ->  
-                      let pyName = (Names.encodeName False Util.CaseConventionLowerSnake env2 name)
-                      in (Flows.pure (Utils.annotatedStatement comment (Utils.assignmentStatement pyName bodyExpr))))))))
+                    in  
+                      let isTrivial = (CoderUtils.isTrivialTerm term)
+                      in (Logic.ifElse (Logic.and isComplex (Logic.not isTrivial)) (withBindings bindings (Flows.bind (Flows.mapList (encodeBindingAs env2) bindings) (\bindingStmts -> encodeFunctionDefinition env2 name tparams params body doms mcod comment bindingStmts))) (Flows.bind (encodeTermInline env2 False body) (\bodyExpr ->  
+                        let pyName = (Names.encodeName False Util.CaseConventionLowerSnake env2 name)
+                        in (Flows.pure (Utils.annotatedStatement comment (Utils.assignmentStatement pyName bodyExpr))))))))
 
 -- | Encode a variable reference to a Python expression
 encodeVariable :: (Helpers.PythonEnvironment -> Core.Name -> [Syntax.Expression] -> Compute.Flow Helpers.PyGraph Syntax.Expression)
@@ -1625,9 +1708,11 @@ encodeVariable env name args = (Flows.bind Monads.getState (\pyg ->
                             let allArgs = (Lists.concat2 args remainingExprs)
                             in  
                               let fullCall = (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env name)) allArgs)
-                              in (Flows.pure (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) (Flows.pure asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Flows.fail (Strings.cat2 "Unknown variable: " (Core.unName name))) (\_ -> Flows.pure asFunctionCall) (Maps.lookup name tcMetadata)) (\el -> Maybes.maybe (Flows.pure asVariable) (\ts -> Logic.ifElse (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (CoderUtils.isComplexBinding tc el)) (Flows.pure asFunctionCall) ( 
-                    let asFunctionRef = (Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable)
-                    in (Flows.pure asFunctionRef))) (Core.bindingType el)) (Lexical.lookupElement g name)) (\prim ->  
+                              in (Flows.pure (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) (Flows.pure asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Flows.fail (Strings.cat2 "Unknown variable: " (Core.unName name))) (\_ -> Flows.pure asFunctionCall) (Maps.lookup name tcMetadata)) (\el ->  
+                    let elTrivial1 = (CoderUtils.isTrivialTerm (Core.bindingTerm el))
+                    in (Maybes.maybe (Flows.pure asVariable) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (CoderUtils.isComplexBinding tc el)) (Logic.not elTrivial1)) (Flows.pure asFunctionCall) ( 
+                      let asFunctionRef = (Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable)
+                      in (Flows.pure asFunctionRef))) (Core.bindingType el))) (Lexical.lookupElement g name)) (\prim ->  
                     let primArity = (Arity.primitiveArity prim)
                     in (Logic.ifElse (Equality.equal primArity 0) (Flows.pure asFunctionCall) ( 
                       let ts = (Graph.primitiveType prim)
@@ -1637,11 +1722,13 @@ encodeVariable env name args = (Flows.bind Monads.getState (\pyg ->
                     let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
                     in (Flows.pure asFunctionRef)) (Logic.ifElse (Logic.not (Maps.member name tcMetadata)) (Maybes.maybe ( 
                     let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
-                    in (Flows.pure asFunctionRef)) (\el -> Maybes.maybe (Logic.ifElse (Equality.equal (Arity.typeArity typ) 0) (Flows.pure asFunctionCall) ( 
-                    let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
-                    in (Flows.pure asFunctionRef))) (\ts -> Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexBinding tc el)) (Flows.pure asFunctionCall) ( 
-                    let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
-                    in (Flows.pure asFunctionRef))) (Core.bindingType el)) (Lexical.lookupElement g name)) (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexVariable tc name)) (Flows.pure asFunctionCall) ( 
+                    in (Flows.pure asFunctionRef)) (\el ->  
+                    let elTrivial = (CoderUtils.isTrivialTerm (Core.bindingTerm el))
+                    in (Maybes.maybe (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (Logic.not elTrivial)) (Flows.pure asFunctionCall) ( 
+                      let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
+                      in (Flows.pure asFunctionRef))) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexBinding tc el)) (Logic.not elTrivial)) (Flows.pure asFunctionCall) ( 
+                      let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
+                      in (Flows.pure asFunctionRef))) (Core.bindingType el))) (Lexical.lookupElement g name)) (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexVariable tc name)) (Flows.pure asFunctionCall) ( 
                     let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
                     in (Flows.pure asFunctionRef)))))) mTyp))))
 

@@ -2,6 +2,7 @@
 wiki/
 
 # Haskell / Stack / Cabal
+.ghcup/
 .stack-work
 dist-newstyle/
 stack.yaml.lock

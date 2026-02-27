@@ -121,15 +121,11 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
             return hydra.lib.lists.cons(accessor(), path)
         match current_term():
             case hydra.core.TermLet(value=let_expr):
-                @lru_cache(1)
-                def bindings() -> frozenlist[hydra.core.Binding]:
-                    return let_expr.bindings
-                @lru_cache(1)
-                def env() -> hydra.core.Term:
-                    return let_expr.body
+                bindings = let_expr.bindings
+                env = let_expr.body
                 @lru_cache(1)
                 def binding_names() -> frozenlist[hydra.core.Name]:
-                    return hydra.lib.lists.map((lambda v1: v1.name), bindings())
+                    return hydra.lib.lists.map((lambda v1: v1.name), bindings)
                 def add_binding_name(nodes_visited_ids: tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]], FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]], name: hydra.core.Name) -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]], FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]]:
                     @lru_cache(1)
                     def current_nodes_visited() -> tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]]:
@@ -181,17 +177,15 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                     @lru_cache(1)
                     def binding() -> hydra.core.Binding:
                         return hydra.lib.pairs.second(node_binding)
-                    @lru_cache(1)
-                    def term1() -> hydra.core.Term:
-                        return binding().term
-                    return helper(ids1(), Just(root()), (), current_state, (dont_care_accessor, term1()))
+                    term1 = binding().term
+                    return helper(ids1(), Just(root()), (), current_state, (dont_care_accessor, term1))
                 @lru_cache(1)
                 def node_binding_pairs() -> frozenlist[tuple[hydra.accessors.AccessorNode, hydra.core.Binding]]:
-                    return hydra.lib.lists.zip(nodes1(), bindings())
+                    return hydra.lib.lists.zip(nodes1(), bindings)
                 @lru_cache(1)
                 def state_after_bindings() -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenlist[hydra.accessors.AccessorEdge]], frozenset[str]]:
                     return hydra.lib.lists.foldl((lambda x1, x2: add_binding_term(x1, x2)), ((hydra.lib.lists.concat2(nodes1(), nodes()), edges()), visited1()), node_binding_pairs())
-                return helper(ids1(), mroot, next_path(), state_after_bindings(), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), env()))
+                return helper(ids1(), mroot, next_path(), state_after_bindings(), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), env))
             
             case hydra.core.TermVariable(value=name):
                 return hydra.lib.maybes.maybe(state, (lambda root: hydra.lib.maybes.maybe(state, (lambda node: (edge := hydra.accessors.AccessorEdge(root, hydra.accessors.AccessorPath(hydra.lib.lists.reverse(next_path())), node), new_edges := hydra.lib.lists.cons(edge, edges()), ((nodes(), new_edges), visited()))[2]), hydra.lib.maps.lookup(name, ids))), mroot)

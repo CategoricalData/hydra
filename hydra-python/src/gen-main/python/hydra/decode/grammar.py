@@ -130,22 +130,14 @@ def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_grammar_pattern_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
-                @lru_cache(1)
-                def tname() -> hydra.core.Name:
-                    return inj.type_name
-                @lru_cache(1)
-                def field() -> hydra.core.Field:
-                    return inj.field
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return field().name
-                @lru_cache(1)
-                def fterm() -> hydra.core.Term:
-                    return field().term
+                tname = inj.type_name
+                field = inj.field
+                fname = field.name
+                fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.grammar.Pattern]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("alternatives"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternAlternatives(t))), hydra.extract.helpers.decode_list((lambda x1, x2: pattern(x1, x2)), cx, input)))), (hydra.core.Name("constant"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternConstant(t))), constant(cx, input)))), (hydra.core.Name("ignored"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternIgnored(t))), pattern(cx, input)))), (hydra.core.Name("labeled"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternLabeled(t))), labeled_pattern(cx, input)))), (hydra.core.Name("nil"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternNil())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("nonterminal"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternNonterminal(t))), symbol(cx, input)))), (hydra.core.Name("option"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternOption(t))), pattern(cx, input)))), (hydra.core.Name("plus"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternPlus(t))), pattern(cx, input)))), (hydra.core.Name("regex"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternRegex(t))), regex(cx, input)))), (hydra.core.Name("sequence"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternSequence(t))), hydra.extract.helpers.decode_list((lambda x1, x2: pattern(x1, x2)), cx, input)))), (hydra.core.Name("star"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.grammar.Pattern, hydra.grammar.PatternStar(t))), pattern(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.grammar.Pattern"))

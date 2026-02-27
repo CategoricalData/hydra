@@ -73,6 +73,7 @@ import qualified Hydra.Ext.Sources.Python.Serde                as PythonSerde
 import qualified Hydra.Ext.Sources.Python.Syntax               as PythonSyntax
 import qualified Hydra.Ext.Sources.Python.Utils                as PythonUtils
 import qualified Hydra.Ext.Sources.Rdf.Syntax                  as RdfSyntax
+import qualified Hydra.Ext.Sources.Rust.Coder                 as RustCoder
 import qualified Hydra.Ext.Sources.Rust.Language               as RustLanguage
 import qualified Hydra.Ext.Sources.Rust.Operators              as RustOperators
 import qualified Hydra.Ext.Sources.Rust.Serde                  as RustSerde
@@ -222,6 +223,7 @@ rdfModules = [
 
 rustModules :: [Module]
 rustModules = [
+  RustCoder.module_,
   RustLanguage.module_,
   RustOperators.module_,
   RustSerde.module_,

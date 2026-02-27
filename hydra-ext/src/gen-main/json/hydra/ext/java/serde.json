@@ -10554,10 +10554,7 @@
                                   "body": {
                                     "application": {
                                       "argument": {"variable": "w"},
-                                      "function": {
-                                        "typeApplication": {
-                                          "body": {"variable": "hydra.ext.java.serde.writeWhileStatement"},
-                                          "type": {"variable": "hydra.ext.java.syntax.WhileStatement"}}}}},
+                                      "function": {"variable": "hydra.ext.java.serde.writeWhileStatement"}}},
                                   "domain": [{"variable": "hydra.ext.java.syntax.WhileStatement"}],
                                   "parameter": "w"}}}},
                           {
@@ -12549,25 +12546,109 @@
     {
       "name": "hydra.ext.java.serde.writeWhileStatement",
       "term": {
-        "typeLambda": {
-          "body": {
-            "function": {
-              "lambda": {
+        "function": {
+          "lambda": {
+            "body": {
+              "let": {
+                "bindings": [
+                  {
+                    "name": "mcond",
+                    "term": {
+                      "application": {
+                        "argument": {"variable": "ws"},
+                        "function": {
+                          "function": {
+                            "elimination": {
+                              "record": {"field": "cond", "typeName": "hydra.ext.java.syntax.WhileStatement"}}}}}},
+                    "type": [
+                      {
+                        "constraints": null,
+                        "type": {"maybe": {"variable": "hydra.ext.java.syntax.Expression"}},
+                        "variables": []}]},
+                  {
+                    "name": "body",
+                    "term": {
+                      "application": {
+                        "argument": {"variable": "ws"},
+                        "function": {
+                          "function": {
+                            "elimination": {
+                              "record": {"field": "body", "typeName": "hydra.ext.java.syntax.WhileStatement"}}}}}},
+                    "type": [
+                      {
+                        "constraints": null,
+                        "type": {"variable": "hydra.ext.java.syntax.Statement"},
+                        "variables": []}]},
+                  {
+                    "name": "condSer",
+                    "term": {
+                      "application": {
+                        "argument": {"variable": "mcond"},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {"variable": "c"},
+                                      "function": {"variable": "hydra.ext.java.serde.writeExpression"}}},
+                                  "domain": [{"variable": "hydra.ext.java.syntax.Expression"}],
+                                  "parameter": "c"}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "true"}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                        "type": {"variable": "hydra.ast.Expr"}}},
+                                    "type": {"variable": "hydra.ext.java.syntax.Expression"}}}}}}}}},
+                    "type": [
+                      {
+                        "constraints": null,
+                        "type": {"variable": "hydra.ast.Expr"},
+                        "variables": []}]}],
                 "body": {
                   "application": {
-                    "argument": {"literal": {"string": "STUB:WhileStatement"}},
-                    "function": {"variable": "hydra.serialization.cst"}}},
-                "domain": [{"variable": "t0"}],
-                "parameter": "_"}}},
-          "parameter": "t0"}},
+                    "argument": {
+                      "list": [
+                        {
+                          "application": {
+                            "argument": {"literal": {"string": "while"}},
+                            "function": {"variable": "hydra.serialization.cst"}}},
+                        {
+                          "application": {
+                            "argument": {"list": [{"variable": "condSer"}]},
+                            "function": {
+                              "application": {
+                                "argument": {"literal": {"boolean": false}},
+                                "function": {"variable": "hydra.serialization.parenList"}}}}},
+                        {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "body"},
+                                "function": {"variable": "hydra.ext.java.serde.writeStatement"}}},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "hydra.serialization.fullBlockStyle"},
+                                "function": {"variable": "hydra.serialization.curlyBlock"}}}}}]},
+                    "function": {"variable": "hydra.serialization.spaceSep"}}}}},
+            "domain": [{"variable": "hydra.ext.java.syntax.WhileStatement"}],
+            "parameter": "ws"}}},
       "type": [
         {
           "constraints": null,
           "type": {
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0"]}]},
+              "domain": {"variable": "hydra.ext.java.syntax.WhileStatement"}}},
+          "variables": []}]},
     {
       "name": "hydra.ext.java.serde.writeWildcard",
       "term": {

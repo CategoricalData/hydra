@@ -1,0 +1,380 @@
+[workspace]
+name = "hydra"
+version = "0.12.0"
+description = "The Hydra language for type-safe transformations"
+authors = [
+    "Joshua Shinavier <josh@fortytwo.net>",
+    "Fred Eisele <fredrick.eisele@gmail.com>",
+]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tasks.build-all]
+cmd = "nu pixi-scripts/build-all.nu"
+cwd = "."
+
+[tasks.docs-html]
+cmd = "pixi run -e docs docs-build-all-html"
+cwd = "."
+
+[tasks.docs-pdf]
+cmd = "pixi run -e docs docs-build-all-pdf"
+cwd = "."
+
+[tasks.docs-all]
+cmd = "pixi run -e docs docs-build-all"
+cwd = "."
+
+[tasks.docs-serve]
+cmd = "python -m http.server 8080"
+cwd = "docs-output"
+
+[tasks.gh-pages-build]
+depends-on = ["docs-html"]
+cmd = "nu pixi-scripts/gh-pages-build.nu"
+cwd = "."
+
+[tasks.build-java]
+cmd = "rattler-build build --recipe-dir recipes/hydra-java"
+
+[tasks.build-python]
+cmd = "rattler-build build --recipe-dir recipes/hydra-python"
+
+[tasks.build-scala]
+cmd = "rattler-build build --recipe-dir recipes/hydra-scala"
+
+[tasks.build-haskell]
+cmd = "pixi run -e haskell hydra-build"
+cwd = "."
+
+[tasks.build-ext]
+cmd = "rattler-build build --recipe-dir recipes/hydra-ext"
+
+[tasks.clean]
+cmd = "nu pixi-scripts/clean.nu"
+cwd = "."
+
+[tasks.validate]
+cmd = "nu pixi-scripts/validate-setup.nu"
+
+[tasks.sync-all]
+cmd = "pixi run -e haskell _sync-all"
+cwd = "."
+
+[tasks.benchmark]
+cmd = "pixi run -e haskell _benchmark"
+cwd = "."
+
+[dependencies]
+rattler-build = ">=0.20.0"
+nushell = ">=0.80.0"
+
+[feature.java.dependencies]
+openjdk = "17.*"
+
+[feature.java.tasks.gradle]
+cmd = "./gradlew"
+env = { JAVA_HOME = "$CONDA_PREFIX" }
+
+[feature.java.tasks.gradle-tasks]
+cmd = "./gradlew tasks"
+env = { JAVA_HOME = "$CONDA_PREFIX" }
+
+[feature.java.tasks.gradle-build]
+cmd = "./gradlew build"
+env = { JAVA_HOME = "$CONDA_PREFIX" }
+
+[feature.java.tasks.gradle-clean]
+cmd = "./gradlew clean"
+env = { JAVA_HOME = "$CONDA_PREFIX" }
+
+[feature.python.dependencies]
+python = ">=3.12"
+pip = "*"
+
+# Haskell feature: uses GHCup (official installer) to manage GHC, Stack, and Cabal.
+# All Haskell tools are installed into ~/.ghcup during activation.
+[feature.haskell.dependencies]
+gmp = "*"
+zlib = "*"
+ncurses = "*"
+libffi = "*"
+
+[feature.haskell.activation]
+scripts = ["bin/activate-haskell.sh"]
+
+[feature.haskell.activation.env]
+GHCUP_INSTALL_BASE_PREFIX = "$PIXI_PROJECT_ROOT"
+PATH = "$PIXI_PROJECT_ROOT/.ghcup/bin:$PATH"
+LD_LIBRARY_PATH = "$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
+LIBRARY_PATH = "$CONDA_PREFIX/lib:$LIBRARY_PATH"
+CPATH = "$CONDA_PREFIX/include:$CPATH"
+PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+# Stack tasks using GHCup-managed GHC
+[feature.haskell.tasks.stack-setup]
+cmd = "stack setup --system-ghc"
+cwd = "."
+
+[feature.haskell.tasks.stack-build]
+cmd = "stack build --system-ghc"
+cwd = "."
+
+[feature.haskell.tasks.stack-test]
+cmd = "stack test --system-ghc"
+cwd = "."
+
+[feature.haskell.tasks.stack-clean]
+cmd = "stack clean"
+cwd = "."
+
+[feature.haskell.tasks.stack-ghci]
+cmd = "stack ghci --system-ghc"
+cwd = "."
+
+[feature.haskell.tasks.stack-install]
+cmd = "stack install --system-ghc"
+cwd = "."
+
+# Individual package builds for hydra-ext
+[feature.haskell.tasks.hydra-build]
+cmd = "stack build hydra-ext --system-ghc"
+cwd = "."
+
+[feature.haskell.tasks.hydra-ghci]
+cmd = "stack ghci hydra-ext --system-ghc"
+cwd = "."
+
+[feature.haskell.tasks.hydra-test]
+cmd = "stack test hydra-ext --system-ghc"
+cwd = "."
+
+[feature.haskell.tasks.ext-ghci]
+cmd = "stack ghci hydra-ext --system-ghc"
+cwd = "."
+
+# Combined development tasks
+[feature.haskell.tasks.ghci-all]
+cmd = "nu pixi-scripts/ghci-all.nu"
+cwd = "."
+
+[feature.haskell.tasks.ghci-all-fixed]
+cmd = "nu pixi-scripts/ghci-all-fixed.nu"
+cwd = "."
+
+[feature.haskell.tasks.ghci-system]
+cmd = "nu pixi-scripts/ghci-system.nu"
+cwd = "."
+
+[feature.haskell.tasks.ghci-interactive]
+cmd = "stack ghci hydra-ext --system-ghc"
+cwd = "."
+
+# Module and code exploration tasks
+[feature.haskell.tasks.haskell-modules]
+cmd = "find src -name '*.hs' | head -n 20"
+cwd = "hydra-haskell"
+
+[feature.haskell.tasks.haskell-functions]
+cmd = "nu ../pixi-scripts/haskell-functions.nu"
+
+# GraphSON generation tasks
+[feature.haskell.tasks.graphson-help]
+cmd = "ghc --make pixi-scripts/run-graphson.hs -o run-graphson && ./run-graphson"
+cwd = "."
+
+[feature.haskell.tasks.run-copilot-graphson]
+cmd = "nu pixi-scripts/run-copilot-graphson.nu"
+cwd = "."
+
+[feature.haskell.tasks.run-example-graphson]
+cmd = "nu pixi-scripts/run-example-graphson.nu"
+cwd = "."
+
+# Data checking tasks
+[feature.haskell.tasks.check-data]
+cmd = "ls -la data/genpg/sources/"
+cwd = "hydra-ext"
+
+[feature.haskell.tasks.check-graphson]
+cmd = "ls -la data/genpg/*.json"
+cwd = "hydra-ext"
+
+[feature.haskell.tasks.check-copilot-data]
+cmd = "head -n 3 data/genpg/copilot.json"
+cwd = "hydra-ext"
+
+[feature.haskell.tasks.check-sales-data]
+cmd = "head -n 3 data/genpg/sales.json"
+cwd = "hydra-ext"
+
+# Stack cache management
+[feature.haskell.tasks.clear-stack-cache-haskell]
+cmd = "stack clean --full && rm -rf .stack-work"
+cwd = "hydra-haskell"
+
+[feature.haskell.tasks.clear-stack-cache-ext]
+cmd = "stack clean --full && rm -rf .stack-work"
+cwd = "hydra-ext"
+
+[feature.haskell.tasks.clear-stack-cache-all]
+cmd = "stack clean --full && rm -rf .stack-work"
+cwd = "."
+
+# Unified Haskell tasks
+[feature.haskell.tasks.haskell-setup-all]
+depends-on = ["stack-setup"]
+
+[feature.haskell.tasks.haskell-build-all]
+depends-on = ["stack-build", "hydra-build"]
+
+[feature.haskell.tasks.haskell-test-all]
+depends-on = ["stack-test", "hydra-test"]
+
+[feature.haskell.tasks.haskell-clean-all]
+depends-on = ["stack-clean"]
+
+# Code generation tasks using hydraExtModules
+[feature.haskell.tasks.generate-java]
+cmd = "nu pixi-scripts/generate-java.nu"
+cwd = "."
+
+[feature.haskell.tasks.generate-haskell]
+cmd = "nu pixi-scripts/generate-haskell.nu"
+cwd = "."
+
+# Alternative ghci task with minimal conda interference
+[feature.haskell.tasks.ghci-minimal]
+cmd = "nu pixi-scripts/ghci-minimal.nu"
+cwd = "."
+
+# Benchmark tasks
+[feature.haskell.tasks._benchmark]
+cmd = "bash bin/run-benchmark-tests.sh"
+cwd = "."
+
+# Sync tasks (run individual sync scripts from haskell environment)
+[feature.haskell.tasks._sync-all]
+cmd = "bash -c 'bash bin/sync-all.sh 2>&1 | tee sync-all.log'"
+cwd = "."
+
+[feature.haskell.tasks.sync-haskell]
+cmd = "bash hydra-haskell/bin/sync-haskell.sh"
+cwd = "."
+
+[feature.haskell.tasks.sync-java]
+cmd = "bash hydra-ext/bin/sync-java.sh"
+cwd = "."
+
+[feature.haskell.tasks.sync-python]
+cmd = "bash hydra-ext/bin/sync-python.sh"
+cwd = "."
+
+[feature.scala.dependencies]
+openjdk = "17.*"
+sbt = "*"
+
+[feature.docs.dependencies]
+ruby = ">=3.0"
+asciidoctor = "*"
+rb-asciidoctor-pdf = "*"
+plantuml = "*"
+graphviz = "*"
+
+[feature.docs.activation.env]
+DIAGRAM_PLANTUML_CLASSPATH = "$PIXI_PROJECT_ROOT/.pixi/envs/docs/lib/plantuml.jar"
+
+[feature.docs.tasks.docs-setup]
+cmd = "gem install asciidoctor-diagram pygments.rb"
+cwd = "."
+
+[feature.ext.dependencies]
+openjdk = "17.*"
+
+# Documentation build tasks
+[feature.docs.tasks.docs-build-html]
+depends-on = ["docs-prepare", "docs-setup"]
+cmd = "asciidoctor -r asciidoctor-diagram -a data-uri -a allow-uri-read -o docs-output/index.html docs/index.adoc"
+cwd = "."
+
+[feature.docs.tasks.docs-build-developer-guide]
+depends-on = ["docs-prepare", "docs-setup"]
+cmd = "asciidoctor -r asciidoctor-diagram -a data-uri -a allow-uri-read -o docs-output/developer-guide.html docs/developer-guide.adoc"
+cwd = "."
+
+[feature.docs.tasks.docs-build-implementor-guide]
+depends-on = ["docs-prepare", "docs-setup"]
+cmd = "asciidoctor -r asciidoctor-diagram -a data-uri -a allow-uri-read -o docs-output/implementor-guide.html docs/implementor-guide.adoc"
+cwd = "."
+
+[feature.docs.tasks.docs-build-operator-guide]
+depends-on = ["docs-prepare", "docs-setup"]
+cmd = "asciidoctor -r asciidoctor-diagram -a data-uri -a allow-uri-read -o docs-output/operator-guide.html docs/operator-guide.adoc"
+cwd = "."
+
+[feature.docs.tasks.docs-build-pdf-developer]
+depends-on = ["docs-prepare", "docs-setup"]
+cmd = "asciidoctor-pdf -r asciidoctor-diagram -a allow-uri-read -o docs-output/developer-guide.pdf docs/developer-guide.adoc"
+cwd = "."
+
+[feature.docs.tasks.docs-build-pdf-implementor]
+depends-on = ["docs-prepare", "docs-setup"]
+cmd = "asciidoctor-pdf -r asciidoctor-diagram -a allow-uri-read -o docs-output/implementor-guide.pdf docs/implementor-guide.adoc"
+cwd = "."
+
+[feature.docs.tasks.docs-build-pdf-operator]
+depends-on = ["docs-prepare", "docs-setup"]
+cmd = "asciidoctor-pdf -r asciidoctor-diagram -a allow-uri-read -o docs-output/operator-guide.pdf docs/operator-guide.adoc"
+cwd = "."
+
+[feature.docs.tasks.docs-build-all-html]
+depends-on = [
+    "docs-build-html",
+    "docs-build-developer-guide",
+    "docs-build-implementor-guide",
+    "docs-build-operator-guide",
+]
+
+[feature.docs.tasks.docs-build-all-pdf]
+depends-on = [
+    "docs-build-pdf-developer",
+    "docs-build-pdf-implementor",
+    "docs-build-pdf-operator",
+]
+
+[feature.docs.tasks.docs-build-all]
+depends-on = ["docs-build-all-html", "docs-build-all-pdf"]
+
+[feature.docs.tasks.docs-clean]
+cmd = "rm -rf docs-output"
+cwd = "."
+
+[feature.docs.tasks.docs-setup-output]
+cmd = "mkdir -p docs-output"
+cwd = "."
+
+[feature.docs.tasks.docs-copy-assets]
+cmd = "cp -r docs/images docs-output/ 2>/dev/null || true"
+cwd = "."
+
+[feature.docs.tasks.docs-generate-diagrams]
+cmd = "nu pixi-scripts/generate-diagrams.nu"
+cwd = "."
+
+[feature.docs.tasks.docs-prepare]
+depends-on = [
+    "docs-clean",
+    "docs-setup-output",
+    "docs-copy-assets",
+    "docs-generate-diagrams",
+]
+
+[environments]
+default = { features = ["java"] }
+java = { features = ["java"] }
+python = { features = ["python"], solve-group = "python" }
+haskell = { features = ["haskell"], solve-group = "haskell" }
+scala = { features = ["scala"] }
+ext = { features = ["ext"], solve-group = "ext" }
+all = { features = ["java", "scala"] }
+docs = { features = ["docs"], solve-group = "docs" }

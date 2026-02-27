@@ -288,6 +288,277 @@ public interface CoderUtils {
       }));
   }
   
+  static Boolean isTrivialTerm(hydra.core.Term t) {
+    return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Term instance) {
+        return false;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Literal ignored) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Variable ignored) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Unit ignored) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Application app) {
+        hydra.core.Term arg = ((app).value).argument;
+        hydra.core.Term fun = ((app).value).function;
+        return (fun).accept(new hydra.core.Term.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Term instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Term.Function f) {
+            return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+              @Override
+              public Boolean otherwise(hydra.core.Function instance) {
+                return false;
+              }
+              
+              @Override
+              public Boolean visit(hydra.core.Function.Elimination e) {
+                return ((e).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+                  @Override
+                  public Boolean otherwise(hydra.core.Elimination instance) {
+                    return false;
+                  }
+                  
+                  @Override
+                  public Boolean visit(hydra.core.Elimination.Record ignored) {
+                    return hydra.coderUtils.CoderUtils.isTrivialTerm(arg);
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Maybe opt) {
+        return hydra.lib.maybes.Maybe.apply(
+          true,
+          (java.util.function.Function<hydra.core.Term, Boolean>) (inner -> hydra.coderUtils.CoderUtils.isTrivialTerm(inner)),
+          (opt).value);
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.TypeApplication ta) {
+        return hydra.coderUtils.CoderUtils.isTrivialTerm(((ta).value).body);
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.TypeLambda tl) {
+        return hydra.coderUtils.CoderUtils.isTrivialTerm(((tl).value).body);
+      }
+    });
+  }
+  
+  static Boolean isSelfTailRecursive(hydra.core.Name funcName, hydra.core.Term body) {
+    Boolean callsSelf = hydra.lib.logic.Not.apply(hydra.rewriting.Rewriting.isFreeVariableInTerm(
+      funcName,
+      body));
+    return hydra.lib.logic.IfElse.lazy(
+      callsSelf,
+      () -> hydra.coderUtils.CoderUtils.isTailRecursiveInTailPosition(
+        funcName,
+        body),
+      () -> false);
+  }
+  
+  static Boolean isTailRecursiveInTailPosition(hydra.core.Name funcName, hydra.core.Term term) {
+    hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateAndDetypeTerm(term);
+    return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Term instance) {
+        return hydra.rewriting.Rewriting.isFreeVariableInTerm(
+          funcName,
+          term);
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Application app) {
+        hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> gathered = hydra.coderUtils.CoderUtils.gatherApplications(stripped);
+        hydra.util.Lazy<java.util.List<hydra.core.Term>> gatherArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
+        hydra.util.Lazy<hydra.core.Term> gatherFun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
+        hydra.core.Term strippedFun = hydra.rewriting.Rewriting.deannotateAndDetypeTerm(gatherFun.get());
+        return (strippedFun).accept(new hydra.core.Term.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Term instance) {
+            return hydra.rewriting.Rewriting.isFreeVariableInTerm(
+              funcName,
+              term);
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Term.Variable vname) {
+            return hydra.lib.logic.IfElse.lazy(
+              hydra.lib.equality.Equal.apply(
+                (vname).value,
+                funcName),
+              () -> ((java.util.function.Supplier<Boolean>) (() -> {
+                hydra.util.Lazy<Boolean> argsNoFunc = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                  (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Term, Boolean>) (arg -> hydra.lib.logic.And.apply(
+                    ok,
+                    hydra.rewriting.Rewriting.isFreeVariableInTerm(
+                      funcName,
+                      arg)))),
+                  true,
+                  gatherArgs.get()));
+                return ((java.util.function.Supplier<Boolean>) (() -> {
+                  hydra.util.Lazy<Boolean> argsNoLambda = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                    (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Term, Boolean>) (arg -> hydra.lib.logic.And.apply(
+                      ok,
+                      hydra.lib.logic.Not.apply(hydra.rewriting.Rewriting.foldOverTerm(
+                        new hydra.coders.TraversalOrder.Pre(),
+                        (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (found -> (java.util.function.Function<hydra.core.Term, Boolean>) (t -> hydra.lib.logic.Or.apply(
+                          found,
+                          (t).accept(new hydra.core.Term.PartialVisitor<>() {
+                            @Override
+                            public Boolean otherwise(hydra.core.Term instance) {
+                              return false;
+                            }
+                            
+                            @Override
+                            public Boolean visit(hydra.core.Term.Function f2) {
+                              return ((f2).value).accept(new hydra.core.Function.PartialVisitor<>() {
+                                @Override
+                                public Boolean otherwise(hydra.core.Function instance) {
+                                  return false;
+                                }
+                                
+                                @Override
+                                public Boolean visit(hydra.core.Function.Lambda lam) {
+                                  hydra.core.Term ignore = ((lam).value).body;
+                                  return true;
+                                }
+                              });
+                            }
+                          })))),
+                        false,
+                        arg))))),
+                    true,
+                    gatherArgs.get()));
+                  return hydra.lib.logic.And.apply(
+                    argsNoFunc.get(),
+                    argsNoLambda.get());
+                })).get();
+              })).get(),
+              () -> hydra.rewriting.Rewriting.isFreeVariableInTerm(
+                funcName,
+                term));
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Term.Function f) {
+            return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+              @Override
+              public Boolean otherwise(hydra.core.Function instance) {
+                return hydra.rewriting.Rewriting.isFreeVariableInTerm(
+                  funcName,
+                  term);
+              }
+              
+              @Override
+              public Boolean visit(hydra.core.Function.Elimination e) {
+                return ((e).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+                  @Override
+                  public Boolean otherwise(hydra.core.Elimination instance) {
+                    return hydra.rewriting.Rewriting.isFreeVariableInTerm(
+                      funcName,
+                      term);
+                  }
+                  
+                  @Override
+                  public Boolean visit(hydra.core.Elimination.Union cs) {
+                    hydra.util.Lazy<Boolean> argsOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                      (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Term, Boolean>) (arg -> hydra.lib.logic.And.apply(
+                        ok,
+                        hydra.rewriting.Rewriting.isFreeVariableInTerm(
+                          funcName,
+                          arg)))),
+                      true,
+                      gatherArgs.get()));
+                    java.util.List<hydra.core.Field> cases_ = ((cs).value).cases;
+                    hydra.util.Lazy<Boolean> branchesOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+                      (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Field, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Field, Boolean>) (field -> hydra.lib.logic.And.apply(
+                        ok,
+                        hydra.coderUtils.CoderUtils.isTailRecursiveInTailPosition(
+                          funcName,
+                          (field).term)))),
+                      true,
+                      cases_));
+                    hydra.util.Maybe<hydra.core.Term> dflt = ((cs).value).default_;
+                    hydra.util.Lazy<Boolean> dfltOk = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
+                      true,
+                      (java.util.function.Function<hydra.core.Term, Boolean>) (d -> hydra.coderUtils.CoderUtils.isTailRecursiveInTailPosition(
+                        funcName,
+                        d)),
+                      dflt));
+                    return hydra.lib.logic.And.apply(
+                      hydra.lib.logic.And.apply(
+                        branchesOk.get(),
+                        dfltOk.get()),
+                      argsOk.get());
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Function f) {
+        return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Function instance) {
+            return hydra.rewriting.Rewriting.isFreeVariableInTerm(
+              funcName,
+              term);
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Function.Lambda lam) {
+            return hydra.coderUtils.CoderUtils.isTailRecursiveInTailPosition(
+              funcName,
+              ((lam).value).body);
+          }
+        });
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Let lt) {
+        hydra.util.Lazy<Boolean> bindingsOk = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+          (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Binding, Boolean>>) (ok -> (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.logic.And.apply(
+            ok,
+            hydra.rewriting.Rewriting.isFreeVariableInTerm(
+              funcName,
+              (b).term)))),
+          true,
+          ((lt).value).bindings));
+        return hydra.lib.logic.And.apply(
+          bindingsOk.get(),
+          hydra.coderUtils.CoderUtils.isTailRecursiveInTailPosition(
+            funcName,
+            ((lt).value).body));
+      }
+    });
+  }
+  
   static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>> commentsFromElement(hydra.core.Binding b) {
     return hydra.annotations.Annotations.getTermDescription((b).term);
   }

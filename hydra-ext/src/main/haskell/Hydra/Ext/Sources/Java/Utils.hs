@@ -198,6 +198,7 @@ module_ = Module ns elements
       toBinding variantClassName,
       -- Variable declaration
       toBinding variableDeclarationStatement,
+      toBinding finalVarDeclarationStatement,
       -- String multiplicative expression
       toBinding javaStringMultiplicativeExpression,
       -- Annotation helpers
@@ -733,6 +734,19 @@ varDeclarationStatement = def "varDeclarationStatement" $
       (JavaDsl.localVariableDeclarationStatement
         (JavaDsl.localVariableDeclaration
           (list ([] :: [TTerm Java.VariableModifier]))
+          JavaDsl.localVariableTypeVar
+          (list [javaVariableDeclarator @@ var "id" @@
+            (just $ JavaDsl.variableInitializerExpression (var "rhs"))])))
+
+-- | Like varDeclarationStatement, but with 'final' modifier.
+--   Used in TCO while loops to create effectively-final snapshots of loop variables.
+finalVarDeclarationStatement :: TBinding (Java.Identifier -> Java.Expression -> Java.BlockStatement)
+finalVarDeclarationStatement = def "finalVarDeclarationStatement" $
+  lambda "id" $ lambda "rhs" $
+    JavaDsl.blockStatementLocalVariableDeclaration
+      (JavaDsl.localVariableDeclarationStatement
+        (JavaDsl.localVariableDeclaration
+          (list [inject Java._VariableModifier Java._VariableModifier_final unit])
           JavaDsl.localVariableTypeVar
           (list [javaVariableDeclarator @@ var "id" @@
             (just $ JavaDsl.variableInitializerExpression (var "rhs"))])))

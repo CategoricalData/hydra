@@ -79,13 +79,9 @@ def write_type_identifier(tid: hydra.ext.java.syntax.TypeIdentifier) -> hydra.as
     return write_identifier(tid.value)
 
 def write_type_name(tn: hydra.ext.java.syntax.TypeName) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.TypeIdentifier:
-        return tn.identifier
-    @lru_cache(1)
-    def mqual() -> Maybe[hydra.ext.java.syntax.PackageOrTypeName]:
-        return tn.qualifier
-    return hydra.serialization.dot_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: write_package_or_type_name(x1)), mqual()), Just(write_type_identifier(id())))))
+    id = tn.identifier
+    mqual = tn.qualifier
+    return hydra.serialization.dot_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: write_package_or_type_name(x1)), mqual), Just(write_type_identifier(id)))))
 
 def write_marker_annotation(ma: hydra.ext.java.syntax.MarkerAnnotation) -> hydra.ast.Expr:
     return hydra.serialization.prefix("@", write_type_name(ma.value))
@@ -165,13 +161,9 @@ def write_ambiguous_name(an: hydra.ext.java.syntax.AmbiguousName) -> hydra.ast.E
     return hydra.serialization.dot_sep(hydra.lib.lists.map((lambda x1: write_identifier(x1)), an.value))
 
 def write_expression_name(en: hydra.ext.java.syntax.ExpressionName) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mqual() -> Maybe[hydra.ext.java.syntax.AmbiguousName]:
-        return en.qualifier
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.Identifier:
-        return en.identifier
-    return hydra.serialization.dot_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: write_ambiguous_name(x1)), mqual()), Just(write_identifier(id())))))
+    mqual = en.qualifier
+    id = en.identifier
+    return hydra.serialization.dot_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: write_ambiguous_name(x1)), mqual), Just(write_identifier(id)))))
 
 def write_post_decrement_expression(_: T0) -> hydra.ast.Expr:
     return hydra.serialization.cst("STUB:PostDecrementExpression")
@@ -186,13 +178,9 @@ def write_enum_declaration(_: T0) -> hydra.ast.Expr:
     return hydra.serialization.cst("STUB:EnumDeclaration")
 
 def write_variable_declarator_id(vdi: hydra.ext.java.syntax.VariableDeclaratorId) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.Identifier:
-        return vdi.identifier
-    @lru_cache(1)
-    def mdims() -> Maybe[hydra.ext.java.syntax.Dims]:
-        return vdi.dims
-    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(write_identifier(id())), hydra.lib.maybes.map((lambda x1: write_dims(x1)), mdims()))))
+    id = vdi.identifier
+    mdims = vdi.dims
+    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(write_identifier(id)), hydra.lib.maybes.map((lambda x1: write_dims(x1)), mdims))))
 
 def write_annotation_type_declaration(_: T0) -> hydra.ast.Expr:
     return hydra.serialization.cst("STUB:AnnotationTypeDeclaration")
@@ -259,9 +247,6 @@ def write_synchronized_statement(_: T0) -> hydra.ast.Expr:
 
 def write_try_statement(_: T0) -> hydra.ast.Expr:
     return hydra.serialization.cst("STUB:TryStatement")
-
-def write_while_statement(_: T0) -> hydra.ast.Expr:
-    return hydra.serialization.cst("STUB:WhileStatement")
 
 def write_lambda_parameters(p: hydra.ext.java.syntax.LambdaParameters) -> hydra.ast.Expr:
     match p:
@@ -366,13 +351,9 @@ def write_annotation(ann: hydra.ext.java.syntax.Annotation) -> hydra.ast.Expr:
 def write_array_creation_expression(ace: hydra.ext.java.syntax.ArrayCreationExpression) -> hydra.ast.Expr:
     match ace:
         case hydra.ext.java.syntax.ArrayCreationExpressionPrimitiveArray(value=pa):
-            @lru_cache(1)
-            def pt() -> hydra.ext.java.syntax.PrimitiveTypeWithAnnotations:
-                return pa.type
-            @lru_cache(1)
-            def ai() -> hydra.ext.java.syntax.ArrayInitializer:
-                return pa.array
-            return hydra.serialization.space_sep((hydra.serialization.cst("new"), hydra.serialization.no_sep((write_primitive_type_with_annotations(pt()), hydra.serialization.cst("[]"))), write_array_initializer(ai())))
+            pt = pa.type
+            ai = pa.array
+            return hydra.serialization.space_sep((hydra.serialization.cst("new"), hydra.serialization.no_sep((write_primitive_type_with_annotations(pt), hydra.serialization.cst("[]"))), write_array_initializer(ai)))
         
         case hydra.ext.java.syntax.ArrayCreationExpressionClassOrInterfaceArray():
             return hydra.serialization.cst("STUB:ArrayCreationExpression")
@@ -393,15 +374,11 @@ def write_array_initializer(ai: hydra.ext.java.syntax.ArrayInitializer) -> hydra
     return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(groups()), 1), (lambda : hydra.serialization.no_sep((hydra.serialization.cst("{"), hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_variable_initializer(x1)), hydra.lib.lists.head(groups()))), hydra.serialization.cst("}")))), (lambda : hydra.serialization.cst("{}")))
 
 def write_array_type(at: hydra.ext.java.syntax.ArrayType) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def dims() -> hydra.ext.java.syntax.Dims:
-        return at.dims
-    @lru_cache(1)
-    def variant() -> hydra.ext.java.syntax.ArrayType_Variant:
-        return at.variant
+    dims = at.dims
+    variant = at.variant
     @lru_cache(1)
     def var_expr() -> hydra.ast.Expr:
-        match variant():
+        match variant:
             case hydra.ext.java.syntax.ArrayType_VariantPrimitive(value=pt):
                 return write_primitive_type_with_annotations(pt)
             
@@ -413,60 +390,14 @@ def write_array_type(at: hydra.ext.java.syntax.ArrayType) -> hydra.ast.Expr:
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    return hydra.serialization.no_sep((var_expr(), write_dims(dims())))
+    return hydra.serialization.no_sep((var_expr(), write_dims(dims)))
 
 def write_assignment(a: hydra.ext.java.syntax.Assignment) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def lhs() -> hydra.ext.java.syntax.LeftHandSide:
-        return a.lhs
-    @lru_cache(1)
-    def op() -> hydra.ext.java.syntax.AssignmentOperator:
-        return a.op
-    @lru_cache(1)
-    def rhs() -> hydra.ext.java.syntax.Expression:
-        return a.expression
-    @lru_cache(1)
-    def ctop() -> str:
-        match op():
-            case hydra.ext.java.syntax.AssignmentOperator.SIMPLE:
-                return "="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.TIMES:
-                return "*="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.DIV:
-                return "/="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.MOD:
-                return "%="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.PLUS:
-                return "+="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.MINUS:
-                return "-="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.SHIFT_LEFT:
-                return "<<="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.SHIFT_RIGHT:
-                return ">>="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.SHIFT_RIGHT_ZERO_FILL:
-                return ">>>="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.AND:
-                return "&="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.XOR:
-                return "^="
-            
-            case hydra.ext.java.syntax.AssignmentOperator.OR:
-                return "|="
-            
-            case _:
-                raise AssertionError("Unreachable: all variants handled")
-    return hydra.serialization.infix_ws(ctop(), write_left_hand_side(lhs()), write_expression(rhs()))
+    lhs = a.lhs
+    op = a.op
+    rhs = a.expression
+    ctop = hydra.dsl.python.unsupported("inline match expressions are not yet supported")
+    return hydra.serialization.infix_ws(ctop(), write_left_hand_side(lhs), write_expression(rhs))
 
 def write_assignment_expression(e: hydra.ext.java.syntax.AssignmentExpression) -> hydra.ast.Expr:
     match e:
@@ -511,31 +442,19 @@ def write_cast_expression(e: hydra.ext.java.syntax.CastExpression) -> hydra.ast.
             raise AssertionError("Unreachable: all variants handled")
 
 def write_cast_expression_not_plus_minus(npm: hydra.ext.java.syntax.CastExpression_NotPlusMinus) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def rb() -> hydra.ext.java.syntax.CastExpression_RefAndBounds:
-        return npm.ref_and_bounds
-    @lru_cache(1)
-    def ex() -> hydra.ext.java.syntax.UnaryExpression:
-        return npm.expression
-    return hydra.serialization.space_sep((write_cast_expression_ref_and_bounds(rb()), write_unary_expression(ex())))
+    rb = npm.ref_and_bounds
+    ex = npm.expression
+    return hydra.serialization.space_sep((write_cast_expression_ref_and_bounds(rb), write_unary_expression(ex)))
 
 def write_cast_expression_primitive(cp: hydra.ext.java.syntax.CastExpression_Primitive) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def pt() -> hydra.ext.java.syntax.PrimitiveTypeWithAnnotations:
-        return cp.type
-    @lru_cache(1)
-    def ex() -> hydra.ext.java.syntax.UnaryExpression:
-        return cp.expression
-    return hydra.serialization.space_sep((hydra.serialization.paren_list(False, (write_primitive_type_with_annotations(pt()),)), write_unary_expression(ex())))
+    pt = cp.type
+    ex = cp.expression
+    return hydra.serialization.space_sep((hydra.serialization.paren_list(False, (write_primitive_type_with_annotations(pt),)), write_unary_expression(ex)))
 
 def write_cast_expression_ref_and_bounds(rab: hydra.ext.java.syntax.CastExpression_RefAndBounds) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def rt() -> hydra.ext.java.syntax.ReferenceType:
-        return rab.type
-    @lru_cache(1)
-    def adds() -> frozenlist[hydra.ext.java.syntax.AdditionalBound]:
-        return rab.bounds
-    return hydra.serialization.paren_list(False, (hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(write_reference_type(rt())), hydra.lib.logic.if_else(hydra.lib.lists.null(adds()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_additional_bound(x1)), adds())))))))),))
+    rt = rab.type
+    adds = rab.bounds
+    return hydra.serialization.paren_list(False, (hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(write_reference_type(rt)), hydra.lib.logic.if_else(hydra.lib.lists.null(adds), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_additional_bound(x1)), adds)))))))),))
 
 def write_class_body(cb: hydra.ext.java.syntax.ClassBody) -> hydra.ast.Expr:
     return hydra.serialization.curly_block(hydra.serialization.full_block_style, hydra.serialization.double_newline_sep(hydra.lib.lists.map((lambda x1: write_class_body_declaration_with_comments(x1)), cb.value)))
@@ -558,13 +477,9 @@ def write_class_body_declaration(d: hydra.ext.java.syntax.ClassBodyDeclaration) 
             raise AssertionError("Unreachable: all variants handled")
 
 def write_class_body_declaration_with_comments(cbdwc: hydra.ext.java.syntax.ClassBodyDeclarationWithComments) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def d() -> hydra.ext.java.syntax.ClassBodyDeclaration:
-        return cbdwc.value
-    @lru_cache(1)
-    def mc() -> Maybe[str]:
-        return cbdwc.comments
-    return with_comments(mc(), write_class_body_declaration(d()))
+    d = cbdwc.value
+    mc = cbdwc.comments
+    return with_comments(mc, write_class_body_declaration(d))
 
 def write_class_declaration(d: hydra.ext.java.syntax.ClassDeclaration) -> hydra.ast.Expr:
     match d:
@@ -578,13 +493,9 @@ def write_class_declaration(d: hydra.ext.java.syntax.ClassDeclaration) -> hydra.
             raise AssertionError("Unreachable: all variants handled")
 
 def write_class_instance_creation_expression(cice: hydra.ext.java.syntax.ClassInstanceCreationExpression) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mqual() -> Maybe[hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier]:
-        return cice.qualifier
-    @lru_cache(1)
-    def e() -> hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression:
-        return cice.expression
-    return hydra.lib.maybes.maybe(write_unqualified_class_instance_creation_expression(e()), (lambda q: hydra.serialization.dot_sep((write_class_instance_creation_expression_qualifier(q), write_unqualified_class_instance_creation_expression(e())))), mqual())
+    mqual = cice.qualifier
+    e = cice.expression
+    return hydra.lib.maybes.maybe(write_unqualified_class_instance_creation_expression(e), (lambda q: hydra.serialization.dot_sep((write_class_instance_creation_expression_qualifier(q), write_unqualified_class_instance_creation_expression(e)))), mqual)
 
 def write_class_instance_creation_expression_qualifier(q: hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier) -> hydra.ast.Expr:
     match q:
@@ -658,42 +569,30 @@ def write_class_or_interface_type(cit: hydra.ext.java.syntax.ClassOrInterfaceTyp
             raise AssertionError("Unreachable: all variants handled")
 
 def write_class_or_interface_type_to_instantiate(coitti: hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def ids() -> frozenlist[hydra.ext.java.syntax.AnnotatedIdentifier]:
-        return coitti.identifiers
-    @lru_cache(1)
-    def margs() -> Maybe[hydra.ext.java.syntax.TypeArgumentsOrDiamond]:
-        return coitti.type_arguments
-    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(hydra.serialization.dot_sep(hydra.lib.lists.map((lambda x1: write_annotated_identifier(x1)), ids()))), hydra.lib.maybes.map((lambda x1: write_type_arguments_or_diamond(x1)), margs()))))
+    ids = coitti.identifiers
+    margs = coitti.type_arguments
+    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(hydra.serialization.dot_sep(hydra.lib.lists.map((lambda x1: write_annotated_identifier(x1)), ids))), hydra.lib.maybes.map((lambda x1: write_type_arguments_or_diamond(x1)), margs))))
 
 def write_class_type(ct: hydra.ext.java.syntax.ClassType) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def anns() -> frozenlist[hydra.ext.java.syntax.Annotation]:
-        return ct.annotations
-    @lru_cache(1)
-    def qual() -> hydra.ext.java.syntax.ClassTypeQualifier:
-        return ct.qualifier
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.TypeIdentifier:
-        return ct.identifier
-    @lru_cache(1)
-    def args() -> frozenlist[hydra.ext.java.syntax.TypeArgument]:
-        return ct.arguments
+    anns = ct.annotations
+    qual = ct.qualifier
+    id = ct.identifier
+    args = ct.arguments
     @lru_cache(1)
     def qualified_id() -> hydra.ast.Expr:
-        match qual():
+        match qual:
             case hydra.ext.java.syntax.ClassTypeQualifierNone():
-                return write_type_identifier(id())
+                return write_type_identifier(id)
             
             case hydra.ext.java.syntax.ClassTypeQualifierPackage(value=pkg):
-                return hydra.serialization.dot_sep((write_package_name(pkg), write_type_identifier(id())))
+                return hydra.serialization.dot_sep((write_package_name(pkg), write_type_identifier(id)))
             
             case hydra.ext.java.syntax.ClassTypeQualifierParent(value=cit):
-                return hydra.serialization.dot_sep((write_class_or_interface_type(cit), write_type_identifier(id())))
+                return hydra.serialization.dot_sep((write_class_or_interface_type(cit), write_type_identifier(id)))
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns()), (lambda : Nothing()), (lambda : Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns()))))), Just(qualified_id()))))), hydra.lib.logic.if_else(hydra.lib.lists.null(args()), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_argument(x1)), args()))))))))
+    return hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns), (lambda : Nothing()), (lambda : Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns))))), Just(qualified_id()))))), hydra.lib.logic.if_else(hydra.lib.lists.null(args), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_argument(x1)), args))))))))
 
 def write_conditional_and_expression(cae: hydra.ext.java.syntax.ConditionalAndExpression) -> hydra.ast.Expr:
     return hydra.serialization.infix_ws_list("&&", hydra.lib.lists.map((lambda x1: write_inclusive_or_expression(x1)), cae.value))
@@ -716,52 +615,28 @@ def write_conditional_or_expression(coe: hydra.ext.java.syntax.ConditionalOrExpr
     return hydra.serialization.infix_ws_list("||", hydra.lib.lists.map((lambda x1: write_conditional_and_expression(x1)), coe.value))
 
 def write_constant_declaration(cd: hydra.ext.java.syntax.ConstantDeclaration) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.ConstantModifier]:
-        return cd.modifiers
-    @lru_cache(1)
-    def typ() -> hydra.ext.java.syntax.UnannType:
-        return cd.type
-    @lru_cache(1)
-    def vars() -> frozenlist[hydra.ext.java.syntax.VariableDeclarator]:
-        return cd.variables
-    return hydra.serialization.with_semi(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_constant_modifier(x1)), mods()))))), Just(write_unann_type(typ())), Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_variable_declarator(x1)), vars())))))))
+    mods = cd.modifiers
+    typ = cd.type
+    vars = cd.variables
+    return hydra.serialization.with_semi(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_constant_modifier(x1)), mods))))), Just(write_unann_type(typ)), Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_variable_declarator(x1)), vars)))))))
 
 def write_constructor_body(cb: hydra.ext.java.syntax.ConstructorBody) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def minvoc() -> Maybe[hydra.ext.java.syntax.ExplicitConstructorInvocation]:
-        return cb.invocation
-    @lru_cache(1)
-    def stmts() -> frozenlist[hydra.ext.java.syntax.BlockStatement]:
-        return cb.statements
-    return hydra.serialization.curly_block(hydra.serialization.full_block_style, hydra.serialization.double_newline_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: write_explicit_constructor_invocation(x1)), minvoc()), Just(hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: write_block_statement(x1)), stmts())))))))
+    minvoc = cb.invocation
+    stmts = cb.statements
+    return hydra.serialization.curly_block(hydra.serialization.full_block_style, hydra.serialization.double_newline_sep(hydra.lib.maybes.cat((hydra.lib.maybes.map((lambda x1: write_explicit_constructor_invocation(x1)), minvoc), Just(hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: write_block_statement(x1)), stmts)))))))
 
 def write_constructor_declaration(cd: hydra.ext.java.syntax.ConstructorDeclaration) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.ConstructorModifier]:
-        return cd.modifiers
-    @lru_cache(1)
-    def cons() -> hydra.ext.java.syntax.ConstructorDeclarator:
-        return cd.constructor
-    @lru_cache(1)
-    def mthrows() -> Maybe[hydra.ext.java.syntax.Throws]:
-        return cd.throws
-    @lru_cache(1)
-    def body() -> hydra.ext.java.syntax.ConstructorBody:
-        return cd.body
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_constructor_modifier(x1)), mods()))))), Just(write_constructor_declarator(cons())), hydra.lib.maybes.map((lambda x1: write_throws(x1)), mthrows()), Just(write_constructor_body(body())))))
+    mods = cd.modifiers
+    cons = cd.constructor
+    mthrows = cd.throws
+    body = cd.body
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_constructor_modifier(x1)), mods))))), Just(write_constructor_declarator(cons)), hydra.lib.maybes.map((lambda x1: write_throws(x1)), mthrows), Just(write_constructor_body(body)))))
 
 def write_constructor_declarator(cd: hydra.ext.java.syntax.ConstructorDeclarator) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def tparams() -> frozenlist[hydra.ext.java.syntax.TypeParameter]:
-        return cd.parameters
-    @lru_cache(1)
-    def name() -> hydra.ext.java.syntax.SimpleTypeName:
-        return cd.name
-    @lru_cache(1)
-    def fparams() -> frozenlist[hydra.ext.java.syntax.FormalParameter]:
-        return cd.formal_parameters
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(tparams()), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_parameter(x1)), tparams()))))), Just(write_simple_type_name(name())), Just(hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: write_formal_parameter(x1)), fparams()))))))
+    tparams = cd.parameters
+    name = cd.name
+    fparams = cd.formal_parameters
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(tparams), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_parameter(x1)), tparams))))), Just(write_simple_type_name(name)), Just(hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: write_formal_parameter(x1)), fparams))))))
 
 def write_constructor_modifier(m: hydra.ext.java.syntax.ConstructorModifier) -> hydra.ast.Expr:
     match m:
@@ -795,13 +670,9 @@ def write_element_value(ev: hydra.ext.java.syntax.ElementValue) -> hydra.ast.Exp
             raise AssertionError("Unreachable: all variants handled")
 
 def write_element_value_pair(evp: hydra.ext.java.syntax.ElementValuePair) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def k() -> hydra.ext.java.syntax.Identifier:
-        return evp.key
-    @lru_cache(1)
-    def v() -> hydra.ext.java.syntax.ElementValue:
-        return evp.value
-    return hydra.serialization.infix_ws("=", write_identifier(k()), write_element_value(v()))
+    k = evp.key
+    v = evp.value
+    return hydra.serialization.infix_ws("=", write_identifier(k), write_element_value(v))
 
 def write_equality_expression(e: hydra.ext.java.syntax.EqualityExpression) -> hydra.ast.Expr:
     match e:
@@ -835,36 +706,26 @@ def write_expression_statement(es: hydra.ext.java.syntax.ExpressionStatement) ->
     return hydra.serialization.with_semi(write_statement_expression(es.value))
 
 def write_field_access(fa: hydra.ext.java.syntax.FieldAccess) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def qual() -> hydra.ext.java.syntax.FieldAccess_Qualifier:
-        return fa.qualifier
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.Identifier:
-        return fa.identifier
-    match qual():
+    qual = fa.qualifier
+    id = fa.identifier
+    match qual:
         case hydra.ext.java.syntax.FieldAccess_QualifierPrimary(value=p):
-            return hydra.serialization.dot_sep((write_primary(p), write_identifier(id())))
+            return hydra.serialization.dot_sep((write_primary(p), write_identifier(id)))
         
         case hydra.ext.java.syntax.FieldAccess_QualifierSuper():
-            return hydra.serialization.dot_sep((hydra.serialization.cst("super"), write_identifier(id())))
+            return hydra.serialization.dot_sep((hydra.serialization.cst("super"), write_identifier(id)))
         
         case hydra.ext.java.syntax.FieldAccess_QualifierTyped(value=tn):
-            return hydra.serialization.dot_sep((write_type_name(tn), hydra.serialization.cst("super"), write_identifier(id())))
+            return hydra.serialization.dot_sep((write_type_name(tn), hydra.serialization.cst("super"), write_identifier(id)))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 def write_field_declaration(fd: hydra.ext.java.syntax.FieldDeclaration) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.FieldModifier]:
-        return fd.modifiers
-    @lru_cache(1)
-    def typ() -> hydra.ext.java.syntax.UnannType:
-        return fd.unann_type
-    @lru_cache(1)
-    def vars() -> frozenlist[hydra.ext.java.syntax.VariableDeclarator]:
-        return fd.variable_declarators
-    return hydra.serialization.with_semi(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_field_modifier(x1)), mods()))))), Just(write_unann_type(typ())), Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_variable_declarator(x1)), vars())))))))
+    mods = fd.modifiers
+    typ = fd.unann_type
+    vars = fd.variable_declarators
+    return hydra.serialization.with_semi(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_field_modifier(x1)), mods))))), Just(write_unann_type(typ)), Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_variable_declarator(x1)), vars)))))))
 
 def write_field_modifier(m: hydra.ext.java.syntax.FieldModifier) -> hydra.ast.Expr:
     match m:
@@ -907,25 +768,15 @@ def write_formal_parameter(p: hydra.ext.java.syntax.FormalParameter) -> hydra.as
             raise AssertionError("Unreachable: all variants handled")
 
 def write_formal_parameter_simple(fps: hydra.ext.java.syntax.FormalParameter_Simple) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.VariableModifier]:
-        return fps.modifiers
-    @lru_cache(1)
-    def typ() -> hydra.ext.java.syntax.UnannType:
-        return fps.type
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.VariableDeclaratorId:
-        return fps.id
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_variable_modifier(x1)), mods()))))), Just(write_unann_type(typ())), Just(write_variable_declarator_id(id())))))
+    mods = fps.modifiers
+    typ = fps.type
+    id = fps.id
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_variable_modifier(x1)), mods))))), Just(write_unann_type(typ)), Just(write_variable_declarator_id(id)))))
 
 def write_if_then_statement(its: hydra.ext.java.syntax.IfThenStatement) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def cond() -> hydra.ext.java.syntax.Expression:
-        return its.expression
-    @lru_cache(1)
-    def thn() -> hydra.ext.java.syntax.Statement:
-        return its.statement
-    return hydra.serialization.space_sep((hydra.serialization.cst("if"), hydra.serialization.paren_list(False, (write_expression(cond()),)), hydra.serialization.curly_block(hydra.serialization.full_block_style, write_statement(thn()))))
+    cond = its.expression
+    thn = its.statement
+    return hydra.serialization.space_sep((hydra.serialization.cst("if"), hydra.serialization.paren_list(False, (write_expression(cond),)), hydra.serialization.curly_block(hydra.serialization.full_block_style, write_statement(thn))))
 
 def write_inclusive_or_expression(ioe: hydra.ext.java.syntax.InclusiveOrExpression) -> hydra.ast.Expr:
     return hydra.serialization.infix_ws_list("|", hydra.lib.lists.map((lambda x1: write_exclusive_or_expression(x1)), ioe.value))
@@ -962,16 +813,10 @@ def write_interface_member_declaration(d: hydra.ext.java.syntax.InterfaceMemberD
             raise AssertionError("Unreachable: all variants handled")
 
 def write_interface_method_declaration(imd: hydra.ext.java.syntax.InterfaceMethodDeclaration) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.InterfaceMethodModifier]:
-        return imd.modifiers
-    @lru_cache(1)
-    def header() -> hydra.ext.java.syntax.MethodHeader:
-        return imd.header
-    @lru_cache(1)
-    def body() -> hydra.ext.java.syntax.MethodBody:
-        return imd.body
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_interface_method_modifier(x1)), mods()))))), Just(write_method_header(header())), Just(write_method_body(body())))))
+    mods = imd.modifiers
+    header = imd.header
+    body = imd.body
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_interface_method_modifier(x1)), mods))))), Just(write_method_header(header)), Just(write_method_body(body)))))
 
 def write_interface_method_modifier(m: hydra.ext.java.syntax.InterfaceMethodModifier) -> hydra.ast.Expr:
     match m:
@@ -1040,13 +885,9 @@ def write_lambda_body(b: hydra.ext.java.syntax.LambdaBody) -> hydra.ast.Expr:
             raise AssertionError("Unreachable: all variants handled")
 
 def write_lambda_expression(le: hydra.ext.java.syntax.LambdaExpression) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def params() -> hydra.ext.java.syntax.LambdaParameters:
-        return le.parameters
-    @lru_cache(1)
-    def body() -> hydra.ext.java.syntax.LambdaBody:
-        return le.body
-    return hydra.serialization.infix_ws("->", write_lambda_parameters(params()), write_lambda_body(body()))
+    params = le.parameters
+    body = le.body
+    return hydra.serialization.infix_ws("->", write_lambda_parameters(params), write_lambda_body(body))
 
 def write_left_hand_side(lhs: hydra.ext.java.syntax.LeftHandSide) -> hydra.ast.Expr:
     match lhs:
@@ -1074,16 +915,10 @@ def write_local_name(t: hydra.ext.java.syntax.LocalVariableType) -> hydra.ast.Ex
             raise AssertionError("Unreachable: all variants handled")
 
 def write_local_variable_declaration(lvd: hydra.ext.java.syntax.LocalVariableDeclaration) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.VariableModifier]:
-        return lvd.modifiers
-    @lru_cache(1)
-    def t() -> hydra.ext.java.syntax.LocalVariableType:
-        return lvd.type
-    @lru_cache(1)
-    def decls() -> frozenlist[hydra.ext.java.syntax.VariableDeclarator]:
-        return lvd.declarators
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_variable_modifier(x1)), mods()))))), Just(write_local_name(t())), Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_variable_declarator(x1)), decls()))))))
+    mods = lvd.modifiers
+    t = lvd.type
+    decls = lvd.declarators
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_variable_modifier(x1)), mods))))), Just(write_local_name(t)), Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_variable_declarator(x1)), decls))))))
 
 def write_local_variable_declaration_statement(lvds: hydra.ext.java.syntax.LocalVariableDeclarationStatement) -> hydra.ast.Expr:
     return hydra.serialization.with_semi(write_local_variable_declaration(lvds.value))
@@ -1100,76 +935,46 @@ def write_method_body(b: hydra.ext.java.syntax.MethodBody) -> hydra.ast.Expr:
             raise AssertionError("Unreachable: all variants handled")
 
 def write_method_declaration(md: hydra.ext.java.syntax.MethodDeclaration) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def anns() -> frozenlist[hydra.ext.java.syntax.Annotation]:
-        return md.annotations
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.MethodModifier]:
-        return md.modifiers
-    @lru_cache(1)
-    def header() -> hydra.ext.java.syntax.MethodHeader:
-        return md.header
-    @lru_cache(1)
-    def body() -> hydra.ext.java.syntax.MethodBody:
-        return md.body
+    anns = md.annotations
+    mods = md.modifiers
+    header = md.header
+    body = md.body
     @lru_cache(1)
     def header_and_body() -> hydra.ast.Expr:
-        return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_method_modifier(x1)), mods()))))), Just(write_method_header(header())), Just(write_method_body(body())))))
-    return hydra.serialization.newline_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns()), (lambda : Nothing()), (lambda : Just(hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns()))))), Just(header_and_body()))))
+        return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_method_modifier(x1)), mods))))), Just(write_method_header(header)), Just(write_method_body(body)))))
+    return hydra.serialization.newline_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns), (lambda : Nothing()), (lambda : Just(hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns))))), Just(header_and_body()))))
 
 def write_method_declarator(md: hydra.ext.java.syntax.MethodDeclarator) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.Identifier:
-        return md.identifier
-    @lru_cache(1)
-    def params() -> frozenlist[hydra.ext.java.syntax.FormalParameter]:
-        return md.formal_parameters
-    return hydra.serialization.no_sep((write_identifier(id()), hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: write_formal_parameter(x1)), params()))))
+    id = md.identifier
+    params = md.formal_parameters
+    return hydra.serialization.no_sep((write_identifier(id), hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: write_formal_parameter(x1)), params))))
 
 def write_method_header(mh: hydra.ext.java.syntax.MethodHeader) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def params() -> frozenlist[hydra.ext.java.syntax.TypeParameter]:
-        return mh.parameters
-    @lru_cache(1)
-    def result() -> hydra.ext.java.syntax.Result:
-        return mh.result
-    @lru_cache(1)
-    def decl() -> hydra.ext.java.syntax.MethodDeclarator:
-        return mh.declarator
-    @lru_cache(1)
-    def mthrows() -> Maybe[hydra.ext.java.syntax.Throws]:
-        return mh.throws
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(params()), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_parameter(x1)), params()))))), Just(write_result(result())), Just(write_method_declarator(decl())), hydra.lib.maybes.map((lambda x1: write_throws(x1)), mthrows()))))
+    params = mh.parameters
+    result = mh.result
+    decl = mh.declarator
+    mthrows = mh.throws
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(params), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_parameter(x1)), params))))), Just(write_result(result)), Just(write_method_declarator(decl)), hydra.lib.maybes.map((lambda x1: write_throws(x1)), mthrows))))
 
 def write_method_invocation(mi: hydra.ext.java.syntax.MethodInvocation) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def header() -> hydra.ext.java.syntax.MethodInvocation_Header:
-        return mi.header
-    @lru_cache(1)
-    def args() -> frozenlist[hydra.ext.java.syntax.Expression]:
-        return mi.arguments
+    header = mi.header
+    args = mi.arguments
     @lru_cache(1)
     def arg_sec() -> hydra.ast.Expr:
-        return hydra.serialization.paren_list(True, hydra.lib.lists.map((lambda x1: write_expression(x1)), args()))
+        return hydra.serialization.paren_list(True, hydra.lib.lists.map((lambda x1: write_expression(x1)), args))
     @lru_cache(1)
     def header_sec():
-        match header():
+        match header:
             case hydra.ext.java.syntax.MethodInvocation_HeaderSimple(value=mname):
                 return write_method_name(mname)
             
             case hydra.ext.java.syntax.MethodInvocation_HeaderComplex(value=cx):
-                @lru_cache(1)
-                def cvar() -> hydra.ext.java.syntax.MethodInvocation_Variant:
-                    return cx.variant
-                @lru_cache(1)
-                def targs() -> frozenlist[hydra.ext.java.syntax.TypeArgument]:
-                    return cx.type_arguments
-                @lru_cache(1)
-                def cid() -> hydra.ext.java.syntax.Identifier:
-                    return cx.identifier
+                cvar = cx.variant
+                targs = cx.type_arguments
+                cid = cx.identifier
                 @lru_cache(1)
                 def id_sec() -> hydra.ast.Expr:
-                    return hydra.serialization.no_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(targs()), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_argument(x1)), targs()))))), Just(write_identifier(cid())))))
+                    return hydra.serialization.no_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(targs), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_argument(x1)), targs))))), Just(write_identifier(cid)))))
                 def _hoist_body_1(v1):
                     match v1:
                         case hydra.ext.java.syntax.MethodInvocation_VariantType(value=tname):
@@ -1189,7 +994,7 @@ def write_method_invocation(mi: hydra.ext.java.syntax.MethodInvocation) -> hydra
                         
                         case _:
                             raise AssertionError("Unreachable: all variants handled")
-                return _hoist_body_1(cvar())
+                return _hoist_body_1(cvar)
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -1245,52 +1050,26 @@ def write_multiplicative_expression(e: hydra.ext.java.syntax.MultiplicativeExpre
             raise AssertionError("Unreachable: all variants handled")
 
 def write_normal_annotation(na: hydra.ext.java.syntax.NormalAnnotation) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def tname() -> hydra.ext.java.syntax.TypeName:
-        return na.type_name
-    @lru_cache(1)
-    def pairs() -> frozenlist[hydra.ext.java.syntax.ElementValuePair]:
-        return na.pairs
-    return hydra.serialization.prefix("@", hydra.serialization.no_sep((write_type_name(tname()), hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_element_value_pair(x1)), pairs())))))
+    tname = na.type_name
+    pairs = na.pairs
+    return hydra.serialization.prefix("@", hydra.serialization.no_sep((write_type_name(tname), hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_element_value_pair(x1)), pairs)))))
 
 def write_normal_class_declaration(ncd: hydra.ext.java.syntax.NormalClassDeclaration) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.ClassModifier]:
-        return ncd.modifiers
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.TypeIdentifier:
-        return ncd.identifier
-    @lru_cache(1)
-    def tparams() -> frozenlist[hydra.ext.java.syntax.TypeParameter]:
-        return ncd.parameters
-    @lru_cache(1)
-    def msuperc() -> Maybe[hydra.ext.java.syntax.ClassType]:
-        return ncd.extends
-    @lru_cache(1)
-    def superi() -> frozenlist[hydra.ext.java.syntax.InterfaceType]:
-        return ncd.implements
-    @lru_cache(1)
-    def body() -> hydra.ext.java.syntax.ClassBody:
-        return ncd.body
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_class_modifier(x1)), mods()))))), Just(hydra.serialization.cst("class")), Just(hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(write_type_identifier(id())), hydra.lib.logic.if_else(hydra.lib.lists.null(tparams()), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_parameter(x1)), tparams()))))))))), hydra.lib.maybes.map((lambda c: hydra.serialization.space_sep((hydra.serialization.cst("extends"), write_class_type(c)))), msuperc()), hydra.lib.logic.if_else(hydra.lib.lists.null(superi()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep((hydra.serialization.cst("implements"), hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_interface_type(x1)), superi()))))))), Just(write_class_body(body())))))
+    mods = ncd.modifiers
+    id = ncd.identifier
+    tparams = ncd.parameters
+    msuperc = ncd.extends
+    superi = ncd.implements
+    body = ncd.body
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_class_modifier(x1)), mods))))), Just(hydra.serialization.cst("class")), Just(hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(write_type_identifier(id)), hydra.lib.logic.if_else(hydra.lib.lists.null(tparams), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_parameter(x1)), tparams))))))))), hydra.lib.maybes.map((lambda c: hydra.serialization.space_sep((hydra.serialization.cst("extends"), write_class_type(c)))), msuperc), hydra.lib.logic.if_else(hydra.lib.lists.null(superi), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep((hydra.serialization.cst("implements"), hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_interface_type(x1)), superi))))))), Just(write_class_body(body)))))
 
 def write_normal_interface_declaration(nid: hydra.ext.java.syntax.NormalInterfaceDeclaration) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.InterfaceModifier]:
-        return nid.modifiers
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.TypeIdentifier:
-        return nid.identifier
-    @lru_cache(1)
-    def tparams() -> frozenlist[hydra.ext.java.syntax.TypeParameter]:
-        return nid.parameters
-    @lru_cache(1)
-    def extends() -> frozenlist[hydra.ext.java.syntax.InterfaceType]:
-        return nid.extends
-    @lru_cache(1)
-    def body() -> hydra.ext.java.syntax.InterfaceBody:
-        return nid.body
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_interface_modifier(x1)), mods()))))), Just(hydra.serialization.cst("interface")), Just(hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(write_type_identifier(id())), hydra.lib.logic.if_else(hydra.lib.lists.null(tparams()), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_parameter(x1)), tparams()))))))))), hydra.lib.logic.if_else(hydra.lib.lists.null(extends()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep((hydra.serialization.cst("extends"), hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_interface_type(x1)), extends()))))))), Just(write_interface_body(body())))))
+    mods = nid.modifiers
+    id = nid.identifier
+    tparams = nid.parameters
+    extends = nid.extends
+    body = nid.body
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_interface_modifier(x1)), mods))))), Just(hydra.serialization.cst("interface")), Just(hydra.serialization.no_sep(hydra.lib.maybes.cat((Just(write_type_identifier(id)), hydra.lib.logic.if_else(hydra.lib.lists.null(tparams), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_parameter(x1)), tparams))))))))), hydra.lib.logic.if_else(hydra.lib.lists.null(extends), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep((hydra.serialization.cst("extends"), hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_interface_type(x1)), extends))))))), Just(write_interface_body(body)))))
 
 def write_postfix_expression(e: hydra.ext.java.syntax.PostfixExpression) -> hydra.ast.Expr:
     match e:
@@ -1356,13 +1135,9 @@ def write_primary_no_new_array(p: hydra.ext.java.syntax.PrimaryNoNewArray) -> hy
             raise AssertionError("Unreachable: all variants handled")
 
 def write_primitive_type_with_annotations(ptwa: hydra.ext.java.syntax.PrimitiveTypeWithAnnotations) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def pt() -> hydra.ext.java.syntax.PrimitiveType:
-        return ptwa.type
-    @lru_cache(1)
-    def anns() -> frozenlist[hydra.ext.java.syntax.Annotation]:
-        return ptwa.annotations
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns()))))), Just(write_primitive_type(pt())))))
+    pt = ptwa.type
+    anns = ptwa.annotations
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns))))), Just(write_primitive_type(pt)))))
 
 def write_reference_type(rt: hydra.ext.java.syntax.ReferenceType) -> hydra.ast.Expr:
     match rt:
@@ -1451,13 +1226,9 @@ def write_shift_expression(e: hydra.ext.java.syntax.ShiftExpression) -> hydra.as
             raise AssertionError("Unreachable: all variants handled")
 
 def write_single_element_annotation(sea: hydra.ext.java.syntax.SingleElementAnnotation) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def tname() -> hydra.ext.java.syntax.TypeName:
-        return sea.name
-    @lru_cache(1)
-    def mv() -> Maybe[hydra.ext.java.syntax.ElementValue]:
-        return sea.value
-    return hydra.lib.maybes.maybe(write_marker_annotation(hydra.ext.java.syntax.MarkerAnnotation(tname())), (lambda v: hydra.serialization.prefix("@", hydra.serialization.no_sep((write_type_name(tname()), hydra.serialization.paren_list(False, (write_element_value(v),)))))), mv())
+    tname = sea.name
+    mv = sea.value
+    return hydra.lib.maybes.maybe(write_marker_annotation(hydra.ext.java.syntax.MarkerAnnotation(tname)), (lambda v: hydra.serialization.prefix("@", hydra.serialization.no_sep((write_type_name(tname), hydra.serialization.paren_list(False, (write_element_value(v),)))))), mv)
 
 def write_statement(s: hydra.ext.java.syntax.Statement) -> hydra.ast.Expr:
     match s:
@@ -1591,40 +1362,26 @@ def write_type_bound(b: hydra.ext.java.syntax.TypeBound) -> hydra.ast.Expr:
             return write_type_variable(tv)
         
         case hydra.ext.java.syntax.TypeBoundClassOrInterface(value=ci):
-            @lru_cache(1)
-            def cit() -> hydra.ext.java.syntax.ClassOrInterfaceType:
-                return ci.type
-            @lru_cache(1)
-            def additional() -> frozenlist[hydra.ext.java.syntax.AdditionalBound]:
-                return ci.additional
-            return hydra.lib.logic.if_else(hydra.lib.lists.null(additional()), (lambda : write_class_or_interface_type(cit())), (lambda : hydra.serialization.space_sep(hydra.lib.lists.cons(write_class_or_interface_type(cit()), hydra.lib.lists.map((lambda x1: write_additional_bound(x1)), additional())))))
+            cit = ci.type
+            additional = ci.additional
+            return hydra.lib.logic.if_else(hydra.lib.lists.null(additional), (lambda : write_class_or_interface_type(cit)), (lambda : hydra.serialization.space_sep(hydra.lib.lists.cons(write_class_or_interface_type(cit), hydra.lib.lists.map((lambda x1: write_additional_bound(x1)), additional)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
 def write_type_parameter(tp: hydra.ext.java.syntax.TypeParameter) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.TypeParameterModifier]:
-        return tp.modifiers
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.TypeIdentifier:
-        return tp.identifier
-    @lru_cache(1)
-    def bound() -> Maybe[hydra.ext.java.syntax.TypeBound]:
-        return tp.bound
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_type_parameter_modifier(x1)), mods()))))), Just(write_type_identifier(id())), hydra.lib.maybes.map((lambda b: hydra.serialization.space_sep((hydra.serialization.cst("extends"), write_type_bound(b)))), bound()))))
+    mods = tp.modifiers
+    id = tp.identifier
+    bound = tp.bound
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_type_parameter_modifier(x1)), mods))))), Just(write_type_identifier(id)), hydra.lib.maybes.map((lambda b: hydra.serialization.space_sep((hydra.serialization.cst("extends"), write_type_bound(b)))), bound))))
 
 def write_type_parameter_modifier(tpm: hydra.ext.java.syntax.TypeParameterModifier) -> hydra.ast.Expr:
     return write_annotation(tpm.value)
 
 def write_type_variable(tv: hydra.ext.java.syntax.TypeVariable) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def anns() -> frozenlist[hydra.ext.java.syntax.Annotation]:
-        return tv.annotations
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.TypeIdentifier:
-        return tv.identifier
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns()))))), Just(write_type_identifier(id())))))
+    anns = tv.annotations
+    id = tv.identifier
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns))))), Just(write_type_identifier(id)))))
 
 def write_unann_type(ut: hydra.ext.java.syntax.UnannType) -> hydra.ast.Expr:
     return write_type(ut.value)
@@ -1667,31 +1424,19 @@ def write_unary_expression_not_plus_minus(e: hydra.ext.java.syntax.UnaryExpressi
             raise AssertionError("Unreachable: all variants handled")
 
 def write_unqualified_class_instance_creation_expression(ucice: hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def targs() -> frozenlist[hydra.ext.java.syntax.TypeArgument]:
-        return ucice.type_arguments
-    @lru_cache(1)
-    def cit() -> hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate:
-        return ucice.class_or_interface
-    @lru_cache(1)
-    def args() -> frozenlist[hydra.ext.java.syntax.Expression]:
-        return ucice.arguments
-    @lru_cache(1)
-    def mbody() -> Maybe[hydra.ext.java.syntax.ClassBody]:
-        return ucice.body
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(hydra.serialization.cst("new")), hydra.lib.logic.if_else(hydra.lib.lists.null(targs()), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_argument(x1)), targs()))))), Just(hydra.serialization.no_sep((write_class_or_interface_type_to_instantiate(cit()), hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: write_expression(x1)), args()))))), hydra.lib.maybes.map((lambda x1: write_class_body(x1)), mbody()))))
+    targs = ucice.type_arguments
+    cit = ucice.class_or_interface
+    args = ucice.arguments
+    mbody = ucice.body
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((Just(hydra.serialization.cst("new")), hydra.lib.logic.if_else(hydra.lib.lists.null(targs), (lambda : Nothing()), (lambda : Just(hydra.serialization.angle_braces_list(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_type_argument(x1)), targs))))), Just(hydra.serialization.no_sep((write_class_or_interface_type_to_instantiate(cit), hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: write_expression(x1)), args))))), hydra.lib.maybes.map((lambda x1: write_class_body(x1)), mbody))))
 
 def write_variable_declarator(vd: hydra.ext.java.syntax.VariableDeclarator) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def id() -> hydra.ext.java.syntax.VariableDeclaratorId:
-        return vd.id
-    @lru_cache(1)
-    def minit() -> Maybe[hydra.ext.java.syntax.VariableInitializer]:
-        return vd.initializer
+    id = vd.id
+    minit = vd.initializer
     @lru_cache(1)
     def id_sec() -> hydra.ast.Expr:
-        return write_variable_declarator_id(id())
-    return hydra.lib.maybes.maybe(id_sec(), (lambda init: hydra.serialization.infix_ws("=", id_sec(), write_variable_initializer(init))), minit())
+        return write_variable_declarator_id(id)
+    return hydra.lib.maybes.maybe(id_sec(), (lambda init: hydra.serialization.infix_ws("=", id_sec(), write_variable_initializer(init))), minit)
 
 def write_variable_initializer(i: hydra.ext.java.syntax.VariableInitializer) -> hydra.ast.Expr:
     match i:
@@ -1715,14 +1460,18 @@ def write_variable_modifier(m: hydra.ext.java.syntax.VariableModifier) -> hydra.
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+def write_while_statement(ws: hydra.ext.java.syntax.WhileStatement) -> hydra.ast.Expr:
+    mcond = ws.cond
+    body = ws.body
+    @lru_cache(1)
+    def cond_ser() -> hydra.ast.Expr:
+        return hydra.lib.maybes.maybe(hydra.serialization.cst("true"), (lambda c: write_expression(c)), mcond)
+    return hydra.serialization.space_sep((hydra.serialization.cst("while"), hydra.serialization.paren_list(False, (cond_ser(),)), hydra.serialization.curly_block(hydra.serialization.full_block_style, write_statement(body))))
+
 def write_wildcard(w: hydra.ext.java.syntax.Wildcard) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def anns() -> frozenlist[hydra.ext.java.syntax.Annotation]:
-        return w.annotations
-    @lru_cache(1)
-    def mbounds() -> Maybe[hydra.ext.java.syntax.WildcardBounds]:
-        return w.wildcard
-    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns()), (lambda : Nothing()), (lambda : Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns()))))), Just(hydra.serialization.cst("*")), hydra.lib.maybes.map((lambda x1: write_wildcard_bounds(x1)), mbounds()))))
+    anns = w.annotations
+    mbounds = w.wildcard
+    return hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(anns), (lambda : Nothing()), (lambda : Just(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: write_annotation(x1)), anns))))), Just(hydra.serialization.cst("*")), hydra.lib.maybes.map((lambda x1: write_wildcard_bounds(x1)), mbounds))))
 
 def write_wildcard_bounds(b: hydra.ext.java.syntax.WildcardBounds) -> hydra.ast.Expr:
     match b:
@@ -1756,13 +1505,9 @@ def write_package_modifier(pm: hydra.ext.java.syntax.PackageModifier) -> hydra.a
     return write_annotation(pm.value)
 
 def write_package_declaration(pd: hydra.ext.java.syntax.PackageDeclaration) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def mods() -> frozenlist[hydra.ext.java.syntax.PackageModifier]:
-        return pd.modifiers
-    @lru_cache(1)
-    def ids() -> frozenlist[hydra.ext.java.syntax.Identifier]:
-        return pd.identifiers
-    return hydra.serialization.with_semi(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods()), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_package_modifier(x1)), mods()))))), Just(hydra.serialization.space_sep((hydra.serialization.cst("package"), hydra.serialization.cst(hydra.lib.strings.intercalate(".", hydra.lib.lists.map((lambda id: id.value), ids()))))))))))
+    mods = pd.modifiers
+    ids = pd.identifiers
+    return hydra.serialization.with_semi(hydra.serialization.space_sep(hydra.lib.maybes.cat((hydra.lib.logic.if_else(hydra.lib.lists.null(mods), (lambda : Nothing()), (lambda : Just(hydra.serialization.space_sep(hydra.lib.lists.map((lambda x1: write_package_modifier(x1)), mods))))), Just(hydra.serialization.space_sep((hydra.serialization.cst("package"), hydra.serialization.cst(hydra.lib.strings.intercalate(".", hydra.lib.lists.map((lambda id: id.value), ids))))))))))
 
 def write_type_declaration(d: hydra.ext.java.syntax.TypeDeclaration) -> hydra.ast.Expr:
     match d:
@@ -1779,38 +1524,28 @@ def write_type_declaration(d: hydra.ext.java.syntax.TypeDeclaration) -> hydra.as
             raise AssertionError("Unreachable: all variants handled")
 
 def write_type_declaration_with_comments(tdwc: hydra.ext.java.syntax.TypeDeclarationWithComments) -> hydra.ast.Expr:
-    @lru_cache(1)
-    def d() -> hydra.ext.java.syntax.TypeDeclaration:
-        return tdwc.value
-    @lru_cache(1)
-    def mc() -> Maybe[str]:
-        return tdwc.comments
-    return with_comments(mc(), write_type_declaration(d()))
+    d = tdwc.value
+    mc = tdwc.comments
+    return with_comments(mc, write_type_declaration(d))
 
 def write_compilation_unit(u: hydra.ext.java.syntax.CompilationUnit) -> hydra.ast.Expr:
     match u:
         case hydra.ext.java.syntax.CompilationUnitOrdinary(value=ocu):
-            @lru_cache(1)
-            def mpkg() -> Maybe[hydra.ext.java.syntax.PackageDeclaration]:
-                return ocu.package
-            @lru_cache(1)
-            def imports() -> frozenlist[hydra.ext.java.syntax.ImportDeclaration]:
-                return ocu.imports
-            @lru_cache(1)
-            def types() -> frozenlist[hydra.ext.java.syntax.TypeDeclarationWithComments]:
-                return ocu.types
+            mpkg = ocu.package
+            imports = ocu.imports
+            types = ocu.types
             @lru_cache(1)
             def warning() -> Maybe[hydra.ast.Expr]:
                 return Just(single_line_comment(hydra.constants.warning_auto_generated_file))
             @lru_cache(1)
             def pkg_sec() -> Maybe[hydra.ast.Expr]:
-                return hydra.lib.maybes.map((lambda x1: write_package_declaration(x1)), mpkg())
+                return hydra.lib.maybes.map((lambda x1: write_package_declaration(x1)), mpkg)
             @lru_cache(1)
             def imports_sec() -> Maybe[hydra.ast.Expr]:
-                return hydra.lib.logic.if_else(hydra.lib.lists.null(imports()), (lambda : Nothing()), (lambda : Just(hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: write_import_declaration(x1)), imports())))))
+                return hydra.lib.logic.if_else(hydra.lib.lists.null(imports), (lambda : Nothing()), (lambda : Just(hydra.serialization.newline_sep(hydra.lib.lists.map((lambda x1: write_import_declaration(x1)), imports)))))
             @lru_cache(1)
             def types_sec() -> Maybe[hydra.ast.Expr]:
-                return hydra.lib.logic.if_else(hydra.lib.lists.null(types()), (lambda : Nothing()), (lambda : Just(hydra.serialization.double_newline_sep(hydra.lib.lists.map((lambda x1: write_type_declaration_with_comments(x1)), types())))))
+                return hydra.lib.logic.if_else(hydra.lib.lists.null(types), (lambda : Nothing()), (lambda : Just(hydra.serialization.double_newline_sep(hydra.lib.lists.map((lambda x1: write_type_declaration_with_comments(x1)), types)))))
             return hydra.serialization.double_newline_sep(hydra.lib.maybes.cat((warning(), pkg_sec(), imports_sec(), types_sec())))
         
         case _:

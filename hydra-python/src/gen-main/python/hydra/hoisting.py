@@ -36,9 +36,7 @@ T3 = TypeVar("T3")
 def augment_bindings_with_new_free_vars(cx: hydra.typing.TypeContext, bound_vars: frozenset[hydra.core.Name], bindings: frozenlist[hydra.core.Binding]) -> tuple[frozenlist[hydra.core.Binding], hydra.typing.TermSubst]:
     r"""Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas."""
     
-    @lru_cache(1)
-    def types() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-        return cx.types
+    types = cx.types
     def wrap_after_type_lambdas(vars: frozenlist[tuple[hydra.core.Name, Maybe[hydra.core.Type]]], term: hydra.core.Term) -> hydra.core.Term:
         match term:
             case hydra.core.TermTypeLambda(value=tl):
@@ -52,7 +50,7 @@ def augment_bindings_with_new_free_vars(cx: hydra.typing.TypeContext, bound_vars
             return hydra.lib.sets.to_list(hydra.lib.sets.intersection(bound_vars, hydra.rewriting.free_variables_in_term(b.term)))
         @lru_cache(1)
         def var_type_pairs() -> frozenlist[tuple[hydra.core.Name, Maybe[hydra.core.Type]]]:
-            return hydra.lib.lists.map((lambda v: (v, hydra.lib.maps.lookup(v, types()))), free_vars())
+            return hydra.lib.lists.map((lambda v: (v, hydra.lib.maps.lookup(v, types))), free_vars())
         @lru_cache(1)
         def var_types() -> frozenlist[hydra.core.Type]:
             return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.lib.pairs.second(x1)), var_type_pairs()))
@@ -152,12 +150,10 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
         @lru_cache(1)
         def captured_term_vars() -> frozenlist[hydra.core.Name]:
             return hydra.lib.pairs.second(binding_with_captured_vars)
-        @lru_cache(1)
-        def types() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-            return cx.types
+        types = cx.types
         @lru_cache(1)
         def captured_term_var_type_pairs() -> frozenlist[tuple[hydra.core.Name, Maybe[hydra.core.Type]]]:
-            return hydra.lib.lists.map((lambda v: (v, hydra.lib.maps.lookup(v, types()))), captured_term_vars())
+            return hydra.lib.lists.map((lambda v: (v, hydra.lib.maps.lookup(v, types))), captured_term_vars())
         @lru_cache(1)
         def captured_term_var_types() -> frozenlist[hydra.core.Type]:
             return hydra.lib.lists.map((lambda typ: hydra.rewriting.deannotate_type_parameters(typ)), hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.lib.pairs.second(x1)), captured_term_var_type_pairs())))
@@ -226,9 +222,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
         def _hoist_body_1(v1):
             match v1:
                 case hydra.core.TermLet(value=l):
-                    @lru_cache(1)
-                    def body() -> hydra.core.Term:
-                        return l.body
+                    body = l.body
                     @lru_cache(1)
                     def partition_pair() -> tuple[frozenlist[hydra.core.Binding], frozenlist[hydra.core.Binding]]:
                         return hydra.lib.lists.partition((lambda v12: should_hoist_binding(cx, v12)), l.bindings)
@@ -289,7 +283,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
                     def is_cacheable(name: hydra.core.Name) -> bool:
                         @lru_cache(1)
                         def multi_ref() -> bool:
-                            return hydra.lib.equality.gte(count_var_occurrences(name, body()), 2)
+                            return hydra.lib.equality.gte(count_var_occurrences(name, body), 2)
                         @lru_cache(1)
                         def is_poly() -> bool:
                             return hydra.lib.maybes.maybe(False, (lambda b: binding_is_polymorphic(b)), hydra.lib.maps.lookup(name, hoist_binding_map()))
@@ -308,7 +302,7 @@ def hoist_let_bindings_with_predicate(is_parent_binding: Callable[[hydra.core.Bi
                         return hydra.typing.TermSubst(hydra.lib.maps.from_list(single_ref_pairs()))
                     @lru_cache(1)
                     def body_subst() -> hydra.core.Term:
-                        return hydra.substitution.substitute_in_term(body_only_subst(), body())
+                        return hydra.substitution.substitute_in_term(body_only_subst(), body)
                     @lru_cache(1)
                     def cache_bindings() -> frozenlist[hydra.core.Binding]:
                         return hydra.lib.lists.map((lambda p: (orig_type := hydra.lib.maybes.maybe(Nothing(), (lambda b: b.type), hydra.lib.maps.lookup(hydra.lib.pairs.first(p), hoist_binding_map())), hydra.core.Binding(hydra.lib.pairs.first(p), hydra.lib.pairs.second(p), orig_type))[1]), multi_ref_pairs())
@@ -452,9 +446,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
     r"""Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of TermAccessors from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables."""
     
     def process_immediate_subterm(cx: hydra.typing.TypeContext, counter: int, name_prefix: str, path_prefix: frozenlist[hydra.accessors.TermAccessor], subterm: hydra.core.Term) -> tuple[int, hydra.core.Term]:
-        @lru_cache(1)
-        def baseline_lambda_vars() -> frozenset[hydra.core.Name]:
-            return cx.lambda_variables
+        baseline_lambda_vars = cx.lambda_variables
         def collect_and_replace(recurse: Callable[[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term], tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]], path: frozenlist[hydra.accessors.TermAccessor], cx_inner: hydra.typing.TypeContext, acc: tuple[int, frozenlist[hydra.core.Binding]], term: hydra.core.Term) -> tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]:
             @lru_cache(1)
             def current_counter() -> int:
@@ -470,7 +462,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
                     return (acc, term)
                 
                 case _:
-                    return (result := recurse(acc, term), (new_acc := hydra.lib.pairs.first(result), (processed_term := hydra.lib.pairs.second(result), (new_counter := hydra.lib.pairs.first(new_acc), (new_bindings := hydra.lib.pairs.second(new_acc), (full_path := hydra.lib.lists.concat2(path_prefix, path), hydra.lib.logic.if_else(should_hoist((full_path, processed_term)), (lambda : (binding_name := hydra.core.Name(hydra.lib.strings.cat(("_hoist_", name_prefix, "_", hydra.lib.literals.show_int32(new_counter)))), (all_lambda_vars := cx_inner.lambda_variables, (new_lambda_vars := hydra.lib.sets.difference(all_lambda_vars, baseline_lambda_vars()), (free_vars := hydra.rewriting.free_variables_in_term(processed_term), (captured_vars := hydra.lib.sets.to_list(hydra.lib.sets.intersection(new_lambda_vars, free_vars)), (type_map := cx_inner.types, (wrapped_term := hydra.lib.lists.foldl((lambda body, var_name: cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(var_name, hydra.lib.maps.lookup(var_name, type_map), body)))))), processed_term, hydra.lib.lists.reverse(captured_vars)), (reference := hydra.lib.lists.foldl((lambda fn, var_name: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fn, cast(hydra.core.Term, hydra.core.TermVariable(var_name)))))), cast(hydra.core.Term, hydra.core.TermVariable(binding_name)), captured_vars), (new_binding := hydra.core.Binding(binding_name, wrapped_term, Nothing()), ((hydra.lib.math.add(new_counter, 1), hydra.lib.lists.cons(new_binding, new_bindings)), reference))[1])[1])[1])[1])[1])[1])[1])[1])[1]), (lambda : (new_acc, processed_term))))[1])[1])[1])[1])[1])[1]
+                    return (result := recurse(acc, term), (new_acc := hydra.lib.pairs.first(result), (processed_term := hydra.lib.pairs.second(result), (new_counter := hydra.lib.pairs.first(new_acc), (new_bindings := hydra.lib.pairs.second(new_acc), (full_path := hydra.lib.lists.concat2(path_prefix, path), hydra.lib.logic.if_else(should_hoist((full_path, processed_term)), (lambda : (binding_name := hydra.core.Name(hydra.lib.strings.cat(("_hoist_", name_prefix, "_", hydra.lib.literals.show_int32(new_counter)))), (all_lambda_vars := cx_inner.lambda_variables, (new_lambda_vars := hydra.lib.sets.difference(all_lambda_vars, baseline_lambda_vars), (free_vars := hydra.rewriting.free_variables_in_term(processed_term), (captured_vars := hydra.lib.sets.to_list(hydra.lib.sets.intersection(new_lambda_vars, free_vars)), (type_map := cx_inner.types, (wrapped_term := hydra.lib.lists.foldl((lambda body, var_name: cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(var_name, hydra.lib.maps.lookup(var_name, type_map), body)))))), processed_term, hydra.lib.lists.reverse(captured_vars)), (reference := hydra.lib.lists.foldl((lambda fn, var_name: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fn, cast(hydra.core.Term, hydra.core.TermVariable(var_name)))))), cast(hydra.core.Term, hydra.core.TermVariable(binding_name)), captured_vars), (new_binding := hydra.core.Binding(binding_name, wrapped_term, Nothing()), ((hydra.lib.math.add(new_counter, 1), hydra.lib.lists.cons(new_binding, new_bindings)), reference))[1])[1])[1])[1])[1])[1])[1])[1])[1]), (lambda : (new_acc, processed_term))))[1])[1])[1])[1])[1])[1]
         @lru_cache(1)
         def result() -> tuple[tuple[int, frozenlist[hydra.core.Binding]], hydra.core.Term]:
             return rewrite_and_fold_term_with_type_context_and_path((lambda x1, x2, x3, x4, x5: collect_and_replace(x1, x2, x3, x4, x5)), cx, (counter, ()), subterm)
@@ -488,12 +480,8 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
             return hydra.lib.pairs.second(final_acc())
         return hydra.lib.logic.if_else(hydra.lib.lists.null(bindings()), (lambda : (final_counter(), transformed_subterm())), (lambda : (local_let := cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.reverse(bindings()), transformed_subterm()))), (final_counter(), local_let))[1]))
     def process_let_term(cx: hydra.typing.TypeContext, counter: T0, path: frozenlist[hydra.accessors.TermAccessor], lt: hydra.core.Let) -> tuple[T0, hydra.core.Term]:
-        @lru_cache(1)
-        def bindings() -> frozenlist[hydra.core.Binding]:
-            return lt.bindings
-        @lru_cache(1)
-        def body() -> hydra.core.Term:
-            return lt.body
+        bindings = lt.bindings
+        body = lt.body
         def process_binding(acc: frozenlist[hydra.core.Binding], binding: hydra.core.Binding) -> frozenlist[hydra.core.Binding]:
             @lru_cache(1)
             def name_prefix() -> str:
@@ -513,7 +501,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
             return hydra.lib.lists.cons(new_binding(), acc)
         @lru_cache(1)
         def new_bindings_reversed() -> frozenlist[hydra.core.Binding]:
-            return hydra.lib.lists.foldl((lambda x1, x2: process_binding(x1, x2)), (), bindings())
+            return hydra.lib.lists.foldl((lambda x1, x2: process_binding(x1, x2)), (), bindings)
         @lru_cache(1)
         def new_bindings() -> frozenlist[hydra.core.Binding]:
             return hydra.lib.lists.reverse(new_bindings_reversed())
@@ -522,7 +510,7 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
             return hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()),))
         @lru_cache(1)
         def body_result() -> tuple[int, hydra.core.Term]:
-            return process_immediate_subterm(cx, 1, "_body", body_path_prefix(), body())
+            return process_immediate_subterm(cx, 1, "_body", body_path_prefix(), body)
         @lru_cache(1)
         def new_body() -> hydra.core.Term:
             return hydra.lib.pairs.second(body_result())
