@@ -4867,9 +4867,9 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
 --   Returns a list of Java BlockStatements (if/instanceof checks + return/continue).
 --   tcoVarRenames maps original parameter names to snapshot names (e.g. term -> term_tco).
 --   Non-continue paths use the snapshot names so lambdas capture effectively-final variables.
-encodeTermTCO :: TBinding (JavaHelpers.JavaEnvironment -> Name -> [Name] -> M.Map Name Name -> Term -> Flow Graph [Java.BlockStatement])
+encodeTermTCO :: TBinding (JavaHelpers.JavaEnvironment -> Name -> [Name] -> M.Map Name Name -> Int -> Term -> Flow Graph [Java.BlockStatement])
 encodeTermTCO = def "encodeTermTCO" $
-  "env0" ~> "funcName" ~> "paramNames" ~> "tcoVarRenames" ~> "term" ~>
+  "env0" ~> "funcName" ~> "paramNames" ~> "tcoVarRenames" ~> "tcoDepth" ~> "term" ~>
     -- Apply varRenames to the environment so encodeTerm uses snapshot variable names
     "aliases0" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env0") $
     "env" <~ (record JavaHelpers._JavaEnvironment [
@@ -4939,8 +4939,11 @@ encodeTermTCO = def "encodeTermTCO" $
             (inject Java._StatementWithoutTrailingSubstatement Java._StatementWithoutTrailingSubstatement_continue
               (wrap Java._ContinueStatement (nothing :: TTerm (Maybe Java.Identifier)))))) $
         produce $ Lists.concat2 (var "assignments") (list [var "continueStmt"]))
-      -- NOT a self-call: check for case statement application
-      ("gathered2" <~ (CoderUtils.gatherApplications @@ var "term") $
+      -- NOT a self-call: check for let-expression or case statement application
+      (cases _Term (var "stripped")
+        (Just $
+          -- Default: check for case statement application
+          "gathered2" <~ (CoderUtils.gatherApplications @@ var "term") $
         "args2" <~ (Pairs.first $ var "gathered2") $
         "body2" <~ (Pairs.second $ var "gathered2") $
         Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
@@ -4965,8 +4968,17 @@ encodeTermTCO = def "encodeTermTCO" $
                         "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                         "cases_" <~ (Core.caseStatementCases $ var "cs") $
                         "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ (Schemas.nominalApplication @@ var "tname" @@ list ([] :: [TTerm Type]))) $
-                        -- Encode the argument (the value being matched)
-                        "jArg" <<~ (encodeTerm @@ var "env" @@ var "arg") $
+                        -- Encode the argument (the value being matched) and cache in a local variable
+                        -- so that complex expressions (e.g. deannotateType(t_tco)) are computed once,
+                        -- not duplicated across every instanceof check and cast.
+                        "jArgRaw" <<~ (encodeTerm @@ var "env" @@ var "arg") $
+                        "depthSuffix" <~ Logic.ifElse (Equality.equal (var "tcoDepth") (int32 0))
+                          (string "")
+                          (Literals.showInt32 (var "tcoDepth")) $
+                        "matchVarId" <~ (JavaUtilsSource.javaIdentifier @@
+                          Strings.cat (list [string "_tco_match_", Formatting.decapitalize @@ (Names.localNameOf @@ var "tname"), var "depthSuffix"])) $
+                        "matchDecl" <~ (JavaUtilsSource.varDeclarationStatement @@ var "matchVarId" @@ var "jArgRaw") $
+                        "jArg" <~ (JavaUtilsSource.javaIdentifierToJavaExpression @@ var "matchVarId") $
                         -- Generate if/instanceof blocks for each case branch
                         "ifBlocks" <<~ (Flows.mapList ("field" ~>
                           "fieldName" <~ (Core.fieldName (var "field")) $
@@ -4995,7 +5007,7 @@ encodeTermTCO = def "encodeTermTCO" $
                                   "isBranchTailCall" <~ (CoderUtils.isTailRecursiveInTailPosition @@ var "funcName" @@ var "branchBody") $
                                   "bodyStmts" <<~ (Logic.ifElse (var "isBranchTailCall")
                                     -- Self-call: emit assignment + continue via encodeTermTCO
-                                    (encodeTermTCO @@ var "env3" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ var "branchBody")
+                                    (encodeTermTCO @@ var "env3" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ (Math.add (var "tcoDepth") (int32 1)) @@ var "branchBody")
                                     -- Not a self-call: use normal encoding with analyzeJavaFunction
                                     ("fs" <<~ (analyzeJavaFunction @@ var "env3" @@ var "branchBody") $
                                       "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
@@ -5031,10 +5043,19 @@ encodeTermTCO = def "encodeTermTCO" $
                             "dExpr" <<~ (encodeTerm @@ var "env" @@ var "d") $
                             produce $ list [JavaDsl.blockStatementStatement
                               (JavaUtilsSource.javaReturnStatement @@ just (var "dExpr"))])) $
-                        produce $ Lists.concat2 (var "ifBlocks") (var "defaultStmt")]]])
+                        produce $ Lists.concat (list [list [var "matchDecl"], var "ifBlocks", var "defaultStmt"])]]])
           -- Not a single-arg application: fall back to normal return
           ("expr" <<~ (encodeTerm @@ var "env" @@ var "term") $
-            produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]))
+            produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))])) [
+        -- Let-expression: encode bindings as statements, then recurse on body
+        _Term_let>>: "lt" ~>
+          "letBindings" <~ Core.letBindings (var "lt") $
+          "letBody" <~ Core.letBody (var "lt") $
+          "bindResult" <<~ (bindingsToStatements @@ var "env" @@ var "letBindings") $
+          "letStmts" <~ Pairs.first (var "bindResult") $
+          "envAfterLet" <~ Pairs.second (var "bindResult") $
+          "tcoBodyStmts" <<~ (encodeTermTCO @@ var "envAfterLet" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ var "tcoDepth" @@ var "letBody") $
+          produce $ Lists.concat2 (var "letStmts") (var "tcoBodyStmts")])
 
 -- | Encode a term definition as a Java interface method declaration.
 -- This is the most complex function — it handles type parameters, lambda analysis,
@@ -5146,10 +5167,12 @@ encodeTermDefinition = def "encodeTermDefinition" $
       "result" <~ (JavaUtilsSource.javaTypeToJavaResult @@ var "jcod") $
       "mods" <~ list [inject Java._InterfaceMethodModifier Java._InterfaceMethodModifier_static unit] $
       "jname" <~ (JavaUtilsSource.sanitizeJavaName @@ (Formatting.decapitalize @@ (Names.localNameOf @@ var "name"))) $
-      -- Check for tail-call optimization opportunity
-      "isTCO" <~ (Logic.and
-        (Logic.not $ Lists.null (var "params"))
-        (CoderUtils.isSelfTailRecursive @@ var "name" @@ var "body")) $
+      -- TCO disabled for now: instanceof chains cause significant regression vs visitor pattern.
+      -- To re-enable, restore the following:
+      --   "isTCO" <~ (Logic.and
+      --     (Logic.not $ Lists.null (var "params"))
+      --     (CoderUtils.isSelfTailRecursive @@ var "name" @@ var "body")) $
+      "isTCO" <~ boolean False $
       "methodBody" <<~ (Logic.ifElse (var "isTCO")
         -- TCO path: wrap body in while(true) loop
         -- Note: bindingStmts (let-binding prefixes) go INSIDE the while loop so they are
@@ -5166,8 +5189,14 @@ encodeTermDefinition = def "encodeTermDefinition" $
               @@ (JavaUtilsSource.javaIdentifierToJavaExpression
                     @@ (JavaUtilsSource.variableToJavaIdentifier @@ Pairs.first (var "pair"))))
             (Lists.zip (var "params") (var "snapshotNames")) $
-          "tcoStmts" <<~ (encodeTermTCO @@ var "env3" @@ var "name" @@ var "params" @@ var "tcoVarRenames" @@ var "annotatedBody") $
-          "whileBodyStmts" <~ Lists.concat (list [var "bindingStmts", var "snapshotDecls", var "tcoStmts"]) $
+          -- For TCO, re-wrap the body with any let-bindings so encodeTermTCO handles them
+          -- with the renamed environment (tcoVarRenames). This ensures let-bound lambdas
+          -- capture the effectively-final snapshot variables instead of the reassigned parameters.
+          "tcoBody" <~ Logic.ifElse (Lists.null (var "bindings"))
+            (var "annotatedBody")
+            (Core.termLet (Core.let_ (var "bindings") (var "annotatedBody"))) $
+          "tcoStmts" <<~ (encodeTermTCO @@ var "env2WithTypeParams" @@ var "name" @@ var "params" @@ var "tcoVarRenames" @@ int32 0 @@ var "tcoBody") $
+          "whileBodyStmts" <~ Lists.concat2 (var "snapshotDecls") (var "tcoStmts") $
           "whileBodyBlock" <~ (JavaDsl.statementWithoutTrailing (JavaDsl.stmtBlock (JavaDsl.block (var "whileBodyStmts")))) $
           "noCond" <~ (nothing :: TTerm (Maybe Java.Expression)) $
           "whileStmt" <~ (JavaDsl.blockStatementStatement
