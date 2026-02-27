@@ -116,7 +116,7 @@ but these web links are the canonical references:
 | DSL guide (Haskell) | https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide.md | Comprehensive Haskell DSL reference. 4 DSL variants (direct, phantom-typed, meta, generated). Operators, precedence, import conventions. Library DSLs. Common errors |
 | DSL guide (Java) | https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide-java.md | Java DSL: `hydra.dsl.Types`, `hydra.dsl.Terms`. Visitor pattern for unions. Flow monad usage. Primitive function packages |
 | DSL guide (Python) | https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide-python.md | Python DSL: `hydra.dsl.types`, `hydra.dsl.terms`. Pattern matching via `match`/`isinstance`. `FrozenDict` for maps. Trailing underscores on reserved words |
-| Implementation | https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md | Detailed architecture guide. 20 kernel type modules, DSL system (3 levels, 33+ files), ~180+ primitive functions with `prim`/`primEval` registration. Cross-language coder architecture. Bootstrap process. Extension points |
+| Implementation | https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md | Detailed architecture guide. 21 kernel type modules, DSL system (3 levels, 34+ files), ~180+ primitive functions with `prim`/`primEval` registration. Cross-language coder architecture. Bootstrap process. Extension points |
 | Code organization | https://github.com/CategoricalData/hydra/wiki/Code-organization | The `src/main/` vs `src/gen-main/` pattern explained per implementation. What goes where. Never edit generated files |
 | Testing | https://github.com/CategoricalData/hydra/wiki/Testing | Common test suite (`hydra.test.testSuite`). Kernel tests vs generation tests. Test categories (primitives, inference, checking, formatting). Per-language test runners. TestGenerator abstraction |
 | Benchmarking | https://github.com/CategoricalData/hydra/wiki/Benchmarking | Performance measurement across implementations. Python benchmark tool with CSV output. `hydra_path` for cross-language comparison. Known slow tests |
@@ -255,7 +255,7 @@ stack ghci hydra:lib hydra:hydra-test
 ./gradlew test --tests "hydra.VisitorTest"
 ```
 
-Requires: **Java 17+**
+Requires: **Java 17+** (see [Hydra-Java README](../../hydra-java/README.md))
 
 ### Python (hydra-python)
 

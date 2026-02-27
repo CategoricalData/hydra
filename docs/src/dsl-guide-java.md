@@ -531,7 +531,7 @@ Binding lambda = define("Lambda",
 ### Complete example: hydra.core
 
 See `hydra-java/src/main/java/hydra/dsl/meta/examples/CoreTypes.java` for a complete
-implementation of all 33 `hydra.core` types using this pattern.
+implementation of all `hydra.core` types using this pattern.
 
 ## Term definitions
 

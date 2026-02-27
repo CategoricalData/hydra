@@ -218,7 +218,7 @@ if [ $ERRORS -eq 0 ]; then
     echo "  2. Commit all changes"
     echo "  3. Tag: git tag $EXPECTED -m '$EXPECTED release' HEAD"
     echo "  4. Push: git push && git push --tags"
-    echo "  5. Publish to Hackage, Sonatype, and PyPI"
+    echo "  5. Publish to Hackage, Sonatype, and conda-forge"
 else
     echo "FAIL: $ERRORS check(s) failed. Please fix before releasing."
     exit 1
