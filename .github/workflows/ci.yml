@@ -21,7 +21,7 @@ jobs:
           path: ~/.stack
           key: stack-${{ hashFiles('hydra-haskell/stack.yaml', 'hydra-haskell/package.yaml') }}
           restore-keys: stack-
-      - run: stack test
+      - run: stack test --install-ghc
         working-directory: hydra-haskell
 
   java:
