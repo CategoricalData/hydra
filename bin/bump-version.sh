@@ -72,6 +72,10 @@ patch "$REPO_ROOT/hydra-python/pyproject.toml" \
 patch "$REPO_ROOT/hydra-ext/demos/bootstrapping/resources/python/pyproject.toml" \
     "s/^version = \".*\"/version = \"$VERSION\"/"
 
+# Pixi (pixi.toml): version = "X.Y.Z"
+patch "$REPO_ROOT/pixi.toml" \
+    "s/^version = \".*\"/version = \"$VERSION\"/"
+
 # README.md: version references
 patch "$REPO_ROOT/README.md" \
     "s/The current release is \*\*[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\*\*/The current release is \*\*$VERSION\*\*/"

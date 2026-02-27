@@ -1,6 +1,6 @@
 [workspace]
 name = "hydra"
-version = "0.12.0"
+version = "0.13.0"
 description = "The Hydra language for type-safe transformations"
 authors = [
     "Joshua Shinavier <josh@fortytwo.net>",
