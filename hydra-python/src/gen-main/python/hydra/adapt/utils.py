@@ -102,20 +102,16 @@ def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util
     @lru_cache(1)
     def qual_name() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(name)
-    @lru_cache(1)
-    def ns() -> Maybe[hydra.module.Namespace]:
-        return qual_name().namespace
-    @lru_cache(1)
-    def local() -> str:
-        return qual_name().local
+    ns = qual_name().namespace
+    local = qual_name().local
     def ns_to_file_path(ns2: hydra.module.Namespace) -> str:
         return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns2.value)))
     @lru_cache(1)
     def prefix() -> str:
-        return hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns())
+        return hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
     @lru_cache(1)
     def suffix() -> str:
-        return hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local())
+        return hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local)
     return hydra.lib.strings.cat((prefix(), suffix(), ".", ext.value))
 
 def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.core.Type) -> bool:

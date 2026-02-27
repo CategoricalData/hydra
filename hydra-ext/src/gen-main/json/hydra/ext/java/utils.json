@@ -6120,6 +6120,71 @@
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}]},
     {
+      "name": "hydra.ext.java.utils.finalVarDeclarationStatement",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "union": {
+                      "field": {
+                        "name": "localVariableDeclaration",
+                        "term": {
+                          "wrap": {
+                            "body": {
+                              "record": {
+                                "fields": [
+                                  {
+                                    "name": "modifiers",
+                                    "term": {
+                                      "list": [
+                                        {
+                                          "union": {
+                                            "field": {"name": "final", "term": {"unit": {}}},
+                                            "typeName": "hydra.ext.java.syntax.VariableModifier"}}]}},
+                                  {
+                                    "name": "type",
+                                    "term": {
+                                      "union": {
+                                        "field": {"name": "var", "term": {"unit": {}}},
+                                        "typeName": "hydra.ext.java.syntax.LocalVariableType"}}},
+                                  {
+                                    "name": "declarators",
+                                    "term": {
+                                      "list": [
+                                        {
+                                          "application": {
+                                            "argument": {
+                                              "maybe": [
+                                                {
+                                                  "union": {
+                                                    "field": {"name": "expression", "term": {"variable": "rhs"}},
+                                                    "typeName": "hydra.ext.java.syntax.VariableInitializer"}}]},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "id"},
+                                                "function": {"variable": "hydra.ext.java.utils.javaVariableDeclarator"}}}}}]}}],
+                                "typeName": "hydra.ext.java.syntax.LocalVariableDeclaration"}},
+                            "typeName": "hydra.ext.java.syntax.LocalVariableDeclarationStatement"}}},
+                      "typeName": "hydra.ext.java.syntax.BlockStatement"}},
+                  "domain": [{"variable": "hydra.ext.java.syntax.Expression"}],
+                  "parameter": "rhs"}}},
+            "domain": [{"variable": "hydra.ext.java.syntax.Identifier"}],
+            "parameter": "id"}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ext.java.syntax.BlockStatement"},
+                  "domain": {"variable": "hydra.ext.java.syntax.Expression"}}},
+              "domain": {"variable": "hydra.ext.java.syntax.Identifier"}}},
+          "variables": []}]},
+    {
       "name": "hydra.ext.java.utils.javaStringMultiplicativeExpression",
       "term": {
         "function": {

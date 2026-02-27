@@ -14,8 +14,9 @@ set -eo pipefail
 #     - Ext Haskell modules (Java/Python coders, language syntaxes, etc.)
 #     - Export ext modules to JSON
 #
-#   Phase 3-5: Generate target languages from JSON (hydra-ext)
-#     - Haskell, Java, Python (all from JSON via bootstrap-from-json)
+#   Phases 3-4: Generate target languages from JSON (hydra-ext)
+#     - Java, Python (from JSON via bootstrap-from-json)
+#     - Haskell is already fully synced by Phases 1-2
 #
 # Stops at the first error. Times the entire operation.
 #
@@ -48,9 +49,8 @@ for arg in "$@"; do
             echo "Phases:"
             echo "  1. Generate Haskell from DSL (kernel, tests, eval lib, sources, JSON)"
             echo "  2. Generate ext modules and JSON (hydra-ext)"
-            echo "  3. Sync Haskell from JSON"
-            echo "  4. Sync Java from JSON"
-            echo "  5. Sync Python from JSON"
+            echo "  3. Sync Java from JSON"
+            echo "  4. Sync Python from JSON"
             echo ""
             echo "Stops at the first error. Reports total elapsed time."
             exit 0
@@ -89,7 +89,7 @@ echo ""
 # ──────────────────────────────────────────────────
 
 echo "============================================"
-echo "Phase 1/5: Generating Haskell from DSL"
+echo "Phase 1/4: Generating Haskell from DSL"
 echo "============================================"
 echo ""
 
@@ -147,8 +147,15 @@ echo ""
 echo "Rebuilding..."
 stack build
 
+if [ "$QUICK_MODE" = false ]; then
+    echo ""
+    echo "Step 1g: Running Haskell tests..."
+    echo ""
+    stack test 2>&1
+fi
+
 echo ""
-echo "Step 1g: Exporting and verifying JSON..."
+echo "Step 1h: Exporting and verifying JSON..."
 echo ""
 stack build hydra:exe:update-json-kernel hydra:exe:update-json-main hydra:exe:verify-json-kernel
 stack exec update-json-kernel -- $RTS_FLAGS
@@ -156,17 +163,10 @@ stack exec update-json-main -- $RTS_FLAGS
 stack exec verify-json-kernel -- $RTS_FLAGS
 
 echo ""
-echo "Step 1h: Generating JSON manifest..."
+echo "Step 1i: Generating JSON manifest..."
 echo ""
 stack build hydra:exe:update-json-manifest
 stack exec update-json-manifest
-
-if [ "$QUICK_MODE" = false ]; then
-    echo ""
-    echo "Step 1i: Running Haskell tests..."
-    echo ""
-    stack test 2>&1
-fi
 
 echo ""
 echo "Phase 1 complete."
@@ -177,7 +177,7 @@ echo ""
 # ──────────────────────────────────────────────────
 
 echo "============================================"
-echo "Phase 2/5: Synchronizing Hydra-Ext"
+echo "Phase 2/4: Synchronizing Hydra-Ext"
 echo "============================================"
 echo ""
 
@@ -186,8 +186,10 @@ echo ""
 echo ""
 
 # ──────────────────────────────────────────────────
-# Phases 3-5: Sync from JSON via bootstrap-from-json
+# Phases 3-4: Sync Java and Python from JSON
 # ──────────────────────────────────────────────────
+# Note: Haskell is already fully synced by Phases 1-2 (DSL generation + JSON export).
+# hydra-ext/bin/sync-haskell.sh exists for standalone use but is not needed here.
 
 QUICK_FLAG=""
 if [ "$QUICK_MODE" = true ]; then
@@ -195,15 +197,7 @@ if [ "$QUICK_MODE" = true ]; then
 fi
 
 echo "============================================"
-echo "Phase 3/5: Synchronizing Haskell (from JSON)"
-echo "============================================"
-echo ""
-
-"$HYDRA_EXT_DIR/bin/sync-haskell.sh" $QUICK_FLAG
-
-echo ""
-echo "============================================"
-echo "Phase 4/5: Synchronizing Java (from JSON)"
+echo "Phase 3/4: Synchronizing Java (from JSON)"
 echo "============================================"
 echo ""
 
@@ -211,7 +205,7 @@ echo ""
 
 echo ""
 echo "============================================"
-echo "Phase 5/5: Synchronizing Python (from JSON)"
+echo "Phase 4/4: Synchronizing Python (from JSON)"
 echo "============================================"
 echo ""
 

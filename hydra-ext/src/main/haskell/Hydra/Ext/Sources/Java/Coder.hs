@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Module                     as Module
 import qualified Hydra.Dsl.Meta.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
@@ -316,6 +317,8 @@ module_ = Module ns elements
       toBinding collectLambdaDomains,
       toBinding rebuildApps,
       toBinding propagateTypesInAppChain,
+      -- Tail-call optimization
+      toBinding encodeTermTCO,
       toBinding encodeTermDefinition,
       toBinding encodeDefinitions,
       toBinding moduleToJava]
@@ -1560,7 +1563,9 @@ encodeVariable :: TBinding (JavaHelpers.JavaEnvironment -> Name -> Flow Graph Ja
 encodeVariable = def "encodeVariable" $
   lambda "env" $ lambda "name" $
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    "jid" <~ (JavaUtilsSource.javaIdentifier @@ (unwrap _Name @@ var "name")) $
+    -- Apply varRenames to get the Java-level variable name (for TCO snapshot support)
+    "resolvedName" <~ (JavaUtilsSource.lookupJavaVarName @@ var "aliases" @@ var "name") $
+    "jid" <~ (JavaUtilsSource.javaIdentifier @@ (unwrap _Name @@ var "resolvedName")) $
     -- Branch vars: access .value field
     Logic.ifElse (Sets.member (var "name") (project JavaHelpers._Aliases JavaHelpers._Aliases_branchVars @@ var "aliases"))
       (Flows.pure (JavaUtilsSource.javaFieldAccessToJavaExpression @@
@@ -1597,14 +1602,15 @@ encodeVariable = def "encodeVariable" $
             -- Lambda-bound variables
             (Logic.ifElse (isLambdaBoundIn @@ var "name" @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases"))
               ("actualName" <~ (findMatchingLambdaVar @@ var "name" @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases")) $
-               Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "actualName")))
+               "resolvedActual" <~ (JavaUtilsSource.lookupJavaVarName @@ var "aliases" @@ var "actualName") $
+               Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "resolvedActual")))
               -- Classify and encode
               ("cls" <<~ (classifyDataReference @@ var "name") $
                cases JavaHelpers._JavaSymbolClass (var "cls") Nothing [
                  JavaHelpers._JavaSymbolClass_hoistedLambda>>: "arity" ~>
                    encodeVariable_hoistedLambdaCase @@ var "aliases" @@ var "name" @@ var "arity",
                  JavaHelpers._JavaSymbolClass_localVariable>>: lambda "_" $
-                   Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (elementJavaIdentifier @@ boolean False @@ boolean False @@ var "aliases" @@ var "name")),
+                   Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (elementJavaIdentifier @@ boolean False @@ boolean False @@ var "aliases" @@ var "resolvedName")),
                  JavaHelpers._JavaSymbolClass_constant>>: lambda "_" $
                    Flows.pure (JavaUtilsSource.javaIdentifierToJavaExpression @@ (elementJavaIdentifier @@ boolean False @@ boolean False @@ var "aliases" @@ var "name")),
                  JavaHelpers._JavaSymbolClass_nullaryFunction>>: lambda "_" $
@@ -3796,7 +3802,10 @@ encodeApplication = def "encodeApplication" $
     -- Get the function's arity from its type
     "mfunTyp" <<~ (Annotations.getType @@ (Annotations.termAnnotationInternal @@ var "fun")) $
     "funTyp" <<~ (Maybes.cases (var "mfunTyp")
-      (CoderUtils.tryTypeOf @@ string "1" @@ var "tc" @@ var "fun")
+      -- Use withDefault so that if type inference fails (e.g. empty list without type args),
+      -- we fall through to encodeApplication_fallback via the default dispatch paths
+      (Flows.withDefault (Core.typeVariable (Core.name (string "unknown")))
+        (CoderUtils.tryTypeOf @@ string "1" @@ var "tc" @@ var "fun"))
       (lambda "t" $ Flows.pure (var "t"))) $
     "arity" <~ (Arity.typeArity @@ var "funTyp") $
     -- Determine callee name for type annotation correction
@@ -3876,7 +3885,11 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
       (CoderUtils.tryTypeOf @@ string "2" @@ var "tc" @@ var "lhs")
       (lambda "typ" $ Flows.pure (var "typ"))) $
     cases _Type (Rewriting.deannotateTypeParameters @@ (Rewriting.deannotateType @@ var "t"))
-      (Just $ Monads.fail @@ (Strings.cat (list [string "Unexpected type: ", ShowCore.type_ @@ var "t"]))) [
+      (Just $
+        -- Non-function type: encode as generic .apply() call
+        "jfun" <<~ (encodeTerm @@ var "env" @@ var "lhs") $
+        "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs") $
+        Flows.pure (applyJavaArg @@ var "jfun" @@ var "jarg")) [
       _Type_function>>: lambda "ft" $
         "dom" <~ Core.functionTypeDomain (var "ft") $
         "cod" <~ Core.functionTypeCodomain (var "ft") $
@@ -4846,6 +4859,204 @@ propagateTypesInAppChain = def "propagateTypesInAppChain" $
             @@ just (encodeTypeAsTerm @@ var "resultType")
             @@ inject _Term _Term_application (Core.application (var "annotatedLhs") (var "rhs"))])
 
+-- =============================================================================
+-- Tail-call optimization (TCO) helpers
+-- =============================================================================
+
+-- | Encode a term for TCO: self-tail-calls become param reassignment + continue.
+--   Returns a list of Java BlockStatements (if/instanceof checks + return/continue).
+--   tcoVarRenames maps original parameter names to snapshot names (e.g. term -> term_tco).
+--   Non-continue paths use the snapshot names so lambdas capture effectively-final variables.
+encodeTermTCO :: TBinding (JavaHelpers.JavaEnvironment -> Name -> [Name] -> M.Map Name Name -> Int -> Term -> Flow Graph [Java.BlockStatement])
+encodeTermTCO = def "encodeTermTCO" $
+  "env0" ~> "funcName" ~> "paramNames" ~> "tcoVarRenames" ~> "tcoDepth" ~> "term" ~>
+    -- Apply varRenames to the environment so encodeTerm uses snapshot variable names
+    "aliases0" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env0") $
+    "env" <~ (record JavaHelpers._JavaEnvironment [
+      JavaHelpers._JavaEnvironment_aliases>>: record JavaHelpers._Aliases [
+        JavaHelpers._Aliases_currentNamespace>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_currentNamespace @@ var "aliases0",
+        JavaHelpers._Aliases_packages>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_packages @@ var "aliases0",
+        JavaHelpers._Aliases_branchVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_branchVars @@ var "aliases0",
+        JavaHelpers._Aliases_recursiveVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_recursiveVars @@ var "aliases0",
+        JavaHelpers._Aliases_inScopeTypeParams>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeTypeParams @@ var "aliases0",
+        JavaHelpers._Aliases_polymorphicLocals>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_polymorphicLocals @@ var "aliases0",
+        JavaHelpers._Aliases_inScopeJavaVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeJavaVars @@ var "aliases0",
+        JavaHelpers._Aliases_varRenames>>:
+          Maps.union (var "tcoVarRenames") (project JavaHelpers._Aliases JavaHelpers._Aliases_varRenames @@ var "aliases0"),
+        JavaHelpers._Aliases_lambdaVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases0",
+        JavaHelpers._Aliases_typeVarSubst>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_typeVarSubst @@ var "aliases0",
+        JavaHelpers._Aliases_trustedTypeVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_trustedTypeVars @@ var "aliases0",
+        JavaHelpers._Aliases_methodCodomain>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_methodCodomain @@ var "aliases0",
+        JavaHelpers._Aliases_thunkedVars>>:
+          project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases0"],
+      JavaHelpers._JavaEnvironment_typeContext>>:
+        project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env0"]) $
+    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    -- Check if this term is a direct self-tail-call: funcName(args...)
+    "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
+    "gatherArgs" <~ (Pairs.first $ var "gathered") $
+    "gatherFun" <~ (Pairs.second $ var "gathered") $
+    "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+    -- Check for self-call pattern: Variable(funcName)
+    "isSelfCall" <~ (cases _Term (var "strippedFun")
+      (Just false) [
+        _Term_variable>>: "n" ~> Equality.equal (var "n") (var "funcName")]) $
+    Logic.ifElse (Logic.and (var "isSelfCall")
+                            (Equality.equal (Lists.length $ var "gatherArgs") (Lists.length $ var "paramNames")))
+      -- TAIL CALL: emit param reassignment + continue
+      (-- Filter out self-assignments (e.g. x = x) so params remain effectively final for lambdas
+        "changePairs" <~ Lists.filter ("pair" ~>
+          Logic.not (cases _Term (Rewriting.deannotateAndDetypeTerm @@ Pairs.second (var "pair"))
+            (Just false) [
+            _Term_variable>>: "n" ~> Equality.equal (var "n") (Pairs.first (var "pair"))]))
+          (Lists.zip (var "paramNames") (var "gatherArgs")) $
+        "changedParams" <~ Lists.map (unaryFunction Pairs.first) (var "changePairs") $
+        "jChangedArgs" <<~ Flows.mapList ("pair" ~> encodeTerm @@ var "env" @@ Pairs.second (var "pair"))
+          (var "changePairs") $
+        "assignments" <~ (Lists.map ("pair" ~>
+          "paramName" <~ (Pairs.first $ var "pair") $
+          "jArg" <~ (Pairs.second $ var "pair") $
+          JavaDsl.blockStatementStatement
+            (JavaUtilsSource.javaAssignmentStatement
+              @@ (JavaDsl.leftHandSideExpressionName
+                    (JavaUtilsSource.javaIdentifierToJavaExpressionName
+                      @@ (JavaUtilsSource.variableToJavaIdentifier @@ var "paramName")))
+              @@ var "jArg"))
+          (Lists.zip (var "changedParams") (var "jChangedArgs"))) $
+        "continueStmt" <~ (JavaDsl.blockStatementStatement
+          (JavaDsl.statementWithoutTrailing
+            (inject Java._StatementWithoutTrailingSubstatement Java._StatementWithoutTrailingSubstatement_continue
+              (wrap Java._ContinueStatement (nothing :: TTerm (Maybe Java.Identifier)))))) $
+        produce $ Lists.concat2 (var "assignments") (list [var "continueStmt"]))
+      -- NOT a self-call: check for let-expression or case statement application
+      (cases _Term (var "stripped")
+        (Just $
+          -- Default: check for case statement application
+          "gathered2" <~ (CoderUtils.gatherApplications @@ var "term") $
+        "args2" <~ (Pairs.first $ var "gathered2") $
+        "body2" <~ (Pairs.second $ var "gathered2") $
+        Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
+          -- Single argument: try to match as case statement
+          ("arg" <~ (Lists.head $ var "args2") $
+            cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body2") (Just $
+              -- Default: not a case statement, encode as return
+              "expr" <<~ (encodeTerm @@ var "env" @@ var "term") $
+              produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
+              _Term_function>>: "f" ~>
+                cases _Function (var "f") (Just $
+                  "expr" <<~ (encodeTerm @@ var "env" @@ var "term") $
+                  produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
+                  _Function_elimination>>: "e" ~>
+                    cases _Elimination (var "e") (Just $
+                      "expr" <<~ (encodeTerm @@ var "env" @@ var "term") $
+                      produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
+                      _Elimination_union>>: "cs" ~>
+                        -- Case statement: generate if/instanceof chain
+                        "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
+                        "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+                        "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                        "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                        "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ (Schemas.nominalApplication @@ var "tname" @@ list ([] :: [TTerm Type]))) $
+                        -- Encode the argument (the value being matched) and cache in a local variable
+                        -- so that complex expressions (e.g. deannotateType(t_tco)) are computed once,
+                        -- not duplicated across every instanceof check and cast.
+                        "jArgRaw" <<~ (encodeTerm @@ var "env" @@ var "arg") $
+                        "depthSuffix" <~ Logic.ifElse (Equality.equal (var "tcoDepth") (int32 0))
+                          (string "")
+                          (Literals.showInt32 (var "tcoDepth")) $
+                        "matchVarId" <~ (JavaUtilsSource.javaIdentifier @@
+                          Strings.cat (list [string "_tco_match_", Formatting.decapitalize @@ (Names.localNameOf @@ var "tname"), var "depthSuffix"])) $
+                        "matchDecl" <~ (JavaUtilsSource.varDeclarationStatement @@ var "matchVarId" @@ var "jArgRaw") $
+                        "jArg" <~ (JavaUtilsSource.javaIdentifierToJavaExpression @@ var "matchVarId") $
+                        -- Generate if/instanceof blocks for each case branch
+                        "ifBlocks" <<~ (Flows.mapList ("field" ~>
+                          "fieldName" <~ (Core.fieldName (var "field")) $
+                          -- Build the variant reference type for instanceof
+                          "variantRefType" <~ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ true @@ var "domArgs"
+                            @@ var "tname" @@ just (Formatting.capitalize @@ (Core.unName (var "fieldName")))) $
+                          -- Extract the lambda body from this case branch
+                          cases _Term (Rewriting.deannotateTerm @@ Core.fieldTerm (var "field"))
+                            (Just $ Monads.fail @@ string "TCO: case branch is not a lambda") [
+                            _Term_function>>: "f2" ~>
+                              cases _Function (var "f2")
+                                (Just $ Monads.fail @@ string "TCO: case branch is not a lambda") [
+                                _Function_lambda>>: "lam" ~>
+                                  -- Use withLambda to properly set up the lambda context
+                                  withLambda @@ var "env" @@ var "lam" @@ (lambda "env2" $
+                                  "lambdaParam" <~ Core.lambdaParameter (var "lam") $
+                                  "branchBody" <~ Core.lambdaBody (var "lam") $
+                                  "env3" <~ (insertBranchVar @@ var "lambdaParam" @@ var "env2") $
+                                  -- Build local var: VariantType varName = (VariantType) arg;
+                                  "varId" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "lambdaParam") $
+                                  "castExpr" <~ (JavaUtilsSource.javaCastExpressionToJavaExpression
+                                    @@ (JavaUtilsSource.javaCastExpression @@ var "variantRefType"
+                                          @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "jArg"))) $
+                                  "localDecl" <~ (JavaUtilsSource.varDeclarationStatement @@ var "varId" @@ var "castExpr") $
+                                  -- Check if this branch body is a self-tail-call
+                                  "isBranchTailCall" <~ (CoderUtils.isTailRecursiveInTailPosition @@ var "funcName" @@ var "branchBody") $
+                                  "bodyStmts" <<~ (Logic.ifElse (var "isBranchTailCall")
+                                    -- Self-call: emit assignment + continue via encodeTermTCO
+                                    (encodeTermTCO @@ var "env3" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ (Math.add (var "tcoDepth") (int32 1)) @@ var "branchBody")
+                                    -- Not a self-call: use normal encoding with analyzeJavaFunction
+                                    ("fs" <<~ (analyzeJavaFunction @@ var "env3" @@ var "branchBody") $
+                                      "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
+                                      "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
+                                      "env4" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
+                                      "bindResult" <<~ (bindingsToStatements @@ var "env4" @@ var "bindings") $
+                                      "bindingStmts" <~ Pairs.first (var "bindResult") $
+                                      "env5" <~ Pairs.second (var "bindResult") $
+                                      "jret" <<~ (encodeTerm @@ var "env5" @@ var "innerBody") $
+                                      "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
+                                      produce $ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]))) $
+                                  -- Build: if (arg instanceof VariantType) { VariantType v = (VariantType) arg; stmts... }
+                                  -- Use jArg (the encoded case argument) for the instanceof check,
+                                  -- not paramNames[0], which may differ from the actual matched variable
+                                  "relExpr" <~ (JavaUtilsSource.javaInstanceOf
+                                    @@ (JavaUtilsSource.javaUnaryExpressionToJavaRelationalExpression
+                                          @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "jArg"))
+                                    @@ var "variantRefType") $
+                                  "condExpr" <~ (JavaUtilsSource.javaRelationalExpressionToJavaExpression @@ var "relExpr") $
+                                  "blockStmts" <~ Lists.cons (var "localDecl") (var "bodyStmts") $
+                                  "ifBody" <~ (JavaDsl.statementWithoutTrailing
+                                    (JavaDsl.stmtBlock (JavaDsl.block (var "blockStmts")))) $
+                                  produce $ JavaDsl.blockStatementStatement
+                                    (JavaDsl.statementIfThen (JavaDsl.ifThenStatement (var "condExpr") (var "ifBody"))))]])
+                          (var "cases_")) $
+                        -- Default: return the expression (or the arg for otherwise)
+                        "defaultStmt" <<~ (Maybes.cases (var "dflt")
+                          -- No default: return the argument unchanged
+                          (produce $ list [JavaDsl.blockStatementStatement
+                            (JavaUtilsSource.javaReturnStatement @@ just (var "jArg"))])
+                          ("d" ~>
+                            -- Default is a value to return, not a function to apply to the argument
+                            "dExpr" <<~ (encodeTerm @@ var "env" @@ var "d") $
+                            produce $ list [JavaDsl.blockStatementStatement
+                              (JavaUtilsSource.javaReturnStatement @@ just (var "dExpr"))])) $
+                        produce $ Lists.concat (list [list [var "matchDecl"], var "ifBlocks", var "defaultStmt"])]]])
+          -- Not a single-arg application: fall back to normal return
+          ("expr" <<~ (encodeTerm @@ var "env" @@ var "term") $
+            produce $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))])) [
+        -- Let-expression: encode bindings as statements, then recurse on body
+        _Term_let>>: "lt" ~>
+          "letBindings" <~ Core.letBindings (var "lt") $
+          "letBody" <~ Core.letBody (var "lt") $
+          "bindResult" <<~ (bindingsToStatements @@ var "env" @@ var "letBindings") $
+          "letStmts" <~ Pairs.first (var "bindResult") $
+          "envAfterLet" <~ Pairs.second (var "bindResult") $
+          "tcoBodyStmts" <<~ (encodeTermTCO @@ var "envAfterLet" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ var "tcoDepth" @@ var "letBody") $
+          produce $ Lists.concat2 (var "letStmts") (var "tcoBodyStmts")])
+
 -- | Encode a term definition as a Java interface method declaration.
 -- This is the most complex function — it handles type parameters, lambda analysis,
 -- type variable substitution, accumulator unification, and body annotation.
@@ -4954,13 +5165,52 @@ encodeTermDefinition = def "encodeTermDefinition" $
         (Lists.zip (var "fixedDoms") (var "params"))) $
       "jcod" <<~ (encodeType @@ var "aliases2" @@ Sets.empty @@ var "fixedCod") $
       "result" <~ (JavaUtilsSource.javaTypeToJavaResult @@ var "jcod") $
-      "jbody" <<~ (encodeTerm @@ var "env3" @@ var "annotatedBody") $
       "mods" <~ list [inject Java._InterfaceMethodModifier Java._InterfaceMethodModifier_static unit] $
       "jname" <~ (JavaUtilsSource.sanitizeJavaName @@ (Formatting.decapitalize @@ (Names.localNameOf @@ var "name"))) $
-      "returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
+      -- TCO disabled for now: instanceof chains cause significant regression vs visitor pattern.
+      -- To re-enable, restore the following:
+      --   "isTCO" <~ (Logic.and
+      --     (Logic.not $ Lists.null (var "params"))
+      --     (CoderUtils.isSelfTailRecursive @@ var "name" @@ var "body")) $
+      "isTCO" <~ boolean False $
+      "methodBody" <<~ (Logic.ifElse (var "isTCO")
+        -- TCO path: wrap body in while(true) loop
+        -- Note: bindingStmts (let-binding prefixes) go INSIDE the while loop so they are
+        -- re-evaluated each iteration when parameters change via reassignment + continue.
+        -- Create snapshot names for each parameter (e.g. term -> term_tco) so that
+        -- non-continue branches can capture effectively-final variables in lambdas.
+        ("tcoSuffix" <~ string "_tco" $
+          "snapshotNames" <~ Lists.map ("p" ~> wrap _Name (Strings.cat2 (unwrap _Name @@ var "p") (var "tcoSuffix"))) (var "params") $
+          "tcoVarRenames" <~ (Maps.fromList (Lists.zip (var "params") (var "snapshotNames"))) $
+          -- Generate: final var param_tco = param;
+          "snapshotDecls" <~ Lists.map ("pair" ~>
+            JavaUtilsSource.finalVarDeclarationStatement
+              @@ (JavaUtilsSource.variableToJavaIdentifier @@ Pairs.second (var "pair"))
+              @@ (JavaUtilsSource.javaIdentifierToJavaExpression
+                    @@ (JavaUtilsSource.variableToJavaIdentifier @@ Pairs.first (var "pair"))))
+            (Lists.zip (var "params") (var "snapshotNames")) $
+          -- For TCO, re-wrap the body with any let-bindings so encodeTermTCO handles them
+          -- with the renamed environment (tcoVarRenames). This ensures let-bound lambdas
+          -- capture the effectively-final snapshot variables instead of the reassigned parameters.
+          "tcoBody" <~ Logic.ifElse (Lists.null (var "bindings"))
+            (var "annotatedBody")
+            (Core.termLet (Core.let_ (var "bindings") (var "annotatedBody"))) $
+          "tcoStmts" <<~ (encodeTermTCO @@ var "env2WithTypeParams" @@ var "name" @@ var "params" @@ var "tcoVarRenames" @@ int32 0 @@ var "tcoBody") $
+          "whileBodyStmts" <~ Lists.concat2 (var "snapshotDecls") (var "tcoStmts") $
+          "whileBodyBlock" <~ (JavaDsl.statementWithoutTrailing (JavaDsl.stmtBlock (JavaDsl.block (var "whileBodyStmts")))) $
+          "noCond" <~ (nothing :: TTerm (Maybe Java.Expression)) $
+          "whileStmt" <~ (JavaDsl.blockStatementStatement
+            (JavaDsl.statementWhile (record Java._WhileStatement [
+              Java._WhileStatement_cond>>: var "noCond",
+              Java._WhileStatement_body>>: var "whileBodyBlock"]))) $
+          produce $ list [var "whileStmt"])
+        -- Normal path: encode body as expression with return
+        ("jbody" <<~ (encodeTerm @@ var "env3" @@ var "annotatedBody") $
+          "returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
+          produce $ Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))) $
       Flows.pure (JavaUtilsSource.interfaceMethodDeclaration @@ var "mods" @@ var "jparams"
         @@ var "jname" @@ var "jformalParams" @@ var "result"
-        @@ just (Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))))
+        @@ just (var "methodBody")))
 
 -- | Encode all definitions in a module to Java compilation units.
 encodeDefinitions :: TBinding (Module -> [Definition] -> Flow Graph (M.Map Name Java.CompilationUnit))

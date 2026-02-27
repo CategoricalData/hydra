@@ -8,8 +8,6 @@ import hydra.graph.Graph;
 import hydra.json.writer.Writer;
 import hydra.pg.model.Edge;
 import hydra.pg.model.Element;
-import hydra.pg.model.ElementEdge;
-import hydra.pg.model.ElementVertex;
 import hydra.pg.model.LazyGraph;
 import hydra.pg.model.Vertex;
 import hydra.relational.RelationName;
@@ -150,8 +148,8 @@ public class Demo {
         LazyGraph<Term> g = transformTables(sourceRoot, tableSchemas, graphMapping);
         List<Element<Term>> els = lazyGraphToElements(g);
 
-        long vertexCount = els.stream().filter(e -> e instanceof ElementVertex).count();
-        long edgeCount = els.stream().filter(e -> e instanceof ElementEdge).count();
+        long vertexCount = els.stream().filter(e -> e instanceof Element.Vertex).count();
+        long edgeCount = els.stream().filter(e -> e instanceof Element.Edge).count();
 
         System.out.println("Transforming to property graph...");
         System.out.println("  Vertices: " + vertexCount);
@@ -178,10 +176,10 @@ public class Demo {
     private static List<Element<Term>> lazyGraphToElements(LazyGraph<Term> graph) {
         List<Element<Term>> elements = new ArrayList<>();
         for (Vertex<Term> v : graph.vertices) {
-            elements.add(new ElementVertex<>(v));
+            elements.add(new Element.Vertex<>(v));
         }
         for (Edge<Term> e : graph.edges) {
-            elements.add(new ElementEdge<>(e));
+            elements.add(new Element.Edge<>(e));
         }
         return elements;
     }

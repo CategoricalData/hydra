@@ -136,22 +136,14 @@ def evaluation_style(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_evaluation_style_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
-                @lru_cache(1)
-                def tname() -> hydra.core.Name:
-                    return inj.type_name
-                @lru_cache(1)
-                def field() -> hydra.core.Field:
-                    return inj.field
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return field().name
-                @lru_cache(1)
-                def fterm() -> hydra.core.Term:
-                    return field().term
+                tname = inj.type_name
+                field = inj.field
+                fname = field.name
+                fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.testing.EvaluationStyle]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("eager"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.EvaluationStyle.EAGER), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("lazy"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.EvaluationStyle.LAZY), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.testing.EvaluationStyle"))
@@ -187,22 +179,14 @@ def fold_operation(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_fold_operation_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
-                @lru_cache(1)
-                def tname() -> hydra.core.Name:
-                    return inj.type_name
-                @lru_cache(1)
-                def field() -> hydra.core.Field:
-                    return inj.field
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return field().name
-                @lru_cache(1)
-                def fterm() -> hydra.core.Term:
-                    return field().term
+                tname = inj.type_name
+                field = inj.field
+                fname = field.name
+                fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.testing.FoldOperation]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("sumInt32Literals"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.FoldOperation.SUM_INT32_LITERALS), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("collectListLengths"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.FoldOperation.COLLECT_LIST_LENGTHS), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("collectLabels"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.FoldOperation.COLLECT_LABELS), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.testing.FoldOperation"))
@@ -277,22 +261,14 @@ def hoist_predicate(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_hoist_predicate_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
-                @lru_cache(1)
-                def tname() -> hydra.core.Name:
-                    return inj.type_name
-                @lru_cache(1)
-                def field() -> hydra.core.Field:
-                    return inj.field
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return field().name
-                @lru_cache(1)
-                def fterm() -> hydra.core.Term:
-                    return field().term
+                tname = inj.type_name
+                field = inj.field
+                fname = field.name
+                fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.testing.HoistPredicate]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("caseStatements"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.HoistPredicate.CASE_STATEMENTS), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("applications"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.HoistPredicate.APPLICATIONS), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("lists"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.HoistPredicate.LISTS), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("nothing"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.HoistPredicate.NOTHING), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.testing.HoistPredicate"))
@@ -520,22 +496,14 @@ def term_rewriter(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_term_rewriter_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
-                @lru_cache(1)
-                def tname() -> hydra.core.Name:
-                    return inj.type_name
-                @lru_cache(1)
-                def field() -> hydra.core.Field:
-                    return inj.field
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return field().name
-                @lru_cache(1)
-                def fterm() -> hydra.core.Term:
-                    return field().term
+                tname = inj.type_name
+                field = inj.field
+                fname = field.name
+                fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.testing.TermRewriter]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("replaceFooWithBar"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.TermRewriter.REPLACE_FOO_WITH_BAR), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("replaceInt32WithInt64"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.TermRewriter.REPLACE_INT32_WITH_INT64), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.testing.TermRewriter"))
@@ -558,22 +526,14 @@ def type_rewriter(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_type_rewriter_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
-                @lru_cache(1)
-                def tname() -> hydra.core.Name:
-                    return inj.type_name
-                @lru_cache(1)
-                def field() -> hydra.core.Field:
-                    return inj.field
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return field().name
-                @lru_cache(1)
-                def fterm() -> hydra.core.Term:
-                    return field().term
+                tname = inj.type_name
+                field = inj.field
+                fname = field.name
+                fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.testing.TypeRewriter]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("replaceStringWithInt32"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.testing.TypeRewriter.REPLACE_STRING_WITH_INT32), hydra.extract.helpers.decode_unit(cx, input)))),))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.testing.TypeRewriter"))
@@ -965,22 +925,14 @@ def test_case(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_testing_test_case_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
-                @lru_cache(1)
-                def tname() -> hydra.core.Name:
-                    return inj.type_name
-                @lru_cache(1)
-                def field() -> hydra.core.Field:
-                    return inj.field
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return field().name
-                @lru_cache(1)
-                def fterm() -> hydra.core.Term:
-                    return field().term
+                tname = inj.type_name
+                field = inj.field
+                fname = field.name
+                fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.util.DecodingError, hydra.testing.TestCase]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("alphaConversion"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseAlphaConversion(t))), alpha_conversion_test_case(cx, input)))), (hydra.core.Name("caseConversion"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseCaseConversion(t))), case_conversion_test_case(cx, input)))), (hydra.core.Name("deannotateTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseDeannotateTerm(t))), deannotate_term_test_case(cx, input)))), (hydra.core.Name("deannotateType"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseDeannotateType(t))), deannotate_type_test_case(cx, input)))), (hydra.core.Name("delegatedEvaluation"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseDelegatedEvaluation(t))), delegated_evaluation_test_case(cx, input)))), (hydra.core.Name("etaExpansion"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseEtaExpansion(t))), eta_expansion_test_case(cx, input)))), (hydra.core.Name("flattenLetTerms"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseFlattenLetTerms(t))), flatten_let_terms_test_case(cx, input)))), (hydra.core.Name("freeVariables"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseFreeVariables(t))), free_variables_test_case(cx, input)))), (hydra.core.Name("evaluation"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseEvaluation(t))), evaluation_test_case(cx, input)))), (hydra.core.Name("inference"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseInference(t))), inference_test_case(cx, input)))), (hydra.core.Name("inferenceFailure"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseInferenceFailure(t))), inference_failure_test_case(cx, input)))), (hydra.core.Name("jsonCoder"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseJsonCoder(t))), json_coder_test_case(cx, input)))), (hydra.core.Name("jsonDecode"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseJsonDecode(t))), json_decode_test_case(cx, input)))), (hydra.core.Name("jsonEncode"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseJsonEncode(t))), json_encode_test_case(cx, input)))), (hydra.core.Name("jsonParser"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseJsonParser(t))), json_parser_test_case(cx, input)))), (hydra.core.Name("jsonRoundtrip"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseJsonRoundtrip(t))), json_roundtrip_test_case(cx, input)))), (hydra.core.Name("jsonWriter"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseJsonWriter(t))), json_writer_test_case(cx, input)))), (hydra.core.Name("liftLambdaAboveLet"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseLiftLambdaAboveLet(t))), lift_lambda_above_let_test_case(cx, input)))), (hydra.core.Name("serialization"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseSerialization(t))), serialization_test_case(cx, input)))), (hydra.core.Name("simplifyTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseSimplifyTerm(t))), simplify_term_test_case(cx, input)))), (hydra.core.Name("topologicalSort"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseTopologicalSort(t))), topological_sort_test_case(cx, input)))), (hydra.core.Name("topologicalSortBindings"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseTopologicalSortBindings(t))), topological_sort_bindings_test_case(cx, input)))), (hydra.core.Name("topologicalSortSCC"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseTopologicalSortSCC(t))), topological_sort_s_c_c_test_case(cx, input)))), (hydra.core.Name("typeChecking"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseTypeChecking(t))), type_checking_test_case(cx, input)))), (hydra.core.Name("typeCheckingFailure"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseTypeCheckingFailure(t))), type_checking_failure_test_case(cx, input)))), (hydra.core.Name("typeReduction"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseTypeReduction(t))), type_reduction_test_case(cx, input)))), (hydra.core.Name("normalizeTypeVariables"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseNormalizeTypeVariables(t))), normalize_type_variables_test_case(cx, input)))), (hydra.core.Name("foldOverTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseFoldOverTerm(t))), fold_over_term_test_case(cx, input)))), (hydra.core.Name("rewriteTerm"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseRewriteTerm(t))), rewrite_term_test_case(cx, input)))), (hydra.core.Name("rewriteType"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseRewriteType(t))), rewrite_type_test_case(cx, input)))), (hydra.core.Name("hoistSubterms"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseHoistSubterms(t))), hoist_subterms_test_case(cx, input)))), (hydra.core.Name("hoistCaseStatements"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseHoistCaseStatements(t))), hoist_case_statements_test_case(cx, input)))), (hydra.core.Name("hoistLetBindings"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseHoistLetBindings(t))), hoist_let_bindings_test_case(cx, input)))), (hydra.core.Name("hoistPolymorphicLetBindings"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseHoistPolymorphicLetBindings(t))), hoist_polymorphic_let_bindings_test_case(cx, input)))), (hydra.core.Name("substInType"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseSubstInType(t))), subst_in_type_test_case(cx, input)))), (hydra.core.Name("variableOccursInType"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseVariableOccursInType(t))), variable_occurs_in_type_test_case(cx, input)))), (hydra.core.Name("unifyTypes"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseUnifyTypes(t))), unify_types_test_case(cx, input)))), (hydra.core.Name("joinTypes"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseJoinTypes(t))), join_types_test_case(cx, input)))), (hydra.core.Name("unshadowVariables"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.testing.TestCase, hydra.testing.TestCaseUnshadowVariables(t))), unshadow_variables_test_case(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.testing.TestCase"))

@@ -396,8 +396,8 @@ public interface Serde {
       }
       
       @Override
-      public hydra.ast.Expr visit(hydra.ext.python.syntax.CompoundStatement.While ignored) {
-        return hydra.serialization.Serialization.cst("while ...");
+      public hydra.ast.Expr visit(hydra.ext.python.syntax.CompoundStatement.While w) {
+        return hydra.ext.python.serde.Serde.encodeWhileStatement((w).value);
       }
       
       @Override
@@ -1536,6 +1536,25 @@ public interface Serde {
   
   static hydra.ast.Expr encodeValuePattern(hydra.ext.python.syntax.ValuePattern vp) {
     return hydra.ext.python.serde.Serde.encodeAttribute((vp).value);
+  }
+  
+  static hydra.ast.Expr encodeWhileStatement(hydra.ext.python.syntax.WhileStatement ws) {
+    hydra.ext.python.syntax.Block body = (ws).body;
+    hydra.ext.python.syntax.NamedExpression cond = (ws).condition;
+    hydra.util.Maybe<hydra.ext.python.syntax.Block> else_ = (ws).else_;
+    return hydra.serialization.Serialization.newlineSep(hydra.lib.maybes.Cat.apply(java.util.List.of(
+      hydra.util.Maybe.just(hydra.serialization.Serialization.newlineSep(java.util.List.of(
+        hydra.serialization.Serialization.spaceSep(java.util.List.of(
+          hydra.serialization.Serialization.cst("while"),
+          hydra.serialization.Serialization.noSep(java.util.List.of(
+            hydra.ext.python.serde.Serde.encodeNamedExpression(cond),
+            hydra.serialization.Serialization.cst(":"))))),
+        hydra.ext.python.serde.Serde.encodeBlock(body)))),
+      hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.ext.python.syntax.Block, hydra.ast.Expr>) (eb -> hydra.serialization.Serialization.newlineSep(java.util.List.of(
+          hydra.serialization.Serialization.cst("else:"),
+          hydra.ext.python.serde.Serde.encodeBlock(eb)))),
+        else_))));
   }
   
   static String escapePythonString(Boolean doubleQuoted, String s) {

@@ -1134,8 +1134,16 @@ writeVariableModifier m = ((\x -> case x of
   Syntax.VariableModifierAnnotation v1 -> (writeAnnotation v1)
   Syntax.VariableModifierFinal -> (Serialization.cst "final")) m)
 
-writeWhileStatement :: (t0 -> Ast.Expr)
-writeWhileStatement _ = (Serialization.cst "STUB:WhileStatement")
+writeWhileStatement :: (Syntax.WhileStatement -> Ast.Expr)
+writeWhileStatement ws =  
+  let mcond = (Syntax.whileStatementCond ws) 
+      body = (Syntax.whileStatementBody ws)
+      condSer = (Maybes.maybe (Serialization.cst "true") (\c -> writeExpression c) mcond)
+  in (Serialization.spaceSep [
+    Serialization.cst "while",
+    (Serialization.parenList False [
+      condSer]),
+    (Serialization.curlyBlock Serialization.fullBlockStyle (writeStatement body))])
 
 writeWildcard :: (Syntax.Wildcard -> Ast.Expr)
 writeWildcard w =  

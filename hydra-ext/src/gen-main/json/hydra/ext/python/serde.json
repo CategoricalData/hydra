@@ -1982,10 +1982,10 @@
                                     "lambda": {
                                       "body": {
                                         "application": {
-                                          "argument": {"literal": {"string": "while ..."}},
-                                          "function": {"variable": "hydra.serialization.cst"}}},
+                                          "argument": {"variable": "w"},
+                                          "function": {"variable": "hydra.ext.python.serde.encodeWhileStatement"}}},
                                       "domain": [{"variable": "hydra.ext.python.syntax.WhileStatement"}],
-                                      "parameter": "_"}}}},
+                                      "parameter": "w"}}}},
                               {
                                 "name": "match",
                                 "term": {
@@ -7709,6 +7709,152 @@
             "function": {
               "codomain": {"variable": "hydra.ast.Expr"},
               "domain": {"variable": "hydra.ext.python.syntax.ValuePattern"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.python.serde.encodeWhileStatement",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Serialize a while statement"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "cond",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "ws"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {
+                                    "field": "condition",
+                                    "typeName": "hydra.ext.python.syntax.WhileStatement"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ext.python.syntax.NamedExpression"},
+                            "variables": []}]},
+                      {
+                        "name": "body",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "ws"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {
+                                    "field": "body",
+                                    "typeName": "hydra.ext.python.syntax.WhileStatement"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ext.python.syntax.Block"},
+                            "variables": []}]},
+                      {
+                        "name": "else_",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "ws"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {
+                                    "field": "else",
+                                    "typeName": "hydra.ext.python.syntax.WhileStatement"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"maybe": {"variable": "hydra.ext.python.syntax.Block"}},
+                            "variables": []}]}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {
+                              "list": [
+                                {
+                                  "maybe": [
+                                    {
+                                      "application": {
+                                        "argument": {
+                                          "list": [
+                                            {
+                                              "application": {
+                                                "argument": {
+                                                  "list": [
+                                                    {
+                                                      "application": {
+                                                        "argument": {"literal": {"string": "while"}},
+                                                        "function": {"variable": "hydra.serialization.cst"}}},
+                                                    {
+                                                      "application": {
+                                                        "argument": {
+                                                          "list": [
+                                                            {
+                                                              "application": {
+                                                                "argument": {"variable": "cond"},
+                                                                "function": {"variable": "hydra.ext.python.serde.encodeNamedExpression"}}},
+                                                            {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": ":"}},
+                                                                "function": {"variable": "hydra.serialization.cst"}}}]},
+                                                        "function": {"variable": "hydra.serialization.noSep"}}}]},
+                                                "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                            {
+                                              "application": {
+                                                "argument": {"variable": "body"},
+                                                "function": {"variable": "hydra.ext.python.serde.encodeBlock"}}}]},
+                                        "function": {"variable": "hydra.serialization.newlineSep"}}}]},
+                                {
+                                  "application": {
+                                    "argument": {"variable": "else_"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {
+                                                    "list": [
+                                                      {
+                                                        "application": {
+                                                          "argument": {"literal": {"string": "else:"}},
+                                                          "function": {"variable": "hydra.serialization.cst"}}},
+                                                      {
+                                                        "application": {
+                                                          "argument": {"variable": "eb"},
+                                                          "function": {"variable": "hydra.ext.python.serde.encodeBlock"}}}]},
+                                                  "function": {"variable": "hydra.serialization.newlineSep"}}},
+                                              "domain": [{"variable": "hydra.ext.python.syntax.Block"}],
+                                              "parameter": "eb"}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.maybes.map"}},
+                                                "type": {"variable": "hydra.ext.python.syntax.Block"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}}}}]},
+                            "function": {
+                              "typeApplication": {
+                                "body": {"function": {"primitive": "hydra.lib.maybes.cat"}},
+                                "type": {"variable": "hydra.ast.Expr"}}}}},
+                        "function": {"variable": "hydra.serialization.newlineSep"}}}}},
+                "domain": [{"variable": "hydra.ext.python.syntax.WhileStatement"}],
+                "parameter": "ws"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"variable": "hydra.ext.python.syntax.WhileStatement"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.python.serde.escapePythonString",

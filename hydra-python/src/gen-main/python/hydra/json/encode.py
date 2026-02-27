@@ -126,35 +126,25 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
                 @lru_cache(1)
                 def fname() -> str:
                     return f.name.value
-                @lru_cache(1)
-                def fterm() -> hydra.core.Term:
-                    return f.term
+                fterm = f.term
                 @lru_cache(1)
                 def encoded_field() -> Either[str, hydra.json.model.Value]:
-                    return to_json(fterm())
+                    return to_json(fterm)
                 return hydra.lib.eithers.map((lambda v: (fname(), v)), encoded_field())
-            @lru_cache(1)
-            def fields() -> frozenlist[hydra.core.Field]:
-                return r.fields
+            fields = r.fields
             @lru_cache(1)
             def encoded_fields() -> Either[str, frozenlist[tuple[str, hydra.json.model.Value]]]:
-                return hydra.lib.eithers.map_list((lambda x1: encode_field(x1)), fields())
+                return hydra.lib.eithers.map_list((lambda x1: encode_field(x1)), fields)
             return hydra.lib.eithers.map((lambda fs: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(fs)))), encoded_fields())
         
         case hydra.core.TermUnion(value=inj):
-            @lru_cache(1)
-            def field() -> hydra.core.Field:
-                return inj.field
-            @lru_cache(1)
-            def fname() -> str:
-                return field().name.value
-            @lru_cache(1)
-            def fterm() -> hydra.core.Term:
-                return field().term
+            field = inj.field
+            fname = field.name.value
+            fterm = field.term
             @lru_cache(1)
             def encoded_union() -> Either[str, hydra.json.model.Value]:
-                return to_json(fterm())
-            return hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(((fname(), v),))))), encoded_union())
+                return to_json(fterm)
+            return hydra.lib.eithers.map((lambda v: cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(((fname, v),))))), encoded_union())
         
         case hydra.core.TermUnit():
             return Right(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.empty())))

@@ -2711,8 +2711,21 @@ public interface Serde {
     });
   }
   
-  static <T0> hydra.ast.Expr writeWhileStatement(T0 ignored) {
-    return hydra.serialization.Serialization.cst("STUB:WhileStatement");
+  static hydra.ast.Expr writeWhileStatement(hydra.ext.java.syntax.WhileStatement ws) {
+    hydra.ext.java.syntax.Statement body = (ws).body;
+    hydra.util.Maybe<hydra.ext.java.syntax.Expression> mcond = (ws).cond;
+    hydra.util.Lazy<hydra.ast.Expr> condSer = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
+      hydra.serialization.Serialization.cst("true"),
+      (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.ast.Expr>) (c -> hydra.ext.java.serde.Serde.writeExpression(c)),
+      mcond));
+    return hydra.serialization.Serialization.spaceSep(java.util.List.of(
+      hydra.serialization.Serialization.cst("while"),
+      hydra.serialization.Serialization.parenList(
+        false,
+        java.util.List.of(condSer.get())),
+      hydra.serialization.Serialization.curlyBlock(
+        hydra.serialization.Serialization.fullBlockStyle(),
+        hydra.ext.java.serde.Serde.writeStatement(body))));
   }
   
   static hydra.ast.Expr writeWildcard(hydra.ext.java.syntax.Wildcard w) {

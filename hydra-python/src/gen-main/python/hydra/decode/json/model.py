@@ -22,18 +22,10 @@ def value(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_json_model_value_1(cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
-                @lru_cache(1)
-                def tname() -> hydra.core.Name:
-                    return inj.type_name
-                @lru_cache(1)
-                def field() -> hydra.core.Field:
-                    return inj.field
-                @lru_cache(1)
-                def fname() -> hydra.core.Name:
-                    return field().name
-                @lru_cache(1)
-                def fterm() -> hydra.core.Term:
-                    return field().term
+                tname = inj.type_name
+                field = inj.field
+                fname = field.name
+                fterm = field.term
                 @lru_cache(1)
                 def variant_map():
                     def _hoist_variant_map_1(v12):
@@ -100,7 +92,7 @@ def value(cx: hydra.graph.Graph, raw: hydra.core.Term):
                             case _:
                                 return Left(hydra.util.DecodingError("expected literal"))
                     return hydra.lib.maps.from_list(((hydra.core.Name("array"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.json.model.Value, hydra.json.model.ValueArray(t))), hydra.extract.helpers.decode_list((lambda x1, x2: value(x1, x2)), cx, input)))), (hydra.core.Name("boolean"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.json.model.Value, hydra.json.model.ValueBoolean(t))), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_variant_map_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("null"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.json.model.Value, hydra.json.model.ValueNull())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("number"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.json.model.Value, hydra.json.model.ValueNumber(t))), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_variant_map_5(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("object"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.json.model.Value, hydra.json.model.ValueObject(t))), hydra.extract.helpers.decode_map((lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_variant_map_7(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), (lambda x1, x2: value(x1, x2)), cx, input)))), (hydra.core.Name("string"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.json.model.Value, hydra.json.model.ValueString(t))), hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped2: _hoist_variant_map_9(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input)))))))
-                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname().value, " in union type ", tname().value)))), (lambda f: f(fterm())), hydra.lib.maps.lookup(fname(), variant_map()))
+                return hydra.lib.maybes.maybe(Left(hydra.util.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.util.DecodingError("expected union of type hydra.json.model.Value"))

@@ -213,6 +213,7 @@ module_ = Module ns elements
       toBinding encodeTypedAssignment,
       toBinding encodeUntypedAssignment,
       toBinding encodeValuePattern,
+      toBinding encodeWhileStatement,
       toBinding escapePythonString,
       toBinding toPythonComments]
 
@@ -281,7 +282,7 @@ encodeCompoundStatement = def "encodeCompoundStatement" $
       Py._CompoundStatement_with>>: lambda "_" $ Serialization.cst @@ string "with ...",
       Py._CompoundStatement_for>>: lambda "_" $ Serialization.cst @@ string "for ...",
       Py._CompoundStatement_try>>: lambda "_" $ Serialization.cst @@ string "try ...",
-      Py._CompoundStatement_while>>: lambda "_" $ Serialization.cst @@ string "while ...",
+      Py._CompoundStatement_while>>: lambda "w" $ encodeWhileStatement @@ var "w",
       Py._CompoundStatement_match>>: lambda "m" $ encodeMatchStatement @@ var "m"]
 
 -- =============================================================================
@@ -1107,6 +1108,31 @@ encodeRaiseExpression = def "encodeRaiseExpression" $
       Maybes.map (lambda "f" $
         Serialization.spaceSep @@ list [Serialization.cst @@ string "from", encodeExpression @@ var "f"])
         (var "from_")])
+
+-- =============================================================================
+-- While statements
+-- =============================================================================
+
+encodeWhileStatement :: TBinding (Py.WhileStatement -> Expr)
+encodeWhileStatement = def "encodeWhileStatement" $
+  doc "Serialize a while statement" $
+  lambda "ws" $ lets [
+    "cond">: project Py._WhileStatement Py._WhileStatement_condition @@ var "ws",
+    "body">: project Py._WhileStatement Py._WhileStatement_body @@ var "ws",
+    "else_">: project Py._WhileStatement Py._WhileStatement_else @@ var "ws"] $
+    Serialization.newlineSep @@ Maybes.cat (list [
+      just $ Serialization.newlineSep @@ list [
+        Serialization.spaceSep @@ list [
+          Serialization.cst @@ string "while",
+          Serialization.noSep @@ list [
+            encodeNamedExpression @@ var "cond",
+            Serialization.cst @@ string ":"]],
+        encodeBlock @@ var "body"],
+      Maybes.map (lambda "eb" $
+        Serialization.newlineSep @@ list [
+          Serialization.cst @@ string "else:",
+          encodeBlock @@ var "eb"])
+        (var "else_")])
 
 -- =============================================================================
 -- Match statements

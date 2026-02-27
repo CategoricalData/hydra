@@ -33,13 +33,9 @@ def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydr
     @lru_cache(1)
     def qual_name() -> hydra.module.QualifiedName:
         return qualify_name(name)
-    @lru_cache(1)
-    def mns() -> Maybe[hydra.module.Namespace]:
-        return qual_name().namespace
-    @lru_cache(1)
-    def local() -> str:
-        return qual_name().local
-    return hydra.lib.maybes.maybe(name.value, (lambda ns: hydra.lib.maybes.maybe(local(), (lambda pre: hydra.lib.strings.cat((pre, ":", local()))), hydra.lib.maps.lookup(ns, namespaces))), mns())
+    mns = qual_name().namespace
+    local = qual_name().local
+    return hydra.lib.maybes.maybe(name.value, (lambda ns: hydra.lib.maybes.maybe(local, (lambda pre: hydra.lib.strings.cat((pre, ":", local))), hydra.lib.maps.lookup(ns, namespaces))), mns)
 
 def local_name_of(arg_: hydra.core.Name) -> str:
     r"""Extract the local part of a name."""

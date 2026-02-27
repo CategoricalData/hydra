@@ -19,6 +19,7 @@ import java.util.Set;
  * regenerate Hydra from a language-independent JSON representation.
  *
  * Usage:
+ * <pre>{@code
  *   java hydra.Bootstrap --target <haskell|java|python> --json-dir <path> [OPTIONS]
  *
  * Options:
@@ -28,6 +29,7 @@ import java.util.Set;
  *   --ext-json-dir <dir>   Directory containing ext JSON modules (for --include-coders)
  *   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
  *   --types-only           Only generate type-defining modules
+ * }</pre>
  */
 public class Bootstrap {
 

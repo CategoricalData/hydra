@@ -7,6 +7,7 @@ module Hydra.CoderUtils where
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Checking as Checking
+import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
@@ -139,6 +140,83 @@ isComplexBinding tc b =
         in  
           let isComplex = (isComplexTerm tc term)
           in (Logic.or (Logic.or isPolymorphic isNonNullary) isComplex)))
+
+-- | Check if a term is trivially cheap (no thunking needed)
+isTrivialTerm :: (Core.Term -> Bool)
+isTrivialTerm t = ((\x -> case x of
+  Core.TermLiteral _ -> True
+  Core.TermVariable _ -> True
+  Core.TermUnit -> True
+  Core.TermApplication v1 ->  
+    let fun = (Core.applicationFunction v1)
+    in  
+      let arg = (Core.applicationArgument v1)
+      in ((\x -> case x of
+        Core.TermFunction v2 -> ((\x -> case x of
+          Core.FunctionElimination v3 -> ((\x -> case x of
+            Core.EliminationRecord _ -> (isTrivialTerm arg)
+            _ -> False) v3)
+          _ -> False) v2)
+        _ -> False) fun)
+  Core.TermMaybe v1 -> (Maybes.maybe True (\inner -> isTrivialTerm inner) v1)
+  Core.TermTypeApplication v1 -> (isTrivialTerm (Core.typeApplicationTermBody v1))
+  Core.TermTypeLambda v1 -> (isTrivialTerm (Core.typeLambdaBody v1))
+  _ -> False) (Rewriting.deannotateTerm t))
+
+-- | Check if a term body is self-tail-recursive with respect to a function name
+isSelfTailRecursive :: (Core.Name -> Core.Term -> Bool)
+isSelfTailRecursive funcName body =  
+  let callsSelf = (Logic.not (Rewriting.isFreeVariableInTerm funcName body))
+  in (Logic.ifElse callsSelf (isTailRecursiveInTailPosition funcName body) False)
+
+-- | Check that all self-references are in tail position
+isTailRecursiveInTailPosition :: (Core.Name -> Core.Term -> Bool)
+isTailRecursiveInTailPosition funcName term =  
+  let stripped = (Rewriting.deannotateAndDetypeTerm term)
+  in ((\x -> case x of
+    Core.TermApplication _ ->  
+      let gathered = (gatherApplications stripped)
+      in  
+        let gatherArgs = (Pairs.first gathered)
+        in  
+          let gatherFun = (Pairs.second gathered)
+          in  
+            let strippedFun = (Rewriting.deannotateAndDetypeTerm gatherFun)
+            in ((\x -> case x of
+              Core.TermVariable v2 -> (Logic.ifElse (Equality.equal v2 funcName) ( 
+                let argsNoFunc = (Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs)
+                in  
+                  let argsNoLambda = (Lists.foldl (\ok -> \arg -> Logic.and ok (Logic.not (Rewriting.foldOverTerm Coders.TraversalOrderPre (\found -> \t -> Logic.or found ((\x -> case x of
+                          Core.TermFunction v3 -> ((\x -> case x of
+                            Core.FunctionLambda v4 ->  
+                              let ignore = (Core.lambdaBody v4)
+                              in True
+                            _ -> False) v3)
+                          _ -> False) t)) False arg))) True gatherArgs)
+                  in (Logic.and argsNoFunc argsNoLambda)) (Rewriting.isFreeVariableInTerm funcName term))
+              Core.TermFunction v2 -> ((\x -> case x of
+                Core.FunctionElimination v3 -> ((\x -> case x of
+                  Core.EliminationUnion v4 ->  
+                    let cases_ = (Core.caseStatementCases v4)
+                    in  
+                      let dflt = (Core.caseStatementDefault v4)
+                      in  
+                        let branchesOk = (Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_)
+                        in  
+                          let dfltOk = (Maybes.maybe True (\d -> isTailRecursiveInTailPosition funcName d) dflt)
+                          in  
+                            let argsOk = (Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs)
+                            in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
+                  _ -> (Rewriting.isFreeVariableInTerm funcName term)) v3)
+                _ -> (Rewriting.isFreeVariableInTerm funcName term)) v2)
+              _ -> (Rewriting.isFreeVariableInTerm funcName term)) strippedFun)
+    Core.TermFunction v1 -> ((\x -> case x of
+      Core.FunctionLambda v2 -> (isTailRecursiveInTailPosition funcName (Core.lambdaBody v2))
+      _ -> (Rewriting.isFreeVariableInTerm funcName term)) v1)
+    Core.TermLet v1 ->  
+      let bindingsOk = (Lists.foldl (\ok -> \b -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v1))
+      in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v1)))
+    _ -> (Rewriting.isFreeVariableInTerm funcName term)) stripped)
 
 -- | Extract comments/description from a Binding
 commentsFromElement :: (Core.Binding -> Compute.Flow Graph.Graph (Maybe String))

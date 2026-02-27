@@ -27,6 +27,8 @@ import Hydra.Ext.Staging.Json.Schema.Coder
 import Hydra.Ext.Staging.Pegasus.Coder
 import Hydra.Ext.Staging.Protobuf.Coder
 import Hydra.Ext.Python.Coder (moduleToPython)
+import Hydra.Ext.Rust.Coder (moduleToRust)
+import Hydra.Ext.Rust.Language (rustLanguage)
 import Hydra.Ext.Staging.Scala.Coder
 
 import qualified Hydra.Json.Model as Json
@@ -100,6 +102,13 @@ writeProtobuf = generateSources moduleToProtobuf protobufLanguage True False Fal
 -- Note: Python uses doHoistCaseStatements=True to hoist case statements to let bindings
 writePython :: FP.FilePath -> [Module] -> [Module] -> IO ()
 writePython = generateSources moduleToPython pythonLanguage True True True False
+
+-- | Generate Rust source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+writeRust :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writeRust = generateSources moduleToRust rustLanguage True False False False
 
 -- | Generate Scala source files from modules.
 -- First argument: output directory

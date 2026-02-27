@@ -209,12 +209,15 @@ module_ = Module ns elements
       toBinding initialEnvironment,
       toBinding targetPythonVersion,
       -- Function analysis
+      toBinding pythonBindingMetadata,
       toBinding analyzePythonFunction,
       toBinding analyzePythonFunctionInline,
       -- withDefinitions context
       toBinding withDefinitions,
       -- Binding encoding
       toBinding encodeBindingAsAssignment,
+      -- Tail-call optimization
+      toBinding encodeTermMultilineTCO,
       toBinding encodeFunctionDefinition,
       toBinding encodeTermMultiline,
       toBinding encodeFunction,
@@ -1746,7 +1749,7 @@ withLet = def "withLet" $
   Schemas.withLetContext @@
     pythonEnvironmentGetTypeContext @@
     pythonEnvironmentSetTypeContext @@
-    CoderUtils.bindingMetadata
+    pythonBindingMetadata
 
 -- | Execute a computation with inline let context (no metadata, for walrus operators)
 --   Also adds binding names to inlineVariables so encodeVariable knows not to add call syntax.
@@ -1826,13 +1829,26 @@ initialEnvironment = def "initialEnvironment" $
       PyHelpers._PythonEnvironment_skipCasts>>: true,
       PyHelpers._PythonEnvironment_inlineVariables>>: Sets.empty]
 
+-- | Python-specific binding metadata function.
+--   Like CoderUtils.bindingMetadata, but skips metadata for trivial bindings.
+--   This prevents trivial let-bindings (field accesses, literals, plain variables)
+--   from being thunked with @lru_cache(1) and from getting () call syntax at reference sites.
+pythonBindingMetadata :: TBinding (TypeContext -> Binding -> Maybe Term)
+pythonBindingMetadata = def "pythonBindingMetadata" $
+  doc "Like bindingMetadata, but skips metadata for trivial bindings" $
+  "tc" ~> "b" ~>
+  Logic.ifElse (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "b"))
+    nothing
+    (CoderUtils.bindingMetadata @@ var "tc" @@ var "b")
+
 -- | Analyze a function term with Python-specific TypeContext management.
---   This is a wrapper around CoderUtils.analyzeFunctionTerm that provides the Python-specific
---   TypeContext getter and setter functions.
+--   This is a wrapper around CoderUtils.analyzeFunctionTermWith that provides the Python-specific
+--   TypeContext getter/setter and Python-specific binding metadata (which skips trivial bindings).
 analyzePythonFunction :: TBinding (PyHelpers.PythonEnvironment -> Term -> Flow PyHelpers.PyGraph (FunctionStructure PyHelpers.PythonEnvironment))
 analyzePythonFunction = def "analyzePythonFunction" $
   doc "Analyze a function term with Python-specific TypeContext management" $
-  CoderUtils.analyzeFunctionTerm @@
+  CoderUtils.analyzeFunctionTermWith @@
+    pythonBindingMetadata @@
     pythonEnvironmentGetTypeContext @@
     pythonEnvironmentSetTypeContext
 
@@ -1883,16 +1899,101 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env") $
     "isComplexVar" <~ (CoderUtils.isComplexVariable @@ var "tc" @@ var "name") $
     "termIsComplex" <~ (CoderUtils.isComplexTerm @@ var "tc" @@ var "term") $
+    "isTrivial" <~ (CoderUtils.isTrivialTerm @@ var "term") $
     -- Check if needs thunking based on type scheme arity and complexity
-    "needsThunk" <~ optCases (var "mts")
-      -- No type scheme: thunk if complex
-      (Logic.and (var "allowThunking") (Logic.or (var "isComplexVar") (var "termIsComplex")))
-      -- Has type scheme: thunk if arity == 0 and complex
-      ("ts" ~> Logic.and (var "allowThunking")
-        (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (Phantoms.int 0))
-                   (Logic.or (var "isComplexVar") (var "termIsComplex")))) $
+    -- Trivial terms (literals, variables, field projections) are never thunked
+    "needsThunk" <~ Logic.ifElse (var "isTrivial") (boolean False)
+      (optCases (var "mts")
+        -- No type scheme: thunk if complex
+        (Logic.and (var "allowThunking") (Logic.or (var "isComplexVar") (var "termIsComplex")))
+        -- Has type scheme: thunk if arity == 0 and complex
+        ("ts" ~> Logic.and (var "allowThunking")
+          (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (Phantoms.int 0))
+                     (Logic.or (var "isComplexVar") (var "termIsComplex"))))) $
     "pterm" <~ (Logic.ifElse (var "needsThunk") (makeThunk @@ var "pbody") (var "pbody")) $
     produce $ PyDsl.namedExpressionAssignment $ PyDsl.assignmentExpression (var "pyName") (var "pterm")
+
+-- =============================================================================
+-- Tail-call optimization (TCO)
+-- =============================================================================
+
+-- | Encode a term body for TCO: tail self-calls become param reassignment + continue.
+--   Non-recursive returns stay as normal return statements.
+encodeTermMultilineTCO :: TBinding (PyHelpers.PythonEnvironment
+  -> Name -> [Name] -> TTerm Term
+  -> Flow PyHelpers.PyGraph [Py.Statement])
+encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
+  doc "Encode a term body for TCO: tail self-calls become param reassignment + continue" $
+  "env" ~> "funcName" ~> "paramNames" ~> "term" ~>
+    "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
+    -- Check if this term is a direct self-tail-call: funcName(args...)
+    "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
+    "gatherArgs" <~ (Pairs.first $ var "gathered") $
+    "gatherFun" <~ (Pairs.second $ var "gathered") $
+    "strippedFun" <~ (Rewriting.deannotateAndDetypeTerm @@ var "gatherFun") $
+    -- Check for self-call pattern: Variable(funcName)
+    "isSelfCall" <~ (cases _Term (var "strippedFun")
+      (Just false) [
+        _Term_variable>>: "n" ~> Equality.equal (var "n") (var "funcName")]) $
+    Logic.ifElse (Logic.and (var "isSelfCall")
+                            (Equality.equal (Lists.length $ var "gatherArgs") (Lists.length $ var "paramNames")))
+      -- TAIL CALL: emit param reassignment + continue
+      ("pyArgs" <<~ Flows.mapList ("a" ~> encodeTermInline @@ var "env" @@ false @@ var "a") (var "gatherArgs") $
+        "assignments" <~ (Lists.map ("pair" ~>
+          "paramName" <~ (Pairs.first $ var "pair") $
+          "pyArg" <~ (Pairs.second $ var "pair") $
+          PyUtils.assignmentStatement
+            @@ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "paramName")
+            @@ var "pyArg")
+          (Lists.zip (var "paramNames") (var "pyArgs"))) $
+        "continueStmt" <~ (PyDsl.statementSimple $ list [PyDsl.simpleStatementContinue]) $
+        produce $ Lists.concat2 (var "assignments") (list [var "continueStmt"]))
+      -- NOT a self-call: check for case statement application
+      ("gathered2" <~ (CoderUtils.gatherApplications @@ var "term") $
+        "args2" <~ (Pairs.first $ var "gathered2") $
+        "body2" <~ (Pairs.second $ var "gathered2") $
+        Logic.ifElse (Equality.equal (Lists.length $ var "args2") (int32 1))
+          -- Single argument: try to match as case statement
+          ("arg" <~ (Lists.head $ var "args2") $
+            cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body2") (Just $
+              -- Default: not a case statement, encode as return
+              "expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+              produce $ list [PyUtils.returnSingle @@ var "expr"]) [
+              _Term_function>>: "f" ~>
+                cases _Function (var "f") (Just $
+                  "expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+                  produce $ list [PyUtils.returnSingle @@ var "expr"]) [
+                  _Function_elimination>>: "e" ~>
+                    cases _Elimination (var "e") (Just $
+                      "expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+                      produce $ list [PyUtils.returnSingle @@ var "expr"]) [
+                      _Elimination_union>>: "cs" ~>
+                        -- Case statement: use encodeCaseBlock with TCO-aware body encoder
+                        "tname" <~ (Core.caseStatementTypeName $ var "cs") $
+                        "dflt" <~ (Core.caseStatementDefault $ var "cs") $
+                        "cases_" <~ (Core.caseStatementCases $ var "cs") $
+                        "rt" <<~ (inGraphContext @@ (Schemas.requireUnionType @@ var "tname")) $
+                        "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
+                        "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
+                        "pyArg" <<~ (encodeTermInline @@ var "env" @@ false @@ var "arg") $
+                        -- Use TCO body encoder for each case branch
+                        "pyCases" <<~ (Flows.mapList
+                          (encodeCaseBlock @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum"
+                            @@ ("e2" ~> "t2" ~> encodeTermMultilineTCO @@ var "e2" @@ var "funcName" @@ var "paramNames" @@ var "t2"))
+                          (deduplicateCaseVariables @@ var "cases_")) $
+                        -- Default case: uses normal return encoding (base case is never a tail call)
+                        "pyDflt" <<~ (encodeDefaultCaseBlock
+                          @@ ("t2" ~> encodeTermInline @@ var "env" @@ false @@ var "t2")
+                          @@ var "isFull" @@ var "dflt" @@ var "tname") $
+                        "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
+                        "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $
+                          Phantoms.record Py._MatchStatement [
+                            Phantoms.field Py._MatchStatement_subject (var "subj"),
+                            Phantoms.field Py._MatchStatement_cases (Lists.concat2 (var "pyCases") (var "pyDflt"))]) $
+                        produce $ list [var "matchStmt"]]]])
+          -- Not a single-arg application: fall back to normal return
+          ("expr" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
+            produce $ list [PyUtils.returnSingle @@ var "expr"]))
 
 -- | Encode a function definition with parameters and body.
 --   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
@@ -1913,8 +2014,23 @@ encodeFunctionDefinition = def "encodeFunctionDefinition" $
           (just $ PyDsl.annotation $ var "pyTyp"))
       (Lists.zip (var "args") (var "doms")) $
     "pyParams" <~ (PyDsl.parametersParamNoDefault $ PyDsl.paramNoDefaultParameters (var "pyArgs") (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])) nothing) $
-    "stmts" <<~ (encodeTermMultiline @@ var "env" @@ var "body") $
-    "block" <~ (PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")]) $
+    -- Check for tail-call optimization opportunity
+    "isTCO" <~ (Logic.and
+      (Logic.not $ Lists.null (var "args"))
+      (CoderUtils.isSelfTailRecursive @@ var "name" @@ var "body")) $
+    "block" <<~ (Logic.ifElse (var "isTCO")
+      -- TCO path: wrap body in while True loop
+      -- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
+      -- re-evaluated each iteration when parameters change via reassignment + continue.
+      ("tcoStmts" <<~ (encodeTermMultilineTCO @@ var "env" @@ var "name" @@ var "args" @@ var "body") $
+        "trueExpr" <~ (PyDsl.namedExpressionSimple $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue) $
+        "whileBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [Lists.concat2 (var "prefixes") (var "tcoStmts")]) $
+        "whileStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementWhile $
+          PyDsl.whileStatement (var "trueExpr") (var "whileBody") nothing) $
+        produce $ PyUtils.indentedBlock @@ var "comment" @@ list [list [var "whileStmt"]])
+      -- Normal path: encode body as statements with return
+      ("stmts" <<~ (encodeTermMultiline @@ var "env" @@ var "body") $
+        produce $ PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")])) $
     -- Encode return type if present
     "mreturnType" <<~ optCases (var "mcod")
       (Flows.pure (nothing :: TTerm (Maybe Py.Expression)))
@@ -2070,8 +2186,9 @@ encodeTermAssignment = def "encodeTermAssignment" $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env2") $
     "binding" <~ (Core.binding (var "name") (var "term") (just $ var "ts")) $
     "isComplex" <~ (CoderUtils.isComplexBinding @@ var "tc" @@ var "binding") $
-    Logic.ifElse (var "isComplex")
-      -- Complex binding: use function definition
+    "isTrivial" <~ (CoderUtils.isTrivialTerm @@ var "term") $
+    Logic.ifElse (Logic.and (var "isComplex") (Logic.not (var "isTrivial")))
+      -- Complex binding (non-trivial): use function definition
       (withBindings @@ var "bindings" @@
         ("bindingStmts" <<~ (Flows.mapList (encodeBindingAs @@ var "env2") (var "bindings")) $
           encodeFunctionDefinition @@ var "env2" @@ var "name" @@ var "tparams" @@ var "params" @@ var "body" @@ var "doms" @@ var "mcod" @@ var "comment" @@ var "bindingStmts"))
@@ -2137,11 +2254,13 @@ encodeVariable = def "encodeVariable" $
                   (Maps.lookup (var "name") (var "tcMetadata")))
               -- In graph elements
               ("el" ~>
+                "elTrivial1" <~ (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
                 Maybes.maybe
                   (produce $ var "asVariable")
                   ("ts" ~>
-                    Logic.ifElse (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (int32 0))
-                                            (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                    Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (int32 0))
+                                                       (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                                            (Logic.not (var "elTrivial1")))
                       (produce $ var "asFunctionCall")
                       ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
                           (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeType $ var "ts")) @@ var "asVariable")
@@ -2185,16 +2304,19 @@ encodeVariable = def "encodeVariable" $
                     produce $ var "asFunctionRef")
                   -- In graph elements
                   ("el" ~>
+                    "elTrivial" <~ (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "el")) $
                     Maybes.maybe
-                      (Logic.ifElse (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                      (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                                               (Logic.not (var "elTrivial")))
                         (produce $ var "asFunctionCall")
                         ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
                             (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
                             (var "asVariable")) $
                           produce $ var "asFunctionRef"))
                       ("ts" ~>
-                        Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
-                                                (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                        Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeArity @@ var "typ") (int32 0))
+                                                           (CoderUtils.isComplexBinding @@ var "tc" @@ var "el"))
+                                                (Logic.not (var "elTrivial")))
                           (produce $ var "asFunctionCall")
                           ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
                               (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")

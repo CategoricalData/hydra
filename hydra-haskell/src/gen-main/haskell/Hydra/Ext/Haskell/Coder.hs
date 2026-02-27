@@ -152,8 +152,8 @@ encodeFunction namespaces fun = ((\x -> case x of
           def = (Core.caseStatementDefault v2)
           fields = (Core.caseStatementCases v2)
           caseExpr = (Flows.bind (Lexical.withSchemaContext (Schemas.requireUnionType dn)) (\rt ->  
-                  let fieldMap = (Maps.fromList (Lists.map toFieldMapEntry (Core.rowTypeFields rt))) 
-                      toFieldMapEntry = (\f -> (Core.fieldTypeName f, f))
+                  let toFieldMapEntry = (\f -> (Core.fieldTypeName f, f)) 
+                      fieldMap = (Maps.fromList (Lists.map toFieldMapEntry (Core.rowTypeFields rt)))
                   in (Flows.bind (Flows.mapList (toAlt fieldMap) fields) (\ecases -> Flows.bind (Maybes.cases def (Flows.pure []) (\d -> Flows.bind (Flows.map (\x -> Ast.CaseRhs x) (encodeTerm namespaces d)) (\cs ->  
                     let lhs = (Ast.PatternName (Utils.rawName Constants.ignoredVariable)) 
                         alt = Ast.Alternative {

@@ -660,6 +660,12 @@ public interface Utils {
     return new hydra.ext.java.syntax.BlockStatement.LocalVariableDeclaration(new hydra.ext.java.syntax.LocalVariableDeclarationStatement(new hydra.ext.java.syntax.LocalVariableDeclaration((java.util.List<hydra.ext.java.syntax.VariableModifier>) (java.util.List.<hydra.ext.java.syntax.VariableModifier>of()), new hydra.ext.java.syntax.LocalVariableType.Type(new hydra.ext.java.syntax.UnannType(jtype)), java.util.List.of(vdec))));
   }
   
+  static hydra.ext.java.syntax.BlockStatement finalVarDeclarationStatement(hydra.ext.java.syntax.Identifier id, hydra.ext.java.syntax.Expression rhs) {
+    return new hydra.ext.java.syntax.BlockStatement.LocalVariableDeclaration(new hydra.ext.java.syntax.LocalVariableDeclarationStatement(new hydra.ext.java.syntax.LocalVariableDeclaration(java.util.List.of(new hydra.ext.java.syntax.VariableModifier.Final()), new hydra.ext.java.syntax.LocalVariableType.Var(), java.util.List.of(hydra.ext.java.utils.Utils.javaVariableDeclarator(
+      id,
+      hydra.util.Maybe.just(new hydra.ext.java.syntax.VariableInitializer.Expression(rhs)))))));
+  }
+  
   static hydra.ext.java.syntax.MultiplicativeExpression javaStringMultiplicativeExpression(String s) {
     return hydra.ext.java.utils.Utils.javaLiteralToJavaMultiplicativeExpression(hydra.ext.java.utils.Utils.javaString(s));
   }

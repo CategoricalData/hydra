@@ -13,7 +13,7 @@ For the Java DSLs, see [DSL Guide (Java)](dsl-guide-java.md).
 - Understand Hydra's core concepts: [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)
 - Know basic Python syntax
 - Have set up Hydra-Python locally (see [Hydra-Python README](https://github.com/CategoricalData/hydra/tree/main/hydra-python))
-- Python 3.10+ recommended (for `match` statement support in generated code)
+- Python 3.12+ required (for `match` statement support in generated code)
 
 ## Table of Contents
 

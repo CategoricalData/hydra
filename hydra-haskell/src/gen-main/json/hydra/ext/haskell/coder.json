@@ -1406,6 +1406,39 @@
                                                                                       "let": {
                                                                                         "bindings": [
                                                                                           {
+                                                                                            "name": "toFieldMapEntry",
+                                                                                            "term": {
+                                                                                              "function": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "pair": {
+                                                                                                              "@first": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "f"},
+                                                                                                                  "function": {
+                                                                                                                    "function": {
+                                                                                                                      "elimination": {"record": {"field": "name", "typeName": "hydra.core.FieldType"}}}}}},
+                                                                                                              "@second": {"variable": "f"}}},
+                                                                                                          "type": {"variable": "hydra.core.Name"}}},
+                                                                                                      "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                                  "domain": [{"variable": "hydra.core.FieldType"}],
+                                                                                                  "parameter": "f"}}},
+                                                                                            "type": [
+                                                                                              {
+                                                                                                "constraints": null,
+                                                                                                "type": {
+                                                                                                  "function": {
+                                                                                                    "codomain": {
+                                                                                                      "pair": {
+                                                                                                        "first": {"variable": "hydra.core.Name"},
+                                                                                                        "second": {"variable": "hydra.core.FieldType"}}},
+                                                                                                    "domain": {"variable": "hydra.core.FieldType"}}},
+                                                                                                "variables": []}]},
+                                                                                          {
                                                                                             "name": "fieldMap",
                                                                                             "term": {
                                                                                               "application": {
@@ -1444,39 +1477,6 @@
                                                                                                   "map": {
                                                                                                     "keys": {"variable": "hydra.core.Name"},
                                                                                                     "values": {"variable": "hydra.core.FieldType"}}},
-                                                                                                "variables": []}]},
-                                                                                          {
-                                                                                            "name": "toFieldMapEntry",
-                                                                                            "term": {
-                                                                                              "function": {
-                                                                                                "lambda": {
-                                                                                                  "body": {
-                                                                                                    "typeApplication": {
-                                                                                                      "body": {
-                                                                                                        "typeApplication": {
-                                                                                                          "body": {
-                                                                                                            "pair": {
-                                                                                                              "@first": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "f"},
-                                                                                                                  "function": {
-                                                                                                                    "function": {
-                                                                                                                      "elimination": {"record": {"field": "name", "typeName": "hydra.core.FieldType"}}}}}},
-                                                                                                              "@second": {"variable": "f"}}},
-                                                                                                          "type": {"variable": "hydra.core.Name"}}},
-                                                                                                      "type": {"variable": "hydra.core.FieldType"}}},
-                                                                                                  "domain": [{"variable": "hydra.core.FieldType"}],
-                                                                                                  "parameter": "f"}}},
-                                                                                            "type": [
-                                                                                              {
-                                                                                                "constraints": null,
-                                                                                                "type": {
-                                                                                                  "function": {
-                                                                                                    "codomain": {
-                                                                                                      "pair": {
-                                                                                                        "first": {"variable": "hydra.core.Name"},
-                                                                                                        "second": {"variable": "hydra.core.FieldType"}}},
-                                                                                                    "domain": {"variable": "hydra.core.FieldType"}}},
                                                                                                 "variables": []}]}],
                                                                                         "body": {
                                                                                           "application": {

@@ -68,16 +68,12 @@ def element_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.
     @lru_cache(1)
     def qname() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(name)
-    @lru_cache(1)
-    def local() -> str:
-        return qname().local
+    local = qname().local
     @lru_cache(1)
     def esc_local() -> str:
-        return sanitize_haskell_name(local())
-    @lru_cache(1)
-    def mns() -> Maybe[hydra.module.Namespace]:
-        return qname().namespace
-    return hydra.lib.maybes.cases(qname().namespace, simple_name(local()), (lambda ns: hydra.lib.maybes.cases(hydra.lib.maps.lookup(ns, namespaces_map()), simple_name(local()), (lambda mn: (alias_str := mn.value, hydra.lib.logic.if_else(hydra.lib.equality.equal(ns, gname()), (lambda : simple_name(esc_local())), (lambda : raw_name(hydra.lib.strings.cat((alias_str, ".", sanitize_haskell_name(local())))))))[1]))))
+        return sanitize_haskell_name(local)
+    mns = qname().namespace
+    return hydra.lib.maybes.cases(qname().namespace, simple_name(local), (lambda ns: hydra.lib.maybes.cases(hydra.lib.maps.lookup(ns, namespaces_map()), simple_name(local), (lambda mn: (alias_str := mn.value, hydra.lib.logic.if_else(hydra.lib.equality.equal(ns, gname()), (lambda : simple_name(esc_local())), (lambda : raw_name(hydra.lib.strings.cat((alias_str, ".", sanitize_haskell_name(local)))))))[1]))))
 
 def hsapp(l: hydra.ext.haskell.ast.Expression, r: hydra.ext.haskell.ast.Expression) -> hydra.ext.haskell.ast.Expression:
     r"""Create a Haskell function application expression."""
@@ -129,9 +125,7 @@ def record_field_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell
     @lru_cache(1)
     def qname() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(sname)
-    @lru_cache(1)
-    def ns() -> Maybe[hydra.module.Namespace]:
-        return qname().namespace
+    ns = qname().namespace
     @lru_cache(1)
     def type_name_str() -> str:
         return type_name_for_record(sname)
@@ -146,7 +140,7 @@ def record_field_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell
         return hydra.lib.strings.cat2(decapitalized(), capitalized())
     @lru_cache(1)
     def qual_name() -> hydra.module.QualifiedName:
-        return hydra.module.QualifiedName(ns(), nm())
+        return hydra.module.QualifiedName(ns, nm())
     @lru_cache(1)
     def unqual_name() -> hydra.core.Name:
         return hydra.names.unqualify_name(qual_name())
@@ -179,9 +173,7 @@ def union_field_reference(g: hydra.graph.Graph, namespaces: hydra.module.Namespa
     @lru_cache(1)
     def qname() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(sname)
-    @lru_cache(1)
-    def ns() -> Maybe[hydra.module.Namespace]:
-        return qname().namespace
+    ns = qname().namespace
     @lru_cache(1)
     def type_name_str() -> str:
         return type_name_for_record(sname)
@@ -194,14 +186,14 @@ def union_field_reference(g: hydra.graph.Graph, namespaces: hydra.module.Namespa
     def deconflict(name: str) -> str:
         @lru_cache(1)
         def tname() -> hydra.core.Name:
-            return hydra.names.unqualify_name(hydra.module.QualifiedName(ns(), name))
+            return hydra.names.unqualify_name(hydra.module.QualifiedName(ns, name))
         return hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, tname())), g.elements)), (lambda : deconflict(hydra.lib.strings.cat2(name, "_"))), (lambda : name))
     @lru_cache(1)
     def nm() -> str:
         return deconflict(hydra.lib.strings.cat2(capitalized_type_name(), capitalized_field_name()))
     @lru_cache(1)
     def qual_name() -> hydra.module.QualifiedName:
-        return hydra.module.QualifiedName(ns(), nm())
+        return hydra.module.QualifiedName(ns, nm())
     @lru_cache(1)
     def unqual_name() -> hydra.core.Name:
         return hydra.names.unqualify_name(qual_name())
@@ -212,22 +204,18 @@ def unpack_forall_type(cx: T0, t: hydra.core.Type) -> tuple[frozenlist[hydra.cor
     
     match hydra.rewriting.deannotate_type(t):
         case hydra.core.TypeForall(value=fat):
-            @lru_cache(1)
-            def v() -> hydra.core.Name:
-                return fat.parameter
-            @lru_cache(1)
-            def tbody() -> hydra.core.Type:
-                return fat.body
+            v = fat.parameter
+            tbody = fat.body
             @lru_cache(1)
             def recursive_result() -> tuple[frozenlist[hydra.core.Name], hydra.core.Type]:
-                return unpack_forall_type(cx, tbody())
+                return unpack_forall_type(cx, tbody)
             @lru_cache(1)
             def vars() -> frozenlist[hydra.core.Name]:
                 return hydra.lib.pairs.first(recursive_result())
             @lru_cache(1)
             def final_type() -> hydra.core.Type:
                 return hydra.lib.pairs.second(recursive_result())
-            return (hydra.lib.lists.cons(v(), vars()), final_type())
+            return (hydra.lib.lists.cons(v, vars()), final_type())
         
         case _:
             return ((), t)

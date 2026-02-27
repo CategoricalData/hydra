@@ -192,17 +192,25 @@ Do not refer to immature implementations in user-facing documentation unless con
 
 ```
 docs/
+├── index.html              # GitHub Pages landing page
 └── src/
+    ├── demos.md            # Demo overviews
     ├── documentation-style-guide.md  # This file
+    ├── dsl-guide.md        # Haskell DSL guide
+    ├── dsl-guide-java.md   # Java DSL guide
+    ├── dsl-guide-python.md # Python DSL guide
+    ├── implementation.md   # Architecture and internals
+    ├── llm-quickstart.md   # LLM orientation guide
+    ├── test-suite-architecture.md  # Test kernel details
     └── recipes/            # Task-oriented guides
         ├── index.md
-        ├── adding-primitives.md
-        └── extending-hydra-core.md
+        └── ...             # Individual recipes
 
 wiki/
 ├── Home.md                 # Documentation index
 ├── Concepts.md             # Theoretical foundations
-├── Implementation.md       # Implementation details
+├── Testing.md              # Testing guide
+├── Release-process.md      # Release procedures
 └── ...                     # Other reference docs
 ```
 

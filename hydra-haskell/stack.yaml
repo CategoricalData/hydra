@@ -1,5 +1,8 @@
 resolver: lts-24.7
 
+system-ghc: true
+install-ghc: false
+
 packages:
   - .
 

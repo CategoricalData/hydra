@@ -235,7 +235,7 @@ encodeCompoundStatement cs = ((\x -> case x of
   Syntax.CompoundStatementWith _ -> (Serialization.cst "with ...")
   Syntax.CompoundStatementFor _ -> (Serialization.cst "for ...")
   Syntax.CompoundStatementTry _ -> (Serialization.cst "try ...")
-  Syntax.CompoundStatementWhile _ -> (Serialization.cst "while ...")
+  Syntax.CompoundStatementWhile v1 -> (encodeWhileStatement v1)
   Syntax.CompoundStatementMatch v1 -> (encodeMatchStatement v1)) cs)
 
 -- | Serialize a conjunction (and expression)
@@ -867,6 +867,24 @@ encodeUntypedAssignment ua =
 -- | Serialize a value pattern
 encodeValuePattern :: (Syntax.ValuePattern -> Ast.Expr)
 encodeValuePattern vp = (encodeAttribute (Syntax.unValuePattern vp))
+
+-- | Serialize a while statement
+encodeWhileStatement :: (Syntax.WhileStatement -> Ast.Expr)
+encodeWhileStatement ws =  
+  let cond = (Syntax.whileStatementCondition ws) 
+      body = (Syntax.whileStatementBody ws)
+      else_ = (Syntax.whileStatementElse ws)
+  in (Serialization.newlineSep (Maybes.cat [
+    Just (Serialization.newlineSep [
+      Serialization.spaceSep [
+        Serialization.cst "while",
+        (Serialization.noSep [
+          encodeNamedExpression cond,
+          (Serialization.cst ":")])],
+      (encodeBlock body)]),
+    (Maybes.map (\eb -> Serialization.newlineSep [
+      Serialization.cst "else:",
+      (encodeBlock eb)]) else_)]))
 
 -- | Escape special characters in a Python string and wrap in quotes
 escapePythonString :: (Bool -> String -> String)

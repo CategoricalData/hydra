@@ -2,7 +2,7 @@
 # Run benchmark tests for all implementations and display the dashboard.
 #
 # Usage:
-#   bin/run-benchmark-tests.sh              # Run all (Haskell + Python + Java)
+#   bin/run-benchmark-tests.sh              # Run all (Haskell + Java + Python)
 #   bin/run-benchmark-tests.sh haskell      # Run Haskell only
 #   bin/run-benchmark-tests.sh python       # Run Python only
 #   bin/run-benchmark-tests.sh java         # Run Java only
@@ -10,19 +10,25 @@
 #
 # Options:
 #   --repeat N    Run each language N times (default: 1)
+#   --tag TAG     Append a human-readable tag to the run directory name
 
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 RUNS_DIR="$REPO_ROOT/benchmark/runs"
 
-# Parse --repeat flag
+# Parse flags
 REPEAT=1
+TAG=""
 ARGS=()
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --repeat)
             REPEAT="$2"
+            shift 2
+            ;;
+        --tag)
+            TAG="$2"
             shift 2
             ;;
         *)
@@ -34,6 +40,9 @@ done
 set -- "${ARGS[@]+"${ARGS[@]}"}"
 
 RUN_DIR="$RUNS_DIR/run_$(python3 -c 'from datetime import datetime,timezone; t=datetime.now(timezone.utc); print(t.strftime("%Y-%m-%d_%H%M%S") + "_" + f"{t.microsecond//1000:03d}")')"
+if [ -n "$TAG" ]; then
+    RUN_DIR="${RUN_DIR}_${TAG}"
+fi
 
 mkdir -p "$RUN_DIR"
 
@@ -58,8 +67,12 @@ run_lang() {
         python)
             echo "=== Running Python benchmark tests (run $i/$REPEAT) ==="
             cd "$REPO_ROOT/hydra-python"
+            local py="${REPO_ROOT}/hydra-python/.venv/bin/python"
+            if [ ! -x "$py" ]; then
+                py="python3"
+            fi
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
-                .venv/bin/python -m pytest src/test/python/test_suite_runner.py
+                "$py" -m pytest src/test/python/test_suite_runner.py
             ;;
         java)
             echo "=== Running Java benchmark tests (run $i/$REPEAT) ==="
@@ -105,12 +118,12 @@ case "$target" in
         ;;
     all)
         run_all_repeats haskell
-        run_all_repeats python
         run_all_repeats java
+        run_all_repeats python
         run_dashboard "$@"
         ;;
     *)
-        echo "Usage: $0 [all|haskell|python|java|dashboard] [--repeat N] [dashboard options...]"
+        echo "Usage: $0 [all|haskell|python|java|dashboard] [--repeat N] [--tag TAG] [dashboard options...]"
         exit 1
         ;;
 esac

@@ -13,10 +13,8 @@ import hydra.show.core
 def graph(graph: hydra.graph.Graph) -> str:
     r"""Show a graph as a string."""
     
-    @lru_cache(1)
-    def elements() -> frozenlist[hydra.core.Binding]:
-        return graph.elements
+    elements = graph.elements
     @lru_cache(1)
     def element_strs() -> frozenlist[str]:
-        return hydra.lib.lists.map((lambda x1: hydra.show.core.binding(x1)), elements())
+        return hydra.lib.lists.map((lambda x1: hydra.show.core.binding(x1)), elements)
     return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", element_strs()), "}"))

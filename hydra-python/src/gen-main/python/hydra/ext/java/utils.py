@@ -52,19 +52,11 @@ def add_java_type_parameter(rt: hydra.ext.java.syntax.ReferenceType, t: hydra.ex
     def _hoist_hydra_ext_java_utils_add_java_type_parameter_1(rt, v1):
         match v1:
             case hydra.ext.java.syntax.ClassOrInterfaceTypeClass(value=ct):
-                @lru_cache(1)
-                def anns() -> frozenlist[hydra.ext.java.syntax.Annotation]:
-                    return ct.annotations
-                @lru_cache(1)
-                def qual() -> hydra.ext.java.syntax.ClassTypeQualifier:
-                    return ct.qualifier
-                @lru_cache(1)
-                def id() -> hydra.ext.java.syntax.TypeIdentifier:
-                    return ct.identifier
-                @lru_cache(1)
-                def args() -> frozenlist[hydra.ext.java.syntax.TypeArgument]:
-                    return ct.arguments
-                return hydra.lib.flows.pure(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.syntax.ClassType(anns(), qual(), id(), hydra.lib.lists.concat2(args(), (cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(rt)),))))))))))
+                anns = ct.annotations
+                qual = ct.qualifier
+                id = ct.identifier
+                args = ct.arguments
+                return hydra.lib.flows.pure(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.syntax.ClassType(anns, qual, id, hydra.lib.lists.concat2(args, (cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(rt)),))))))))))
             
             case hydra.ext.java.syntax.ClassOrInterfaceTypeInterface():
                 return hydra.lib.flows.fail("expected a Java class type")
@@ -132,6 +124,9 @@ def field_name_to_java_variable_declarator(fname: hydra.core.Name) -> hydra.ext.
 
 def field_name_to_java_variable_declarator_id(fname: hydra.core.Name) -> hydra.ext.java.syntax.VariableDeclaratorId:
     return java_variable_declarator_id(java_identifier(fname.value))
+
+def final_var_declaration_statement(id: hydra.ext.java.syntax.Identifier, rhs: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.BlockStatement:
+    return cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementLocalVariableDeclaration(hydra.ext.java.syntax.LocalVariableDeclarationStatement(hydra.ext.java.syntax.LocalVariableDeclaration((cast(hydra.ext.java.syntax.VariableModifier, hydra.ext.java.syntax.VariableModifierFinal()),), cast(hydra.ext.java.syntax.LocalVariableType, hydra.ext.java.syntax.LocalVariableTypeVar()), (java_variable_declarator(id, Just(cast(hydra.ext.java.syntax.VariableInitializer, hydra.ext.java.syntax.VariableInitializerExpression(rhs)))),)))))
 
 def import_aliases_for_module(mod: hydra.module.Module) -> hydra.ext.java.helpers.Aliases:
     return hydra.ext.java.helpers.Aliases(mod.namespace, hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), Nothing(), hydra.lib.sets.empty())
@@ -205,21 +200,17 @@ def name_to_qualified_java_name(aliases: hydra.ext.java.helpers.Aliases, qualify
     @lru_cache(1)
     def qn() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(name)
-    @lru_cache(1)
-    def ns_() -> Maybe[hydra.module.Namespace]:
-        return qn().namespace
-    @lru_cache(1)
-    def local() -> str:
-        return qn().local
+    ns_ = qn().namespace
+    local = qn().local
     @lru_cache(1)
     def alias() -> Maybe[hydra.ext.java.syntax.PackageName]:
-        return hydra.lib.maybes.cases(ns_(), Nothing(), (lambda n: Just(hydra.lib.maybes.cases(hydra.lib.maps.lookup(n, aliases.packages), hydra.ext.java.names.java_package_name(hydra.lib.strings.split_on(".", n.value)), (lambda id: id)))))
+        return hydra.lib.maybes.cases(ns_, Nothing(), (lambda n: Just(hydra.lib.maybes.cases(hydra.lib.maps.lookup(n, aliases.packages), hydra.ext.java.names.java_package_name(hydra.lib.strings.split_on(".", n.value)), (lambda id: id)))))
     @lru_cache(1)
     def pkg() -> hydra.ext.java.syntax.ClassTypeQualifier:
         return hydra.lib.logic.if_else(qualify, (lambda : hydra.lib.maybes.cases(alias(), cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone()), (lambda p: cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierPackage(p))))), (lambda : cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone())))
     @lru_cache(1)
     def jid() -> hydra.ext.java.syntax.TypeIdentifier:
-        return java_type_identifier(hydra.lib.maybes.cases(mlocal, sanitize_java_name(local()), (lambda l: hydra.lib.strings.cat2(hydra.lib.strings.cat2(sanitize_java_name(local()), "."), sanitize_java_name(l)))))
+        return java_type_identifier(hydra.lib.maybes.cases(mlocal, sanitize_java_name(local), (lambda l: hydra.lib.strings.cat2(hydra.lib.strings.cat2(sanitize_java_name(local), "."), sanitize_java_name(l)))))
     return (jid(), pkg())
 
 def name_to_java_class_type(aliases: hydra.ext.java.helpers.Aliases, qualify: bool, args: frozenlist[hydra.ext.java.syntax.TypeArgument], name: hydra.core.Name, mlocal: Maybe[str]) -> hydra.ext.java.syntax.ClassType:
@@ -391,31 +382,19 @@ def java_reference_type_to_raw_type(rt: hydra.ext.java.syntax.ReferenceType):
     def _hoist_hydra_ext_java_utils_java_reference_type_to_raw_type_1(v1):
         match v1:
             case hydra.ext.java.syntax.ClassOrInterfaceTypeClass(value=ct):
-                @lru_cache(1)
-                def anns() -> frozenlist[hydra.ext.java.syntax.Annotation]:
-                    return ct.annotations
-                @lru_cache(1)
-                def qual() -> hydra.ext.java.syntax.ClassTypeQualifier:
-                    return ct.qualifier
-                @lru_cache(1)
-                def id() -> hydra.ext.java.syntax.TypeIdentifier:
-                    return ct.identifier
-                return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.syntax.ClassType(anns(), qual(), id(), ())))))
+                anns = ct.annotations
+                qual = ct.qualifier
+                id = ct.identifier
+                return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.syntax.ClassType(anns, qual, id, ())))))
             
             case hydra.ext.java.syntax.ClassOrInterfaceTypeInterface(value=it):
                 @lru_cache(1)
                 def ct() -> hydra.ext.java.syntax.ClassType:
                     return it.value
-                @lru_cache(1)
-                def anns() -> frozenlist[hydra.ext.java.syntax.Annotation]:
-                    return ct().annotations
-                @lru_cache(1)
-                def qual() -> hydra.ext.java.syntax.ClassTypeQualifier:
-                    return ct().qualifier
-                @lru_cache(1)
-                def id() -> hydra.ext.java.syntax.TypeIdentifier:
-                    return ct().identifier
-                return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeInterface(hydra.ext.java.syntax.InterfaceType(hydra.ext.java.syntax.ClassType(anns(), qual(), id(), ()))))))
+                anns = ct().annotations
+                qual = ct().qualifier
+                id = ct().identifier
+                return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeInterface(hydra.ext.java.syntax.InterfaceType(hydra.ext.java.syntax.ClassType(anns, qual, id, ()))))))
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -550,13 +529,9 @@ def name_to_java_name(aliases: hydra.ext.java.helpers.Aliases, name: hydra.core.
     @lru_cache(1)
     def qn() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(name)
-    @lru_cache(1)
-    def ns_() -> Maybe[hydra.module.Namespace]:
-        return qn().namespace
-    @lru_cache(1)
-    def local() -> str:
-        return qn().local
-    return hydra.lib.logic.if_else(is_escaped(name.value), (lambda : hydra.ext.java.syntax.Identifier(sanitize_java_name(local()))), (lambda : hydra.lib.maybes.cases(ns_(), hydra.ext.java.syntax.Identifier(local()), (lambda gname: (parts := hydra.lib.maybes.cases(hydra.lib.maps.lookup(gname, aliases.packages), hydra.lib.strings.split_on(".", gname.value), (lambda pkg_name: hydra.lib.lists.map((lambda i: i.value), pkg_name.value))), all_parts := hydra.lib.lists.concat2(parts, (sanitize_java_name(local()),)), hydra.ext.java.syntax.Identifier(hydra.lib.strings.intercalate(".", all_parts)))[2]))))
+    ns_ = qn().namespace
+    local = qn().local
+    return hydra.lib.logic.if_else(is_escaped(name.value), (lambda : hydra.ext.java.syntax.Identifier(sanitize_java_name(local))), (lambda : hydra.lib.maybes.cases(ns_, hydra.ext.java.syntax.Identifier(local), (lambda gname: (parts := hydra.lib.maybes.cases(hydra.lib.maps.lookup(gname, aliases.packages), hydra.lib.strings.split_on(".", gname.value), (lambda pkg_name: hydra.lib.lists.map((lambda i: i.value), pkg_name.value))), all_parts := hydra.lib.lists.concat2(parts, (sanitize_java_name(local),)), hydra.ext.java.syntax.Identifier(hydra.lib.strings.intercalate(".", all_parts)))[2]))))
 
 def name_to_java_reference_type(aliases: hydra.ext.java.helpers.Aliases, qualify: bool, args: frozenlist[hydra.ext.java.syntax.TypeArgument], name: hydra.core.Name, mlocal: Maybe[str]) -> hydra.ext.java.syntax.ReferenceType:
     return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(name_to_java_class_type(aliases, qualify, args, name, mlocal)))))
@@ -634,10 +609,8 @@ def to_java_array_type(t: hydra.ext.java.syntax.Type):
                 @lru_cache(1)
                 def new_dims() -> hydra.ext.java.syntax.Dims:
                     return hydra.ext.java.syntax.Dims(hydra.lib.lists.concat2(old_dims(), ((),)))
-                @lru_cache(1)
-                def variant() -> hydra.ext.java.syntax.ArrayType_Variant:
-                    return at.variant
-                return hydra.lib.flows.pure(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeArray(hydra.ext.java.syntax.ArrayType(new_dims(), variant()))))))
+                variant = at.variant
+                return hydra.lib.flows.pure(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeArray(hydra.ext.java.syntax.ArrayType(new_dims(), variant))))))
             
             case hydra.ext.java.syntax.ReferenceTypeVariable():
                 return hydra.lib.flows.fail("don't know how to make Java reference type into array type")
@@ -685,16 +658,12 @@ def variant_class_name(qualify: bool, el_name: hydra.core.Name, fname: hydra.cor
     @lru_cache(1)
     def qn() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(el_name)
-    @lru_cache(1)
-    def ns_() -> Maybe[hydra.module.Namespace]:
-        return qn().namespace
-    @lru_cache(1)
-    def local() -> str:
-        return qn().local
+    ns_ = qn().namespace
+    local = qn().local
     @lru_cache(1)
     def flocal() -> str:
         return hydra.formatting.capitalize(fname.value)
     @lru_cache(1)
     def local1() -> str:
-        return hydra.lib.logic.if_else(qualify, (lambda : hydra.lib.strings.cat2(hydra.lib.strings.cat2(local(), "."), flocal())), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(flocal(), local()), (lambda : hydra.lib.strings.cat2(flocal(), "_")), (lambda : flocal()))))
-    return hydra.names.unqualify_name(hydra.module.QualifiedName(ns_(), local1()))
+        return hydra.lib.logic.if_else(qualify, (lambda : hydra.lib.strings.cat2(hydra.lib.strings.cat2(local, "."), flocal())), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(flocal(), local), (lambda : hydra.lib.strings.cat2(flocal(), "_")), (lambda : flocal()))))
+    return hydra.names.unqualify_name(hydra.module.QualifiedName(ns_, local1()))
