@@ -1,6 +1,6 @@
 [project]
 name = "hydra"
-version = "0.12.0"
+version = "0.13.0"
 description = "Graph programming language (bootstrapped)"
 readme = "README.md"
 authors = []
