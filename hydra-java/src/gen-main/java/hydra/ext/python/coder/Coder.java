@@ -1719,81 +1719,66 @@ public interface Coder {
   }
   
   static hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>> encodeTypeAssignmentInner(hydra.ext.python.helpers.PythonEnvironment env, hydra.core.Name name, hydra.core.Type typ, hydra.util.Maybe<String> comment) {
-    while (true) {
-      {
-        hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
-        final var env_tco = env;
-        final var name_tco = name;
-        final var typ_tco = typ;
-        final var comment_tco = comment;
-        if ((stripped) instanceof hydra.core.Type.Forall) {
-          {
-            var ft = (hydra.core.Type.Forall) (stripped);
-            return ((java.util.function.Supplier<hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
-              hydra.core.Name tvar = ((ft).value).parameter;
-              return ((java.util.function.Supplier<hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
-                hydra.core.Type body = ((ft).value).body;
-                return ((java.util.function.Supplier<hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
-                  hydra.ext.python.helpers.PythonEnvironment newEnv = hydra.ext.python.coder.Coder.extendEnvWithTypeVar(
-                    env_tco,
-                    tvar);
-                  return hydra.ext.python.coder.Coder.encodeTypeAssignmentInner(
-                    newEnv,
-                    name_tco,
-                    body,
-                    comment_tco);
-                })).get();
-              })).get();
-            })).get();
-          }
-        }
-        if ((stripped) instanceof hydra.core.Type.Record) {
-          {
-            var rt = (hydra.core.Type.Record) (stripped);
-            return hydra.lib.flows.Map.apply(
-              (java.util.function.Function<hydra.ext.python.syntax.Statement, java.util.List<hydra.ext.python.syntax.Statement>>) (s -> java.util.List.of(s)),
-              hydra.ext.python.coder.Coder.encodeRecordType(
-                env_tco,
-                name_tco,
-                (rt).value,
-                comment_tco));
-          }
-        }
-        if ((stripped) instanceof hydra.core.Type.Union) {
-          {
-            var rt = (hydra.core.Type.Union) (stripped);
-            return hydra.ext.python.coder.Coder.encodeUnionType(
-              env_tco,
-              name_tco,
-              (rt).value,
-              comment_tco);
-          }
-        }
-        if ((stripped) instanceof hydra.core.Type.Wrap) {
-          {
-            var wt = (hydra.core.Type.Wrap) (stripped);
-            return ((java.util.function.Supplier<hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>>>) (() -> {
-              hydra.core.Type innerType = ((wt).value).body;
-              return hydra.ext.python.coder.Coder.encodeWrappedType(
-                env_tco,
-                name_tco,
-                innerType,
-                comment_tco);
-            })).get();
-          }
-        }
+    hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
+    return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>> otherwise(hydra.core.Type instance) {
         return hydra.ext.python.coder.Coder.encodeTypeAssignmentInner_dflt(
-          comment_tco,
-          env_tco,
+          comment,
+          env,
           (java.util.function.Function<hydra.ext.python.helpers.PythonEnvironment, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Statement>>>>>) (p0 -> p1 -> p2 -> p3 -> hydra.ext.python.coder.Coder.encodeTypeDefSingle(
             p0,
             p1,
             p2,
             p3)),
-          name_tco,
-          typ_tco);
+          name,
+          typ);
       }
-    }
+      
+      @Override
+      public hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Forall ft) {
+        hydra.core.Type body = ((ft).value).body;
+        hydra.core.Name tvar = ((ft).value).parameter;
+        hydra.ext.python.helpers.PythonEnvironment newEnv = hydra.ext.python.coder.Coder.extendEnvWithTypeVar(
+          env,
+          tvar);
+        return hydra.ext.python.coder.Coder.encodeTypeAssignmentInner(
+          newEnv,
+          name,
+          body,
+          comment);
+      }
+      
+      @Override
+      public hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Record rt) {
+        return hydra.lib.flows.Map.apply(
+          (java.util.function.Function<hydra.ext.python.syntax.Statement, java.util.List<hydra.ext.python.syntax.Statement>>) (s -> java.util.List.of(s)),
+          hydra.ext.python.coder.Coder.encodeRecordType(
+            env,
+            name,
+            (rt).value,
+            comment));
+      }
+      
+      @Override
+      public hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Union rt) {
+        return hydra.ext.python.coder.Coder.encodeUnionType(
+          env,
+          name,
+          (rt).value,
+          comment);
+      }
+      
+      @Override
+      public hydra.compute.Flow<hydra.ext.python.helpers.PyGraph, java.util.List<hydra.ext.python.syntax.Statement>> visit(hydra.core.Type.Wrap wt) {
+        hydra.core.Type innerType = ((wt).value).body;
+        return hydra.ext.python.coder.Coder.encodeWrappedType(
+          env,
+          name,
+          innerType,
+          comment);
+      }
+    });
   }
   
   static <T0> hydra.compute.Flow<T0, java.util.List<hydra.ext.python.syntax.Statement>> encodeTypeAssignmentInner_dflt(hydra.util.Maybe<String> comment, hydra.ext.python.helpers.PythonEnvironment env, java.util.function.Function<hydra.ext.python.helpers.PythonEnvironment, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.util.Maybe<String>, java.util.function.Function<hydra.ext.python.syntax.Expression, java.util.List<hydra.ext.python.syntax.Statement>>>>> hydra_ext_python_coder_encodeTypeDefSingle2, hydra.core.Name name, hydra.core.Type typ) {
@@ -4096,32 +4081,30 @@ public interface Coder {
   }
   
   static hydra.ext.python.helpers.PythonModuleMetadata digForWrap(Boolean isTermAnnot, hydra.ext.python.helpers.PythonModuleMetadata meta, hydra.core.Type typ) {
-    while (true) {
-      {
-        final var isTermAnnot_tco = isTermAnnot;
-        final var meta_tco = meta;
-        final var typ_tco = typ;
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Forall) {
-          {
-            var ft = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            typ = ((ft).value).body;
-            continue;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Wrap) {
-          {
-            var ignored = (hydra.core.Type.Wrap) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return hydra.lib.logic.IfElse.lazy(
-              isTermAnnot_tco,
-              () -> meta_tco,
-              () -> hydra.ext.python.coder.Coder.setMetaUsesNode(
-                meta_tco,
-                true));
-          }
-        }
-        return meta_tco;
+    return (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.ext.python.helpers.PythonModuleMetadata otherwise(hydra.core.Type instance) {
+        return meta;
       }
-    }
+      
+      @Override
+      public hydra.ext.python.helpers.PythonModuleMetadata visit(hydra.core.Type.Forall ft) {
+        return hydra.ext.python.coder.Coder.digForWrap(
+          isTermAnnot,
+          meta,
+          ((ft).value).body);
+      }
+      
+      @Override
+      public hydra.ext.python.helpers.PythonModuleMetadata visit(hydra.core.Type.Wrap ignored) {
+        return hydra.lib.logic.IfElse.lazy(
+          isTermAnnot,
+          () -> meta,
+          () -> hydra.ext.python.coder.Coder.setMetaUsesNode(
+            meta,
+            true));
+      }
+    });
   }
   
   static hydra.ext.python.helpers.PythonModuleMetadata setMetaNamespaces(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> ns, hydra.ext.python.helpers.PythonModuleMetadata m) {
@@ -4209,42 +4192,30 @@ public interface Coder {
   }
   
   static java.util.Set<hydra.core.Name> collectTypeVariables(java.util.Set<hydra.core.Name> initial, hydra.core.Type typ) {
-    while (true) {
-      {
-        final var initial_tco = initial;
-        final var typ_tco = typ;
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Forall) {
-          {
-            var ft = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return ((java.util.function.Supplier<java.util.Set<hydra.core.Name>>) (() -> {
-              hydra.core.Name v = ((ft).value).parameter;
-              return ((java.util.function.Supplier<java.util.Set<hydra.core.Name>>) (() -> {
-                hydra.core.Type body = ((ft).value).body;
-                return hydra.ext.python.coder.Coder.collectTypeVariables(
-                  hydra.lib.sets.Insert.apply(
-                    v,
-                    initial_tco),
-                  body);
-              })).get();
-            })).get();
-          }
-        }
-        return ((java.util.function.Supplier<java.util.Set<hydra.core.Name>>) (() -> {
-          java.util.Set<hydra.core.Name> freeVars = hydra.rewriting.Rewriting.freeVariablesInType(typ_tco);
-          return ((java.util.function.Supplier<java.util.Set<hydra.core.Name>>) (() -> {
-            java.util.function.Function<hydra.core.Name, Boolean> isTypeVar = (java.util.function.Function<hydra.core.Name, Boolean>) (n -> hydra.ext.python.coder.Coder.isTypeVariableName(n));
-            return ((java.util.function.Supplier<java.util.Set<hydra.core.Name>>) (() -> {
-              hydra.util.Lazy<java.util.List<hydra.core.Name>> filteredList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-                isTypeVar,
-                hydra.lib.sets.ToList.apply(freeVars)));
-              return hydra.lib.sets.Union.apply(
-                initial_tco,
-                hydra.lib.sets.FromList.apply(filteredList.get()));
-            })).get();
-          })).get();
-        })).get();
+    return (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public java.util.Set<hydra.core.Name> otherwise(hydra.core.Type instance) {
+        java.util.Set<hydra.core.Name> freeVars = hydra.rewriting.Rewriting.freeVariablesInType(typ);
+        java.util.function.Function<hydra.core.Name, Boolean> isTypeVar = (java.util.function.Function<hydra.core.Name, Boolean>) (n -> hydra.ext.python.coder.Coder.isTypeVariableName(n));
+        hydra.util.Lazy<java.util.List<hydra.core.Name>> filteredList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+          isTypeVar,
+          hydra.lib.sets.ToList.apply(freeVars)));
+        return hydra.lib.sets.Union.apply(
+          initial,
+          hydra.lib.sets.FromList.apply(filteredList.get()));
       }
-    }
+      
+      @Override
+      public java.util.Set<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
+        hydra.core.Type body = ((ft).value).body;
+        hydra.core.Name v = ((ft).value).parameter;
+        return hydra.ext.python.coder.Coder.collectTypeVariables(
+          hydra.lib.sets.Insert.apply(
+            v,
+            initial),
+          body);
+      }
+    });
   }
   
   static hydra.ext.python.helpers.PythonModuleMetadata extendMetaForTypes(java.util.List<hydra.core.Type> types, hydra.ext.python.helpers.PythonModuleMetadata meta) {

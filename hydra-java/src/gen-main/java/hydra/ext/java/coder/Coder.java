@@ -295,67 +295,62 @@ public interface Coder {
   }
   
   static Boolean isNonComparableType(hydra.core.Type typ) {
-    while (true) {
-      {
-        final var typ_tco = typ;
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.List) {
-          {
-            var ignored = (hydra.core.Type.List) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return true;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Set) {
-          {
-            var ignored = (hydra.core.Type.Set) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return true;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Map) {
-          {
-            var ignored = (hydra.core.Type.Map) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return true;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Maybe) {
-          {
-            var ignored = (hydra.core.Type.Maybe) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return true;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Either) {
-          {
-            var ignored = (hydra.core.Type.Either) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return true;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Function) {
-          {
-            var ignored = (hydra.core.Type.Function) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return true;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Literal) {
-          {
-            var lt = (hydra.core.Type.Literal) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            if (((lt).value) instanceof hydra.core.LiteralType.Binary) {
-              {
-                var ignored = (hydra.core.LiteralType.Binary) ((lt).value);
-                return true;
-              }
-            }
-            return false;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Forall) {
-          {
-            var ft = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            typ = ((ft).value).body;
-            continue;
-          }
-        }
+    return (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Type instance) {
         return false;
       }
-    }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.List ignored) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Set ignored) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Map ignored) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Maybe ignored) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Either ignored) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Function ignored) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Literal lt) {
+        return ((lt).value).accept(new hydra.core.LiteralType.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.LiteralType instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.LiteralType.Binary ignored) {
+            return true;
+          }
+        });
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Forall ft) {
+        return hydra.ext.java.coder.Coder.isNonComparableType(((ft).value).body);
+      }
+    });
   }
   
   static Boolean isBinaryType(hydra.core.Type typ) {
@@ -1049,19 +1044,17 @@ public interface Coder {
   }
   
   static hydra.core.Term classifyDataTerm_stripTypeLambdas(hydra.core.Term t) {
-    while (true) {
-      {
-        final var t_tco = t;
-        if ((hydra.rewriting.Rewriting.deannotateTerm(t_tco)) instanceof hydra.core.Term.TypeLambda) {
-          {
-            var tl = (hydra.core.Term.TypeLambda) (hydra.rewriting.Rewriting.deannotateTerm(t_tco));
-            t = ((tl).value).body;
-            continue;
-          }
-        }
-        return t_tco;
+    return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term otherwise(hydra.core.Term instance) {
+        return t;
       }
-    }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
+        return hydra.ext.java.coder.Coder.classifyDataTerm_stripTypeLambdas(((tl).value).body);
+      }
+    });
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.helpers.JavaSymbolClass> classifyDataReference(hydra.core.Name name) {
@@ -1913,160 +1906,14 @@ public interface Coder {
   }
   
   static java.util.Map<hydra.core.Name, hydra.core.Name> buildTypeVarSubst_go(java.util.Set<hydra.core.Name> svs, hydra.core.Type ft, hydra.core.Type ct) {
-    while (true) {
-      {
-        java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, java.util.Map<hydra.core.Name, hydra.core.Name>>> goSub = (java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, java.util.Map<hydra.core.Name, hydra.core.Name>>>) (a -> (java.util.function.Function<hydra.core.Type, java.util.Map<hydra.core.Name, hydra.core.Name>>) (b -> hydra.ext.java.coder.Coder.buildTypeVarSubst_go(
-          svs,
-          hydra.rewriting.Rewriting.deannotateType(a),
-          hydra.rewriting.Rewriting.deannotateType(b))));
-        final var svs_tco = svs;
-        final var ft_tco = ft;
-        final var ct_tco = ct;
-        if ((ft_tco) instanceof hydra.core.Type.Variable) {
-          {
-            var fn = (hydra.core.Type.Variable) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.Variable) {
-              {
-                var cn = (hydra.core.Type.Variable) (ct_tco);
-                return hydra.lib.logic.IfElse.lazy(
-                  hydra.lib.logic.And.apply(
-                    hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
-                      (fn).value,
-                      (cn).value)),
-                    hydra.lib.sets.Member.apply(
-                      (cn).value,
-                      svs_tco)),
-                  () -> hydra.lib.maps.Singleton.apply(
-                    (fn).value,
-                    (cn).value),
-                  () -> (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())));
-              }
-            }
-            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
-          }
-        }
-        if ((ft_tco) instanceof hydra.core.Type.Function) {
-          {
-            var fft = (hydra.core.Type.Function) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.Function) {
-              {
-                var cft = (hydra.core.Type.Function) (ct_tco);
-                return hydra.lib.maps.Union.apply(
-                  ((goSub).apply(((fft).value).domain)).apply(((cft).value).domain),
-                  ((goSub).apply(((fft).value).codomain)).apply(((cft).value).codomain));
-              }
-            }
-            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
-          }
-        }
-        if ((ft_tco) instanceof hydra.core.Type.Application) {
-          {
-            var fat = (hydra.core.Type.Application) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.Application) {
-              {
-                var cat = (hydra.core.Type.Application) (ct_tco);
-                return hydra.lib.maps.Union.apply(
-                  ((goSub).apply(((fat).value).function)).apply(((cat).value).function),
-                  ((goSub).apply(((fat).value).argument)).apply(((cat).value).argument));
-              }
-            }
-            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
-          }
-        }
-        if ((ft_tco) instanceof hydra.core.Type.List) {
-          {
-            var fl = (hydra.core.Type.List) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.List) {
-              {
-                var cl = (hydra.core.Type.List) (ct_tco);
-                return ((goSub).apply((fl).value)).apply((cl).value);
-              }
-            }
-            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
-          }
-        }
-        if ((ft_tco) instanceof hydra.core.Type.Set) {
-          {
-            var fs = (hydra.core.Type.Set) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.Set) {
-              {
-                var cs = (hydra.core.Type.Set) (ct_tco);
-                return ((goSub).apply((fs).value)).apply((cs).value);
-              }
-            }
-            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
-          }
-        }
-        if ((ft_tco) instanceof hydra.core.Type.Maybe) {
-          {
-            var fm = (hydra.core.Type.Maybe) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.Maybe) {
-              {
-                var cm = (hydra.core.Type.Maybe) (ct_tco);
-                return ((goSub).apply((fm).value)).apply((cm).value);
-              }
-            }
-            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
-          }
-        }
-        if ((ft_tco) instanceof hydra.core.Type.Map) {
-          {
-            var fmt = (hydra.core.Type.Map) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.Map) {
-              {
-                var cmt = (hydra.core.Type.Map) (ct_tco);
-                return hydra.lib.maps.Union.apply(
-                  ((goSub).apply(((fmt).value).keys)).apply(((cmt).value).keys),
-                  ((goSub).apply(((fmt).value).values)).apply(((cmt).value).values));
-              }
-            }
-            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
-          }
-        }
-        if ((ft_tco) instanceof hydra.core.Type.Pair) {
-          {
-            var fpt = (hydra.core.Type.Pair) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.Pair) {
-              {
-                var cpt = (hydra.core.Type.Pair) (ct_tco);
-                return hydra.lib.maps.Union.apply(
-                  ((goSub).apply(((fpt).value).first)).apply(((cpt).value).first),
-                  ((goSub).apply(((fpt).value).second)).apply(((cpt).value).second));
-              }
-            }
-            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
-          }
-        }
-        if ((ft_tco) instanceof hydra.core.Type.Either) {
-          {
-            var fet = (hydra.core.Type.Either) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.Either) {
-              {
-                var cet = (hydra.core.Type.Either) (ct_tco);
-                return hydra.lib.maps.Union.apply(
-                  ((goSub).apply(((fet).value).left)).apply(((cet).value).left),
-                  ((goSub).apply(((fet).value).right)).apply(((cet).value).right));
-              }
-            }
-            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
-          }
-        }
-        if ((ft_tco) instanceof hydra.core.Type.Forall) {
-          {
-            var ffa = (hydra.core.Type.Forall) (ft_tco);
-            if ((ct_tco) instanceof hydra.core.Type.Forall) {
-              {
-                var cfa = (hydra.core.Type.Forall) (ct_tco);
-                return ((goSub).apply(((ffa).value).body)).apply(((cfa).value).body);
-              }
-            }
-            return hydra.ext.java.coder.Coder.buildTypeVarSubst_go(
-              svs_tco,
-              hydra.rewriting.Rewriting.deannotateType(((ffa).value).body),
-              ct_tco);
-          }
-        }
-        return (ct_tco).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, java.util.Map<hydra.core.Name, hydra.core.Name>>> goSub = (java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, java.util.Map<hydra.core.Name, hydra.core.Name>>>) (a -> (java.util.function.Function<hydra.core.Type, java.util.Map<hydra.core.Name, hydra.core.Name>>) (b -> hydra.ext.java.coder.Coder.buildTypeVarSubst_go(
+      svs,
+      hydra.rewriting.Rewriting.deannotateType(a),
+      hydra.rewriting.Rewriting.deannotateType(b))));
+    return (ft).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
           public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
             return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
@@ -2075,13 +1922,187 @@ public interface Coder {
           @Override
           public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Forall cfa) {
             return hydra.ext.java.coder.Coder.buildTypeVarSubst_go(
-              svs_tco,
-              ft_tco,
+              svs,
+              ft,
               hydra.rewriting.Rewriting.deannotateType(((cfa).value).body));
           }
         });
       }
-    }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Variable fn) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Variable cn) {
+            return hydra.lib.logic.IfElse.lazy(
+              hydra.lib.logic.And.apply(
+                hydra.lib.logic.Not.apply(hydra.lib.equality.Equal.apply(
+                  (fn).value,
+                  (cn).value)),
+                hydra.lib.sets.Member.apply(
+                  (cn).value,
+                  svs)),
+              () -> hydra.lib.maps.Singleton.apply(
+                (fn).value,
+                (cn).value),
+              () -> (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())));
+          }
+        });
+      }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Function fft) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Function cft) {
+            return hydra.lib.maps.Union.apply(
+              ((goSub).apply(((fft).value).domain)).apply(((cft).value).domain),
+              ((goSub).apply(((fft).value).codomain)).apply(((cft).value).codomain));
+          }
+        });
+      }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Application fat) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Application cat) {
+            return hydra.lib.maps.Union.apply(
+              ((goSub).apply(((fat).value).function)).apply(((cat).value).function),
+              ((goSub).apply(((fat).value).argument)).apply(((cat).value).argument));
+          }
+        });
+      }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.List fl) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.List cl) {
+            return ((goSub).apply((fl).value)).apply((cl).value);
+          }
+        });
+      }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Set fs) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Set cs) {
+            return ((goSub).apply((fs).value)).apply((cs).value);
+          }
+        });
+      }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Maybe fm) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Maybe cm) {
+            return ((goSub).apply((fm).value)).apply((cm).value);
+          }
+        });
+      }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Map fmt) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Map cmt) {
+            return hydra.lib.maps.Union.apply(
+              ((goSub).apply(((fmt).value).keys)).apply(((cmt).value).keys),
+              ((goSub).apply(((fmt).value).values)).apply(((cmt).value).values));
+          }
+        });
+      }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Pair fpt) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Pair cpt) {
+            return hydra.lib.maps.Union.apply(
+              ((goSub).apply(((fpt).value).first)).apply(((cpt).value).first),
+              ((goSub).apply(((fpt).value).second)).apply(((cpt).value).second));
+          }
+        });
+      }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Either fet) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()));
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Either cet) {
+            return hydra.lib.maps.Union.apply(
+              ((goSub).apply(((fet).value).left)).apply(((cet).value).left),
+              ((goSub).apply(((fet).value).right)).apply(((cet).value).right));
+          }
+        });
+      }
+      
+      @Override
+      public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Forall ffa) {
+        return (ct).accept(new hydra.core.Type.PartialVisitor<>() {
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> otherwise(hydra.core.Type instance) {
+            return hydra.ext.java.coder.Coder.buildTypeVarSubst_go(
+              svs,
+              hydra.rewriting.Rewriting.deannotateType(((ffa).value).body),
+              ct);
+          }
+          
+          @Override
+          public java.util.Map<hydra.core.Name, hydra.core.Name> visit(hydra.core.Type.Forall cfa) {
+            return ((goSub).apply(((ffa).value).body)).apply(((cfa).value).body);
+          }
+        });
+      }
+    });
   }
   
   static java.util.Map<hydra.core.Name, hydra.core.Type> buildTypeSubst(java.util.Set<hydra.core.Name> schemeVarSet, hydra.core.Type schemeType, hydra.core.Type actualType) {
@@ -2791,43 +2812,39 @@ public interface Coder {
   }
   
   static hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> collectTypeApps(hydra.core.Term t, java.util.List<hydra.core.Type> acc) {
-    while (true) {
-      {
-        final var t_tco = t;
-        final var acc_tco = acc;
-        if ((hydra.rewriting.Rewriting.deannotateTerm(t_tco)) instanceof hydra.core.Term.TypeApplication) {
-          {
-            var ta = (hydra.core.Term.TypeApplication) (hydra.rewriting.Rewriting.deannotateTerm(t_tco));
-            t = ((ta).value).body;
-            acc = hydra.lib.lists.Cons.apply(
-              ((ta).value).type,
-              acc_tco);
-            continue;
-          }
-        }
-        return (hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>(hydra.rewriting.Rewriting.deannotateTerm(t_tco), acc_tco)));
+    return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>(hydra.rewriting.Rewriting.deannotateTerm(t), acc)));
       }
-    }
+      
+      @Override
+      public hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> visit(hydra.core.Term.TypeApplication ta) {
+        return hydra.ext.java.coder.Coder.collectTypeApps(
+          ((ta).value).body,
+          hydra.lib.lists.Cons.apply(
+            ((ta).value).type,
+            acc));
+      }
+    });
   }
   
   static hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> collectTypeApps0(hydra.core.Term t, java.util.List<hydra.core.Type> acc) {
-    while (true) {
-      {
-        final var t_tco = t;
-        final var acc_tco = acc;
-        if ((hydra.rewriting.Rewriting.deannotateTerm(t_tco)) instanceof hydra.core.Term.TypeApplication) {
-          {
-            var ta = (hydra.core.Term.TypeApplication) (hydra.rewriting.Rewriting.deannotateTerm(t_tco));
-            t = ((ta).value).body;
-            acc = hydra.lib.lists.Cons.apply(
-              ((ta).value).type,
-              acc_tco);
-            continue;
-          }
-        }
-        return (hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>(t_tco, acc_tco)));
+    return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>(t, acc)));
       }
-    }
+      
+      @Override
+      public hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> visit(hydra.core.Term.TypeApplication ta) {
+        return hydra.ext.java.coder.Coder.collectTypeApps0(
+          ((ta).value).body,
+          hydra.lib.lists.Cons.apply(
+            ((ta).value).type,
+            acc));
+      }
+    });
   }
   
   static Integer countFunctionParams(hydra.core.Type t) {
@@ -2873,26 +2890,22 @@ public interface Coder {
   }
   
   static hydra.core.Type unwrapReturnType(hydra.core.Type t) {
-    while (true) {
-      {
-        final var t_tco = t;
-        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Function) {
-          {
-            var ft = (hydra.core.Type.Function) (hydra.rewriting.Rewriting.deannotateType(t_tco));
-            t = ((ft).value).codomain;
-            continue;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Application) {
-          {
-            var at = (hydra.core.Type.Application) (hydra.rewriting.Rewriting.deannotateType(t_tco));
-            t = ((at).value).argument;
-            continue;
-          }
-        }
-        return t_tco;
+    return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.core.Type otherwise(hydra.core.Type instance) {
+        return t;
       }
-    }
+      
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Function ft) {
+        return hydra.ext.java.coder.Coder.unwrapReturnType(((ft).value).codomain);
+      }
+      
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Application at) {
+        return hydra.ext.java.coder.Coder.unwrapReturnType(((at).value).argument);
+      }
+    });
   }
   
   static hydra.util.Maybe<hydra.core.Name> findPairFirst(hydra.core.Type t) {
@@ -6588,85 +6601,68 @@ public interface Coder {
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration> toClassDecl(Boolean isInner, Boolean isSer, hydra.ext.java.helpers.Aliases aliases, java.util.List<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.core.Type t) {
-    while (true) {
-      {
-        java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration>> wrap = (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration>>) (t_ -> hydra.ext.java.coder.Coder.declarationForRecordType(
+    java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration>> wrap = (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration>>) (t_ -> hydra.ext.java.coder.Coder.declarationForRecordType(
+      isInner,
+      isSer,
+      aliases,
+      tparams,
+      elName,
+      java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("value"), hydra.rewriting.Rewriting.deannotateType(t_)))));
+    return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration> otherwise(hydra.core.Type instance) {
+        return (wrap).apply(t);
+      }
+      
+      @Override
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration> visit(hydra.core.Type.Record rt) {
+        return hydra.ext.java.coder.Coder.declarationForRecordType(
           isInner,
           isSer,
           aliases,
           tparams,
           elName,
-          java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("value"), hydra.rewriting.Rewriting.deannotateType(t_)))));
-        final var isInner_tco = isInner;
-        final var isSer_tco = isSer;
-        final var aliases_tco = aliases;
-        final var tparams_tco = tparams;
-        final var elName_tco = elName;
-        final var t_tco = t;
-        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Record) {
-          {
-            var rt = (hydra.core.Type.Record) (hydra.rewriting.Rewriting.deannotateType(t_tco));
-            return hydra.ext.java.coder.Coder.declarationForRecordType(
-              isInner_tco,
-              isSer_tco,
-              aliases_tco,
-              tparams_tco,
-              elName_tco,
-              ((rt).value).fields);
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Union) {
-          {
-            var rt = (hydra.core.Type.Union) (hydra.rewriting.Rewriting.deannotateType(t_tco));
-            return hydra.ext.java.coder.Coder.declarationForUnionType(
-              isSer_tco,
-              aliases_tco,
-              tparams_tco,
-              elName_tco,
-              ((rt).value).fields);
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Forall) {
-          {
-            var fa = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(t_tco));
-            return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration>>) (() -> {
-              hydra.core.Name v = ((fa).value).parameter;
-              return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration>>) (() -> {
-                hydra.core.Type body = ((fa).value).body;
-                return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration>>) (() -> {
-                  hydra.ext.java.syntax.TypeParameter param = hydra.ext.java.utils.Utils.javaTypeParameter(hydra.formatting.Formatting.capitalize((v).value));
-                  return hydra.ext.java.coder.Coder.toClassDecl(
-                    false,
-                    isSer_tco,
-                    aliases_tco,
-                    hydra.lib.lists.Concat2.apply(
-                      tparams_tco,
-                      java.util.List.of(param)),
-                    elName_tco,
-                    body);
-                })).get();
-              })).get();
-            })).get();
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Wrap) {
-          {
-            var wt = (hydra.core.Type.Wrap) (hydra.rewriting.Rewriting.deannotateType(t_tco));
-            return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration>>) (() -> {
-              hydra.core.Type wtype = ((wt).value).body;
-              return hydra.ext.java.coder.Coder.declarationForRecordType(
-                isInner_tco,
-                isSer_tco,
-                aliases_tco,
-                tparams_tco,
-                elName_tco,
-                java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("value"), wtype)));
-            })).get();
-          }
-        }
-        return (wrap).apply(t_tco);
+          ((rt).value).fields);
       }
-    }
+      
+      @Override
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration> visit(hydra.core.Type.Union rt) {
+        return hydra.ext.java.coder.Coder.declarationForUnionType(
+          isSer,
+          aliases,
+          tparams,
+          elName,
+          ((rt).value).fields);
+      }
+      
+      @Override
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration> visit(hydra.core.Type.Forall fa) {
+        hydra.core.Type body = ((fa).value).body;
+        hydra.core.Name v = ((fa).value).parameter;
+        hydra.ext.java.syntax.TypeParameter param = hydra.ext.java.utils.Utils.javaTypeParameter(hydra.formatting.Formatting.capitalize((v).value));
+        return hydra.ext.java.coder.Coder.toClassDecl(
+          false,
+          isSer,
+          aliases,
+          hydra.lib.lists.Concat2.apply(
+            tparams,
+            java.util.List.of(param)),
+          elName,
+          body);
+      }
+      
+      @Override
+      public hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration> visit(hydra.core.Type.Wrap wt) {
+        hydra.core.Type wtype = ((wt).value).body;
+        return hydra.ext.java.coder.Coder.declarationForRecordType(
+          isInner,
+          isSer,
+          aliases,
+          tparams,
+          elName,
+          java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("value"), wtype)));
+      }
+    });
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration> declarationForUnionType(Boolean isSer, hydra.ext.java.helpers.Aliases aliases, java.util.List<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, java.util.List<hydra.core.FieldType> fields) {
@@ -6952,37 +6948,32 @@ public interface Coder {
   }
   
   static Boolean isSerializableJavaType(hydra.core.Type typ) {
-    while (true) {
-      {
-        final var typ_tco = typ;
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Record) {
-          {
-            var rt = (hydra.core.Type.Record) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return true;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Union) {
-          {
-            var rt = (hydra.core.Type.Union) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return true;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Wrap) {
-          {
-            var wt = (hydra.core.Type.Wrap) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            return true;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateType(typ_tco)) instanceof hydra.core.Type.Forall) {
-          {
-            var fa = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(typ_tco));
-            typ = ((fa).value).body;
-            continue;
-          }
-        }
+    return (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Type instance) {
         return false;
       }
-    }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Record rt) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Union rt) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Wrap wt) {
+        return true;
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Type.Forall fa) {
+        return hydra.ext.java.coder.Coder.isSerializableJavaType(((fa).value).body);
+      }
+    });
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.core.Type> correctCastType(hydra.core.Term innerBody, java.util.List<hydra.core.Type> typeArgs, hydra.core.Type fallback) {
@@ -7146,23 +7137,21 @@ public interface Coder {
   }
   
   static hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> flattenApps(hydra.core.Term t, java.util.List<hydra.core.Term> acc) {
-    while (true) {
-      {
-        final var t_tco = t;
-        final var acc_tco = acc;
-        if ((hydra.rewriting.Rewriting.deannotateTerm(t_tco)) instanceof hydra.core.Term.Application) {
-          {
-            var app = (hydra.core.Term.Application) (hydra.rewriting.Rewriting.deannotateTerm(t_tco));
-            t = ((app).value).function;
-            acc = hydra.lib.lists.Cons.apply(
-              ((app).value).argument,
-              acc_tco);
-            continue;
-          }
-        }
-        return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>(acc_tco, t_tco)));
+    return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>(acc, t)));
       }
-    }
+      
+      @Override
+      public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> visit(hydra.core.Term.Application app) {
+        return hydra.ext.java.coder.Coder.flattenApps(
+          ((app).value).function,
+          hydra.lib.lists.Cons.apply(
+            ((app).value).argument,
+            acc));
+      }
+    });
   }
   
   static hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term> collectLambdaDomains(hydra.core.Term t) {
@@ -7328,7 +7317,7 @@ public interface Coder {
       }));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> encodeTermTCO(hydra.ext.java.helpers.JavaEnvironment env0, hydra.core.Name funcName, java.util.List<hydra.core.Name> paramNames, java.util.Map<hydra.core.Name, hydra.core.Name> tcoVarRenames, hydra.core.Term term) {
+  static hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> encodeTermTCO(hydra.ext.java.helpers.JavaEnvironment env0, hydra.core.Name funcName, java.util.List<hydra.core.Name> paramNames, java.util.Map<hydra.core.Name, hydra.core.Name> tcoVarRenames, Integer tcoDepth, hydra.core.Term term) {
     hydra.ext.java.helpers.Aliases aliases0 = (env0).aliases;
     hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env = new hydra.util.Lazy<>(() -> new hydra.ext.java.helpers.JavaEnvironment(new hydra.ext.java.helpers.Aliases((aliases0).currentNamespace, (aliases0).packages, (aliases0).branchVars, (aliases0).recursiveVars, (aliases0).inScopeTypeParams, (aliases0).polymorphicLocals, (aliases0).inScopeJavaVars, hydra.lib.maps.Union.apply(
       tcoVarRenames,
@@ -7404,69 +7393,84 @@ public interface Coder {
             }));
         })).get();
       })).get(),
-      () -> ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
-        hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> gathered2 = hydra.coderUtils.CoderUtils.gatherApplications(term);
-        return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
+      () -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
+        @Override
+        public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> otherwise(hydra.core.Term instance) {
+          hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> gathered2 = hydra.coderUtils.CoderUtils.gatherApplications(term);
           hydra.util.Lazy<java.util.List<hydra.core.Term>> args2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered2));
-          return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
-            hydra.util.Lazy<hydra.core.Term> body2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered2));
-            return hydra.lib.logic.IfElse.lazy(
-              hydra.lib.equality.Equal.apply(
-                hydra.lib.lists.Length.apply(args2.get()),
-                1),
-              () -> ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
-                hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args2.get()));
-                return (hydra.rewriting.Rewriting.deannotateAndDetypeTerm(body2.get())).accept(new hydra.core.Term.PartialVisitor<>() {
-                  @Override
-                  public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> otherwise(hydra.core.Term instance) {
-                    return hydra.lib.flows.Bind.apply(
-                      hydra.ext.java.coder.Coder.encodeTerm(
-                        env.get(),
-                        term),
-                      (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr)))))));
-                  }
-                  
-                  @Override
-                  public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Term.Function f) {
-                    return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
-                      @Override
-                      public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> otherwise(hydra.core.Function instance) {
-                        return hydra.lib.flows.Bind.apply(
-                          hydra.ext.java.coder.Coder.encodeTerm(
-                            env.get(),
-                            term),
-                          (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr)))))));
-                      }
-                      
-                      @Override
-                      public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Function.Elimination e) {
-                        return ((e).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
-                          @Override
-                          public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> otherwise(hydra.core.Elimination instance) {
-                            return hydra.lib.flows.Bind.apply(
+          hydra.util.Lazy<hydra.core.Term> body2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered2));
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              hydra.lib.lists.Length.apply(args2.get()),
+              1),
+            () -> ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
+              hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args2.get()));
+              return (hydra.rewriting.Rewriting.deannotateAndDetypeTerm(body2.get())).accept(new hydra.core.Term.PartialVisitor<>() {
+                @Override
+                public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> otherwise(hydra.core.Term instance) {
+                  return hydra.lib.flows.Bind.apply(
+                    hydra.ext.java.coder.Coder.encodeTerm(
+                      env.get(),
+                      term),
+                    (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr)))))));
+                }
+                
+                @Override
+                public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Term.Function f) {
+                  return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+                    @Override
+                    public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> otherwise(hydra.core.Function instance) {
+                      return hydra.lib.flows.Bind.apply(
+                        hydra.ext.java.coder.Coder.encodeTerm(
+                          env.get(),
+                          term),
+                        (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr)))))));
+                    }
+                    
+                    @Override
+                    public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Function.Elimination e) {
+                      return ((e).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+                        @Override
+                        public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> otherwise(hydra.core.Elimination instance) {
+                          return hydra.lib.flows.Bind.apply(
+                            hydra.ext.java.coder.Coder.encodeTerm(
+                              env.get(),
+                              term),
+                            (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr)))))));
+                        }
+                        
+                        @Override
+                        public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Elimination.Union cs) {
+                          hydra.ext.java.helpers.Aliases aliases = (env.get()).aliases;
+                          java.util.List<hydra.core.Field> cases_ = ((cs).value).cases;
+                          hydra.util.Maybe<hydra.core.Term> dflt = ((cs).value).default_;
+                          hydra.core.Name tname = ((cs).value).typeName;
+                          return hydra.lib.flows.Bind.apply(
+                            hydra.ext.java.coder.Coder.domTypeArgs(
+                              aliases,
+                              hydra.schemas.Schemas.nominalApplication(
+                                tname,
+                                (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()))),
+                            (java.util.function.Function<java.util.List<hydra.ext.java.syntax.TypeArgument>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (domArgs -> hydra.lib.flows.Bind.apply(
                               hydra.ext.java.coder.Coder.encodeTerm(
                                 env.get(),
-                                term),
-                              (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr)))))));
-                          }
-                          
-                          @Override
-                          public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Elimination.Union cs) {
-                            hydra.ext.java.helpers.Aliases aliases = (env.get()).aliases;
-                            java.util.List<hydra.core.Field> cases_ = ((cs).value).cases;
-                            hydra.util.Maybe<hydra.core.Term> dflt = ((cs).value).default_;
-                            hydra.core.Name tname = ((cs).value).typeName;
-                            return hydra.lib.flows.Bind.apply(
-                              hydra.ext.java.coder.Coder.domTypeArgs(
-                                aliases,
-                                hydra.schemas.Schemas.nominalApplication(
-                                  tname,
-                                  (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()))),
-                              (java.util.function.Function<java.util.List<hydra.ext.java.syntax.TypeArgument>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (domArgs -> hydra.lib.flows.Bind.apply(
-                                hydra.ext.java.coder.Coder.encodeTerm(
-                                  env.get(),
-                                  arg.get()),
-                                (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (jArg -> hydra.lib.flows.Bind.apply(
+                                arg.get()),
+                              (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (jArgRaw -> {
+                                hydra.util.Lazy<String> depthSuffix = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+                                  hydra.lib.equality.Equal.apply(
+                                    tcoDepth,
+                                    0),
+                                  () -> "",
+                                  () -> hydra.lib.literals.ShowInt32.apply(tcoDepth)));
+                                hydra.ext.java.syntax.Identifier matchVarId = hydra.ext.java.utils.Utils.javaIdentifier(hydra.lib.strings.Cat.apply(java.util.List.of(
+                                  "_tco_match_",
+                                  hydra.formatting.Formatting.decapitalize(hydra.names.Names.localNameOf(tname)),
+                                  depthSuffix.get())));
+                                hydra.ext.java.syntax.Expression jArg = hydra.ext.java.utils.Utils.javaIdentifierToJavaExpression(matchVarId);
+                                hydra.ext.java.syntax.BlockStatement matchDecl = hydra.ext.java.utils.Utils.varDeclarationStatement(
+                                  matchVarId,
+                                  jArgRaw);
+                                return hydra.lib.flows.Bind.apply(
                                   hydra.lib.flows.MapList.apply(
                                     (java.util.function.Function<hydra.core.Field, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.BlockStatement>>) (field -> {
                                       hydra.core.Name fieldName = (field).name;
@@ -7519,6 +7523,9 @@ public interface Coder {
                                                         funcName,
                                                         paramNames,
                                                         tcoVarRenames,
+                                                        hydra.lib.math.Add.apply(
+                                                          tcoDepth,
+                                                          1),
                                                         branchBody),
                                                       () -> hydra.lib.flows.Bind.apply(
                                                         hydra.ext.java.coder.Coder.analyzeJavaFunction(
@@ -7574,24 +7581,50 @@ public interface Coder {
                                           env.get(),
                                           d),
                                         (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (dExpr -> hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(dExpr))))))))),
-                                    (java.util.function.Function<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (defaultStmt -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Concat2.apply(
+                                    (java.util.function.Function<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (defaultStmt -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Concat.apply(java.util.List.of(
+                                      java.util.List.of(matchDecl),
                                       ifBlocks,
-                                      defaultStmt))))))))));
-                          }
-                        });
-                      }
-                    });
-                  }
-                });
-              })).get(),
-              () -> hydra.lib.flows.Bind.apply(
-                hydra.ext.java.coder.Coder.encodeTerm(
-                  env.get(),
-                  term),
-                (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr))))))));
-          })).get();
-        })).get();
-      })).get());
+                                      defaultStmt)))))));
+                              }))));
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            })).get(),
+            () -> hydra.lib.flows.Bind.apply(
+              hydra.ext.java.coder.Coder.encodeTerm(
+                env.get(),
+                term),
+              (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (expr -> hydra.lib.flows.Pure.apply(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(expr))))))));
+        }
+        
+        @Override
+        public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> visit(hydra.core.Term.Let lt) {
+          java.util.List<hydra.core.Binding> letBindings = ((lt).value).bindings;
+          hydra.core.Term letBody = ((lt).value).body;
+          return hydra.lib.flows.Bind.apply(
+            hydra.ext.java.coder.Coder.bindingsToStatements(
+              env.get(),
+              letBindings),
+            (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (bindResult -> {
+              hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> envAfterLet = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindResult));
+              hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> letStmts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindResult));
+              return hydra.lib.flows.Bind.apply(
+                hydra.ext.java.coder.Coder.encodeTermTCO(
+                  envAfterLet.get(),
+                  funcName,
+                  paramNames,
+                  tcoVarRenames,
+                  tcoDepth,
+                  letBody),
+                (java.util.function.Function<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (tcoBodyStmts -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Concat2.apply(
+                  letStmts.get(),
+                  tcoBodyStmts))));
+            }));
+        }
+      }));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.InterfaceMemberDeclaration> encodeTermDefinition(hydra.ext.java.helpers.JavaEnvironment env, hydra.module.TermDefinition tdef) {
@@ -7750,17 +7783,13 @@ public interface Coder {
                               (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
                               fixedCod.get()),
                             (java.util.function.Function<hydra.ext.java.syntax.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.InterfaceMemberDeclaration>>) (jcod -> {
-                              hydra.util.Lazy<Boolean> isTCO = new hydra.util.Lazy<>(() -> hydra.lib.logic.And.apply(
-                                hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(params.get())),
-                                hydra.coderUtils.CoderUtils.isSelfTailRecursive(
-                                  name,
-                                  body.get())));
+                              Boolean isTCO = false;
                               String jname = hydra.ext.java.utils.Utils.sanitizeJavaName(hydra.formatting.Formatting.decapitalize(hydra.names.Names.localNameOf(name)));
                               java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> mods = java.util.List.of(new hydra.ext.java.syntax.InterfaceMethodModifier.Static());
                               hydra.ext.java.syntax.Result result = hydra.ext.java.utils.Utils.javaTypeToJavaResult(jcod);
                               return hydra.lib.flows.Bind.apply(
                                 hydra.lib.logic.IfElse.lazy(
-                                  isTCO.get(),
+                                  isTCO,
                                   () -> ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
                                     String tcoSuffix = "_tco";
                                     return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
@@ -7781,22 +7810,28 @@ public interface Coder {
                                             hydra.lib.lists.Zip.apply(
                                               params.get(),
                                               snapshotNames.get())));
-                                          return hydra.lib.flows.Bind.apply(
-                                            hydra.ext.java.coder.Coder.encodeTermTCO(
-                                              env3.get(),
-                                              name,
-                                              params.get(),
-                                              tcoVarRenames.get(),
-                                              annotatedBody),
-                                            (java.util.function.Function<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (tcoStmts -> {
-                                              hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> whileBodyStmts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(java.util.List.of(
-                                                bindingStmts.get(),
-                                                snapshotDecls.get(),
-                                                tcoStmts)));
-                                              hydra.ext.java.syntax.Statement whileBodyBlock = new hydra.ext.java.syntax.Statement.WithoutTrailing(new hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.Block(new hydra.ext.java.syntax.Block(whileBodyStmts.get())));
-                                              hydra.util.Lazy<hydra.ext.java.syntax.BlockStatement> whileStmt = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.BlockStatement.Statement(new hydra.ext.java.syntax.Statement.While(new hydra.ext.java.syntax.WhileStatement(hydra.ext.java.coder.Coder.<hydra.ext.java.syntax.Expression>encodeTermDefinition_noCond(), whileBodyBlock))));
-                                              return hydra.lib.flows.Pure.apply(java.util.List.of(whileStmt.get()));
-                                            }));
+                                          return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
+                                            hydra.util.Lazy<hydra.core.Term> tcoBody = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+                                              hydra.lib.lists.Null.apply(bindings.get()),
+                                              () -> annotatedBody,
+                                              () -> new hydra.core.Term.Let(new hydra.core.Let(bindings.get(), annotatedBody))));
+                                            return hydra.lib.flows.Bind.apply(
+                                              hydra.ext.java.coder.Coder.encodeTermTCO(
+                                                env2WithTypeParams,
+                                                name,
+                                                params.get(),
+                                                tcoVarRenames.get(),
+                                                0,
+                                                tcoBody.get()),
+                                              (java.util.function.Function<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (tcoStmts -> {
+                                                hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> whileBodyStmts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+                                                  snapshotDecls.get(),
+                                                  tcoStmts));
+                                                hydra.ext.java.syntax.Statement whileBodyBlock = new hydra.ext.java.syntax.Statement.WithoutTrailing(new hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.Block(new hydra.ext.java.syntax.Block(whileBodyStmts.get())));
+                                                hydra.util.Lazy<hydra.ext.java.syntax.BlockStatement> whileStmt = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.BlockStatement.Statement(new hydra.ext.java.syntax.Statement.While(new hydra.ext.java.syntax.WhileStatement(hydra.ext.java.coder.Coder.<hydra.ext.java.syntax.Expression>encodeTermDefinition_noCond(), whileBodyBlock))));
+                                                return hydra.lib.flows.Pure.apply(java.util.List.of(whileStmt.get()));
+                                              }));
+                                          })).get();
                                         })).get();
                                       })).get();
                                     })).get();

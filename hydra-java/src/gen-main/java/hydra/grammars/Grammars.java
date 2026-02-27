@@ -78,35 +78,31 @@ public interface Grammars {
   }
   
   static Boolean isComplex(hydra.grammar.Pattern pat) {
-    while (true) {
-      {
-        final var pat_tco = pat;
-        if ((pat_tco) instanceof hydra.grammar.Pattern.Labeled) {
-          {
-            var lp = (hydra.grammar.Pattern.Labeled) (pat_tco);
-            pat = ((lp).value).pattern;
-            continue;
-          }
-        }
-        if ((pat_tco) instanceof hydra.grammar.Pattern.Sequence) {
-          {
-            var pats = (hydra.grammar.Pattern.Sequence) (pat_tco);
-            return hydra.grammars.Grammars.isNontrivial(
-              true,
-              (pats).value);
-          }
-        }
-        if ((pat_tco) instanceof hydra.grammar.Pattern.Alternatives) {
-          {
-            var pats = (hydra.grammar.Pattern.Alternatives) (pat_tco);
-            return hydra.grammars.Grammars.isNontrivial(
-              false,
-              (pats).value);
-          }
-        }
+    return (pat).accept(new hydra.grammar.Pattern.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.grammar.Pattern instance) {
         return false;
       }
-    }
+      
+      @Override
+      public Boolean visit(hydra.grammar.Pattern.Labeled lp) {
+        return hydra.grammars.Grammars.isComplex(((lp).value).pattern);
+      }
+      
+      @Override
+      public Boolean visit(hydra.grammar.Pattern.Sequence pats) {
+        return hydra.grammars.Grammars.isNontrivial(
+          true,
+          (pats).value);
+      }
+      
+      @Override
+      public Boolean visit(hydra.grammar.Pattern.Alternatives pats) {
+        return hydra.grammars.Grammars.isNontrivial(
+          false,
+          (pats).value);
+      }
+    });
   }
   
   static Boolean isNontrivial(Boolean isRecord, java.util.List<hydra.grammar.Pattern> pats) {

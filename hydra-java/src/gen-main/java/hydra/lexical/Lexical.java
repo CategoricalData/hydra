@@ -103,32 +103,28 @@ public interface Lexical {
   }
   
   static java.util.List<hydra.core.FieldType> fieldsOf(hydra.core.Type t) {
-    while (true) {
-      {
-        hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(t);
-        final var t_tco = t;
-        if ((stripped) instanceof hydra.core.Type.Forall) {
-          {
-            var forallType = (hydra.core.Type.Forall) (stripped);
-            t = ((forallType).value).body;
-            continue;
-          }
-        }
-        if ((stripped) instanceof hydra.core.Type.Record) {
-          {
-            var rt = (hydra.core.Type.Record) (stripped);
-            return ((rt).value).fields;
-          }
-        }
-        if ((stripped) instanceof hydra.core.Type.Union) {
-          {
-            var rt = (hydra.core.Type.Union) (stripped);
-            return ((rt).value).fields;
-          }
-        }
+    hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(t);
+    return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public java.util.List<hydra.core.FieldType> otherwise(hydra.core.Type instance) {
         return (java.util.List<hydra.core.FieldType>) (java.util.List.<hydra.core.FieldType>of());
       }
-    }
+      
+      @Override
+      public java.util.List<hydra.core.FieldType> visit(hydra.core.Type.Forall forallType) {
+        return hydra.lexical.Lexical.fieldsOf(((forallType).value).body);
+      }
+      
+      @Override
+      public java.util.List<hydra.core.FieldType> visit(hydra.core.Type.Record rt) {
+        return ((rt).value).fields;
+      }
+      
+      @Override
+      public java.util.List<hydra.core.FieldType> visit(hydra.core.Type.Union rt) {
+        return ((rt).value).fields;
+      }
+    });
   }
   
   static <T0, T1, T2> hydra.compute.Flow<T1, T2> getField(java.util.Map<hydra.core.Name, T0> m, hydra.core.Name fname, java.util.function.Function<T0, hydra.compute.Flow<T1, T2>> decode) {

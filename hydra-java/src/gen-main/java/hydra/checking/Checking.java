@@ -730,54 +730,14 @@ public interface Checking {
   }
   
   static <T1> hydra.compute.Flow<T1, hydra.core.Type> typeOfApplication_tryType(hydra.core.Term fun, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Type, Boolean>>> hydra_checking_typesEffectivelyEqual2, java.util.function.Function<hydra.core.Term, String> hydra_show_core_term2, java.util.function.Function<hydra.core.Type, String> hydra_show_core_type2, hydra.typing.TypeContext tx, hydra.core.Type tfun, hydra.core.Type targ) {
-    while (true) {
-      {
-        final var fun_tco = fun;
-        final var hydra_checking_typesEffectivelyEqual2_tco = hydra_checking_typesEffectivelyEqual2;
-        final var hydra_show_core_term2_tco = hydra_show_core_term2;
-        final var hydra_show_core_type2_tco = hydra_show_core_type2;
-        final var tx_tco = tx;
-        final var tfun_tco = tfun;
-        final var targ_tco = targ;
-        if ((tfun_tco) instanceof hydra.core.Type.Forall) {
-          {
-            var ft = (hydra.core.Type.Forall) (tfun_tco);
-            tfun = ((ft).value).body;
-            continue;
-          }
-        }
-        if ((tfun_tco) instanceof hydra.core.Type.Function) {
-          {
-            var ft = (hydra.core.Type.Function) (tfun_tco);
-            return ((java.util.function.Supplier<hydra.compute.Flow<T1, hydra.core.Type>>) (() -> {
-              hydra.core.Type dom = ((ft).value).domain;
-              return ((java.util.function.Supplier<hydra.compute.Flow<T1, hydra.core.Type>>) (() -> {
-                hydra.core.Type cod = ((ft).value).codomain;
-                return hydra.lib.logic.IfElse.lazy(
-                  (((hydra_checking_typesEffectivelyEqual2_tco).apply(tx_tco)).apply(dom)).apply(targ_tco),
-                  () -> hydra.lib.flows.Pure.apply(cod),
-                  () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
-                    "in application, expected ",
-                    (hydra_show_core_type2_tco).apply(dom),
-                    " but found ",
-                    (hydra_show_core_type2_tco).apply(targ_tco)))));
-              })).get();
-            })).get();
-          }
-        }
-        if ((tfun_tco) instanceof hydra.core.Type.Variable) {
-          {
-            var v = (hydra.core.Type.Variable) (tfun_tco);
-            return hydra.lib.flows.Map.apply(
-              (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (x -> new hydra.core.Type.Variable(x)),
-              hydra.schemas.Schemas.<T1>freshName());
-          }
-        }
+    return (tfun).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.compute.Flow<T1, hydra.core.Type> otherwise(hydra.core.Type instance) {
         return hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
           "left hand side of application (",
-          (hydra_show_core_term2_tco).apply(fun_tco),
+          (hydra_show_core_term2).apply(fun),
           ") is not function-typed (",
-          (hydra_show_core_type2_tco).apply(tfun_tco),
+          (hydra_show_core_type2).apply(tfun),
           ")",
           ". types: ",
           hydra.lib.strings.Intercalate.apply(
@@ -786,10 +746,43 @@ public interface Checking {
               (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, String>) (p -> hydra.lib.strings.Cat.apply(java.util.List.of(
                 (hydra.lib.pairs.First.apply(p)).value,
                 ": ",
-                (hydra_show_core_type2_tco).apply(hydra.lib.pairs.Second.apply(p))))),
-              hydra.lib.maps.ToList.apply((tx_tco).types))))));
+                (hydra_show_core_type2).apply(hydra.lib.pairs.Second.apply(p))))),
+              hydra.lib.maps.ToList.apply((tx).types))))));
       }
-    }
+      
+      @Override
+      public hydra.compute.Flow<T1, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
+        return hydra.checking.Checking.<T1>typeOfApplication_tryType(
+          fun,
+          hydra_checking_typesEffectivelyEqual2,
+          hydra_show_core_term2,
+          hydra_show_core_type2,
+          tx,
+          ((ft).value).body,
+          targ);
+      }
+      
+      @Override
+      public hydra.compute.Flow<T1, hydra.core.Type> visit(hydra.core.Type.Function ft) {
+        hydra.core.Type cod = ((ft).value).codomain;
+        hydra.core.Type dom = ((ft).value).domain;
+        return hydra.lib.logic.IfElse.lazy(
+          (((hydra_checking_typesEffectivelyEqual2).apply(tx)).apply(dom)).apply(targ),
+          () -> hydra.lib.flows.Pure.apply(cod),
+          () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
+            "in application, expected ",
+            (hydra_show_core_type2).apply(dom),
+            " but found ",
+            (hydra_show_core_type2).apply(targ)))));
+      }
+      
+      @Override
+      public hydra.compute.Flow<T1, hydra.core.Type> visit(hydra.core.Type.Variable v) {
+        return hydra.lib.flows.Map.apply(
+          (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (x -> new hydra.core.Type.Variable(x)),
+          hydra.schemas.Schemas.<T1>freshName());
+      }
+    });
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.core.Type> typeOfCaseStatement(hydra.typing.TypeContext tx, java.util.List<hydra.core.Type> typeArgs, hydra.core.CaseStatement cs) {

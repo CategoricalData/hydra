@@ -30,81 +30,69 @@ public interface Rewriting {
   }
   
   static hydra.core.Term deannotateAndDetypeTerm(hydra.core.Term t) {
-    while (true) {
-      {
-        final var t_tco = t;
-        if ((t_tco) instanceof hydra.core.Term.Annotated) {
-          {
-            var at = (hydra.core.Term.Annotated) (t_tco);
-            t = ((at).value).body;
-            continue;
-          }
-        }
-        if ((t_tco) instanceof hydra.core.Term.TypeApplication) {
-          {
-            var tt = (hydra.core.Term.TypeApplication) (t_tco);
-            t = ((tt).value).body;
-            continue;
-          }
-        }
-        if ((t_tco) instanceof hydra.core.Term.TypeLambda) {
-          {
-            var ta = (hydra.core.Term.TypeLambda) (t_tco);
-            t = ((ta).value).body;
-            continue;
-          }
-        }
-        return t_tco;
+    return (t).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term otherwise(hydra.core.Term instance) {
+        return t;
       }
-    }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Annotated at) {
+        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm(((at).value).body);
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
+        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm(((tt).value).body);
+      }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
+        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm(((ta).value).body);
+      }
+    });
   }
   
   static hydra.core.Term deannotateTerm(hydra.core.Term t) {
-    while (true) {
-      {
-        final var t_tco = t;
-        if ((t_tco) instanceof hydra.core.Term.Annotated) {
-          {
-            var at = (hydra.core.Term.Annotated) (t_tco);
-            t = ((at).value).body;
-            continue;
-          }
-        }
-        return t_tco;
+    return (t).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.core.Term otherwise(hydra.core.Term instance) {
+        return t;
       }
-    }
+      
+      @Override
+      public hydra.core.Term visit(hydra.core.Term.Annotated at) {
+        return hydra.rewriting.Rewriting.deannotateTerm(((at).value).body);
+      }
+    });
   }
   
   static hydra.core.Type deannotateType(hydra.core.Type t) {
-    while (true) {
-      {
-        final var t_tco = t;
-        if ((t_tco) instanceof hydra.core.Type.Annotated) {
-          {
-            var arg_ = (hydra.core.Type.Annotated) (t_tco);
-            t = ((arg_).value).body;
-            continue;
-          }
-        }
-        return t_tco;
+    return (t).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.core.Type otherwise(hydra.core.Type instance) {
+        return t;
       }
-    }
+      
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Annotated arg_) {
+        return hydra.rewriting.Rewriting.deannotateType(((arg_).value).body);
+      }
+    });
   }
   
   static hydra.core.Type deannotateTypeParameters(hydra.core.Type t) {
-    while (true) {
-      {
-        final var t_tco = t;
-        if ((hydra.rewriting.Rewriting.deannotateType(t_tco)) instanceof hydra.core.Type.Forall) {
-          {
-            var lt = (hydra.core.Type.Forall) (hydra.rewriting.Rewriting.deannotateType(t_tco));
-            t = ((lt).value).body;
-            continue;
-          }
-        }
-        return t_tco;
+    return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.core.Type otherwise(hydra.core.Type instance) {
+        return t;
       }
-    }
+      
+      @Override
+      public hydra.core.Type visit(hydra.core.Type.Forall lt) {
+        return hydra.rewriting.Rewriting.deannotateTypeParameters(((lt).value).body);
+      }
+    });
   }
   
   static hydra.core.Type deannotateTypeRecursive(hydra.core.Type typ) {
@@ -602,31 +590,32 @@ public interface Rewriting {
   }
   
   static Boolean isLambda(hydra.core.Term term) {
-    while (true) {
-      {
-        final var term_tco = term;
-        if ((hydra.rewriting.Rewriting.deannotateTerm(term_tco)) instanceof hydra.core.Term.Function) {
-          {
-            var v1 = (hydra.core.Term.Function) (hydra.rewriting.Rewriting.deannotateTerm(term_tco));
-            if (((v1).value) instanceof hydra.core.Function.Lambda) {
-              {
-                var ignored = (hydra.core.Function.Lambda) ((v1).value);
-                return true;
-              }
-            }
-            return false;
-          }
-        }
-        if ((hydra.rewriting.Rewriting.deannotateTerm(term_tco)) instanceof hydra.core.Term.Let) {
-          {
-            var lt = (hydra.core.Term.Let) (hydra.rewriting.Rewriting.deannotateTerm(term_tco));
-            term = ((lt).value).body;
-            continue;
-          }
-        }
+    return (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public Boolean otherwise(hydra.core.Term instance) {
         return false;
       }
-    }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Function v1) {
+        return ((v1).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          @Override
+          public Boolean otherwise(hydra.core.Function instance) {
+            return false;
+          }
+          
+          @Override
+          public Boolean visit(hydra.core.Function.Lambda ignored) {
+            return true;
+          }
+        });
+      }
+      
+      @Override
+      public Boolean visit(hydra.core.Term.Let lt) {
+        return hydra.rewriting.Rewriting.isLambda(((lt).value).body);
+      }
+    });
   }
   
   static hydra.core.Term liftLambdaAboveLet(hydra.core.Term term0) {

@@ -1134,96 +1134,92 @@ public interface Reduction {
   }
   
   static <T2> hydra.compute.Flow<T2, Integer> etaExpandTypedTerm_arityOf(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, hydra.typing.TypeContext tx, hydra.core.Term term) {
-    while (true) {
-      {
-        final var hydra_arity_typeArity2_tco = hydra_arity_typeArity2;
-        final var hydra_arity_typeSchemeArity2_tco = hydra_arity_typeSchemeArity2;
-        final var hydra_schemas_extendTypeContextForLambda2_tco = hydra_schemas_extendTypeContextForLambda2;
-        final var hydra_schemas_extendTypeContextForLet2_tco = hydra_schemas_extendTypeContextForLet2;
-        final var hydra_schemas_extendTypeContextForTypeLambda2_tco = hydra_schemas_extendTypeContextForTypeLambda2;
-        final var tx_tco = tx;
-        final var term_tco = term;
-        if ((term_tco) instanceof hydra.core.Term.Annotated) {
-          {
-            var at = (hydra.core.Term.Annotated) (term_tco);
-            term = ((at).value).body;
-            continue;
-          }
-        }
-        if ((term_tco) instanceof hydra.core.Term.Function) {
-          {
-            var f = (hydra.core.Term.Function) (term_tco);
-            return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_forFunction(
-              hydra_arity_typeArity2_tco,
-              hydra_schemas_extendTypeContextForLet2_tco,
-              hydra_schemas_extendTypeContextForTypeLambda2_tco,
-              hydra_arity_typeSchemeArity2_tco,
-              hydra_schemas_extendTypeContextForLambda2_tco,
-              tx_tco,
-              (f).value);
-          }
-        }
-        if ((term_tco) instanceof hydra.core.Term.Let) {
-          {
-            var l = (hydra.core.Term.Let) (term_tco);
-            return ((java.util.function.Supplier<hydra.compute.Flow<T2, Integer>>) (() -> {
-              hydra.util.Lazy<hydra.typing.TypeContext> txl = new hydra.util.Lazy<>(() -> (((hydra_schemas_extendTypeContextForLet2_tco).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(tx_tco)).apply((l).value));
-              return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
-                hydra_arity_typeArity2_tco,
-                hydra_arity_typeSchemeArity2_tco,
-                hydra_schemas_extendTypeContextForLambda2_tco,
-                hydra_schemas_extendTypeContextForLet2_tco,
-                hydra_schemas_extendTypeContextForTypeLambda2_tco,
-                txl.get(),
-                ((l).value).body);
-            })).get();
-          }
-        }
-        if ((term_tco) instanceof hydra.core.Term.TypeApplication) {
-          {
-            var tat = (hydra.core.Term.TypeApplication) (term_tco);
-            term = ((tat).value).body;
-            continue;
-          }
-        }
-        if ((term_tco) instanceof hydra.core.Term.TypeLambda) {
-          {
-            var tl = (hydra.core.Term.TypeLambda) (term_tco);
-            return ((java.util.function.Supplier<hydra.compute.Flow<T2, Integer>>) (() -> {
-              hydra.typing.TypeContext txt = ((hydra_schemas_extendTypeContextForTypeLambda2_tco).apply(tx_tco)).apply((tl).value);
-              return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
-                hydra_arity_typeArity2_tco,
-                hydra_arity_typeSchemeArity2_tco,
-                hydra_schemas_extendTypeContextForLambda2_tco,
-                hydra_schemas_extendTypeContextForLet2_tco,
-                hydra_schemas_extendTypeContextForTypeLambda2_tco,
-                txt,
-                ((tl).value).body);
-            })).get();
-          }
-        }
-        if ((term_tco) instanceof hydra.core.Term.Variable) {
-          {
-            var name = (hydra.core.Term.Variable) (term_tco);
-            return hydra.lib.maybes.Maybe.apply(
-              hydra.lib.flows.Map.apply(
-                hydra_arity_typeArity2_tco,
-                hydra.checking.Checking.<T2>typeOf(
-                  tx_tco,
-                  (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
-                  new hydra.core.Term.Variable((name).value))),
-              (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T2, Integer>>) (t -> hydra.lib.flows.Pure.apply((hydra_arity_typeArity2_tco).apply(t))),
-              hydra.lib.maps.Lookup.apply(
-                (name).value,
-                (tx_tco).types));
-          }
-        }
+    return (term).accept(new hydra.core.Term.PartialVisitor<>() {
+      @Override
+      public hydra.compute.Flow<T2, Integer> otherwise(hydra.core.Term instance) {
         return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_dflt(
-          hydra_arity_typeArity2_tco,
-          term_tco,
-          tx_tco);
+          hydra_arity_typeArity2,
+          term,
+          tx);
       }
-    }
+      
+      @Override
+      public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.Annotated at) {
+        return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
+          hydra_arity_typeArity2,
+          hydra_arity_typeSchemeArity2,
+          hydra_schemas_extendTypeContextForLambda2,
+          hydra_schemas_extendTypeContextForLet2,
+          hydra_schemas_extendTypeContextForTypeLambda2,
+          tx,
+          ((at).value).body);
+      }
+      
+      @Override
+      public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.Function f) {
+        return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_forFunction(
+          hydra_arity_typeArity2,
+          hydra_schemas_extendTypeContextForLet2,
+          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_arity_typeSchemeArity2,
+          hydra_schemas_extendTypeContextForLambda2,
+          tx,
+          (f).value);
+      }
+      
+      @Override
+      public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.Let l) {
+        hydra.util.Lazy<hydra.typing.TypeContext> txl = new hydra.util.Lazy<>(() -> (((hydra_schemas_extendTypeContextForLet2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(tx)).apply((l).value));
+        return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
+          hydra_arity_typeArity2,
+          hydra_arity_typeSchemeArity2,
+          hydra_schemas_extendTypeContextForLambda2,
+          hydra_schemas_extendTypeContextForLet2,
+          hydra_schemas_extendTypeContextForTypeLambda2,
+          txl.get(),
+          ((l).value).body);
+      }
+      
+      @Override
+      public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.TypeApplication tat) {
+        return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
+          hydra_arity_typeArity2,
+          hydra_arity_typeSchemeArity2,
+          hydra_schemas_extendTypeContextForLambda2,
+          hydra_schemas_extendTypeContextForLet2,
+          hydra_schemas_extendTypeContextForTypeLambda2,
+          tx,
+          ((tat).value).body);
+      }
+      
+      @Override
+      public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.TypeLambda tl) {
+        hydra.typing.TypeContext txt = ((hydra_schemas_extendTypeContextForTypeLambda2).apply(tx)).apply((tl).value);
+        return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
+          hydra_arity_typeArity2,
+          hydra_arity_typeSchemeArity2,
+          hydra_schemas_extendTypeContextForLambda2,
+          hydra_schemas_extendTypeContextForLet2,
+          hydra_schemas_extendTypeContextForTypeLambda2,
+          txt,
+          ((tl).value).body);
+      }
+      
+      @Override
+      public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.Variable name) {
+        return hydra.lib.maybes.Maybe.apply(
+          hydra.lib.flows.Map.apply(
+            hydra_arity_typeArity2,
+            hydra.checking.Checking.<T2>typeOf(
+              tx,
+              (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
+              new hydra.core.Term.Variable((name).value))),
+          (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T2, Integer>>) (t -> hydra.lib.flows.Pure.apply((hydra_arity_typeArity2).apply(t))),
+          hydra.lib.maps.Lookup.apply(
+            (name).value,
+            (tx).types));
+      }
+    });
   }
   
   static <T2> hydra.compute.Flow<T2, hydra.core.Term> etaExpandTypedTerm_forceExpansion(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>> padn, hydra.typing.TypeContext tx, java.util.function.Function<hydra.core.Term, hydra.core.Term> unwind, hydra.core.Term t) {
