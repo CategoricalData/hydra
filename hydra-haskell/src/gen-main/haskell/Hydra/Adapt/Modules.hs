@@ -11,6 +11,7 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Error as Error
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
@@ -25,7 +26,6 @@ import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -62,7 +62,7 @@ adaptedModuleDefinitions lang mod = (Flows.bind Monads.getState (\graph ->
                     let typ = (Core.typeApplicationTermType tt)
                     in  
                       let name = (Core.bindingName el)
-                      in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Monads.withTrace "adapt module definitions" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ graph term))) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
+                      in (Logic.ifElse (Annotations.isNativeType el) (Flows.bind (Flows.bind (Monads.withTrace "adapt module definitions" (Monads.eitherToFlow Error.unDecodingError (Core_.type_ graph term))) (\coreTyp -> adaptTypeToLanguage lang coreTyp)) (\adaptedTyp -> Flows.pure (Module.DefinitionType (Module.TypeDefinition {
                         Module.typeDefinitionName = name,
                         Module.typeDefinitionType = adaptedTyp})))) (Maybes.maybe (Flows.fail (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Flows.bind (Compute.coderEncode (Compute.adapterCoder adapter) term) (\adapted -> Flows.pure (Module.DefinitionTerm (Module.TermDefinition {
                         Module.termDefinitionName = name,

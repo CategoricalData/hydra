@@ -305,42 +305,6 @@ module_ = Module.Module {
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
       Core.bindingType = Nothing},
     Core.Binding {
-      Core.bindingName = (Core.Name "hydra.encode.util.decodingError"),
-      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-        Core.lambdaParameter = (Core.Name "x"),
-        Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
-          Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-          Core.injectionField = Core.Field {
-            Core.fieldName = (Core.Name "wrap"),
-            Core.fieldTerm = (Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.Name "hydra.core.WrappedTerm"),
-              Core.recordFields = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "typeName"),
-                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.util.DecodingError"))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "body"),
-                  Core.fieldTerm = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "x"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermUnion (Core.Injection {
-                        Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-                        Core.injectionField = Core.Field {
-                          Core.fieldName = (Core.Name "literal"),
-                          Core.fieldTerm = (Core.TermUnion (Core.Injection {
-                            Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
-                            Core.injectionField = Core.Field {
-                              Core.fieldName = (Core.Name "string"),
-                              Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}))),
-                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.util.DecodingError")))),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
-      Core.bindingType = Nothing},
-    Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.util.precision"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
         Core.caseStatementTypeName = (Core.Name "hydra.util.Precision"),

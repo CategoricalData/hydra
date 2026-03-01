@@ -12,6 +12,7 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Decode.Module as Module
 import qualified Hydra.Encode.Module as Module_
+import qualified Hydra.Error as Error
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Json.Decode as Decode
@@ -35,7 +36,6 @@ import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -190,7 +190,7 @@ formatPrimitive prim =
 
 -- | Format a type binding for the lexicon
 formatTypeBinding :: (Core.Binding -> Compute.Flow Graph.Graph String)
-formatTypeBinding binding = (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.eitherToFlow Util.unDecodingError (Core_.type_ graph (Core.bindingTerm binding))) (\typ -> Flows.pure (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core__.type_ typ)))))
+formatTypeBinding binding = (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.eitherToFlow Error.unDecodingError (Core_.type_ graph (Core.bindingTerm binding))) (\typ -> Flows.pure (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core__.type_ typ)))))
 
 -- | Build a schema map (Name -> Type) from a graph's schema types
 buildSchemaMap :: (Graph.Graph -> M.Map Core.Name Core.Type)
@@ -328,4 +328,4 @@ decodeModuleFromJson bsGraph universeModules doStripTypeSchemes jsonVal =
     let schemaMap = (buildSchemaMap graph)
     in  
       let modType = (Core.TypeVariable (Core.Name "hydra.module.Module"))
-      in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\decErr -> Left (Util.unDecodingError decErr)) (\mod -> Right (Logic.ifElse doStripTypeSchemes (stripModuleTypeSchemes mod) mod)) (Module.module_ graph term)) (Decode.fromJson schemaMap modType jsonVal))
+      in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\decErr -> Left (Error.unDecodingError decErr)) (\mod -> Right (Logic.ifElse doStripTypeSchemes (stripModuleTypeSchemes mod) mod)) (Module.module_ graph term)) (Decode.fromJson schemaMap modType jsonVal))

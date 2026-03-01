@@ -7,6 +7,7 @@ module Hydra.Templates where
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Error as Error
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Logic as Logic
@@ -16,7 +17,6 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as Core__
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -29,7 +29,7 @@ graphToSchema :: ([Core.Binding] -> Compute.Flow Graph.Graph (M.Map Core.Name Co
 graphToSchema els =  
   let toPair = (\el ->  
           let name = (Core.bindingName el)
-          in (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.withTrace "graph to schema" (Monads.eitherToFlow Util.unDecodingError (Core_.type_ graph (Core.bindingTerm el)))) (\t -> Flows.pure (name, t)))))
+          in (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.withTrace "graph to schema" (Monads.eitherToFlow Error.unDecodingError (Core_.type_ graph (Core.bindingTerm el)))) (\t -> Flows.pure (name, t)))))
   in (Flows.bind (Flows.mapList toPair els) (\pairs -> Flows.pure (Maps.fromList pairs)))
 
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals
