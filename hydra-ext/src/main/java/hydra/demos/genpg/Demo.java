@@ -15,7 +15,7 @@ import hydra.tabular.Table;
 import hydra.tabular.TableType;
 import hydra.tools.FlowException;
 import hydra.util.Either;
-import hydra.util.Tuple.Tuple2;
+import hydra.util.Pair;
 
 import hydra.demos.genpg.transform.Transform;
 import hydra.demos.genpg.sales.Sales;
@@ -77,13 +77,13 @@ public class Demo {
     /**
      * Transform a table by reading from a file and applying vertex/edge specifications.
      */
-    public Tuple2<List<Vertex<Term>>, List<Edge<Term>>> transformTable(
+    public Pair<List<Vertex<Term>>, List<Edge<Term>>> transformTable(
             TableType tableType,
             Path path,
             List<Vertex<Term>> vspecs,
             List<Edge<Term>> especs) throws IOException, FlowException {
         Table<Term> table = decodeTableIo(tableType, path);
-        Flow<Graph, Tuple2<List<Vertex<Term>>, List<Edge<Term>>>> flow =
+        Flow<Graph, Pair<List<Vertex<Term>>, List<Edge<Term>>>> flow =
             Transform.transformTableRows(vspecs, especs, tableType, table.data);
         return Flows.fromFlow(graphContext, flow);
     }
@@ -95,24 +95,24 @@ public class Demo {
             Path sourceRoot,
             List<TableType> tableTypes,
             LazyGraph<Term> spec) throws IOException, FlowException {
-        Either<String, Map<String, Tuple2<List<Vertex<Term>>, List<Edge<Term>>>>> specsResult =
+        Either<String, Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>>> specsResult =
             Transform.elementSpecsByTable(spec);
         if (specsResult.isLeft()) {
             throw new RuntimeException(
                 "Error in mapping specification: " + ((Either.Left<String, ?>) specsResult).value);
         }
-        Map<String, Tuple2<List<Vertex<Term>>, List<Edge<Term>>>> byTable =
-            ((Either.Right<String, Map<String, Tuple2<List<Vertex<Term>>, List<Edge<Term>>>>>) specsResult).value;
+        Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>> byTable =
+            ((Either.Right<String, Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>>>) specsResult).value;
 
         Map<RelationName, TableType> tblTypesByName = Transform.tableTypesByName(tableTypes);
 
         List<Vertex<Term>> allVertices = new ArrayList<>();
         List<Edge<Term>> allEdges = new ArrayList<>();
 
-        for (Map.Entry<String, Tuple2<List<Vertex<Term>>, List<Edge<Term>>>> entry : byTable.entrySet()) {
+        for (Map.Entry<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>> entry : byTable.entrySet()) {
             String tname = entry.getKey();
-            List<Vertex<Term>> vspecs = entry.getValue().object1;
-            List<Edge<Term>> especs = entry.getValue().object2;
+            List<Vertex<Term>> vspecs = entry.getValue().first;
+            List<Edge<Term>> especs = entry.getValue().second;
 
             RelationName relName = new RelationName(tname);
             TableType tableType = tblTypesByName.get(relName);
@@ -121,10 +121,10 @@ public class Demo {
             }
 
             Path path = sourceRoot.resolve(tname);
-            Tuple2<List<Vertex<Term>>, List<Edge<Term>>> result =
+            Pair<List<Vertex<Term>>, List<Edge<Term>>> result =
                 transformTable(tableType, path, vspecs, especs);
-            allVertices.addAll(result.object1);
-            allEdges.addAll(result.object2);
+            allVertices.addAll(result.first);
+            allEdges.addAll(result.second);
         }
 
         return Transform.makeLazyGraph(allVertices, allEdges);

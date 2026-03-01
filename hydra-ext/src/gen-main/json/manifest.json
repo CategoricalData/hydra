@@ -20,6 +20,23 @@
     "hydra.ext.python.syntax",
     "hydra.ext.python.utils",
     "hydra.ext.python.coder"],
+  "hydraExtJavaModules": [
+    "hydra.ext.io.delta.parquet",
+    "hydra.ext.org.apache.tinkerpop.features",
+    "hydra.ext.org.iana.linkrelations",
+    "hydra.ext.org.w3.owl.syntax",
+    "hydra.ext.org.w3.xml.schema",
+    "hydra.ext.datalog.syntax",
+    "hydra.pg.graphson.coder",
+    "hydra.pg.graphson.construct",
+    "hydra.pg.graphson.syntax",
+    "hydra.pg.graphson.utils",
+    "hydra.pg.mapping",
+    "hydra.pg.model",
+    "hydra.decode.pg.mapping",
+    "hydra.decode.pg.model",
+    "hydra.encode.pg.mapping",
+    "hydra.encode.pg.model"],
   "hydraExtModules": [
     "hydra.ext.org.apache.atlas",
     "hydra.ext.org.apache.avro.schema",
@@ -95,4 +112,8 @@
     "hydra.ext.rust.serde",
     "hydra.ext.rust.syntax",
     "hydra.ext.typeScript.language",
-    "hydra.ext.typeScript.model"]}
+    "hydra.ext.typeScript.model",
+    "hydra.decode.pg.mapping",
+    "hydra.decode.pg.model",
+    "hydra.encode.pg.mapping",
+    "hydra.encode.pg.model"]}

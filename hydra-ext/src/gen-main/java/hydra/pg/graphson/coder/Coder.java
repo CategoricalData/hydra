@@ -8,16 +8,16 @@ package hydra.pg.graphson.coder;
 public interface Coder {
   static hydra.json.model.Value adjacentEdgeToJson(Boolean out, hydra.pg.graphson.syntax.AdjacentEdge ae) {
     return hydra.pg.graphson.coder.Coder.toJsonObject(java.util.List.of(
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("id", hydra.util.Maybe.just(hydra.pg.graphson.coder.Coder.valueToJson((ae).id))))),
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("inV", hydra.lib.logic.IfElse.lazy(
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("id", hydra.util.Maybe.just(hydra.pg.graphson.coder.Coder.valueToJson((ae).id))))),
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("inV", hydra.lib.logic.IfElse.lazy(
         out,
         () -> hydra.util.Maybe.just(hydra.pg.graphson.coder.Coder.valueToJson((ae).vertexId)),
         () -> (hydra.util.Maybe<hydra.json.model.Value>) (hydra.util.Maybe.<hydra.json.model.Value>nothing()))))),
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("outV", hydra.lib.logic.IfElse.lazy(
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("outV", hydra.lib.logic.IfElse.lazy(
         out,
         () -> (hydra.util.Maybe<hydra.json.model.Value>) (hydra.util.Maybe.<hydra.json.model.Value>nothing()),
         () -> hydra.util.Maybe.just(hydra.pg.graphson.coder.Coder.valueToJson((ae).vertexId)))))),
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("properties", hydra.pg.graphson.coder.Coder.edgePropertyMapToJson((ae).properties))))));
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("properties", hydra.pg.graphson.coder.Coder.edgePropertyMapToJson((ae).properties))))));
   }
   
   static hydra.json.model.Value doubleValueToJson(hydra.pg.graphson.syntax.DoubleValue v1) {
@@ -49,7 +49,7 @@ public interface Coder {
       hydra.lib.maps.Null.apply(m),
       () -> (hydra.util.Maybe<hydra.json.model.Value>) (hydra.util.Maybe.<hydra.json.model.Value>nothing()),
       () -> hydra.util.Maybe.just(new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.pg.graphson.syntax.EdgeLabel, java.util.List<hydra.pg.graphson.syntax.AdjacentEdge>>, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>) (p -> (hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) ((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) (new hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>((hydra.lib.pairs.First.apply(p)).value, new hydra.json.model.Value.Array(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, java.util.List<hydra.pg.graphson.syntax.AdjacentEdge>>, hydra.util.Pair<String, hydra.json.model.Value>>) (p -> (hydra.util.Pair<String, hydra.json.model.Value>) ((hydra.util.Pair<String, hydra.json.model.Value>) (new hydra.util.Pair<String, hydra.json.model.Value>((hydra.lib.pairs.First.apply(p)).value, new hydra.json.model.Value.Array(hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.pg.graphson.syntax.AdjacentEdge, hydra.json.model.Value>) (v1 -> hydra.pg.graphson.coder.Coder.adjacentEdgeToJson(
             out,
             v1)),
@@ -62,7 +62,7 @@ public interface Coder {
       hydra.lib.maps.Null.apply(m),
       () -> (hydra.util.Maybe<hydra.json.model.Value>) (hydra.util.Maybe.<hydra.json.model.Value>nothing()),
       () -> hydra.util.Maybe.just(new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value>, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>) (p -> (hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) ((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) (new hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>((hydra.lib.pairs.First.apply(p)).value, hydra.pg.graphson.coder.Coder.valueToJson(hydra.lib.pairs.Second.apply(p)))))),
+        (java.util.function.Function<hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value>, hydra.util.Pair<String, hydra.json.model.Value>>) (p -> (hydra.util.Pair<String, hydra.json.model.Value>) ((hydra.util.Pair<String, hydra.json.model.Value>) (new hydra.util.Pair<String, hydra.json.model.Value>((hydra.lib.pairs.First.apply(p)).value, hydra.pg.graphson.coder.Coder.valueToJson(hydra.lib.pairs.Second.apply(p)))))),
         hydra.lib.maps.ToList.apply(m))))));
   }
   
@@ -98,18 +98,18 @@ public interface Coder {
       (m).value)));
   }
   
-  static hydra.json.model.Value toJsonObject(java.util.List<hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>> pairs) {
+  static hydra.json.model.Value toJsonObject(java.util.List<hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>> pairs) {
     return new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>, hydra.util.Maybe<hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>>) (p -> hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.json.model.Value, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>) (v -> (hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) ((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) (new hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>(hydra.lib.pairs.First.apply(p), v)))),
+      (java.util.function.Function<hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>, hydra.util.Maybe<hydra.util.Pair<String, hydra.json.model.Value>>>) (p -> hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.json.model.Value, hydra.util.Pair<String, hydra.json.model.Value>>) (v -> (hydra.util.Pair<String, hydra.json.model.Value>) ((hydra.util.Pair<String, hydra.json.model.Value>) (new hydra.util.Pair<String, hydra.json.model.Value>(hydra.lib.pairs.First.apply(p), v)))),
         hydra.lib.pairs.Second.apply(p))),
       pairs))));
   }
   
   static hydra.json.model.Value typedValueToJson(String typeName, hydra.json.model.Value valueJson) {
     return hydra.pg.graphson.coder.Coder.toJsonObject(java.util.List.of(
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("@type", hydra.util.Maybe.just(new hydra.json.model.Value.String_(typeName))))),
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("@value", hydra.util.Maybe.just(valueJson))))));
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("@type", hydra.util.Maybe.just(new hydra.json.model.Value.String_(typeName))))),
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("@value", hydra.util.Maybe.just(valueJson))))));
   }
   
   static hydra.json.model.Value valueToJson(hydra.pg.graphson.syntax.Value v1) {
@@ -266,7 +266,7 @@ public interface Coder {
       hydra.lib.maps.Null.apply(m),
       () -> (hydra.util.Maybe<hydra.json.model.Value>) (hydra.util.Maybe.<hydra.json.model.Value>nothing()),
       () -> hydra.util.Maybe.just(new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.pg.graphson.syntax.PropertyKey, java.util.List<hydra.pg.graphson.syntax.VertexPropertyValue>>, hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>>) (p -> (hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) ((hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>) (new hydra.util.Tuple.Tuple2<String, hydra.json.model.Value>((hydra.lib.pairs.First.apply(p)).value, new hydra.json.model.Value.Array(hydra.lib.lists.Map.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, java.util.List<hydra.pg.graphson.syntax.VertexPropertyValue>>, hydra.util.Pair<String, hydra.json.model.Value>>) (p -> (hydra.util.Pair<String, hydra.json.model.Value>) ((hydra.util.Pair<String, hydra.json.model.Value>) (new hydra.util.Pair<String, hydra.json.model.Value>((hydra.lib.pairs.First.apply(p)).value, new hydra.json.model.Value.Array(hydra.lib.lists.Map.apply(
           hydra.pg.graphson.coder.Coder::vertexPropertyValueToJson,
           hydra.lib.pairs.Second.apply(p))))))),
         hydra.lib.maps.ToList.apply(m))))));
@@ -274,24 +274,24 @@ public interface Coder {
   
   static hydra.json.model.Value vertexPropertyValueToJson(hydra.pg.graphson.syntax.VertexPropertyValue vpv) {
     return hydra.pg.graphson.coder.Coder.toJsonObject(java.util.List.of(
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("id", hydra.lib.maybes.Map.apply(
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("id", hydra.lib.maybes.Map.apply(
         hydra.pg.graphson.coder.Coder::valueToJson,
         (vpv).id)))),
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("value", hydra.util.Maybe.just(hydra.pg.graphson.coder.Coder.valueToJson((vpv).value)))))));
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("value", hydra.util.Maybe.just(hydra.pg.graphson.coder.Coder.valueToJson((vpv).value)))))));
   }
   
   static hydra.json.model.Value vertexToJson(hydra.pg.graphson.syntax.Vertex v) {
     return hydra.pg.graphson.coder.Coder.toJsonObject(java.util.List.of(
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("id", hydra.util.Maybe.just(hydra.pg.graphson.coder.Coder.valueToJson((v).id))))),
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("label", hydra.lib.maybes.Map.apply(
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("id", hydra.util.Maybe.just(hydra.pg.graphson.coder.Coder.valueToJson((v).id))))),
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("label", hydra.lib.maybes.Map.apply(
         (java.util.function.Function<hydra.pg.graphson.syntax.VertexLabel, hydra.json.model.Value>) (lbl -> new hydra.json.model.Value.String_((lbl).value)),
         (v).label)))),
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("inE", hydra.pg.graphson.coder.Coder.edgeMapToJson(
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("inE", hydra.pg.graphson.coder.Coder.edgeMapToJson(
         false,
         (v).inEdges)))),
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("outE", hydra.pg.graphson.coder.Coder.edgeMapToJson(
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("outE", hydra.pg.graphson.coder.Coder.edgeMapToJson(
         true,
         (v).outEdges)))),
-      (hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Tuple.Tuple2<String, hydra.util.Maybe<hydra.json.model.Value>>("properties", hydra.pg.graphson.coder.Coder.vertexPropertyMapToJson((v).properties))))));
+      (hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>) (new hydra.util.Pair<String, hydra.util.Maybe<hydra.json.model.Value>>("properties", hydra.pg.graphson.coder.Coder.vertexPropertyMapToJson((v).properties))))));
   }
 }

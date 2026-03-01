@@ -503,7 +503,7 @@ encodeType aliases boundVars t =
         jvt] Names.javaUtilPackageName "Map"))))
       Core.TypePair v1 -> (Flows.bind (Flows.bind (encodeType aliases boundVars (Core.pairTypeFirst v1)) (\jt_ -> Utils_.javaTypeToJavaReferenceType jt_)) (\jfirst -> Flows.bind (Flows.bind (encodeType aliases boundVars (Core.pairTypeSecond v1)) (\jt_ -> Utils_.javaTypeToJavaReferenceType jt_)) (\jsecond -> Flows.pure (Utils_.javaRefType [
         jfirst,
-        jsecond] Names.hydraUtilPackageName "Tuple.Tuple2"))))
+        jsecond] Names.hydraUtilPackageName "Pair"))))
       Core.TypeUnit -> (Flows.pure (Utils_.javaRefType [] Names.javaLangPackageName "Void"))
       Core.TypeRecord v1 -> (Logic.ifElse (Logic.and (Equality.equal (Core.rowTypeTypeName v1) (Core.Name "hydra.core.Unit")) (Lists.null (Core.rowTypeFields v1))) (Flows.pure (Utils_.javaRefType [] Names.javaLangPackageName "Void")) (Flows.pure (Syntax.TypeReference (Utils_.nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) (Core.rowTypeTypeName v1) Nothing))))
       Core.TypeMaybe v1 -> (Flows.bind (Flows.bind (encodeType aliases boundVars v1) (\jt_ -> Utils_.javaTypeToJavaReferenceType jt_)) (\jot -> Flows.pure (Utils_.javaRefType [
@@ -1715,7 +1715,7 @@ encodeTermInternal env anns tyapps term =
       in (Flows.bind (Logic.ifElse (Maps.null v1) (takeTypeArgs "map" 2 tyapps) (Flows.pure [])) (\targs -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "java.util.Map") (Syntax.Identifier "ofEntries") targs pairExprs)))))))
     Core.TermMaybe v1 -> (Maybes.cases v1 (Flows.bind (takeTypeArgs "maybe" 1 tyapps) (\targs -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Maybe") (Syntax.Identifier "nothing") targs [])))) (\term1 -> Flows.bind (encode term1) (\expr -> Flows.pure (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStatic (Syntax.Identifier "hydra.util.Maybe") (Syntax.Identifier "just") [
       expr])))))
-    Core.TermPair v1 -> (Flows.bind (encode (Pairs.first v1)) (\jterm1 -> Flows.bind (encode (Pairs.second v1)) (\jterm2 -> Flows.bind (Logic.ifElse (Lists.null tyapps) (Flows.pure Nothing) (Flows.bind (Flows.mapList (\jt -> Utils_.javaTypeToJavaReferenceType jt) tyapps) (\rts -> Flows.pure (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts)))))) (\mtargs -> Flows.pure (Utils_.javaConstructorCall (Utils_.javaConstructorName (Syntax.Identifier "hydra.util.Tuple.Tuple2") mtargs) [
+    Core.TermPair v1 -> (Flows.bind (encode (Pairs.first v1)) (\jterm1 -> Flows.bind (encode (Pairs.second v1)) (\jterm2 -> Flows.bind (Logic.ifElse (Lists.null tyapps) (Flows.pure Nothing) (Flows.bind (Flows.mapList (\jt -> Utils_.javaTypeToJavaReferenceType jt) tyapps) (\rts -> Flows.pure (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts)))))) (\mtargs -> Flows.pure (Utils_.javaConstructorCall (Utils_.javaConstructorName (Syntax.Identifier "hydra.util.Pair") mtargs) [
       jterm1,
       jterm2] Nothing)))))
     Core.TermRecord v1 ->  

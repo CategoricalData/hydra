@@ -44,7 +44,8 @@ writeExtManifestJson :: FilePath -> IO ()
 writeExtManifestJson basePath = do
     let jsonVal = Json.ValueObject $ M.fromList [
             ("hydraCoderModules", namespacesJson hydraCoderModules),
-            ("hydraExtModules", namespacesJson hydraExtModules)]
+            ("hydraExtJavaModules", namespacesJson hydraExtJavaModules),
+            ("hydraExtModules", namespacesJson hydraExtJsonModules)]
         jsonStr = JsonWriter.printJson jsonVal
         filePath = basePath FP.</> "manifest.json"
     writeFile filePath (jsonStr ++ "\n")
