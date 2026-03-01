@@ -90,7 +90,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "type checking failure" $ H.shouldBe True False  -- TODO: implement
     TestCaseTypeReduction (TypeReductionTestCase input output) ->
       H.it "type reduction" $ H.shouldBe
-        (fromFlow input (schemaContext testGraph) (betaReduceType input))
+        (fromFlow input testGraph (betaReduceType input))
         output
     TestCaseTopologicalSort (TopologicalSortTestCase adjList expected) ->
       H.it "topological sort" $ H.shouldBe
@@ -154,7 +154,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
         output
     TestCaseHoistCaseStatements (HoistCaseStatementsTestCase input output) ->
       H.it "hoist case statements" $ H.shouldBe
-        (Hoisting.hoistCaseStatements emptyTypeContext input)
+        (Hoisting.hoistCaseStatements emptyGraph input)
         output
     TestCaseHoistPolymorphicLetBindings (HoistPolymorphicLetBindingsTestCase input output) ->
       H.it "hoist polymorphic let bindings" $ H.shouldBe
@@ -180,8 +180,6 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "unshadow variables" $ H.shouldBe
         (ShowCore.term $ Rewriting.unshadowVariables input)
         (ShowCore.term output)
-  where
-    cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
 runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) =
@@ -346,7 +344,7 @@ runTypeRewriter TypeRewriterReplaceStringWithInt32 = Rewriting.rewriteType rewri
 -- | Run hoistSubterms with the given predicate
 -- The predicate receives (path, term) where path is the list of TermAccessors from root
 runHoistSubterms :: HoistPredicate -> Term -> Term
-runHoistSubterms pred term = Hoisting.hoistSubterms (predicateFn pred) emptyTypeContext term
+runHoistSubterms pred term = Hoisting.hoistSubterms (predicateFn pred) emptyGraph term
   where
     -- A predicate returns True if the term should be hoisted.
     -- The predicate receives (path, term) for path-aware hoisting decisions.
@@ -361,11 +359,6 @@ runHoistSubterms pred term = Hoisting.hoistSubterms (predicateFn pred) emptyType
     predicateFn HoistPredicateCaseStatements (_, t) = case t of
       TermFunction (FunctionElimination _) -> True  -- Case statements are eliminations
       _ -> False
-
-emptyTypeContext :: TypeContext
-emptyTypeContext = TypeContext M.empty M.empty S.empty S.empty S.empty emptyInferenceContext
-  where
-    emptyInferenceContext = InferenceContext M.empty M.empty M.empty M.empty False
 
 -- | Check unifyTypes result against expected
 -- schemaTypeNames is a list of names that should be treated as schema types (not bound during unification)

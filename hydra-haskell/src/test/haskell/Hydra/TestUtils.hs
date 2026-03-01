@@ -44,8 +44,11 @@ import qualified Data.Maybe as Y
 import qualified Data.ByteString.Lazy as BS
 
 
+decodeSchemaTypes :: Graph -> M.Map Name TypeScheme
+decodeSchemaTypes sg = fromFlow M.empty sg (schemaGraphToTypingEnvironment sg)
+
 testGraph :: Graph
-testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) (kernelTermBindings ++ dataBindings)
+testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
   where
     -- Include only essential kernel term definitions for interpreter tests.
     -- The evaluator needs hydra.monads (and its dependencies) plus hydra.annotations (and its dependencies).
@@ -63,7 +66,7 @@ testGraph = elementsToGraph hydraCoreGraph (Just testSchemaGraph) (kernelTermBin
     dataBindings = (\(name, term) -> Binding name term Nothing) <$> M.toList testTerms
 
 testSchemaGraph :: Graph
-testSchemaGraph = elementsToGraph hydraCoreGraph (Just hydraCoreGraph)
+testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGraph)
     -- Only the kernel type modules that define types referenced by the test suite schema graph:
     -- CoderDirection (hydra.coders), Coder (hydra.compute), and Type/Name/ForallType (hydra.core).
     (kernelElements ++ testElements)
@@ -170,10 +173,9 @@ eval = reduceTerm True
 
 expectEtaExpansionResult :: String -> Term -> Term -> H.SpecWith ()
 expectEtaExpansionResult desc input output = H.it "eta expansion" $ do
-  tx <- fromTestFlow desc $ graphToTypeContext testGraph
   -- Use the original etaExpandTypedTerm (monadic) instead of etaExpandTermNew (pure)
   -- to test the production code path
-  result <- fromTestFlow desc $ etaExpandTypedTerm tx input
+  result <- fromTestFlow desc $ etaExpandTypedTerm testGraph input
   result `H.shouldBe` output
 
 expectFailure :: (a -> String) -> String -> Flow () a -> H.Expectation
@@ -188,14 +190,12 @@ expectFailure print desc f = case my of
 
 expectInferenceFailure :: String -> Term -> H.Expectation
 expectInferenceFailure desc term = expectFailure (ShowCore.typeScheme . snd) desc $ do
-  cx <- graphToInferenceContext testGraph
-  inferTypeOf cx term
+  inferTypeOf testGraph term
 
 expectInferenceResult :: String -> Term -> TypeScheme -> H.SpecWith ()
 expectInferenceResult desc term expected = do
   (iterm, its) <- H.runIO $ fromTestFlow desc $ do
-    cx <- graphToInferenceContext testGraph
-    inferTypeOf cx term
+    inferTypeOf testGraph term
 
   H.it "inferred type" $
     H.shouldBe (ShowCore.typeScheme its) (ShowCore.typeScheme expected)
@@ -215,14 +215,11 @@ expectSuccess desc flow x = case my of
 expectTypeCheckingResult :: String -> Term -> Term -> Type -> H.SpecWith ()
 expectTypeCheckingResult desc input outputTerm outputType = do
   (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
-    cx <- graphToInferenceContext testGraph
-    let tx = TypeContext M.empty M.empty S.empty S.empty S.empty cx
-
     -- typeOf is always called on System F terms
-    (iterm, ts) <- inferTypeOf cx input
+    (iterm, ts) <- inferTypeOf testGraph input
     let itype = typeSchemeToFType ts
 
-    rtype <- typeOf tx [] iterm
+    rtype <- typeOf testGraph [] iterm
     return (iterm, itype, rtype)
 
   -- Three labeled assertions as per the type checking specification
