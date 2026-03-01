@@ -116,19 +116,19 @@ individualDecoderTestCases = do
 
     H.it "float32 literal type" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literalType testGraph
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literalType (testGraph)
           (inject _LiteralType _LiteralType_float $ injectUnit _FloatType _FloatType_float32))
         (LiteralTypeFloat FloatTypeFloat32)
 
     H.it "float32 type" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (testGraph)
           (inject _Type _Type_literal $ inject _LiteralType _LiteralType_float $ injectUnit _FloatType _FloatType_float32))
         Types.float32
 
     H.it "union type" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (testGraph) $
           inject _Type _Type_union $ record _RowType [
             Field _RowType_typeName $ wrap _Name $ string (unName testTypeName),
             Field _RowType_fields $
@@ -147,31 +147,31 @@ individualDecoderTestCases = do
 
     H.it "Name (wrapped type)" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.name testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.name (testGraph) $
           wrap _Name $ string "test.Name")
         (Name "test.Name")
 
     H.it "string literal" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal (testGraph) $
           inject _Literal _Literal_string $ string "hello")
         (LiteralString "hello")
 
     H.it "int32 literal" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal (testGraph) $
           inject _Literal _Literal_integer $ inject _IntegerValue _IntegerValue_int32 $ int32 42)
         (LiteralInteger (IntegerValueInt32 42))
 
     H.it "boolean literal" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal (testGraph) $
           inject _Literal _Literal_boolean $ boolean True)
         (LiteralBoolean True)
 
     H.it "Field (record type)" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.field testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.field (testGraph) $
           record _Field [
             Field _Field_name $ wrap _Name $ string "myField",
             Field _Field_term $ inject _Term _Term_literal $ inject _Literal _Literal_string $ string "value"])
@@ -179,7 +179,7 @@ individualDecoderTestCases = do
 
     H.it "Lambda function" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.lambda testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.lambda (testGraph) $
           record _Lambda [
             Field _Lambda_parameter $ wrap _Name $ string "x",
             Field _Lambda_domain $ optional Nothing,
@@ -188,7 +188,7 @@ individualDecoderTestCases = do
 
     H.it "function type" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (testGraph) $
           inject _Type _Type_function $ record _FunctionType [
             Field _FunctionType_domain $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string,
             Field _FunctionType_codomain $ inject _Type _Type_literal $ inject _LiteralType _LiteralType_integer $
@@ -197,13 +197,13 @@ individualDecoderTestCases = do
 
     H.it "list type" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (testGraph) $
           inject _Type _Type_list $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_boolean)
         (Types.list Types.boolean)
 
     H.it "optional type" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (testGraph) $
           inject _Type _Type_maybe $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string)
         (Types.optional Types.string)
 
@@ -212,23 +212,23 @@ decodeInvalidTerms = do
   H.describe "Decode invalid terms" $ do
 
     H.it "Try to decode a term with wrong fields for Type" $ do
-      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $ inject untyped (Name "unknownField") $ list [])
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (testGraph) $ inject untyped (Name "unknownField") $ list [])
 
     H.it "Try to decode an incomplete representation of a Type" $ do
-      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_integer)
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (testGraph) $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_integer)
 
     H.it "Try to decode a Name from non-string" $ do
-      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.name testGraph $ wrap _Name $ int32 42)
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.name (testGraph) $ wrap _Name $ int32 42)
 
     H.it "Try to decode a Literal from wrong union variant" $ do
-      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal testGraph $ inject untyped (Name "unknownVariant") $ string "bad")
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal (testGraph) $ inject untyped (Name "unknownVariant") $ string "bad")
 
     H.it "Try to decode a record with missing field" $ do
-      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.field testGraph $
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.field (testGraph) $
         record _Field [Field _Field_name $ wrap _Name $ string "onlyName"])
 
     H.it "Try to decode a Lambda with wrong body type" $ do
-      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.lambda testGraph $
+      shouldFail (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.lambda (testGraph) $
         record _Lambda [
           Field _Lambda_parameter $ wrap _Name $ string "x",
           Field _Lambda_domain $ optional Nothing,
@@ -240,7 +240,7 @@ metadataIsPreserved = do
 
     H.it "Basic metadata" $ do
       shouldSucceedWith
-        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $ EncodeCore.type_ annotatedStringType)
+        (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (testGraph) $ EncodeCore.type_ annotatedStringType)
         annotatedStringType
   where
     annotatedStringType :: Type
@@ -255,7 +255,7 @@ testRoundTripsFromType = do
     H.it "Try random types" $
       QC.property $ \typ ->
         shouldSucceedWith
-          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ testGraph $ EncodeCore.type_ typ)
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (testGraph) $ EncodeCore.type_ typ)
           typ
 
 testRoundTripsFromLiteral :: H.SpecWith ()
@@ -265,7 +265,7 @@ testRoundTripsFromLiteral = do
     H.it "Try random literals" $
       QC.property $ \lit ->
         shouldSucceedWith
-          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal testGraph $ EncodeCore.literal lit)
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literal (testGraph) $ EncodeCore.literal lit)
           lit
 
 testRoundTripsFromLiteralType :: H.SpecWith ()
@@ -275,7 +275,7 @@ testRoundTripsFromLiteralType = do
     H.it "Try random literal types" $
       QC.property $ \litType ->
         shouldSucceedWith
-          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literalType testGraph $ EncodeCore.literalType litType)
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literalType (testGraph) $ EncodeCore.literalType litType)
           litType
 
 testRoundTripsFromName :: H.SpecWith ()
@@ -285,7 +285,7 @@ testRoundTripsFromName = do
     H.it "Try random names" $
       QC.property $ \name ->
         shouldSucceedWith
-          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.name testGraph $ EncodeCore.name name)
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.name (testGraph) $ EncodeCore.name name)
           name
 
 testRoundTripsFromIntegerType :: H.SpecWith ()
@@ -295,7 +295,7 @@ testRoundTripsFromIntegerType = do
     H.it "Try random integer types" $
       QC.property $ \intType ->
         shouldSucceedWith
-          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.integerType testGraph $ EncodeCore.integerType intType)
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.integerType (testGraph) $ EncodeCore.integerType intType)
           intType
 
 testRoundTripsFromFloatType :: H.SpecWith ()
@@ -305,7 +305,7 @@ testRoundTripsFromFloatType = do
     H.it "Try random float types" $
       QC.property $ \floatType ->
         shouldSucceedWith
-          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.floatType testGraph $ EncodeCore.floatType floatType)
+          (Monads.eitherToFlow Util.unDecodingError $ DecodeCore.floatType (testGraph) $ EncodeCore.floatType floatType)
           floatType
 
 spec :: H.Spec
