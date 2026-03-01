@@ -31,7 +31,9 @@ module Hydra.Kernel (
   module Hydra.Compute,
   module Hydra.Constants,
   module Hydra.Constraints,
+  module Hydra.Context,
   module Hydra.Core,
+  module Hydra.Error,
   module Hydra.Languages,
   module Hydra.Monads,
   module Hydra.Formatting,
@@ -77,7 +79,9 @@ import Hydra.Coders
 import Hydra.Compute
 import Hydra.Constants
 import Hydra.Constraints
+import Hydra.Context
 import Hydra.Core
+import Hydra.Error
 import Hydra.Languages
 import Hydra.Monads hiding (bind, exec, fail, pure)
 import Hydra.Formatting
