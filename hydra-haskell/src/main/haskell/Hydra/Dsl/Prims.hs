@@ -12,7 +12,7 @@ import qualified Hydra.Monads as Monads
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
-import qualified Hydra.Util as Util
+import qualified Hydra.Error as Error
 import qualified Hydra.Extract.Util as ExtractUtil
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -115,7 +115,7 @@ floatType = TermCoder (TypeVariable _FloatType) $ Coder encode decode
   where
     encode term = do
       g <- Monads.getState
-      Monads.eitherToFlow Util.unDecodingError $ DecodeCore.floatType (g) term
+      Monads.eitherToFlow Error.unDecodingError $ DecodeCore.floatType (g) term
     decode = pure . EncodeCore.floatType
 
 floatValue :: TermCoder FloatValue
@@ -171,7 +171,7 @@ integerType = TermCoder (TypeVariable _IntegerType) $ Coder encode decode
   where
     encode term = do
       g <- Monads.getState
-      Monads.eitherToFlow Util.unDecodingError $ DecodeCore.integerType (g) term
+      Monads.eitherToFlow Error.unDecodingError $ DecodeCore.integerType (g) term
     decode = pure . EncodeCore.integerType
 
 integerValue :: TermCoder IntegerValue
@@ -221,7 +221,7 @@ literalType = TermCoder (TypeVariable _LiteralType) $ Coder encode decode
   where
     encode term = do
       g <- Monads.getState
-      Monads.eitherToFlow Util.unDecodingError $ DecodeCore.literalType (g) term
+      Monads.eitherToFlow Error.unDecodingError $ DecodeCore.literalType (g) term
     decode = pure . EncodeCore.literalType
 
 map :: Ord k => TermCoder k -> TermCoder v -> TermCoder (M.Map k v)
@@ -353,7 +353,7 @@ type_ = TermCoder (TypeVariable _Type) $ Coder encode decode
   where
     encode term = do
       g <- Monads.getState
-      Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (g) term
+      Monads.eitherToFlow Error.unDecodingError $ DecodeCore.type_ (g) term
     decode = pure . EncodeCore.type_
 
 uint8 :: TermCoder Int16
