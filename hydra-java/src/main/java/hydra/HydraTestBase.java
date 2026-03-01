@@ -6,10 +6,8 @@ import hydra.compute.FlowState;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.util.Maybe;
 import hydra.util.Unit;
 import hydra.dsl.Flows;
-import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.lib.Libraries;
@@ -177,18 +175,20 @@ public class HydraTestBase {
      * @return an empty graph
      */
     protected static Graph emptyGraph() {
-        List<hydra.core.Binding> elements = Collections.emptyList();
-        Map<Name, TypeScheme> types = Collections.emptyMap();
-        Map<Name, Maybe<Term>> environment = Collections.emptyMap();
-        Term body = Terms.string("empty graph");
+        Map<Name, Term> boundTerms = Collections.emptyMap();
+        Map<Name, TypeScheme> boundTypes = Collections.emptyMap();
+        Map<Name, hydra.core.TypeVariableMetadata> classConstraints = Collections.emptyMap();
+        java.util.Set<Name> lambdaVariables = Collections.emptySet();
+        Map<Name, Term> metadata = Collections.emptyMap();
 
         Map<Name, Primitive> primitives = new HashMap<>();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
             primitives.put(prim.name(), prim.toNative());
         }
 
-        Maybe<Graph> schema = Maybe.nothing();
+        Map<Name, TypeScheme> schemaTypes = Collections.emptyMap();
+        java.util.Set<Name> typeVariables = Collections.emptySet();
 
-        return new Graph(elements, environment, types, body, primitives, schema);
+        return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
     }
 }

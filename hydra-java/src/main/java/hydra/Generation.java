@@ -10,7 +10,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Flows;
-import hydra.dsl.Terms;
+
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.json.model.Value;
@@ -49,19 +49,21 @@ public class Generation {
      * Create an empty graph with standard primitives (the bootstrap graph).
      */
     public static Graph bootstrapGraph() {
-        List<Binding> elements = Collections.emptyList();
-        Map<Name, TypeScheme> types = Collections.emptyMap();
-        Map<Name, Maybe<Term>> environment = Collections.emptyMap();
-        Term body = Terms.string("empty graph");
+        Map<Name, Term> boundTerms = Collections.emptyMap();
+        Map<Name, TypeScheme> boundTypes = Collections.emptyMap();
+        Map<Name, hydra.core.TypeVariableMetadata> classConstraints = Collections.emptyMap();
+        java.util.Set<Name> lambdaVariables = Collections.emptySet();
+        Map<Name, Term> metadata = Collections.emptyMap();
 
         Map<Name, Primitive> primitives = new HashMap<>();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
             primitives.put(prim.name(), prim.toNative());
         }
 
-        Maybe<Graph> schema = Maybe.nothing();
+        Map<Name, TypeScheme> schemaTypes = Collections.emptyMap();
+        java.util.Set<Name> typeVariables = Collections.emptySet();
 
-        return new Graph(elements, environment, types, body, primitives, schema);
+        return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
     }
 
     /**
@@ -308,7 +310,7 @@ public class Generation {
         Map<Name, hydra.core.Type> raw = hydra.json.bootstrap.Bootstrap.typesByName();
         Map<Name, hydra.core.Type> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.Type> entry : raw.entrySet()) {
-            hydra.core.TypeScheme ts = hydra.schemas.Schemas.fTypeToTypeScheme(entry.getValue());
+            hydra.core.TypeScheme ts = hydra.rewriting.Rewriting.fTypeToTypeScheme(entry.getValue());
             result.put(entry.getKey(), Rewriting.deannotateTypeRecursive(ts.type));
         }
         return result;
@@ -322,7 +324,7 @@ public class Generation {
         Map<Name, hydra.core.Type> raw = hydra.json.bootstrap.Bootstrap.typesByName();
         Map<Name, hydra.core.TypeScheme> result = new HashMap<>();
         for (Map.Entry<Name, hydra.core.Type> entry : raw.entrySet()) {
-            result.put(entry.getKey(), hydra.schemas.Schemas.fTypeToTypeScheme(entry.getValue()));
+            result.put(entry.getKey(), hydra.rewriting.Rewriting.fTypeToTypeScheme(entry.getValue()));
         }
         return result;
     }

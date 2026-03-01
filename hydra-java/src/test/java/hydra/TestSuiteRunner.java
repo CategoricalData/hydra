@@ -50,8 +50,6 @@ public class TestSuiteRunner {
 
     // Cached test infrastructure
     private static Graph testGraph;
-    private static hydra.typing.InferenceContext inferenceContext;
-    private static hydra.typing.TypeContext typeContext;
 
     /**
      * Compare two terms for equality, with tolerance for floating-point precision and BigDecimal scale differences.
@@ -94,34 +92,20 @@ public class TestSuiteRunner {
         return testGraph;
     }
 
-    private static synchronized hydra.typing.InferenceContext getInferenceContext() {
-        if (inferenceContext == null) {
-            Graph graph = getTestGraph();
-            Flow<Object, hydra.typing.InferenceContext> flow =
-                hydra.schemas.Schemas.graphToInferenceContext(graph);
-            FlowState<Object, hydra.typing.InferenceContext> state =
-                flow.value.apply(UNIT).apply(EMPTY_TRACE);
-            if (!state.value.isJust()) {
-                throw new RuntimeException("Failed to create inference context: " + state.trace.messages);
-            }
-            inferenceContext = state.value.fromJust();
+    private static Graph emptyGraph() {
+        Map<Name, Primitive> primitives = new HashMap<>();
+        for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
+            primitives.put(prim.name(), prim.toNative());
         }
-        return inferenceContext;
-    }
-
-    private static synchronized hydra.typing.TypeContext getTypeContext() {
-        if (typeContext == null) {
-            Graph graph = getTestGraph();
-            Flow<Graph, hydra.typing.TypeContext> flow =
-                hydra.schemas.Schemas.graphToTypeContext(graph);
-            FlowState<Graph, hydra.typing.TypeContext> state =
-                flow.value.apply(graph).apply(EMPTY_TRACE);
-            if (!state.value.isJust()) {
-                throw new RuntimeException("Failed to create type context: " + state.trace.messages);
-            }
-            typeContext = state.value.fromJust();
-        }
-        return typeContext;
+        return new Graph(
+            Collections.emptyMap(),
+            Collections.emptyMap(),
+            Collections.emptyMap(),
+            Collections.emptySet(),
+            Collections.emptyMap(),
+            primitives,
+            Collections.emptyMap(),
+            Collections.emptySet());
     }
 
     /**
@@ -135,93 +119,81 @@ public class TestSuiteRunner {
             primitives.put(prim.name(), prim.toNative());
         }
 
-        // Build schema graph with test types + kernel types
+        // Build schema types from test types + kernel types
         Map<Name, Type> testTypes = TestGraph.testTypes();
         Map<Name, Type> kernelTypes = buildKernelTypes();
-        Map<Name, Type> allSchemaTypes = new HashMap<>(kernelTypes);
-        allSchemaTypes.putAll(testTypes); // test types override kernel types if any overlap
-        List<Binding> typeBindings = new ArrayList<>();
-        for (Map.Entry<Name, Type> entry : allSchemaTypes.entrySet()) {
-            Term typeTerm = hydra.encode.core.Core.type(entry.getValue());
-            TypeScheme typeScheme = new TypeScheme(
-                List.of(),
-                new Type.Variable(new Name("hydra.core.Type")),
-                Maybe.nothing()
-            );
-            typeBindings.add(new Binding(entry.getKey(), typeTerm, Maybe.just(typeScheme)));
+        Map<Name, Type> allTypes = new HashMap<>(kernelTypes);
+        allTypes.putAll(testTypes); // test types override kernel types if any overlap
+        Map<Name, TypeScheme> schemaTypes = new HashMap<>();
+        for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
+            schemaTypes.put(entry.getKey(), hydra.schemas.Schemas.typeToTypeScheme(entry.getValue()));
         }
 
-        Graph schemaGraph = new Graph(
-            typeBindings,
-            Collections.emptyMap(),
-            Collections.emptyMap(),
-            new Term.Literal(new Literal.String_("schema")),
-            Collections.emptyMap(),
-            Maybe.nothing()
-        );
+        // Build bound terms map from test terms + primitive bridges + kernel constants
+        Map<Name, Term> boundTerms = new HashMap<>();
 
-        // Build main graph with test terms + kernel term bindings
-        Map<Name, Term> testTerms = TestGraph.testTerms();
-        List<Binding> termBindings = new ArrayList<>();
-
-        // The source module ASTs reference external functions as Term.Variable.
-        // The reducer only looks up Term.Variable in term bindings (not primitives).
-        // Bridge all primitives: Variable("hydra.lib.maps.null") -> Function.Primitive("hydra.lib.maps.null")
-        Set<String> existingBindingNames = new HashSet<>();
-        for (Binding b : termBindings) {
-            existingBindingNames.add(b.name.value);
-        }
-        // Exclude annotation/rewriting primitives from the bridge — they operate at the Java level
-        // (producing Term.Annotated) rather than at the meta level (producing Term.Union injections).
-        // Hand-written term bindings are added below instead.
-        existingBindingNames.add("hydra.annotations.setTermAnnotation");
-        existingBindingNames.add("hydra.annotations.setTermDescription");
-        existingBindingNames.add("hydra.rewriting.deannotateTerm");
+        // Bridge all primitives as term bindings
+        Set<String> excludedNames = new HashSet<>();
+        excludedNames.add("hydra.annotations.setTermAnnotation");
+        excludedNames.add("hydra.annotations.setTermDescription");
+        excludedNames.add("hydra.rewriting.deannotateTerm");
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
             String primName = prim.name().value;
-            if (!existingBindingNames.contains(primName)) {
-                termBindings.add(new Binding(
-                    prim.name(),
-                    new Term.Function(new hydra.core.Function.Primitive(prim.name())),
-                    Maybe.nothing()));
+            if (!excludedNames.contains(primName)) {
+                boundTerms.put(prim.name(),
+                    new Term.Function(new hydra.core.Function.Primitive(prim.name())));
             }
         }
 
         // Add non-primitive kernel constants needed by annotation source module
-        addConstantBinding(termBindings, "hydra.constants.key_classes",
+        boundTerms.put(new Name("hydra.constants.key_classes"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("classes")))));
-        addConstantBinding(termBindings, "hydra.constants.key_description",
+        boundTerms.put(new Name("hydra.constants.key_description"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("description")))));
-        addConstantBinding(termBindings, "hydra.constants.key_type",
+        boundTerms.put(new Name("hydra.constants.key_type"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("type")))));
-        addConstantBinding(termBindings, "hydra.constants.key_debugId",
+        boundTerms.put(new Name("hydra.constants.key_debugId"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("debugId")))));
-        addConstantBinding(termBindings, "hydra.constants.key_firstClassType",
+        boundTerms.put(new Name("hydra.constants.key_firstClassType"),
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("firstClassType")))));
 
         // Add kernel monads term bindings (hand-written since generated sources exceed JVM method size limits)
-        addMonadsBindings(termBindings);
+        List<Binding> monadBindings = new ArrayList<>();
+        addMonadsBindings(monadBindings);
+        for (Binding b : monadBindings) {
+            boundTerms.put(b.name, b.term);
+        }
 
         // Add kernel annotation/rewriting term bindings
-        addAnnotationsBindings(termBindings);
+        List<Binding> annotationBindings = new ArrayList<>();
+        addAnnotationsBindings(annotationBindings);
+        for (Binding b : annotationBindings) {
+            boundTerms.put(b.name, b.term);
+        }
 
         // Add test term bindings
-        for (Map.Entry<Name, Term> entry : testTerms.entrySet()) {
-            termBindings.add(new Binding(entry.getKey(), entry.getValue(), Maybe.nothing()));
+        Map<Name, Term> testTerms = TestGraph.testTerms();
+        boundTerms.putAll(testTerms);
+
+        // Add type element terms to boundTerms (encoded types)
+        for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
+            boundTerms.put(entry.getKey(), hydra.encode.core.Core.type(entry.getValue()));
         }
 
         return new Graph(
-            termBindings,
-            Collections.emptyMap(),
-            Collections.emptyMap(),
-            new Term.Literal(new Literal.String_("test")),
+            boundTerms,
+            Collections.emptyMap(), // boundTypes (TypeSchemes for term bindings — not populated for test graph)
+            Collections.emptyMap(), // classConstraints
+            Collections.emptySet(), // lambdaVariables
+            Collections.emptyMap(), // metadata
             primitives,
-            Maybe.just(schemaGraph)
+            schemaTypes,
+            Collections.emptySet()  // typeVariables
         );
     }
 
@@ -571,7 +543,6 @@ public class TestSuiteRunner {
         // This ensures startup cost is not attributed to the first test group.
         long initStart = System.nanoTime();
         getTestGraph();
-        getInferenceContext();
         double initMs = (System.nanoTime() - initStart) / 1_000_000.0;
         if (BENCHMARK_OUTPUT != null) {
             benchmarkResults.put(allTests.name + "/_initialization", initMs);
@@ -692,8 +663,8 @@ public class TestSuiteRunner {
             public DynamicTest visit(TestCase.EtaExpansion instance) {
                 EtaExpansionTestCase tc = instance.value;
                 return withTimeout(name, () -> {
-                    hydra.typing.TypeContext tx = getTypeContext();
-                    Flow<Object, Term> flow = hydra.reduction.Reduction.etaExpandTypedTerm(tx, tc.input);
+                    Graph graph = getTestGraph();
+                    Flow<Object, Term> flow = hydra.reduction.Reduction.etaExpandTypedTerm(graph, tc.input);
                     FlowState<Object, Term> state = flow.value.apply(UNIT).apply(EMPTY_TRACE);
                     assertTrue(state.value.isJust(),
                         "Eta expansion failed: " + state.trace.messages);
@@ -738,21 +709,23 @@ public class TestSuiteRunner {
             public DynamicTest visit(TestCase.Inference instance) {
                 InferenceTestCase tc = instance.value;
                 return withTimeout(name, () -> {
-                    hydra.typing.InferenceContext cx = getInferenceContext();
+                    Graph graph = getTestGraph();
                     Flow<Object, Tuple.Tuple2<Term, TypeScheme>> flow =
-                        hydra.inference.Inference.inferTypeOf(cx, tc.input);
+                        hydra.inference.Inference.inferTypeOf(graph, tc.input);
                     FlowState<Object, Tuple.Tuple2<Term, TypeScheme>> state =
                         flow.value.apply(UNIT).apply(EMPTY_TRACE);
                     assertTrue(state.value.isJust(),
                         "Inference failed: " + state.trace.messages);
                     Tuple.Tuple2<Term, TypeScheme> result = state.value.fromJust();
+                    Term inferredTerm = result.object1;
+                    TypeScheme resultScheme = result.object2;
                     assertEquals(
                         hydra.show.core.Core.typeScheme(tc.output),
-                        hydra.show.core.Core.typeScheme(result.object2),
+                        hydra.show.core.Core.typeScheme(resultScheme),
                         "Type scheme mismatch");
                     // Also check that inferred term has types stripped correctly
                     assertEquals(
-                        hydra.show.core.Core.term(hydra.rewriting.Rewriting.removeTypesFromTerm(result.object1)),
+                        hydra.show.core.Core.term(hydra.rewriting.Rewriting.removeTypesFromTerm(inferredTerm)),
                         hydra.show.core.Core.term(hydra.rewriting.Rewriting.removeTypesFromTerm(tc.input)),
                         "Inferred term mismatch");
                 });
@@ -762,9 +735,9 @@ public class TestSuiteRunner {
             public DynamicTest visit(TestCase.InferenceFailure instance) {
                 InferenceFailureTestCase tc = instance.value;
                 return withTimeout(name, () -> {
-                    hydra.typing.InferenceContext cx = getInferenceContext();
+                    Graph graph = getTestGraph();
                     Flow<Object, Tuple.Tuple2<Term, TypeScheme>> flow =
-                        hydra.inference.Inference.inferTypeOf(cx, tc.input);
+                        hydra.inference.Inference.inferTypeOf(graph, tc.input);
                     FlowState<Object, Tuple.Tuple2<Term, TypeScheme>> state =
                         flow.value.apply(UNIT).apply(EMPTY_TRACE);
                     assertFalse(state.value.isJust(),
@@ -779,23 +752,22 @@ public class TestSuiteRunner {
             public DynamicTest visit(TestCase.TypeChecking instance) {
                 TypeCheckingTestCase tc = instance.value;
                 return withTimeout(name, () -> {
-                    hydra.typing.InferenceContext cx = getInferenceContext();
+                    Graph graph = getTestGraph();
 
                     // Infer type
                     Flow<Object, Tuple.Tuple2<Term, TypeScheme>> inferFlow =
-                        hydra.inference.Inference.inferTypeOf(cx, tc.input);
+                        hydra.inference.Inference.inferTypeOf(graph, tc.input);
                     FlowState<Object, Tuple.Tuple2<Term, TypeScheme>> inferState =
                         inferFlow.value.apply(UNIT).apply(EMPTY_TRACE);
                     assertTrue(inferState.value.isJust(),
                         "Inference failed: " + inferState.trace.messages);
-                    Term inferredTerm = inferState.value.fromJust().object1;
-                    Type inferredType = hydra.schemas.Schemas.typeSchemeToFType(
-                        inferState.value.fromJust().object2);
+                    Tuple.Tuple2<Term, TypeScheme> inferResult = inferState.value.fromJust();
+                    Term inferredTerm = inferResult.object1;
+                    Type inferredType = typeSchemeToType(inferResult.object2);
 
                     // Reconstruct type - use trace from inference to continue fresh name counter
-                    hydra.typing.TypeContext tx = getTypeContext();
                     Flow<Object, Type> typeOfFlow =
-                        hydra.checking.Checking.typeOf(tx, List.of(), inferredTerm);
+                        hydra.checking.Checking.typeOf(graph, List.of(), inferredTerm);
                     FlowState<Object, Type> typeOfState =
                         typeOfFlow.value.apply(UNIT).apply(inferState.trace);
                     assertTrue(typeOfState.value.isJust(),
@@ -823,10 +795,8 @@ public class TestSuiteRunner {
                 TypeReductionTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    // Use schema context for type reduction
-                    Graph schemaGraph = graph.schema.orElse(graph);
                     Flow<Graph, Type> flow = hydra.reduction.Reduction.betaReduceType(tc.input);
-                    FlowState<Graph, Type> state = flow.value.apply(schemaGraph).apply(EMPTY_TRACE);
+                    FlowState<Graph, Type> state = flow.value.apply(graph).apply(EMPTY_TRACE);
                     assertTrue(state.value.isJust(),
                         "Type reduction failed: " + state.trace.messages);
                     assertEquals(tc.output, state.value.fromJust());
@@ -938,7 +908,7 @@ public class TestSuiteRunner {
                 return withTimeout(name, () ->
                     assertEquals(tc.output,
                         hydra.hoisting.Hoisting.hoistSubterms(
-                            predicateFn(tc.predicate), emptyTypeContext(), tc.input)));
+                            predicateFn(tc.predicate), emptyGraph(), tc.input)));
             }
 
             @Override
@@ -946,7 +916,7 @@ public class TestSuiteRunner {
                 HoistCaseStatementsTestCase tc = instance.value;
                 return withTimeout(name, () ->
                     assertEquals(tc.output,
-                        hydra.hoisting.Hoisting.hoistCaseStatements(emptyTypeContext(), tc.input)));
+                        hydra.hoisting.Hoisting.hoistCaseStatements(emptyGraph(), tc.input)));
             }
 
             @Override
@@ -1210,6 +1180,18 @@ public class TestSuiteRunner {
 
     private static DynamicTest withTimeout(String name, org.junit.jupiter.api.function.Executable executable) {
         return DynamicTest.dynamicTest(name, () -> assertTimeoutPreemptively(TEST_TIMEOUT, executable));
+    }
+
+    /**
+     * Convert a TypeScheme back to a Type by wrapping forall binders around the body.
+     */
+    private static Type typeSchemeToType(TypeScheme ts) {
+        Type result = ts.type;
+        // Wrap in reverse order so the first parameter is the outermost forall
+        for (int i = ts.variables.size() - 1; i >= 0; i--) {
+            result = new Type.Forall(new ForallType(ts.variables.get(i), result));
+        }
+        return result;
     }
 
     // ---- Helper methods ----
@@ -1598,21 +1580,4 @@ public class TestSuiteRunner {
         }
     }
 
-    private static hydra.typing.TypeContext emptyTypeContext() {
-        hydra.typing.InferenceContext emptyIc = new hydra.typing.InferenceContext(
-            Collections.emptyMap(),
-            Collections.emptyMap(),
-            Collections.emptyMap(),
-            Collections.emptyMap(),
-            false
-        );
-        return new hydra.typing.TypeContext(
-            Collections.emptyMap(),
-            Collections.emptyMap(),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            Collections.emptySet(),
-            emptyIc
-        );
-    }
 }
