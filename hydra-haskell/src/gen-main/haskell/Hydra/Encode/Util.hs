@@ -54,11 +54,6 @@ comparison x = case x of
       Core.fieldName = (Core.Name "greaterThan"),
       Core.fieldTerm = Core.TermUnit}}))
 
-decodingError :: (Util.DecodingError -> Core.Term)
-decodingError x = (Core.TermWrap (Core.WrappedTerm {
-  Core.wrappedTermTypeName = (Core.Name "hydra.util.DecodingError"),
-  Core.wrappedTermBody = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Util.unDecodingError x))}))
-
 precision :: (Util.Precision -> Core.Term)
 precision x = case x of
   Util.PrecisionArbitrary -> (Core.TermUnion (Core.Injection {

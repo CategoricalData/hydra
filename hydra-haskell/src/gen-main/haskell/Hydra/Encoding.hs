@@ -8,6 +8,7 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
+import qualified Hydra.Error as Error
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Flows as Flows
@@ -19,7 +20,6 @@ import qualified Hydra.Module as Module
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
 import qualified Hydra.Schemas as Schemas
-import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -29,7 +29,7 @@ import qualified Data.Set as S
 
 -- | Transform a type binding into an encoder binding
 encodeBinding :: (Core.Binding -> Compute.Flow Graph.Graph Core.Binding)
-encodeBinding b = (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.eitherToFlow Util.unDecodingError (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Flows.pure (Core.Binding {
+encodeBinding b = (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.eitherToFlow Error.unDecodingError (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Flows.pure (Core.Binding {
   Core.bindingName = (encodeBindingName (Core.bindingName b)),
   Core.bindingTerm = (encodeType typ),
   Core.bindingType = Nothing}))))

@@ -91,7 +91,7 @@
                                                                     "function": {"variable": "hydra.decode.core.type"}}}}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"function": {"elimination": {"wrap": "hydra.util.DecodingError"}}},
+                                                                "argument": {"function": {"elimination": {"wrap": "hydra.error.DecodingError"}}},
                                                                 "function": {
                                                                   "typeApplication": {
                                                                     "body": {
@@ -99,7 +99,7 @@
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {"variable": "hydra.monads.eitherToFlow"},
-                                                                            "type": {"variable": "hydra.util.DecodingError"}}},
+                                                                            "type": {"variable": "hydra.error.DecodingError"}}},
                                                                         "type": {"variable": "hydra.core.Type"}}},
                                                                     "type": {"variable": "hydra.graph.Graph"}}}}}}},
                                                         "function": {
@@ -1446,7 +1446,9 @@
     "hydra.coders",
     "hydra.compute",
     "hydra.constraints",
+    "hydra.context",
     "hydra.core",
+    "hydra.error",
     "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",

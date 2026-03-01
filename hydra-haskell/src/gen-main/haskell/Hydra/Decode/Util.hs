@@ -5,6 +5,7 @@
 module Hydra.Decode.Util where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Extract.Helpers as Helpers
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
@@ -20,8 +21,8 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-caseConvention :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Util.CaseConvention)
-caseConvention cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+caseConvention :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Util.CaseConvention)
+caseConvention cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v1 ->  
     let tname = (Core.injectionTypeName v1) 
         field = (Core.injectionField v1)
@@ -32,15 +33,15 @@ caseConvention cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) 
                 (Core.Name "pascal", (\input -> Eithers.map (\t -> Util.CaseConventionPascal) (Helpers.decodeUnit cx input))),
                 (Core.Name "lowerSnake", (\input -> Eithers.map (\t -> Util.CaseConventionLowerSnake) (Helpers.decodeUnit cx input))),
                 (Core.Name "upperSnake", (\input -> Eithers.map (\t -> Util.CaseConventionUpperSnake) (Helpers.decodeUnit cx input)))])
-    in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Util.DecodingError "expected union of type hydra.util.CaseConvention"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected union of type hydra.util.CaseConvention"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-comparison :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Util.Comparison)
-comparison cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+comparison :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Util.Comparison)
+comparison cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v1 ->  
     let tname = (Core.injectionTypeName v1) 
         field = (Core.injectionField v1)
@@ -50,24 +51,15 @@ comparison cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\st
                 (Core.Name "lessThan", (\input -> Eithers.map (\t -> Util.ComparisonLessThan) (Helpers.decodeUnit cx input))),
                 (Core.Name "equalTo", (\input -> Eithers.map (\t -> Util.ComparisonEqualTo) (Helpers.decodeUnit cx input))),
                 (Core.Name "greaterThan", (\input -> Eithers.map (\t -> Util.ComparisonGreaterThan) (Helpers.decodeUnit cx input)))])
-    in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+    in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Util.DecodingError "expected union of type hydra.util.Comparison"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected union of type hydra.util.Comparison"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-decodingError :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Util.DecodingError)
-decodingError cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v1 -> (Eithers.map (\b -> Util.DecodingError b) ((\raw -> Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
-    Core.TermLiteral v2 -> ((\x -> case x of
-      Core.LiteralString v3 -> (Right v3)
-      _ -> (Left (Util.DecodingError "expected string literal"))) v2)
-    _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v1)))
-  _ -> (Left (Util.DecodingError "expected wrapped type hydra.util.DecodingError"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
-
-precision :: (Graph.Graph -> Core.Term -> Either Util.DecodingError Util.Precision)
-precision cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+precision :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Util.Precision)
+precision cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v1 ->  
     let tname = (Core.injectionTypeName v1) 
         field = (Core.injectionField v1)
@@ -75,16 +67,16 @@ precision cx raw = (Eithers.either (\err -> Left (Util.DecodingError err)) (\str
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
                 (Core.Name "arbitrary", (\input -> Eithers.map (\t -> Util.PrecisionArbitrary) (Helpers.decodeUnit cx input))),
-                (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left (Util.DecodingError err)) (\stripped -> (\x -> case x of
+                (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
                   Core.TermLiteral v2 -> ((\x -> case x of
                     Core.LiteralInteger v3 -> ((\x -> case x of
                       Core.IntegerValueInt32 v4 -> (Right v4)
-                      _ -> (Left (Util.DecodingError "expected int32 value"))) v3)
-                    _ -> (Left (Util.DecodingError "expected int32 literal"))) v2)
-                  _ -> (Left (Util.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
-    in (Maybes.maybe (Left (Util.DecodingError (Strings.cat [
+                      _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
+                    _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
+    in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Util.DecodingError "expected union of type hydra.util.Precision"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected union of type hydra.util.Precision"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
