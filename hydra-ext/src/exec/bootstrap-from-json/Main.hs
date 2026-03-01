@@ -22,6 +22,7 @@
 --   --include-gentests     Also generate generation tests
 --   --kernel-only          Only generate kernel modules (exclude hydra.ext.*)
 --   --types-only           Only generate type-defining modules
+--   --ext-java-only        Only generate hydraExtJavaModules from ext manifest
 --   --json-dir <dir>       Override kernel JSON directory
 --   --ext-json-dir <dir>   Override ext JSON directory (for --include-coders)
 
@@ -88,6 +89,7 @@ data Options = Options
   , optIncludeGenTests :: Bool
   , optKernelOnly      :: Bool
   , optTypesOnly       :: Bool
+  , optExtJavaOnly     :: Bool
   , optJsonDir         :: Maybe FilePath
   , optExtJsonDir      :: Maybe FilePath
   }
@@ -101,6 +103,7 @@ defaultOptions = Options
   , optIncludeGenTests = False
   , optKernelOnly      = False
   , optTypesOnly       = False
+  , optExtJavaOnly     = False
   , optJsonDir         = Nothing
   , optExtJsonDir      = Nothing
   }
@@ -118,6 +121,7 @@ parseArgs = go defaultOptions
     go opts ("--include-gentests" : rest) = go (opts { optIncludeGenTests = True }) rest
     go opts ("--kernel-only" : rest) = go (opts { optKernelOnly = True }) rest
     go opts ("--types-only" : rest) = go (opts { optTypesOnly = True }) rest
+    go opts ("--ext-java-only" : rest) = go (opts { optExtJavaOnly = True }) rest
     go opts ("--json-dir" : d : rest) = go (opts { optJsonDir = Just d }) rest
     go opts ("--ext-json-dir" : d : rest) = go (opts { optExtJsonDir = Just d }) rest
     go _ (arg : _) = Left $ "Unknown argument: " ++ arg
@@ -133,6 +137,7 @@ usage = unlines
   , "  --include-gentests     Also generate generation tests"
   , "  --kernel-only          Only generate kernel modules (exclude hydra.ext.*)"
   , "  --types-only           Only generate type-defining modules"
+  , "  --ext-java-only        Only generate hydraExtJavaModules from ext manifest"
   , "  --json-dir <dir>       Override kernel JSON directory"
   , "  --ext-json-dir <dir>   Override ext JSON directory (for --include-coders)"
   ]
@@ -229,15 +234,28 @@ main = do
     putStrLn $ "Filtering to type modules: " ++ show (length allMainMods) ++ " of " ++ show (length filtered1)
     putStrLn ""
 
+  -- Optionally filter to ext Java modules only
+  extJavaMods <- if optExtJavaOnly opts
+    then do
+      extJavaNamespaces <- readManifestField extJsonDir "hydraExtJavaModules"
+      let extJavaNsSet = fmap unNamespace extJavaNamespaces
+          filtered = Prelude.filter (\m -> unNamespace (moduleNamespace m) `elem` extJavaNsSet) allMainMods
+      putStrLn $ "Filtering to ext Java modules: " ++ show (length filtered) ++ " of " ++ show (length allMainMods)
+      putStrLn ""
+      return filtered
+    else return allMainMods
+
+  let modsToGenerate = extJavaMods
+
   -- Generate main modules
   let stepNum = if optIncludeCoders opts then "3" else "2"
-  putStrLn $ "Step " ++ stepNum ++ ": Mapping " ++ show (length allMainMods) ++ " modules to " ++ targetCap ++ "..."
+  putStrLn $ "Step " ++ stepNum ++ ": Mapping " ++ show (length modsToGenerate) ++ " modules to " ++ targetCap ++ "..."
 
   genStart <- getCurrentTime
   case target of
-    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allMainMods allMainMods
-    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain allMainMods allMainMods
-    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allMainMods allMainMods
+    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allMainMods modsToGenerate
+    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain allMainMods modsToGenerate
+    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allMainMods modsToGenerate
     _ -> do
       putStrLn $ "Unknown target: " ++ target
       exitFailure
