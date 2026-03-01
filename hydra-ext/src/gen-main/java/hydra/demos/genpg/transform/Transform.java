@@ -6,8 +6,8 @@ package hydra.demos.genpg.transform;
  * Functions for transforming property graph mappings into property graph elements.
  */
 public interface Transform {
-  static <T0, T1> hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>> concatPairs(hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>> acc, hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>> p) {
-    return (hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>(hydra.lib.lists.Concat2.apply(
+  static <T0, T1> hydra.util.Pair<java.util.List<T0>, java.util.List<T1>> concatPairs(hydra.util.Pair<java.util.List<T0>, java.util.List<T1>> acc, hydra.util.Pair<java.util.List<T0>, java.util.List<T1>> p) {
+    return (hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>(hydra.lib.lists.Concat2.apply(
       hydra.lib.pairs.First.apply(acc),
       hydra.lib.pairs.First.apply(p)), hydra.lib.lists.Concat2.apply(
       hydra.lib.pairs.Second.apply(acc),
@@ -132,7 +132,7 @@ public interface Transform {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.core.Term>>, hydra.tabular.DataRow<hydra.core.Term>>) (decodedCells -> (hydra.tabular.DataRow<hydra.core.Term>) (new hydra.tabular.DataRow(decodedCells))),
       hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.tabular.ColumnType, hydra.util.Maybe<String>>, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (pair -> {
+        (java.util.function.Function<hydra.util.Pair<hydra.tabular.ColumnType, hydra.util.Maybe<String>>, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (pair -> {
           hydra.util.Lazy<hydra.tabular.ColumnType> colType = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
           hydra.util.Lazy<hydra.util.Maybe<String>> mvalue = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
           return hydra.demos.genpg.transform.Transform.decodeCell(
@@ -185,22 +185,22 @@ public interface Transform {
     })))).apply(v1))).apply(el);
   }
   
-  static hydra.util.Either<String, java.util.Map<String, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>> elementSpecsByTable(hydra.pg.model.LazyGraph<hydra.core.Term> graph) {
+  static hydra.util.Either<String, java.util.Map<String, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>> elementSpecsByTable(hydra.pg.model.LazyGraph<hydra.core.Term> graph) {
     hydra.util.Lazy<java.util.List<hydra.pg.model.Edge<hydra.core.Term>>> edges = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.LazyGraph<hydra.core.Term>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) (projected -> projected.edges)).apply(graph));
     hydra.util.Lazy<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>> vertices = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.LazyGraph<hydra.core.Term>, java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>>) (projected -> projected.vertices)).apply(graph));
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.util.Either<String, hydra.util.Tuple.Tuple2<String, hydra.pg.model.Vertex<hydra.core.Term>>>>) (v -> hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<String, hydra.util.Tuple.Tuple2<String, hydra.pg.model.Vertex<hydra.core.Term>>>) (t -> (hydra.util.Tuple.Tuple2<String, hydra.pg.model.Vertex<hydra.core.Term>>) ((hydra.util.Tuple.Tuple2<String, hydra.pg.model.Vertex<hydra.core.Term>>) (new hydra.util.Tuple.Tuple2<String, hydra.pg.model.Vertex<hydra.core.Term>>(t, v)))),
+        (java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.util.Either<String, hydra.util.Pair<String, hydra.pg.model.Vertex<hydra.core.Term>>>>) (v -> hydra.lib.eithers.Map.apply(
+          (java.util.function.Function<String, hydra.util.Pair<String, hydra.pg.model.Vertex<hydra.core.Term>>>) (t -> (hydra.util.Pair<String, hydra.pg.model.Vertex<hydra.core.Term>>) ((hydra.util.Pair<String, hydra.pg.model.Vertex<hydra.core.Term>>) (new hydra.util.Pair<String, hydra.pg.model.Vertex<hydra.core.Term>>(t, v)))),
           hydra.demos.genpg.transform.Transform.tableForVertex(v))),
         vertices.get()),
-      (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.pg.model.Vertex<hydra.core.Term>>>, hydra.util.Either<String, java.util.Map<String, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>>) (vertexPairs -> hydra.lib.eithers.Bind.apply(
+      (java.util.function.Function<java.util.List<hydra.util.Pair<String, hydra.pg.model.Vertex<hydra.core.Term>>>, hydra.util.Either<String, java.util.Map<String, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>>) (vertexPairs -> hydra.lib.eithers.Bind.apply(
         hydra.lib.eithers.MapList.apply(
-          (java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.util.Either<String, hydra.util.Tuple.Tuple2<String, hydra.pg.model.Edge<hydra.core.Term>>>>) (e -> hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<String, hydra.util.Tuple.Tuple2<String, hydra.pg.model.Edge<hydra.core.Term>>>) (t -> (hydra.util.Tuple.Tuple2<String, hydra.pg.model.Edge<hydra.core.Term>>) ((hydra.util.Tuple.Tuple2<String, hydra.pg.model.Edge<hydra.core.Term>>) (new hydra.util.Tuple.Tuple2<String, hydra.pg.model.Edge<hydra.core.Term>>(t, e)))),
+          (java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.util.Either<String, hydra.util.Pair<String, hydra.pg.model.Edge<hydra.core.Term>>>>) (e -> hydra.lib.eithers.Map.apply(
+            (java.util.function.Function<String, hydra.util.Pair<String, hydra.pg.model.Edge<hydra.core.Term>>>) (t -> (hydra.util.Pair<String, hydra.pg.model.Edge<hydra.core.Term>>) ((hydra.util.Pair<String, hydra.pg.model.Edge<hydra.core.Term>>) (new hydra.util.Pair<String, hydra.pg.model.Edge<hydra.core.Term>>(t, e)))),
             hydra.demos.genpg.transform.Transform.tableForEdge(e))),
           edges.get()),
-        (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<String, hydra.pg.model.Edge<hydra.core.Term>>>, hydra.util.Either<String, java.util.Map<String, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>>) (edgePairs -> (hydra.util.Either<String, java.util.Map<String, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) ((hydra.util.Either<String, java.util.Map<String, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (hydra.util.Either.<String, java.util.Map<String, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>right(hydra.lib.lists.Foldl.apply(
+        (java.util.function.Function<java.util.List<hydra.util.Pair<String, hydra.pg.model.Edge<hydra.core.Term>>>, hydra.util.Either<String, java.util.Map<String, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>>) (edgePairs -> (hydra.util.Either<String, java.util.Map<String, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) ((hydra.util.Either<String, java.util.Map<String, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (hydra.util.Either.<String, java.util.Map<String, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>right(hydra.lib.lists.Foldl.apply(
           p0 -> p1 -> hydra.demos.genpg.transform.Transform.<String, hydra.pg.model.Vertex<hydra.core.Term>, hydra.pg.model.Edge<hydra.core.Term>>elementSpecsByTable_addEdge(
             p0,
             p1),
@@ -208,46 +208,46 @@ public interface Transform {
           edgePairs))))))));
   }
   
-  static <T0, T1, T2> java.util.Map<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>> elementSpecsByTable_addVertex(java.util.Map<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>> m, hydra.util.Tuple.Tuple2<T0, T1> p) {
+  static <T0, T1, T2> java.util.Map<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>> elementSpecsByTable_addVertex(java.util.Map<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>> m, hydra.util.Pair<T0, T1> p) {
     hydra.util.Lazy<T0> table = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T0, T1>elementSpecsByTable_table2(p));
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>> current = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T1, T2>elementSpecsByTable_current2(hydra.demos.genpg.transform.Transform.<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>>elementSpecsByTable_existing2(
+    hydra.util.Lazy<hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>> current = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T1, T2>elementSpecsByTable_current2(hydra.demos.genpg.transform.Transform.<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>>elementSpecsByTable_existing2(
       m,
       table.get())));
     return hydra.lib.maps.Insert.apply(
       table.get(),
-      (hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>) ((hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>) (new hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>(hydra.lib.lists.Cons.apply(
+      (hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) ((hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) (new hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>(hydra.lib.lists.Cons.apply(
         hydra.demos.genpg.transform.Transform.<T0, T1>elementSpecsByTable_v(p),
         hydra.lib.pairs.First.apply(current.get())), hydra.lib.pairs.Second.apply(current.get())))),
       m);
   }
   
-  static <T0, T1, T2> java.util.Map<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>> elementSpecsByTable_addEdge(java.util.Map<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>> m, hydra.util.Tuple.Tuple2<T0, T2> p) {
+  static <T0, T1, T2> java.util.Map<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>> elementSpecsByTable_addEdge(java.util.Map<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>> m, hydra.util.Pair<T0, T2> p) {
     hydra.util.Lazy<T0> table = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T0, T2>elementSpecsByTable_table(p));
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>> current = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T1, T2>elementSpecsByTable_current(hydra.demos.genpg.transform.Transform.<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>>elementSpecsByTable_existing(
+    hydra.util.Lazy<hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>> current = new hydra.util.Lazy<>(() -> hydra.demos.genpg.transform.Transform.<T1, T2>elementSpecsByTable_current(hydra.demos.genpg.transform.Transform.<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>>elementSpecsByTable_existing(
       m,
       table.get())));
     return hydra.lib.maps.Insert.apply(
       table.get(),
-      (hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>) ((hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>) (new hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>(hydra.lib.pairs.First.apply(current.get()), hydra.lib.lists.Cons.apply(
+      (hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) ((hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) (new hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>(hydra.lib.pairs.First.apply(current.get()), hydra.lib.lists.Cons.apply(
         hydra.demos.genpg.transform.Transform.<T0, T2>elementSpecsByTable_e(p),
         hydra.lib.pairs.Second.apply(current.get()))))),
       m);
   }
   
-  static <T0, T1, T2> java.util.Map<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>> elementSpecsByTable_vertexMap(java.util.List<hydra.util.Tuple.Tuple2<T0, T1>> vertexPairs) {
+  static <T0, T1, T2> java.util.Map<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>> elementSpecsByTable_vertexMap(java.util.List<hydra.util.Pair<T0, T1>> vertexPairs) {
     return hydra.lib.lists.Foldl.apply(
       p0 -> p1 -> hydra.demos.genpg.transform.Transform.<T0, T1, T2>elementSpecsByTable_addVertex(
         p0,
         p1),
-      (java.util.Map<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>>) ((java.util.Map<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>>) (hydra.lib.maps.Empty.<T0, hydra.util.Tuple.Tuple2<java.util.List<T1>, java.util.List<T2>>>apply())),
+      (java.util.Map<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>>) ((java.util.Map<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>>) (hydra.lib.maps.Empty.<T0, hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>>apply())),
       vertexPairs);
   }
   
-  static <T0, T1> T0 elementSpecsByTable_table(hydra.util.Tuple.Tuple2<T0, T1> p) {
+  static <T0, T1> T0 elementSpecsByTable_table(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.First.apply(p);
   }
   
-  static <T0, T1> T1 elementSpecsByTable_e(hydra.util.Tuple.Tuple2<T0, T1> p) {
+  static <T0, T1> T1 elementSpecsByTable_e(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.Second.apply(p);
   }
   
@@ -257,17 +257,17 @@ public interface Transform {
       m);
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>> elementSpecsByTable_current(hydra.util.Maybe<hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>> existing) {
+  static <T0, T1> hydra.util.Pair<java.util.List<T0>, java.util.List<T1>> elementSpecsByTable_current(hydra.util.Maybe<hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>> existing) {
     return hydra.lib.maybes.FromMaybe.apply(
-      (hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>((java.util.List<T0>) (java.util.List.<T0>of()), (java.util.List<T1>) (java.util.List.<T1>of())))),
+      (hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>((java.util.List<T0>) (java.util.List.<T0>of()), (java.util.List<T1>) (java.util.List.<T1>of())))),
       existing);
   }
   
-  static <T0, T1> T0 elementSpecsByTable_table2(hydra.util.Tuple.Tuple2<T0, T1> p) {
+  static <T0, T1> T0 elementSpecsByTable_table2(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.First.apply(p);
   }
   
-  static <T0, T1> T1 elementSpecsByTable_v(hydra.util.Tuple.Tuple2<T0, T1> p) {
+  static <T0, T1> T1 elementSpecsByTable_v(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.Second.apply(p);
   }
   
@@ -277,9 +277,9 @@ public interface Transform {
       m);
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>> elementSpecsByTable_current2(hydra.util.Maybe<hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>> existing) {
+  static <T0, T1> hydra.util.Pair<java.util.List<T0>, java.util.List<T1>> elementSpecsByTable_current2(hydra.util.Maybe<hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>> existing) {
     return hydra.lib.maybes.FromMaybe.apply(
-      (hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Tuple.Tuple2<java.util.List<T0>, java.util.List<T1>>((java.util.List<T0>) (java.util.List.<T0>of()), (java.util.List<T1>) (java.util.List.<T1>of())))),
+      (hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>((java.util.List<T0>) (java.util.List.<T0>of()), (java.util.List<T1>) (java.util.List.<T1>of())))),
       existing);
   }
   
@@ -322,33 +322,33 @@ public interface Transform {
   
   static <T0> hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, hydra.core.Term>> evaluateProperties(java.util.Map<T0, hydra.core.Term> specs, hydra.core.Term record) {
     return hydra.lib.flows.Map.apply(
-      (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.Map<T0, hydra.core.Term>>) (pairs -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(pairs))),
+      (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>, java.util.Map<T0, hydra.core.Term>>) (pairs -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(pairs))),
       hydra.lib.flows.MapList.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>) (pair -> {
+        (java.util.function.Function<hydra.util.Pair<T0, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>>) (pair -> {
           hydra.util.Lazy<hydra.core.Term> spec = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
           return hydra.lib.flows.Bind.apply(
             hydra.reduction.Reduction.reduceTerm(
               true,
               new hydra.core.Term.Application(new hydra.core.Application(spec.get(), record))),
-            (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>) (value -> hydra.demos.genpg.transform.Transform.evaluateProperties_extractMaybe(
+            (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>>>) (value -> hydra.demos.genpg.transform.Transform.evaluateProperties_extractMaybe(
               hydra.demos.genpg.transform.Transform.evaluateProperties_k(pair),
               hydra.rewriting.Rewriting.deannotateTerm(value))));
         }),
         hydra.lib.maps.ToList.apply(specs)));
   }
   
-  static <T0, T1> hydra.compute.Flow<T1, hydra.util.Maybe<hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>> evaluateProperties_extractMaybe(T0 k, hydra.core.Term term) {
+  static <T0, T1> hydra.compute.Flow<T1, hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>> evaluateProperties_extractMaybe(T0 k, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T1, hydra.util.Maybe<hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>> visit(hydra.core.Term.Maybe mv) {
+      public hydra.compute.Flow<T1, hydra.util.Maybe<hydra.util.Pair<T0, hydra.core.Term>>> visit(hydra.core.Term.Maybe mv) {
         return hydra.lib.flows.Pure.apply(hydra.lib.maybes.Map.apply(
-          (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>) (v -> (hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<T0, hydra.core.Term>(k, v)))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v -> (hydra.util.Pair<T0, hydra.core.Term>) ((hydra.util.Pair<T0, hydra.core.Term>) (new hydra.util.Pair<T0, hydra.core.Term>(k, v)))),
           (mv).value));
       }
     });
   }
   
-  static <T0, T1> T0 evaluateProperties_k(hydra.util.Tuple.Tuple2<T0, T1> pair) {
+  static <T0, T1> T0 evaluateProperties_k(hydra.util.Pair<T0, T1> pair) {
     return hydra.lib.pairs.First.apply(pair);
   }
   
@@ -436,7 +436,7 @@ public interface Transform {
       () -> hydra.util.Maybe.just(s));
   }
   
-  static hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean> parseCsvChar(hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean> state, Integer c) {
+  static hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean> parseCsvChar(hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean> state, Integer c) {
     hydra.util.Lazy<java.util.List<hydra.util.Maybe<String>>> acc = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.First.apply(state)));
     hydra.util.Lazy<String> field = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(state)));
     hydra.util.Lazy<Boolean> inQuotes = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(state));
@@ -446,11 +446,11 @@ public interface Transform {
         34),
       () -> hydra.lib.logic.IfElse.lazy(
         inQuotes.get(),
-        () -> (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>(acc.get(), field.get()))), false))),
+        () -> (hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>(acc.get(), field.get()))), false))),
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.strings.Null.apply(field.get()),
-          () -> (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>(acc.get(), field.get()))), true))),
-          () -> (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>(acc.get(), hydra.lib.strings.Cat2.apply(
+          () -> (hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>(acc.get(), field.get()))), true))),
+          () -> (hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>(acc.get(), hydra.lib.strings.Cat2.apply(
             field.get(),
             "\"")))), inQuotes.get()))))),
       () -> hydra.lib.logic.IfElse.lazy(
@@ -459,18 +459,18 @@ public interface Transform {
             c,
             44),
           hydra.lib.logic.Not.apply(inQuotes.get())),
-        () -> (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>(hydra.lib.lists.Cons.apply(
+        () -> (hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>(hydra.lib.lists.Cons.apply(
           hydra.demos.genpg.transform.Transform.normalizeField(field.get()),
           acc.get()), ""))), false))),
-        () -> (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>(acc.get(), hydra.lib.strings.Cat2.apply(
+        () -> (hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) ((hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>) (new hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) ((hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>) (new hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>(acc.get(), hydra.lib.strings.Cat2.apply(
           field.get(),
           hydra.lib.strings.FromList.apply(java.util.List.of(c)))))), inQuotes.get())))));
   }
   
   static hydra.util.Either<String, java.util.List<hydra.util.Maybe<String>>> parseCsvLine(String line) {
     java.util.List<Integer> chars = hydra.lib.strings.ToList.apply(line);
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>, java.util.function.Function<Integer, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>>>) (p0 -> p1 -> hydra.demos.genpg.transform.Transform.parseCsvChar(
+    hydra.util.Lazy<hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>, java.util.function.Function<Integer, hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.util.Maybe<String>>, String>, Boolean>>>) (p0 -> p1 -> hydra.demos.genpg.transform.Transform.parseCsvChar(
         p0,
         p1)),
       hydra.demos.genpg.transform.Transform.<hydra.util.Maybe<String>>parseCsvLine_initState(),
@@ -486,8 +486,8 @@ public interface Transform {
         acc.get()))))));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<T0>, String>, Boolean> parseCsvLine_initState() {
-    return (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<T0>, String>, Boolean>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<T0>, String>, Boolean>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<T0>, String>, Boolean>((hydra.util.Tuple.Tuple2<java.util.List<T0>, String>) ((hydra.util.Tuple.Tuple2<java.util.List<T0>, String>) (new hydra.util.Tuple.Tuple2<java.util.List<T0>, String>((java.util.List<T0>) (java.util.List.<T0>of()), ""))), false)));
+  static <T0> hydra.util.Pair<hydra.util.Pair<java.util.List<T0>, String>, Boolean> parseCsvLine_initState() {
+    return (hydra.util.Pair<hydra.util.Pair<java.util.List<T0>, String>, Boolean>) ((hydra.util.Pair<hydra.util.Pair<java.util.List<T0>, String>, Boolean>) (new hydra.util.Pair<hydra.util.Pair<java.util.List<T0>, String>, Boolean>((hydra.util.Pair<java.util.List<T0>, String>) ((hydra.util.Pair<java.util.List<T0>, String>) (new hydra.util.Pair<java.util.List<T0>, String>((java.util.List<T0>) (java.util.List.<T0>of()), ""))), false)));
   }
   
   static hydra.util.Either<String, hydra.util.Maybe<java.util.List<hydra.util.Maybe<String>>>> parseSingleLine(String line) {
@@ -584,7 +584,7 @@ public interface Transform {
   
   static java.util.Map<hydra.relational.RelationName, hydra.tabular.TableType> tableTypesByName(java.util.List<hydra.tabular.TableType> tableTypes) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.tabular.TableType, hydra.util.Tuple.Tuple2<hydra.relational.RelationName, hydra.tabular.TableType>>) (t -> (hydra.util.Tuple.Tuple2<hydra.relational.RelationName, hydra.tabular.TableType>) ((hydra.util.Tuple.Tuple2<hydra.relational.RelationName, hydra.tabular.TableType>) (new hydra.util.Tuple.Tuple2<hydra.relational.RelationName, hydra.tabular.TableType>((t).name, t)))),
+      (java.util.function.Function<hydra.tabular.TableType, hydra.util.Pair<hydra.relational.RelationName, hydra.tabular.TableType>>) (t -> (hydra.util.Pair<hydra.relational.RelationName, hydra.tabular.TableType>) ((hydra.util.Pair<hydra.relational.RelationName, hydra.tabular.TableType>) (new hydra.util.Pair<hydra.relational.RelationName, hydra.tabular.TableType>((t).name, t)))),
       tableTypes));
   }
   
@@ -601,32 +601,32 @@ public interface Transform {
       cells.get())));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>> transformRecord(java.util.List<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, java.util.List<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.core.Term record) {
+  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>> transformRecord(java.util.List<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, java.util.List<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.core.Term record) {
     return hydra.lib.flows.Bind.apply(
       hydra.lib.flows.MapList.apply(
         (java.util.function.Function<hydra.pg.model.Vertex<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>>) (spec -> hydra.demos.genpg.transform.Transform.evaluateVertex(
           spec,
           record)),
         vspecs),
-      (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (mVertices -> hydra.lib.flows.Bind.apply(
+      (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.Vertex<hydra.core.Term>>>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (mVertices -> hydra.lib.flows.Bind.apply(
         hydra.lib.flows.MapList.apply(
           (java.util.function.Function<hydra.pg.model.Edge<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>>) (spec -> hydra.demos.genpg.transform.Transform.evaluateEdge(
             spec,
             record)),
           especs),
-        (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (mEdges -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>(hydra.lib.maybes.Cat.apply(mVertices), hydra.lib.maybes.Cat.apply(mEdges)))))))));
+        (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.pg.model.Edge<hydra.core.Term>>>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (mEdges -> hydra.lib.flows.Pure.apply((hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>(hydra.lib.maybes.Cat.apply(mVertices), hydra.lib.maybes.Cat.apply(mEdges)))))))));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>> transformTableRows(java.util.List<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, java.util.List<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.tabular.TableType tableType, java.util.List<hydra.tabular.DataRow<hydra.core.Term>> rows) {
+  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>> transformTableRows(java.util.List<hydra.pg.model.Vertex<hydra.core.Term>> vspecs, java.util.List<hydra.pg.model.Edge<hydra.core.Term>> especs, hydra.tabular.TableType tableType, java.util.List<hydra.tabular.DataRow<hydra.core.Term>> rows) {
     return hydra.lib.flows.Map.apply(
-      (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>) (pairs -> hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<java.util.List<hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>) (pairs -> hydra.lib.lists.Foldl.apply(
         p0 -> p1 -> hydra.demos.genpg.transform.Transform.<hydra.pg.model.Vertex<hydra.core.Term>, hydra.pg.model.Edge<hydra.core.Term>>concatPairs(
           p0,
           p1),
-        (hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>((java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>) (java.util.List.<hydra.pg.model.Vertex<hydra.core.Term>>of()), (java.util.List<hydra.pg.model.Edge<hydra.core.Term>>) (java.util.List.<hydra.pg.model.Edge<hydra.core.Term>>of())))),
+        (hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>((java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>) (java.util.List.<hydra.pg.model.Vertex<hydra.core.Term>>of()), (java.util.List<hydra.pg.model.Edge<hydra.core.Term>>) (java.util.List.<hydra.pg.model.Edge<hydra.core.Term>>of())))),
         pairs)),
       hydra.lib.flows.MapList.apply(
-        (java.util.function.Function<hydra.tabular.DataRow<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (row -> hydra.demos.genpg.transform.Transform.transformRecord(
+        (java.util.function.Function<hydra.tabular.DataRow<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<java.util.List<hydra.pg.model.Vertex<hydra.core.Term>>, java.util.List<hydra.pg.model.Edge<hydra.core.Term>>>>>) (row -> hydra.demos.genpg.transform.Transform.transformRecord(
           vspecs,
           especs,
           hydra.demos.genpg.transform.Transform.termRowToRecord(
