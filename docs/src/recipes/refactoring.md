@@ -24,6 +24,7 @@ Changes to kernel code must be propagated to all of these locations.
 | **Move element** | Add to new location → Update references → Remove from old → Regenerate |
 | **Rename element** | Update name in source → Update all references → Regenerate |
 | **Move/rename module** | See [detailed section](#moving-or-renaming-modules) and [Refactoring Namespaces](refactoring-namespaces.md) |
+| **Consolidate types** | Introduce new type → Migrate consumers → Delete old type → Regenerate. See [detailed section](#consolidating-or-replacing-types) |
 
 ## Prerequisites
 
@@ -112,6 +113,8 @@ kernelPrimaryTermsModules = [
 ```
 
 ### Step 4: Build and Regenerate
+
+The simplest approach is to run `bin/sync-all.sh` from the repo root, which handles all regeneration steps in the correct order. For incremental work, you can run the steps individually:
 
 ```bash
 cd hydra-haskell
@@ -413,6 +416,60 @@ rm -f ../hydra-python/src/gen-main/python/hydra/foo.py
 
 ---
 
+## Consolidating or Replacing Types
+
+When a refactoring eliminates types or merges multiple types into one, the scope goes beyond renaming — you need to rewrite every consumer of the old types to use the new one, often with different field names and semantics.
+
+### When You Might Need This
+
+- Merging related types that have converged in purpose (e.g., separate "context" types that can be unified)
+- Eliminating wrapper types whose indirection is no longer needed
+- Replacing a type with a fundamentally different structure (different fields, not just renamed fields)
+
+### General Approach
+
+1. **Introduce the new type alongside the old one**. If the new type doesn't exist yet, add it to the type definition source. If replacing type A with existing type B, this step is already done.
+
+2. **Add a transitional bridge** (optional but recommended for large changes). Add a field or helper function that converts between old and new representations. This lets you migrate consumers incrementally rather than all at once.
+
+3. **Migrate consumers module by module**. Update each Source file that references the old type:
+   - Change function signatures to use the new type
+   - Replace field accessors with the new type's accessors
+   - Update DSL helper calls (constructor, `with*` helpers, field projections)
+
+4. **Update DSL helpers** in `Dsl/Meta/`. Delete old constructors and accessors, add new ones or rename as appropriate.
+
+5. **Delete the old type** once no consumers remain. Remove it from the type definition source and the module's element list.
+
+6. **Remove the transitional bridge** if one was used.
+
+7. **Build, regenerate, and test** across all implementations.
+
+### Updating Non-Generated Code
+
+Type consolidation affects not only Sources and gen-main, but also hand-written code that references the old types:
+
+- **Test infrastructure**: Test runners in Java (`TestSuiteRunner.java`), Python, and Haskell (`TestUtils.hs`, `TestSuiteSpec.hs`) construct kernel types directly. These need manual updates to use new constructors and field names.
+- **Executables**: `verify-json-kernel/Main.hs` and `Generation.hs` use kernel types directly.
+- **DSL bootstrap**: `Dsl/Bootstrap.hs` constructs initial graphs using Haskell record syntax on kernel types.
+- **hydra-ext coders**: Language coders in `hydra-ext` (Java, Python, Haskell coders) reference kernel types in their state management.
+
+Search broadly for the old type name:
+```bash
+# Search across all subprojects, not just Sources
+grep -rn 'OldTypeName' hydra-haskell/ hydra-java/ hydra-python/ hydra-ext/
+```
+
+### Pitfalls Specific to Type Consolidation
+
+- **Silent semantic mismatches**: When a field changes meaning (not just name), consumers may compile but produce wrong results. For example, if a field changes from `Type` to `TypeScheme`, code that previously stored a bare type must now properly extract/wrap forall binders. Tests are essential for catching these.
+
+- **Intermediate types used as Flow state**: If the old type was used as state in `Flow OldType`, every `Monads.withState`, `Monads.getState`, and `Monads.setState` call must be updated. These are easy to miss because the compiler may not flag them if the new type happens to unify.
+
+- **Multiple types with similar roles**: When consolidating types like `TypeContext`, `InferenceContext`, and `Graph` into a single `Graph`, different consumers may have used different subsets of the old types' fields. Map each consumer's actual field usage to the new type's fields rather than doing a mechanical rename.
+
+---
+
 ## Common Pitfalls
 
 ### Chicken-and-Egg Bootstrap Problem
@@ -421,10 +478,31 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 2. Build incrementally
 3. Regenerate fully once the build works
 
+**Adding a field to a kernel type** (e.g., adding `transitionalGraf` to `Graph`):
+1. Add the field to the type definition in Sources (e.g., `Sources/Kernel/Types/Graph.hs`)
+2. Regenerate just the types module into gen-main (e.g., via `writeHaskell` in ghci)
+3. Manually patch **all** record construction sites in gen-main to supply the new field — search for `TypeName {` across gen-main
+4. If the new field's type needs a default value (like `emptyGraf`), add that helper manually to the generated file
+5. Update the DSL helpers (e.g., `Dsl/Meta/Graph.hs`) — constructor, accessors, and all `with*` helpers
+6. Update all Source-level constructor calls to supply the new field
+7. `stack build` to verify everything compiles
+8. Regenerate cleanly — the generated files will now replace your manual patches
+9. `stack build` again and run tests to confirm
+
+The key insight: gen-main patches in step 3 are temporary scaffolding. They only need to be correct enough for the build to succeed so that regeneration can produce the real versions.
+
+### Silent State Pipeline Bugs
+When refactoring types that are used as Flow state, a function may compile but produce wrong results because a field is empty or has the wrong representation. For example:
+- A graph used as Flow state might have an empty `schemaTypes` map, causing type alias lookups to silently fail and generate wrapper classes instead of transparent aliases.
+- A function that previously read schema types from a nested `Maybe Graph` field might now need to read from a flat `Map Name TypeScheme` field — the code compiles either way, but one path returns nothing.
+
+These bugs don't cause compilation errors or even runtime exceptions — they produce subtly wrong output. The defense is to run the full test suite after every regeneration and investigate any new failures carefully, even if they seem unrelated to the change.
+
 ### Orphan Files
 When modules are moved or regenerated, old files may be left behind:
 - After moving `Foo.hs` to `Foo/Bar.hs`, delete the old `Foo.hs`
 - After regenerating Python, delete old `.py` files that are now packages
+- After a type change causes a previously-generated class to no longer be generated (e.g., a type alias that was incorrectly generating a wrapper class), the stale file remains and must be deleted manually
 
 ### Python Module/Package Conflicts
 Python can't have both `foo.py` and `foo/` directory. Use a structure like `hydra/foo/bar.py` instead of `hydra/foo.py` alongside `hydra/foo/baz.py`.
@@ -436,6 +514,42 @@ When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules also m
 
 ---
 
+## The Sync Pipeline
+
+After making changes to Sources and rebuilding Haskell, regeneration must propagate through several stages. The `bin/sync-all.sh` script runs all of these in the correct order (use `--quick` to skip tests at each stage). However, it's useful to understand the individual stages, especially when debugging failures.
+
+### Pipeline Order
+
+`bin/sync-all.sh` executes four phases:
+
+```
+Phase 1: stack build + update-haskell-kernel + update-kernel-tests + ... (hydra-haskell)
+    → Export and verify JSON
+    → stack test (unless --quick)
+Phase 2: sync-ext.sh (hydra-ext Haskell generation)
+Phase 3: sync-java.sh (Java from JSON)
+    → gradle test (unless --quick)
+Phase 4: sync-python.sh (Python from JSON)
+    → pytest (unless --quick)
+```
+
+### Diagnosing Failures at Each Stage
+
+| Stage | Typical Failures | What To Check |
+|-------|-----------------|---------------|
+| `stack build` (hydra-haskell) | Missing fields, wrong types in Sources | Source files, DSL helpers, gen-main bootstrap |
+| `sync-haskell.sh` | Haskell test failures | Generated code correctness, `verify-json-kernel` |
+| `stack build` (hydra-ext) | Coders using old type names/fields | `hydra-ext` source files referencing old types |
+| `sync-java.sh` | Java compilation errors | Hand-written Java code (test runners, utilities) |
+| `gradle test` | Test failures (wrong results, not just compilation) | Test graph construction, method signatures, type representations |
+| `sync-python.sh` | Python import errors, test failures | Hand-written Python code, `__init__.py` structure |
+
+### Key Principle
+
+Fix errors at the earliest stage before moving to the next. A Haskell compilation error in hydra-ext will cascade into meaningless sync-java failures. Similarly, if Haskell tests fail, investigate before regenerating Java/Python — the generated code may be wrong.
+
+---
+
 ## Verification Checklist
 
 - [ ] hydra-haskell builds (`stack build`)
@@ -444,9 +558,11 @@ When renaming `hydra.foo` to `hydra.foo.bar`, the decoder/encoder modules also m
 - [ ] hydra-ext builds (`stack build` in hydra-ext)
 - [ ] Python kernel regenerated
 - [ ] Python tests pass
-- [ ] Java files updated
-- [ ] Orphan files cleaned up
+- [ ] Java compilation succeeds (`gradle compileTestJava`)
+- [ ] Java tests pass (`gradle test`)
+- [ ] Orphan files cleaned up (stale generated files from old type structure)
 - [ ] All references updated (no broken imports)
+- [ ] Hand-written test infrastructure updated (test runners, test utilities)
 
 ---
 
