@@ -46,7 +46,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Util         as Util
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -167,7 +167,7 @@ adaptedModuleDefinitions = define "adaptedModuleDefinitions" $
     "name" <~ Core.bindingName (var "el") $
     Logic.ifElse (Annotations.isNativeType @@ var "el")
       ("adaptedTyp" <<~ (
-        "coreTyp" <<~ (trace (string "adapt module definitions") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "term")) $
+        "coreTyp" <<~ (trace (string "adapt module definitions") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "term")) $
         adaptTypeToLanguage @@ var "lang" @@ var "coreTyp") $
        produce $ Module.definitionType $ Module.typeDefinition (var "name") (var "adaptedTyp"))
       (Maybes.maybe

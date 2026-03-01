@@ -48,7 +48,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Util         as Util
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
@@ -112,7 +112,7 @@ encodeBinding = define "encodeBinding" $
   doc "Transform a type binding into an encoder binding" $
   "b" ~>
     "graph" <<~ Monads.getState $
-    Flows.bind (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
+    Flows.bind (Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
       "typ" ~>
       Flows.pure (Core.binding
         (encodeBindingName @@ (Core.bindingName (var "b")))

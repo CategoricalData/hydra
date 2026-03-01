@@ -48,7 +48,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Util         as Util
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
@@ -144,7 +144,7 @@ leftError msg = DC.left $ decodingErrorTerm msg
 -- | Helper to convert Either String Term to Either DecodingError Term
 stripWithDecodingError :: TTerm Graph -> TTerm Term -> TTerm (Either DecodingError Term)
 stripWithDecodingError g term = Eithers.bimap
-  (unaryFunction Util.decodingError)
+  (unaryFunction Error.decodingError)
   ("x" ~> var "x")
   (Lexical.stripAndDereferenceTermEither @@ g @@ term)
 
@@ -425,7 +425,7 @@ decodeBinding = define "decodeBinding" $
   doc "Transform a type binding into a decoder binding" $
   "b" ~>
     "graph" <<~ Monads.getState $
-    Flows.bind (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) $
+    Flows.bind (Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) $
       "typ" ~>
       Flows.pure (Core.binding
         (decodeBindingName @@ (Core.bindingName (var "b")))

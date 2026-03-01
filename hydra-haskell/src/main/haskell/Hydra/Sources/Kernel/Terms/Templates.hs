@@ -44,7 +44,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Util         as Util
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -82,7 +82,7 @@ graphToSchema = define "graphToSchema" $
   "toPair" <~ ("el" ~>
     "name" <~ Core.bindingName (var "el") $
     "graph" <<~ Monads.getState $
-    Flows.bind (trace (string "graph to schema") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "el")))) (
+    Flows.bind (trace (string "graph to schema") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "el")))) (
       "t" ~> Flows.pure (pair (var "name") (var "t")))) $
   Flows.bind (Flows.mapList (var "toPair") (var "els")) (
     "pairs" ~> Flows.pure (Maps.fromList (var "pairs")))

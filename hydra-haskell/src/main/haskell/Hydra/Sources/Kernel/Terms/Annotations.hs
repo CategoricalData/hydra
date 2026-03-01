@@ -50,7 +50,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Util         as Util
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -213,7 +213,7 @@ getType = define "getType" $
   "graph" <<~ Monads.getState $
   Maybes.maybe
     (produce nothing)
-    ("dat" ~> Flows.map (unaryFunction just) (trace (string "get type") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "dat")))
+    ("dat" ~> Flows.map (unaryFunction just) (trace (string "get type") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "dat")))
     (Maps.lookup (Constants.key_type) (var "anns"))
 
 getTypeAnnotation :: TBinding (Name -> Type -> Maybe Term)
@@ -238,7 +238,7 @@ getTypeClasses = define "getTypeClasses" $
   Maybes.maybe
     (produce Maps.empty)
     ("term" ~> ExtractCore.map
-      @@ ("t" ~> Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Name @@ var "graph" @@ var "t"))
+      @@ ("t" ~> Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Name @@ var "graph" @@ var "t"))
       @@ (ExtractCore.setOf @@ var "decodeClass")
       @@ (var "term"))
     (getTermAnnotation @@ Constants.key_classes @@ var "term")

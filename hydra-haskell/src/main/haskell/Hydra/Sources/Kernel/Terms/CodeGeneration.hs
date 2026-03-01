@@ -55,7 +55,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Util         as Util
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Json.Model                as JsonModel
@@ -350,7 +350,7 @@ formatTypeBinding = define "formatTypeBinding" $
   doc "Format a type binding for the lexicon" $
   "binding" ~>
   "graph" <<~ Monads.getState $
-  "typ" <<~ Monads.eitherToFlow_ @@ Util.unDecodingError
+  "typ" <<~ Monads.eitherToFlow_ @@ Error.unDecodingError
     @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "binding")) $
   produce $
     (string "  ") ++ Core.unName (Core.bindingName $ var "binding") ++ (string " = ") ++ (ShowCore.type_ @@ var "typ")
@@ -548,7 +548,7 @@ decodeModuleFromJson = define "decodeModuleFromJson" $
     ("term" ~>
       -- Step 2: Term -> Module (via decoderFor _Module)
       Eithers.either_
-        ("decErr" ~> left (Util.unDecodingError @@ var "decErr"))
+        ("decErr" ~> left (Error.unDecodingError @@ var "decErr"))
         ("mod" ~> right (Logic.ifElse (var "doStripTypeSchemes")
           (stripModuleTypeSchemes @@ var "mod")
           (var "mod")))
