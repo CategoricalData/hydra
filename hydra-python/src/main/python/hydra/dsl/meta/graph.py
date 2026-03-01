@@ -41,45 +41,55 @@ def comparison_greater_than() -> TTerm:
 # ============================================================
 
 def graph(
-        elements: TTerm,
-        environment: TTerm,
-        types: TTerm,
-        body: TTerm,
+        bound_terms: TTerm,
+        bound_types: TTerm,
+        class_constraints: TTerm,
+        lambda_variables: TTerm,
+        metadata: TTerm,
         primitives: TTerm,
-        schema: TTerm,
+        schema_types: TTerm,
+        type_variables: TTerm,
 ) -> TTerm:
     """Construct a Graph."""
     return Phantoms.record(Graph.TYPE_, [
-        Phantoms.field(Graph.ELEMENTS, elements),
-        Phantoms.field(Graph.ENVIRONMENT, environment),
-        Phantoms.field(Graph.TYPES, types),
-        Phantoms.field(Graph.BODY, body),
+        Phantoms.field(Graph.BOUND_TERMS, bound_terms),
+        Phantoms.field(Graph.BOUND_TYPES, bound_types),
+        Phantoms.field(Graph.CLASS_CONSTRAINTS, class_constraints),
+        Phantoms.field(Graph.LAMBDA_VARIABLES, lambda_variables),
+        Phantoms.field(Graph.METADATA, metadata),
         Phantoms.field(Graph.PRIMITIVES, primitives),
-        Phantoms.field(Graph.SCHEMA, schema)])
+        Phantoms.field(Graph.SCHEMA_TYPES, schema_types),
+        Phantoms.field(Graph.TYPE_VARIABLES, type_variables)])
 
 
-def graph_elements(g: TTerm) -> TTerm:
-    """Get the elements of a Graph."""
+def graph_bound_terms(g: TTerm) -> TTerm:
+    """Get the bound terms of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(Graph.TYPE_, Graph.ELEMENTS), g)
+        Phantoms.project(Graph.TYPE_, Graph.BOUND_TERMS), g)
 
 
-def graph_environment(g: TTerm) -> TTerm:
-    """Get the environment of a Graph."""
+def graph_bound_types(g: TTerm) -> TTerm:
+    """Get the bound types of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(Graph.TYPE_, Graph.ENVIRONMENT), g)
+        Phantoms.project(Graph.TYPE_, Graph.BOUND_TYPES), g)
 
 
-def graph_types(g: TTerm) -> TTerm:
-    """Get the types of a Graph."""
+def graph_class_constraints(g: TTerm) -> TTerm:
+    """Get the class constraints of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(Graph.TYPE_, Graph.TYPES), g)
+        Phantoms.project(Graph.TYPE_, Graph.CLASS_CONSTRAINTS), g)
 
 
-def graph_body(g: TTerm) -> TTerm:
-    """Get the body of a Graph."""
+def graph_lambda_variables(g: TTerm) -> TTerm:
+    """Get the lambda variables of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(Graph.TYPE_, Graph.BODY), g)
+        Phantoms.project(Graph.TYPE_, Graph.LAMBDA_VARIABLES), g)
+
+
+def graph_metadata(g: TTerm) -> TTerm:
+    """Get the metadata of a Graph."""
+    return Phantoms.apply(
+        Phantoms.project(Graph.TYPE_, Graph.METADATA), g)
 
 
 def graph_primitives(g: TTerm) -> TTerm:
@@ -88,46 +98,72 @@ def graph_primitives(g: TTerm) -> TTerm:
         Phantoms.project(Graph.TYPE_, Graph.PRIMITIVES), g)
 
 
-def graph_schema(g: TTerm) -> TTerm:
-    """Get the schema of a Graph."""
+def graph_schema_types(g: TTerm) -> TTerm:
+    """Get the schema types of a Graph."""
     return Phantoms.apply(
-        Phantoms.project(Graph.TYPE_, Graph.SCHEMA), g)
+        Phantoms.project(Graph.TYPE_, Graph.SCHEMA_TYPES), g)
 
 
-def graph_with_elements(g: TTerm, new_elements: TTerm) -> TTerm:
-    """Return a Graph with new elements."""
-    return graph(new_elements, graph_environment(g), graph_types(g),
-                 graph_body(g), graph_primitives(g), graph_schema(g))
+def graph_type_variables(g: TTerm) -> TTerm:
+    """Get the type variables of a Graph."""
+    return Phantoms.apply(
+        Phantoms.project(Graph.TYPE_, Graph.TYPE_VARIABLES), g)
 
 
-def graph_with_environment(g: TTerm, new_environment: TTerm) -> TTerm:
-    """Return a Graph with a new environment."""
-    return graph(graph_elements(g), new_environment, graph_types(g),
-                 graph_body(g), graph_primitives(g), graph_schema(g))
+def graph_with_bound_terms(g: TTerm, new_bound_terms: TTerm) -> TTerm:
+    """Return a Graph with new bound terms."""
+    return graph(new_bound_terms, graph_bound_types(g), graph_class_constraints(g),
+                 graph_lambda_variables(g), graph_metadata(g), graph_primitives(g),
+                 graph_schema_types(g), graph_type_variables(g))
 
 
-def graph_with_types(g: TTerm, new_types: TTerm) -> TTerm:
-    """Return a Graph with new types."""
-    return graph(graph_elements(g), graph_environment(g), new_types,
-                 graph_body(g), graph_primitives(g), graph_schema(g))
+def graph_with_bound_types(g: TTerm, new_bound_types: TTerm) -> TTerm:
+    """Return a Graph with new bound types."""
+    return graph(graph_bound_terms(g), new_bound_types, graph_class_constraints(g),
+                 graph_lambda_variables(g), graph_metadata(g), graph_primitives(g),
+                 graph_schema_types(g), graph_type_variables(g))
 
 
-def graph_with_body(g: TTerm, new_body: TTerm) -> TTerm:
-    """Return a Graph with a new body."""
-    return graph(graph_elements(g), graph_environment(g), graph_types(g),
-                 new_body, graph_primitives(g), graph_schema(g))
+def graph_with_class_constraints(g: TTerm, new_class_constraints: TTerm) -> TTerm:
+    """Return a Graph with new class constraints."""
+    return graph(graph_bound_terms(g), graph_bound_types(g), new_class_constraints,
+                 graph_lambda_variables(g), graph_metadata(g), graph_primitives(g),
+                 graph_schema_types(g), graph_type_variables(g))
+
+
+def graph_with_lambda_variables(g: TTerm, new_lambda_variables: TTerm) -> TTerm:
+    """Return a Graph with new lambda variables."""
+    return graph(graph_bound_terms(g), graph_bound_types(g), graph_class_constraints(g),
+                 new_lambda_variables, graph_metadata(g), graph_primitives(g),
+                 graph_schema_types(g), graph_type_variables(g))
+
+
+def graph_with_metadata(g: TTerm, new_metadata: TTerm) -> TTerm:
+    """Return a Graph with new metadata."""
+    return graph(graph_bound_terms(g), graph_bound_types(g), graph_class_constraints(g),
+                 graph_lambda_variables(g), new_metadata, graph_primitives(g),
+                 graph_schema_types(g), graph_type_variables(g))
 
 
 def graph_with_primitives(g: TTerm, new_primitives: TTerm) -> TTerm:
     """Return a Graph with new primitives."""
-    return graph(graph_elements(g), graph_environment(g), graph_types(g),
-                 graph_body(g), new_primitives, graph_schema(g))
+    return graph(graph_bound_terms(g), graph_bound_types(g), graph_class_constraints(g),
+                 graph_lambda_variables(g), graph_metadata(g), new_primitives,
+                 graph_schema_types(g), graph_type_variables(g))
 
 
-def graph_with_schema(g: TTerm, new_schema: TTerm) -> TTerm:
-    """Return a Graph with a new schema."""
-    return graph(graph_elements(g), graph_environment(g), graph_types(g),
-                 graph_body(g), graph_primitives(g), new_schema)
+def graph_with_schema_types(g: TTerm, new_schema_types: TTerm) -> TTerm:
+    """Return a Graph with new schema types."""
+    return graph(graph_bound_terms(g), graph_bound_types(g), graph_class_constraints(g),
+                 graph_lambda_variables(g), graph_metadata(g), graph_primitives(g),
+                 new_schema_types, graph_type_variables(g))
+
+
+def graph_with_type_variables(g: TTerm, new_type_variables: TTerm) -> TTerm:
+    """Return a Graph with new type variables."""
+    return graph(graph_bound_terms(g), graph_bound_types(g), graph_class_constraints(g),
+                 graph_lambda_variables(g), graph_metadata(g), graph_primitives(g),
+                 graph_schema_types(g), new_type_variables)
 
 
 # ============================================================
