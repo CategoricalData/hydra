@@ -8,26 +8,13 @@
           "annotation": [
             {
               "@key": "description",
-              "@value": {"literal": {"string": "Show a graph as a string"}}}],
+              "@value": {"literal": {"string": "Show a list of bindings as a string"}}}],
           "body": {
             "function": {
               "lambda": {
                 "body": {
                   "let": {
                     "bindings": [
-                      {
-                        "name": "elements",
-                        "term": {
-                          "application": {
-                            "argument": {"variable": "graph"},
-                            "function": {
-                              "function": {
-                                "elimination": {"record": {"field": "elements", "typeName": "hydra.graph.Graph"}}}}}},
-                        "type": [
-                          {
-                            "constraints": null,
-                            "type": {"list": {"variable": "hydra.core.Binding"}},
-                            "variables": []}]},
                       {
                         "name": "elementStrs",
                         "term": {
@@ -62,15 +49,15 @@
                                     "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
                             {"literal": {"string": "}"}}]},
                         "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}},
-                "domain": [{"variable": "hydra.graph.Graph"}],
-                "parameter": "graph"}}}}},
+                "domain": [{"list": {"variable": "hydra.core.Binding"}}],
+                "parameter": "elements"}}}}},
       "type": [
         {
           "constraints": null,
           "type": {
             "function": {
               "codomain": {"literal": {"string": {}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
+              "domain": {"list": {"variable": "hydra.core.Binding"}}}},
           "variables": []}]}],
   "namespace": "hydra.show.graph",
   "termDependencies": ["hydra.show.core"],

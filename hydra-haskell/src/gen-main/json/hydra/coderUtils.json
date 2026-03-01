@@ -953,7 +953,7 @@
                                   "typeName": "hydra.core.Term"}}}}}},
                       "domain": [{"variable": "hydra.core.Term"}],
                       "parameter": "t"}}},
-                "domain": [{"variable": "hydra.typing.TypeContext"}],
+                "domain": [{"variable": "hydra.graph.Graph"}],
                 "parameter": "tc"}}}}},
       "type": [
         {
@@ -964,7 +964,7 @@
                 "function": {
                   "codomain": {"literal": {"boolean": {}}},
                   "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.typing.TypeContext"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]},
     {
       "name": "hydra.coderUtils.isComplexVariable",
@@ -993,8 +993,7 @@
                                       "argument": {"variable": "tc"},
                                       "function": {
                                         "function": {
-                                          "elimination": {
-                                            "record": {"field": "metadata", "typeName": "hydra.typing.TypeContext"}}}}}},
+                                          "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "name"},
@@ -1026,7 +1025,7 @@
                                                   "argument": {"variable": "tc"},
                                                   "function": {
                                                     "function": {
-                                                      "elimination": {"record": {"field": "types", "typeName": "hydra.typing.TypeContext"}}}}}},
+                                                      "elimination": {"record": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}}}},
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "name"},
@@ -1036,11 +1035,11 @@
                                                         "typeApplication": {
                                                           "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
                                                           "type": {"variable": "hydra.core.Name"}}},
-                                                      "type": {"variable": "hydra.core.Type"}}}}}}},
+                                                      "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                           "type": [
                                             {
                                               "constraints": null,
-                                              "type": {"maybe": {"variable": "hydra.core.Type"}},
+                                              "type": {"maybe": {"variable": "hydra.core.TypeScheme"}},
                                               "variables": []}]}],
                                       "body": {
                                         "application": {
@@ -1050,7 +1049,7 @@
                                               "function": {
                                                 "typeApplication": {
                                                   "body": {"function": {"primitive": "hydra.lib.maybes.isJust"}},
-                                                  "type": {"variable": "hydra.core.Type"}}}}},
+                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}},
                                           "function": {"function": {"primitive": "hydra.lib.logic.not"}}}}}},
                                   "function": {
                                     "application": {
@@ -1065,7 +1064,7 @@
                                                   "function": {
                                                     "function": {
                                                       "elimination": {
-                                                        "record": {"field": "lambdaVariables", "typeName": "hydra.typing.TypeContext"}}}}}},
+                                                        "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}},
                                               "function": {
                                                 "application": {
                                                   "argument": {"variable": "name"},
@@ -1095,7 +1094,7 @@
                                           "type": {"literal": {"boolean": {}}}}}}}}}}}}},
                       "domain": [{"variable": "hydra.core.Name"}],
                       "parameter": "name"}}},
-                "domain": [{"variable": "hydra.typing.TypeContext"}],
+                "domain": [{"variable": "hydra.graph.Graph"}],
                 "parameter": "tc"}}}}},
       "type": [
         {
@@ -1106,7 +1105,7 @@
                 "function": {
                   "codomain": {"literal": {"boolean": {}}},
                   "domain": {"variable": "hydra.core.Name"}}},
-              "domain": {"variable": "hydra.typing.TypeContext"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]},
     {
       "name": "hydra.coderUtils.isComplexBinding",
@@ -1267,7 +1266,7 @@
                                               "type": {"literal": {"boolean": {}}}}}}}}}}}}}}},
                       "domain": [{"variable": "hydra.core.Binding"}],
                       "parameter": "b"}}},
-                "domain": [{"variable": "hydra.typing.TypeContext"}],
+                "domain": [{"variable": "hydra.graph.Graph"}],
                 "parameter": "tc"}}}}},
       "type": [
         {
@@ -1278,7 +1277,7 @@
                 "function": {
                   "codomain": {"literal": {"boolean": {}}},
                   "domain": {"variable": "hydra.core.Binding"}}},
-              "domain": {"variable": "hydra.typing.TypeContext"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]},
     {
       "name": "hydra.coderUtils.isTrivialTerm",
@@ -2428,7 +2427,7 @@
                                             "type": {"variable": "hydra.core.Type"}}}}}}},
                                 "domain": [{"variable": "hydra.core.Term"}],
                                 "parameter": "term"}}},
-                          "domain": [{"variable": "hydra.typing.TypeContext"}],
+                          "domain": [{"variable": "hydra.graph.Graph"}],
                           "parameter": "tc"}}},
                     "domain": [{"literal": {"string": {}}}],
                     "parameter": "msg"}}}}},
@@ -2450,7 +2449,7 @@
                               "argument": {"variable": "t0"},
                               "function": {"variable": "hydra.compute.Flow"}}}}},
                       "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.typing.TypeContext"}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"literal": {"string": {}}}}},
           "variables": ["t0"]}]},
     {
@@ -2500,7 +2499,7 @@
                                       "type": {"maybe": {"variable": "hydra.core.Term"}}}}}}}}}},
                       "domain": [{"variable": "hydra.core.Binding"}],
                       "parameter": "b"}}},
-                "domain": [{"variable": "hydra.typing.TypeContext"}],
+                "domain": [{"variable": "hydra.graph.Graph"}],
                 "parameter": "tc"}}}}},
       "type": [
         {
@@ -2511,7 +2510,7 @@
                 "function": {
                   "codomain": {"maybe": {"variable": "hydra.core.Term"}},
                   "domain": {"variable": "hydra.core.Binding"}}},
-              "domain": {"variable": "hydra.typing.TypeContext"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]},
     {
       "name": "hydra.coderUtils.analyzeFunctionTermWith_finish",
@@ -2723,7 +2722,7 @@
                     "domain": [
                       {
                         "function": {
-                          "codomain": {"variable": "hydra.typing.TypeContext"},
+                          "codomain": {"variable": "hydra.graph.Graph"},
                           "domain": {"variable": "t0"}}}],
                     "parameter": "getTC"}}},
               "parameter": "t1"}},
@@ -2766,7 +2765,7 @@
                   "domain": {"variable": "t0"}}},
               "domain": {
                 "function": {
-                  "codomain": {"variable": "hydra.typing.TypeContext"},
+                  "codomain": {"variable": "hydra.graph.Graph"},
                   "domain": {"variable": "t0"}}}}},
           "variables": ["t0", "t1"]}]},
     {
@@ -2963,7 +2962,7 @@
                                                                                                                                                                       "application": {
                                                                                                                                                                         "argument": {
                                                                                                                                                                           "application": {"argument": {"variable": "gEnv"}, "function": {"variable": "getTC"}}},
-                                                                                                                                                                        "function": {"variable": "hydra.schemas.extendTypeContextForLambda"}}}}},
+                                                                                                                                                                        "function": {"variable": "hydra.schemas.extendGraphForLambda"}}}}},
                                                                                                                                                                 "function": {"variable": "setTC"}}}}},
                                                                                                                                                         "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
                                                                                                                                                     "body": {
@@ -3134,7 +3133,7 @@
                                                                                                                                       "function": {
                                                                                                                                         "application": {
                                                                                                                                           "argument": {"variable": "forBinding"},
-                                                                                                                                          "function": {"variable": "hydra.schemas.extendTypeContextForLet"}}}}}}},
+                                                                                                                                          "function": {"variable": "hydra.schemas.extendGraphForLet"}}}}}}},
                                                                                                                               "function": {"variable": "setTC"}}}}},
                                                                                                                       "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
                                                                                                                   "body": {
@@ -3333,7 +3332,7 @@
                                                                                                                                     "application": {
                                                                                                                                       "argument": {
                                                                                                                                         "application": {"argument": {"variable": "gEnv"}, "function": {"variable": "getTC"}}},
-                                                                                                                                      "function": {"variable": "hydra.schemas.extendTypeContextForTypeLambda"}}}}},
+                                                                                                                                      "function": {"variable": "hydra.schemas.extendGraphForTypeLambda"}}}}},
                                                                                                                               "function": {"variable": "setTC"}}}}},
                                                                                                                       "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
                                                                                                                   "body": {
@@ -3441,12 +3440,12 @@
                                     "function": {
                                       "codomain": {
                                         "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                      "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                                      "domain": {"variable": "hydra.graph.Graph"}}}],
                                 "parameter": "setTC"}}},
                           "domain": [
                             {
                               "function": {
-                                "codomain": {"variable": "hydra.typing.TypeContext"},
+                                "codomain": {"variable": "hydra.graph.Graph"},
                                 "domain": {"variable": "t0"}}}],
                           "parameter": "getTC"}}},
                     "domain": [
@@ -3456,7 +3455,7 @@
                             "function": {
                               "codomain": {"maybe": {"variable": "hydra.core.Term"}},
                               "domain": {"variable": "hydra.core.Binding"}}},
-                          "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                          "domain": {"variable": "hydra.graph.Graph"}}}],
                     "parameter": "forBinding"}}},
               "parameter": "t1"}},
           "parameter": "t0"}},
@@ -3507,10 +3506,10 @@
                         "function": {
                           "codomain": {
                             "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                          "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                          "domain": {"variable": "hydra.graph.Graph"}}}}},
                   "domain": {
                     "function": {
-                      "codomain": {"variable": "hydra.typing.TypeContext"},
+                      "codomain": {"variable": "hydra.graph.Graph"},
                       "domain": {"variable": "t0"}}}}},
               "domain": {
                 "function": {
@@ -3518,7 +3517,7 @@
                     "function": {
                       "codomain": {"maybe": {"variable": "hydra.core.Term"}},
                       "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}}}},
           "variables": ["t0", "t1"]}]},
     {
       "name": "hydra.coderUtils.analyzeFunctionTermWith",
@@ -3603,12 +3602,12 @@
                                         "function": {
                                           "codomain": {
                                             "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                          "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                                          "domain": {"variable": "hydra.graph.Graph"}}}],
                                     "parameter": "setTC"}}},
                               "domain": [
                                 {
                                   "function": {
-                                    "codomain": {"variable": "hydra.typing.TypeContext"},
+                                    "codomain": {"variable": "hydra.graph.Graph"},
                                     "domain": {"variable": "t0"}}}],
                               "parameter": "getTC"}}},
                         "domain": [
@@ -3618,7 +3617,7 @@
                                 "function": {
                                   "codomain": {"maybe": {"variable": "hydra.core.Term"}},
                                   "domain": {"variable": "hydra.core.Binding"}}},
-                              "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                              "domain": {"variable": "hydra.graph.Graph"}}}],
                         "parameter": "forBinding"}}}}},
               "parameter": "t1"}},
           "parameter": "t0"}},
@@ -3651,10 +3650,10 @@
                         "function": {
                           "codomain": {
                             "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                          "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                          "domain": {"variable": "hydra.graph.Graph"}}}}},
                   "domain": {
                     "function": {
-                      "codomain": {"variable": "hydra.typing.TypeContext"},
+                      "codomain": {"variable": "hydra.graph.Graph"},
                       "domain": {"variable": "t0"}}}}},
               "domain": {
                 "function": {
@@ -3662,7 +3661,7 @@
                     "function": {
                       "codomain": {"maybe": {"variable": "hydra.core.Term"}},
                       "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}}}},
           "variables": ["t0", "t1"]}]},
     {
       "name": "hydra.coderUtils.analyzeFunctionTermNoInferWith_finish",
@@ -4032,7 +4031,7 @@
                                                                                                                                                                       "application": {
                                                                                                                                                                         "argument": {
                                                                                                                                                                           "application": {"argument": {"variable": "gEnv"}, "function": {"variable": "getTC"}}},
-                                                                                                                                                                        "function": {"variable": "hydra.schemas.extendTypeContextForLambda"}}}}},
+                                                                                                                                                                        "function": {"variable": "hydra.schemas.extendGraphForLambda"}}}}},
                                                                                                                                                                 "function": {"variable": "setTC"}}}}},
                                                                                                                                                         "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
                                                                                                                                                     "body": {
@@ -4200,7 +4199,7 @@
                                                                                                                                       "function": {
                                                                                                                                         "application": {
                                                                                                                                           "argument": {"variable": "forBinding"},
-                                                                                                                                          "function": {"variable": "hydra.schemas.extendTypeContextForLet"}}}}}}},
+                                                                                                                                          "function": {"variable": "hydra.schemas.extendGraphForLet"}}}}}}},
                                                                                                                               "function": {"variable": "setTC"}}}}},
                                                                                                                       "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
                                                                                                                   "body": {
@@ -4399,7 +4398,7 @@
                                                                                                                                     "application": {
                                                                                                                                       "argument": {
                                                                                                                                         "application": {"argument": {"variable": "gEnv"}, "function": {"variable": "getTC"}}},
-                                                                                                                                      "function": {"variable": "hydra.schemas.extendTypeContextForTypeLambda"}}}}},
+                                                                                                                                      "function": {"variable": "hydra.schemas.extendGraphForTypeLambda"}}}}},
                                                                                                                               "function": {"variable": "setTC"}}}}},
                                                                                                                       "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
                                                                                                                   "body": {
@@ -4504,12 +4503,12 @@
                                     "function": {
                                       "codomain": {
                                         "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                      "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                                      "domain": {"variable": "hydra.graph.Graph"}}}],
                                 "parameter": "setTC"}}},
                           "domain": [
                             {
                               "function": {
-                                "codomain": {"variable": "hydra.typing.TypeContext"},
+                                "codomain": {"variable": "hydra.graph.Graph"},
                                 "domain": {"variable": "t0"}}}],
                           "parameter": "getTC"}}},
                     "domain": [
@@ -4519,7 +4518,7 @@
                             "function": {
                               "codomain": {"maybe": {"variable": "hydra.core.Term"}},
                               "domain": {"variable": "hydra.core.Binding"}}},
-                          "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                          "domain": {"variable": "hydra.graph.Graph"}}}],
                     "parameter": "forBinding"}}},
               "parameter": "t1"}},
           "parameter": "t0"}},
@@ -4570,10 +4569,10 @@
                         "function": {
                           "codomain": {
                             "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                          "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                          "domain": {"variable": "hydra.graph.Graph"}}}}},
                   "domain": {
                     "function": {
-                      "codomain": {"variable": "hydra.typing.TypeContext"},
+                      "codomain": {"variable": "hydra.graph.Graph"},
                       "domain": {"variable": "t0"}}}}},
               "domain": {
                 "function": {
@@ -4581,7 +4580,7 @@
                     "function": {
                       "codomain": {"maybe": {"variable": "hydra.core.Term"}},
                       "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}}}},
           "variables": ["t0", "t1"]}]},
     {
       "name": "hydra.coderUtils.analyzeFunctionTermNoInferWith",
@@ -4666,12 +4665,12 @@
                                         "function": {
                                           "codomain": {
                                             "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                          "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                                          "domain": {"variable": "hydra.graph.Graph"}}}],
                                     "parameter": "setTC"}}},
                               "domain": [
                                 {
                                   "function": {
-                                    "codomain": {"variable": "hydra.typing.TypeContext"},
+                                    "codomain": {"variable": "hydra.graph.Graph"},
                                     "domain": {"variable": "t0"}}}],
                               "parameter": "getTC"}}},
                         "domain": [
@@ -4681,7 +4680,7 @@
                                 "function": {
                                   "codomain": {"maybe": {"variable": "hydra.core.Term"}},
                                   "domain": {"variable": "hydra.core.Binding"}}},
-                              "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                              "domain": {"variable": "hydra.graph.Graph"}}}],
                         "parameter": "forBinding"}}}}},
               "parameter": "t1"}},
           "parameter": "t0"}},
@@ -4714,10 +4713,10 @@
                         "function": {
                           "codomain": {
                             "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                          "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                          "domain": {"variable": "hydra.graph.Graph"}}}}},
                   "domain": {
                     "function": {
-                      "codomain": {"variable": "hydra.typing.TypeContext"},
+                      "codomain": {"variable": "hydra.graph.Graph"},
                       "domain": {"variable": "t0"}}}}},
               "domain": {
                 "function": {
@@ -4725,7 +4724,7 @@
                     "function": {
                       "codomain": {"maybe": {"variable": "hydra.core.Term"}},
                       "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                  "domain": {"variable": "hydra.graph.Graph"}}}}},
           "variables": ["t0", "t1"]}]},
     {
       "name": "hydra.coderUtils.analyzeFunctionTerm",
@@ -4784,12 +4783,12 @@
                                   "function": {
                                     "codomain": {
                                       "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                    "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                                    "domain": {"variable": "hydra.graph.Graph"}}}],
                               "parameter": "setTC"}}},
                         "domain": [
                           {
                             "function": {
-                              "codomain": {"variable": "hydra.typing.TypeContext"},
+                              "codomain": {"variable": "hydra.graph.Graph"},
                               "domain": {"variable": "t0"}}}],
                         "parameter": "getTC"}}}}},
               "parameter": "t1"}},
@@ -4821,10 +4820,10 @@
                     "function": {
                       "codomain": {
                         "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                      "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                      "domain": {"variable": "hydra.graph.Graph"}}}}},
               "domain": {
                 "function": {
-                  "codomain": {"variable": "hydra.typing.TypeContext"},
+                  "codomain": {"variable": "hydra.graph.Graph"},
                   "domain": {"variable": "t0"}}}}},
           "variables": ["t0", "t1"]}]},
     {
@@ -4877,7 +4876,7 @@
                                                                             "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}},
                                                                           "domain": [{"variable": "hydra.core.Binding"}],
                                                                           "parameter": "_"}}},
-                                                                    "domain": [{"variable": "hydra.typing.TypeContext"}],
+                                                                    "domain": [{"variable": "hydra.graph.Graph"}],
                                                                     "parameter": "_"}}},
                                                               "function": {
                                                                 "typeApplication": {
@@ -4895,12 +4894,12 @@
                                   "function": {
                                     "codomain": {
                                       "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                    "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                                    "domain": {"variable": "hydra.graph.Graph"}}}],
                               "parameter": "setTC"}}},
                         "domain": [
                           {
                             "function": {
-                              "codomain": {"variable": "hydra.typing.TypeContext"},
+                              "codomain": {"variable": "hydra.graph.Graph"},
                               "domain": {"variable": "t0"}}}],
                         "parameter": "getTC"}}}}},
               "parameter": "t1"}},
@@ -4932,10 +4931,10 @@
                     "function": {
                       "codomain": {
                         "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                      "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                      "domain": {"variable": "hydra.graph.Graph"}}}}},
               "domain": {
                 "function": {
-                  "codomain": {"variable": "hydra.typing.TypeContext"},
+                  "codomain": {"variable": "hydra.graph.Graph"},
                   "domain": {"variable": "t0"}}}}},
           "variables": ["t0", "t1"]}]},
     {
@@ -4995,12 +4994,12 @@
                                   "function": {
                                     "codomain": {
                                       "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                    "domain": {"variable": "hydra.typing.TypeContext"}}}],
+                                    "domain": {"variable": "hydra.graph.Graph"}}}],
                               "parameter": "setTC"}}},
                         "domain": [
                           {
                             "function": {
-                              "codomain": {"variable": "hydra.typing.TypeContext"},
+                              "codomain": {"variable": "hydra.graph.Graph"},
                               "domain": {"variable": "t0"}}}],
                         "parameter": "getTC"}}}}},
               "parameter": "t1"}},
@@ -5032,10 +5031,10 @@
                     "function": {
                       "codomain": {
                         "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                      "domain": {"variable": "hydra.typing.TypeContext"}}}}},
+                      "domain": {"variable": "hydra.graph.Graph"}}}}},
               "domain": {
                 "function": {
-                  "codomain": {"variable": "hydra.typing.TypeContext"},
+                  "codomain": {"variable": "hydra.graph.Graph"},
                   "domain": {"variable": "t0"}}}}},
           "variables": ["t0", "t1"]}]},
     {

@@ -75,7 +75,7 @@
                                                   "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
                                           "function": {
                                             "application": {
-                                              "argument": {"variable": "cx"},
+                                              "argument": {"variable": "graph"},
                                               "function": {"variable": "hydra.decode.core.type"}}}}},
                                       "function": {
                                         "application": {
@@ -101,7 +101,7 @@
                                           "type": {"variable": "hydra.core.Type"}}},
                                       "type": {"variable": "hydra.core.Binding"}}}}}}},
                           "domain": [{"variable": "hydra.graph.Graph"}],
-                          "parameter": "cx"}}},
+                          "parameter": "graph"}}},
                     "function": {
                       "application": {
                         "argument": {
