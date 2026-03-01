@@ -12,7 +12,7 @@ import hydra.tools.PrettyPrinter;
 import hydra.lib.Libraries;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
@@ -710,15 +710,15 @@ public class TestSuiteRunner {
                 InferenceTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Object, Tuple.Tuple2<Term, TypeScheme>> flow =
+                    Flow<Object, Pair<Term, TypeScheme>> flow =
                         hydra.inference.Inference.inferTypeOf(graph, tc.input);
-                    FlowState<Object, Tuple.Tuple2<Term, TypeScheme>> state =
+                    FlowState<Object, Pair<Term, TypeScheme>> state =
                         flow.value.apply(UNIT).apply(EMPTY_TRACE);
                     assertTrue(state.value.isJust(),
                         "Inference failed: " + state.trace.messages);
-                    Tuple.Tuple2<Term, TypeScheme> result = state.value.fromJust();
-                    Term inferredTerm = result.object1;
-                    TypeScheme resultScheme = result.object2;
+                    Pair<Term, TypeScheme> result = state.value.fromJust();
+                    Term inferredTerm = result.first;
+                    TypeScheme resultScheme = result.second;
                     assertEquals(
                         hydra.show.core.Core.typeScheme(tc.output),
                         hydra.show.core.Core.typeScheme(resultScheme),
@@ -736,14 +736,14 @@ public class TestSuiteRunner {
                 InferenceFailureTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Object, Tuple.Tuple2<Term, TypeScheme>> flow =
+                    Flow<Object, Pair<Term, TypeScheme>> flow =
                         hydra.inference.Inference.inferTypeOf(graph, tc.input);
-                    FlowState<Object, Tuple.Tuple2<Term, TypeScheme>> state =
+                    FlowState<Object, Pair<Term, TypeScheme>> state =
                         flow.value.apply(UNIT).apply(EMPTY_TRACE);
                     assertFalse(state.value.isJust(),
                         "Expected inference failure but got: " +
                         (state.value.isJust()
-                            ? hydra.show.core.Core.typeScheme(state.value.fromJust().object2)
+                            ? hydra.show.core.Core.typeScheme(state.value.fromJust().second)
                             : ""));
                 });
             }
@@ -755,15 +755,15 @@ public class TestSuiteRunner {
                     Graph graph = getTestGraph();
 
                     // Infer type
-                    Flow<Object, Tuple.Tuple2<Term, TypeScheme>> inferFlow =
+                    Flow<Object, Pair<Term, TypeScheme>> inferFlow =
                         hydra.inference.Inference.inferTypeOf(graph, tc.input);
-                    FlowState<Object, Tuple.Tuple2<Term, TypeScheme>> inferState =
+                    FlowState<Object, Pair<Term, TypeScheme>> inferState =
                         inferFlow.value.apply(UNIT).apply(EMPTY_TRACE);
                     assertTrue(inferState.value.isJust(),
                         "Inference failed: " + inferState.trace.messages);
-                    Tuple.Tuple2<Term, TypeScheme> inferResult = inferState.value.fromJust();
-                    Term inferredTerm = inferResult.object1;
-                    Type inferredType = typeSchemeToType(inferResult.object2);
+                    Pair<Term, TypeScheme> inferResult = inferState.value.fromJust();
+                    Term inferredTerm = inferResult.first;
+                    Type inferredType = typeSchemeToType(inferResult.second);
 
                     // Reconstruct type - use trace from inference to continue fresh name counter
                     Flow<Object, Type> typeOfFlow =
@@ -822,15 +822,15 @@ public class TestSuiteRunner {
                 TopologicalSortBindingsTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Map<Name, Term> bindingMap = hydra.lib.maps.FromList.apply(tc.bindings);
-                    List<List<Tuple.Tuple2<Name, Term>>> result =
+                    List<List<Pair<Name, Term>>> result =
                         hydra.rewriting.Rewriting.topologicalSortBindingMap(bindingMap);
                     // Compare as sets of sets (order within SCCs doesn't matter)
-                    Set<Set<Tuple.Tuple2<Name, Term>>> resultSet = new HashSet<>();
-                    for (List<Tuple.Tuple2<Name, Term>> group : result) {
+                    Set<Set<Pair<Name, Term>>> resultSet = new HashSet<>();
+                    for (List<Pair<Name, Term>> group : result) {
                         resultSet.add(new HashSet<>(group));
                     }
-                    Set<Set<Tuple.Tuple2<Name, Term>>> expectedSet = new HashSet<>();
-                    for (List<Tuple.Tuple2<Name, Term>> group : tc.expected) {
+                    Set<Set<Pair<Name, Term>>> expectedSet = new HashSet<>();
+                    for (List<Pair<Name, Term>> group : tc.expected) {
                         expectedSet.add(new HashSet<>(group));
                     }
                     assertEquals(expectedSet, resultSet);
@@ -1083,8 +1083,8 @@ public class TestSuiteRunner {
                 return withTimeout(name, () -> {
                     // Build TypeSubst from list of (Name, Type) pairs
                     Map<Name, Type> substMap = new HashMap<>();
-                    for (hydra.util.Tuple.Tuple2<Name, Type> pair : tc.substitution) {
-                        substMap.put(pair.object1, pair.object2);
+                    for (hydra.util.Pair<Name, Type> pair : tc.substitution) {
+                        substMap.put(pair.first, pair.second);
                     }
                     hydra.typing.TypeSubst subst = new hydra.typing.TypeSubst(substMap);
                     Type result = hydra.substitution.Substitution.substInType(subst, tc.input);
@@ -1263,7 +1263,7 @@ public class TestSuiteRunner {
 
     private static List<Literal> getLabel(Term t) {
         if (t instanceof Term.Pair) {
-            Term first = ((Term.Pair) t).value.object1;
+            Term first = ((Term.Pair) t).value.first;
             if (first instanceof Term.Literal) {
                 Literal lit = ((Term.Literal) first).value;
                 if (lit instanceof Literal.String_) {
@@ -1323,32 +1323,32 @@ public class TestSuiteRunner {
             input);
     }
 
-    private static java.util.function.Function<Tuple.Tuple2<List<hydra.accessors.TermAccessor>, Term>, Boolean> predicateFn(
+    private static java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> predicateFn(
             HoistPredicate pred) {
         return pred.accept(new HoistPredicate.Visitor<>() {
             @Override
-            public java.util.function.Function<Tuple.Tuple2<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
                     HoistPredicate.Nothing instance) {
                 return pair -> false;
             }
 
             @Override
-            public java.util.function.Function<Tuple.Tuple2<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
                     HoistPredicate.Lists instance) {
-                return pair -> pair.object2 instanceof Term.List;
+                return pair -> pair.second instanceof Term.List;
             }
 
             @Override
-            public java.util.function.Function<Tuple.Tuple2<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
                     HoistPredicate.Applications instance) {
-                return pair -> pair.object2 instanceof Term.Application;
+                return pair -> pair.second instanceof Term.Application;
             }
 
             @Override
-            public java.util.function.Function<Tuple.Tuple2<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
                     HoistPredicate.CaseStatements instance) {
-                return pair -> pair.object2 instanceof Term.Function
-                    && ((Term.Function) pair.object2).value instanceof Function.Elimination;
+                return pair -> pair.second instanceof Term.Function
+                    && ((Term.Function) pair.second).value instanceof Function.Elimination;
             }
         });
     }

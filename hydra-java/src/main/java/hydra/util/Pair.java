@@ -2,12 +2,13 @@ package hydra.util;
 
 /**
  * A simple class for pairs in Java.
- * Unlike Tuple2, this is specifically for the Pair type variant.
+ * A generic pair of two values.
  *
  * @param <A> the type of the first element
  * @param <B> the type of the second element
  */
-public class Pair<A, B> {
+@SuppressWarnings("rawtypes")
+public class Pair<A, B> implements Comparable<Pair> {
     public final A first;
     public final B second;
 
@@ -45,5 +46,15 @@ public class Pair<A, B> {
     @Override
     public int hashCode() {
         return 31 * first.hashCode() + second.hashCode();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Pair other) {
+        int cmp = ((Comparable) first).compareTo(other.first);
+        if (cmp != 0) {
+            return cmp;
+        }
+        return ((Comparable) second).compareTo(other.second);
     }
 }

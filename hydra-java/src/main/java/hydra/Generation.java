@@ -23,7 +23,7 @@ import hydra.tools.FlowException;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Either;
 import hydra.util.Maybe;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import java.io.File;
 import java.io.IOException;
@@ -399,16 +399,16 @@ public class Generation {
             List<Module> universe,
             List<Module> modulesToGenerate) {
         Graph bsGraph = bootstrapGraph();
-        Flow<Graph, List<Tuple.Tuple2<String, String>>> flow =
+        Flow<Graph, List<Pair<String, String>>> flow =
                 CodeGeneration.generateSourceFiles(coder, language,
                         doInfer, doExpand, doHoistCase, doHoistPoly,
                         bsGraph, universe, modulesToGenerate);
-        List<Tuple.Tuple2<String, String>> files;
+        List<Pair<String, String>> files;
         try {
             files = runFlow(bsGraph, flow);
         } catch (Exception e) {
             // Print trace for debugging
-            FlowState<Graph, List<Tuple.Tuple2<String, String>>> state =
+            FlowState<Graph, List<Pair<String, String>>> state =
                     flow.value.apply(bsGraph).apply(new Trace(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap()));
             if (state.trace != null) {
                 if (state.trace.stack != null && !state.trace.stack.isEmpty()) {
@@ -432,9 +432,9 @@ public class Generation {
             // Error already logged via instrumented Unification.joinTypes_cannotUnify
             throw e;
         }
-        for (Tuple.Tuple2<String, String> pair : files) {
-            String filePath = basePath + File.separator + pair.object1;
-            String content = pair.object2;
+        for (Pair<String, String> pair : files) {
+            String filePath = basePath + File.separator + pair.first;
+            String content = pair.second;
             if (!content.endsWith("\n")) {
                 content = content + "\n";
             }

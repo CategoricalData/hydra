@@ -8,7 +8,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import java.util.List;
 import java.util.function.Function;
@@ -47,7 +47,7 @@ public class Second extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(Expect.pair(Flows::pure, Flows::pure, args.get(0)),
-                (Function<Tuple.Tuple2<Term, Term>, Term>) pair -> apply(pair));
+                (Function<Pair<Term, Term>, Term>) pair -> apply(pair));
     }
 
     /**
@@ -57,7 +57,7 @@ public class Second extends PrimitiveFunction {
      * @param pair the pair
      * @return the second element
      */
-    public static <A, B> B apply(Tuple.Tuple2<A, B> pair) {
-        return pair.object2;
+    public static <A, B> B apply(Pair<A, B> pair) {
+        return pair.second;
     }
 }

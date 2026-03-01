@@ -10,7 +10,7 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.tools.PrettyPrinter;
 import hydra.util.Maybe;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -457,24 +457,24 @@ public class Expect {
      * @param first the function to decode the first element
      * @param second the function to decode the second element
      * @param term the term to decode
-     * @return a Flow containing the decoded Tuple2
+     * @return a Flow containing the decoded Pair
      */
-    public static <S, A, B> Flow<S, Tuple.Tuple2<A, B>> pair(
+    public static <S, A, B> Flow<S, Pair<A, B>> pair(
             final Function<Term, Flow<S, A>> first,
             final Function<Term, Flow<S, B>> second,
             final Term term) {
-        return term.accept(new Term.PartialVisitor<Flow<S, Tuple.Tuple2<A, B>>>() {
+        return term.accept(new Term.PartialVisitor<Flow<S, Pair<A, B>>>() {
             @Override
-            public Flow<S, Tuple.Tuple2<A, B>> otherwise(Term instance) {
+            public Flow<S, Pair<A, B>> otherwise(Term instance) {
                 return wrongType("pair", term);
             }
 
             @Override
-            public Flow<S, Tuple.Tuple2<A, B>> visit(Term.Pair instance) {
+            public Flow<S, Pair<A, B>> visit(Term.Pair instance) {
                 return Flows.map2(
-                        first.apply(instance.value.object1),
-                        second.apply(instance.value.object2),
-                        Tuple.Tuple2::new);
+                        first.apply(instance.value.first),
+                        second.apply(instance.value.second),
+                        Pair::new);
             }
         });
     }

@@ -10,7 +10,7 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -73,16 +73,16 @@ public class ToList extends PrimitiveFunction {
      * @return a list of key-value pairs
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> List<Tuple.Tuple2<K, V>> apply(Map<K, V> map) {
-        List<Tuple.Tuple2<K, V>> pairs = new java.util.ArrayList<>(map.size());
+    public static <K, V> List<Pair<K, V>> apply(Map<K, V> map) {
+        List<Pair<K, V>> pairs = new java.util.ArrayList<>(map.size());
         for (Map.Entry<K, V> entry : map.entrySet()) {
-            pairs.add(new Tuple.Tuple2<>(entry.getKey(), entry.getValue()));
+            pairs.add(new Pair<>(entry.getKey(), entry.getValue()));
         }
         if (!pairs.isEmpty()) {
-            if (pairs.get(0).object1 instanceof Comparable) {
-                pairs.sort((a, b) -> ((Comparable<K>) a.object1).compareTo(b.object1));
-            } else if (pairs.get(0).object1 instanceof Term) {
-                pairs.sort((a, b) -> hydra.lib.equality.Compare.compareTerms((Term) a.object1, (Term) b.object1));
+            if (pairs.get(0).first instanceof Comparable) {
+                pairs.sort((a, b) -> ((Comparable<K>) a.first).compareTo(b.first));
+            } else if (pairs.get(0).first instanceof Term) {
+                pairs.sort((a, b) -> hydra.lib.equality.Compare.compareTerms((Term) a.first, (Term) b.first));
             }
         }
         return pairs;

@@ -8,7 +8,7 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -54,7 +54,7 @@ public class FromList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> Flows.map(list(term -> Expect.pair(Flows::pure, Flows::pure, term), args.get(0)),
-                (Function<List<Tuple.Tuple2<Term, Term>>, Term>) pairs -> new Term.Map(apply(pairs)));
+                (Function<List<Pair<Term, Term>>, Term>) pairs -> new Term.Map(apply(pairs)));
     }
 
     /**
@@ -65,12 +65,12 @@ public class FromList extends PrimitiveFunction {
      * @return a map constructed from the pairs
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> Map<K, V> apply(List<Tuple.Tuple2<K, V>> pairs) {
+    public static <K, V> Map<K, V> apply(List<Pair<K, V>> pairs) {
         if (pairs.isEmpty()) {
             return new LinkedHashMap<>();
         }
         // Check first key to determine map type
-        K firstKey = pairs.get(0).object1;
+        K firstKey = pairs.get(0).first;
         Map<K, V> mp;
         if (firstKey instanceof Comparable) {
             try {
@@ -81,8 +81,8 @@ public class FromList extends PrimitiveFunction {
         } else {
             mp = new LinkedHashMap<>();
         }
-        for (Tuple.Tuple2<K, V> pair : pairs) {
-            mp.put(pair.object1, pair.object2);
+        for (Pair<K, V> pair : pairs) {
+            mp.put(pair.first, pair.second);
         }
         return mp;
     }

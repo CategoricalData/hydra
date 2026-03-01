@@ -25,7 +25,7 @@ import hydra.core.WrappedTerm;
 import hydra.util.Comparison;
 import hydra.util.Either;
 import hydra.util.Maybe;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -803,7 +803,7 @@ public interface Terms {
      * @return the pair term
      */
     static Term pair(Term a, Term b) {
-        return new Term.Pair(new Tuple.Tuple2<>(a, b));
+        return new Term.Pair(new Pair<>(a, b));
     }
 
     /**
