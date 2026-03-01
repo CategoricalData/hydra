@@ -5,12 +5,10 @@
 module Hydra.Hoisting where
 
 import qualified Hydra.Accessors as Accessors
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -33,9 +31,9 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas.
-augmentBindingsWithNewFreeVars :: (Typing.TypeContext -> S.Set Core.Name -> [Core.Binding] -> ([Core.Binding], Typing.TermSubst))
+augmentBindingsWithNewFreeVars :: (Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> ([Core.Binding], Typing.TermSubst))
 augmentBindingsWithNewFreeVars cx boundVars bindings =  
-  let types = (Typing.typeContextTypes cx)
+  let types = (Maps.map Rewriting.typeSchemeToFType (Graph.graphBoundTypes cx))
   in  
     let wrapAfterTypeLambdas = (\vars -> \term -> (\x -> case x of
             Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
@@ -71,12 +69,12 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
 bindingIsPolymorphic :: (Core.Binding -> Bool)
 bindingIsPolymorphic binding = (Maybes.maybe False (\ts -> Logic.not (Lists.null (Core.typeSchemeVariables ts))) (Core.bindingType binding))
 
--- | Check if a binding's type uses any type variables from the given TypeContext. Returns True if the free type variables in the binding's type intersect with the type variables in scope (typeContextTypeVariables).
-bindingUsesContextTypeVars :: (Typing.TypeContext -> Core.Binding -> Bool)
+-- | Check if a binding's type uses any type variables from the given Graph. Returns True if the free type variables in the binding's type intersect with the type variables in scope (graphTypeVariables).
+bindingUsesContextTypeVars :: (Graph.Graph -> Core.Binding -> Bool)
 bindingUsesContextTypeVars cx binding = (Maybes.maybe False (\ts ->  
   let freeInType = (Rewriting.freeVariablesInType (Core.typeSchemeType ts))
   in  
-    let contextTypeVars = (Typing.typeContextTypeVariables cx)
+    let contextTypeVars = (Graph.graphTypeVariables cx)
     in (Logic.not (Sets.null (Sets.intersection freeInType contextTypeVars)))) (Core.bindingType binding))
 
 -- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
@@ -90,63 +88,47 @@ countVarOccurrences name term =
 -- | Transform a let-term by pulling ALL let bindings to the top level. This is useful for targets like Java that don't support nested let expressions at all. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistAllLetBindings :: (Core.Let -> Core.Let)
 hoistAllLetBindings let0 =  
-  let emptyIx = Typing.InferenceContext {
-          Typing.inferenceContextSchemaTypes = Maps.empty,
-          Typing.inferenceContextPrimitiveTypes = Maps.empty,
-          Typing.inferenceContextDataTypes = Maps.empty,
-          Typing.inferenceContextClassConstraints = Maps.empty,
-          Typing.inferenceContextDebug = False}
-  in  
-    let emptyCx = Typing.TypeContext {
-            Typing.typeContextTypes = Maps.empty,
-            Typing.typeContextMetadata = Maps.empty,
-            Typing.typeContextTypeVariables = Sets.empty,
-            Typing.typeContextLambdaVariables = Sets.empty,
-            Typing.typeContextLetVariables = Sets.empty,
-            Typing.typeContextInferenceContext = emptyIx}
-    in (hoistLetBindingsWithPredicate (\_ -> True) shouldHoistAll emptyCx let0)
+  let emptyCx = Graph.Graph {
+          Graph.graphBoundTerms = Maps.empty,
+          Graph.graphBoundTypes = Maps.empty,
+          Graph.graphClassConstraints = Maps.empty,
+          Graph.graphLambdaVariables = Sets.empty,
+          Graph.graphMetadata = Maps.empty,
+          Graph.graphPrimitives = Maps.empty,
+          Graph.graphSchemaTypes = Maps.empty,
+          Graph.graphTypeVariables = Sets.empty}
+  in (hoistLetBindingsWithPredicate (\_ -> True) shouldHoistAll emptyCx let0)
 
 -- | Hoist case statements into local let bindings. This is useful for targets such as Python which only support case statements (match) at the top level. Case statements are hoisted only when they appear at non-top-level positions. Top level = root, or reachable through annotations, let body/binding, lambda bodies, or ONE application LHS. Once through an application LHS, lambda bodies no longer count as pass-through.
-hoistCaseStatements :: (Typing.TypeContext -> Core.Term -> Core.Term)
+hoistCaseStatements :: (Graph.Graph -> Core.Term -> Core.Term)
 hoistCaseStatements = (hoistSubterms shouldHoistCaseStatement)
 
--- | Hoist case statements into local let bindings for all elements in a graph. This version operates prior to inference and uses an empty type context. It hoists case statements and their applied arguments into let bindings.
-hoistCaseStatementsInGraph :: (Graph.Graph -> Compute.Flow t0 Graph.Graph)
-hoistCaseStatementsInGraph graph =  
-  let emptyIx = Typing.InferenceContext {
-          Typing.inferenceContextSchemaTypes = Maps.empty,
-          Typing.inferenceContextPrimitiveTypes = Maps.empty,
-          Typing.inferenceContextDataTypes = Maps.empty,
-          Typing.inferenceContextClassConstraints = Maps.empty,
-          Typing.inferenceContextDebug = False}
+-- | Hoist case statements into local let bindings for a list of bindings. This version operates prior to inference and uses an empty type context. It hoists case statements and their applied arguments into let bindings.
+hoistCaseStatementsInGraph :: ([Core.Binding] -> [Core.Binding])
+hoistCaseStatementsInGraph bindings =  
+  let emptyTx = Graph.Graph {
+          Graph.graphBoundTerms = Maps.empty,
+          Graph.graphBoundTypes = Maps.empty,
+          Graph.graphClassConstraints = Maps.empty,
+          Graph.graphLambdaVariables = Sets.empty,
+          Graph.graphMetadata = Maps.empty,
+          Graph.graphPrimitives = Maps.empty,
+          Graph.graphSchemaTypes = Maps.empty,
+          Graph.graphTypeVariables = Sets.empty}
   in  
-    let emptyTx = Typing.TypeContext {
-            Typing.typeContextTypes = Maps.empty,
-            Typing.typeContextMetadata = Maps.empty,
-            Typing.typeContextTypeVariables = Sets.empty,
-            Typing.typeContextLambdaVariables = Sets.empty,
-            Typing.typeContextLetVariables = Sets.empty,
-            Typing.typeContextInferenceContext = emptyIx}
+    let term0 = (Core.TermLet (Core.Let {
+            Core.letBindings = bindings,
+            Core.letBody = Core.TermUnit}))
     in  
-      let gterm0 = (Schemas.graphAsTerm graph)
-      in  
-        let gterm1 = (hoistCaseStatements emptyTx gterm0)
-        in  
-          let newElements = (Schemas.termAsGraph gterm1)
-          in (Flows.pure (Graph.Graph {
-            Graph.graphElements = newElements,
-            Graph.graphEnvironment = (Graph.graphEnvironment graph),
-            Graph.graphTypes = (Graph.graphTypes graph),
-            Graph.graphBody = (Graph.graphBody graph),
-            Graph.graphPrimitives = (Graph.graphPrimitives graph),
-            Graph.graphSchema = (Graph.graphSchema graph)}))
+      let term1 = (hoistCaseStatements emptyTx term0)
+      in (Schemas.termAsBindings term1)
 
--- | Transform a let-term by pulling polymorphic let bindings to the top level, using TypeContext. A binding is hoisted if: (1) It is polymorphic (has non-empty typeSchemeVariables), OR (2) Its type uses type variables from the TypeContext (i.e., from enclosing type lambdas). Bindings which are already at the top level are not hoisted. If a hoisted binding captures lambda-bound or let-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding uses type variables from the context, those type variables are added to the binding's type scheme. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.
-hoistLetBindingsWithContext :: ((Core.Binding -> Bool) -> Typing.TypeContext -> Core.Let -> Core.Let)
+-- | Transform a let-term by pulling polymorphic let bindings to the top level, using Graph. A binding is hoisted if: (1) It is polymorphic (has non-empty typeSchemeVariables), OR (2) Its type uses type variables from the Graph (i.e., from enclosing type lambdas). Bindings which are already at the top level are not hoisted. If a hoisted binding captures lambda-bound or let-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding uses type variables from the context, those type variables are added to the binding's type scheme. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.
+hoistLetBindingsWithContext :: ((Core.Binding -> Bool) -> Graph.Graph -> Core.Let -> Core.Let)
 hoistLetBindingsWithContext isParentBinding cx let0 = (hoistLetBindingsWithPredicate isParentBinding shouldHoistPolymorphic cx let0)
 
--- | Transform a let-term by pulling let bindings to the top level. The isParentBinding predicate applies to top-level bindings and determines whether their subterm bindings are eligible for hoisting. The shouldHoistBinding predicate takes the TypeContext and a subterm binding, and returns True if the binding should be hoisted. This is useful for targets like Java that cannot have polymorphic definitions in arbitrary positions. The TypeContext provides information about type variables and lambda variables in scope. If a hoisted binding captures let-bound or lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding captures type variables from an enclosing type lambda scope, those type variables are added to the binding's type scheme, and references are replaced with type applications. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.
-hoistLetBindingsWithPredicate :: ((Core.Binding -> Bool) -> (Typing.TypeContext -> Core.Binding -> Bool) -> Typing.TypeContext -> Core.Let -> Core.Let)
+-- | Transform a let-term by pulling let bindings to the top level. The isParentBinding predicate applies to top-level bindings and determines whether their subterm bindings are eligible for hoisting. The shouldHoistBinding predicate takes the Graph and a subterm binding, and returns True if the binding should be hoisted. This is useful for targets like Java that cannot have polymorphic definitions in arbitrary positions. The Graph provides information about type variables and lambda variables in scope. If a hoisted binding captures let-bound or lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. If a hoisted binding captures type variables from an enclosing type lambda scope, those type variables are added to the binding's type scheme, and references are replaced with type applications. Note: we assume that there is no variable shadowing; use hydra.rewriting.unshadowVariables first.
+hoistLetBindingsWithPredicate :: ((Core.Binding -> Bool) -> (Graph.Graph -> Core.Binding -> Bool) -> Graph.Graph -> Core.Let -> Core.Let)
 hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =  
   let hoistOne = (\prefix -> \cx -> \pair -> \bindingWithCapturedVars ->  
           let bindingAndReplacementPairs = (Pairs.first pair)
@@ -157,7 +139,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
               in  
                 let capturedTermVars = (Pairs.second bindingWithCapturedVars)
                 in  
-                  let types = (Typing.typeContextTypes cx)
+                  let types = (Maps.map Rewriting.typeSchemeToFType (Graph.graphBoundTypes cx))
                   in  
                     let capturedTermVarTypePairs = (Lists.map (\v -> (v, (Maps.lookup v types))) capturedTermVars)
                     in  
@@ -167,7 +149,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                         in  
                           let freeInCapturedVarTypes = (Sets.unions (Lists.map (\t -> Rewriting.freeVariablesInType t) capturedTermVarTypes))
                           in  
-                            let capturedTypeVars = (Sets.toList (Sets.intersection (Typing.typeContextTypeVariables cx) (Sets.union freeInBindingType freeInCapturedVarTypes)))
+                            let capturedTypeVars = (Sets.toList (Sets.intersection (Graph.graphTypeVariables cx) (Sets.union freeInBindingType freeInCapturedVarTypes)))
                             in  
                               let globalBindingName = (Lexical.chooseUniqueName alreadyUsedNames (Core.Name (Strings.cat2 prefix (Core.unName (Core.bindingName b)))))
                               in  
@@ -233,9 +215,9 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                                   in  
                                     let hoistedBindingNames = (Lists.map Core.bindingName hoistUs)
                                     in  
-                                      let polyLetVariables = (Sets.fromList (Lists.filter (\v -> Maybes.maybe False Schemas.fTypeIsPolymorphic (Maps.lookup v (Typing.typeContextTypes cx))) (Sets.toList (Typing.typeContextLetVariables cx))))
+                                      let polyLetVariables = (Sets.fromList (Lists.filter (\v -> Maybes.maybe False Schemas.fTypeIsPolymorphic (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v (Graph.graphBoundTypes cx)))) (Sets.toList (Sets.difference (Sets.fromList (Maps.keys (Graph.graphBoundTerms cx))) (Graph.graphLambdaVariables cx)))))
                                       in  
-                                        let boundTermVariables = (Sets.union (Typing.typeContextLambdaVariables cx) (Typing.typeContextLetVariables cx))
+                                        let boundTermVariables = (Sets.union (Graph.graphLambdaVariables cx) (Sets.difference (Sets.fromList (Maps.keys (Graph.graphBoundTerms cx))) (Graph.graphLambdaVariables cx)))
                                         in  
                                           let freeVariablesInEachBinding = (Lists.map (\b -> Sets.toList (Sets.intersection boundTermVariables (Rewriting.freeVariablesInTerm (Core.bindingTerm b)))) hoistUs)
                                           in  
@@ -319,7 +301,7 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                                                                                                           bindingsSoFarFinal], finalUsedNames), finalTerm)
                           _ -> ((Lists.concat2 previouslyFinishedBindings bindingsSoFar, alreadyUsedNames), newTerm)) newTerm))
     in  
-      let cx1 = (Schemas.extendTypeContextForLet (\c -> \b -> Nothing) cx0 let0)
+      let cx1 = (Schemas.extendGraphForLet (\c -> \b -> Nothing) cx0 let0)
       in  
         let forActiveBinding = (\b ->  
                 let prefix = (Strings.cat2 (Core.unName (Core.bindingName b)) "_")
@@ -345,27 +327,22 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
 -- | Transform a let-term by pulling all polymorphic let bindings to the top level. This is useful to ensure that polymorphic bindings are not nested within other terms, which is unsupported by certain targets such as Java. Polymorphic bindings are those with a non-empty list of type scheme variables. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
 hoistPolymorphicLetBindings :: ((Core.Binding -> Bool) -> Core.Let -> Core.Let)
 hoistPolymorphicLetBindings isParentBinding let0 =  
-  let emptyIx = Typing.InferenceContext {
-          Typing.inferenceContextSchemaTypes = Maps.empty,
-          Typing.inferenceContextPrimitiveTypes = Maps.empty,
-          Typing.inferenceContextDataTypes = Maps.empty,
-          Typing.inferenceContextClassConstraints = Maps.empty,
-          Typing.inferenceContextDebug = False}
-  in  
-    let emptyCx = Typing.TypeContext {
-            Typing.typeContextTypes = Maps.empty,
-            Typing.typeContextMetadata = Maps.empty,
-            Typing.typeContextTypeVariables = Sets.empty,
-            Typing.typeContextLambdaVariables = Sets.empty,
-            Typing.typeContextLetVariables = Sets.empty,
-            Typing.typeContextInferenceContext = emptyIx}
-    in (hoistLetBindingsWithPredicate isParentBinding shouldHoistPolymorphic emptyCx let0)
+  let emptyCx = Graph.Graph {
+          Graph.graphBoundTerms = Maps.empty,
+          Graph.graphBoundTypes = Maps.empty,
+          Graph.graphClassConstraints = Maps.empty,
+          Graph.graphLambdaVariables = Sets.empty,
+          Graph.graphMetadata = Maps.empty,
+          Graph.graphPrimitives = Maps.empty,
+          Graph.graphSchemaTypes = Maps.empty,
+          Graph.graphTypeVariables = Sets.empty}
+  in (hoistLetBindingsWithPredicate isParentBinding shouldHoistPolymorphic emptyCx let0)
 
 -- | Hoist subterms into local let bindings based on a path-aware predicate. The predicate receives a pair of (path, term) where path is the list of TermAccessors from the root to the current term, and returns True if the term should be hoisted. For each let term found, the immediate subterms (binding values and body) are processed: matching subterms within each immediate subterm are collected and hoisted into a local let that wraps that immediate subterm. If a hoisted term contains free variables that are lambda-bound at an enclosing scope, the hoisted binding is wrapped in lambdas for those variables, and the reference is replaced with an application of those variables.
-hoistSubterms :: ((([Accessors.TermAccessor], Core.Term) -> Bool) -> Typing.TypeContext -> Core.Term -> Core.Term)
+hoistSubterms :: ((([Accessors.TermAccessor], Core.Term) -> Bool) -> Graph.Graph -> Core.Term -> Core.Term)
 hoistSubterms shouldHoist cx0 term0 =  
   let processImmediateSubterm = (\cx -> \counter -> \namePrefix -> \pathPrefix -> \subterm ->  
-          let baselineLambdaVars = (Typing.typeContextLambdaVariables cx)
+          let baselineLambdaVars = (Graph.graphLambdaVariables cx)
           in  
             let collectAndReplace = (\recurse -> \path -> \cxInner -> \acc -> \term ->  
                     let currentCounter = (Pairs.first acc)
@@ -393,7 +370,7 @@ hoistSubterms shouldHoist cx0 term0 =
                                               "_",
                                               (Literals.showInt32 newCounter)]))
                                       in  
-                                        let allLambdaVars = (Typing.typeContextLambdaVariables cxInner)
+                                        let allLambdaVars = (Graph.graphLambdaVariables cxInner)
                                         in  
                                           let newLambdaVars = (Sets.difference allLambdaVars baselineLambdaVars)
                                           in  
@@ -401,7 +378,7 @@ hoistSubterms shouldHoist cx0 term0 =
                                             in  
                                               let capturedVars = (Sets.toList (Sets.intersection newLambdaVars freeVars))
                                               in  
-                                                let typeMap = (Typing.typeContextTypes cxInner)
+                                                let typeMap = (Maps.map Rewriting.typeSchemeToFType (Graph.graphBoundTypes cxInner))
                                                 in  
                                                   let wrappedTerm = (Lists.foldl (\body -> \varName -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                                           Core.lambdaParameter = varName,
@@ -523,8 +500,8 @@ normalizePathForHoisting path =
               in (Logic.ifElse (Logic.and (isApplicationFunction first) (isLambdaBody second)) (Lists.cons Accessors.TermAccessorLetBody (go rest)) (Lists.cons first (go (Lists.tail remaining))))))
   in (go path)
 
--- | Rewrite a term while folding to produce a value, with TypeContext updated as we descend into subterms. Combines the features of rewriteAndFoldTerm and rewriteTermWithTypeContext. The user function f receives a recurse function that handles subterm traversal and TypeContext management.
-rewriteAndFoldTermWithTypeContext :: (((t0 -> Core.Term -> (t0, Core.Term)) -> Typing.TypeContext -> t0 -> Core.Term -> (t0, Core.Term)) -> Typing.TypeContext -> t0 -> Core.Term -> (t0, Core.Term))
+-- | Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms. Combines the features of rewriteAndFoldTerm and rewriteTermWithTypeContext. The user function f receives a recurse function that handles subterm traversal and Graph management.
+rewriteAndFoldTermWithTypeContext :: (((t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term))
 rewriteAndFoldTermWithTypeContext f cx0 val0 term0 =  
   let wrapper = (\lowLevelRecurse -> \valAndCx -> \term ->  
           let val = (Pairs.first valAndCx)
@@ -533,10 +510,10 @@ rewriteAndFoldTermWithTypeContext f cx0 val0 term0 =
             in  
               let cx1 = ((\x -> case x of
                       Core.TermFunction v1 -> ((\x -> case x of
-                        Core.FunctionLambda v2 -> (Schemas.extendTypeContextForLambda cx v2)
+                        Core.FunctionLambda v2 -> (Schemas.extendGraphForLambda cx v2)
                         _ -> cx) v1)
-                      Core.TermLet v1 -> (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) cx v1)
-                      Core.TermTypeLambda v1 -> (Schemas.extendTypeContextForTypeLambda cx v1)
+                      Core.TermLet v1 -> (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v1)
+                      Core.TermTypeLambda v1 -> (Schemas.extendGraphForTypeLambda cx v1)
                       _ -> cx) term)
               in  
                 let recurseForUser = (\newVal -> \subterm ->  
@@ -549,8 +526,8 @@ rewriteAndFoldTermWithTypeContext f cx0 val0 term0 =
     let result = (Rewriting.rewriteAndFoldTerm wrapper (val0, cx0) term0)
     in (Pairs.first (Pairs.first result), (Pairs.second result))
 
--- | Rewrite a term while folding to produce a value, with both TypeContext and accessor path tracked. The path is a list of TermAccessors representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and TypeContext tracking. The TypeContext is automatically updated when descending into lambdas, lets, and type lambdas.
-rewriteAndFoldTermWithTypeContextAndPath :: (((t0 -> Core.Term -> (t0, Core.Term)) -> [Accessors.TermAccessor] -> Typing.TypeContext -> t0 -> Core.Term -> (t0, Core.Term)) -> Typing.TypeContext -> t0 -> Core.Term -> (t0, Core.Term))
+-- | Rewrite a term while folding to produce a value, with both Graph and accessor path tracked. The path is a list of TermAccessors representing the position from the root to the current term. Combines the features of rewriteAndFoldTermWithPath and Graph tracking. The Graph is automatically updated when descending into lambdas, lets, and type lambdas.
+rewriteAndFoldTermWithTypeContextAndPath :: (((t0 -> Core.Term -> (t0, Core.Term)) -> [Accessors.TermAccessor] -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term)) -> Graph.Graph -> t0 -> Core.Term -> (t0, Core.Term))
 rewriteAndFoldTermWithTypeContextAndPath f cx0 val0 term0 =  
   let wrapper = (\recurse -> \path -> \cxAndVal -> \term ->  
           let cx = (Pairs.first cxAndVal)
@@ -559,10 +536,10 @@ rewriteAndFoldTermWithTypeContextAndPath f cx0 val0 term0 =
             in  
               let cx1 = ((\x -> case x of
                       Core.TermFunction v1 -> ((\x -> case x of
-                        Core.FunctionLambda v2 -> (Schemas.extendTypeContextForLambda cx v2)
+                        Core.FunctionLambda v2 -> (Schemas.extendGraphForLambda cx v2)
                         _ -> cx) v1)
-                      Core.TermLet v1 -> (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) cx v1)
-                      Core.TermTypeLambda v1 -> (Schemas.extendTypeContextForTypeLambda cx v1)
+                      Core.TermLet v1 -> (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v1)
+                      Core.TermTypeLambda v1 -> (Schemas.extendGraphForTypeLambda cx v1)
                       _ -> cx) term)
               in  
                 let recurseForUser = (\valIn -> \termIn ->  
@@ -576,25 +553,25 @@ rewriteAndFoldTermWithTypeContextAndPath f cx0 val0 term0 =
     in (Pairs.second (Pairs.first result), (Pairs.second result))
 
 -- | Rewrite a term with the help of a type context which is updated as we descend into subterms
-rewriteTermWithTypeContext :: (((Core.Term -> t0) -> Typing.TypeContext -> Core.Term -> t0) -> Typing.TypeContext -> Core.Term -> t0)
+rewriteTermWithTypeContext :: (((Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0) -> Graph.Graph -> Core.Term -> t0)
 rewriteTermWithTypeContext f cx0 term0 =  
   let f2 = (\recurse -> \cx -> \term ->  
           let recurse1 = (\term -> recurse cx term)
           in ((\x -> case x of
             Core.TermFunction v1 -> ((\x -> case x of
               Core.FunctionLambda v2 ->  
-                let cx1 = (Schemas.extendTypeContextForLambda cx v2)
+                let cx1 = (Schemas.extendGraphForLambda cx v2)
                 in  
                   let recurse2 = (\term -> recurse cx1 term)
                   in (f recurse2 cx1 term)
               _ -> (f recurse1 cx term)) v1)
             Core.TermLet v1 ->  
-              let cx1 = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) cx v1)
+              let cx1 = (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v1)
               in  
                 let recurse2 = (\term -> recurse cx1 term)
                 in (f recurse2 cx1 term)
             Core.TermTypeLambda v1 ->  
-              let cx1 = (Schemas.extendTypeContextForTypeLambda cx v1)
+              let cx1 = (Schemas.extendGraphForTypeLambda cx v1)
               in  
                 let recurse2 = (\term -> recurse cx1 term)
                 in (f recurse2 cx1 term)
@@ -617,8 +594,8 @@ shouldHoistCaseStatement pathAndTerm =
       let finalState = (Lists.foldl (\st -> \acc -> updateHoistState acc st) (True, False) path)
       in (Logic.not (Pairs.first finalState))))
 
--- | Predicate for hoisting polymorphic bindings. Returns True if the binding is polymorphic (has type scheme variables) or if its type uses any type variables from the TypeContext.
-shouldHoistPolymorphic :: (Typing.TypeContext -> Core.Binding -> Bool)
+-- | Predicate for hoisting polymorphic bindings. Returns True if the binding is polymorphic (has type scheme variables) or if its type uses any type variables from the Graph.
+shouldHoistPolymorphic :: (Graph.Graph -> Core.Binding -> Bool)
 shouldHoistPolymorphic cx binding = (Logic.or (bindingIsPolymorphic binding) (bindingUsesContextTypeVars cx binding))
 
 -- | Update hoisting state when traversing an accessor. State is (atTopLevel, usedAppLHS). Returns updated state.

@@ -9,7 +9,6 @@ import qualified Hydra.Encode.Core as Core_
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -43,26 +42,6 @@ functionStructure env x = (Core.TermRecord (Core.Record {
     Core.Field {
       Core.fieldName = (Core.Name "environment"),
       Core.fieldTerm = (env (Typing.functionStructureEnvironment x))}]}))
-
-inferenceContext :: (Typing.InferenceContext -> Core.Term)
-inferenceContext x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.typing.InferenceContext"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "schemaTypes"),
-      Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.typeScheme m)) (Typing.inferenceContextSchemaTypes x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "primitiveTypes"),
-      Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.typeScheme m)) (Typing.inferenceContextPrimitiveTypes x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "dataTypes"),
-      Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.typeScheme m)) (Typing.inferenceContextDataTypes x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "classConstraints"),
-      Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.typeVariableMetadata m)) (Typing.inferenceContextClassConstraints x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "debug"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralBoolean x)) (Typing.inferenceContextDebug x))}]}))
 
 inferenceResult :: (Typing.InferenceResult -> Core.Term)
 inferenceResult x = (Core.TermRecord (Core.Record {
@@ -99,29 +78,6 @@ typeConstraint x = (Core.TermRecord (Core.Record {
     Core.Field {
       Core.fieldName = (Core.Name "comment"),
       Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Typing.typeConstraintComment x))}]}))
-
-typeContext :: (Typing.TypeContext -> Core.Term)
-typeContext x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.typing.TypeContext"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "types"),
-      Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.type_ m)) (Typing.typeContextTypes x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "metadata"),
-      Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.term m)) (Typing.typeContextMetadata x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "typeVariables"),
-      Core.fieldTerm = ((\s -> Core.TermSet (Sets.map Core_.name s)) (Typing.typeContextTypeVariables x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "lambdaVariables"),
-      Core.fieldTerm = ((\s -> Core.TermSet (Sets.map Core_.name s)) (Typing.typeContextLambdaVariables x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "letVariables"),
-      Core.fieldTerm = ((\s -> Core.TermSet (Sets.map Core_.name s)) (Typing.typeContextLetVariables x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "inferenceContext"),
-      Core.fieldTerm = (inferenceContext (Typing.typeContextInferenceContext x))}]}))
 
 typeSubst :: (Typing.TypeSubst -> Core.Term)
 typeSubst x = (Core.TermWrap (Core.WrappedTerm {

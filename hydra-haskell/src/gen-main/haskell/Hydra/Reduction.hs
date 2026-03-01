@@ -26,7 +26,6 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
-import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -164,8 +163,8 @@ etaExpandTerm graph term =
                 _ -> (afterRecursion (recurse t2))) t2))
     in (contractTerm (Rewriting.rewriteTerm (rewrite []) term))
 
--- | Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the TypeContext to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the TypeContext through nested scopes.
-etaExpandTermNew :: (Typing.TypeContext -> Core.Term -> Core.Term)
+-- | Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes.
+etaExpandTermNew :: (Graph.Graph -> Core.Term -> Core.Term)
 etaExpandTermNew tx0 term0 =  
   let termArityWithContext = (\tx -> \term -> (\x -> case x of
           Core.TermAnnotated v1 -> (termArityWithContext tx (Core.annotatedTermBody v1))
@@ -173,11 +172,11 @@ etaExpandTermNew tx0 term0 =
           Core.TermFunction v1 -> ((\x -> case x of
             Core.FunctionElimination _ -> 1
             Core.FunctionLambda _ -> 0
-            Core.FunctionPrimitive v2 -> (Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v2 (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx))))) v1)
-          Core.TermLet v1 -> (termArityWithContext (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx v1) (Core.letBody v1))
-          Core.TermTypeLambda v1 -> (termArityWithContext (Schemas.extendTypeContextForTypeLambda tx v1) (Core.typeLambdaBody v1))
+            Core.FunctionPrimitive v2 -> (Maybes.maybe 0 Arity.typeSchemeArity (Maps.lookup v2 (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx))))))) v1)
+          Core.TermLet v1 -> (termArityWithContext (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v1) (Core.letBody v1))
+          Core.TermTypeLambda v1 -> (termArityWithContext (Schemas.extendGraphForTypeLambda tx v1) (Core.typeLambdaBody v1))
           Core.TermTypeApplication v1 -> (termArityWithContext tx (Core.typeApplicationTermBody v1))
-          Core.TermVariable v1 -> (Maybes.maybe 0 Arity.typeArity (Maps.lookup v1 (Typing.typeContextTypes tx)))
+          Core.TermVariable v1 -> (Maybes.maybe 0 Arity.typeArity (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v1 (Graph.graphBoundTypes tx))))
           _ -> 0) term)
   in  
     let domainTypes = (\n -> \mt -> Logic.ifElse (Equality.lte n 0) [] (Maybes.maybe (Lists.map (\_ -> Nothing) (Math.range 1 n)) (\typ -> (\x -> case x of
@@ -239,14 +238,14 @@ etaExpandTermNew tx0 term0 =
                     let termHeadType = (\tx2 -> \trm2 -> (\x -> case x of
                             Core.TermAnnotated v1 -> (termHeadType tx2 (Core.annotatedTermBody v1))
                             Core.TermFunction v1 -> ((\x -> case x of
-                              Core.FunctionPrimitive v2 -> (Maybes.map (\ts2 -> Core.typeSchemeType ts2) (Maps.lookup v2 (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx2))))
+                              Core.FunctionPrimitive v2 -> (Maybes.map (\ts2 -> Core.typeSchemeType ts2) (Maps.lookup v2 (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx2))))))
                               _ -> Nothing) v1)
-                            Core.TermLet v1 -> (termHeadType (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx2 v1) (Core.letBody v1))
-                            Core.TermTypeLambda v1 -> (termHeadType (Schemas.extendTypeContextForTypeLambda tx2 v1) (Core.typeLambdaBody v1))
+                            Core.TermLet v1 -> (termHeadType (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx2 v1) (Core.letBody v1))
+                            Core.TermTypeLambda v1 -> (termHeadType (Schemas.extendGraphForTypeLambda tx2 v1) (Core.typeLambdaBody v1))
                             Core.TermTypeApplication v1 -> (Maybes.bind (termHeadType tx2 (Core.typeApplicationTermBody v1)) (\htyp2 -> (\x -> case x of
                               Core.TypeForall v2 -> (Just (Rewriting.replaceFreeTypeVariable (Core.forallTypeParameter v2) (Core.typeApplicationTermType v1) (Core.forallTypeBody v2)))
                               _ -> (Just htyp2)) htyp2))
-                            Core.TermVariable v1 -> (Maps.lookup v1 (Typing.typeContextTypes tx2))
+                            Core.TermVariable v1 -> (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v1 (Graph.graphBoundTypes tx2)))
                             _ -> Nothing) trm2)
                     in  
                       let afterRecursion = (\trm ->  
@@ -304,7 +303,7 @@ etaExpandTermNew tx0 term0 =
                                                 _ -> Nothing) v2)
                                         in (expand padElim args 1 elimHeadType elimTerm)
                                   Core.FunctionLambda v2 ->  
-                                    let tx1 = (Schemas.extendTypeContextForLambda tx v2)
+                                    let tx1 = (Schemas.extendGraphForLambda tx v2)
                                     in  
                                       let body = (rewriteWithArgs [] tx1 (Core.lambdaBody v2))
                                       in  
@@ -318,10 +317,10 @@ etaExpandTermNew tx0 term0 =
                                   Core.FunctionPrimitive v2 ->  
                                     let arty = (termArityWithContext tx term)
                                     in  
-                                      let primType = (Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v2 (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx))))
+                                      let primType = (Maybes.map (\ts -> Core.typeSchemeType ts) (Maps.lookup v2 (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx))))))
                                       in (expand False args arty primType term)) v1)
                                 Core.TermLet v1 ->  
-                                  let tx1 = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx v1)
+                                  let tx1 = (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v1)
                                   in  
                                     let mapBinding = (\b -> Core.Binding {
                                             Core.bindingName = (Core.bindingName b),
@@ -345,7 +344,7 @@ etaExpandTermNew tx0 term0 =
                                   Core.typeApplicationTermBody = (recurse tx (Core.typeApplicationTermBody v1)),
                                   Core.typeApplicationTermType = (Core.typeApplicationTermType v1)})))
                                 Core.TermTypeLambda v1 ->  
-                                  let tx1 = (Schemas.extendTypeContextForTypeLambda tx v1)
+                                  let tx1 = (Schemas.extendGraphForTypeLambda tx v1)
                                   in  
                                     let result = (Core.TermTypeLambda (Core.TypeLambda {
                                             Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
@@ -358,7 +357,7 @@ etaExpandTermNew tx0 term0 =
                                 Core.TermVariable v1 ->  
                                   let arty = (termArityWithContext tx term)
                                   in  
-                                    let varType = (Maps.lookup v1 (Typing.typeContextTypes tx))
+                                    let varType = (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v1 (Graph.graphBoundTypes tx)))
                                     in (expand False args arty varType term)
                                 Core.TermWrap v1 -> (afterRecursion (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
@@ -380,7 +379,7 @@ etaExpansionArity graph term = ((\x -> case x of
   _ -> 0) term)
 
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
-etaExpandTypedTerm :: (Typing.TypeContext -> Core.Term -> Compute.Flow t0 Core.Term)
+etaExpandTypedTerm :: (Graph.Graph -> Core.Term -> Compute.Flow t0 Core.Term)
 etaExpandTypedTerm tx0 term0 =  
   let rewrite = (\topLevel -> \forced -> \typeArgs -> \recurse -> \tx -> \term ->  
           let rewriteSpine = (\term -> (\x -> case x of
@@ -408,20 +407,20 @@ etaExpandTypedTerm tx0 term0 =
                       let forFunction = (\tx -> \f -> (\x -> case x of
                               Core.FunctionElimination _ -> (Flows.pure 1)
                               Core.FunctionLambda v1 ->  
-                                let txl = (Schemas.extendTypeContextForLambda tx v1)
+                                let txl = (Schemas.extendGraphForLambda tx v1)
                                 in (arityOf txl (Core.lambdaBody v1))
                               Core.FunctionPrimitive v1 -> (Flows.map Arity.typeSchemeArity (Lexical.requirePrimitiveType tx v1))) f)
                       in ((\x -> case x of
                         Core.TermAnnotated v1 -> (arityOf tx (Core.annotatedTermBody v1))
                         Core.TermFunction v1 -> (forFunction tx v1)
                         Core.TermLet v1 ->  
-                          let txl = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx v1)
+                          let txl = (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v1)
                           in (arityOf txl (Core.letBody v1))
                         Core.TermTypeApplication v1 -> (arityOf tx (Core.typeApplicationTermBody v1))
                         Core.TermTypeLambda v1 ->  
-                          let txt = (Schemas.extendTypeContextForTypeLambda tx v1)
+                          let txt = (Schemas.extendGraphForTypeLambda tx v1)
                           in (arityOf txt (Core.typeLambdaBody v1))
-                        Core.TermVariable v1 -> (Maybes.maybe (Flows.map Arity.typeArity (Checking.typeOf tx [] (Core.TermVariable v1))) (\t -> Flows.pure (Arity.typeArity t)) (Maps.lookup v1 (Typing.typeContextTypes tx)))
+                        Core.TermVariable v1 -> (Maybes.maybe (Flows.map Arity.typeArity (Checking.typeOf tx [] (Core.TermVariable v1))) (\t -> Flows.pure (Arity.typeArity t)) (Maybes.map Rewriting.typeSchemeToFType (Maps.lookup v1 (Graph.graphBoundTypes tx))))
                         _ -> dflt) term))
             in  
               let extraVariables = (\n -> Lists.map (\i -> Core.Name (Strings.cat2 "v" (Literals.showInt32 i))) (Math.range 1 n))
@@ -478,15 +477,15 @@ etaExpandTypedTerm tx0 term0 =
                                 Core.TermFunction v1 -> ((\x -> case x of
                                   Core.FunctionElimination v2 -> (forElimination v2)
                                   Core.FunctionLambda v2 ->  
-                                    let txl = (Schemas.extendTypeContextForLambda tx v2)
+                                    let txl = (Schemas.extendGraphForLambda tx v2)
                                     in (Flows.map unwind (recurse txl term))
                                   _ -> (recurseOrForce term)) v1)
                                 Core.TermLet v1 ->  
-                                  let txlt = (Schemas.extendTypeContextForLet (\_ -> \_ -> Nothing) tx v1)
+                                  let txlt = (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) tx v1)
                                   in (recurse txlt term)
                                 Core.TermTypeApplication v1 -> (rewrite topLevel forced (Lists.cons (Core.typeApplicationTermType v1) typeArgs) recurse tx (Core.typeApplicationTermBody v1))
                                 Core.TermTypeLambda v1 ->  
-                                  let txt = (Schemas.extendTypeContextForTypeLambda tx v1)
+                                  let txt = (Schemas.extendGraphForTypeLambda tx v1)
                                   in (recurse txt term)
                                 _ -> (recurseOrForce term)) term))
   in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
@@ -602,11 +601,11 @@ termIsClosed :: (Core.Term -> Bool)
 termIsClosed term = (Sets.null (Rewriting.freeVariablesInTerm term))
 
 -- | Whether a term has been fully reduced to a value
-termIsValue :: (t0 -> Core.Term -> Bool)
-termIsValue g term =  
-  let forList = (\els -> Lists.foldl (\b -> \t -> Logic.and b (termIsValue g t)) True els)
+termIsValue :: (Core.Term -> Bool)
+termIsValue term =  
+  let forList = (\els -> Lists.foldl (\b -> \t -> Logic.and b (termIsValue t)) True els)
   in  
-    let checkField = (\f -> termIsValue g (Core.fieldTerm f))
+    let checkField = (\f -> termIsValue (Core.fieldTerm f))
     in  
       let checkFields = (\fields -> Lists.foldl (\b -> \f -> Logic.and b (checkField f)) True fields)
       in  
@@ -614,17 +613,17 @@ termIsValue g term =
                 Core.FunctionElimination v1 -> ((\x -> case x of
                   Core.EliminationWrap _ -> True
                   Core.EliminationRecord _ -> True
-                  Core.EliminationUnion v2 -> (Logic.and (checkFields (Core.caseStatementCases v2)) (Maybes.maybe True (termIsValue g) (Core.caseStatementDefault v2)))) v1)
-                Core.FunctionLambda v1 -> (termIsValue g (Core.lambdaBody v1))
+                  Core.EliminationUnion v2 -> (Logic.and (checkFields (Core.caseStatementCases v2)) (Maybes.maybe True termIsValue (Core.caseStatementDefault v2)))) v1)
+                Core.FunctionLambda v1 -> (termIsValue (Core.lambdaBody v1))
                 Core.FunctionPrimitive _ -> True) f)
         in ((\x -> case x of
           Core.TermApplication _ -> False
-          Core.TermEither v1 -> (Eithers.either (\l -> termIsValue g l) (\r -> termIsValue g r) v1)
+          Core.TermEither v1 -> (Eithers.either (\l -> termIsValue l) (\r -> termIsValue r) v1)
           Core.TermLiteral _ -> True
           Core.TermFunction v1 -> (functionIsValue v1)
           Core.TermList v1 -> (forList v1)
-          Core.TermMap v1 -> (Lists.foldl (\b -> \kv -> Logic.and b (Logic.and (termIsValue g (Pairs.first kv)) (termIsValue g (Pairs.second kv)))) True (Maps.toList v1))
-          Core.TermMaybe v1 -> (Maybes.maybe True (termIsValue g) v1)
+          Core.TermMap v1 -> (Lists.foldl (\b -> \kv -> Logic.and b (Logic.and (termIsValue (Pairs.first kv)) (termIsValue (Pairs.second kv)))) True (Maps.toList v1))
+          Core.TermMaybe v1 -> (Maybes.maybe True termIsValue v1)
           Core.TermRecord v1 -> (checkFields (Core.recordFields v1))
           Core.TermSet v1 -> (forList (Sets.toList v1))
           Core.TermUnion v1 -> (checkField (Core.injectionField v1))

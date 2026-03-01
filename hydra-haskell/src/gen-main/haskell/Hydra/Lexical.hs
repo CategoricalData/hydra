@@ -22,13 +22,30 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+
+-- | Build a Graph from element bindings, environment, and primitives
+buildGraph :: ([Core.Binding] -> M.Map Core.Name (Maybe Core.Term) -> M.Map Core.Name Graph.Primitive -> Graph.Graph)
+buildGraph elements environment primitives =  
+  let elementTerms = (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) elements))
+  in  
+    let letTerms = (Maps.map (\mt -> Maybes.fromJust mt) (Maps.filter (\mt -> Maybes.isJust mt) environment))
+    in  
+      let elementTypes = (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) elements)))
+      in Graph.Graph {
+        Graph.graphBoundTerms = (Maps.union elementTerms letTerms),
+        Graph.graphBoundTypes = elementTypes,
+        Graph.graphClassConstraints = Maps.empty,
+        Graph.graphLambdaVariables = (Sets.fromList (Maps.keys (Maps.filter (\mt -> Maybes.isNothing mt) environment))),
+        Graph.graphMetadata = Maps.empty,
+        Graph.graphPrimitives = primitives,
+        Graph.graphSchemaTypes = Maps.empty,
+        Graph.graphTypeVariables = Sets.empty}
 
 chooseUniqueName :: (S.Set Core.Name -> Core.Name -> Core.Name)
 chooseUniqueName reserved name =  
@@ -39,7 +56,7 @@ chooseUniqueName reserved name =
 
 -- | Look up an element in the current graph context
 dereferenceElement :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Binding))
-dereferenceElement name = (Flows.map (\g -> lookupElement g name) Monads.getState)
+dereferenceElement name = (Flows.map (\graph -> lookupElement graph name) Monads.getState)
 
 -- | Resolve a schema type through a chain of zero or more typedefs
 dereferenceSchemaType :: (Core.Name -> M.Map Core.Name Core.TypeScheme -> Maybe Core.TypeScheme)
@@ -60,39 +77,62 @@ dereferenceSchemaType name types =
     Core.typeSchemeType = (Core.typeSchemeType ts2),
     Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts2)}) (forType (Core.typeSchemeType ts))))
 
--- | Look up an element by name in a graph, returning Either an error or the binding
+-- | Look up a binding by name in a graph, returning Either an error or the binding
 dereferenceVariable :: (Graph.Graph -> Core.Name -> Either String Core.Binding)
-dereferenceVariable g name = (Maybes.maybe (Left (Strings.cat2 "no such element: " (Core.unName name))) (\right_ -> Right right_) (lookupElement g name))
+dereferenceVariable graph name = (Maybes.maybe (Left (Strings.cat2 "no such element: " (Core.unName name))) (\right_ -> Right right_) (lookupElement graph name))
 
--- | Create a graph from a parent graph, optional schema, and list of element bindings
-elementsToGraph :: (Graph.Graph -> Maybe Graph.Graph -> [Core.Binding] -> Graph.Graph)
-elementsToGraph parent schema elements = Graph.Graph {
-  Graph.graphElements = elements,
-  Graph.graphEnvironment = (Graph.graphEnvironment parent),
-  Graph.graphTypes = (Graph.graphTypes parent),
-  Graph.graphBody = (Graph.graphBody parent),
-  Graph.graphPrimitives = (Graph.graphPrimitives parent),
-  Graph.graphSchema = schema}
+-- | Create a graph from a parent graph, schema types, and list of element bindings
+elementsToGraph :: (Graph.Graph -> M.Map Core.Name Core.TypeScheme -> [Core.Binding] -> Graph.Graph)
+elementsToGraph parent schemaTypes elements =  
+  let prims = (Graph.graphPrimitives parent)
+  in Graph.Graph {
+    Graph.graphBoundTerms = (Graph.graphBoundTerms (buildGraph elements Maps.empty prims)),
+    Graph.graphBoundTypes = (Graph.graphBoundTypes (buildGraph elements Maps.empty prims)),
+    Graph.graphClassConstraints = (Graph.graphClassConstraints (buildGraph elements Maps.empty prims)),
+    Graph.graphLambdaVariables = (Graph.graphLambdaVariables (buildGraph elements Maps.empty prims)),
+    Graph.graphMetadata = (Graph.graphMetadata (buildGraph elements Maps.empty prims)),
+    Graph.graphPrimitives = (Graph.graphPrimitives (buildGraph elements Maps.empty prims)),
+    Graph.graphSchemaTypes = schemaTypes,
+    Graph.graphTypeVariables = (Graph.graphTypeVariables (buildGraph elements Maps.empty prims))}
 
--- | An empty graph; no elements, no primitives, no schema, and an arbitrary body.
+-- | An empty graph; no elements, no primitives, no schema.
 emptyGraph :: Graph.Graph
 emptyGraph = Graph.Graph {
-  Graph.graphElements = [],
-  Graph.graphEnvironment = Maps.empty,
-  Graph.graphTypes = Maps.empty,
-  Graph.graphBody = (Core.TermLiteral (Core.LiteralString "empty graph")),
+  Graph.graphBoundTerms = Maps.empty,
+  Graph.graphBoundTypes = Maps.empty,
+  Graph.graphClassConstraints = Maps.empty,
+  Graph.graphLambdaVariables = Sets.empty,
+  Graph.graphMetadata = Maps.empty,
   Graph.graphPrimitives = Maps.empty,
-  Graph.graphSchema = Nothing}
+  Graph.graphSchemaTypes = Maps.empty,
+  Graph.graphTypeVariables = Sets.empty}
 
 -- | Add bindings to an existing graph
 extendGraphWithBindings :: ([Core.Binding] -> Graph.Graph -> Graph.Graph)
-extendGraphWithBindings bindings g = Graph.Graph {
-  Graph.graphElements = (Lists.concat2 bindings (Graph.graphElements g)),
-  Graph.graphEnvironment = (Graph.graphEnvironment g),
-  Graph.graphTypes = (Graph.graphTypes g),
-  Graph.graphBody = (Graph.graphBody g),
-  Graph.graphPrimitives = (Graph.graphPrimitives g),
-  Graph.graphSchema = (Graph.graphSchema g)}
+extendGraphWithBindings bindings g =  
+  let newTerms = (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings))
+  in  
+    let newTypes = (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings)))
+    in Graph.Graph {
+      Graph.graphBoundTerms = (Maps.union newTerms (Graph.graphBoundTerms g)),
+      Graph.graphBoundTypes = (Maps.union newTypes (Graph.graphBoundTypes g)),
+      Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+      Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
+      Graph.graphMetadata = (Graph.graphMetadata g),
+      Graph.graphPrimitives = (Graph.graphPrimitives g),
+      Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
+      Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
+
+-- | Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes
+graphToBindings :: (Graph.Graph -> [Core.Binding])
+graphToBindings g = (Lists.map (\p ->  
+  let name = (Pairs.first p)
+  in  
+    let term = (Pairs.second p)
+    in Core.Binding {
+      Core.bindingName = name,
+      Core.bindingTerm = term,
+      Core.bindingType = (Maps.lookup name (Graph.graphBoundTypes g))}) (Maps.toList (Graph.graphBoundTerms g)))
 
 -- | Extract the fields of a record or union type
 fieldsOf :: (Core.Type -> [Core.FieldType])
@@ -107,11 +147,20 @@ fieldsOf t =
 getField :: (M.Map Core.Name t0 -> Core.Name -> (t0 -> Compute.Flow t1 t2) -> Compute.Flow t1 t2)
 getField m fname decode = (Maybes.maybe (Flows.fail (Strings.cat2 (Strings.cat2 "expected field " (Core.unName fname)) " not found")) decode (Maps.lookup fname m))
 
+-- | Look up a binding in a graph by name
 lookupElement :: (Graph.Graph -> Core.Name -> Maybe Core.Binding)
-lookupElement g name = (Lists.find (\b -> Equality.equal (Core.bindingName b) name) (Graph.graphElements g))
+lookupElement graph name = (Maybes.map (\term -> Core.Binding {
+  Core.bindingName = name,
+  Core.bindingTerm = term,
+  Core.bindingType = (Maps.lookup name (Graph.graphBoundTypes graph))}) (Maps.lookup name (Graph.graphBoundTerms graph)))
 
+-- | Look up a primitive function in a graph by name
 lookupPrimitive :: (Graph.Graph -> Core.Name -> Maybe Graph.Primitive)
-lookupPrimitive g name = (Maps.lookup name (Graph.graphPrimitives g))
+lookupPrimitive graph name = (Maps.lookup name (Graph.graphPrimitives graph))
+
+-- | Look up a term by name in a graph
+lookupTerm :: (Graph.Graph -> Core.Name -> Maybe Core.Term)
+lookupTerm graph name = (Maps.lookup name (Graph.graphBoundTerms graph))
 
 matchEnum :: (Core.Name -> [(Core.Name, t0)] -> Core.Term -> Compute.Flow Graph.Graph t0)
 matchEnum tname pairs = (matchUnion tname (Lists.map (\pair -> matchUnitField (Pairs.first pair) (Pairs.second pair)) pairs))
@@ -154,15 +203,15 @@ requireElement name =
     let ellipsis = (\strings -> Logic.ifElse (Logic.and (Equality.gt (Lists.length strings) 3) (Logic.not showAll)) (Lists.concat2 (Lists.take 3 strings) [
             "..."]) strings)
     in  
-      let err = (\g -> Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "no such element: " (Core.unName name)) ". Available elements: {") (Strings.intercalate ", " (ellipsis (Lists.map (\el -> Core.unName (Core.bindingName el)) (Graph.graphElements g))))) "}"))
-      in (Flows.bind (dereferenceElement name) (\mel -> Maybes.maybe (Flows.bind Monads.getState (\g -> err g)) Flows.pure mel))
+      let err = (\graph -> Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "no such element: " (Core.unName name)) ". Available elements: {") (Strings.intercalate ", " (ellipsis (Lists.map Core.unName (Maps.keys (Graph.graphBoundTerms graph)))))) "}"))
+      in (Flows.bind (dereferenceElement name) (\mel -> Maybes.maybe (Flows.bind Monads.getState (\graph -> err graph)) Flows.pure mel))
 
 requirePrimitive :: (Core.Name -> Compute.Flow Graph.Graph Graph.Primitive)
-requirePrimitive name = (Flows.bind Monads.getState (\g -> Maybes.maybe (Flows.fail (Strings.cat2 "no such primitive function: " (Core.unName name))) Flows.pure (lookupPrimitive g name)))
+requirePrimitive name = (Flows.bind Monads.getState (\graph -> Maybes.maybe (Flows.fail (Strings.cat2 "no such primitive function: " (Core.unName name))) Flows.pure (lookupPrimitive graph name)))
 
-requirePrimitiveType :: (Typing.TypeContext -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
+requirePrimitiveType :: (Graph.Graph -> Core.Name -> Compute.Flow t0 Core.TypeScheme)
 requirePrimitiveType tx name =  
-  let mts = (Maps.lookup name (Typing.inferenceContextPrimitiveTypes (Typing.typeContextInferenceContext tx)))
+  let mts = (Maps.lookup name (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx)))))
   in (Maybes.maybe (Flows.fail (Strings.cat2 "no such primitive function: " (Core.unName name))) (\ts -> Flows.pure ts) mts)
 
 requireTerm :: (Core.Name -> Compute.Flow Graph.Graph Core.Term)
@@ -171,16 +220,12 @@ requireTerm name = (Flows.bind (resolveTerm name) (\mt -> Maybes.maybe (Flows.fa
 -- | TODO: distinguish between lambda-bound and let-bound variables
 resolveTerm :: (Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Term))
 resolveTerm name =  
-  let recurse = (\el ->  
-          let stripped = (Rewriting.deannotateTerm (Core.bindingTerm el))
+  let recurse = (\term ->  
+          let stripped = (Rewriting.deannotateTerm term)
           in ((\x -> case x of
             Core.TermVariable v1 -> (resolveTerm v1)
-            _ -> (Flows.pure (Just (Core.bindingTerm el)))) stripped))
-  in (Flows.bind Monads.getState (\g -> Maybes.maybe (Flows.pure Nothing) recurse (Lists.find (\b -> Equality.equal (Core.bindingName b) name) (Graph.graphElements g))))
-
--- | Note: assuming for now that primitive functions are the same in the schema graph
-schemaContext :: (Graph.Graph -> Graph.Graph)
-schemaContext g = (Maybes.fromMaybe g (Graph.graphSchema g))
+            _ -> (Flows.pure (Just term))) stripped))
+  in (Flows.bind Monads.getState (\graph -> Maybes.maybe (Flows.pure Nothing) recurse (lookupTerm graph name)))
 
 stripAndDereferenceTerm :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
 stripAndDereferenceTerm term =  
@@ -191,15 +236,20 @@ stripAndDereferenceTerm term =
 
 -- | Strip annotations and dereference variables, returning Either an error or the resolved term
 stripAndDereferenceTermEither :: (Graph.Graph -> Core.Term -> Either String Core.Term)
-stripAndDereferenceTermEither g term =  
+stripAndDereferenceTermEither graph term =  
   let stripped = (Rewriting.deannotateAndDetypeTerm term)
   in ((\x -> case x of
-    Core.TermVariable v1 -> (Eithers.either (\left_ -> Left left_) (\binding -> stripAndDereferenceTermEither g (Core.bindingTerm binding)) (dereferenceVariable g v1))
+    Core.TermVariable v1 -> (Eithers.either (\left_ -> Left left_) (\binding -> stripAndDereferenceTermEither graph (Core.bindingTerm binding)) (dereferenceVariable graph v1))
     _ -> (Right stripped)) stripped)
 
 -- | Execute flow with empty graph
 withEmptyGraph :: (Compute.Flow Graph.Graph t0 -> Compute.Flow t1 t0)
-withEmptyGraph = (Monads.withState emptyGraph)
-
-withSchemaContext :: (Compute.Flow Graph.Graph t0 -> Compute.Flow Graph.Graph t0)
-withSchemaContext f = (Flows.bind Monads.getState (\g -> Monads.withState (schemaContext g) f))
+withEmptyGraph = (Monads.withState (Graph.Graph {
+  Graph.graphBoundTerms = Maps.empty,
+  Graph.graphBoundTypes = Maps.empty,
+  Graph.graphClassConstraints = Maps.empty,
+  Graph.graphLambdaVariables = Sets.empty,
+  Graph.graphMetadata = Maps.empty,
+  Graph.graphPrimitives = Maps.empty,
+  Graph.graphSchemaTypes = Maps.empty,
+  Graph.graphTypeVariables = Sets.empty}))

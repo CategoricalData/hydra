@@ -207,6 +207,17 @@ foldOverType order fld b0 typ = ((\x -> case x of
   Coders.TraversalOrderPre -> (Lists.foldl (foldOverType order fld) (fld b0 typ) (subtypes typ))
   Coders.TraversalOrderPost -> (fld (Lists.foldl (foldOverType order fld) b0 (subtypes typ)) typ)) order)
 
+-- | Convert a forall type to a type scheme
+fTypeToTypeScheme :: (Core.Type -> Core.TypeScheme)
+fTypeToTypeScheme typ =  
+  let gatherForall = (\vars -> \typ -> (\x -> case x of
+          Core.TypeForall v1 -> (gatherForall (Lists.cons (Core.forallTypeParameter v1) vars) (Core.forallTypeBody v1))
+          _ -> Core.TypeScheme {
+            Core.typeSchemeVariables = (Lists.reverse vars),
+            Core.typeSchemeType = typ,
+            Core.typeSchemeConstraints = Nothing}) (deannotateType typ))
+  in (gatherForall [] typ)
+
 -- | Get the set of free type variables in a term (including schema names, where they appear in type annotations). In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.
 freeTypeVariablesInTerm :: (Core.Term -> S.Set Core.Name)
 freeTypeVariablesInTerm term0 =  
@@ -1691,6 +1702,16 @@ typeNamesInType typ0 =
             in (Sets.insert tname names)
           _ -> names) typ)
   in (foldOverType Coders.TraversalOrderPre addNames Sets.empty typ0)
+
+-- | Convert a type scheme to a forall type
+typeSchemeToFType :: (Core.TypeScheme -> Core.Type)
+typeSchemeToFType ts =  
+  let vars = (Core.typeSchemeVariables ts)
+  in  
+    let body = (Core.typeSchemeType ts)
+    in (Lists.foldl (\t -> \v -> Core.TypeForall (Core.ForallType {
+      Core.forallTypeParameter = v,
+      Core.forallTypeBody = t})) body (Lists.reverse vars))
 
 -- | Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term.
 unshadowVariables :: (Core.Term -> Core.Term)

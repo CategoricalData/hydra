@@ -79,7 +79,7 @@ collectTypeVariablesFromType typ = ((\x -> case x of
 
 -- | Transform a type binding into a decoder binding
 decodeBinding :: (Core.Binding -> Compute.Flow Graph.Graph Core.Binding)
-decodeBinding b = (Flows.bind Monads.getState (\cx -> Flows.bind (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm b))) (\typ -> Flows.pure (Core.Binding {
+decodeBinding b = (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.eitherToFlow Util.unDecodingError (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Flows.pure (Core.Binding {
   Core.bindingName = (decodeBindingName (Core.bindingName b)),
   Core.bindingTerm = (decodeType typ),
   Core.bindingType = (Just (decoderTypeScheme typ))}))))
