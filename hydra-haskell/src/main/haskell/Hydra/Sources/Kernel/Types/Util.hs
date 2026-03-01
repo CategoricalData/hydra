@@ -22,7 +22,6 @@ module_ = Module ns elements [] [Core.ns] $
     elements = [
       caseConvention,
       comparison,
-      decodingError,
       precision]
 
 caseConvention :: Binding
@@ -37,11 +36,6 @@ comparison = define "Comparison" $
     "lessThan",
     "equalTo",
     "greaterThan"]
-
-decodingError :: Binding
-decodingError = define "DecodingError" $
-  doc "An error that occurred during decoding of a term" $
-  T.wrap T.string
 
 precision :: Binding
 precision = define "Precision" $
