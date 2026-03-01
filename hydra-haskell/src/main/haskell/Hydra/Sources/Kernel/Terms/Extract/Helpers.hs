@@ -46,7 +46,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Util         as Util
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
@@ -92,7 +92,7 @@ define = definitionInModule module_
 -- | Helper to convert Either String Term to Either DecodingError Term
 stripWithDecodingError :: TTerm Graph -> TTerm Term -> TTerm (Either DecodingError Term)
 stripWithDecodingError g term = Eithers.bimap
-  (unaryFunction Util.decodingError)
+  (unaryFunction Error.decodingError)
   ("x" ~> var "x")
   (Lexical.stripAndDereferenceTermEither @@ g @@ term)
 
@@ -108,7 +108,7 @@ decodeEither = define "decodeEither" $
   Eithers.bind
     (stripWithDecodingError (var "g") (var "term"))
     ("stripped" ~> cases _Term (var "stripped")
-      (Just $ left $ Util.decodingError $ string "expected either value") [
+      (Just $ left $ Error.decodingError $ string "expected either value") [
       _Term_either>>: "e" ~>
         Eithers.either_
           -- Left case: decode the left value, then wrap result in Left
@@ -125,7 +125,7 @@ decodeList = define "decodeList" $
   Eithers.bind
     (stripWithDecodingError (var "g") (var "term"))
     ("stripped" ~> cases _Term (var "stripped")
-      (Just $ left $ Util.decodingError $ string "expected list") [
+      (Just $ left $ Error.decodingError $ string "expected list") [
       _Term_list>>: "els" ~> Eithers.mapList (var "elemDecoder" @@ var "g") $ var "els"])
 
 -- | Decode a Map using the provided key and value decoders
@@ -136,7 +136,7 @@ decodeMap = define "decodeMap" $
   Eithers.bind
     (stripWithDecodingError (var "g") (var "term"))
     ("stripped" ~> cases _Term (var "stripped")
-      (Just $ left $ Util.decodingError $ string "expected map") [
+      (Just $ left $ Error.decodingError $ string "expected map") [
       _Term_map>>: "m" ~>
         Eithers.map (unaryFunction Maps.fromList)
           (Eithers.mapList
@@ -154,7 +154,7 @@ decodeMaybe = define "decodeMaybe" $
   Eithers.bind
     (stripWithDecodingError (var "g") (var "term"))
     ("stripped" ~> cases _Term (var "stripped")
-      (Just $ left $ Util.decodingError $ string "expected optional value") [
+      (Just $ left $ Error.decodingError $ string "expected optional value") [
       _Term_maybe>>: "opt" ~> Eithers.mapMaybe (var "elemDecoder" @@ var "g") $ var "opt"])
 
 -- | Decode a Pair using the provided first and second decoders
@@ -165,7 +165,7 @@ decodePair = define "decodePair" $
   Eithers.bind
     (stripWithDecodingError (var "g") (var "term"))
     ("stripped" ~> cases _Term (var "stripped")
-      (Just $ left $ Util.decodingError $ string "expected pair") [
+      (Just $ left $ Error.decodingError $ string "expected pair") [
       _Term_pair>>: "p" ~>
         Eithers.bind (var "firstDecoder" @@ var "g" @@ (Pairs.first $ var "p"))
           ("f" ~> Eithers.map ("s" ~> pair (var "f") (var "s"))
@@ -179,7 +179,7 @@ decodeSet = define "decodeSet" $
   Eithers.bind
     (stripWithDecodingError (var "g") (var "term"))
     ("stripped" ~> cases _Term (var "stripped")
-      (Just $ left $ Util.decodingError $ string "expected set") [
+      (Just $ left $ Error.decodingError $ string "expected set") [
       _Term_set>>: "s" ~>
         Eithers.map (unaryFunction Sets.fromList)
           (Eithers.mapList (var "elemDecoder" @@ var "g") (Sets.toList $ var "s"))])
@@ -192,7 +192,7 @@ decodeUnit = define "decodeUnit" $
   Eithers.bind
     (stripWithDecodingError (var "g") (var "term"))
     ("stripped" ~> cases _Term (var "stripped")
-      (Just $ left $ Util.decodingError $ string "expected a unit value") [
+      (Just $ left $ Error.decodingError $ string "expected a unit value") [
       _Term_unit>>: constant $ right unit])
 
 -- | Decode a wrapped value using the provided body decoder
@@ -203,7 +203,7 @@ decodeWrapped = define "decodeWrapped" $
   Eithers.bind
     (stripWithDecodingError (var "g") (var "term"))
     ("stripped" ~> cases _Term (var "stripped")
-      (Just $ left $ Util.decodingError $ string "expected wrapped value") [
+      (Just $ left $ Error.decodingError $ string "expected wrapped value") [
       _Term_wrap>>: "wt" ~>
         var "bodyDecoder" @@ var "g" @@ (Core.wrappedTermBody (var "wt"))])
 
@@ -214,7 +214,7 @@ requireField = define "requireField" $
   doc "Require a field from a record's field map and decode it" $
   "fieldName" ~> "decoder" ~> "fieldMap" ~> "g" ~>
   Maybes.maybe
-    (left $ Util.decodingError $ Strings.cat $ list [string "missing field ", var "fieldName", string " in record"])
+    (left $ Error.decodingError $ Strings.cat $ list [string "missing field ", var "fieldName", string " in record"])
     ("fieldTerm" ~> var "decoder" @@ var "g" @@ var "fieldTerm")
     (Maps.lookup (Phantoms.wrap _Name $ var "fieldName") $ var "fieldMap")
 

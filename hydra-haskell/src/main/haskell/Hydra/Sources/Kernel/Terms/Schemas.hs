@@ -98,7 +98,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Util         as Util
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -233,13 +233,13 @@ dependencyNamespaces = define "dependencyNamespaces" $
       Sets.empty $
     -- Handle encoded types: decode as Type and extract type dependency names
     Logic.ifElse (isEncodedType @@ var "deannotatedTerm")
-      (Flows.bind (trace (string "dependency namespace (type)") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "term")) (
+      (Flows.bind (trace (string "dependency namespace (type)") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "term")) (
         "typ" ~> Flows.pure (Sets.unions (list [
           var "dataNames", var "schemaNames",
           Rewriting.typeDependencyNames @@ true @@ var "typ"]))))
       -- Handle encoded terms: decode as Term and extract term dependency names
       (Logic.ifElse (isEncodedTerm @@ var "deannotatedTerm")
-        (Flows.bind (trace (string "dependency namespace (term)") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Term @@ var "graph" @@ var "term")) (
+        (Flows.bind (trace (string "dependency namespace (term)") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Term @@ var "graph" @@ var "term")) (
           "decodedTerm" ~> Flows.pure (Sets.unions (list [
             var "dataNames", var "schemaNames",
             Rewriting.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "decodedTerm"]))))
@@ -256,7 +256,7 @@ dereferenceType = define "dereferenceType" $
   "mel" <<~ Lexical.dereferenceElement @@ var "name" $
   optCases (var "mel")
     (Flows.pure nothing)
-    ("el" ~> Flows.map (unaryFunction just) $ (trace (string "dereference type") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))
+    ("el" ~> Flows.map (unaryFunction just) $ (trace (string "dereference type") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))
 
 elementAsTypeApplicationTerm :: TBinding (Binding -> Flow Graph TypeApplicationTerm)
 elementAsTypeApplicationTerm = define "elementAsTypeApplicationTerm" $
@@ -369,7 +369,7 @@ fieldTypes = define "fieldTypes" $
       trace (Strings.cat2 (string "field types of ") (Core.unName (var "name"))) (
       Flows.bind (Lexical.requireElement @@ var "name") (
         "el" ~>
-        Flows.bind (trace (string "field types") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))) (
+        Flows.bind (trace (string "field types") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))) (
           fieldTypes)))]
   @@ (Rewriting.deannotateType @@ var "t")
 
@@ -451,7 +451,7 @@ graphAsTypes = define "graphAsTypes" $
   "els" ~>
   "graph" <<~ Monads.getState $
   "toPair" <~ ("el" ~>
-    "typ" <<~ (trace ((string "graph as types: ") ++ Core.unName (Core.bindingName $ var "el")) $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "el"))) $
+    "typ" <<~ (trace ((string "graph as types: ") ++ Core.unName (Core.bindingName $ var "el")) $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "el"))) $
     produce $ pair (Core.bindingName $ var "el") (var "typ")) $
   "pairs" <<~ Flows.mapList (var "toPair") (var "els") $
   produce $ Maps.fromList $ var "pairs"
@@ -747,22 +747,22 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
           (Equality.equal (Core.recordTypeName (var "r")) (Core.nameLift _TypeScheme))
           (Flows.map
             (unaryFunction just)
-            (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _TypeScheme @@ var "cx" @@ Core.bindingTerm (var "el"))))
+            (Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _TypeScheme @@ var "cx" @@ Core.bindingTerm (var "el"))))
           (Flows.pure nothing),
       _Term_union>>: "i" ~>
         Logic.ifElse (Equality.equal (Core.injectionTypeName (var "i")) (Core.nameLift _Type))
           (Flows.map
             ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded"))
-            (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el"))))
+            (Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el"))))
           (Flows.pure nothing)]) $
     "mts" <<~ optCases (Core.bindingType (var "el"))
-      (Flows.map ("typ" ~> just $ Rewriting.fTypeToTypeScheme @@ var "typ") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "el"))))
+      (Flows.map ("typ" ~> just $ Rewriting.fTypeToTypeScheme @@ var "typ") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "el"))))
       ("ts" ~> Logic.ifElse
         (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))
-        (Flows.map (unaryFunction just) (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _TypeScheme @@ var "cx" @@ Core.bindingTerm (var "el"))))
+        (Flows.map (unaryFunction just) (Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _TypeScheme @@ var "cx" @@ Core.bindingTerm (var "el"))))
         (Logic.ifElse
           (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
-          (Flows.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded")) (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el"))))
+          (Flows.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded")) (Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el"))))
           (var "forTerm" @@ (Rewriting.deannotateTerm @@ (Core.bindingTerm (var "el")))))) $
     produce $ Maybes.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
   trace (string "schema graph to typing environment") $
@@ -800,7 +800,7 @@ typeDependencies = define "typeDependencies" $
   "requireType" <~ ("name" ~>
     trace (Strings.cat2 (string "type dependencies of ") (Core.unName (var "name"))) (
     Flows.bind (Lexical.requireElement @@ var "name") (
-      "el" ~> Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))) $
+      "el" ~> Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))) $
   "toPair" <~ ("name" ~>
     Flows.bind (var "requireType" @@ var "name") (
       "typ" ~> Flows.pure (pair (var "name") (var "transform" @@ var "typ")))) $
