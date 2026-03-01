@@ -136,9 +136,11 @@ writeYaml basePath universeModules modulesToGenerate = do
           else withTrace "generate YAML files" $ do
             let g0 = modulesToGraph completeUniverse completeUniverse  -- Use complete universe for full dependency resolution
                 namespaces = fmap moduleNamespace dataModules
+                -- Get original ordered data elements for binding order preservation
+                dataElements = L.filter (not . isNativeType) $ L.concatMap moduleElements completeUniverse
             -- Infer types on the data graph before adaptation (eta expansion requires types)
-            g0' <- inferGraphTypes g0
-            (g1, defLists) <- dataGraphToDefinitions constraints True True False False g0' namespaces
+            (g0', _inferredBindings) <- inferGraphTypes dataElements g0
+            (g1, defLists) <- dataGraphToDefinitions constraints True True False False dataElements g0' namespaces
             withState g1 $ do
               maps <- CM.zipWithM forEachModule dataModules defLists
               return $ L.concat (M.toList <$> maps)
@@ -172,13 +174,10 @@ writeLexiconToStandardPath = writeLexicon "../docs/hydra-lexicon.txt"
 generateCoderModulesIO :: (Module -> Flow Graph (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
 generateCoderModulesIO codec label universeModules typeModules = do
     let graph = modulesToGraph universeModules universeModules
-    case graphSchema graph of
-      Nothing -> fail "No schema graph available"
-      Just schemaGraph -> do
-        mresult <- runFlow schemaGraph (CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules)
-        case mresult of
-          Nothing -> fail $ "Failed to generate " ++ label ++ " modules"
-          Just results -> return results
+    mresult <- runFlow graph (CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules)
+    case mresult of
+      Nothing -> fail $ "Failed to generate " ++ label ++ " modules"
+      Just results -> return results
 
 generateDecoderModules :: [Module] -> [Module] -> IO [Module]
 generateDecoderModules = generateCoderModulesIO Decoding.decodeModule "decoder"

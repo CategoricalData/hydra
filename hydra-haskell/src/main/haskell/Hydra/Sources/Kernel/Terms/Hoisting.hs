@@ -115,20 +115,20 @@ bindingIsPolymorphic = define "bindingIsPolymorphic" $
     false  -- No type scheme means monomorphic (or untyped)
     ("ts" ~> Logic.not $ Lists.null $ Core.typeSchemeVariables $ var "ts")
 
--- | Check if a binding's type uses any type variables from the given TypeContext.
+-- | Check if a binding's type uses any type variables from the given Graph.
 -- This checks if the free type variables in the binding's type intersect with
--- the type variables in scope (typeContextTypeVariables).
-bindingUsesContextTypeVars :: TBinding (TypeContext -> Binding -> Bool)
+-- the type variables in scope (graphTypeVariables).
+bindingUsesContextTypeVars :: TBinding (Graph -> Binding -> Bool)
 bindingUsesContextTypeVars = define "bindingUsesContextTypeVars" $
-  doc ("Check if a binding's type uses any type variables from the given TypeContext."
+  doc ("Check if a binding's type uses any type variables from the given Graph."
     <> " Returns True if the free type variables in the binding's type intersect with"
-    <> " the type variables in scope (typeContextTypeVariables).") $
+    <> " the type variables in scope (graphTypeVariables).") $
   "cx" ~> "binding" ~>
   optCases (Core.bindingType $ var "binding")
     false  -- No type scheme means no type variables used
     ("ts" ~>
       "freeInType" <~ Rewriting.freeVariablesInType @@ Core.typeSchemeType (var "ts") $
-      "contextTypeVars" <~ Typing.typeContextTypeVariables (var "cx") $
+      "contextTypeVars" <~ Graph.graphTypeVariables (var "cx") $
       Logic.not $ Sets.null $ Sets.intersection (var "freeInType") (var "contextTypeVars"))
 
 -- | Count the number of occurrences of a variable name in a term. Assumes no variable shadowing.
@@ -148,11 +148,11 @@ countVarOccurrences = define "countVarOccurrences" $
         (var "childCount")]
 
 -- | Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas.
-augmentBindingsWithNewFreeVars :: TBinding (TypeContext -> S.Set Name -> [Binding] -> ([Binding], TermSubst))
+augmentBindingsWithNewFreeVars :: TBinding (Graph -> S.Set Name -> [Binding] -> ([Binding], TermSubst))
 augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   doc "Augment bindings with new free variables introduced by substitution, wrapping with lambdas after any type lambdas." $
   "cx" ~> "boundVars" ~> "bindings" ~>
-  "types" <~ Typing.typeContextTypes (var "cx") $
+  "types" <~ Maps.map (Rewriting.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
   "wrapAfterTypeLambdas" <~ ("vars" ~> "term" ~>
     cases _Term (var "term")
       -- Default: wrap with lambdas (for any non-type-lambda term)
@@ -196,29 +196,29 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
 
 -- | Predicate for hoisting polymorphic bindings.
 -- A binding should be hoisted if it is polymorphic or uses outer type variables.
-shouldHoistPolymorphic :: TBinding (TypeContext -> Binding -> Bool)
+shouldHoistPolymorphic :: TBinding (Graph -> Binding -> Bool)
 shouldHoistPolymorphic = define "shouldHoistPolymorphic" $
   doc ("Predicate for hoisting polymorphic bindings."
     <> " Returns True if the binding is polymorphic (has type scheme variables)"
-    <> " or if its type uses any type variables from the TypeContext.") $
+    <> " or if its type uses any type variables from the Graph.") $
   "cx" ~> "binding" ~>
   Logic.or (bindingIsPolymorphic @@ var "binding") (bindingUsesContextTypeVars @@ var "cx" @@ var "binding")
 
 -- | Predicate for hoisting all bindings unconditionally.
-shouldHoistAll :: TBinding (TypeContext -> Binding -> Bool)
+shouldHoistAll :: TBinding (Graph -> Binding -> Bool)
 shouldHoistAll = define "shouldHoistAll" $
   doc "Predicate that always returns True, for hoisting all bindings unconditionally." $
   constant (constant true)
 
-hoistLetBindingsWithPredicate :: TBinding ((Binding -> Bool) -> (TypeContext -> Binding -> Bool) -> TypeContext -> Let -> Let)
+hoistLetBindingsWithPredicate :: TBinding ((Binding -> Bool) -> (Graph -> Binding -> Bool) -> Graph -> Let -> Let)
 hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
   doc ("Transform a let-term by pulling let bindings to the top level."
     <> " The isParentBinding predicate applies to top-level bindings and determines whether their subterm bindings are"
     <> " eligible for hoisting."
-    <> " The shouldHoistBinding predicate takes the TypeContext and a subterm binding,"
+    <> " The shouldHoistBinding predicate takes the Graph and a subterm binding,"
     <> " and returns True if the binding should be hoisted."
     <> " This is useful for targets like Java that cannot have polymorphic definitions in arbitrary positions."
-    <> " The TypeContext provides information about type variables and lambda variables in scope."
+    <> " The Graph provides information about type variables and lambda variables in scope."
     <> " If a hoisted binding captures let-bound or lambda-bound variables from an enclosing scope,"
     <> " the binding is wrapped in lambdas for those variables, and references are replaced"
     <> " with applications."
@@ -232,7 +232,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     "alreadyUsedNames" <~ Pairs.second (var "pair") $
     "b" <~ Pairs.first (var "bindingWithCapturedVars") $
     "capturedTermVars" <~ Pairs.second (var "bindingWithCapturedVars") $
-    "types" <~ Typing.typeContextTypes (var "cx") $
+    "types" <~ Maps.map (Rewriting.typeSchemeToFType) (Graph.graphBoundTypes (var "cx")) $
     "capturedTermVarTypePairs" <~ Lists.map
       ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types")))
       (var "capturedTermVars") $
@@ -247,7 +247,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
       ("ts" ~> Rewriting.freeVariablesInType @@ (Core.typeSchemeType $ var "ts")) $
     "freeInCapturedVarTypes" <~ Sets.unions (Lists.map ("t" ~> Rewriting.freeVariablesInType @@ var "t") (var "capturedTermVarTypes")) $
     "capturedTypeVars" <~ Sets.toList (Sets.intersection
-      (Typing.typeContextTypeVariables $ var "cx")
+      (Graph.graphTypeVariables $ var "cx")
       (Sets.union (var "freeInBindingType") (var "freeInCapturedVarTypes"))) $
     "globalBindingName" <~ Lexical.chooseUniqueName
       @@ var "alreadyUsedNames"
@@ -337,14 +337,14 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         -- We need to include them for argument propagation, but exclude them from the final list of arguments
         -- for each hoisted binding.
         "polyLetVariables" <~ (Sets.fromList $ Lists.filter
-          ("v" ~> optCases (Maps.lookup (var "v") (Typing.typeContextTypes $ var "cx"))
+          ("v" ~> optCases (Maybes.map (Rewriting.typeSchemeToFType) $ Maps.lookup (var "v") (Graph.graphBoundTypes $ var "cx"))
             false -- This function should not be applied to untyped terms, but we make a hopeful guess if it is
             Schemas.fTypeIsPolymorphic)
-          (Sets.toList $ Typing.typeContextLetVariables $ var "cx")) $
+          (Sets.toList $ Sets.difference (Sets.fromList $ Maps.keys $ Graph.graphBoundTerms $ var "cx") (Graph.graphLambdaVariables $ var "cx"))) $
 
         "boundTermVariables" <~ Sets.union
-          (Typing.typeContextLambdaVariables $ var "cx")
-          (Typing.typeContextLetVariables $ var "cx") $
+          (Graph.graphLambdaVariables $ var "cx")
+          (Sets.difference (Sets.fromList $ Maps.keys $ Graph.graphBoundTerms $ var "cx") (Graph.graphLambdaVariables $ var "cx")) $
         "freeVariablesInEachBinding" <~ Lists.map
           ("b" ~> Sets.toList $ Sets.intersection
             (var "boundTermVariables")
@@ -456,7 +456,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
             (Lists.concat $ list [var "previouslyFinishedBindings", var "hoistedBindingsFinal", var "bindingsSoFarFinal"])
             (var "finalUsedNames"))
           (var "finalTerm")]) $
-  "cx1" <~ Schemas.extendTypeContextForLet @@ ("c" ~> "b" ~> nothing) @@ var "cx0" @@ var "let0" $
+  "cx1" <~ Schemas.extendGraphForLet @@ ("c" ~> "b" ~> nothing) @@ var "cx0" @@ var "let0" $
   -- Each binding becomes a list of bindings: the original one with substitutions in its body,
   -- as well as hoisted bindings from any level. The hoisted bindings share the original binding's namespace.
   -- Since each top-level binding has exclusive access to its hoisted bindings, it can be processed individually.
@@ -493,17 +493,15 @@ hoistPolymorphicLetBindings = define "hoistPolymorphicLetBindings" $
     <> " with applications."
     <> " Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
   "isParentBinding" ~> "let0" ~>
-  -- Create an empty TypeContext
-  "emptyIx" <~ Typing.inferenceContext (Maps.empty) (Maps.empty) (Maps.empty) (Maps.empty) false $
-  "emptyCx" <~ Typing.typeContext Maps.empty Maps.empty Sets.empty Sets.empty Sets.empty (var "emptyIx") $
+  "emptyCx" <~ Graph.emptyGraph $
   hoistLetBindingsWithPredicate @@ var "isParentBinding" @@ shouldHoistPolymorphic @@ var "emptyCx" @@ var "let0"
 
-hoistLetBindingsWithContext :: TBinding ((Binding -> Bool) -> TypeContext -> Let -> Let)
+hoistLetBindingsWithContext :: TBinding ((Binding -> Bool) -> Graph -> Let -> Let)
 hoistLetBindingsWithContext = define "hoistLetBindingsWithContext" $
-  doc ("Transform a let-term by pulling polymorphic let bindings to the top level, using TypeContext."
+  doc ("Transform a let-term by pulling polymorphic let bindings to the top level, using Graph."
     <> " A binding is hoisted if:"
     <> " (1) It is polymorphic (has non-empty typeSchemeVariables), OR"
-    <> " (2) Its type uses type variables from the TypeContext (i.e., from enclosing type lambdas)."
+    <> " (2) Its type uses type variables from the Graph (i.e., from enclosing type lambdas)."
     <> " Bindings which are already at the top level are not hoisted."
     <> " If a hoisted binding captures lambda-bound or let-bound variables from an enclosing scope,"
     <> " the binding is wrapped in lambdas for those variables, and references are replaced"
@@ -523,12 +521,10 @@ hoistAllLetBindings = define "hoistAllLetBindings" $
     <> " with applications."
     <> " Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.") $
   "let0" ~>
-  -- Create an empty TypeContext
-  "emptyIx" <~ Typing.inferenceContext (Maps.empty) (Maps.empty) (Maps.empty) (Maps.empty) false $
-  "emptyCx" <~ Typing.typeContext Maps.empty Maps.empty Sets.empty Sets.empty Sets.empty (var "emptyIx") $
+  "emptyCx" <~ Graph.emptyGraph $
   hoistLetBindingsWithPredicate @@ constant true @@ shouldHoistAll @@ var "emptyCx" @@ var "let0"
 
-hoistCaseStatements :: TBinding (TypeContext -> Term -> Term)
+hoistCaseStatements :: TBinding (Graph -> Term -> Term)
 hoistCaseStatements = define "hoistCaseStatements" $
   doc ("Hoist case statements into local let bindings."
     <> " This is useful for targets such as Python which only support case statements (match) at the top level."
@@ -537,20 +533,18 @@ hoistCaseStatements = define "hoistCaseStatements" $
     <> " Once through an application LHS, lambda bodies no longer count as pass-through.") $
   hoistSubterms @@ shouldHoistCaseStatement
 
-hoistCaseStatementsInGraph :: TBinding (Graph -> Flow Graph Graph)
+hoistCaseStatementsInGraph :: TBinding ([Binding] -> [Binding])
 hoistCaseStatementsInGraph = define "hoistCaseStatementsInGraph" $
-  doc ("Hoist case statements into local let bindings for all elements in a graph."
+  doc ("Hoist case statements into local let bindings for a list of bindings."
     <> " This version operates prior to inference and uses an empty type context."
     <> " It hoists case statements and their applied arguments into let bindings.") $
-  "graph" ~>
-  -- Create an empty type context (no lambda variables to track since we're pre-inference)
-  "emptyIx" <~ Typing.inferenceContext (Maps.empty) (Maps.empty) (Maps.empty) (Maps.empty) false $
-  "emptyTx" <~ Typing.typeContext Maps.empty Maps.empty Sets.empty Sets.empty Sets.empty (var "emptyIx") $
-  -- Convert graph to a term, apply hoisting, convert back
-  "gterm0" <~ Schemas.graphAsTerm @@ var "graph" $
-  "gterm1" <~ hoistCaseStatements @@ var "emptyTx" @@ var "gterm0" $
-  "newElements" <~ Schemas.termAsGraph @@ var "gterm1" $
-  produce $ Graph.graphWithElements (var "graph") (var "newElements")
+  "bindings" ~>
+  -- Create an empty graph (no lambda variables to track since we're pre-inference)
+  "emptyTx" <~ Graph.emptyGraph $
+  -- Convert bindings to a let term, apply hoisting, extract bindings back
+  "term0" <~ Core.termLet (Core.let_ (var "bindings") Core.termUnit) $
+  "term1" <~ hoistCaseStatements @@ var "emptyTx" @@ var "term0" $
+  Schemas.termAsBindings @@ var "term1"
 
 -- | Check if a term is a union elimination (case statement)
 isUnionElimination :: TBinding (Term -> Bool)
@@ -728,7 +722,7 @@ shouldHoistCaseStatement = define "shouldHoistCaseStatement" $
     -- If still at top level, don't hoist. If not at top level, hoist.
     Logic.not $ Pairs.first $ var "finalState")
 
-hoistSubterms :: TBinding ((([TermAccessor], Term) -> Bool) -> TypeContext -> Term -> Term)
+hoistSubterms :: TBinding ((([TermAccessor], Term) -> Bool) -> Graph -> Term -> Term)
 hoistSubterms = define "hoistSubterms" $
   doc ("Hoist subterms into local let bindings based on a path-aware predicate."
     <> " The predicate receives a pair of (path, term) where path is the list of TermAccessors"
@@ -743,7 +737,7 @@ hoistSubterms = define "hoistSubterms" $
 
   -- Process a single immediate subterm: find all hoistable subterms, extract them, wrap in local let
   -- Returns (newCounter, transformedSubterm)
-  -- Uses rewriteAndFoldTermWithTypeContextAndPath to track paths and type context
+  -- Uses rewriteAndFoldTermWithTypeContextAndPath to track paths and graph context
   -- The accumulator is (counter, [Binding])
   -- The namePrefix parameter is used to create stable hoisted binding names (e.g., the parent binding's name)
   -- The pathPrefix parameter provides the path context from enclosing scopes, allowing
@@ -753,7 +747,7 @@ hoistSubterms = define "hoistSubterms" $
   "processImmediateSubterm" <~ ("cx" ~> "counter" ~> "namePrefix" ~> "pathPrefix" ~> "subterm" ~>
     -- Lambda variables that exist at the level of the let (before processing this subterm)
     -- These don't need to be captured since they're in scope at the hoisting site
-    "baselineLambdaVars" <~ Typing.typeContextLambdaVariables (var "cx") $
+    "baselineLambdaVars" <~ Graph.graphLambdaVariables (var "cx") $
     -- Collect all hoistable subterms and their replacements using a fold
     -- The accumulator is (counter, [Binding])
     -- Important: We stop at let and type lambda boundaries - nested lets are handled by the outer rewrite loop,
@@ -762,7 +756,7 @@ hoistSubterms = define "hoistSubterms" $
     -- The user function receives:
     --   recurse :: a -> Term -> (a, Term) - framework handles subterm iteration
     --   path :: [TermAccessor]
-    --   cx :: TypeContext
+    --   cx :: Graph
     --   acc :: (counter, [Binding])
     --   term :: Term
     "collectAndReplace" <~ ("recurse" ~> "path" ~> "cxInner" ~> "acc" ~> "term" ~>
@@ -785,13 +779,13 @@ hoistSubterms = define "hoistSubterms" $
             ("bindingName" <~ Core.name (Strings.cat (list [string "_hoist_", var "namePrefix", string "_", Literals.showInt32 (var "newCounter")])) $
              -- Find lambda-bound variables that need to be captured
              -- Only capture variables that were added INSIDE this subterm (not at the let level)
-             "allLambdaVars" <~ Typing.typeContextLambdaVariables (var "cxInner") $
+             "allLambdaVars" <~ Graph.graphLambdaVariables (var "cxInner") $
              -- Get names that are new lambda vars (in current scope but not baseline)
              "newLambdaVars" <~ Sets.difference (var "allLambdaVars") (var "baselineLambdaVars") $
              "freeVars" <~ Rewriting.freeVariablesInTerm @@ var "processedTerm" $
              "capturedVars" <~ Sets.toList (Sets.intersection (var "newLambdaVars") (var "freeVars")) $
              -- Wrap the term in lambdas for each captured variable, looking up their types from the context
-             "typeMap" <~ Typing.typeContextTypes (var "cxInner") $
+             "typeMap" <~ Maps.map (Rewriting.typeSchemeToFType) (Graph.graphBoundTypes (var "cxInner")) $
              "wrappedTerm" <~ Lists.foldl
                ("body" ~> "varName" ~>
                  Core.termFunction $ Core.functionLambda $ Core.lambda (var "varName")
@@ -889,11 +883,11 @@ hoistSubterms = define "hoistSubterms" $
 
   Pairs.second $ rewriteAndFoldTermWithTypeContextAndPath @@ var "rewrite" @@ var "cx0" @@ int32 1 @@ var "term0"
 
-rewriteAndFoldTermWithTypeContext :: TBinding (((a -> Term -> (a, Term)) -> TypeContext -> a -> Term -> (a, Term)) -> TypeContext -> a -> Term -> (a, Term))
+rewriteAndFoldTermWithTypeContext :: TBinding (((a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term)) -> Graph -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithTypeContext = define "rewriteAndFoldTermWithTypeContext" $
-  doc ("Rewrite a term while folding to produce a value, with TypeContext updated as we descend into subterms."
+  doc ("Rewrite a term while folding to produce a value, with Graph updated as we descend into subterms."
     <> " Combines the features of rewriteAndFoldTerm and rewriteTermWithTypeContext."
-    <> " The user function f receives a recurse function that handles subterm traversal and TypeContext management.") $
+    <> " The user function f receives a recurse function that handles subterm traversal and Graph management.") $
   "f" ~> "cx0" ~> "val0" ~> "term0" ~>
   -- wrapper is the function we pass to rewriteAndFoldTerm
   -- Combined state is (val, cx). The low-level recurse handles term structure traversal.
@@ -905,9 +899,9 @@ rewriteAndFoldTermWithTypeContext = define "rewriteAndFoldTermWithTypeContext" $
       (Just $ var "cx") [
       _Term_function>>: "fun" ~> cases _Function (var "fun")
         (Just $ var "cx") [
-        _Function_lambda>>: "l" ~> Schemas.extendTypeContextForLambda @@ var "cx" @@ var "l"],
-      _Term_let>>: "l" ~> Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
-      _Term_typeLambda>>: "tl" ~> Schemas.extendTypeContextForTypeLambda @@ var "cx" @@ var "tl"]) $
+        _Function_lambda>>: "l" ~> Schemas.extendGraphForLambda @@ var "cx" @@ var "l"],
+      _Term_let>>: "l" ~> Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
+      _Term_typeLambda>>: "tl" ~> Schemas.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
     -- Create a recurse function for the user that unwraps/wraps the combined state
     "recurseForUser" <~ ("newVal" ~> "subterm" ~>
       -- Call low-level recurse with combined state (newVal, cx1)
@@ -926,29 +920,29 @@ rewriteAndFoldTermWithTypeContext = define "rewriteAndFoldTermWithTypeContext" $
 
 -- | The most general-purpose term rewriting function, combining:
 --   - Folding to produce a value (like rewriteAndFoldTerm)
---   - TypeContext tracking (like rewriteTermWithTypeContext)
+--   - Graph tracking (like rewriteTermWithTypeContext)
 --   - Path tracking via TermAccessors (like rewriteAndFoldTermWithPath)
 --
 -- This function wraps rewriteAndFoldTermWithPath, automatically managing
--- TypeContext updates as the traversal descends into lambdas, lets, and type lambdas.
+-- Graph updates as the traversal descends into lambdas, lets, and type lambdas.
 --
 -- The user function receives:
 --   - A recurse function: a -> Term -> (a, Term) - called by framework during traversal
 --   - The current path (list of TermAccessors from root to current position)
---   - The current TypeContext (updated for the current position)
+--   - The current Graph (updated for the current position)
 --   - The current accumulated value
 --   - The current term
 -- And returns (newVal, newTerm)
 rewriteAndFoldTermWithTypeContextAndPath :: TBinding (
-  ((a -> Term -> (a, Term)) -> [TermAccessor] -> TypeContext -> a -> Term -> (a, Term))
-  -> TypeContext -> a -> Term -> (a, Term))
+  ((a -> Term -> (a, Term)) -> [TermAccessor] -> Graph -> a -> Term -> (a, Term))
+  -> Graph -> a -> Term -> (a, Term))
 rewriteAndFoldTermWithTypeContextAndPath = define "rewriteAndFoldTermWithTypeContextAndPath" $
-  doc ("Rewrite a term while folding to produce a value, with both TypeContext and accessor path tracked."
+  doc ("Rewrite a term while folding to produce a value, with both Graph and accessor path tracked."
     <> " The path is a list of TermAccessors representing the position from the root to the current term."
-    <> " Combines the features of rewriteAndFoldTermWithPath and TypeContext tracking."
-    <> " The TypeContext is automatically updated when descending into lambdas, lets, and type lambdas.") $
+    <> " Combines the features of rewriteAndFoldTermWithPath and Graph tracking."
+    <> " The Graph is automatically updated when descending into lambdas, lets, and type lambdas.") $
   "f" ~> "cx0" ~> "val0" ~> "term0" ~>
-  -- Combined state is (TypeContext, a). We wrap rewriteAndFoldTermWithPath.
+  -- Combined state is (Graph, a). We wrap rewriteAndFoldTermWithPath.
   -- The wrapper function receives recurse, path, (cx, val), term and returns ((cx, val), term)
   "wrapper" <~ ("recurse" ~> "path" ~> "cxAndVal" ~> "term" ~>
     "cx" <~ Pairs.first (var "cxAndVal") $
@@ -958,9 +952,9 @@ rewriteAndFoldTermWithTypeContextAndPath = define "rewriteAndFoldTermWithTypeCon
       (Just $ var "cx") [
       _Term_function>>: "fun" ~> cases _Function (var "fun")
         (Just $ var "cx") [
-        _Function_lambda>>: "l" ~> Schemas.extendTypeContextForLambda @@ var "cx" @@ var "l"],
-      _Term_let>>: "l" ~> Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
-      _Term_typeLambda>>: "tl" ~> Schemas.extendTypeContextForTypeLambda @@ var "cx" @@ var "tl"]) $
+        _Function_lambda>>: "l" ~> Schemas.extendGraphForLambda @@ var "cx" @@ var "l"],
+      _Term_let>>: "l" ~> Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l",
+      _Term_typeLambda>>: "tl" ~> Schemas.extendGraphForTypeLambda @@ var "cx" @@ var "tl"]) $
     -- Create a recurse function for the user that uses the combined state
     -- Note: the user's recurse takes just (val, term) but the framework's recurse
     -- takes (path, val, term). We pass the current path through.
@@ -980,11 +974,11 @@ rewriteAndFoldTermWithTypeContextAndPath = define "rewriteAndFoldTermWithTypeCon
   -- Extract just the val part of the result
   pair (Pairs.second $ Pairs.first $ var "result") (Pairs.second $ var "result")
 
-rewriteTermWithTypeContext :: TBinding (((Term -> Term) -> TypeContext -> Term -> Term) -> TypeContext -> Term -> Term)
+rewriteTermWithTypeContext :: TBinding (((Term -> Term) -> Graph -> Term -> Term) -> Graph -> Term -> Term)
 rewriteTermWithTypeContext = define "rewriteTermWithTypeContext" $
   doc "Rewrite a term with the help of a type context which is updated as we descend into subterms" $
   "f" ~> "cx0" ~> "term0" ~>
-  -- f2 wraps f to handle TypeContext updates for lambda/let/typeLambda
+  -- f2 wraps f to handle Graph updates for lambda/let/typeLambda
   "f2" <~ ("recurse" ~> "cx" ~> "term" ~>
     -- recurse1 is what the user sees: it takes just term and handles cx internally
     "recurse1" <~ ("term" ~> var "recurse" @@ var "cx" @@ var "term") $
@@ -993,15 +987,15 @@ rewriteTermWithTypeContext = define "rewriteTermWithTypeContext" $
       _Term_function>>: "fun" ~> cases _Function (var "fun")
         (Just $ var "f" @@ var "recurse1" @@ var "cx" @@ var "term") [
         _Function_lambda>>: "l" ~>
-          "cx1" <~ Schemas.extendTypeContextForLambda @@ var "cx" @@ var "l" $
+          "cx1" <~ Schemas.extendGraphForLambda @@ var "cx" @@ var "l" $
           "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
           var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"],
       _Term_let>>: "l" ~>
-        "cx1" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
+        "cx1" <~ Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "cx" @@ var "l" $
         "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
         var "f" @@ var "recurse2" @@ var "cx1" @@ var "term",
       _Term_typeLambda>>: "tl" ~>
-        "cx1" <~ Schemas.extendTypeContextForTypeLambda @@ var "cx" @@ var "tl" $
+        "cx1" <~ Schemas.extendGraphForTypeLambda @@ var "cx" @@ var "tl" $
         "recurse2" <~ ("term" ~> var "recurse" @@ var "cx1" @@ var "term") $
         var "f" @@ var "recurse2" @@ var "cx1" @@ var "term"]) $
   -- Local fixpoint that threads context through

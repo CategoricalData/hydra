@@ -261,7 +261,7 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
             "def">: Core.caseStatementDefault $ var "stmt",
             "fields">: Core.caseStatementCases $ var "stmt",
             "caseExpr">:
-              "rt" <<~ Lexical.withSchemaContext @@ (Schemas.requireUnionType @@ var "dn") $ lets [
+              "rt" <<~ (Schemas.requireUnionType @@ var "dn") $ lets [
               "toFieldMapEntry">: "f" ~>
                 pair (Core.fieldTypeName $ var "f") (var "f"),
               "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (Core.rowTypeFields $ var "rt")] $
@@ -291,7 +291,7 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
                       (Constants.ignoredVariable)
                       (var "v0")] $
                     "g_ufr" <<~ Monads.getState $ lets [
-                    "hname">: HaskellUtils.unionFieldReference @@ var "g_ufr" @@ var "namespaces" @@ var "dn" @@ var "fn"] $
+                    "hname">: HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g_ufr"))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
                     "args" <<~ (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
                         (Flows.fail $ Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
                           string " not found in ", Literals.showString $ (Core.unName $ var "dn")]) $
@@ -468,7 +468,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "fn">: Core.fieldName $ var "field",
         "ft">: Core.fieldTerm $ var "field"] $
         "g_ufr2" <<~ Monads.getState $ lets [
-        "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ var "g_ufr2" @@ var "namespaces" @@ var "sname" @@ var "fn",
+        "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g_ufr2"))) @@ var "namespaces" @@ var "sname" @@ var "fn",
         "dflt">: Flows.map (HaskellUtils.hsapp @@ var "lhs") (var "encode" @@ var "ft")] $
         "ftyp" <<~ Schemas.requireUnionField_ @@ var "sname" @@ var "fn" $
         cases _Type (Rewriting.deannotateType @@ var "ftyp")
@@ -676,10 +676,10 @@ moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Module.moduleNamespace $ var "mod")] $
   Flows.pure $ Maps.singleton (var "filepath") (var "s")
 
-nameDecls :: TBinding (Graph -> HaskellNamespaces -> Name -> Type -> [H.DeclarationWithComments])
+nameDecls :: TBinding (HaskellNamespaces -> Name -> Type -> [H.DeclarationWithComments])
 nameDecls = haskellCoderDefinition "nameDecls" $
   doc "Generate Haskell declarations for type and field name constants" $
-  "g" ~> "namespaces" ~> "name" ~> "typ" ~> lets [
+  "namespaces" ~> "name" ~> "typ" ~> lets [
     "nm">: Core.unName $ var "name",
     "toDecl">: "n" ~> "pair" ~> lets [
       "k">: Pairs.first $ var "pair",
@@ -826,7 +826,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
 --        "tname">: Names.unqualifyName @@ record _QualifiedName [
 --          _QualifiedName_namespace>>: just $ Pairs.first $ Module.namespacesFocus $ var "namespaces",
 --          _QualifiedName_local>>: var "name"]] $
---        Logic.ifElse (Maybes.isJust $ Maps.lookup (var "tname") (Graph.graphElements $ var "g'"))
+--        Logic.ifElse (Maybes.isJust $ Maps.lookup (var "tname") (Lexical.graphToBindings @@ var "g'"))
 --          (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
 --          (var "name")] $
 --      "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $ lets [
@@ -944,14 +944,14 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
           H._RecordConstructor_name>>: HaskellUtils.simpleName @@ var "lname'",
           H._RecordConstructor_fields>>: var "hFields"],
         H._ConstructorWithComments_comments>>: nothing],
-    "unionCons">: "g'" ~> "lname'" ~> "fieldType" ~> lets [
+    "unionCons">: "boundNames'" ~> "lname'" ~> "fieldType" ~> lets [
       "fname">: Core.fieldTypeName $ var "fieldType",
       "ftype">: Core.fieldTypeType $ var "fieldType",
       "deconflict">: "name" ~> lets [
         "tname">: Names.unqualifyName @@ record _QualifiedName [
           _QualifiedName_namespace>>: just $ Pairs.first $ Module.namespacesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
-        Logic.ifElse (Maybes.isJust $ Lists.find ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "tname")) (Graph.graphElements $ var "g'"))
+        Logic.ifElse (Sets.member (var "tname") (var "boundNames'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
           (var "name")] $
       "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $ lets [
@@ -971,7 +971,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
         (Lists.map (HaskellUtils.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
         (list ([] :: [TTerm H.Name])),
-      "unpackResult">: HaskellUtils.unpackForallType @@ var "g" @@ var "typ",
+      "unpackResult">: HaskellUtils.unpackForallType @@ var "typ",
       "vars">: Pairs.first $ var "unpackResult",
       "t'">: Pairs.second $ var "unpackResult",
       "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
@@ -989,7 +989,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
             H._DataDeclaration_constructors>>: list [var "cons"],
             H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_union>>: "rt" ~>
-          "cons" <<~ Flows.mapList (var "unionCons" @@ var "g" @@ var "lname") (Core.rowTypeFields $ var "rt") $
+          "cons" <<~ Flows.mapList (var "unionCons" @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "lname") (Core.rowTypeFields $ var "rt") $
           Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
             H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
             H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
@@ -1013,7 +1013,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "mainDecl">: record H._DeclarationWithComments [
         H._DeclarationWithComments_body>>: var "decl",
         H._DeclarationWithComments_comments>>: var "comments"],
-      "nameDecls'">: nameDecls @@ var "g" @@ var "namespaces" @@ var "elementName" @@ var "typ"] $
+      "nameDecls'">: nameDecls @@ var "namespaces" @@ var "elementName" @@ var "typ"] $
       Flows.pure $ Lists.concat $ list [list [var "mainDecl"], var "nameDecls'", var "tdecls"])
 
 typeDecl :: TBinding (HaskellNamespaces -> Name -> Type -> Flow Graph H.DeclarationWithComments)

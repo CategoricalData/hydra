@@ -302,10 +302,10 @@ typeNameForRecord = haskellUtilsDefinition "typeNameForRecord" $
     "parts">: Strings.splitOn (string ".") (var "snameStr")] $
     Lists.last $ var "parts"
 
-unionFieldReference :: TBinding (Graph -> HaskellNamespaces -> Name -> Name -> H.Name)
+unionFieldReference :: TBinding (S.Set Name -> HaskellNamespaces -> Name -> Name -> H.Name)
 unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
   doc "Generate a Haskell name for a union variant constructor, with disambiguation" $
-  "g" ~> "namespaces" ~> "sname" ~> "fname" ~> lets [
+  "boundNames" ~> "namespaces" ~> "sname" ~> "fname" ~> lets [
     "fnameStr">: unwrap _Name @@ var "fname",
     "qname">: Names.qualifyName @@ var "sname",
     "ns">: Module.qualifiedNameNamespace $ var "qname",
@@ -316,7 +316,7 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
       "tname">: Names.unqualifyName @@ record _QualifiedName [
         _QualifiedName_namespace>>: var "ns",
         _QualifiedName_local>>: var "name"]] $
-      Logic.ifElse (Maybes.isJust $ Lists.find ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "tname")) (Graph.graphElements $ var "g"))
+      Logic.ifElse (Sets.member (var "tname") (var "boundNames"))
         (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
         (var "name"),
     "nm">: var "deconflict" @@ Strings.cat2 (var "capitalizedTypeName") (var "capitalizedFieldName"),
@@ -326,15 +326,15 @@ unionFieldReference = haskellUtilsDefinition "unionFieldReference" $
     "unqualName">: Names.unqualifyName @@ var "qualName"] $
     elementReference @@ var "namespaces" @@ var "unqualName"
 
-unpackForallType :: TBinding (Graph -> Type -> ([Name], Type))
+unpackForallType :: TBinding (Type -> ([Name], Type))
 unpackForallType = haskellUtilsDefinition "unpackForallType" $
   doc "Unpack nested forall types into a list of type variables and the inner type" $
-  "cx" ~> "t" ~> cases _Type (Rewriting.deannotateType @@ var "t")
+  "t" ~> cases _Type (Rewriting.deannotateType @@ var "t")
     (Just $ pair (list ([] :: [TTerm Name])) (var "t")) [
     _Type_forall>>: "fat" ~> lets [
       "v">: Core.forallTypeParameter $ var "fat",
       "tbody">: Core.forallTypeBody $ var "fat",
-      "recursiveResult">: unpackForallType @@ var "cx" @@ var "tbody",
+      "recursiveResult">: unpackForallType @@ var "tbody",
       "vars">: Pairs.first $ var "recursiveResult",
       "finalType">: Pairs.second $ var "recursiveResult"] $
       pair (Lists.cons (var "v") (var "vars")) (var "finalType")]

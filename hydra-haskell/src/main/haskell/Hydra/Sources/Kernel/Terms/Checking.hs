@@ -149,7 +149,7 @@ allEqual = define "allEqual" $
        true
        (Lists.tail $ var "els"))
 
-applyTypeArgumentsToType :: TBinding (TypeContext -> [Type] -> Type -> Flow s Type)
+applyTypeArgumentsToType :: TBinding (Graph -> [Type] -> Type -> Flow s Type)
 applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
   doc "Apply type arguments to a type, substituting forall-bound variables" $
   "tx" ~> "typeArgs" ~> "t" ~>
@@ -162,7 +162,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
       string " type args: ",
       Formatting.showList @@ ShowCore.type_ @@ var "typeArgs",
       string ". Context has vars: {",
-      Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Typing.typeContextTypes $ var "tx"),
+      Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
       string "}"]) [
     _Type_forall>>: "ft" ~>
       "v" <~ Core.forallTypeParameter (var "ft") $
@@ -180,11 +180,11 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
     (exec (checkTypeVariables @@ var "tx" @@ var "t") $ produce $ var "t")
     (var "nonnull")
 
-checkForUnboundTypeVariables :: TBinding (InferenceContext -> Term -> Flow s ())
+checkForUnboundTypeVariables :: TBinding (Graph -> Term -> Flow s ())
 checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
   doc "Check that a term has no unbound type variables" $
   "cx" ~> "term0" ~>
-  "svars" <~ Sets.fromList (Maps.keys $ Typing.inferenceContextSchemaTypes $ var "cx") $
+  "svars" <~ Sets.fromList (Maps.keys $ Graph.graphSchemaTypes $ var "cx") $
   "checkRecursive" <~ ("vars" ~> "trace" ~> "lbinding" ~> "term" ~>
     "recurse" <~ var "checkRecursive" @@ var "vars" @@ var "trace" @@ var "lbinding" $
     "dflt" <~ (
@@ -235,11 +235,11 @@ checkForUnboundTypeVariables = define "checkForUnboundTypeVariables" $
         var "recurse" @@ (Core.typeLambdaBody $ var "tl")]) $
   var "checkRecursive" @@ Sets.empty @@ list [string "top level"] @@ nothing @@ var "term0"
 
-checkNominalApplication ::  TBinding (TypeContext -> Name -> [Type] -> Flow s ())
+checkNominalApplication ::  TBinding (Graph -> Name -> [Type] -> Flow s ())
 checkNominalApplication = define "checkNominalApplication" $
   doc "Check that a nominal type is applied to the correct number of type arguments" $
   "tx" ~> "tname" ~> "typeArgs" ~>
-  "schemaType" <<~ Schemas.requireSchemaType @@ Typing.typeContextInferenceContext (var "tx") @@ var "tname" $
+  "schemaType" <<~ Schemas.requireSchemaType @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "vars" <~ Core.typeSchemeVariables (var "schemaType") $
   "body" <~ Core.typeSchemeType (var "schemaType") $
   "varslen" <~ Lists.length (var "vars") $
@@ -251,7 +251,7 @@ checkNominalApplication = define "checkNominalApplication" $
       ++ Literals.showInt32 (var "argslen") ++ (string "): ")
       ++ (Formatting.showList @@ (ShowCore.type_) @@ (var "typeArgs")))
 
-checkSameType :: TBinding (TypeContext -> String -> [Type] -> Flow s Type)
+checkSameType :: TBinding (Graph -> String -> [Type] -> Flow s Type)
 checkSameType = define "checkSameType" $
   doc "Ensure all types in a list are equal and return the common type" $
   "tx" ~> "desc" ~> "types" ~>
@@ -264,12 +264,11 @@ checkSameType = define "checkSameType" $
       var "desc"])
 
 -- TODO: unused
-checkType :: TBinding (TypeContext -> Term -> Type -> Flow s ())
+checkType :: TBinding (Graph -> Term -> Type -> Flow s ())
 checkType = define "checkType" $
   doc "Check that a term has the expected type" $
   "tx" ~> "term" ~> "typ" ~>
-  "cx" <~ Typing.typeContextInferenceContext (var "tx") $
-  "vars" <~ Typing.typeContextTypeVariables (var "tx") $
+  "vars" <~ Graph.graphTypeVariables (var "tx") $
   Logic.ifElse (Constants.debugInference)
     ("t0" <<~ typeOf @@ var "tx" @@ noTypeArgs  @@ var "term" $
       Logic.ifElse (typesEffectivelyEqual @@ var "tx" @@ var "t0" @@ var "typ")
@@ -281,14 +280,14 @@ checkType = define "checkType" $
           ShowCore.type_ @@ var "t0"]))
     (Flows.pure unit)
 
-checkTypeSubst :: TBinding (InferenceContext -> TypeSubst -> Flow s TypeSubst)
+checkTypeSubst :: TBinding (Graph -> TypeSubst -> Flow s TypeSubst)
 checkTypeSubst = define "checkTypeSubst" $
   doc ("Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been"
     <> " inappropriately unified with type variables inferred from terms.") $
   "cx" ~> "subst" ~>
   "s" <~ Typing.unTypeSubst (var "subst") $
   "vars" <~ Sets.fromList (Maps.keys $ var "s") $
-  "suspectVars" <~ Sets.intersection (var "vars") (Sets.fromList $ Maps.keys $ Typing.inferenceContextSchemaTypes $ var "cx") $
+  "suspectVars" <~ Sets.intersection (var "vars") (Sets.fromList $ Maps.keys $ Graph.graphSchemaTypes $ var "cx") $
   "isNominal" <~ ("ts" ~> cases _Type (Rewriting.deannotateType @@ (Core.typeSchemeType $ var "ts"))
     (Just false) [
     _Type_record>>: constant true,
@@ -296,7 +295,7 @@ checkTypeSubst = define "checkTypeSubst" $
     _Type_wrap>>: constant true]) $
   "badVars" <~ Sets.fromList (Lists.filter
     ("v" ~> Maybes.maybe false (var "isNominal") $
-      Lexical.dereferenceSchemaType @@ var "v" @@ (Typing.inferenceContextSchemaTypes $ var "cx"))
+      Lexical.dereferenceSchemaType @@ var "v" @@ (Graph.graphSchemaTypes $ var "cx"))
     (Sets.toList $ var "suspectVars")) $
   "badPairs" <~ Lists.filter ("p" ~> Sets.member (Pairs.first $ var "p") (var "badVars")) (Maps.toList $ var "s") $
   "printPair" <~ ("p" ~> (Core.unName $ Pairs.first $ var "p") ++ (string " --> ") ++ (ShowCore.type_ @@ Pairs.second (var "p"))) $
@@ -306,7 +305,7 @@ checkTypeSubst = define "checkTypeSubst" $
       ++ (Strings.intercalate (string ", ") (Lists.map (var "printPair") (var "badPairs")))
       ++ (string "}"))
 
-checkTypeVariables :: TBinding (TypeContext -> Type -> Flow s ())
+checkTypeVariables :: TBinding (Graph -> Type -> Flow s ())
 checkTypeVariables = define "checkTypeVariables" $
   doc "Check that all type variables in a type are bound. NOTE: This check is currently disabled to allow phantom type variables from polymorphic instantiation to pass through. The proper fix is to ensure `typeOf` doesn't create fresh variables for post-inference code." $
   "_tx" ~> "_typ" ~>
@@ -314,13 +313,13 @@ checkTypeVariables = define "checkTypeVariables" $
   -- The inference pass has already validated type variables via checkForUnboundTypeVariables.
   Flows.pure unit
 
--- TODO: unused (?). This function can be used to construct Typing.typeContextTypes from Typing.typeContextInferenceContext
-toFContext :: TBinding (InferenceContext -> M.Map Name Type)
+-- Note: with Graph, this converts TypeSchemes back to System F types
+toFContext :: TBinding (Graph -> M.Map Name Type)
 toFContext = define "toFContext" $
-  doc "Convert an inference context to a type environment by converting type schemes to System F types" $
-  "cx" ~> Maps.map (Schemas.typeSchemeToFType) $ Typing.inferenceContextDataTypes $ var "cx"
+  doc "Get the bound types from a graph as a type environment" $
+  "cx" ~> Maps.map (Rewriting.typeSchemeToFType) $ Graph.graphBoundTypes $ var "cx"
 
-typeListsEffectivelyEqual :: TBinding (TypeContext -> [Type] -> [Type] -> Bool)
+typeListsEffectivelyEqual :: TBinding (Graph -> [Type] -> [Type] -> Bool)
 typeListsEffectivelyEqual = define "typeListsEffectivelyEqual" $
   doc "Check whether two lists of types are effectively equal, disregarding type aliases" $
   "tx" ~> "tlist1" ~> "tlist2" ~>
@@ -329,7 +328,7 @@ typeListsEffectivelyEqual = define "typeListsEffectivelyEqual" $
       Lists.zipWith (typesEffectivelyEqual @@ var "tx") (var "tlist1") (var "tlist2"))
     false
 
-typeOf :: TBinding (TypeContext -> [Type] -> Term -> Flow s Type)
+typeOf :: TBinding (Graph -> [Type] -> Term -> Flow s Type)
 typeOf = define "typeOf" $
   doc "Given a type context, reconstruct the type of a System F term" $
   "tx" ~> "typeArgs" ~> "term" ~>
@@ -367,13 +366,13 @@ typeOf = define "typeOf" $
 --  trace (string "typeOf " ++ (ShowCore.term @@ var "term")) $ -- For debugging only; risk of slow execution and stack overflow on deeply nested terms
   var "check"
 
-typeOfAnnotatedTerm :: TBinding (TypeContext -> [Type] -> AnnotatedTerm -> Flow s Type)
+typeOfAnnotatedTerm :: TBinding (Graph -> [Type] -> AnnotatedTerm -> Flow s Type)
 typeOfAnnotatedTerm = define "typeOfAnnotatedTerm" $
   doc "Reconstruct the type of an annotated term" $
   "tx" ~> "typeArgs" ~> "at" ~>
   typeOf @@ var "tx" @@ var "typeArgs" @@ Core.annotatedTermBody (var "at")
 
-typeOfApplication :: TBinding (TypeContext -> [Type] -> Application -> Flow s Type)
+typeOfApplication :: TBinding (Graph -> [Type] -> Application -> Flow s Type)
 typeOfApplication = define "typeOfApplication" $
   doc "Reconstruct the type of an application term" $
   "tx" ~> "typeArgs" ~> "app" ~>
@@ -387,8 +386,8 @@ typeOfApplication = define "typeOfApplication" $
       ShowCore.type_ @@ var "tfun",
       string ")",
       string ". types: ", Strings.intercalate (string ", ") (Lists.map
-        ("p" ~> Strings.cat $ list [Core.unName (Pairs.first $ var "p"), string ": ", ShowCore.type_ @@ (Pairs.second $ var "p")]) $
-        Maps.toList $ Typing.typeContextTypes $ var "tx")]) [
+        ("p" ~> Strings.cat $ list [Core.unName (Pairs.first $ var "p"), string ": ", ShowCore.type_ @@ (Rewriting.typeSchemeToFType @@ Pairs.second (var "p"))]) $
+        Maps.toList $ Graph.graphBoundTypes $ var "tx")]) [
     -- These forall types can arise from bindUnboundTypeVariables
     _Type_forall>>: "ft" ~> var "tryType" @@ (Core.forallTypeBody (var "ft")) @@ var "targ",
     _Type_function>>: "ft" ~>
@@ -414,7 +413,7 @@ typeOfApplication = define "typeOfApplication" $
   "t" <<~ var "tryType" @@ var "tfun" @@ var "targ" $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t"
 
-typeOfCaseStatement :: TBinding (TypeContext -> [Type] -> CaseStatement -> Flow s Type)
+typeOfCaseStatement :: TBinding (Graph -> [Type] -> CaseStatement -> Flow s Type)
 typeOfCaseStatement = define "typeOfCaseStatement" $
   doc "Reconstruct the type of a case statement" $
   "tx" ~> "typeArgs" ~> "cs" ~>
@@ -435,7 +434,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
     (Schemas.nominalApplication @@ var "tname"  @@ var "typeArgs")
     (var "cod")
 
-typeOfEither :: TBinding (TypeContext -> [Type] -> Prelude.Either Term Term -> Flow s Type)
+typeOfEither :: TBinding (Graph -> [Type] -> Prelude.Either Term Term -> Flow s Type)
 typeOfEither = define "typeOfEither" $
   doc "Reconstruct the type of an either value" $
   "tx" ~> "typeArgs" ~> "et" ~>
@@ -456,7 +455,7 @@ typeOfEither = define "typeOfEither" $
       Flows.pure $ Core.typeEither $ Core.eitherType (Lists.at (int32 0) $ var "typeArgs") (var "rightType"))
     (var "et")
 
-typeOfInjection :: TBinding (TypeContext -> [Type] -> Injection -> Flow s Type)
+typeOfInjection :: TBinding (Graph -> [Type] -> Injection -> Flow s Type)
 typeOfInjection = define "typeOfInjection" $
   doc "Reconstruct the type of a union injection" $
   "tx" ~> "typeArgs" ~> "injection" ~>
@@ -466,7 +465,7 @@ typeOfInjection = define "typeOfInjection" $
   "field" <~ Core.injectionField (var "injection") $
   "fname" <~ Core.fieldName (var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
-  "schemaType" <<~ Schemas.requireSchemaType @@ Typing.typeContextInferenceContext (var "tx") @@ var "tname" $
+  "schemaType" <<~ Schemas.requireSchemaType @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
   "sfields" <<~ ExtractCore.unionType @@ var "tname" @@ var "sbody" $
@@ -474,7 +473,7 @@ typeOfInjection = define "typeOfInjection" $
 
   produce $ Schemas.nominalApplication @@ var "tname"  @@ var "typeArgs"
 
-typeOfLambda :: TBinding (TypeContext -> [Type] -> Lambda -> Flow s Type)
+typeOfLambda :: TBinding (Graph -> [Type] -> Lambda -> Flow s Type)
 typeOfLambda = define "typeOfLambda" $
   doc "Reconstruct the type of a lambda function" $
   "tx" ~> "typeArgs" ~> "l" ~>
@@ -485,13 +484,13 @@ typeOfLambda = define "typeOfLambda" $
     (Flows.fail (string "untyped lambda"))
     ("dom" ~>
       exec (checkTypeVariables @@ var "tx" @@ var "dom") $
-      "types2" <~ Maps.insert (var "v") (var "dom") (Typing.typeContextTypes $ var "tx") $
-      "cod" <<~ typeOf @@ (Typing.typeContextWithTypes (var "tx") $ var "types2") @@ noTypeArgs  @@ var "body" $
+      "types2" <~ Maps.insert (var "v") (Rewriting.fTypeToTypeScheme @@ var "dom") (Graph.graphBoundTypes $ var "tx") $
+      "cod" <<~ typeOf @@ (Graph.graphWithBoundTypes (var "tx") $ var "types2") @@ noTypeArgs  @@ var "body" $
       exec (checkTypeVariables @@ var "tx" @@ var "cod") $
       Flows.pure $ Core.typeFunction $ Core.functionType (var "dom") (var "cod")) $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "tbody"
 
-typeOfLet :: TBinding (TypeContext -> [Type] -> Let -> Flow s Type)
+typeOfLet :: TBinding (Graph -> [Type] -> Let -> Flow s Type)
 typeOfLet = define "typeOfLet" $
   doc "Reconstruct the type of a let binding" $
   "tx" ~> "typeArgs" ~> "letTerm" ~>
@@ -504,15 +503,15 @@ typeOfLet = define "typeOfLet" $
       (Flows.fail $ Strings.cat $ list [
         string "untyped let binding: ",
         ShowCore.binding @@ var "b"])
-      ("ts" ~> Flows.pure $ Schemas.typeSchemeToFType @@ var "ts")
+      ("ts" ~> Flows.pure $ Rewriting.typeSchemeToFType @@ var "ts")
       (Core.bindingType $ var "b")) $
   -- Previously inferred types for each binding
   "btypes" <<~ Flows.mapList (var "bindingType") (var "bs") $
   -- Extended type context (note: new bindings override old ones)
-  "tx2" <~ (Typing.typeContextWithTypes (var "tx")
+  "tx2" <~ (Graph.graphWithBoundTypes (var "tx")
     (Maps.union
-      (Maps.fromList $ Lists.zip (var "bnames") (var "btypes"))
-      (Typing.typeContextTypes $ var "tx"))) $
+      (Maps.fromList $ Lists.zip (var "bnames") (Lists.map (Rewriting.fTypeToTypeScheme) $ var "btypes"))
+      (Graph.graphBoundTypes $ var "tx"))) $
   -- Note: We trust the declared binding types (btypes) and use them to type-check the body.
   -- Previously we also reconstructed types from terms and verified they match,
   -- but this fails for terms that lack type application wrappers (e.g. after hoisting).
@@ -520,7 +519,7 @@ typeOfLet = define "typeOfLet" $
   "t" <<~ typeOf @@ var "tx2" @@ noTypeArgs  @@ var "body" $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t"
 
-typeOfList :: TBinding (TypeContext -> [Type] -> [Term] -> Flow s Type)
+typeOfList :: TBinding (Graph -> [Type] -> [Term] -> Flow s Type)
 typeOfList = define "typeOfList" $
   doc "Reconstruct the type of a list" $
   "tx" ~> "typeArgs" ~> "els" ~>
@@ -538,14 +537,14 @@ typeOfList = define "typeOfList" $
        exec (checkTypeVariables @@ var "tx" @@ var "unifiedType") $
        Flows.pure $ Core.typeList $ var "unifiedType")
 
-typeOfLiteral :: TBinding (TypeContext -> [Type] -> Literal -> Flow s Type)
+typeOfLiteral :: TBinding (Graph -> [Type] -> Literal -> Flow s Type)
 typeOfLiteral = define "typeOfLiteral" $
   doc "Reconstruct the type of a literal" $
   "tx" ~> "typeArgs" ~> "lit" ~>
   "t" <~ Core.typeLiteral (Reflect.literalType @@ var "lit") $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t"
 
-typeOfMap :: TBinding (TypeContext -> [Type] -> M.Map Term Term -> Flow s Type)
+typeOfMap :: TBinding (Graph -> [Type] -> M.Map Term Term -> Flow s Type)
 typeOfMap = define "typeOfMap" $
   doc "Reconstruct the type of a map" $
   "tx" ~> "typeArgs" ~> "m" ~>
@@ -573,7 +572,7 @@ typeOfMap = define "typeOfMap" $
     -- Nonempty map must have keys and values of the same type
     (var "nonnull")
 
-typeOfMaybe :: TBinding (TypeContext -> [Type] -> Maybe Term -> Flow s Type)
+typeOfMaybe :: TBinding (Graph -> [Type] -> Maybe Term -> Flow s Type)
 typeOfMaybe = define "typeOfMaybe" $
   doc "Reconstruct the type of an optional value" $
   "tx" ~> "typeArgs" ~> "mt" ~>
@@ -592,7 +591,7 @@ typeOfMaybe = define "typeOfMaybe" $
     applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t") $
   optCases (var "mt") (var "forNothing") (var "forJust")
 
-typeOfPair :: TBinding (TypeContext -> [Type] -> (Term, Term) -> Flow s Type)
+typeOfPair :: TBinding (Graph -> [Type] -> (Term, Term) -> Flow s Type)
 typeOfPair = define "typeOfPair" $
   doc "Reconstruct the type of a pair" $
   "tx" ~> "typeArgs" ~> "p" ~>
@@ -610,26 +609,26 @@ typeOfPair = define "typeOfPair" $
   exec (checkTypeVariables @@ var "tx" @@ var "secondType") $
   Flows.pure $ Core.typePair $ Core.pairType (var "firstType") (var "secondType")
 
-typeOfPrimitive :: TBinding (TypeContext -> [Type] -> Name -> Flow s Type)
+typeOfPrimitive :: TBinding (Graph -> [Type] -> Name -> Flow s Type)
 typeOfPrimitive = define "typeOfPrimitive" $
   doc "Reconstruct the type of a primitive function" $
   "tx" ~> "typeArgs" ~> "name" ~>
   "ts" <<~ optCases
-    (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx"))
+    (Maps.lookup (var "name") (Graph.graphPrimitiveTypes $ var "tx"))
     (Flows.fail $ Strings.cat $ list [
       string "no such primitive: ",
       Core.unName $ var "name"])
     (Schemas.instantiateTypeScheme) $
-  "t" <~ Schemas.typeSchemeToFType @@ var "ts" $
+  "t" <~ Rewriting.typeSchemeToFType @@ var "ts" $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t"
 
-typeOfProjection :: TBinding (TypeContext -> [Type] -> Projection -> Flow s Type)
+typeOfProjection :: TBinding (Graph -> [Type] -> Projection -> Flow s Type)
 typeOfProjection = define "typeOfProjection" $
   doc "Reconstruct the type of a record projection" $
   "tx" ~> "typeArgs" ~> "p" ~>
   "tname" <~ Core.projectionTypeName (var "p") $
   "fname" <~ Core.projectionField (var "p") $
-  "schemaType" <<~ Schemas.requireSchemaType @@ Typing.typeContextInferenceContext (var "tx") @@ var "tname" $
+  "schemaType" <<~ Schemas.requireSchemaType @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
   "sfields" <<~ ExtractCore.recordType @@ var "tname" @@ var "sbody" $
@@ -640,7 +639,7 @@ typeOfProjection = define "typeOfProjection" $
     (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs")
     (var "sftyp")
 
-typeOfRecord :: TBinding (TypeContext -> [Type] -> Record -> Flow s Type)
+typeOfRecord :: TBinding (Graph -> [Type] -> Record -> Flow s Type)
 typeOfRecord = define "typeOfRecord" $
   doc "Reconstruct the type of a record" $
   "tx" ~> "typeArgs" ~> "record" ~>
@@ -655,7 +654,7 @@ typeOfRecord = define "typeOfRecord" $
 
   produce $ Schemas.nominalApplication @@ var "tname" @@ var "typeArgs"
 
-typeOfSet :: TBinding (TypeContext -> [Type] -> S.Set Term -> Flow s Type)
+typeOfSet :: TBinding (Graph -> [Type] -> S.Set Term -> Flow s Type)
 typeOfSet = define "typeOfSet" $
   doc "Reconstruct the type of a set" $
   "tx" ~> "typeArgs" ~> "els" ~>
@@ -673,7 +672,7 @@ typeOfSet = define "typeOfSet" $
        exec (checkTypeVariables @@ var "tx" @@ var "unifiedType") $
        produce $ Core.typeSet $ var "unifiedType")
 
-typeOfTypeApplication :: TBinding (TypeContext -> [Type] -> TypeApplicationTerm -> Flow s Type)
+typeOfTypeApplication :: TBinding (Graph -> [Type] -> TypeApplicationTerm -> Flow s Type)
 typeOfTypeApplication = define "typeOfTypeApplication" $
   doc "Reconstruct the type of a type application term" $
   "tx" ~> "typeArgs" ~> "tyapp" ~>
@@ -681,30 +680,30 @@ typeOfTypeApplication = define "typeOfTypeApplication" $
   "t" <~ Core.typeApplicationTermType (var "tyapp") $
   typeOf @@ var "tx" @@ Lists.cons (var "t") (var "typeArgs") @@ var "body"
 
-typeOfTypeLambda :: TBinding (TypeContext -> [Type] -> TypeLambda -> Flow s Type)
+typeOfTypeLambda :: TBinding (Graph -> [Type] -> TypeLambda -> Flow s Type)
 typeOfTypeLambda = define "typeOfTypeLambda" $
   doc "Reconstruct the type of a type lambda (type abstraction) term" $
   "tx" ~> "typeArgs" ~> "tl" ~>
   "v" <~ Core.typeLambdaParameter (var "tl") $
   "body" <~ Core.typeLambdaBody (var "tl") $
-  "vars" <~ Typing.typeContextTypeVariables (var "tx") $
-  "tx2" <~ Typing.typeContextWithTypeVariables (var "tx") (Sets.insert (var "v") (var "vars")) $
+  "vars" <~ Graph.graphTypeVariables (var "tx") $
+  "tx2" <~ Graph.graphWithTypeVariables (var "tx") (Sets.insert (var "v") (var "vars")) $
   "t1" <<~ typeOf @@ var "tx2" @@ noTypeArgs  @@ var "body" $
   exec (checkTypeVariables @@ var "tx2" @@ var "t1") $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs"
     @@ (Core.typeForall $ Core.forallType (var "v") (var "t1"))
 
-typeOfUnit :: TBinding (TypeContext -> [Type] -> Flow s Type)
+typeOfUnit :: TBinding (Graph -> [Type] -> Flow s Type)
 typeOfUnit = define "typeOfUnit" $
   doc "Reconstruct the type of the unit term" $
   "tx" ~> "typeArgs" ~>
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ Core.typeUnit
 
-typeOfUnwrap :: TBinding (TypeContext -> [Type] -> Name -> Flow s Type)
+typeOfUnwrap :: TBinding (Graph -> [Type] -> Name -> Flow s Type)
 typeOfUnwrap = define "typeOfUnwrap" $
   doc "Reconstruct the type of an unwrap operation" $
   "tx" ~> "typeArgs" ~> "tname" ~>
-  "schemaType" <<~ Schemas.requireSchemaType @@ Typing.typeContextInferenceContext (var "tx") @@ var "tname" $
+  "schemaType" <<~ Schemas.requireSchemaType @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
   "wrapped" <<~ ExtractCore.wrappedType @@ var "tname" @@ var "sbody" $
@@ -714,25 +713,27 @@ typeOfUnwrap = define "typeOfUnwrap" $
     (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs")
     (var "swrapped")
 
-typeOfVariable :: TBinding (TypeContext -> [Type] -> Name -> Flow s Type)
+typeOfVariable :: TBinding (Graph -> [Type] -> Name -> Flow s Type)
 typeOfVariable = define "typeOfVariable" $
   doc "Reconstruct the type of a variable" $
   "tx" ~> "typeArgs" ~> "name" ~>
-  "rawType" <~ Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx") $
+  "rawTypeScheme" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx") $
   "failMsg" <~ Flows.fail (Strings.cat $ list [
       string "unbound variable: ",
       Core.unName $ var "name",
       string ". Variables: {",
-      Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Typing.typeContextTypes $ var "tx"),
+      Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
       string "}"]) $
-  "t" <<~ optCases (var "rawType")
+  "t" <<~ optCases (var "rawTypeScheme")
     (var "failMsg")
-    ("t" ~> Logic.ifElse (Lists.null $ var "typeArgs")
-      (Schemas.instantiateType @@ var "t")
-      (Flows.pure $ var "t")) $
+    ("ts" ~>
+      "t" <~ Rewriting.typeSchemeToFType @@ var "ts" $
+      Logic.ifElse (Lists.null $ var "typeArgs")
+        (Schemas.instantiateType @@ var "t")
+        (Flows.pure $ var "t")) $
   applyTypeArgumentsToType @@ var "tx" @@ var "typeArgs" @@ var "t"
 
-typeOfWrappedTerm :: TBinding (TypeContext -> [Type] -> WrappedTerm -> Flow s Type)
+typeOfWrappedTerm :: TBinding (Graph -> [Type] -> WrappedTerm -> Flow s Type)
 typeOfWrappedTerm = define "typeOfWrappedTerm" $
   doc "Reconstruct the type of a wrapped term" $
   "tx" ~> "typeArgs" ~> "wt" ~>
@@ -759,12 +760,12 @@ normalizeTypeFreeVars = define "normalizeTypeFreeVars" $
   "subst" <~ Rewriting.foldOverType @@ Coders.traversalOrderPre @@ var "collectVars" @@ Maps.empty @@ var "typ" $
   Rewriting.substituteTypeVariables @@ var "subst" @@ var "typ"
 
-typesAllEffectivelyEqual :: TBinding (TypeContext -> [Type] -> Bool)
+typesAllEffectivelyEqual :: TBinding (Graph -> [Type] -> Bool)
 typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
   doc ("Check whether a list of types are effectively equal, disregarding type aliases and free type variable naming."
     <> " Also treats free type variables (not in schema) as wildcards, since inference has already verified consistency.") $
   "tx" ~> "tlist" ~>
-  "types" <~ Typing.inferenceContextSchemaTypes (Typing.typeContextInferenceContext $ var "tx") $
+  "types" <~ (Graph.graphSchemaTypes $ var "tx") $
   "containsFreeVar" <~ ("t" ~>
     "allVars" <~ Rewriting.freeVariablesInTypeSimple @@ var "t" $
     "schemaNames" <~ Sets.fromList (Maps.keys $ var "types") $
@@ -776,16 +777,16 @@ typesAllEffectivelyEqual = define "typesAllEffectivelyEqual" $
       true
       (allEqual @@ (Lists.map ("t" ~> normalizeTypeFreeVars @@ (Rewriting.deannotateTypeRecursive @@ (Rewriting.replaceTypedefs @@ var "types" @@ var "t"))) (var "tlist"))))
 
--- | Check if a type contains any type variable that's in scope (from typeContextTypeVariables)
-containsInScopeTypeVars :: TBinding (TypeContext -> Type -> Bool)
+-- | Check if a type contains any type variable that's in scope (from graphTypeVariables)
+containsInScopeTypeVars :: TBinding (Graph -> Type -> Bool)
 containsInScopeTypeVars = define "containsInScopeTypeVars" $
   doc "Check if a type contains any type variable from the current scope" $
   "tx" ~> "t" ~>
-  "vars" <~ Typing.typeContextTypeVariables (var "tx") $
+  "vars" <~ Graph.graphTypeVariables (var "tx") $
   "freeVars" <~ Rewriting.freeVariablesInTypeSimple @@ var "t" $
   Logic.not $ Sets.null $ Sets.intersection (var "vars") (var "freeVars")
 
-typesEffectivelyEqual :: TBinding (TypeContext -> Type -> Type -> Bool)
+typesEffectivelyEqual :: TBinding (Graph -> Type -> Type -> Bool)
 typesEffectivelyEqual = define "typesEffectivelyEqual" $
   doc "Check whether two types are effectively equal, disregarding type aliases, forall quantifiers, and treating in-scope type variables as wildcards" $
   "tx" ~> "t1" ~> "t2" ~>

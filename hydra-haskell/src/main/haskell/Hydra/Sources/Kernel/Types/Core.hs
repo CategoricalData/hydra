@@ -7,6 +7,8 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
 
+import qualified Data.Map as M
+
 
 ns :: Namespace
 ns = Namespace "hydra.core"
@@ -15,7 +17,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 hydraCoreGraph :: Graph
-hydraCoreGraph = elementsToGraph bootstrapGraph Nothing (moduleElements module_)
+hydraCoreGraph = elementsToGraph bootstrapGraph M.empty (moduleElements module_)
 
 module_ :: Module
 module_ = Module ns elements [] [ns] $ -- Note: hydra.core uniquely takes itself as a type-level dependency

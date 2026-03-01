@@ -21,35 +21,10 @@ module_ = Module ns elements [Core.ns] [Core.ns] $
   where
     elements = [
       functionStructure,
-      inferenceContext,
       inferenceResult,
       termSubst,
       typeConstraint,
-      typeContext,
       typeSubst]
-
-inferenceContext :: Binding
-inferenceContext = define "InferenceContext" $
-  doc "The context provided to type inference, including various typing environments." $
-  T.record [
-    "schemaTypes">:
-      doc "A fixed typing environment which is derived from the schema of the graph." $
-      T.map Core.name Core.typeScheme,
-    "primitiveTypes">:
-      doc "A fixed typing environment which is derived from the set of primitives in the graph." $
-      T.map Core.name Core.typeScheme,
-    "dataTypes">:
-      doc ("A mutable typing environment which is specific to the current graph being processed."
-        ++ " This environment is (usually) smaller than the schema and primitive typing environments,"
-        ++ " and is subject to global substitutions.") $
-      T.map Core.name Core.typeScheme,
-    "classConstraints">:
-      doc ("A mutable map from type variable names to their accumulated class constraints."
-        ++ " This is populated during type inference when operations requiring Eq or Ord are encountered.") $
-      T.map Core.name Core.typeVariableMetadata,
-    "debug">:
-      doc "Whether to enable debug output during type inference"
-      T.boolean]
 
 inferenceResult :: Binding
 inferenceResult = define "InferenceResult" $
@@ -86,29 +61,6 @@ typeConstraint = define "TypeConstraint" $
     "comment">:
       doc "A description of the type constraint which may be used for tracing or debugging"
       T.string]
-
-typeContext :: Binding
-typeContext = define "TypeContext" $
-  doc "A typing environment used for type reconstruction (typeOf) over System F terms" $
-  T.record [
-    "types">:
-      doc "A mapping of lambda- and let-bound variables to their types" $
-      T.map Core.name Core.type_,
-    "metadata">:
-      doc "Any additional metadata about lambda- and let-bound variables" $
-      T.map Core.name Core.term,
-    "typeVariables">:
-      doc "The set of type variables introduced by enclosing type lambdas" $
-      T.set Core.name,
-    "lambdaVariables">:
-      doc "The set of term variables introduced by lambdas (even if untyped)" $
-      T.set Core.name,
-    "letVariables">:
-      doc "The set of term variables introduced by let bindings (even if untyped)" $
-      T.set Core.name,
-    "inferenceContext">:
-      doc "The schema types, primitive types, and data types of the graph"
-      inferenceContext]
 
 typeSubst :: Binding
 typeSubst = define "TypeSubst" $

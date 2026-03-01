@@ -10,56 +10,8 @@ import Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 
 import qualified Data.Map as M
-import qualified Data.Set as S
-import qualified Data.Maybe as Y
-import Data.Int
 import Prelude hiding (map, product, sum)
 
-
-inferenceContext
-  :: TTerm (M.Map Name TypeScheme)
-  -> TTerm (M.Map Name TypeScheme)
-  -> TTerm (M.Map Name TypeScheme)
-  -> TTerm (M.Map Name TypeVariableMetadata)
-  -> TTerm Bool
-  -> TTerm InferenceContext
-inferenceContext schemaTypes primitiveTypes dataTypes classConstraints debug = Phantoms.record _InferenceContext [
-  _InferenceContext_schemaTypes>>: schemaTypes,
-  _InferenceContext_primitiveTypes>>: primitiveTypes,
-  _InferenceContext_dataTypes>>: dataTypes,
-  _InferenceContext_classConstraints>>: classConstraints,
-  _InferenceContext_debug>>: debug]
-
-inferenceContextSchemaTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme)
-inferenceContextSchemaTypes ic = Phantoms.project _InferenceContext _InferenceContext_schemaTypes @@ ic
-
-inferenceContextPrimitiveTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme)
-inferenceContextPrimitiveTypes ic = Phantoms.project _InferenceContext _InferenceContext_primitiveTypes @@ ic
-
-inferenceContextDataTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme)
-inferenceContextDataTypes ic = Phantoms.project _InferenceContext _InferenceContext_dataTypes @@ ic
-
-inferenceContextClassConstraints :: TTerm InferenceContext -> TTerm (M.Map Name TypeVariableMetadata)
-inferenceContextClassConstraints ic = Phantoms.project _InferenceContext _InferenceContext_classConstraints @@ ic
-
-inferenceContextDebug :: TTerm InferenceContext -> TTerm Bool
-inferenceContextDebug ic = Phantoms.project _InferenceContext _InferenceContext_debug @@ ic
-
-inferenceContextWithDataTypes :: TTerm InferenceContext -> TTerm (M.Map Name TypeScheme) -> TTerm InferenceContext
-inferenceContextWithDataTypes ctx dataTypes = inferenceContext
-  (Hydra.Dsl.Meta.Typing.inferenceContextSchemaTypes ctx)
-  (Hydra.Dsl.Meta.Typing.inferenceContextPrimitiveTypes ctx)
-  dataTypes
-  (Hydra.Dsl.Meta.Typing.inferenceContextClassConstraints ctx)
-  (Hydra.Dsl.Meta.Typing.inferenceContextDebug ctx)
-
-inferenceContextWithClassConstraints :: TTerm InferenceContext -> TTerm (M.Map Name TypeVariableMetadata) -> TTerm InferenceContext
-inferenceContextWithClassConstraints ctx classConstraints = inferenceContext
-  (Hydra.Dsl.Meta.Typing.inferenceContextSchemaTypes ctx)
-  (Hydra.Dsl.Meta.Typing.inferenceContextPrimitiveTypes ctx)
-  (Hydra.Dsl.Meta.Typing.inferenceContextDataTypes ctx)
-  classConstraints
-  (Hydra.Dsl.Meta.Typing.inferenceContextDebug ctx)
 
 inferenceResult :: AsTerm t TypeSubst => TTerm Term -> TTerm Type -> t -> TTerm (M.Map Name TypeVariableMetadata) -> TTerm InferenceResult
 inferenceResult term type_ subst classConstraints = Phantoms.record _InferenceResult [
@@ -97,78 +49,6 @@ typeConstraintRight tc = Phantoms.project _TypeConstraint _TypeConstraint_right 
 
 typeConstraintComment :: TTerm TypeConstraint -> TTerm String
 typeConstraintComment tc = Phantoms.project _TypeConstraint _TypeConstraint_comment @@ tc
-
-typeContext :: TTerm (M.Map Name Type) -> TTerm (M.Map Name Term) -> TTerm (S.Set Name) -> TTerm (S.Set Name) -> TTerm (S.Set Name) -> TTerm InferenceContext -> TTerm TypeContext
-typeContext types metadata typeVariables lambdaVariables letVariables inferenceContext = Phantoms.record _TypeContext [
-  _TypeContext_types>>: types,
-  _TypeContext_metadata>>: metadata,
-  _TypeContext_typeVariables>>: typeVariables,
-  _TypeContext_lambdaVariables>>: lambdaVariables,
-  _TypeContext_letVariables>>: letVariables,
-  _TypeContext_inferenceContext>>: inferenceContext]
-
-typeContextTypes :: TTerm TypeContext -> TTerm (M.Map Name Type)
-typeContextTypes tc = Phantoms.project _TypeContext _TypeContext_types @@ tc
-
-typeContextMetadata :: TTerm TypeContext -> TTerm (M.Map Name Term)
-typeContextMetadata tc = Phantoms.project _TypeContext _TypeContext_metadata @@ tc
-
-typeContextTypeVariables :: TTerm TypeContext -> TTerm (S.Set Name)
-typeContextTypeVariables tc = Phantoms.project _TypeContext _TypeContext_typeVariables @@ tc
-
-typeContextLambdaVariables :: TTerm TypeContext -> TTerm (S.Set Name)
-typeContextLambdaVariables tc = Phantoms.project _TypeContext _TypeContext_lambdaVariables @@ tc
-
-typeContextLetVariables :: TTerm TypeContext -> TTerm (S.Set Name)
-typeContextLetVariables tc = Phantoms.project _TypeContext _TypeContext_letVariables @@ tc
-
-typeContextInferenceContext :: TTerm TypeContext -> TTerm InferenceContext
-typeContextInferenceContext tc = Phantoms.project _TypeContext _TypeContext_inferenceContext @@ tc
-
-typeContextWithTypes :: TTerm TypeContext -> TTerm (M.Map Name Type) -> TTerm TypeContext
-typeContextWithTypes ctx types = typeContext
-  types
-  (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextTypeVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextLambdaVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextLetVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
-
-typeContextWithMetadata :: TTerm TypeContext -> TTerm (M.Map Name Term) -> TTerm TypeContext
-typeContextWithMetadata ctx metadata = typeContext
-  (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
-  metadata
-  (Hydra.Dsl.Meta.Typing.typeContextTypeVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextLambdaVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextLetVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
-
-typeContextWithTypeVariables :: TTerm TypeContext -> TTerm (S.Set Name) -> TTerm TypeContext
-typeContextWithTypeVariables ctx typeVariables = typeContext
-  (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
-  typeVariables
-  (Hydra.Dsl.Meta.Typing.typeContextLambdaVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextLetVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
-
-typeContextWithLambdaVariables :: TTerm TypeContext -> TTerm (S.Set Name) -> TTerm TypeContext
-typeContextWithLambdaVariables ctx lambdaVariables = typeContext
-  (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextTypeVariables ctx)
-  lambdaVariables
-  (Hydra.Dsl.Meta.Typing.typeContextLetVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
-
-typeContextWithLetVariables :: TTerm TypeContext -> TTerm (S.Set Name) -> TTerm TypeContext
-typeContextWithLetVariables ctx letVariables = typeContext
-  (Hydra.Dsl.Meta.Typing.typeContextTypes ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextMetadata ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextTypeVariables ctx)
-  (Hydra.Dsl.Meta.Typing.typeContextLambdaVariables ctx)
-  letVariables
-  (Hydra.Dsl.Meta.Typing.typeContextInferenceContext ctx)
 
 typeSubst :: TTerm (M.Map Name Type) -> TTerm TypeSubst
 typeSubst = Phantoms.wrap _TypeSubst

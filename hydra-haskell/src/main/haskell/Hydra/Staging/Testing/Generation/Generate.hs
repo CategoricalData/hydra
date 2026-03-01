@@ -146,7 +146,7 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
       let graph = modulesToGraph (mainModules ++ testModules) $ modules ++ extraModules
 
       -- Generate using the provided test generator, writing files incrementally
-      result <- runFlowWithGraph graph $ generateAllModuleTestsIncremental testGen outDir moduleTestPairs writeFilePair
+      result <- runFlowWithGraph (graph) $ generateAllModuleTestsIncremental testGen graph outDir moduleTestPairs writeFilePair
 
       case result of
         Left trace -> do
@@ -179,15 +179,14 @@ runFlowWithGraph s f = do
 
 -- | Generate all test files using the provided test generator
 -- Returns a list of (FilePath, content) pairs
-generateAllModuleTests :: TestGenerator a -> FilePath -> [(Module, TestGroup)] -> Flow Graph [(FilePath, String)]
-generateAllModuleTests testGen baseDir modulePairs = do
+generateAllModuleTests :: TestGenerator a -> Graph -> FilePath -> [(Module, TestGroup)] -> Flow Graph [(FilePath, String)]
+generateAllModuleTests testGen graph0 baseDir modulePairs = do
   -- Perform type inference ONCE upfront for the entire graph
   -- This is critical for performance: inferGraphTypes is expensive and should not be called per-module
-  g0 <- getState
   trace ("Starting type inference...") $ return ()
-  g <- Inference.inferGraphTypes g0
+  (g, _inferredBindings) <- Inference.inferGraphTypes (graphToBindings graph0) graph0
   trace ("Type inference complete. Generating " ++ show (length modulePairs) ++ " module(s)...") $ return ()
-  putState g
+  putState (g)
 
   files <- mapM (generateModuleTestWithProgress testGen baseDir) (zip [1..] modulePairs)
   -- Generate an aggregator file if the generator provides one
@@ -201,14 +200,13 @@ generateAllModuleTests testGen baseDir modulePairs = do
 -- 1. The IO is idempotent (writing the same file twice produces the same result)
 -- 2. The ordering doesn't affect the final result
 -- Returns the count of files generated
-generateAllModuleTestsIncremental :: TestGenerator a -> FilePath -> [(Module, TestGroup)] -> ((FilePath, String) -> IO ()) -> Flow Graph Int
-generateAllModuleTestsIncremental testGen baseDir modulePairs writeFile = do
+generateAllModuleTestsIncremental :: TestGenerator a -> Graph -> FilePath -> [(Module, TestGroup)] -> ((FilePath, String) -> IO ()) -> Flow Graph Int
+generateAllModuleTestsIncremental testGen graph0 baseDir modulePairs writeFile = do
   -- Perform type inference ONCE upfront for the entire graph
-  g0 <- getState
   trace ("Starting type inference...") $ return ()
-  g <- Inference.inferGraphTypes g0
+  (g, _inferredBindings) <- Inference.inferGraphTypes (graphToBindings graph0) graph0
   trace ("Type inference complete. Generating " ++ show (length modulePairs) ++ " module(s)...") $ return ()
-  putState g
+  putState (g)
 
   -- Generate files one at a time, writing each immediately
   -- Strict: any failure stops generation

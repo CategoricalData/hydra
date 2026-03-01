@@ -20,6 +20,7 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
+import qualified Hydra.Dsl.Meta.Graph as Graph
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 
@@ -28,9 +29,7 @@ import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 testTrace :: TTerm Term
 testTrace = metaref Monads.emptyTrace
 
--- | Test state for Flow-based tests (using Graph as the state type, since
--- functions like getTermDescription return Flow Graph ...)
--- Note: the type is TTerm Term because at the meta level, everything is a Term
+-- | Test state for Flow-based tests (must be a Graph value to match Flow Graph signatures)
 testState :: TTerm Term
 testState = metaref Lexical.emptyGraph
 

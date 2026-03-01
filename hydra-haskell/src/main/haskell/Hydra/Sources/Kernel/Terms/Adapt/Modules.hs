@@ -142,7 +142,7 @@ transformModule = define "transformModule" $
   "lang" ~> "encodeTerm" ~> "createModule" ~> "mod" ~>
   "els" <~ Module.moduleElements (var "mod") $
   "transform" <~ (
-    "tterms" <<~ Lexical.withSchemaContext @@ (Flows.mapList (Schemas.elementAsTypeApplicationTerm) (var "els")) $
+    "tterms" <<~ Flows.mapList (Schemas.elementAsTypeApplicationTerm) (var "els") $
     "types" <~ Lists.nub (Lists.map (unaryFunction Core.typeApplicationTermType) (var "tterms")) $
     "cdrs" <<~ Flows.mapList (constructCoder @@ var "lang" @@ var "encodeTerm") (var "types") $
     "coders" <~ Maps.fromList (Lists.zip (var "types") (var "cdrs")) $
@@ -154,7 +154,7 @@ adaptedModuleDefinitions :: TBinding (Language -> Module -> Flow Graph [Definiti
 adaptedModuleDefinitions = define "adaptedModuleDefinitions" $
   doc "Map a Hydra module to a list of type and/or term definitions which have been adapted to the target language" $
   "lang" ~> "mod" ~>
-  "cx" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   "els" <~ Module.moduleElements (var "mod") $
   "adaptersFor" <~ lambda "types" (
     "adapters" <<~ Flows.mapList (languageAdapter @@ var "lang") (var "types") $
@@ -167,7 +167,7 @@ adaptedModuleDefinitions = define "adaptedModuleDefinitions" $
     "name" <~ Core.bindingName (var "el") $
     Logic.ifElse (Annotations.isNativeType @@ var "el")
       ("adaptedTyp" <<~ (
-        "coreTyp" <<~ (trace (string "adapt module definitions") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ var "term")) $
+        "coreTyp" <<~ (trace (string "adapt module definitions") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "term")) $
         adaptTypeToLanguage @@ var "lang" @@ var "coreTyp") $
        produce $ Module.definitionType $ Module.typeDefinition (var "name") (var "adaptedTyp"))
       (Maybes.maybe
@@ -176,7 +176,7 @@ adaptedModuleDefinitions = define "adaptedModuleDefinitions" $
           "adapted" <<~ Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "term" $
           produce $ Module.definitionTerm $ Module.termDefinition (var "name") (var "adapted") (Schemas.typeToTypeScheme @@ (Compute.adapterTarget $ var "adapter"))))
         (Maps.lookup (var "typ") (var "adapters")))) $
-  "tterms" <<~ Lexical.withSchemaContext @@ (Flows.mapList (Schemas.elementAsTypeApplicationTerm) (var "els")) $
+  "tterms" <<~ Flows.mapList (Schemas.elementAsTypeApplicationTerm) (var "els") $
   "types" <~ Sets.toList (Sets.fromList (Lists.map (Rewriting.deannotateType <.> unaryFunction Core.typeApplicationTermType) (var "tterms"))) $
   "adapters" <<~ var "adaptersFor" @@ var "types" $
   Flows.mapList (var "classify" @@ var "adapters") (Lists.zip (var "els") (var "tterms"))
