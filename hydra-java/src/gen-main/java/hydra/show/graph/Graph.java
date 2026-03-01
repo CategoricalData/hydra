@@ -6,8 +6,7 @@ package hydra.show.graph;
  * String representations of hydra.graph types
  */
 public interface Graph {
-  static String graph(hydra.graph.Graph graph) {
-    java.util.List<hydra.core.Binding> elements = (graph).elements;
+  static String graph(java.util.List<hydra.core.Binding> elements) {
     hydra.util.Lazy<java.util.List<String>> elementStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       hydra.show.core.Core::binding,
       elements));

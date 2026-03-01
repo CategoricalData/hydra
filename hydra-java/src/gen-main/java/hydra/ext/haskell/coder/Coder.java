@@ -188,11 +188,11 @@ public interface Coder {
                   return hydra.lib.flows.Bind.apply(
                     hydra.monads.Monads.<hydra.graph.Graph>getState(),
                     (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Alternative>>) (g_ufr -> {
-                      hydra.ext.haskell.ast.Name hname = hydra.ext.haskell.utils.Utils.unionFieldReference(
-                        g_ufr,
+                      hydra.util.Lazy<hydra.ext.haskell.ast.Name> hname = new hydra.util.Lazy<>(() -> hydra.ext.haskell.utils.Utils.unionFieldReference(
+                        hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((g_ufr).boundTerms)),
                         namespaces,
                         dn,
-                        fn);
+                        fn));
                       return hydra.lib.flows.Bind.apply(
                         hydra.lib.maybes.Cases.apply(
                           hydra.lib.maps.Lookup.apply(
@@ -221,7 +221,7 @@ public interface Coder {
                           })),
                         (java.util.function.Function<java.util.List<hydra.ext.haskell.ast.Pattern>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Alternative>>) (args -> {
                           hydra.ext.haskell.ast.Pattern lhs = hydra.ext.haskell.utils.Utils.applicationPattern(
-                            hname,
+                            hname.get(),
                             args);
                           return hydra.lib.flows.Bind.apply(
                             hydra.lib.flows.Map.apply(
@@ -235,7 +235,7 @@ public interface Coder {
                 }));
             }));
             hydra.util.Lazy<hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Expression>> caseExpr = new hydra.util.Lazy<>(() -> hydra.lib.flows.Bind.apply(
-              hydra.lexical.Lexical.withSchemaContext(hydra.schemas.Schemas.requireUnionType(dn)),
+              hydra.schemas.Schemas.requireUnionType(dn),
               (java.util.function.Function<hydra.core.RowType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Expression>>) (rt -> {
                 java.util.function.Function<hydra.core.FieldType, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.FieldType>> toFieldMapEntry = (java.util.function.Function<hydra.core.FieldType, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.FieldType>>) (f -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.FieldType>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.FieldType>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.FieldType>((f).name, f))));
                 hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.FieldType>> fieldMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
@@ -610,14 +610,14 @@ public interface Coder {
         return hydra.lib.flows.Bind.apply(
           hydra.monads.Monads.<hydra.graph.Graph>getState(),
           (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Expression>>) (g_ufr2 -> {
-            hydra.ext.haskell.ast.Expression lhs = new hydra.ext.haskell.ast.Expression.Variable(hydra.ext.haskell.utils.Utils.unionFieldReference(
-              g_ufr2,
+            hydra.util.Lazy<hydra.ext.haskell.ast.Expression> lhs = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.ast.Expression.Variable(hydra.ext.haskell.utils.Utils.unionFieldReference(
+              hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((g_ufr2).boundTerms)),
               namespaces,
               sname,
-              fn));
+              fn)));
             hydra.util.Lazy<hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Expression>> dflt = new hydra.util.Lazy<>(() -> hydra.lib.flows.Map.apply(
               (java.util.function.Function<hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.Expression>) (v1 -> hydra.ext.haskell.utils.Utils.hsapp(
-                lhs,
+                lhs.get(),
                 v1)),
               (encode).apply(ft)));
             return hydra.lib.flows.Bind.apply(
@@ -632,7 +632,7 @@ public interface Coder {
                 
                 @Override
                 public hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Expression> visit(hydra.core.Type.Unit ignored) {
-                  return hydra.lib.flows.Pure.apply(lhs);
+                  return hydra.lib.flows.Pure.apply(lhs.get());
                 }
               })));
           }));
@@ -1072,7 +1072,7 @@ public interface Coder {
       }));
   }
   
-  static <T0> java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> nameDecls(T0 g, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name name, hydra.core.Type typ) {
+  static java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> nameDecls(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name name, hydra.core.Type typ) {
     java.util.function.Function<hydra.core.FieldType, hydra.util.Tuple.Tuple2<String, String>> toConstant = (java.util.function.Function<hydra.core.FieldType, hydra.util.Tuple.Tuple2<String, String>>) (fieldType -> {
       hydra.core.Name fname = (fieldType).name;
       return (hydra.util.Tuple.Tuple2<String, String>) ((hydra.util.Tuple.Tuple2<String, String>) (new hydra.util.Tuple.Tuple2<String, String>(hydra.ext.haskell.coder.Coder.constantForFieldName(
@@ -1271,16 +1271,14 @@ public interface Coder {
           fields),
         (java.util.function.Function<java.util.List<hydra.ext.haskell.ast.FieldWithComments>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>) (hFields -> hydra.lib.flows.Pure.apply(new hydra.ext.haskell.ast.ConstructorWithComments(new hydra.ext.haskell.ast.Constructor.Record(new hydra.ext.haskell.ast.RecordConstructor(hydra.ext.haskell.utils.Utils.simpleName(lname_), hFields)), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))));
     }));
-    java.util.function.Function<hydra.graph.Graph, java.util.function.Function<String, java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>>> unionCons = (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<String, java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>>>) (g_ -> (java.util.function.Function<String, java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>>) (lname_ -> (java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>) (fieldType -> {
+    java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<String, java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>>> unionCons = (java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<String, java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>>>) (boundNames_ -> (java.util.function.Function<String, java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>>) (lname_ -> (java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>) (fieldType -> {
       java.util.concurrent.atomic.AtomicReference<java.util.function.Function<String, String>> deconflict = new java.util.concurrent.atomic.AtomicReference<>();
       deconflict.set((java.util.function.Function<String, String>) (name -> {
         hydra.util.Lazy<hydra.core.Name> tname = new hydra.util.Lazy<>(() -> hydra.names.Names.unqualifyName(new hydra.module.QualifiedName(hydra.util.Maybe.just(hydra.lib.pairs.First.apply(((java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>>) (projected -> projected.focus)).apply(namespaces))), name)));
         return hydra.lib.logic.IfElse.lazy(
-          hydra.lib.maybes.IsJust.apply(hydra.lib.lists.Find.apply(
-            (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
-              (b).name,
-              tname.get())),
-            (g_).elements)),
+          hydra.lib.sets.Member.apply(
+            tname.get(),
+            boundNames_),
           () -> (deconflict.get()).apply(hydra.lib.strings.Cat2.apply(
             name,
             "_")),
@@ -1327,12 +1325,10 @@ public interface Coder {
                   "Read",
                   "Show")),
               () -> (java.util.List<hydra.ext.haskell.ast.Name>) (java.util.List.<hydra.ext.haskell.ast.Name>of()))));
-            hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type>> unpackResult = new hydra.util.Lazy<>(() -> hydra.ext.haskell.utils.Utils.unpackForallType(
-              g,
-              typ));
-            hydra.util.Lazy<java.util.List<hydra.core.Name>> vars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(unpackResult.get()));
+            hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type> unpackResult = hydra.ext.haskell.utils.Utils.unpackForallType(typ);
+            hydra.util.Lazy<java.util.List<hydra.core.Name>> vars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(unpackResult));
             hydra.util.Lazy<hydra.ext.haskell.ast.DeclarationHead> hd = new hydra.util.Lazy<>(() -> ((declHead.get()).apply(hname)).apply(hydra.lib.lists.Reverse.apply(vars.get())));
-            hydra.util.Lazy<hydra.core.Type> t_ = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(unpackResult.get()));
+            hydra.util.Lazy<hydra.core.Type> t_ = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(unpackResult));
             return hydra.lib.flows.Bind.apply(
               (hydra.rewriting.Rewriting.deannotateType(t_.get())).accept(new hydra.core.Type.PartialVisitor<>() {
                 @Override
@@ -1355,7 +1351,7 @@ public interface Coder {
                 public hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Declaration> visit(hydra.core.Type.Union rt) {
                   return hydra.lib.flows.Bind.apply(
                     hydra.lib.flows.MapList.apply(
-                      (java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>) (v1 -> (((unionCons).apply(g)).apply(lname)).apply(v1)),
+                      (java.util.function.Function<hydra.core.FieldType, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.ConstructorWithComments>>) (v1 -> (((unionCons).apply(hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((g).boundTerms)))).apply(lname)).apply(v1)),
                       ((rt).value).fields),
                     (java.util.function.Function<java.util.List<hydra.ext.haskell.ast.ConstructorWithComments>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.haskell.ast.Declaration>>) (cons -> hydra.lib.flows.Pure.apply(new hydra.ext.haskell.ast.Declaration.Data(new hydra.ext.haskell.ast.DataDeclaration(new hydra.ext.haskell.ast.DataOrNewtype.Data(), (java.util.List<hydra.ext.haskell.ast.Assertion>) (java.util.List.<hydra.ext.haskell.ast.Assertion>of()), hd.get(), cons, java.util.List.of(deriv.get()))))));
                 }
@@ -1382,14 +1378,13 @@ public interface Coder {
                     () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>) (java.util.List.<hydra.ext.haskell.ast.DeclarationWithComments>of()))),
                   (java.util.function.Function<java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>>>) (tdecls -> {
                     hydra.ext.haskell.ast.DeclarationWithComments mainDecl = new hydra.ext.haskell.ast.DeclarationWithComments(decl, comments);
-                    hydra.util.Lazy<java.util.List<hydra.ext.haskell.ast.DeclarationWithComments>> nameDecls_ = new hydra.util.Lazy<>(() -> hydra.ext.haskell.coder.Coder.nameDecls(
-                      g,
+                    java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> nameDecls_ = hydra.ext.haskell.coder.Coder.nameDecls(
                       namespaces,
                       elementName,
-                      typ));
+                      typ);
                     return hydra.lib.flows.Pure.apply(hydra.lib.lists.Concat.apply(java.util.List.of(
                       java.util.List.of(mainDecl),
-                      nameDecls_.get(),
+                      nameDecls_,
                       tdecls)));
                   }))))));
           })))));

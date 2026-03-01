@@ -311,6 +311,24 @@ public interface Rewriting {
     });
   }
   
+  static hydra.core.TypeScheme fTypeToTypeScheme(hydra.core.Type typ) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>> gatherForall = new java.util.concurrent.atomic.AtomicReference<>();
+    gatherForall.set((java.util.function.Function<java.util.List<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>) (vars -> (java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>) (typ2 -> (hydra.rewriting.Rewriting.deannotateType(typ2)).accept(new hydra.core.Type.PartialVisitor<>() {
+      @Override
+      public hydra.core.TypeScheme otherwise(hydra.core.Type instance) {
+        return new hydra.core.TypeScheme(hydra.lib.lists.Reverse.apply(vars), typ2, (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()));
+      }
+      
+      @Override
+      public hydra.core.TypeScheme visit(hydra.core.Type.Forall ft) {
+        return ((gatherForall.get()).apply(hydra.lib.lists.Cons.apply(
+          ((ft).value).parameter,
+          vars))).apply(((ft).value).body);
+      }
+    }))));
+    return ((gatherForall.get()).apply((java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()))).apply(typ);
+  }
+  
   static java.util.Set<hydra.core.Name> freeTypeVariablesInTerm(hydra.core.Term term0) {
     java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>>> tryType = (java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>>>) (tvars -> (java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>>) (typ -> hydra.lib.sets.Difference.apply(
       hydra.rewriting.Rewriting.freeVariablesInType(typ),
@@ -4490,6 +4508,15 @@ public interface Rewriting {
       addNames,
       (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
       typ0);
+  }
+  
+  static hydra.core.Type typeSchemeToFType(hydra.core.TypeScheme ts) {
+    hydra.core.Type body = (ts).type;
+    java.util.List<hydra.core.Name> vars = (ts).variables;
+    return hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.core.Name, hydra.core.Type>>) (t -> (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (v -> new hydra.core.Type.Forall(new hydra.core.ForallType(v, t)))),
+      body,
+      hydra.lib.lists.Reverse.apply(vars));
   }
   
   static hydra.core.Term unshadowVariables(hydra.core.Term term0) {

@@ -738,7 +738,7 @@ public interface Coder {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     return new hydra.ext.java.helpers.JavaEnvironment(new hydra.ext.java.helpers.Aliases((aliases).currentNamespace, (aliases).packages, hydra.lib.sets.Insert.apply(
       name,
-      (aliases).branchVars), (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, (aliases).inScopeJavaVars, (aliases).varRenames, (aliases).lambdaVars, (aliases).typeVarSubst, (aliases).trustedTypeVars, (aliases).methodCodomain, (aliases).thunkedVars), (env).typeContext);
+      (aliases).branchVars), (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, (aliases).inScopeJavaVars, (aliases).varRenames, (aliases).lambdaVars, (aliases).typeVarSubst, (aliases).trustedTypeVars, (aliases).methodCodomain, (aliases).thunkedVars), (env).graph);
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type> getCodomain(java.util.Map<hydra.core.Name, hydra.core.Term> ann) {
@@ -1375,40 +1375,38 @@ public interface Coder {
         () -> hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
         () -> hydra.lib.flows.Bind.apply(
           hydra.monads.Monads.<hydra.graph.Graph>getState(),
-          (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>>>) (g -> hydra.lib.flows.Bind.apply(
-            hydra.schemas.Schemas.graphToInferenceContext(g),
-            (java.util.function.Function<hydra.typing.InferenceContext, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>>>) (ix -> {
-              java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes = (ix).schemaTypes;
-              return hydra.lib.maybes.Cases.apply(
-                hydra.lib.maps.Lookup.apply(
-                  name,
-                  schemaTypes),
-                hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
-                (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>>>) (ts -> hydra.lib.logic.IfElse.lazy(
-                  hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply((ts).variables)),
-                  () -> hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
-                  () -> (hydra.rewriting.Rewriting.deannotateType((ts).type)).accept(new hydra.core.Type.PartialVisitor<>() {
-                    @Override
-                    public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> otherwise(hydra.core.Type instance) {
-                      return hydra.lib.flows.Pure.apply(hydra.util.Maybe.just((ts).type));
-                    }
-                    
-                    @Override
-                    public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Record ignored) {
-                      return hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()));
-                    }
-                    
-                    @Override
-                    public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Union ignored) {
-                      return hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()));
-                    }
-                    
-                    @Override
-                    public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Wrap ignored) {
-                      return hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()));
-                    }
-                  }))));
-            }))))));
+          (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>>>) (g -> {
+            java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes = (g).schemaTypes;
+            return hydra.lib.maybes.Cases.apply(
+              hydra.lib.maps.Lookup.apply(
+                name,
+                schemaTypes),
+              hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
+              (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>>>) (ts -> hydra.lib.logic.IfElse.lazy(
+                hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply((ts).variables)),
+                () -> hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
+                () -> (hydra.rewriting.Rewriting.deannotateType((ts).type)).accept(new hydra.core.Type.PartialVisitor<>() {
+                  @Override
+                  public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> otherwise(hydra.core.Type instance) {
+                    return hydra.lib.flows.Pure.apply(hydra.util.Maybe.just((ts).type));
+                  }
+                  
+                  @Override
+                  public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Record ignored) {
+                    return hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()));
+                  }
+                  
+                  @Override
+                  public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Union ignored) {
+                    return hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()));
+                  }
+                  
+                  @Override
+                  public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Wrap ignored) {
+                    return hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()));
+                  }
+                }))));
+          }))));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.TypeArgument>> javaTypeArgumentsForNamedType(hydra.core.Name tname) {
@@ -2282,18 +2280,18 @@ public interface Coder {
     });
   }
   
-  static hydra.typing.TypeContext javaEnvGetTC(hydra.ext.java.helpers.JavaEnvironment env) {
-    return (env).typeContext;
+  static hydra.graph.Graph javaEnvGetGraph(hydra.ext.java.helpers.JavaEnvironment env) {
+    return (env).graph;
   }
   
-  static hydra.ext.java.helpers.JavaEnvironment javaEnvSetTC(hydra.typing.TypeContext tc, hydra.ext.java.helpers.JavaEnvironment env) {
-    return new hydra.ext.java.helpers.JavaEnvironment((env).aliases, tc);
+  static hydra.ext.java.helpers.JavaEnvironment javaEnvSetGraph(hydra.graph.Graph g, hydra.ext.java.helpers.JavaEnvironment env) {
+    return new hydra.ext.java.helpers.JavaEnvironment((env).aliases, g);
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.typing.FunctionStructure<hydra.ext.java.helpers.JavaEnvironment>> analyzeJavaFunction(hydra.ext.java.helpers.JavaEnvironment v1, hydra.core.Term v2) {
     return hydra.coderUtils.CoderUtils.analyzeFunctionTerm(
-      hydra.ext.java.coder.Coder::javaEnvGetTC,
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, hydra.ext.java.helpers.JavaEnvironment>>) (p0 -> p1 -> hydra.ext.java.coder.Coder.javaEnvSetTC(
+      hydra.ext.java.coder.Coder::javaEnvGetGraph,
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, hydra.ext.java.helpers.JavaEnvironment>>) (p0 -> p1 -> hydra.ext.java.coder.Coder.javaEnvSetGraph(
         p0,
         p1)),
       v1,
@@ -2302,8 +2300,8 @@ public interface Coder {
   
   static <T0> hydra.compute.Flow<T0, hydra.typing.FunctionStructure<hydra.ext.java.helpers.JavaEnvironment>> analyzeJavaFunctionNoInfer(hydra.ext.java.helpers.JavaEnvironment v1, hydra.core.Term v2) {
     return hydra.coderUtils.CoderUtils.analyzeFunctionTermNoInfer(
-      hydra.ext.java.coder.Coder::javaEnvGetTC,
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, hydra.ext.java.helpers.JavaEnvironment>>) (p0 -> p1 -> hydra.ext.java.coder.Coder.javaEnvSetTC(
+      hydra.ext.java.coder.Coder::javaEnvGetGraph,
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, hydra.ext.java.helpers.JavaEnvironment>>) (p0 -> p1 -> hydra.ext.java.coder.Coder.javaEnvSetGraph(
         p0,
         p1)),
       v1,
@@ -2312,8 +2310,8 @@ public interface Coder {
   
   static <T0> T0 withLambda(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Lambda lam, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, T0> k) {
     return hydra.schemas.Schemas.withLambdaContext(
-      hydra.ext.java.coder.Coder::javaEnvGetTC,
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, hydra.ext.java.helpers.JavaEnvironment>>) (p0 -> p1 -> hydra.ext.java.coder.Coder.javaEnvSetTC(
+      hydra.ext.java.coder.Coder::javaEnvGetGraph,
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, hydra.ext.java.helpers.JavaEnvironment>>) (p0 -> p1 -> hydra.ext.java.coder.Coder.javaEnvSetGraph(
         p0,
         p1)),
       env,
@@ -2323,15 +2321,15 @@ public interface Coder {
         hydra.util.Lazy<hydra.ext.java.helpers.Aliases> aliases2 = new hydra.util.Lazy<>(() -> new hydra.ext.java.helpers.Aliases((aliases).currentNamespace, (aliases).packages, (aliases).branchVars, (aliases).recursiveVars, (aliases).inScopeTypeParams, (aliases).polymorphicLocals, (aliases).inScopeJavaVars, (aliases).varRenames, hydra.lib.sets.Insert.apply(
           (lam).parameter,
           (aliases).lambdaVars), (aliases).typeVarSubst, (aliases).trustedTypeVars, (aliases).methodCodomain, (aliases).thunkedVars));
-        hydra.ext.java.helpers.JavaEnvironment env2 = new hydra.ext.java.helpers.JavaEnvironment(aliases2.get(), (env1).typeContext);
+        hydra.ext.java.helpers.JavaEnvironment env2 = new hydra.ext.java.helpers.JavaEnvironment(aliases2.get(), (env1).graph);
         return (k).apply(env2);
       }));
   }
   
   static <T0> T0 withTypeLambda(hydra.ext.java.helpers.JavaEnvironment v1, hydra.core.TypeLambda v2, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, T0> v3) {
     return hydra.schemas.Schemas.withTypeLambdaContext(
-      hydra.ext.java.coder.Coder::javaEnvGetTC,
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, hydra.ext.java.helpers.JavaEnvironment>>) (p0 -> p1 -> hydra.ext.java.coder.Coder.javaEnvSetTC(
+      hydra.ext.java.coder.Coder::javaEnvGetGraph,
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, hydra.ext.java.helpers.JavaEnvironment>>) (p0 -> p1 -> hydra.ext.java.coder.Coder.javaEnvSetGraph(
         p0,
         p1)),
       v1,
@@ -3542,7 +3540,7 @@ public interface Coder {
         })).get())));
   }
   
-  static <T0> hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.core.Type>> correctTypeApps(T0 tc, hydra.core.Name name, java.util.List<hydra.core.Term> args, java.util.List<hydra.core.Type> fallbackTypeApps) {
+  static <T0> hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.core.Type>> correctTypeApps(T0 g, hydra.core.Name name, java.util.List<hydra.core.Term> args, java.util.List<hydra.core.Type> fallbackTypeApps) {
     return hydra.lib.flows.Bind.apply(
       hydra.lexical.Lexical.dereferenceElement(name),
       (java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.core.Type>>>) (mel -> hydra.lib.maybes.Cases.apply(
@@ -4459,35 +4457,33 @@ public interface Coder {
       new hydra.core.Name("hydra.core.Name"));
     return hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (g -> hydra.lib.flows.Bind.apply(
-        hydra.schemas.Schemas.graphToTypeContext(g),
-        (java.util.function.Function<hydra.typing.TypeContext, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (tc -> {
-          hydra.ext.java.helpers.JavaEnvironment env = new hydra.ext.java.helpers.JavaEnvironment(aliases, tc);
-          return hydra.lib.flows.Bind.apply(
-            hydra.ext.java.coder.Coder.encodeType(
-              aliases,
-              (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
-              new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name"))),
-            (java.util.function.Function<hydra.ext.java.syntax.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (jt -> hydra.lib.flows.Bind.apply(
-              hydra.ext.java.coder.Coder.encodeTerm(
-                env,
-                new hydra.core.Term.Literal(new hydra.core.Literal.String_((name).value))),
-              (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (arg -> {
-                hydra.util.Lazy<hydra.ext.java.syntax.VariableInitializer> init = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.VariableInitializer.Expression(hydra.ext.java.utils.Utils.javaConstructorCall(
-                  hydra.ext.java.utils.Utils.javaConstructorName(
-                    nameName,
-                    (hydra.util.Maybe<hydra.ext.java.syntax.TypeArgumentsOrDiamond>) (hydra.util.Maybe.<hydra.ext.java.syntax.TypeArgumentsOrDiamond>nothing())),
-                  java.util.List.of(arg),
-                  (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing()))));
-                hydra.ext.java.syntax.VariableDeclarator var = hydra.ext.java.utils.Utils.javaVariableDeclarator(
-                  new hydra.ext.java.syntax.Identifier(javaName),
-                  hydra.util.Maybe.just(init.get()));
-                return hydra.lib.flows.Pure.apply(hydra.ext.java.coder.Coder.noComment(hydra.ext.java.utils.Utils.javaMemberField(
-                  mods,
-                  jt,
-                  var)));
-              }))));
-        }))));
+      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (g -> {
+        hydra.ext.java.helpers.JavaEnvironment env = new hydra.ext.java.helpers.JavaEnvironment(aliases, g);
+        return hydra.lib.flows.Bind.apply(
+          hydra.ext.java.coder.Coder.encodeType(
+            aliases,
+            (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
+            new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name"))),
+          (java.util.function.Function<hydra.ext.java.syntax.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (jt -> hydra.lib.flows.Bind.apply(
+            hydra.ext.java.coder.Coder.encodeTerm(
+              env,
+              new hydra.core.Term.Literal(new hydra.core.Literal.String_((name).value))),
+            (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (arg -> {
+              hydra.util.Lazy<hydra.ext.java.syntax.VariableInitializer> init = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.VariableInitializer.Expression(hydra.ext.java.utils.Utils.javaConstructorCall(
+                hydra.ext.java.utils.Utils.javaConstructorName(
+                  nameName,
+                  (hydra.util.Maybe<hydra.ext.java.syntax.TypeArgumentsOrDiamond>) (hydra.util.Maybe.<hydra.ext.java.syntax.TypeArgumentsOrDiamond>nothing())),
+                java.util.List.of(arg),
+                (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing()))));
+              hydra.ext.java.syntax.VariableDeclarator var = hydra.ext.java.utils.Utils.javaVariableDeclarator(
+                new hydra.ext.java.syntax.Identifier(javaName),
+                hydra.util.Maybe.just(init.get()));
+              return hydra.lib.flows.Pure.apply(hydra.ext.java.coder.Coder.noComment(hydra.ext.java.utils.Utils.javaMemberField(
+                mods,
+                jt,
+                var)));
+            }))));
+      }));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments> constantDeclForFieldType(hydra.ext.java.helpers.Aliases aliases, hydra.core.FieldType ftyp) {
@@ -4651,34 +4647,32 @@ public interface Coder {
   static hydra.compute.Flow<hydra.graph.Graph, Boolean> isFieldUnitType(hydra.core.Name typeName, hydra.core.Name fieldName) {
     return hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, Boolean>>) (g -> hydra.lib.flows.Bind.apply(
-        hydra.schemas.Schemas.graphToInferenceContext(g),
-        (java.util.function.Function<hydra.typing.InferenceContext, hydra.compute.Flow<hydra.graph.Graph, Boolean>>) (ix -> {
-          java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes = (ix).schemaTypes;
-          return hydra.lib.maybes.Cases.apply(
-            hydra.lib.maps.Lookup.apply(
-              typeName,
-              schemaTypes),
-            hydra.lib.flows.Pure.apply(false),
-            (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<hydra.graph.Graph, Boolean>>) (ts -> (hydra.rewriting.Rewriting.deannotateType((ts).type)).accept(new hydra.core.Type.PartialVisitor<>() {
-              @Override
-              public hydra.compute.Flow<hydra.graph.Graph, Boolean> otherwise(hydra.core.Type instance) {
-                return hydra.lib.flows.Pure.apply(false);
-              }
-              
-              @Override
-              public hydra.compute.Flow<hydra.graph.Graph, Boolean> visit(hydra.core.Type.Union rt) {
-                return hydra.lib.flows.Pure.apply(hydra.lib.maybes.Cases.apply(
-                  hydra.lib.lists.Find.apply(
-                    (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.lib.equality.Equal.apply(
-                      (ft).name,
-                      fieldName)),
-                    ((rt).value).fields),
-                  false,
-                  (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.schemas.Schemas.isUnitType(hydra.rewriting.Rewriting.deannotateType((ft).type)))));
-              }
-            })));
-        }))));
+      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, Boolean>>) (g -> {
+        java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes = (g).schemaTypes;
+        return hydra.lib.maybes.Cases.apply(
+          hydra.lib.maps.Lookup.apply(
+            typeName,
+            schemaTypes),
+          hydra.lib.flows.Pure.apply(false),
+          (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<hydra.graph.Graph, Boolean>>) (ts -> (hydra.rewriting.Rewriting.deannotateType((ts).type)).accept(new hydra.core.Type.PartialVisitor<>() {
+            @Override
+            public hydra.compute.Flow<hydra.graph.Graph, Boolean> otherwise(hydra.core.Type instance) {
+              return hydra.lib.flows.Pure.apply(false);
+            }
+            
+            @Override
+            public hydra.compute.Flow<hydra.graph.Graph, Boolean> visit(hydra.core.Type.Union rt) {
+              return hydra.lib.flows.Pure.apply(hydra.lib.maybes.Cases.apply(
+                hydra.lib.lists.Find.apply(
+                  (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.lib.equality.Equal.apply(
+                    (ft).name,
+                    fieldName)),
+                  ((rt).value).fields),
+                false,
+                (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.schemas.Schemas.isUnitType(hydra.rewriting.Rewriting.deannotateType((ft).type)))));
+            }
+          })));
+      }));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression> encodeTerm(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Term term) {
@@ -4694,7 +4688,7 @@ public interface Coder {
     java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>> encode = (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (t -> hydra.ext.java.coder.Coder.encodeTerm(
       env,
       t));
-    hydra.typing.TypeContext tc = (env).typeContext;
+    hydra.graph.Graph g = (env).graph;
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression> otherwise(hydra.core.Term instance) {
@@ -4770,7 +4764,7 @@ public interface Coder {
                     hydra.ext.java.coder.Coder.tryInferFunctionType((f).value),
                     hydra.coderUtils.CoderUtils.tryTypeOf(
                       "4",
-                      tc,
+                      g,
                       term),
                     (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (inferredType -> hydra.lib.flows.Pure.apply(inferredType))),
                   (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (t -> hydra.lib.flows.Pure.apply(t))),
@@ -4835,8 +4829,8 @@ public interface Coder {
                             m))),
                           (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())),
                           anns));
+                        hydra.graph.Graph g2 = (env2.get()).graph;
                         hydra.util.Lazy<hydra.ext.java.syntax.Expression> nullaryLambda = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.Expression.Lambda(new hydra.ext.java.syntax.LambdaExpression(new hydra.ext.java.syntax.LambdaParameters.Tuple((java.util.List<hydra.ext.java.syntax.LambdaParameters>) (java.util.List.<hydra.ext.java.syntax.LambdaParameters>of())), new hydra.ext.java.syntax.LambdaBody.Block(block.get()))));
-                        hydra.typing.TypeContext tc2 = (env2.get()).typeContext;
                         return hydra.lib.flows.Bind.apply(
                           hydra.annotations.Annotations.getType(combinedAnns.get()),
                           (java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (mt -> hydra.lib.flows.Bind.apply(
@@ -4844,7 +4838,7 @@ public interface Coder {
                               mt,
                               hydra.coderUtils.CoderUtils.tryTypeOf(
                                 "let-body",
-                                tc2,
+                                g2,
                                 body),
                               (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (t -> hydra.lib.flows.Pure.apply(t))),
                             (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (letType -> hydra.lib.flows.Bind.apply(
@@ -5205,7 +5199,7 @@ public interface Coder {
                   mtyp,
                   hydra.coderUtils.CoderUtils.tryTypeOf(
                     "5",
-                    tc,
+                    g,
                     term),
                   (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (t -> hydra.lib.flows.Pure.apply(t))),
                 (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (typ -> {
@@ -5336,7 +5330,7 @@ public interface Coder {
       (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of())));
     hydra.util.Lazy<java.util.List<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(gathered.get())));
     hydra.util.Lazy<hydra.core.Term> fun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered.get()));
-    hydra.typing.TypeContext tc = (env).typeContext;
+    hydra.graph.Graph g = (env).graph;
     hydra.util.Lazy<java.util.List<hydra.core.Type>> typeApps = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(gathered.get())));
     return hydra.lib.flows.Bind.apply(
       hydra.annotations.Annotations.getType(hydra.annotations.Annotations.termAnnotationInternal(fun.get())),
@@ -5347,7 +5341,7 @@ public interface Coder {
             new hydra.core.Type.Variable(new hydra.core.Name("unknown")),
             hydra.coderUtils.CoderUtils.tryTypeOf(
               "1",
-              tc,
+              g,
               fun.get())),
           (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (t -> hydra.lib.flows.Pure.apply(t))),
         (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (funTyp -> {
@@ -5393,7 +5387,7 @@ public interface Coder {
                 return hydra.ext.java.coder.Coder.encodeApplication_fallback(
                   env,
                   aliases,
-                  tc,
+                  g,
                   typeApps.get(),
                   (app).function,
                   (app).argument);
@@ -5407,7 +5401,7 @@ public interface Coder {
                     return hydra.ext.java.coder.Coder.encodeApplication_fallback(
                       env,
                       aliases,
-                      tc,
+                      g,
                       typeApps.get(),
                       (app).function,
                       (app).argument);
@@ -5455,7 +5449,7 @@ public interface Coder {
                   () -> hydra.ext.java.coder.Coder.encodeApplication_fallback(
                     env,
                     aliases,
-                    tc,
+                    g,
                     typeApps.get(),
                     (app).function,
                     (app).argument),
@@ -5507,7 +5501,7 @@ public interface Coder {
                           hydra.lib.lists.Null.apply(filteredTypeApps.get()),
                           () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of())),
                           () -> hydra.ext.java.coder.Coder.correctTypeApps(
-                            tc,
+                            g,
                             (name).value,
                             hargs.get(),
                             filteredTypeApps.get())),
@@ -5538,7 +5532,7 @@ public interface Coder {
         }))));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression> encodeApplication_fallback(hydra.ext.java.helpers.JavaEnvironment env, hydra.ext.java.helpers.Aliases aliases, hydra.typing.TypeContext tc, java.util.List<hydra.core.Type> typeApps, hydra.core.Term lhs, hydra.core.Term rhs) {
+  static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression> encodeApplication_fallback(hydra.ext.java.helpers.JavaEnvironment env, hydra.ext.java.helpers.Aliases aliases, hydra.graph.Graph g, java.util.List<hydra.core.Type> typeApps, hydra.core.Term lhs, hydra.core.Term rhs) {
     return hydra.monads.Monads.withTrace(
       "fallback",
       hydra.lib.flows.Bind.apply(
@@ -5548,7 +5542,7 @@ public interface Coder {
             mt,
             hydra.coderUtils.CoderUtils.tryTypeOf(
               "2",
-              tc,
+              g,
               lhs),
             (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (typ -> hydra.lib.flows.Pure.apply(typ))),
           (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (t -> (hydra.rewriting.Rewriting.deannotateTypeParameters(hydra.rewriting.Rewriting.deannotateType(t))).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -5622,7 +5616,7 @@ public interface Coder {
                                 hydra.lib.flows.Bind.apply(
                                   hydra.coderUtils.CoderUtils.tryTypeOf(
                                     "dom-enrich",
-                                    tc,
+                                    g,
                                     rhs),
                                   (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (rt -> hydra.lib.flows.Pure.apply(hydra.lib.logic.IfElse.lazy(
                                     hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.ext.java.coder.Coder.javaTypeArgumentsForType(rt))),
@@ -6361,7 +6355,7 @@ public interface Coder {
     });
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.ext.java.syntax.BlockStatement>> toDeclInit(hydra.ext.java.helpers.Aliases aliasesExt, hydra.typing.TypeContext tcExt, java.util.Set<hydra.core.Name> recursiveVars, java.util.List<hydra.core.Binding> flatBindings, hydra.core.Name name) {
+  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.ext.java.syntax.BlockStatement>> toDeclInit(hydra.ext.java.helpers.Aliases aliasesExt, hydra.graph.Graph gExt, java.util.Set<hydra.core.Name> recursiveVars, java.util.List<hydra.core.Binding> flatBindings, hydra.core.Name name) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
         name,
@@ -6379,7 +6373,7 @@ public interface Coder {
               (binding.get()).type,
               hydra.coderUtils.CoderUtils.tryTypeOf(
                 "6",
-                tcExt,
+                gExt,
                 value),
               (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (ts -> hydra.lib.flows.Pure.apply((ts).type))),
             (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.ext.java.syntax.BlockStatement>>>) (typ -> hydra.lib.flows.Bind.apply(
@@ -6421,7 +6415,7 @@ public interface Coder {
       () -> hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.ext.java.syntax.BlockStatement>) (hydra.util.Maybe.<hydra.ext.java.syntax.BlockStatement>nothing())));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.BlockStatement> toDeclStatement(hydra.ext.java.helpers.JavaEnvironment envExt, hydra.ext.java.helpers.Aliases aliasesExt, hydra.typing.TypeContext tcExt, java.util.Set<hydra.core.Name> recursiveVars, java.util.Set<hydra.core.Name> thunkedVars, java.util.List<hydra.core.Binding> flatBindings, hydra.core.Name name) {
+  static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.BlockStatement> toDeclStatement(hydra.ext.java.helpers.JavaEnvironment envExt, hydra.ext.java.helpers.Aliases aliasesExt, hydra.graph.Graph gExt, java.util.Set<hydra.core.Name> recursiveVars, java.util.Set<hydra.core.Name> thunkedVars, java.util.List<hydra.core.Binding> flatBindings, hydra.core.Name name) {
     hydra.util.Lazy<hydra.core.Binding> binding = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
         (b).name,
@@ -6433,7 +6427,7 @@ public interface Coder {
         (binding.get()).type,
         hydra.coderUtils.CoderUtils.tryTypeOf(
           "7",
-          tcExt,
+          gExt,
           value),
         (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (ts -> hydra.lib.flows.Pure.apply((ts).type))),
       (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.BlockStatement>>) (typ -> hydra.lib.flows.Bind.apply(
@@ -6560,14 +6554,14 @@ public interface Coder {
       bindingVars.get()), (aliases).varRenames, (aliases).lambdaVars, (aliases).typeVarSubst, (aliases).trustedTypeVars, (aliases).methodCodomain, hydra.lib.sets.Union.apply(
       (aliases).thunkedVars,
       thunkedVars.get())));
-    hydra.typing.TypeContext tc = (env).typeContext;
-    hydra.typing.TypeContext tcExtended = hydra.schemas.Schemas.extendTypeContextForLet(
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (p0 -> p1 -> hydra.coderUtils.CoderUtils.bindingMetadata(
+    hydra.graph.Graph g = (env).graph;
+    hydra.graph.Graph gExtended = hydra.schemas.Schemas.extendGraphForLet(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (p0 -> p1 -> hydra.coderUtils.CoderUtils.bindingMetadata(
         p0,
         p1)),
-      tc,
+      g,
       new hydra.core.Let(flatBindings, new hydra.core.Term.Variable(new hydra.core.Name("dummy"))));
-    hydra.ext.java.helpers.JavaEnvironment envExtended = new hydra.ext.java.helpers.JavaEnvironment(aliasesExtended.get(), tcExtended);
+    hydra.ext.java.helpers.JavaEnvironment envExtended = new hydra.ext.java.helpers.JavaEnvironment(aliasesExtended.get(), gExtended);
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(bindings),
       () -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>((java.util.List<hydra.ext.java.syntax.BlockStatement>) (java.util.List.<hydra.ext.java.syntax.BlockStatement>of()), envExtended)))),
@@ -6577,7 +6571,7 @@ public interface Coder {
             hydra.lib.flows.MapList.apply(
               (java.util.function.Function<hydra.core.Name, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.ext.java.syntax.BlockStatement>>>) (n -> hydra.ext.java.coder.Coder.toDeclInit(
                 aliasesExtended.get(),
-                tcExtended,
+                gExtended,
                 recursiveVars.get(),
                 flatBindings,
                 n)),
@@ -6587,7 +6581,7 @@ public interface Coder {
                 (java.util.function.Function<hydra.core.Name, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.BlockStatement>>) (n -> hydra.ext.java.coder.Coder.toDeclStatement(
                   envExtended,
                   aliasesExtended.get(),
-                  tcExtended,
+                  gExtended,
                   recursiveVars.get(),
                   thunkedVars.get(),
                   flatBindings,
@@ -7321,7 +7315,7 @@ public interface Coder {
     hydra.ext.java.helpers.Aliases aliases0 = (env0).aliases;
     hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env = new hydra.util.Lazy<>(() -> new hydra.ext.java.helpers.JavaEnvironment(new hydra.ext.java.helpers.Aliases((aliases0).currentNamespace, (aliases0).packages, (aliases0).branchVars, (aliases0).recursiveVars, (aliases0).inScopeTypeParams, (aliases0).polymorphicLocals, (aliases0).inScopeJavaVars, hydra.lib.maps.Union.apply(
       tcoVarRenames,
-      (aliases0).varRenames), (aliases0).lambdaVars, (aliases0).typeVarSubst, (aliases0).trustedTypeVars, (aliases0).methodCodomain, (aliases0).thunkedVars), (env0).typeContext));
+      (aliases0).varRenames), (aliases0).lambdaVars, (aliases0).typeVarSubst, (aliases0).trustedTypeVars, (aliases0).methodCodomain, (aliases0).thunkedVars), (env0).graph));
     hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateAndDetypeTerm(term);
     hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> gathered = hydra.coderUtils.CoderUtils.gatherApplications(stripped);
     hydra.util.Lazy<java.util.List<hydra.core.Term>> gatherArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
@@ -7741,7 +7735,7 @@ public interface Coder {
                 hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>> constraints = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.apply(
                   (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())),
                   (ts).constraints));
-                hydra.ext.java.helpers.JavaEnvironment env2WithTypeParams = new hydra.ext.java.helpers.JavaEnvironment(aliases2.get(), (env2.get()).typeContext);
+                hydra.ext.java.helpers.JavaEnvironment env2WithTypeParams = new hydra.ext.java.helpers.JavaEnvironment(aliases2.get(), (env2.get()).graph);
                 hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.TypeParameter>> jparams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                   (java.util.function.Function<hydra.core.Name, hydra.ext.java.syntax.TypeParameter>) (v -> hydra.ext.java.utils.Utils.javaTypeParameter(hydra.formatting.Formatting.capitalize((v).value))),
                   fixedTparams.get()));
@@ -7868,45 +7862,43 @@ public interface Coder {
   static hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>> encodeDefinitions(hydra.module.Module mod, java.util.List<hydra.module.Definition> defs) {
     return hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (g -> hydra.lib.flows.Bind.apply(
-        hydra.inference.Inference.initialTypeContext(g),
-        (java.util.function.Function<hydra.typing.TypeContext, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (tc -> {
-          hydra.ext.java.helpers.Aliases aliases = hydra.ext.java.utils.Utils.importAliasesForModule(mod);
-          hydra.ext.java.helpers.JavaEnvironment env = new hydra.ext.java.helpers.JavaEnvironment(aliases, tc);
-          hydra.util.Tuple.Tuple2<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>> partitioned = hydra.schemas.Schemas.partitionDefinitions(defs);
-          hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
-          hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> nonTypedefDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-            (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> {
-              hydra.core.Type typ = (td).type;
-              return hydra.ext.java.coder.Coder.isSerializableJavaType(typ);
-            }),
-            typeDefs.get()));
-          hydra.ext.java.syntax.PackageDeclaration pkg = hydra.ext.java.utils.Utils.javaPackageDeclaration((mod).namespace);
-          hydra.util.Lazy<java.util.List<hydra.module.TermDefinition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));
-          return hydra.lib.flows.Bind.apply(
-            hydra.lib.flows.MapList.apply(
-              (java.util.function.Function<hydra.module.TypeDefinition, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (td -> hydra.ext.java.coder.Coder.encodeTypeDefinition(
-                pkg,
-                aliases,
-                td)),
-              nonTypedefDefs.get()),
-            (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (typeUnits -> hydra.lib.flows.Bind.apply(
-              hydra.lib.logic.IfElse.lazy(
-                hydra.lib.lists.Null.apply(termDefs.get()),
-                () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>of())),
-                () -> hydra.lib.flows.Bind.apply(
-                  hydra.lib.flows.MapList.apply(
-                    (java.util.function.Function<hydra.module.TermDefinition, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.InterfaceMemberDeclaration>>) (td -> hydra.ext.java.coder.Coder.encodeTermDefinition(
-                      env,
-                      td)),
-                    termDefs.get()),
-                  (java.util.function.Function<java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>>) (dataMembers -> hydra.lib.flows.Pure.apply(java.util.List.of(hydra.ext.java.coder.Coder.constructElementsInterface(
-                    mod,
-                    dataMembers)))))),
-              (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (termUnits -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat2.apply(
-                typeUnits,
-                termUnits)))))));
-        }))));
+      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (g -> {
+        hydra.ext.java.helpers.Aliases aliases = hydra.ext.java.utils.Utils.importAliasesForModule(mod);
+        hydra.ext.java.helpers.JavaEnvironment env = new hydra.ext.java.helpers.JavaEnvironment(aliases, g);
+        hydra.util.Tuple.Tuple2<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>> partitioned = hydra.schemas.Schemas.partitionDefinitions(defs);
+        hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
+        hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> nonTypedefDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+          (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> {
+            hydra.core.Type typ = (td).type;
+            return hydra.ext.java.coder.Coder.isSerializableJavaType(typ);
+          }),
+          typeDefs.get()));
+        hydra.ext.java.syntax.PackageDeclaration pkg = hydra.ext.java.utils.Utils.javaPackageDeclaration((mod).namespace);
+        hydra.util.Lazy<java.util.List<hydra.module.TermDefinition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));
+        return hydra.lib.flows.Bind.apply(
+          hydra.lib.flows.MapList.apply(
+            (java.util.function.Function<hydra.module.TypeDefinition, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (td -> hydra.ext.java.coder.Coder.encodeTypeDefinition(
+              pkg,
+              aliases,
+              td)),
+            nonTypedefDefs.get()),
+          (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (typeUnits -> hydra.lib.flows.Bind.apply(
+            hydra.lib.logic.IfElse.lazy(
+              hydra.lib.lists.Null.apply(termDefs.get()),
+              () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>of())),
+              () -> hydra.lib.flows.Bind.apply(
+                hydra.lib.flows.MapList.apply(
+                  (java.util.function.Function<hydra.module.TermDefinition, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.InterfaceMemberDeclaration>>) (td -> hydra.ext.java.coder.Coder.encodeTermDefinition(
+                    env,
+                    td)),
+                  termDefs.get()),
+                (java.util.function.Function<java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>>) (dataMembers -> hydra.lib.flows.Pure.apply(java.util.List.of(hydra.ext.java.coder.Coder.constructElementsInterface(
+                  mod,
+                  dataMembers)))))),
+            (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (termUnits -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat2.apply(
+              typeUnits,
+              termUnits)))))));
+      }));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, java.util.Map<String, String>> moduleToJava(hydra.module.Module mod, java.util.List<hydra.module.Definition> defs) {

@@ -6,25 +6,25 @@ package hydra.templates;
  * A utility which instantiates a nonrecursive type with default values
  */
 public interface Templates {
-  static hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>> graphToSchema(hydra.graph.Graph g) {
+  static hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>> graphToSchema(java.util.List<hydra.core.Binding> els) {
     java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>> toPair = (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (el -> {
       hydra.core.Name name = (el).name;
       return hydra.lib.flows.Bind.apply(
         hydra.monads.Monads.<hydra.graph.Graph>getState(),
-        (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (cx -> hydra.lib.flows.Bind.apply(
+        (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (graph -> hydra.lib.flows.Bind.apply(
           hydra.monads.Monads.withTrace(
             "graph to schema",
             hydra.monads.Monads.eitherToFlow(
               wrapped -> (wrapped).value,
               hydra.decode.core.Core.type(
-                cx,
+                graph,
                 (el).term))),
           (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (t -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>(name, t))))))));
     });
     return hydra.lib.flows.Bind.apply(
       hydra.lib.flows.MapList.apply(
         toPair,
-        (g).elements),
+        els),
       (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (pairs -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(pairs))));
   }
   

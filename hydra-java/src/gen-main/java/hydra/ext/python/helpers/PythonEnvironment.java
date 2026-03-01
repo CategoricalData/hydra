@@ -14,7 +14,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   
   public static final hydra.core.Name BOUND_TYPE_VARIABLES = new hydra.core.Name("boundTypeVariables");
   
-  public static final hydra.core.Name TYPE_CONTEXT = new hydra.core.Name("typeContext");
+  public static final hydra.core.Name GRAPH = new hydra.core.Name("graph");
   
   public static final hydra.core.Name NULLARY_BINDINGS = new hydra.core.Name("nullaryBindings");
   
@@ -35,9 +35,9 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   public final hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables;
   
   /**
-   * Type context for type inference
+   * Graph context for type inference
    */
-  public final hydra.typing.TypeContext typeContext;
+  public final hydra.graph.Graph graph;
   
   /**
    * Set of nullary bindings (need call syntax)
@@ -59,10 +59,10 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
    */
   public final java.util.Set<hydra.core.Name> inlineVariables;
   
-  public PythonEnvironment (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables, hydra.typing.TypeContext typeContext, java.util.Set<hydra.core.Name> nullaryBindings, hydra.ext.python.helpers.PythonVersion version, Boolean skipCasts, java.util.Set<hydra.core.Name> inlineVariables) {
+  public PythonEnvironment (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables, hydra.graph.Graph graph, java.util.Set<hydra.core.Name> nullaryBindings, hydra.ext.python.helpers.PythonVersion version, Boolean skipCasts, java.util.Set<hydra.core.Name> inlineVariables) {
     this.namespaces = namespaces;
     this.boundTypeVariables = boundTypeVariables;
-    this.typeContext = typeContext;
+    this.graph = graph;
     this.nullaryBindings = nullaryBindings;
     this.version = version;
     this.skipCasts = skipCasts;
@@ -80,8 +80,8 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
       o.namespaces) && java.util.Objects.equals(
       this.boundTypeVariables,
       o.boundTypeVariables) && java.util.Objects.equals(
-      this.typeContext,
-      o.typeContext) && java.util.Objects.equals(
+      this.graph,
+      o.graph) && java.util.Objects.equals(
       this.nullaryBindings,
       o.nullaryBindings) && java.util.Objects.equals(
       this.version,
@@ -94,7 +94,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(namespaces) + 3 * java.util.Objects.hashCode(boundTypeVariables) + 5 * java.util.Objects.hashCode(typeContext) + 7 * java.util.Objects.hashCode(nullaryBindings) + 11 * java.util.Objects.hashCode(version) + 13 * java.util.Objects.hashCode(skipCasts) + 17 * java.util.Objects.hashCode(inlineVariables);
+    return 2 * java.util.Objects.hashCode(namespaces) + 3 * java.util.Objects.hashCode(boundTypeVariables) + 5 * java.util.Objects.hashCode(graph) + 7 * java.util.Objects.hashCode(nullaryBindings) + 11 * java.util.Objects.hashCode(version) + 13 * java.util.Objects.hashCode(skipCasts) + 17 * java.util.Objects.hashCode(inlineVariables);
   }
   
   @Override
@@ -109,7 +109,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) typeContext).compareTo(other.typeContext);
+    cmp = ((Comparable) graph).compareTo(other.graph);
     if (cmp != 0) {
       return cmp;
     }
@@ -133,30 +133,30 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   }
   
   public PythonEnvironment withNamespaces(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {
-    return new PythonEnvironment(namespaces, boundTypeVariables, typeContext, nullaryBindings, version, skipCasts, inlineVariables);
+    return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
   public PythonEnvironment withBoundTypeVariables(hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables) {
-    return new PythonEnvironment(namespaces, boundTypeVariables, typeContext, nullaryBindings, version, skipCasts, inlineVariables);
+    return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
-  public PythonEnvironment withTypeContext(hydra.typing.TypeContext typeContext) {
-    return new PythonEnvironment(namespaces, boundTypeVariables, typeContext, nullaryBindings, version, skipCasts, inlineVariables);
+  public PythonEnvironment withGraph(hydra.graph.Graph graph) {
+    return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
   public PythonEnvironment withNullaryBindings(java.util.Set<hydra.core.Name> nullaryBindings) {
-    return new PythonEnvironment(namespaces, boundTypeVariables, typeContext, nullaryBindings, version, skipCasts, inlineVariables);
+    return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
   public PythonEnvironment withVersion(hydra.ext.python.helpers.PythonVersion version) {
-    return new PythonEnvironment(namespaces, boundTypeVariables, typeContext, nullaryBindings, version, skipCasts, inlineVariables);
+    return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
   public PythonEnvironment withSkipCasts(Boolean skipCasts) {
-    return new PythonEnvironment(namespaces, boundTypeVariables, typeContext, nullaryBindings, version, skipCasts, inlineVariables);
+    return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
   public PythonEnvironment withInlineVariables(java.util.Set<hydra.core.Name> inlineVariables) {
-    return new PythonEnvironment(namespaces, boundTypeVariables, typeContext, nullaryBindings, version, skipCasts, inlineVariables);
+    return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
 }

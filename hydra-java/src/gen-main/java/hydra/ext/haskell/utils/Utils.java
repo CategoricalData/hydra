@@ -189,7 +189,7 @@ public interface Utils {
     return hydra.lib.lists.Last.apply(parts);
   }
   
-  static hydra.ext.haskell.ast.Name unionFieldReference(hydra.graph.Graph g, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name sname, hydra.core.Name fname) {
+  static hydra.ext.haskell.ast.Name unionFieldReference(java.util.Set<hydra.core.Name> boundNames, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name sname, hydra.core.Name fname) {
     String fnameStr = (fname).value;
     String capitalizedFieldName = hydra.formatting.Formatting.capitalize(fnameStr);
     String typeNameStr = hydra.ext.haskell.utils.Utils.typeNameForRecord(sname);
@@ -200,11 +200,9 @@ public interface Utils {
     deconflict.set((java.util.function.Function<String, String>) (name -> {
       hydra.core.Name tname = hydra.names.Names.unqualifyName(new hydra.module.QualifiedName(ns, name));
       return hydra.lib.logic.IfElse.lazy(
-        hydra.lib.maybes.IsJust.apply(hydra.lib.lists.Find.apply(
-          (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
-            (b).name,
-            tname)),
-          (g).elements)),
+        hydra.lib.sets.Member.apply(
+          tname,
+          boundNames),
         () -> (deconflict.get()).apply(hydra.lib.strings.Cat2.apply(
           name,
           "_")),
@@ -220,7 +218,7 @@ public interface Utils {
       unqualName);
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type> unpackForallType(T0 cx, hydra.core.Type t) {
+  static hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type> unpackForallType(hydra.core.Type t) {
     return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type> otherwise(hydra.core.Type instance) {
@@ -230,12 +228,10 @@ public interface Utils {
       @Override
       public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type> visit(hydra.core.Type.Forall fat) {
         hydra.core.Type tbody = ((fat).value).body;
-        hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type>> recursiveResult = new hydra.util.Lazy<>(() -> hydra.ext.haskell.utils.Utils.<T0>unpackForallType(
-          cx,
-          tbody));
-        hydra.util.Lazy<hydra.core.Type> finalType = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(recursiveResult.get()));
+        hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type> recursiveResult = hydra.ext.haskell.utils.Utils.unpackForallType(tbody);
+        hydra.util.Lazy<hydra.core.Type> finalType = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(recursiveResult));
         hydra.core.Name v = ((fat).value).parameter;
-        hydra.util.Lazy<java.util.List<hydra.core.Name>> vars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(recursiveResult.get()));
+        hydra.util.Lazy<java.util.List<hydra.core.Name>> vars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(recursiveResult));
         return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Name>, hydra.core.Type>(hydra.lib.lists.Cons.apply(
           v,
           vars.get()), finalType.get())));
