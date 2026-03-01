@@ -39,6 +39,10 @@ infixl 1 <<~
 (<<~) :: AsTerm t (Flow s a) => String -> t -> TTerm (Flow s b) -> TTerm (Flow s b)
 name <<~ def = bind name (asTerm def)
 
+infixl 1 <<=
+(<<=) :: AsTerm t (Either e a) => String -> t -> TTerm (Either e b) -> TTerm (Either e b)
+name <<= def = eitherBind name (asTerm def)
+
 -- | Function composition operator: f <.> g creates a function that applies g then f
 -- Example: toString <.> increment
 -- Accepts TTerm or TBinding for both operands (via AsTerm)
@@ -80,6 +84,10 @@ apply (TTerm lhs) (TTerm rhs) = TTerm $ Terms.apply lhs rhs
 
 bind :: AsTerm t (Flow s a) => String -> t -> TTerm (Flow s b) -> TTerm (Flow s b)
 bind v def body = primitive2 _flows_bind (asTerm def) $ lambda v $ body
+
+-- | Bind over Either: extracts the Right value into a variable, short-circuiting on Left
+eitherBind :: AsTerm t (Either e a) => String -> t -> TTerm (Either e b) -> TTerm (Either e b)
+eitherBind v def body = primitive2 _eithers_bind (asTerm def) $ lambda v $ body
 
 binaryFunction :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
 binaryFunction f = case (unTTerm $ f (var "x") (var "y")) of
