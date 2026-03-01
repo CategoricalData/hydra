@@ -36,7 +36,7 @@ testModule = Module testNs elements [] [] Nothing
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
-    let state = unFlow evaluateSelectedTerm context emptyTrace
+    let state = unFlow evaluateSelectedTerm (context) emptyTrace
     putStrLn $ traceSummary (flowStateTrace state)
     let result = flowStateValue state
     putStrLn $ "result: " <> show result

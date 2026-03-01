@@ -1,6 +1,6 @@
 -- | Rust code generator in Hydra DSL.
--- This module provides DSL versions of Rust code generation functions for type modules.
--- Only type definitions (records, unions, newtypes) are mapped; term definitions are ignored.
+-- This module provides DSL versions of Rust code generation functions.
+-- Type definitions are mapped to structs/enums/newtypes; term definitions are mapped to functions.
 
 module Hydra.Ext.Sources.Rust.Coder where
 
@@ -9,18 +9,19 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
+import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
+import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Module                     as Module
 import qualified Hydra.Dsl.Meta.Util                       as Util
-import qualified Hydra.Dsl.Terms                           as Terms
-import qualified Hydra.Dsl.Types                           as Types
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
@@ -54,7 +55,7 @@ module_ = Module ns elements
     [moduleNamespace RustSerdeSource.module_, moduleNamespace RustLanguageSource.module_,
       Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns, Monads.ns, SerializationSource.ns]
     (RustSyntax.ns:KernelTypes.kernelTypesNamespaces) $
-    Just "Rust code generator: converts Hydra type modules to Rust source code"
+    Just "Rust code generator: converts Hydra type and term modules to Rust source code"
   where
     elements = [
       toBinding standardDerives,
@@ -63,11 +64,21 @@ module_ = Module ns elements
       toBinding rustApply1,
       toBinding rustApply2,
       toBinding rustUnit,
+      toBinding rustExprPath,
+      toBinding rustCall,
+      toBinding rustBlock,
+      toBinding rustLetStmt,
+      toBinding rustClosure,
       toBinding encodeLiteralType,
+      toBinding encodeLiteral,
       toBinding encodeType,
+      toBinding encodeTerm,
+      toBinding encodeFunction,
+      toBinding encodeElimination,
       toBinding encodeStructField,
       toBinding encodeEnumVariant,
       toBinding encodeTypeDefinition,
+      toBinding encodeTermDefinition,
       toBinding moduleToRust]
 
 -- =============================================================================
@@ -147,6 +158,77 @@ rustUnit = def "rustUnit" $
   inject R._Type R._Type_unit unit
 
 -- =============================================================================
+-- Rust expression AST helpers
+-- =============================================================================
+
+-- | Variable reference as a path expression
+rustExprPath :: TBinding (String -> R.Expression)
+rustExprPath = def "rustExprPath" $
+  lambda "name" $
+    inject R._Expression R._Expression_path $
+      record R._ExprPath [
+        R._ExprPath_global>>: boolean False,
+        R._ExprPath_segments>>: list [
+          record R._PathSegment [
+            R._PathSegment_name>>: var "name",
+            R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]]
+
+-- | Function call expression
+rustCall :: TBinding (R.Expression -> [R.Expression] -> R.Expression)
+rustCall = def "rustCall" $
+  lambda "fun" $ lambda "args" $
+    inject R._Expression R._Expression_call $
+      record R._CallExpr [
+        R._CallExpr_function>>: var "fun",
+        R._CallExpr_args>>: var "args"]
+
+-- | Block expression with statements and trailing expression
+rustBlock :: TBinding ([R.Statement] -> R.Expression -> R.Expression)
+rustBlock = def "rustBlock" $
+  lambda "stmts" $ lambda "expr" $
+    inject R._Expression R._Expression_block $
+      record R._Block [
+        R._Block_statements>>: var "stmts",
+        R._Block_expression>>: just (var "expr")]
+
+-- | Let statement: let name = expr;
+rustLetStmt :: TBinding (String -> R.Expression -> R.Statement)
+rustLetStmt = def "rustLetStmt" $
+  lambda "name" $ lambda "expr" $
+    inject R._Statement R._Statement_let $
+      record R._LetStatement [
+        R._LetStatement_pattern>>:
+          inject R._Pattern R._Pattern_identifier $
+            record R._IdentifierPattern [
+              R._IdentifierPattern_name>>: var "name",
+              R._IdentifierPattern_mutable>>: boolean False,
+              R._IdentifierPattern_atPattern>>: nothing],
+        R._LetStatement_mutable>>: boolean False,
+        R._LetStatement_type>>: nothing,
+        R._LetStatement_init>>: just (var "expr")]
+
+-- | Closure expression: |params| body
+rustClosure :: TBinding ([String] -> R.Expression -> R.Expression)
+rustClosure = def "rustClosure" $
+  lambda "params" $ lambda "body" $
+    inject R._Expression R._Expression_closure $
+      record R._ClosureExpr [
+        R._ClosureExpr_move>>: boolean False,
+        R._ClosureExpr_params>>:
+          Lists.map (lambda "p" $
+            record R._ClosureParam [
+              R._ClosureParam_pattern>>:
+                inject R._Pattern R._Pattern_identifier $
+                  record R._IdentifierPattern [
+                    R._IdentifierPattern_name>>: var "p",
+                    R._IdentifierPattern_mutable>>: boolean False,
+                    R._IdentifierPattern_atPattern>>: nothing],
+              R._ClosureParam_type>>: nothing])
+          (var "params"),
+        R._ClosureExpr_returnType>>: nothing,
+        R._ClosureExpr_body>>: var "body"]
+
+-- =============================================================================
 -- Literal type encoding
 -- =============================================================================
 
@@ -176,6 +258,97 @@ encodeLiteralType = def "encodeLiteralType" $
         _IntegerType_uint64>>: constant $ rustPath @@ string "u64"],
     _LiteralType_string>>: constant $
       rustPath @@ string "String"]
+
+-- =============================================================================
+-- Literal value encoding
+-- =============================================================================
+
+-- | Encode a Hydra literal value as a Rust expression
+encodeLiteral :: TBinding (Literal -> R.Expression)
+encodeLiteral = def "encodeLiteral" $
+  lambda "lit" $ cases _Literal (var "lit") Nothing [
+    _Literal_boolean>>: lambda "b" $
+      inject R._Expression R._Expression_literal $
+        inject R._Literal R._Literal_bool (var "b"),
+    _Literal_string>>: lambda "s" $
+      inject R._Expression R._Expression_literal $
+        inject R._Literal R._Literal_string (var "s"),
+    _Literal_float>>: lambda "fv" $
+      cases _FloatValue (var "fv") Nothing [
+        _FloatValue_float32>>: lambda "f" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_float $
+              record R._FloatLiteral [
+                R._FloatLiteral_value>>: Literals.bigfloatToFloat64 (Literals.float32ToBigfloat (var "f")),
+                R._FloatLiteral_suffix>>: just (string "f32")],
+        _FloatValue_float64>>: lambda "f" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_float $
+              record R._FloatLiteral [
+                R._FloatLiteral_value>>: var "f",
+                R._FloatLiteral_suffix>>: nothing],
+        _FloatValue_bigfloat>>: lambda "f" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_float $
+              record R._FloatLiteral [
+                R._FloatLiteral_value>>: Literals.bigfloatToFloat64 (var "f"),
+                R._FloatLiteral_suffix>>: nothing]],
+    _Literal_integer>>: lambda "iv" $
+      cases _IntegerValue (var "iv") Nothing [
+        _IntegerValue_int8>>: lambda "i" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_integer $
+              record R._IntegerLiteral [
+                R._IntegerLiteral_value>>: Literals.int8ToBigint (var "i"),
+                R._IntegerLiteral_suffix>>: just (string "i8")],
+        _IntegerValue_int16>>: lambda "i" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_integer $
+              record R._IntegerLiteral [
+                R._IntegerLiteral_value>>: Literals.int16ToBigint (var "i"),
+                R._IntegerLiteral_suffix>>: just (string "i16")],
+        _IntegerValue_int32>>: lambda "i" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_integer $
+              record R._IntegerLiteral [
+                R._IntegerLiteral_value>>: Literals.int32ToBigint (var "i"),
+                R._IntegerLiteral_suffix>>: just (string "i32")],
+        _IntegerValue_int64>>: lambda "i" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_integer $
+              record R._IntegerLiteral [
+                R._IntegerLiteral_value>>: Literals.int64ToBigint (var "i"),
+                R._IntegerLiteral_suffix>>: just (string "i64")],
+        _IntegerValue_uint8>>: lambda "i" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_integer $
+              record R._IntegerLiteral [
+                R._IntegerLiteral_value>>: Literals.uint8ToBigint (var "i"),
+                R._IntegerLiteral_suffix>>: just (string "u8")],
+        _IntegerValue_uint16>>: lambda "i" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_integer $
+              record R._IntegerLiteral [
+                R._IntegerLiteral_value>>: Literals.uint16ToBigint (var "i"),
+                R._IntegerLiteral_suffix>>: just (string "u16")],
+        _IntegerValue_uint32>>: lambda "i" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_integer $
+              record R._IntegerLiteral [
+                R._IntegerLiteral_value>>: Literals.uint32ToBigint (var "i"),
+                R._IntegerLiteral_suffix>>: just (string "u32")],
+        _IntegerValue_uint64>>: lambda "i" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_integer $
+              record R._IntegerLiteral [
+                R._IntegerLiteral_value>>: Literals.uint64ToBigint (var "i"),
+                R._IntegerLiteral_suffix>>: just (string "u64")],
+        _IntegerValue_bigint>>: lambda "i" $
+          inject R._Expression R._Expression_literal $
+            inject R._Literal R._Literal_integer $
+              record R._IntegerLiteral [
+                R._IntegerLiteral_value>>: var "i",
+                R._IntegerLiteral_suffix>>: nothing]]]
 
 -- =============================================================================
 -- Type encoding
@@ -242,6 +415,230 @@ encodeType = def "encodeType" $
         Flows.pure (rustPath @@ (Formatting.capitalize @@ Core.unName (var "name"))),
       _Type_forall>>: lambda "fa" $
         encodeType @@ Core.forallTypeBody (var "fa")]
+
+-- =============================================================================
+-- Term encoding
+-- =============================================================================
+
+-- | Encode a Hydra term as a Rust expression
+encodeTerm :: TBinding (Term -> Flow Graph R.Expression)
+encodeTerm = def "encodeTerm" $
+  lambda "term" $
+    cases _Term (var "term") (Just $
+      Flows.fail (string "unexpected term variant"))
+    [_Term_annotated>>: lambda "at" $
+       encodeTerm @@ Core.annotatedTermBody (var "at"),
+     _Term_application>>: lambda "app" $
+       "fun" <<~ (encodeTerm @@ Core.applicationFunction (var "app")) $
+       "arg" <<~ (encodeTerm @@ Core.applicationArgument (var "app")) $
+         Flows.pure (rustCall @@ var "fun" @@ list [var "arg"]),
+     _Term_either>>: lambda "e" $
+       Eithers.either_
+         (lambda "l" $
+           "sl" <<~ (encodeTerm @@ var "l") $
+             Flows.pure (rustCall @@ (rustExprPath @@ string "Left") @@ list [var "sl"]))
+         (lambda "r" $
+           "sr" <<~ (encodeTerm @@ var "r") $
+             Flows.pure (rustCall @@ (rustExprPath @@ string "Right") @@ list [var "sr"]))
+         (var "e"),
+     _Term_function>>: lambda "fun" $
+       encodeFunction @@ var "fun",
+     _Term_let>>: lambda "lt" $
+       "bindings" <~ Core.letBindings (var "lt") $
+       "body" <~ Core.letBody (var "lt") $
+       "stmts" <<~ (Flows.mapList
+         (lambda "b" $
+           "bname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.bindingName (var "b"))) $
+           "bval" <<~ (encodeTerm @@ Core.bindingTerm (var "b")) $
+             Flows.pure (rustLetStmt @@ var "bname" @@ var "bval"))
+         (var "bindings")) $
+       "bodyExpr" <<~ (encodeTerm @@ var "body") $
+         Flows.pure (rustBlock @@ var "stmts" @@ var "bodyExpr"),
+     _Term_list>>: lambda "els" $
+       "sels" <<~ (Flows.mapList encodeTerm (var "els")) $
+         Flows.pure (rustCall @@ (rustExprPath @@ string "Vec::from") @@
+           list [inject R._Expression R._Expression_array $
+             inject R._ArrayExpr R._ArrayExpr_elements (var "sels")]),
+     _Term_literal>>: lambda "lit" $
+       Flows.pure (encodeLiteral @@ var "lit"),
+     _Term_map>>: lambda "m" $
+       "pairs" <<~ (Flows.mapList
+         (lambda "entry" $
+           "k" <<~ (encodeTerm @@ Pairs.first (var "entry")) $
+           "v" <<~ (encodeTerm @@ Pairs.second (var "entry")) $
+             Flows.pure (inject R._Expression R._Expression_tuple $ list [var "k", var "v"]))
+         (Maps.toList (var "m"))) $
+         Flows.pure (rustCall @@ (rustExprPath @@ string "BTreeMap::from") @@
+           list [inject R._Expression R._Expression_array $
+             inject R._ArrayExpr R._ArrayExpr_elements (var "pairs")]),
+     _Term_maybe>>: lambda "mt" $
+       Maybes.cases (var "mt")
+         (Flows.pure (rustExprPath @@ string "None"))
+         (lambda "val" $
+           "sval" <<~ (encodeTerm @@ var "val") $
+             Flows.pure (rustCall @@ (rustExprPath @@ string "Some") @@ list [var "sval"])),
+     _Term_pair>>: lambda "p" $
+       "f" <<~ (encodeTerm @@ Pairs.first (var "p")) $
+       "s" <<~ (encodeTerm @@ Pairs.second (var "p")) $
+         Flows.pure (inject R._Expression R._Expression_tuple $ list [var "f", var "s"]),
+     _Term_record>>: lambda "rec" $
+       "rname" <~ Core.recordTypeName (var "rec") $
+       "fields" <~ Core.recordFields (var "rec") $
+       "sfields" <<~ (Flows.mapList
+         (lambda "f" $
+           "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "f"))) $
+           "fval" <<~ (encodeTerm @@ Core.fieldTerm (var "f")) $
+             Flows.pure (record R._FieldValue [
+               R._FieldValue_name>>: var "fname",
+               R._FieldValue_value>>: just (var "fval")]))
+         (var "fields")) $
+         Flows.pure (inject R._Expression R._Expression_struct $
+           record R._StructExpr [
+             R._StructExpr_path>>:
+               record R._ExprPath [
+                 R._ExprPath_global>>: boolean False,
+                 R._ExprPath_segments>>: list [
+                   record R._PathSegment [
+                     R._PathSegment_name>>: Formatting.capitalize @@ (Names.localNameOf @@ var "rname"),
+                     R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]],
+             R._StructExpr_fields>>: var "sfields",
+             R._StructExpr_rest>>: nothing]),
+     _Term_set>>: lambda "s" $
+       "sels" <<~ (Flows.mapList encodeTerm (Sets.toList (var "s"))) $
+         Flows.pure (rustCall @@ (rustExprPath @@ string "BTreeSet::from") @@
+           list [inject R._Expression R._Expression_array $
+             inject R._ArrayExpr R._ArrayExpr_elements (var "sels")]),
+     _Term_union>>: lambda "inj" $
+       "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.injectionTypeName (var "inj"))) $
+       "field" <~ Core.injectionField (var "inj") $
+       "fname" <~ (Formatting.capitalize @@ Core.unName (Core.fieldName (var "field"))) $
+       "fterm" <~ Core.fieldTerm (var "field") $
+       "dterm" <~ (Rewriting.deannotateTerm @@ var "fterm") $
+       "isUnit" <~ (cases _Term (var "dterm") (Just $ boolean False) [
+         _Term_unit>>: constant $ boolean True,
+         _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
+       Logic.ifElse (var "isUnit")
+         (Flows.pure (rustExprPath @@ Strings.cat2 (Strings.cat2 (var "tname") (string "::")) (var "fname")))
+         ("sval" <<~ (encodeTerm @@ var "fterm") $
+           Flows.pure (rustCall @@ (rustExprPath @@ Strings.cat2 (Strings.cat2 (var "tname") (string "::")) (var "fname")) @@ list [var "sval"])),
+     _Term_unit>>: constant $
+       Flows.pure (inject R._Expression R._Expression_tuple $ list ([] :: [TTerm R.Expression])),
+     _Term_variable>>: lambda "name" $
+       Flows.pure (rustExprPath @@ (Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ RustLanguageSource.rustReservedWords @@ Core.unName (var "name")))),
+     _Term_wrap>>: lambda "wt" $
+       "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.wrappedTermTypeName (var "wt"))) $
+       "inner" <<~ (encodeTerm @@ Core.wrappedTermBody (var "wt")) $
+         Flows.pure (rustCall @@ (rustExprPath @@ var "tname") @@ list [var "inner"])]
+
+-- =============================================================================
+-- Function encoding
+-- =============================================================================
+
+-- | Encode a Hydra function as a Rust expression
+encodeFunction :: TBinding (Function -> Flow Graph R.Expression)
+encodeFunction = def "encodeFunction" $
+  lambda "fun" $
+    cases _Function (var "fun") Nothing [
+      _Function_lambda>>: lambda "lam" $
+        "param" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.lambdaParameter (var "lam"))) $
+        "body" <<~ (encodeTerm @@ Core.lambdaBody (var "lam")) $
+          Flows.pure (rustClosure @@ list [var "param"] @@ var "body"),
+      _Function_primitive>>: lambda "name" $
+        Flows.pure (rustExprPath @@ Core.unName (var "name")),
+      _Function_elimination>>: lambda "elim" $
+        encodeElimination @@ var "elim" @@ nothing]
+
+-- =============================================================================
+-- Elimination encoding
+-- =============================================================================
+
+-- | Encode a Hydra elimination as a Rust expression.
+-- Takes an optional argument for applied eliminations.
+encodeElimination :: TBinding (Elimination -> Maybe Term -> Flow Graph R.Expression)
+encodeElimination = def "encodeElimination" $
+  lambda "elim" $ lambda "marg" $
+    cases _Elimination (var "elim") Nothing [
+      _Elimination_record>>: lambda "proj" $
+        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
+        Maybes.cases (var "marg")
+          -- Unapplied projection: |v| v.field
+          (Flows.pure (rustClosure @@ list [string "v"] @@
+            (inject R._Expression R._Expression_fieldAccess $
+              record R._FieldAccessExpr [
+                R._FieldAccessExpr_object>>: rustExprPath @@ string "v",
+                R._FieldAccessExpr_field>>: var "fname"])))
+          (lambda "arg" $
+            "sarg" <<~ (encodeTerm @@ var "arg") $
+              Flows.pure (inject R._Expression R._Expression_fieldAccess $
+                record R._FieldAccessExpr [
+                  R._FieldAccessExpr_object>>: var "sarg",
+                  R._FieldAccessExpr_field>>: var "fname"])),
+      _Elimination_union>>: lambda "cs" $
+        "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs"))) $
+        "caseFields" <~ Core.caseStatementCases (var "cs") $
+        "defCase" <~ Core.caseStatementDefault (var "cs") $
+        "arms" <<~ (Flows.mapList
+          (lambda "cf" $
+            "cfname" <~ (Formatting.capitalize @@ Core.unName (Core.fieldName (var "cf"))) $
+            "cfterm" <~ Core.fieldTerm (var "cf") $
+            "armBody" <<~ (encodeTerm @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "v")))))) $
+              Flows.pure (record R._MatchArm [
+                R._MatchArm_pattern>>:
+                  inject R._Pattern R._Pattern_tupleStruct $
+                    record R._TupleStructPattern [
+                      R._TupleStructPattern_path>>:
+                        record R._ExprPath [
+                          R._ExprPath_global>>: boolean False,
+                          R._ExprPath_segments>>: list [
+                            record R._PathSegment [
+                              R._PathSegment_name>>: Strings.cat2 (Strings.cat2 (var "tname") (string "::")) (var "cfname"),
+                              R._PathSegment_arguments>>: inject R._GenericArguments R._GenericArguments_none unit]]],
+                      R._TupleStructPattern_elements>>: list [
+                        inject R._Pattern R._Pattern_identifier $
+                          record R._IdentifierPattern [
+                            R._IdentifierPattern_name>>: string "v",
+                            R._IdentifierPattern_mutable>>: boolean False,
+                            R._IdentifierPattern_atPattern>>: nothing]]],
+                R._MatchArm_guard>>: nothing,
+                R._MatchArm_body>>: var "armBody"]))
+          (var "caseFields")) $
+        -- Add default arm if present
+        "allArms" <<~ (Maybes.cases (var "defCase")
+          (Flows.pure (var "arms"))
+          (lambda "dt" $
+            "defBody" <<~ (encodeTerm @@ (Core.termApplication (Core.application (var "dt") (Core.termVariable (wrap _Name (string "v")))))) $
+            Flows.pure (Lists.concat2 (var "arms") (list [
+              record R._MatchArm [
+                R._MatchArm_pattern>>: inject R._Pattern R._Pattern_wildcard unit,
+                R._MatchArm_guard>>: nothing,
+                R._MatchArm_body>>: var "defBody"]])))) $
+        Maybes.cases (var "marg")
+          -- Unapplied: |v| match v { ... }
+          (Flows.pure (rustClosure @@ list [string "v"] @@
+            (inject R._Expression R._Expression_match $
+              record R._MatchExpr [
+                R._MatchExpr_scrutinee>>: rustExprPath @@ string "v",
+                R._MatchExpr_arms>>: var "allArms"])))
+          (lambda "arg" $
+            "sarg" <<~ (encodeTerm @@ var "arg") $
+              Flows.pure (inject R._Expression R._Expression_match $
+                record R._MatchExpr [
+                  R._MatchExpr_scrutinee>>: var "sarg",
+                  R._MatchExpr_arms>>: var "allArms"])),
+      _Elimination_wrap>>: lambda "name" $
+        Maybes.cases (var "marg")
+          -- Unapplied: |v| v.0
+          (Flows.pure (rustClosure @@ list [string "v"] @@
+            (inject R._Expression R._Expression_tupleIndex $
+              record R._TupleIndexExpr [
+                R._TupleIndexExpr_tuple>>: rustExprPath @@ string "v",
+                R._TupleIndexExpr_index>>: int32 0])))
+          (lambda "arg" $
+            "sarg" <<~ (encodeTerm @@ var "arg") $
+              Flows.pure (inject R._Expression R._Expression_tupleIndex $
+                record R._TupleIndexExpr [
+                  R._TupleIndexExpr_tuple>>: var "sarg",
+                  R._TupleIndexExpr_index>>: int32 0]))]
 
 -- =============================================================================
 -- Struct field encoding
@@ -370,18 +767,56 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
       R._ItemWithComments_item>>: var "item"]))
 
 -- =============================================================================
+-- Term definition encoding
+-- =============================================================================
+
+-- | Encode a Hydra term definition as a Rust function item
+encodeTermDefinition :: TBinding (TermDefinition -> Flow Graph R.ItemWithComments)
+encodeTermDefinition = def "encodeTermDefinition" $
+  lambda "tdef" $
+    "name" <~ Module.termDefinitionName (var "tdef") $
+    "term" <~ Module.termDefinitionTerm (var "tdef") $
+    "tscheme" <~ Module.termDefinitionType (var "tdef") $
+    "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
+    "typ" <~ Core.typeSchemeType (var "tscheme") $
+    Monads.withTrace @@ (Strings.cat2 (string "term ") (Core.unName (var "name"))) @@
+    ("body" <<~ (encodeTerm @@ var "term") $
+     "retType" <<~ (encodeType @@ var "typ") $
+       Flows.pure (record R._ItemWithComments [
+         R._ItemWithComments_doc>>: nothing,
+         R._ItemWithComments_visibility>>: inject R._Visibility R._Visibility_public unit,
+         R._ItemWithComments_item>>: inject R._Item R._Item_fn $
+           record R._FnDef [
+             R._FnDef_name>>: var "lname",
+             R._FnDef_generics>>: list ([] :: [TTerm R.GenericParam]),
+             R._FnDef_whereClause>>: nothing,
+             R._FnDef_params>>: list ([] :: [TTerm R.FnParam]),
+             R._FnDef_returnType>>: just (var "retType"),
+             R._FnDef_body>>: record R._Block [
+               R._Block_statements>>: list ([] :: [TTerm R.Statement]),
+               R._Block_expression>>: just (var "body")],
+             R._FnDef_public>>: boolean True,
+             R._FnDef_async>>: boolean False,
+             R._FnDef_const>>: boolean False,
+             R._FnDef_unsafe>>: boolean False,
+             R._FnDef_doc>>: nothing]]))
+
+-- =============================================================================
 -- Module entry point
 -- =============================================================================
 
 -- | Convert a Hydra module to a map of file paths to Rust source code strings.
--- Only type definitions are mapped; term definitions are ignored.
 moduleToRust :: TBinding (Module -> [Definition] -> Flow Graph (M.Map FilePath String))
 moduleToRust = def "moduleToRust" $
   lambda "mod" $ lambda "defs" $
     Monads.withTrace @@ (Strings.cat2 (string "encode Rust module: ") (Core.unNamespace $ Module.moduleNamespace (var "mod"))) @@
-    ("typeDefs" <~ (Pairs.first (Schemas.partitionDefinitions @@ var "defs")) $
-    "items" <<~ (Flows.mapList encodeTypeDefinition (var "typeDefs")) $
-    "crate" <~ (record R._Crate [R._Crate_items>>: var "items"]) $
+    ("partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
+    "typeDefs" <~ Pairs.first (var "partitioned") $
+    "termDefs" <~ Pairs.second (var "partitioned") $
+    "typeItems" <<~ (Flows.mapList encodeTypeDefinition (var "typeDefs")) $
+    "termItems" <<~ (Flows.mapList encodeTermDefinition (var "termDefs")) $
+    "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
+    "crate" <~ (record R._Crate [R._Crate_items>>: var "allItems"]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (RustSerdeSource.crateToExpr @@ var "crate"))) $
     "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "rs") @@ (Module.moduleNamespace (var "mod"))) $
       Flows.pure (Maps.singleton (var "filePath") (var "code")))

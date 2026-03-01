@@ -65,8 +65,8 @@ fieldTypeSummary (FieldType fname ftype) = unName fname ++ " : " ++ ShowCore.typ
 
 graphSummary :: Bool -> Graph -> Flow Graph String
 graphSummary withTypes g = do
-  gi <- if withTypes then inferGraphTypes g else pure g
-  let els = L.sortBy (O.comparing bindingName) $ graphElements gi
+  gi <- if withTypes then fst <$> inferGraphTypes (graphToBindings g) g else pure g
+  let els = L.sortBy (O.comparing bindingName) $ graphToBindings gi
   let prims = L.sortBy (O.comparing primitiveName) $ M.elems $ graphPrimitives gi
   elSummaries <- CM.mapM (elementSummary withTypes) els
   let primSummaries = fmap (primitiveSummary withTypes) prims
@@ -80,7 +80,7 @@ termGraphToDependencyPropertyGraph :: Bool -> Graph -> PG.Graph String
 termGraphToDependencyPropertyGraph withPrimitives g = PG.Graph vertexMap edgeMap
   where
     primitives = graphPrimitives g
-    elements = graphElements g
+    elements = graphToBindings g
     primLabel = PG.VertexLabel "Primitive"
     elLabel = PG.VertexLabel "Element"
     dependsOnPrimitiveLabel = PG.EdgeLabel "dependsOnPrimitive"

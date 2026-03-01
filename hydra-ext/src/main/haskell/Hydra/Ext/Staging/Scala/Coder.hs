@@ -150,7 +150,7 @@ encodeFunction meta fun arg = case fun of
       EliminationUnion (CaseStatement _ def cases) -> do
           let v = "v"
           dom <- findDomain
-          ftypes <- withSchemaContext $ fieldTypes dom
+          ftypes <- fieldTypes dom
           cx <- getState
           let sn = nameOfType cx dom
           scases <- CM.mapM (encodeCase ftypes sn) cases
@@ -293,4 +293,6 @@ encodeType t = case deannotateType t of
   _ -> fail $ "can't encode unsupported type in Scala: " ++ show t
 
 encodeUntypeApplicationTerm :: Term -> Flow Graph Scala.Data
-encodeUntypeApplicationTerm term = (inferenceResultTerm <$> inferInGraphContext term) >>= encodeTerm
+encodeUntypeApplicationTerm term = do
+  g <- getState
+  (inferenceResultTerm <$> inferInGraphContext g term) >>= encodeTerm

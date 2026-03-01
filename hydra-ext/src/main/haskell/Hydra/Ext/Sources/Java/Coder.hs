@@ -185,8 +185,8 @@ module_ = Module ns elements
       toBinding buildTypeSubst,
       toBinding buildTypeSubst_go,
       -- Environment getter/setter helpers
-      toBinding javaEnvGetTC,
-      toBinding javaEnvSetTC,
+      toBinding javaEnvGetGraph,
+      toBinding javaEnvSetGraph,
       -- Function analysis
       toBinding analyzeJavaFunction,
       toBinding analyzeJavaFunctionNoInfer,
@@ -838,8 +838,8 @@ insertBranchVar = def "insertBranchVar" $
             project JavaHelpers._Aliases JavaHelpers._Aliases_methodCodomain @@ var "aliases",
           JavaHelpers._Aliases_thunkedVars>>:
             project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases"],
-      JavaHelpers._JavaEnvironment_typeContext>>:
-        project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env"]
+      JavaHelpers._JavaEnvironment_graph>>:
+        project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env"]
 
 -- =============================================================================
 -- Flow helpers
@@ -1339,8 +1339,7 @@ encodeType_resolveIfTypedef = def "encodeType_resolveIfTypedef" $
       (Logic.ifElse (isLambdaBoundVariable @@ var "name")
         (Flows.pure nothing)
         ("g" <<~ Monads.getState $
-          "ix" <<~ (Schemas.graphToInferenceContext @@ var "g") $
-          "schemaTypes" <~ (project _InferenceContext _InferenceContext_schemaTypes @@ var "ix") $
+          "schemaTypes" <~ Graph.graphSchemaTypes (var "g") $
           Maybes.cases (Maps.lookup (var "name") (var "schemaTypes"))
             (Flows.pure nothing)
             (lambda "ts" $
@@ -1859,19 +1858,19 @@ buildTypeSubst_go = def "buildTypeSubst_go" $
 -- Environment getter/setter helpers
 -- =============================================================================
 
--- | Get TypeContext from JavaEnvironment
-javaEnvGetTC :: TBinding (JavaHelpers.JavaEnvironment -> TypeContext)
-javaEnvGetTC = def "javaEnvGetTC" $
-  lambda "env" $ project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env"
+-- | Get Graph from JavaEnvironment
+javaEnvGetGraph :: TBinding (JavaHelpers.JavaEnvironment -> Graph)
+javaEnvGetGraph = def "javaEnvGetGraph" $
+  lambda "env" $ project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env"
 
--- | Set TypeContext in JavaEnvironment (preserving other fields)
-javaEnvSetTC :: TBinding (TypeContext -> JavaHelpers.JavaEnvironment -> JavaHelpers.JavaEnvironment)
-javaEnvSetTC = def "javaEnvSetTC" $
-  lambda "tc" $ lambda "env" $
+-- | Set Graph in JavaEnvironment (preserving other fields)
+javaEnvSetGraph :: TBinding (Graph -> JavaHelpers.JavaEnvironment -> JavaHelpers.JavaEnvironment)
+javaEnvSetGraph = def "javaEnvSetGraph" $
+  lambda "g" $ lambda "env" $
     record JavaHelpers._JavaEnvironment [
       JavaHelpers._JavaEnvironment_aliases>>:
         project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env",
-      JavaHelpers._JavaEnvironment_typeContext>>: var "tc"]
+      JavaHelpers._JavaEnvironment_graph>>: var "g"]
 
 -- =============================================================================
 -- Function analysis
@@ -1880,23 +1879,23 @@ javaEnvSetTC = def "javaEnvSetTC" $
 -- | Analyze a Java function term, collecting lambdas, type lambdas, lets, and type applications
 analyzeJavaFunction :: TBinding (JavaHelpers.JavaEnvironment -> Term -> Flow Graph (FunctionStructure JavaHelpers.JavaEnvironment))
 analyzeJavaFunction = def "analyzeJavaFunction" $
-  CoderUtils.analyzeFunctionTerm @@ javaEnvGetTC @@ javaEnvSetTC
+  CoderUtils.analyzeFunctionTerm @@ javaEnvGetGraph @@ javaEnvSetGraph
 
 -- | Like analyzeJavaFunction but without type inference for the codomain.
 analyzeJavaFunctionNoInfer :: TBinding (JavaHelpers.JavaEnvironment -> Term -> Flow Graph (FunctionStructure JavaHelpers.JavaEnvironment))
 analyzeJavaFunctionNoInfer = def "analyzeJavaFunctionNoInfer" $
-  CoderUtils.analyzeFunctionTermNoInfer @@ javaEnvGetTC @@ javaEnvSetTC
+  CoderUtils.analyzeFunctionTermNoInfer @@ javaEnvGetGraph @@ javaEnvSetGraph
 
 -- =============================================================================
 -- Lambda context management
 -- =============================================================================
 
--- | Execute a computation in the context of a lambda, extending both TypeContext
+-- | Execute a computation in the context of a lambda, extending both the Graph
 -- and aliasesLambdaVars with the lambda parameter.
 withLambda :: TBinding (JavaHelpers.JavaEnvironment -> Lambda -> (JavaHelpers.JavaEnvironment -> Flow s a) -> Flow s a)
 withLambda = def "withLambda" $
   lambda "env" $ lambda "lam" $ lambda "k" $
-    Schemas.withLambdaContext @@ javaEnvGetTC @@ javaEnvSetTC @@ var "env" @@ var "lam" @@
+    Schemas.withLambdaContext @@ javaEnvGetGraph @@ javaEnvSetGraph @@ var "env" @@ var "lam" @@
       (lambda "env1" $
         "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env1") $
         "aliases2" <~ (record JavaHelpers._Aliases [
@@ -1929,14 +1928,14 @@ withLambda = def "withLambda" $
             project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases"]) $
         "env2" <~ (record JavaHelpers._JavaEnvironment [
           JavaHelpers._JavaEnvironment_aliases>>: var "aliases2",
-          JavaHelpers._JavaEnvironment_typeContext>>:
-            project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env1"]) $
+          JavaHelpers._JavaEnvironment_graph>>:
+            project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env1"]) $
         var "k" @@ var "env2")
 
 -- | Execute a computation in the context of a type lambda
 withTypeLambda :: TBinding (JavaHelpers.JavaEnvironment -> TypeLambda -> (JavaHelpers.JavaEnvironment -> Flow s a) -> Flow s a)
 withTypeLambda = def "withTypeLambda" $
-  Schemas.withTypeLambdaContext @@ javaEnvGetTC @@ javaEnvSetTC
+  Schemas.withTypeLambdaContext @@ javaEnvGetGraph @@ javaEnvSetGraph
 
 -- =============================================================================
 -- Type propagation
@@ -2649,9 +2648,9 @@ correctTypeAppsWithArgs = def "correctTypeAppsWithArgs" $
           @@ (buildArgSubst @@ var "schemeVarSet" @@ var "schemeDoms" @@ var "argTypes"))))
 
 -- | Compute corrected type applications for a function call.
-correctTypeApps :: TBinding (TypeContext -> Name -> [Term] -> [Type] -> Flow Graph [Type])
+correctTypeApps :: TBinding (Graph -> Name -> [Term] -> [Type] -> Flow Graph [Type])
 correctTypeApps = def "correctTypeApps" $
-  lambda "tc" $ lambda "name" $ lambda "args" $ lambda "fallbackTypeApps" $
+  lambda "g" $ lambda "name" $ lambda "args" $ lambda "fallbackTypeApps" $
     "mel" <<~ (Lexical.dereferenceElement @@ var "name") $
     Maybes.cases (var "mel")
       (Flows.pure (var "fallbackTypeApps"))
@@ -3333,10 +3332,9 @@ constantDecl = def "constantDecl" $
                    inject Java._FieldModifier Java._FieldModifier_final unit],
     "nameName">: JavaUtilsSource.nameToJavaName @@ var "aliases" @@ Core.name (string "hydra.core.Name")] $
     "g" <<~ Monads.getState $
-    "tc" <<~ (Schemas.graphToTypeContext @@ var "g") $
     "env" <~ (record JavaHelpers._JavaEnvironment [
       JavaHelpers._JavaEnvironment_aliases>>: var "aliases",
-      JavaHelpers._JavaEnvironment_typeContext>>: var "tc"]) $
+      JavaHelpers._JavaEnvironment_graph>>: var "g"]) $
     "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ Core.typeVariable (Core.name (string "hydra.core.Name"))) $
     "arg" <<~ (encodeTerm @@ var "env" @@ (Core.termLiteral (Core.literalString (unwrap _Name @@ var "name")))) $
     "init" <~ (inject Java._VariableInitializer Java._VariableInitializer_expression
@@ -3424,8 +3422,7 @@ isFieldUnitType :: TBinding (Name -> Name -> Flow Graph Bool)
 isFieldUnitType = def "isFieldUnitType" $
   lambda "typeName" $ lambda "fieldName" $
     "g" <<~ Monads.getState $
-    "ix" <<~ (Schemas.graphToInferenceContext @@ var "g") $
-    "schemaTypes" <~ (project _InferenceContext _InferenceContext_schemaTypes @@ var "ix") $
+    "schemaTypes" <~ Graph.graphSchemaTypes (var "g") $
     Maybes.cases (Maps.lookup (var "typeName") (var "schemaTypes"))
       (Flows.pure false)
       (lambda "ts" $
@@ -3450,7 +3447,7 @@ encodeTermInternal :: TBinding (JavaHelpers.JavaEnvironment -> [M.Map Name Term]
 encodeTermInternal = def "encodeTermInternal" $
   lambda "env" $ lambda "anns" $ lambda "tyapps" $ lambda "term" $ lets [
     "aliases">: project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env",
-    "tc">: project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env",
+    "g">: project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env",
     "encode">: lambda "t" $ encodeTerm @@ var "env" @@ var "t"] $
     cases _Term (var "term") (Just $
       Flows.pure (encodeLiteral @@ inject _Literal _Literal_string (string "Unimplemented term variant")))
@@ -3494,7 +3491,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "mt" <<~ (Annotations.getType @@ var "combinedAnns") $
         "typ" <<~ (Maybes.cases (var "mt")
           (Maybes.cases (tryInferFunctionType @@ var "f")
-            (CoderUtils.tryTypeOf @@ string "4" @@ var "tc" @@ var "term")
+            (CoderUtils.tryTypeOf @@ string "4" @@ var "g" @@ var "term")
             (lambda "inferredType" $ Flows.pure (var "inferredType")))
           (lambda "t" $ Flows.pure (var "t"))) $
         cases _Type (Rewriting.deannotateType @@ var "typ")
@@ -3520,11 +3517,11 @@ encodeTermInternal = def "encodeTermInternal" $
                 (JavaDsl.lambdaParametersTuple (list ([] :: [TTerm Java.FormalParameter])))
                 (JavaDsl.lambdaBodyBlock (var "block"))) $
             "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
-            "tc2" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env2") $
+            "g2" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env2") $
             "aliases2" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env2") $
             "mt" <<~ (Annotations.getType @@ var "combinedAnns") $
             "letType" <<~ (Maybes.cases (var "mt")
-              (CoderUtils.tryTypeOf @@ string "let-body" @@ var "tc2" @@ var "body")
+              (CoderUtils.tryTypeOf @@ string "let-body" @@ var "g2" @@ var "body")
               (lambda "t" $ Flows.pure (var "t"))) $
             "jLetType" <<~ (encodeType @@ var "aliases2" @@ Sets.empty @@ var "letType") $
             "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jLetType") $
@@ -3713,7 +3710,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
         "mtyp" <<~ (Annotations.getType @@ var "combinedAnns") $
         "typ" <<~ (Maybes.cases (var "mtyp")
-          (CoderUtils.tryTypeOf @@ string "5" @@ var "tc" @@ var "term")
+          (CoderUtils.tryTypeOf @@ string "5" @@ var "g" @@ var "term")
           (lambda "t" $ Flows.pure (var "t"))) $
         -- Collect all nested type applications (preserving annotations)
         "collected0" <~ (collectTypeApps0 @@ var "body" @@ list [var "atyp"]) $
@@ -3790,7 +3787,7 @@ encodeApplication :: TBinding (JavaHelpers.JavaEnvironment -> Application -> Flo
 encodeApplication = def "encodeApplication" $
   lambda "env" $ lambda "app" $
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    "tc" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env") $
+    "g" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env") $
     -- Gather function, args, and type applications
     "gathered" <~ (CoderUtils.gatherArgsWithTypeApps
       @@ (inject _Term _Term_application (var "app"))
@@ -3805,7 +3802,7 @@ encodeApplication = def "encodeApplication" $
       -- Use withDefault so that if type inference fails (e.g. empty list without type args),
       -- we fall through to encodeApplication_fallback via the default dispatch paths
       (Flows.withDefault (Core.typeVariable (Core.name (string "unknown")))
-        (CoderUtils.tryTypeOf @@ string "1" @@ var "tc" @@ var "fun"))
+        (CoderUtils.tryTypeOf @@ string "1" @@ var "g" @@ var "fun"))
       (lambda "t" $ Flows.pure (var "t"))) $
     "arity" <~ (Arity.typeArity @@ var "funTyp") $
     -- Determine callee name for type annotation correction
@@ -3823,11 +3820,11 @@ encodeApplication = def "encodeApplication" $
       (lambda "cname" $ annotateLambdaArgs @@ var "cname" @@ var "typeApps" @@ var "args")) $
     -- Dispatch based on the deannotated function form
     cases _Term (var "deannotatedFun")
-      (Just $ encodeApplication_fallback @@ var "env" @@ var "aliases" @@ var "tc" @@ var "typeApps"
+      (Just $ encodeApplication_fallback @@ var "env" @@ var "aliases" @@ var "g" @@ var "typeApps"
         @@ Core.applicationFunction (var "app") @@ Core.applicationArgument (var "app")) [
       _Term_function>>: lambda "f" $
         cases _Function (var "f")
-          (Just $ encodeApplication_fallback @@ var "env" @@ var "aliases" @@ var "tc" @@ var "typeApps"
+          (Just $ encodeApplication_fallback @@ var "env" @@ var "aliases" @@ var "g" @@ var "typeApps"
             @@ Core.applicationFunction (var "app") @@ Core.applicationArgument (var "app")) [
           _Function_primitive>>: lambda "name" $
             "hargs" <~ Lists.take (var "arity") (var "annotatedArgs") $
@@ -3843,7 +3840,7 @@ encodeApplication = def "encodeApplication" $
             (Logic.not (isLambdaBoundIn @@ var "name"
               @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases"))))
           -- Use curried construction for recursive bindings
-          (encodeApplication_fallback @@ var "env" @@ var "aliases" @@ var "tc" @@ var "typeApps"
+          (encodeApplication_fallback @@ var "env" @@ var "aliases" @@ var "g" @@ var "typeApps"
             @@ Core.applicationFunction (var "app") @@ Core.applicationArgument (var "app"))
           -- Normal variable application
           ("symClass" <<~ (classifyDataReference @@ var "name") $
@@ -3866,7 +3863,7 @@ encodeApplication = def "encodeApplication" $
             -- Correct the type application ordering
             "safeTypeApps" <<~ (Logic.ifElse (Lists.null (var "filteredTypeApps"))
               (Flows.pure (list ([] :: [TTerm Type])))
-              (correctTypeApps @@ var "tc" @@ var "name" @@ var "hargs" @@ var "filteredTypeApps")) $
+              (correctTypeApps @@ var "g" @@ var "name" @@ var "hargs" @@ var "filteredTypeApps")) $
             -- Filter phantom type args
             "finalTypeApps" <<~ (filterPhantomTypeArgs @@ var "name" @@ var "safeTypeApps") $
             "initialCall" <<~ (functionCall @@ var "env" @@ false @@ var "name" @@ var "hargs" @@ var "finalTypeApps") $
@@ -3876,13 +3873,13 @@ encodeApplication = def "encodeApplication" $
               (var "initialCall") (var "rargs"))]
 
 -- | Fallback path for encodeApplication — used for eliminations and default expressions.
-encodeApplication_fallback :: TBinding (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> TypeContext -> [Type] -> Term -> Term -> Flow Graph Java.Expression)
+encodeApplication_fallback :: TBinding (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> [Type] -> Term -> Term -> Flow Graph Java.Expression)
 encodeApplication_fallback = def "encodeApplication_fallback" $
-  lambda "env" $ lambda "aliases" $ lambda "tc" $ lambda "typeApps" $ lambda "lhs" $ lambda "rhs" $
+  lambda "env" $ lambda "aliases" $ lambda "g" $ lambda "typeApps" $ lambda "lhs" $ lambda "rhs" $
     Monads.withTrace @@ string "fallback" @@
     ("mt" <<~ (Annotations.getType @@ (Annotations.termAnnotationInternal @@ var "lhs")) $
     "t" <<~ (Maybes.cases (var "mt")
-      (CoderUtils.tryTypeOf @@ string "2" @@ var "tc" @@ var "lhs")
+      (CoderUtils.tryTypeOf @@ string "2" @@ var "g" @@ var "lhs")
       (lambda "typ" $ Flows.pure (var "typ"))) $
     cases _Type (Rewriting.deannotateTypeParameters @@ (Rewriting.deannotateType @@ var "t"))
       (Just $
@@ -3914,7 +3911,7 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
                   (Flows.pure (var "dom"))
                   ("mrt" <<~ (Annotations.getType @@ (Annotations.termAnnotationInternal @@ var "rhs")) $
                     Maybes.cases (var "mrt")
-                      ("rt" <<~ (CoderUtils.tryTypeOf @@ string "dom-enrich" @@ var "tc" @@ var "rhs") $
+                      ("rt" <<~ (CoderUtils.tryTypeOf @@ string "dom-enrich" @@ var "g" @@ var "rhs") $
                         Flows.pure (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "rt")))
                           (var "rt")
                           (var "dom")))
@@ -4299,14 +4296,14 @@ functionCall = def "functionCall" $
                       (JavaUtilsSource.methodInvocationStaticWithTypeArgs @@ var "classId" @@ var "methodId" @@ var "jTypeArgs" @@ var "jargs"))))))
 
 -- | Initialize a recursive binding with AtomicReference (for toDeclInit).
-toDeclInit :: TBinding (JavaHelpers.Aliases -> TypeContext -> S.Set Name -> [Binding] -> Name -> Flow Graph (Maybe Java.BlockStatement))
+toDeclInit :: TBinding (JavaHelpers.Aliases -> Graph -> S.Set Name -> [Binding] -> Name -> Flow Graph (Maybe Java.BlockStatement))
 toDeclInit = def "toDeclInit" $
-  lambda "aliasesExt" $ lambda "tcExt" $ lambda "recursiveVars" $ lambda "flatBindings" $ lambda "name" $
+  lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "flatBindings" $ lambda "name" $
     Logic.ifElse (Sets.member (var "name") (var "recursiveVars"))
       ("binding" <~ Lists.head (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings")) $
         "value" <~ Core.bindingTerm (var "binding") $
         "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
-          (CoderUtils.tryTypeOf @@ string "6" @@ var "tcExt" @@ var "value")
+          (CoderUtils.tryTypeOf @@ string "6" @@ var "gExt" @@ var "value")
           (lambda "ts" $ Flows.pure (Core.typeSchemeType (var "ts"))) $
         "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ") $
         "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
@@ -4324,13 +4321,13 @@ toDeclInit = def "toDeclInit" $
       (Flows.pure nothing)
 
 -- | Declare or set a binding value (for toDeclStatement).
-toDeclStatement :: TBinding (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> TypeContext -> S.Set Name -> S.Set Name -> [Binding] -> Name -> Flow Graph Java.BlockStatement)
+toDeclStatement :: TBinding (JavaHelpers.JavaEnvironment -> JavaHelpers.Aliases -> Graph -> S.Set Name -> S.Set Name -> [Binding] -> Name -> Flow Graph Java.BlockStatement)
 toDeclStatement = def "toDeclStatement" $
-  lambda "envExt" $ lambda "aliasesExt" $ lambda "tcExt" $ lambda "recursiveVars" $ lambda "thunkedVars" $ lambda "flatBindings" $ lambda "name" $
+  lambda "envExt" $ lambda "aliasesExt" $ lambda "gExt" $ lambda "recursiveVars" $ lambda "thunkedVars" $ lambda "flatBindings" $ lambda "name" $
     "binding" <~ Lists.head (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings")) $
     "value" <~ Core.bindingTerm (var "binding") $
     "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
-      (CoderUtils.tryTypeOf @@ string "7" @@ var "tcExt" @@ var "value")
+      (CoderUtils.tryTypeOf @@ string "7" @@ var "gExt" @@ var "value")
       (lambda "ts" $ Flows.pure (Core.typeSchemeType (var "ts"))) $
     "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ") $
     "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
@@ -4365,12 +4362,12 @@ bindingsToStatements :: TBinding (JavaHelpers.JavaEnvironment -> [Binding] -> Fl
 bindingsToStatements = def "bindingsToStatements" $
   lambda "env" $ lambda "bindings" $
     "aliases" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env") $
-    "tc" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env") $
+    "g" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env") $
     -- Flatten nested lets then deduplicate names
     "flatBindings" <~ (dedupBindings @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeJavaVars @@ var "aliases")
       @@ (flattenBindings @@ var "bindings")) $
-    -- Extend TypeContext with flattened bindings
-    "tcExtended" <~ (Schemas.extendTypeContextForLet @@ CoderUtils.bindingMetadata @@ var "tc"
+    -- Extend Graph with flattened bindings
+    "gExtended" <~ (Schemas.extendGraphForLet @@ CoderUtils.bindingMetadata @@ var "g"
       @@ record _Let [
         _Let_bindings>>: var "flatBindings",
         _Let_body>>: inject _Term _Term_variable (wrap _Name (string "dummy"))]) $
@@ -4446,15 +4443,15 @@ bindingsToStatements = def "bindingsToStatements" $
     -- Build extended environment
     "envExtended" <~ (record JavaHelpers._JavaEnvironment [
       JavaHelpers._JavaEnvironment_aliases>>: var "aliasesExtended",
-      JavaHelpers._JavaEnvironment_typeContext>>: var "tcExtended"]) $
+      JavaHelpers._JavaEnvironment_graph>>: var "gExtended"]) $
     -- Generate statements
     Logic.ifElse (Lists.null (var "bindings"))
       (Flows.pure (pair (list ([] :: [TTerm Java.BlockStatement])) (var "envExtended")))
       ("groups" <<~ (Flows.mapList
         (lambda "names" $
           -- For each group: generate init statements (for recursive vars) and decl statements
-          "inits" <<~ (Flows.mapList (lambda "n" $ toDeclInit @@ var "aliasesExtended" @@ var "tcExtended" @@ var "recursiveVars" @@ var "flatBindings" @@ var "n") (var "names")) $
-          "decls" <<~ (Flows.mapList (lambda "n" $ toDeclStatement @@ var "envExtended" @@ var "aliasesExtended" @@ var "tcExtended" @@ var "recursiveVars" @@ var "thunkedVars" @@ var "flatBindings" @@ var "n") (var "names")) $
+          "inits" <<~ (Flows.mapList (lambda "n" $ toDeclInit @@ var "aliasesExtended" @@ var "gExtended" @@ var "recursiveVars" @@ var "flatBindings" @@ var "n") (var "names")) $
+          "decls" <<~ (Flows.mapList (lambda "n" $ toDeclStatement @@ var "envExtended" @@ var "aliasesExtended" @@ var "gExtended" @@ var "recursiveVars" @@ var "thunkedVars" @@ var "flatBindings" @@ var "n") (var "names")) $
           Flows.pure (Lists.concat2 (Maybes.cat (var "inits")) (var "decls")))
         (var "sorted")) $
         Flows.pure (pair (Lists.concat (var "groups")) (var "envExtended")))
@@ -4900,8 +4897,8 @@ encodeTermTCO = def "encodeTermTCO" $
           project JavaHelpers._Aliases JavaHelpers._Aliases_methodCodomain @@ var "aliases0",
         JavaHelpers._Aliases_thunkedVars>>:
           project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases0"],
-      JavaHelpers._JavaEnvironment_typeContext>>:
-        project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env0"]) $
+      JavaHelpers._JavaEnvironment_graph>>:
+        project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env0"]) $
     "stripped" <~ (Rewriting.deannotateAndDetypeTerm @@ var "term") $
     -- Check if this term is a direct self-tail-call: funcName(args...)
     "gathered" <~ (CoderUtils.gatherApplications @@ var "stripped") $
@@ -5145,8 +5142,8 @@ encodeTermDefinition = def "encodeTermDefinition" $
           project JavaHelpers._Aliases JavaHelpers._Aliases_thunkedVars @@ var "aliases2base"]) $
       "env2WithTypeParams" <~ (record JavaHelpers._JavaEnvironment [
         JavaHelpers._JavaEnvironment_aliases>>: var "aliases2",
-        JavaHelpers._JavaEnvironment_typeContext>>:
-          project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_typeContext @@ var "env2"]) $
+        JavaHelpers._JavaEnvironment_graph>>:
+          project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env2"]) $
       -- Convert bindings to statements
       "bindResult" <<~ (bindingsToStatements @@ var "env2WithTypeParams" @@ var "bindings") $
       "bindingStmts" <~ Pairs.first (var "bindResult") $
@@ -5217,11 +5214,10 @@ encodeDefinitions :: TBinding (Module -> [Definition] -> Flow Graph (M.Map Name 
 encodeDefinitions = def "encodeDefinitions" $
   lambda "mod" $ lambda "defs" $
     "g" <<~ Monads.getState $
-    "tc" <<~ (Inference.initialTypeContext @@ var "g") $
     "aliases" <~ (JavaUtilsSource.importAliasesForModule @@ var "mod") $
     "env" <~ (record JavaHelpers._JavaEnvironment [
       JavaHelpers._JavaEnvironment_aliases>>: var "aliases",
-      JavaHelpers._JavaEnvironment_typeContext>>: var "tc"]) $
+      JavaHelpers._JavaEnvironment_graph>>: var "g"]) $
     "pkg" <~ (JavaUtilsSource.javaPackageDeclaration @@ (Module.moduleNamespace (var "mod"))) $
     "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $

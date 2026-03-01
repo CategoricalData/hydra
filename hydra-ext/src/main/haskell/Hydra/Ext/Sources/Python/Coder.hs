@@ -195,8 +195,8 @@ module_ = Module ns elements
       toBinding termArityWithPrimitives,
       toBinding functionArityWithPrimitives,
       -- Python function analysis
-      toBinding pythonEnvironmentGetTypeContext,
-      toBinding pythonEnvironmentSetTypeContext,
+      toBinding pythonEnvironmentGetGraph,
+      toBinding pythonEnvironmentSetGraph,
       -- withLambda and withTypeLambda for context management
       toBinding withLambda,
       toBinding withTypeLambda,
@@ -770,7 +770,7 @@ extendEnvWithTypeVar = def "extendEnvWithTypeVar" $
     record PyHelpers._PythonEnvironment [
       PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
       PyHelpers._PythonEnvironment_boundTypeVariables>>: pair (var "newList") (var "newMap"),
-      PyHelpers._PythonEnvironment_typeContext>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env",
+      PyHelpers._PythonEnvironment_graph>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env",
       PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "env",
       PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "env",
       PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "env",
@@ -837,7 +837,7 @@ isCaseStatementApplication = def "isCaseStatementApplication" $
                       (Core.caseStatementCases $ var "cs")
                       (var "arg")]]])
 
--- | Extend PythonEnvironment's TypeContext by adding lambda parameters.
+-- | Extend PythonEnvironment's Graph by adding lambda parameters.
 --   This is used when we've gathered lambdas from a term but need to manually extend the context.
 extendEnvWithLambdaParams :: TBinding (PyHelpers.PythonEnvironment -> Term -> PyHelpers.PythonEnvironment)
 extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
@@ -848,9 +848,9 @@ extendEnvWithLambdaParams = def "extendEnvWithLambdaParams" $
         _Term_function>>: "f" ~>
           cases _Function (var "f") (Just $ var "e") [
             _Function_lambda>>: "lam" ~>
-              "newTc" <~ (Schemas.extendTypeContextForLambda @@
-                (pythonEnvironmentGetTypeContext @@ var "e") @@ var "lam") $
-              "newEnv" <~ (pythonEnvironmentSetTypeContext @@ var "newTc" @@ var "e") $
+              "newTc" <~ (Schemas.extendGraphForLambda @@
+                (pythonEnvironmentGetGraph @@ var "e") @@ var "lam") $
+              "newEnv" <~ (pythonEnvironmentSetGraph @@ var "newTc" @@ var "e") $
               var "go" @@ var "newEnv" @@ (Core.lambdaBody $ var "lam")]]) $
     var "go" @@ var "env" @@ var "term"
 
@@ -1122,7 +1122,7 @@ encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
 --   This handles both enum variants and class-based variants with value capture.
 --   The encodeBody function is passed in to allow different encoding strategies
 --   (inline vs multiline).
---   Uses withLambda to extend TypeContext with the case binding variable.
+--   Uses withLambda to extend Graph with the case binding variable.
 encodeCaseBlock :: TBinding (PyHelpers.PythonEnvironment -> Name -> RowType -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Flow PyHelpers.PyGraph [Py.Statement]) -> Field -> Flow PyHelpers.PyGraph Py.CaseBlock)
 encodeCaseBlock = def "encodeCaseBlock" $
   doc "Encode a single case (Field) into a CaseBlock for a match statement" $
@@ -1160,10 +1160,10 @@ encodeCaseBlock = def "encodeCaseBlock" $
     "shouldCapture" <~ (Logic.not $ Logic.or (var "isUnitVariant")
       (Logic.or (Rewriting.isFreeVariableInTerm @@ var "v" @@ var "rawBody")
                 (Schemas.isUnitTerm @@ var "rawBody"))) $
-    -- Extend the TypeContext with the lambda parameter inside a Flows.bind
+    -- Extend the Graph with the lambda parameter inside a Flows.bind
     -- to prevent the code generator from reducing it away
-    "env2" <<~ (Flows.pure $ pythonEnvironmentSetTypeContext
-      @@ (Schemas.extendTypeContextForLambda @@ (pythonEnvironmentGetTypeContext @@ var "env") @@ var "effectiveLambda")
+    "env2" <<~ (Flows.pure $ pythonEnvironmentSetGraph
+      @@ (Schemas.extendGraphForLambda @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "effectiveLambda")
       @@ var "env") $
     -- Deconflict the variant name in case it collides with a type name
     "pyVariantName" <<~ (deconflictVariantName @@ true @@ var "env2" @@ var "tname" @@ var "fname") $
@@ -1296,7 +1296,7 @@ deconflictVariantName = def "deconflictVariantName" $
     -- Check if this name exists as an element in the graph
     "pyg" <<~ Monads.getState $
     "g" <~ (pyGraphGraph @@ var "pyg") $
-    "elements" <~ (Graph.graphElements $ var "g") $
+    "elements" <~ (Lexical.graphToBindings @@ var "g") $
     "collision" <~ (Maybes.isJust $ Lists.find ("b" ~> Core.equalName_ (Core.bindingName $ var "b") (var "candidateHydraName")) (var "elements")) $
     Logic.ifElse (var "collision")
       -- Collision: append '_' to the Python name
@@ -1706,49 +1706,49 @@ functionArityWithPrimitives = def "functionArityWithPrimitives" $
           (Phantoms.int 0)
           ("prim" ~> Arity.primitiveArity @@ var "prim")]
 
--- | Get the TypeContext from a PythonEnvironment
-pythonEnvironmentGetTypeContext :: TBinding (PyHelpers.PythonEnvironment -> TypeContext)
-pythonEnvironmentGetTypeContext = def "pythonEnvironmentGetTypeContext" $
-  doc "Get the TypeContext from a PythonEnvironment" $
-  lambda "env" $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env"
+-- | Get the Graph from a PythonEnvironment
+pythonEnvironmentGetGraph :: TBinding (PyHelpers.PythonEnvironment -> Graph)
+pythonEnvironmentGetGraph = def "pythonEnvironmentGetGraph" $
+  doc "Get the Graph from a PythonEnvironment" $
+  lambda "env" $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env"
 
--- | Set the TypeContext in a PythonEnvironment
-pythonEnvironmentSetTypeContext :: TBinding (TypeContext -> PyHelpers.PythonEnvironment -> PyHelpers.PythonEnvironment)
-pythonEnvironmentSetTypeContext = def "pythonEnvironmentSetTypeContext" $
-  doc "Set the TypeContext in a PythonEnvironment" $
+-- | Set the Graph in a PythonEnvironment
+pythonEnvironmentSetGraph :: TBinding (Graph -> PyHelpers.PythonEnvironment -> PyHelpers.PythonEnvironment)
+pythonEnvironmentSetGraph = def "pythonEnvironmentSetGraph" $
+  doc "Set the Graph in a PythonEnvironment" $
   "tc" ~> "env" ~>
     record PyHelpers._PythonEnvironment [
       PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "env",
       PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
-      PyHelpers._PythonEnvironment_typeContext>>: var "tc",
+      PyHelpers._PythonEnvironment_graph>>: var "tc",
       PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "env",
       PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "env",
       PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "env",
       PyHelpers._PythonEnvironment_inlineVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env"]
 
--- | Execute a computation with lambda context (adds lambda parameter to TypeContext)
+-- | Execute a computation with lambda context (adds lambda parameter to Graph)
 withLambda :: TBinding (PyHelpers.PythonEnvironment -> Lambda -> (PyHelpers.PythonEnvironment -> Flow s a) -> Flow s a)
 withLambda = def "withLambda" $
-  doc "Execute a computation with lambda context (adds lambda parameter to TypeContext)" $
+  doc "Execute a computation with lambda context (adds lambda parameter to Graph)" $
   Schemas.withLambdaContext @@
-    pythonEnvironmentGetTypeContext @@
-    pythonEnvironmentSetTypeContext
+    pythonEnvironmentGetGraph @@
+    pythonEnvironmentSetGraph
 
--- | Execute a computation with type lambda context (adds type parameter to TypeContext)
+-- | Execute a computation with type lambda context (adds type parameter to Graph)
 withTypeLambda :: TBinding (PyHelpers.PythonEnvironment -> TypeLambda -> (PyHelpers.PythonEnvironment -> Flow s a) -> Flow s a)
 withTypeLambda = def "withTypeLambda" $
   doc "Execute a computation with type lambda context" $
   Schemas.withTypeLambdaContext @@
-    pythonEnvironmentGetTypeContext @@
-    pythonEnvironmentSetTypeContext
+    pythonEnvironmentGetGraph @@
+    pythonEnvironmentSetGraph
 
--- | Execute a computation with let context (adds let bindings to TypeContext with metadata)
+-- | Execute a computation with let context (adds let bindings to Graph with metadata)
 withLet :: TBinding (PyHelpers.PythonEnvironment -> Let -> (PyHelpers.PythonEnvironment -> Flow s a) -> Flow s a)
 withLet = def "withLet" $
-  doc "Execute a computation with let context (adds let bindings to TypeContext)" $
+  doc "Execute a computation with let context (adds let bindings to Graph)" $
   Schemas.withLetContext @@
-    pythonEnvironmentGetTypeContext @@
-    pythonEnvironmentSetTypeContext @@
+    pythonEnvironmentGetGraph @@
+    pythonEnvironmentSetGraph @@
     pythonBindingMetadata
 
 -- | Execute a computation with inline let context (no metadata, for walrus operators)
@@ -1761,8 +1761,8 @@ withLetInline = def "withLetInline" $
     "inlineVars" <~ (Sets.fromList $ var "bindingNames") $
     "noMetadata" <~ ("tc" ~> "b" ~> (nothing :: TTerm (Maybe Term))) $
     Schemas.withLetContext @@
-      pythonEnvironmentGetTypeContext @@
-      pythonEnvironmentSetTypeContext @@
+      pythonEnvironmentGetGraph @@
+      pythonEnvironmentSetGraph @@
       var "noMetadata" @@
       var "env" @@
       var "lt" @@
@@ -1770,7 +1770,7 @@ withLetInline = def "withLetInline" $
         "updatedEnv" <~ (record PyHelpers._PythonEnvironment [
           PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "innerEnv",
           PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "innerEnv",
-          PyHelpers._PythonEnvironment_typeContext>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "innerEnv",
+          PyHelpers._PythonEnvironment_graph>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "innerEnv",
           PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "innerEnv",
           PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "innerEnv",
           PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "innerEnv",
@@ -1816,14 +1816,14 @@ targetPythonVersion = def "targetPythonVersion" $
   PyUtils.targetPythonVersion
 
 -- | Create an initial Python environment for code generation
-initialEnvironment :: TBinding (Namespaces Py.DottedName -> TypeContext -> PyHelpers.PythonEnvironment)
+initialEnvironment :: TBinding (Namespaces Py.DottedName -> Graph -> PyHelpers.PythonEnvironment)
 initialEnvironment = def "initialEnvironment" $
   doc "Create an initial Python environment for code generation" $
   "namespaces" ~> "tcontext" ~>
     record PyHelpers._PythonEnvironment [
       PyHelpers._PythonEnvironment_namespaces>>: var "namespaces",
       PyHelpers._PythonEnvironment_boundTypeVariables>>: pair (list ([] :: [TTerm Name])) Maps.empty,
-      PyHelpers._PythonEnvironment_typeContext>>: var "tcontext",
+      PyHelpers._PythonEnvironment_graph>>: var "tcontext",
       PyHelpers._PythonEnvironment_nullaryBindings>>: Sets.empty,
       PyHelpers._PythonEnvironment_version>>: targetPythonVersion,
       PyHelpers._PythonEnvironment_skipCasts>>: true,
@@ -1833,7 +1833,7 @@ initialEnvironment = def "initialEnvironment" $
 --   Like CoderUtils.bindingMetadata, but skips metadata for trivial bindings.
 --   This prevents trivial let-bindings (field accesses, literals, plain variables)
 --   from being thunked with @lru_cache(1) and from getting () call syntax at reference sites.
-pythonBindingMetadata :: TBinding (TypeContext -> Binding -> Maybe Term)
+pythonBindingMetadata :: TBinding (Graph -> Binding -> Maybe Term)
 pythonBindingMetadata = def "pythonBindingMetadata" $
   doc "Like bindingMetadata, but skips metadata for trivial bindings" $
   "tc" ~> "b" ~>
@@ -1841,16 +1841,16 @@ pythonBindingMetadata = def "pythonBindingMetadata" $
     nothing
     (CoderUtils.bindingMetadata @@ var "tc" @@ var "b")
 
--- | Analyze a function term with Python-specific TypeContext management.
+-- | Analyze a function term with Python-specific Graph management.
 --   This is a wrapper around CoderUtils.analyzeFunctionTermWith that provides the Python-specific
---   TypeContext getter/setter and Python-specific binding metadata (which skips trivial bindings).
+--   Graph getter/setter and Python-specific binding metadata (which skips trivial bindings).
 analyzePythonFunction :: TBinding (PyHelpers.PythonEnvironment -> Term -> Flow PyHelpers.PyGraph (FunctionStructure PyHelpers.PythonEnvironment))
 analyzePythonFunction = def "analyzePythonFunction" $
-  doc "Analyze a function term with Python-specific TypeContext management" $
+  doc "Analyze a function term with Python-specific Graph management" $
   CoderUtils.analyzeFunctionTermWith @@
     pythonBindingMetadata @@
-    pythonEnvironmentGetTypeContext @@
-    pythonEnvironmentSetTypeContext
+    pythonEnvironmentGetGraph @@
+    pythonEnvironmentSetGraph
 
 -- | Like analyzePythonFunction but without recording binding metadata.
 --   Used for inline lambda expressions where let bindings become walrus operators.
@@ -1858,8 +1858,8 @@ analyzePythonFunctionInline :: TBinding (PyHelpers.PythonEnvironment -> Term -> 
 analyzePythonFunctionInline = def "analyzePythonFunctionInline" $
   doc "Analyze a function term without recording binding metadata (for inline lambdas)" $
   CoderUtils.analyzeFunctionTermInline @@
-    pythonEnvironmentGetTypeContext @@
-    pythonEnvironmentSetTypeContext
+    pythonEnvironmentGetGraph @@
+    pythonEnvironmentSetGraph
 
 -- | Execute a computation with definitions in scope
 withDefinitions :: TBinding (PyHelpers.PythonEnvironment -> [Definition] -> (PyHelpers.PythonEnvironment -> Flow s a) -> Flow s a)
@@ -1896,7 +1896,7 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
     "mts" <~ Core.bindingType (var "binding") $
     "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
     "pbody" <<~ (encodeTermInline @@ var "env" @@ false @@ var "term") $
-    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env") $
+    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
     "isComplexVar" <~ (CoderUtils.isComplexVariable @@ var "tc" @@ var "name") $
     "termIsComplex" <~ (CoderUtils.isComplexTerm @@ var "tc" @@ var "term") $
     "isTrivial" <~ (CoderUtils.isTrivialTerm @@ var "term") $
@@ -2129,7 +2129,7 @@ encodeFunction = def "encodeFunction" $
         "innerEnv" <~ (record PyHelpers._PythonEnvironment [
           PyHelpers._PythonEnvironment_namespaces>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_namespaces @@ var "innerEnv0",
           PyHelpers._PythonEnvironment_boundTypeVariables>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "innerEnv0",
-          PyHelpers._PythonEnvironment_typeContext>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "innerEnv0",
+          PyHelpers._PythonEnvironment_graph>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "innerEnv0",
           PyHelpers._PythonEnvironment_nullaryBindings>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_nullaryBindings @@ var "innerEnv0",
           PyHelpers._PythonEnvironment_version>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_version @@ var "innerEnv0",
           PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "innerEnv0",
@@ -2183,7 +2183,7 @@ encodeTermAssignment = def "encodeTermAssignment" $
     "doms" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_domains @@ var "fs") $
     "mcod" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_codomain @@ var "fs") $
     "env2" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
-    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env2") $
+    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env2") $
     "binding" <~ (Core.binding (var "name") (var "term") (just $ var "ts")) $
     "isComplex" <~ (CoderUtils.isComplexBinding @@ var "tc" @@ var "binding") $
     "isTrivial" <~ (CoderUtils.isTrivialTerm @@ var "term") $
@@ -2206,12 +2206,13 @@ encodeVariable = def "encodeVariable" $
   "env" ~> "name" ~> "args" ~>
     "pyg" <<~ Monads.getState $
     "g" <~ (pyGraphGraph @@ var "pyg") $
-    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env") $
-    "tcTypes" <~ (Typing.typeContextTypes $ var "tc") $
-    "tcLambdaVars" <~ (Typing.typeContextLambdaVariables $ var "tc") $
-    "tcMetadata" <~ (Typing.typeContextMetadata $ var "tc") $
+    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
+    "tcTypes" <~ (Graph.graphBoundTypes $ var "tc") $
+    "tcLambdaVars" <~ (Graph.graphLambdaVariables $ var "tc") $
+    "tcMetadata" <~ (Graph.graphMetadata $ var "tc") $
     "inlineVars" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env") $
-    "mTyp" <~ (Maps.lookup (var "name") (var "tcTypes")) $
+    "mTypScheme" <~ (Maps.lookup (var "name") (var "tcTypes")) $
+    "mTyp" <~ (Maybes.map ("ts_" ~> Core.typeSchemeType (var "ts_")) (var "mTypScheme")) $
     "asVariable" <~ (PyNames.termVariableReference @@ var "env" @@ var "name") $
     "asFunctionCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "args") $
     Logic.ifElse (Logic.not $ Lists.null (var "args"))
@@ -2235,7 +2236,7 @@ encodeVariable = def "encodeVariable" $
         (Lexical.lookupPrimitive @@ var "g" @@ var "name"))
       -- Empty args: check various contexts
       (Maybes.maybe
-        -- Name not in typeContextTypes
+        -- Name not in graphBoundTypes
         (Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
           -- Untyped lambda variable
           (produce $ var "asVariable")
@@ -2281,7 +2282,7 @@ encodeVariable = def "encodeVariable" $
                       (var "asVariable")) $
                   produce $ var "asFunctionRef"))
             (Lexical.lookupPrimitive @@ var "g" @@ var "name"))))
-        -- Name is in typeContextTypes
+        -- Name is in graphBoundTypes
         ("typ" ~>
           Logic.ifElse (Sets.member (var "name") (var "tcLambdaVars"))
             -- Lambda variable
@@ -2349,7 +2350,7 @@ encodeApplication = def "encodeApplication" $
   "env" ~> "app" ~>
     "pyg" <<~ Monads.getState $
     "g" <~ (pyGraphGraph @@ var "pyg") $
-    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env") $
+    "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
     "skipCasts" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "env") $
     "term" <~ (Core.termApplication $ var "app") $
     "gathered" <~ (CoderUtils.gatherArgs @@ var "term" @@ list ([] :: [TTerm Term])) $
@@ -2550,7 +2551,7 @@ encodeTermInline = def "encodeTermInline" $
         -- Skip casting: just return the expression
         (Flows.pure $ var "pyexp")
         -- Try to get the type and wrap in cast if successful
-        ("tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_typeContext @@ var "env") $
+        ("tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
          -- Use withDefault to handle type inference failures gracefully
          Flows.withDefault (var "pyexp")
            ("typ" <<~ (Checking.typeOf @@ var "tc" @@ list ([] :: [TTerm Type]) @@ var "term") $
@@ -4265,8 +4266,7 @@ encodePythonModule = def "encodePythonModule" $
     "g" <<~ Monads.getState $
     Monads.withState @@ (makePyGraph @@ var "g" @@ var "meta0") @@
       ("namespaces0" <~ (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "meta0") $
-       "tcontext" <<~ (Inference.initialTypeContext @@ var "g") $
-       "env0" <~ (initialEnvironment @@ var "namespaces0" @@ var "tcontext") $
+       "env0" <~ (initialEnvironment @@ var "namespaces0" @@ var "g") $
        "isTypeMod" <~ (isTypeModuleCheck @@ var "defs0") $
        withDefinitions @@ var "env0" @@ var "defs" @@ ("env" ~>
          "defStmts" <<~ (Flows.map ("xs" ~> Lists.concat (var "xs")) (Flows.mapList ("d" ~> encodeDefinition @@ var "env" @@ var "d") (var "defs"))) $

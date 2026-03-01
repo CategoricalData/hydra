@@ -127,7 +127,7 @@ termGraphToDependencyPropertyGraph :: Bool -> Bool -> Graph -> PG.Graph String
 termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap edgeMap
   where
     primitives = graphPrimitives g
-    elements = graphElements g
+    elements = graphToBindings g
     nameToVertexId = unName
     vertexMap = M.fromList $ fmap (\v -> (PG.vertexId v, v)) vertices
       where
@@ -167,7 +167,7 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                 edgesFrom el = fmap (namePairToEdge edgeLabel_hasType (bindingName el)) $
                   S.toList $ termDependencyNames False False True $ bindingTerm el
             primEdges = if withPrims
-                then L.concat $ fmap edgesFrom $ graphElements g
+                then L.concat $ fmap edgesFrom $ graphToBindings g
                 else []
               where
                 edgesFrom el = fmap (namePairToEdge edgeLabel_usesPrimitive (bindingName el)) $
@@ -184,14 +184,14 @@ typeGraphToDependencyGraphson g = do
 
 typeGraphToDependencyPropertyGraph :: Graph -> Flow Graph (PG.Graph String)
 typeGraphToDependencyPropertyGraph g = do
-    types <- CM.mapM (\t -> Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g t) terms
+    types <- CM.mapM (\t -> Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (g) t) terms
     let vertices = L.zipWith toVertex names types
     let edges = L.concat $ L.zipWith toEdges names $ fmap (S.toList . freeVariablesInType) types
     return $ PG.Graph
       (M.fromList $ fmap (\v -> (PG.vertexId v, v)) vertices)
       (M.fromList $ fmap (\e -> (PG.edgeId e, e)) edges)
   where
-    elements = graphElements g
+    elements = graphToBindings g
     terms = fmap bindingTerm elements
     names = fmap bindingName elements
     toEdges name deps = fmap (namePairToEdge edgeLabel_subtype name) deps

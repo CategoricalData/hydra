@@ -51,7 +51,7 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
   log $ "  Vertices: " ++ show (L.length vertices)
   log $ "  Edges: " ++ show (L.length edges)
   log $ "Writing GraphSON to " ++ outputPath
-  jsonResult <- flowToIo hydraCoreGraph (pgElementsToGraphson encodeTermValue els)
+  jsonResult <- flowToIo (hydraCoreGraph) (pgElementsToGraphson encodeTermValue els)
   writeFile outputPath (jsonValuesToString jsonResult)
   log $ "Done. Output written to " ++ outputPath
   where
@@ -67,7 +67,7 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
 transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] -> IO ([Pg.Vertex Term], [Pg.Edge Term])
 transformTable tableType@(TableType (RelationName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
-    flowToIo hydraCoreGraph $ withTrace ("transforming " ++ tableName) $
+    flowToIo (hydraCoreGraph) $ withTrace ("transforming " ++ tableName) $
       Transform.transformTableRows vspecs especs tableType rows
 
 -- | Transform multiple tables according to a graph mapping specification
