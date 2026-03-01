@@ -1379,7 +1379,7 @@
                                                   "name": "name",
                                                   "term": {
                                                     "wrap": {
-                                                      "body": {"literal": {"string": "typeContext"}},
+                                                      "body": {"literal": {"string": "graph"}},
                                                       "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "type",
@@ -1398,7 +1398,7 @@
                                                                       "name": "variable",
                                                                       "term": {
                                                                         "wrap": {
-                                                                          "body": {"literal": {"string": "hydra.typing.TypeContext"}},
+                                                                          "body": {"literal": {"string": "hydra.graph.Graph"}},
                                                                           "typeName": "hydra.core.Name"}}},
                                                                     "typeName": "hydra.core.Type"}}},
                                                               {
@@ -1418,7 +1418,7 @@
                                                                               "union": {
                                                                                 "field": {
                                                                                   "name": "string",
-                                                                                  "term": {"literal": {"string": "Type context for type inference"}}},
+                                                                                  "term": {"literal": {"string": "Graph context for type inference"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}}}]}}],
                                                             "typeName": "hydra.core.AnnotatedType"}}},
