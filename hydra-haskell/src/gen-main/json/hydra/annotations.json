@@ -1025,7 +1025,7 @@
                                                         "argument": {"variable": "dat"},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {"variable": "cx"},
+                                                            "argument": {"variable": "graph"},
                                                             "function": {"variable": "hydra.decode.core.type"}}}}},
                                                     "function": {
                                                       "application": {
@@ -1095,7 +1095,7 @@
                                                       "function": {"variable": "hydra.compute.Flow"}}}}}}},
                                           "type": {"variable": "hydra.core.Term"}}}}}}}}},
                           "domain": [{"variable": "hydra.graph.Graph"}],
-                          "parameter": "cx"}}},
+                          "parameter": "graph"}}},
                     "function": {
                       "application": {
                         "argument": {
@@ -1398,7 +1398,7 @@
                                                                       "argument": {"variable": "t"},
                                                                       "function": {
                                                                         "application": {
-                                                                          "argument": {"variable": "cx"},
+                                                                          "argument": {"variable": "graph"},
                                                                           "function": {"variable": "hydra.decode.core.name"}}}}},
                                                                   "function": {
                                                                     "application": {
@@ -1462,7 +1462,7 @@
                                                           "function": {"variable": "hydra.compute.Flow"}}}}}}},
                                               "type": {"variable": "hydra.core.Term"}}}}}}}}}}},
                           "domain": [{"variable": "hydra.graph.Graph"}],
-                          "parameter": "cx"}}},
+                          "parameter": "graph"}}},
                     "function": {
                       "application": {
                         "argument": {

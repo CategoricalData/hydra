@@ -1926,6 +1926,131 @@
               "domain": {"variable": "hydra.coders.TraversalOrder"}}},
           "variables": ["t0"]}]},
     {
+      "name": "hydra.rewriting.fTypeToTypeScheme",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Convert a forall type to a type scheme"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "gatherForall",
+                        "term": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "typ"},
+                                            "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                        "function": {
+                                          "function": {
+                                            "elimination": {
+                                              "union": {
+                                                "cases": [
+                                                  {
+                                                    "name": "forall",
+                                                    "term": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "ft"},
+                                                                  "function": {
+                                                                    "function": {
+                                                                      "elimination": {"record": {"field": "body", "typeName": "hydra.core.ForallType"}}}}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "vars"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "ft"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {
+                                                                                    "record": {"field": "parameter", "typeName": "hydra.core.ForallType"}}}}}},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                              "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                                  "function": {"variable": "gatherForall"}}}}},
+                                                          "domain": [{"variable": "hydra.core.ForallType"}],
+                                                          "parameter": "ft"}}}}],
+                                                "default": [
+                                                  {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "variables",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "vars"},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                                                  "type": {"variable": "hydra.core.Name"}}}}}},
+                                                        {"name": "type", "term": {"variable": "typ"}},
+                                                        {
+                                                          "name": "constraints",
+                                                          "term": {
+                                                            "typeApplication": {
+                                                              "body": {"maybe": null},
+                                                              "type": {
+                                                                "map": {
+                                                                  "keys": {"variable": "hydra.core.Name"},
+                                                                  "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                      "typeName": "hydra.core.TypeScheme"}}],
+                                                "typeName": "hydra.core.Type"}}}}}},
+                                    "domain": [{"variable": "hydra.core.Type"}],
+                                    "parameter": "typ"}}},
+                              "domain": [{"list": {"variable": "hydra.core.Name"}}],
+                              "parameter": "vars"}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {
+                              "function": {
+                                "codomain": {
+                                  "function": {
+                                    "codomain": {"variable": "hydra.core.TypeScheme"},
+                                    "domain": {"variable": "hydra.core.Type"}}},
+                                "domain": {"list": {"variable": "hydra.core.Name"}}}},
+                            "variables": []}]}],
+                    "body": {
+                      "application": {
+                        "argument": {"variable": "typ"},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
+                            "function": {"variable": "gatherForall"}}}}}}},
+                "domain": [{"variable": "hydra.core.Type"}],
+                "parameter": "typ"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.TypeScheme"},
+              "domain": {"variable": "hydra.core.Type"}}},
+          "variables": []}]},
+    {
       "name": "hydra.rewriting.freeTypeVariablesInTerm",
       "term": {
         "annotated": {
@@ -30658,6 +30783,102 @@
             "function": {
               "codomain": {"set": {"variable": "hydra.core.Name"}},
               "domain": {"variable": "hydra.core.Type"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.rewriting.typeSchemeToFType",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Convert a type scheme to a forall type"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "vars",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "ts"},
+                            "function": {
+                              "function": {
+                                "elimination": {
+                                  "record": {"field": "variables", "typeName": "hydra.core.TypeScheme"}}}}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"list": {"variable": "hydra.core.Name"}},
+                            "variables": []}]}],
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "body",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "ts"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {"record": {"field": "type", "typeName": "hydra.core.TypeScheme"}}}}}},
+                            "type": [
+                              {
+                                "constraints": null,
+                                "type": {"variable": "hydra.core.Type"},
+                                "variables": []}]}],
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "vars"},
+                                "function": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
+                                    "type": {"variable": "hydra.core.Name"}}}}},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "body"},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "forall",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {"name": "parameter", "term": {"variable": "v"}},
+                                                            {"name": "body", "term": {"variable": "t"}}],
+                                                          "typeName": "hydra.core.ForallType"}}},
+                                                    "typeName": "hydra.core.Type"}},
+                                                "domain": [{"variable": "hydra.core.Name"}],
+                                                "parameter": "v"}}},
+                                          "domain": [{"variable": "hydra.core.Type"}],
+                                          "parameter": "t"}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                            "type": {"variable": "hydra.core.Type"}}},
+                                        "type": {"variable": "hydra.core.Name"}}}}}}}}}}}}},
+                "domain": [{"variable": "hydra.core.TypeScheme"}],
+                "parameter": "ts"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Type"},
+              "domain": {"variable": "hydra.core.TypeScheme"}}},
           "variables": []}]},
     {
       "name": "hydra.rewriting.unshadowVariables",

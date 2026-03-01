@@ -967,7 +967,7 @@
                                                                                                                                 "argument": {"variable": "term"},
                                                                                                                                 "function": {
                                                                                                                                   "application": {
-                                                                                                                                    "argument": {"variable": "cx"},
+                                                                                                                                    "argument": {"variable": "graph"},
                                                                                                                                     "function": {"variable": "hydra.decode.core.type"}}}}},
                                                                                                                             "function": {
                                                                                                                               "application": {
@@ -1271,29 +1271,23 @@
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {
+                                                            "argument": {"variable": "els"},
+                                                            "function": {
                                                               "application": {
-                                                                "argument": {"variable": "els"},
+                                                                "argument": {
+                                                                  "typeApplication": {
+                                                                    "body": {"variable": "hydra.schemas.elementAsTypeApplicationTerm"},
+                                                                    "type": {"variable": "hydra.graph.Graph"}}},
                                                                 "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "typeApplication": {
-                                                                        "body": {"variable": "hydra.schemas.elementAsTypeApplicationTerm"},
-                                                                        "type": {"variable": "hydra.graph.Graph"}}},
-                                                                    "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
                                                                       "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.flows.mapList"}},
-                                                                                "type": {"variable": "hydra.core.Binding"}}},
-                                                                            "type": {"variable": "hydra.graph.Graph"}}},
-                                                                        "type": {"variable": "hydra.core.TypeApplicationTerm"}}}}}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"variable": "hydra.lexical.withSchemaContext"},
-                                                                "type": {"list": {"variable": "hydra.core.TypeApplicationTerm"}}}}}},
+                                                                            "body": {"function": {"primitive": "hydra.lib.flows.mapList"}},
+                                                                            "type": {"variable": "hydra.core.Binding"}}},
+                                                                        "type": {"variable": "hydra.graph.Graph"}}},
+                                                                    "type": {"variable": "hydra.core.TypeApplicationTerm"}}}}}}},
                                                         "function": {
                                                           "typeApplication": {
                                                             "body": {
@@ -1305,7 +1299,7 @@
                                                                 "type": {"list": {"variable": "hydra.core.TypeApplicationTerm"}}}},
                                                             "type": {"list": {"variable": "hydra.module.Definition"}}}}}}}}}}}}}},
                                     "domain": [{"variable": "hydra.graph.Graph"}],
-                                    "parameter": "cx"}}},
+                                    "parameter": "graph"}}},
                               "function": {
                                 "application": {
                                   "argument": {
@@ -2808,29 +2802,23 @@
                                                                     "application": {
                                                                       "argument": {
                                                                         "application": {
-                                                                          "argument": {
+                                                                          "argument": {"variable": "els"},
+                                                                          "function": {
                                                                             "application": {
-                                                                              "argument": {"variable": "els"},
+                                                                              "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.schemas.elementAsTypeApplicationTerm"},
+                                                                                  "type": {"variable": "hydra.graph.Graph"}}},
                                                                               "function": {
-                                                                                "application": {
-                                                                                  "argument": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"variable": "hydra.schemas.elementAsTypeApplicationTerm"},
-                                                                                      "type": {"variable": "hydra.graph.Graph"}}},
-                                                                                  "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.flows.mapList"}},
-                                                                                              "type": {"variable": "hydra.core.Binding"}}},
-                                                                                          "type": {"variable": "hydra.graph.Graph"}}},
-                                                                                      "type": {"variable": "hydra.core.TypeApplicationTerm"}}}}}}},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {"variable": "hydra.lexical.withSchemaContext"},
-                                                                              "type": {"list": {"variable": "hydra.core.TypeApplicationTerm"}}}}}},
+                                                                                          "body": {"function": {"primitive": "hydra.lib.flows.mapList"}},
+                                                                                          "type": {"variable": "hydra.core.Binding"}}},
+                                                                                      "type": {"variable": "hydra.graph.Graph"}}},
+                                                                                  "type": {"variable": "hydra.core.TypeApplicationTerm"}}}}}}},
                                                                       "function": {
                                                                         "typeApplication": {
                                                                           "body": {

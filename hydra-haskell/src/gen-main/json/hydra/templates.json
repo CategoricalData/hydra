@@ -11,7 +11,7 @@
               "@key": "description",
               "@value": {
                 "literal": {
-                  "string": "Create a graph schema from a graph which contains nothing but encoded type definitions"}}}],
+                  "string": "Decode a list of type-encoding bindings into a map of named types"}}}],
           "body": {
             "function": {
               "lambda": {
@@ -87,7 +87,7 @@
                                                                         "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"variable": "cx"},
+                                                                    "argument": {"variable": "graph"},
                                                                     "function": {"variable": "hydra.decode.core.type"}}}}},
                                                             "function": {
                                                               "application": {
@@ -126,7 +126,7 @@
                                                             "first": {"variable": "hydra.core.Name"},
                                                             "second": {"variable": "hydra.core.Type"}}}}}}}}},
                                             "domain": [{"variable": "hydra.graph.Graph"}],
-                                            "parameter": "cx"}}},
+                                            "parameter": "graph"}}},
                                       "function": {
                                         "application": {
                                           "argument": {
@@ -203,12 +203,7 @@
                           "application": {
                             "argument": {
                               "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "g"},
-                                    "function": {
-                                      "function": {
-                                        "elimination": {"record": {"field": "elements", "typeName": "hydra.graph.Graph"}}}}}},
+                                "argument": {"variable": "els"},
                                 "function": {
                                   "application": {
                                     "argument": {"variable": "toPair"},
@@ -242,8 +237,8 @@
                                   "map": {
                                     "keys": {"variable": "hydra.core.Name"},
                                     "values": {"variable": "hydra.core.Type"}}}}}}}}}}},
-                "domain": [{"variable": "hydra.graph.Graph"}],
-                "parameter": "g"}}}}},
+                "domain": [{"list": {"variable": "hydra.core.Binding"}}],
+                "parameter": "els"}}}}},
       "type": [
         {
           "constraints": null,
@@ -259,7 +254,7 @@
                     "application": {
                       "argument": {"variable": "hydra.graph.Graph"},
                       "function": {"variable": "hydra.compute.Flow"}}}}},
-              "domain": {"variable": "hydra.graph.Graph"}}},
+              "domain": {"list": {"variable": "hydra.core.Binding"}}}},
           "variables": []}]},
     {
       "name": "hydra.templates.instantiateTemplate",
