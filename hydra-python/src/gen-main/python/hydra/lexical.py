@@ -24,12 +24,25 @@ import hydra.lib.strings
 import hydra.monads
 import hydra.rewriting
 import hydra.show.core
-import hydra.typing
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 T3 = TypeVar("T3")
+
+def build_graph(elements: frozenlist[hydra.core.Binding], environment: FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], primitives: FrozenDict[hydra.core.Name, hydra.graph.Primitive]) -> hydra.graph.Graph:
+    r"""Build a Graph from element bindings, environment, and primitives."""
+    
+    @lru_cache(1)
+    def element_terms() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+        return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b.term)), elements))
+    @lru_cache(1)
+    def let_terms() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+        return hydra.lib.maps.map((lambda mt: hydra.lib.maybes.from_just(mt)), hydra.lib.maps.filter((lambda mt: hydra.lib.maybes.is_just(mt)), environment))
+    @lru_cache(1)
+    def element_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
+        return hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, ts)), b.type)), elements)))
+    return hydra.graph.Graph(hydra.lib.maps.union(element_terms(), let_terms()), element_types(), hydra.lib.maps.empty(), hydra.lib.sets.from_list(hydra.lib.maps.keys(hydra.lib.maps.filter((lambda mt: hydra.lib.maybes.is_nothing(mt)), environment))), hydra.lib.maps.empty(), primitives, hydra.lib.maps.empty(), hydra.lib.sets.empty())
 
 def choose_unique_name(reserved: frozenset[hydra.core.Name], name: hydra.core.Name) -> hydra.core.Name:
     def try_name(index: int) -> hydra.core.Name:
@@ -39,13 +52,15 @@ def choose_unique_name(reserved: frozenset[hydra.core.Name], name: hydra.core.Na
         return hydra.lib.logic.if_else(hydra.lib.sets.member(candidate(), reserved), (lambda : try_name(hydra.lib.math.add(index, 1))), (lambda : candidate()))
     return try_name(1)
 
-def lookup_element(g: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.core.Binding]:
-    return hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, name)), g.elements)
+def lookup_element(graph: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.core.Binding]:
+    r"""Look up a binding in a graph by name."""
+    
+    return hydra.lib.maybes.map((lambda term: hydra.core.Binding(name, term, hydra.lib.maps.lookup(name, graph.bound_types))), hydra.lib.maps.lookup(name, graph.bound_terms))
 
 def dereference_element(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Binding]]:
     r"""Look up an element in the current graph context."""
     
-    return hydra.lib.flows.map((lambda g: lookup_element(g, name)), hydra.monads.get_state())
+    return hydra.lib.flows.map((lambda graph: lookup_element(graph, name)), hydra.monads.get_state())
 
 def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme]) -> Maybe[hydra.core.TypeScheme]:
     r"""Resolve a schema type through a chain of zero or more typedefs."""
@@ -65,26 +80,33 @@ def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.
                 return Just(hydra.core.TypeScheme((), t, Nothing()))
     return hydra.lib.maybes.bind(hydra.lib.maps.lookup(name, types), (lambda ts: hydra.lib.maybes.map((lambda ts2: hydra.core.TypeScheme(hydra.lib.lists.concat2(ts.variables, ts2.variables), ts2.type, ts2.constraints)), for_type(ts.type))))
 
-def dereference_variable(g: hydra.graph.Graph, name: hydra.core.Name) -> Either[str, hydra.core.Binding]:
-    r"""Look up an element by name in a graph, returning Either an error or the binding."""
+def dereference_variable(graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[str, hydra.core.Binding]:
+    r"""Look up a binding by name in a graph, returning Either an error or the binding."""
     
-    return hydra.lib.maybes.maybe(Left(hydra.lib.strings.cat2("no such element: ", name.value)), (lambda right_: Right(right_)), lookup_element(g, name))
+    return hydra.lib.maybes.maybe(Left(hydra.lib.strings.cat2("no such element: ", name.value)), (lambda right_: Right(right_)), lookup_element(graph, name))
 
-def elements_to_graph(parent: hydra.graph.Graph, schema: Maybe[hydra.graph.Graph], elements: frozenlist[hydra.core.Binding]) -> hydra.graph.Graph:
-    r"""Create a graph from a parent graph, optional schema, and list of element bindings."""
+def elements_to_graph(parent: hydra.graph.Graph, schema_types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], elements: frozenlist[hydra.core.Binding]) -> hydra.graph.Graph:
+    r"""Create a graph from a parent graph, schema types, and list of element bindings."""
     
-    return hydra.graph.Graph(elements, parent.environment, parent.types, parent.body, parent.primitives, schema)
+    prims = parent.primitives
+    return hydra.graph.Graph(build_graph(elements, hydra.lib.maps.empty(), prims).bound_terms, build_graph(elements, hydra.lib.maps.empty(), prims).bound_types, build_graph(elements, hydra.lib.maps.empty(), prims).class_constraints, build_graph(elements, hydra.lib.maps.empty(), prims).lambda_variables, build_graph(elements, hydra.lib.maps.empty(), prims).metadata, build_graph(elements, hydra.lib.maps.empty(), prims).primitives, schema_types, build_graph(elements, hydra.lib.maps.empty(), prims).type_variables)
 
 @lru_cache(1)
 def empty_graph() -> hydra.graph.Graph:
-    r"""An empty graph; no elements, no primitives, no schema, and an arbitrary body."""
+    r"""An empty graph; no elements, no primitives, no schema."""
     
-    return hydra.graph.Graph((), hydra.lib.maps.empty(), hydra.lib.maps.empty(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("empty graph")))), hydra.lib.maps.empty(), Nothing())
+    return hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty())
 
 def extend_graph_with_bindings(bindings: frozenlist[hydra.core.Binding], g: hydra.graph.Graph) -> hydra.graph.Graph:
     r"""Add bindings to an existing graph."""
     
-    return hydra.graph.Graph(hydra.lib.lists.concat2(bindings, g.elements), g.environment, g.types, g.body, g.primitives, g.schema)
+    @lru_cache(1)
+    def new_terms() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+        return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b.term)), bindings))
+    @lru_cache(1)
+    def new_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
+        return hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, ts)), b.type)), bindings)))
+    return hydra.graph.Graph(hydra.lib.maps.union(new_terms(), g.bound_terms), hydra.lib.maps.union(new_types(), g.bound_types), g.class_constraints, g.lambda_variables, g.metadata, g.primitives, g.schema_types, g.type_variables)
 
 def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
     r"""Extract the fields of a record or union type."""
@@ -110,16 +132,28 @@ def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
 def get_field(m: FrozenDict[hydra.core.Name, T0], fname: hydra.core.Name, decode: Callable[[T0], hydra.compute.Flow[T1, T2]]) -> hydra.compute.Flow[T1, T2]:
     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected field ", fname.value), " not found")), decode, hydra.lib.maps.lookup(fname, m))
 
-def lookup_primitive(g: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.graph.Primitive]:
-    return hydra.lib.maps.lookup(name, g.primitives)
+def graph_to_bindings(g: hydra.graph.Graph) -> frozenlist[hydra.core.Binding]:
+    r"""Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes."""
+    
+    return hydra.lib.lists.map((lambda p: (name := hydra.lib.pairs.first(p), term := hydra.lib.pairs.second(p), hydra.core.Binding(name, term, hydra.lib.maps.lookup(name, g.bound_types)))[2]), hydra.lib.maps.to_list(g.bound_terms))
+
+def lookup_primitive(graph: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.graph.Primitive]:
+    r"""Look up a primitive function in a graph by name."""
+    
+    return hydra.lib.maps.lookup(name, graph.primitives)
+
+def lookup_term(graph: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.core.Term]:
+    r"""Look up a term by name in a graph."""
+    
+    return hydra.lib.maps.lookup(name, graph.bound_terms)
 
 def require_element(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Binding]:
     show_all = False
     def ellipsis(strings: frozenlist[str]) -> frozenlist[str]:
         return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.gt(hydra.lib.lists.length(strings), 3), hydra.lib.logic.not_(show_all)), (lambda : hydra.lib.lists.concat2(hydra.lib.lists.take(3, strings), ("...",))), (lambda : strings))
-    def err(g: hydra.graph.Graph) -> hydra.compute.Flow[T0, T1]:
-        return hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no such element: ", name.value), ". Available elements: {"), hydra.lib.strings.intercalate(", ", ellipsis(hydra.lib.lists.map((lambda el: el.name.value), g.elements)))), "}"))
-    return hydra.lib.flows.bind(dereference_element(name), (lambda mel: hydra.lib.maybes.maybe(hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: err(g))), (lambda x1: hydra.lib.flows.pure(x1)), mel)))
+    def err(graph: hydra.graph.Graph) -> hydra.compute.Flow[T0, T1]:
+        return hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no such element: ", name.value), ". Available elements: {"), hydra.lib.strings.intercalate(", ", ellipsis(hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(graph.bound_terms))))), "}"))
+    return hydra.lib.flows.bind(dereference_element(name), (lambda mel: hydra.lib.maybes.maybe(hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: err(graph))), (lambda x1: hydra.lib.flows.pure(x1)), mel)))
 
 def match_union(tname: hydra.core.Name, pairs: frozenlist[tuple[hydra.core.Name, Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]]]], term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
     @lru_cache(1)
@@ -161,36 +195,31 @@ def match_record(decode: Callable[[FrozenDict[hydra.core.Name, hydra.core.Term]]
             return hydra.monads.unexpected("record", hydra.show.core.term(term))
 
 def require_primitive(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, hydra.graph.Primitive]:
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no such primitive function: ", name.value)), (lambda x1: hydra.lib.flows.pure(x1)), lookup_primitive(g, name))))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no such primitive function: ", name.value)), (lambda x1: hydra.lib.flows.pure(x1)), lookup_primitive(graph, name))))
 
-def require_primitive_type(tx: hydra.typing.TypeContext, name: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
+def require_primitive_type(tx: hydra.graph.Graph, name: hydra.core.Name) -> hydra.compute.Flow[T0, hydra.core.TypeScheme]:
     @lru_cache(1)
     def mts() -> Maybe[hydra.core.TypeScheme]:
-        return hydra.lib.maps.lookup(name, tx.inference_context.primitive_types)
+        return hydra.lib.maps.lookup(name, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives))))
     return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no such primitive function: ", name.value)), (lambda ts: hydra.lib.flows.pure(ts)), mts())
 
 def resolve_term(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
     r"""TODO: distinguish between lambda-bound and let-bound variables."""
     
-    def recurse(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
+    def recurse(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Term]]:
         @lru_cache(1)
         def stripped() -> hydra.core.Term:
-            return hydra.rewriting.deannotate_term(el.term)
+            return hydra.rewriting.deannotate_term(term)
         match stripped():
             case hydra.core.TermVariable(value=name_):
                 return resolve_term(name_)
             
             case _:
-                return hydra.lib.flows.pure(Just(el.term))
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda x1: recurse(x1)), hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, name)), g.elements))))
+                return hydra.lib.flows.pure(Just(term))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda x1: recurse(x1)), lookup_term(graph, name))))
 
 def require_term(name: hydra.core.Name) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     return hydra.lib.flows.bind(resolve_term(name), (lambda mt: hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no such element: ", name.value)), (lambda x1: hydra.lib.flows.pure(x1)), mt)))
-
-def schema_context(g: hydra.graph.Graph) -> hydra.graph.Graph:
-    r"""Note: assuming for now that primitive functions are the same in the schema graph."""
-    
-    return hydra.lib.maybes.from_maybe(g, g.schema)
 
 def strip_and_dereference_term(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
     @lru_cache(1)
@@ -203,7 +232,7 @@ def strip_and_dereference_term(term: hydra.core.Term) -> hydra.compute.Flow[hydr
         case _:
             return hydra.lib.flows.pure(stripped())
 
-def strip_and_dereference_term_either(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
+def strip_and_dereference_term_either(graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
     r"""Strip annotations and dereference variables, returning Either an error or the resolved term."""
     
     @lru_cache(1)
@@ -211,7 +240,7 @@ def strip_and_dereference_term_either(g: hydra.graph.Graph, term: hydra.core.Ter
         return hydra.rewriting.deannotate_and_detype_term(term)
     match stripped():
         case hydra.core.TermVariable(value=v):
-            return hydra.lib.eithers.either((lambda left_: Left(left_)), (lambda binding: strip_and_dereference_term_either(g, binding.term)), dereference_variable(g, v))
+            return hydra.lib.eithers.either((lambda left_: Left(left_)), (lambda binding: strip_and_dereference_term_either(graph, binding.term)), dereference_variable(graph, v))
         
         case _:
             return Right(stripped())
@@ -219,7 +248,4 @@ def strip_and_dereference_term_either(g: hydra.graph.Graph, term: hydra.core.Ter
 def with_empty_graph(v1: hydra.compute.Flow[hydra.graph.Graph, T0]) -> hydra.compute.Flow[T1, T0]:
     r"""Execute flow with empty graph."""
     
-    return hydra.monads.with_state(empty_graph(), v1)
-
-def with_schema_context(f: hydra.compute.Flow[hydra.graph.Graph, T0]) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: hydra.monads.with_state(schema_context(g), f)))
+    return hydra.monads.with_state(hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty()), v1)

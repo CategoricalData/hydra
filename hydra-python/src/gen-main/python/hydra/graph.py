@@ -5,7 +5,7 @@ r"""The extension to graphs of Hydra's core type system (hydra.core)."""
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
-from hydra.dsl.python import FrozenDict, Maybe, frozenlist
+from hydra.dsl.python import FrozenDict, frozenlist
 from typing import Annotated, Generic, TypeAlias, TypeVar
 import hydra.compute
 import hydra.core
@@ -14,26 +14,30 @@ A = TypeVar("A")
 
 @dataclass(frozen=True)
 class Graph:
-    r"""A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph."""
+    r"""A graph, or lexical environment which binds names to terms, types, primitives, and metadata."""
     
-    elements: Annotated[frozenlist[hydra.core.Binding], "All of the elements in the graph"]
-    environment: Annotated[FrozenDict[hydra.core.Name, Maybe[hydra.core.Term]], "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)"]
-    types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "The typing environment of the graph"]
-    body: Annotated[hydra.core.Term, "The body of the term which generated this context"]
-    primitives: Annotated[FrozenDict[hydra.core.Name, Primitive], "All supported primitive constants and functions, by name"]
-    schema: Annotated[Maybe[Graph], "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph."]
+    bound_terms: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term], "The terms bound by all term variables in scope"]
+    bound_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "The type schemes of all term variables in scope"]
+    class_constraints: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata], "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."]
+    lambda_variables: Annotated[frozenset[hydra.core.Name], "The set of term variables introduced by specifically by lambdas"]
+    metadata: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term], "Any additional metadata bound to term variables in scope"]
+    primitives: Annotated[FrozenDict[hydra.core.Name, Primitive], "All primitive functions and constants by name"]
+    schema_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "All schema types (type schemes) in scope"]
+    type_variables: Annotated[frozenset[hydra.core.Name], "The set of type variables introduced specifically by type lambdas"]
     
     TYPE_ = hydra.core.Name("hydra.graph.Graph")
-    ELEMENTS = hydra.core.Name("elements")
-    ENVIRONMENT = hydra.core.Name("environment")
-    TYPES = hydra.core.Name("types")
-    BODY = hydra.core.Name("body")
+    BOUND_TERMS = hydra.core.Name("boundTerms")
+    BOUND_TYPES = hydra.core.Name("boundTypes")
+    CLASS_CONSTRAINTS = hydra.core.Name("classConstraints")
+    LAMBDA_VARIABLES = hydra.core.Name("lambdaVariables")
+    METADATA = hydra.core.Name("metadata")
     PRIMITIVES = hydra.core.Name("primitives")
-    SCHEMA = hydra.core.Name("schema")
+    SCHEMA_TYPES = hydra.core.Name("schemaTypes")
+    TYPE_VARIABLES = hydra.core.Name("typeVariables")
 
 @dataclass(frozen=True)
 class Primitive:
-    r"""A built-in function."""
+    r"""A built-in function or constant."""
     
     name: Annotated[hydra.core.Name, "The unique name of the primitive function"]
     type: Annotated[hydra.core.TypeScheme, "The type signature of the primitive function"]

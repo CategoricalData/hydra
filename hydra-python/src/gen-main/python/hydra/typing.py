@@ -32,23 +32,6 @@ class FunctionStructure(Generic[Env]):
     ENVIRONMENT = hydra.core.Name("environment")
 
 @dataclass(frozen=True)
-class InferenceContext:
-    r"""The context provided to type inference, including various typing environments."""
-    
-    schema_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A fixed typing environment which is derived from the schema of the graph."]
-    primitive_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A fixed typing environment which is derived from the set of primitives in the graph."]
-    data_types: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeScheme], "A mutable typing environment which is specific to the current graph being processed. This environment is (usually) smaller than the schema and primitive typing environments, and is subject to global substitutions."]
-    class_constraints: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata], "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."]
-    debug: Annotated[bool, "Whether to enable debug output during type inference"]
-    
-    TYPE_ = hydra.core.Name("hydra.typing.InferenceContext")
-    SCHEMA_TYPES = hydra.core.Name("schemaTypes")
-    PRIMITIVE_TYPES = hydra.core.Name("primitiveTypes")
-    DATA_TYPES = hydra.core.Name("dataTypes")
-    CLASS_CONSTRAINTS = hydra.core.Name("classConstraints")
-    DEBUG = hydra.core.Name("debug")
-
-@dataclass(frozen=True)
 class InferenceResult:
     r"""The result of applying inference rules to a term."""
     
@@ -80,25 +63,6 @@ class TypeConstraint:
     LEFT = hydra.core.Name("left")
     RIGHT = hydra.core.Name("right")
     COMMENT = hydra.core.Name("comment")
-
-@dataclass(frozen=True)
-class TypeContext:
-    r"""A typing environment used for type reconstruction (typeOf) over System F terms."""
-    
-    types: Annotated[FrozenDict[hydra.core.Name, hydra.core.Type], "A mapping of lambda- and let-bound variables to their types"]
-    metadata: Annotated[FrozenDict[hydra.core.Name, hydra.core.Term], "Any additional metadata about lambda- and let-bound variables"]
-    type_variables: Annotated[frozenset[hydra.core.Name], "The set of type variables introduced by enclosing type lambdas"]
-    lambda_variables: Annotated[frozenset[hydra.core.Name], "The set of term variables introduced by lambdas (even if untyped)"]
-    let_variables: Annotated[frozenset[hydra.core.Name], "The set of term variables introduced by let bindings (even if untyped)"]
-    inference_context: Annotated[InferenceContext, "The schema types, primitive types, and data types of the graph"]
-    
-    TYPE_ = hydra.core.Name("hydra.typing.TypeContext")
-    TYPES = hydra.core.Name("types")
-    METADATA = hydra.core.Name("metadata")
-    TYPE_VARIABLES = hydra.core.Name("typeVariables")
-    LAMBDA_VARIABLES = hydra.core.Name("lambdaVariables")
-    LET_VARIABLES = hydra.core.Name("letVariables")
-    INFERENCE_CONTEXT = hydra.core.Name("inferenceContext")
 
 class TypeSubst(Node["FrozenDict[hydra.core.Name, hydra.core.Type]"]):
     r"""A substitution of type variables for types."""

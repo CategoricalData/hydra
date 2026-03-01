@@ -11,7 +11,6 @@ import hydra.core
 import hydra.ext.python.syntax
 import hydra.graph
 import hydra.module
-import hydra.typing
 
 class PythonVersion(Enum):
     r"""Target Python version for code generation."""
@@ -28,7 +27,7 @@ class PythonEnvironment:
     
     namespaces: Annotated[hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], "Namespace mapping for imports"]
     bound_type_variables: Annotated[tuple[frozenlist[hydra.core.Name], FrozenDict[hydra.core.Name, hydra.ext.python.syntax.Name]], "Type variables in scope, with their Python names"]
-    type_context: Annotated[hydra.typing.TypeContext, "Type context for type inference"]
+    graph: Annotated[hydra.graph.Graph, "Graph context for type inference"]
     nullary_bindings: Annotated[frozenset[hydra.core.Name], "Set of nullary bindings (need call syntax)"]
     version: Annotated[PythonVersion, "Target Python version"]
     skip_casts: Annotated[bool, "When True, skip generating cast() calls for reduced memory usage"]
@@ -37,7 +36,7 @@ class PythonEnvironment:
     TYPE_ = hydra.core.Name("hydra.ext.python.helpers.PythonEnvironment")
     NAMESPACES = hydra.core.Name("namespaces")
     BOUND_TYPE_VARIABLES = hydra.core.Name("boundTypeVariables")
-    TYPE_CONTEXT = hydra.core.Name("typeContext")
+    GRAPH = hydra.core.Name("graph")
     NULLARY_BINDINGS = hydra.core.Name("nullaryBindings")
     VERSION = hydra.core.Name("version")
     SKIP_CASTS = hydra.core.Name("skipCasts")

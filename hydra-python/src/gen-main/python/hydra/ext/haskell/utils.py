@@ -11,7 +11,6 @@ import hydra.core
 import hydra.ext.haskell.ast
 import hydra.ext.haskell.language
 import hydra.formatting
-import hydra.graph
 import hydra.lib.equality
 import hydra.lib.flows
 import hydra.lib.lists
@@ -164,7 +163,7 @@ def to_type_application(types: frozenlist[hydra.ext.haskell.ast.Type]) -> hydra.
         return hydra.lib.logic.if_else(hydra.lib.equality.gt(hydra.lib.lists.length(l), 1), (lambda : cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeApplication(hydra.ext.haskell.ast.ApplicationType(app(hydra.lib.lists.tail(l)), hydra.lib.lists.head(l))))), (lambda : hydra.lib.lists.head(l)))
     return app(hydra.lib.lists.reverse(types))
 
-def union_field_reference(g: hydra.graph.Graph, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.ast.Name:
+def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.ast.Name:
     r"""Generate a Haskell name for a union variant constructor, with disambiguation."""
     
     @lru_cache(1)
@@ -187,7 +186,7 @@ def union_field_reference(g: hydra.graph.Graph, namespaces: hydra.module.Namespa
         @lru_cache(1)
         def tname() -> hydra.core.Name:
             return hydra.names.unqualify_name(hydra.module.QualifiedName(ns, name))
-        return hydra.lib.logic.if_else(hydra.lib.maybes.is_just(hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, tname())), g.elements)), (lambda : deconflict(hydra.lib.strings.cat2(name, "_"))), (lambda : name))
+        return hydra.lib.logic.if_else(hydra.lib.sets.member(tname(), bound_names), (lambda : deconflict(hydra.lib.strings.cat2(name, "_"))), (lambda : name))
     @lru_cache(1)
     def nm() -> str:
         return deconflict(hydra.lib.strings.cat2(capitalized_type_name(), capitalized_field_name()))
@@ -199,7 +198,7 @@ def union_field_reference(g: hydra.graph.Graph, namespaces: hydra.module.Namespa
         return hydra.names.unqualify_name(qual_name())
     return element_reference(namespaces, unqual_name())
 
-def unpack_forall_type(cx: T0, t: hydra.core.Type) -> tuple[frozenlist[hydra.core.Name], hydra.core.Type]:
+def unpack_forall_type(t: hydra.core.Type) -> tuple[frozenlist[hydra.core.Name], hydra.core.Type]:
     r"""Unpack nested forall types into a list of type variables and the inner type."""
     
     match hydra.rewriting.deannotate_type(t):
@@ -208,7 +207,7 @@ def unpack_forall_type(cx: T0, t: hydra.core.Type) -> tuple[frozenlist[hydra.cor
             tbody = fat.body
             @lru_cache(1)
             def recursive_result() -> tuple[frozenlist[hydra.core.Name], hydra.core.Type]:
-                return unpack_forall_type(cx, tbody)
+                return unpack_forall_type(tbody)
             @lru_cache(1)
             def vars() -> frozenlist[hydra.core.Name]:
                 return hydra.lib.pairs.first(recursive_result())

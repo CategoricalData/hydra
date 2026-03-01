@@ -8,6 +8,7 @@ from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
 from typing import TypeVar, cast
 import hydra.core
+import hydra.graph
 import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
@@ -88,16 +89,16 @@ def subst_in_type_scheme(subst: hydra.typing.TypeSubst, ts: hydra.core.TypeSchem
     
     return hydra.core.TypeScheme(ts.variables, subst_in_type(subst, ts.type), hydra.lib.maybes.map((lambda v1: subst_in_class_constraints(subst, v1)), ts.constraints))
 
-def subst_in_context(subst: hydra.typing.TypeSubst, cx: hydra.typing.InferenceContext) -> hydra.typing.InferenceContext:
-    r"""Apply a type substitution to an inference context."""
+def subst_in_context(subst: hydra.typing.TypeSubst, cx: hydra.graph.Graph) -> hydra.graph.Graph:
+    r"""Apply a type substitution to a graph's bound types and class constraints."""
     
     @lru_cache(1)
-    def new_data_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
-        return hydra.lib.maps.map((lambda v1: subst_in_type_scheme(subst, v1)), cx.data_types)
+    def new_bound_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
+        return hydra.lib.maps.map((lambda v1: subst_in_type_scheme(subst, v1)), cx.bound_types)
     @lru_cache(1)
     def new_class_constraints() -> FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]:
         return subst_in_class_constraints(subst, cx.class_constraints)
-    return hydra.typing.InferenceContext(cx.schema_types, cx.primitive_types, new_data_types(), new_class_constraints(), cx.debug)
+    return hydra.graph.Graph(hydra.graph.Graph(cx.bound_terms, new_bound_types(), cx.class_constraints, cx.lambda_variables, cx.metadata, cx.primitives, cx.schema_types, cx.type_variables).bound_terms, hydra.graph.Graph(cx.bound_terms, new_bound_types(), cx.class_constraints, cx.lambda_variables, cx.metadata, cx.primitives, cx.schema_types, cx.type_variables).bound_types, new_class_constraints(), hydra.graph.Graph(cx.bound_terms, new_bound_types(), cx.class_constraints, cx.lambda_variables, cx.metadata, cx.primitives, cx.schema_types, cx.type_variables).lambda_variables, hydra.graph.Graph(cx.bound_terms, new_bound_types(), cx.class_constraints, cx.lambda_variables, cx.metadata, cx.primitives, cx.schema_types, cx.type_variables).metadata, hydra.graph.Graph(cx.bound_terms, new_bound_types(), cx.class_constraints, cx.lambda_variables, cx.metadata, cx.primitives, cx.schema_types, cx.type_variables).primitives, hydra.graph.Graph(cx.bound_terms, new_bound_types(), cx.class_constraints, cx.lambda_variables, cx.metadata, cx.primitives, cx.schema_types, cx.type_variables).schema_types, hydra.graph.Graph(cx.bound_terms, new_bound_types(), cx.class_constraints, cx.lambda_variables, cx.metadata, cx.primitives, cx.schema_types, cx.type_variables).type_variables)
 
 def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -> hydra.core.Term:
     r"""Apply a type substitution to the type annotations within a term."""

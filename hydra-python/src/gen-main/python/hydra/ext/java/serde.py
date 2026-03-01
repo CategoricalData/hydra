@@ -396,7 +396,7 @@ def write_assignment(a: hydra.ext.java.syntax.Assignment) -> hydra.ast.Expr:
     lhs = a.lhs
     op = a.op
     rhs = a.expression
-    ctop = hydra.dsl.python.unsupported("inline match expressions are not yet supported")
+    ctop = (lambda _: "=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorSimple) else (lambda _: "*=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorTimes) else (lambda _: "/=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorDiv) else (lambda _: "%=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorMod) else (lambda _: "+=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorPlus) else (lambda _: "-=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorMinus) else (lambda _: "<<=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorShiftLeft) else (lambda _: ">>=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorShiftRight) else (lambda _: ">>>=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorShiftRightZeroFill) else (lambda _: "&=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorAnd) else (lambda _: "^=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorXor) else (lambda _: "|=")(op) if isinstance(op, hydra.ext.java.syntax.AssignmentOperatorOr) else hydra.dsl.python.unsupported("no matching case in inline union elimination")
     return hydra.serialization.infix_ws(ctop(), write_left_hand_side(lhs), write_expression(rhs))
 
 def write_assignment_expression(e: hydra.ext.java.syntax.AssignmentExpression) -> hydra.ast.Expr:

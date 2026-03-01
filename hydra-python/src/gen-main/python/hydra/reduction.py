@@ -28,7 +28,6 @@ import hydra.lib.sets
 import hydra.lib.strings
 import hydra.rewriting
 import hydra.schemas
-import hydra.typing
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -180,10 +179,10 @@ def eta_expand_term(graph: hydra.graph.Graph, term: hydra.core.Term) -> hydra.co
                 return after_recursion(recurse(t2()))
     return contract_term(hydra.rewriting.rewrite_term((lambda v1, v2: rewrite((), v1, v2)), term))
 
-def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -> hydra.core.Term:
-    r"""Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the TypeContext to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the TypeContext through nested scopes."""
+def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.core.Term:
+    r"""Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes."""
     
-    def term_arity_with_context(tx: hydra.typing.TypeContext, term: hydra.core.Term):
+    def term_arity_with_context(tx: hydra.graph.Graph, term: hydra.core.Term):
         def _hoist_term_arity_with_context_1(tx, v1):
             match v1:
                 case hydra.core.FunctionElimination():
@@ -193,7 +192,7 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
                     return 0
                 
                 case hydra.core.FunctionPrimitive(value=name):
-                    return hydra.lib.maybes.maybe(0, (lambda x1: hydra.arity.type_scheme_arity(x1)), hydra.lib.maps.lookup(name, tx.inference_context.primitive_types))
+                    return hydra.lib.maybes.maybe(0, (lambda x1: hydra.arity.type_scheme_arity(x1)), hydra.lib.maps.lookup(name, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives)))))
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
@@ -208,16 +207,16 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
                 return _hoist_term_arity_with_context_1(tx, f)
             
             case hydra.core.TermLet(value=l):
-                return term_arity_with_context(hydra.schemas.extend_type_context_for_let((lambda _, _2: Nothing()), tx, l), l.body)
+                return term_arity_with_context(hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx, l), l.body)
             
             case hydra.core.TermTypeLambda(value=tl):
-                return term_arity_with_context(hydra.schemas.extend_type_context_for_type_lambda(tx, tl), tl.body)
+                return term_arity_with_context(hydra.schemas.extend_graph_for_type_lambda(tx, tl), tl.body)
             
             case hydra.core.TermTypeApplication(value=tat):
                 return term_arity_with_context(tx, tat.body)
             
             case hydra.core.TermVariable(value=name):
-                return hydra.lib.maybes.maybe(0, (lambda x1: hydra.arity.type_arity(x1)), hydra.lib.maps.lookup(name, tx.types))
+                return hydra.lib.maybes.maybe(0, (lambda x1: hydra.arity.type_arity(x1)), hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(name, tx.bound_types)))
             
             case _:
                 return 0
@@ -268,14 +267,14 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
         def needed() -> int:
             return hydra.lib.math.sub(arity, num_args())
         return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.gt(needed(), 0), hydra.lib.logic.or_(always_pad, hydra.lib.equality.gt(num_args(), 0))), (lambda : (indices := hydra.lib.math.range_(1, needed()), (remaining_type := peel_function_domains(head_typ, num_args()), (domains := domain_types(needed(), remaining_type), (codomain_type := peel_function_domains(remaining_type, needed()), (fully_applied_raw := hydra.lib.lists.foldl((lambda body, i: (vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(vn))))))[1]), applied(), indices), (fully_applied := hydra.lib.maybes.maybe(fully_applied_raw, (lambda ct: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(fully_applied_raw, hydra.lib.maps.singleton(hydra.core.Name("type"), hydra.encode.core.type(ct)))))), codomain_type), (indexed_domains := hydra.lib.lists.zip(indices, domains), hydra.lib.lists.foldl((lambda body, id_pair: (i := hydra.lib.pairs.first(id_pair), dom := hydra.lib.pairs.second(id_pair), vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(vn, dom, body))))))[3]), fully_applied, hydra.lib.lists.reverse(indexed_domains)))[1])[1])[1])[1])[1])[1])[1]), (lambda : applied()))
-    def rewrite_with_args(args: frozenlist[hydra.core.Term], tx: hydra.typing.TypeContext, term: hydra.core.Term):
-        def recurse(tx1: hydra.typing.TypeContext, term1: hydra.core.Term) -> hydra.core.Term:
+    def rewrite_with_args(args: frozenlist[hydra.core.Term], tx: hydra.graph.Graph, term: hydra.core.Term):
+        def recurse(tx1: hydra.graph.Graph, term1: hydra.core.Term) -> hydra.core.Term:
             return rewrite_with_args((), tx1, term1)
-        def term_head_type(tx2: hydra.typing.TypeContext, trm2: hydra.core.Term):
+        def term_head_type(tx2: hydra.graph.Graph, trm2: hydra.core.Term):
             def _hoist_term_head_type_1(tx2, v1):
                 match v1:
                     case hydra.core.FunctionPrimitive(value=pn2):
-                        return hydra.lib.maybes.map((lambda ts2: ts2.type), hydra.lib.maps.lookup(pn2, tx2.inference_context.primitive_types))
+                        return hydra.lib.maybes.map((lambda ts2: ts2.type), hydra.lib.maps.lookup(pn2, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx2.primitives)))))
                     
                     case _:
                         return Nothing()
@@ -294,16 +293,16 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
                     return _hoist_term_head_type_1(tx2, f2)
                 
                 case hydra.core.TermLet(value=l2):
-                    return term_head_type(hydra.schemas.extend_type_context_for_let((lambda _, _2: Nothing()), tx2, l2), l2.body)
+                    return term_head_type(hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx2, l2), l2.body)
                 
                 case hydra.core.TermTypeLambda(value=tl2):
-                    return term_head_type(hydra.schemas.extend_type_context_for_type_lambda(tx2, tl2), tl2.body)
+                    return term_head_type(hydra.schemas.extend_graph_for_type_lambda(tx2, tl2), tl2.body)
                 
                 case hydra.core.TermTypeApplication(value=tat2):
                     return hydra.lib.maybes.bind(term_head_type(tx2, tat2.body), (lambda htyp2: _hoist_term_head_type_2(htyp2, tat2, htyp2)))
                 
                 case hydra.core.TermVariable(value=vn2):
-                    return hydra.lib.maps.lookup(vn2, tx2.types)
+                    return hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(vn2, tx2.bound_types))
                 
                 case _:
                     return Nothing()
@@ -381,8 +380,8 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
                 
                 case hydra.core.FunctionLambda(value=lm):
                     @lru_cache(1)
-                    def tx1() -> hydra.typing.TypeContext:
-                        return hydra.schemas.extend_type_context_for_lambda(tx, lm)
+                    def tx1() -> hydra.graph.Graph:
+                        return hydra.schemas.extend_graph_for_lambda(tx, lm)
                     @lru_cache(1)
                     def body() -> hydra.core.Term:
                         return rewrite_with_args((), tx1(), lm.body)
@@ -400,7 +399,7 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
                         return term_arity_with_context(tx, term)
                     @lru_cache(1)
                     def prim_type() -> Maybe[hydra.core.Type]:
-                        return hydra.lib.maybes.map((lambda ts: ts.type), hydra.lib.maps.lookup(pn, tx.inference_context.primitive_types))
+                        return hydra.lib.maybes.map((lambda ts: ts.type), hydra.lib.maps.lookup(pn, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives)))))
                     return expand(False, args, arty(), prim_type(), term)
                 
                 case _:
@@ -423,8 +422,8 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
             
             case hydra.core.TermLet(value=lt):
                 @lru_cache(1)
-                def tx1() -> hydra.typing.TypeContext:
-                    return hydra.schemas.extend_type_context_for_let((lambda _, _2: Nothing()), tx, lt)
+                def tx1() -> hydra.graph.Graph:
+                    return hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx, lt)
                 def map_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                     return hydra.core.Binding(b.name, rewrite_with_args((), tx1(), b.term), b.type)
                 @lru_cache(1)
@@ -458,8 +457,8 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
             
             case hydra.core.TermTypeLambda(value=tl):
                 @lru_cache(1)
-                def tx1() -> hydra.typing.TypeContext:
-                    return hydra.schemas.extend_type_context_for_type_lambda(tx, tl)
+                def tx1() -> hydra.graph.Graph:
+                    return hydra.schemas.extend_graph_for_type_lambda(tx, tl)
                 @lru_cache(1)
                 def result() -> hydra.core.Term:
                     return cast(hydra.core.Term, hydra.core.TermTypeLambda(hydra.core.TypeLambda(tl.parameter, rewrite_with_args((), tx1(), tl.body))))
@@ -477,7 +476,7 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
                     return term_arity_with_context(tx, term)
                 @lru_cache(1)
                 def var_type() -> Maybe[hydra.core.Type]:
-                    return hydra.lib.maps.lookup(vn, tx.types)
+                    return hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(vn, tx.bound_types))
                 return expand(False, args, arty(), var_type(), term)
             
             case hydra.core.TermWrap(value=wt):
@@ -487,10 +486,10 @@ def eta_expand_term_new(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -
                 raise AssertionError("Unreachable: all variants handled")
     return contract_term(rewrite_with_args((), tx0, term0))
 
-def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
+def eta_expand_typed_term(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
     r"""Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added."""
     
-    def rewrite(top_level: bool, forced: bool, type_args: frozenlist[hydra.core.Type], recurse: Callable[[hydra.typing.TypeContext, hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]], tx: hydra.typing.TypeContext, term: hydra.core.Term):
+    def rewrite(top_level: bool, forced: bool, type_args: frozenlist[hydra.core.Type], recurse: Callable[[hydra.graph.Graph, hydra.core.Term], hydra.compute.Flow[T1, hydra.core.Term]], tx: hydra.graph.Graph, term: hydra.core.Term):
         def rewrite_spine(term2: hydra.core.Term):
             def _hoist_rewrite_spine_1(term2, v1):
                 match v1:
@@ -509,11 +508,11 @@ def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term)
                     case _:
                         return rewrite(False, False, (), recurse, tx, term2)
             return _hoist_rewrite_spine_1(term2, term2)
-        def arity_of(tx2: hydra.typing.TypeContext, term2: hydra.core.Term):
+        def arity_of(tx2: hydra.graph.Graph, term2: hydra.core.Term):
             @lru_cache(1)
             def dflt() -> hydra.compute.Flow[T3, int]:
                 return hydra.lib.flows.map((lambda x1: hydra.arity.type_arity(x1)), hydra.checking.type_of(tx2, (), term2))
-            def for_function(tx3: hydra.typing.TypeContext, f: hydra.core.Function):
+            def for_function(tx3: hydra.graph.Graph, f: hydra.core.Function):
                 def _hoist_for_function_1(tx3, v1):
                     match v1:
                         case hydra.core.FunctionElimination():
@@ -521,8 +520,8 @@ def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term)
                         
                         case hydra.core.FunctionLambda(value=l):
                             @lru_cache(1)
-                            def txl() -> hydra.typing.TypeContext:
-                                return hydra.schemas.extend_type_context_for_lambda(tx3, l)
+                            def txl() -> hydra.graph.Graph:
+                                return hydra.schemas.extend_graph_for_lambda(tx3, l)
                             return arity_of(txl(), l.body)
                         
                         case hydra.core.FunctionPrimitive(value=name):
@@ -541,8 +540,8 @@ def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term)
                     
                     case hydra.core.TermLet(value=l):
                         @lru_cache(1)
-                        def txl() -> hydra.typing.TypeContext:
-                            return hydra.schemas.extend_type_context_for_let((lambda _, _2: Nothing()), tx2, l)
+                        def txl() -> hydra.graph.Graph:
+                            return hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx2, l)
                         return arity_of(txl(), l.body)
                     
                     case hydra.core.TermTypeApplication(value=tat):
@@ -550,12 +549,12 @@ def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term)
                     
                     case hydra.core.TermTypeLambda(value=tl):
                         @lru_cache(1)
-                        def txt() -> hydra.typing.TypeContext:
-                            return hydra.schemas.extend_type_context_for_type_lambda(tx2, tl)
+                        def txt() -> hydra.graph.Graph:
+                            return hydra.schemas.extend_graph_for_type_lambda(tx2, tl)
                         return arity_of(txt(), tl.body)
                     
                     case hydra.core.TermVariable(value=name):
-                        return hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda x1: hydra.arity.type_arity(x1)), hydra.checking.type_of(tx2, (), cast(hydra.core.Term, hydra.core.TermVariable(name)))), (lambda t: hydra.lib.flows.pure(hydra.arity.type_arity(t))), hydra.lib.maps.lookup(name, tx2.types))
+                        return hydra.lib.maybes.maybe(hydra.lib.flows.map((lambda x1: hydra.arity.type_arity(x1)), hydra.checking.type_of(tx2, (), cast(hydra.core.Term, hydra.core.TermVariable(name)))), (lambda t: hydra.lib.flows.pure(hydra.arity.type_arity(t))), hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(name, tx2.bound_types)))
                     
                     case _:
                         return dflt()
@@ -597,8 +596,8 @@ def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term)
                 
                 case hydra.core.FunctionLambda(value=l):
                     @lru_cache(1)
-                    def txl() -> hydra.typing.TypeContext:
-                        return hydra.schemas.extend_type_context_for_lambda(tx, l)
+                    def txl() -> hydra.graph.Graph:
+                        return hydra.schemas.extend_graph_for_lambda(tx, l)
                     return hydra.lib.flows.map((lambda x1: unwind(x1)), recurse(txl(), term))
                 
                 case _:
@@ -615,8 +614,8 @@ def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term)
                 
                 case hydra.core.TermLet(value=l):
                     @lru_cache(1)
-                    def txlt() -> hydra.typing.TypeContext:
-                        return hydra.schemas.extend_type_context_for_let((lambda _, _2: Nothing()), tx, l)
+                    def txlt() -> hydra.graph.Graph:
+                        return hydra.schemas.extend_graph_for_let((lambda _, _2: Nothing()), tx, l)
                     return recurse(txlt(), term)
                 
                 case hydra.core.TermTypeApplication(value=tat):
@@ -624,8 +623,8 @@ def eta_expand_typed_term(tx0: hydra.typing.TypeContext, term0: hydra.core.Term)
                 
                 case hydra.core.TermTypeLambda(value=tl):
                     @lru_cache(1)
-                    def txt() -> hydra.typing.TypeContext:
-                        return hydra.schemas.extend_type_context_for_type_lambda(tx, tl)
+                    def txt() -> hydra.graph.Graph:
+                        return hydra.schemas.extend_graph_for_type_lambda(tx, tl)
                     return recurse(txt(), term)
                 
                 case _:
@@ -804,13 +803,13 @@ def term_is_closed(term: hydra.core.Term) -> bool:
     
     return hydra.lib.sets.null(hydra.rewriting.free_variables_in_term(term))
 
-def term_is_value(g: T0, term: hydra.core.Term) -> bool:
+def term_is_value(term: hydra.core.Term) -> bool:
     r"""Whether a term has been fully reduced to a value."""
     
     def for_list(els: frozenlist[hydra.core.Term]) -> bool:
-        return hydra.lib.lists.foldl((lambda b, t: hydra.lib.logic.and_(b, term_is_value(g, t))), True, els)
+        return hydra.lib.lists.foldl((lambda b, t: hydra.lib.logic.and_(b, term_is_value(t))), True, els)
     def check_field(f: hydra.core.Field) -> bool:
-        return term_is_value(g, f.term)
+        return term_is_value(f.term)
     def check_fields(fields: frozenlist[hydra.core.Field]) -> bool:
         return hydra.lib.lists.foldl((lambda b, f: hydra.lib.logic.and_(b, check_field(f))), True, fields)
     def function_is_value(f: hydra.core.Function):
@@ -823,7 +822,7 @@ def term_is_value(g: T0, term: hydra.core.Term) -> bool:
                     return True
                 
                 case hydra.core.EliminationUnion(value=cs):
-                    return hydra.lib.logic.and_(check_fields(cs.cases), hydra.lib.maybes.maybe(True, (lambda v12: term_is_value(g, v12)), cs.default))
+                    return hydra.lib.logic.and_(check_fields(cs.cases), hydra.lib.maybes.maybe(True, (lambda x1: term_is_value(x1)), cs.default))
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
@@ -832,7 +831,7 @@ def term_is_value(g: T0, term: hydra.core.Term) -> bool:
                 return _hoist_function_is_value_1(e)
             
             case hydra.core.FunctionLambda(value=l):
-                return term_is_value(g, l.body)
+                return term_is_value(l.body)
             
             case hydra.core.FunctionPrimitive():
                 return True
@@ -844,7 +843,7 @@ def term_is_value(g: T0, term: hydra.core.Term) -> bool:
             return False
         
         case hydra.core.TermEither(value=e):
-            return hydra.lib.eithers.either((lambda l: term_is_value(g, l)), (lambda r: term_is_value(g, r)), e)
+            return hydra.lib.eithers.either((lambda l: term_is_value(l)), (lambda r: term_is_value(r)), e)
         
         case hydra.core.TermLiteral():
             return True
@@ -856,10 +855,10 @@ def term_is_value(g: T0, term: hydra.core.Term) -> bool:
             return for_list(els)
         
         case hydra.core.TermMap(value=m):
-            return hydra.lib.lists.foldl((lambda b, kv: hydra.lib.logic.and_(b, hydra.lib.logic.and_(term_is_value(g, hydra.lib.pairs.first(kv)), term_is_value(g, hydra.lib.pairs.second(kv))))), True, hydra.lib.maps.to_list(m))
+            return hydra.lib.lists.foldl((lambda b, kv: hydra.lib.logic.and_(b, hydra.lib.logic.and_(term_is_value(hydra.lib.pairs.first(kv)), term_is_value(hydra.lib.pairs.second(kv))))), True, hydra.lib.maps.to_list(m))
         
         case hydra.core.TermMaybe(value=m2):
-            return hydra.lib.maybes.maybe(True, (lambda v1: term_is_value(g, v1)), m2)
+            return hydra.lib.maybes.maybe(True, (lambda x1: term_is_value(x1)), m2)
         
         case hydra.core.TermRecord(value=r):
             return check_fields(r.fields)
