@@ -42,12 +42,12 @@ public interface Modules {
   static <T0> hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.module.Definition>> adaptedModuleDefinitions(hydra.coders.Language lang, hydra.module.Module mod) {
     return hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.module.Definition>>>) (cx -> {
+      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.module.Definition>>>) (graph -> {
         java.util.List<hydra.core.Binding> els = (mod).elements;
         return hydra.lib.flows.Bind.apply(
-          hydra.lexical.Lexical.withSchemaContext(hydra.lib.flows.MapList.apply(
+          hydra.lib.flows.MapList.apply(
             p0 -> hydra.schemas.Schemas.<hydra.graph.Graph>elementAsTypeApplicationTerm(p0),
-            els)),
+            els),
           (java.util.function.Function<java.util.List<hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.module.Definition>>>) (tterms -> {
             hydra.util.Lazy<java.util.List<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.core.TypeApplicationTerm, hydra.core.Type>) (arg_ -> hydra.rewriting.Rewriting.deannotateType((arg_).type)),
@@ -58,7 +58,7 @@ public interface Modules {
                 types.get()),
               (java.util.function.Function<java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T0, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.module.Definition>>>) (adapters -> hydra.lib.flows.MapList.apply(
                 (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition>>) (v1 -> hydra.adapt.modules.Modules.adaptedModuleDefinitions_classify(
-                  cx,
+                  graph,
                   hydra.annotations.Annotations::isNativeType,
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.core.Core.type(
                     p0,
@@ -86,7 +86,7 @@ public interface Modules {
         adapters)))));
   }
   
-  static <T1, T2> hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition> adaptedModuleDefinitions_classify(hydra.graph.Graph cx, java.util.function.Function<hydra.core.Binding, Boolean> hydra_annotations_isNativeType2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>> hydra_decode_core_type2, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme> hydra_schemas_typeToTypeScheme2, hydra.coders.Language lang, java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T1, T2, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters, hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm> pair) {
+  static <T1, T2> hydra.compute.Flow<hydra.graph.Graph, hydra.module.Definition> adaptedModuleDefinitions_classify(hydra.graph.Graph graph, java.util.function.Function<hydra.core.Binding, Boolean> hydra_annotations_isNativeType2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>> hydra_decode_core_type2, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme> hydra_schemas_typeToTypeScheme2, hydra.coders.Language lang, java.util.Map<hydra.core.Type, hydra.compute.Adapter<hydra.graph.Graph, T1, T2, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters, hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm> pair) {
     hydra.util.Lazy<hydra.core.Binding> el = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
     hydra.core.Name name = (el.get()).name;
     hydra.util.Lazy<hydra.core.TypeApplicationTerm> tt = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
@@ -100,7 +100,7 @@ public interface Modules {
             "adapt module definitions",
             hydra.monads.Monads.eitherToFlow(
               wrapped -> (wrapped).value,
-              ((hydra_decode_core_type2).apply(cx)).apply(term))),
+              ((hydra_decode_core_type2).apply(graph)).apply(term))),
           (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (coreTyp -> hydra.adapt.modules.Modules.adaptTypeToLanguage(
             lang,
             coreTyp))),
@@ -187,9 +187,9 @@ public interface Modules {
   
   static <T0, T1, T2, T3> hydra.compute.Flow<hydra.graph.Graph, T3> transformModule_transform(java.util.function.Function<hydra.module.Module, java.util.function.Function<java.util.Map<hydra.core.Type, hydra.compute.Coder<T0, T2, hydra.core.Term, T1>>, java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.TypeApplicationTerm>>, hydra.compute.Flow<hydra.graph.Graph, T3>>>> createModule, java.util.List<hydra.core.Binding> els, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, T1>> encodeTerm, hydra.coders.Language lang, hydra.module.Module mod) {
     return hydra.lib.flows.Bind.apply(
-      hydra.lexical.Lexical.withSchemaContext(hydra.lib.flows.MapList.apply(
+      hydra.lib.flows.MapList.apply(
         p0 -> hydra.schemas.Schemas.<hydra.graph.Graph>elementAsTypeApplicationTerm(p0),
-        els)),
+        els),
       (java.util.function.Function<java.util.List<hydra.core.TypeApplicationTerm>, hydra.compute.Flow<hydra.graph.Graph, T3>>) (tterms -> {
         hydra.util.Lazy<java.util.List<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> hydra.lib.lists.Nub.apply(hydra.lib.lists.Map.apply(
           projected -> projected.type,

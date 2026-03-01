@@ -126,7 +126,7 @@ public interface Annotations {
   static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>> getType(java.util.Map<hydra.core.Name, hydra.core.Term> anns) {
     return hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>>>) (cx -> hydra.lib.maybes.Maybe.apply(
+      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>>>) (graph -> hydra.lib.maybes.Maybe.apply(
         hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
         (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Type>>>) (dat -> hydra.lib.flows.Map.apply(
           (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (hydra.lib.maybes.Pure::apply),
@@ -135,7 +135,7 @@ public interface Annotations {
             hydra.monads.Monads.eitherToFlow(
               wrapped -> (wrapped).value,
               hydra.decode.core.Core.type(
-                cx,
+                graph,
                 dat))))),
         hydra.lib.maps.Lookup.apply(
           hydra.constants.Constants.key_type(),
@@ -151,7 +151,7 @@ public interface Annotations {
   static hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>> getTypeClasses(hydra.core.Term term) {
     return hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>>>) (cx -> {
+      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>>>) (graph -> {
         java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.classes.TypeClass>> decodeClass = (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.classes.TypeClass>>) (term2 -> {
           hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.classes.TypeClass>> byName = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
             (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.classes.TypeClass>(new hydra.core.Name("equality"), new hydra.classes.TypeClass.Equality()))),
@@ -175,7 +175,7 @@ public interface Annotations {
             (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Name>>) (t -> hydra.monads.Monads.eitherToFlow(
               wrapped -> (wrapped).value,
               hydra.decode.core.Core.name(
-                cx,
+                graph,
                 t))),
             (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, java.util.Set<hydra.classes.TypeClass>>>) (v1 -> hydra.extract.core.Core.setOf(
               decodeClass,

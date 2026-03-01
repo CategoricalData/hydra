@@ -5,7 +5,7 @@ package hydra.graph;
 import java.io.Serializable;
 
 /**
- * A built-in function
+ * A built-in function or constant
  */
 public class Primitive implements Serializable, Comparable<Primitive> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.graph.Primitive");

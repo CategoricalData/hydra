@@ -6,8 +6,10 @@ package hydra.hoisting;
  * Functions for deep term rewriting operations involving hoisting subterms or bindings into enclosing let terms.
  */
 public interface Hoisting {
-  static hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, hydra.typing.TermSubst> augmentBindingsWithNewFreeVars(hydra.typing.TypeContext cx, java.util.Set<hydra.core.Name> boundVars, java.util.List<hydra.core.Binding> bindings) {
-    java.util.Map<hydra.core.Name, hydra.core.Type> types = (cx).types;
+  static hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, hydra.typing.TermSubst> augmentBindingsWithNewFreeVars(hydra.graph.Graph cx, java.util.Set<hydra.core.Name> boundVars, java.util.List<hydra.core.Binding> bindings) {
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Type>> types = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
+      hydra.rewriting.Rewriting::typeSchemeToFType,
+      (cx).boundTypes));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> wrapAfterTypeLambdas = new java.util.concurrent.atomic.AtomicReference<>();
     wrapAfterTypeLambdas.set((java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (vars -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -30,7 +32,7 @@ public interface Hoisting {
       hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>>> varTypePairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.Name, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>>) (v -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>(v, hydra.lib.maps.Lookup.apply(
           v,
-          types))))),
+          types.get()))))),
         freeVars.get()));
       hydra.util.Lazy<java.util.List<hydra.core.Type>> varTypes = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.util.Maybe<hydra.core.Type>>) ((java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.util.Maybe<hydra.core.Type>>) (hydra.lib.pairs.Second::apply)),
@@ -69,7 +71,7 @@ public interface Hoisting {
       (binding).type);
   }
   
-  static Boolean bindingUsesContextTypeVars(hydra.typing.TypeContext cx, hydra.core.Binding binding) {
+  static Boolean bindingUsesContextTypeVars(hydra.graph.Graph cx, hydra.core.Binding binding) {
     return hydra.lib.maybes.Maybe.apply(
       false,
       (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> {
@@ -112,60 +114,59 @@ public interface Hoisting {
   }
   
   static hydra.core.Let hoistAllLetBindings(hydra.core.Let let0) {
-    hydra.util.Lazy<hydra.typing.InferenceContext> emptyIx = new hydra.util.Lazy<>(() -> new hydra.typing.InferenceContext((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), false));
-    hydra.util.Lazy<hydra.typing.TypeContext> emptyCx = new hydra.util.Lazy<>(() -> new hydra.typing.TypeContext((java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), emptyIx.get()));
+    hydra.util.Lazy<hydra.graph.Graph> emptyCx = new hydra.util.Lazy<>(() -> new hydra.graph.Graph((java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.graph.Primitive>) ((java.util.Map<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())));
     return hydra.hoisting.Hoisting.hoistLetBindingsWithPredicate(
       (java.util.function.Function<hydra.core.Binding, Boolean>) (ignored -> true),
-      p0 -> p1 -> hydra.hoisting.Hoisting.<hydra.typing.TypeContext, hydra.core.Binding>shouldHoistAll(
+      p0 -> p1 -> hydra.hoisting.Hoisting.<hydra.graph.Graph, hydra.core.Binding>shouldHoistAll(
         p0,
         p1),
       emptyCx.get(),
       let0);
   }
   
-  static hydra.core.Term hoistCaseStatements(hydra.typing.TypeContext v1, hydra.core.Term v2) {
+  static hydra.core.Term hoistCaseStatements(hydra.graph.Graph v1, hydra.core.Term v2) {
     return hydra.hoisting.Hoisting.hoistSubterms(
       hydra.hoisting.Hoisting::shouldHoistCaseStatement,
       v1,
       v2);
   }
   
-  static <T0> hydra.compute.Flow<T0, hydra.graph.Graph> hoistCaseStatementsInGraph(hydra.graph.Graph graph) {
-    hydra.util.Lazy<hydra.typing.InferenceContext> emptyIx = new hydra.util.Lazy<>(() -> new hydra.typing.InferenceContext((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), false));
-    hydra.util.Lazy<hydra.typing.TypeContext> emptyTx = new hydra.util.Lazy<>(() -> new hydra.typing.TypeContext((java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), emptyIx.get()));
-    hydra.core.Term gterm0 = hydra.schemas.Schemas.graphAsTerm(graph);
-    hydra.core.Term gterm1 = hydra.hoisting.Hoisting.hoistCaseStatements(
+  static java.util.List<hydra.core.Binding> hoistCaseStatementsInGraph(java.util.List<hydra.core.Binding> bindings) {
+    hydra.util.Lazy<hydra.graph.Graph> emptyTx = new hydra.util.Lazy<>(() -> new hydra.graph.Graph((java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.graph.Primitive>) ((java.util.Map<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())));
+    hydra.core.Term term0 = new hydra.core.Term.Let(new hydra.core.Let(bindings, new hydra.core.Term.Unit()));
+    hydra.core.Term term1 = hydra.hoisting.Hoisting.hoistCaseStatements(
       emptyTx.get(),
-      gterm0);
-    java.util.List<hydra.core.Binding> newElements = hydra.schemas.Schemas.termAsGraph(gterm1);
-    return hydra.lib.flows.Pure.apply(new hydra.graph.Graph(newElements, (graph).environment, (graph).types, (graph).body, (graph).primitives, (graph).schema));
+      term0);
+    return hydra.schemas.Schemas.termAsBindings(term1);
   }
   
-  static hydra.core.Let hoistLetBindingsWithContext(java.util.function.Function<hydra.core.Binding, Boolean> isParentBinding, hydra.typing.TypeContext cx, hydra.core.Let let0) {
+  static hydra.core.Let hoistLetBindingsWithContext(java.util.function.Function<hydra.core.Binding, Boolean> isParentBinding, hydra.graph.Graph cx, hydra.core.Let let0) {
     return hydra.hoisting.Hoisting.hoistLetBindingsWithPredicate(
       isParentBinding,
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, Boolean>>) (p0 -> p1 -> hydra.hoisting.Hoisting.shouldHoistPolymorphic(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, Boolean>>) (p0 -> p1 -> hydra.hoisting.Hoisting.shouldHoistPolymorphic(
         p0,
         p1)),
       cx,
       let0);
   }
   
-  static hydra.core.Let hoistLetBindingsWithPredicate(java.util.function.Function<hydra.core.Binding, Boolean> isParentBinding, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, Boolean>> shouldHoistBinding, hydra.typing.TypeContext cx0, hydra.core.Let let0) {
-    hydra.util.Lazy<hydra.typing.TypeContext> cx1 = new hydra.util.Lazy<>(() -> hydra.schemas.Schemas.extendTypeContextForLet(
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (c -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (b -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
+  static hydra.core.Let hoistLetBindingsWithPredicate(java.util.function.Function<hydra.core.Binding, Boolean> isParentBinding, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, Boolean>> shouldHoistBinding, hydra.graph.Graph cx0, hydra.core.Let let0) {
+    hydra.util.Lazy<hydra.graph.Graph> cx1 = new hydra.util.Lazy<>(() -> hydra.schemas.Schemas.extendGraphForLet(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (c -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (b -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
       cx0,
       let0));
-    java.util.function.Function<String, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>>> hoistOne = (java.util.function.Function<String, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>>>) (prefix -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>>) (cx -> (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>) (pair -> (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>) (bindingWithCapturedVars -> {
+    java.util.function.Function<String, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>>> hoistOne = (java.util.function.Function<String, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>>>) (prefix -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>>) (cx -> (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>) (pair -> (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>) (bindingWithCapturedVars -> {
       hydra.util.Lazy<java.util.Set<hydra.core.Name>> alreadyUsedNames = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
       hydra.util.Lazy<hydra.core.Binding> b = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindingWithCapturedVars));
       hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>> bindingAndReplacementPairs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
       hydra.util.Lazy<java.util.List<hydra.core.Name>> capturedTermVars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindingWithCapturedVars));
-      java.util.Map<hydra.core.Name, hydra.core.Type> types = (cx).types;
+      hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Type>> types = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
+        hydra.rewriting.Rewriting::typeSchemeToFType,
+        (cx).boundTypes));
       hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>>> capturedTermVarTypePairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.Name, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>>) (v -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>(v, hydra.lib.maps.Lookup.apply(
           v,
-          types))))),
+          types.get()))))),
         capturedTermVars.get()));
       hydra.util.Lazy<java.util.List<hydra.core.Type>> capturedTermVarTypes = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (typ -> hydra.rewriting.Rewriting.deannotateTypeParameters(typ)),
@@ -238,9 +239,9 @@ public interface Hoisting {
         ((b).name).value,
         "_");
       hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>> resultPair = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContext(
-        (java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>>) (v2 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>) (v4 -> hydra.hoisting.Hoisting.hoistLetBindingsWithPredicate_rewrite(
+        (java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>>) (v2 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>) (v4 -> hydra.hoisting.Hoisting.hoistLetBindingsWithPredicate_rewrite(
           hoistOne,
-          (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, hydra.typing.TermSubst>>>>) (p0 -> p1 -> p2 -> hydra.hoisting.Hoisting.augmentBindingsWithNewFreeVars(
+          (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, hydra.typing.TermSubst>>>>) (p0 -> p1 -> p2 -> hydra.hoisting.Hoisting.augmentBindingsWithNewFreeVars(
             p0,
             p1,
             p2)),
@@ -249,6 +250,7 @@ public interface Hoisting {
             p0,
             p1)),
           hydra.rewriting.Rewriting::freeVariablesInTerm,
+          hydra.rewriting.Rewriting::typeSchemeToFType,
           hydra.schemas.Schemas::fTypeIsPolymorphic,
           (java.util.function.Function<hydra.typing.TermSubst, java.util.function.Function<hydra.core.Binding, hydra.core.Binding>>) (p0 -> p1 -> hydra.substitution.Substitution.substituteInBinding(
             p0,
@@ -280,7 +282,7 @@ public interface Hoisting {
       (let0).bindings)), (let0).body);
   }
   
-  static <T0, T1, T2> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term> hoistLetBindingsWithPredicate_rewrite(java.util.function.Function<String, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>>> hoistOne, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, hydra.typing.TermSubst>>>> hydra_hoisting_augmentBindingsWithNewFreeVars2, java.util.function.Function<hydra.core.Binding, Boolean> hydra_hoisting_bindingIsPolymorphic2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, Integer>> hydra_hoisting_countVarOccurrences2, java.util.function.Function<hydra.core.Term, java.util.Set<hydra.core.Name>> hydra_rewriting_freeVariablesInTerm2, java.util.function.Function<hydra.core.Type, Boolean> hydra_schemas_fTypeIsPolymorphic2, java.util.function.Function<hydra.typing.TermSubst, java.util.function.Function<hydra.core.Binding, hydra.core.Binding>> hydra_substitution_substituteInBinding2, java.util.function.Function<hydra.typing.TermSubst, java.util.function.Function<hydra.core.Term, hydra.core.Term>> hydra_substitution_substituteInTerm2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, Boolean>> shouldHoistBinding, String prefix, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<T0>, T1>, java.util.function.Function<T2, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>> recurse, hydra.typing.TypeContext cx, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, T1> bindingsAndNames, T2 term) {
+  static <T0, T1, T2> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term> hoistLetBindingsWithPredicate_rewrite(java.util.function.Function<String, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>, hydra.util.Tuple.Tuple2<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, hydra.core.Term>>, java.util.Set<hydra.core.Name>>>>>> hoistOne, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, hydra.typing.TermSubst>>>> hydra_hoisting_augmentBindingsWithNewFreeVars2, java.util.function.Function<hydra.core.Binding, Boolean> hydra_hoisting_bindingIsPolymorphic2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, Integer>> hydra_hoisting_countVarOccurrences2, java.util.function.Function<hydra.core.Term, java.util.Set<hydra.core.Name>> hydra_rewriting_freeVariablesInTerm2, java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> hydra_rewriting_typeSchemeToFType2, java.util.function.Function<hydra.core.Type, Boolean> hydra_schemas_fTypeIsPolymorphic2, java.util.function.Function<hydra.typing.TermSubst, java.util.function.Function<hydra.core.Binding, hydra.core.Binding>> hydra_substitution_substituteInBinding2, java.util.function.Function<hydra.typing.TermSubst, java.util.function.Function<hydra.core.Term, hydra.core.Term>> hydra_substitution_substituteInTerm2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, Boolean>> shouldHoistBinding, String prefix, java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<T0>, T1>, java.util.function.Function<T2, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>>> recurse, hydra.graph.Graph cx, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, T1> bindingsAndNames, T2 term) {
     hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> ((recurse).apply(hydra.hoisting.Hoisting.<T1, T0>hoistLetBindingsWithPredicate_emptyBindingsAndNames(bindingsAndNames))).apply(term));
     hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.Set<hydra.core.Name>>> newBindingsAndNames = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result.get()));
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> alreadyUsedNames = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(newBindingsAndNames.get()));
@@ -303,7 +305,9 @@ public interface Hoisting {
         hydra.util.Lazy<java.util.List<hydra.core.Binding>> hoistUs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitionPair.get()));
         hydra.util.Lazy<java.util.Set<hydra.core.Name>> boundTermVariables = new hydra.util.Lazy<>(() -> hydra.lib.sets.Union.apply(
           (cx).lambdaVariables,
-          (cx).letVariables));
+          hydra.lib.sets.Difference.apply(
+            hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((cx).boundTerms)),
+            (cx).lambdaVariables)));
         hydra.util.Lazy<java.util.List<java.util.List<hydra.core.Name>>> freeVariablesInEachBinding = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.Binding, java.util.List<hydra.core.Name>>) (b -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
             boundTermVariables.get(),
@@ -336,10 +340,14 @@ public interface Hoisting {
           (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.lib.maybes.Maybe.apply(
             false,
             hydra_schemas_fTypeIsPolymorphic2,
-            hydra.lib.maps.Lookup.apply(
-              v,
-              (cx).types))),
-          hydra.lib.sets.ToList.apply((cx).letVariables))));
+            hydra.lib.maybes.Map.apply(
+              hydra_rewriting_typeSchemeToFType2,
+              hydra.lib.maps.Lookup.apply(
+                v,
+                (cx).boundTypes)))),
+          hydra.lib.sets.ToList.apply(hydra.lib.sets.Difference.apply(
+            hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((cx).boundTerms)),
+            (cx).lambdaVariables)))));
         hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>>> bindingsWithCapturedVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.Binding, hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>>) (b -> (hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>) ((hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>) (new hydra.util.Tuple.Tuple2<hydra.core.Binding, java.util.List<hydra.core.Name>>(b, hydra.lib.maybes.Maybe.apply(
             (java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()),
@@ -455,21 +463,20 @@ public interface Hoisting {
   }
   
   static hydra.core.Let hoistPolymorphicLetBindings(java.util.function.Function<hydra.core.Binding, Boolean> isParentBinding, hydra.core.Let let0) {
-    hydra.util.Lazy<hydra.typing.InferenceContext> emptyIx = new hydra.util.Lazy<>(() -> new hydra.typing.InferenceContext((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), false));
-    hydra.util.Lazy<hydra.typing.TypeContext> emptyCx = new hydra.util.Lazy<>(() -> new hydra.typing.TypeContext((java.util.Map<hydra.core.Name, hydra.core.Type>) ((java.util.Map<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), emptyIx.get()));
+    hydra.util.Lazy<hydra.graph.Graph> emptyCx = new hydra.util.Lazy<>(() -> new hydra.graph.Graph((java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.graph.Primitive>) ((java.util.Map<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())));
     return hydra.hoisting.Hoisting.hoistLetBindingsWithPredicate(
       isParentBinding,
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, Boolean>>) (p0 -> p1 -> hydra.hoisting.Hoisting.shouldHoistPolymorphic(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, Boolean>>) (p0 -> p1 -> hydra.hoisting.Hoisting.shouldHoistPolymorphic(
         p0,
         p1)),
       emptyCx.get(),
       let0);
   }
   
-  static hydra.core.Term hoistSubterms(java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.accessors.TermAccessor>, hydra.core.Term>, Boolean> shouldHoist, hydra.typing.TypeContext cx0, hydra.core.Term term0) {
-    java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>> processImmediateSubterm = (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>>) (cx -> (java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>) (counter -> (java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>) (namePrefix -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>) (pathPrefix -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>) (subterm -> {
+  static hydra.core.Term hoistSubterms(java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.accessors.TermAccessor>, hydra.core.Term>, Boolean> shouldHoist, hydra.graph.Graph cx0, hydra.core.Term term0) {
+    java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>> processImmediateSubterm = (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>>) (cx -> (java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>) (counter -> (java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>) (namePrefix -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>) (pathPrefix -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>) (subterm -> {
       java.util.Set<hydra.core.Name> baselineLambdaVars = (cx).lambdaVariables;
-      java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>>> collectAndReplace = (java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>>>) (recurse -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>>) (path -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>) (cxInner -> (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (term -> {
+      java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>>> collectAndReplace = (java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>>>) (recurse -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>>) (path -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>>) (cxInner -> (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>>) (acc -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (term -> {
         hydra.util.Lazy<java.util.List<hydra.core.Binding>> collectedBindings = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
         hydra.util.Lazy<Integer> currentCounter = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(acc));
         return (term).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -504,12 +511,14 @@ public interface Hoisting {
                           newLambdaVars.get(),
                           freeVars)));
                         return ((java.util.function.Supplier<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
-                          java.util.Map<hydra.core.Name, hydra.core.Type> typeMap = (cxInner).types;
+                          hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Type>> typeMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
+                            hydra.rewriting.Rewriting::typeSchemeToFType,
+                            (cxInner).boundTypes));
                           return ((java.util.function.Supplier<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
                             hydra.util.Lazy<hydra.core.Term> wrappedTerm = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
                               (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (varName -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(varName, hydra.lib.maps.Lookup.apply(
                                 varName,
-                                typeMap), body))))),
+                                typeMap.get()), body))))),
                               processedTerm.get(),
                               hydra.lib.lists.Reverse.apply(capturedVars.get())));
                             return ((java.util.function.Supplier<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<Integer, java.util.List<hydra.core.Binding>>, hydra.core.Term>>) (() -> {
@@ -565,7 +574,7 @@ public interface Hoisting {
         })).get());
     })))));
     return hydra.lib.pairs.Second.apply(hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContextAndPath(
-      (java.util.function.Function<java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>) (v2 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>) (v3 -> (java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>) (v4 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>) (v5 -> hydra.hoisting.Hoisting.hoistSubterms_rewrite(
+      (java.util.function.Function<java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>) (v2 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>) (v3 -> (java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>) (v4 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>) (v5 -> hydra.hoisting.Hoisting.hoistSubterms_rewrite(
         processImmediateSubterm,
         v1,
         v2,
@@ -577,7 +586,7 @@ public interface Hoisting {
       term0));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> hoistSubterms_processLetTerm(java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>> processImmediateSubterm, hydra.typing.TypeContext cx, T0 counter, java.util.List<hydra.accessors.TermAccessor> path, hydra.core.Let lt) {
+  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> hoistSubterms_processLetTerm(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>> processImmediateSubterm, hydra.graph.Graph cx, T0 counter, java.util.List<hydra.accessors.TermAccessor> path, hydra.core.Let lt) {
     java.util.List<hydra.core.Binding> bindings = (lt).bindings;
     hydra.core.Term body = (lt).body;
     hydra.util.Lazy<java.util.List<hydra.accessors.TermAccessor>> bodyPathPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
@@ -609,7 +618,7 @@ public interface Hoisting {
     return (hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<T0, hydra.core.Term>(counter, new hydra.core.Term.Let(new hydra.core.Let(newBindings.get(), newBody.get())))));
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<T1, hydra.core.Term> hoistSubterms_rewrite(java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>> processImmediateSubterm, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T1, hydra.core.Term>>> recurse, java.util.List<hydra.accessors.TermAccessor> path, hydra.typing.TypeContext cx, T0 counter, hydra.core.Term term) {
+  static <T0, T1> hydra.util.Tuple.Tuple2<T1, hydra.core.Term> hoistSubterms_rewrite(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<Integer, java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<Integer, hydra.core.Term>>>>>> processImmediateSubterm, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T1, hydra.core.Term>>> recurse, java.util.List<hydra.accessors.TermAccessor> path, hydra.graph.Graph cx, T0 counter, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Tuple.Tuple2<T1, hydra.core.Term> otherwise(hydra.core.Term instance) {
@@ -761,17 +770,17 @@ public interface Hoisting {
     return (go.get()).apply(path);
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContext(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>> f, hydra.typing.TypeContext cx0, T0 val0, hydra.core.Term term0) {
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.<T0>rewriteAndFoldTermWithTypeContext_result(
+  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContext(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>> f, hydra.graph.Graph cx0, T0 val0, hydra.core.Term term0) {
+    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.<T0>rewriteAndFoldTermWithTypeContext_result(
       f,
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForLambda(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.schemas.Schemas.extendGraphForLambda(
         p0,
         p1)),
-      (java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>>) (p0 -> p1 -> p2 -> hydra.schemas.Schemas.extendTypeContextForLet(
+      (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>>) (p0 -> p1 -> p2 -> hydra.schemas.Schemas.extendGraphForLet(
         p0,
         p1,
         p2)),
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForTypeLambda(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.schemas.Schemas.extendGraphForTypeLambda(
         p0,
         p1)),
       cx0,
@@ -780,37 +789,37 @@ public interface Hoisting {
     return (hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<T0, hydra.core.Term>(hydra.lib.pairs.First.apply(hydra.lib.pairs.First.apply(result.get())), hydra.lib.pairs.Second.apply(result.get()))));
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term> rewriteAndFoldTermWithTypeContext_wrapper(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>> f, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, T1>, hydra.core.Term>>> lowLevelRecurse, hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext> valAndCx, hydra.core.Term term) {
-    hydra.util.Lazy<hydra.typing.TypeContext> cx = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(valAndCx));
-    hydra.util.Lazy<hydra.typing.TypeContext> cx1 = new hydra.util.Lazy<>(() -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
+  static <T0, T1> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term> rewriteAndFoldTermWithTypeContext_wrapper(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>> f, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, T1>, hydra.core.Term>>> lowLevelRecurse, hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph> valAndCx, hydra.core.Term term) {
+    hydra.util.Lazy<hydra.graph.Graph> cx = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(valAndCx));
+    hydra.util.Lazy<hydra.graph.Graph> cx1 = new hydra.util.Lazy<>(() -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.typing.TypeContext otherwise(hydra.core.Term instance) {
+      public hydra.graph.Graph otherwise(hydra.core.Term instance) {
         return cx.get();
       }
       
       @Override
-      public hydra.typing.TypeContext visit(hydra.core.Term.Function fun) {
+      public hydra.graph.Graph visit(hydra.core.Term.Function fun) {
         return ((fun).value).accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
-          public hydra.typing.TypeContext otherwise(hydra.core.Function instance) {
+          public hydra.graph.Graph otherwise(hydra.core.Function instance) {
             return cx.get();
           }
           
           @Override
-          public hydra.typing.TypeContext visit(hydra.core.Function.Lambda l) {
-            return ((hydra_schemas_extendTypeContextForLambda2).apply(cx.get())).apply((l).value);
+          public hydra.graph.Graph visit(hydra.core.Function.Lambda l) {
+            return ((hydra_schemas_extendGraphForLambda2).apply(cx.get())).apply((l).value);
           }
         });
       }
       
       @Override
-      public hydra.typing.TypeContext visit(hydra.core.Term.Let l) {
-        return (((hydra_schemas_extendTypeContextForLet2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(cx.get())).apply((l).value);
+      public hydra.graph.Graph visit(hydra.core.Term.Let l) {
+        return (((hydra_schemas_extendGraphForLet2).apply((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(cx.get())).apply((l).value);
       }
       
       @Override
-      public hydra.typing.TypeContext visit(hydra.core.Term.TypeLambda tl) {
-        return ((hydra_schemas_extendTypeContextForTypeLambda2).apply(cx.get())).apply((tl).value);
+      public hydra.graph.Graph visit(hydra.core.Term.TypeLambda tl) {
+        return ((hydra_schemas_extendGraphForTypeLambda2).apply(cx.get())).apply((tl).value);
       }
     }));
     hydra.util.Lazy<hydra.util.Tuple.Tuple2<T0, hydra.core.Term>> fResult = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.<T0>rewriteAndFoldTermWithTypeContext_fResult(
@@ -823,28 +832,28 @@ public interface Hoisting {
         v2))),
       term,
       hydra.hoisting.Hoisting.<T0>rewriteAndFoldTermWithTypeContext_val(valAndCx)));
-    return (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term>((hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>) ((hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>) (new hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>(hydra.lib.pairs.First.apply(fResult.get()), cx.get()))), hydra.lib.pairs.Second.apply(fResult.get()))));
+    return (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term>((hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>) ((hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>) (new hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>(hydra.lib.pairs.First.apply(fResult.get()), cx.get()))), hydra.lib.pairs.Second.apply(fResult.get()))));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term> rewriteAndFoldTermWithTypeContext_result(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>> f, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, hydra.typing.TypeContext cx0, hydra.core.Term term0, T0 val0) {
+  static <T0> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term> rewriteAndFoldTermWithTypeContext_result(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>> f, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, hydra.graph.Graph cx0, hydra.core.Term term0, T0 val0) {
     return hydra.rewriting.Rewriting.rewriteAndFoldTerm(
-      (java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term>>>, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term>>>>) (v1 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term>>>) (v2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, hydra.core.Term>>) (v3 -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContext_wrapper(
+      (java.util.function.Function<java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term>>>, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term>>>>) (v1 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term>>>) (v2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, hydra.core.Term>>) (v3 -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContext_wrapper(
         f,
-        hydra_schemas_extendTypeContextForLambda2,
-        hydra_schemas_extendTypeContextForLet2,
-        hydra_schemas_extendTypeContextForTypeLambda2,
+        hydra_schemas_extendGraphForLambda2,
+        hydra_schemas_extendGraphForLet2,
+        hydra_schemas_extendGraphForTypeLambda2,
         v1,
         v2,
         v3)))),
-      (hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>) ((hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>) (new hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>(val0, cx0))),
+      (hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>) ((hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>) (new hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>(val0, cx0))),
       term0);
   }
   
-  static <T0> T0 rewriteAndFoldTermWithTypeContext_val(hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext> valAndCx) {
+  static <T0> T0 rewriteAndFoldTermWithTypeContext_val(hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph> valAndCx) {
     return hydra.lib.pairs.First.apply(valAndCx);
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContext_recurseForUser(hydra.typing.TypeContext cx1, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, T1>, hydra.core.Term>>> lowLevelRecurse, T0 newVal, hydra.core.Term subterm) {
+  static <T0, T1> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContext_recurseForUser(hydra.graph.Graph cx1, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, T1>, hydra.core.Term>>> lowLevelRecurse, T0 newVal, hydra.core.Term subterm) {
     hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, T1>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.<T0, T1>rewriteAndFoldTermWithTypeContext_result2(
       cx1,
       lowLevelRecurse,
@@ -853,25 +862,25 @@ public interface Hoisting {
     return (hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<T0, hydra.core.Term>(hydra.lib.pairs.First.apply(hydra.lib.pairs.First.apply(result.get())), hydra.lib.pairs.Second.apply(result.get()))));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContext_fResult(hydra.typing.TypeContext cx1, java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>> f, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>> recurseForUser, hydra.core.Term term, T0 val) {
+  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContext_fResult(hydra.graph.Graph cx1, java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>> f, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>> recurseForUser, hydra.core.Term term, T0 val) {
     return ((((f).apply(recurseForUser)).apply(cx1)).apply(val)).apply(term);
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, T1>, hydra.core.Term> rewriteAndFoldTermWithTypeContext_result2(hydra.typing.TypeContext cx1, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, T1>, hydra.core.Term>>> lowLevelRecurse, T0 newVal, hydra.core.Term subterm) {
-    return ((lowLevelRecurse).apply((hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>) ((hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>) (new hydra.util.Tuple.Tuple2<T0, hydra.typing.TypeContext>(newVal, cx1))))).apply(subterm);
+  static <T0, T1> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, T1>, hydra.core.Term> rewriteAndFoldTermWithTypeContext_result2(hydra.graph.Graph cx1, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T0, T1>, hydra.core.Term>>> lowLevelRecurse, T0 newVal, hydra.core.Term subterm) {
+    return ((lowLevelRecurse).apply((hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>) ((hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>) (new hydra.util.Tuple.Tuple2<T0, hydra.graph.Graph>(newVal, cx1))))).apply(subterm);
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>>> f, hydra.typing.TypeContext cx0, T0 val0, hydra.core.Term term0) {
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.<T0>rewriteAndFoldTermWithTypeContextAndPath_result(
+  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>>> f, hydra.graph.Graph cx0, T0 val0, hydra.core.Term term0) {
+    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.<T0>rewriteAndFoldTermWithTypeContextAndPath_result(
       f,
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForLambda(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.schemas.Schemas.extendGraphForLambda(
         p0,
         p1)),
-      (java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>>) (p0 -> p1 -> p2 -> hydra.schemas.Schemas.extendTypeContextForLet(
+      (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>>) (p0 -> p1 -> p2 -> hydra.schemas.Schemas.extendGraphForLet(
         p0,
         p1,
         p2)),
-      (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForTypeLambda(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.schemas.Schemas.extendGraphForTypeLambda(
         p0,
         p1)),
       cx0,
@@ -880,37 +889,37 @@ public interface Hoisting {
     return (hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<T0, hydra.core.Term>(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result.get())), hydra.lib.pairs.Second.apply(result.get()))));
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_wrapper(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>>> f, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T1, T0>, hydra.core.Term>>>> recurse, java.util.List<hydra.accessors.TermAccessor> path, hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0> cxAndVal, hydra.core.Term term) {
-    hydra.util.Lazy<hydra.typing.TypeContext> cx = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(cxAndVal));
-    hydra.util.Lazy<hydra.typing.TypeContext> cx1 = new hydra.util.Lazy<>(() -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
+  static <T0, T1> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_wrapper(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>>> f, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T1, T0>, hydra.core.Term>>>> recurse, java.util.List<hydra.accessors.TermAccessor> path, hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0> cxAndVal, hydra.core.Term term) {
+    hydra.util.Lazy<hydra.graph.Graph> cx = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(cxAndVal));
+    hydra.util.Lazy<hydra.graph.Graph> cx1 = new hydra.util.Lazy<>(() -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.typing.TypeContext otherwise(hydra.core.Term instance) {
+      public hydra.graph.Graph otherwise(hydra.core.Term instance) {
         return cx.get();
       }
       
       @Override
-      public hydra.typing.TypeContext visit(hydra.core.Term.Function fun) {
+      public hydra.graph.Graph visit(hydra.core.Term.Function fun) {
         return ((fun).value).accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
-          public hydra.typing.TypeContext otherwise(hydra.core.Function instance) {
+          public hydra.graph.Graph otherwise(hydra.core.Function instance) {
             return cx.get();
           }
           
           @Override
-          public hydra.typing.TypeContext visit(hydra.core.Function.Lambda l) {
-            return ((hydra_schemas_extendTypeContextForLambda2).apply(cx.get())).apply((l).value);
+          public hydra.graph.Graph visit(hydra.core.Function.Lambda l) {
+            return ((hydra_schemas_extendGraphForLambda2).apply(cx.get())).apply((l).value);
           }
         });
       }
       
       @Override
-      public hydra.typing.TypeContext visit(hydra.core.Term.Let l) {
-        return (((hydra_schemas_extendTypeContextForLet2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(cx.get())).apply((l).value);
+      public hydra.graph.Graph visit(hydra.core.Term.Let l) {
+        return (((hydra_schemas_extendGraphForLet2).apply((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(cx.get())).apply((l).value);
       }
       
       @Override
-      public hydra.typing.TypeContext visit(hydra.core.Term.TypeLambda tl) {
-        return ((hydra_schemas_extendTypeContextForTypeLambda2).apply(cx.get())).apply((tl).value);
+      public hydra.graph.Graph visit(hydra.core.Term.TypeLambda tl) {
+        return ((hydra_schemas_extendGraphForTypeLambda2).apply(cx.get())).apply((tl).value);
       }
     }));
     hydra.util.Lazy<hydra.util.Tuple.Tuple2<T0, hydra.core.Term>> fResult = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.<T0>rewriteAndFoldTermWithTypeContextAndPath_fResult(
@@ -925,29 +934,29 @@ public interface Hoisting {
         v2))),
       term,
       hydra.hoisting.Hoisting.<T0>rewriteAndFoldTermWithTypeContextAndPath_val(cxAndVal)));
-    return (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term>((hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>) ((hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>) (new hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>(cx.get(), hydra.lib.pairs.First.apply(fResult.get())))), hydra.lib.pairs.Second.apply(fResult.get()))));
+    return (hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term>((hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>) ((hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>) (new hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>(cx.get(), hydra.lib.pairs.First.apply(fResult.get())))), hydra.lib.pairs.Second.apply(fResult.get()))));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_result(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>>> f, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, hydra.typing.TypeContext cx0, hydra.core.Term term0, T0 val0) {
+  static <T0> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_result(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>>> f, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, hydra.graph.Graph cx0, hydra.core.Term term0, T0 val0) {
     return hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath(
-      (java.util.function.Function<java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term>>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term>>>>) (v2 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, hydra.core.Term>>) (v4 -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContextAndPath_wrapper(
+      (java.util.function.Function<java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term>>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term>>>>) (v2 -> (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term>>>) (v3 -> (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, hydra.core.Term>>) (v4 -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContextAndPath_wrapper(
         f,
-        hydra_schemas_extendTypeContextForLambda2,
-        hydra_schemas_extendTypeContextForLet2,
-        hydra_schemas_extendTypeContextForTypeLambda2,
+        hydra_schemas_extendGraphForLambda2,
+        hydra_schemas_extendGraphForLet2,
+        hydra_schemas_extendGraphForTypeLambda2,
         v1,
         v2,
         v3,
         v4))))),
-      (hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>) ((hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>) (new hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>(cx0, val0))),
+      (hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>) ((hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>) (new hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>(cx0, val0))),
       term0);
   }
   
-  static <T0> T0 rewriteAndFoldTermWithTypeContextAndPath_val(hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0> cxAndVal) {
+  static <T0> T0 rewriteAndFoldTermWithTypeContextAndPath_val(hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0> cxAndVal) {
     return hydra.lib.pairs.Second.apply(cxAndVal);
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_recurseForUser(hydra.typing.TypeContext cx1, java.util.List<hydra.accessors.TermAccessor> path, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T1, T0>, hydra.core.Term>>>> recurse, T0 valIn, hydra.core.Term termIn) {
+  static <T0, T1> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_recurseForUser(hydra.graph.Graph cx1, java.util.List<hydra.accessors.TermAccessor> path, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T1, T0>, hydra.core.Term>>>> recurse, T0 valIn, hydra.core.Term termIn) {
     hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T1, T0>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.<T0, T1>rewriteAndFoldTermWithTypeContextAndPath_result2(
       cx1,
       path,
@@ -957,26 +966,26 @@ public interface Hoisting {
     return (hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<T0, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<T0, hydra.core.Term>(hydra.lib.pairs.Second.apply(hydra.lib.pairs.First.apply(result.get())), hydra.lib.pairs.Second.apply(result.get()))));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_fResult(hydra.typing.TypeContext cx1, java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>>> f, java.util.List<hydra.accessors.TermAccessor> path, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>> recurseForUser, hydra.core.Term term, T0 val) {
+  static <T0> hydra.util.Tuple.Tuple2<T0, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_fResult(hydra.graph.Graph cx1, java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>>>>> f, java.util.List<hydra.accessors.TermAccessor> path, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<T0, hydra.core.Term>>> recurseForUser, hydra.core.Term term, T0 val) {
     return (((((f).apply(recurseForUser)).apply(path)).apply(cx1)).apply(val)).apply(term);
   }
   
-  static <T0, T1> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T1, T0>, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_result2(hydra.typing.TypeContext cx1, java.util.List<hydra.accessors.TermAccessor> path, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T1, T0>, hydra.core.Term>>>> recurse, hydra.core.Term termIn, T0 valIn) {
-    return (((recurse).apply(path)).apply((hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>) ((hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>) (new hydra.util.Tuple.Tuple2<hydra.typing.TypeContext, T0>(cx1, valIn))))).apply(termIn);
+  static <T0, T1> hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T1, T0>, hydra.core.Term> rewriteAndFoldTermWithTypeContextAndPath_result2(hydra.graph.Graph cx1, java.util.List<hydra.accessors.TermAccessor> path, java.util.function.Function<java.util.List<hydra.accessors.TermAccessor>, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>, java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.util.Tuple.Tuple2<T1, T0>, hydra.core.Term>>>> recurse, hydra.core.Term termIn, T0 valIn) {
+    return (((recurse).apply(path)).apply((hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>) ((hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>) (new hydra.util.Tuple.Tuple2<hydra.graph.Graph, T0>(cx1, valIn))))).apply(termIn);
   }
   
-  static <T0> T0 rewriteTermWithTypeContext(java.util.function.Function<java.util.function.Function<hydra.core.Term, T0>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>> f, hydra.typing.TypeContext cx0, hydra.core.Term term0) {
+  static <T0> T0 rewriteTermWithTypeContext(java.util.function.Function<java.util.function.Function<hydra.core.Term, T0>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>>> f, hydra.graph.Graph cx0, hydra.core.Term term0) {
     return hydra.hoisting.Hoisting.<T0>rewriteTermWithTypeContext_rewrite(
-      (java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>>) (v1 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>) (v2 -> (java.util.function.Function<hydra.core.Term, T0>) (v3 -> hydra.hoisting.Hoisting.<T0>rewriteTermWithTypeContext_f2(
+      (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>>>) (v1 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>>) (v2 -> (java.util.function.Function<hydra.core.Term, T0>) (v3 -> hydra.hoisting.Hoisting.<T0>rewriteTermWithTypeContext_f2(
         f,
-        (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForLambda(
+        (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.schemas.Schemas.extendGraphForLambda(
           p0,
           p1)),
-        (java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>>) (p0 -> p1 -> p2 -> hydra.schemas.Schemas.extendTypeContextForLet(
+        (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>>) (p0 -> p1 -> p2 -> hydra.schemas.Schemas.extendGraphForLet(
           p0,
           p1,
           p2)),
-        (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForTypeLambda(
+        (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.schemas.Schemas.extendGraphForTypeLambda(
           p0,
           p1)),
         v1,
@@ -986,7 +995,7 @@ public interface Hoisting {
       term0);
   }
   
-  static <T0> T0 rewriteTermWithTypeContext_f2(java.util.function.Function<java.util.function.Function<hydra.core.Term, T0>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>> f, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.typing.TypeContext cx, hydra.core.Term term) {
+  static <T0> T0 rewriteTermWithTypeContext_f2(java.util.function.Function<java.util.function.Function<hydra.core.Term, T0>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>>> f, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.graph.Graph cx, hydra.core.Term term) {
     java.util.function.Function<hydra.core.Term, T0> recurse1 = (java.util.function.Function<hydra.core.Term, T0>) (v1 -> hydra.hoisting.Hoisting.<T0>rewriteTermWithTypeContext_recurse1(
       cx,
       recurse,
@@ -1007,7 +1016,7 @@ public interface Hoisting {
           
           @Override
           public T0 visit(hydra.core.Function.Lambda l) {
-            hydra.typing.TypeContext cx1 = ((hydra_schemas_extendTypeContextForLambda2).apply(cx)).apply((l).value);
+            hydra.graph.Graph cx1 = ((hydra_schemas_extendGraphForLambda2).apply(cx)).apply((l).value);
             return (((f).apply((java.util.function.Function<hydra.core.Term, T0>) (v1 -> hydra.hoisting.Hoisting.<T0>rewriteTermWithTypeContext_recurse2(
               cx1,
               recurse,
@@ -1018,7 +1027,7 @@ public interface Hoisting {
       
       @Override
       public T0 visit(hydra.core.Term.Let l) {
-        hydra.util.Lazy<hydra.typing.TypeContext> cx1 = new hydra.util.Lazy<>(() -> (((hydra_schemas_extendTypeContextForLet2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(cx)).apply((l).value));
+        hydra.util.Lazy<hydra.graph.Graph> cx1 = new hydra.util.Lazy<>(() -> (((hydra_schemas_extendGraphForLet2).apply((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(cx)).apply((l).value));
         return (((f).apply((java.util.function.Function<hydra.core.Term, T0>) (v1 -> hydra.hoisting.Hoisting.<T0>rewriteTermWithTypeContext_recurse22(
           cx1.get(),
           recurse,
@@ -1027,7 +1036,7 @@ public interface Hoisting {
       
       @Override
       public T0 visit(hydra.core.Term.TypeLambda tl) {
-        hydra.typing.TypeContext cx1 = ((hydra_schemas_extendTypeContextForTypeLambda2).apply(cx)).apply((tl).value);
+        hydra.graph.Graph cx1 = ((hydra_schemas_extendGraphForTypeLambda2).apply(cx)).apply((tl).value);
         return (((f).apply((java.util.function.Function<hydra.core.Term, T0>) (v1 -> hydra.hoisting.Hoisting.<T0>rewriteTermWithTypeContext_recurse23(
           cx1,
           recurse,
@@ -1036,26 +1045,26 @@ public interface Hoisting {
     });
   }
   
-  static <T0> T0 rewriteTermWithTypeContext_rewrite(java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>> f2, hydra.typing.TypeContext cx, hydra.core.Term term) {
-    return (((f2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>>) (v1 -> (java.util.function.Function<hydra.core.Term, T0>) (v2 -> hydra.hoisting.Hoisting.<T0>rewriteTermWithTypeContext_rewrite(
+  static <T0> T0 rewriteTermWithTypeContext_rewrite(java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>>> f2, hydra.graph.Graph cx, hydra.core.Term term) {
+    return (((f2).apply((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>>) (v1 -> (java.util.function.Function<hydra.core.Term, T0>) (v2 -> hydra.hoisting.Hoisting.<T0>rewriteTermWithTypeContext_rewrite(
       f2,
       v1,
       v2))))).apply(cx)).apply(term);
   }
   
-  static <T0> T0 rewriteTermWithTypeContext_recurse1(hydra.typing.TypeContext cx, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.core.Term term) {
+  static <T0> T0 rewriteTermWithTypeContext_recurse1(hydra.graph.Graph cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.core.Term term) {
     return ((recurse).apply(cx)).apply(term);
   }
   
-  static <T0> T0 rewriteTermWithTypeContext_recurse2(hydra.typing.TypeContext cx1, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.core.Term term) {
+  static <T0> T0 rewriteTermWithTypeContext_recurse2(hydra.graph.Graph cx1, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.core.Term term) {
     return ((recurse).apply(cx1)).apply(term);
   }
   
-  static <T0> T0 rewriteTermWithTypeContext_recurse22(hydra.typing.TypeContext cx1, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.core.Term term) {
+  static <T0> T0 rewriteTermWithTypeContext_recurse22(hydra.graph.Graph cx1, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.core.Term term) {
     return ((recurse).apply(cx1)).apply(term);
   }
   
-  static <T0> T0 rewriteTermWithTypeContext_recurse23(hydra.typing.TypeContext cx1, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.core.Term term) {
+  static <T0> T0 rewriteTermWithTypeContext_recurse23(hydra.graph.Graph cx1, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, T0>> recurse, hydra.core.Term term) {
     return ((recurse).apply(cx1)).apply(term);
   }
   
@@ -1082,7 +1091,7 @@ public interface Hoisting {
       })).get());
   }
   
-  static Boolean shouldHoistPolymorphic(hydra.typing.TypeContext cx, hydra.core.Binding binding) {
+  static Boolean shouldHoistPolymorphic(hydra.graph.Graph cx, hydra.core.Binding binding) {
     return hydra.lib.logic.Or.apply(
       hydra.hoisting.Hoisting.bindingIsPolymorphic(binding),
       hydra.hoisting.Hoisting.bindingUsesContextTypeVars(

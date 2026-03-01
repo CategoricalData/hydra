@@ -5,60 +5,76 @@ package hydra.graph;
 import java.io.Serializable;
 
 /**
- * A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
+ * A graph, or lexical environment which binds names to terms, types, primitives, and metadata
  */
 public class Graph implements Serializable, Comparable<Graph> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.graph.Graph");
   
-  public static final hydra.core.Name ELEMENTS = new hydra.core.Name("elements");
+  public static final hydra.core.Name BOUND_TERMS = new hydra.core.Name("boundTerms");
   
-  public static final hydra.core.Name ENVIRONMENT = new hydra.core.Name("environment");
+  public static final hydra.core.Name BOUND_TYPES = new hydra.core.Name("boundTypes");
   
-  public static final hydra.core.Name TYPES = new hydra.core.Name("types");
+  public static final hydra.core.Name CLASS_CONSTRAINTS = new hydra.core.Name("classConstraints");
   
-  public static final hydra.core.Name BODY = new hydra.core.Name("body");
+  public static final hydra.core.Name LAMBDA_VARIABLES = new hydra.core.Name("lambdaVariables");
+  
+  public static final hydra.core.Name METADATA = new hydra.core.Name("metadata");
   
   public static final hydra.core.Name PRIMITIVES = new hydra.core.Name("primitives");
   
-  public static final hydra.core.Name SCHEMA = new hydra.core.Name("schema");
+  public static final hydra.core.Name SCHEMA_TYPES = new hydra.core.Name("schemaTypes");
+  
+  public static final hydra.core.Name TYPE_VARIABLES = new hydra.core.Name("typeVariables");
   
   /**
-   * All of the elements in the graph
+   * The terms bound by all term variables in scope
    */
-  public final java.util.List<hydra.core.Binding> elements;
+  public final java.util.Map<hydra.core.Name, hydra.core.Term> boundTerms;
   
   /**
-   * The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
+   * The type schemes of all term variables in scope
    */
-  public final java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>> environment;
+  public final java.util.Map<hydra.core.Name, hydra.core.TypeScheme> boundTypes;
   
   /**
-   * The typing environment of the graph
+   * A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered.
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types;
+  public final java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints;
   
   /**
-   * The body of the term which generated this context
+   * The set of term variables introduced by specifically by lambdas
    */
-  public final hydra.core.Term body;
+  public final java.util.Set<hydra.core.Name> lambdaVariables;
   
   /**
-   * All supported primitive constants and functions, by name
+   * Any additional metadata bound to term variables in scope
+   */
+  public final java.util.Map<hydra.core.Name, hydra.core.Term> metadata;
+  
+  /**
+   * All primitive functions and constants by name
    */
   public final java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives;
   
   /**
-   * The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
+   * All schema types (type schemes) in scope
    */
-  public final hydra.util.Maybe<hydra.graph.Graph> schema;
+  public final java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes;
   
-  public Graph (java.util.List<hydra.core.Binding> elements, java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>> environment, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, hydra.util.Maybe<hydra.graph.Graph> schema) {
-    this.elements = elements;
-    this.environment = environment;
-    this.types = types;
-    this.body = body;
+  /**
+   * The set of type variables introduced specifically by type lambdas
+   */
+  public final java.util.Set<hydra.core.Name> typeVariables;
+  
+  public Graph (java.util.Map<hydra.core.Name, hydra.core.Term> boundTerms, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> boundTypes, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints, java.util.Set<hydra.core.Name> lambdaVariables, java.util.Map<hydra.core.Name, hydra.core.Term> metadata, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes, java.util.Set<hydra.core.Name> typeVariables) {
+    this.boundTerms = boundTerms;
+    this.boundTypes = boundTypes;
+    this.classConstraints = classConstraints;
+    this.lambdaVariables = lambdaVariables;
+    this.metadata = metadata;
     this.primitives = primitives;
-    this.schema = schema;
+    this.schemaTypes = schemaTypes;
+    this.typeVariables = typeVariables;
   }
   
   @Override
@@ -68,23 +84,27 @@ public class Graph implements Serializable, Comparable<Graph> {
     }
     Graph o = (Graph) other;
     return java.util.Objects.equals(
-      this.elements,
-      o.elements) && java.util.Objects.equals(
-      this.environment,
-      o.environment) && java.util.Objects.equals(
-      this.types,
-      o.types) && java.util.Objects.equals(
-      this.body,
-      o.body) && java.util.Objects.equals(
+      this.boundTerms,
+      o.boundTerms) && java.util.Objects.equals(
+      this.boundTypes,
+      o.boundTypes) && java.util.Objects.equals(
+      this.classConstraints,
+      o.classConstraints) && java.util.Objects.equals(
+      this.lambdaVariables,
+      o.lambdaVariables) && java.util.Objects.equals(
+      this.metadata,
+      o.metadata) && java.util.Objects.equals(
       this.primitives,
       o.primitives) && java.util.Objects.equals(
-      this.schema,
-      o.schema);
+      this.schemaTypes,
+      o.schemaTypes) && java.util.Objects.equals(
+      this.typeVariables,
+      o.typeVariables);
   }
   
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(elements) + 3 * java.util.Objects.hashCode(environment) + 5 * java.util.Objects.hashCode(types) + 7 * java.util.Objects.hashCode(body) + 11 * java.util.Objects.hashCode(primitives) + 13 * java.util.Objects.hashCode(schema);
+    return 2 * java.util.Objects.hashCode(boundTerms) + 3 * java.util.Objects.hashCode(boundTypes) + 5 * java.util.Objects.hashCode(classConstraints) + 7 * java.util.Objects.hashCode(lambdaVariables) + 11 * java.util.Objects.hashCode(metadata) + 13 * java.util.Objects.hashCode(primitives) + 17 * java.util.Objects.hashCode(schemaTypes) + 19 * java.util.Objects.hashCode(typeVariables);
   }
   
   @Override
@@ -92,24 +112,32 @@ public class Graph implements Serializable, Comparable<Graph> {
   public int compareTo(Graph other) {
     int cmp = 0;
     cmp = Integer.compare(
-      elements.hashCode(),
-      other.elements.hashCode());
+      boundTerms.hashCode(),
+      other.boundTerms.hashCode());
     if (cmp != 0) {
       return cmp;
     }
     cmp = Integer.compare(
-      environment.hashCode(),
-      other.environment.hashCode());
+      boundTypes.hashCode(),
+      other.boundTypes.hashCode());
     if (cmp != 0) {
       return cmp;
     }
     cmp = Integer.compare(
-      types.hashCode(),
-      other.types.hashCode());
+      classConstraints.hashCode(),
+      other.classConstraints.hashCode());
     if (cmp != 0) {
       return cmp;
     }
-    cmp = ((Comparable) body).compareTo(other.body);
+    cmp = Integer.compare(
+      lambdaVariables.hashCode(),
+      other.lambdaVariables.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      metadata.hashCode(),
+      other.metadata.hashCode());
     if (cmp != 0) {
       return cmp;
     }
@@ -119,32 +147,46 @@ public class Graph implements Serializable, Comparable<Graph> {
     if (cmp != 0) {
       return cmp;
     }
+    cmp = Integer.compare(
+      schemaTypes.hashCode(),
+      other.schemaTypes.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
     return Integer.compare(
-      schema.hashCode(),
-      other.schema.hashCode());
+      typeVariables.hashCode(),
+      other.typeVariables.hashCode());
   }
   
-  public Graph withElements(java.util.List<hydra.core.Binding> elements) {
-    return new Graph(elements, environment, types, body, primitives, schema);
+  public Graph withBoundTerms(java.util.Map<hydra.core.Name, hydra.core.Term> boundTerms) {
+    return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withEnvironment(java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>> environment) {
-    return new Graph(elements, environment, types, body, primitives, schema);
+  public Graph withBoundTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> boundTypes) {
+    return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types) {
-    return new Graph(elements, environment, types, body, primitives, schema);
+  public Graph withClassConstraints(java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
+    return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withBody(hydra.core.Term body) {
-    return new Graph(elements, environment, types, body, primitives, schema);
+  public Graph withLambdaVariables(java.util.Set<hydra.core.Name> lambdaVariables) {
+    return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
+  }
+  
+  public Graph withMetadata(java.util.Map<hydra.core.Name, hydra.core.Term> metadata) {
+    return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
   public Graph withPrimitives(java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives) {
-    return new Graph(elements, environment, types, body, primitives, schema);
+    return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withSchema(hydra.util.Maybe<hydra.graph.Graph> schema) {
-    return new Graph(elements, environment, types, body, primitives, schema);
+  public Graph withSchemaTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes) {
+    return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
+  }
+  
+  public Graph withTypeVariables(java.util.Set<hydra.core.Name> typeVariables) {
+    return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
 }

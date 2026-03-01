@@ -262,7 +262,7 @@ public interface Reduction {
       term));
   }
   
-  static hydra.core.Term etaExpandTermNew(hydra.typing.TypeContext tx0, hydra.core.Term term0) {
+  static hydra.core.Term etaExpandTermNew(hydra.graph.Graph tx0, hydra.core.Term term0) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Integer, java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, java.util.List<hydra.util.Maybe<hydra.core.Type>>>>> domainTypes = new java.util.concurrent.atomic.AtomicReference<>();
     domainTypes.set((java.util.function.Function<Integer, java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, java.util.List<hydra.util.Maybe<hydra.core.Type>>>>) (n -> (java.util.function.Function<hydra.util.Maybe<hydra.core.Type>, java.util.List<hydra.util.Maybe<hydra.core.Type>>>) (mt -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Lte.apply(
@@ -417,8 +417,8 @@ public interface Reduction {
         })).get(),
         () -> applied.get());
     })))));
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, Integer>>> termArityWithContext = new java.util.concurrent.atomic.AtomicReference<>();
-    termArityWithContext.set((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, Integer>>) (tx -> (java.util.function.Function<hydra.core.Term, Integer>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, Integer>>> termArityWithContext = new java.util.concurrent.atomic.AtomicReference<>();
+    termArityWithContext.set((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, Integer>>) (tx -> (java.util.function.Function<hydra.core.Term, Integer>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Integer otherwise(hydra.core.Term instance) {
         return 0;
@@ -456,22 +456,24 @@ public interface Reduction {
               hydra.arity.Arity::typeSchemeArity,
               hydra.lib.maps.Lookup.apply(
                 (name).value,
-                ((tx).inferenceContext).primitiveTypes));
+                hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+                  (java.util.function.Function<hydra.graph.Primitive, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
+                  hydra.lib.maps.Elems.apply((tx).primitives)))));
           }
         });
       }
       
       @Override
       public Integer visit(hydra.core.Term.Let l) {
-        return ((termArityWithContext.get()).apply(hydra.schemas.Schemas.extendTypeContextForLet(
-          (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
+        return ((termArityWithContext.get()).apply(hydra.schemas.Schemas.extendGraphForLet(
+          (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
           tx,
           (l).value))).apply(((l).value).body);
       }
       
       @Override
       public Integer visit(hydra.core.Term.TypeLambda tl) {
-        return ((termArityWithContext.get()).apply(hydra.schemas.Schemas.extendTypeContextForTypeLambda(
+        return ((termArityWithContext.get()).apply(hydra.schemas.Schemas.extendGraphForTypeLambda(
           tx,
           (tl).value))).apply(((tl).value).body);
       }
@@ -486,15 +488,17 @@ public interface Reduction {
         return hydra.lib.maybes.Maybe.apply(
           0,
           hydra.arity.Arity::typeArity,
-          hydra.lib.maps.Lookup.apply(
-            (name).value,
-            (tx).types));
+          hydra.lib.maybes.Map.apply(
+            hydra.rewriting.Rewriting::typeSchemeToFType,
+            hydra.lib.maps.Lookup.apply(
+              (name).value,
+              (tx).boundTypes)));
       }
     }))));
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>> rewriteWithArgs = new java.util.concurrent.atomic.AtomicReference<>();
-    rewriteWithArgs.set((java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (args -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (tx -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> {
-      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Type>>>> termHeadType = new java.util.concurrent.atomic.AtomicReference<>();
-      termHeadType.set((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Type>>>) (tx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Type>>) (trm2 -> (trm2).accept(new hydra.core.Term.PartialVisitor<>() {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>> rewriteWithArgs = new java.util.concurrent.atomic.AtomicReference<>();
+    rewriteWithArgs.set((java.util.function.Function<java.util.List<hydra.core.Term>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (args -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (tx -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> {
+      java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Type>>>> termHeadType = new java.util.concurrent.atomic.AtomicReference<>();
+      termHeadType.set((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Type>>>) (tx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Type>>) (trm2 -> (trm2).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Term instance) {
           return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
@@ -519,22 +523,24 @@ public interface Reduction {
                 (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts2 -> (ts2).type),
                 hydra.lib.maps.Lookup.apply(
                   (pn2).value,
-                  ((tx2).inferenceContext).primitiveTypes));
+                  hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+                    (java.util.function.Function<hydra.graph.Primitive, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
+                    hydra.lib.maps.Elems.apply((tx2).primitives)))));
             }
           });
         }
         
         @Override
         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Let l2) {
-          return ((termHeadType.get()).apply(hydra.schemas.Schemas.extendTypeContextForLet(
-            (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
+          return ((termHeadType.get()).apply(hydra.schemas.Schemas.extendGraphForLet(
+            (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
             tx2,
             (l2).value))).apply(((l2).value).body);
         }
         
         @Override
         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.TypeLambda tl2) {
-          return ((termHeadType.get()).apply(hydra.schemas.Schemas.extendTypeContextForTypeLambda(
+          return ((termHeadType.get()).apply(hydra.schemas.Schemas.extendGraphForTypeLambda(
             tx2,
             (tl2).value))).apply(((tl2).value).body);
         }
@@ -561,9 +567,11 @@ public interface Reduction {
         
         @Override
         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Variable vn2) {
-          return hydra.lib.maps.Lookup.apply(
-            (vn2).value,
-            (tx2).types);
+          return hydra.lib.maybes.Map.apply(
+            hydra.rewriting.Rewriting::typeSchemeToFType,
+            hydra.lib.maps.Lookup.apply(
+              (vn2).value,
+              (tx2).boundTypes));
         }
       }))));
       java.util.function.Function<hydra.core.Term, hydra.core.Term> afterRecursion = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (trm -> {
@@ -571,7 +579,7 @@ public interface Reduction {
         hydra.util.Maybe<hydra.core.Type> hType = ((termHeadType.get()).apply(tx)).apply(trm);
         return (((((expand).apply(false)).apply(args)).apply(arity)).apply(hType)).apply(trm);
       });
-      java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.core.Term>> recurse = (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (tx1 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term1 -> (((rewriteWithArgs.get()).apply((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))).apply(tx1)).apply(term1)));
+      java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.core.Term>> recurse = (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (tx1 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term1 -> (((rewriteWithArgs.get()).apply((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))).apply(tx1)).apply(term1)));
       java.util.function.Function<hydra.core.Field, hydra.core.Field> forCaseBranch = (java.util.function.Function<hydra.core.Field, hydra.core.Field>) (f -> {
         hydra.core.Term branchBody = ((recurse).apply(tx)).apply((f).term);
         Integer arty = ((termArityWithContext.get()).apply(tx)).apply(branchBody);
@@ -665,7 +673,7 @@ public interface Reduction {
             
             @Override
             public hydra.core.Term visit(hydra.core.Function.Lambda lm) {
-              hydra.typing.TypeContext tx1 = hydra.schemas.Schemas.extendTypeContextForLambda(
+              hydra.graph.Graph tx1 = hydra.schemas.Schemas.extendGraphForLambda(
                 tx,
                 (lm).value);
               hydra.util.Lazy<hydra.core.Term> body = new hydra.util.Lazy<>(() -> (((rewriteWithArgs.get()).apply((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))).apply(tx1)).apply(((lm).value).body));
@@ -681,7 +689,9 @@ public interface Reduction {
                 (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> (ts).type),
                 hydra.lib.maps.Lookup.apply(
                   (pn).value,
-                  ((tx).inferenceContext).primitiveTypes)));
+                  hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
+                    (java.util.function.Function<hydra.graph.Primitive, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
+                    hydra.lib.maps.Elems.apply((tx).primitives))))));
               return (((((expand).apply(false)).apply(args)).apply(arty)).apply(primType.get())).apply(term);
             }
           });
@@ -689,8 +699,8 @@ public interface Reduction {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Let lt) {
-          hydra.util.Lazy<hydra.typing.TypeContext> tx1 = new hydra.util.Lazy<>(() -> hydra.schemas.Schemas.extendTypeContextForLet(
-            (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
+          hydra.util.Lazy<hydra.graph.Graph> tx1 = new hydra.util.Lazy<>(() -> hydra.schemas.Schemas.extendGraphForLet(
+            (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
             tx,
             (lt).value));
           java.util.function.Function<hydra.core.Binding, hydra.core.Binding> mapBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, (((rewriteWithArgs.get()).apply((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))).apply(tx1.get())).apply((b).term), (b).type));
@@ -750,7 +760,7 @@ public interface Reduction {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
-          hydra.typing.TypeContext tx1 = hydra.schemas.Schemas.extendTypeContextForTypeLambda(
+          hydra.graph.Graph tx1 = hydra.schemas.Schemas.extendGraphForTypeLambda(
             tx,
             (tl).value);
           hydra.util.Lazy<hydra.core.Term> result = new hydra.util.Lazy<>(() -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(((tl).value).parameter, (((rewriteWithArgs.get()).apply((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))).apply(tx1)).apply(((tl).value).body))));
@@ -770,9 +780,11 @@ public interface Reduction {
         @Override
         public hydra.core.Term visit(hydra.core.Term.Variable vn) {
           Integer arty = ((termArityWithContext.get()).apply(tx)).apply(term);
-          hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> varType = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
-            (vn).value,
-            (tx).types));
+          hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> varType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
+            hydra.rewriting.Rewriting::typeSchemeToFType,
+            hydra.lib.maps.Lookup.apply(
+              (vn).value,
+              (tx).boundTypes)));
           return (((((expand).apply(false)).apply(args)).apply(arty)).apply(varType.get())).apply(term);
         }
         
@@ -858,19 +870,20 @@ public interface Reduction {
     });
   }
   
-  static <T0> hydra.compute.Flow<T0, hydra.core.Term> etaExpandTypedTerm(hydra.typing.TypeContext tx0, hydra.core.Term term0) {
+  static <T0> hydra.compute.Flow<T0, hydra.core.Term> etaExpandTypedTerm(hydra.graph.Graph tx0, hydra.core.Term term0) {
     return hydra.rewriting.Rewriting.rewriteTermWithContextM(
-      (java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>>>) (v1 -> (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>>) (v2 -> (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (v3 -> hydra.reduction.Reduction.<T0>etaExpandTypedTerm_rewrite(
+      (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>>>) (v1 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>>) (v2 -> (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T0, hydra.core.Term>>) (v3 -> hydra.reduction.Reduction.<T0>etaExpandTypedTerm_rewrite(
         hydra.arity.Arity::typeArity,
         hydra.arity.Arity::typeSchemeArity,
-        (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForLambda(
+        hydra.rewriting.Rewriting::typeSchemeToFType,
+        (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.schemas.Schemas.extendGraphForLambda(
           p0,
           p1)),
-        (java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>>) (p0 -> p1 -> p2 -> hydra.schemas.Schemas.extendTypeContextForLet(
+        (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>>) (p0 -> p1 -> p2 -> hydra.schemas.Schemas.extendGraphForLet(
           p0,
           p1,
           p2)),
-        (java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>>) (p0 -> p1 -> hydra.schemas.Schemas.extendTypeContextForTypeLambda(
+        (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>>) (p0 -> p1 -> hydra.schemas.Schemas.extendGraphForTypeLambda(
           p0,
           p1)),
         true,
@@ -883,7 +896,7 @@ public interface Reduction {
       term0);
   }
   
-  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_rewrite(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, Boolean topLevel, Boolean forced, java.util.List<hydra.core.Type> typeArgs, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.typing.TypeContext tx, hydra.core.Term term) {
+  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_rewrite(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> hydra_rewriting_typeSchemeToFType2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, Boolean topLevel, Boolean forced, java.util.List<hydra.core.Type> typeArgs, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.graph.Graph tx, hydra.core.Term term) {
     java.util.function.Function<Integer, java.util.List<hydra.core.Name>> extraVariables = (java.util.function.Function<Integer, java.util.List<hydra.core.Name>>) (n -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<Integer, hydra.core.Name>) (i -> new hydra.core.Name(hydra.lib.strings.Cat2.apply(
         "v",
@@ -923,9 +936,10 @@ public interface Reduction {
           hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewrite(
             hydra_arity_typeArity2,
             hydra_arity_typeSchemeArity2,
-            hydra_schemas_extendTypeContextForLambda2,
-            hydra_schemas_extendTypeContextForLet2,
-            hydra_schemas_extendTypeContextForTypeLambda2,
+            hydra_rewriting_typeSchemeToFType2,
+            hydra_schemas_extendGraphForLambda2,
+            hydra_schemas_extendGraphForLet2,
+            hydra_schemas_extendGraphForTypeLambda2,
             true,
             false,
             (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
@@ -936,18 +950,20 @@ public interface Reduction {
             hydra.reduction.Reduction.<T1>etaExpandTypedTerm_arityOf(
               hydra_arity_typeArity2,
               hydra_arity_typeSchemeArity2,
-              hydra_schemas_extendTypeContextForLambda2,
-              hydra_schemas_extendTypeContextForLet2,
-              hydra_schemas_extendTypeContextForTypeLambda2,
+              hydra_rewriting_typeSchemeToFType2,
+              hydra_schemas_extendGraphForLambda2,
+              hydra_schemas_extendGraphForLet2,
+              hydra_schemas_extendGraphForTypeLambda2,
               tx,
               lhs),
             (java.util.function.Function<Integer, hydra.compute.Flow<T1, hydra.core.Term>>) (lhsarity -> hydra.lib.flows.Bind.apply(
               hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewriteSpine(
                 hydra_arity_typeArity2,
                 hydra_arity_typeSchemeArity2,
-                hydra_schemas_extendTypeContextForLambda2,
-                hydra_schemas_extendTypeContextForLet2,
-                hydra_schemas_extendTypeContextForTypeLambda2,
+                hydra_rewriting_typeSchemeToFType2,
+                hydra_schemas_extendGraphForLambda2,
+                hydra_schemas_extendGraphForLet2,
+                hydra_schemas_extendGraphForTypeLambda2,
                 recurse,
                 tx,
                 lhs),
@@ -978,15 +994,17 @@ public interface Reduction {
               (java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<T1, hydra.core.Term>>) (v1 -> hydra.reduction.Reduction.<T1>etaExpandTypedTerm_forCaseStatement(
                 hydra_arity_typeArity2,
                 hydra_arity_typeSchemeArity2,
-                hydra_schemas_extendTypeContextForLambda2,
-                hydra_schemas_extendTypeContextForLet2,
-                hydra_schemas_extendTypeContextForTypeLambda2,
+                hydra_rewriting_typeSchemeToFType2,
+                hydra_schemas_extendGraphForLambda2,
+                hydra_schemas_extendGraphForLet2,
+                hydra_schemas_extendGraphForTypeLambda2,
                 (java.util.function.Function<hydra.core.Field, hydra.compute.Flow<T1, hydra.core.Field>>) (v12 -> hydra.reduction.Reduction.<T1>etaExpandTypedTerm_forCase(
                   hydra_arity_typeArity2,
                   hydra_arity_typeSchemeArity2,
-                  hydra_schemas_extendTypeContextForLambda2,
-                  hydra_schemas_extendTypeContextForLet2,
-                  hydra_schemas_extendTypeContextForTypeLambda2,
+                  hydra_rewriting_typeSchemeToFType2,
+                  hydra_schemas_extendGraphForLambda2,
+                  hydra_schemas_extendGraphForLet2,
+                  hydra_schemas_extendGraphForTypeLambda2,
                   recurse,
                   tx,
                   v12)),
@@ -1005,7 +1023,7 @@ public interface Reduction {
           
           @Override
           public hydra.compute.Flow<T1, hydra.core.Term> visit(hydra.core.Function.Lambda l) {
-            hydra.typing.TypeContext txl = ((hydra_schemas_extendTypeContextForLambda2).apply(tx)).apply((l).value);
+            hydra.graph.Graph txl = ((hydra_schemas_extendGraphForLambda2).apply(tx)).apply((l).value);
             return hydra.lib.flows.Map.apply(
               unwind,
               ((recurse).apply(txl)).apply(term));
@@ -1015,7 +1033,7 @@ public interface Reduction {
       
       @Override
       public hydra.compute.Flow<T1, hydra.core.Term> visit(hydra.core.Term.Let l) {
-        hydra.util.Lazy<hydra.typing.TypeContext> txlt = new hydra.util.Lazy<>(() -> (((hydra_schemas_extendTypeContextForLet2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(tx)).apply((l).value));
+        hydra.util.Lazy<hydra.graph.Graph> txlt = new hydra.util.Lazy<>(() -> (((hydra_schemas_extendGraphForLet2).apply((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(tx)).apply((l).value));
         return ((recurse).apply(txlt.get())).apply(term);
       }
       
@@ -1024,9 +1042,10 @@ public interface Reduction {
         return hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewrite(
           hydra_arity_typeArity2,
           hydra_arity_typeSchemeArity2,
-          hydra_schemas_extendTypeContextForLambda2,
-          hydra_schemas_extendTypeContextForLet2,
-          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_rewriting_typeSchemeToFType2,
+          hydra_schemas_extendGraphForLambda2,
+          hydra_schemas_extendGraphForLet2,
+          hydra_schemas_extendGraphForTypeLambda2,
           topLevel,
           forced,
           hydra.lib.lists.Cons.apply(
@@ -1039,22 +1058,23 @@ public interface Reduction {
       
       @Override
       public hydra.compute.Flow<T1, hydra.core.Term> visit(hydra.core.Term.TypeLambda tl) {
-        hydra.typing.TypeContext txt = ((hydra_schemas_extendTypeContextForTypeLambda2).apply(tx)).apply((tl).value);
+        hydra.graph.Graph txt = ((hydra_schemas_extendGraphForTypeLambda2).apply(tx)).apply((tl).value);
         return ((recurse).apply(txt)).apply(term);
       }
     });
   }
   
-  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_rewriteSpine(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.typing.TypeContext tx, hydra.core.Term term) {
+  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_rewriteSpine(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> hydra_rewriting_typeSchemeToFType2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.graph.Graph tx, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.compute.Flow<T1, hydra.core.Term> otherwise(hydra.core.Term instance) {
         return hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewrite(
           hydra_arity_typeArity2,
           hydra_arity_typeSchemeArity2,
-          hydra_schemas_extendTypeContextForLambda2,
-          hydra_schemas_extendTypeContextForLet2,
-          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_rewriting_typeSchemeToFType2,
+          hydra_schemas_extendGraphForLambda2,
+          hydra_schemas_extendGraphForLet2,
+          hydra_schemas_extendGraphForTypeLambda2,
           false,
           false,
           (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
@@ -1069,9 +1089,10 @@ public interface Reduction {
           hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewriteSpine(
             hydra_arity_typeArity2,
             hydra_arity_typeSchemeArity2,
-            hydra_schemas_extendTypeContextForLambda2,
-            hydra_schemas_extendTypeContextForLet2,
-            hydra_schemas_extendTypeContextForTypeLambda2,
+            hydra_rewriting_typeSchemeToFType2,
+            hydra_schemas_extendGraphForLambda2,
+            hydra_schemas_extendGraphForLet2,
+            hydra_schemas_extendGraphForTypeLambda2,
             recurse,
             tx,
             ((at).value).body),
@@ -1091,9 +1112,10 @@ public interface Reduction {
           hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewriteSpine(
             hydra_arity_typeArity2,
             hydra_arity_typeSchemeArity2,
-            hydra_schemas_extendTypeContextForLambda2,
-            hydra_schemas_extendTypeContextForLet2,
-            hydra_schemas_extendTypeContextForTypeLambda2,
+            hydra_rewriting_typeSchemeToFType2,
+            hydra_schemas_extendGraphForLambda2,
+            hydra_schemas_extendGraphForLet2,
+            hydra_schemas_extendGraphForTypeLambda2,
             recurse,
             tx,
             ((a).value).function),
@@ -1101,9 +1123,10 @@ public interface Reduction {
             hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewrite(
               hydra_arity_typeArity2,
               hydra_arity_typeSchemeArity2,
-              hydra_schemas_extendTypeContextForLambda2,
-              hydra_schemas_extendTypeContextForLet2,
-              hydra_schemas_extendTypeContextForTypeLambda2,
+              hydra_rewriting_typeSchemeToFType2,
+              hydra_schemas_extendGraphForLambda2,
+              hydra_schemas_extendGraphForLet2,
+              hydra_schemas_extendGraphForTypeLambda2,
               true,
               false,
               l.get(),
@@ -1119,9 +1142,10 @@ public interface Reduction {
           hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewriteSpine(
             hydra_arity_typeArity2,
             hydra_arity_typeSchemeArity2,
-            hydra_schemas_extendTypeContextForLambda2,
-            hydra_schemas_extendTypeContextForLet2,
-            hydra_schemas_extendTypeContextForTypeLambda2,
+            hydra_rewriting_typeSchemeToFType2,
+            hydra_schemas_extendGraphForLambda2,
+            hydra_schemas_extendGraphForLet2,
+            hydra_schemas_extendGraphForTypeLambda2,
             recurse,
             tx,
             ((tat).value).body),
@@ -1133,7 +1157,7 @@ public interface Reduction {
     });
   }
   
-  static <T2> hydra.compute.Flow<T2, Integer> etaExpandTypedTerm_arityOf(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, hydra.typing.TypeContext tx, hydra.core.Term term) {
+  static <T2> hydra.compute.Flow<T2, Integer> etaExpandTypedTerm_arityOf(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> hydra_rewriting_typeSchemeToFType2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, hydra.graph.Graph tx, hydra.core.Term term) {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.compute.Flow<T2, Integer> otherwise(hydra.core.Term instance) {
@@ -1148,9 +1172,10 @@ public interface Reduction {
         return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
           hydra_arity_typeArity2,
           hydra_arity_typeSchemeArity2,
-          hydra_schemas_extendTypeContextForLambda2,
-          hydra_schemas_extendTypeContextForLet2,
-          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_rewriting_typeSchemeToFType2,
+          hydra_schemas_extendGraphForLambda2,
+          hydra_schemas_extendGraphForLet2,
+          hydra_schemas_extendGraphForTypeLambda2,
           tx,
           ((at).value).body);
       }
@@ -1159,23 +1184,25 @@ public interface Reduction {
       public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.Function f) {
         return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_forFunction(
           hydra_arity_typeArity2,
-          hydra_schemas_extendTypeContextForLet2,
-          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_rewriting_typeSchemeToFType2,
+          hydra_schemas_extendGraphForLet2,
+          hydra_schemas_extendGraphForTypeLambda2,
           hydra_arity_typeSchemeArity2,
-          hydra_schemas_extendTypeContextForLambda2,
+          hydra_schemas_extendGraphForLambda2,
           tx,
           (f).value);
       }
       
       @Override
       public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.Let l) {
-        hydra.util.Lazy<hydra.typing.TypeContext> txl = new hydra.util.Lazy<>(() -> (((hydra_schemas_extendTypeContextForLet2).apply((java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(tx)).apply((l).value));
+        hydra.util.Lazy<hydra.graph.Graph> txl = new hydra.util.Lazy<>(() -> (((hydra_schemas_extendGraphForLet2).apply((java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))))).apply(tx)).apply((l).value));
         return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
           hydra_arity_typeArity2,
           hydra_arity_typeSchemeArity2,
-          hydra_schemas_extendTypeContextForLambda2,
-          hydra_schemas_extendTypeContextForLet2,
-          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_rewriting_typeSchemeToFType2,
+          hydra_schemas_extendGraphForLambda2,
+          hydra_schemas_extendGraphForLet2,
+          hydra_schemas_extendGraphForTypeLambda2,
           txl.get(),
           ((l).value).body);
       }
@@ -1185,22 +1212,24 @@ public interface Reduction {
         return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
           hydra_arity_typeArity2,
           hydra_arity_typeSchemeArity2,
-          hydra_schemas_extendTypeContextForLambda2,
-          hydra_schemas_extendTypeContextForLet2,
-          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_rewriting_typeSchemeToFType2,
+          hydra_schemas_extendGraphForLambda2,
+          hydra_schemas_extendGraphForLet2,
+          hydra_schemas_extendGraphForTypeLambda2,
           tx,
           ((tat).value).body);
       }
       
       @Override
       public hydra.compute.Flow<T2, Integer> visit(hydra.core.Term.TypeLambda tl) {
-        hydra.typing.TypeContext txt = ((hydra_schemas_extendTypeContextForTypeLambda2).apply(tx)).apply((tl).value);
+        hydra.graph.Graph txt = ((hydra_schemas_extendGraphForTypeLambda2).apply(tx)).apply((tl).value);
         return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
           hydra_arity_typeArity2,
           hydra_arity_typeSchemeArity2,
-          hydra_schemas_extendTypeContextForLambda2,
-          hydra_schemas_extendTypeContextForLet2,
-          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_rewriting_typeSchemeToFType2,
+          hydra_schemas_extendGraphForLambda2,
+          hydra_schemas_extendGraphForLet2,
+          hydra_schemas_extendGraphForTypeLambda2,
           txt,
           ((tl).value).body);
       }
@@ -1215,14 +1244,16 @@ public interface Reduction {
               (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
               new hydra.core.Term.Variable((name).value))),
           (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T2, Integer>>) (t -> hydra.lib.flows.Pure.apply((hydra_arity_typeArity2).apply(t))),
-          hydra.lib.maps.Lookup.apply(
-            (name).value,
-            (tx).types));
+          hydra.lib.maybes.Map.apply(
+            hydra_rewriting_typeSchemeToFType2,
+            hydra.lib.maps.Lookup.apply(
+              (name).value,
+              (tx).boundTypes)));
       }
     });
   }
   
-  static <T2> hydra.compute.Flow<T2, hydra.core.Term> etaExpandTypedTerm_forceExpansion(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>> padn, hydra.typing.TypeContext tx, java.util.function.Function<hydra.core.Term, hydra.core.Term> unwind, hydra.core.Term t) {
+  static <T2> hydra.compute.Flow<T2, hydra.core.Term> etaExpandTypedTerm_forceExpansion(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>> padn, hydra.graph.Graph tx, java.util.function.Function<hydra.core.Term, hydra.core.Term> unwind, hydra.core.Term t) {
     return hydra.lib.flows.Bind.apply(
       hydra.checking.Checking.<T2>typeOf(
         tx,
@@ -1234,7 +1265,7 @@ public interface Reduction {
       }));
   }
   
-  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_recurseOrForce(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>> padn, Boolean forced, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.typing.TypeContext tx, java.util.function.Function<hydra.core.Term, hydra.core.Term> unwind, hydra.core.Term term) {
+  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_recurseOrForce(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>> padn, Boolean forced, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.graph.Graph tx, java.util.function.Function<hydra.core.Term, hydra.core.Term> unwind, hydra.core.Term term) {
     return hydra.lib.logic.IfElse.lazy(
       forced,
       () -> hydra.reduction.Reduction.<T1>etaExpandTypedTerm_forceExpansion(
@@ -1246,14 +1277,15 @@ public interface Reduction {
       () -> ((recurse).apply(tx)).apply((unwind).apply(term)));
   }
   
-  static <T1> hydra.compute.Flow<T1, hydra.core.Field> etaExpandTypedTerm_forCase(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.typing.TypeContext tx, hydra.core.Field f) {
+  static <T1> hydra.compute.Flow<T1, hydra.core.Field> etaExpandTypedTerm_forCase(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> hydra_rewriting_typeSchemeToFType2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.graph.Graph tx, hydra.core.Field f) {
     return hydra.lib.flows.Bind.apply(
       hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewrite(
         hydra_arity_typeArity2,
         hydra_arity_typeSchemeArity2,
-        hydra_schemas_extendTypeContextForLambda2,
-        hydra_schemas_extendTypeContextForLet2,
-        hydra_schemas_extendTypeContextForTypeLambda2,
+        hydra_rewriting_typeSchemeToFType2,
+        hydra_schemas_extendGraphForLambda2,
+        hydra_schemas_extendGraphForLet2,
+        hydra_schemas_extendGraphForTypeLambda2,
         false,
         true,
         (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
@@ -1263,7 +1295,7 @@ public interface Reduction {
       (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Field>>) (r -> hydra.lib.flows.Pure.apply(new hydra.core.Field((f).name, r))));
   }
   
-  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_forCaseStatement(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<hydra.core.Field, hydra.compute.Flow<T1, hydra.core.Field>> forCase, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.typing.TypeContext tx, hydra.core.CaseStatement cs) {
+  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_forCaseStatement(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> hydra_rewriting_typeSchemeToFType2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, java.util.function.Function<hydra.core.Field, hydra.compute.Flow<T1, hydra.core.Field>> forCase, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.graph.Graph tx, hydra.core.CaseStatement cs) {
     java.util.List<hydra.core.Field> cases = (cs).cases;
     hydra.util.Maybe<hydra.core.Term> dflt = (cs).default_;
     hydra.core.Name tname = (cs).typeName;
@@ -1272,9 +1304,10 @@ public interface Reduction {
         (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>) (v1 -> hydra.reduction.Reduction.<T1>etaExpandTypedTerm_rewrite(
           hydra_arity_typeArity2,
           hydra_arity_typeSchemeArity2,
-          hydra_schemas_extendTypeContextForLambda2,
-          hydra_schemas_extendTypeContextForLet2,
-          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_rewriting_typeSchemeToFType2,
+          hydra_schemas_extendGraphForLambda2,
+          hydra_schemas_extendGraphForLet2,
+          hydra_schemas_extendGraphForTypeLambda2,
           false,
           false,
           (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
@@ -1289,7 +1322,7 @@ public interface Reduction {
         (java.util.function.Function<java.util.List<hydra.core.Field>, hydra.compute.Flow<T1, hydra.core.Term>>) (rcases -> hydra.lib.flows.Pure.apply(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Union(new hydra.core.CaseStatement(tname, rdflt, rcases)))))))));
   }
   
-  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_forElimination(java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<T1, hydra.core.Term>> forCaseStatement, Boolean forced, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>> padn, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.core.Term term, Boolean topLevel, hydra.typing.TypeContext tx, java.util.function.Function<hydra.core.Term, hydra.core.Term> unwind, hydra.core.Elimination elm) {
+  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_forElimination(java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<T1, hydra.core.Term>> forCaseStatement, Boolean forced, java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>> padn, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.core.Term term, Boolean topLevel, hydra.graph.Graph tx, java.util.function.Function<hydra.core.Term, hydra.core.Term> unwind, hydra.core.Elimination elm) {
     return hydra.lib.flows.Bind.apply(
       hydra.lib.flows.Map.apply(
         unwind,
@@ -1307,7 +1340,7 @@ public interface Reduction {
         () -> base))));
   }
   
-  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_checkBase(java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<T1, hydra.core.Term>> forCaseStatement, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.core.Term term, hydra.typing.TypeContext tx, hydra.core.Elimination elm) {
+  static <T1> hydra.compute.Flow<T1, hydra.core.Term> etaExpandTypedTerm_checkBase(java.util.function.Function<hydra.core.CaseStatement, hydra.compute.Flow<T1, hydra.core.Term>> forCaseStatement, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<T1, hydra.core.Term>>> recurse, hydra.core.Term term, hydra.graph.Graph tx, hydra.core.Elimination elm) {
     return (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
       public hydra.compute.Flow<T1, hydra.core.Term> otherwise(hydra.core.Elimination instance) {
@@ -1321,7 +1354,7 @@ public interface Reduction {
     });
   }
   
-  static <T3> hydra.compute.Flow<T3, Integer> etaExpandTypedTerm_dflt(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, hydra.core.Term term, hydra.typing.TypeContext tx) {
+  static <T3> hydra.compute.Flow<T3, Integer> etaExpandTypedTerm_dflt(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, hydra.core.Term term, hydra.graph.Graph tx) {
     return hydra.lib.flows.Map.apply(
       hydra_arity_typeArity2,
       hydra.checking.Checking.<T3>typeOf(
@@ -1330,7 +1363,7 @@ public interface Reduction {
         term));
   }
   
-  static <T2> hydra.compute.Flow<T2, Integer> etaExpandTypedTerm_forFunction(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Let, hydra.typing.TypeContext>>> hydra_schemas_extendTypeContextForLet2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.TypeLambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForTypeLambda2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.typing.TypeContext, java.util.function.Function<hydra.core.Lambda, hydra.typing.TypeContext>> hydra_schemas_extendTypeContextForLambda2, hydra.typing.TypeContext tx, hydra.core.Function f) {
+  static <T2> hydra.compute.Flow<T2, Integer> etaExpandTypedTerm_forFunction(java.util.function.Function<hydra.core.Type, Integer> hydra_arity_typeArity2, java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type> hydra_rewriting_typeSchemeToFType2, java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Let, hydra.graph.Graph>>> hydra_schemas_extendGraphForLet2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.TypeLambda, hydra.graph.Graph>> hydra_schemas_extendGraphForTypeLambda2, java.util.function.Function<hydra.core.TypeScheme, Integer> hydra_arity_typeSchemeArity2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Lambda, hydra.graph.Graph>> hydra_schemas_extendGraphForLambda2, hydra.graph.Graph tx, hydra.core.Function f) {
     return (f).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
       public hydra.compute.Flow<T2, Integer> visit(hydra.core.Function.Elimination ignored) {
@@ -1339,13 +1372,14 @@ public interface Reduction {
       
       @Override
       public hydra.compute.Flow<T2, Integer> visit(hydra.core.Function.Lambda l) {
-        hydra.typing.TypeContext txl = ((hydra_schemas_extendTypeContextForLambda2).apply(tx)).apply((l).value);
+        hydra.graph.Graph txl = ((hydra_schemas_extendGraphForLambda2).apply(tx)).apply((l).value);
         return hydra.reduction.Reduction.<T2>etaExpandTypedTerm_arityOf(
           hydra_arity_typeArity2,
           hydra_arity_typeSchemeArity2,
-          hydra_schemas_extendTypeContextForLambda2,
-          hydra_schemas_extendTypeContextForLet2,
-          hydra_schemas_extendTypeContextForTypeLambda2,
+          hydra_rewriting_typeSchemeToFType2,
+          hydra_schemas_extendGraphForLambda2,
+          hydra_schemas_extendGraphForLet2,
+          hydra_schemas_extendGraphForTypeLambda2,
           txl,
           ((l).value).body);
       }
@@ -1616,10 +1650,8 @@ public interface Reduction {
     return hydra.lib.sets.Null.apply(hydra.rewriting.Rewriting.freeVariablesInTerm(term));
   }
   
-  static <T0> Boolean termIsValue(T0 g, hydra.core.Term term) {
-    java.util.function.Function<hydra.core.Field, Boolean> checkField = (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.reduction.Reduction.<T0>termIsValue(
-      g,
-      (f).term));
+  static Boolean termIsValue(hydra.core.Term term) {
+    java.util.function.Function<hydra.core.Field, Boolean> checkField = (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.reduction.Reduction.termIsValue((f).term));
     java.util.function.Function<java.util.List<hydra.core.Field>, Boolean> checkFields = (java.util.function.Function<java.util.List<hydra.core.Field>, Boolean>) (fields -> hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Field, Boolean>>) (b -> (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.logic.And.apply(
         b,
@@ -1629,9 +1661,7 @@ public interface Reduction {
     java.util.function.Function<java.util.List<hydra.core.Term>, Boolean> forList = (java.util.function.Function<java.util.List<hydra.core.Term>, Boolean>) (els -> hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, Boolean>>) (b -> (java.util.function.Function<hydra.core.Term, Boolean>) (t -> hydra.lib.logic.And.apply(
         b,
-        hydra.reduction.Reduction.<T0>termIsValue(
-          g,
-          t)))),
+        hydra.reduction.Reduction.termIsValue(t)))),
       true,
       els));
     java.util.function.Function<hydra.core.Function, Boolean> functionIsValue = (java.util.function.Function<hydra.core.Function, Boolean>) (f -> (f).accept(new hydra.core.Function.PartialVisitor<>() {
@@ -1654,9 +1684,7 @@ public interface Reduction {
               (checkFields).apply(((cs).value).cases),
               hydra.lib.maybes.Maybe.apply(
                 true,
-                (java.util.function.Function<hydra.core.Term, Boolean>) (v1 -> hydra.reduction.Reduction.<T0>termIsValue(
-                  g,
-                  v1)),
+                hydra.reduction.Reduction::termIsValue,
                 ((cs).value).default_));
           }
         });
@@ -1664,9 +1692,7 @@ public interface Reduction {
       
       @Override
       public Boolean visit(hydra.core.Function.Lambda l) {
-        return hydra.reduction.Reduction.<T0>termIsValue(
-          g,
-          ((l).value).body);
+        return hydra.reduction.Reduction.termIsValue(((l).value).body);
       }
       
       @Override
@@ -1688,12 +1714,8 @@ public interface Reduction {
       @Override
       public Boolean visit(hydra.core.Term.Either e) {
         return hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.core.Term, Boolean>) (l -> hydra.reduction.Reduction.<T0>termIsValue(
-            g,
-            l)),
-          (java.util.function.Function<hydra.core.Term, Boolean>) (r -> hydra.reduction.Reduction.<T0>termIsValue(
-            g,
-            r)),
+          (java.util.function.Function<hydra.core.Term, Boolean>) (l -> hydra.reduction.Reduction.termIsValue(l)),
+          (java.util.function.Function<hydra.core.Term, Boolean>) (r -> hydra.reduction.Reduction.termIsValue(r)),
           (e).value);
       }
       
@@ -1718,12 +1740,8 @@ public interface Reduction {
           (java.util.function.Function<Boolean, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, Boolean>>) (b -> (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, Boolean>) (kv -> hydra.lib.logic.And.apply(
             b,
             hydra.lib.logic.And.apply(
-              hydra.reduction.Reduction.<T0>termIsValue(
-                g,
-                hydra.lib.pairs.First.apply(kv)),
-              hydra.reduction.Reduction.<T0>termIsValue(
-                g,
-                hydra.lib.pairs.Second.apply(kv)))))),
+              hydra.reduction.Reduction.termIsValue(hydra.lib.pairs.First.apply(kv)),
+              hydra.reduction.Reduction.termIsValue(hydra.lib.pairs.Second.apply(kv)))))),
           true,
           hydra.lib.maps.ToList.apply((m).value));
       }
@@ -1732,9 +1750,7 @@ public interface Reduction {
       public Boolean visit(hydra.core.Term.Maybe m) {
         return hydra.lib.maybes.Maybe.apply(
           true,
-          (java.util.function.Function<hydra.core.Term, Boolean>) (v1 -> hydra.reduction.Reduction.<T0>termIsValue(
-            g,
-            v1)),
+          hydra.reduction.Reduction::termIsValue,
           (m).value);
       }
       

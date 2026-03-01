@@ -643,26 +643,32 @@ public interface Bootstrap {
       java.util.Map.entry(
         new hydra.core.Name("hydra.graph.Graph"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.graph.Graph"), java.util.List.of(
-          new hydra.core.FieldType(new hydra.core.Name("elements"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Binding"))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.FieldType(new hydra.core.Name("boundTerms"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("All of the elements in the graph"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("environment"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new hydra.core.Type.Maybe(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term"))))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The terms bound by all term variables in scope"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("boundTypes"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.TypeScheme")))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("types"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.TypeScheme")))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type schemes of all term variables in scope"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("classConstraints"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.TypeVariableMetadata")))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The typing environment of the graph"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("body"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered."))))))),
+          new hydra.core.FieldType(new hydra.core.Name("lambdaVariables"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Set(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name"))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The body of the term which generated this context"))))))),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The set of term variables introduced by specifically by lambdas"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("metadata"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("Any additional metadata bound to term variables in scope"))))))),
           new hydra.core.FieldType(new hydra.core.Name("primitives"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.graph.Primitive")))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("All supported primitive constants and functions, by name"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("schema"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Maybe(new hydra.core.Type.Variable(new hydra.core.Name("hydra.graph.Graph"))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("All primitive functions and constants by name"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("schemaTypes"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.TypeScheme")))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
-            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("All schema types (type schemes) in scope"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("typeVariables"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Set(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name"))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The set of type variables introduced specifically by type lambdas")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph"))))))),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A graph, or lexical environment which binds names to terms, types, primitives, and metadata"))))))),
       java.util.Map.entry(
         new hydra.core.Name("hydra.graph.Primitive"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.graph.Primitive"), java.util.List.of(
@@ -676,7 +682,7 @@ public interface Bootstrap {
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A concrete implementation of the primitive function")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),
-          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A built-in function"))))))),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A built-in function or constant"))))))),
       java.util.Map.entry(
         new hydra.core.Name("hydra.graph.TermCoder"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.graph.TermCoder"), java.util.List.of(

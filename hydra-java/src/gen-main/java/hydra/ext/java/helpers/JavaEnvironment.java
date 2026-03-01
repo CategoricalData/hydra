@@ -12,7 +12,7 @@ public class JavaEnvironment implements Serializable, Comparable<JavaEnvironment
   
   public static final hydra.core.Name ALIASES = new hydra.core.Name("aliases");
   
-  public static final hydra.core.Name TYPE_CONTEXT = new hydra.core.Name("typeContext");
+  public static final hydra.core.Name GRAPH = new hydra.core.Name("graph");
   
   /**
    * Aliases and context state
@@ -20,13 +20,13 @@ public class JavaEnvironment implements Serializable, Comparable<JavaEnvironment
   public final hydra.ext.java.helpers.Aliases aliases;
   
   /**
-   * Type context for type inference
+   * Graph context for type inference
    */
-  public final hydra.typing.TypeContext typeContext;
+  public final hydra.graph.Graph graph;
   
-  public JavaEnvironment (hydra.ext.java.helpers.Aliases aliases, hydra.typing.TypeContext typeContext) {
+  public JavaEnvironment (hydra.ext.java.helpers.Aliases aliases, hydra.graph.Graph graph) {
     this.aliases = aliases;
-    this.typeContext = typeContext;
+    this.graph = graph;
   }
   
   @Override
@@ -38,13 +38,13 @@ public class JavaEnvironment implements Serializable, Comparable<JavaEnvironment
     return java.util.Objects.equals(
       this.aliases,
       o.aliases) && java.util.Objects.equals(
-      this.typeContext,
-      o.typeContext);
+      this.graph,
+      o.graph);
   }
   
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(aliases) + 3 * java.util.Objects.hashCode(typeContext);
+    return 2 * java.util.Objects.hashCode(aliases) + 3 * java.util.Objects.hashCode(graph);
   }
   
   @Override
@@ -55,14 +55,14 @@ public class JavaEnvironment implements Serializable, Comparable<JavaEnvironment
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) typeContext).compareTo(other.typeContext);
+    return ((Comparable) graph).compareTo(other.graph);
   }
   
   public JavaEnvironment withAliases(hydra.ext.java.helpers.Aliases aliases) {
-    return new JavaEnvironment(aliases, typeContext);
+    return new JavaEnvironment(aliases, graph);
   }
   
-  public JavaEnvironment withTypeContext(hydra.typing.TypeContext typeContext) {
-    return new JavaEnvironment(aliases, typeContext);
+  public JavaEnvironment withGraph(hydra.graph.Graph graph) {
+    return new JavaEnvironment(aliases, graph);
   }
 }

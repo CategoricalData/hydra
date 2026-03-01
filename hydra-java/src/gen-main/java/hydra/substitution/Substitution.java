@@ -130,16 +130,16 @@ public interface Substitution {
         acc));
   }
   
-  static hydra.typing.InferenceContext substInContext(hydra.typing.TypeSubst subst, hydra.typing.InferenceContext cx) {
-    java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> newClassConstraints = hydra.substitution.Substitution.substInClassConstraints(
-      subst,
-      (cx).classConstraints);
-    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.TypeScheme>> newDataTypes = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
+  static hydra.graph.Graph substInContext(hydra.typing.TypeSubst subst, hydra.graph.Graph cx) {
+    hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.TypeScheme>> newBoundTypes = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
       (java.util.function.Function<hydra.core.TypeScheme, hydra.core.TypeScheme>) (v1 -> hydra.substitution.Substitution.substInTypeScheme(
         subst,
         v1)),
-      (cx).dataTypes));
-    return new hydra.typing.InferenceContext((cx).schemaTypes, (cx).primitiveTypes, newDataTypes.get(), newClassConstraints, (cx).debug);
+      (cx).boundTypes));
+    java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> newClassConstraints = hydra.substitution.Substitution.substInClassConstraints(
+      subst,
+      (cx).classConstraints);
+    return new hydra.graph.Graph((new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).boundTerms, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).boundTypes, newClassConstraints, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).lambdaVariables, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).metadata, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).primitives, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).schemaTypes, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).typeVariables);
   }
   
   static hydra.core.Term substituteInTerm(hydra.typing.TermSubst subst, hydra.core.Term term0) {

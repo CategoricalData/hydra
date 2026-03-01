@@ -203,11 +203,11 @@ public interface Decoding {
   static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding> decodeBinding(hydra.core.Binding b) {
     return hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (cx -> hydra.lib.flows.Bind.apply(
+      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (graph -> hydra.lib.flows.Bind.apply(
         hydra.monads.Monads.eitherToFlow(
           wrapped -> (wrapped).value,
           hydra.decode.core.Core.type(
-            cx,
+            graph,
             (b).term)),
         (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (typ -> hydra.lib.flows.Pure.apply(new hydra.core.Binding(hydra.decoding.Decoding.decodeBindingName((b).name), hydra.decoding.Decoding.decodeType(typ), hydra.util.Maybe.just(hydra.decoding.Decoding.decoderTypeScheme(typ))))))));
   }
