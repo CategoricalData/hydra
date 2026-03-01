@@ -8,7 +8,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Python.Syntax as Syntax
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Module as Module
-import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -35,8 +34,8 @@ data PythonEnvironment =
     pythonEnvironmentNamespaces :: (Module.Namespaces Syntax.DottedName),
     -- | Type variables in scope, with their Python names
     pythonEnvironmentBoundTypeVariables :: ([Core.Name], (M.Map Core.Name Syntax.Name)),
-    -- | Type context for type inference
-    pythonEnvironmentTypeContext :: Typing.TypeContext,
+    -- | Graph context for type inference
+    pythonEnvironmentGraph :: Graph.Graph,
     -- | Set of nullary bindings (need call syntax)
     pythonEnvironmentNullaryBindings :: (S.Set Core.Name),
     -- | Target Python version
@@ -45,7 +44,6 @@ data PythonEnvironment =
     pythonEnvironmentSkipCasts :: Bool,
     -- | Variables that are inline let bindings (walrus operators)
     pythonEnvironmentInlineVariables :: (S.Set Core.Name)}
-  deriving (Eq, Ord, Read, Show)
 
 _PythonEnvironment = (Core.Name "hydra.ext.python.helpers.PythonEnvironment")
 
@@ -53,7 +51,7 @@ _PythonEnvironment_namespaces = (Core.Name "namespaces")
 
 _PythonEnvironment_boundTypeVariables = (Core.Name "boundTypeVariables")
 
-_PythonEnvironment_typeContext = (Core.Name "typeContext")
+_PythonEnvironment_graph = (Core.Name "graph")
 
 _PythonEnvironment_nullaryBindings = (Core.Name "nullaryBindings")
 

@@ -18,7 +18,6 @@ import qualified Hydra.Ext.Python.Syntax as Syntax
 import qualified Hydra.Ext.Python.Utils as Utils
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Inference as Inference
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
@@ -413,7 +412,7 @@ extendEnvWithTypeVar env var_ =
           in Helpers.PythonEnvironment {
             Helpers.pythonEnvironmentNamespaces = (Helpers.pythonEnvironmentNamespaces env),
             Helpers.pythonEnvironmentBoundTypeVariables = (newList, newMap),
-            Helpers.pythonEnvironmentTypeContext = (Helpers.pythonEnvironmentTypeContext env),
+            Helpers.pythonEnvironmentGraph = (Helpers.pythonEnvironmentGraph env),
             Helpers.pythonEnvironmentNullaryBindings = (Helpers.pythonEnvironmentNullaryBindings env),
             Helpers.pythonEnvironmentVersion = (Helpers.pythonEnvironmentVersion env),
             Helpers.pythonEnvironmentSkipCasts = (Helpers.pythonEnvironmentSkipCasts env),
@@ -436,9 +435,9 @@ extendEnvWithLambdaParams env term =
   let go = (\e -> \t -> (\x -> case x of
           Core.TermFunction v1 -> ((\x -> case x of
             Core.FunctionLambda v2 ->  
-              let newTc = (Schemas.extendTypeContextForLambda (pythonEnvironmentGetTypeContext e) v2)
+              let newTc = (Schemas.extendGraphForLambda (pythonEnvironmentGetGraph e) v2)
               in  
-                let newEnv = (pythonEnvironmentSetTypeContext newTc e)
+                let newEnv = (pythonEnvironmentSetGraph newTc e)
                 in (go newEnv (Core.lambdaBody v2))
             _ -> e) v1)
           _ -> e) (Rewriting.deannotateAndDetypeTerm t))
@@ -711,7 +710,7 @@ encodeCaseBlock env tname rowType isEnum encodeBody field =
                 let effectiveBody = (Logic.ifElse isUnitVariant (eliminateUnitVar v rawBody) rawBody)
                 in  
                   let shouldCapture = (Logic.not (Logic.or isUnitVariant (Logic.or (Rewriting.isFreeVariableInTerm v rawBody) (Schemas.isUnitTerm rawBody))))
-                  in (Flows.bind (Flows.pure (pythonEnvironmentSetTypeContext (Schemas.extendTypeContextForLambda (pythonEnvironmentGetTypeContext env) effectiveLambda) env)) (\env2 -> Flows.bind (deconflictVariantName True env2 tname fname) (\pyVariantName ->  
+                  in (Flows.bind (Flows.pure (pythonEnvironmentSetGraph (Schemas.extendGraphForLambda (pythonEnvironmentGetGraph env) effectiveLambda) env)) (\env2 -> Flows.bind (deconflictVariantName True env2 tname fname) (\pyVariantName ->  
                     let pattern = (variantClosedPattern env2 tname fname pyVariantName rowType isEnum v shouldCapture)
                     in (Flows.bind (encodeBody env2 effectiveBody) (\stmts ->  
                       let pyBody = (Utils.indentedBlock Nothing [
@@ -824,7 +823,7 @@ deconflictVariantName isQualified env unionName fname =
   in (Flows.bind Monads.getState (\pyg ->  
     let g = (pyGraphGraph pyg)
     in  
-      let elements = (Graph.graphElements g)
+      let elements = (Lexical.graphToBindings g)
       in  
         let collision = (Maybes.isJust (Lists.find (\b -> Equality.equal (Core.unName (Core.bindingName b)) (Core.unName candidateHydraName)) elements))
         in (Logic.ifElse collision (Flows.pure (Syntax.Name (Strings.cat2 (Syntax.unName (Names.variantName isQualified env unionName fname)) "_"))) (Flows.pure (Names.variantName isQualified env unionName fname)))))
@@ -1230,32 +1229,32 @@ functionArityWithPrimitives graph f = ((\x -> case x of
   Core.FunctionPrimitive v1 -> (Maybes.maybe 0 (\prim -> Arity.primitiveArity prim) (Maps.lookup v1 (Graph.graphPrimitives graph)))
   _ -> 0) f)
 
--- | Get the TypeContext from a PythonEnvironment
-pythonEnvironmentGetTypeContext :: (Helpers.PythonEnvironment -> Typing.TypeContext)
-pythonEnvironmentGetTypeContext env = (Helpers.pythonEnvironmentTypeContext env)
+-- | Get the Graph from a PythonEnvironment
+pythonEnvironmentGetGraph :: (Helpers.PythonEnvironment -> Graph.Graph)
+pythonEnvironmentGetGraph env = (Helpers.pythonEnvironmentGraph env)
 
--- | Set the TypeContext in a PythonEnvironment
-pythonEnvironmentSetTypeContext :: (Typing.TypeContext -> Helpers.PythonEnvironment -> Helpers.PythonEnvironment)
-pythonEnvironmentSetTypeContext tc env = Helpers.PythonEnvironment {
+-- | Set the Graph in a PythonEnvironment
+pythonEnvironmentSetGraph :: (Graph.Graph -> Helpers.PythonEnvironment -> Helpers.PythonEnvironment)
+pythonEnvironmentSetGraph tc env = Helpers.PythonEnvironment {
   Helpers.pythonEnvironmentNamespaces = (Helpers.pythonEnvironmentNamespaces env),
   Helpers.pythonEnvironmentBoundTypeVariables = (Helpers.pythonEnvironmentBoundTypeVariables env),
-  Helpers.pythonEnvironmentTypeContext = tc,
+  Helpers.pythonEnvironmentGraph = tc,
   Helpers.pythonEnvironmentNullaryBindings = (Helpers.pythonEnvironmentNullaryBindings env),
   Helpers.pythonEnvironmentVersion = (Helpers.pythonEnvironmentVersion env),
   Helpers.pythonEnvironmentSkipCasts = (Helpers.pythonEnvironmentSkipCasts env),
   Helpers.pythonEnvironmentInlineVariables = (Helpers.pythonEnvironmentInlineVariables env)}
 
--- | Execute a computation with lambda context (adds lambda parameter to TypeContext)
+-- | Execute a computation with lambda context (adds lambda parameter to Graph)
 withLambda :: (Helpers.PythonEnvironment -> Core.Lambda -> (Helpers.PythonEnvironment -> t0) -> t0)
-withLambda = (Schemas.withLambdaContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
+withLambda = (Schemas.withLambdaContext pythonEnvironmentGetGraph pythonEnvironmentSetGraph)
 
 -- | Execute a computation with type lambda context
 withTypeLambda :: (Helpers.PythonEnvironment -> Core.TypeLambda -> (Helpers.PythonEnvironment -> t0) -> t0)
-withTypeLambda = (Schemas.withTypeLambdaContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
+withTypeLambda = (Schemas.withTypeLambdaContext pythonEnvironmentGetGraph pythonEnvironmentSetGraph)
 
--- | Execute a computation with let context (adds let bindings to TypeContext)
+-- | Execute a computation with let context (adds let bindings to Graph)
 withLet :: (Helpers.PythonEnvironment -> Core.Let -> (Helpers.PythonEnvironment -> t0) -> t0)
-withLet = (Schemas.withLetContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext pythonBindingMetadata)
+withLet = (Schemas.withLetContext pythonEnvironmentGetGraph pythonEnvironmentSetGraph pythonBindingMetadata)
 
 -- | Execute a computation with inline let context (for walrus operators)
 withLetInline :: (Helpers.PythonEnvironment -> Core.Let -> (Helpers.PythonEnvironment -> t0) -> t0)
@@ -1265,11 +1264,11 @@ withLetInline env lt body =
     let inlineVars = (Sets.fromList bindingNames)
     in  
       let noMetadata = (\tc -> \b -> Nothing)
-      in (Schemas.withLetContext pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext noMetadata env lt (\innerEnv ->  
+      in (Schemas.withLetContext pythonEnvironmentGetGraph pythonEnvironmentSetGraph noMetadata env lt (\innerEnv ->  
         let updatedEnv = Helpers.PythonEnvironment {
                 Helpers.pythonEnvironmentNamespaces = (Helpers.pythonEnvironmentNamespaces innerEnv),
                 Helpers.pythonEnvironmentBoundTypeVariables = (Helpers.pythonEnvironmentBoundTypeVariables innerEnv),
-                Helpers.pythonEnvironmentTypeContext = (Helpers.pythonEnvironmentTypeContext innerEnv),
+                Helpers.pythonEnvironmentGraph = (Helpers.pythonEnvironmentGraph innerEnv),
                 Helpers.pythonEnvironmentNullaryBindings = (Helpers.pythonEnvironmentNullaryBindings innerEnv),
                 Helpers.pythonEnvironmentVersion = (Helpers.pythonEnvironmentVersion innerEnv),
                 Helpers.pythonEnvironmentSkipCasts = (Helpers.pythonEnvironmentSkipCasts innerEnv),
@@ -1309,11 +1308,11 @@ initialMetadata ns =
       Helpers.pythonModuleMetadataUsesTypeVar = False}
 
 -- | Create an initial Python environment for code generation
-initialEnvironment :: (Module.Namespaces Syntax.DottedName -> Typing.TypeContext -> Helpers.PythonEnvironment)
+initialEnvironment :: (Module.Namespaces Syntax.DottedName -> Graph.Graph -> Helpers.PythonEnvironment)
 initialEnvironment namespaces tcontext = Helpers.PythonEnvironment {
   Helpers.pythonEnvironmentNamespaces = namespaces,
   Helpers.pythonEnvironmentBoundTypeVariables = ([], Maps.empty),
-  Helpers.pythonEnvironmentTypeContext = tcontext,
+  Helpers.pythonEnvironmentGraph = tcontext,
   Helpers.pythonEnvironmentNullaryBindings = Sets.empty,
   Helpers.pythonEnvironmentVersion = targetPythonVersion,
   Helpers.pythonEnvironmentSkipCasts = True,
@@ -1324,16 +1323,16 @@ targetPythonVersion :: Helpers.PythonVersion
 targetPythonVersion = Utils.targetPythonVersion
 
 -- | Like bindingMetadata, but skips metadata for trivial bindings
-pythonBindingMetadata :: (Typing.TypeContext -> Core.Binding -> Maybe Core.Term)
+pythonBindingMetadata :: (Graph.Graph -> Core.Binding -> Maybe Core.Term)
 pythonBindingMetadata tc b = (Logic.ifElse (CoderUtils.isTrivialTerm (Core.bindingTerm b)) Nothing (CoderUtils.bindingMetadata tc b))
 
--- | Analyze a function term with Python-specific TypeContext management
+-- | Analyze a function term with Python-specific Graph management
 analyzePythonFunction :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
-analyzePythonFunction = (CoderUtils.analyzeFunctionTermWith pythonBindingMetadata pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
+analyzePythonFunction = (CoderUtils.analyzeFunctionTermWith pythonBindingMetadata pythonEnvironmentGetGraph pythonEnvironmentSetGraph)
 
 -- | Analyze a function term without recording binding metadata (for inline lambdas)
 analyzePythonFunctionInline :: (Helpers.PythonEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
-analyzePythonFunctionInline = (CoderUtils.analyzeFunctionTermInline pythonEnvironmentGetTypeContext pythonEnvironmentSetTypeContext)
+analyzePythonFunctionInline = (CoderUtils.analyzeFunctionTermInline pythonEnvironmentGetGraph pythonEnvironmentSetGraph)
 
 -- | Execute a computation with definitions in scope
 withDefinitions :: (Helpers.PythonEnvironment -> [Module.Definition] -> (Helpers.PythonEnvironment -> t0) -> t0)
@@ -1362,7 +1361,7 @@ encodeBindingAsAssignment allowThunking env binding =
       in  
         let pyName = (Names.encodeName False Util.CaseConventionLowerSnake env name)
         in (Flows.bind (encodeTermInline env False term) (\pbody ->  
-          let tc = (Helpers.pythonEnvironmentTypeContext env)
+          let tc = (Helpers.pythonEnvironmentGraph env)
           in  
             let isComplexVar = (CoderUtils.isComplexVariable tc name)
             in  
@@ -1553,7 +1552,7 @@ encodeFunction env f = ((\x -> case x of
               let innerEnv = Helpers.PythonEnvironment {
                       Helpers.pythonEnvironmentNamespaces = (Helpers.pythonEnvironmentNamespaces innerEnv0),
                       Helpers.pythonEnvironmentBoundTypeVariables = (Helpers.pythonEnvironmentBoundTypeVariables innerEnv0),
-                      Helpers.pythonEnvironmentTypeContext = (Helpers.pythonEnvironmentTypeContext innerEnv0),
+                      Helpers.pythonEnvironmentGraph = (Helpers.pythonEnvironmentGraph innerEnv0),
                       Helpers.pythonEnvironmentNullaryBindings = (Helpers.pythonEnvironmentNullaryBindings innerEnv0),
                       Helpers.pythonEnvironmentVersion = (Helpers.pythonEnvironmentVersion innerEnv0),
                       Helpers.pythonEnvironmentSkipCasts = (Helpers.pythonEnvironmentSkipCasts innerEnv0),
@@ -1642,7 +1641,7 @@ encodeTermAssignment env name term ts comment = (Flows.bind (analyzePythonFuncti
             in  
               let env2 = (Typing.functionStructureEnvironment fs)
               in  
-                let tc = (Helpers.pythonEnvironmentTypeContext env2)
+                let tc = (Helpers.pythonEnvironmentGraph env2)
                 in  
                   let binding = Core.Binding {
                           Core.bindingName = name,
@@ -1661,83 +1660,85 @@ encodeVariable :: (Helpers.PythonEnvironment -> Core.Name -> [Syntax.Expression]
 encodeVariable env name args = (Flows.bind Monads.getState (\pyg ->  
   let g = (pyGraphGraph pyg)
   in  
-    let tc = (Helpers.pythonEnvironmentTypeContext env)
+    let tc = (Helpers.pythonEnvironmentGraph env)
     in  
-      let tcTypes = (Typing.typeContextTypes tc)
+      let tcTypes = (Graph.graphBoundTypes tc)
       in  
-        let tcLambdaVars = (Typing.typeContextLambdaVariables tc)
+        let tcLambdaVars = (Graph.graphLambdaVariables tc)
         in  
-          let tcMetadata = (Typing.typeContextMetadata tc)
+          let tcMetadata = (Graph.graphMetadata tc)
           in  
             let inlineVars = (Helpers.pythonEnvironmentInlineVariables env)
             in  
-              let mTyp = (Maps.lookup name tcTypes)
+              let mTypScheme = (Maps.lookup name tcTypes)
               in  
-                let asVariable = (Names.termVariableReference env name)
+                let mTyp = (Maybes.map (\ts_ -> Core.typeSchemeType ts_) mTypScheme)
                 in  
-                  let asFunctionCall = (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env name)) args)
-                  in (Logic.ifElse (Logic.not (Lists.null args)) (Maybes.maybe (Flows.pure asFunctionCall) (\prim ->  
-                    let primArity = (Arity.primitiveArity prim)
-                    in (Logic.ifElse (Equality.equal primArity (Lists.length args)) (Flows.pure asFunctionCall) ( 
-                      let numRemaining = (Math.sub primArity (Lists.length args))
-                      in  
-                        let remainingParams = (Lists.map (\i -> Syntax.Name (Strings.cat2 "x" (Literals.showInt32 i))) (Math.range 1 numRemaining))
+                  let asVariable = (Names.termVariableReference env name)
+                  in  
+                    let asFunctionCall = (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env name)) args)
+                    in (Logic.ifElse (Logic.not (Lists.null args)) (Maybes.maybe (Flows.pure asFunctionCall) (\prim ->  
+                      let primArity = (Arity.primitiveArity prim)
+                      in (Logic.ifElse (Equality.equal primArity (Lists.length args)) (Flows.pure asFunctionCall) ( 
+                        let numRemaining = (Math.sub primArity (Lists.length args))
                         in  
-                          let remainingExprs = (Lists.map (\n -> Syntax.ExpressionSimple (Syntax.Disjunction [
-                                  Syntax.Conjunction [
-                                    Syntax.InversionSimple (Syntax.Comparison {
-                                      Syntax.comparisonLhs = Syntax.BitwiseOr {
-                                        Syntax.bitwiseOrLhs = Nothing,
-                                        Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
-                                          Syntax.bitwiseXorLhs = Nothing,
-                                          Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
-                                            Syntax.bitwiseAndLhs = Nothing,
-                                            Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
-                                              Syntax.shiftExpressionLhs = Nothing,
-                                              Syntax.shiftExpressionRhs = Syntax.Sum {
-                                                Syntax.sumLhs = Nothing,
-                                                Syntax.sumRhs = Syntax.Term {
-                                                  Syntax.termLhs = Nothing,
-                                                  Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
-                                                    Syntax.powerLhs = Syntax.AwaitPrimary {
-                                                      Syntax.awaitPrimaryAwait = False,
-                                                      Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName n))},
-                                                    Syntax.powerRhs = Nothing}))}}}}}},
-                                      Syntax.comparisonRhs = []})]])) remainingParams)
+                          let remainingParams = (Lists.map (\i -> Syntax.Name (Strings.cat2 "x" (Literals.showInt32 i))) (Math.range 1 numRemaining))
                           in  
-                            let allArgs = (Lists.concat2 args remainingExprs)
+                            let remainingExprs = (Lists.map (\n -> Syntax.ExpressionSimple (Syntax.Disjunction [
+                                    Syntax.Conjunction [
+                                      Syntax.InversionSimple (Syntax.Comparison {
+                                        Syntax.comparisonLhs = Syntax.BitwiseOr {
+                                          Syntax.bitwiseOrLhs = Nothing,
+                                          Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
+                                            Syntax.bitwiseXorLhs = Nothing,
+                                            Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
+                                              Syntax.bitwiseAndLhs = Nothing,
+                                              Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
+                                                Syntax.shiftExpressionLhs = Nothing,
+                                                Syntax.shiftExpressionRhs = Syntax.Sum {
+                                                  Syntax.sumLhs = Nothing,
+                                                  Syntax.sumRhs = Syntax.Term {
+                                                    Syntax.termLhs = Nothing,
+                                                    Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
+                                                      Syntax.powerLhs = Syntax.AwaitPrimary {
+                                                        Syntax.awaitPrimaryAwait = False,
+                                                        Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName n))},
+                                                      Syntax.powerRhs = Nothing}))}}}}}},
+                                        Syntax.comparisonRhs = []})]])) remainingParams)
                             in  
-                              let fullCall = (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env name)) allArgs)
-                              in (Flows.pure (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) (Flows.pure asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Flows.fail (Strings.cat2 "Unknown variable: " (Core.unName name))) (\_ -> Flows.pure asFunctionCall) (Maps.lookup name tcMetadata)) (\el ->  
-                    let elTrivial1 = (CoderUtils.isTrivialTerm (Core.bindingTerm el))
-                    in (Maybes.maybe (Flows.pure asVariable) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (CoderUtils.isComplexBinding tc el)) (Logic.not elTrivial1)) (Flows.pure asFunctionCall) ( 
-                      let asFunctionRef = (Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable)
-                      in (Flows.pure asFunctionRef))) (Core.bindingType el))) (Lexical.lookupElement g name)) (\prim ->  
-                    let primArity = (Arity.primitiveArity prim)
-                    in (Logic.ifElse (Equality.equal primArity 0) (Flows.pure asFunctionCall) ( 
-                      let ts = (Graph.primitiveType prim)
-                      in  
+                              let allArgs = (Lists.concat2 args remainingExprs)
+                              in  
+                                let fullCall = (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionLowerSnake env name)) allArgs)
+                                in (Flows.pure (makeUncurriedLambda remainingParams fullCall))))) (Lexical.lookupPrimitive g name)) (Maybes.maybe (Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) (Flows.pure asVariable) (Maybes.maybe (Maybes.maybe (Maybes.maybe (Flows.fail (Strings.cat2 "Unknown variable: " (Core.unName name))) (\_ -> Flows.pure asFunctionCall) (Maps.lookup name tcMetadata)) (\el ->  
+                      let elTrivial1 = (CoderUtils.isTrivialTerm (Core.bindingTerm el))
+                      in (Maybes.maybe (Flows.pure asVariable) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeSchemeArity ts) 0) (CoderUtils.isComplexBinding tc el)) (Logic.not elTrivial1)) (Flows.pure asFunctionCall) ( 
                         let asFunctionRef = (Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable)
-                        in (Flows.pure asFunctionRef)))) (Lexical.lookupPrimitive g name)))) (\typ -> Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) ( 
-                    let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
-                    in (Flows.pure asFunctionRef)) (Logic.ifElse (Logic.not (Maps.member name tcMetadata)) (Maybes.maybe ( 
-                    let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
-                    in (Flows.pure asFunctionRef)) (\el ->  
-                    let elTrivial = (CoderUtils.isTrivialTerm (Core.bindingTerm el))
-                    in (Maybes.maybe (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (Logic.not elTrivial)) (Flows.pure asFunctionCall) ( 
+                        in (Flows.pure asFunctionRef))) (Core.bindingType el))) (Lexical.lookupElement g name)) (\prim ->  
+                      let primArity = (Arity.primitiveArity prim)
+                      in (Logic.ifElse (Equality.equal primArity 0) (Flows.pure asFunctionCall) ( 
+                        let ts = (Graph.primitiveType prim)
+                        in  
+                          let asFunctionRef = (Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (makeSimpleLambda (Arity.typeArity (Core.typeSchemeType ts)) asVariable) asVariable)
+                          in (Flows.pure asFunctionRef)))) (Lexical.lookupPrimitive g name)))) (\typ -> Logic.ifElse (Sets.member name tcLambdaVars) (Flows.pure asVariable) (Logic.ifElse (Sets.member name inlineVars) ( 
                       let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
-                      in (Flows.pure asFunctionRef))) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexBinding tc el)) (Logic.not elTrivial)) (Flows.pure asFunctionCall) ( 
+                      in (Flows.pure asFunctionRef)) (Logic.ifElse (Logic.not (Maps.member name tcMetadata)) (Maybes.maybe ( 
                       let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
-                      in (Flows.pure asFunctionRef))) (Core.bindingType el))) (Lexical.lookupElement g name)) (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexVariable tc name)) (Flows.pure asFunctionCall) ( 
-                    let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
-                    in (Flows.pure asFunctionRef)))))) mTyp))))
+                      in (Flows.pure asFunctionRef)) (\el ->  
+                      let elTrivial = (CoderUtils.isTrivialTerm (Core.bindingTerm el))
+                      in (Maybes.maybe (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (Logic.not elTrivial)) (Flows.pure asFunctionCall) ( 
+                        let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
+                        in (Flows.pure asFunctionRef))) (\ts -> Logic.ifElse (Logic.and (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexBinding tc el)) (Logic.not elTrivial)) (Flows.pure asFunctionCall) ( 
+                        let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
+                        in (Flows.pure asFunctionRef))) (Core.bindingType el))) (Lexical.lookupElement g name)) (Logic.ifElse (Logic.and (Equality.equal (Arity.typeArity typ) 0) (CoderUtils.isComplexVariable tc name)) (Flows.pure asFunctionCall) ( 
+                      let asFunctionRef = (Logic.ifElse (Logic.not (Sets.null (Rewriting.freeVariablesInType typ))) (makeSimpleLambda (Arity.typeArity typ) asVariable) asVariable)
+                      in (Flows.pure asFunctionRef)))))) mTyp))))
 
 -- | Encode a function application to a Python expression
 encodeApplication :: (Helpers.PythonEnvironment -> Core.Application -> Compute.Flow Helpers.PyGraph Syntax.Expression)
 encodeApplication env app = (Flows.bind Monads.getState (\pyg ->  
   let g = (pyGraphGraph pyg)
   in  
-    let tc = (Helpers.pythonEnvironmentTypeContext env)
+    let tc = (Helpers.pythonEnvironmentGraph env)
     in  
       let skipCasts = (Helpers.pythonEnvironmentSkipCasts env)
       in  
@@ -1861,7 +1862,7 @@ encodeTermInline env noCast term =
             _ -> t) t)
     in  
       let withCast = (\pyexp -> Logic.ifElse (Logic.or noCast (Helpers.pythonEnvironmentSkipCasts env)) (Flows.pure pyexp) ( 
-              let tc = (Helpers.pythonEnvironmentTypeContext env)
+              let tc = (Helpers.pythonEnvironmentGraph env)
               in (Flows.withDefault pyexp (Flows.bind (Checking.typeOf tc [] term) (\typ -> Flows.bind (encodeType env typ) (\pytyp -> Flows.bind (updateMeta (\m -> Helpers.PythonModuleMetadata {
                 Helpers.pythonModuleMetadataNamespaces = (Helpers.pythonModuleMetadataNamespaces m),
                 Helpers.pythonModuleMetadataTypeVariables = (Helpers.pythonModuleMetadataTypeVariables m),
@@ -2794,8 +2795,8 @@ encodePythonModule mod defs0 =
     let meta0 = (gatherMetadata (Module.moduleNamespace mod) defs)
     in (Flows.bind Monads.getState (\g -> Monads.withState (makePyGraph g meta0) ( 
       let namespaces0 = (Helpers.pythonModuleMetadataNamespaces meta0)
-      in (Flows.bind (Inference.initialTypeContext g) (\tcontext ->  
-        let env0 = (initialEnvironment namespaces0 tcontext)
+      in  
+        let env0 = (initialEnvironment namespaces0 g)
         in  
           let isTypeMod = (isTypeModuleCheck defs0)
           in (withDefinitions env0 defs (\env -> Flows.bind (Flows.map (\xs -> Lists.concat xs) (Flows.mapList (\d -> encodeDefinition env d) defs)) (\defStmts -> Flows.bind Monads.getState (\pyg1 ->  
@@ -2822,7 +2823,7 @@ encodePythonModule mod defs0 =
                                       importStmts,
                                       tvarStmts],
                                     defStmts]))
-                            in (Flows.pure (Syntax.Module body)))))))))))
+                            in (Flows.pure (Syntax.Module body)))))))))
 
 -- | Convert a Hydra module to Python source files
 moduleToPython :: (Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph (M.Map String String))
