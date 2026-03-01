@@ -136,6 +136,6 @@ javaEnvironment = def "JavaEnvironment" $
     "aliases">:
       doc "Aliases and context state" $
       helpers "Aliases",
-    "typeContext">:
-      doc "Type context for type inference" $
-      typing "TypeContext"]
+    "graph">:
+      doc "Graph context for type inference" $
+      graph "Graph"]

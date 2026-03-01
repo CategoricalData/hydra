@@ -92,8 +92,8 @@ shaclRdfLastMile = LastMile typeApplicationTermToShaclRdf (pure . rdfDescription
 typeApplicationTermToShaclRdf :: Type -> Flow Graph (Term -> Graph -> Flow Graph [Rdf.Description])
 typeApplicationTermToShaclRdf _ = pure encode
   where
-    encode term graph = do
-        elDescs <- CM.mapM encodeElement $ graphElements graph
+    encode term graf = do
+        elDescs <- CM.mapM encodeElement $ graphToBindings graf
         termDescs <- encodeBlankTerm
         return $ L.concat (termDescs:elDescs)
       where
@@ -105,7 +105,7 @@ typeApplicationTermToShaclRdf _ = pure encode
             subject <- RdfUt.nextBlankNode
             Shacl.encodeTerm subject $ listsToSets term
           else pure []
-        notInGraph = L.null $ L.filter (\e -> bindingTerm e == term) $ graphElements graph
+        notInGraph = L.null $ L.filter (\e -> bindingTerm e == term) $ graphToBindings graf
 
 transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter -> LastMile Graph x -> FilePath -> FilePath -> IO ()
 transformAvroJson format adapter lastMile inFile outFile = do
@@ -127,11 +127,9 @@ transformAvroJson format adapter lastMile inFile outFile = do
         Right json -> withState emptyAvroEnvironment $ do
           -- TODO; the core graph is neither the data nor the schema graph
           let dataGraph = hydraCoreGraph
-          let schemaGraph = Just hydraCoreGraph
-
           term <- coderEncode (adapterCoder adapter) json
           env <- getState
-          let graph = elementsToGraph dataGraph schemaGraph (M.elems $ avroEnvironmentElements env)
+          let graph = elementsToGraph dataGraph M.empty (M.elems $ avroEnvironmentElements env)
           withState hydraCoreGraph $ lmEncoder term graph
 
 -- | Given a payload format (one JSON object per file, or one per line),

@@ -31,8 +31,7 @@ import qualified Data.Maybe as Y
 import qualified Data.Set as S
 import Data.Char (toLower, isAlphaNum)
 import qualified Hydra.Typing as Typing
-import Hydra.Typing (TypeContext(..), InferenceContext(..), InferenceResult(..))
-import qualified Hydra.Schemas as Schemas
+import Hydra.Typing (InferenceResult(..))
 import qualified Hydra.Inference as Inference
 
 
@@ -63,15 +62,15 @@ emptyPythonModuleMetadata ns = PythonModuleMetadata {
   pythonModuleMetadataUsesTypeVar = False}
 
 -- | Convert a Hydra term to a Python expression string
--- Takes a pre-built TypeContext to avoid rebuilding it for every term
+-- Takes a pre-built Graph to avoid rebuilding it for every term
 -- The skipCasts parameter controls whether to generate cast() calls (False = generate casts, True = skip)
-termToPythonWithContext :: Namespaces Py.DottedName -> TypeContext -> Bool -> Term -> Flow Graph String
-termToPythonWithContext namespaces tcontext skipCasts term = do
+termToPythonWithContext :: Namespaces Py.DottedName -> Graph -> Bool -> Term -> Flow Graph String
+termToPythonWithContext namespaces graph0 skipCasts term = do
   g <- getState
   let env = PythonEnvironment {
         pythonEnvironmentNamespaces = namespaces,
         pythonEnvironmentBoundTypeVariables = ([], M.empty),
-        pythonEnvironmentTypeContext = tcontext,
+        pythonEnvironmentGraph = graph0,
         pythonEnvironmentNullaryBindings = S.empty,
         pythonEnvironmentVersion = targetPythonVersion,
         pythonEnvironmentSkipCasts = skipCasts,
@@ -92,12 +91,11 @@ termToPythonWithContext namespaces tcontext skipCasts term = do
     Just pyExpr -> return $ printExpr $ PySer.encodeExpression pyExpr
     Nothing -> fail $ "Failed to encode term to Python: " ++ traceSummary trace
 
--- | Legacy wrapper that builds TypeContext on each call (inefficient, for backwards compat)
+-- | Legacy wrapper that gets Graph on each call (for backwards compat)
 termToPython :: Namespaces Py.DottedName -> Term -> Flow Graph String
 termToPython namespaces term = do
   g <- getState
-  tcontext <- Schemas.graphToTypeContext g
-  termToPythonWithContext namespaces tcontext False term
+  termToPythonWithContext namespaces g False term
 
 -- | Convert a Hydra type to a Python type expression string
 -- Note: This function expects the graph to already have inferred types (for performance,
@@ -105,12 +103,10 @@ termToPython namespaces term = do
 typeToPython :: Namespaces Py.DottedName -> Type -> Flow Graph String
 typeToPython namespaces typ = do
   g <- getState
-  -- Build a type context with schema types from the graph
-  tcontext <- Schemas.graphToTypeContext g
   let env = PythonEnvironment {
         pythonEnvironmentNamespaces = namespaces,
         pythonEnvironmentBoundTypeVariables = ([], M.empty),
-        pythonEnvironmentTypeContext = tcontext,
+        pythonEnvironmentGraph = g,
         pythonEnvironmentNullaryBindings = S.empty,
         pythonEnvironmentVersion = targetPythonVersion,
         pythonEnvironmentSkipCasts = False,  -- Types don't use casts anyway
@@ -127,7 +123,7 @@ typeToPython namespaces typ = do
     Nothing -> fail $ "Failed to encode type to Python: " ++ traceSummary trace
 
 -- | Create a Python TestCodec that uses the Python coder
--- Note: For efficiency, prefer pythonTestCodecWithContext which takes a pre-built TypeContext
+-- Note: For efficiency, prefer pythonTestCodecWithContext which takes a pre-built Graph
 pythonTestCodec :: Namespaces Py.DottedName -> TestCodec
 pythonTestCodec namespaces = TestCodec {
     testCodecLanguage = LanguageName "python",
@@ -142,10 +138,10 @@ pythonTestCodec namespaces = TestCodec {
     testCodecImportTemplate = pythonImportTemplate,
     testCodecFindImports = findPythonImports namespaces}
 
--- | Create an efficient Python TestCodec with a pre-built TypeContext
--- This avoids rebuilding the TypeContext for every term encoded.
+-- | Create an efficient Python TestCodec with a pre-built Graph
+-- This avoids rebuilding the Graph for every term encoded.
 -- Skips cast() generation for better performance during test generation.
-pythonTestCodecWithContext :: Namespaces Py.DottedName -> TypeContext -> TestCodec
+pythonTestCodecWithContext :: Namespaces Py.DottedName -> Graph -> TestCodec
 pythonTestCodecWithContext namespaces tcontext = TestCodec {
     testCodecLanguage = LanguageName "python",
     testCodecFileExtension = FileExtension "py",
@@ -209,7 +205,7 @@ namespacesForPythonModule mod = do
     graph <- getState
     -- Convert Bindings to Definitions for findNamespaces
     -- We only need term definitions for namespace discovery
-    let bindings = graphElements graph
+    let bindings = graphToBindings graph
         defs = Y.mapMaybe bindingToDefinition bindings
         ns = moduleNamespace mod
     return $ findNamespaces ns defs
@@ -324,12 +320,10 @@ generatePythonTestFile testModule testGroup = do
   -- Build proper namespaces that include all primitives
   namespaces <- buildNamespacesForTestGroup testModule inferredTestGroup
 
-  -- Build TypeContext ONCE per test file (critical for performance)
+  -- Get Graph ONCE per test file (critical for performance)
   g <- getState
-  tcontext <- Schemas.graphToTypeContext g
-
-  -- Generate test file using the efficient codec with pre-built TypeContext
-  generateTestFileWithPythonCodec (pythonTestCodecWithContext namespaces tcontext) testModule inferredTestGroup namespaces
+  -- Generate test file using the efficient codec with pre-built Graph
+  generateTestFileWithPythonCodec (pythonTestCodecWithContext namespaces g) testModule inferredTestGroup namespaces
   where
     buildNamespacesForTestGroup mod tgroup = do
       let testCases = collectTestCases tgroup
@@ -363,7 +357,8 @@ inferTestCase (TestCaseWithMetadata name tcase desc tags) = do
 -- | Run type inference on a single term
 inferTerm :: Term -> Flow Graph Term
 inferTerm term = do
-  result <- Inference.inferInGraphContext term
+  g <- getState
+  result <- Inference.inferInGraphContext g term
   return $ inferenceResultTerm result
 
 -- | Python-specific test generator

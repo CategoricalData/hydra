@@ -38,7 +38,7 @@ parseJsonEither s = case JsonParser.parseJson s of
   ParseResultFailure err -> Left (parseErrorMessage err)
 
 emptyInstanceContext :: Graph -> Graph
-emptyInstanceContext scx = elementsToGraph scx (Just scx) []
+emptyInstanceContext scx = elementsToGraph scx M.empty []
 
 -- | A convenience for osvJsonDirectoryToNtriples, bundling all of the input parameters together as a workflow
 executeOsvToRdfWorkflow :: TransformWorkflow -> IO ()
@@ -64,8 +64,8 @@ listsToSets = rewriteTerm mapExpr
 --   transform the content of each file to a corresponding RDF (N-Triples) file in the destination directory.
 osvJsonDirectoryToNtriples :: FilePath -> FilePath -> IO ()
 osvJsonDirectoryToNtriples srcDir destDir = do
-    entryType <- flowToIo osvContext (requireType Osv._Entry)
-    coder <- flowToIo osvInstanceContext $ jsonCoder entryType
+    entryType <- flowToIo (osvContext) (requireType Osv._Entry)
+    coder <- flowToIo (osvInstanceContext) $ jsonCoder entryType
     paths <- getDirectoryContents srcDir
     conf <- CM.mapM (transformFile coder) paths
     let count = L.length $ L.filter id conf
@@ -90,10 +90,10 @@ osvJsonToNtriples coder inFile outFile = do
       Left msg -> fail $ "Failed to read JSON value in file " ++ inFile ++ ": " ++ msg
       Right v -> do
         let v' = rewriteJsonFieldCase v
-        term0 <- flowToIo osvInstanceContext $ coderDecode coder v'
+        term0 <- flowToIo (osvInstanceContext) $ coderDecode coder v'
         let term1 = listsToSets term0
-        node <- flowToIo osvInstanceContext $ RdfUt.nextBlankNode
-        graph <- flowToIo osvInstanceContext $ (RdfUt.descriptionsToGraph <$> Shacl.encodeTerm node term1)
+        node <- flowToIo (osvInstanceContext) $ RdfUt.nextBlankNode
+        graph <- flowToIo (osvInstanceContext) $ (RdfUt.descriptionsToGraph <$> Shacl.encodeTerm node term1)
         let graphStr = rdfGraphToNtriples graph
         writeFile outFile graphStr
 

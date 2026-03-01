@@ -71,9 +71,9 @@ pythonEnvironment = def "PythonEnvironment" $
     "boundTypeVariables">:
       doc "Type variables in scope, with their Python names" $
       T.pair (T.list (core "Name")) (T.map (core "Name") (syntax "Name")),
-    "typeContext">:
-      doc "Type context for type inference" $
-      typing "TypeContext",
+    "graph">:
+      doc "Graph context for type inference" $
+      graph "Graph",
     "nullaryBindings">:
       doc "Set of nullary bindings (need call syntax)" $
       T.set (core "Name"),
