@@ -51,22 +51,13 @@ parseJsonFile fp = do
   content <- BS.readFile fp
   return $ aesonToHydra <$> A.eitherDecode content
 
--- | Extract a Type from a term that represents a type definition
-termToType :: Graph -> Term -> Maybe Type
-termToType g term = case DecodeCore.type_ g term of
-  Left _ -> Nothing
-  Right typ -> Just typ
-
--- | Build a schema map (Name -> Type) from a graph's schema.
+-- | Build a schema map (Name -> Type) from a graph's schema types.
 -- This is used by the JSON decoder to resolve type variables.
+-- Uses graphSchemaTypes (which contains TypeScheme values) and extracts the underlying Type.
 buildSchemaMap :: Graph -> M.Map Name Type
-buildSchemaMap g = case graphSchema g of
-  Nothing -> M.empty
-  Just schemaGraph -> M.fromList $ concatMap (extractType schemaGraph) $ graphElements schemaGraph
+buildSchemaMap g = M.map extractType (graphSchemaTypes g)
   where
-    extractType sg binding = case termToType sg (bindingTerm binding) of
-      Just typ -> [(bindingName binding, stripTypeAnnotationsTop typ)]
-      Nothing -> []
+    extractType (TypeScheme _ t _) = stripTypeAnnotationsTop t
 
     -- Strip only top-level annotations
     stripTypeAnnotationsTop (TypeAnnotated (AnnotatedType t _)) = stripTypeAnnotationsTop t
