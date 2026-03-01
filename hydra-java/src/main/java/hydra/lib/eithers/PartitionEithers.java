@@ -9,7 +9,7 @@ import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +72,7 @@ public class PartitionEithers extends PrimitiveFunction {
      * @param eithers the list of Either values to partition
      * @return a tuple containing the list of Left values and the list of Right values
      */
-    public static <A, B> Tuple.Tuple2<List<A>, List<B>> apply(List<hydra.util.Either<A, B>> eithers) {
+    public static <A, B> Pair<List<A>, List<B>> apply(List<hydra.util.Either<A, B>> eithers) {
         List<A> lefts = new ArrayList<>();
         List<B> rights = new ArrayList<>();
         for (hydra.util.Either<A, B> either : eithers) {
@@ -82,6 +82,6 @@ public class PartitionEithers extends PrimitiveFunction {
                 rights.add(((hydra.util.Either.Right<A, B>) either).value);
             }
         }
-        return new Tuple.Tuple2<>(lefts, rights);
+        return new Pair<>(lefts, rights);
     }
 }

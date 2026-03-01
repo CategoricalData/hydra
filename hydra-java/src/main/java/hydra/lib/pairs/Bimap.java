@@ -9,7 +9,7 @@ import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import java.util.List;
 import java.util.function.Function;
@@ -57,8 +57,8 @@ public class Bimap extends PrimitiveFunction {
             Term forFirst = args.get(0);
             Term forSecond = args.get(1);
             return Flows.map(Expect.pair(Flows::pure, Flows::pure, args.get(2)),
-                (Function<Tuple.Tuple2<Term, Term>, Term>) p ->
-                    Terms.pair(Terms.apply(forFirst, p.object1), Terms.apply(forSecond, p.object2)));
+                (Function<Pair<Term, Term>, Term>) p ->
+                    Terms.pair(Terms.apply(forFirst, p.first), Terms.apply(forSecond, p.second)));
         };
     }
 
@@ -74,10 +74,10 @@ public class Bimap extends PrimitiveFunction {
      * @param pair the pair to map over
      * @return the mapped pair
      */
-    public static <A, B, C, D> Tuple.Tuple2<C, D> apply(
+    public static <A, B, C, D> Pair<C, D> apply(
             Function<A, C> firstFn,
             Function<B, D> secondFn,
-            Tuple.Tuple2<A, B> pair) {
-        return new Tuple.Tuple2<>(firstFn.apply(pair.object1), secondFn.apply(pair.object2));
+            Pair<A, B> pair) {
+        return new Pair<>(firstFn.apply(pair.first), secondFn.apply(pair.second));
     }
 }

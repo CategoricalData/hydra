@@ -9,7 +9,7 @@ import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Tuple;
+import hydra.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,9 +43,9 @@ public class Partition extends PrimitiveFunction {
     protected Function<List<Term>, Flow<Graph, Term>> implementation() {
         return args -> bind(Expect.predicate(args.get(0)), pred ->
             bind(Expect.list(Flows::pure, args.get(1)), lst -> {
-                Tuple.Tuple2<List<Term>, List<Term>> result =
+                Pair<List<Term>, List<Term>> result =
                     Partition.apply((Function<Term, Boolean>) pred::apply, lst);
-                return pure(Terms.pair(Terms.list(result.object1), Terms.list(result.object2)));
+                return pure(Terms.pair(Terms.list(result.first), Terms.list(result.second)));
             }));
     }
 
@@ -55,7 +55,7 @@ public class Partition extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that partitions a list by the predicate
      */
-    public static <X> Function<List<X>, Tuple.Tuple2<List<X>, List<X>>> apply(Function<X, Boolean> pred) {
+    public static <X> Function<List<X>, Pair<List<X>, List<X>>> apply(Function<X, Boolean> pred) {
         return lst -> apply(pred, lst);
     }
 
@@ -67,7 +67,7 @@ public class Partition extends PrimitiveFunction {
      * @return a pair where first contains elements satisfying the predicate,
      *         second contains elements not satisfying the predicate
      */
-    public static <X> Tuple.Tuple2<List<X>, List<X>> apply(Function<X, Boolean> pred, List<X> lst) {
+    public static <X> Pair<List<X>, List<X>> apply(Function<X, Boolean> pred, List<X> lst) {
         List<X> yes = new ArrayList<>();
         List<X> no = new ArrayList<>();
         for (X x : lst) {
@@ -77,6 +77,6 @@ public class Partition extends PrimitiveFunction {
                 no.add(x);
             }
         }
-        return new Tuple.Tuple2<>(yes, no);
+        return new Pair<>(yes, no);
     }
 }
