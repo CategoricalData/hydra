@@ -567,9 +567,9 @@ public abstract class Term implements Serializable, Comparable<Term> {
    * A pair (2-tuple)
    */
   public static final class Pair extends hydra.core.Term implements Serializable {
-    public final hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term> value;
+    public final hydra.util.Pair<hydra.core.Term, hydra.core.Term> value;
     
-    public Pair (hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term> value) {
+    public Pair (hydra.util.Pair<hydra.core.Term, hydra.core.Term> value) {
       this.value = value;
     }
     

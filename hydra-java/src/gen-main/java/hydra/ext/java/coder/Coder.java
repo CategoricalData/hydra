@@ -768,7 +768,7 @@ public interface Coder {
         })))));
   }
   
-  static hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>> wrapLazyArguments(hydra.core.Name name, java.util.List<hydra.ext.java.syntax.Expression> args) {
+  static hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>> wrapLazyArguments(hydra.core.Name name, java.util.List<hydra.ext.java.syntax.Expression> args) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
         hydra.lib.equality.Equal.apply(
@@ -777,7 +777,7 @@ public interface Coder {
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(args),
           3)),
-      () -> (hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>(java.util.List.of(
+      () -> (hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>(java.util.List.of(
         hydra.lib.lists.At.apply(
           0,
           args),
@@ -787,7 +787,7 @@ public interface Coder {
         hydra.ext.java.coder.Coder.wrapInSupplierLambda(hydra.lib.lists.At.apply(
           2,
           args))), hydra.util.Maybe.just("lazy")))),
-      () -> (hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>(args, (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))));
+      () -> (hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>(args, (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))));
   }
   
   static hydra.ext.java.syntax.Expression wrapInSupplierLambda(hydra.ext.java.syntax.Expression expr) {
@@ -882,7 +882,7 @@ public interface Coder {
           () -> name)));
   }
   
-  static hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit> constructElementsInterface(hydra.module.Module mod, java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> members) {
+  static hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit> constructElementsInterface(hydra.module.Module mod, java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> members) {
     hydra.ext.java.syntax.InterfaceBody body = new hydra.ext.java.syntax.InterfaceBody(members);
     String className = hydra.ext.java.coder.Coder.elementsClassName((mod).namespace);
     java.util.List<hydra.ext.java.syntax.InterfaceModifier> mods = java.util.List.of(new hydra.ext.java.syntax.InterfaceModifier.Public());
@@ -890,7 +890,7 @@ public interface Coder {
     hydra.ext.java.syntax.TypeDeclarationWithComments decl = new hydra.ext.java.syntax.TypeDeclarationWithComments(itf.get(), (mod).description);
     hydra.core.Name elName = hydra.names.Names.unqualifyName(new hydra.module.QualifiedName(hydra.util.Maybe.just((mod).namespace), className));
     hydra.ext.java.syntax.PackageDeclaration pkg = hydra.ext.java.utils.Utils.javaPackageDeclaration((mod).namespace);
-    return (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>(elName, new hydra.ext.java.syntax.CompilationUnit.Ordinary(new hydra.ext.java.syntax.OrdinaryCompilationUnit(hydra.util.Maybe.just(pkg), (java.util.List<hydra.ext.java.syntax.ImportDeclaration>) (java.util.List.<hydra.ext.java.syntax.ImportDeclaration>of()), java.util.List.of(decl))))));
+    return (hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) ((hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) (new hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>(elName, new hydra.ext.java.syntax.CompilationUnit.Ordinary(new hydra.ext.java.syntax.OrdinaryCompilationUnit(hydra.util.Maybe.just(pkg), (java.util.List<hydra.ext.java.syntax.ImportDeclaration>) (java.util.List.<hydra.ext.java.syntax.ImportDeclaration>of()), java.util.List.of(decl))))));
   }
   
   static java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> splitConstantInitializer(hydra.ext.java.syntax.InterfaceMemberDeclaration member) {
@@ -1232,7 +1232,7 @@ public interface Coder {
                 jfirst,
                 jsecond),
               hydra.ext.java.names.Names.hydraUtilPackageName(),
-              "Tuple.Tuple2"))))));
+              "Pair"))))));
       }
       
       @Override
@@ -2809,15 +2809,15 @@ public interface Coder {
     });
   }
   
-  static hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> collectTypeApps(hydra.core.Term t, java.util.List<hydra.core.Type> acc) {
+  static hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>> collectTypeApps(hydra.core.Term t, java.util.List<hydra.core.Type> acc) {
     return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>(hydra.rewriting.Rewriting.deannotateTerm(t), acc)));
+      public hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>>(hydra.rewriting.Rewriting.deannotateTerm(t), acc)));
       }
       
       @Override
-      public hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> visit(hydra.core.Term.TypeApplication ta) {
+      public hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>> visit(hydra.core.Term.TypeApplication ta) {
         return hydra.ext.java.coder.Coder.collectTypeApps(
           ((ta).value).body,
           hydra.lib.lists.Cons.apply(
@@ -2827,15 +2827,15 @@ public interface Coder {
     });
   }
   
-  static hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> collectTypeApps0(hydra.core.Term t, java.util.List<hydra.core.Type> acc) {
+  static hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>> collectTypeApps0(hydra.core.Term t, java.util.List<hydra.core.Type> acc) {
     return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>>(t, acc)));
+      public hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>>) ((hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>>) (new hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>>(t, acc)));
       }
       
       @Override
-      public hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> visit(hydra.core.Term.TypeApplication ta) {
+      public hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>> visit(hydra.core.Term.TypeApplication ta) {
         return hydra.ext.java.coder.Coder.collectTypeApps0(
           ((ta).value).body,
           hydra.lib.lists.Cons.apply(
@@ -2861,26 +2861,26 @@ public interface Coder {
     });
   }
   
-  static hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> peelDomainTypes(Integer n, hydra.core.Type t) {
+  static hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> peelDomainTypes(Integer n, hydra.core.Type t) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Lte.apply(
         n,
         0),
-      () -> (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t))),
+      () -> (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t))),
       () -> (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
         @Override
-        public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-          return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t)));
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> otherwise(hydra.core.Type instance) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t)));
         }
         
         @Override
-        public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Function ft) {
-          hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> rest = hydra.ext.java.coder.Coder.peelDomainTypes(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Function ft) {
+          hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> rest = hydra.ext.java.coder.Coder.peelDomainTypes(
             hydra.lib.math.Sub.apply(
               n,
               1),
             ((ft).value).codomain);
-          return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Cons.apply(
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Cons.apply(
             ((ft).value).domain,
             hydra.lib.pairs.First.apply(rest)), hydra.lib.pairs.Second.apply(rest))));
         }
@@ -2930,41 +2930,41 @@ public interface Coder {
     });
   }
   
-  static java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> extractInOutPair(hydra.core.Type t) {
+  static java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> extractInOutPair(hydra.core.Type t) {
     return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
-        return (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of());
+      public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+        return (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of());
       }
       
       @Override
-      public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Function ft) {
+      public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Function ft) {
         return (hydra.rewriting.Rewriting.deannotateType(((ft).value).domain)).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
-          public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
-            return (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of());
+          public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+            return (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of());
           }
           
           @Override
-          public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable inVar) {
+          public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable inVar) {
             hydra.core.Type retType = hydra.ext.java.coder.Coder.unwrapReturnType(((ft).value).codomain);
             return (hydra.rewriting.Rewriting.deannotateType(retType)).accept(new hydra.core.Type.PartialVisitor<>() {
               @Override
-              public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
-                return (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of());
+              public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+                return (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of());
               }
               
               @Override
-              public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Pair pt) {
+              public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Pair pt) {
                 return (hydra.rewriting.Rewriting.deannotateType(((pt).value).first)).accept(new hydra.core.Type.PartialVisitor<>() {
                   @Override
-                  public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
-                    return (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of());
+                  public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+                    return (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of());
                   }
                   
                   @Override
-                  public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable outVar) {
-                    return java.util.List.of((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>((inVar).value, (outVar).value))));
+                  public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable outVar) {
+                    return java.util.List.of((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Name>((inVar).value, (outVar).value))));
                   }
                 });
               }
@@ -2975,89 +2975,89 @@ public interface Coder {
     });
   }
   
-  static java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> extractDirectReturn(java.util.Set<hydra.core.Name> tparamSet, hydra.core.Type t) {
+  static java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> extractDirectReturn(java.util.Set<hydra.core.Name> tparamSet, hydra.core.Type t) {
     return hydra.ext.java.coder.Coder.extractDirectReturn_go(
       tparamSet,
       t);
   }
   
-  static java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> extractDirectReturn_go(java.util.Set<hydra.core.Name> tparamSet, hydra.core.Type t) {
+  static java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> extractDirectReturn_go(java.util.Set<hydra.core.Name> tparamSet, hydra.core.Type t) {
     return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
-        return (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of());
+      public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+        return (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of());
       }
       
       @Override
-      public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Function ft) {
+      public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Function ft) {
         hydra.core.Type cod = ((ft).value).codomain;
         hydra.core.Type dom = hydra.rewriting.Rewriting.deannotateType(((ft).value).domain);
         return (dom).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
-          public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+          public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
             return hydra.ext.java.coder.Coder.extractDirectReturn_go(
               tparamSet,
               cod);
           }
           
           @Override
-          public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable inVar) {
+          public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable inVar) {
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.sets.Member.apply(
                 (inVar).value,
                 tparamSet),
               () -> (hydra.rewriting.Rewriting.deannotateType(cod)).accept(new hydra.core.Type.PartialVisitor<>() {
                 @Override
-                public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
-                  return (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of());
+                public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+                  return (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of());
                 }
                 
                 @Override
-                public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Function ft2) {
+                public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Function ft2) {
                   hydra.core.Type midArg = hydra.rewriting.Rewriting.deannotateType(((ft2).value).domain);
                   hydra.core.Type retPart = hydra.rewriting.Rewriting.deannotateType(((ft2).value).codomain);
                   return (midArg).accept(new hydra.core.Type.PartialVisitor<>() {
                     @Override
-                    public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+                    public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
                       return (retPart).accept(new hydra.core.Type.PartialVisitor<>() {
                         @Override
-                        public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
-                          return (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of());
+                        public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+                          return (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of());
                         }
                         
                         @Override
-                        public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable outVar) {
+                        public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable outVar) {
                           return hydra.lib.logic.IfElse.lazy(
                             hydra.lib.sets.Member.apply(
                               (outVar).value,
                               tparamSet),
-                            () -> java.util.List.of((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>((inVar).value, (outVar).value)))),
-                            () -> (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of()));
+                            () -> java.util.List.of((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Name>((inVar).value, (outVar).value)))),
+                            () -> (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of()));
                         }
                       });
                     }
                     
                     @Override
-                    public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable midVar) {
+                    public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable midVar) {
                       return hydra.lib.logic.IfElse.lazy(
                         hydra.lib.sets.Member.apply(
                           (midVar).value,
                           tparamSet),
-                        () -> (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of()),
+                        () -> (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of()),
                         () -> (retPart).accept(new hydra.core.Type.PartialVisitor<>() {
                           @Override
-                          public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
-                            return (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of());
+                          public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+                            return (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of());
                           }
                           
                           @Override
-                          public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable outVar) {
+                          public java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable outVar) {
                             return hydra.lib.logic.IfElse.lazy(
                               hydra.lib.sets.Member.apply(
                                 (outVar).value,
                                 tparamSet),
-                              () -> java.util.List.of((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>((inVar).value, (outVar).value)))),
-                              () -> (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>of()));
+                              () -> java.util.List.of((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Name>((inVar).value, (outVar).value)))),
+                              () -> (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>of()));
                           }
                         }));
                     }
@@ -3079,9 +3079,9 @@ public interface Coder {
       m);
   }
   
-  static <T0, T1> java.util.Map<T0, java.util.List<T1>> groupPairsByFirst(java.util.List<hydra.util.Tuple.Tuple2<T0, T1>> pairs) {
+  static <T0, T1> java.util.Map<T0, java.util.List<T1>> groupPairsByFirst(java.util.List<hydra.util.Pair<T0, T1>> pairs) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<java.util.Map<T0, java.util.List<T1>>, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, T1>, java.util.Map<T0, java.util.List<T1>>>>) (m -> (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, T1>, java.util.Map<T0, java.util.List<T1>>>) (p -> {
+      (java.util.function.Function<java.util.Map<T0, java.util.List<T1>>, java.util.function.Function<hydra.util.Pair<T0, T1>, java.util.Map<T0, java.util.List<T1>>>>) (m -> (java.util.function.Function<hydra.util.Pair<T0, T1>, java.util.Map<T0, java.util.List<T1>>>) (p -> {
         hydra.util.Lazy<T1> v = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.<T0, T1>groupPairsByFirst_v(p));
         return hydra.lib.maps.Alter.apply(
           (java.util.function.Function<hydra.util.Maybe<java.util.List<T1>>, hydra.util.Maybe<java.util.List<T1>>>) (mv -> hydra.lib.maybes.Maybe.apply(
@@ -3097,17 +3097,17 @@ public interface Coder {
       pairs);
   }
   
-  static <T0, T1> T0 groupPairsByFirst_k(hydra.util.Tuple.Tuple2<T0, T1> p) {
+  static <T0, T1> T0 groupPairsByFirst_k(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.First.apply(p);
   }
   
-  static <T0, T1> T1 groupPairsByFirst_v(hydra.util.Tuple.Tuple2<T0, T1> p) {
+  static <T0, T1> T1 groupPairsByFirst_v(hydra.util.Pair<T0, T1> p) {
     return hydra.lib.pairs.Second.apply(p);
   }
   
   static <T0> java.util.Map<T0, T0> selfRefSubstitution(java.util.Map<T0, java.util.List<T0>> grouped) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<java.util.Map<T0, T0>, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>, java.util.Map<T0, T0>>>) (subst -> (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>, java.util.Map<T0, T0>>) (entry -> hydra.ext.java.coder.Coder.<T0>selfRefSubstitution_processGroup(
+      (java.util.function.Function<java.util.Map<T0, T0>, java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, java.util.Map<T0, T0>>>) (subst -> (java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, java.util.Map<T0, T0>>) (entry -> hydra.ext.java.coder.Coder.<T0>selfRefSubstitution_processGroup(
         subst,
         hydra.lib.pairs.First.apply(entry),
         hydra.lib.pairs.Second.apply(entry)))),
@@ -3137,7 +3137,7 @@ public interface Coder {
   
   static <T0> java.util.Map<T0, T0> directRefSubstitution(java.util.Set<T0> directInputVars, hydra.util.Maybe<T0> codVar, java.util.Map<T0, java.util.List<T0>> grouped) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<java.util.Map<T0, T0>, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>, java.util.Map<T0, T0>>>) (subst -> (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>, java.util.Map<T0, T0>>) (entry -> hydra.ext.java.coder.Coder.<T0>directRefSubstitution_processGroup(
+      (java.util.function.Function<java.util.Map<T0, T0>, java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, java.util.Map<T0, T0>>>) (subst -> (java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, java.util.Map<T0, T0>>) (entry -> hydra.ext.java.coder.Coder.<T0>directRefSubstitution_processGroup(
         directInputVars,
         codVar,
         subst,
@@ -3196,25 +3196,25 @@ public interface Coder {
   }
   
   static <T0> hydra.util.Maybe<T0> findSelfRefVar(java.util.Map<T0, java.util.List<T0>> grouped) {
-    hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>> selfRefs = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.<T0>findSelfRefVar_selfRefs(grouped));
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<T0, java.util.List<T0>>>> selfRefs = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.<T0>findSelfRefVar_selfRefs(grouped));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(selfRefs.get()),
       () -> (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
       () -> hydra.util.Maybe.just(hydra.lib.pairs.First.apply(hydra.lib.lists.Head.apply(selfRefs.get()))));
   }
   
-  static <T0> java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> findSelfRefVar_selfRefs(java.util.Map<T0, java.util.List<T0>> grouped) {
+  static <T0> java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> findSelfRefVar_selfRefs(java.util.Map<T0, java.util.List<T0>> grouped) {
     return hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>, Boolean>) (entry -> hydra.lib.lists.Elem.apply(
+      (java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, Boolean>) (entry -> hydra.lib.lists.Elem.apply(
         hydra.lib.pairs.First.apply(entry),
         hydra.lib.pairs.Second.apply(entry))),
       hydra.lib.maps.ToList.apply(grouped));
   }
   
   static java.util.Map<hydra.core.Name, hydra.core.Type> detectAccumulatorUnification(java.util.List<hydra.core.Type> doms, hydra.core.Type cod, java.util.List<hydra.core.Name> tparams) {
-    hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>> allPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Bind.apply(
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>> allPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Bind.apply(
       doms,
-      (java.util.function.Function<hydra.core.Type, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>>) (d -> hydra.ext.java.coder.Coder.extractInOutPair(d))));
+      (java.util.function.Function<hydra.core.Type, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>>) (d -> hydra.ext.java.coder.Coder.extractInOutPair(d))));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.List<hydra.core.Name>>> groupedByInput = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.groupPairsByFirst(allPairs.get()));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Name>> selfRefSubst = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.selfRefSubstitution(groupedByInput.get()));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Name>> codSubst = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
@@ -3265,13 +3265,13 @@ public interface Coder {
           hydra.ext.java.coder.Coder.findSelfRefVar(groupedByInput.get())))),
       hydra.ext.java.coder.Coder.findPairFirst(cod)));
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> tparamSet = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(tparams));
-    hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>> directPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Bind.apply(
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>> directPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Bind.apply(
       doms,
-      (java.util.function.Function<hydra.core.Type, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>>) (d -> hydra.ext.java.coder.Coder.extractDirectReturn(
+      (java.util.function.Function<hydra.core.Type, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>>) (d -> hydra.ext.java.coder.Coder.extractDirectReturn(
         tparamSet.get(),
         d))));
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> directInputVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>, hydra.core.Name>) (p -> hydra.lib.pairs.First.apply(p)),
+      (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Name>, hydra.core.Name>) (p -> hydra.lib.pairs.First.apply(p)),
       directPairs.get())));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.List<hydra.core.Name>>> groupedDirect = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.groupPairsByFirst(directPairs.get()));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Name>> directRefSubst = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.directRefSubstitution(
@@ -3350,7 +3350,7 @@ public interface Coder {
           (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.core.Type>>>) (ts -> {
             hydra.core.Type schemeType = (ts).type;
             Integer nParams = hydra.ext.java.coder.Coder.countFunctionParams(schemeType);
-            hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> peeled = hydra.ext.java.coder.Coder.peelDomainTypes(
+            hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> peeled = hydra.ext.java.coder.Coder.peelDomainTypes(
               nParams,
               schemeType);
             hydra.util.Lazy<hydra.core.Type> calleeCod = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(peeled));
@@ -3386,9 +3386,9 @@ public interface Coder {
   
   static java.util.List<hydra.core.Type> filterPhantomTypeArgs_filterAndApply(java.util.List<hydra.core.Type> allTypeArgs, java.util.List<Boolean> keepFlags, java.util.Map<hydra.core.Name, hydra.core.Type> overgenSubst) {
     hydra.util.Lazy<java.util.List<hydra.core.Type>> filtered = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Type, Boolean>, hydra.core.Type>) (p -> hydra.lib.pairs.First.apply(p)),
+      (java.util.function.Function<hydra.util.Pair<hydra.core.Type, Boolean>, hydra.core.Type>) (p -> hydra.lib.pairs.First.apply(p)),
       hydra.lib.lists.Filter.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Type, Boolean>, Boolean>) (p -> hydra.lib.pairs.Second.apply(p)),
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Type, Boolean>, Boolean>) (p -> hydra.lib.pairs.Second.apply(p)),
         hydra.lib.lists.Zip.apply(
           allTypeArgs,
           keepFlags))));
@@ -3404,9 +3404,9 @@ public interface Coder {
   
   static <T0> java.util.List<T0> filterByFlags(java.util.List<T0> xs, java.util.List<Boolean> flags) {
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, Boolean>, T0>) (p -> hydra.lib.pairs.First.apply(p)),
+      (java.util.function.Function<hydra.util.Pair<T0, Boolean>, T0>) (p -> hydra.lib.pairs.First.apply(p)),
       hydra.lib.lists.Filter.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, Boolean>, Boolean>) (p -> hydra.lib.pairs.Second.apply(p)),
+        (java.util.function.Function<hydra.util.Pair<T0, Boolean>, Boolean>) (p -> hydra.lib.pairs.Second.apply(p)),
         hydra.lib.lists.Zip.apply(
           xs,
           flags)));
@@ -3434,28 +3434,28 @@ public interface Coder {
       hydra.lib.lists.Zip.apply(
         schemeDoms,
         argTypes),
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Type, T0>, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, T0>>>) (p -> {
+      (java.util.function.Function<hydra.util.Pair<hydra.core.Type, T0>, java.util.List<hydra.util.Pair<hydra.core.Name, T0>>>) (p -> {
         hydra.util.Lazy<hydra.core.Type> sdom = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
         return (hydra.rewriting.Rewriting.deannotateType(sdom.get())).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
-          public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, T0>> otherwise(hydra.core.Type instance) {
-            return (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, T0>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, T0>>of());
+          public java.util.List<hydra.util.Pair<hydra.core.Name, T0>> otherwise(hydra.core.Type instance) {
+            return (java.util.List<hydra.util.Pair<hydra.core.Name, T0>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, T0>>of());
           }
           
           @Override
-          public java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, T0>> visit(hydra.core.Type.Variable v) {
+          public java.util.List<hydra.util.Pair<hydra.core.Name, T0>> visit(hydra.core.Type.Variable v) {
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.sets.Member.apply(
                 (v).value,
                 schemeVarSet),
-              () -> java.util.List.of((hydra.util.Tuple.Tuple2<hydra.core.Name, T0>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, T0>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, T0>((v).value, hydra.ext.java.coder.Coder.<T0>buildArgSubst_argType(p))))),
-              () -> (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, T0>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, T0>>of()));
+              () -> java.util.List.of((hydra.util.Pair<hydra.core.Name, T0>) ((hydra.util.Pair<hydra.core.Name, T0>) (new hydra.util.Pair<hydra.core.Name, T0>((v).value, hydra.ext.java.coder.Coder.<T0>buildArgSubst_argType(p))))),
+              () -> (java.util.List<hydra.util.Pair<hydra.core.Name, T0>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, T0>>of()));
           }
         });
       })));
   }
   
-  static <T0> T0 buildArgSubst_argType(hydra.util.Tuple.Tuple2<hydra.core.Type, T0> p) {
+  static <T0> T0 buildArgSubst_argType(hydra.util.Pair<hydra.core.Type, T0> p) {
     return hydra.lib.pairs.Second.apply(p);
   }
   
@@ -3490,7 +3490,7 @@ public interface Coder {
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Type>> irSubst = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Zip.apply(
       schemeVars,
       fallbackTypeApps)));
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>> peeled = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.peelDomainTypes(
+    hydra.util.Lazy<hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>> peeled = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.peelDomainTypes(
       hydra.lib.lists.Length.apply(args),
       schemeType));
     hydra.util.Lazy<java.util.List<hydra.core.Type>> schemeDoms = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(peeled.get()));
@@ -3519,7 +3519,7 @@ public interface Coder {
               schemeDoms.get()));
             return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.core.Type>>>) (() -> {
               hydra.util.Lazy<Boolean> domsMatch = new hydra.util.Lazy<>(() -> hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
-                (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Type, hydra.core.Type>, Boolean>) (p -> hydra.lib.logic.Not.apply(hydra.ext.java.coder.Coder.typesMatch(
+                (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.core.Type>, Boolean>) (p -> hydra.lib.logic.Not.apply(hydra.ext.java.coder.Coder.typesMatch(
                   hydra.rewriting.Rewriting.deannotateType(hydra.lib.pairs.First.apply(p)),
                   hydra.rewriting.Rewriting.deannotateType(hydra.lib.pairs.Second.apply(p))))),
                 hydra.lib.lists.Zip.apply(
@@ -3555,7 +3555,7 @@ public interface Coder {
               (ts).variables));
             hydra.core.Type schemeType = (ts).type;
             Integer nParams = hydra.ext.java.coder.Coder.countFunctionParams(schemeType);
-            hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> peeled = hydra.ext.java.coder.Coder.peelDomainTypes(
+            hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> peeled = hydra.ext.java.coder.Coder.peelDomainTypes(
               nParams,
               schemeType);
             hydra.util.Lazy<hydra.core.Type> calleeCod = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(peeled));
@@ -4525,7 +4525,7 @@ public interface Coder {
         fields),
       (java.util.function.Function<java.util.List<hydra.ext.java.syntax.ClassBodyDeclaration>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration>>) (memberVars -> hydra.lib.flows.Bind.apply(
         hydra.lib.flows.MapList.apply(
-          (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.ext.java.syntax.ClassBodyDeclaration, hydra.core.FieldType>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (p -> hydra.ext.java.coder.Coder.addComment(
+          (java.util.function.Function<hydra.util.Pair<hydra.ext.java.syntax.ClassBodyDeclaration, hydra.core.FieldType>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (p -> hydra.ext.java.coder.Coder.addComment(
             hydra.lib.pairs.First.apply(p),
             hydra.lib.pairs.Second.apply(p))),
           hydra.lib.lists.Zip.apply(
@@ -4808,7 +4808,7 @@ public interface Coder {
                   hydra.ext.java.coder.Coder.bindingsToStatements(
                     env,
                     bindings),
-                  (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (bindResult -> {
+                  (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (bindResult -> {
                     hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> bindingStmts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindResult));
                     hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindResult));
                     return hydra.lib.flows.Bind.apply(
@@ -4905,7 +4905,7 @@ public interface Coder {
               hydra.lib.maps.Elems.apply((m).value)),
             (java.util.function.Function<java.util.List<hydra.ext.java.syntax.Expression>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (jvals -> {
               hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.Expression>> pairExprs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-                (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.Expression>, hydra.ext.java.syntax.Expression>) (kv -> hydra.ext.java.utils.Utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.Utils.methodInvocationStatic(
+                (java.util.function.Function<hydra.util.Pair<hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.Expression>, hydra.ext.java.syntax.Expression>) (kv -> hydra.ext.java.utils.Utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.Utils.methodInvocationStatic(
                   new hydra.ext.java.syntax.Identifier("java.util.Map"),
                   new hydra.ext.java.syntax.Identifier("entry"),
                   java.util.List.of(
@@ -4971,7 +4971,7 @@ public interface Coder {
                     rts))))))),
               (java.util.function.Function<hydra.util.Maybe<hydra.ext.java.syntax.TypeArgumentsOrDiamond>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (mtargs -> hydra.lib.flows.Pure.apply(hydra.ext.java.utils.Utils.javaConstructorCall(
                 hydra.ext.java.utils.Utils.javaConstructorName(
-                  new hydra.ext.java.syntax.Identifier("hydra.util.Tuple.Tuple2"),
+                  new hydra.ext.java.syntax.Identifier("hydra.util.Pair"),
                   mtargs),
                 java.util.List.of(
                   jterm1,
@@ -5203,7 +5203,7 @@ public interface Coder {
                     term),
                   (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Type>>) (t -> hydra.lib.flows.Pure.apply(t))),
                 (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (typ -> {
-                  hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> collected0 = hydra.ext.java.coder.Coder.collectTypeApps0(
+                  hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>> collected0 = hydra.ext.java.coder.Coder.collectTypeApps0(
                     body,
                     java.util.List.of(atyp));
                   hydra.util.Lazy<java.util.List<hydra.core.Type>> allTypeArgs0 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(collected0));
@@ -5214,7 +5214,7 @@ public interface Coder {
                       allTypeArgs0.get(),
                       typ),
                     (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (correctedTyp -> {
-                      hydra.util.Tuple.Tuple2<hydra.core.Term, java.util.List<hydra.core.Type>> collected = hydra.ext.java.coder.Coder.collectTypeApps(
+                      hydra.util.Pair<hydra.core.Term, java.util.List<hydra.core.Type>> collected = hydra.ext.java.coder.Coder.collectTypeApps(
                         body,
                         java.util.List.of(atyp));
                       hydra.util.Lazy<java.util.List<hydra.core.Type>> allTypeArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(collected));
@@ -5324,7 +5324,7 @@ public interface Coder {
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression> encodeApplication(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Application app) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>>> gathered = new hydra.util.Lazy<>(() -> hydra.coderUtils.CoderUtils.gatherArgsWithTypeApps(
+    hydra.util.Lazy<hydra.util.Pair<hydra.core.Term, hydra.util.Pair<java.util.List<hydra.core.Term>, java.util.List<hydra.core.Type>>>> gathered = new hydra.util.Lazy<>(() -> hydra.coderUtils.CoderUtils.gatherArgsWithTypeApps(
       new hydra.core.Term.Application(app),
       (java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()),
       (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of())));
@@ -5652,7 +5652,7 @@ public interface Coder {
           arg)),
         args),
       (java.util.function.Function<java.util.List<hydra.ext.java.syntax.Expression>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (jargs0 -> {
-        hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>> wrapResult = hydra.ext.java.coder.Coder.wrapLazyArguments(
+        hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>> wrapResult = hydra.ext.java.coder.Coder.wrapLazyArguments(
           name,
           jargs0);
         hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.Expression>> jargs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(wrapResult));
@@ -5812,7 +5812,7 @@ public interface Coder {
                         hydra.ext.java.coder.Coder.bindingsToStatements(
                           env3.get(),
                           bindings.get()),
-                        (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (bindResult -> {
+                        (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (bindResult -> {
                           hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> bindingStmts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindResult));
                           hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env4 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindResult));
                           return hydra.lib.flows.Bind.apply(
@@ -5861,7 +5861,7 @@ public interface Coder {
                             hydra.ext.java.coder.Coder.bindingsToStatements(
                               env3.get(),
                               bindings.get()),
-                            (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (bindResult -> {
+                            (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (bindResult -> {
                               hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> bindingStmts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindResult));
                               hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env4 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindResult));
                               return hydra.lib.flows.Bind.apply(
@@ -6106,7 +6106,7 @@ public interface Coder {
           hydra.ext.java.coder.Coder.bindingsToStatements(
             env2.get(),
             bindings.get()),
-          (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (bindResult -> {
+          (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (bindResult -> {
             hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> bindingStmts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindResult));
             hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindResult));
             return hydra.lib.flows.Bind.apply(
@@ -6182,7 +6182,7 @@ public interface Coder {
                       hydra.ext.java.coder.Coder.bindingsToStatements(
                         env4.get(),
                         bindings.get()),
-                      (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (bindResult -> {
+                      (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (bindResult -> {
                         hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> bindingStmts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindResult));
                         hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env5 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindResult));
                         return hydra.lib.flows.Bind.apply(
@@ -6487,7 +6487,7 @@ public interface Coder {
         }))));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>> bindingsToStatements(hydra.ext.java.helpers.JavaEnvironment env, java.util.List<hydra.core.Binding> bindings) {
+  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>> bindingsToStatements(hydra.ext.java.helpers.JavaEnvironment env, java.util.List<hydra.core.Binding> bindings) {
     hydra.ext.java.helpers.Aliases aliases = (env).aliases;
     java.util.List<hydra.core.Binding> flatBindings = hydra.ext.java.coder.Coder.dedupBindings(
       (aliases).inScopeJavaVars,
@@ -6496,19 +6496,19 @@ public interface Coder {
       (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (b -> (b).name),
       flatBindings)));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.Set<hydra.core.Name>>> allDeps = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Binding, hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.Set<hydra.core.Name>>>) (b -> {
+      (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, java.util.Set<hydra.core.Name>>>) (b -> {
         hydra.util.Lazy<java.util.Set<hydra.core.Name>> deps = new hydra.util.Lazy<>(() -> hydra.lib.sets.Intersection.apply(
           bindingVars.get(),
           hydra.rewriting.Rewriting.freeVariablesInTerm((b).term)));
         hydra.core.Name key = (b).name;
-        return (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.Set<hydra.core.Name>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.Set<hydra.core.Name>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.Set<hydra.core.Name>>(key, deps.get())));
+        return (hydra.util.Pair<hydra.core.Name, java.util.Set<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, java.util.Set<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, java.util.Set<hydra.core.Name>>(key, deps.get())));
       }),
       flatBindings)));
     hydra.util.Lazy<java.util.List<java.util.List<hydra.core.Name>>> sorted = new hydra.util.Lazy<>(() -> hydra.sorting.Sorting.topologicalSortComponents(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.Set<hydra.core.Name>>, hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.List<hydra.core.Name>>>) (entry -> {
+      (java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.Set<hydra.core.Name>>, hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>) (entry -> {
         hydra.util.Lazy<java.util.Set<hydra.core.Name>> deps = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(entry));
         hydra.util.Lazy<hydra.core.Name> key = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(entry));
-        return (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.List<hydra.core.Name>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.List<hydra.core.Name>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.List<hydra.core.Name>>(key.get(), hydra.lib.sets.ToList.apply(deps.get()))));
+        return (hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>(key.get(), hydra.lib.sets.ToList.apply(deps.get()))));
       }),
       hydra.lib.maps.ToList.apply(allDeps.get()))));
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> recursiveVars = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
@@ -6564,7 +6564,7 @@ public interface Coder {
     hydra.ext.java.helpers.JavaEnvironment envExtended = new hydra.ext.java.helpers.JavaEnvironment(aliasesExtended.get(), gExtended);
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(bindings),
-      () -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>((java.util.List<hydra.ext.java.syntax.BlockStatement>) (java.util.List.<hydra.ext.java.syntax.BlockStatement>of()), envExtended)))),
+      () -> hydra.lib.flows.Pure.apply((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) ((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) (new hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>((java.util.List<hydra.ext.java.syntax.BlockStatement>) (java.util.List.<hydra.ext.java.syntax.BlockStatement>of()), envExtended)))),
       () -> hydra.lib.flows.Bind.apply(
         hydra.lib.flows.MapList.apply(
           (java.util.function.Function<java.util.List<hydra.core.Name>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (names -> hydra.lib.flows.Bind.apply(
@@ -6591,7 +6591,7 @@ public interface Coder {
                 hydra.lib.maybes.Cat.apply(inits),
                 decls))))))),
           sorted.get()),
-        (java.util.function.Function<java.util.List<java.util.List<hydra.ext.java.syntax.BlockStatement>>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>>>) (groups -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>(hydra.lib.lists.Concat.apply(groups), envExtended)))))));
+        (java.util.function.Function<java.util.List<java.util.List<hydra.ext.java.syntax.BlockStatement>>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>>>) (groups -> hydra.lib.flows.Pure.apply((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) ((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>) (new hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>(hydra.lib.lists.Concat.apply(groups), envExtended)))))));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassDeclaration> toClassDecl(Boolean isInner, Boolean isSer, hydra.ext.java.helpers.Aliases aliases, java.util.List<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.core.Type t) {
@@ -6698,7 +6698,7 @@ public interface Coder {
           variantClasses));
         return hydra.lib.flows.Bind.apply(
           hydra.lib.flows.MapList.apply(
-            (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.ext.java.syntax.ClassBodyDeclaration, hydra.core.FieldType>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (pair -> hydra.ext.java.coder.Coder.addComment(
+            (java.util.function.Function<hydra.util.Pair<hydra.ext.java.syntax.ClassBodyDeclaration, hydra.core.FieldType>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.ClassBodyDeclarationWithComments>>) (pair -> hydra.ext.java.coder.Coder.addComment(
               hydra.lib.pairs.First.apply(pair),
               hydra.lib.pairs.Second.apply(pair))),
             hydra.lib.lists.Zip.apply(
@@ -6891,7 +6891,7 @@ public interface Coder {
     });
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>> encodeTypeDefinition(hydra.ext.java.syntax.PackageDeclaration pkg, hydra.ext.java.helpers.Aliases aliases, hydra.module.TypeDefinition tdef) {
+  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>> encodeTypeDefinition(hydra.ext.java.syntax.PackageDeclaration pkg, hydra.ext.java.helpers.Aliases aliases, hydra.module.TypeDefinition tdef) {
     hydra.core.Type typ = (tdef).type;
     Boolean serializable = hydra.ext.java.coder.Coder.isSerializableJavaType(typ);
     hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.ImportDeclaration>> imports = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
@@ -6907,34 +6907,34 @@ public interface Coder {
         (java.util.List<hydra.ext.java.syntax.TypeParameter>) (java.util.List.<hydra.ext.java.syntax.TypeParameter>of()),
         name,
         typ),
-      (java.util.function.Function<hydra.ext.java.syntax.ClassDeclaration, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (decl -> hydra.lib.flows.Bind.apply(
+      (java.util.function.Function<hydra.ext.java.syntax.ClassDeclaration, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (decl -> hydra.lib.flows.Bind.apply(
         hydra.annotations.Annotations.getTypeDescription(typ),
-        (java.util.function.Function<hydra.util.Maybe<String>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (comment -> {
+        (java.util.function.Function<hydra.util.Maybe<String>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (comment -> {
           hydra.ext.java.syntax.TypeDeclarationWithComments tdecl = new hydra.ext.java.syntax.TypeDeclarationWithComments(new hydra.ext.java.syntax.TypeDeclaration.Class_(decl), comment);
-          return hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>(name, new hydra.ext.java.syntax.CompilationUnit.Ordinary(new hydra.ext.java.syntax.OrdinaryCompilationUnit(hydra.util.Maybe.just(pkg), imports.get(), java.util.List.of(tdecl)))))));
+          return hydra.lib.flows.Pure.apply((hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) ((hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>) (new hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>(name, new hydra.ext.java.syntax.CompilationUnit.Ordinary(new hydra.ext.java.syntax.OrdinaryCompilationUnit(hydra.util.Maybe.just(pkg), imports.get(), java.util.List.of(tdecl)))))));
         }))));
   }
   
-  static hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> peelDomainsAndCod(Integer n, hydra.core.Type t) {
+  static hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> peelDomainsAndCod(Integer n, hydra.core.Type t) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Lte.apply(
         n,
         0),
-      () -> (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t))),
+      () -> (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t))),
       () -> (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
         @Override
-        public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-          return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t)));
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> otherwise(hydra.core.Type instance) {
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t)));
         }
         
         @Override
-        public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Function ft) {
-          hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> rest = hydra.ext.java.coder.Coder.peelDomainsAndCod(
+        public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> visit(hydra.core.Type.Function ft) {
+          hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> rest = hydra.ext.java.coder.Coder.peelDomainsAndCod(
             hydra.lib.math.Sub.apply(
               n,
               1),
             ((ft).value).codomain);
-          return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Cons.apply(
+          return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type>(hydra.lib.lists.Cons.apply(
             ((ft).value).domain,
             hydra.lib.pairs.First.apply(rest)), hydra.lib.pairs.Second.apply(rest))));
         }
@@ -7130,15 +7130,15 @@ public interface Coder {
     });
   }
   
-  static hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> flattenApps(hydra.core.Term t, java.util.List<hydra.core.Term> acc) {
+  static hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> flattenApps(hydra.core.Term t, java.util.List<hydra.core.Term> acc) {
     return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>(acc, t)));
+      public hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>) ((hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>) (new hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>(acc, t)));
       }
       
       @Override
-      public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> visit(hydra.core.Term.Application app) {
+      public hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> visit(hydra.core.Term.Application app) {
         return hydra.ext.java.coder.Coder.flattenApps(
           ((app).value).function,
           hydra.lib.lists.Cons.apply(
@@ -7148,29 +7148,29 @@ public interface Coder {
     });
   }
   
-  static hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term> collectLambdaDomains(hydra.core.Term t) {
+  static hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term> collectLambdaDomains(hydra.core.Term t) {
     return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t)));
+      public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t)));
       }
       
       @Override
-      public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term> visit(hydra.core.Term.Function f) {
+      public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term> visit(hydra.core.Term.Function f) {
         return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
-          public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term> otherwise(hydra.core.Function instance) {
-            return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t)));
+          public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term> otherwise(hydra.core.Function instance) {
+            return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t)));
           }
           
           @Override
-          public hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term> visit(hydra.core.Function.Lambda lam) {
+          public hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term> visit(hydra.core.Function.Lambda lam) {
             return hydra.lib.maybes.Cases.apply(
               ((lam).value).domain,
-              (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t))),
-              (java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>>) (dom -> {
-                hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term> rest = hydra.ext.java.coder.Coder.collectLambdaDomains(((lam).value).body);
-                return (hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term>(hydra.lib.lists.Cons.apply(
+              (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>((java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()), t))),
+              (java.util.function.Function<hydra.core.Type, hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>>) (dom -> {
+                hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term> rest = hydra.ext.java.coder.Coder.collectLambdaDomains(((lam).value).body);
+                return (hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>) ((hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>) (new hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term>(hydra.lib.lists.Cons.apply(
                   dom,
                   hydra.lib.pairs.First.apply(rest)), hydra.lib.pairs.Second.apply(rest))));
               }));
@@ -7212,12 +7212,12 @@ public interface Coder {
   }
   
   static hydra.core.Term propagateTypesInAppChain(hydra.core.Type fixedCod, hydra.core.Type resultType, hydra.core.Term t) {
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term>> flattened = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.flattenApps(
+    hydra.util.Lazy<hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term>> flattened = new hydra.util.Lazy<>(() -> hydra.ext.java.coder.Coder.flattenApps(
       t,
       (java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of())));
     hydra.util.Lazy<java.util.List<hydra.core.Term>> args = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(flattened.get()));
     hydra.util.Lazy<hydra.core.Term> fun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(flattened.get()));
-    hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Term> lambdaDomsResult = hydra.ext.java.coder.Coder.collectLambdaDomains(fun.get());
+    hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Term> lambdaDomsResult = hydra.ext.java.coder.Coder.collectLambdaDomains(fun.get());
     hydra.util.Lazy<java.util.List<hydra.core.Type>> lambdaDoms = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(lambdaDomsResult));
     hydra.util.Lazy<Integer> nArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(args.get()));
     hydra.util.Lazy<Integer> nLambdaDoms = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(lambdaDoms.get()));
@@ -7317,7 +7317,7 @@ public interface Coder {
       tcoVarRenames,
       (aliases0).varRenames), (aliases0).lambdaVars, (aliases0).typeVarSubst, (aliases0).trustedTypeVars, (aliases0).methodCodomain, (aliases0).thunkedVars), (env0).graph));
     hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateAndDetypeTerm(term);
-    hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> gathered = hydra.coderUtils.CoderUtils.gatherApplications(stripped);
+    hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> gathered = hydra.coderUtils.CoderUtils.gatherApplications(stripped);
     hydra.util.Lazy<java.util.List<hydra.core.Term>> gatherArgs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered));
     hydra.util.Lazy<hydra.core.Term> gatherFun = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered));
     hydra.core.Term strippedFun = hydra.rewriting.Rewriting.deannotateAndDetypeTerm(gatherFun.get());
@@ -7341,8 +7341,8 @@ public interface Coder {
           hydra.lib.lists.Length.apply(gatherArgs.get()),
           hydra.lib.lists.Length.apply(paramNames))),
       () -> ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
-        hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>> changePairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-          (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, Boolean>) (pair -> hydra.lib.logic.Not.apply((hydra.rewriting.Rewriting.deannotateAndDetypeTerm(hydra.lib.pairs.Second.apply(pair))).accept(new hydra.core.Term.PartialVisitor<>() {
+        hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>> changePairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+          (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, Boolean>) (pair -> hydra.lib.logic.Not.apply((hydra.rewriting.Rewriting.deannotateAndDetypeTerm(hydra.lib.pairs.Second.apply(pair))).accept(new hydra.core.Term.PartialVisitor<>() {
             @Override
             public Boolean otherwise(hydra.core.Term instance) {
               return false;
@@ -7360,17 +7360,17 @@ public interface Coder {
             gatherArgs.get())));
         return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
           hydra.util.Lazy<java.util.List<hydra.core.Name>> changedParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, hydra.core.Name>) ((java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, hydra.core.Name>) (hydra.lib.pairs.First::apply)),
+            (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Name>) ((java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Name>) (hydra.lib.pairs.First::apply)),
             changePairs.get()));
           return hydra.lib.flows.Bind.apply(
             hydra.lib.flows.MapList.apply(
-              (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (pair -> hydra.ext.java.coder.Coder.encodeTerm(
+              (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.Expression>>) (pair -> hydra.ext.java.coder.Coder.encodeTerm(
                 env.get(),
                 hydra.lib.pairs.Second.apply(pair))),
               changePairs.get()),
             (java.util.function.Function<java.util.List<hydra.ext.java.syntax.Expression>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (jChangedArgs -> {
               hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> assignments = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-                (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.Expression>, hydra.ext.java.syntax.BlockStatement>) (pair -> {
+                (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.Expression>, hydra.ext.java.syntax.BlockStatement>) (pair -> {
                   hydra.util.Lazy<hydra.ext.java.syntax.Expression> jArg = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
                   hydra.util.Lazy<hydra.core.Name> paramName = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
                   return new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaAssignmentStatement(
@@ -7390,7 +7390,7 @@ public interface Coder {
       () -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>> otherwise(hydra.core.Term instance) {
-          hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Term>, hydra.core.Term> gathered2 = hydra.coderUtils.CoderUtils.gatherApplications(term);
+          hydra.util.Pair<java.util.List<hydra.core.Term>, hydra.core.Term> gathered2 = hydra.coderUtils.CoderUtils.gatherApplications(term);
           hydra.util.Lazy<java.util.List<hydra.core.Term>> args2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(gathered2));
           hydra.util.Lazy<hydra.core.Term> body2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(gathered2));
           return hydra.lib.logic.IfElse.lazy(
@@ -7533,7 +7533,7 @@ public interface Coder {
                                                             hydra.ext.java.coder.Coder.bindingsToStatements(
                                                               env4.get(),
                                                               bindings.get()),
-                                                            (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (bindResult -> {
+                                                            (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (bindResult -> {
                                                               hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> bindingStmts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindResult));
                                                               hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env5 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindResult));
                                                               return hydra.lib.flows.Bind.apply(
@@ -7602,7 +7602,7 @@ public interface Coder {
             hydra.ext.java.coder.Coder.bindingsToStatements(
               env.get(),
               letBindings),
-            (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (bindResult -> {
+            (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (bindResult -> {
               hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> envAfterLet = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindResult));
               hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> letStmts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindResult));
               return hydra.lib.flows.Bind.apply(
@@ -7645,7 +7645,7 @@ public interface Coder {
             hydra.util.Lazy<java.util.List<hydra.core.Name>> params = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.typing.FunctionStructure<hydra.ext.java.helpers.JavaEnvironment>, java.util.List<hydra.core.Name>>) (projected -> projected.params)).apply(fs));
             hydra.util.Lazy<Integer> numParams = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(params.get()));
             hydra.core.Type schemeType = (ts).type;
-            hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Type>, hydra.core.Type> peelResult = hydra.ext.java.coder.Coder.peelDomainsAndCod(
+            hydra.util.Pair<java.util.List<hydra.core.Type>, hydra.core.Type> peelResult = hydra.ext.java.coder.Coder.peelDomainsAndCod(
               numParams.get(),
               schemeType);
             hydra.util.Lazy<hydra.core.Type> cod = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(peelResult));
@@ -7696,18 +7696,18 @@ public interface Coder {
                     tparams.get())));
                 hydra.util.Lazy<java.util.Set<hydra.core.Name>> fixedSchemeVarSet = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(fixedTparams.get()));
                 hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Name>> overgenVarSubst = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-                  (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>>) (entry -> {
+                  (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>>) (entry -> {
                     hydra.util.Lazy<hydra.core.Name> k = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(entry));
                     hydra.util.Lazy<hydra.core.Type> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(entry));
                     return (v.get()).accept(new hydra.core.Type.PartialVisitor<>() {
                       @Override
-                      public hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
-                        return (hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>) (hydra.util.Maybe.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>>nothing());
+                      public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> otherwise(hydra.core.Type instance) {
+                        return (hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Name, hydra.core.Name>>nothing());
                       }
                       
                       @Override
-                      public hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable n) {
-                        return hydra.util.Maybe.just((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>(k.get(), (n).value))));
+                      public hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.Name>> visit(hydra.core.Type.Variable n) {
+                        return hydra.util.Maybe.just((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Name>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Name>(k.get(), (n).value))));
                       }
                     });
                   }),
@@ -7743,7 +7743,7 @@ public interface Coder {
                   hydra.ext.java.coder.Coder.bindingsToStatements(
                     env2WithTypeParams,
                     bindings.get()),
-                  (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.InterfaceMemberDeclaration>>) (bindResult -> {
+                  (java.util.function.Function<hydra.util.Pair<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.helpers.JavaEnvironment>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.InterfaceMemberDeclaration>>) (bindResult -> {
                     hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> bindingStmts = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(bindResult));
                     hydra.util.Lazy<hydra.ext.java.helpers.JavaEnvironment> env3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bindResult));
                     return hydra.lib.flows.Bind.apply(
@@ -7760,7 +7760,7 @@ public interface Coder {
                           body_);
                         return hydra.lib.flows.Bind.apply(
                           hydra.lib.flows.MapList.apply(
-                            (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Type, hydra.core.Name>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.FormalParameter>>) (pair -> hydra.lib.flows.Bind.apply(
+                            (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.core.Name>, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.FormalParameter>>) (pair -> hydra.lib.flows.Bind.apply(
                               hydra.ext.java.coder.Coder.encodeType(
                                 aliases2.get(),
                                 (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
@@ -7798,7 +7798,7 @@ public interface Coder {
                                           snapshotNames.get())));
                                         return ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.ext.java.syntax.BlockStatement>>>) (() -> {
                                           hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.BlockStatement>> snapshotDecls = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-                                            (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Name>, hydra.ext.java.syntax.BlockStatement>) (pair -> hydra.ext.java.utils.Utils.finalVarDeclarationStatement(
+                                            (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Name>, hydra.ext.java.syntax.BlockStatement>) (pair -> hydra.ext.java.utils.Utils.finalVarDeclarationStatement(
                                               hydra.ext.java.utils.Utils.variableToJavaIdentifier(hydra.lib.pairs.Second.apply(pair)),
                                               hydra.ext.java.utils.Utils.javaIdentifierToJavaExpression(hydra.ext.java.utils.Utils.variableToJavaIdentifier(hydra.lib.pairs.First.apply(pair))))),
                                             hydra.lib.lists.Zip.apply(
@@ -7865,7 +7865,7 @@ public interface Coder {
       (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (g -> {
         hydra.ext.java.helpers.Aliases aliases = hydra.ext.java.utils.Utils.importAliasesForModule(mod);
         hydra.ext.java.helpers.JavaEnvironment env = new hydra.ext.java.helpers.JavaEnvironment(aliases, g);
-        hydra.util.Tuple.Tuple2<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>> partitioned = hydra.schemas.Schemas.partitionDefinitions(defs);
+        hydra.util.Pair<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>> partitioned = hydra.schemas.Schemas.partitionDefinitions(defs);
         hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> typeDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned));
         hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> nonTypedefDefs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
           (java.util.function.Function<hydra.module.TypeDefinition, Boolean>) (td -> {
@@ -7877,25 +7877,25 @@ public interface Coder {
         hydra.util.Lazy<java.util.List<hydra.module.TermDefinition>> termDefs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(partitioned));
         return hydra.lib.flows.Bind.apply(
           hydra.lib.flows.MapList.apply(
-            (java.util.function.Function<hydra.module.TypeDefinition, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (td -> hydra.ext.java.coder.Coder.encodeTypeDefinition(
+            (java.util.function.Function<hydra.module.TypeDefinition, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (td -> hydra.ext.java.coder.Coder.encodeTypeDefinition(
               pkg,
               aliases,
               td)),
             nonTypedefDefs.get()),
-          (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (typeUnits -> hydra.lib.flows.Bind.apply(
+          (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (typeUnits -> hydra.lib.flows.Bind.apply(
             hydra.lib.logic.IfElse.lazy(
               hydra.lib.lists.Null.apply(termDefs.get()),
-              () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>) (java.util.List.<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>of())),
+              () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>) (java.util.List.<hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>of())),
               () -> hydra.lib.flows.Bind.apply(
                 hydra.lib.flows.MapList.apply(
                   (java.util.function.Function<hydra.module.TermDefinition, hydra.compute.Flow<hydra.graph.Graph, hydra.ext.java.syntax.InterfaceMemberDeclaration>>) (td -> hydra.ext.java.coder.Coder.encodeTermDefinition(
                     env,
                     td)),
                   termDefs.get()),
-                (java.util.function.Function<java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>>) (dataMembers -> hydra.lib.flows.Pure.apply(java.util.List.of(hydra.ext.java.coder.Coder.constructElementsInterface(
+                (java.util.function.Function<java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>>) (dataMembers -> hydra.lib.flows.Pure.apply(java.util.List.of(hydra.ext.java.coder.Coder.constructElementsInterface(
                   mod,
                   dataMembers)))))),
-            (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (termUnits -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat2.apply(
+            (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>>>) (termUnits -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(hydra.lib.lists.Concat2.apply(
               typeUnits,
               termUnits)))))));
       }));
@@ -7911,10 +7911,10 @@ public interface Coder {
           mod,
           defs),
         (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<String, String>>>) (units -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>, hydra.util.Tuple.Tuple2<String, String>>) (entry -> {
+          (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.ext.java.syntax.CompilationUnit>, hydra.util.Pair<String, String>>) (entry -> {
             hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(entry));
             hydra.util.Lazy<hydra.ext.java.syntax.CompilationUnit> unit = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(entry));
-            return (hydra.util.Tuple.Tuple2<String, String>) ((hydra.util.Tuple.Tuple2<String, String>) (new hydra.util.Tuple.Tuple2<String, String>(hydra.ext.java.coder.Coder.bindingNameToFilePath(name.get()), hydra.serialization.Serialization.printExpr(hydra.serialization.Serialization.parenthesize(hydra.ext.java.serde.Serde.writeCompilationUnit(unit.get()))))));
+            return (hydra.util.Pair<String, String>) ((hydra.util.Pair<String, String>) (new hydra.util.Pair<String, String>(hydra.ext.java.coder.Coder.bindingNameToFilePath(name.get()), hydra.serialization.Serialization.printExpr(hydra.serialization.Serialization.parenthesize(hydra.ext.java.serde.Serde.writeCompilationUnit(unit.get()))))));
           }),
           hydra.lib.maps.ToList.apply(units)))))));
   }

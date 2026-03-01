@@ -157,8 +157,8 @@ public class FlowsTest {
       2,
       1)),
     (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, java.util.Map<String, Integer>>>) (v2 -> hydra.monads.Monads.pure(hydra.lib.maps.FromList.apply(java.util.List.of(
-      (hydra.util.Tuple.Tuple2<String, Integer>) ((hydra.util.Tuple.Tuple2<String, Integer>) (new hydra.util.Tuple.Tuple2<String, Integer>("a", v1))),
-      (hydra.util.Tuple.Tuple2<String, Integer>) ((hydra.util.Tuple.Tuple2<String, Integer>) (new hydra.util.Tuple.Tuple2<String, Integer>("b", v2)))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+      (hydra.util.Pair<String, Integer>) ((hydra.util.Pair<String, Integer>) (new hydra.util.Pair<String, Integer>("a", v1))),
+      (hydra.util.Pair<String, Integer>) ((hydra.util.Pair<String, Integer>) (new hydra.util.Pair<String, Integer>("b", v2)))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 
@@ -187,8 +187,8 @@ public class FlowsTest {
       2,
       1)),
     (java.util.function.Function<Integer, hydra.compute.Flow<java.lang.Void, java.util.Map<Integer, String>>>) (k2 -> hydra.monads.Monads.pure(hydra.lib.maps.FromList.apply(java.util.List.of(
-      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(k1, "a"))),
-      (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(k2, "b")))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
+      (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(k1, "a"))),
+      (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(k2, "b")))))))))))).apply(null)).apply(new hydra.compute.Trace((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (java.util.Map.<hydra.core.Name, hydra.core.Term>ofEntries())))));
 
     }
 

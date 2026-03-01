@@ -234,11 +234,11 @@ public interface Decode {
         return hydra.lib.eithers.Either.apply(
           (java.util.function.Function<String, hydra.util.Either<String, hydra.core.Term>>) (err -> (hydra.util.Either<String, hydra.core.Term>) ((hydra.util.Either<String, hydra.core.Term>) (hydra.util.Either.<String, hydra.core.Term>left(err)))),
           (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Either<String, hydra.core.Term>>) (arr -> {
-            java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>> decodeEntry = (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>>) (entryJson -> {
+            java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>> decodeEntry = (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (entryJson -> {
               hydra.util.Either<String, java.util.Map<String, hydra.json.model.Value>> objResult = hydra.json.decode.Decode.expectObject(entryJson);
               return hydra.lib.eithers.Either.apply(
-                (java.util.function.Function<String, hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>>) (err -> (hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>left(err)))),
-                (java.util.function.Function<java.util.Map<String, hydra.json.model.Value>, hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>>) (entryObj -> {
+                (java.util.function.Function<String, hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (err -> (hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>left(err)))),
+                (java.util.function.Function<java.util.Map<String, hydra.json.model.Value>, hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (entryObj -> {
                   hydra.util.Lazy<hydra.util.Maybe<hydra.json.model.Value>> keyJson = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
                     "@key",
                     entryObj));
@@ -246,10 +246,10 @@ public interface Decode {
                     "@value",
                     entryObj));
                   return hydra.lib.maybes.Maybe.apply(
-                    (hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>left("missing @key in map entry"))),
-                    (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>>) (kj -> hydra.lib.maybes.Maybe.apply(
-                      (hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>left("missing @value in map entry"))),
-                      (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>>) (vj -> {
+                    (hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>left("missing @key in map entry"))),
+                    (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (kj -> hydra.lib.maybes.Maybe.apply(
+                      (hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>left("missing @value in map entry"))),
+                      (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (vj -> {
                         hydra.util.Either<String, hydra.core.Term> decodedKey = hydra.json.decode.Decode.fromJson(
                           types,
                           keyType,
@@ -259,9 +259,9 @@ public interface Decode {
                           valType,
                           vj);
                         return hydra.lib.eithers.Either.apply(
-                          (java.util.function.Function<String, hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>>) (err -> (hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>left(err)))),
-                          (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>>) (k -> hydra.lib.eithers.Map.apply(
-                            (java.util.function.Function<hydra.core.Term, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) (v -> (hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>(k, v)))),
+                          (java.util.function.Function<String, hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (err -> (hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>left(err)))),
+                          (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (k -> hydra.lib.eithers.Map.apply(
+                            (java.util.function.Function<hydra.core.Term, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (v -> (hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(k, v)))),
                             decodedVal)),
                           decodedKey);
                       }),
@@ -270,11 +270,11 @@ public interface Decode {
                 }),
                 objResult);
             });
-            hydra.util.Lazy<hydra.util.Either<String, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>>> entries = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
+            hydra.util.Lazy<hydra.util.Either<String, java.util.List<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> entries = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
               decodeEntry,
               arr));
             return hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>, hydra.core.Term>) (es -> new hydra.core.Term.Map(hydra.lib.maps.FromList.apply(es))),
+              (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>, hydra.core.Term>) (es -> new hydra.core.Term.Map(hydra.lib.maps.FromList.apply(es))),
               entries.get());
           }),
           arrResult);
@@ -310,7 +310,7 @@ public interface Decode {
                   return hydra.lib.eithers.Either.apply(
                     (java.util.function.Function<String, hydra.util.Either<String, hydra.core.Term>>) (err -> (hydra.util.Either<String, hydra.core.Term>) ((hydra.util.Either<String, hydra.core.Term>) (hydra.util.Either.<String, hydra.core.Term>left(err)))),
                     (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.core.Term>>) (f -> hydra.lib.eithers.Map.apply(
-                      (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (s -> new hydra.core.Term.Pair((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>(f, s))))),
+                      (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (s -> new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(f, s))))),
                       decodedSecond)),
                     decodedFirst);
                 }),

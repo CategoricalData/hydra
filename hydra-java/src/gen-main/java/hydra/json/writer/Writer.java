@@ -79,7 +79,7 @@ public interface Writer {
       "\"");
   }
   
-  static hydra.ast.Expr keyValueToExpr(hydra.util.Tuple.Tuple2<String, hydra.json.model.Value> pair) {
+  static hydra.ast.Expr keyValueToExpr(hydra.util.Pair<String, hydra.json.model.Value> pair) {
     hydra.util.Lazy<String> key = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
     hydra.util.Lazy<hydra.json.model.Value> value = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
     return hydra.serialization.Serialization.ifx(

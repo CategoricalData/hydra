@@ -1977,7 +1977,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<Integer>>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<Integer>>) (new hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<Integer>>(java.util.List.of(
+            (hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>(java.util.List.of(
   4,
   5,
   6), java.util.List.of(
@@ -2005,7 +2005,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<java.lang.Object>>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<java.lang.Object>>) (new hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<java.lang.Object>>(java.util.List.of(
+            (hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>(java.util.List.of(
   1,
   2,
   3), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
@@ -2027,7 +2027,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<Integer>>) ((hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<Integer>>) (new hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<Integer>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), java.util.List.of(
+            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), java.util.List.of(
   1,
   2,
   3)))),
@@ -2049,7 +2049,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<Integer>>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<Integer>>) (new hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<Integer>>(java.util.List.of(
+            (hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>(java.util.List.of(
   2,
   4,
   6), java.util.List.of(
@@ -2075,7 +2075,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) ((hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) (new hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
+            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
@@ -2617,7 +2617,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<Integer>>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<Integer>>) (new hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<Integer>>(java.util.List.of(
+            (hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>(java.util.List.of(
   1,
   2), java.util.List.of(
   3,
@@ -2643,7 +2643,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<java.lang.Object>>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<java.lang.Object>>) (new hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<java.lang.Object>>(java.util.List.of(
+            (hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>(java.util.List.of(
   1,
   2,
   3), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
@@ -2665,7 +2665,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<Integer>>) ((hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<Integer>>) (new hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<Integer>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), java.util.List.of(
+            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), java.util.List.of(
   1,
   2,
   3)))),
@@ -2687,7 +2687,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) ((hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) (new hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
+            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
 
             hydra.lib.lists.Span.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
@@ -2986,9 +2986,9 @@ public class ListsTest {
         assertEquals(
 
             java.util.List.of(
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(1, "a"))),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(2, "b"))),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(3, "c")))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(2, "b"))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(3, "c")))),
 
             hydra.lib.lists.Zip.apply(
   java.util.List.of(
@@ -3009,8 +3009,8 @@ public class ListsTest {
         assertEquals(
 
             java.util.List.of(
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(1, "a"))),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(2, "b")))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(2, "b")))),
 
             hydra.lib.lists.Zip.apply(
   java.util.List.of(
@@ -3030,8 +3030,8 @@ public class ListsTest {
         assertEquals(
 
             java.util.List.of(
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(1, "a"))),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(2, "b")))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(2, "b")))),
 
             hydra.lib.lists.Zip.apply(
   java.util.List.of(

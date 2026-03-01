@@ -7,11 +7,11 @@ package hydra.templates;
  */
 public interface Templates {
   static hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>> graphToSchema(java.util.List<hydra.core.Binding> els) {
-    java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>> toPair = (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (el -> {
+    java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>> toPair = (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (el -> {
       hydra.core.Name name = (el).name;
       return hydra.lib.flows.Bind.apply(
         hydra.monads.Monads.<hydra.graph.Graph>getState(),
-        (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (graph -> hydra.lib.flows.Bind.apply(
+        (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (graph -> hydra.lib.flows.Bind.apply(
           hydra.monads.Monads.withTrace(
             "graph to schema",
             hydra.monads.Monads.eitherToFlow(
@@ -19,13 +19,13 @@ public interface Templates {
               hydra.decode.core.Core.type(
                 graph,
                 (el).term))),
-          (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (t -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>(name, t))))))));
+          (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (t -> hydra.lib.flows.Pure.apply((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(name, t))))))));
     });
     return hydra.lib.flows.Bind.apply(
       hydra.lib.flows.MapList.apply(
         toPair,
         els),
-      (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (pairs -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(pairs))));
+      (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (pairs -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(pairs))));
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.core.Term> instantiateTemplate(Boolean minimal, java.util.Map<hydra.core.Name, hydra.core.Type> schema, hydra.core.Type t) {

@@ -484,7 +484,7 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.Map m) {
-        java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, String> entry = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, String>) (p -> hydra.lib.strings.Cat.apply(java.util.List.of(
+        java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, String> entry = (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, String>) (p -> hydra.lib.strings.Cat.apply(java.util.List.of(
           hydra.show.core.Core.term(hydra.lib.pairs.First.apply(p)),
           "=",
           hydra.show.core.Core.term(hydra.lib.pairs.Second.apply(p)))));

@@ -17,14 +17,14 @@ public class TopologicalSortTestCase implements Serializable, Comparable<Topolog
   /**
    * The directed graph as an adjacency list (node to list of dependencies)
    */
-  public final java.util.List<hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>> adjacencyList;
+  public final java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjacencyList;
   
   /**
    * The expected result: Left for cycles, Right for sorted nodes
    */
   public final hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>> expected;
   
-  public TopologicalSortTestCase (java.util.List<hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>> adjacencyList, hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>> expected) {
+  public TopologicalSortTestCase (java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjacencyList, hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>> expected) {
     this.adjacencyList = adjacencyList;
     this.expected = expected;
   }
@@ -62,7 +62,7 @@ public class TopologicalSortTestCase implements Serializable, Comparable<Topolog
       other.expected.hashCode());
   }
   
-  public TopologicalSortTestCase withAdjacencyList(java.util.List<hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>> adjacencyList) {
+  public TopologicalSortTestCase withAdjacencyList(java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjacencyList) {
     return new TopologicalSortTestCase(adjacencyList, expected);
   }
   

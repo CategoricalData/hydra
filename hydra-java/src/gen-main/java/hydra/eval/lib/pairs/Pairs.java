@@ -19,7 +19,7 @@ public interface Pairs {
       public hydra.compute.Flow<T0, hydra.core.Term> visit(hydra.core.Term.Pair p) {
         hydra.util.Lazy<hydra.core.Term> fst = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply((p).value));
         hydra.util.Lazy<hydra.core.Term> snd = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((p).value));
-        return hydra.lib.flows.Pure.apply(new hydra.core.Term.Pair((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>(new hydra.core.Term.Application(new hydra.core.Application(firstFun, fst.get())), new hydra.core.Term.Application(new hydra.core.Application(secondFun, snd.get())))))));
+        return hydra.lib.flows.Pure.apply(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(new hydra.core.Term.Application(new hydra.core.Application(firstFun, fst.get())), new hydra.core.Term.Application(new hydra.core.Application(secondFun, snd.get())))))));
       }
     });
   }

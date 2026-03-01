@@ -8,11 +8,11 @@ package hydra.lexical;
 public interface Lexical {
   static hydra.graph.Graph buildGraph(java.util.List<hydra.core.Binding> elements, java.util.Map<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>> environment, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives) {
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> elementTerms = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Binding, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>) (b -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>((b).name, (b).term)))),
+      (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>((b).name, (b).term)))),
       elements)));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.TypeScheme>> elementTypes = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>>) (b -> hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((b).name, ts)))),
+      (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>) (b -> hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((b).name, ts)))),
         (b).type)),
       elements))));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> letTerms = new hydra.util.Lazy<>(() -> hydra.lib.maps.Map.apply(
@@ -141,11 +141,11 @@ public interface Lexical {
   
   static hydra.graph.Graph extendGraphWithBindings(java.util.List<hydra.core.Binding> bindings, hydra.graph.Graph g) {
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> newTerms = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Binding, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>) (b -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>((b).name, (b).term)))),
+      (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>((b).name, (b).term)))),
       bindings)));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.TypeScheme>> newTypes = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>>) (b -> hydra.lib.maybes.Map.apply(
-        (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((b).name, ts)))),
+      (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>) (b -> hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((b).name, ts)))),
         (b).type)),
       bindings))));
     return new hydra.graph.Graph(hydra.lib.maps.Union.apply(
@@ -157,7 +157,7 @@ public interface Lexical {
   
   static java.util.List<hydra.core.Binding> graphToBindings(hydra.graph.Graph g) {
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, hydra.core.Binding>) (p -> {
+      (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Binding>) (p -> {
         hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
         hydra.util.Lazy<hydra.core.Term> term = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
         return new hydra.core.Binding(name.get(), term.get(), hydra.lib.maps.Lookup.apply(
@@ -227,11 +227,11 @@ public interface Lexical {
       (graph).boundTerms);
   }
   
-  static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> matchEnum(hydra.core.Name tname, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, T0>> pairs, hydra.core.Term v1) {
+  static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> matchEnum(hydra.core.Name tname, java.util.List<hydra.util.Pair<hydra.core.Name, T0>> pairs, hydra.core.Term v1) {
     return hydra.lexical.Lexical.<T0>matchUnion(
       tname,
       hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, T0>, hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>>) (pair -> hydra.lexical.Lexical.matchUnitField(
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Name, T0>, hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>>) (pair -> hydra.lexical.Lexical.matchUnitField(
           hydra.lib.pairs.First.apply(pair),
           hydra.lib.pairs.Second.apply(pair))),
         pairs),
@@ -251,13 +251,13 @@ public interface Lexical {
       @Override
       public hydra.compute.Flow<T0, T1> visit(hydra.core.Term.Record record) {
         return (decode).apply(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.Field, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>) (field -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>((field).name, (field).term)))),
+          (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (field -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>((field).name, (field).term)))),
           ((record).value).fields)));
       }
     });
   }
   
-  static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> matchUnion(hydra.core.Name tname, java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>> pairs, hydra.core.Term term) {
+  static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> matchUnion(hydra.core.Name tname, java.util.List<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>> pairs, hydra.core.Term term) {
     hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateAndDetypeTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -270,7 +270,7 @@ public interface Lexical {
             hydra.lib.strings.Intercalate.apply(
               ", ",
               hydra.lib.lists.Map.apply(
-                (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>, String>) (pair -> (hydra.lib.pairs.First.apply(pair)).value),
+                (java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>, String>) (pair -> (hydra.lib.pairs.First.apply(pair)).value),
                 pairs)),
             "}")),
           hydra.show.core.Core.term(stripped));
@@ -305,7 +305,7 @@ public interface Lexical {
     });
   }
   
-  static <T0> java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>> matchUnion_mapping(java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>> pairs) {
+  static <T0> java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>> matchUnion_mapping(java.util.List<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>> pairs) {
     return hydra.lib.maps.FromList.apply(pairs);
   }
   
@@ -326,8 +326,8 @@ public interface Lexical {
         mapping));
   }
   
-  static <T0, T1, T2, T3> hydra.util.Tuple.Tuple2<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>> matchUnitField(T0 fname, T1 x) {
-    return (hydra.util.Tuple.Tuple2<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>>) ((hydra.util.Tuple.Tuple2<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>>) (new hydra.util.Tuple.Tuple2<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>>(fname, (java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>) (ignored -> hydra.lib.flows.Pure.apply(x)))));
+  static <T0, T1, T2, T3> hydra.util.Pair<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>> matchUnitField(T0 fname, T1 x) {
+    return (hydra.util.Pair<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>>) ((hydra.util.Pair<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>>) (new hydra.util.Pair<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>>(fname, (java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>) (ignored -> hydra.lib.flows.Pure.apply(x)))));
   }
   
   static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding> requireElement(hydra.core.Name name) {
@@ -390,7 +390,7 @@ public interface Lexical {
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> mts = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
       name,
       hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.graph.Primitive, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
+        (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
         hydra.lib.maps.Elems.apply((tx).primitives)))));
     return hydra.lib.maybes.Maybe.apply(
       hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(

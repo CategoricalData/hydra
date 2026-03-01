@@ -429,12 +429,12 @@ public interface Checking {
           v,
           (cx).schemaTypes))),
       hydra.lib.sets.ToList.apply(suspectVars.get()))));
-    hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>> badPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, Boolean>) (p -> hydra.lib.sets.Member.apply(
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>> badPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+      (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, Boolean>) (p -> hydra.lib.sets.Member.apply(
         hydra.lib.pairs.First.apply(p),
         badVars.get())),
       hydra.lib.maps.ToList.apply(s)));
-    java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, String> printPair = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, String>) (p -> hydra.lib.strings.Cat2.apply(
+    java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, String> printPair = (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, String>) (p -> hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
         (hydra.lib.pairs.First.apply(p)).value,
         " --> "),
@@ -743,7 +743,7 @@ public interface Checking {
           hydra.lib.strings.Intercalate.apply(
             ", ",
             hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>, String>) (p -> hydra.lib.strings.Cat.apply(java.util.List.of(
+              (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>, String>) (p -> hydra.lib.strings.Cat.apply(java.util.List.of(
                 (hydra.lib.pairs.First.apply(p)).value,
                 ": ",
                 (hydra_show_core_type2).apply((hydra_rewriting_typeSchemeToFType2).apply(hydra.lib.pairs.Second.apply(p)))))),
@@ -1034,7 +1034,7 @@ public interface Checking {
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.core.Type> typeOfMap_nonnull(java.util.Map<hydra.core.Term, hydra.core.Term> m, hydra.graph.Graph tx, java.util.List<hydra.core.Type> typeArgs) {
-    hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply(m));
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply(m));
     return hydra.lib.flows.Bind.apply(
       hydra.lib.flows.Bind.apply(
         hydra.lib.flows.MapList.apply(
@@ -1043,7 +1043,7 @@ public interface Checking {
             (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
             v1)),
           hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.core.Term>) ((java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.core.Term>) (hydra.lib.pairs.First::apply)),
+            (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.core.Term>) ((java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.core.Term>) (hydra.lib.pairs.First::apply)),
             pairs.get())),
         (java.util.function.Function<java.util.List<hydra.core.Type>, hydra.compute.Flow<T0, hydra.core.Type>>) (v1 -> hydra.checking.Checking.<T0>checkSameType(
           tx,
@@ -1057,7 +1057,7 @@ public interface Checking {
               (java.util.List<hydra.core.Type>) (java.util.List.<hydra.core.Type>of()),
               v1)),
             hydra.lib.lists.Map.apply(
-              (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.core.Term>) ((java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.core.Term>) (hydra.lib.pairs.Second::apply)),
+              (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.core.Term>) ((java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.core.Term>) (hydra.lib.pairs.Second::apply)),
               pairs.get())),
           (java.util.function.Function<java.util.List<hydra.core.Type>, hydra.compute.Flow<T0, hydra.core.Type>>) (v1 -> hydra.checking.Checking.<T0>checkSameType(
             tx,
@@ -1119,7 +1119,7 @@ public interface Checking {
         t)));
   }
   
-  static <T0> hydra.compute.Flow<T0, hydra.core.Type> typeOfPair(hydra.graph.Graph tx, java.util.List<hydra.core.Type> typeArgs, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term> p) {
+  static <T0> hydra.compute.Flow<T0, hydra.core.Type> typeOfPair(hydra.graph.Graph tx, java.util.List<hydra.core.Type> typeArgs, hydra.util.Pair<hydra.core.Term, hydra.core.Term> p) {
     return hydra.lib.flows.Bind.apply(
       hydra.checking.Checking.<T0>typeOfPair_checkLength(typeArgs),
       (java.util.function.Function<java.lang.Void, hydra.compute.Flow<T0, hydra.core.Type>>) (ignored -> {
@@ -1169,7 +1169,7 @@ public interface Checking {
         hydra.lib.maps.Lookup.apply(
           name,
           hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.graph.Primitive, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
+            (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
             hydra.lib.maps.Elems.apply((tx).primitives))))),
       (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<T0, hydra.core.Type>>) (ts -> {
         hydra.core.Type t = hydra.rewriting.Rewriting.typeSchemeToFType(ts);

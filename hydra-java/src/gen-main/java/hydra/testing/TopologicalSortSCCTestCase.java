@@ -17,14 +17,14 @@ public class TopologicalSortSCCTestCase implements Serializable, Comparable<Topo
   /**
    * The directed graph as an adjacency list
    */
-  public final java.util.List<hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>> adjacencyList;
+  public final java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjacencyList;
   
   /**
    * The expected strongly connected components in topological order
    */
   public final java.util.List<java.util.List<Integer>> expected;
   
-  public TopologicalSortSCCTestCase (java.util.List<hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>> adjacencyList, java.util.List<java.util.List<Integer>> expected) {
+  public TopologicalSortSCCTestCase (java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjacencyList, java.util.List<java.util.List<Integer>> expected) {
     this.adjacencyList = adjacencyList;
     this.expected = expected;
   }
@@ -62,7 +62,7 @@ public class TopologicalSortSCCTestCase implements Serializable, Comparable<Topo
       other.expected.hashCode());
   }
   
-  public TopologicalSortSCCTestCase withAdjacencyList(java.util.List<hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>> adjacencyList) {
+  public TopologicalSortSCCTestCase withAdjacencyList(java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjacencyList) {
     return new TopologicalSortSCCTestCase(adjacencyList, expected);
   }
   

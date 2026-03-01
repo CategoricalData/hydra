@@ -202,7 +202,7 @@ public interface Validation {
         (v1))),
       (types)));
     hydra.util.Maybe<String> checkValues = hydra.pg.validation.Validation.<String>checkAll(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.pg.model.PropertyKey, T1>, hydra.util.Maybe<String>>) (v1 -> hydra.pg.validation.Validation.<T0, T1, String>validateProperties_checkPair(
+      (java.util.function.Function<hydra.util.Pair<hydra.pg.model.PropertyKey, T1>, hydra.util.Maybe<String>>) (v1 -> hydra.pg.validation.Validation.<T0, T1, String>validateProperties_checkPair(
         (checkValue),
         (java.util.function.Function<String, java.util.function.Function<String, String>>) (p0 -> p1 -> hydra.pg.validation.Validation.prepend(
           (p0),
@@ -229,11 +229,11 @@ public interface Validation {
   
   static <T0> java.util.Map<hydra.pg.model.PropertyKey, T0> validateProperties_m(java.util.List<hydra.pg.model.PropertyType<T0>> types) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.util.Tuple.Tuple2<hydra.pg.model.PropertyKey, T0>>) (p -> (hydra.util.Tuple.Tuple2<hydra.pg.model.PropertyKey, T0>) ((hydra.util.Tuple.Tuple2<hydra.pg.model.PropertyKey, T0>) (new hydra.util.Tuple.Tuple2<hydra.pg.model.PropertyKey, T0>(((java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply((p)), ((java.util.function.Function<hydra.pg.model.PropertyType<T0>, T0>) (projected -> projected.value)).apply((p)))))),
+      (java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.util.Pair<hydra.pg.model.PropertyKey, T0>>) (p -> (hydra.util.Pair<hydra.pg.model.PropertyKey, T0>) ((hydra.util.Pair<hydra.pg.model.PropertyKey, T0>) (new hydra.util.Pair<hydra.pg.model.PropertyKey, T0>(((java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply((p)), ((java.util.function.Function<hydra.pg.model.PropertyType<T0>, T0>) (projected -> projected.value)).apply((p)))))),
       (types)));
   }
   
-  static <T0, T1, T2> hydra.util.Maybe<T2> validateProperties_checkPair(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<String>>> checkValue, java.util.function.Function<String, java.util.function.Function<String, T2>> hydra_pg_validation_prepend2, java.util.List<hydra.pg.model.PropertyType<T0>> types, hydra.util.Tuple.Tuple2<hydra.pg.model.PropertyKey, T1> pair) {
+  static <T0, T1, T2> hydra.util.Maybe<T2> validateProperties_checkPair(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Maybe<String>>> checkValue, java.util.function.Function<String, java.util.function.Function<String, T2>> hydra_pg_validation_prepend2, java.util.List<hydra.pg.model.PropertyType<T0>> types, hydra.util.Pair<hydra.pg.model.PropertyKey, T1> pair) {
     hydra.pg.model.PropertyKey key = hydra.lib.pairs.First.apply((pair));
     return hydra.lib.maybes.Maybe.apply(
       hydra.util.Maybe.just((((hydra_pg_validation_prepend2)).apply("Unexpected key")).apply(((key)).value)),
@@ -245,7 +245,7 @@ public interface Validation {
         hydra.pg.validation.Validation.<T0>validateProperties_m((types))));
   }
   
-  static <T0, T1> T1 validateProperties_val(hydra.util.Tuple.Tuple2<T0, T1> pair) {
+  static <T0, T1> T1 validateProperties_val(hydra.util.Pair<T0, T1> pair) {
     return hydra.lib.pairs.Second.apply((pair));
   }
   

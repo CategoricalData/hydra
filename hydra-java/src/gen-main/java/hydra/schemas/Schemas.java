@@ -10,17 +10,17 @@ public interface Schemas {
     hydra.util.Lazy<java.util.Set<hydra.module.Namespace>> nss = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       hydra.names.Names::namespaceOf,
       hydra.lib.sets.ToList.apply(names)))));
-    return (hydra.module.Namespaces<T0>) (new hydra.module.Namespaces<T0>(((java.util.function.Function<hydra.module.Namespaces<T0>, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>>) (projected -> projected.focus)).apply(ns0), hydra.lib.maps.Union.apply(
+    return (hydra.module.Namespaces<T0>) (new hydra.module.Namespaces<T0>(((java.util.function.Function<hydra.module.Namespaces<T0>, hydra.util.Pair<hydra.module.Namespace, T0>>) (projected -> projected.focus)).apply(ns0), hydra.lib.maps.Union.apply(
       ((java.util.function.Function<hydra.module.Namespaces<T0>, java.util.Map<hydra.module.Namespace, T0>>) (projected -> projected.mapping)).apply(ns0),
       hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.module.Namespace, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>>) (v1 -> hydra.schemas.Schemas.<T0>addNamesToNamespaces_toPair(
+        (java.util.function.Function<hydra.module.Namespace, hydra.util.Pair<hydra.module.Namespace, T0>>) (v1 -> hydra.schemas.Schemas.<T0>addNamesToNamespaces_toPair(
           encodeNamespace,
           v1)),
         hydra.lib.sets.ToList.apply(nss.get()))))));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0> addNamesToNamespaces_toPair(java.util.function.Function<hydra.module.Namespace, T0> encodeNamespace, hydra.module.Namespace ns) {
-    return (hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>) ((hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>) (new hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>(ns, (encodeNamespace).apply(ns))));
+  static <T0> hydra.util.Pair<hydra.module.Namespace, T0> addNamesToNamespaces_toPair(java.util.function.Function<hydra.module.Namespace, T0> encodeNamespace, hydra.module.Namespace ns) {
+    return (hydra.util.Pair<hydra.module.Namespace, T0>) ((hydra.util.Pair<hydra.module.Namespace, T0>) (new hydra.util.Pair<hydra.module.Namespace, T0>(ns, (encodeNamespace).apply(ns))));
   }
   
   static java.util.Set<hydra.module.Namespace> definitionDependencyNamespaces(java.util.List<hydra.module.Definition> defs) {
@@ -189,12 +189,12 @@ public interface Schemas {
     java.util.List<hydra.core.Binding> bindings = (letrec).bindings;
     return new hydra.graph.Graph(hydra.lib.maps.Union.apply(
       hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.core.Binding, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>) (b -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>((b).name, (b).term)))),
+        (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>((b).name, (b).term)))),
         bindings)),
       (g).boundTerms), hydra.lib.maps.Union.apply(
       hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>>) (b -> hydra.lib.maybes.Map.apply(
-          (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((b).name, ts)))),
+        (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>) (b -> hydra.lib.maybes.Map.apply(
+          (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((b).name, ts)))),
           (b).type)),
         bindings))),
       (g).boundTypes), (g).classConstraints, hydra.lib.lists.Foldl.apply(
@@ -224,14 +224,14 @@ public interface Schemas {
   }
   
   static java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap(java.util.List<hydra.core.Field> fields) {
-    java.util.function.Function<hydra.core.Field, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>> toPair = (java.util.function.Function<hydra.core.Field, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>) (f -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>((f).name, (f).term))));
+    java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.core.Name, hydra.core.Term>> toPair = (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>((f).name, (f).term))));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       toPair,
       fields));
   }
   
   static java.util.Map<hydra.core.Name, hydra.core.Type> fieldTypeMap(java.util.List<hydra.core.FieldType> fields) {
-    java.util.function.Function<hydra.core.FieldType, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>> toPair = (java.util.function.Function<hydra.core.FieldType, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>) (f -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>((f).name, (f).type))));
+    java.util.function.Function<hydra.core.FieldType, hydra.util.Pair<hydra.core.Name, hydra.core.Type>> toPair = (java.util.function.Function<hydra.core.FieldType, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>) (f -> (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>((f).name, (f).type))));
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       toPair,
       fields));
@@ -242,7 +242,7 @@ public interface Schemas {
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
       (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (graph -> {
         java.util.function.Function<java.util.List<hydra.core.FieldType>, java.util.Map<hydra.core.Name, hydra.core.Type>> toMap = (java.util.function.Function<java.util.List<hydra.core.FieldType>, java.util.Map<hydra.core.Name, hydra.core.Type>>) (fields -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.FieldType, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>) (ft -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>((ft).name, (ft).type)))),
+          (java.util.function.Function<hydra.core.FieldType, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>) (ft -> (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>((ft).name, (ft).type)))),
           fields)));
         return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
@@ -342,15 +342,15 @@ public interface Schemas {
   }
   
   static hydra.core.Type fullyStripAndNormalizeType(hydra.core.Type typ) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Integer, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<Integer, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>) (depth -> (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>) (subst -> (java.util.function.Function<hydra.core.Type, hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>) (t -> (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Integer, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
+    go.set((java.util.function.Function<Integer, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>) (depth -> (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>) (subst -> (java.util.function.Function<hydra.core.Type, hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>) (t -> (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>(subst, t)));
+      public hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type> otherwise(hydra.core.Type instance) {
+        return (hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) ((hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) (new hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>(subst, t)));
       }
       
       @Override
-      public hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
+      public hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
         hydra.core.Name newVar = new hydra.core.Name(hydra.lib.strings.Cat2.apply(
           "_",
           hydra.lib.literals.ShowInt32.apply(depth)));
@@ -363,7 +363,7 @@ public interface Schemas {
           subst))).apply(((ft).value).body);
       }
     })))));
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>> result = new hydra.util.Lazy<>(() -> (((go.get()).apply(0)).apply((java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())))).apply(typ));
+    hydra.util.Lazy<hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Name>, hydra.core.Type>> result = new hydra.util.Lazy<>(() -> (((go.get()).apply(0)).apply((java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())))).apply(typ));
     hydra.util.Lazy<hydra.core.Type> body = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result.get()));
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Name>> subst = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result.get()));
     return hydra.rewriting.Rewriting.substituteTypeVariables(
@@ -400,17 +400,17 @@ public interface Schemas {
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
       (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (graph -> hydra.lib.flows.Bind.apply(
         hydra.lib.flows.MapList.apply(
-          (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (v1 -> hydra.schemas.Schemas.graphAsTypes_toPair(
+          (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (v1 -> hydra.schemas.Schemas.graphAsTypes_toPair(
             graph,
             (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.core.Core.type(
               p0,
               p1)),
             v1)),
           els),
-        (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (pairs -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(pairs))))));
+        (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (pairs -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(pairs))))));
   }
   
-  static <T0> hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>> graphAsTypes_toPair(hydra.graph.Graph graph, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>> hydra_decode_core_type2, hydra.core.Binding el) {
+  static <T0> hydra.compute.Flow<T0, hydra.util.Pair<hydra.core.Name, hydra.core.Type>> graphAsTypes_toPair(hydra.graph.Graph graph, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>> hydra_decode_core_type2, hydra.core.Binding el) {
     return hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.withTrace(
         hydra.lib.strings.Cat2.apply(
@@ -419,7 +419,7 @@ public interface Schemas {
         hydra.monads.Monads.eitherToFlow(
           wrapped -> (wrapped).value,
           ((hydra_decode_core_type2).apply(graph)).apply((el).term))),
-      (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (typ -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>((el).name, typ))))));
+      (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<T0, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (typ -> hydra.lib.flows.Pure.apply((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>((el).name, typ))))));
   }
   
   static <T0> hydra.compute.Flow<T0, hydra.core.Type> instantiateType(hydra.core.Type typ) {
@@ -438,7 +438,7 @@ public interface Schemas {
           newVars)));
         hydra.util.Lazy<hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>> renamedConstraints = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
           (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (oldConstraints -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeVariableMetadata>, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (kv -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeVariableMetadata>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeVariableMetadata>(hydra.lib.maybes.FromMaybe.apply(
+            (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>, hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (kv -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>(hydra.lib.maybes.FromMaybe.apply(
               hydra.lib.pairs.First.apply(kv),
               hydra.lib.maps.Lookup.apply(
                 hydra.lib.pairs.First.apply(kv),
@@ -703,7 +703,7 @@ public interface Schemas {
     hydra.util.Lazy<java.util.Set<hydra.module.Namespace>> nss = new hydra.util.Lazy<>(() -> hydra.lib.sets.Delete.apply(
       focusNs,
       hydra.schemas.Schemas.definitionDependencyNamespaces(defs)));
-    java.util.function.Function<hydra.module.Namespace, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>> toPair = (java.util.function.Function<hydra.module.Namespace, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>>) (v1 -> hydra.schemas.Schemas.<T0>namespacesForDefinitions_toPair(
+    java.util.function.Function<hydra.module.Namespace, hydra.util.Pair<hydra.module.Namespace, T0>> toPair = (java.util.function.Function<hydra.module.Namespace, hydra.util.Pair<hydra.module.Namespace, T0>>) (v1 -> hydra.schemas.Schemas.<T0>namespacesForDefinitions_toPair(
       encodeNamespace,
       v1));
     return (hydra.module.Namespaces<T0>) (new hydra.module.Namespaces<T0>((toPair).apply(focusNs), hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
@@ -711,8 +711,8 @@ public interface Schemas {
       hydra.lib.sets.ToList.apply(nss.get())))));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0> namespacesForDefinitions_toPair(java.util.function.Function<hydra.module.Namespace, T0> encodeNamespace, hydra.module.Namespace ns) {
-    return (hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>) ((hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>) (new hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>(ns, (encodeNamespace).apply(ns))));
+  static <T0> hydra.util.Pair<hydra.module.Namespace, T0> namespacesForDefinitions_toPair(java.util.function.Function<hydra.module.Namespace, T0> encodeNamespace, hydra.module.Namespace ns) {
+    return (hydra.util.Pair<hydra.module.Namespace, T0>) ((hydra.util.Pair<hydra.module.Namespace, T0>) (new hydra.util.Pair<hydra.module.Namespace, T0>(ns, (encodeNamespace).apply(ns))));
   }
   
   static hydra.core.Type nominalApplication(hydra.core.Name tname, java.util.List<hydra.core.Type> args) {
@@ -728,7 +728,7 @@ public interface Schemas {
       hydra.lib.literals.ShowInt32.apply(i)));
   }
   
-  static hydra.util.Tuple.Tuple2<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>> partitionDefinitions(java.util.List<hydra.module.Definition> defs) {
+  static hydra.util.Pair<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>> partitionDefinitions(java.util.List<hydra.module.Definition> defs) {
     java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.module.TermDefinition>> getTerm = (java.util.function.Function<hydra.module.Definition, hydra.util.Maybe<hydra.module.TermDefinition>>) (def -> (def).accept(new hydra.module.Definition.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.module.TermDefinition> visit(hydra.module.Definition.Type ignored) {
@@ -751,7 +751,7 @@ public interface Schemas {
         return (hydra.util.Maybe<hydra.module.TypeDefinition>) (hydra.util.Maybe.<hydra.module.TypeDefinition>nothing());
       }
     }));
-    return (hydra.util.Tuple.Tuple2<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>>) ((hydra.util.Tuple.Tuple2<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>>) (new hydra.util.Tuple.Tuple2<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>>(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+    return (hydra.util.Pair<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>>) ((hydra.util.Pair<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>>) (new hydra.util.Pair<java.util.List<hydra.module.TypeDefinition>, java.util.List<hydra.module.TermDefinition>>(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       getType,
       defs)), hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       getTerm,
@@ -929,9 +929,9 @@ public interface Schemas {
           vars))).apply(((ft).value).body);
       }
     }))));
-    java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>>> toPair = (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>>>) (el -> hydra.lib.flows.Bind.apply(
+    java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>> toPair = (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>>) (el -> hydra.lib.flows.Bind.apply(
       hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>>>) (cx -> hydra.lib.flows.Bind.apply(
+      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>>) (cx -> hydra.lib.flows.Bind.apply(
         hydra.lib.maybes.Maybe.apply(
           hydra.lib.flows.Map.apply(
             (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>) (typ -> hydra.util.Maybe.just(hydra.rewriting.Rewriting.fTypeToTypeScheme(typ))),
@@ -974,8 +974,8 @@ public interface Schemas {
                 toTypeScheme.get(),
                 hydra.rewriting.Rewriting.deannotateTerm((el).term))))),
           (el).type),
-        (java.util.function.Function<hydra.util.Maybe<hydra.core.TypeScheme>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>>>) (mts -> hydra.lib.flows.Pure.apply(hydra.lib.maybes.Map.apply(
-          (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((el).name, ts)))),
+        (java.util.function.Function<hydra.util.Maybe<hydra.core.TypeScheme>, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>>) (mts -> hydra.lib.flows.Pure.apply(hydra.lib.maybes.Map.apply(
+          (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((el).name, ts)))),
           mts)))))));
     return hydra.monads.Monads.withTrace(
       "schema graph to typing environment",
@@ -985,7 +985,7 @@ public interface Schemas {
           hydra.lib.flows.MapList.apply(
             toPair,
             hydra.lexical.Lexical.graphToBindings(g)),
-          (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.TypeScheme>>>) (mpairs -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(mpairs)))))));
+          (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.TypeScheme>>>) (mpairs -> hydra.lib.flows.Pure.apply(hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(mpairs)))))));
   }
   
   static <T1> hydra.compute.Flow<T1, hydra.util.Maybe<hydra.core.TypeScheme>> schemaGraphToTypingEnvironment_forTerm(hydra.graph.Graph cx, hydra.core.Binding el, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.Type>>> hydra_decode_core_type2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.core.TypeScheme>>> hydra_decode_core_typeScheme2, java.util.function.Function<java.util.List<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>> toTypeScheme, hydra.core.Term term) {
@@ -1041,9 +1041,9 @@ public interface Schemas {
   
   static java.util.List<java.util.List<hydra.module.TypeDefinition>> topologicalSortTypeDefinitions(java.util.List<hydra.module.TypeDefinition> defs) {
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.module.TypeDefinition>> nameToDef = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.module.TypeDefinition>>) (d -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.module.TypeDefinition>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.module.TypeDefinition>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.module.TypeDefinition>((d).name, d)))),
+      (java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Pair<hydra.core.Name, hydra.module.TypeDefinition>>) (d -> (hydra.util.Pair<hydra.core.Name, hydra.module.TypeDefinition>) ((hydra.util.Pair<hydra.core.Name, hydra.module.TypeDefinition>) (new hydra.util.Pair<hydra.core.Name, hydra.module.TypeDefinition>((d).name, d)))),
       defs)));
-    java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.List<hydra.core.Name>>> toPair = (java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.List<hydra.core.Name>>>) (def -> (hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.List<hydra.core.Name>>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.List<hydra.core.Name>>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, java.util.List<hydra.core.Name>>((def).name, hydra.lib.sets.ToList.apply(hydra.rewriting.Rewriting.typeDependencyNames(
+    java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>> toPair = (java.util.function.Function<hydra.module.TypeDefinition, hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>>) (def -> (hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Name, java.util.List<hydra.core.Name>>((def).name, hydra.lib.sets.ToList.apply(hydra.rewriting.Rewriting.typeDependencyNames(
       false,
       (def).type))))));
     hydra.util.Lazy<java.util.List<java.util.List<hydra.core.Name>>> sorted = new hydra.util.Lazy<>(() -> hydra.sorting.Sorting.topologicalSortComponents(hydra.lib.lists.Map.apply(
@@ -1073,9 +1073,9 @@ public interface Schemas {
               hydra.decode.core.Core.type(
                 graph,
                 (el).term))))));
-        java.util.function.Function<hydra.core.Name, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>> toPair = (java.util.function.Function<hydra.core.Name, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (name2 -> hydra.lib.flows.Bind.apply(
+        java.util.function.Function<hydra.core.Name, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>> toPair = (java.util.function.Function<hydra.core.Name, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (name2 -> hydra.lib.flows.Bind.apply(
           (requireType).apply(name2),
-          (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>>) (typ -> hydra.lib.flows.Pure.apply((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>(name2, (transform).apply(typ))))))));
+          (java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (typ -> hydra.lib.flows.Pure.apply((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(name2, (transform).apply(typ))))))));
         java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>>> deps = new java.util.concurrent.atomic.AtomicReference<>();
         deps.set((java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>>) (seeds -> (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (names -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.sets.Null.apply(seeds),
@@ -1084,7 +1084,7 @@ public interface Schemas {
             hydra.lib.flows.MapList.apply(
               toPair,
               hydra.lib.sets.ToList.apply(seeds)),
-            (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (pairs -> {
+            (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (pairs -> {
               hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Type>> newNames = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
                 names,
                 hydra.lib.maps.FromList.apply(pairs)));
@@ -1094,7 +1094,7 @@ public interface Schemas {
                   p1))),
                 (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
                 hydra.lib.lists.Map.apply(
-                  (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, java.util.Set<hydra.core.Name>>) (pair -> hydra.rewriting.Rewriting.typeDependencyNames(
+                  (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, java.util.Set<hydra.core.Name>>) (pair -> hydra.rewriting.Rewriting.typeDependencyNames(
                     withSchema,
                     hydra.lib.pairs.Second.apply(pair))),
                   pairs)));
@@ -1129,7 +1129,7 @@ public interface Schemas {
   }
   
   static java.util.List<hydra.core.Binding> typesToElements(java.util.Map<hydra.core.Name, hydra.core.Type> typeMap) {
-    java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, hydra.core.Binding> toElement = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, hydra.core.Binding>) (pair -> {
+    java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.core.Binding> toElement = (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.core.Binding>) (pair -> {
       hydra.util.Lazy<hydra.core.Name> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
       return new hydra.core.Binding(name.get(), hydra.encode.core.Core.type(hydra.lib.pairs.Second.apply(pair)), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()));
     });

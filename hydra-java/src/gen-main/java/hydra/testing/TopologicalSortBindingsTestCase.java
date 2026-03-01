@@ -17,14 +17,14 @@ public class TopologicalSortBindingsTestCase implements Serializable, Comparable
   /**
    * The bindings as a list of (name, term) pairs
    */
-  public final java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>> bindings;
+  public final java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>> bindings;
   
   /**
    * The expected groups of bindings in topological order
    */
-  public final java.util.List<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>> expected;
+  public final java.util.List<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>> expected;
   
-  public TopologicalSortBindingsTestCase (java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>> bindings, java.util.List<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>> expected) {
+  public TopologicalSortBindingsTestCase (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>> bindings, java.util.List<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>> expected) {
     this.bindings = bindings;
     this.expected = expected;
   }
@@ -62,11 +62,11 @@ public class TopologicalSortBindingsTestCase implements Serializable, Comparable
       other.expected.hashCode());
   }
   
-  public TopologicalSortBindingsTestCase withBindings(java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>> bindings) {
+  public TopologicalSortBindingsTestCase withBindings(java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>> bindings) {
     return new TopologicalSortBindingsTestCase(bindings, expected);
   }
   
-  public TopologicalSortBindingsTestCase withExpected(java.util.List<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>> expected) {
+  public TopologicalSortBindingsTestCase withExpected(java.util.List<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>> expected) {
     return new TopologicalSortBindingsTestCase(bindings, expected);
   }
 }
