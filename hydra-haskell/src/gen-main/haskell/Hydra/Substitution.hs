@@ -5,6 +5,7 @@
 module Hydra.Substitution where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -78,18 +79,77 @@ substInClassConstraints subst constraints =
           let freeVars = (Sets.toList (Rewriting.freeVariablesInType targetType))
           in (Lists.foldl (\acc2 -> \freeVar -> insertOrMerge freeVar metadata acc2) acc freeVars)) (Maps.lookup varName substMap))) Maps.empty (Maps.toList constraints))
 
--- | Apply a type substitution to an inference context
-substInContext :: (Typing.TypeSubst -> Typing.InferenceContext -> Typing.InferenceContext)
+-- | Apply a type substitution to a graph's bound types and class constraints
+substInContext :: (Typing.TypeSubst -> Graph.Graph -> Graph.Graph)
 substInContext subst cx =  
-  let newDataTypes = (Maps.map (substInTypeScheme subst) (Typing.inferenceContextDataTypes cx))
+  let newBoundTypes = (Maps.map (substInTypeScheme subst) (Graph.graphBoundTypes cx))
   in  
-    let newClassConstraints = (substInClassConstraints subst (Typing.inferenceContextClassConstraints cx))
-    in Typing.InferenceContext {
-      Typing.inferenceContextSchemaTypes = (Typing.inferenceContextSchemaTypes cx),
-      Typing.inferenceContextPrimitiveTypes = (Typing.inferenceContextPrimitiveTypes cx),
-      Typing.inferenceContextDataTypes = newDataTypes,
-      Typing.inferenceContextClassConstraints = newClassConstraints,
-      Typing.inferenceContextDebug = (Typing.inferenceContextDebug cx)}
+    let newClassConstraints = (substInClassConstraints subst (Graph.graphClassConstraints cx))
+    in Graph.Graph {
+      Graph.graphBoundTerms = (Graph.graphBoundTerms (Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms cx),
+        Graph.graphBoundTypes = newBoundTypes,
+        Graph.graphClassConstraints = (Graph.graphClassConstraints cx),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables cx),
+        Graph.graphMetadata = (Graph.graphMetadata cx),
+        Graph.graphPrimitives = (Graph.graphPrimitives cx),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables cx)})),
+      Graph.graphBoundTypes = (Graph.graphBoundTypes (Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms cx),
+        Graph.graphBoundTypes = newBoundTypes,
+        Graph.graphClassConstraints = (Graph.graphClassConstraints cx),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables cx),
+        Graph.graphMetadata = (Graph.graphMetadata cx),
+        Graph.graphPrimitives = (Graph.graphPrimitives cx),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables cx)})),
+      Graph.graphClassConstraints = newClassConstraints,
+      Graph.graphLambdaVariables = (Graph.graphLambdaVariables (Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms cx),
+        Graph.graphBoundTypes = newBoundTypes,
+        Graph.graphClassConstraints = (Graph.graphClassConstraints cx),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables cx),
+        Graph.graphMetadata = (Graph.graphMetadata cx),
+        Graph.graphPrimitives = (Graph.graphPrimitives cx),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables cx)})),
+      Graph.graphMetadata = (Graph.graphMetadata (Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms cx),
+        Graph.graphBoundTypes = newBoundTypes,
+        Graph.graphClassConstraints = (Graph.graphClassConstraints cx),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables cx),
+        Graph.graphMetadata = (Graph.graphMetadata cx),
+        Graph.graphPrimitives = (Graph.graphPrimitives cx),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables cx)})),
+      Graph.graphPrimitives = (Graph.graphPrimitives (Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms cx),
+        Graph.graphBoundTypes = newBoundTypes,
+        Graph.graphClassConstraints = (Graph.graphClassConstraints cx),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables cx),
+        Graph.graphMetadata = (Graph.graphMetadata cx),
+        Graph.graphPrimitives = (Graph.graphPrimitives cx),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables cx)})),
+      Graph.graphSchemaTypes = (Graph.graphSchemaTypes (Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms cx),
+        Graph.graphBoundTypes = newBoundTypes,
+        Graph.graphClassConstraints = (Graph.graphClassConstraints cx),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables cx),
+        Graph.graphMetadata = (Graph.graphMetadata cx),
+        Graph.graphPrimitives = (Graph.graphPrimitives cx),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables cx)})),
+      Graph.graphTypeVariables = (Graph.graphTypeVariables (Graph.Graph {
+        Graph.graphBoundTerms = (Graph.graphBoundTerms cx),
+        Graph.graphBoundTypes = newBoundTypes,
+        Graph.graphClassConstraints = (Graph.graphClassConstraints cx),
+        Graph.graphLambdaVariables = (Graph.graphLambdaVariables cx),
+        Graph.graphMetadata = (Graph.graphMetadata cx),
+        Graph.graphPrimitives = (Graph.graphPrimitives cx),
+        Graph.graphSchemaTypes = (Graph.graphSchemaTypes cx),
+        Graph.graphTypeVariables = (Graph.graphTypeVariables cx)}))}
 
 -- | Apply a term substitution to a term
 substituteInTerm :: (Typing.TermSubst -> Core.Term -> Core.Term)

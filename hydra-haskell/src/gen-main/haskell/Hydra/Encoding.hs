@@ -29,7 +29,7 @@ import qualified Data.Set as S
 
 -- | Transform a type binding into an encoder binding
 encodeBinding :: (Core.Binding -> Compute.Flow Graph.Graph Core.Binding)
-encodeBinding b = (Flows.bind Monads.getState (\cx -> Flows.bind (Monads.eitherToFlow Util.unDecodingError (Core_.type_ cx (Core.bindingTerm b))) (\typ -> Flows.pure (Core.Binding {
+encodeBinding b = (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.eitherToFlow Util.unDecodingError (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Flows.pure (Core.Binding {
   Core.bindingName = (encodeBindingName (Core.bindingName b)),
   Core.bindingTerm = (encodeType typ),
   Core.bindingType = Nothing}))))

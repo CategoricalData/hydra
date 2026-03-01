@@ -151,7 +151,7 @@ encodeFunction namespaces fun = ((\x -> case x of
       let dn = (Core.caseStatementTypeName v2) 
           def = (Core.caseStatementDefault v2)
           fields = (Core.caseStatementCases v2)
-          caseExpr = (Flows.bind (Lexical.withSchemaContext (Schemas.requireUnionType dn)) (\rt ->  
+          caseExpr = (Flows.bind (Schemas.requireUnionType dn) (\rt ->  
                   let toFieldMapEntry = (\f -> (Core.fieldTypeName f, f)) 
                       fieldMap = (Maps.fromList (Lists.map toFieldMapEntry (Core.rowTypeFields rt)))
                   in (Flows.bind (Flows.mapList (toAlt fieldMap) fields) (\ecases -> Flows.bind (Maybes.cases def (Flows.pure []) (\d -> Flows.bind (Flows.map (\x -> Ast.CaseRhs x) (encodeTerm namespaces d)) (\cs ->  
@@ -175,7 +175,7 @@ encodeFunction namespaces fun = ((\x -> case x of
                         rhsTerm = (Rewriting.simplifyTerm raw)
                         v1 = (Logic.ifElse (Rewriting.isFreeVariableInTerm (Core.Name v0) rhsTerm) Constants.ignoredVariable v0)
                     in (Flows.bind Monads.getState (\g_ufr ->  
-                      let hname = (Utils.unionFieldReference g_ufr namespaces dn fn)
+                      let hname = (Utils.unionFieldReference (Sets.fromList (Maps.keys (Graph.graphBoundTerms g_ufr))) namespaces dn fn)
                       in (Flows.bind (Maybes.cases (Maps.lookup fn fieldMap) (Flows.fail (Strings.cat [
                         "field ",
                         (Literals.showString (Core.unName fn)),
@@ -294,7 +294,7 @@ encodeTerm namespaces term =
               fn = (Core.fieldName field)
               ft = (Core.fieldTerm field)
           in (Flows.bind Monads.getState (\g_ufr2 ->  
-            let lhs = (Ast.ExpressionVariable (Utils.unionFieldReference g_ufr2 namespaces sname fn)) 
+            let lhs = (Ast.ExpressionVariable (Utils.unionFieldReference (Sets.fromList (Maps.keys (Graph.graphBoundTerms g_ufr2))) namespaces sname fn)) 
                 dflt = (Flows.map (Utils.hsapp lhs) (encode ft))
             in (Flows.bind (Schemas.requireUnionField sname fn) (\ftyp -> (\x -> case x of
               Core.TypeUnit -> (Flows.pure lhs)
@@ -449,8 +449,8 @@ moduleToHaskell mod defs = (Flows.bind (moduleToHaskellModule mod defs) (\hsmod 
   in (Flows.pure (Maps.singleton filepath s))))
 
 -- | Generate Haskell declarations for type and field name constants
-nameDecls :: (t0 -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> [Ast.DeclarationWithComments])
-nameDecls g namespaces name typ =  
+nameDecls :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> [Ast.DeclarationWithComments])
+nameDecls namespaces name typ =  
   let nm = (Core.unName name) 
       toDecl = (\n -> \pair ->  
               let k = (Pairs.first pair) 
@@ -571,14 +571,14 @@ toTypeDeclarationsFrom namespaces elementName typ =
                   Ast.recordConstructorName = (Utils.simpleName lname_),
                   Ast.recordConstructorFields = hFields})),
                 Ast.constructorWithCommentsComments = Nothing}))))
-      unionCons = (\g_ -> \lname_ -> \fieldType ->  
+      unionCons = (\boundNames_ -> \lname_ -> \fieldType ->  
               let fname = (Core.fieldTypeName fieldType) 
                   ftype = (Core.fieldTypeType fieldType)
                   deconflict = (\name ->  
                           let tname = (Names.unqualifyName (Module.QualifiedName {
                                   Module.qualifiedNameNamespace = (Just (Pairs.first (Module.namespacesFocus namespaces))),
                                   Module.qualifiedNameLocal = name}))
-                          in (Logic.ifElse (Maybes.isJust (Lists.find (\b -> Equality.equal (Core.bindingName b) tname) (Graph.graphElements g_))) (deconflict (Strings.cat2 name "_")) name))
+                          in (Logic.ifElse (Sets.member tname boundNames_) (deconflict (Strings.cat2 name "_")) name))
               in (Flows.bind (Annotations.getTypeDescription ftype) (\comments ->  
                 let nm = (deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname))))
                 in (Flows.bind (Logic.ifElse (Equality.equal (Rewriting.deannotateType ftype) Core.TypeUnit) (Flows.pure []) (Flows.bind (adaptTypeToHaskellAndEncode namespaces ftype) (\htype -> Flows.pure [
@@ -593,7 +593,7 @@ toTypeDeclarationsFrom namespaces elementName typ =
             "Ord",
             "Read",
             "Show"]) [])) 
-        unpackResult = (Utils.unpackForallType g typ)
+        unpackResult = (Utils.unpackForallType typ)
         vars = (Pairs.first unpackResult)
         t_ = (Pairs.second unpackResult)
         hd = (declHead hname (Lists.reverse vars))
@@ -606,7 +606,7 @@ toTypeDeclarationsFrom namespaces elementName typ =
           cons],
         Ast.dataDeclarationDeriving = [
           deriv]}))))
-      Core.TypeUnion v1 -> (Flows.bind (Flows.mapList (unionCons g lname) (Core.rowTypeFields v1)) (\cons -> Flows.pure (Ast.DeclarationData (Ast.DataDeclaration {
+      Core.TypeUnion v1 -> (Flows.bind (Flows.mapList (unionCons (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) lname) (Core.rowTypeFields v1)) (\cons -> Flows.pure (Ast.DeclarationData (Ast.DataDeclaration {
         Ast.dataDeclarationKeyword = Ast.DataOrNewtypeData,
         Ast.dataDeclarationContext = [],
         Ast.dataDeclarationHead = hd,
@@ -630,7 +630,7 @@ toTypeDeclarationsFrom namespaces elementName typ =
       let mainDecl = Ast.DeclarationWithComments {
               Ast.declarationWithCommentsBody = decl,
               Ast.declarationWithCommentsComments = comments} 
-          nameDecls_ = (nameDecls g namespaces elementName typ)
+          nameDecls_ = (nameDecls namespaces elementName typ)
       in (Flows.pure (Lists.concat [
         [
           mainDecl],

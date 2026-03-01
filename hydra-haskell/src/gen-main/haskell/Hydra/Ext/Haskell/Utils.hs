@@ -174,8 +174,8 @@ typeNameForRecord sname =
   in (Lists.last parts)
 
 -- | Generate a Haskell name for a union variant constructor, with disambiguation
-unionFieldReference :: (Graph.Graph -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name)
-unionFieldReference g namespaces sname fname =  
+unionFieldReference :: (S.Set Core.Name -> Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Name -> Ast.Name)
+unionFieldReference boundNames namespaces sname fname =  
   let fnameStr = (Core.unName fname) 
       qname = (Names.qualifyName sname)
       ns = (Module.qualifiedNameNamespace qname)
@@ -186,7 +186,7 @@ unionFieldReference g namespaces sname fname =
               let tname = (Names.unqualifyName (Module.QualifiedName {
                       Module.qualifiedNameNamespace = ns,
                       Module.qualifiedNameLocal = name}))
-              in (Logic.ifElse (Maybes.isJust (Lists.find (\b -> Equality.equal (Core.bindingName b) tname) (Graph.graphElements g))) (deconflict (Strings.cat2 name "_")) name))
+              in (Logic.ifElse (Sets.member tname boundNames) (deconflict (Strings.cat2 name "_")) name))
       nm = (deconflict (Strings.cat2 capitalizedTypeName capitalizedFieldName))
       qualName = Module.QualifiedName {
               Module.qualifiedNameNamespace = ns,
@@ -195,12 +195,12 @@ unionFieldReference g namespaces sname fname =
   in (elementReference namespaces unqualName)
 
 -- | Unpack nested forall types into a list of type variables and the inner type
-unpackForallType :: (t0 -> Core.Type -> ([Core.Name], Core.Type))
-unpackForallType cx t = ((\x -> case x of
+unpackForallType :: (Core.Type -> ([Core.Name], Core.Type))
+unpackForallType t = ((\x -> case x of
   Core.TypeForall v1 ->  
     let v = (Core.forallTypeParameter v1) 
         tbody = (Core.forallTypeBody v1)
-        recursiveResult = (unpackForallType cx tbody)
+        recursiveResult = (unpackForallType tbody)
         vars = (Pairs.first recursiveResult)
         finalType = (Pairs.second recursiveResult)
     in (Lists.cons v vars, finalType)

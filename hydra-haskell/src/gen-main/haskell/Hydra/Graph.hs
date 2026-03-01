@@ -13,37 +13,45 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph
+-- | A graph, or lexical environment which binds names to terms, types, primitives, and metadata
 data Graph = 
   Graph {
-    -- | All of the elements in the graph
-    graphElements :: [Core.Binding],
-    -- | The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)
-    graphEnvironment :: (M.Map Core.Name (Maybe Core.Term)),
-    -- | The typing environment of the graph
-    graphTypes :: (M.Map Core.Name Core.TypeScheme),
-    -- | The body of the term which generated this context
-    graphBody :: Core.Term,
-    -- | All supported primitive constants and functions, by name
+    -- | The terms bound by all term variables in scope
+    graphBoundTerms :: (M.Map Core.Name Core.Term),
+    -- | The type schemes of all term variables in scope
+    graphBoundTypes :: (M.Map Core.Name Core.TypeScheme),
+    -- | A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered.
+    graphClassConstraints :: (M.Map Core.Name Core.TypeVariableMetadata),
+    -- | The set of term variables introduced by specifically by lambdas
+    graphLambdaVariables :: (S.Set Core.Name),
+    -- | Any additional metadata bound to term variables in scope
+    graphMetadata :: (M.Map Core.Name Core.Term),
+    -- | All primitive functions and constants by name
     graphPrimitives :: (M.Map Core.Name Primitive),
-    -- | The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.
-    graphSchema :: (Maybe Graph)}
+    -- | All schema types (type schemes) in scope
+    graphSchemaTypes :: (M.Map Core.Name Core.TypeScheme),
+    -- | The set of type variables introduced specifically by type lambdas
+    graphTypeVariables :: (S.Set Core.Name)}
 
 _Graph = (Core.Name "hydra.graph.Graph")
 
-_Graph_elements = (Core.Name "elements")
+_Graph_boundTerms = (Core.Name "boundTerms")
 
-_Graph_environment = (Core.Name "environment")
+_Graph_boundTypes = (Core.Name "boundTypes")
 
-_Graph_types = (Core.Name "types")
+_Graph_classConstraints = (Core.Name "classConstraints")
 
-_Graph_body = (Core.Name "body")
+_Graph_lambdaVariables = (Core.Name "lambdaVariables")
+
+_Graph_metadata = (Core.Name "metadata")
 
 _Graph_primitives = (Core.Name "primitives")
 
-_Graph_schema = (Core.Name "schema")
+_Graph_schemaTypes = (Core.Name "schemaTypes")
 
--- | A built-in function
+_Graph_typeVariables = (Core.Name "typeVariables")
+
+-- | A built-in function or constant
 data Primitive = 
   Primitive {
     -- | The unique name of the primitive function

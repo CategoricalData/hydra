@@ -1227,33 +1227,43 @@ typesByName = (M.fromList [
       Core.rowTypeTypeName = (Core.Name "hydra.graph.Graph"),
       Core.rowTypeFields = [
         Core.FieldType {
-          Core.fieldTypeName = (Core.Name "elements"),
-          Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-            Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Binding"))),
-            Core.annotatedTypeAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "All of the elements in the graph")))])}))},
-        Core.FieldType {
-          Core.fieldTypeName = (Core.Name "environment"),
+          Core.fieldTypeName = (Core.Name "boundTerms"),
           Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
             Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
               Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
-              Core.mapTypeValues = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.core.Term")))})),
+              Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.annotatedTypeAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)")))])}))},
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The terms bound by all term variables in scope")))])}))},
         Core.FieldType {
-          Core.fieldTypeName = (Core.Name "types"),
+          Core.fieldTypeName = (Core.Name "boundTypes"),
           Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
             Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
               Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
               Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))})),
             Core.annotatedTypeAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The typing environment of the graph")))])}))},
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The type schemes of all term variables in scope")))])}))},
         Core.FieldType {
-          Core.fieldTypeName = (Core.Name "body"),
+          Core.fieldTypeName = (Core.Name "classConstraints"),
           Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-            Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+            Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
+              Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+              Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeVariableMetadata"))})),
             Core.annotatedTypeAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The body of the term which generated this context")))])}))},
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered.")))])}))},
+        Core.FieldType {
+          Core.fieldTypeName = (Core.Name "lambdaVariables"),
+          Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+            Core.annotatedTypeBody = (Core.TypeSet (Core.TypeVariable (Core.Name "hydra.core.Name"))),
+            Core.annotatedTypeAnnotation = (M.fromList [
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The set of term variables introduced by specifically by lambdas")))])}))},
+        Core.FieldType {
+          Core.fieldTypeName = (Core.Name "metadata"),
+          Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+            Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
+              Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+              Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+            Core.annotatedTypeAnnotation = (M.fromList [
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Any additional metadata bound to term variables in scope")))])}))},
         Core.FieldType {
           Core.fieldTypeName = (Core.Name "primitives"),
           Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1261,15 +1271,23 @@ typesByName = (M.fromList [
               Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
               Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.graph.Primitive"))})),
             Core.annotatedTypeAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "All supported primitive constants and functions, by name")))])}))},
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "All primitive functions and constants by name")))])}))},
         Core.FieldType {
-          Core.fieldTypeName = (Core.Name "schema"),
+          Core.fieldTypeName = (Core.Name "schemaTypes"),
           Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-            Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.graph.Graph"))),
+            Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
+              Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.core.Name")),
+              Core.mapTypeValues = (Core.TypeVariable (Core.Name "hydra.core.TypeScheme"))})),
             Core.annotatedTypeAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph.")))])}))}]})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "All schema types (type schemes) in scope")))])}))},
+        Core.FieldType {
+          Core.fieldTypeName = (Core.Name "typeVariables"),
+          Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+            Core.annotatedTypeBody = (Core.TypeSet (Core.TypeVariable (Core.Name "hydra.core.Name"))),
+            Core.annotatedTypeAnnotation = (M.fromList [
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The set of type variables introduced specifically by type lambdas")))])}))}]})),
     Core.annotatedTypeAnnotation = (M.fromList [
-      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph")))])}))),
+      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A graph, or lexical environment which binds names to terms, types, primitives, and metadata")))])}))),
   (Core.Name "hydra.graph.Primitive", (Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeBody = (Core.TypeRecord (Core.RowType {
       Core.rowTypeTypeName = (Core.Name "hydra.graph.Primitive"),
@@ -1299,7 +1317,7 @@ typesByName = (M.fromList [
             Core.annotatedTypeAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A concrete implementation of the primitive function")))])}))}]})),
     Core.annotatedTypeAnnotation = (M.fromList [
-      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A built-in function")))])}))),
+      (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A built-in function or constant")))])}))),
   (Core.Name "hydra.graph.TermCoder", (Core.TypeAnnotated (Core.AnnotatedType {
     Core.annotatedTypeBody = (Core.TypeForall (Core.ForallType {
       Core.forallTypeParameter = (Core.Name "a"),
