@@ -21,7 +21,6 @@ import qualified Hydra.Ext.Java.Syntax as Syntax
 import qualified Hydra.Ext.Java.Utils as Utils_
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Inference as Inference
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
@@ -336,7 +335,7 @@ insertBranchVar name env =
       Helpers.aliasesTrustedTypeVars = (Helpers.aliasesTrustedTypeVars aliases),
       Helpers.aliasesMethodCodomain = (Helpers.aliasesMethodCodomain aliases),
       Helpers.aliasesThunkedVars = (Helpers.aliasesThunkedVars aliases)},
-    Helpers.javaEnvironmentTypeContext = (Helpers.javaEnvironmentTypeContext env)}
+    Helpers.javaEnvironmentGraph = (Helpers.javaEnvironmentGraph env)}
 
 getCodomain :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph Core.Type)
 getCodomain ann = (Flows.map (\ft -> Core.functionTypeCodomain ft) (getFunctionType ann))
@@ -519,13 +518,13 @@ encodeType aliases boundVars t =
       _ -> (Flows.fail (Strings.cat2 "can't encode unsupported type in Java: " (Core___.type_ t)))) (Rewriting.deannotateType t))
 
 encodeType_resolveIfTypedef :: (t0 -> S.Set Core.Name -> S.Set Core.Name -> Core.Name -> Compute.Flow Graph.Graph (Maybe Core.Type))
-encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name = (Logic.ifElse (Logic.or (Sets.member name boundVars) (Sets.member name inScopeTypeParams)) (Flows.pure Nothing) (Logic.ifElse (isLambdaBoundVariable name) (Flows.pure Nothing) (Flows.bind Monads.getState (\g -> Flows.bind (Schemas.graphToInferenceContext g) (\ix ->  
-  let schemaTypes = (Typing.inferenceContextSchemaTypes ix)
+encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name = (Logic.ifElse (Logic.or (Sets.member name boundVars) (Sets.member name inScopeTypeParams)) (Flows.pure Nothing) (Logic.ifElse (isLambdaBoundVariable name) (Flows.pure Nothing) (Flows.bind Monads.getState (\g ->  
+  let schemaTypes = (Graph.graphSchemaTypes g)
   in (Maybes.cases (Maps.lookup name schemaTypes) (Flows.pure Nothing) (\ts -> Logic.ifElse (Logic.not (Lists.null (Core.typeSchemeVariables ts))) (Flows.pure Nothing) ((\x -> case x of
     Core.TypeRecord _ -> (Flows.pure Nothing)
     Core.TypeUnion _ -> (Flows.pure Nothing)
     Core.TypeWrap _ -> (Flows.pure Nothing)
-    _ -> (Flows.pure (Just (Core.typeSchemeType ts)))) (Rewriting.deannotateType (Core.typeSchemeType ts))))))))))
+    _ -> (Flows.pure (Just (Core.typeSchemeType ts)))) (Rewriting.deannotateType (Core.typeSchemeType ts)))))))))
 
 javaTypeArgumentsForNamedType :: (Core.Name -> Compute.Flow Graph.Graph [Syntax.TypeArgument])
 javaTypeArgumentsForNamedType tname = (Flows.map (\typ -> Lists.map (\tp_ -> Utils_.typeParameterToTypeArgument tp_) (javaTypeParametersForType typ)) (Schemas.requireType tname))
@@ -740,22 +739,22 @@ buildTypeSubst_go svs st at =
       _ -> (goSub (Core.forallTypeBody v1) at)) at)
     _ -> Maps.empty) st)
 
-javaEnvGetTC :: (Helpers.JavaEnvironment -> Typing.TypeContext)
-javaEnvGetTC env = (Helpers.javaEnvironmentTypeContext env)
+javaEnvGetGraph :: (Helpers.JavaEnvironment -> Graph.Graph)
+javaEnvGetGraph env = (Helpers.javaEnvironmentGraph env)
 
-javaEnvSetTC :: (Typing.TypeContext -> Helpers.JavaEnvironment -> Helpers.JavaEnvironment)
-javaEnvSetTC tc env = Helpers.JavaEnvironment {
+javaEnvSetGraph :: (Graph.Graph -> Helpers.JavaEnvironment -> Helpers.JavaEnvironment)
+javaEnvSetGraph g env = Helpers.JavaEnvironment {
   Helpers.javaEnvironmentAliases = (Helpers.javaEnvironmentAliases env),
-  Helpers.javaEnvironmentTypeContext = tc}
+  Helpers.javaEnvironmentGraph = g}
 
 analyzeJavaFunction :: (Helpers.JavaEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.JavaEnvironment))
-analyzeJavaFunction = (CoderUtils.analyzeFunctionTerm javaEnvGetTC javaEnvSetTC)
+analyzeJavaFunction = (CoderUtils.analyzeFunctionTerm javaEnvGetGraph javaEnvSetGraph)
 
 analyzeJavaFunctionNoInfer :: (Helpers.JavaEnvironment -> Core.Term -> Compute.Flow t0 (Typing.FunctionStructure Helpers.JavaEnvironment))
-analyzeJavaFunctionNoInfer = (CoderUtils.analyzeFunctionTermNoInfer javaEnvGetTC javaEnvSetTC)
+analyzeJavaFunctionNoInfer = (CoderUtils.analyzeFunctionTermNoInfer javaEnvGetGraph javaEnvSetGraph)
 
 withLambda :: (Helpers.JavaEnvironment -> Core.Lambda -> (Helpers.JavaEnvironment -> t0) -> t0)
-withLambda env lam k = (Schemas.withLambdaContext javaEnvGetTC javaEnvSetTC env lam (\env1 ->  
+withLambda env lam k = (Schemas.withLambdaContext javaEnvGetGraph javaEnvSetGraph env lam (\env1 ->  
   let aliases = (Helpers.javaEnvironmentAliases env1)
   in  
     let aliases2 = Helpers.Aliases {
@@ -775,11 +774,11 @@ withLambda env lam k = (Schemas.withLambdaContext javaEnvGetTC javaEnvSetTC env 
     in  
       let env2 = Helpers.JavaEnvironment {
               Helpers.javaEnvironmentAliases = aliases2,
-              Helpers.javaEnvironmentTypeContext = (Helpers.javaEnvironmentTypeContext env1)}
+              Helpers.javaEnvironmentGraph = (Helpers.javaEnvironmentGraph env1)}
       in (k env2)))
 
 withTypeLambda :: (Helpers.JavaEnvironment -> Core.TypeLambda -> (Helpers.JavaEnvironment -> t0) -> t0)
-withTypeLambda = (Schemas.withTypeLambdaContext javaEnvGetTC javaEnvSetTC)
+withTypeLambda = (Schemas.withTypeLambdaContext javaEnvGetGraph javaEnvSetGraph)
 
 propagateType :: (Core.Type -> Core.Term -> Core.Term)
 propagateType typ term =  
@@ -1144,7 +1143,7 @@ correctTypeAppsWithArgs schemeVars fallbackTypeApps schemeType args =
               in (Logic.ifElse domsMatch (Flows.pure fallbackTypeApps) (Flows.pure (resolveTypeApps schemeVars fallbackTypeApps (buildArgSubst schemeVarSet schemeDoms argTypes)))))))
 
 correctTypeApps :: (t0 -> Core.Name -> [Core.Term] -> [Core.Type] -> Compute.Flow Graph.Graph [Core.Type])
-correctTypeApps tc name args fallbackTypeApps = (Flows.bind (Lexical.dereferenceElement name) (\mel -> Maybes.cases mel (Flows.pure fallbackTypeApps) (\el -> Maybes.cases (Core.bindingType el) (Flows.pure fallbackTypeApps) (\ts ->  
+correctTypeApps g name args fallbackTypeApps = (Flows.bind (Lexical.dereferenceElement name) (\mel -> Maybes.cases mel (Flows.pure fallbackTypeApps) (\el -> Maybes.cases (Core.bindingType el) (Flows.pure fallbackTypeApps) (\ts ->  
   let schemeType = (Core.typeSchemeType ts)
   in  
     let allSchemeVars = (Lists.filter (\v -> isSimpleName v) (Core.typeSchemeVariables ts))
@@ -1609,16 +1608,16 @@ constantDecl javaName aliases name =
           Syntax.FieldModifierStatic,
           Syntax.FieldModifierFinal] 
       nameName = (Utils_.nameToJavaName aliases (Core.Name "hydra.core.Name"))
-  in (Flows.bind Monads.getState (\g -> Flows.bind (Schemas.graphToTypeContext g) (\tc ->  
+  in (Flows.bind Monads.getState (\g ->  
     let env = Helpers.JavaEnvironment {
             Helpers.javaEnvironmentAliases = aliases,
-            Helpers.javaEnvironmentTypeContext = tc}
+            Helpers.javaEnvironmentGraph = g}
     in (Flows.bind (encodeType aliases Sets.empty (Core.TypeVariable (Core.Name "hydra.core.Name"))) (\jt -> Flows.bind (encodeTerm env (Core.TermLiteral (Core.LiteralString (Core.unName name)))) (\arg ->  
       let init = (Syntax.VariableInitializerExpression (Utils_.javaConstructorCall (Utils_.javaConstructorName nameName Nothing) [
               arg] Nothing))
       in  
         let var = (Utils_.javaVariableDeclarator (Syntax.Identifier javaName) (Just init))
-        in (Flows.pure (noComment (Utils_.javaMemberField mods jt var)))))))))
+        in (Flows.pure (noComment (Utils_.javaMemberField mods jt var))))))))
 
 constantDeclForFieldType :: (Helpers.Aliases -> Core.FieldType -> Compute.Flow Graph.Graph Syntax.ClassBodyDeclarationWithComments)
 constantDeclForFieldType aliases ftyp =  
@@ -1653,11 +1652,11 @@ takeTypeArgs label n tyapps = (Logic.ifElse (Equality.lt (Lists.length tyapps) n
   ", found too few"]) "takeTypeArgs") (Flows.mapList (\jt -> Flows.bind (Utils_.javaTypeToJavaReferenceType jt) (\rt -> Flows.pure (Syntax.TypeArgumentReference rt))) (Lists.take n tyapps)))
 
 isFieldUnitType :: (Core.Name -> Core.Name -> Compute.Flow Graph.Graph Bool)
-isFieldUnitType typeName fieldName = (Flows.bind Monads.getState (\g -> Flows.bind (Schemas.graphToInferenceContext g) (\ix ->  
-  let schemaTypes = (Typing.inferenceContextSchemaTypes ix)
+isFieldUnitType typeName fieldName = (Flows.bind Monads.getState (\g ->  
+  let schemaTypes = (Graph.graphSchemaTypes g)
   in (Maybes.cases (Maps.lookup typeName schemaTypes) (Flows.pure False) (\ts -> (\x -> case x of
     Core.TypeUnion v1 -> (Flows.pure (Maybes.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) (Core.rowTypeFields v1)) False (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft)))))
-    _ -> (Flows.pure False)) (Rewriting.deannotateType (Core.typeSchemeType ts)))))))
+    _ -> (Flows.pure False)) (Rewriting.deannotateType (Core.typeSchemeType ts))))))
 
 encodeTerm :: (Helpers.JavaEnvironment -> Core.Term -> Compute.Flow Graph.Graph Syntax.Expression)
 encodeTerm env term = (encodeTermInternal env [] [] term)
@@ -1665,7 +1664,7 @@ encodeTerm env term = (encodeTermInternal env [] [] term)
 encodeTermInternal :: (Helpers.JavaEnvironment -> [M.Map Core.Name Core.Term] -> [Syntax.Type] -> Core.Term -> Compute.Flow Graph.Graph Syntax.Expression)
 encodeTermInternal env anns tyapps term =  
   let aliases = (Helpers.javaEnvironmentAliases env) 
-      tc = (Helpers.javaEnvironmentTypeContext env)
+      g = (Helpers.javaEnvironmentGraph env)
       encode = (\t -> encodeTerm env t)
   in ((\x -> case x of
     Core.TermAnnotated v1 -> (encodeTermInternal env (Lists.cons (Core.annotatedTermAnnotation v1) anns) tyapps (Core.annotatedTermBody v1))
@@ -1675,7 +1674,7 @@ encodeTermInternal env anns tyapps term =
       expr])))) v1))
     Core.TermFunction v1 -> (Monads.withTrace (Strings.cat2 "encode function (" (Strings.cat2 (Core___.function v1) ")")) ( 
       let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
-      in (Flows.bind (Annotations.getType combinedAnns) (\mt -> Flows.bind (Maybes.cases mt (Maybes.cases (tryInferFunctionType v1) (CoderUtils.tryTypeOf "4" tc term) (\inferredType -> Flows.pure inferredType)) (\t -> Flows.pure t)) (\typ -> (\x -> case x of
+      in (Flows.bind (Annotations.getType combinedAnns) (\mt -> Flows.bind (Maybes.cases mt (Maybes.cases (tryInferFunctionType v1) (CoderUtils.tryTypeOf "4" g term) (\inferredType -> Flows.pure inferredType)) (\t -> Flows.pure t)) (\typ -> (\x -> case x of
         Core.TypeFunction v2 -> (encodeFunction env (Core.functionTypeDomain v2) (Core.functionTypeCodomain v2) v1)
         _ -> (encodeNullaryConstant env typ v1)) (Rewriting.deannotateType typ))))))
     Core.TermLet v1 -> (Monads.withTrace "encode let as block" ( 
@@ -1698,10 +1697,10 @@ encodeTermInternal env anns tyapps term =
                   in  
                     let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
                     in  
-                      let tc2 = (Helpers.javaEnvironmentTypeContext env2)
+                      let g2 = (Helpers.javaEnvironmentGraph env2)
                       in  
                         let aliases2 = (Helpers.javaEnvironmentAliases env2)
-                        in (Flows.bind (Annotations.getType combinedAnns) (\mt -> Flows.bind (Maybes.cases mt (CoderUtils.tryTypeOf "let-body" tc2 body) (\t -> Flows.pure t)) (\letType -> Flows.bind (encodeType aliases2 Sets.empty letType) (\jLetType -> Flows.bind (Utils_.javaTypeToJavaReferenceType jLetType) (\rt ->  
+                        in (Flows.bind (Annotations.getType combinedAnns) (\mt -> Flows.bind (Maybes.cases mt (CoderUtils.tryTypeOf "let-body" g2 body) (\t -> Flows.pure t)) (\letType -> Flows.bind (encodeType aliases2 Sets.empty letType) (\jLetType -> Flows.bind (Utils_.javaTypeToJavaReferenceType jLetType) (\rt ->  
                           let supplierRt = (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Utils_.javaClassType [
                                   rt] Names.javaUtilFunctionPackageName "Supplier")))
                           in  
@@ -1770,7 +1769,7 @@ encodeTermInternal env anns tyapps term =
         let body = (Core.typeApplicationTermBody v1)
         in (Flows.bind (encodeType aliases Sets.empty atyp) (\jatyp ->  
           let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
-          in (Flows.bind (Annotations.getType combinedAnns) (\mtyp -> Flows.bind (Maybes.cases mtyp (CoderUtils.tryTypeOf "5" tc term) (\t -> Flows.pure t)) (\typ ->  
+          in (Flows.bind (Annotations.getType combinedAnns) (\mtyp -> Flows.bind (Maybes.cases mtyp (CoderUtils.tryTypeOf "5" g term) (\t -> Flows.pure t)) (\typ ->  
             let collected0 = (collectTypeApps0 body [
                     atyp])
             in  
@@ -1810,7 +1809,7 @@ encodeApplication :: (Helpers.JavaEnvironment -> Core.Application -> Compute.Flo
 encodeApplication env app =  
   let aliases = (Helpers.javaEnvironmentAliases env)
   in  
-    let tc = (Helpers.javaEnvironmentTypeContext env)
+    let g = (Helpers.javaEnvironmentGraph env)
     in  
       let gathered = (CoderUtils.gatherArgsWithTypeApps (Core.TermApplication app) [] [])
       in  
@@ -1819,7 +1818,7 @@ encodeApplication env app =
           let args = (Pairs.first (Pairs.second gathered))
           in  
             let typeApps = (Pairs.second (Pairs.second gathered))
-            in (Flows.bind (Annotations.getType (Annotations.termAnnotationInternal fun)) (\mfunTyp -> Flows.bind (Maybes.cases mfunTyp (Flows.withDefault (Core.TypeVariable (Core.Name "unknown")) (CoderUtils.tryTypeOf "1" tc fun)) (\t -> Flows.pure t)) (\funTyp ->  
+            in (Flows.bind (Annotations.getType (Annotations.termAnnotationInternal fun)) (\mfunTyp -> Flows.bind (Maybes.cases mfunTyp (Flows.withDefault (Core.TypeVariable (Core.Name "unknown")) (CoderUtils.tryTypeOf "1" g fun)) (\t -> Flows.pure t)) (\funTyp ->  
               let arity = (Arity.typeArity funTyp)
               in  
                 let deannotatedFun = (Rewriting.deannotateTerm fun)
@@ -1837,8 +1836,8 @@ encodeApplication env app =
                         in  
                           let rargs = (Lists.drop arity annotatedArgs)
                           in (Flows.bind (functionCall env True v2 hargs []) (\initialCall -> Flows.foldl (\acc -> \h -> Flows.bind (encodeTerm env h) (\jarg -> Flows.pure (applyJavaArg acc jarg))) initialCall rargs))
-                      _ -> (encodeApplication_fallback env aliases tc typeApps (Core.applicationFunction app) (Core.applicationArgument app))) v1)
-                    Core.TermVariable v1 -> (Logic.ifElse (Logic.and (isRecursiveVariable aliases v1) (Logic.not (isLambdaBoundIn v1 (Helpers.aliasesLambdaVars aliases)))) (encodeApplication_fallback env aliases tc typeApps (Core.applicationFunction app) (Core.applicationArgument app)) (Flows.bind (classifyDataReference v1) (\symClass ->  
+                      _ -> (encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app))) v1)
+                    Core.TermVariable v1 -> (Logic.ifElse (Logic.and (isRecursiveVariable aliases v1) (Logic.not (isLambdaBoundIn v1 (Helpers.aliasesLambdaVars aliases)))) (encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app)) (Flows.bind (classifyDataReference v1) (\symClass ->  
                       let methodArity = ((\x -> case x of
                               Helpers.JavaSymbolClassHoistedLambda v2 -> v2
                               _ -> arity) symClass)
@@ -1854,18 +1853,18 @@ encodeApplication env app =
                                 let filteredTypeApps = (Logic.ifElse (Logic.or (Sets.null trusted) (Sets.null inScope)) [] ( 
                                         let allVars = (Sets.unions (Lists.map (\t -> collectTypeVars t) typeApps))
                                         in (Logic.ifElse (Logic.not (Sets.null (Sets.difference allVars inScope))) [] (Logic.ifElse (Sets.null (Sets.difference allVars trusted)) typeApps []))))
-                                in (Flows.bind (Logic.ifElse (Lists.null filteredTypeApps) (Flows.pure []) (correctTypeApps tc v1 hargs filteredTypeApps)) (\safeTypeApps -> Flows.bind (filterPhantomTypeArgs v1 safeTypeApps) (\finalTypeApps -> Flows.bind (functionCall env False v1 hargs finalTypeApps) (\initialCall -> Flows.foldl (\acc -> \h -> Flows.bind (encodeTerm env h) (\jarg -> Flows.pure (applyJavaArg acc jarg))) initialCall rargs)))))))
-                    _ -> (encodeApplication_fallback env aliases tc typeApps (Core.applicationFunction app) (Core.applicationArgument app))) deannotatedFun)))))
+                                in (Flows.bind (Logic.ifElse (Lists.null filteredTypeApps) (Flows.pure []) (correctTypeApps g v1 hargs filteredTypeApps)) (\safeTypeApps -> Flows.bind (filterPhantomTypeArgs v1 safeTypeApps) (\finalTypeApps -> Flows.bind (functionCall env False v1 hargs finalTypeApps) (\initialCall -> Flows.foldl (\acc -> \h -> Flows.bind (encodeTerm env h) (\jarg -> Flows.pure (applyJavaArg acc jarg))) initialCall rargs)))))))
+                    _ -> (encodeApplication_fallback env aliases g typeApps (Core.applicationFunction app) (Core.applicationArgument app))) deannotatedFun)))))
 
-encodeApplication_fallback :: (Helpers.JavaEnvironment -> Helpers.Aliases -> Typing.TypeContext -> [Core.Type] -> Core.Term -> Core.Term -> Compute.Flow Graph.Graph Syntax.Expression)
-encodeApplication_fallback env aliases tc typeApps lhs rhs = (Monads.withTrace "fallback" (Flows.bind (Annotations.getType (Annotations.termAnnotationInternal lhs)) (\mt -> Flows.bind (Maybes.cases mt (CoderUtils.tryTypeOf "2" tc lhs) (\typ -> Flows.pure typ)) (\t -> (\x -> case x of
+encodeApplication_fallback :: (Helpers.JavaEnvironment -> Helpers.Aliases -> Graph.Graph -> [Core.Type] -> Core.Term -> Core.Term -> Compute.Flow Graph.Graph Syntax.Expression)
+encodeApplication_fallback env aliases g typeApps lhs rhs = (Monads.withTrace "fallback" (Flows.bind (Annotations.getType (Annotations.termAnnotationInternal lhs)) (\mt -> Flows.bind (Maybes.cases mt (CoderUtils.tryTypeOf "2" g lhs) (\typ -> Flows.pure typ)) (\t -> (\x -> case x of
   Core.TypeFunction v1 ->  
     let dom = (Core.functionTypeDomain v1)
     in  
       let cod = (Core.functionTypeCodomain v1)
       in ((\x -> case x of
         Core.TermFunction v2 -> ((\x -> case x of
-          Core.FunctionElimination v3 -> (Flows.bind (encodeTerm env rhs) (\jarg -> Flows.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Flows.pure dom) (Flows.bind (Annotations.getType (Annotations.termAnnotationInternal rhs)) (\mrt -> Maybes.cases mrt (Flows.bind (CoderUtils.tryTypeOf "dom-enrich" tc rhs) (\rt -> Flows.pure (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))) (\rt -> Flows.pure (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))))) (\enrichedDom -> encodeElimination env (Just jarg) enrichedDom cod v3)))
+          Core.FunctionElimination v3 -> (Flows.bind (encodeTerm env rhs) (\jarg -> Flows.bind (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType dom))) (Flows.pure dom) (Flows.bind (Annotations.getType (Annotations.termAnnotationInternal rhs)) (\mrt -> Maybes.cases mrt (Flows.bind (CoderUtils.tryTypeOf "dom-enrich" g rhs) (\rt -> Flows.pure (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))) (\rt -> Flows.pure (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType rt))) rt dom))))) (\enrichedDom -> encodeElimination env (Just jarg) enrichedDom cod v3)))
           _ -> (Flows.bind (encodeTerm env lhs) (\jfun -> Flows.bind (encodeTerm env rhs) (\jarg -> Flows.pure (applyJavaArg jfun jarg))))) v2)
         _ -> (Flows.bind (encodeTerm env lhs) (\jfun -> Flows.bind (encodeTerm env rhs) (\jarg -> Flows.pure (applyJavaArg jfun jarg))))) (Rewriting.deannotateTerm lhs))
   _ -> (Flows.bind (encodeTerm env lhs) (\jfun -> Flows.bind (encodeTerm env rhs) (\jarg -> Flows.pure (applyJavaArg jfun jarg))))) (Rewriting.deannotateTypeParameters (Rewriting.deannotateType t))))))
@@ -2160,12 +2159,12 @@ encodeElimination env marg dom cod elm =
           in (Utils_.javaLambda wVar (withArg wArg))) (\jarg -> withArg jarg)))
     _ -> (Monads.unexpected "elimination case" "encodeElimination")) elm)
 
-toDeclInit :: (Helpers.Aliases -> Typing.TypeContext -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Compute.Flow Graph.Graph (Maybe Syntax.BlockStatement))
-toDeclInit aliasesExt tcExt recursiveVars flatBindings name = (Logic.ifElse (Sets.member name recursiveVars) ( 
+toDeclInit :: (Helpers.Aliases -> Graph.Graph -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Compute.Flow Graph.Graph (Maybe Syntax.BlockStatement))
+toDeclInit aliasesExt gExt recursiveVars flatBindings name = (Logic.ifElse (Sets.member name recursiveVars) ( 
   let binding = (Lists.head (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings))
   in  
     let value = (Core.bindingTerm binding)
-    in (Flows.bind (Maybes.cases (Core.bindingType binding) (CoderUtils.tryTypeOf "6" tcExt value) (\ts -> Flows.pure (Core.typeSchemeType ts))) (\typ -> Flows.bind (encodeType aliasesExt Sets.empty typ) (\jtype ->  
+    in (Flows.bind (Maybes.cases (Core.bindingType binding) (CoderUtils.tryTypeOf "6" gExt value) (\ts -> Flows.pure (Core.typeSchemeType ts))) (\typ -> Flows.bind (encodeType aliasesExt Sets.empty typ) (\jtype ->  
       let id = (Utils_.variableToJavaIdentifier name)
       in  
         let arid = (Syntax.Identifier "java.util.concurrent.atomic.AtomicReference")
@@ -2194,12 +2193,12 @@ toDeclInit aliasesExt tcExt recursiveVars flatBindings name = (Logic.ifElse (Set
                             rt] (Just pkg) "AtomicReference")
                     in (Flows.pure (Just (Utils_.variableDeclarationStatement aliasesExt artype id body))))))))) (Flows.pure Nothing))
 
-toDeclStatement :: (Helpers.JavaEnvironment -> Helpers.Aliases -> Typing.TypeContext -> S.Set Core.Name -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Compute.Flow Graph.Graph Syntax.BlockStatement)
-toDeclStatement envExt aliasesExt tcExt recursiveVars thunkedVars flatBindings name =  
+toDeclStatement :: (Helpers.JavaEnvironment -> Helpers.Aliases -> Graph.Graph -> S.Set Core.Name -> S.Set Core.Name -> [Core.Binding] -> Core.Name -> Compute.Flow Graph.Graph Syntax.BlockStatement)
+toDeclStatement envExt aliasesExt gExt recursiveVars thunkedVars flatBindings name =  
   let binding = (Lists.head (Lists.filter (\b -> Equality.equal (Core.bindingName b) name) flatBindings))
   in  
     let value = (Core.bindingTerm binding)
-    in (Flows.bind (Maybes.cases (Core.bindingType binding) (CoderUtils.tryTypeOf "7" tcExt value) (\ts -> Flows.pure (Core.typeSchemeType ts))) (\typ -> Flows.bind (encodeType aliasesExt Sets.empty typ) (\jtype ->  
+    in (Flows.bind (Maybes.cases (Core.bindingType binding) (CoderUtils.tryTypeOf "7" gExt value) (\ts -> Flows.pure (Core.typeSchemeType ts))) (\typ -> Flows.bind (encodeType aliasesExt Sets.empty typ) (\jtype ->  
       let id = (Utils_.variableToJavaIdentifier name)
       in  
         let annotatedValue = (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ typ)) value)
@@ -2227,11 +2226,11 @@ bindingsToStatements :: (Helpers.JavaEnvironment -> [Core.Binding] -> Compute.Fl
 bindingsToStatements env bindings =  
   let aliases = (Helpers.javaEnvironmentAliases env)
   in  
-    let tc = (Helpers.javaEnvironmentTypeContext env)
+    let g = (Helpers.javaEnvironmentGraph env)
     in  
       let flatBindings = (dedupBindings (Helpers.aliasesInScopeJavaVars aliases) (flattenBindings bindings))
       in  
-        let tcExtended = (Schemas.extendTypeContextForLet CoderUtils.bindingMetadata tc (Core.Let {
+        let gExtended = (Schemas.extendGraphForLet CoderUtils.bindingMetadata g (Core.Let {
                 Core.letBindings = flatBindings,
                 Core.letBody = (Core.TermVariable (Core.Name "dummy"))}))
         in  
@@ -2276,8 +2275,8 @@ bindingsToStatements env bindings =
                     in  
                       let envExtended = Helpers.JavaEnvironment {
                               Helpers.javaEnvironmentAliases = aliasesExtended,
-                              Helpers.javaEnvironmentTypeContext = tcExtended}
-                      in (Logic.ifElse (Lists.null bindings) (Flows.pure ([], envExtended)) (Flows.bind (Flows.mapList (\names -> Flows.bind (Flows.mapList (\n -> toDeclInit aliasesExtended tcExtended recursiveVars flatBindings n) names) (\inits -> Flows.bind (Flows.mapList (\n -> toDeclStatement envExtended aliasesExtended tcExtended recursiveVars thunkedVars flatBindings n) names) (\decls -> Flows.pure (Lists.concat2 (Maybes.cat inits) decls)))) sorted) (\groups -> Flows.pure (Lists.concat groups, envExtended))))
+                              Helpers.javaEnvironmentGraph = gExtended}
+                      in (Logic.ifElse (Lists.null bindings) (Flows.pure ([], envExtended)) (Flows.bind (Flows.mapList (\names -> Flows.bind (Flows.mapList (\n -> toDeclInit aliasesExtended gExtended recursiveVars flatBindings n) names) (\inits -> Flows.bind (Flows.mapList (\n -> toDeclStatement envExtended aliasesExtended gExtended recursiveVars thunkedVars flatBindings n) names) (\decls -> Flows.pure (Lists.concat2 (Maybes.cat inits) decls)))) sorted) (\groups -> Flows.pure (Lists.concat groups, envExtended))))
 
 toClassDecl :: (Bool -> Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Core.Type -> Compute.Flow Graph.Graph Syntax.ClassDeclaration)
 toClassDecl isInner isSer aliases tparams elName t =  
@@ -2620,7 +2619,7 @@ encodeTermTCO env0 funcName paramNames tcoVarRenames tcoDepth term =
               Helpers.aliasesTrustedTypeVars = (Helpers.aliasesTrustedTypeVars aliases0),
               Helpers.aliasesMethodCodomain = (Helpers.aliasesMethodCodomain aliases0),
               Helpers.aliasesThunkedVars = (Helpers.aliasesThunkedVars aliases0)},
-            Helpers.javaEnvironmentTypeContext = (Helpers.javaEnvironmentTypeContext env0)}
+            Helpers.javaEnvironmentGraph = (Helpers.javaEnvironmentGraph env0)}
     in  
       let stripped = (Rewriting.deannotateAndDetypeTerm term)
       in  
@@ -2836,7 +2835,7 @@ encodeTermDefinition env tdef =
                                                               in  
                                                                 let env2WithTypeParams = Helpers.JavaEnvironment {
                                                                         Helpers.javaEnvironmentAliases = aliases2,
-                                                                        Helpers.javaEnvironmentTypeContext = (Helpers.javaEnvironmentTypeContext env2)}
+                                                                        Helpers.javaEnvironmentGraph = (Helpers.javaEnvironmentGraph env2)}
                                                                 in (Flows.bind (bindingsToStatements env2WithTypeParams bindings) (\bindResult ->  
                                                                   let bindingStmts = (Pairs.first bindResult)
                                                                   in  
@@ -2881,12 +2880,12 @@ encodeTermDefinition env tdef =
                                                                                   returnSt]))))) (\methodBody -> Flows.pure (Utils_.interfaceMethodDeclaration mods jparams jname jformalParams result (Just methodBody)))))))))))))))))
 
 encodeDefinitions :: (Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph (M.Map Core.Name Syntax.CompilationUnit))
-encodeDefinitions mod defs = (Flows.bind Monads.getState (\g -> Flows.bind (Inference.initialTypeContext g) (\tc ->  
+encodeDefinitions mod defs = (Flows.bind Monads.getState (\g ->  
   let aliases = (Utils_.importAliasesForModule mod)
   in  
     let env = Helpers.JavaEnvironment {
             Helpers.javaEnvironmentAliases = aliases,
-            Helpers.javaEnvironmentTypeContext = tc}
+            Helpers.javaEnvironmentGraph = g}
     in  
       let pkg = (Utils_.javaPackageDeclaration (Module.moduleNamespace mod))
       in  
@@ -2900,7 +2899,7 @@ encodeDefinitions mod defs = (Flows.bind Monads.getState (\g -> Flows.bind (Infe
                       let typ = (Module.typeDefinitionType td)
                       in (isSerializableJavaType typ)) typeDefs)
               in (Flows.bind (Flows.mapList (\td -> encodeTypeDefinition pkg aliases td) nonTypedefDefs) (\typeUnits -> Flows.bind (Logic.ifElse (Lists.null termDefs) (Flows.pure []) (Flows.bind (Flows.mapList (\td -> encodeTermDefinition env td) termDefs) (\dataMembers -> Flows.pure [
-                constructElementsInterface mod dataMembers]))) (\termUnits -> Flows.pure (Maps.fromList (Lists.concat2 typeUnits termUnits))))))))
+                constructElementsInterface mod dataMembers]))) (\termUnits -> Flows.pure (Maps.fromList (Lists.concat2 typeUnits termUnits)))))))
 
 moduleToJava :: (Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph (M.Map String String))
 moduleToJava mod defs = (Monads.withTrace (Strings.cat2 "encode module: " (Module.unNamespace (Module.moduleNamespace mod))) (Flows.bind (encodeDefinitions mod defs) (\units -> Flows.pure (Maps.fromList (Lists.map (\entry ->  

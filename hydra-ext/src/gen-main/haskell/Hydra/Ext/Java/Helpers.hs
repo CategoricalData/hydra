@@ -6,8 +6,8 @@ module Hydra.Ext.Java.Helpers where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Java.Syntax as Syntax
+import qualified Hydra.Graph as Graph
 import qualified Hydra.Module as Module
-import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -116,12 +116,11 @@ data JavaEnvironment =
   JavaEnvironment {
     -- | Aliases and context state
     javaEnvironmentAliases :: Aliases,
-    -- | Type context for type inference
-    javaEnvironmentTypeContext :: Typing.TypeContext}
-  deriving (Eq, Ord, Read, Show)
+    -- | Graph context for type inference
+    javaEnvironmentGraph :: Graph.Graph}
 
 _JavaEnvironment = (Core.Name "hydra.ext.java.helpers.JavaEnvironment")
 
 _JavaEnvironment_aliases = (Core.Name "aliases")
 
-_JavaEnvironment_typeContext = (Core.Name "typeContext")
+_JavaEnvironment_graph = (Core.Name "graph")
