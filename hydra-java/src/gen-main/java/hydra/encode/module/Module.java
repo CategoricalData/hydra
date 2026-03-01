@@ -50,7 +50,7 @@ public interface Module {
       new hydra.core.Field(new hydra.core.Name("focus"), new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
         hydra.encode.module.Module::namespace,
         n,
-        ((java.util.function.Function<hydra.module.Namespaces<T0>, hydra.util.Tuple.Tuple2<hydra.module.Namespace, T0>>) (projected -> projected.focus)).apply(x)))),
+        ((java.util.function.Function<hydra.module.Namespaces<T0>, hydra.util.Pair<hydra.module.Namespace, T0>>) (projected -> projected.focus)).apply(x)))),
       new hydra.core.Field(new hydra.core.Name("mapping"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.module.Module::namespace,
         n,

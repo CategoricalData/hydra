@@ -394,11 +394,11 @@ public interface Reduction {
                         hydra.encode.core.Core.type(ct))))),
                       codomainType));
                     return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
-                      hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<Integer, hydra.util.Maybe<hydra.core.Type>>>> indexedDomains = new hydra.util.Lazy<>(() -> hydra.lib.lists.Zip.apply(
+                      hydra.util.Lazy<java.util.List<hydra.util.Pair<Integer, hydra.util.Maybe<hydra.core.Type>>>> indexedDomains = new hydra.util.Lazy<>(() -> hydra.lib.lists.Zip.apply(
                         indices,
                         domains));
                       return hydra.lib.lists.Foldl.apply(
-                        (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>) (idPair -> {
+                        (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.Pair<Integer, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>>) (body -> (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.Maybe<hydra.core.Type>>, hydra.core.Term>) (idPair -> {
                           hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> dom = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(idPair));
                           hydra.util.Lazy<Integer> i = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(idPair));
                           hydra.core.Name vn = new hydra.core.Name(hydra.lib.strings.Cat2.apply(
@@ -457,7 +457,7 @@ public interface Reduction {
               hydra.lib.maps.Lookup.apply(
                 (name).value,
                 hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-                  (java.util.function.Function<hydra.graph.Primitive, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
+                  (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
                   hydra.lib.maps.Elems.apply((tx).primitives)))));
           }
         });
@@ -524,7 +524,7 @@ public interface Reduction {
                 hydra.lib.maps.Lookup.apply(
                   (pn2).value,
                   hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-                    (java.util.function.Function<hydra.graph.Primitive, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
+                    (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
                     hydra.lib.maps.Elems.apply((tx2).primitives)))));
             }
           });
@@ -608,7 +608,7 @@ public interface Reduction {
       }));
       java.util.function.Function<hydra.core.Field, hydra.core.Field> forField = (java.util.function.Function<hydra.core.Field, hydra.core.Field>) (f -> new hydra.core.Field((f).name, ((recurse).apply(tx)).apply((f).term)));
       java.util.function.Function<java.util.Map<hydra.core.Term, hydra.core.Term>, java.util.Map<hydra.core.Term, hydra.core.Term>> forMap = (java.util.function.Function<java.util.Map<hydra.core.Term, hydra.core.Term>, java.util.Map<hydra.core.Term, hydra.core.Term>>) (mp -> {
-        java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>> forPair = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>>) (pr -> (hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>(((recurse).apply(tx)).apply(hydra.lib.pairs.First.apply(pr)), ((recurse).apply(tx)).apply(hydra.lib.pairs.Second.apply(pr))))));
+        java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> forPair = (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (pr -> (hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(((recurse).apply(tx)).apply(hydra.lib.pairs.First.apply(pr)), ((recurse).apply(tx)).apply(hydra.lib.pairs.Second.apply(pr))))));
         return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
           forPair,
           hydra.lib.maps.ToList.apply(mp)));
@@ -690,7 +690,7 @@ public interface Reduction {
                 hydra.lib.maps.Lookup.apply(
                   (pn).value,
                   hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-                    (java.util.function.Function<hydra.graph.Primitive, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
+                    (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
                     hydra.lib.maps.Elems.apply((tx).primitives))))));
               return (((((expand).apply(false)).apply(args)).apply(arty)).apply(primType.get())).apply(term);
             }
@@ -736,7 +736,7 @@ public interface Reduction {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Pair pr) {
-          return (afterRecursion).apply(new hydra.core.Term.Pair((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>(((recurse).apply(tx)).apply(hydra.lib.pairs.First.apply((pr).value)), ((recurse).apply(tx)).apply(hydra.lib.pairs.Second.apply((pr).value)))))));
+          return (afterRecursion).apply(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(((recurse).apply(tx)).apply(hydra.lib.pairs.First.apply((pr).value)), ((recurse).apply(tx)).apply(hydra.lib.pairs.Second.apply((pr).value)))))));
         }
         
         @Override
@@ -1737,7 +1737,7 @@ public interface Reduction {
       @Override
       public Boolean visit(hydra.core.Term.Map m) {
         return hydra.lib.lists.Foldl.apply(
-          (java.util.function.Function<Boolean, java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, Boolean>>) (b -> (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, Boolean>) (kv -> hydra.lib.logic.And.apply(
+          (java.util.function.Function<Boolean, java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, Boolean>>) (b -> (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, Boolean>) (kv -> hydra.lib.logic.And.apply(
             b,
             hydra.lib.logic.And.apply(
               hydra.reduction.Reduction.termIsValue(hydra.lib.pairs.First.apply(kv)),

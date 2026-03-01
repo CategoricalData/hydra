@@ -6,9 +6,9 @@ package hydra.sorting;
  * Utilities for sorting.
  */
 public interface Sorting {
-  static <T0, T1> java.util.Map<T0, java.util.List<T1>> adjacencyListToMap(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T1>>> pairs) {
+  static <T0, T1> java.util.Map<T0, java.util.List<T1>> adjacencyListToMap(java.util.List<hydra.util.Pair<T0, java.util.List<T1>>> pairs) {
     return hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<java.util.Map<T0, java.util.List<T1>>, java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T1>>, java.util.Map<T0, java.util.List<T1>>>>) (mp -> (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T1>>, java.util.Map<T0, java.util.List<T1>>>) (p -> {
+      (java.util.function.Function<java.util.Map<T0, java.util.List<T1>>, java.util.function.Function<hydra.util.Pair<T0, java.util.List<T1>>, java.util.Map<T0, java.util.List<T1>>>>) (mp -> (java.util.function.Function<hydra.util.Pair<T0, java.util.List<T1>>, java.util.Map<T0, java.util.List<T1>>>) (p -> {
         hydra.util.Lazy<T0> k = new hydra.util.Lazy<>(() -> hydra.sorting.Sorting.<T0, T1>adjacencyListToMap_k(p));
         return hydra.lib.maps.Insert.apply(
           k.get(),
@@ -23,11 +23,11 @@ public interface Sorting {
       pairs);
   }
   
-  static <T0, T1> T0 adjacencyListToMap_k(hydra.util.Tuple.Tuple2<T0, java.util.List<T1>> p) {
+  static <T0, T1> T0 adjacencyListToMap_k(hydra.util.Pair<T0, java.util.List<T1>> p) {
     return hydra.lib.pairs.First.apply(p);
   }
   
-  static <T0, T1> java.util.List<T1> adjacencyListToMap_vs(hydra.util.Tuple.Tuple2<T0, java.util.List<T1>> p) {
+  static <T0, T1> java.util.List<T1> adjacencyListToMap_vs(hydra.util.Pair<T0, java.util.List<T1>> p) {
     return hydra.lib.pairs.Second.apply(p);
   }
   
@@ -114,9 +114,9 @@ public interface Sorting {
       visited);
   }
   
-  static <T0, T1> java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.Set<T1>>> propagateTags(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> edges, java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T1>>> nodeTags) {
+  static <T0, T1> java.util.List<hydra.util.Pair<T0, java.util.Set<T1>>> propagateTags(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> edges, java.util.List<hydra.util.Pair<T0, java.util.List<T1>>> nodeTags) {
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<T0, hydra.util.Tuple.Tuple2<T0, java.util.Set<T1>>>) (n -> (hydra.util.Tuple.Tuple2<T0, java.util.Set<T1>>) ((hydra.util.Tuple.Tuple2<T0, java.util.Set<T1>>) (new hydra.util.Tuple.Tuple2<T0, java.util.Set<T1>>(n, hydra.sorting.Sorting.<T0, T1>propagateTags_getTagsForNode(
+      (java.util.function.Function<T0, hydra.util.Pair<T0, java.util.Set<T1>>>) (n -> (hydra.util.Pair<T0, java.util.Set<T1>>) ((hydra.util.Pair<T0, java.util.Set<T1>>) (new hydra.util.Pair<T0, java.util.Set<T1>>(n, hydra.sorting.Sorting.<T0, T1>propagateTags_getTagsForNode(
         hydra.sorting.Sorting.<T0>propagateTags_adjMap(edges),
         hydra.sorting.Sorting.<T0, T1>propagateTags_tagMap(nodeTags),
         n))))),
@@ -125,23 +125,23 @@ public interface Sorting {
         nodeTags));
   }
   
-  static <T0> java.util.Map<T0, java.util.List<T0>> propagateTags_adjMap(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> edges) {
+  static <T0> java.util.Map<T0, java.util.List<T0>> propagateTags_adjMap(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> edges) {
     return hydra.sorting.Sorting.<T0, T0>adjacencyListToMap(edges);
   }
   
-  static <T0, T1> java.util.Map<T0, java.util.Set<T1>> propagateTags_tagMap(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T1>>> nodeTags) {
+  static <T0, T1> java.util.Map<T0, java.util.Set<T1>> propagateTags_tagMap(java.util.List<hydra.util.Pair<T0, java.util.List<T1>>> nodeTags) {
     return hydra.lib.maps.Map.apply(
       (java.util.function.Function<java.util.List<T1>, java.util.Set<T1>>) (hydra.lib.sets.FromList::apply),
       hydra.sorting.Sorting.<T0, T1>adjacencyListToMap(nodeTags));
   }
   
-  static <T0, T1> java.util.List<T0> propagateTags_allNodes(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> edges, java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T1>>> nodeTags) {
+  static <T0, T1> java.util.List<T0> propagateTags_allNodes(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> edges, java.util.List<hydra.util.Pair<T0, java.util.List<T1>>> nodeTags) {
     return hydra.lib.sets.ToList.apply(hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat2.apply(
       hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>, T0>) ((java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>, T0>) (hydra.lib.pairs.First::apply)),
+        (java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, T0>) ((java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, T0>) (hydra.lib.pairs.First::apply)),
         edges),
       hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T1>>, T0>) ((java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T1>>, T0>) (hydra.lib.pairs.First::apply)),
+        (java.util.function.Function<hydra.util.Pair<T0, java.util.List<T1>>, T0>) ((java.util.function.Function<hydra.util.Pair<T0, java.util.List<T1>>, T0>) (hydra.lib.pairs.First::apply)),
         nodeTags))));
   }
   
@@ -169,7 +169,7 @@ public interface Sorting {
       node);
   }
   
-  static <T0> hydra.util.Either<java.util.List<java.util.List<T0>>, java.util.List<T0>> topologicalSort(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> pairs) {
+  static <T0> hydra.util.Either<java.util.List<java.util.List<T0>>, java.util.List<T0>> topologicalSort(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> pairs) {
     hydra.util.Lazy<java.util.List<java.util.List<T0>>> sccs = new hydra.util.Lazy<>(() -> hydra.sorting.Sorting.<T0>topologicalSort_sccs(pairs));
     hydra.util.Lazy<java.util.List<java.util.List<T0>>> withCycles = new hydra.util.Lazy<>(() -> hydra.sorting.Sorting.<T0>topologicalSort_withCycles(sccs.get()));
     return hydra.lib.logic.IfElse.lazy(
@@ -178,7 +178,7 @@ public interface Sorting {
       () -> (hydra.util.Either<java.util.List<java.util.List<T0>>, java.util.List<T0>>) ((hydra.util.Either<java.util.List<java.util.List<T0>>, java.util.List<T0>>) (hydra.util.Either.<java.util.List<java.util.List<T0>>, java.util.List<T0>>left(withCycles.get()))));
   }
   
-  static <T0> java.util.List<java.util.List<T0>> topologicalSort_sccs(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> pairs) {
+  static <T0> java.util.List<java.util.List<T0>> topologicalSort_sccs(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> pairs) {
     return hydra.sorting.Sorting.<T0>topologicalSortComponents(pairs);
   }
   
@@ -192,8 +192,8 @@ public interface Sorting {
       sccs);
   }
   
-  static <T0> java.util.List<java.util.List<T0>> topologicalSortComponents(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> pairs) {
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>> graphResult = new hydra.util.Lazy<>(() -> hydra.sorting.Sorting.<T0>topologicalSortComponents_graphResult(pairs));
+  static <T0> java.util.List<java.util.List<T0>> topologicalSortComponents(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> pairs) {
+    hydra.util.Lazy<hydra.util.Pair<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>> graphResult = new hydra.util.Lazy<>(() -> hydra.sorting.Sorting.<T0>topologicalSortComponents_graphResult(pairs));
     hydra.util.Lazy<java.util.Map<Integer, java.util.List<Integer>>> g = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(graphResult.get()));
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<java.util.List<Integer>, java.util.List<T0>>) (comp -> hydra.lib.lists.Map.apply(
@@ -202,7 +202,7 @@ public interface Sorting {
       hydra.tarjan.Tarjan.stronglyConnectedComponents(g.get()));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>> topologicalSortComponents_graphResult(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> pairs) {
+  static <T0> hydra.util.Pair<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>> topologicalSortComponents_graphResult(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> pairs) {
     return hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph(pairs);
   }
   
@@ -223,17 +223,17 @@ public interface Sorting {
   
   static <T0, T1> java.util.Map<T1, T0> topologicalSortNodes_nodesByKey(java.util.function.Function<T0, T1> getKey, java.util.List<T0> nodes) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<T0, hydra.util.Tuple.Tuple2<T1, T0>>) (n -> (hydra.util.Tuple.Tuple2<T1, T0>) ((hydra.util.Tuple.Tuple2<T1, T0>) (new hydra.util.Tuple.Tuple2<T1, T0>((getKey).apply(n), n)))),
+      (java.util.function.Function<T0, hydra.util.Pair<T1, T0>>) (n -> (hydra.util.Pair<T1, T0>) ((hydra.util.Pair<T1, T0>) (new hydra.util.Pair<T1, T0>((getKey).apply(n), n)))),
       nodes));
   }
   
-  static <T0, T1> java.util.List<hydra.util.Tuple.Tuple2<T1, java.util.List<T1>>> topologicalSortNodes_pairs(java.util.function.Function<T0, java.util.List<T1>> getAdj, java.util.function.Function<T0, T1> getKey, java.util.List<T0> nodes) {
+  static <T0, T1> java.util.List<hydra.util.Pair<T1, java.util.List<T1>>> topologicalSortNodes_pairs(java.util.function.Function<T0, java.util.List<T1>> getAdj, java.util.function.Function<T0, T1> getKey, java.util.List<T0> nodes) {
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<T0, hydra.util.Tuple.Tuple2<T1, java.util.List<T1>>>) (n -> (hydra.util.Tuple.Tuple2<T1, java.util.List<T1>>) ((hydra.util.Tuple.Tuple2<T1, java.util.List<T1>>) (new hydra.util.Tuple.Tuple2<T1, java.util.List<T1>>((getKey).apply(n), (getAdj).apply(n))))),
+      (java.util.function.Function<T0, hydra.util.Pair<T1, java.util.List<T1>>>) (n -> (hydra.util.Pair<T1, java.util.List<T1>>) ((hydra.util.Pair<T1, java.util.List<T1>>) (new hydra.util.Pair<T1, java.util.List<T1>>((getKey).apply(n), (getAdj).apply(n))))),
       nodes);
   }
   
-  static <T1> java.util.List<java.util.List<T1>> topologicalSortNodes_comps(java.util.List<hydra.util.Tuple.Tuple2<T1, java.util.List<T1>>> pairs) {
+  static <T1> java.util.List<java.util.List<T1>> topologicalSortNodes_comps(java.util.List<hydra.util.Pair<T1, java.util.List<T1>>> pairs) {
     return hydra.sorting.Sorting.<T1>topologicalSortComponents(pairs);
   }
 }

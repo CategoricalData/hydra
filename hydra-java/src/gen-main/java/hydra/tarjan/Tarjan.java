@@ -6,30 +6,30 @@ package hydra.tarjan;
  * This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki: https://hackage.haskell.org/package/GraphSCC.
  */
 public interface Tarjan {
-  static <T0> hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>> adjacencyListsToGraph(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> edges0) {
-    hydra.util.Lazy<java.util.List<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>>> indexedEdges = new hydra.util.Lazy<>(() -> hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_indexedEdges(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_sortedEdges(edges0)));
+  static <T0> hydra.util.Pair<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>> adjacencyListsToGraph(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> edges0) {
+    hydra.util.Lazy<java.util.List<hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>>>> indexedEdges = new hydra.util.Lazy<>(() -> hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_indexedEdges(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_sortedEdges(edges0)));
     hydra.util.Lazy<java.util.Map<Integer, java.util.List<Integer>>> graph = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>, hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>>) (vkNeighbors -> {
+      (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>>, hydra.util.Pair<Integer, java.util.List<Integer>>>) (vkNeighbors -> {
         hydra.util.Lazy<Integer> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(vkNeighbors));
-        return (hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>) ((hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>) (new hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>(v.get(), hydra.lib.maybes.MapMaybe.apply(
+        return (hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(v.get(), hydra.lib.maybes.MapMaybe.apply(
           (java.util.function.Function<T0, hydra.util.Maybe<Integer>>) (k -> hydra.lib.maps.Lookup.apply(
             k,
             hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_keyToVertex(indexedEdges.get()))),
           hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_neighbors(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_kNeighbors(vkNeighbors))))));
       }),
       indexedEdges.get())));
-    return (hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>) ((hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>) (new hydra.util.Tuple.Tuple2<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>(graph.get(), (java.util.function.Function<Integer, T0>) (v1 -> hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_vertexToKey(
+    return (hydra.util.Pair<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>) ((hydra.util.Pair<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>) (new hydra.util.Pair<java.util.Map<Integer, java.util.List<Integer>>, java.util.function.Function<Integer, T0>>(graph.get(), (java.util.function.Function<Integer, T0>) (v1 -> hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_vertexToKey(
       hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_vertexMap(indexedEdges.get()),
       v1)))));
   }
   
-  static <T0> java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> adjacencyListsToGraph_sortedEdges(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> edges0) {
+  static <T0> java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> adjacencyListsToGraph_sortedEdges(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> edges0) {
     return hydra.lib.lists.SortOn.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>, T0>) ((java.util.function.Function<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>, T0>) (hydra.lib.pairs.First::apply)),
+      (java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, T0>) ((java.util.function.Function<hydra.util.Pair<T0, java.util.List<T0>>, T0>) (hydra.lib.pairs.First::apply)),
       edges0);
   }
   
-  static <T0> java.util.List<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>> adjacencyListsToGraph_indexedEdges(java.util.List<hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> sortedEdges) {
+  static <T0> java.util.List<hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>>> adjacencyListsToGraph_indexedEdges(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> sortedEdges) {
     return hydra.lib.lists.Zip.apply(
       hydra.lib.math.Range.apply(
         0,
@@ -37,20 +37,20 @@ public interface Tarjan {
       sortedEdges);
   }
   
-  static <T0> java.util.Map<T0, Integer> adjacencyListsToGraph_keyToVertex(java.util.List<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>> indexedEdges) {
+  static <T0> java.util.Map<T0, Integer> adjacencyListsToGraph_keyToVertex(java.util.List<hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>>> indexedEdges) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>, hydra.util.Tuple.Tuple2<T0, Integer>>) (vkNeighbors -> {
+      (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>>, hydra.util.Pair<T0, Integer>>) (vkNeighbors -> {
         hydra.util.Lazy<Integer> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(vkNeighbors));
-        return (hydra.util.Tuple.Tuple2<T0, Integer>) ((hydra.util.Tuple.Tuple2<T0, Integer>) (new hydra.util.Tuple.Tuple2<T0, Integer>(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_k2(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_kNeighbors3(vkNeighbors)), v.get())));
+        return (hydra.util.Pair<T0, Integer>) ((hydra.util.Pair<T0, Integer>) (new hydra.util.Pair<T0, Integer>(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_k2(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_kNeighbors3(vkNeighbors)), v.get())));
       }),
       indexedEdges));
   }
   
-  static <T0> java.util.Map<Integer, T0> adjacencyListsToGraph_vertexMap(java.util.List<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>> indexedEdges) {
+  static <T0> java.util.Map<Integer, T0> adjacencyListsToGraph_vertexMap(java.util.List<hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>>> indexedEdges) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>>, hydra.util.Tuple.Tuple2<Integer, T0>>) (vkNeighbors -> {
+      (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>>, hydra.util.Pair<Integer, T0>>) (vkNeighbors -> {
         hydra.util.Lazy<Integer> v = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(vkNeighbors));
-        return (hydra.util.Tuple.Tuple2<Integer, T0>) ((hydra.util.Tuple.Tuple2<Integer, T0>) (new hydra.util.Tuple.Tuple2<Integer, T0>(v.get(), hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_k(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_kNeighbors2(vkNeighbors)))));
+        return (hydra.util.Pair<Integer, T0>) ((hydra.util.Pair<Integer, T0>) (new hydra.util.Pair<Integer, T0>(v.get(), hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_k(hydra.tarjan.Tarjan.<T0>adjacencyListsToGraph_kNeighbors2(vkNeighbors)))));
       }),
       indexedEdges));
   }
@@ -61,27 +61,27 @@ public interface Tarjan {
       vertexMap));
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<T0, java.util.List<T0>> adjacencyListsToGraph_kNeighbors(hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> vkNeighbors) {
+  static <T0> hydra.util.Pair<T0, java.util.List<T0>> adjacencyListsToGraph_kNeighbors(hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>> vkNeighbors) {
     return hydra.lib.pairs.Second.apply(vkNeighbors);
   }
   
-  static <T0> java.util.List<T0> adjacencyListsToGraph_neighbors(hydra.util.Tuple.Tuple2<T0, java.util.List<T0>> kNeighbors) {
+  static <T0> java.util.List<T0> adjacencyListsToGraph_neighbors(hydra.util.Pair<T0, java.util.List<T0>> kNeighbors) {
     return hydra.lib.pairs.Second.apply(kNeighbors);
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<T0, java.util.List<T0>> adjacencyListsToGraph_kNeighbors2(hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> vkNeighbors) {
+  static <T0> hydra.util.Pair<T0, java.util.List<T0>> adjacencyListsToGraph_kNeighbors2(hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>> vkNeighbors) {
     return hydra.lib.pairs.Second.apply(vkNeighbors);
   }
   
-  static <T0> T0 adjacencyListsToGraph_k(hydra.util.Tuple.Tuple2<T0, java.util.List<T0>> kNeighbors) {
+  static <T0> T0 adjacencyListsToGraph_k(hydra.util.Pair<T0, java.util.List<T0>> kNeighbors) {
     return hydra.lib.pairs.First.apply(kNeighbors);
   }
   
-  static <T0> hydra.util.Tuple.Tuple2<T0, java.util.List<T0>> adjacencyListsToGraph_kNeighbors3(hydra.util.Tuple.Tuple2<Integer, hydra.util.Tuple.Tuple2<T0, java.util.List<T0>>> vkNeighbors) {
+  static <T0> hydra.util.Pair<T0, java.util.List<T0>> adjacencyListsToGraph_kNeighbors3(hydra.util.Pair<Integer, hydra.util.Pair<T0, java.util.List<T0>>> vkNeighbors) {
     return hydra.lib.pairs.Second.apply(vkNeighbors);
   }
   
-  static <T0> T0 adjacencyListsToGraph_k2(hydra.util.Tuple.Tuple2<T0, java.util.List<T0>> kNeighbors) {
+  static <T0> T0 adjacencyListsToGraph_k2(hydra.util.Pair<T0, java.util.List<T0>> kNeighbors) {
     return hydra.lib.pairs.First.apply(kNeighbors);
   }
   

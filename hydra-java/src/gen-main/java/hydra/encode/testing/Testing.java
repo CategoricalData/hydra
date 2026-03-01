@@ -505,14 +505,14 @@ public interface Testing {
   static hydra.core.Term topologicalSortBindingsTestCase(hydra.testing.TopologicalSortBindingsTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TopologicalSortBindingsTestCase"), java.util.List.of(
       new hydra.core.Field(new hydra.core.Name("bindings"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
           hydra.encode.core.Core::name,
           hydra.encode.core.Core::term,
           p))),
         (x).bindings))),
       new hydra.core.Field(new hydra.core.Name("expected"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>, hydra.core.Term>) (xs2 -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
+        (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>, hydra.core.Term>) (xs2 -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
             hydra.encode.core.Core::name,
             hydra.encode.core.Core::term,
             p))),
@@ -523,7 +523,7 @@ public interface Testing {
   static hydra.core.Term topologicalSortTestCase(hydra.testing.TopologicalSortTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TopologicalSortTestCase"), java.util.List.of(
       new hydra.core.Field(new hydra.core.Name("adjacencyList"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
+        (java.util.function.Function<hydra.util.Pair<Integer, java.util.List<Integer>>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
           (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
           (java.util.function.Function<java.util.List<Integer>, hydra.core.Term>) (xs2 -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
             (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
@@ -545,7 +545,7 @@ public interface Testing {
   static hydra.core.Term topologicalSortSCCTestCase(hydra.testing.TopologicalSortSCCTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.TopologicalSortSCCTestCase"), java.util.List.of(
       new hydra.core.Field(new hydra.core.Name("adjacencyList"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<Integer, java.util.List<Integer>>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
+        (java.util.function.Function<hydra.util.Pair<Integer, java.util.List<Integer>>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
           (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
           (java.util.function.Function<java.util.List<Integer>, hydra.core.Term>) (xs2 -> new hydra.core.Term.List(hydra.lib.lists.Map.apply(
             (java.util.function.Function<Integer, hydra.core.Term>) (x2 -> new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(x2)))),
@@ -592,7 +592,7 @@ public interface Testing {
   static hydra.core.Term substInTypeTestCase(hydra.testing.SubstInTypeTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.SubstInTypeTestCase"), java.util.List.of(
       new hydra.core.Field(new hydra.core.Name("substitution"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Type>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, hydra.core.Term>) (p -> new hydra.core.Term.Pair(hydra.lib.pairs.Bimap.apply(
           hydra.encode.core.Core::name,
           hydra.encode.core.Core::type,
           p))),

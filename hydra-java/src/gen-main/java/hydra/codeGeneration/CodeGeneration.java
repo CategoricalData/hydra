@@ -93,7 +93,7 @@ public interface CodeGeneration {
   
   static hydra.graph.Graph modulesToGraph(hydra.graph.Graph bsGraph, java.util.List<hydra.module.Module> universeModules, java.util.List<hydra.module.Module> modules) {
     hydra.util.Lazy<java.util.Map<hydra.module.Namespace, hydra.module.Module>> universe = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.Module, hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>>) (m -> (hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>) ((hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>) (new hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>((m).namespace, m)))),
+      (java.util.function.Function<hydra.module.Module, hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>>) (m -> (hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>) ((hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>) (new hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>((m).namespace, m)))),
       hydra.lib.lists.Concat2.apply(
         universeModules,
         modules))));
@@ -129,10 +129,10 @@ public interface CodeGeneration {
       dataElements.get());
   }
   
-  static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>> generateSourceFiles(java.util.function.Function<hydra.module.Module, java.util.function.Function<java.util.List<hydra.module.Definition>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>>>> printDefinitions, hydra.coders.Language lang, Boolean doInfer, Boolean doExpand, Boolean doHoistCaseStatements, Boolean doHoistPolymorphicLetBindings, hydra.graph.Graph bsGraph, java.util.List<hydra.module.Module> universeModules, java.util.List<hydra.module.Module> modsToGenerate) {
+  static <T0, T1> hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<T0, T1>>> generateSourceFiles(java.util.function.Function<hydra.module.Module, java.util.function.Function<java.util.List<hydra.module.Definition>, hydra.compute.Flow<hydra.graph.Graph, java.util.Map<T0, T1>>>> printDefinitions, hydra.coders.Language lang, Boolean doInfer, Boolean doExpand, Boolean doHoistCaseStatements, Boolean doHoistPolymorphicLetBindings, hydra.graph.Graph bsGraph, java.util.List<hydra.module.Module> universeModules, java.util.List<hydra.module.Module> modsToGenerate) {
     hydra.coders.LanguageConstraints constraints = (lang).constraints;
     hydra.util.Lazy<java.util.Map<hydra.module.Namespace, hydra.module.Module>> namespaceMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.Module, hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>>) (m -> (hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>) ((hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>) (new hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>((m).namespace, m)))),
+      (java.util.function.Function<hydra.module.Module, hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>>) (m -> (hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>) ((hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>) (new hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>((m).namespace, m)))),
       hydra.lib.lists.Concat2.apply(
         universeModules,
         modsToGenerate))));
@@ -148,7 +148,7 @@ public interface CodeGeneration {
     java.util.function.Function<hydra.module.Module, Boolean> isTypeModule = (java.util.function.Function<hydra.module.Module, Boolean>) (mod -> hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.core.Binding, Boolean>) (e -> hydra.annotations.Annotations.isNativeType(e)),
       (mod).elements))));
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.List<hydra.module.Module>, java.util.List<hydra.module.Module>>> partitioned = new hydra.util.Lazy<>(() -> hydra.lib.lists.Partition.apply(
+    hydra.util.Lazy<hydra.util.Pair<java.util.List<hydra.module.Module>, java.util.List<hydra.module.Module>>> partitioned = new hydra.util.Lazy<>(() -> hydra.lib.lists.Partition.apply(
       isTypeModule,
       modsToGenerate));
     hydra.util.Lazy<java.util.List<hydra.module.Module>> typeModulesToGenerate = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(partitioned.get()));
@@ -175,10 +175,10 @@ public interface CodeGeneration {
     return hydra.lib.flows.Bind.apply(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(typeModulesToGenerate.get()),
-        () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>) (java.util.List.<hydra.util.Tuple.Tuple2<T0, T1>>of())),
+        () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.util.Pair<T0, T1>>) (java.util.List.<hydra.util.Pair<T0, T1>>of())),
         () -> hydra.monads.Monads.withTrace(
           "generate type modules",
-          ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>>) (() -> {
+          ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<T0, T1>>>>) (() -> {
             hydra.util.Lazy<java.util.List<java.util.List<hydra.core.Name>>> nameLists = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.module.Module, java.util.List<hydra.core.Name>>) (m -> hydra.lib.lists.Map.apply(
                 (java.util.function.Function<hydra.core.Binding, hydra.core.Name>) (e -> (e).name),
@@ -191,14 +191,14 @@ public interface CodeGeneration {
                 constraints,
                 schemaGraph.get(),
                 nameLists.get()),
-              (java.util.function.Function<hydra.util.Tuple.Tuple2<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.List<java.util.List<hydra.module.TypeDefinition>>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>>) (schemaResult -> {
+              (java.util.function.Function<hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.List<java.util.List<hydra.module.TypeDefinition>>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<T0, T1>>>>) (schemaResult -> {
                 hydra.util.Lazy<java.util.List<java.util.List<hydra.module.TypeDefinition>>> defLists = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(schemaResult));
                 return hydra.monads.Monads.withState(
                   new hydra.graph.Graph((schemaGraph.get()).boundTerms, (schemaGraph.get()).boundTypes, (schemaGraph.get()).classConstraints, (schemaGraph.get()).lambdaVariables, (schemaGraph.get()).metadata, (schemaGraph.get()).primitives, schemaTypes2.get(), (schemaGraph.get()).typeVariables),
                   hydra.lib.flows.Map.apply(
-                    (java.util.function.Function<java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
+                    (java.util.function.Function<java.util.List<java.util.List<hydra.util.Pair<T0, T1>>>, java.util.List<hydra.util.Pair<T0, T1>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
                     hydra.lib.flows.MapList.apply(
-                      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.module.Module, java.util.List<hydra.module.TypeDefinition>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>>) (p -> {
+                      (java.util.function.Function<hydra.util.Pair<hydra.module.Module, java.util.List<hydra.module.TypeDefinition>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<T0, T1>>>>) (p -> {
                         hydra.util.Lazy<java.util.List<hydra.module.TypeDefinition>> defs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
                         hydra.util.Lazy<hydra.module.Module> mod = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
                         return hydra.monads.Monads.withTrace(
@@ -206,7 +206,7 @@ public interface CodeGeneration {
                             "type module ",
                             ((mod.get()).namespace).value),
                           hydra.lib.flows.Map.apply(
-                            (java.util.function.Function<java.util.Map<T0, T1>, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>) (m -> hydra.lib.maps.ToList.apply(m)),
+                            (java.util.function.Function<java.util.Map<T0, T1>, java.util.List<hydra.util.Pair<T0, T1>>>) (m -> hydra.lib.maps.ToList.apply(m)),
                             ((printDefinitions).apply(mod.get())).apply(hydra.lib.lists.Map.apply(
                               (java.util.function.Function<hydra.module.TypeDefinition, hydra.module.Definition>) (d -> new hydra.module.Definition.Type(d)),
                               defs.get()))));
@@ -216,13 +216,13 @@ public interface CodeGeneration {
                         defLists.get()))));
               }));
           })).get())),
-      (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>>) (schemaFiles -> hydra.lib.flows.Bind.apply(
+      (java.util.function.Function<java.util.List<hydra.util.Pair<T0, T1>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<T0, T1>>>>) (schemaFiles -> hydra.lib.flows.Bind.apply(
         hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(termModulesToGenerate.get()),
-          () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>) (java.util.List.<hydra.util.Tuple.Tuple2<T0, T1>>of())),
+          () -> hydra.lib.flows.Pure.apply((java.util.List<hydra.util.Pair<T0, T1>>) (java.util.List.<hydra.util.Pair<T0, T1>>of())),
           () -> hydra.monads.Monads.withTrace(
             "generate term modules",
-            ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>>) (() -> {
+            ((java.util.function.Supplier<hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<T0, T1>>>>) (() -> {
               hydra.util.Lazy<java.util.List<hydra.module.Namespace>> namespaces = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                 (java.util.function.Function<hydra.module.Module, hydra.module.Namespace>) (m -> (m).namespace),
                 termModulesToGenerate.get()));
@@ -236,7 +236,7 @@ public interface CodeGeneration {
                   dataElements.get(),
                   dataGraph,
                   namespaces.get()),
-                (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>>) (dataResult -> {
+                (java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<T0, T1>>>>) (dataResult -> {
                   hydra.util.Lazy<java.util.List<java.util.List<hydra.module.TermDefinition>>> defLists = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(dataResult));
                   hydra.util.Lazy<hydra.graph.Graph> g1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(dataResult));
                   java.util.function.Function<java.util.List<hydra.core.Binding>, java.util.function.Function<hydra.module.Module, hydra.module.Module>> refreshModule = (java.util.function.Function<java.util.List<hydra.core.Binding>, java.util.function.Function<hydra.module.Module, hydra.module.Module>>) (els -> (java.util.function.Function<hydra.module.Module, hydra.module.Module>) (m -> new hydra.module.Module((m).namespace, hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
@@ -252,9 +252,9 @@ public interface CodeGeneration {
                   return hydra.monads.Monads.withState(
                     g1.get(),
                     hydra.lib.flows.Map.apply(
-                      (java.util.function.Function<java.util.List<java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
+                      (java.util.function.Function<java.util.List<java.util.List<hydra.util.Pair<T0, T1>>>, java.util.List<hydra.util.Pair<T0, T1>>>) (xs -> hydra.lib.lists.Concat.apply(xs)),
                       hydra.lib.flows.MapList.apply(
-                        (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.module.Module, java.util.List<hydra.module.TermDefinition>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>>) (p -> {
+                        (java.util.function.Function<hydra.util.Pair<hydra.module.Module, java.util.List<hydra.module.TermDefinition>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<T0, T1>>>>) (p -> {
                           hydra.util.Lazy<java.util.List<hydra.module.TermDefinition>> defs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(p));
                           hydra.util.Lazy<hydra.module.Module> mod = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
                           return hydra.monads.Monads.withTrace(
@@ -262,7 +262,7 @@ public interface CodeGeneration {
                               "term module ",
                               ((mod.get()).namespace).value),
                             hydra.lib.flows.Map.apply(
-                              (java.util.function.Function<java.util.Map<T0, T1>, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>) (m -> hydra.lib.maps.ToList.apply(m)),
+                              (java.util.function.Function<java.util.Map<T0, T1>, java.util.List<hydra.util.Pair<T0, T1>>>) (m -> hydra.lib.maps.ToList.apply(m)),
                               ((printDefinitions).apply(mod.get())).apply(hydra.lib.lists.Map.apply(
                                 (java.util.function.Function<hydra.module.TermDefinition, hydra.module.Definition>) (d -> new hydra.module.Definition.Term(d)),
                                 defs.get()))));
@@ -272,7 +272,7 @@ public interface CodeGeneration {
                           defLists.get()))));
                 }));
             })).get())),
-        (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>>>) (termFiles -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Concat2.apply(
+        (java.util.function.Function<java.util.List<hydra.util.Pair<T0, T1>>, hydra.compute.Flow<hydra.graph.Graph, java.util.List<hydra.util.Pair<T0, T1>>>>) (termFiles -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Concat2.apply(
           schemaFiles,
           termFiles))))));
   }
@@ -349,7 +349,7 @@ public interface CodeGeneration {
   
   static hydra.compute.Flow<hydra.graph.Graph, String> generateLexicon(hydra.graph.Graph graph) {
     java.util.List<hydra.core.Binding> bindings = hydra.lexical.Lexical.graphToBindings(graph);
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<java.util.List<hydra.core.Binding>, java.util.List<hydra.core.Binding>>> partitioned = new hydra.util.Lazy<>(() -> hydra.lib.lists.Partition.apply(
+    hydra.util.Lazy<hydra.util.Pair<java.util.List<hydra.core.Binding>, java.util.List<hydra.core.Binding>>> partitioned = new hydra.util.Lazy<>(() -> hydra.lib.lists.Partition.apply(
       (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.annotations.Annotations.isNativeType(b)),
       bindings));
     hydra.util.Lazy<java.util.List<hydra.graph.Primitive>> primitives = new hydra.util.Lazy<>(() -> hydra.lib.maps.Elems.apply((graph).primitives));
@@ -410,7 +410,7 @@ public interface CodeGeneration {
       hydra.inference.Inference.<T0>inferGraphTypes(
         dataElements.get(),
         g0),
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<hydra.core.Binding>>, hydra.compute.Flow<T0, java.util.List<hydra.module.Module>>>) (inferResult -> {
+      (java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, java.util.List<hydra.core.Binding>>, hydra.compute.Flow<T0, java.util.List<hydra.module.Module>>>) (inferResult -> {
         hydra.util.Lazy<hydra.graph.Graph> g1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(inferResult));
         hydra.util.Lazy<java.util.List<hydra.core.Binding>> inferredElements = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(inferResult));
         java.util.function.Function<hydra.module.Module, Boolean> isTypeModule = (java.util.function.Function<hydra.module.Module, Boolean>) (mod -> hydra.lib.lists.Null.apply(hydra.lib.lists.Filter.apply(
@@ -434,7 +434,7 @@ public interface CodeGeneration {
   
   static <T0, T1, T2> hydra.compute.Flow<T2, java.util.List<T1>> generateCoderModules(java.util.function.Function<T0, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<T1>>> codec, hydra.graph.Graph bsGraph, java.util.List<hydra.module.Module> universeModules, java.util.List<T0> typeModules) {
     hydra.util.Lazy<java.util.Map<hydra.module.Namespace, hydra.module.Module>> universe = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.module.Module, hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>>) (m -> (hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>) ((hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>) (new hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.module.Module>((m).namespace, m)))),
+      (java.util.function.Function<hydra.module.Module, hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>>) (m -> (hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>) ((hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>) (new hydra.util.Pair<hydra.module.Namespace, hydra.module.Module>((m).namespace, m)))),
       hydra.lib.lists.Concat2.apply(
         universeModules,
         universeModules))));
@@ -494,7 +494,7 @@ public interface CodeGeneration {
       hydra.inference.Inference.<T0>inferGraphTypes(
         dataElements.get(),
         g0),
-      (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.graph.Graph, java.util.List<hydra.core.Binding>>, hydra.compute.Flow<T0, String>>) (inferResult -> {
+      (java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, java.util.List<hydra.core.Binding>>, hydra.compute.Flow<T0, String>>) (inferResult -> {
         hydra.util.Lazy<hydra.graph.Graph> g1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(inferResult));
         return hydra.monads.Monads.withState(
           g1.get(),

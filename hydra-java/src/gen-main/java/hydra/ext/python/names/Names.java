@@ -40,7 +40,7 @@ public interface Names {
   static hydra.ext.python.syntax.Name encodeName(Boolean isQualified, hydra.util.CaseConvention conv, hydra.ext.python.helpers.PythonEnvironment env, hydra.core.Name name) {
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundVars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((env).boundTypeVariables));
     hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces = (env).namespaces;
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>> focusPair = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces));
+    hydra.util.Lazy<hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>> focusPair = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces));
     hydra.util.Lazy<hydra.module.Namespace> focusNs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(focusPair.get()));
     hydra.module.QualifiedName qualName = hydra.names.Names.qualifyName(name);
     String local = (qualName).local;
@@ -90,7 +90,7 @@ public interface Names {
   static hydra.ext.python.syntax.Name encodeNameQualified(hydra.ext.python.helpers.PythonEnvironment env, hydra.core.Name name) {
     hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundVars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply((env).boundTypeVariables));
     hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces = (env).namespaces;
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>> focusPair = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces));
+    hydra.util.Lazy<hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>> focusPair = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces));
     hydra.util.Lazy<hydra.module.Namespace> focusNs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(focusPair.get()));
     hydra.module.QualifiedName qualName = hydra.names.Names.qualifyName(name);
     String local = (qualName).local;
@@ -168,7 +168,7 @@ public interface Names {
   
   static hydra.ext.python.syntax.Expression variableReference(hydra.util.CaseConvention conv, Boolean quoted, hydra.ext.python.helpers.PythonEnvironment env, hydra.core.Name name) {
     hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces = (env).namespaces;
-    hydra.util.Lazy<hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>> focusPair = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Tuple.Tuple2<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces));
+    hydra.util.Lazy<hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>> focusPair = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces));
     hydra.util.Lazy<hydra.module.Namespace> focusNs = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(focusPair.get()));
     hydra.util.Maybe<hydra.module.Namespace> mns = hydra.names.Names.namespaceOf(name);
     hydra.ext.python.syntax.Name pyName = hydra.ext.python.names.Names.encodeName(

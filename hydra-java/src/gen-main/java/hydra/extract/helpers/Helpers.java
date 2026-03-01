@@ -74,12 +74,12 @@ public interface Helpers {
         @Override
         public hydra.util.Either<hydra.util.DecodingError, java.util.Map<T0, T1>> visit(hydra.core.Term.Map m) {
           return hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>, java.util.Map<T0, T1>>) ((java.util.function.Function<java.util.List<hydra.util.Tuple.Tuple2<T0, T1>>, java.util.Map<T0, T1>>) (hydra.lib.maps.FromList::apply)),
+            (java.util.function.Function<java.util.List<hydra.util.Pair<T0, T1>>, java.util.Map<T0, T1>>) ((java.util.function.Function<java.util.List<hydra.util.Pair<T0, T1>>, java.util.Map<T0, T1>>) (hydra.lib.maps.FromList::apply)),
             hydra.lib.eithers.MapList.apply(
-              (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Term, hydra.core.Term>, hydra.util.Either<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>>>) (kv -> hydra.lib.eithers.Bind.apply(
+              (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Either<hydra.util.DecodingError, hydra.util.Pair<T0, T1>>>) (kv -> hydra.lib.eithers.Bind.apply(
                 ((keyDecoder).apply(g)).apply(hydra.lib.pairs.First.apply(kv)),
-                (java.util.function.Function<T0, hydra.util.Either<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>>>) (k -> hydra.lib.eithers.Map.apply(
-                  (java.util.function.Function<T1, hydra.util.Tuple.Tuple2<T0, T1>>) (v -> (hydra.util.Tuple.Tuple2<T0, T1>) ((hydra.util.Tuple.Tuple2<T0, T1>) (new hydra.util.Tuple.Tuple2<T0, T1>(k, v)))),
+                (java.util.function.Function<T0, hydra.util.Either<hydra.util.DecodingError, hydra.util.Pair<T0, T1>>>) (k -> hydra.lib.eithers.Map.apply(
+                  (java.util.function.Function<T1, hydra.util.Pair<T0, T1>>) (v -> (hydra.util.Pair<T0, T1>) ((hydra.util.Pair<T0, T1>) (new hydra.util.Pair<T0, T1>(k, v)))),
                   ((valDecoder).apply(g)).apply(hydra.lib.pairs.Second.apply(kv)))))),
               hydra.lib.maps.ToList.apply((m).value)));
         }
@@ -109,7 +109,7 @@ public interface Helpers {
       })));
   }
   
-  static <T0, T1> hydra.util.Either<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>> decodePair(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, T0>>> firstDecoder, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, T1>>> secondDecoder, hydra.graph.Graph g, hydra.core.Term term) {
+  static <T0, T1> hydra.util.Either<hydra.util.DecodingError, hydra.util.Pair<T0, T1>> decodePair(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, T0>>> firstDecoder, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, T1>>> secondDecoder, hydra.graph.Graph g, hydra.core.Term term) {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
         (java.util.function.Function<String, hydra.util.DecodingError>) (x -> new hydra.util.DecodingError(x)),
@@ -117,18 +117,18 @@ public interface Helpers {
         hydra.lexical.Lexical.stripAndDereferenceTermEither(
           g,
           term)),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.util.DecodingError, hydra.util.Pair<T0, T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
-        public hydra.util.Either<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>>) ((hydra.util.Either<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>>) (hydra.util.Either.<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>>left(new hydra.util.DecodingError("expected pair"))));
+        public hydra.util.Either<hydra.util.DecodingError, hydra.util.Pair<T0, T1>> otherwise(hydra.core.Term instance) {
+          return (hydra.util.Either<hydra.util.DecodingError, hydra.util.Pair<T0, T1>>) ((hydra.util.Either<hydra.util.DecodingError, hydra.util.Pair<T0, T1>>) (hydra.util.Either.<hydra.util.DecodingError, hydra.util.Pair<T0, T1>>left(new hydra.util.DecodingError("expected pair"))));
         }
         
         @Override
-        public hydra.util.Either<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>> visit(hydra.core.Term.Pair p) {
+        public hydra.util.Either<hydra.util.DecodingError, hydra.util.Pair<T0, T1>> visit(hydra.core.Term.Pair p) {
           return hydra.lib.eithers.Bind.apply(
             ((firstDecoder).apply(g)).apply(hydra.lib.pairs.First.apply((p).value)),
-            (java.util.function.Function<T0, hydra.util.Either<hydra.util.DecodingError, hydra.util.Tuple.Tuple2<T0, T1>>>) (f -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<T1, hydra.util.Tuple.Tuple2<T0, T1>>) (s -> (hydra.util.Tuple.Tuple2<T0, T1>) ((hydra.util.Tuple.Tuple2<T0, T1>) (new hydra.util.Tuple.Tuple2<T0, T1>(f, s)))),
+            (java.util.function.Function<T0, hydra.util.Either<hydra.util.DecodingError, hydra.util.Pair<T0, T1>>>) (f -> hydra.lib.eithers.Map.apply(
+              (java.util.function.Function<T1, hydra.util.Pair<T0, T1>>) (s -> (hydra.util.Pair<T0, T1>) ((hydra.util.Pair<T0, T1>) (new hydra.util.Pair<T0, T1>(f, s)))),
               ((secondDecoder).apply(g)).apply(hydra.lib.pairs.Second.apply((p).value)))));
         }
       })));
@@ -215,7 +215,7 @@ public interface Helpers {
   
   static java.util.Map<hydra.core.Name, hydra.core.Term> toFieldMap(hydra.core.Record record) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Field, hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>>) (f -> (hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) ((hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>) (new hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>((f).name, (f).term)))),
+      (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>((f).name, (f).term)))),
       (record).fields));
   }
 }

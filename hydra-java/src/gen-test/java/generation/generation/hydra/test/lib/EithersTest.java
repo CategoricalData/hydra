@@ -379,7 +379,7 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<String>>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<String>>) (new hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<String>>(java.util.List.of(
+            (hydra.util.Pair<java.util.List<Integer>, java.util.List<String>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<String>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<String>>(java.util.List.of(
   1,
   2), java.util.List.of(
   "a",
@@ -399,7 +399,7 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<java.lang.Object>>) ((hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<java.lang.Object>>) (new hydra.util.Tuple.Tuple2<java.util.List<Integer>, java.util.List<java.lang.Object>>(java.util.List.of(
+            (hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>(java.util.List.of(
   1,
   2), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
 
@@ -415,7 +415,7 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<String>>) ((hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<String>>) (new hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<String>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), java.util.List.of(
+            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<String>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<String>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<String>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), java.util.List.of(
   "a",
   "b")))),
 
@@ -431,7 +431,7 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) ((hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) (new hydra.util.Tuple.Tuple2<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
+            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
 
             hydra.lib.eithers.PartitionEithers.apply((java.util.List<hydra.util.Either<java.lang.Object, java.lang.Object>>) (java.util.List.<hydra.util.Either<java.lang.Object, java.lang.Object>>of())));
 

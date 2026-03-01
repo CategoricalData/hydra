@@ -17,14 +17,14 @@ public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
   /**
    * The namespace in focus, together with its associated value
    */
-  public final hydra.util.Tuple.Tuple2<hydra.module.Namespace, N> focus;
+  public final hydra.util.Pair<hydra.module.Namespace, N> focus;
   
   /**
    * A mapping of namespaces to values
    */
   public final java.util.Map<hydra.module.Namespace, N> mapping;
   
-  public Namespaces (hydra.util.Tuple.Tuple2<hydra.module.Namespace, N> focus, java.util.Map<hydra.module.Namespace, N> mapping) {
+  public Namespaces (hydra.util.Pair<hydra.module.Namespace, N> focus, java.util.Map<hydra.module.Namespace, N> mapping) {
     this.focus = focus;
     this.mapping = mapping;
   }
@@ -60,7 +60,7 @@ public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
       other.mapping.hashCode());
   }
   
-  public Namespaces withFocus(hydra.util.Tuple.Tuple2<hydra.module.Namespace, N> focus) {
+  public Namespaces withFocus(hydra.util.Pair<hydra.module.Namespace, N> focus) {
     return new Namespaces(focus, mapping);
   }
   

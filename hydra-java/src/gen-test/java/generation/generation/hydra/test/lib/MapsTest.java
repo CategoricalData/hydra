@@ -417,8 +417,8 @@ public class MapsTest {
     "b")),
 
             hydra.lib.maps.FromList.apply(java.util.List.of(
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(1, "a"))),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(2, "b"))))));
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(2, "b"))))));
 
     }
 
@@ -433,8 +433,8 @@ public class MapsTest {
   "b")),
 
             hydra.lib.maps.FromList.apply(java.util.List.of(
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(1, "a"))),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(1, "b"))))));
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "b"))))));
 
     }
 
@@ -446,7 +446,7 @@ public class MapsTest {
 
             (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
 
-            hydra.lib.maps.FromList.apply((java.util.List<hydra.util.Tuple.Tuple2<java.lang.Object, java.lang.Object>>) (java.util.List.<hydra.util.Tuple.Tuple2<java.lang.Object, java.lang.Object>>of())));
+            hydra.lib.maps.FromList.apply((java.util.List<hydra.util.Pair<java.lang.Object, java.lang.Object>>) (java.util.List.<hydra.util.Pair<java.lang.Object, java.lang.Object>>of())));
 
     }
 
@@ -963,8 +963,8 @@ public class MapsTest {
         assertEquals(
 
             java.util.List.of(
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(1, "a"))),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(2, "b")))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(2, "b")))),
 
             hydra.lib.maps.ToList.apply(java.util.Map.ofEntries(
   java.util.Map.entry(
@@ -983,9 +983,9 @@ public class MapsTest {
         assertEquals(
 
             java.util.List.of(
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(1, "a"))),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(2, "b"))),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(3, "c")))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(2, "b"))),
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(3, "c")))),
 
             hydra.lib.maps.ToList.apply(java.util.Map.ofEntries(
   java.util.Map.entry(

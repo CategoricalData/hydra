@@ -498,7 +498,7 @@ public interface Utils {
     return new hydra.ext.java.syntax.EqualityExpression.Unary(re);
   }
   
-  static hydra.util.Tuple.Tuple2<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> nameToQualifiedJavaName(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
+  static hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> nameToQualifiedJavaName(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
     hydra.module.QualifiedName qn = hydra.names.Names.qualifyName(name);
     hydra.util.Maybe<hydra.module.Namespace> ns_ = (qn).namespace;
     hydra.util.Lazy<hydra.util.Maybe<hydra.ext.java.syntax.PackageName>> alias = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.apply(
@@ -528,11 +528,11 @@ public interface Utils {
         new hydra.ext.java.syntax.ClassTypeQualifier.None(),
         (java.util.function.Function<hydra.ext.java.syntax.PackageName, hydra.ext.java.syntax.ClassTypeQualifier>) (p -> new hydra.ext.java.syntax.ClassTypeQualifier.Package_(p))),
       () -> new hydra.ext.java.syntax.ClassTypeQualifier.None()));
-    return (hydra.util.Tuple.Tuple2<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) ((hydra.util.Tuple.Tuple2<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) (new hydra.util.Tuple.Tuple2<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>(jid.get(), pkg.get())));
+    return (hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) ((hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) (new hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>(jid.get(), pkg.get())));
   }
   
   static hydra.ext.java.syntax.ClassType nameToJavaClassType(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, java.util.List<hydra.ext.java.syntax.TypeArgument> args, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
-    hydra.util.Tuple.Tuple2<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> result = hydra.ext.java.utils.Utils.nameToQualifiedJavaName(
+    hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> result = hydra.ext.java.utils.Utils.nameToQualifiedJavaName(
       aliases,
       qualify,
       name,

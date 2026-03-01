@@ -18,14 +18,14 @@ public class PairsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<Integer, Integer>) ((hydra.util.Tuple.Tuple2<Integer, Integer>) (new hydra.util.Tuple.Tuple2<Integer, Integer>(10, 2))),
+            (hydra.util.Pair<Integer, Integer>) ((hydra.util.Pair<Integer, Integer>) (new hydra.util.Pair<Integer, Integer>(10, 2))),
 
             hydra.lib.pairs.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
     x,
     2)),
   (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply(s)),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(5, "ab")))));
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(5, "ab")))));
 
     }
 
@@ -35,14 +35,14 @@ public class PairsTest {
 
         assertEquals(
 
-            (hydra.util.Tuple.Tuple2<Integer, Integer>) ((hydra.util.Tuple.Tuple2<Integer, Integer>) (new hydra.util.Tuple.Tuple2<Integer, Integer>(0, 5))),
+            (hydra.util.Pair<Integer, Integer>) ((hydra.util.Pair<Integer, Integer>) (new hydra.util.Pair<Integer, Integer>(0, 5))),
 
             hydra.lib.pairs.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
     x,
     2)),
   (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply(s)),
-  (hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(0, "hello")))));
+  (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(0, "hello")))));
 
     }
 
@@ -56,7 +56,7 @@ public class PairsTest {
 
             42,
 
-            hydra.lib.pairs.First.apply((hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(42, "hello")))));
+            hydra.lib.pairs.First.apply((hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(42, "hello")))));
 
     }
 
@@ -68,7 +68,7 @@ public class PairsTest {
 
             0,
 
-            hydra.lib.pairs.First.apply((hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(0, "world")))));
+            hydra.lib.pairs.First.apply((hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(0, "world")))));
 
     }
 
@@ -80,7 +80,7 @@ public class PairsTest {
 
             -5,
 
-            hydra.lib.pairs.First.apply((hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(-5, "test")))));
+            hydra.lib.pairs.First.apply((hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(-5, "test")))));
 
     }
 
@@ -94,7 +94,7 @@ public class PairsTest {
 
             "hello",
 
-            hydra.lib.pairs.Second.apply((hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(42, "hello")))));
+            hydra.lib.pairs.Second.apply((hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(42, "hello")))));
 
     }
 
@@ -106,7 +106,7 @@ public class PairsTest {
 
             "",
 
-            hydra.lib.pairs.Second.apply((hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(0, "")))));
+            hydra.lib.pairs.Second.apply((hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(0, "")))));
 
     }
 
@@ -118,7 +118,7 @@ public class PairsTest {
 
             "testing",
 
-            hydra.lib.pairs.Second.apply((hydra.util.Tuple.Tuple2<Integer, String>) ((hydra.util.Tuple.Tuple2<Integer, String>) (new hydra.util.Tuple.Tuple2<Integer, String>(123, "testing")))));
+            hydra.lib.pairs.Second.apply((hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(123, "testing")))));
 
     }
 }

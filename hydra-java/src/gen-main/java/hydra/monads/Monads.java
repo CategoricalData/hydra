@@ -215,7 +215,7 @@ public interface Monads {
   }
   
   static String traceSummary(hydra.compute.Trace t) {
-    java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, String> toLine = (java.util.function.Function<hydra.util.Tuple.Tuple2<hydra.core.Name, hydra.core.Term>, String>) (pair -> hydra.lib.strings.Cat2.apply(
+    java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, String> toLine = (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, String>) (pair -> hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           "\t",
