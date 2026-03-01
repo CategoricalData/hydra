@@ -23,7 +23,7 @@ from hydra.code_generation import (
     strip_module_type_schemes,
 )
 from hydra.compute import Trace
-from hydra.core import Binding, LiteralString, TermLiteral
+from hydra.core import Binding
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 from hydra.graph import Graph
 from hydra.json import model as JsonModel
@@ -88,12 +88,14 @@ def bootstrap_graph():
     """Create an empty graph with standard primitives (the bootstrap graph)."""
     primitives = standard_library()
     return Graph(
-        elements=(),
-        environment=FrozenDict({}),
-        types=FrozenDict({}),
-        body=TermLiteral(LiteralString("empty graph")),
+        bound_terms=FrozenDict({}),
+        bound_types=FrozenDict({}),
+        class_constraints=FrozenDict({}),
+        lambda_variables=frozenset(),
+        metadata=FrozenDict({}),
         primitives=FrozenDict(primitives),
-        schema=Nothing(),
+        schema_types=FrozenDict({}),
+        type_variables=frozenset(),
     )
 
 

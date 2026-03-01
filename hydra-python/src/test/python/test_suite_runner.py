@@ -36,6 +36,7 @@ import hydra.encode.core
 import hydra.formatting
 import hydra.graph
 import hydra.inference
+import hydra.lexical
 import hydra.lib.flows
 import hydra.reduction
 import hydra.serialization
@@ -251,180 +252,133 @@ def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     return False
 
 
+def _decode_schema_types(schema_graph: hydra.graph.Graph) -> FrozenDict:
+    """Decode schema types from a graph using schemaGraphToTypingEnvironment.
+
+    This mirrors Haskell's decodeSchemaTypes:
+        decodeSchemaTypes sg = fromFlow M.empty sg (schemaGraphToTypingEnvironment sg)
+    """
+    flow = hydra.schemas.schema_graph_to_typing_environment(schema_graph)
+    state = flow.value(schema_graph, hydra.monads.empty_trace())
+    match state.value:
+        case Just(value=result):
+            return result
+        case _:
+            return FrozenDict({})
+
+
 def build_test_graph() -> hydra.graph.Graph:
     """
     Build the test graph with schema and primitives.
 
-    This mirrors the Haskell testGraph setup which includes:
-    - Test types (LatLon, Person, etc.) in a schema graph
-    - Test terms (testDataArthur, etc.) as elements
-    - Standard library primitives (hydra.lib.*)
+    This mirrors the Haskell testGraph setup:
+        testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGraph)
+            (kernelElements ++ testElements)
+        testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph)
+            (kernelTermBindings ++ dataBindings)
 
     Returns:
         Graph: The test graph
     """
     from hydra.dsl.python import FrozenDict, Nothing, Just
     import hydra.encode.core
+    import hydra.lexical
+    import hydra.schemas
 
-    # Get the test types from test_graph (e.g., LatLon, Person, etc.)
+    # Step 1: Build hydraCoreGraph - a graph with all kernel type definitions
+    # In Haskell this is Sources.Kernel.Types.Core.hydraCoreGraph
+    # We use the bootstrap graph (which has primitives) and build a schema graph from kernel type modules
+    from hydra.generation import bootstrap_graph, kernel_modules
+    from hydra.code_generation import modules_to_graph
+    bs_graph = bootstrap_graph()
+    km = kernel_modules()
+    hydra_core_graph = modules_to_graph(bs_graph, tuple(km), tuple(km))
+
+    # Step 2: Build testSchemaGraph
+    # Haskell: testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGraph) (kernelElements ++ testElements)
+
+    # Get kernel type bindings from kernel type modules
+    kernel_types = _load_kernel_type_bindings()
+    kernel_elements = list(kernel_types.values())
+
+    # Get test type bindings
     test_types_dict = test_graph.test_types()
-
-    # Build type bindings for the schema graph
-    # Each type becomes a Binding with the type encoded as a term
-    type_bindings = {}
+    type_type_scheme = hydra.core.TypeScheme(
+        variables=(),
+        type=hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")),
+        constraints=Nothing()
+    )
+    test_elements = []
     for name, typ in test_types_dict.items():
-        # Encode the type as a term (like Haskell's EncodeCore.type_)
         type_term = hydra.encode.core.type(typ)
-        # Create a binding with type scheme for Type
-        type_scheme = hydra.core.TypeScheme(
-            variables=(),
-            type=hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")),
-            constraints=Nothing()
-        )
-        type_bindings[name] = hydra.core.Binding(
-            name=name,
-            term=type_term,
-            type=Just(type_scheme)
-        )
+        test_elements.append(hydra.core.Binding(
+            name=name, term=type_term, type=Just(type_type_scheme)))
 
-    # Add additional types needed by tests that aren't in test_types
-    # hydra.compute.Coder is needed by eta_expansion tests
+    # Add Coder and CoderDirection types needed by tests
     coder_name = hydra.core.Name("hydra.compute.Coder")
-    # Coder<s1, s2, v1, v2> is a record with:
-    #   encode: v1 -> Flow s1 v2
-    #   decode: v2 -> Flow s2 v1
     s1 = hydra.core.TypeVariable(hydra.core.Name("s1"))
     s2 = hydra.core.TypeVariable(hydra.core.Name("s2"))
     v1 = hydra.core.TypeVariable(hydra.core.Name("v1"))
     v2 = hydra.core.TypeVariable(hydra.core.Name("v2"))
     flow_name = hydra.core.Name("hydra.compute.Flow")
-
-    # Flow s a = s -> FlowState s a  (simplified as application)
     flow_s1_v2 = hydra.core.TypeApplication(hydra.core.ApplicationType(
         hydra.core.TypeApplication(hydra.core.ApplicationType(
-            hydra.core.TypeVariable(flow_name), s1
-        )), v2
-    ))
+            hydra.core.TypeVariable(flow_name), s1)), v2))
     flow_s2_v1 = hydra.core.TypeApplication(hydra.core.ApplicationType(
         hydra.core.TypeApplication(hydra.core.ApplicationType(
-            hydra.core.TypeVariable(flow_name), s2
-        )), v1
-    ))
-
-    encode_type = hydra.core.TypeFunction(hydra.core.FunctionType(v1, flow_s1_v2))
-    decode_type = hydra.core.TypeFunction(hydra.core.FunctionType(v2, flow_s2_v1))
-
-    coder_record = hydra.core.TypeRecord(hydra.core.RowType(
-        coder_name,
-        (
-            hydra.core.FieldType(hydra.core.Name("encode"), encode_type),
-            hydra.core.FieldType(hydra.core.Name("decode"), decode_type),
-        )
-    ))
-
-    # Wrap in forall for all 4 type variables
+            hydra.core.TypeVariable(flow_name), s2)), v1))
     coder_type = hydra.core.TypeForall(hydra.core.ForallType(
-        hydra.core.Name("s1"),
-        hydra.core.TypeForall(hydra.core.ForallType(
-            hydra.core.Name("s2"),
-            hydra.core.TypeForall(hydra.core.ForallType(
-                hydra.core.Name("v1"),
-                hydra.core.TypeForall(hydra.core.ForallType(
-                    hydra.core.Name("v2"),
-                    coder_record
-                ))
-            ))
-        ))
-    ))
+        hydra.core.Name("s1"), hydra.core.TypeForall(hydra.core.ForallType(
+            hydra.core.Name("s2"), hydra.core.TypeForall(hydra.core.ForallType(
+                hydra.core.Name("v1"), hydra.core.TypeForall(hydra.core.ForallType(
+                    hydra.core.Name("v2"), hydra.core.TypeRecord(hydra.core.RowType(
+                        coder_name, (
+                            hydra.core.FieldType(hydra.core.Name("encode"),
+                                hydra.core.TypeFunction(hydra.core.FunctionType(v1, flow_s1_v2))),
+                            hydra.core.FieldType(hydra.core.Name("decode"),
+                                hydra.core.TypeFunction(hydra.core.FunctionType(v2, flow_s2_v1))),
+                        )))))))))))
+    test_elements.append(hydra.core.Binding(
+        name=coder_name, term=hydra.encode.core.type(coder_type), type=Just(type_type_scheme)))
 
-    coder_term = hydra.encode.core.type(coder_type)
-    coder_type_scheme = hydra.core.TypeScheme(
-        variables=(),
-        type=hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")),
-        constraints=Nothing()
-    )
-    type_bindings[coder_name] = hydra.core.Binding(
-        name=coder_name,
-        term=coder_term,
-        type=Just(coder_type_scheme)
-    )
-
-    # hydra.coders.CoderDirection is an enum with encode and decode variants
     coder_direction_name = hydra.core.Name("hydra.coders.CoderDirection")
     coder_direction_type = hydra.core.TypeUnion(hydra.core.RowType(
-        coder_direction_name,
-        (
+        coder_direction_name, (
             hydra.core.FieldType(hydra.core.Name("encode"), hydra.core.TypeUnit()),
             hydra.core.FieldType(hydra.core.Name("decode"), hydra.core.TypeUnit()),
-        )
-    ))
-    coder_direction_term = hydra.encode.core.type(coder_direction_type)
-    type_bindings[coder_direction_name] = hydra.core.Binding(
-        name=coder_direction_name,
-        term=coder_direction_term,
-        type=Just(coder_type_scheme)  # Reuse the same scheme for Type
-    )
+        )))
+    test_elements.append(hydra.core.Binding(
+        name=coder_direction_name, term=hydra.encode.core.type(coder_direction_type),
+        type=Just(type_type_scheme)))
 
-    # Load kernel type bindings (hydra.core.Type, hydra.core.Name, etc.)
-    # This mirrors how Haskell includes kernelTypesModules in testSchemaGraph:
-    #   kernelElements = L.concat $ fmap moduleElements kernelTypesModules
-    kernel_types = _load_kernel_type_bindings()
+    # Build the schema graph using elementsToGraph
+    core_schema_types = _decode_schema_types(hydra_core_graph)
+    test_schema_graph = hydra.lexical.elements_to_graph(
+        hydra_core_graph, core_schema_types, tuple(kernel_elements + test_elements))
 
-    # Merge test types with kernel types (test types take precedence)
-    all_type_bindings = {**kernel_types, **type_bindings}
+    # Step 3: Build testGraph
+    # Haskell: testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
 
-    # Create the schema graph with test types and kernel types
-    # Note: elements is now a list of Bindings, not a Map Name Binding
-    schema_graph = hydra.graph.Graph(
-        elements=tuple(all_type_bindings.values()),
-        environment=FrozenDict({}),
-        types=FrozenDict({}),
-        body=hydra.core.TermLiteral(hydra.core.LiteralString("schema")),
-        primitives=FrozenDict({}),
-        schema=Nothing()
-    )
+    # Decode schema types from the test schema graph
+    test_schema_types = _decode_schema_types(test_schema_graph)
 
-    # Get test terms from test_graph
+    # Build term bindings
     test_terms_dict = test_graph.test_terms()
+    data_bindings = [hydra.core.Binding(name=name, term=term, type=Nothing())
+                     for name, term in test_terms_dict.items()]
 
-    # Build term bindings for the main graph
-    term_bindings = {}
-    for name, term in test_terms_dict.items():
-        term_bindings[name] = hydra.core.Binding(
-            name=name,
-            term=term,
-            type=Nothing()
-        )
-
-    # Add kernel term bindings (hydra.monads.*, hydra.annotations.*, etc.)
-    # so the evaluator can resolve references to kernel definitions at runtime.
-    # This mirrors how Haskell includes kernelTermsModules in testGraph.
-    # Loaded from JSON (see _load_kernel_term_bindings for rationale).
+    # Load kernel term bindings
     kernel_terms = _load_kernel_term_bindings()
-    term_bindings.update(kernel_terms)
+    kernel_term_bindings = list(kernel_terms.values())
 
-    # Get standard library primitives (hydra.lib.*)
-    # This mirrors how Haskell includes kernelTermsModules in testGraph
-    primitives = hydra.sources.libraries.standard_library()
-
-    # Create the main test graph with schema and primitives
-    # Note: elements is now a list of Bindings, not a Map Name Binding
-    return hydra.graph.Graph(
-        elements=tuple(term_bindings.values()),
-        environment=FrozenDict({}),
-        types=FrozenDict({}),
-        body=hydra.core.TermLiteral(hydra.core.LiteralString("test")),
-        primitives=FrozenDict(primitives),
-        schema=Just(schema_graph)
-    )
+    # Build the test graph using elementsToGraph
+    return hydra.lexical.elements_to_graph(
+        hydra_core_graph, test_schema_types, tuple(kernel_term_bindings + data_bindings))
 
 
-# Cache the test graph, inference context, and type context at module level.
-# This mirrors the Haskell approach where cx is computed once and reused,
-# avoiding the ~19 second overhead per test of rebuilding the inference context.
+# Cache the test graph at module level.
+# This mirrors the Haskell approach where the graph is computed once and reused.
 _test_graph: Optional[hydra.graph.Graph] = None
-_inference_context: Optional[hydra.typing.InferenceContext] = None
-_type_context: Optional[hydra.typing.TypeContext] = None
 
 
 def get_test_graph() -> hydra.graph.Graph:
@@ -434,59 +388,11 @@ def get_test_graph() -> hydra.graph.Graph:
         if BENCHMARK_OUTPUT and _init_start_ns == 0:
             _init_start_ns = time.perf_counter_ns()
         _test_graph = build_test_graph()
-    return _test_graph
-
-
-def get_inference_context() -> hydra.typing.InferenceContext:
-    """
-    Get the cached inference context, building it if necessary.
-
-    This is the key performance optimization: in Haskell, the inference context
-    is computed once at module level (line 135 of TestSuiteSpec.hs):
-        cx = fromFlow emptyInferenceContext () $ graphToInferenceContext testGraph
-
-    Without caching, each test was rebuilding the inference context from scratch,
-    which involves processing the entire schema graph - taking ~19 seconds per test.
-    """
-    global _inference_context
-    if _inference_context is None:
-        graph = get_test_graph()
-        cx_flow = hydra.schemas.graph_to_inference_context(graph)
-        cx_state = cx_flow.value(None, hydra.monads.empty_trace())
-
-        match cx_state.value:
-            case Nothing():
-                errors = "\n".join(cx_state.trace.messages)
-                raise RuntimeError(f"Failed to create inference context:\n{errors}")
-            case Just(value=cx):
-                _inference_context = cx
-    return _inference_context
-
-
-def get_type_context() -> hydra.typing.TypeContext:
-    """
-    Get the cached type context, building it if necessary.
-
-    This is used for typed eta expansion tests. In Haskell:
-        tx <- graphToTypeContext testGraph
-    """
-    global _type_context
-    if _type_context is None:
-        graph = get_test_graph()
-        tx_flow = hydra.schemas.graph_to_type_context(graph)
-        tx_state = tx_flow.value(graph, hydra.monads.empty_trace())
-
-        match tx_state.value:
-            case Nothing():
-                errors = "\n".join(tx_state.trace.messages)
-                raise RuntimeError(f"Failed to create type context:\n{errors}")
-            case Just(value=tx):
-                _type_context = tx
-        # Record initialization time (this is the last context to be built)
+        # Record initialization time
         if BENCHMARK_OUTPUT and _init_start_ns > 0:
             elapsed_ns = time.perf_counter_ns() - _init_start_ns
             _benchmark_results["common/_initialization"] = elapsed_ns / 1_000_000.0
-    return _type_context
+    return _test_graph
 
 
 def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) -> Optional[Callable[[], None]]:
@@ -676,7 +582,7 @@ def run_inference_test(desc: str, test_case: hydra.testing.InferenceTestCase) ->
     expected_scheme = test_case.output
 
     # Get cached inference context (this is the key optimization)
-    cx = get_inference_context()
+    cx = get_test_graph()
 
     # Infer the type
     result_flow = hydra.inference.infer_type_of(cx, input_term)
@@ -731,7 +637,7 @@ def run_inference_failure_test(desc: str, test_case: hydra.testing.InferenceFail
     input_term = test_case.input
 
     # Get cached inference context (this is the key optimization)
-    cx = get_inference_context()
+    cx = get_test_graph()
 
     # Try to infer the type
     result_flow = hydra.inference.infer_type_of(cx, input_term)
@@ -791,7 +697,7 @@ def run_eta_expansion_test(desc: str, test_case: hydra.testing.EtaExpansionTestC
     """
     # Use cached test graph and type context
     graph = get_test_graph()
-    tx = get_type_context()
+    tx = get_test_graph()
 
     # Run the typed eta expansion (matches Haskell's etaExpandTypedTerm)
     flow_result = hydra.reduction.eta_expand_typed_term(tx, test_case.input)
@@ -943,7 +849,7 @@ def run_topological_sort_scc_test(test_case: hydra.testing.TopologicalSortSCCTes
 def run_type_checking_test(desc: str, test_case: hydra.testing.TypeCheckingTestCase) -> None:
     """Execute a type checking test."""
     # Get cached inference context (this is the key optimization)
-    cx = get_inference_context()
+    cx = get_test_graph()
 
     # Infer the type
     result_flow = hydra.inference.infer_type_of(cx, test_case.input)
@@ -964,7 +870,7 @@ def run_type_checking_test(desc: str, test_case: hydra.testing.TypeCheckingTestC
     # Compare the inferred type with expected output type
     # Convert the TypeScheme to a Type with forall quantifiers for comparison
     expected_type_str = hydra.show.core.type(test_case.output_type)
-    inferred_type = hydra.schemas.type_scheme_to_f_type(inferred_scheme)
+    inferred_type = hydra.rewriting.type_scheme_to_f_type(inferred_scheme)
     inferred_type_str = hydra.show.core.type(inferred_type)
 
     assert inferred_type_str == expected_type_str, (
@@ -986,13 +892,11 @@ def run_type_checking_test(desc: str, test_case: hydra.testing.TypeCheckingTestC
 
 def run_type_reduction_test(desc: str, test_case: hydra.testing.TypeReductionTestCase) -> None:
     """Execute a type reduction test."""
-    # Use cached test graph - type reduction needs the schema graph
+    # Use cached test graph - type reduction needs the graph with schema types
     graph = get_test_graph()
-    # Type reduction runs with the schema graph as context
-    schema_graph = graph.schema.value if isinstance(graph.schema, Just) else graph
 
     result_flow = hydra.reduction.beta_reduce_type(test_case.input)
-    result_state = result_flow.value(schema_graph, hydra.monads.empty_trace())
+    result_state = result_flow.value(graph, hydra.monads.empty_trace())
 
     match result_state.value:
         case Nothing():
@@ -1232,13 +1136,7 @@ def run_json_roundtrip_test(test_case: hydra.testing.JsonRoundtripTestCase) -> N
 
 def run_hoist_subterms_test(test_case: hydra.testing.HoistSubtermsTestCase) -> None:
     """Execute a hoist subterms test."""
-    # Create an empty type context (matches Haskell's emptyTypeContext)
-    empty_inference_context = hydra.typing.InferenceContext(
-        FrozenDict({}), FrozenDict({}), FrozenDict({}), FrozenDict({}), False
-    )
-    empty_type_context = hydra.typing.TypeContext(
-        FrozenDict({}), FrozenDict({}), frozenset(), frozenset(), frozenset(), empty_inference_context
-    )
+    empty_graph = hydra.lexical.empty_graph()
 
     # Build the predicate function based on the predicate type
     def predicate_fn(path_term: tuple) -> bool:
@@ -1256,7 +1154,7 @@ def run_hoist_subterms_test(test_case: hydra.testing.HoistSubtermsTestCase) -> N
                     return isinstance(term.value, hydra.core.FunctionElimination)
                 return False
 
-    result = hydra.hoisting.hoist_subterms(predicate_fn, empty_type_context, test_case.input)
+    result = hydra.hoisting.hoist_subterms(predicate_fn, empty_graph, test_case.input)
 
     assert result == test_case.output, (
         f"Hoist subterms failed:\n"
@@ -1267,15 +1165,9 @@ def run_hoist_subterms_test(test_case: hydra.testing.HoistSubtermsTestCase) -> N
 
 def run_hoist_case_statements_test(test_case: hydra.testing.HoistCaseStatementsTestCase) -> None:
     """Execute a hoist case statements test."""
-    # Create an empty type context (matches Haskell's emptyTypeContext)
-    empty_inference_context = hydra.typing.InferenceContext(
-        FrozenDict({}), FrozenDict({}), FrozenDict({}), FrozenDict({}), False
-    )
-    empty_type_context = hydra.typing.TypeContext(
-        FrozenDict({}), FrozenDict({}), frozenset(), frozenset(), frozenset(), empty_inference_context
-    )
+    empty_graph = hydra.lexical.empty_graph()
 
-    result = hydra.hoisting.hoist_case_statements(empty_type_context, test_case.input)
+    result = hydra.hoisting.hoist_case_statements(empty_graph, test_case.input)
 
     assert result == test_case.output, (
         f"Hoist case statements failed:\n"
@@ -1681,7 +1573,7 @@ _all_tests = generate_pytest_tests(test_suite.all_tests(), default_test_runner)
 # Eagerly initialize test infrastructure so that JSON module loading
 # and graph construction are not counted inside the first test group's timer.
 get_test_graph()
-get_inference_context()
+get_test_graph()
 
 # Build a mapping from Python test names to Hydra paths for cross-language benchmarking
 # This can be imported by benchmark tools to correlate test results across implementations
