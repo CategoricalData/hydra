@@ -10,7 +10,6 @@ from hydra.dsl.python import FrozenDict, Just, Nothing, frozenlist
 from typing import TypeVar, cast
 import hydra.core
 import hydra.decode.core
-import hydra.graph
 import hydra.lib.flows
 import hydra.lib.logic
 import hydra.lib.maps
@@ -25,13 +24,13 @@ T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 
-def graph_to_schema(g: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
-    r"""Create a graph schema from a graph which contains nothing but encoded type definitions."""
+def graph_to_schema(els: frozenlist[hydra.core.Binding]) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, hydra.core.Type]]:
+    r"""Decode a list of type-encoding bindings into a map of named types."""
     
     def to_pair(el: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, tuple[hydra.core.Name, hydra.core.Type]]:
         name = el.name
-        return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, el.term))), (lambda t: hydra.lib.flows.pure((name, t))))))
-    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: to_pair(x1)), g.elements), (lambda pairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(pairs))))
+        return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: hydra.lib.flows.bind(hydra.monads.with_trace("graph to schema", hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(graph, el.term))), (lambda t: hydra.lib.flows.pure((name, t))))))
+    return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: to_pair(x1)), els), (lambda pairs: hydra.lib.flows.pure(hydra.lib.maps.from_list(pairs))))
 
 def instantiate_template(minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Term]:
     r"""Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals."""

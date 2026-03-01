@@ -8,8 +8,8 @@ from hydra.dsl.python import FrozenDict, Maybe, Node
 from typing import Annotated, TypeAlias
 import hydra.core
 import hydra.ext.java.syntax
+import hydra.graph
 import hydra.module
-import hydra.typing
 
 class JavaSymbolClassConstant:
     r"""A constant value"""
@@ -112,8 +112,8 @@ class JavaEnvironment:
     r"""Environment for Java code generation."""
     
     aliases: Annotated[Aliases, "Aliases and context state"]
-    type_context: Annotated[hydra.typing.TypeContext, "Type context for type inference"]
+    graph: Annotated[hydra.graph.Graph, "Graph context for type inference"]
     
     TYPE_ = hydra.core.Name("hydra.ext.java.helpers.JavaEnvironment")
     ALIASES = hydra.core.Name("aliases")
-    TYPE_CONTEXT = hydra.core.Name("typeContext")
+    GRAPH = hydra.core.Name("graph")

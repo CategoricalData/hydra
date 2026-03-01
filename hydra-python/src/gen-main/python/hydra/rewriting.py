@@ -208,6 +208,21 @@ def detype_term(t: hydra.core.Term) -> hydra.core.Term:
         case _:
             return t
 
+def f_type_to_type_scheme(typ: hydra.core.Type) -> hydra.core.TypeScheme:
+    r"""Convert a forall type to a type scheme."""
+    
+    def gather_forall(vars: frozenlist[hydra.core.Name], typ2: hydra.core.Type) -> hydra.core.TypeScheme:
+        while True:
+            match deannotate_type(typ2):
+                case hydra.core.TypeForall(value=ft):
+                    vars = hydra.lib.lists.cons(ft.parameter, vars)
+                    typ2 = ft.body
+                    continue
+                
+                case _:
+                    return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), typ2, Nothing())
+    return gather_forall((), typ)
+
 def rewrite_term(f: Callable[[Callable[[hydra.core.Term], hydra.core.Term], hydra.core.Term], hydra.core.Term], term0: hydra.core.Term) -> hydra.core.Term:
     def fsub(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term) -> hydra.core.Term:
         def for_field(f2: hydra.core.Field) -> hydra.core.Field:
@@ -2246,6 +2261,13 @@ def type_names_in_type(typ0: hydra.core.Type) -> frozenset[hydra.core.Name]:
 
 def type_dependency_names(with_schema: bool, typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
     return hydra.lib.logic.if_else(with_schema, (lambda : hydra.lib.sets.union(free_variables_in_type(typ), type_names_in_type(typ))), (lambda : free_variables_in_type(typ)))
+
+def type_scheme_to_f_type(ts: hydra.core.TypeScheme) -> hydra.core.Type:
+    r"""Convert a type scheme to a forall type."""
+    
+    vars = ts.variables
+    body = ts.type
+    return hydra.lib.lists.foldl((lambda t, v: cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(v, t)))), body, hydra.lib.lists.reverse(vars))
 
 def unshadow_variables(term0: hydra.core.Term) -> hydra.core.Term:
     r"""Rename all shadowed variables (both lambda parameters and let-bound variables that shadow lambda parameters) in a term."""

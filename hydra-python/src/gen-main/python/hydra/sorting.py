@@ -38,7 +38,7 @@ def create_ordering_isomorphism(source_ord: frozenlist[T0], target_ord: frozenli
         def mp() -> FrozenDict[T0, T2]:
             return hydra.lib.maps.from_list(hydra.lib.lists.zip(target_ord, els))
         return hydra.lib.maybes.cat(hydra.lib.lists.map((lambda n: hydra.lib.maps.lookup(n, mp())), source_ord))
-    return hydra.topology.OrderingIsomorphism(source_to_target_mapping, target_to_source_mapping)
+    return hydra.topology.OrderingIsomorphism((lambda x1: source_to_target_mapping(x1)), (lambda x1: target_to_source_mapping(x1)))
 
 def find_reachable_nodes(adj: Callable[[T0], frozenset[T0]], root: T0) -> frozenset[T0]:
     r"""Given an adjacency function and a distinguished root node, find all reachable nodes (including the root node)."""
@@ -90,7 +90,7 @@ def topological_sort(pairs: frozenlist[tuple[T0, frozenlist[T0]]]) -> Either[fro
         return hydra.lib.logic.not_(hydra.lib.lists.null(hydra.lib.lists.tail(scc)))
     @lru_cache(1)
     def with_cycles() -> frozenlist[frozenlist[T0]]:
-        return hydra.lib.lists.filter(is_cycle, sccs())
+        return hydra.lib.lists.filter((lambda x1: is_cycle(x1)), sccs())
     return hydra.lib.logic.if_else(hydra.lib.lists.null(with_cycles()), (lambda : Right(hydra.lib.lists.concat(sccs()))), (lambda : Left(with_cycles())))
 
 def topological_sort_nodes(get_key: Callable[[T0], T1], get_adj: Callable[[T0], frozenlist[T1]], nodes: frozenlist[T0]) -> frozenlist[frozenlist[T0]]:

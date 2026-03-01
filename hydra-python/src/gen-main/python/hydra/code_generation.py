@@ -34,6 +34,7 @@ import hydra.lib.strings
 import hydra.module
 import hydra.monads
 import hydra.rewriting
+import hydra.schemas
 import hydra.show.core
 import hydra.util
 
@@ -42,9 +43,9 @@ T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 
 def build_schema_map(g: hydra.graph.Graph) -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-    r"""Build a schema map (Name -> Type) from a graph's schema."""
+    r"""Build a schema map (Name -> Type) from a graph's schema types."""
     
-    return hydra.lib.maybes.maybe(hydra.lib.maps.empty(), (lambda schema_graph: hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda binding: (result := hydra.decode.core.type(schema_graph, binding.term), hydra.lib.eithers.either((lambda _err: Nothing()), (lambda typ: Just((binding.name, hydra.rewriting.deannotate_type(typ)))), result))[1]), schema_graph.elements)))), g.schema)
+    return hydra.lib.maps.map((lambda ts: hydra.rewriting.deannotate_type(ts.type)), g.schema_types)
 
 def transitive_deps(get_deps: Callable[[hydra.module.Module], frozenlist[hydra.module.Namespace]], ns_map: FrozenDict[hydra.module.Namespace, hydra.module.Module], start_mods: frozenlist[hydra.module.Module]) -> frozenset[hydra.module.Namespace]:
     r"""Compute transitive closure of module dependencies."""
@@ -95,8 +96,11 @@ def modules_to_graph(bs_graph: hydra.graph.Graph, universe_modules: frozenlist[h
         return hydra.lib.lists.filter((lambda e: hydra.lib.logic.not_(hydra.annotations.is_native_type(e))), hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: m.elements), data_modules())))
     @lru_cache(1)
     def schema_graph() -> hydra.graph.Graph:
-        return hydra.lexical.elements_to_graph(bs_graph, Nothing(), schema_elements())
-    return hydra.lexical.elements_to_graph(bs_graph, Just(schema_graph()), data_elements())
+        return hydra.lexical.elements_to_graph(bs_graph, hydra.lib.maps.empty(), schema_elements())
+    @lru_cache(1)
+    def schema_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
+        return hydra.monads.from_flow(hydra.lib.maps.empty(), schema_graph(), hydra.schemas.schema_graph_to_typing_environment(schema_graph()))
+    return hydra.lexical.elements_to_graph(bs_graph, schema_types(), data_elements())
 
 def strip_module_type_schemes(m: hydra.module.Module) -> hydra.module.Module:
     r"""Strip TypeSchemes from term bindings in a module, preserving type binding TypeSchemes. JSON-loaded modules carry inferred TypeSchemes from the original compilation. After adaptation (e.g., bigfloat -> float64), these TypeSchemes become stale and can cause inference errors. Stripping them allows the inference engine to reconstruct correct TypeSchemes from scratch."""
@@ -153,26 +157,52 @@ def format_term_binding(binding: hydra.core.Binding) -> str:
 def format_type_binding(binding: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, str]:
     r"""Format a type binding for the lexicon."""
     
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: hydra.lib.flows.bind(hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(g, binding.term)), (lambda typ: hydra.lib.flows.pure(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", binding.name.value), " = "), hydra.show.core.type(typ)))))))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: hydra.lib.flows.bind(hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(graph, binding.term)), (lambda typ: hydra.lib.flows.pure(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", binding.name.value), " = "), hydra.show.core.type(typ)))))))
 
 def generate_coder_modules(codec: Callable[[T0], hydra.compute.Flow[hydra.graph.Graph, Maybe[T1]]], bs_graph: hydra.graph.Graph, universe_modules: frozenlist[hydra.module.Module], type_modules: frozenlist[T0]) -> hydra.compute.Flow[T2, frozenlist[T1]]:
     r"""Generate encoder or decoder modules for a list of type modules."""
     
     @lru_cache(1)
+    def universe() -> FrozenDict[hydra.module.Namespace, hydra.module.Module]:
+        return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda m: (m.namespace, m)), hydra.lib.lists.concat2(universe_modules, universe_modules)))
+    @lru_cache(1)
+    def schema_modules() -> frozenlist[hydra.module.Module]:
+        return module_type_deps_transitive(universe(), universe_modules)
+    @lru_cache(1)
+    def data_modules() -> frozenlist[hydra.module.Module]:
+        return module_term_deps_transitive(universe(), universe_modules)
+    @lru_cache(1)
+    def schema_elements() -> frozenlist[hydra.core.Binding]:
+        return hydra.lib.lists.filter((lambda e: hydra.annotations.is_native_type(e)), hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: m.elements), hydra.lib.lists.concat2(schema_modules(), universe_modules))))
+    @lru_cache(1)
+    def data_elements() -> frozenlist[hydra.core.Binding]:
+        return hydra.lib.lists.filter((lambda e: hydra.lib.logic.not_(hydra.annotations.is_native_type(e))), hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: m.elements), data_modules())))
+    @lru_cache(1)
+    def schema_graph() -> hydra.graph.Graph:
+        return hydra.lexical.elements_to_graph(bs_graph, hydra.lib.maps.empty(), schema_elements())
+    @lru_cache(1)
+    def schema_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
+        return hydra.monads.from_flow(hydra.lib.maps.empty(), schema_graph(), hydra.schemas.schema_graph_to_typing_environment(schema_graph()))
+    @lru_cache(1)
+    def all_elements() -> frozenlist[hydra.core.Binding]:
+        return hydra.lib.lists.concat2(schema_elements(), data_elements())
+    @lru_cache(1)
     def graph() -> hydra.graph.Graph:
-        return modules_to_graph(bs_graph, universe_modules, universe_modules)
-    return hydra.lib.maybes.maybe(hydra.lib.flows.fail("No schema graph available"), (lambda schema_graph: hydra.monads.with_state(schema_graph, hydra.lib.flows.map((lambda results: hydra.lib.maybes.cat(results)), hydra.lib.flows.map_list(codec, type_modules)))), graph().schema)
+        return hydra.lexical.elements_to_graph(bs_graph, schema_types(), all_elements())
+    return hydra.monads.with_state(graph(), hydra.lib.flows.map((lambda results: hydra.lib.maybes.cat(results)), hydra.lib.flows.map_list(codec, type_modules)))
 
 def generate_lexicon(graph: hydra.graph.Graph) -> hydra.compute.Flow[hydra.graph.Graph, str]:
     r"""Generate the lexicon content from a graph."""
     
-    bindings = graph.elements
+    @lru_cache(1)
+    def bindings() -> frozenlist[hydra.core.Binding]:
+        return hydra.lexical.graph_to_bindings(graph)
     @lru_cache(1)
     def primitives() -> frozenlist[hydra.graph.Primitive]:
         return hydra.lib.maps.elems(graph.primitives)
     @lru_cache(1)
     def partitioned() -> tuple[frozenlist[hydra.core.Binding], frozenlist[hydra.core.Binding]]:
-        return hydra.lib.lists.partition((lambda b: hydra.annotations.is_native_type(b)), bindings)
+        return hydra.lib.lists.partition((lambda b: hydra.annotations.is_native_type(b)), bindings())
     @lru_cache(1)
     def type_bindings() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.pairs.first(partitioned())
@@ -222,11 +252,14 @@ def generate_source_files(print_definitions: Callable[[hydra.module.Module, froz
         return hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: m.elements), data_mods()))
     @lru_cache(1)
     def schema_graph() -> hydra.graph.Graph:
-        return hydra.lexical.elements_to_graph(bs_graph, Nothing(), schema_elements())
+        return hydra.lexical.elements_to_graph(bs_graph, hydra.lib.maps.empty(), schema_elements())
+    @lru_cache(1)
+    def schema_types2() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
+        return hydra.monads.from_flow(hydra.lib.maps.empty(), schema_graph(), hydra.schemas.schema_graph_to_typing_environment(schema_graph()))
     @lru_cache(1)
     def data_graph() -> hydra.graph.Graph:
-        return hydra.lexical.elements_to_graph(bs_graph, Just(schema_graph()), data_elements())
-    return hydra.lib.flows.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(type_modules_to_generate()), (lambda : hydra.lib.flows.pure(())), (lambda : hydra.monads.with_trace("generate type modules", (name_lists := hydra.lib.lists.map((lambda m: hydra.lib.lists.map((lambda e: e.name), hydra.lib.lists.filter((lambda e: hydra.annotations.is_native_type(e)), m.elements))), type_modules_to_generate()), hydra.lib.flows.bind(hydra.adapt.simple.schema_graph_to_definitions(constraints, schema_graph(), name_lists), (lambda schema_result: (def_lists := hydra.lib.pairs.second(schema_result), hydra.monads.with_state(schema_graph(), hydra.lib.flows.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.flows.map_list((lambda p: (mod := hydra.lib.pairs.first(p), defs := hydra.lib.pairs.second(p), hydra.monads.with_trace(hydra.lib.strings.cat2("type module ", mod.namespace.value), hydra.lib.flows.map((lambda m: hydra.lib.maps.to_list(m)), print_definitions(mod, hydra.lib.lists.map((lambda d: cast(hydra.module.Definition, hydra.module.DefinitionType(d))), defs)))))[2]), hydra.lib.lists.zip(type_modules_to_generate(), def_lists)))))[1])))[1]))), (lambda schema_files: hydra.lib.flows.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(term_modules_to_generate()), (lambda : hydra.lib.flows.pure(())), (lambda : hydra.monads.with_trace("generate term modules", (namespaces := hydra.lib.lists.map((lambda m: m.namespace), term_modules_to_generate()), hydra.lib.flows.bind(hydra.adapt.simple.data_graph_to_definitions(constraints, do_infer, do_expand, do_hoist_case_statements, do_hoist_polymorphic_let_bindings, data_graph(), namespaces), (lambda data_result: (g1 := hydra.lib.pairs.first(data_result), def_lists := hydra.lib.pairs.second(data_result), refresh_module := (lambda els, m: hydra.module.Module(m.namespace, hydra.lib.maybes.cat(hydra.lib.lists.map((lambda e: hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, e.name)), els)), m.elements)), m.term_dependencies, m.type_dependencies, m.description)), refreshed_mods := hydra.lib.lists.map((lambda m: refresh_module(g1.elements, m)), term_modules_to_generate()), hydra.monads.with_state(g1, hydra.lib.flows.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.flows.map_list((lambda p: (mod := hydra.lib.pairs.first(p), defs := hydra.lib.pairs.second(p), hydra.monads.with_trace(hydra.lib.strings.cat2("term module ", mod.namespace.value), hydra.lib.flows.map((lambda m: hydra.lib.maps.to_list(m)), print_definitions(mod, hydra.lib.lists.map((lambda d: cast(hydra.module.Definition, hydra.module.DefinitionTerm(d))), defs)))))[2]), hydra.lib.lists.zip(refreshed_mods, def_lists)))))[4])))[1]))), (lambda term_files: hydra.lib.flows.pure(hydra.lib.lists.concat2(schema_files, term_files))))))
+        return hydra.lexical.elements_to_graph(bs_graph, schema_types2(), data_elements())
+    return hydra.lib.flows.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(type_modules_to_generate()), (lambda : hydra.lib.flows.pure(())), (lambda : hydra.monads.with_trace("generate type modules", (name_lists := hydra.lib.lists.map((lambda m: hydra.lib.lists.map((lambda e: e.name), hydra.lib.lists.filter((lambda e: hydra.annotations.is_native_type(e)), m.elements))), type_modules_to_generate()), hydra.lib.flows.bind(hydra.adapt.simple.schema_graph_to_definitions(constraints, schema_graph(), name_lists), (lambda schema_result: (def_lists := hydra.lib.pairs.second(schema_result), hydra.monads.with_state(hydra.graph.Graph(schema_graph().bound_terms, schema_graph().bound_types, schema_graph().class_constraints, schema_graph().lambda_variables, schema_graph().metadata, schema_graph().primitives, schema_types2(), schema_graph().type_variables), hydra.lib.flows.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.flows.map_list((lambda p: (mod := hydra.lib.pairs.first(p), defs := hydra.lib.pairs.second(p), hydra.monads.with_trace(hydra.lib.strings.cat2("type module ", mod.namespace.value), hydra.lib.flows.map((lambda m: hydra.lib.maps.to_list(m)), print_definitions(mod, hydra.lib.lists.map((lambda d: cast(hydra.module.Definition, hydra.module.DefinitionType(d))), defs)))))[2]), hydra.lib.lists.zip(type_modules_to_generate(), def_lists)))))[1])))[1]))), (lambda schema_files: hydra.lib.flows.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(term_modules_to_generate()), (lambda : hydra.lib.flows.pure(())), (lambda : hydra.monads.with_trace("generate term modules", (namespaces := hydra.lib.lists.map((lambda m: m.namespace), term_modules_to_generate()), hydra.lib.flows.bind(hydra.adapt.simple.data_graph_to_definitions(constraints, do_infer, do_expand, do_hoist_case_statements, do_hoist_polymorphic_let_bindings, data_elements(), data_graph(), namespaces), (lambda data_result: (g1 := hydra.lib.pairs.first(data_result), def_lists := hydra.lib.pairs.second(data_result), refresh_module := (lambda els, m: hydra.module.Module(m.namespace, hydra.lib.maybes.cat(hydra.lib.lists.map((lambda e: hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, e.name)), els)), m.elements)), m.term_dependencies, m.type_dependencies, m.description)), refreshed_mods := hydra.lib.lists.map((lambda m: refresh_module(hydra.lexical.graph_to_bindings(g1), m)), term_modules_to_generate()), hydra.monads.with_state(g1, hydra.lib.flows.map((lambda xs: hydra.lib.lists.concat(xs)), hydra.lib.flows.map_list((lambda p: (mod := hydra.lib.pairs.first(p), defs := hydra.lib.pairs.second(p), hydra.monads.with_trace(hydra.lib.strings.cat2("term module ", mod.namespace.value), hydra.lib.flows.map((lambda m: hydra.lib.maps.to_list(m)), print_definitions(mod, hydra.lib.lists.map((lambda d: cast(hydra.module.Definition, hydra.module.DefinitionTerm(d))), defs)))))[2]), hydra.lib.lists.zip(refreshed_mods, def_lists)))))[4])))[1]))), (lambda term_files: hydra.lib.flows.pure(hydra.lib.lists.concat2(schema_files, term_files))))))
 
 def infer_and_generate_lexicon(bs_graph: hydra.graph.Graph, kernel_modules: frozenlist[hydra.module.Module]) -> hydra.compute.Flow[T0, str]:
     r"""Perform type inference and generate the lexicon for a set of modules."""
@@ -234,7 +267,10 @@ def infer_and_generate_lexicon(bs_graph: hydra.graph.Graph, kernel_modules: froz
     @lru_cache(1)
     def g0() -> hydra.graph.Graph:
         return modules_to_graph(bs_graph, kernel_modules, kernel_modules)
-    return hydra.lib.flows.bind(hydra.inference.infer_graph_types(g0()), (lambda g1: hydra.monads.with_state(g1, generate_lexicon(g1))))
+    @lru_cache(1)
+    def data_elements() -> frozenlist[hydra.core.Binding]:
+        return hydra.lib.lists.filter((lambda e: hydra.lib.logic.not_(hydra.annotations.is_native_type(e))), hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: m.elements), kernel_modules)))
+    return hydra.lib.flows.bind(hydra.inference.infer_graph_types(data_elements(), g0()), (lambda infer_result: (g1 := hydra.lib.pairs.first(infer_result), hydra.monads.with_state(g1, generate_lexicon(g1)))[1]))
 
 def infer_modules(bs_graph: hydra.graph.Graph, universe_mods: frozenlist[hydra.module.Module], target_mods: frozenlist[hydra.module.Module]) -> hydra.compute.Flow[T0, frozenlist[hydra.module.Module]]:
     r"""Perform type inference on modules and reconstruct with inferred types."""
@@ -242,7 +278,10 @@ def infer_modules(bs_graph: hydra.graph.Graph, universe_mods: frozenlist[hydra.m
     @lru_cache(1)
     def g0() -> hydra.graph.Graph:
         return modules_to_graph(bs_graph, universe_mods, universe_mods)
-    return hydra.lib.flows.bind(hydra.inference.infer_graph_types(g0()), (lambda g1: (inferred_elements := g1.elements, is_type_module := (lambda mod: hydra.lib.lists.null(hydra.lib.lists.filter((lambda e: hydra.lib.logic.not_(hydra.annotations.is_native_type(e))), mod.elements))), refresh_module := (lambda m: hydra.lib.logic.if_else(is_type_module(m), (lambda : m), (lambda : hydra.module.Module(m.namespace, hydra.lib.maybes.cat(hydra.lib.lists.map((lambda e: hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, e.name)), inferred_elements)), m.elements)), m.term_dependencies, m.type_dependencies, m.description)))), hydra.lib.flows.pure(hydra.lib.lists.map((lambda x1: refresh_module(x1)), target_mods)))[3]))
+    @lru_cache(1)
+    def data_elements() -> frozenlist[hydra.core.Binding]:
+        return hydra.lib.lists.filter((lambda e: hydra.lib.logic.not_(hydra.annotations.is_native_type(e))), hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: m.elements), universe_mods)))
+    return hydra.lib.flows.bind(hydra.inference.infer_graph_types(data_elements(), g0()), (lambda infer_result: (g1 := hydra.lib.pairs.first(infer_result), inferred_elements := hydra.lib.pairs.second(infer_result), is_type_module := (lambda mod: hydra.lib.lists.null(hydra.lib.lists.filter((lambda e: hydra.lib.logic.not_(hydra.annotations.is_native_type(e))), mod.elements))), refresh_module := (lambda m: hydra.lib.logic.if_else(is_type_module(m), (lambda : m), (lambda : hydra.module.Module(m.namespace, hydra.lib.maybes.cat(hydra.lib.lists.map((lambda e: hydra.lib.lists.find((lambda b: hydra.lib.equality.equal(b.name, e.name)), inferred_elements)), m.elements)), m.term_dependencies, m.type_dependencies, m.description)))), hydra.lib.flows.pure(hydra.lib.lists.map((lambda x1: refresh_module(x1)), target_mods)))[4]))
 
 def module_to_json(m: hydra.module.Module) -> Either[str, str]:
     r"""Convert a Module to a JSON string."""

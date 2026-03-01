@@ -2448,7 +2448,7 @@ class VariableAccess(metaclass=_VariableAccessMeta):
     EXPRESSION_NAME = hydra.core.Name("expressionName")
     FIELD_ACCESS = hydra.core.Name("fieldAccess")
 
-class PrimaryNoNewArray(Node["PrimaryNoNewArray"]):
+class PrimaryNoNewArray_(Node["PrimaryNoNewArray"]):
     ...
 
 class PrimaryArrayCreation(Node["ArrayCreationExpression"]):

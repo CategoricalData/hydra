@@ -13,6 +13,7 @@ import hydra.checking
 import hydra.coders
 import hydra.core
 import hydra.formatting
+import hydra.graph
 import hydra.lexical
 import hydra.lib.equality
 import hydra.lib.flows
@@ -34,23 +35,23 @@ T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 T3 = TypeVar("T3")
 
-def try_type_of(msg: str, tc: hydra.typing.TypeContext, term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Type]:
+def try_type_of(msg: str, tc: hydra.graph.Graph, term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Type]:
     r"""Infer the type of a term with tracing."""
     
     return hydra.monads.with_trace(msg, hydra.checking.type_of(tc, (), term))
 
-def analyze_function_term_with_finish(get_t_c: Callable[[T0], hydra.typing.TypeContext], f_env: T0, tparams: frozenlist[hydra.core.Name], args: frozenlist[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], doms: frozenlist[hydra.core.Type], tapps: frozenlist[hydra.core.Type], body: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
+def analyze_function_term_with_finish(get_t_c: Callable[[T0], hydra.graph.Graph], f_env: T0, tparams: frozenlist[hydra.core.Name], args: frozenlist[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], doms: frozenlist[hydra.core.Type], tapps: frozenlist[hydra.core.Type], body: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
     @lru_cache(1)
     def body_with_tapps() -> hydra.core.Term:
         return hydra.lib.lists.foldl((lambda trm, typ: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(trm, typ)))), body, tapps)
     return hydra.lib.flows.bind(hydra.lib.flows.with_default(Nothing(), hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), try_type_of("analyzeFunctionTermWith", get_t_c(f_env), body_with_tapps()))), (lambda mcod: hydra.lib.flows.pure(hydra.typing.FunctionStructure(hydra.lib.lists.reverse(tparams), hydra.lib.lists.reverse(args), bindings, body_with_tapps(), hydra.lib.lists.reverse(doms), mcod, f_env))))
 
-def analyze_function_term_with_gather(for_binding: Callable[[hydra.typing.TypeContext, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.typing.TypeContext], set_t_c: Callable[[hydra.typing.TypeContext, T0], T0], arg_mode: bool, g_env: T0, tparams: frozenlist[hydra.core.Name], args: frozenlist[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], doms: frozenlist[hydra.core.Type], tapps: frozenlist[hydra.core.Type], t: hydra.core.Term):
+def analyze_function_term_with_gather(for_binding: Callable[[hydra.graph.Graph, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], arg_mode: bool, g_env: T0, tparams: frozenlist[hydra.core.Name], args: frozenlist[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], doms: frozenlist[hydra.core.Type], tapps: frozenlist[hydra.core.Type], t: hydra.core.Term):
     while True:
         def _hoist_hydra_coder_utils_analyze_function_term_with_gather_1(arg_mode, args, bindings, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
-                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_"))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.schemas.extend_type_context_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_with_finish(get_t_c, g_env, tparams, args, bindings, doms, tapps, t)))
+                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_"))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_with_finish(get_t_c, g_env, tparams, args, bindings, doms, tapps, t)))
                 
                 case _:
                     return analyze_function_term_with_finish(get_t_c, g_env, tparams, args, bindings, doms, tapps, t)
@@ -59,31 +60,31 @@ def analyze_function_term_with_gather(for_binding: Callable[[hydra.typing.TypeCo
                 return _hoist_hydra_coder_utils_analyze_function_term_with_gather_1(arg_mode, args, bindings, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, f)
             
             case hydra.core.TermLet(value=lt):
-                return (new_bindings := lt.bindings, (body := lt.body, (new_env := set_t_c(hydra.schemas.extend_type_context_for_let(for_binding, get_t_c(g_env), lt), g_env), analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, False, new_env, tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body))[1])[1])[1]
+                return (new_bindings := lt.bindings, (body := lt.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_let(for_binding, get_t_c(g_env), lt), g_env), analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, False, new_env, tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body))[1])[1])[1]
             
             case hydra.core.TermTypeApplication(value=ta):
                 return (ta_body := ta.body, (typ := ta.type, analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, arg_mode, g_env, tparams, args, bindings, doms, hydra.lib.lists.cons(typ, tapps), ta_body))[1])[1]
             
             case hydra.core.TermTypeLambda(value=tl):
-                return (tvar := tl.parameter, (tl_body := tl.body, (new_env := set_t_c(hydra.schemas.extend_type_context_for_type_lambda(get_t_c(g_env), tl), g_env), analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body))[1])[1])[1]
+                return (tvar := tl.parameter, (tl_body := tl.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_type_lambda(get_t_c(g_env), tl), g_env), analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body))[1])[1])[1]
             
             case _:
                 return analyze_function_term_with_finish(get_t_c, g_env, tparams, args, bindings, doms, tapps, t)
 
-def analyze_function_term_with(for_binding: Callable[[hydra.typing.TypeContext, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.typing.TypeContext], set_t_c: Callable[[hydra.typing.TypeContext, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
+def analyze_function_term_with(for_binding: Callable[[hydra.graph.Graph, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
     r"""Analyze a function term with configurable binding metadata."""
     
     return analyze_function_term_with_gather(for_binding, get_t_c, set_t_c, True, env, (), (), (), (), (), term)
 
-def is_complex_variable(tc: hydra.typing.TypeContext, name: hydra.core.Name) -> bool:
+def is_complex_variable(tc: hydra.graph.Graph, name: hydra.core.Name) -> bool:
     r"""Check if a variable is bound to a complex term."""
     
     @lru_cache(1)
     def meta_lookup() -> Maybe[hydra.core.Term]:
         return hydra.lib.maps.lookup(name, tc.metadata)
-    return hydra.lib.logic.if_else(hydra.lib.maybes.is_just(meta_lookup()), (lambda : True), (lambda : hydra.lib.logic.if_else(hydra.lib.sets.member(name, tc.lambda_variables), (lambda : True), (lambda : (type_lookup := hydra.lib.maps.lookup(name, tc.types), hydra.lib.logic.not_(hydra.lib.maybes.is_just(type_lookup)))[1]))))
+    return hydra.lib.logic.if_else(hydra.lib.maybes.is_just(meta_lookup()), (lambda : True), (lambda : hydra.lib.logic.if_else(hydra.lib.sets.member(name, tc.lambda_variables), (lambda : True), (lambda : (type_lookup := hydra.lib.maps.lookup(name, tc.bound_types), hydra.lib.logic.not_(hydra.lib.maybes.is_just(type_lookup)))[1]))))
 
-def is_complex_term(tc: hydra.typing.TypeContext, t: hydra.core.Term) -> bool:
+def is_complex_term(tc: hydra.graph.Graph, t: hydra.core.Term) -> bool:
     r"""Check if a term needs to be treated as a function rather than a simple value."""
     
     match t:
@@ -102,24 +103,24 @@ def is_complex_term(tc: hydra.typing.TypeContext, t: hydra.core.Term) -> bool:
         case _:
             return hydra.lib.lists.foldl((lambda b, sub: hydra.lib.logic.or_(b, is_complex_term(tc, sub))), False, hydra.rewriting.subterms(t))
 
-def is_complex_binding(tc: hydra.typing.TypeContext, b: hydra.core.Binding) -> bool:
+def is_complex_binding(tc: hydra.graph.Graph, b: hydra.core.Binding) -> bool:
     r"""Check if a binding needs to be treated as a function."""
     
     term = b.term
     mts = b.type
     return hydra.lib.maybes.cases(mts, is_complex_term(tc, term), (lambda ts: (is_polymorphic := hydra.lib.logic.not_(hydra.lib.lists.null(ts.variables)), is_non_nullary := hydra.lib.equality.gt(hydra.arity.type_arity(ts.type), 0), is_complex := is_complex_term(tc, term), hydra.lib.logic.or_(hydra.lib.logic.or_(is_polymorphic, is_non_nullary), is_complex))[3]))
 
-def binding_metadata(tc: hydra.typing.TypeContext, b: hydra.core.Binding) -> Maybe[hydra.core.Term]:
+def binding_metadata(tc: hydra.graph.Graph, b: hydra.core.Binding) -> Maybe[hydra.core.Term]:
     r"""Produces metadata for a binding if it is complex."""
     
     return hydra.lib.logic.if_else(is_complex_binding(tc, b), (lambda : Just(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))))), (lambda : Nothing()))
 
-def analyze_function_term(get_t_c: Callable[[T0], hydra.typing.TypeContext], set_t_c: Callable[[hydra.typing.TypeContext, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
+def analyze_function_term(get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
     r"""Analyze a function term, collecting lambdas, type lambdas, lets, and type applications."""
     
     return analyze_function_term_with((lambda x1, x2: binding_metadata(x1, x2)), get_t_c, set_t_c, env, term)
 
-def analyze_function_term_inline(get_t_c: Callable[[T0], hydra.typing.TypeContext], set_t_c: Callable[[hydra.typing.TypeContext, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
+def analyze_function_term_inline(get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
     r"""Analyze a function term without recording binding metadata."""
     
     return analyze_function_term_with((lambda _, _2: Nothing()), get_t_c, set_t_c, env, term)
@@ -130,12 +131,12 @@ def analyze_function_term_no_infer_with_finish(f_env: T0, tparams: frozenlist[hy
         return hydra.lib.lists.foldl((lambda trm, typ: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(trm, typ)))), body, tapps)
     return hydra.lib.flows.pure(hydra.typing.FunctionStructure(hydra.lib.lists.reverse(tparams), hydra.lib.lists.reverse(args), bindings, body_with_tapps(), hydra.lib.lists.reverse(doms), Nothing(), f_env))
 
-def analyze_function_term_no_infer_with_gather(for_binding: Callable[[hydra.typing.TypeContext, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.typing.TypeContext], set_t_c: Callable[[hydra.typing.TypeContext, T0], T0], arg_mode: bool, g_env: T0, tparams: frozenlist[hydra.core.Name], args: frozenlist[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], doms: frozenlist[hydra.core.Type], tapps: frozenlist[hydra.core.Type], t: hydra.core.Term):
+def analyze_function_term_no_infer_with_gather(for_binding: Callable[[hydra.graph.Graph, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], arg_mode: bool, g_env: T0, tparams: frozenlist[hydra.core.Name], args: frozenlist[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], doms: frozenlist[hydra.core.Type], tapps: frozenlist[hydra.core.Type], t: hydra.core.Term):
     while True:
         def _hoist_hydra_coder_utils_analyze_function_term_no_infer_with_gather_1(arg_mode, args, bindings, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
-                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_"))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.schemas.extend_type_context_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_no_infer_with_finish(g_env, tparams, args, bindings, doms, tapps, t)))
+                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_"))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_no_infer_with_finish(g_env, tparams, args, bindings, doms, tapps, t)))
                 
                 case _:
                     return analyze_function_term_no_infer_with_finish(g_env, tparams, args, bindings, doms, tapps, t)
@@ -144,23 +145,23 @@ def analyze_function_term_no_infer_with_gather(for_binding: Callable[[hydra.typi
                 return _hoist_hydra_coder_utils_analyze_function_term_no_infer_with_gather_1(arg_mode, args, bindings, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, f)
             
             case hydra.core.TermLet(value=lt):
-                return (new_bindings := lt.bindings, (body := lt.body, (new_env := set_t_c(hydra.schemas.extend_type_context_for_let(for_binding, get_t_c(g_env), lt), g_env), analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, False, new_env, tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body))[1])[1])[1]
+                return (new_bindings := lt.bindings, (body := lt.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_let(for_binding, get_t_c(g_env), lt), g_env), analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, False, new_env, tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body))[1])[1])[1]
             
             case hydra.core.TermTypeApplication(value=ta):
                 return (ta_body := ta.body, (typ := ta.type, analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, g_env, tparams, args, bindings, doms, hydra.lib.lists.cons(typ, tapps), ta_body))[1])[1]
             
             case hydra.core.TermTypeLambda(value=tl):
-                return (tvar := tl.parameter, (tl_body := tl.body, (new_env := set_t_c(hydra.schemas.extend_type_context_for_type_lambda(get_t_c(g_env), tl), g_env), analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body))[1])[1])[1]
+                return (tvar := tl.parameter, (tl_body := tl.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_type_lambda(get_t_c(g_env), tl), g_env), analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body))[1])[1])[1]
             
             case _:
                 return analyze_function_term_no_infer_with_finish(g_env, tparams, args, bindings, doms, tapps, t)
 
-def analyze_function_term_no_infer_with(for_binding: Callable[[hydra.typing.TypeContext, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.typing.TypeContext], set_t_c: Callable[[hydra.typing.TypeContext, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
+def analyze_function_term_no_infer_with(for_binding: Callable[[hydra.graph.Graph, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
     r"""Analyze a function term without type inference, with configurable binding metadata."""
     
     return analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, True, env, (), (), (), (), (), term)
 
-def analyze_function_term_no_infer(get_t_c: Callable[[T0], hydra.typing.TypeContext], set_t_c: Callable[[hydra.typing.TypeContext, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
+def analyze_function_term_no_infer(get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], env: T0, term: hydra.core.Term) -> hydra.compute.Flow[T1, hydra.typing.FunctionStructure[T0]]:
     r"""Analyze a function term without type inference (performance optimization)."""
     
     return analyze_function_term_no_infer_with((lambda x1, x2: binding_metadata(x1, x2)), get_t_c, set_t_c, env, term)
@@ -282,7 +283,7 @@ def is_tail_recursive_in_tail_position(func_name: hydra.core.Name, term: hydra.c
             def _hoist_body_3(v1):
                 match v1:
                     case hydra.core.TermVariable(value=vname):
-                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(vname, func_name), (lambda : (args_no_func := hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.rewriting.is_free_variable_in_term(func_name, arg))), True, gather_args()), (args_no_lambda := (_hoist_args_no_lambda_1 := (lambda v12: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_args_no_lambda_2 := (lambda v12: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.lib.logic.not_(hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda found, t: hydra.lib.logic.or_(found, _hoist_args_no_lambda_2(t))), False, arg)))), True, gather_args()))[2], hydra.lib.logic.and_(args_no_func, args_no_lambda))[1])[1]), (lambda : hydra.rewriting.is_free_variable_in_term(func_name, term)))
+                        return hydra.lib.logic.if_else(hydra.lib.equality.equal(vname, func_name), (lambda : (args_no_func := hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.rewriting.is_free_variable_in_term(func_name, arg))), True, gather_args()), (args_no_lambda := (_hoist_args_no_lambda_1 := (lambda v12: (lambda lam: (ignore := lam.body, True)[1])(v12.value) if isinstance(v12, hydra.core.FunctionLambda) else False), _hoist_args_no_lambda_2 := (lambda v12: (lambda f2: _hoist_args_no_lambda_1(f2))(v12.value) if isinstance(v12, hydra.core.TermFunction) else False), hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.lib.logic.not_(hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda found, t: hydra.lib.logic.or_(found, _hoist_args_no_lambda_2(t))), False, arg)))), True, gather_args()))[2], hydra.lib.logic.and_(args_no_func, args_no_lambda))[1])[1]), (lambda : hydra.rewriting.is_free_variable_in_term(func_name, term)))
                     
                     case hydra.core.TermFunction(value=f):
                         return _hoist_body_2(f)
@@ -339,7 +340,7 @@ def is_simple_assignment(term: hydra.core.Term):
                 continue
             
             case _:
-                return (base_term := hydra.lib.pairs.first(gather_args(term, ())), (_hoist_body_1 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_2 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3 := (lambda v1: hydra.dsl.python.unsupported("inline match expressions are not yet supported")), _hoist_body_3(base_term))[3])[1]
+                return (base_term := hydra.lib.pairs.first(gather_args(term, ())), (_hoist_body_1 := (lambda v1: (lambda _: False)(v1.value) if isinstance(v1, hydra.core.EliminationUnion) else True), _hoist_body_2 := (lambda v1: (lambda elim: _hoist_body_1(elim))(v1.value) if isinstance(v1, hydra.core.FunctionElimination) else True), _hoist_body_3 := (lambda v1: (lambda f: _hoist_body_2(f))(v1.value) if isinstance(v1, hydra.core.TermFunction) else True), _hoist_body_3(base_term))[3])[1]
 
 def is_trivial_term(t: hydra.core.Term):
     r"""Check if a term is trivially cheap (no thunking needed)."""

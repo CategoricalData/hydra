@@ -122,7 +122,7 @@ def get_term_description(term: hydra.core.Term) -> hydra.compute.Flow[hydra.grap
 def get_type(anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[hydra.core.Type]]:
     r"""Get type from annotations."""
     
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda dat: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.with_trace("get type", hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, dat))))), hydra.lib.maps.lookup(hydra.constants.key_type, anns))))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda dat: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.monads.with_trace("get type", hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(graph, dat))))), hydra.lib.maps.lookup(hydra.constants.key_type, anns))))
 
 def type_annotation_internal(typ: hydra.core.Type) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
     r"""Get internal type annotations."""
@@ -144,7 +144,7 @@ def get_type_annotation(key: hydra.core.Name, typ: hydra.core.Type) -> Maybe[hyd
 def get_type_classes(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[hydra.core.Name, frozenset[hydra.classes.TypeClass]]]:
     r"""Get type classes from term."""
     
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: (decode_class := (lambda term2: (by_name := hydra.lib.maps.from_list(((hydra.core.Name("equality"), hydra.classes.TypeClass.EQUALITY), (hydra.core.Name("ordering"), hydra.classes.TypeClass.ORDERING))), hydra.lib.flows.bind(hydra.extract.core.unit_variant(hydra.core.Name("hydra.classes.TypeClass"), term2), (lambda fn: hydra.lib.maybes.maybe(hydra.monads.unexpected("type class", hydra.show.core.term(term2)), (lambda x1: hydra.lib.flows.pure(x1)), hydra.lib.maps.lookup(fn, by_name)))))[1]), hydra.lib.maybes.maybe(hydra.lib.flows.pure(hydra.lib.maps.empty()), (lambda term2: hydra.extract.core.map((lambda t: hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.name(cx, t))), (lambda v1: hydra.extract.core.set_of((lambda x1: decode_class(x1)), v1)), term2)), get_term_annotation(hydra.constants.key_classes, term)))[1]))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: (decode_class := (lambda term2: (by_name := hydra.lib.maps.from_list(((hydra.core.Name("equality"), hydra.classes.TypeClass.EQUALITY), (hydra.core.Name("ordering"), hydra.classes.TypeClass.ORDERING))), hydra.lib.flows.bind(hydra.extract.core.unit_variant(hydra.core.Name("hydra.classes.TypeClass"), term2), (lambda fn: hydra.lib.maybes.maybe(hydra.monads.unexpected("type class", hydra.show.core.term(term2)), (lambda x1: hydra.lib.flows.pure(x1)), hydra.lib.maps.lookup(fn, by_name)))))[1]), hydra.lib.maybes.maybe(hydra.lib.flows.pure(hydra.lib.maps.empty()), (lambda term2: hydra.extract.core.map((lambda t: hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.name(graph, t))), (lambda v1: hydra.extract.core.set_of((lambda x1: decode_class(x1)), v1)), term2)), get_term_annotation(hydra.constants.key_classes, term)))[1]))
 
 def get_type_description(typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[str]]:
     r"""Get type description."""

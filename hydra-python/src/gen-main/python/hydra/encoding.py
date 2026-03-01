@@ -221,7 +221,7 @@ def encode_wrapped_type(wt: hydra.core.WrappedType) -> hydra.core.Term:
 def encode_binding(b: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Binding]:
     r"""Transform a type binding into an encoder binding."""
     
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: hydra.lib.flows.bind(hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, b.term)), (lambda typ: hydra.lib.flows.pure(hydra.core.Binding(encode_binding_name(b.name), encode_type(typ), Nothing()))))))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: hydra.lib.flows.bind(hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(graph, b.term)), (lambda typ: hydra.lib.flows.pure(hydra.core.Binding(encode_binding_name(b.name), encode_type(typ), Nothing()))))))
 
 def encode_namespace(ns: hydra.module.Namespace) -> hydra.module.Namespace:
     r"""Generate an encoder module namespace from a source module namespace."""

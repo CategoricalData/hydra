@@ -445,7 +445,7 @@ def decoder_type_scheme(typ: hydra.core.Type) -> hydra.core.TypeScheme:
 def decode_binding(b: hydra.core.Binding) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Binding]:
     r"""Transform a type binding into a decoder binding."""
     
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: hydra.lib.flows.bind(hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(cx, b.term)), (lambda typ: hydra.lib.flows.pure(hydra.core.Binding(decode_binding_name(b.name), decode_type(typ), Just(decoder_type_scheme(typ))))))))
+    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: hydra.lib.flows.bind(hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(graph, b.term)), (lambda typ: hydra.lib.flows.pure(hydra.core.Binding(decode_binding_name(b.name), decode_type(typ), Just(decoder_type_scheme(typ))))))))
 
 def decode_namespace(ns: hydra.module.Namespace) -> hydra.module.Namespace:
     r"""Generate a decoder module namespace from a source module namespace."""
