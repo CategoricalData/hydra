@@ -1250,7 +1250,7 @@ encodeType = def "encodeType" $
         Flows.pure (JavaUtilsSource.javaRefType
           @@ list [var "jfirst", var "jsecond"]
           @@ asTerm JavaNamesSource.hydraUtilPackageName
-          @@ string "Tuple.Tuple2"),
+          @@ string "Pair"),
       _Type_unit>>: lambda "_" $
         Flows.pure (JavaUtilsSource.javaRefType
           @@ list ([] :: [TTerm Java.ReferenceType])
@@ -3587,7 +3587,7 @@ encodeTermInternal = def "encodeTermInternal" $
                 @@ JavaDsl.identifier (string "just")
                 @@ list [var "expr"]))),
 
-      -- TermPair: new Tuple2(t1, t2)
+      -- TermPair: new Pair(t1, t2)
       _Term_pair>>: lambda "p" $
         "jterm1" <<~ (var "encode" @@ Pairs.first (var "p")) $
         "jterm2" <<~ (var "encode" @@ Pairs.second (var "p")) $
@@ -3597,7 +3597,7 @@ encodeTermInternal = def "encodeTermInternal" $
             Flows.pure (just (JavaDsl.typeArgumentsOrDiamondArguments
               (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "rts")))))) $
         Flows.pure (JavaUtilsSource.javaConstructorCall
-          @@ (JavaUtilsSource.javaConstructorName @@ JavaDsl.identifier (string "hydra.util.Tuple.Tuple2") @@ var "mtargs")
+          @@ (JavaUtilsSource.javaConstructorName @@ JavaDsl.identifier (string "hydra.util.Pair") @@ var "mtargs")
           @@ list [var "jterm1", var "jterm2"] @@ nothing),
 
       -- TermRecord: new RecordType(field1, field2, ...)
