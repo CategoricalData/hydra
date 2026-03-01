@@ -222,8 +222,11 @@ modulesToGraph = define "modulesToGraph" $
       (Lists.concat2 (var "schemaModules") (var "modules"))) $
   "dataElements" <~ Lists.filter ("e" ~> Logic.not $ Annotations.isNativeType @@ var "e")
     (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m")) (var "dataModules")) $
-  "schemaGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ nothing @@ var "schemaElements" $
-  Lexical.elementsToGraph @@ var "bsGraph" @@ (just $ var "schemaGraph") @@ var "dataElements"
+  "schemaGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ Maps.empty @@ var "schemaElements" $
+  -- Decode the schema graph to a Map Name TypeScheme using fromFlow (interim solution until schema graphs are eliminated)
+  "schemaTypes" <~ Monads.fromFlow @@ (Maps.empty :: TTerm (M.Map Name TypeScheme)) @@ var "schemaGraph"
+    @@ (Schemas.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
+  Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "dataElements"
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
 -- and modules to generate, produce a list of (filePath, content) pairs.
@@ -261,8 +264,10 @@ generateSourceFiles = define "generateSourceFiles" $
       (Lists.concat2 (var "schemaMods") (var "typeModulesToGenerate"))) $
   "dataMods" <~ moduleTermDepsTransitive @@ var "namespaceMap" @@ var "modsToGenerate" $
   "dataElements" <~ Lists.concat (Lists.map ("m" ~> Module.moduleElements (var "m")) (var "dataMods")) $
-  "schemaGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ nothing @@ var "schemaElements" $
-  "dataGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ (just $ var "schemaGraph") @@ var "dataElements" $
+  "schemaGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ Maps.empty @@ var "schemaElements" $
+  "schemaTypes2" <~ Monads.fromFlow @@ (Maps.empty :: TTerm (M.Map Name TypeScheme)) @@ var "schemaGraph"
+    @@ (Schemas.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
+  "dataGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes2" @@ var "dataElements" $
 
   -- Generate type modules
   "schemaFiles" <<~ Logic.ifElse (Lists.null $ var "typeModulesToGenerate")
@@ -274,7 +279,7 @@ generateSourceFiles = define "generateSourceFiles" $
         (var "typeModulesToGenerate") $
       "schemaResult" <<~ AdaptSimple.schemaGraphToDefinitions @@ var "constraints" @@ var "schemaGraph" @@ var "nameLists" $
       "defLists" <~ Pairs.second (var "schemaResult") $
-      Monads.withState @@ var "schemaGraph" @@
+      Monads.withState @@ (Graph.graphWithSchemaTypes (var "schemaGraph") (var "schemaTypes2")) @@
         (Flows.map ("xs" ~> Lists.concat (var "xs")) $
           Flows.mapList ("p" ~>
             "mod" <~ Pairs.first (var "p") $
@@ -292,7 +297,7 @@ generateSourceFiles = define "generateSourceFiles" $
       "dataResult" <<~ AdaptSimple.dataGraphToDefinitions
         @@ var "constraints"
         @@ var "doInfer" @@ var "doExpand" @@ var "doHoistCaseStatements" @@ var "doHoistPolymorphicLetBindings"
-        @@ var "dataGraph" @@ var "namespaces" $
+        @@ var "dataElements" @@ var "dataGraph" @@ var "namespaces" $
       "g1" <~ Pairs.first (var "dataResult") $
       "defLists" <~ Pairs.second (var "dataResult") $
       -- Refresh modules with elements from the inferred graph
@@ -305,7 +310,7 @@ generateSourceFiles = define "generateSourceFiles" $
           (Module.moduleTermDependencies $ var "m")
           (Module.moduleTypeDependencies $ var "m")
           (Module.moduleDescription $ var "m")) $
-      "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ (Graph.graphElements $ var "g1") @@ var "m") (var "termModulesToGenerate") $
+      "refreshedMods" <~ Lists.map ("m" ~> var "refreshModule" @@ (Lexical.graphToBindings @@ var "g1") @@ var "m") (var "termModulesToGenerate") $
       Monads.withState @@ var "g1" @@
         (Flows.map ("xs" ~> Lists.concat (var "xs")) $
           Flows.mapList ("p" ~>
@@ -344,29 +349,20 @@ formatTypeBinding :: TBinding (Binding -> Flow Graph String)
 formatTypeBinding = define "formatTypeBinding" $
   doc "Format a type binding for the lexicon" $
   "binding" ~>
-  "g" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   "typ" <<~ Monads.eitherToFlow_ @@ Util.unDecodingError
-    @@ (decoderFor _Type @@ var "g" @@ (Core.bindingTerm $ var "binding")) $
+    @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "binding")) $
   produce $
     (string "  ") ++ Core.unName (Core.bindingName $ var "binding") ++ (string " = ") ++ (ShowCore.type_ @@ var "typ")
 
--- | Build a schema map (Name -> Type) from a graph's schema.
+-- | Build a schema map (Name -> Type) from a graph's schema types.
 -- Used by the JSON decoder to resolve type variables.
 buildSchemaMap :: TBinding (Graph -> M.Map Name Type)
 buildSchemaMap = define "buildSchemaMap" $
-  doc "Build a schema map (Name -> Type) from a graph's schema" $
+  doc "Build a schema map (Name -> Type) from a graph's schema types" $
   "g" ~>
-  optCases (Graph.graphSchema $ var "g")
-    (Maps.empty :: TTerm (M.Map Name Type))
-    ("schemaGraph" ~>
-      Maps.fromList $ Maybes.cat $ Lists.map
-        ("binding" ~>
-          "result" <~ decoderFor _Type @@ var "schemaGraph" @@ (Core.bindingTerm $ var "binding") $
-          Eithers.either_
-            ("_err" ~> (nothing :: TTerm (Maybe (Name, Type))))
-            ("typ" ~> just $ pair (Core.bindingName $ var "binding") (Rewriting.deannotateType @@ var "typ"))
-            (var "result"))
-        (Graph.graphElements $ var "schemaGraph"))
+  Maps.map ("ts" ~> Rewriting.deannotateType @@ (Core.typeSchemeType $ var "ts"))
+    (Graph.graphSchemaTypes $ var "g")
 
 -- | Convert a generated Module into a Source module.
 -- The Source module contains a single binding `module_` which holds the Module encoded as a Term.
@@ -399,7 +395,7 @@ generateLexicon :: TBinding (Graph -> Flow Graph String)
 generateLexicon = define "generateLexicon" $
   doc "Generate the lexicon content from a graph" $
   "graph" ~>
-  "bindings" <~ Graph.graphElements (var "graph") $
+  "bindings" <~ Lexical.graphToBindings @@ var "graph" $
   "primitives" <~ Maps.elems (Graph.graphPrimitives $ var "graph") $
   "partitioned" <~ Lists.partition ("b" ~> Annotations.isNativeType @@ var "b") (var "bindings") $
   "typeBindings" <~ Pairs.first (var "partitioned") $
@@ -433,8 +429,11 @@ inferModules = define "inferModules" $
   doc "Perform type inference on modules and reconstruct with inferred types" $
   "bsGraph" ~> "universeMods" ~> "targetMods" ~>
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
-  "g1" <<~ Inference.inferGraphTypes @@ var "g0" $
-  "inferredElements" <~ Graph.graphElements (var "g1") $
+  "dataElements" <~ Lists.filter ("e" ~> Logic.not $ Annotations.isNativeType @@ var "e")
+    (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m")) (var "universeMods")) $
+  "inferResult" <<~ Inference.inferGraphTypes @@ var "dataElements" @@ var "g0" $
+  "g1" <~ Pairs.first (var "inferResult") $
+  "inferredElements" <~ Pairs.second (var "inferResult") $
   "isTypeModule" <~ ("mod" ~> Lists.null $
     Lists.filter ("e" ~> Logic.not $ Annotations.isNativeType @@ var "e")
       (Module.moduleElements $ var "mod")) $
@@ -461,13 +460,25 @@ generateCoderModules
 generateCoderModules = define "generateCoderModules" $
   doc "Generate encoder or decoder modules for a list of type modules" $
   "codec" ~> "bsGraph" ~> "universeModules" ~> "typeModules" ~>
-  "graph" <~ modulesToGraph @@ var "bsGraph" @@ var "universeModules" @@ var "universeModules" $
-  optCases (Graph.graphSchema $ var "graph")
-    (Flows.fail $ string "No schema graph available")
-    ("schemaGraph" ~>
-      Monads.withState @@ var "schemaGraph" @@
-        (Flows.map ("results" ~> Maybes.cat (var "results")) $
-          Flows.mapList (var "codec") (var "typeModules")))
+  -- Build a graph that includes both schema and data elements, since codecs need to dereference type elements
+  "universe" <~ Maps.fromList (Lists.map
+    ("m" ~> pair (Module.moduleNamespace $ var "m") (var "m"))
+    (Lists.concat2 (var "universeModules") (var "universeModules"))) $
+  "schemaModules" <~ moduleTypeDepsTransitive @@ var "universe" @@ var "universeModules" $
+  "dataModules" <~ moduleTermDepsTransitive @@ var "universe" @@ var "universeModules" $
+  "schemaElements" <~ Lists.filter ("e" ~> Annotations.isNativeType @@ var "e")
+    (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m"))
+      (Lists.concat2 (var "schemaModules") (var "universeModules"))) $
+  "dataElements" <~ Lists.filter ("e" ~> Logic.not $ Annotations.isNativeType @@ var "e")
+    (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m")) (var "dataModules")) $
+  "schemaGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ Maps.empty @@ var "schemaElements" $
+  "schemaTypes" <~ Monads.fromFlow @@ (Maps.empty :: TTerm (M.Map Name TypeScheme)) @@ var "schemaGraph"
+    @@ (Schemas.schemaGraphToTypingEnvironment @@ var "schemaGraph") $
+  "allElements" <~ Lists.concat2 (var "schemaElements") (var "dataElements") $
+  "graph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "allElements" $
+  Monads.withState @@ var "graph" @@
+    (Flows.map ("results" ~> Maybes.cat (var "results")) $
+      Flows.mapList (var "codec") (var "typeModules"))
 
 -- | Perform type inference on a graph and generate its lexicon.
 -- Composes inferGraphTypes and generateLexicon into a single Flow.
@@ -476,7 +487,10 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   doc "Perform type inference and generate the lexicon for a set of modules" $
   "bsGraph" ~> "kernelModules" ~>
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "kernelModules" @@ var "kernelModules" $
-  "g1" <<~ Inference.inferGraphTypes @@ var "g0" $
+  "dataElements" <~ Lists.filter ("e" ~> Logic.not $ Annotations.isNativeType @@ var "e")
+    (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m")) (var "kernelModules")) $
+  "inferResult" <<~ Inference.inferGraphTypes @@ var "dataElements" @@ var "g0" $
+  "g1" <~ Pairs.first (var "inferResult") $
   Monads.withState @@ var "g1" @@ (generateLexicon @@ var "g1")
 
 -- | Escape unescaped control characters (< 0x20) inside JSON string literals.

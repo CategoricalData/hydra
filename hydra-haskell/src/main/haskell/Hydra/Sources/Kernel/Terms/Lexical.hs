@@ -2,7 +2,7 @@
 module Hydra.Sources.Kernel.Terms.Lexical where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyGraph, extendGraphWithBindings, fieldsOf, getField, lookupElement, lookupPrimitive, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, schemaContext, stripAndDereferenceTerm, stripAndDereferenceTermEither, withEmptyGraph, withSchemaContext)
+import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyGraph, extendGraphWithBindings, fieldsOf, getField, graphToBindings, lookupElement, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither, withEmptyGraph)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -72,6 +72,7 @@ module_ = Module ns elements
     Just ("A module for lexical operations over graphs.")
   where
     elements = [
+      toBinding buildGraph,
       toBinding chooseUniqueName,
       toBinding dereferenceElement,
       toBinding dereferenceSchemaType,
@@ -79,10 +80,12 @@ module_ = Module ns elements
       toBinding elementsToGraph,
       toBinding emptyGraph,
       toBinding extendGraphWithBindings,
+      toBinding graphToBindings,
       toBinding fieldsOf,
       toBinding getField,
       toBinding lookupElement,
       toBinding lookupPrimitive,
+      toBinding lookupTerm,
       toBinding matchEnum,
       toBinding matchRecord,
       toBinding matchUnion,
@@ -92,11 +95,33 @@ module_ = Module ns elements
       toBinding requirePrimitiveType,
       toBinding requireTerm,
       toBinding resolveTerm,
-      toBinding schemaContext,
       toBinding stripAndDereferenceTerm,
       toBinding stripAndDereferenceTermEither,
-      toBinding withEmptyGraph,
-      toBinding withSchemaContext]
+      toBinding withEmptyGraph]
+
+-- | Build a Graph from element bindings, environment, and primitives.
+buildGraph :: TBinding ([Binding] -> M.Map Name (Maybe Term) -> M.Map Name Primitive -> Graph)
+buildGraph = define "buildGraph" $
+  doc "Build a Graph from element bindings, environment, and primitives" $
+  "elements" ~> "environment" ~> "primitives" ~>
+  -- boundTerms: element bindings (name -> term) merged with let-bound vars from environment (Just term)
+  "elementTerms" <~ Maps.fromList (Lists.map ("b" ~>
+    pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "elements")) $
+  "letTerms" <~ Maps.map ("mt" ~> Maybes.fromJust (var "mt"))
+    (Maps.filter ("mt" ~> Maybes.isJust (var "mt")) (var "environment")) $
+  -- boundTypes: extract bindingType from each element (preserving TypeScheme with constraints)
+  "elementTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
+    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
+      (Core.bindingType (var "b"))) (var "elements"))) $
+  Graph.graph
+    (Maps.union (var "elementTerms") (var "letTerms"))
+    (var "elementTypes")
+    Maps.empty
+    (Sets.fromList (Maps.keys (Maps.filter ("mt" ~> Maybes.isNothing (var "mt")) (var "environment"))))
+    Maps.empty
+    (var "primitives")
+    Maps.empty
+    Sets.empty
 
 chooseUniqueName :: TBinding (S.Set Name -> Name -> Name)
 chooseUniqueName = define "chooseUniqueName" $
@@ -114,7 +139,7 @@ dereferenceElement :: TBinding (Name -> Flow Graph (Maybe Binding))
 dereferenceElement = define "dereferenceElement" $
   doc "Look up an element in the current graph context" $
   "name" ~> Flows.map
-    ("g" ~> lookupElement @@ var "g" @@ var "name")
+    ("graph" ~> lookupElement @@ var "graph" @@ var "name")
     (Monads.getState)
 
 dereferenceSchemaType :: TBinding (Name -> M.Map Name TypeScheme -> Maybe TypeScheme)
@@ -142,44 +167,59 @@ dereferenceSchemaType = define "dereferenceSchemaType" $
         (Core.typeSchemeConstraints (var "ts2")))
       (var "forType" @@ (Core.typeSchemeType (var "ts"))))
 
--- | Dereference a variable name in a graph, returning Either an error message or the binding
 dereferenceVariable :: TBinding (Graph -> Name -> Either String Binding)
 dereferenceVariable = define "dereferenceVariable" $
-  doc "Look up an element by name in a graph, returning Either an error or the binding" $
-  "g" ~> "name" ~>
+  doc "Look up a binding by name in a graph, returning Either an error or the binding" $
+  "graph" ~> "name" ~>
   Maybes.maybe
     (left ((string "no such element: ") ++ (Core.unName (var "name"))))
     right_
-    (lookupElement @@ var "g" @@ var "name")
+    (lookupElement @@ var "graph" @@ var "name")
 
-elementsToGraph :: TBinding (Graph -> Maybe Graph -> [Binding] -> Graph)
+elementsToGraph :: TBinding (Graph -> M.Map Name TypeScheme -> [Binding] -> Graph)
 elementsToGraph = define "elementsToGraph" $
-  doc "Create a graph from a parent graph, optional schema, and list of element bindings" $
-  "parent" ~> "schema" ~> "elements" ~>
-  Graph.graph
-    (var "elements")
-    (Graph.graphEnvironment (var "parent"))
-    (Graph.graphTypes (var "parent"))
-    (Graph.graphBody (var "parent"))
-    (Graph.graphPrimitives (var "parent"))
-    (var "schema")
+  doc "Create a graph from a parent graph, schema types, and list of element bindings" $
+  "parent" ~> "schemaTypes" ~> "elements" ~>
+  "prims" <~ Graph.graphPrimitives (var "parent") $
+  Graph.graphWithSchemaTypes
+    (buildGraph @@ var "elements" @@ Maps.empty @@ var "prims")
+    (var "schemaTypes")
 
 emptyGraph :: TBinding Graph
 emptyGraph = define "emptyGraph" $
-  doc "An empty graph; no elements, no primitives, no schema, and an arbitrary body." $
-  Graph.graph
-    (list ([] :: [TTerm Binding]))
-    Maps.empty
-    Maps.empty
-    (Core.termLiteral (Core.literalString (string "empty graph")))
-    Maps.empty
-    nothing
+  doc "An empty graph; no elements, no primitives, no schema." $
+  Graph.emptyGraph
 
 extendGraphWithBindings :: TBinding ([Binding] -> Graph -> Graph)
 extendGraphWithBindings = define "extendGraphWithBindings" $
   doc "Add bindings to an existing graph" $
   "bindings" ~> "g" ~>
-  Graph.graphWithElements (var "g") (Lists.concat2 (var "bindings") (Graph.graphElements (var "g")))
+  -- Merge new binding terms/types into existing graph
+  "newTerms" <~ Maps.fromList (Lists.map ("b" ~>
+    pair (Core.bindingName (var "b")) (Core.bindingTerm (var "b"))) (var "bindings")) $
+  "newTypes" <~ Maps.fromList (Maybes.cat (Lists.map ("b" ~>
+    Maybes.map ("ts" ~> pair (Core.bindingName (var "b")) (var "ts"))
+      (Core.bindingType (var "b"))) (var "bindings"))) $
+  Graph.graph
+    (Maps.union (var "newTerms") (Graph.graphBoundTerms (var "g")))
+    (Maps.union (var "newTypes") (Graph.graphBoundTypes (var "g")))
+    (Graph.graphClassConstraints (var "g"))
+    (Graph.graphLambdaVariables (var "g"))
+    (Graph.graphMetadata (var "g"))
+    (Graph.graphPrimitives (var "g"))
+    (Graph.graphSchemaTypes (var "g"))
+    (Graph.graphTypeVariables (var "g"))
+
+graphToBindings :: TBinding (Graph -> [Binding])
+graphToBindings = define "graphToBindings" $
+  doc "Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes" $
+  "g" ~>
+  Lists.map ("p" ~>
+    "name" <~ Pairs.first (var "p") $
+    "term" <~ Pairs.second (var "p") $
+    Core.binding (var "name") (var "term")
+      (Maps.lookup (var "name") (Graph.graphBoundTypes (var "g"))))
+    (Maps.toList (Graph.graphBoundTerms (var "g")))
 
 fieldsOf :: TBinding (Type -> [FieldType])
 fieldsOf = define "fieldsOf" $
@@ -202,12 +242,24 @@ getField = define "getField" $
 
 lookupElement :: TBinding (Graph -> Name -> Maybe Binding)
 lookupElement = define "lookupElement" $
-  "g" ~> "name" ~> Lists.find ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "name")) (Graph.graphElements (var "g"))
+  doc "Look up a binding in a graph by name" $
+  "graph" ~> "name" ~>
+  Maybes.map
+    ("term" ~> Core.binding (var "name") (var "term")
+      (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))))
+    (Maps.lookup (var "name") (Graph.graphBoundTerms (var "graph")))
 
 lookupPrimitive :: TBinding (Graph -> Name -> Maybe Primitive)
 lookupPrimitive = define "lookupPrimitive" $
-  "g" ~> "name" ~>
-  Maps.lookup (var "name") (Graph.graphPrimitives (var "g"))
+  doc "Look up a primitive function in a graph by name" $
+  "graph" ~> "name" ~>
+  Maps.lookup (var "name") (Graph.graphPrimitives (var "graph"))
+
+lookupTerm :: TBinding (Graph -> Name -> Maybe Term)
+lookupTerm = define "lookupTerm" $
+  doc "Look up a term by name in a graph" $
+  "graph" ~> "name" ~>
+  Maps.lookup (var "name") (Graph.graphBoundTerms (var "graph"))
 
 matchEnum :: TBinding (Name -> [(Name, b)] -> Term -> Flow Graph b)
 matchEnum = define "matchEnum" $
@@ -268,32 +320,32 @@ requireElement = define "requireElement" $
     Logic.ifElse (Logic.and (Equality.gt (Lists.length (var "strings")) (int32 3)) (Logic.not (var "showAll")))
       (Lists.concat2 (Lists.take (int32 3) (var "strings")) (list [string "..."]))
       (var "strings")) $
-  "err" <~ ("g" ~> Flows.fail (
+  "err" <~ ("graph" ~> Flows.fail (
     (string "no such element: ") ++ (Core.unName (var "name")) ++
     (string ". Available elements: {") ++
-    (Strings.intercalate (string ", ") (var "ellipsis" @@ (Lists.map ("el" ~> Core.unName (Core.bindingName (var "el"))) (Graph.graphElements (var "g"))))) ++
+    (Strings.intercalate (string ", ") (var "ellipsis" @@ (Lists.map (unaryFunction Core.unName) (Maps.keys (Graph.graphBoundTerms (var "graph")))))) ++
     (string "}"))) $
   "mel" <<~ dereferenceElement @@ var "name" $
   Maybes.maybe
-    ("g" <<~ Monads.getState $ var "err" @@ var "g")
+    ("graph" <<~ Monads.getState $ var "err" @@ var "graph")
     (unaryFunction Flows.pure)
     (var "mel")
 
 requirePrimitive :: TBinding (Name -> Flow Graph Primitive)
 requirePrimitive = define "requirePrimitive" $
   "name" ~>
-  "g" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   Maybes.maybe
     (Flows.fail ((string "no such primitive function: ") ++ (Core.unName (var "name"))))
     (unaryFunction Flows.pure)
-    (lookupPrimitive @@ var "g" @@ var "name")
+    (lookupPrimitive @@ var "graph" @@ var "name")
 
-requirePrimitiveType :: TBinding (TypeContext -> Name -> Flow s TypeScheme)
+requirePrimitiveType :: TBinding (Graph -> Name -> Flow s TypeScheme)
 requirePrimitiveType = define "requirePrimitiveType" $
   "tx" ~> "name" ~>
   "mts" <~ Maps.lookup
     (var "name" )
-    (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx") $
+    (Graph.graphPrimitiveTypes $ var "tx") $
   optCases (var "mts")
     (Flows.fail ((string "no such primitive function: ") ++ (Core.unName (var "name"))))
     ("ts" ~> produce $ var "ts")
@@ -311,21 +363,16 @@ resolveTerm :: TBinding (Name -> Flow Graph (Maybe Term))
 resolveTerm = define "resolveTerm" $
   doc "TODO: distinguish between lambda-bound and let-bound variables" $
   "name" ~>
-  "recurse" <~ ("el" ~>
-    "stripped" <~ Rewriting.deannotateTerm @@ (Core.bindingTerm (var "el")) $
+  "recurse" <~ ("term" ~>
+    "stripped" <~ Rewriting.deannotateTerm @@ var "term" $
     cases _Term (var "stripped")
-      (Just (produce (just (Core.bindingTerm (var "el"))))) [
+      (Just (produce (just (var "term")))) [
       _Term_variable>>: "name'" ~> resolveTerm @@ var "name'"]) $
-  "g" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   Maybes.maybe
     (produce nothing)
     (var "recurse")
-    (Lists.find ("b" ~> Equality.equal (Core.bindingName (var "b")) (var "name")) (Graph.graphElements (var "g")))
-
-schemaContext :: TBinding (Graph -> Graph)
-schemaContext = define "schemaContext" $
-  doc "Note: assuming for now that primitive functions are the same in the schema graph" $
-  "g" ~> Maybes.fromMaybe (var "g") (Graph.graphSchema (var "g"))
+    (lookupTerm @@ var "graph" @@ var "name")
 
 stripAndDereferenceTerm :: TBinding (Term -> Flow Graph Term)
 stripAndDereferenceTerm = define "stripAndDereferenceTerm" $
@@ -337,29 +384,22 @@ stripAndDereferenceTerm = define "stripAndDereferenceTerm" $
       "t" <<~ requireTerm @@ var "v" $
       stripAndDereferenceTerm @@ var "t"]
 
--- | Strip annotations and dereference variables, returning Either String Term
--- This is the pure (non-Flow) version for use in generated decoders
 stripAndDereferenceTermEither :: TBinding (Graph -> Term -> Either String Term)
 stripAndDereferenceTermEither = define "stripAndDereferenceTermEither" $
   doc "Strip annotations and dereference variables, returning Either an error or the resolved term" $
-  "g" ~> "term" ~>
+  "graph" ~> "term" ~>
   "stripped" <~ Rewriting.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
     (Just (right (var "stripped"))) [
     _Term_variable>>: "v" ~>
       Eithers.either_
         left_  -- propagate error
-        ("binding" ~> stripAndDereferenceTermEither @@ var "g" @@ (Core.bindingTerm (var "binding")))
-        (dereferenceVariable @@ var "g" @@ var "v")]
+        ("binding" ~> stripAndDereferenceTermEither @@ var "graph" @@ (Core.bindingTerm (var "binding")))
+        (dereferenceVariable @@ var "graph" @@ var "v")]
 
 -- TODO: move into hydra.lexical
 withEmptyGraph :: TBinding (Flow Graph a -> Flow s a)
 withEmptyGraph = define "withEmptyGraph" $
   doc "Execute flow with empty graph" $
-  Monads.withState @@ emptyGraph
+  Monads.withState @@ Graph.emptyGraph
 
-withSchemaContext :: TBinding (Flow Graph x -> Flow Graph x)
-withSchemaContext = define "withSchemaContext" $
-  "f" ~>
-  "g" <<~ Monads.getState $
-  Monads.withState @@ (schemaContext @@ var "g") @@ var "f"

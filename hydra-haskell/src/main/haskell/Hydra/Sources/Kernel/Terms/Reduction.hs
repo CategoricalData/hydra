@@ -202,23 +202,23 @@ etaExpandTerm = define "etaExpandTerm" $
         var "rewrite" @@ (Lists.cons (var "erhs") (var "args")) @@ var "recurse" @@ var "lhs"]) $
   contractTerm @@ (Rewriting.rewriteTerm @@ (var "rewrite" @@ list ([] :: [TTerm Term])) @@ var "term")
 
--- | Eta-expand a term using TypeContext for type lookups. This is a pure function that does not
--- require type inference, instead relying on the TypeContext being properly populated with types
+-- | Eta-expand a term using Graph for type lookups. This is a pure function that does not
+-- require type inference, instead relying on the Graph being properly populated with types
 -- for all in-scope variables.
 --
 -- The key differences from etaExpandTypedTerm:
 -- 1. Pure (no Flow monad needed) because we look up types directly from the context
--- 2. Manually tracks TypeContext when entering lambdas, lets, and type lambdas
+-- 2. Manually tracks Graph when entering lambdas, lets, and type lambdas
 -- 3. Preserves existing type annotations where possible
-etaExpandTermNew :: TBinding (TypeContext -> Term -> Term)
+etaExpandTermNew :: TBinding (Graph -> Term -> Term)
 etaExpandTermNew = define "etaExpandTermNew" $
   doc ("Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\\x.add 42 x'."
-    <> " Uses the TypeContext to look up types for arity calculation."
+    <> " Uses the Graph to look up types for arity calculation."
     <> " Bare primitives and variables are NOT expanded; eliminations and partial applications are."
-    <> " This version properly tracks the TypeContext through nested scopes.") $
+    <> " This version properly tracks the Graph through nested scopes.") $
   "tx0" ~> "term0" ~>
 
-  -- termArityWithContext: compute arity of a term using TypeContext for lookups
+  -- termArityWithContext: compute arity of a term using Graph for lookups
   "termArityWithContext" <~ ("tx" ~> "term" ~>
     cases _Term (var "term")
       (Just $ int32 0) [
@@ -230,20 +230,20 @@ etaExpandTermNew = define "etaExpandTermNew" $
         _Function_elimination>>: constant $ int32 1,
         _Function_lambda>>: constant $ int32 0,
         _Function_primitive>>: "name" ~>
-          optCases (Maps.lookup (var "name") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx"))
+          optCases (Maps.lookup (var "name") (Graph.graphPrimitiveTypes $ var "tx"))
             (int32 0) Arity.typeSchemeArity],
       _Term_let>>: "l" ~>
         var "termArityWithContext"
-          @@ (Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx" @@ var "l")
+          @@ (Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l")
           @@ Core.letBody (var "l"),
       _Term_typeLambda>>: "tl" ~>
         var "termArityWithContext"
-          @@ (Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl")
+          @@ (Schemas.extendGraphForTypeLambda @@ var "tx" @@ var "tl")
           @@ Core.typeLambdaBody (var "tl"),
       _Term_typeApplication>>: "tat" ~>
         var "termArityWithContext" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
       _Term_variable>>: "name" ~>
-        optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
+        optCases (Maybes.map (Rewriting.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
           (int32 0) Arity.typeArity]) $
 
   -- domainTypes: extract domain types from a function type, returning a list of Maybe Type
@@ -347,14 +347,14 @@ etaExpandTermNew = define "etaExpandTermNew" $
         _Term_function>>: "f2" ~> cases _Function (var "f2") (Just nothing) [
           _Function_primitive>>: "pn2" ~>
             Maybes.map ("ts2" ~> Core.typeSchemeType $ var "ts2")
-              (Maps.lookup (var "pn2") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx2"))],
+              (Maps.lookup (var "pn2") (Graph.graphPrimitiveTypes $ var "tx2"))],
         _Term_let>>: "l2" ~>
           var "termHeadType"
-            @@ (Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx2" @@ var "l2")
+            @@ (Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx2" @@ var "l2")
             @@ Core.letBody (var "l2"),
         _Term_typeLambda>>: "tl2" ~>
           var "termHeadType"
-            @@ (Schemas.extendTypeContextForTypeLambda @@ var "tx2" @@ var "tl2")
+            @@ (Schemas.extendGraphForTypeLambda @@ var "tx2" @@ var "tl2")
             @@ Core.typeLambdaBody (var "tl2"),
         _Term_typeApplication>>: "tat2" ~>
           -- Get the head type of the body, then substitute forall parameter with the type argument
@@ -366,7 +366,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
                   @@ Core.typeApplicationTermType (var "tat2")
                   @@ Core.forallTypeBody (var "ft2")]),
         _Term_variable>>: "vn2" ~>
-          Maps.lookup (var "vn2") (Typing.typeContextTypes $ var "tx2")]) $
+          Maybes.map (Rewriting.typeSchemeToFType) $ Maps.lookup (var "vn2") (Graph.graphBoundTypes $ var "tx2")]) $
 
     -- afterRecursion: apply expansion logic after subterms have been processed
     "afterRecursion" <~ ("trm" ~>
@@ -437,7 +437,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
                 Core.typeUnit] $
           var "expand" @@ var "padElim" @@ var "args" @@ (int32 1) @@ var "elimHeadType" @@ var "elimTerm",
         _Function_lambda>>: "lm" ~>
-          "tx1" <~ Schemas.extendTypeContextForLambda @@ var "tx" @@ var "lm" $
+          "tx1" <~ Schemas.extendGraphForLambda @@ var "tx" @@ var "lm" $
           "body" <~ var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.lambdaBody (var "lm") $
           "result" <~ Core.termFunction (Core.functionLambda $
             Core.lambda (Core.lambdaParameter $ var "lm") (Core.lambdaDomain $ var "lm") (var "body")) $
@@ -448,12 +448,12 @@ etaExpandTermNew = define "etaExpandTermNew" $
           -- Don't expand if bare; look up primitive type for lambda domain annotations
           "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
           "primType" <~ Maybes.map ("ts" ~> Core.typeSchemeType $ var "ts")
-            (Maps.lookup (var "pn") (Typing.inferenceContextPrimitiveTypes $ Typing.typeContextInferenceContext $ var "tx")) $
+            (Maps.lookup (var "pn") (Graph.graphPrimitiveTypes $ var "tx")) $
           var "expand" @@ false @@ var "args" @@ var "arty" @@ var "primType" @@ var "term"],
 
       -- Let: extend context for bindings and body
       _Term_let>>: "lt" ~>
-        "tx1" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx" @@ var "lt" $
+        "tx1" <~ Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "lt" $
         "mapBinding" <~ ("b" ~> Core.binding
           (Core.bindingName $ var "b")
           (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.bindingTerm (var "b"))
@@ -498,7 +498,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
 
       -- TypeLambda: extend context for body
       _Term_typeLambda>>: "tl" ~>
-        "tx1" <~ Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl" $
+        "tx1" <~ Schemas.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
         "result" <~ Core.termTypeLambda (Core.typeLambda
           (Core.typeLambdaParameter $ var "tl")
           (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx1" @@ Core.typeLambdaBody (var "tl"))) $
@@ -515,7 +515,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
       -- Variable: don't expand if bare; look up type for lambda domain annotations
       _Term_variable>>: "vn" ~>
         "arty" <~ var "termArityWithContext" @@ var "tx" @@ var "term" $
-        "varType" <~ Maps.lookup (var "vn") (Typing.typeContextTypes $ var "tx") $
+        "varType" <~ Maybes.map (Rewriting.typeSchemeToFType) (Maps.lookup (var "vn") (Graph.graphBoundTypes $ var "tx")) $
         var "expand" @@ false @@ var "args" @@ var "arty" @@ var "varType" @@ var "term",
 
       -- Wrap: recurse into body
@@ -525,7 +525,7 @@ etaExpandTermNew = define "etaExpandTermNew" $
 
   contractTerm @@ (var "rewriteWithArgs" @@ list ([] :: [TTerm Term]) @@ var "tx0" @@ var "term0")
 
--- TODO: this function probably needs to be replaced with a function which takes not only a Graph, but a TypeContext.
+-- TODO: this function probably needs to be replaced with a function which takes not only a Graph, but an extended Graph.
 --       etaExpansionArity won't give the correct answer unless it has access to the full lexical environment
 --       of each subterm in which it is applied, including lambda-bound variables as well as nested let-bound variables.
 --       The new function need not be monadic, because we don't need to call typeOf; it just needs accurate type lookups.
@@ -557,7 +557,7 @@ etaExpansionArity = define "etaExpansionArity" $
           ("b" ~> Core.bindingType $ var "b"))]
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
-etaExpandTypedTerm :: TBinding (TypeContext -> Term -> Flow s Term)
+etaExpandTypedTerm :: TBinding (Graph -> Term -> Flow s Term)
 etaExpandTypedTerm = define "etaExpandTypedTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x',"
     <> " eliminating partial application. Variable references are not expanded."
@@ -594,7 +594,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         Nothing [
         _Function_elimination>>: constant $ produce $ int32 1,
         _Function_lambda>>: "l" ~>
-          "txl" <~ Schemas.extendTypeContextForLambda @@ var "tx" @@ var "l" $
+          "txl" <~ Schemas.extendGraphForLambda @@ var "tx" @@ var "l" $
           var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l"),
         _Function_primitive>>: "name" ~> Flows.map
           (Arity.typeSchemeArity)
@@ -608,14 +608,14 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         -- like identity where (id x) has the same arity as x.
         _Term_function>>: "f" ~> var "forFunction" @@ var "tx" @@ var "f",
         _Term_let>>: "l" ~>
-          "txl" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
+          "txl" <~ Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
           var "arityOf" @@ var "txl" @@ Core.letBody (var "l"),
         _Term_typeApplication>>: "tat" ~> var "arityOf" @@ var "tx" @@ Core.typeApplicationTermBody (var "tat"),
         _Term_typeLambda>>: "tl" ~>
-          "txt" <~ Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl" $
+          "txt" <~ Schemas.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
           var "arityOf" @@ var "txt" @@ Core.typeLambdaBody (var "tl"),
-        _Term_variable>>: "name" ~> optCases (Maps.lookup (var "name") (Typing.typeContextTypes $ var "tx"))
-          -- Variable not in typeContextTypes; use typeOf with CURRENT context and variable term as fallback
+        _Term_variable>>: "name" ~> optCases (Maybes.map (Rewriting.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
+          -- Variable not in graphBoundTypes; use typeOf with CURRENT context and variable term as fallback
           -- This can happen with local let bindings that aren't yet in scope during eta expansion
           (Flows.map Arity.typeArity (Checking.typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ Core.termVariable (var "name")))
           ("t" ~> produce $ Arity.typeArity @@ var "t")]) $
@@ -688,17 +688,17 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         (Just $ var "recurseOrForce" @@ var "term") [
         _Function_elimination>>: "elm" ~> var "forElimination" @@ var "elm",
         _Function_lambda>>: "l" ~>
-          "txl" <~ Schemas.extendTypeContextForLambda @@ var "tx" @@ var "l" $
+          "txl" <~ Schemas.extendGraphForLambda @@ var "tx" @@ var "l" $
            Flows.map (var "unwind") (var "recurse" @@ var "txl" @@ var "term")],
       _Term_let>>: "l" ~>
-        "txlt" <~ Schemas.extendTypeContextForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
+        "txlt" <~ Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
         var "recurse" @@ var "txlt" @@ var "term",
       _Term_typeApplication>>: "tat" ~> var "rewrite" @@ var "topLevel" @@ var "forced"
         @@ (Lists.cons (Core.typeApplicationTermType $ var "tat") (var "typeArgs"))
         @@ var "recurse" @@ var "tx"
         @@ Core.typeApplicationTermBody (var "tat"),
       _Term_typeLambda>>: "tl" ~>
-        "txt" <~ Schemas.extendTypeContextForTypeLambda @@ var "tx" @@ var "tl" $
+        "txt" <~ Schemas.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
         var "recurse" @@ var "txt" @@ var "term"]) $
 --  trace ("term0: " ++ (ShowCore.term @@ var "term0")) $
   Rewriting.rewriteTermWithContextM @@ (var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type])) @@ var "tx0" @@ var "term0"
@@ -901,12 +901,12 @@ termIsClosed = define "termIsClosed" $
   doc "Whether a term is closed, i.e. represents a complete program" $
   "term" ~> Sets.null $ Rewriting.freeVariablesInTerm @@ var "term"
 
-termIsValue :: TBinding (Graph -> Term -> Bool)
+termIsValue :: TBinding (Term -> Bool)
 termIsValue = define "termIsValue" $
   doc "Whether a term has been fully reduced to a value" $
-  "g" ~> "term" ~>
-  "forList" <~ ("els" ~> Lists.foldl ("b" ~> "t" ~> Logic.and (var "b") (termIsValue @@ var "g" @@ var "t")) true (var "els")) $
-  "checkField" <~ ("f" ~> termIsValue @@ var "g" @@ Core.fieldTerm (var "f")) $
+  "term" ~>
+  "forList" <~ ("els" ~> Lists.foldl ("b" ~> "t" ~> Logic.and (var "b") (termIsValue @@ var "t")) true (var "els")) $
+  "checkField" <~ ("f" ~> termIsValue @@ Core.fieldTerm (var "f")) $
   "checkFields" <~ ("fields" ~> Lists.foldl ("b" ~> "f" ~> Logic.and (var "b") (var "checkField" @@ var "f")) true (var "fields")) $
   "functionIsValue" <~ ("f" ~> cases _Function (var "f") Nothing [
     _Function_elimination>>: "e" ~>
@@ -915,16 +915,16 @@ termIsValue = define "termIsValue" $
         _Elimination_record>>: constant true,
         _Elimination_union>>: "cs" ~>
           Logic.and (var "checkFields" @@ Core.caseStatementCases (var "cs"))
-            (Maybes.maybe true (termIsValue @@ var "g") (Core.caseStatementDefault $ var "cs"))],
-    _Function_lambda>>: "l" ~> termIsValue @@ var "g" @@ Core.lambdaBody (var "l"),
+            (Maybes.maybe true termIsValue (Core.caseStatementDefault $ var "cs"))],
+    _Function_lambda>>: "l" ~> termIsValue @@ Core.lambdaBody (var "l"),
     _Function_primitive>>: constant true]) $
   cases _Term (Rewriting.deannotateTerm @@ var "term")
     (Just false) [
     _Term_application>>: constant false,
     _Term_either>>: "e" ~>
       Eithers.either_
-        ("l" ~> termIsValue @@ var "g" @@ var "l")
-        ("r" ~> termIsValue @@ var "g" @@ var "r")
+        ("l" ~> termIsValue @@ var "l")
+        ("r" ~> termIsValue @@ var "r")
         (var "e"),
     _Term_literal>>: constant true,
     _Term_function>>: "f" ~> var "functionIsValue" @@ var "f",
@@ -932,11 +932,11 @@ termIsValue = define "termIsValue" $
     _Term_map>>: "m" ~>
       Lists.foldl ("b" ~> "kv" ~>
         Logic.and (var "b") $ Logic.and
-          (termIsValue @@ var "g" @@ Pairs.first (var "kv"))
-          (termIsValue @@ var "g" @@ Pairs.second (var "kv")))
+          (termIsValue @@ Pairs.first (var "kv"))
+          (termIsValue @@ Pairs.second (var "kv")))
         true $ Maps.toList (var "m"),
     _Term_maybe>>: "m" ~>
-      Maybes.maybe true (termIsValue @@ var "g") (var "m"),
+      Maybes.maybe true termIsValue (var "m"),
     _Term_record>>: "r" ~> var "checkFields" @@ Core.recordFields (var "r"),
     _Term_set>>: "s" ~> var "forList" @@ Sets.toList (var "s"),
     _Term_union>>: "i" ~> var "checkField" @@ Core.injectionField (var "i"),

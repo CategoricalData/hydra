@@ -210,10 +210,10 @@ getType :: TBinding (M.Map Name Term -> Flow Graph (Maybe Type))
 getType = define "getType" $
   doc "Get type from annotations" $
   "anns" ~>
-  "cx" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   Maybes.maybe
     (produce nothing)
-    ("dat" ~> Flows.map (unaryFunction just) (trace (string "get type") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ var "dat")))
+    ("dat" ~> Flows.map (unaryFunction just) (trace (string "get type") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "dat")))
     (Maps.lookup (Constants.key_type) (var "anns"))
 
 getTypeAnnotation :: TBinding (Name -> Type -> Maybe Term)
@@ -225,7 +225,7 @@ getTypeClasses :: TBinding (Term -> Flow Graph (M.Map Name (S.Set TypeClass)))
 getTypeClasses = define "getTypeClasses" $
   doc "Get type classes from term" $
   "term" ~>
-  "cx" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   "decodeClass" <~ ("term" ~>
     "byName" <~ Maps.fromList (list [
       pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
@@ -238,7 +238,7 @@ getTypeClasses = define "getTypeClasses" $
   Maybes.maybe
     (produce Maps.empty)
     ("term" ~> ExtractCore.map
-      @@ ("t" ~> Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Name @@ var "cx" @@ var "t"))
+      @@ ("t" ~> Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Name @@ var "graph" @@ var "t"))
       @@ (ExtractCore.setOf @@ var "decodeClass")
       @@ (var "term"))
     (getTermAnnotation @@ Constants.key_classes @@ var "term")

@@ -5,7 +5,12 @@ module Hydra.Dsl.Meta.Graph where
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Phantoms
 
+import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
+import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
+import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
+
 import qualified Data.Map as M
+import qualified Data.Set as S
 
 
 comparisonLessThan :: TTerm Comparison
@@ -17,92 +22,142 @@ comparisonEqualTo = injectUnit _Comparison _Comparison_equalTo
 comparisonGreaterThan :: TTerm Comparison
 comparisonGreaterThan = injectUnit _Comparison _Comparison_greaterThan
 
-graph :: TTerm [Binding]
-    -> TTerm (M.Map Name (Maybe Term))
+emptyGraph :: TTerm Graph
+emptyGraph = graph
+    Maps.empty
+    Maps.empty
+    Maps.empty
+    Sets.empty
+    Maps.empty
+    Maps.empty
+    Maps.empty
+    Sets.empty
+
+graph :: TTerm (M.Map Name Term)
     -> TTerm (M.Map Name TypeScheme)
-    -> TTerm Term
+    -> TTerm (M.Map Name TypeVariableMetadata)
+    -> TTerm (S.Set Name)
+    -> TTerm (M.Map Name Term)
     -> TTerm (M.Map Name Primitive)
-    -> TTerm (Maybe Graph)
+    -> TTerm (M.Map Name TypeScheme)
+    -> TTerm (S.Set Name)
     -> TTerm Graph
-graph elements environment types body primitives schema = record _Graph [
-    _Graph_elements>>: elements,
-    _Graph_environment>>: environment,
-    _Graph_types>>: types,
-    _Graph_body>>: body,
+graph boundTerms boundTypes classConstraints lambdaVariables metadata primitives schemaTypes typeVariables = record _Graph [
+    _Graph_boundTerms>>: boundTerms,
+    _Graph_boundTypes>>: boundTypes,
+    _Graph_classConstraints>>: classConstraints,
+    _Graph_lambdaVariables>>: lambdaVariables,
+    _Graph_metadata>>: metadata,
     _Graph_primitives>>: primitives,
-    _Graph_schema>>: schema]
+    _Graph_schemaTypes>>: schemaTypes,
+    _Graph_typeVariables>>: typeVariables]
 
-graphElements :: TTerm Graph -> TTerm [Binding]
-graphElements g = project _Graph _Graph_elements @@ g
+graphBoundTerms :: TTerm Graph -> TTerm (M.Map Name Term)
+graphBoundTerms g = project _Graph _Graph_boundTerms @@ g
 
-graphEnvironment :: TTerm Graph -> TTerm (M.Map Name (Maybe Term))
-graphEnvironment g = project _Graph _Graph_environment @@ g
+graphBoundTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme)
+graphBoundTypes g = project _Graph _Graph_boundTypes @@ g
 
-graphTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme)
-graphTypes g = project _Graph _Graph_types @@ g
+graphClassConstraints :: TTerm Graph -> TTerm (M.Map Name TypeVariableMetadata)
+graphClassConstraints g = project _Graph _Graph_classConstraints @@ g
 
-graphBody :: TTerm Graph -> TTerm Term
-graphBody g = project _Graph _Graph_body @@ g
+graphLambdaVariables :: TTerm Graph -> TTerm (S.Set Name)
+graphLambdaVariables g = project _Graph _Graph_lambdaVariables @@ g
+
+graphMetadata :: TTerm Graph -> TTerm (M.Map Name Term)
+graphMetadata g = project _Graph _Graph_metadata @@ g
 
 graphPrimitives :: TTerm Graph -> TTerm (M.Map Name Primitive)
 graphPrimitives g = project _Graph _Graph_primitives @@ g
 
-graphSchema :: TTerm Graph -> TTerm (Maybe Graph)
-graphSchema g = project _Graph _Graph_schema @@ g
+graphSchemaTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme)
+graphSchemaTypes g = project _Graph _Graph_schemaTypes @@ g
 
-graphWithElements :: TTerm Graph -> TTerm [Binding] -> TTerm Graph
-graphWithElements g newElements = graph
-    newElements
-    (Hydra.Dsl.Meta.Graph.graphEnvironment g)
-    (Hydra.Dsl.Meta.Graph.graphTypes g)
-    (Hydra.Dsl.Meta.Graph.graphBody g)
+graphTypeVariables :: TTerm Graph -> TTerm (S.Set Name)
+graphTypeVariables g = project _Graph _Graph_typeVariables @@ g
+
+graphWithBoundTerms :: TTerm Graph -> TTerm (M.Map Name Term) -> TTerm Graph
+graphWithBoundTerms g newBoundTerms = graph
+    newBoundTerms
+    (Hydra.Dsl.Meta.Graph.graphBoundTypes g)
+    (Hydra.Dsl.Meta.Graph.graphClassConstraints g)
+    (Hydra.Dsl.Meta.Graph.graphLambdaVariables g)
+    (Hydra.Dsl.Meta.Graph.graphMetadata g)
     (Hydra.Dsl.Meta.Graph.graphPrimitives g)
-    (Hydra.Dsl.Meta.Graph.graphSchema g)
+    (Hydra.Dsl.Meta.Graph.graphSchemaTypes g)
+    (Hydra.Dsl.Meta.Graph.graphTypeVariables g)
 
-graphWithEnvironment :: TTerm Graph -> TTerm (M.Map Name (Maybe Term)) -> TTerm Graph
-graphWithEnvironment g newEnvironment = graph
-    (Hydra.Dsl.Meta.Graph.graphElements g)
-    newEnvironment
-    (Hydra.Dsl.Meta.Graph.graphTypes g)
-    (Hydra.Dsl.Meta.Graph.graphBody g)
+graphWithBoundTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme) -> TTerm Graph
+graphWithBoundTypes g newBoundTypes = graph
+    (Hydra.Dsl.Meta.Graph.graphBoundTerms g)
+    newBoundTypes
+    (Hydra.Dsl.Meta.Graph.graphClassConstraints g)
+    (Hydra.Dsl.Meta.Graph.graphLambdaVariables g)
+    (Hydra.Dsl.Meta.Graph.graphMetadata g)
     (Hydra.Dsl.Meta.Graph.graphPrimitives g)
-    (Hydra.Dsl.Meta.Graph.graphSchema g)
+    (Hydra.Dsl.Meta.Graph.graphSchemaTypes g)
+    (Hydra.Dsl.Meta.Graph.graphTypeVariables g)
 
-graphWithTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme) -> TTerm Graph
-graphWithTypes g newTypes = graph
-    (Hydra.Dsl.Meta.Graph.graphElements g)
-    (Hydra.Dsl.Meta.Graph.graphEnvironment g)
-    newTypes
-    (Hydra.Dsl.Meta.Graph.graphBody g)
+graphWithClassConstraints :: TTerm Graph -> TTerm (M.Map Name TypeVariableMetadata) -> TTerm Graph
+graphWithClassConstraints g newCC = graph
+    (Hydra.Dsl.Meta.Graph.graphBoundTerms g)
+    (Hydra.Dsl.Meta.Graph.graphBoundTypes g)
+    newCC
+    (Hydra.Dsl.Meta.Graph.graphLambdaVariables g)
+    (Hydra.Dsl.Meta.Graph.graphMetadata g)
     (Hydra.Dsl.Meta.Graph.graphPrimitives g)
-    (Hydra.Dsl.Meta.Graph.graphSchema g)
+    (Hydra.Dsl.Meta.Graph.graphSchemaTypes g)
+    (Hydra.Dsl.Meta.Graph.graphTypeVariables g)
 
-graphWithBody :: TTerm Graph -> TTerm Term -> TTerm Graph
-graphWithBody g newBody = graph
-    (Hydra.Dsl.Meta.Graph.graphElements g)
-    (Hydra.Dsl.Meta.Graph.graphEnvironment g)
-    (Hydra.Dsl.Meta.Graph.graphTypes g)
-    newBody
+graphWithLambdaVariables :: TTerm Graph -> TTerm (S.Set Name) -> TTerm Graph
+graphWithLambdaVariables g newLV = graph
+    (Hydra.Dsl.Meta.Graph.graphBoundTerms g)
+    (Hydra.Dsl.Meta.Graph.graphBoundTypes g)
+    (Hydra.Dsl.Meta.Graph.graphClassConstraints g)
+    newLV
+    (Hydra.Dsl.Meta.Graph.graphMetadata g)
     (Hydra.Dsl.Meta.Graph.graphPrimitives g)
-    (Hydra.Dsl.Meta.Graph.graphSchema g)
+    (Hydra.Dsl.Meta.Graph.graphSchemaTypes g)
+    (Hydra.Dsl.Meta.Graph.graphTypeVariables g)
 
-graphWithPrimitives :: TTerm Graph -> TTerm (M.Map Name Primitive) -> TTerm Graph
-graphWithPrimitives g newPrimitives = graph
-    (Hydra.Dsl.Meta.Graph.graphElements g)
-    (Hydra.Dsl.Meta.Graph.graphEnvironment g)
-    (Hydra.Dsl.Meta.Graph.graphTypes g)
-    (Hydra.Dsl.Meta.Graph.graphBody g)
-    newPrimitives
-    (Hydra.Dsl.Meta.Graph.graphSchema g)
-
-graphWithSchema :: TTerm Graph -> TTerm (Maybe Graph) -> TTerm Graph
-graphWithSchema g newSchema = graph
-    (Hydra.Dsl.Meta.Graph.graphElements g)
-    (Hydra.Dsl.Meta.Graph.graphEnvironment g)
-    (Hydra.Dsl.Meta.Graph.graphTypes g)
-    (Hydra.Dsl.Meta.Graph.graphBody g)
+graphWithMetadata :: TTerm Graph -> TTerm (M.Map Name Term) -> TTerm Graph
+graphWithMetadata g newMeta = graph
+    (Hydra.Dsl.Meta.Graph.graphBoundTerms g)
+    (Hydra.Dsl.Meta.Graph.graphBoundTypes g)
+    (Hydra.Dsl.Meta.Graph.graphClassConstraints g)
+    (Hydra.Dsl.Meta.Graph.graphLambdaVariables g)
+    newMeta
     (Hydra.Dsl.Meta.Graph.graphPrimitives g)
-    newSchema
+    (Hydra.Dsl.Meta.Graph.graphSchemaTypes g)
+    (Hydra.Dsl.Meta.Graph.graphTypeVariables g)
+
+graphWithSchemaTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme) -> TTerm Graph
+graphWithSchemaTypes g newSchemaTypes = graph
+    (Hydra.Dsl.Meta.Graph.graphBoundTerms g)
+    (Hydra.Dsl.Meta.Graph.graphBoundTypes g)
+    (Hydra.Dsl.Meta.Graph.graphClassConstraints g)
+    (Hydra.Dsl.Meta.Graph.graphLambdaVariables g)
+    (Hydra.Dsl.Meta.Graph.graphMetadata g)
+    (Hydra.Dsl.Meta.Graph.graphPrimitives g)
+    newSchemaTypes
+    (Hydra.Dsl.Meta.Graph.graphTypeVariables g)
+
+-- | Get primitive types as a Map Name TypeScheme from a Graph's primitives map
+graphPrimitiveTypes :: TTerm Graph -> TTerm (M.Map Name TypeScheme)
+graphPrimitiveTypes g = Maps.fromList (Lists.map
+    ("_gpt_p" ~> pair (Hydra.Dsl.Meta.Graph.primitiveName $ var "_gpt_p") (Hydra.Dsl.Meta.Graph.primitiveType $ var "_gpt_p"))
+    (Maps.elems $ Hydra.Dsl.Meta.Graph.graphPrimitives g))
+
+graphWithTypeVariables :: TTerm Graph -> TTerm (S.Set Name) -> TTerm Graph
+graphWithTypeVariables g newTV = graph
+    (Hydra.Dsl.Meta.Graph.graphBoundTerms g)
+    (Hydra.Dsl.Meta.Graph.graphBoundTypes g)
+    (Hydra.Dsl.Meta.Graph.graphClassConstraints g)
+    (Hydra.Dsl.Meta.Graph.graphLambdaVariables g)
+    (Hydra.Dsl.Meta.Graph.graphMetadata g)
+    (Hydra.Dsl.Meta.Graph.graphPrimitives g)
+    (Hydra.Dsl.Meta.Graph.graphSchemaTypes g)
+    newTV
 
 primitive :: TTerm Name
     -> TTerm TypeScheme

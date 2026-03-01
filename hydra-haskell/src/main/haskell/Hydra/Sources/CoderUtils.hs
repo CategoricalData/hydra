@@ -250,7 +250,7 @@ isSimpleAssignment = define "isSimpleAssignment" $
 -- | Determine whether a given term needs to be treated as a (possibly nullary) function,
 -- rather than a simple value. The term might be an actual function, or it may have type parameters
 -- or internal let bindings, or it may reference complex variables.
-isComplexTerm :: TBinding (TypeContext -> Term -> Bool)
+isComplexTerm :: TBinding (Graph -> Term -> Bool)
 isComplexTerm = define "isComplexTerm" $
   doc "Check if a term needs to be treated as a function rather than a simple value" $
   "tc" ~> "t" ~>
@@ -267,25 +267,25 @@ isComplexTerm = define "isComplexTerm" $
     _Term_variable>>: "name" ~> isComplexVariable @@ var "tc" @@ var "name"]
 
 -- | Look up a variable to see if it is bound to a complex term
-isComplexVariable :: TBinding (TypeContext -> Name -> Bool)
+isComplexVariable :: TBinding (Graph -> Name -> Bool)
 isComplexVariable = define "isComplexVariable" $
   doc "Check if a variable is bound to a complex term" $
   "tc" ~> "name" ~>
   -- Check if there's metadata for this variable (indicates complexity)
-  "metaLookup" <~ Maps.lookup (var "name") (Typing.typeContextMetadata $ var "tc") $
+  "metaLookup" <~ Maps.lookup (var "name") (Graph.graphMetadata $ var "tc") $
   Logic.ifElse
     (Maybes.isJust (var "metaLookup"))
     (boolean True)
     -- Lambda-bound variables are complex because they might be thunked
     (Logic.ifElse
-      (Sets.member (var "name") (Typing.typeContextLambdaVariables $ var "tc"))
+      (Sets.member (var "name") (Graph.graphLambdaVariables $ var "tc"))
       (boolean True)
-      -- If not in type context, assume mutual recursion (complex)
-      ("typeLookup" <~ Maps.lookup (var "name") (Typing.typeContextTypes $ var "tc") $
+      -- If not in graph, assume mutual recursion (complex)
+      ("typeLookup" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tc") $
        Logic.not (Maybes.isJust (var "typeLookup"))))
 
 -- | Check if a binding is complex and needs to be treated as a function
-isComplexBinding :: TBinding (TypeContext -> Binding -> Bool)
+isComplexBinding :: TBinding (Graph -> Binding -> Bool)
 isComplexBinding = define "isComplexBinding" $
   doc "Check if a binding needs to be treated as a function" $
   "tc" ~> "b" ~>
@@ -481,16 +481,16 @@ commentsFromFieldType = define "commentsFromFieldType" $
 -- Function analysis utilities
 --------------------------------------------------------------------------------
 
--- | Infer the type of a term using the given TypeContext.
+-- | Infer the type of a term using the given Graph.
 -- This is a helper that adds tracing for debugging purposes.
-tryTypeOf :: TBinding (String -> TypeContext -> Term -> Flow s Type)
+tryTypeOf :: TBinding (String -> Graph -> Term -> Flow s Type)
 tryTypeOf = define "tryTypeOf" $
   doc "Infer the type of a term with tracing" $
   "msg" ~> "tc" ~> "term" ~>
   Monads.withTrace @@ var "msg" @@ (Checking.typeOf @@ var "tc" @@ list ([] :: [TTerm Type]) @@ var "term")
 
 -- | Produces a simple 'true' value if the binding is complex (needs to be treated as a function)
-bindingMetadata :: TBinding (TypeContext -> Binding -> Maybe Term)
+bindingMetadata :: TBinding (Graph -> Binding -> Maybe Term)
 bindingMetadata = define "bindingMetadata" $
   doc "Produces metadata for a binding if it is complex" $
   "tc" ~> "b" ~>
@@ -508,7 +508,7 @@ bindingMetadata = define "bindingMetadata" $
 -- collecting lambda parameters (vs. having seen a let which stops parameter collection).
 -- | Finish helper for analyzeFunctionTermWith: reapply type applications and infer return type
 analyzeFunctionTermWith_finish :: TBinding (
-  (env -> TypeContext) ->
+  (env -> Graph) ->
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
   Flow s (FunctionStructure env))
 analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
@@ -530,9 +530,9 @@ analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
 
 -- | Gather helper for analyzeFunctionTermWith: recursively collect function components
 analyzeFunctionTermWith_gather :: TBinding (
-  (TypeContext -> Binding -> Maybe Term) ->
-  (env -> TypeContext) ->
-  (TypeContext -> env -> env) ->
+  (Graph -> Binding -> Maybe Term) ->
+  (env -> Graph) ->
+  (Graph -> env -> env) ->
   Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
   Flow s (FunctionStructure env))
 analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
@@ -548,7 +548,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
             ("v" <~ Core.lambdaParameter (var "lam") $
              "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
              "body" <~ Core.lambdaBody (var "lam") $
-             "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
+             "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
              analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
                @@ var "argMode" @@ var "newEnv"
                @@ var "tparams"
@@ -561,7 +561,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
     _Term_let>>: "lt" ~>
       "newBindings" <~ Core.letBindings (var "lt") $
       "body" <~ Core.letBody (var "lt") $
-      "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
+      "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
       analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ boolean False @@ var "newEnv"
         @@ var "tparams"
@@ -584,7 +584,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
     _Term_typeLambda>>: "tl" ~>
       "tvar" <~ Core.typeLambdaParameter (var "tl") $
       "tlBody" <~ Core.typeLambdaBody (var "tl") $
-      "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
+      "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
       analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ var "argMode" @@ var "newEnv"
         @@ (Lists.cons (var "tvar") (var "tparams"))
@@ -595,9 +595,9 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
         @@ var "tlBody"]
 
 analyzeFunctionTermWith :: TBinding (
-  (TypeContext -> Binding -> Maybe Term) ->
-  (env -> TypeContext) ->
-  (TypeContext -> env -> env) ->
+  (Graph -> Binding -> Maybe Term) ->
+  (env -> Graph) ->
+  (Graph -> env -> env) ->
   env ->
   Term ->
   Flow s (FunctionStructure env))
@@ -634,9 +634,9 @@ analyzeFunctionTermNoInferWith_finish = define "analyzeFunctionTermNoInferWith_f
 
 -- | Gather helper for analyzeFunctionTermNoInferWith: recursively collect function components
 analyzeFunctionTermNoInferWith_gather :: TBinding (
-  (TypeContext -> Binding -> Maybe Term) ->
-  (env -> TypeContext) ->
-  (TypeContext -> env -> env) ->
+  (Graph -> Binding -> Maybe Term) ->
+  (env -> Graph) ->
+  (Graph -> env -> env) ->
   Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
   Flow s (FunctionStructure env))
 analyzeFunctionTermNoInferWith_gather = define "analyzeFunctionTermNoInferWith_gather" $
@@ -652,7 +652,7 @@ analyzeFunctionTermNoInferWith_gather = define "analyzeFunctionTermNoInferWith_g
             ("v" <~ Core.lambdaParameter (var "lam") $
              "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
              "body" <~ Core.lambdaBody (var "lam") $
-             "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
+             "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
              analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
                @@ var "argMode" @@ var "newEnv"
                @@ var "tparams"
@@ -665,7 +665,7 @@ analyzeFunctionTermNoInferWith_gather = define "analyzeFunctionTermNoInferWith_g
     _Term_let>>: "lt" ~>
       "newBindings" <~ Core.letBindings (var "lt") $
       "body" <~ Core.letBody (var "lt") $
-      "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
+      "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
       analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ boolean False @@ var "newEnv"
         @@ var "tparams"
@@ -688,7 +688,7 @@ analyzeFunctionTermNoInferWith_gather = define "analyzeFunctionTermNoInferWith_g
     _Term_typeLambda>>: "tl" ~>
       "tvar" <~ Core.typeLambdaParameter (var "tl") $
       "tlBody" <~ Core.typeLambdaBody (var "tl") $
-      "newEnv" <~ (var "setTC" @@ (Schemas.extendTypeContextForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
+      "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
       analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ var "argMode" @@ var "newEnv"
         @@ (Lists.cons (var "tvar") (var "tparams"))
@@ -700,9 +700,9 @@ analyzeFunctionTermNoInferWith_gather = define "analyzeFunctionTermNoInferWith_g
 
 -- | Internal helper: analyze a function term without type inference, with configurable binding metadata.
 analyzeFunctionTermNoInferWith :: TBinding (
-  (TypeContext -> Binding -> Maybe Term) ->
-  (env -> TypeContext) ->
-  (TypeContext -> env -> env) ->
+  (Graph -> Binding -> Maybe Term) ->
+  (env -> Graph) ->
+  (Graph -> env -> env) ->
   env ->
   Term ->
   Flow s (FunctionStructure env))
@@ -722,8 +722,8 @@ analyzeFunctionTermNoInferWith = define "analyzeFunctionTermNoInferWith" $
 -- This is a common pattern across all language coders: we need to understand the structure of a function
 -- to properly encode it in the target language.
 analyzeFunctionTerm :: TBinding (
-  (env -> TypeContext) ->
-  (TypeContext -> env -> env) ->
+  (env -> Graph) ->
+  (Graph -> env -> env) ->
   env ->
   Term ->
   Flow s (FunctionStructure env))
@@ -736,8 +736,8 @@ analyzeFunctionTerm = define "analyzeFunctionTerm" $
 -- lambda expressions where let bindings are encoded as walrus operators (which evaluate
 -- immediately and share values, so don't need thunking or function call syntax).
 analyzeFunctionTermInline :: TBinding (
-  (env -> TypeContext) ->
-  (TypeContext -> env -> env) ->
+  (env -> Graph) ->
+  (Graph -> env -> env) ->
   env ->
   Term ->
   Flow s (FunctionStructure env))
@@ -750,8 +750,8 @@ analyzeFunctionTermInline = define "analyzeFunctionTermInline" $
 -- This is a performance optimization for dynamically-typed target languages (like Python)
 -- where the codomain type is not needed and type inference is expensive.
 analyzeFunctionTermNoInfer :: TBinding (
-  (env -> TypeContext) ->
-  (TypeContext -> env -> env) ->
+  (env -> Graph) ->
+  (Graph -> env -> env) ->
   env ->
   Term ->
   Flow s (FunctionStructure env))

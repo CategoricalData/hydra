@@ -182,18 +182,15 @@ substInClassConstraints = define "substInClassConstraints" $
     Maps.empty
     (Maps.toList $ var "constraints")
 
-substInContext :: TBinding (TypeSubst -> InferenceContext -> InferenceContext)
+substInContext :: TBinding (TypeSubst -> Graph -> Graph)
 substInContext = define "substInContext" $
-  doc "Apply a type substitution to an inference context" $
+  doc "Apply a type substitution to a graph's bound types and class constraints" $
   lambdas ["subst", "cx"] $
-    "newDataTypes" <~ Maps.map (substInTypeScheme @@ var "subst") (Typing.inferenceContextDataTypes $ var "cx") $
-    "newClassConstraints" <~ substInClassConstraints @@ var "subst" @@ (Typing.inferenceContextClassConstraints $ var "cx") $
-    Typing.inferenceContext
-      (Typing.inferenceContextSchemaTypes $ var "cx")
-      (Typing.inferenceContextPrimitiveTypes $ var "cx")
-      (var "newDataTypes")
+    "newBoundTypes" <~ Maps.map (substInTypeScheme @@ var "subst") (Graph.graphBoundTypes $ var "cx") $
+    "newClassConstraints" <~ substInClassConstraints @@ var "subst" @@ (Graph.graphClassConstraints $ var "cx") $
+    Graph.graphWithClassConstraints
+      (Graph.graphWithBoundTypes (var "cx") (var "newBoundTypes"))
       (var "newClassConstraints")
-      (Typing.inferenceContextDebug $ var "cx")
 
 substituteInTerm :: TBinding (TermSubst -> Term -> Term)
 substituteInTerm = define "substituteInTerm" $

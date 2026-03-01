@@ -34,13 +34,13 @@ import qualified System.FilePath as FP
 -- | Extract all variable names from term-encoded terms in a given term.
 -- This recursively decodes encoded terms and extracts the variable names.
 extractEncodedTermVariableNames :: Graph -> Term -> S.Set Name
-extractEncodedTermVariableNames graph term =
+extractEncodedTermVariableNames graf term =
   Rewriting.foldOverTerm TraversalOrderPre collectNames S.empty term
   where
     collectNames :: S.Set Name -> Term -> S.Set Name
     collectNames names t
       | isEncodedTerm (Rewriting.deannotateTerm t) =
-          case DecodeCore.term graph t of
+          case DecodeCore.term graf t of
             Right decodedTerm ->
               -- Recursively extract variable names from the decoded term
               S.union names (Rewriting.termDependencyNames True True True decodedTerm)
@@ -79,12 +79,12 @@ isFlowStateRecord term = case Rewriting.deannotateTerm term of
     findField name = L.foldr (\f acc -> if unName (fieldName f) == name then Just (fieldTerm f) else acc) Nothing
 
 -- | Preprocess input term to replace TermUnit state with emptyGraph in Flow unrolling patterns.
--- The kernel test generation converts the Flow state argument (e.g. emptyGraph) to TermUnit
--- due to type erasure, but some functions (like annotation functions) specifically require Graph state.
+-- The kernel test generation converts the Flow state argument to TermUnit due to type erasure,
+-- but Flow functions use Graph as the state type. We use emptyGraph to get a Graph.
 preprocessFlowInput :: Term -> Term
 preprocessFlowInput = Rewriting.rewriteTerm rewrite
   where
-    emptyGraphVar = TermVariable (Name "hydra.lexical.emptyGraph")
+    emptyGraphExpr = TermVariable (Name "hydra.lexical.emptyGraph")
 
     rewrite :: (Term -> Term) -> Term -> Term
     rewrite recurse t = case Rewriting.deannotateTerm t of
@@ -106,7 +106,7 @@ preprocessFlowInput = Rewriting.rewriteTerm rewrite
                     | unName wrapName == "hydra.compute.Flow" ->
                       -- Found the pattern! Check if stateArg is TermUnit
                       let newState = case Rewriting.deannotateTerm stateArg of
-                            TermUnit -> emptyGraphVar
+                            TermUnit -> emptyGraphExpr
                             _ -> recurse stateArg
                           -- Rebuild: ((unFlowApp newState) trace)
                           newStateApp = TermApplication $ Application (recurse unFlowApp) newState
@@ -178,10 +178,10 @@ findHaskellImports namespaces names = L.map makeImport (M.toList filteredMapping
       Strings.intercalate "." $ Lists.map Formatting.capitalize (Strings.splitOn "." ns)
 
 -- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
-generateTestGroupHierarchy :: InferenceContext -> Namespaces H.ModuleName -> TestCodec -> Int -> TestGroup -> Flow Graph String
-generateTestGroupHierarchy infContext namespaces codec depth testGroup = do
+generateTestGroupHierarchy :: Graph -> Namespaces H.ModuleName -> TestCodec -> Int -> TestGroup -> Flow Graph String
+generateTestGroupHierarchy g namespaces codec depth testGroup = do
   -- Generate test cases at the current level with proper indentation
-  testCaseLinesRaw <- mapM (generateTestCaseWithCodec infContext namespaces codec depth) (testGroupCases testGroup)
+  testCaseLinesRaw <- mapM (generateTestCaseWithCodec g namespaces codec depth) (testGroupCases testGroup)
   let indent = replicate (depth * 2) ' '
       indentTestCase = L.map (indent ++)
       testCaseLines = fmap indentTestCase testCaseLinesRaw
@@ -198,7 +198,7 @@ generateTestGroupHierarchy infContext namespaces codec depth testGroup = do
     generateSubgroupBlock subgroup = do
       let indent = replicate (depth * 2) ' '
       -- Recursively generate content for this subgroup at depth+1 (nested inside this H.describe)
-      subgroupContent <- generateTestGroupHierarchy infContext namespaces codec (depth + 1) subgroup
+      subgroupContent <- generateTestGroupHierarchy g namespaces codec (depth + 1) subgroup
       let groupName = testGroupName subgroup
       -- Generate the H.describe block with proper indentation
       return $ indent ++ "H.describe " ++ show groupName ++ " $ do\n" ++ subgroupContent
@@ -209,10 +209,9 @@ generateTestFileWithCodec codec testModule testGroup namespaces = do
   -- Note: Type inference is now performed ONCE upfront in generateAllModuleTests (Generate.hs)
   -- This is critical for performance: inferGraphTypes is expensive and should not be called per-module
   g <- getState
-  infContext <- graphToInferenceContext g
 
   -- Generate test hierarchy preserving the structure
-  testBody <- generateTestGroupHierarchy infContext namespaces codec 1 testGroup
+  testBody <- generateTestGroupHierarchy g namespaces codec 1 testGroup
 
   -- Build the complete test module
   let testModuleContent = buildTestModuleWithCodec codec testModule testGroup testBody namespaces
@@ -229,8 +228,8 @@ generateTestFileWithCodec codec testModule testGroup namespaces = do
   return (filePath, testModuleContent)
 
 -- | Generate a single test case using a TestCodec
-generateTestCaseWithCodec :: InferenceContext -> Namespaces H.ModuleName -> TestCodec -> Int -> TestCaseWithMetadata -> Flow Graph [String]
-generateTestCaseWithCodec infContext namespaces codec depth (TestCaseWithMetadata name tcase _ _) = case tcase of
+generateTestCaseWithCodec :: Graph -> Namespaces H.ModuleName -> TestCodec -> Int -> TestCaseWithMetadata -> Flow Graph [String]
+generateTestCaseWithCodec g namespaces codec depth (TestCaseWithMetadata name tcase _ _) = case tcase of
   TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase inputRaw output) -> do
     -- Preprocess input to replace TermUnit state with emptyGraph in Flow patterns
     let input = preprocessFlowInput inputRaw
@@ -251,7 +250,7 @@ generateTestCaseWithCodec infContext namespaces codec depth (TestCaseWithMetadat
 
         -- Check if we need a type annotation for the expected value
         -- Use expectedValue (the unwrapped flowStateValue) for inference, not full FlowState output
-        typeAnnotation <- generateTypeAnnotationForFlowStateValue infContext namespaces input expectedValue
+        typeAnnotation <- generateTypeAnnotationForFlowStateValue g namespaces input expectedValue
         let finalExpectedCode = case typeAnnotation of
               Just anno -> indentedExpectedCode ++ anno
               Nothing -> indentedExpectedCode
@@ -272,7 +271,7 @@ generateTestCaseWithCodec infContext namespaces codec depth (TestCaseWithMetadat
             indentedInputCode = indentLines continuationIndent inputCode
             indentedOutputCode = indentLines continuationIndent outputCode
 
-        typeAnnotation <- generateTypeAnnotationFor infContext namespaces input output
+        typeAnnotation <- generateTypeAnnotationFor g namespaces input output
         let (finalInputCode, finalOutputCode) = case typeAnnotation of
               Just anno -> (indentedInputCode, indentedOutputCode ++ anno)
               Nothing -> (indentedInputCode, indentedOutputCode)
@@ -289,7 +288,7 @@ generateTestCaseWithCodec infContext namespaces codec depth (TestCaseWithMetadat
 -- 1. Bare `Nothing` (always ambiguous) -> `Maybe Int`
 -- 2. `Just Nothing` when INPUT also contains bare `Nothing` (polymorphic) -> `Maybe (Maybe Int)`
 -- For (2), if input is concrete (like getTermDescription), GHC infers from input.
-generateTypeAnnotationForFlowStateValue :: InferenceContext -> Namespaces H.ModuleName -> Term -> Term -> Flow Graph (Maybe String)
+generateTypeAnnotationForFlowStateValue :: Graph -> Namespaces H.ModuleName -> Term -> Term -> Flow Graph (Maybe String)
 generateTypeAnnotationForFlowStateValue _ _ inputTerm expectedValue =
   case Rewriting.deannotateTerm expectedValue of
     TermMaybe Nothing -> return $ Just " :: Maybe Int"
@@ -350,8 +349,8 @@ extractFlowStateValueType typ = case Rewriting.deannotateType typ of
 -- The annotation is derived from the INPUT term's inferred type, since the input
 -- is the expression being evaluated and its result type should match the output type.
 -- Free type variables are replaced with Int32.
-generateTypeAnnotationFor :: InferenceContext -> Namespaces H.ModuleName -> Term -> Term -> Flow Graph (Maybe String)
-generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
+generateTypeAnnotationFor :: Graph -> Namespaces H.ModuleName -> Term -> Term -> Flow Graph (Maybe String)
+generateTypeAnnotationFor g namespaces inputTerm outputTerm = do
   -- Only consider annotation if output has no concrete values to guide inference
   if not needsAnnotation
     then return Nothing
@@ -359,7 +358,7 @@ generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
       -- Infer the type of the input expression (which gives us the result/output type)
       -- Use tryInferTypeOf to gracefully handle inference failures (e.g., when schema types
       -- like Graph conflict with polymorphic type variables)
-      mresult <- tryInferTypeOf infContext inputTerm
+      mresult <- tryInferTypeOf g inputTerm
       case mresult of
         Nothing -> return Nothing  -- Inference failed; skip annotation
         Just (_, typeScheme) -> do
@@ -381,7 +380,7 @@ generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
               return $ Just (" :: " ++ typeStr)
             else return Nothing
   where
-    schemaVars = S.fromList $ M.keys $ inferenceContextSchemaTypes infContext
+    schemaVars = S.fromList $ M.keys $ graphSchemaTypes g
     needsAnnotation = containsTriviallyPolymorphic outputTerm
     isEitherTerm (TermEither _) = True
     isEitherTerm _ = False
@@ -389,9 +388,9 @@ generateTypeAnnotationFor infContext namespaces inputTerm outputTerm = do
 -- | Try to infer the type of a term, returning Nothing if inference fails
 -- This allows graceful degradation when type inference encounters issues
 -- (e.g., schema types being unified with polymorphic type variables)
-tryInferTypeOf :: InferenceContext -> Term -> Flow Graph (Maybe (Term, TypeScheme))
-tryInferTypeOf infContext term = Flow $ \s t ->
-  let FlowState mval s' t' = unFlow (Inference.inferTypeOf infContext term) s t
+tryInferTypeOf :: Graph -> Term -> Flow Graph (Maybe (Term, TypeScheme))
+tryInferTypeOf g term = Flow $ \s t ->
+  let FlowState mval s' t' = unFlow (Inference.inferTypeOf g term) s t
   in FlowState (Just mval) s' t'
 
 -- | Check if a term CONTAINS any trivially polymorphic sub-terms (empty list, Nothing, etc.)
@@ -487,7 +486,7 @@ generateHaskellTestFile testModule testGroup = do
       graph <- getState
       let encodedNames = S.unions $ map (extractEncodedTermVariableNames graph) testTerms
       -- Add the encoded term namespaces to the base namespaces
-      -- Also add hydra.lexical explicitly since it's needed for Flow tests (emptyGraph)
+      -- Also add hydra.lexical explicitly since emptyGraph is needed for Flow tests
       let extraNamespaces = S.fromList [Name "hydra.lexical.emptyGraph"]
       return $ addNamespacesToNamespaces baseNamespaces (S.union encodedNames extraNamespaces)
     extractTestTerms (TestCaseWithMetadata _ tcase _ _) = case tcase of

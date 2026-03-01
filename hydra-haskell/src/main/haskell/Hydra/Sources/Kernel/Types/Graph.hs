@@ -17,7 +17,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Compute.ns] [Core.ns] $
+module_ = Module ns elements [Compute.ns] [Compute.ns] $
     Just "The extension to graphs of Hydra's core type system (hydra.core)"
   where
     elements = [
@@ -27,30 +27,37 @@ module_ = Module ns elements [Compute.ns] [Core.ns] $
 
 graph :: Binding
 graph = define "Graph" $
-  doc "A graph, or set of name/term bindings together with parameters (annotations, primitives) and a schema graph" $
+  doc "A graph, or lexical environment which binds names to terms, types, primitives, and metadata" $
   T.record [
-    "elements">:
-      doc "All of the elements in the graph" $
-      T.list Core.binding,
-    "environment">:
-      doc "The lambda environment of this graph context; it indicates whether a variable is bound by a lambda (Nothing) or a let (Just term)" $
-      T.map Core.name (T.maybe Core.term),
-    "types">:
-      doc "The typing environment of the graph" $
+    "boundTerms">:
+      doc "The terms bound by all term variables in scope" $
+      T.map Core.name Core.term,
+    "boundTypes">:
+      doc "The type schemes of all term variables in scope" $
       T.map Core.name Core.typeScheme,
-    "body">:
-      doc "The body of the term which generated this context"
-      Core.term,
+    "classConstraints">:
+      doc ("A mutable map from type variable names to their accumulated class constraints."
+        ++ " This is populated during type inference when operations requiring Eq or Ord are encountered.") $
+      T.map Core.name Core.typeVariableMetadata,
+    "lambdaVariables">:
+      doc "The set of term variables introduced by specifically by lambdas" $
+      T.set Core.name,
+    "metadata">:
+      doc "Any additional metadata bound to term variables in scope" $
+      T.map Core.name Core.term,
     "primitives">:
-      doc "All supported primitive constants and functions, by name" $
+      doc "All primitive functions and constants by name" $
       T.map Core.name primitive,
-    "schema">:
-      doc "The schema of this graph. If this parameter is omitted (nothing), the graph is its own schema graph." $
-      T.maybe graph]
+    "schemaTypes">:
+      doc "All schema types (type schemes) in scope" $
+      T.map Core.name Core.typeScheme,
+    "typeVariables">:
+      doc "The set of type variables introduced specifically by type lambdas" $
+      T.set Core.name]
 
 primitive :: Binding
 primitive = define "Primitive" $
-  doc "A built-in function" $
+  doc "A built-in function or constant" $
   T.record [
     "name">:
       doc "The unique name of the primitive function"

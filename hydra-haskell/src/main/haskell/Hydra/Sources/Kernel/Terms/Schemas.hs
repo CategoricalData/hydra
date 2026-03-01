@@ -9,11 +9,10 @@ import Hydra.Kernel hiding (
   dereferenceType,
   elementAsTypeApplicationTerm,
   elementsWithDependencies,
-  extendTypeContextForLambda,
-  extendTypeContextForLet,
-  extendTypeContextForTypeLambda,
+  extendGraphForLambda,
+  extendGraphForLet,
+  extendGraphForTypeLambda,
   fTypeIsPolymorphic,
-  fTypeToTypeScheme,
   fieldMap,
   fieldTypeMap,
   fieldTypes,
@@ -25,8 +24,6 @@ import Hydra.Kernel hiding (
   graphAsLet,
   graphAsTerm,
   graphAsTypes,
-  graphToInferenceContext,
-  graphToTypeContext,
   instantiateType,
   instantiateTypeScheme,
   isEncodedTerm,
@@ -52,10 +49,9 @@ import Hydra.Kernel hiding (
   requireUnionType,
   resolveType,
   schemaGraphToTypingEnvironment,
-  termAsGraph,
+  termAsBindings,
   topologicalSortTypeDefinitions,
   typeDependencies,
-  typeSchemeToFType,
   typeToTypeScheme,
   typesToElements,
   withLambdaContext,
@@ -147,9 +143,9 @@ module_ = Module ns elements
       toBinding dereferenceType,
       toBinding elementAsTypeApplicationTerm,
       toBinding elementsWithDependencies,
-      toBinding extendTypeContextForLambda,
-      toBinding extendTypeContextForLet,
-      toBinding extendTypeContextForTypeLambda,
+      toBinding extendGraphForLambda,
+      toBinding extendGraphForLet,
+      toBinding extendGraphForTypeLambda,
       toBinding fieldMap,
       toBinding fieldTypeMap,
       toBinding fieldTypes,
@@ -157,14 +153,11 @@ module_ = Module ns elements
       toBinding freshName,
       toBinding freshNames,
       toBinding fTypeIsPolymorphic,
-      toBinding fTypeToTypeScheme,
       toBinding fullyStripAndNormalizeType,
       toBinding fullyStripType,
       toBinding graphAsLet,
       toBinding graphAsTerm,
       toBinding graphAsTypes,
-      toBinding graphToInferenceContext,
-      toBinding graphToTypeContext,
       toBinding instantiateType,
       toBinding instantiateTypeScheme,
       toBinding isEncodedTerm,
@@ -191,10 +184,9 @@ module_ = Module ns elements
       toBinding requireUnionType,
       toBinding resolveType,
       toBinding schemaGraphToTypingEnvironment,
-      toBinding termAsGraph,
+      toBinding termAsBindings,
       toBinding topologicalSortTypeDefinitions,
       toBinding typeDependencies,
-      toBinding typeSchemeToFType,
       toBinding typeToTypeScheme,
       toBinding typesToElements,
       toBinding withLambdaContext,
@@ -229,7 +221,7 @@ dependencyNamespaces :: TBinding (Bool -> Bool -> Bool -> Bool -> [Binding] -> F
 dependencyNamespaces = define "dependencyNamespaces" $
   doc "Find dependency namespaces in all of a set of terms" $
   "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "els" ~>
-  "cx" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   "depNames" <~ ("el" ~>
     "term" <~ Core.bindingTerm (var "el") $
     "deannotatedTerm" <~ Rewriting.deannotateTerm @@ var "term" $
@@ -241,13 +233,13 @@ dependencyNamespaces = define "dependencyNamespaces" $
       Sets.empty $
     -- Handle encoded types: decode as Type and extract type dependency names
     Logic.ifElse (isEncodedType @@ var "deannotatedTerm")
-      (Flows.bind (trace (string "dependency namespace (type)") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ var "term")) (
+      (Flows.bind (trace (string "dependency namespace (type)") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "term")) (
         "typ" ~> Flows.pure (Sets.unions (list [
           var "dataNames", var "schemaNames",
           Rewriting.typeDependencyNames @@ true @@ var "typ"]))))
       -- Handle encoded terms: decode as Term and extract term dependency names
       (Logic.ifElse (isEncodedTerm @@ var "deannotatedTerm")
-        (Flows.bind (trace (string "dependency namespace (term)") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Term @@ var "cx" @@ var "term")) (
+        (Flows.bind (trace (string "dependency namespace (term)") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Term @@ var "graph" @@ var "term")) (
           "decodedTerm" ~> Flows.pure (Sets.unions (list [
             var "dataNames", var "schemaNames",
             Rewriting.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "decodedTerm"]))))
@@ -260,11 +252,11 @@ dereferenceType :: TBinding (Name -> Flow Graph (Maybe Type))
 dereferenceType = define "dereferenceType" $
   doc "Dereference a type name to get the actual type" $
   "name" ~>
-  "cx" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   "mel" <<~ Lexical.dereferenceElement @@ var "name" $
   optCases (var "mel")
     (Flows.pure nothing)
-    ("el" ~> Flows.map (unaryFunction just) $ (trace (string "dereference type") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el"))))
+    ("el" ~> Flows.map (unaryFunction just) $ (trace (string "dereference type") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))
 
 elementAsTypeApplicationTerm :: TBinding (Binding -> Flow Graph TypeApplicationTerm)
 elementAsTypeApplicationTerm = define "elementAsTypeApplicationTerm" $
@@ -284,69 +276,70 @@ elementsWithDependencies = define "elementsWithDependencies" $
     (Lists.concat (Lists.map (var "depNames") (var "original")))) $
   Flows.mapList (Lexical.requireElement) (var "allDepNames")
 
-extendTypeContextForLambda :: TBinding (TypeContext -> Lambda -> TypeContext)
-extendTypeContextForLambda = define "extendTypeContextForLambda" $
-  doc "Extend a type context by descending into a System F lambda body" $
-  "tcontext" ~> "lam" ~>
+extendGraphForLambda :: TBinding (Graph -> Lambda -> Graph)
+extendGraphForLambda = define "extendGraphForLambda" $
+  doc "Extend a graph by descending into a lambda body" $
+  "g" ~> "lam" ~>
   "var" <~ Core.lambdaParameter (var "lam") $
-  Typing.typeContext
+  Graph.graph
+    (Graph.graphBoundTerms $ var "g")
     (optCases (Core.lambdaDomain $ var "lam")
-      (Typing.typeContextTypes $ var "tcontext")
-      -- Note: if the domain is missing, we have nothing to add here
-      ("dom" ~> Maps.insert (var "var") (var "dom") $ Typing.typeContextTypes $ var "tcontext"))
-    (Maps.delete (var "var") (Typing.typeContextMetadata $ var "tcontext"))
-    (Typing.typeContextTypeVariables $ var "tcontext")
-    -- Add the variable to lambda variables
-    (Sets.insert (var "var") $ Typing.typeContextLambdaVariables $ var "tcontext")
-    -- Remove the variable from let variables if it exists there; it is shadowed if so
-    (Sets.delete (var "var") $ Typing.typeContextLetVariables $ var "tcontext")
-    (Typing.typeContextInferenceContext $ var "tcontext")
+      (Graph.graphBoundTypes $ var "g")
+      ("dom" ~> Maps.insert (var "var") (Rewriting.fTypeToTypeScheme @@ var "dom") $ Graph.graphBoundTypes $ var "g"))
+    (Graph.graphClassConstraints $ var "g")
+    (Sets.insert (var "var") $ Graph.graphLambdaVariables $ var "g")
+    (Maps.delete (var "var") $ Graph.graphMetadata $ var "g")
+    (Graph.graphPrimitives $ var "g")
+    (Graph.graphSchemaTypes $ var "g")
+    (Graph.graphTypeVariables $ var "g")
 
-extendTypeContextForLet :: TBinding ((TypeContext -> Binding -> Maybe Term) -> TypeContext -> Let -> TypeContext)
-extendTypeContextForLet = define "extendTypeContextForLet" $
-  doc "Extend a type context by descending into a let body" $
-  "forBinding" ~> "tcontext" ~> "letrec" ~>
+extendGraphForLet :: TBinding ((Graph -> Binding -> Maybe Term) -> Graph -> Let -> Graph)
+extendGraphForLet = define "extendGraphForLet" $
+  doc "Extend a graph by descending into a let body" $
+  "forBinding" ~> "g" ~> "letrec" ~>
   "bindings" <~ Core.letBindings (var "letrec") $
-  Typing.typeContext
-    -- Note: Maps.union prefers the left argument when keys conflict, so we put the new bindings first
-    -- to allow inner bindings to shadow outer ones with the same name.
+  Graph.graph
+    -- Add all binding terms
     (Maps.union
-      -- Add all bindings to typeContextTypes. Use the type scheme if available, otherwise use a placeholder type.
-      -- This ensures that isComplexVariable can distinguish defined local bindings from undefined variables.
+      (Maps.fromList $ Lists.map ("b" ~> pair (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")) (var "bindings"))
+      (Graph.graphBoundTerms $ var "g"))
+    -- Add typed binding type schemes; untyped bindings are not added, so outer types are shadowed by union precedence
+    (Maps.union
       (Maps.fromList $ Maybes.cat $ Lists.map
-        ("b" ~>
-          (Maybes.map
-            ("ts" ~> pair (Core.bindingName $ var "b") (typeSchemeToFType @@ var "ts")))
-            (Core.bindingType $ var "b"))
+        ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts"))
+          (Core.bindingType $ var "b"))
         (var "bindings"))
-      (Typing.typeContextTypes (var "tcontext")))
+      (Graph.graphBoundTypes $ var "g"))
+    (Graph.graphClassConstraints $ var "g")
+    -- Remove all binding names from lambda variables; they are shadowed
+    (Lists.foldl ("s" ~> "b" ~> Sets.delete (Core.bindingName $ var "b") (var "s"))
+      (Graph.graphLambdaVariables $ var "g")
+      (var "bindings"))
+    -- Update metadata per binding
     (Lists.foldl
-      ("m" ~> "b" ~> optCases (var "forBinding" @@ var "tcontext" @@ var "b")
+      ("m" ~> "b" ~> optCases (var "forBinding" @@ var "g" @@ var "b")
         (Maps.delete (Core.bindingName $ var "b") (var "m"))
         ("t" ~> Maps.insert (Core.bindingName $ var "b") (var "t") (var "m")))
-      (Typing.typeContextMetadata $ var "tcontext")
+      (Graph.graphMetadata $ var "g")
       (var "bindings"))
-    (Typing.typeContextTypeVariables $ var "tcontext")
-    -- Remove all binding names from lambda variables; they are shadowed if so
-    (Lists.foldl
-      ("s" ~> "b" ~> Sets.delete (Core.bindingName $ var "b") (var "s"))
-      (Typing.typeContextLambdaVariables $ var "tcontext")
-      (var "bindings"))
-    -- Add all binding names to let variables
-    (Lists.foldl
-      ("s" ~> "b" ~> Sets.insert (Core.bindingName $ var "b") (var "s"))
-      (Typing.typeContextLetVariables $ var "tcontext")
-      (var "bindings"))
-    (Typing.typeContextInferenceContext $ var "tcontext")
+    (Graph.graphPrimitives $ var "g")
+    (Graph.graphSchemaTypes $ var "g")
+    (Graph.graphTypeVariables $ var "g")
 
-extendTypeContextForTypeLambda :: TBinding (TypeContext -> TypeLambda -> TypeContext)
-extendTypeContextForTypeLambda = define "extendTypeContextForTypeLambda" $
-  doc "Extend a type context by descending into a System F type lambda body" $
-  "tcontext" ~> "tlam" ~>
+extendGraphForTypeLambda :: TBinding (Graph -> TypeLambda -> Graph)
+extendGraphForTypeLambda = define "extendGraphForTypeLambda" $
+  doc "Extend a graph by descending into a type lambda body" $
+  "g" ~> "tlam" ~>
   "name" <~ Core.typeLambdaParameter (var "tlam") $
-  Typing.typeContextWithTypeVariables
-    (var "tcontext")
-    (Sets.insert (var "name") (Typing.typeContextTypeVariables (var "tcontext")))
+  Graph.graph
+    (Graph.graphBoundTerms $ var "g")
+    (Graph.graphBoundTypes $ var "g")
+    (Graph.graphClassConstraints $ var "g")
+    (Graph.graphLambdaVariables $ var "g")
+    (Graph.graphMetadata $ var "g")
+    (Graph.graphPrimitives $ var "g")
+    (Graph.graphSchemaTypes $ var "g")
+    (Sets.insert (var "name") $ Graph.graphTypeVariables $ var "g")
 
 fieldMap :: TBinding ([Field] -> M.Map Name Term)
 fieldMap = define "fieldMap" $
@@ -364,7 +357,7 @@ fieldTypes :: TBinding (Type -> Flow Graph (M.Map Name Type))
 fieldTypes = define "fieldTypes" $
   doc "Get field types from a record or union type" $
   "t" ~>
-  "cx" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   "toMap" <~ ("fields" ~> Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
     (var "fields"))) $
@@ -376,7 +369,7 @@ fieldTypes = define "fieldTypes" $
       trace (Strings.cat2 (string "field types of ") (Core.unName (var "name"))) (
       Flows.bind (Lexical.requireElement @@ var "name") (
         "el" ~>
-        Flows.bind (trace (string "field types") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el"))) (
+        Flows.bind (trace (string "field types") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))) (
           fieldTypes)))]
   @@ (Rewriting.deannotateType @@ var "t")
 
@@ -400,17 +393,6 @@ fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
     (Just false) [
     _Type_annotated>>: "at" ~> fTypeIsPolymorphic @@ Core.annotatedTypeBody (var "at"),
     _Type_forall>>: "ft" ~> true]
-
-fTypeToTypeScheme :: TBinding (Type -> TypeScheme)
-fTypeToTypeScheme = define "fTypeToTypeScheme" $
-  doc "Convert a forall type to a type scheme" $
-  "typ" ~>
-  "gatherForall" <~ ("vars" ~> "typ" ~> cases _Type (Rewriting.deannotateType @@ var "typ")
-     (Just $ Core.typeScheme (Lists.reverse $ var "vars") (var "typ") Phantoms.nothing) [
-     _Type_forall>>: "ft" ~> var "gatherForall" @@
-       (Lists.cons (Core.forallTypeParameter $ var "ft") (var "vars")) @@
-       (Core.forallTypeBody $ var "ft")]) $
-  var "gatherForall" @@ list ([] :: [TTerm Name]) @@ var "typ"
 
 freshName :: TBinding (Flow s Name)
 freshName = define "freshName" $
@@ -450,63 +432,36 @@ fullyStripType = define "fullyStripType" $
     _Type_forall>>: "ft" ~> fullyStripType @@ Core.forallTypeBody (var "ft")]
   @@ (Rewriting.deannotateType @@ var "typ")
 
-graphAsLet :: TBinding (Graph -> Let)
+graphAsLet :: TBinding ([Binding] -> Term -> Let)
 graphAsLet = define "graphAsLet" $
-  doc "Convert a graph to a let expression" $
-  "g" ~>
+  doc "Convert bindings and a body to a let expression" $
+  "bindings" ~> "body" ~>
   Core.let_
-    (Graph.graphElements $ var "g")
-    (Graph.graphBody $ var "g")
+    (var "bindings")
+    (var "body")
 
-graphAsTerm :: TBinding (Graph -> Term)
+graphAsTerm :: TBinding ([Binding] -> Term -> Term)
 graphAsTerm = define "graphAsTerm" $
-  doc "Convert a graph to a term, taking advantage of the built-in duality between graphs and terms" $
-  "g" ~> Core.termLet (graphAsLet @@ var "g")
+  doc "Convert bindings and a body to a term, using let-term duality" $
+  "bindings" ~> "body" ~> Core.termLet (graphAsLet @@ var "bindings" @@ var "body")
 
-graphAsTypes :: TBinding (Graph -> Flow s (M.Map Name Type))
+graphAsTypes :: TBinding ([Binding] -> Flow Graph (M.Map Name Type))
 graphAsTypes = define "graphAsTypes" $
-  doc "Decode a schema graph which encodes a set of named types" $
-  "sg" ~>
-  "cx" <<~ Monads.getState $
-  "els" <~ Graph.graphElements (var "sg") $
+  doc "Decode a list of type-encoding bindings into a map of named types" $
+  "els" ~>
+  "graph" <<~ Monads.getState $
   "toPair" <~ ("el" ~>
-    "typ" <<~ (trace ((string "graph as types: ") ++ Core.unName (Core.bindingName $ var "el")) $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm $ var "el"))) $
+    "typ" <<~ (trace ((string "graph as types: ") ++ Core.unName (Core.bindingName $ var "el")) $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "el"))) $
     produce $ pair (Core.bindingName $ var "el") (var "typ")) $
   "pairs" <<~ Flows.mapList (var "toPair") (var "els") $
   produce $ Maps.fromList $ var "pairs"
-
-graphToInferenceContext :: TBinding (Graph -> Flow s InferenceContext)
-graphToInferenceContext = define "graphToInferenceContext" $
-  doc "Convert a graph to an inference context" $
-  "graph" ~>
-  "schema" <~ Maybes.fromMaybe (var "graph") (Graph.graphSchema $ var "graph") $
-  "primTypes" <~ Maps.fromList (Lists.map
-    ("p" ~> pair (Graph.primitiveName $ var "p") (Graph.primitiveType $ var "p"))
-    (Maps.elems $ Graph.graphPrimitives $ var "graph")) $
-  "varTypes" <~ Maps.fromList (Maybes.cat $ Lists.map
-    ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (var "ts")) $ Core.bindingType $ var "b")
-    (Graph.graphElements $ var "graph")) $
-  "schemaTypes" <<~ schemaGraphToTypingEnvironment @@ var "schema" $
-  produce $ Typing.inferenceContext (var "schemaTypes") (var "primTypes") (var "varTypes") Maps.empty false
-
-graphToTypeContext :: TBinding (Graph -> Flow s TypeContext)
-graphToTypeContext = define "graphToTypeContext" $
-  doc "Convert a graph to a type context including the graph's element types" $
-  "graph" ~>
-  "ix" <<~ graphToInferenceContext @@ var "graph" $
-  -- Populate typeContextTypes from graph elements' type schemes (converted to System F types)
-  -- This ensures variables are resolvable during eta expansion and other processing
-  "elementTypes" <~ Maps.fromList (Maybes.cat $ Lists.map
-    ("b" ~> Maybes.map ("ts" ~> pair (Core.bindingName $ var "b") (typeSchemeToFType @@ var "ts")) $ Core.bindingType $ var "b")
-    (Graph.graphElements $ var "graph")) $
-  produce $ Typing.typeContext (var "elementTypes") Maps.empty Sets.empty Sets.empty Sets.empty (var "ix")
 
 instantiateType :: TBinding (Type -> Flow s Type)
 instantiateType = define "instantiateType" $
   doc "Instantiate a type by replacing all forall-bound type variables with fresh variables" $
   "typ" ~>
   "ts" <<~ instantiateTypeScheme @@ (typeToTypeScheme @@ var "typ") $
-  produce $ typeSchemeToFType @@ var "ts"
+  produce $ Rewriting.typeSchemeToFType @@ var "ts"
 
 instantiateTypeScheme :: TBinding (TypeScheme -> Flow s TypeScheme)
 instantiateTypeScheme = define "instantiateTypeScheme" $
@@ -706,11 +661,10 @@ requireRowType = define "requireRowType" $
       (unaryFunction Flows.pure)
       (var "getter" @@ (var "rawType" @@ var "t")))
 
-requireSchemaType :: TBinding (InferenceContext -> Name -> Flow s TypeScheme)
+requireSchemaType :: TBinding (M.Map Name TypeScheme -> Name -> Flow s TypeScheme)
 requireSchemaType = define "requireSchemaType" $
-  doc "Look up a schema type in the context and instantiate it" $
-  "cx" ~> "tname" ~>
-  "types" <~ (Typing.inferenceContextSchemaTypes $ var "cx") $
+  doc "Look up a schema type and instantiate it" $
+  "types" ~> "tname" ~>
   Maybes.maybe
     (Flows.fail $ Strings.cat $ list [
       (string "No such schema type: "),
@@ -725,10 +679,16 @@ requireType :: TBinding (Name -> Flow Graph Type)
 requireType = define "requireType" $
   doc "Require a type by name" $
   "name" ~>
-  "cx" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   trace (Strings.cat2 (string "require type ") (Core.unName (var "name"))) $
-  Flows.bind (Lexical.withSchemaContext @@ (Lexical.requireElement @@ var "name")) (
-    "el" ~> Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el")))
+  -- Look up in schema types first, then fall back to bound types
+  Maybes.maybe
+    (Maybes.maybe
+      (Flows.fail (Strings.cat2 (string "no such type: ") (Core.unName (var "name"))))
+      ("ts" ~> Flows.pure (Rewriting.typeSchemeToFType @@ var "ts"))
+      (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))))
+    ("ts" ~> Flows.pure (Rewriting.typeSchemeToFType @@ var "ts"))
+    (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))
 
 requireUnionField_ :: TBinding (Name -> Name -> Flow Graph Type)
 requireUnionField_ = define "requireUnionField" $
@@ -760,16 +720,14 @@ resolveType :: TBinding (Type -> Flow Graph (Maybe Type))
 resolveType = define "resolveType" $
   doc "Resolve a type, dereferencing type variables" $
   "typ" ~>
-  "cx" <<~ Monads.getState $
---  trace "resolve type" $
+  "graph" <<~ Monads.getState $
   match _Type (Just (Flows.pure (just (var "typ")))) [
     _Type_variable>>: "name" ~>
-      Lexical.withSchemaContext @@
-        (Flows.bind (Lexical.resolveTerm @@ var "name") (
-          "mterm" ~>
-          Maybes.maybe (Flows.pure nothing)
-            ("t" ~> Flows.map (unaryFunction just) (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ var "t")))
-            (var "mterm")))]
+      -- Look up in schema types first, then fall back to bound types
+      Maybes.maybe
+        (Flows.pure (Maybes.map ("ts" ~> Rewriting.typeSchemeToFType @@ var "ts") (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph")))))
+        ("ts" ~> Flows.pure (just (Rewriting.typeSchemeToFType @@ var "ts")))
+        (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))]
   @@ (Rewriting.deannotateType @@ var "typ")
 
 schemaGraphToTypingEnvironment :: TBinding (Graph -> Flow s (M.Map Name TypeScheme))
@@ -798,7 +756,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
             (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el"))))
           (Flows.pure nothing)]) $
     "mts" <<~ optCases (Core.bindingType (var "el"))
-      (Flows.map ("typ" ~> just $ fTypeToTypeScheme @@ var "typ") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "el"))))
+      (Flows.map ("typ" ~> just $ Rewriting.fTypeToTypeScheme @@ var "typ") $ Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "el"))))
       ("ts" ~> Logic.ifElse
         (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))
         (Flows.map (unaryFunction just) (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _TypeScheme @@ var "cx" @@ Core.bindingTerm (var "el"))))
@@ -809,13 +767,13 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
     produce $ Maybes.map ("ts" ~> pair (Core.bindingName (var "el")) (var "ts")) (var "mts")) $
   trace (string "schema graph to typing environment") $
   Monads.withState @@ var "g" @@
-    (Flows.bind (Flows.mapList (var "toPair") (Graph.graphElements (var "g"))) (
+    (Flows.bind (Flows.mapList (var "toPair") (Lexical.graphToBindings @@ var "g")) (
       "mpairs" ~> Flows.pure (Maps.fromList (Maybes.cat (var "mpairs")))))
 
 -- Note: this is lossy, as it throws away the term body
-termAsGraph :: TBinding (Term -> [Binding])
-termAsGraph = define "termAsGraph" $
-  doc "Find the equivalent graph representation of a term" $
+termAsBindings :: TBinding (Term -> [Binding])
+termAsBindings = define "termAsBindings" $
+  doc "Extract the bindings from a let term, or return an empty list for other terms" $
   "term" ~> cases _Term (Rewriting.deannotateTerm @@ var "term")
     (Just (list ([] :: [TTerm Binding]))) [
     _Term_let>>: "lt" ~> Core.letBindings (var "lt")]
@@ -838,11 +796,11 @@ typeDependencies :: TBinding (Bool -> (Type -> Type) -> Name -> Flow Graph (M.Ma
 typeDependencies = define "typeDependencies" $
   doc "Get all type dependencies for a given type name" $
   "withSchema" ~> "transform" ~> "name" ~>
-  "cx" <<~ Monads.getState $
+  "graph" <<~ Monads.getState $
   "requireType" <~ ("name" ~>
     trace (Strings.cat2 (string "type dependencies of ") (Core.unName (var "name"))) (
     Flows.bind (Lexical.requireElement @@ var "name") (
-      "el" ~> Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ Core.bindingTerm (var "el"))))) $
+      "el" ~> Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))) $
   "toPair" <~ ("name" ~>
     Flows.bind (var "requireType" @@ var "name") (
       "typ" ~> Flows.pure (pair (var "name") (var "transform" @@ var "typ")))) $
@@ -860,18 +818,6 @@ typeDependencies = define "typeDependencies" $
         var "deps" @@ var "newSeeds" @@ var "newNames"))) $
   trace (string "type dependencies") $
   var "deps" @@ Sets.singleton (var "name") @@ Maps.empty
-
-typeSchemeToFType :: TBinding (TypeScheme -> Type)
-typeSchemeToFType = define "typeSchemeToFType" $
-  doc "Convert a type scheme to a forall type" $
-  "ts" ~>
-  "vars" <~ Core.typeSchemeVariables (var "ts") $
-  "body" <~ Core.typeSchemeType (var "ts") $
-  Lists.foldl
-    ("t" ~> "v" ~> Core.typeForall $ Core.forallType (var "v") (var "t"))
-    (var "body")
-    -- Put the variables in the same order in which they are introduced by the type scheme.
-    (Lists.reverse $ var "vars")
 
 typeToTypeScheme :: TBinding (Type -> TypeScheme)
 typeToTypeScheme = define "typeToTypeScheme" $
@@ -896,23 +842,23 @@ typesToElements = define "typesToElements" $
       nothing) $
   Lists.map (var "toElement") $ Maps.toList $ var "typeMap"
 
-withLambdaContext :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> e -> Lambda -> (e -> Flow s a) -> Flow s a)
+withLambdaContext :: TBinding ((e -> Graph) -> (Graph -> e -> e) -> e -> Lambda -> (e -> Flow s a) -> Flow s a)
 withLambdaContext = define "withLambdaContext" $
   doc "Execute a computation in the context of a lambda body, extending the type context with the lambda parameter" $
   "getContext" ~> "setContext" ~> "env" ~> "lam" ~> "body" ~>
-  "newContext" <~ extendTypeContextForLambda @@ (var "getContext" @@ var "env") @@ var "lam" $
+  "newContext" <~ extendGraphForLambda @@ (var "getContext" @@ var "env") @@ var "lam" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
-withLetContext :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> (TypeContext -> Binding -> Maybe Term) -> e -> Let -> (e -> Flow s a) -> Flow s a)
+withLetContext :: TBinding ((e -> Graph) -> (Graph -> e -> e) -> (Graph -> Binding -> Maybe Term) -> e -> Let -> (e -> Flow s a) -> Flow s a)
 withLetContext = define "withLetContext" $
   doc "Execute a computation in the context of a let body, extending the type context with the let bindings" $
   "getContext" ~> "setContext" ~> "forBinding" ~> "env" ~> "letrec" ~> "body" ~>
-  "newContext" <~ extendTypeContextForLet @@ var "forBinding" @@ (var "getContext" @@ var "env") @@ var "letrec" $
+  "newContext" <~ extendGraphForLet @@ var "forBinding" @@ (var "getContext" @@ var "env") @@ var "letrec" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")
 
-withTypeLambdaContext :: TBinding ((e -> TypeContext) -> (TypeContext -> e -> e) -> e -> TypeLambda -> (e -> Flow s a) -> Flow s a)
+withTypeLambdaContext :: TBinding ((e -> Graph) -> (Graph -> e -> e) -> e -> TypeLambda -> (e -> Flow s a) -> Flow s a)
 withTypeLambdaContext = define "withTypeLambdaContext" $
   doc "Execute a computation in the context of a type lambda body, extending the type context with the type parameter" $
   "getContext" ~> "setContext" ~> "env" ~> "tlam" ~> "body" ~>
-  "newContext" <~ extendTypeContextForTypeLambda @@ (var "getContext" @@ var "env") @@ var "tlam" $
+  "newContext" <~ extendGraphForTypeLambda @@ (var "getContext" @@ var "env") @@ var "tlam" $
   var "body" @@ (var "setContext" @@ var "newContext" @@ var "env")

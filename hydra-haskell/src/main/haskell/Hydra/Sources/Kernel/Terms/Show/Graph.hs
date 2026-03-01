@@ -71,11 +71,10 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-graph :: TBinding (Graph -> String)
+graph :: TBinding ([Binding] -> String)
 graph = define "graph" $
-  doc "Show a graph as a string" $
-  lambda "graph" $ lets [
-    "elements">: Graph.graphElements $ var "graph",
+  doc "Show a list of bindings as a string" $
+  lambda "elements" $ lets [
     "elementStrs">: Lists.map ShowCore.binding (var "elements")] $
     Strings.cat $ list [
       string "{",

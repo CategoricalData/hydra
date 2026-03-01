@@ -424,8 +424,8 @@ decodeBinding :: TBinding (Binding -> Flow Graph Binding)
 decodeBinding = define "decodeBinding" $
   doc "Transform a type binding into a decoder binding" $
   "b" ~>
-    "cx" <<~ Monads.getState $
-    Flows.bind (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "b")))) $
+    "graph" <<~ Monads.getState $
+    Flows.bind (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) $
       "typ" ~>
       Flows.pure (Core.binding
         (decodeBindingName @@ (Core.bindingName (var "b")))

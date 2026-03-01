@@ -111,8 +111,8 @@ encodeBinding :: TBinding (Binding -> Flow Graph Binding)
 encodeBinding = define "encodeBinding" $
   doc "Transform a type binding into an encoder binding" $
   "b" ~>
-    "cx" <<~ Monads.getState $
-    Flows.bind (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "cx" @@ (Core.bindingTerm (var "b")))) (
+    "graph" <<~ Monads.getState $
+    Flows.bind (Monads.eitherToFlow_ @@ Util.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
       "typ" ~>
       Flows.pure (Core.binding
         (encodeBindingName @@ (Core.bindingName (var "b")))

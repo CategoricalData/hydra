@@ -33,7 +33,15 @@ import qualified Data.Set as S
 
 -- | An empty graph (no elements, no schema, but with primitive functions) which is used for bootstrapping Hydra Core
 bootstrapGraph :: Graph
-bootstrapGraph = emptyGraph {graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) (L.concat (libraryPrimitives <$> standardLibraries))}
+bootstrapGraph = Graph {
+  graphBoundTerms = M.empty,
+  graphBoundTypes = M.empty,
+  graphClassConstraints = M.empty,
+  graphLambdaVariables = S.empty,
+  graphMetadata = M.empty,
+  graphPrimitives = M.fromList $ fmap (\p -> (primitiveName p, p)) (L.concat (libraryPrimitives <$> standardLibraries)),
+  graphSchemaTypes = M.empty,
+  graphTypeVariables = S.empty}
 
 datatype :: Namespace -> String -> Type -> Binding
 datatype gname lname typ = typeElement elName $ rewriteType replacePlaceholders typ
