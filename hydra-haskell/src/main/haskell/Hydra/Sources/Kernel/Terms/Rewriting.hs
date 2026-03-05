@@ -37,7 +37,6 @@ import Hydra.Kernel hiding (
   replaceFreeTypeVariable,
   replaceTypedefs,
   rewriteAndFoldTerm,
-  rewriteAndFoldTermM,
   rewriteAndFoldTermWithPath,
   rewriteTerm,
   rewriteTermM,
@@ -76,7 +75,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -165,7 +163,6 @@ module_ = Module ns elements
      toBinding replaceTypedefs,
 --     toBinding rewrite,
      toBinding rewriteAndFoldTerm,
-     toBinding rewriteAndFoldTermM,
      toBinding rewriteAndFoldTermWithPath,
      toBinding rewriteTerm,
      toBinding rewriteTermM,
@@ -528,19 +525,19 @@ freeVariablesInTypeSchemeSimple = define "freeVariablesInTypeSchemeSimple" $
   "t" <~ Core.typeSchemeType (var "ts") $
   Sets.difference (freeVariablesInTypeSimple @@ var "t") (Sets.fromList $ var "vars")
 
-inlineType :: TBinding (M.Map Name Type -> Type -> Flow s Type)
+inlineType :: TBinding (M.Map Name Type -> Type -> Prelude.Either String Type)
 inlineType = define "inlineType" $
-  doc "Inline all type variables in a type using the provided schema. Note: this function is only appropriate for nonrecursive type definitions" $
+  doc "Inline all type variables in a type using the provided schema (Either version). Note: this function is only appropriate for nonrecursive type definitions" $
   "schema" ~> "typ" ~>
   "f" <~ ("recurse" ~> "typ" ~>
     "afterRecurse" <~ ("tr" ~> cases _Type (var "tr")
-      (Just $ produce $ var "tr") [
+      (Just $ right $ var "tr") [
       _Type_variable>>: "v" ~>
         Maybes.maybe
-          (Flows.fail $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v"))
+          (left $ Strings.cat2 (string "No such type in schema: ") (unwrap _Name @@ var "v"))
           (inlineType @@ var "schema")
           (Maps.lookup (var "v") (var "schema"))]) $
-    "tr" <<~ var "recurse" @@ var "typ" $
+    "tr" <<= var "recurse" @@ var "typ" $
     var "afterRecurse" @@ var "tr") $
   rewriteTypeM @@ var "f" @@ var "typ"
 
@@ -1298,155 +1295,6 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ list ([] :: [TTerm TermAccessor]) @@ var "term0"
 
-rewriteAndFoldTermM :: TBinding (((a -> Term -> Flow s (a, Term)) -> a -> Term -> Flow s (a, Term)) -> a -> Term -> Flow s (a, Term))
-rewriteAndFoldTermM = define "rewriteAndFoldTermM" $
-  doc "Monadic version: rewrite a term and fold a function over it, accumulating a value" $
-  "f" ~> "term0" ~>
-  "fsub" <~ ("recurse" ~> "val0" ~> "term0" ~>
-    "forSingle" <~ ("rec" ~> "cons" ~> "val" ~> "term" ~>
-      "r" <<~ var "rec" @@ var "val" @@ var "term" $
-      produce $ pair (Pairs.first $ var "r") (var "cons" @@ (Pairs.second $ var "r"))) $
-    "forMany" <~ ("rec" ~> "cons" ~> "val" ~> "els" ~>
-      "rr" <<~ Flows.foldl
-        ("r" ~> "el" ~>
-          "r2" <<~ var "rec" @@ (Pairs.first $ var "r") @@ var "el" $
-          produce $ pair (Pairs.first $ var "r2") (Lists.cons (Pairs.second $ var "r2") (Pairs.second $ var "r")))
-        (pair (var "val") (list ([] :: [TTerm Term])))
-        (var "els") $
-      produce $ pair (Pairs.first $ var "rr") (var "cons" @@ (Lists.reverse $ Pairs.second $ var "rr"))) $
-    "forField" <~ ("val" ~> "field" ~>
-      "r" <<~ var "recurse" @@ var "val" @@ Core.fieldTerm (var "field") $
-      produce $ pair (Pairs.first $ var "r") (Core.field (Core.fieldName $ var "field") (Pairs.second $ var "r"))) $
-    "forFields" <~ var "forMany" @@ var "forField" @@ ("x" ~> var "x") $
-    "forPair" <~ ("val" ~> "kv" ~>
-      "rk" <<~ var "recurse" @@ var "val" @@ (Pairs.first $ var "kv") $
-      "rv" <<~ var "recurse" @@ (Pairs.first $ var "rk") @@ (Pairs.second $ var "kv") $
-      produce $ pair
-        (Pairs.first $ var "rv")
-        (pair (Pairs.second $ var "rk") (Pairs.second $ var "rv"))) $
-    "forBinding" <~ ("val" ~> "binding" ~>
-      "r" <<~ var "recurse" @@ var "val" @@ Core.bindingTerm (var "binding") $
-      produce $ pair
-        (Pairs.first $ var "r")
-        (Core.binding
-          (Core.bindingName $ var "binding")
-          (Pairs.second $ var "r")
-          (Core.bindingType $ var "binding"))) $
-    "forElimination" <~ ("val" ~> "elm" ~>
-      "rw" <~ ("elm" ~> cases _Elimination (var "elm")
-        (Just $ produce $ pair (var "val") (var "elm")) [
-        _Elimination_union>>: "cs" ~>
-          "rmd" <<~ Maybes.maybe (produce nothing)
-            ("def" ~> Flows.map (unaryFunction just) (var "recurse" @@ var "val" @@ var "def"))
-            (Core.caseStatementDefault $ var "cs") $
-          "val1" <~ Maybes.maybe (var "val") (unaryFunction Pairs.first) (var "rmd") $
-          "rcases" <<~ var "forFields" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
-          produce $ pair
-            (Pairs.first $ var "rcases")
-            (Core.eliminationUnion $ Core.caseStatement
-              (Core.caseStatementTypeName $ var "cs")
-              (Maybes.map (unaryFunction Pairs.second) (var "rmd"))
-              (Pairs.second $ var "rcases"))]) $
-      "r" <<~ var "rw" @@ var "elm" $
-      produce $ pair (Pairs.first $ var "r") (Pairs.second $ var "r")) $
-    "forFunction" <~ ("val" ~> "fun" ~> cases _Function (var "fun")
-      (Just $ produce $ pair (var "val") (var "fun")) [
-      _Function_elimination>>: "elm" ~>
-         "r" <<~ var "forElimination" @@ var "val" @@ var "elm" $
-         produce $ pair (Pairs.first $ var "r") (Core.functionElimination (Pairs.second $ var "r")),
-      _Function_lambda>>: "l" ~>
-        "r" <<~ var "recurse" @@ var "val" @@ (Core.lambdaBody $ var "l") $
-        produce $ pair
-          (Pairs.first $ var "r")
-          (Core.functionLambda $ Core.lambda
-            (Core.lambdaParameter $ var "l")
-            (Core.lambdaDomain $ var "l")
-            (Pairs.second $ var "r"))]) $
-    "dflt" <~ produce (pair (var "val0") (var "term0")) $
-    cases _Term (var "term0")
-      (Just $ var "dflt") [
-      _Term_annotated>>: "at" ~> var "forSingle"
-        @@ var "recurse"
-        @@ ("t" ~> Core.termAnnotated $ Core.annotatedTerm (var "t") (Core.annotatedTermAnnotation $ var "at"))
-        @@ var "val0"
-        @@ (Core.annotatedTermBody $ var "at"),
-      _Term_application>>: "a" ~>
-        "rlhs" <<~ var "recurse" @@ var "val0" @@ (Core.applicationFunction $ var "a") $
-        "rrhs" <<~ var "recurse" @@ (Pairs.first $ var "rlhs") @@ (Core.applicationArgument $ var "a") $
-        produce $ pair
-          (Pairs.first $ var "rrhs")
-          (Core.termApplication $ Core.application
-            (Pairs.second $ var "rlhs")
-            (Pairs.second $ var "rrhs")),
-      _Term_either>>: "e" ~> Eithers.either_
-        ("l" ~>
-          "rl" <<~ var "recurse" @@ var "val0" @@ var "l" $
-          produce $ pair (Pairs.first $ var "rl") (Core.termEither $ left $ Pairs.second $ var "rl"))
-        ("r" ~>
-          "rr" <<~ var "recurse" @@ var "val0" @@ var "r" $
-          produce $ pair (Pairs.first $ var "rr") (Core.termEither $ right $ Pairs.second $ var "rr"))
-        (var "e"),
-      _Term_function>>: "f" ~> var "forSingle"
-        @@ var "forFunction"
-        @@ ("f" ~> Core.termFunction $ var "f")
-        @@ var "val0"
-        @@ var "f",
-      _Term_let>>: "l" ~>
-        "renv" <<~ var "recurse" @@ var "val0" @@ (Core.letBody $ var "l") $
-        var "forMany" @@ var "forBinding"
-          @@ ("bins" ~> Core.termLet $ Core.let_ (var "bins") (Pairs.second $ var "renv"))
-          @@ Pairs.first (var "renv") @@ (Core.letBindings $ var "l"),
-      _Term_list>>: "els" ~> var "forMany" @@ var "recurse" @@ (unaryFunction Core.termList) @@ var "val0" @@ var "els",
-      _Term_map>>: "m" ~> var "forMany" @@ var "forPair"
-        @@ ("pairs" ~> Core.termMap $ Maps.fromList $ var "pairs") @@ var "val0" @@ Maps.toList (var "m"),
-      _Term_maybe>>: "mt" ~> Maybes.maybe
-        (var "dflt")
-        ("t" ~> var "forSingle"
-          @@ var "recurse"
-          @@ ("t1" ~> Core.termMaybe $ just $ var "t1")
-          @@ var "val0"
-          @@ var "t")
-        (var "mt"),
-      _Term_pair>>: "p" ~>
-        "rf" <<~ var "recurse" @@ var "val0" @@ (Pairs.first $ var "p") $
-        "rs" <<~ var "recurse" @@ (Pairs.first $ var "rf") @@ (Pairs.second $ var "p") $
-        produce $ pair (Pairs.first $ var "rs") (Core.termPair $ pair (Pairs.second $ var "rf") (Pairs.second $ var "rs")),
-      _Term_record>>: "r" ~> var "forMany"
-        @@ var "forField"
-        @@ ("fields" ~> Core.termRecord $ Core.record (Core.recordTypeName $ var "r") (var "fields"))
-        @@ var "val0"
-        @@ Core.recordFields (var "r"),
-      _Term_set>>: "els" ~> var "forMany"
-        @@ var "recurse"
-        @@ ("e" ~> Core.termSet $ Sets.fromList $ var "e")
-        @@ var "val0"
-        @@ (Sets.toList $ var "els"),
-      _Term_typeApplication>>: "ta" ~> var "forSingle"
-        @@ var "recurse"
-        @@ ("t" ~> Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType $ var "ta"))
-        @@ var "val0"
-        @@ (Core.typeApplicationTermBody $ var "ta"),
-      _Term_typeLambda>>: "tl" ~> var "forSingle"
-        @@ var "recurse"
-        @@ ("t" ~> Core.termTypeLambda $ Core.typeLambda (Core.typeLambdaParameter $ var "tl") (var "t"))
-        @@ var "val0"
-        @@ (Core.typeLambdaBody $ var "tl"),
-      _Term_union>>: "inj" ~> var "forSingle"
-        @@ var "recurse"
-        @@ ("t" ~> Core.termUnion $ Core.injection
-          (Core.injectionTypeName $ var "inj")
-          (Core.field (Core.fieldName $ Core.injectionField $ var "inj") (var "t")))
-        @@ var "val0"
-        @@ (Core.fieldTerm $ Core.injectionField $ var "inj"),
-      _Term_wrap>>: "wt" ~> var "forSingle"
-        @@ var "recurse"
-        @@ ("t" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTermTypeName $ var "wt") (var "t"))
-        @@ var "val0"
-        @@ (Core.wrappedTermBody $ var "wt")]) $
---  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
-  "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
-  var "recurse" @@ var "term0"
-
 rewriteTerm :: TBinding (((Term -> Term) -> Term -> Term) -> Term -> Term)
 rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
@@ -1518,112 +1366,111 @@ rewriteTerm = define "rewriteTerm" $ "f" ~> "term0" ~>
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
-rewriteTermM :: TBinding (((Term -> Flow s Term) -> Term -> Flow s Term) -> Term -> Flow s Term)
+rewriteTermM :: TBinding (((Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term) -> Term -> Prelude.Either e Term)
 rewriteTermM = define "rewriteTermM" $
-  doc "Monadic term rewriting with custom transformation function" $
+  doc "Either-based term rewriting with custom transformation function" $
   "f" ~> "term0" ~>
   "fsub" <~ ("recurse" ~> "term" ~>
     "forField" <~ ("field" ~>
-      "t" <<~ var "recurse" @@ Core.fieldTerm (var "field") $
-      produce $ Core.fieldWithTerm (var "t") (var "field")) $
+      "t" <<= var "recurse" @@ Core.fieldTerm (var "field") $
+      right $ Core.fieldWithTerm (var "t") (var "field")) $
     "forPair" <~ ("kv" ~>
-      "k" <<~ var "recurse" @@ (Pairs.first $ var "kv") $
-      "v" <<~ var "recurse" @@ (Pairs.second $ var "kv") $
-      produce $ pair (var "k") (var "v")) $
+      "k" <<= var "recurse" @@ (Pairs.first $ var "kv") $
+      "v" <<= var "recurse" @@ (Pairs.second $ var "kv") $
+      right $ pair (var "k") (var "v")) $
     "mapBinding" <~ ("b" ~>
-      "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
-      produce $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
+      "v" <<= var "recurse" @@ (Core.bindingTerm $ var "b") $
+      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~>
-        "ex" <<~ var "recurse" @@ Core.annotatedTermBody (var "at") $
-        produce $ Core.termAnnotated $ Core.annotatedTerm (var "ex") (Core.annotatedTermAnnotation $ var "at"),
+        "ex" <<= var "recurse" @@ Core.annotatedTermBody (var "at") $
+        right $ Core.termAnnotated $ Core.annotatedTerm (var "ex") (Core.annotatedTermAnnotation $ var "at"),
       _Term_application>>: "app" ~>
-        "lhs" <<~ var "recurse" @@ Core.applicationFunction (var "app") $
-        "rhs" <<~ var "recurse" @@ Core.applicationArgument (var "app") $
-        produce $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
+        "lhs" <<= var "recurse" @@ Core.applicationFunction (var "app") $
+        "rhs" <<= var "recurse" @@ Core.applicationArgument (var "app") $
+        right $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
       _Term_either>>: "e" ~>
-        "re" <<~ Eithers.either_
-          ("l" ~> Flows.map (unaryFunction left) $ var "recurse" @@ var "l")
-          ("r" ~> Flows.map (unaryFunction right) $ var "recurse" @@ var "r")
+        "re" <<= Eithers.either_
+          ("l" ~> Eithers.map (unaryFunction left) $ var "recurse" @@ var "l")
+          ("r" ~> Eithers.map (unaryFunction right) $ var "recurse" @@ var "r")
           (var "e") $
-        produce $ Core.termEither $ var "re",
+        right $ Core.termEither $ var "re",
       _Term_function>>: "fun" ~>
         "forElm" <~ ("e" ~> cases _Elimination (var "e") Nothing [
-          _Elimination_record>>: "p" ~> produce $ Core.functionElimination $ Core.eliminationRecord $ var "p",
+          _Elimination_record>>: "p" ~> right $ Core.functionElimination $ Core.eliminationRecord $ var "p",
           _Elimination_union>>: "cs" ~>
             "n" <~ Core.caseStatementTypeName (var "cs") $
             "def" <~ Core.caseStatementDefault (var "cs") $
             "cases" <~ Core.caseStatementCases (var "cs") $
-            "rdef" <<~ Maybes.maybe (produce nothing)
-              ("t" ~> Flows.map (unaryFunction just) $ var "recurse" @@ var "t")
+            "rdef" <<= Maybes.maybe (right nothing)
+              ("t" ~> Eithers.map (unaryFunction just) $ var "recurse" @@ var "t")
               (var "def") $
-            Flows.map
+            Eithers.map
               ("rcases" ~> Core.functionElimination $ Core.eliminationUnion $
                 Core.caseStatement (var "n") (var "rdef") (var "rcases"))
-              (Flows.mapList (var "forField") (var "cases")),
-          _Elimination_wrap>>: "name" ~> produce $ Core.functionElimination $ Core.eliminationWrap $ var "name"]) $
+              (Eithers.mapList (var "forField") (var "cases")),
+          _Elimination_wrap>>: "name" ~> right $ Core.functionElimination $ Core.eliminationWrap $ var "name"]) $
         "forFun" <~ ("fun" ~> cases _Function (var "fun") Nothing [
           _Function_elimination>>: "e" ~> var "forElm" @@ var "e",
           _Function_lambda>>: "l" ~>
             "v" <~ Core.lambdaParameter (var "l") $
             "d" <~ Core.lambdaDomain (var "l") $
             "body" <~ Core.lambdaBody (var "l") $
-            "rbody" <<~ var "recurse" @@ var "body" $
-            produce $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
-          _Function_primitive>>: "name" ~> produce $ Core.functionPrimitive $ var "name"]) $
-        "rfun" <<~ var "forFun" @@ var "fun" $
-        produce $ Core.termFunction $ var "rfun",
+            "rbody" <<= var "recurse" @@ var "body" $
+            right $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
+          _Function_primitive>>: "name" ~> right $ Core.functionPrimitive $ var "name"]) $
+        "rfun" <<= var "forFun" @@ var "fun" $
+        right $ Core.termFunction $ var "rfun",
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
         "env" <~ Core.letBody (var "lt") $
-        "rbindings" <<~ Flows.mapList (var "mapBinding") (var "bindings") $
-        "renv" <<~ var "recurse" @@ var "env" $
-        produce $ Core.termLet $ Core.let_ (var "rbindings") (var "renv"),
+        "rbindings" <<= Eithers.mapList (var "mapBinding") (var "bindings") $
+        "renv" <<= var "recurse" @@ var "env" $
+        right $ Core.termLet $ Core.let_ (var "rbindings") (var "renv"),
       _Term_list>>: "els" ~>
-        "rels" <<~ Flows.mapList (var "recurse") (var "els") $
-        produce $ Core.termList $ var "rels",
-      _Term_literal>>: "v" ~> produce $ Core.termLiteral $ var "v",
+        "rels" <<= Eithers.mapList (var "recurse") (var "els") $
+        right $ Core.termList $ var "rels",
+      _Term_literal>>: "v" ~> right $ Core.termLiteral $ var "v",
       _Term_map>>: "m" ~>
-        "pairs" <<~ Flows.mapList (var "forPair") (Maps.toList $ var "m") $
-        produce $ Core.termMap $ Maps.fromList $ var "pairs",
+        "pairs" <<= Eithers.mapList (var "forPair") (Maps.toList $ var "m") $
+        right $ Core.termMap $ Maps.fromList $ var "pairs",
       _Term_maybe>>: "m" ~>
-        "rm" <<~ Flows.mapMaybe (var "recurse") (var "m") $
-        produce $ Core.termMaybe $ var "rm",
+        "rm" <<= Eithers.mapMaybe (var "recurse") (var "m") $
+        right $ Core.termMaybe $ var "rm",
       _Term_pair>>: "p" ~>
-        "rf" <<~ var "recurse" @@ (Pairs.first $ var "p") $
-        "rs" <<~ var "recurse" @@ (Pairs.second $ var "p") $
-        produce $ Core.termPair $ pair (var "rf") (var "rs"),
+        "rf" <<= var "recurse" @@ (Pairs.first $ var "p") $
+        "rs" <<= var "recurse" @@ (Pairs.second $ var "p") $
+        right $ Core.termPair $ pair (var "rf") (var "rs"),
       _Term_record>>: "r" ~>
         "n" <~ Core.recordTypeName (var "r") $
         "fields" <~ Core.recordFields (var "r") $
-        Flows.map
+        Eithers.map
           ("rfields" ~> Core.termRecord $ Core.record (var "n") (var "rfields"))
-          (Flows.mapList (var "forField") (var "fields")),
+          (Eithers.mapList (var "forField") (var "fields")),
       _Term_set>>: "s" ~>
-        "rlist" <<~ Flows.mapList (var "recurse") (Sets.toList $ var "s") $
-        produce $ Core.termSet $ Sets.fromList $ var "rlist",
+        "rlist" <<= Eithers.mapList (var "recurse") (Sets.toList $ var "s") $
+        right $ Core.termSet $ Sets.fromList $ var "rlist",
       _Term_typeApplication>>: "tt" ~>
-        "t" <<~ var "recurse" @@ Core.typeApplicationTermBody (var "tt") $
-        produce $ Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType (var "tt")),
+        "t" <<= var "recurse" @@ Core.typeApplicationTermBody (var "tt") $
+        right $ Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType (var "tt")),
       _Term_typeLambda>>: "tl" ~>
         "v" <~ Core.typeLambdaParameter (var "tl") $
         "body" <~ Core.typeLambdaBody (var "tl") $
-        "rbody" <<~ var "recurse" @@ var "body" $
-        produce $ Core.termTypeLambda $ Core.typeLambda (var "v") (var "rbody"),
+        "rbody" <<= var "recurse" @@ var "body" $
+        right $ Core.termTypeLambda $ Core.typeLambda (var "v") (var "rbody"),
       _Term_union>>: "i" ~>
         "n" <~ Core.injectionTypeName (var "i") $
         "field" <~ Core.injectionField (var "i") $
-        Flows.map
+        Eithers.map
           ("rfield" ~> Core.termUnion $ Core.injection (var "n") (var "rfield"))
           (var "forField" @@ var "field"),
-      _Term_unit>>: constant $ produce Core.termUnit,
-      _Term_variable>>: "v" ~> produce $ Core.termVariable $ var "v",
+      _Term_unit>>: constant $ right $ Core.termUnit,
+      _Term_variable>>: "v" ~> right $ Core.termVariable $ var "v",
       _Term_wrap>>: "wt" ~>
         "name" <~ Core.wrappedTermTypeName (var "wt") $
         "t" <~ Core.wrappedTermBody (var "wt") $
-        "rt" <<~ var "recurse" @@ var "t" $
-        produce $ Core.termWrap $ Core.wrappedTerm (var "name") (var "rt")]) $
---  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
+        "rt" <<= var "recurse" @@ var "t" $
+        right $ Core.termWrap $ Core.wrappedTerm (var "name") (var "rt")]) $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "term0"
 
@@ -1701,113 +1548,113 @@ rewriteTermWithContext = define "rewriteTermWithContext" $
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
 
-rewriteTermWithContextM :: TBinding (((a -> Term -> Flow s Term) -> a -> Term -> Flow s Term) -> a -> Term -> Flow s Term)
+rewriteTermWithContextM :: TBinding (((a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term) -> a -> Term -> Prelude.Either e Term)
 rewriteTermWithContextM = define "rewriteTermWithContextM" $
-  doc ("A variant of rewriteTermM which allows a context (e.g. a TypeContext)"
+  doc ("Either-based variant of rewriteTermWithContextM which allows a context (e.g. a TypeContext)"
     <> " to be passed down to all subterms during rewriting") $
   "f" ~> "cx0" ~> "term0" ~>
   "forSubterms" <~ ("recurse0" ~> "cx" ~> "term" ~>
     "recurse" <~ var "recurse0" @@ var "cx" $
     "forField" <~ ("field" ~>
-      "t" <<~ var "recurse" @@ Core.fieldTerm (var "field") $
-      produce $ Core.fieldWithTerm (var "t") (var "field")) $
+      "t" <<= var "recurse" @@ Core.fieldTerm (var "field") $
+      right $ Core.fieldWithTerm (var "t") (var "field")) $
     "forPair" <~ ("kv" ~>
-      "k" <<~ var "recurse" @@ (Pairs.first $ var "kv") $
-      "v" <<~ var "recurse" @@ (Pairs.second $ var "kv") $
-      produce $ pair (var "k") (var "v")) $
+      "k" <<= var "recurse" @@ (Pairs.first $ var "kv") $
+      "v" <<= var "recurse" @@ (Pairs.second $ var "kv") $
+      right $ pair (var "k") (var "v")) $
     "forElimination" <~ ("e" ~> cases _Elimination (var "e") Nothing [
-      _Elimination_record>>: "p" ~> produce $ Core.functionElimination $ Core.eliminationRecord $ var "p",
+      _Elimination_record>>: "p" ~> right $ Core.functionElimination $ Core.eliminationRecord $ var "p",
       _Elimination_union>>: "cs" ~>
         "n" <~ Core.caseStatementTypeName (var "cs") $
         "def" <~ Core.caseStatementDefault (var "cs") $
         "cases" <~ Core.caseStatementCases (var "cs") $
-        "rdef" <<~ Maybes.maybe (produce nothing)
-          ("t" ~> Flows.map (unaryFunction just) $ var "recurse" @@ var "t")
+        "rdef" <<= Maybes.maybe (right nothing)
+          ("t" ~> Eithers.map (unaryFunction just) $ var "recurse" @@ var "t")
           (var "def") $
-        Flows.map
+        Eithers.map
           ("rcases" ~> Core.functionElimination $ Core.eliminationUnion $
             Core.caseStatement (var "n") (var "rdef") (var "rcases"))
-          (Flows.mapList (var "forField") (var "cases")),
-      _Elimination_wrap>>: "name" ~> produce $ Core.functionElimination $ Core.eliminationWrap $ var "name"]) $
+          (Eithers.mapList (var "forField") (var "cases")),
+      _Elimination_wrap>>: "name" ~> right $ Core.functionElimination $ Core.eliminationWrap $ var "name"]) $
     "forFunction" <~ ("fun" ~> cases _Function (var "fun") Nothing [
       _Function_elimination>>: "e" ~> var "forElimination" @@ var "e",
       _Function_lambda>>: "l" ~>
         "v" <~ Core.lambdaParameter (var "l") $
         "d" <~ Core.lambdaDomain (var "l") $
         "body" <~ Core.lambdaBody (var "l") $
-        "rbody" <<~ var "recurse" @@ var "body" $
-        produce $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
-      _Function_primitive>>: "name" ~> produce $ Core.functionPrimitive $ var "name"]) $
+        "rbody" <<= var "recurse" @@ var "body" $
+        right $ Core.functionLambda $ Core.lambda (var "v") (var "d") (var "rbody"),
+      _Function_primitive>>: "name" ~> right $ Core.functionPrimitive $ var "name"]) $
     "mapBinding" <~ ("b" ~>
-      "v" <<~ var "recurse" @@ (Core.bindingTerm $ var "b") $
-      produce $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
+      "v" <<= var "recurse" @@ (Core.bindingTerm $ var "b") $
+      right $ Core.binding (Core.bindingName $ var "b") (var "v") (Core.bindingType $ var "b")) $
     cases _Term (var "term") Nothing [
       _Term_annotated>>: "at" ~>
-        "ex" <<~ var "recurse" @@ Core.annotatedTermBody (var "at") $
-        produce $ Core.termAnnotated $ Core.annotatedTerm (var "ex") (Core.annotatedTermAnnotation $ var "at"),
+        "ex" <<= var "recurse" @@ Core.annotatedTermBody (var "at") $
+        right $ Core.termAnnotated $ Core.annotatedTerm (var "ex") (Core.annotatedTermAnnotation $ var "at"),
       _Term_application>>: "app" ~>
-        "lhs" <<~ var "recurse" @@ Core.applicationFunction (var "app") $
-        "rhs" <<~ var "recurse" @@ Core.applicationArgument (var "app") $
-        produce $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
+        "lhs" <<= var "recurse" @@ Core.applicationFunction (var "app") $
+        "rhs" <<= var "recurse" @@ Core.applicationArgument (var "app") $
+        right $ Core.termApplication $ Core.application (var "lhs") (var "rhs"),
       _Term_either>>: "e" ~>
-        "re" <<~ Eithers.either_
-          ("l" ~> Flows.map (unaryFunction left) $ var "recurse" @@ var "l")
-          ("r" ~> Flows.map (unaryFunction right) $ var "recurse" @@ var "r")
+        "re" <<= Eithers.either_
+          ("l" ~> Eithers.map (unaryFunction left) $ var "recurse" @@ var "l")
+          ("r" ~> Eithers.map (unaryFunction right) $ var "recurse" @@ var "r")
           (var "e") $
-        produce $ Core.termEither $ var "re",
+        right $ Core.termEither $ var "re",
       _Term_function>>: "fun" ~>
-        "rfun" <<~ var "forFunction" @@ var "fun" $
-        produce $ Core.termFunction $ var "rfun",
+        "rfun" <<= var "forFunction" @@ var "fun" $
+        right $ Core.termFunction $ var "rfun",
       _Term_let>>: "lt" ~>
         "bindings" <~ Core.letBindings (var "lt") $
         "body" <~ Core.letBody (var "lt") $
-        "rbindings" <<~ Flows.mapList (var "mapBinding") (var "bindings") $
-        "rbody" <<~ var "recurse" @@ var "body" $
-        produce $ Core.termLet $ Core.let_ (var "rbindings") (var "rbody"),
+        "rbindings" <<= Eithers.mapList (var "mapBinding") (var "bindings") $
+        "rbody" <<= var "recurse" @@ var "body" $
+        right $ Core.termLet $ Core.let_ (var "rbindings") (var "rbody"),
       _Term_list>>: "els" ~>
-        "rels" <<~ Flows.mapList (var "recurse") (var "els") $
-        produce $ Core.termList $ var "rels",
-      _Term_literal>>: "v" ~> produce $ Core.termLiteral $ var "v",
+        "rels" <<= Eithers.mapList (var "recurse") (var "els") $
+        right $ Core.termList $ var "rels",
+      _Term_literal>>: "v" ~> right $ Core.termLiteral $ var "v",
       _Term_map>>: "m" ~>
-        "pairs" <<~ Flows.mapList (var "forPair") (Maps.toList $ var "m") $
-        produce $ Core.termMap $ Maps.fromList $ var "pairs",
+        "pairs" <<= Eithers.mapList (var "forPair") (Maps.toList $ var "m") $
+        right $ Core.termMap $ Maps.fromList $ var "pairs",
       _Term_maybe>>: "m" ~>
-        "rm" <<~ Flows.mapMaybe (var "recurse") (var "m") $
-        produce $ Core.termMaybe $ var "rm",
+        "rm" <<= Eithers.mapMaybe (var "recurse") (var "m") $
+        right $ Core.termMaybe $ var "rm",
       _Term_pair>>: "p" ~>
-        "rfirst" <<~ var "recurse" @@ Pairs.first (var "p") $
-        "rsecond" <<~ var "recurse" @@ Pairs.second (var "p") $
-        produce $ Core.termPair $ pair (var "rfirst") (var "rsecond"),
+        "rfirst" <<= var "recurse" @@ Pairs.first (var "p") $
+        "rsecond" <<= var "recurse" @@ Pairs.second (var "p") $
+        right $ Core.termPair $ pair (var "rfirst") (var "rsecond"),
       _Term_record>>: "r" ~>
         "n" <~ Core.recordTypeName (var "r") $
         "fields" <~ Core.recordFields (var "r") $
-        Flows.map
+        Eithers.map
           ("rfields" ~> Core.termRecord $ Core.record (var "n") (var "rfields"))
-          (Flows.mapList (var "forField") (var "fields")),
+          (Eithers.mapList (var "forField") (var "fields")),
       _Term_set>>: "s" ~>
-        "rlist" <<~ Flows.mapList (var "recurse") (Sets.toList $ var "s") $
-        produce $ Core.termSet $ Sets.fromList $ var "rlist",
+        "rlist" <<= Eithers.mapList (var "recurse") (Sets.toList $ var "s") $
+        right $ Core.termSet $ Sets.fromList $ var "rlist",
       _Term_typeApplication>>: "tt" ~>
-        "t" <<~ var "recurse" @@ Core.typeApplicationTermBody (var "tt") $
-        produce $ Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType (var "tt")),
+        "t" <<= var "recurse" @@ Core.typeApplicationTermBody (var "tt") $
+        right $ Core.termTypeApplication $ Core.typeApplicationTerm (var "t") (Core.typeApplicationTermType (var "tt")),
       _Term_typeLambda>>: "tl" ~>
         "v" <~ Core.typeLambdaParameter (var "tl") $
         "body" <~ Core.typeLambdaBody (var "tl") $
-        "rbody" <<~ var "recurse" @@ var "body" $
-        produce $ Core.termTypeLambda $ Core.typeLambda (var "v") (var "rbody"),
+        "rbody" <<= var "recurse" @@ var "body" $
+        right $ Core.termTypeLambda $ Core.typeLambda (var "v") (var "rbody"),
       _Term_union>>: "i" ~>
         "n" <~ Core.injectionTypeName (var "i") $
         "field" <~ Core.injectionField (var "i") $
-        Flows.map
+        Eithers.map
           ("rfield" ~> Core.termUnion $ Core.injection (var "n") (var "rfield"))
           (var "forField" @@ var "field"),
-      _Term_unit>>: constant $ produce Core.termUnit,
-      _Term_variable>>: "v" ~> produce $ Core.termVariable $ var "v",
+      _Term_unit>>: constant $ right Core.termUnit,
+      _Term_variable>>: "v" ~> right $ Core.termVariable $ var "v",
       _Term_wrap>>: "wt" ~>
         "name" <~ Core.wrappedTermTypeName (var "wt") $
         "t" <~ Core.wrappedTermBody (var "wt") $
-        "rt" <<~ var "recurse" @@ var "t" $
-        produce $ Core.termWrap $ Core.wrappedTerm (var "name") (var "rt")]) $
+        "rt" <<= var "recurse" @@ var "t" $
+        right $ Core.termWrap $ Core.wrappedTerm (var "name") (var "rt")]) $
 
   "rewrite" <~ ("cx" ~> "term" ~> var "f" @@ (var "forSubterms" @@ var "rewrite") @@ var "cx" @@ var "term") $
   var "rewrite" @@ var "cx0" @@ var "term0"
@@ -1857,69 +1704,68 @@ rewriteType = define "rewriteType" $ "f" ~> "typ0" ~>
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 
-rewriteTypeM :: TBinding (((Type -> Flow s Type) -> Type -> Flow s Type) -> Type -> Flow s Type)
+rewriteTypeM :: TBinding (((Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type) -> Type -> Prelude.Either e Type)
 rewriteTypeM = define "rewriteTypeM" $
-  doc "Monadic type rewriting" $
+  doc "Either-based type rewriting" $
   "f" ~> "typ0" ~>
   "fsub" <~ ("recurse" ~> "typ" ~> cases _Type (var "typ") Nothing [
     _Type_annotated>>: "at" ~>
-      "t" <<~ var "recurse" @@ (Core.annotatedTypeBody $ var "at") $
-      produce $ Core.typeAnnotated $ Core.annotatedType (var "t") (Core.annotatedTypeAnnotation $ var "at"),
+      "t" <<= var "recurse" @@ (Core.annotatedTypeBody $ var "at") $
+      right $ Core.typeAnnotated $ Core.annotatedType (var "t") (Core.annotatedTypeAnnotation $ var "at"),
     _Type_application>>: "at" ~>
-      "lhs" <<~ var "recurse" @@ (Core.applicationTypeFunction $ var "at") $
-      "rhs" <<~ var "recurse" @@ (Core.applicationTypeArgument $ var "at") $
-      produce $ Core.typeApplication $ Core.applicationType (var "lhs") (var "rhs"),
+      "lhs" <<= var "recurse" @@ (Core.applicationTypeFunction $ var "at") $
+      "rhs" <<= var "recurse" @@ (Core.applicationTypeArgument $ var "at") $
+      right $ Core.typeApplication $ Core.applicationType (var "lhs") (var "rhs"),
     _Type_either>>: "et" ~>
-      "left" <<~ var "recurse" @@ (Core.eitherTypeLeft $ var "et") $
-      "right" <<~ var "recurse" @@ (Core.eitherTypeRight $ var "et") $
-      produce $ Core.typeEither $ Core.eitherType (var "left") (var "right"),
+      "left" <<= var "recurse" @@ (Core.eitherTypeLeft $ var "et") $
+      "right" <<= var "recurse" @@ (Core.eitherTypeRight $ var "et") $
+      right $ Core.typeEither $ Core.eitherType (var "left") (var "right"),
     _Type_pair>>: "pt" ~>
-      "pairFirst" <<~ var "recurse" @@ (Core.pairTypeFirst $ var "pt") $
-      "pairSecond" <<~ var "recurse" @@ (Core.pairTypeSecond $ var "pt") $
-      produce $ Core.typePair $ Core.pairType (var "pairFirst") (var "pairSecond"),
+      "pairFirst" <<= var "recurse" @@ (Core.pairTypeFirst $ var "pt") $
+      "pairSecond" <<= var "recurse" @@ (Core.pairTypeSecond $ var "pt") $
+      right $ Core.typePair $ Core.pairType (var "pairFirst") (var "pairSecond"),
     _Type_function>>: "ft" ~>
-      "dom" <<~ var "recurse" @@ (Core.functionTypeDomain $ var "ft") $
-      "cod" <<~ var "recurse" @@ (Core.functionTypeCodomain $ var "ft") $
-      produce $ Core.typeFunction $ Core.functionType (var "dom") (var "cod"),
+      "dom" <<= var "recurse" @@ (Core.functionTypeDomain $ var "ft") $
+      "cod" <<= var "recurse" @@ (Core.functionTypeCodomain $ var "ft") $
+      right $ Core.typeFunction $ Core.functionType (var "dom") (var "cod"),
     _Type_forall>>: "ft" ~>
-      "b" <<~ var "recurse" @@ (Core.forallTypeBody $ var "ft") $
-      produce $ Core.typeForall $ Core.forallType (Core.forallTypeParameter $ var "ft") (var "b"),
+      "b" <<= var "recurse" @@ (Core.forallTypeBody $ var "ft") $
+      right $ Core.typeForall $ Core.forallType (Core.forallTypeParameter $ var "ft") (var "b"),
     _Type_list>>: "t" ~>
-      "rt" <<~ var "recurse" @@ var "t" $
-      produce $ Core.typeList $ var "rt",
-    _Type_literal>>: "lt" ~> produce $ Core.typeLiteral $ var "lt",
+      "rt" <<= var "recurse" @@ var "t" $
+      right $ Core.typeList $ var "rt",
+    _Type_literal>>: "lt" ~> right $ Core.typeLiteral $ var "lt",
     _Type_map>>: "mt" ~>
-      "kt" <<~ var "recurse" @@ (Core.mapTypeKeys $ var "mt") $
-      "vt" <<~ var "recurse" @@ (Core.mapTypeValues $ var "mt") $
-      produce $ Core.typeMap $ Core.mapType (var "kt") (var "vt"),
+      "kt" <<= var "recurse" @@ (Core.mapTypeKeys $ var "mt") $
+      "vt" <<= var "recurse" @@ (Core.mapTypeValues $ var "mt") $
+      right $ Core.typeMap $ Core.mapType (var "kt") (var "vt"),
     _Type_maybe>>: "t" ~>
-      "rt" <<~ var "recurse" @@ var "t" $
-      produce $ Core.typeMaybe $ var "rt",
+      "rt" <<= var "recurse" @@ var "t" $
+      right $ Core.typeMaybe $ var "rt",
     _Type_record>>: "rt" ~>
       "name" <~ Core.rowTypeTypeName (var "rt") $
       "fields" <~ Core.rowTypeFields (var "rt") $
       "forField" <~ ("f" ~>
-        "t" <<~ var "recurse" @@ (Core.fieldTypeType $ var "f") $
-        produce $ Core.fieldTypeWithType (var "f") (var "t")) $
-      "rfields" <<~ Flows.mapList (var "forField") (var "fields") $
-      produce $ Core.typeRecord $ Core.rowType (var "name") (var "rfields"),
+        "t" <<= var "recurse" @@ (Core.fieldTypeType $ var "f") $
+        right $ Core.fieldTypeWithType (var "f") (var "t")) $
+      "rfields" <<= Eithers.mapList (var "forField") (var "fields") $
+      right $ Core.typeRecord $ Core.rowType (var "name") (var "rfields"),
     _Type_set>>: "t" ~>
-      "rt" <<~ var "recurse" @@ var "t" $
-      produce $ Core.typeSet $ var "rt",
+      "rt" <<= var "recurse" @@ var "t" $
+      right $ Core.typeSet $ var "rt",
     _Type_union>>: "rt" ~>
       "name" <~ Core.rowTypeTypeName (var "rt") $
       "fields" <~ Core.rowTypeFields (var "rt") $
       "forField" <~ ("f" ~>
-        "t" <<~ var "recurse" @@ (Core.fieldTypeType $ var "f") $
-        produce $ Core.fieldTypeWithType (var "f") (var "t")) $
-      "rfields" <<~ Flows.mapList (var "forField") (var "fields") $
-      produce $ Core.typeUnion $ Core.rowType (var "name") (var "rfields"),
-    _Type_unit>>: constant $ produce Core.typeUnit,
-    _Type_variable>>: "v" ~> produce $ Core.typeVariable $ var "v",
+        "t" <<= var "recurse" @@ (Core.fieldTypeType $ var "f") $
+        right $ Core.fieldTypeWithType (var "f") (var "t")) $
+      "rfields" <<= Eithers.mapList (var "forField") (var "fields") $
+      right $ Core.typeUnion $ Core.rowType (var "name") (var "rfields"),
+    _Type_unit>>: constant $ right $ Core.typeUnit,
+    _Type_variable>>: "v" ~> right $ Core.typeVariable $ var "v",
     _Type_wrap>>: "wt" ~>
-      "t" <<~ var "recurse" @@ (Core.wrappedTypeBody $ var "wt") $
-      produce $ Core.typeWrap $ Core.wrappedType (Core.wrappedTypeTypeName $ var "wt") (var "t")]) $
---  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
+      "t" <<= var "recurse" @@ (Core.wrappedTypeBody $ var "wt") $
+      right $ Core.typeWrap $ Core.wrappedType (Core.wrappedTypeTypeName $ var "wt") (var "t")]) $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 

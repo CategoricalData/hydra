@@ -10,6 +10,7 @@ import qualified Hydra.Dsl.Meta.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Coders       as Coders
 import qualified Hydra.Dsl.Meta.Compute      as Compute
+import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Grammar      as Grammar
 import qualified Hydra.Dsl.Grammars          as Grammars
@@ -18,7 +19,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -55,7 +55,6 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Decode.Core as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
@@ -64,7 +63,7 @@ ns = Namespace "hydra.templates"
 
 module_ :: Module
 module_ = Module ns elements
-    [moduleNamespace DecodeCore.module_, Monads.ns, ShowCore.ns]
+    [moduleNamespace DecodeCore.module_, ShowCore.ns]
     kernelTypesNamespaces $
     Just "A utility which instantiates a nonrecursive type with default values"
   where
@@ -75,26 +74,25 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-graphToSchema :: TBinding ([Binding] -> Flow Graph (M.Map Name Type))
+graphToSchema :: TBinding (Context -> Graph -> [Binding] -> Either (InContext DecodingError) (M.Map Name Type))
 graphToSchema = define "graphToSchema" $
   doc "Decode a list of type-encoding bindings into a map of named types" $
-  "els" ~>
+  "cx" ~> "graph" ~> "els" ~>
   "toPair" <~ ("el" ~>
     "name" <~ Core.bindingName (var "el") $
-    "graph" <<~ Monads.getState $
-    Flows.bind (trace (string "graph to schema") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "el")))) (
-      "t" ~> Flows.pure (pair (var "name") (var "t")))) $
-  Flows.bind (Flows.mapList (var "toPair") (var "els")) (
-    "pairs" ~> Flows.pure (Maps.fromList (var "pairs")))
+    Eithers.bind (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "el")))) (
+      "t" ~> right (pair (var "name") (var "t")))) $
+  Eithers.bind (Eithers.mapList (var "toPair") (var "els")) (
+    "pairs" ~> right (Maps.fromList (var "pairs")))
 
-instantiateTemplate :: TBinding (Bool -> M.Map Name Type -> Type -> Flow s Term)
+instantiateTemplate :: TBinding (Context -> Bool -> M.Map Name Type -> Type -> Either (InContext OtherError) Term)
 instantiateTemplate = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"
     <> " is produced for constructors which do not otherwise require one, e.g. in lists and optionals") $
-  "minimal" ~> "schema" ~> "t" ~>
-  "inst" <~ instantiateTemplate @@ var "minimal" @@ var "schema" $
-  "noPoly" <~ Flows.fail (string "Polymorphic and function types are not currently supported") $
+  "cx" ~> "minimal" ~> "schema" ~> "t" ~>
+  "inst" <~ instantiateTemplate @@ var "cx" @@ var "minimal" @@ var "schema" $
+  "noPoly" <~ Ctx.failInContext (Error.otherError (string "Polymorphic and function types are not currently supported")) (var "cx") $
   "forFloat" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
     _FloatType_bigfloat>>: constant (Core.floatValueBigfloat (bigfloat 0.0)),
@@ -125,64 +123,43 @@ instantiateTemplate = define "instantiateTemplate" $
     _Type_function>>: constant (var "noPoly"),
     _Type_forall>>: constant (var "noPoly"),
     _Type_list>>: "et" ~> Logic.ifElse (var "minimal")
-      (Flows.pure (Core.termList (list ([] :: [TTerm Term]))))
-      (Flows.bind (var "inst" @@ var "et") (
-        "e" ~> Flows.pure (Core.termList (list [var "e"])))),
-    _Type_literal>>: "lt" ~> Flows.pure (Core.termLiteral (var "forLiteral" @@ var "lt")),
+      (right (Core.termList (list ([] :: [TTerm Term]))))
+      (Eithers.bind (var "inst" @@ var "et") (
+        "e" ~> right (Core.termList (list [var "e"])))),
+    _Type_literal>>: "lt" ~> right (Core.termLiteral (var "forLiteral" @@ var "lt")),
     _Type_map>>: "mt" ~>
       "kt" <~ Core.mapTypeKeys (var "mt") $
       "vt" <~ Core.mapTypeValues (var "mt") $
       Logic.ifElse (var "minimal")
-        (Flows.pure (Core.termMap Maps.empty))
-        (Flows.bind (var "inst" @@ var "kt") (
+        (right (Core.termMap Maps.empty))
+        (Eithers.bind (var "inst" @@ var "kt") (
           "ke" ~>
-          Flows.bind (var "inst" @@ var "vt") (
-            "ve" ~> Flows.pure (Core.termMap (Maps.singleton (var "ke") (var "ve")))))),
+          Eithers.bind (var "inst" @@ var "vt") (
+            "ve" ~> right (Core.termMap (Maps.singleton (var "ke") (var "ve")))))),
     _Type_maybe>>: "ot" ~> Logic.ifElse (var "minimal")
-      (Flows.pure (Core.termMaybe nothing))
-      (Flows.bind (var "inst" @@ var "ot") (
-        "e" ~> Flows.pure (Core.termMaybe (just (var "e"))))),
+      (right (Core.termMaybe nothing))
+      (Eithers.bind (var "inst" @@ var "ot") (
+        "e" ~> right (Core.termMaybe (just (var "e"))))),
     _Type_record>>: "rt" ~>
       "tname" <~ Core.rowTypeTypeName (var "rt") $
       "fields" <~ Core.rowTypeFields (var "rt") $
       "toField" <~ ("ft" ~>
-        Flows.bind (var "inst" @@ (Core.fieldTypeType (var "ft"))) (
-          "e" ~> Flows.pure (Core.field (Core.fieldTypeName (var "ft")) (var "e")))) $
-      Flows.bind (Flows.mapList (var "toField") (var "fields")) (
-        "dfields" ~> Flows.pure (Core.termRecord (Core.record (var "tname") (var "dfields")))),
+        Eithers.bind (var "inst" @@ (Core.fieldTypeType (var "ft"))) (
+          "e" ~> right (Core.field (Core.fieldTypeName (var "ft")) (var "e")))) $
+      Eithers.bind (Eithers.mapList (var "toField") (var "fields")) (
+        "dfields" ~> right (Core.termRecord (Core.record (var "tname") (var "dfields")))),
     _Type_set>>: "et" ~> Logic.ifElse (var "minimal")
-      (Flows.pure (Core.termSet Sets.empty))
-      (Flows.bind (var "inst" @@ var "et") (
-        "e" ~> Flows.pure (Core.termSet (Sets.fromList (list [var "e"]))))),
+      (right (Core.termSet Sets.empty))
+      (Eithers.bind (var "inst" @@ var "et") (
+        "e" ~> right (Core.termSet (Sets.fromList (list [var "e"]))))),
     _Type_variable>>: "tname" ~>
       Maybes.maybe
-        (Flows.fail (Strings.cat2 (string "Type variable ") (Strings.cat2 (ShowCore.term @@ (Core.termVariable (var "tname"))) (string " not found in schema"))))
+        (Ctx.failInContext (Error.otherError (Strings.cat2 (string "Type variable ") (Strings.cat2 (ShowCore.term @@ (Core.termVariable (var "tname"))) (string " not found in schema")))) (var "cx"))
         (var "inst")
         (Maps.lookup (var "tname") (var "schema")),
     _Type_wrap>>: "wt" ~>
       "tname" <~ Core.wrappedTypeTypeName (var "wt") $
       "t'" <~ Core.wrappedTypeBody (var "wt") $
-      Flows.bind (var "inst" @@ var "t'") (
-        "e" ~> Flows.pure (Core.termWrap (Core.wrappedTerm (var "tname") (var "e"))))]
+      Eithers.bind (var "inst" @@ var "t'") (
+        "e" ~> right (Core.termWrap (Core.wrappedTerm (var "tname") (var "e"))))]
 
-{-
-
--- Example of type-to-term instantiation which creates a YAML-based template out of the OpenCypher feature model.
-
-import Hydra.Staging.Yaml.Model as Yaml
-import Hydra.Monads
-import Data.Map as M
-import Data.Maybe as Y
-
-ff = flowToIo bootstrapGraph
-
-schema <- ff $ graphToSchema $ modulesToGraph [openCypherFeaturesModule]
-
-typ <- ff $ inlineType schema $ Y.fromJust $ M.lookup _CypherFeatures schema
-term <- ff $ insantiateTemplate False schema typ
-
-encoder <- ff (coderEncode <$> yamlCoder typ)
-yaml <- ff $ encoder term
-putStrLn $ hydraYamlToString yaml
-
--}

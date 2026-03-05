@@ -3,12 +3,16 @@ module Hydra.Sources.Kernel.Terms.Annotations where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  aggregateAnnotations, debugIf, failOnFlag, getDebugId, getAttr, getAttrWithDefault, getCount,
-  getDescription, getTermAnnotation, getTermDescription, getType, getTypeAnnotation, getTypeClasses,
-  getTypeDescription, isNativeType, hasDescription, hasFlag, hasTypeDescription, nextCount,
-  normalizeTermAnnotations, normalizeTypeAnnotations, putAttr, putCount, resetCount, setAnnotation,
+  aggregateAnnotations, debugIf, failOnFlag, getDebugId,
+  getAttr, getAttrWithDefault, getCount,
+  getDescription, getTermAnnotation, getTermDescription,
+  getType, getTypeAnnotation, getTypeClasses,
+  getTypeDescription, isNativeType, hasDescription, hasFlag,
+  hasTypeDescription, nextCount,
+  normalizeTermAnnotations, normalizeTypeAnnotations, putAttr, putCount,
+  resetCount, setAnnotation,
   setDescription, setTermAnnotation, setTermDescription, setType, setTypeAnnotation, setTypeClasses,
-  setTypeDescription, termAnnotationInternal, typeAnnotationInternal, typeElement, whenFlag, withDepth)
+  setTypeDescription, termAnnotationInternal, typeAnnotationInternal, typeElement, whenFlag)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -16,6 +20,7 @@ import qualified Hydra.Dsl.Meta.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Coders       as Coders
 import qualified Hydra.Dsl.Meta.Compute      as Compute
+import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Grammar      as Grammar
 import qualified Hydra.Dsl.Grammars          as Grammars
@@ -24,7 +29,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -76,7 +80,7 @@ ns = Namespace "hydra.annotations"
 
 module_ :: Module
 module_ = Module ns elements
-    [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns, Monads.ns,
+    [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns,
       Rewriting.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Utilities for reading and writing type and term annotations"
@@ -117,11 +121,13 @@ module_ = Module ns elements
      toBinding termAnnotationInternal,
      toBinding typeAnnotationInternal,
      toBinding typeElement,
-     toBinding whenFlag,
-     toBinding withDepth]
+     toBinding whenFlag]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
+
+formatOtherError :: TTerm (InContext OtherError -> String)
+formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
 
 aggregateAnnotations :: TBinding ((x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term)
 aggregateAnnotations = define "aggregateAnnotations" $
@@ -134,61 +140,64 @@ aggregateAnnotations = define "aggregateAnnotations" $
     (var "getValue" @@ var "t")) $
   Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TTerm [(Name, Term)]]) @@ var "t"))
 
-debugIf :: TBinding (String -> String -> Flow s ())
+debugIf :: TBinding (Context -> String -> String -> Prelude.Either (InContext OtherError) ())
 debugIf = define "debugIf" $
-  doc "Debug if the debug ID matches" $
-  "debugId" ~> "message" ~>
-  "checkAndFail" <~ ("desc" ~> Logic.ifElse
-    (Equality.equal (var "desc") (just $ string "debugId"))
-    (Flows.fail (var "message"))
-    (produce unit)) $
-  Flows.bind getDebugId (var "checkAndFail")
+  doc "Debug if the debug ID matches (Either version)" $
+  "cx" ~> "debugId" ~> "message" ~>
+  "mid" <<= getDebugId @@ var "cx" $
+  Logic.ifElse (Equality.equal (var "mid") (just $ var "debugId"))
+    (Ctx.failInContext (Error.otherError (var "message")) (var "cx"))
+    (right unit)
 
-failOnFlag :: TBinding (Name -> String -> Flow s ())
+failOnFlag :: TBinding (Context -> Name -> String -> Prelude.Either (InContext OtherError) ())
 failOnFlag = define "failOnFlag" $
-  doc "Fail if the given flag is set" $
-  "flag" ~> "msg" ~>
-  "val" <<~ hasFlag @@ var "flag" $
+  doc "Fail if the given flag is set (Either version)" $
+  "cx" ~> "flag" ~> "msg" ~>
+  "val" <<= hasFlag @@ var "cx" @@ var "flag" $
   Logic.ifElse (var "val")
-    (Flows.fail (var "msg"))
-    (produce unit)
+    (Ctx.failInContext (Error.otherError (var "msg")) (var "cx"))
+    (right unit)
 
-getAttr :: TBinding (Name -> Flow s (Maybe Term))
+getAttr :: TBinding (Name -> Context -> Maybe Term)
 getAttr = define "getAttr" $
-  doc "Get an attribute from the trace" $
-  "key" ~> Compute.flow (
-    "s0" ~> "t0" ~> Compute.flowState
-      (just (Maps.lookup (var "key") (Compute.traceOther (var "t0"))))
-      (var "s0")
-      (var "t0"))
+  doc "Get an attribute from a context (pure version)" $
+  "key" ~> "cx" ~>
+  Maps.lookup (var "key") (Ctx.contextOther (var "cx"))
 
-getAttrWithDefault :: TBinding (Name -> Term -> Flow s Term)
+getAttrWithDefault :: TBinding (Name -> Term -> Context -> Term)
 getAttrWithDefault = define "getAttrWithDefault" $
-  doc "Get an attribute with a default value" $
-  "key" ~> "def" ~> Flows.map
-    ("mval" ~> Maybes.fromMaybe (var "def") (var "mval"))
-    (getAttr @@ var "key")
+  doc "Get an attribute with a default value from context (pure version)" $
+  "key" ~> "def" ~> "cx" ~>
+  Maybes.fromMaybe (var "def") (getAttr @@ var "key" @@ var "cx")
 
-getCount :: TBinding (Name -> Flow s Int)
+getCount :: TBinding (Name -> Context -> Int)
 getCount = define "getCount" $
-  doc "Get a counter value" $
-  "key" ~> Lexical.withEmptyGraph @@ (Flows.bind
-    (getAttrWithDefault @@ var "key" @@ (Core.int32 0))
-    (ExtractCore.int32))
+  doc "Get a counter value from context (pure version)" $
+  "key" ~> "cx" ~>
+  Maybes.maybe
+    (int32 0)
+    ("term" ~> cases _Term (var "term") (Just (int32 0)) [
+      _Term_literal>>: "lit" ~> cases _Literal (var "lit") (Just (int32 0)) [
+        _Literal_integer>>: "iv" ~> cases _IntegerValue (var "iv") (Just (int32 0)) [
+          _IntegerValue_int32>>: "i" ~> var "i"]]])
+    (Maps.lookup (var "key") (Ctx.contextOther (var "cx")))
 
-getDebugId :: TBinding (Flow s (Maybe String))
+getDebugId :: TBinding (Context -> Prelude.Either (InContext OtherError) (Maybe String))
 getDebugId = define "getDebugId" $
-  doc "Get the debug ID from flow state" $
-  Lexical.withEmptyGraph @@ (Flows.bind
-    (getAttr @@ Constants.key_debugId)
-    ("desc" ~> Flows.mapMaybe (ExtractCore.string) (var "desc")))
+  doc "Get the debug ID from context (Either version)" $
+  "cx" ~>
+  Maybes.maybe
+    (right nothing)
+    ("term" ~> Eithers.map (unaryFunction just) (ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "term"))
+    (getAttr @@ Constants.key_debugId @@ var "cx")
 
-getDescription :: TBinding (M.Map Name Term -> Flow Graph (Maybe String))
+getDescription :: TBinding (Context -> Graph -> M.Map Name Term -> Prelude.Either (InContext OtherError) (Maybe String))
 getDescription = define "getDescription" $
-  doc "Get description from annotations map" $
-  "anns" ~> Maybes.maybe
-    (produce nothing)
-    ("term" ~> Flows.map (unaryFunction just) (ExtractCore.string @@ var "term"))
+  doc "Get description from annotations map (Either version)" $
+  "cx" ~> "graph" ~> "anns" ~>
+  Maybes.maybe
+    (right nothing)
+    ("term" ~> Eithers.map (unaryFunction just) (ExtractCore.string @@ var "cx" @@ var "graph" @@ var "term"))
     (Maps.lookup (Core.nameLift key_description) (var "anns"))
 
 getTermAnnotation :: TBinding (Name -> Term -> Maybe Term)
@@ -196,24 +205,23 @@ getTermAnnotation = define "getTermAnnotation" $
   doc "Get a term annotation" $
   "key" ~> "term" ~> Maps.lookup (var "key") (termAnnotationInternal @@ var "term")
 
-getTermDescription :: TBinding (Term -> Flow Graph (Maybe String))
+getTermDescription :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) (Maybe String))
 getTermDescription = define "getTermDescription" $
-  doc "Get term description. Peels through TermTypeLambda and TermTypeApplication wrappers (added by inference for polymorphic bindings) to find the description annotation underneath." $
-  "term" ~>
+  doc "Get term description (Either version)" $
+  "cx" ~> "graph" ~> "term" ~>
   "peel" <~ ("t" ~> cases _Term (var "t")
     (Just $ var "t") [
     _Term_typeLambda>>: "tl" ~> var "peel" @@ Core.typeLambdaBody (var "tl"),
     _Term_typeApplication>>: "ta" ~> var "peel" @@ Core.typeApplicationTermBody (var "ta")]) $
-  getDescription @@ (termAnnotationInternal @@ (var "peel" @@ var "term"))
+  getDescription @@ var "cx" @@ var "graph" @@ (termAnnotationInternal @@ (var "peel" @@ var "term"))
 
-getType :: TBinding (M.Map Name Term -> Flow Graph (Maybe Type))
+getType :: TBinding (Graph -> M.Map Name Term -> Prelude.Either DecodingError (Maybe Type))
 getType = define "getType" $
   doc "Get type from annotations" $
-  "anns" ~>
-  "graph" <<~ Monads.getState $
+  "graph" ~> "anns" ~>
   Maybes.maybe
-    (produce nothing)
-    ("dat" ~> Flows.map (unaryFunction just) (trace (string "get type") $ Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ var "dat")))
+    (right nothing)
+    ("dat" ~> Eithers.map (unaryFunction just) (decoderFor _Type @@ var "graph" @@ var "dat"))
     (Maps.lookup (Constants.key_type) (var "anns"))
 
 getTypeAnnotation :: TBinding (Name -> Type -> Maybe Term)
@@ -221,32 +229,38 @@ getTypeAnnotation = define "getTypeAnnotation" $
   doc "Get a type annotation" $
   "key" ~> "typ" ~> Maps.lookup (var "key") (typeAnnotationInternal @@ var "typ")
 
-getTypeClasses :: TBinding (Term -> Flow Graph (M.Map Name (S.Set TypeClass)))
+getTypeClasses :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) (M.Map Name (S.Set TypeClass)))
 getTypeClasses = define "getTypeClasses" $
   doc "Get type classes from term" $
-  "term" ~>
-  "graph" <<~ Monads.getState $
+  "cx" ~> "graph" ~> "term" ~>
   "decodeClass" <~ ("term" ~>
     "byName" <~ Maps.fromList (list [
       pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
       pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]) $
-    "fn" <<~ ExtractCore.unitVariant @@ Core.nameLift _TypeClass @@ var "term" $
+    "fn" <<= ExtractCore.unitVariant @@ var "cx" @@ Core.nameLift _TypeClass @@ var "graph" @@ var "term" $
     Maybes.maybe
-      (Monads.unexpected @@ string "type class" @@ (ShowCore.term @@ var "term"))
-      (unaryFunction produce)
+      (Ctx.failInContext (Error.otherError (string "unexpected: expected type class, got " ++ (ShowCore.term @@ var "term"))) (var "cx"))
+      (unaryFunction right)
       (Maps.lookup (var "fn") (var "byName"))) $
   Maybes.maybe
-    (produce Maps.empty)
-    ("term" ~> ExtractCore.map
-      @@ ("t" ~> Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Name @@ var "graph" @@ var "t"))
-      @@ (ExtractCore.setOf @@ var "decodeClass")
-      @@ (var "term"))
+    (right Maps.empty)
+    ("term" ~>
+      ExtractCore.map
+        @@ var "cx"
+        @@ ("t" ~> Eithers.bimap
+          ("de" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ var "de")) (var "cx"))
+          ("x" ~> var "x")
+          (decoderFor _Name @@ var "graph" @@ var "t"))
+        @@ (ExtractCore.setOf @@ var "cx" @@ var "decodeClass" @@ var "graph")
+        @@ var "graph"
+        @@ (var "term"))
     (getTermAnnotation @@ Constants.key_classes @@ var "term")
 
-getTypeDescription :: TBinding (Type -> Flow Graph (Maybe String))
+getTypeDescription :: TBinding (Context -> Graph -> Type -> Prelude.Either (InContext OtherError) (Maybe String))
 getTypeDescription = define "getTypeDescription" $
-  doc "Get type description" $
-  "typ" ~> getDescription @@ (typeAnnotationInternal @@ var "typ")
+  doc "Get type description (Either version)" $
+  "cx" ~> "graph" ~> "typ" ~>
+  getDescription @@ var "cx" @@ var "graph" @@ (typeAnnotationInternal @@ var "typ")
 
 isNativeType :: TBinding (Binding -> Bool)
 isNativeType = define "isNativeType" $
@@ -268,26 +282,24 @@ hasDescription = define "hasDescription" $
   doc "Check if annotations contain description" $
   "anns" ~> Maybes.isJust (Maps.lookup (Constants.key_description) (var "anns"))
 
-hasFlag :: TBinding (Name -> Flow s Bool)
+hasFlag :: TBinding (Context -> Name -> Prelude.Either (InContext OtherError) Bool)
 hasFlag = define "hasFlag" $
-  doc "Check if flag is set" $
-  "flag" ~> Lexical.withEmptyGraph
-    @@ ("term" <<~ getAttrWithDefault @@ var "flag" @@ Core.false $
-        ExtractCore.boolean @@ var "term")
+  doc "Check if flag is set (Either version)" $
+  "cx" ~> "flag" ~>
+  "term" <~ getAttrWithDefault @@ var "flag" @@ Core.false @@ var "cx" $
+  ExtractCore.boolean @@ var "cx" @@ Graph.emptyGraph @@ var "term"
 
 hasTypeDescription :: TBinding (Type -> Bool)
 hasTypeDescription = define "hasTypeDescription" $
   doc "Check if type has description" $
   "typ" ~> hasDescription @@ (typeAnnotationInternal @@ var "typ")
 
-nextCount :: TBinding (Name -> Flow s Int)
+nextCount :: TBinding (Name -> Context -> (Int, Context))
 nextCount = define "nextCount" $
-  doc "Return a zero-indexed counter for the given key: 0, 1, 2, ..." $
-  "key" ~>
-  "count" <<~ getCount @@ var "key" $
-  Flows.map
-    (constant (var "count"))
-    (putCount @@ var "key" @@ Math.add (var "count") (int32 1))
+  doc "Return a zero-indexed counter for the given key and updated context (pure version)" $
+  "key" ~> "cx" ~>
+  "count" <~ getCount @@ var "key" @@ var "cx" $
+  pair (var "count") (putCount @@ var "key" @@ Math.add (var "count") (int32 1) @@ var "cx")
 
 normalizeTermAnnotations :: TBinding (Term -> Term)
 normalizeTermAnnotations = define "normalizeTermAnnotations" $
@@ -309,26 +321,22 @@ normalizeTypeAnnotations = define "normalizeTypeAnnotations" $
     (var "stripped")
     (Core.typeAnnotated (Core.annotatedType (var "stripped") (var "anns")))
 
-putAttr :: TBinding (Name -> Term -> Flow s ())
+putAttr :: TBinding (Name -> Term -> Context -> Context)
 putAttr = define "putAttr" $
-  doc "Set an attribute in the trace" $
-  "key" ~> "val" ~> Compute.flow (
-    "s0" ~> "t0" ~>
-    Compute.flowState
-      (just unit)
-      (var "s0")
-      (Compute.traceWithOther (var "t0") (Maps.insert (var "key") (var "val") (Compute.traceOther (var "t0")))))
+  doc "Set an attribute in a context" $
+  "key" ~> "val" ~> "cx" ~>
+  Ctx.contextWithOther (var "cx") (Maps.insert (var "key") (var "val") (Ctx.contextOther (var "cx")))
 
-putCount :: TBinding (Name -> Int -> Flow s ())
+putCount :: TBinding (Name -> Int -> Context -> Context)
 putCount = define "putCount" $
-  doc "Set counter value" $
-  "key" ~> "count" ~>
-  putAttr @@ var "key" @@ (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (var "count"))))
+  doc "Set counter value in context" $
+  "key" ~> "count" ~> "cx" ~>
+  putAttr @@ var "key" @@ (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (var "count")))) @@ var "cx"
 
-resetCount :: TBinding (Name -> Flow s ())
+resetCount :: TBinding (Name -> Context -> Context)
 resetCount = define "resetCount" $
-  doc "Reset counter to zero" $
-  "key" ~> putAttr @@ var "key" @@ MetaTerms.int32 0
+  doc "Reset counter to zero in context" $
+  "key" ~> "cx" ~> putAttr @@ var "key" @@ MetaTerms.int32 0 @@ var "cx"
 
 setAnnotation :: TBinding (Name -> Maybe Term -> M.Map Name Term -> M.Map Name Term)
 setAnnotation = define "setAnnotation" $
@@ -437,23 +445,9 @@ typeElement = define "typeElement" $
     (Maps.fromList (list [pair (Constants.key_type) (var "schemaTerm")])))) $
   Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))
 
-whenFlag :: TBinding (Name -> Flow s a -> Flow s a -> Flow s a)
+whenFlag :: TBinding (Context -> Name -> Prelude.Either (InContext OtherError) a -> Prelude.Either (InContext OtherError) a -> Prelude.Either (InContext OtherError) a)
 whenFlag = define "whenFlag" $
-  doc "Execute different flows based on flag" $
-  "flag" ~> "fthen" ~> "felse" ~>
-  "b" <<~ hasFlag @@ var "flag" $
-  Logic.ifElse (var "b") (var "fthen") (var "felse")
-
-withDepth :: TBinding (Name -> (Int -> Flow s a) -> Flow s a)
-withDepth = define "withDepth" $
-  doc ("Provide an one-indexed, integer-valued 'depth' to a flow, where the depth is the number of nested calls."
-    <> " This is useful for generating variable names while avoiding conflicts between the variables of parents and children."
-    <> " E.g. a variable in an outer case/match statement might be \"v1\", whereas the variable of another case/match statement"
-    <> " inside of the first one becomes \"v2\". See also nextCount.") $
-  "key" ~> "f" ~>
-  "count" <<~ getCount @@ var "key" $
-  "inc" <~ Math.add (var "count") (int32 1) $
-  exec (putCount @@ var "key" @@ var "inc") $
-  "r" <<~ var "f" @@ var "inc" $
-  exec (putCount @@ var "key" @@ var "count") $
-  produce (var "r")
+  doc "Execute different branches based on flag (Either version)" $
+  "cx" ~> "flag" ~> "ethen" ~> "eelse" ~>
+  "b" <<= hasFlag @@ var "cx" @@ var "flag" $
+  Logic.ifElse (var "b") (var "ethen") (var "eelse")

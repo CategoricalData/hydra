@@ -23,7 +23,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -51,6 +50,8 @@ import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
 import qualified Hydra.Dsl.Meta.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
+import qualified Hydra.Dsl.Meta.Context      as Ctx
+import qualified Hydra.Dsl.Meta.Error        as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -66,6 +67,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names       as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction   as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect     as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Monads      as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting   as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas     as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core   as ShowCore
@@ -77,7 +79,7 @@ ns = Namespace "hydra.adapt.simple"
 
 module_ :: Module
 module_ = Module ns elements
-    [Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns, Schemas.ns,
+    [Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Monads.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns, Schemas.ns,
       ShowCore.ns, ShowGraph.ns]
     kernelTypesNamespaces $
     Just "Simple, one-way adapters for types and terms"
@@ -104,6 +106,12 @@ module_ = Module ns elements
       toBinding termAlternatives,
       toBinding typeAlternatives]
 
+formatOtherError :: TTerm (InContext OtherError -> String)
+formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+
+formatDecodingError :: TTerm (InContext DecodingError -> String)
+formatDecodingError = "ic" ~> Error.unDecodingError @@ Ctx.inContextObject (var "ic")
+
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
@@ -123,7 +131,7 @@ adaptFloatType = define "adaptFloatType" $
     (just $ var "ft")
     (var "forUnsupported" @@ var "ft")
 
-adaptDataGraph :: TBinding (LanguageConstraints -> Bool -> [Binding] -> Graph -> Flow s (Graph, [Binding]))
+adaptDataGraph :: TBinding (LanguageConstraints -> Bool -> [Binding] -> Context -> Graph -> Prelude.Either String (Graph, [Binding]))
 adaptDataGraph = define "adaptDataGraph" $
   doc ("Adapt a graph and its schema to the given language constraints."
     <> " The doExpand flag controls eta expansion of partial applications."
@@ -131,7 +139,7 @@ adaptDataGraph = define "adaptDataGraph" $
     <> " Note: case statement hoisting is done separately, prior to adaptation."
     <> " The els0 parameter provides the original ordered bindings."
     <> " Returns both the adapted graph and the ordered adapted bindings.") $
-  "constraints" ~> "doExpand" ~> "els0" ~> "graph0" ~>
+  "constraints" ~> "doExpand" ~> "els0" ~> "cx" ~> "graph0" ~>
   "transform" <~ ("g" ~> "gterm" ~>
     "tx" <~ var "g" $
     -- Order of operations:
@@ -142,27 +150,27 @@ adaptDataGraph = define "adaptDataGraph" $
     "gterm2" <~ Rewriting.unshadowVariables @@ (Logic.ifElse (var "doExpand")
       (pushTypeAppsInward @@ (Reduction.etaExpandTermNew @@ var "tx" @@ var "gterm1"))
       (var "gterm1")) $
-    produce $ Rewriting.liftLambdaAboveLet @@ var "gterm2") $
+    Rewriting.liftLambdaAboveLet @@ var "gterm2") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "prims0" <~ Graph.graphPrimitives (var "graph0") $
   "schemaTypes0" <~ Graph.graphSchemaTypes (var "graph0") $
   -- Adapt schema types
   "schemaBindings" <~ Schemas.typesToElements @@ Maps.map ("ts" ~> Rewriting.typeSchemeToFType @@ var "ts") (var "schemaTypes0") $
-  "schemaResult" <<~ Logic.ifElse (Maps.null (var "schemaTypes0"))
-    (produce (Maps.empty :: TTerm (M.Map Name TypeScheme)))
-    ("tmap0" <<~ Schemas.graphAsTypes @@ var "schemaBindings" $
-      "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
-      produce $ Maps.map ("t" ~> Schemas.typeToTypeScheme @@ var "t") (var "tmap1")) $
+  "schemaResult" <<= Logic.ifElse (Maps.null (var "schemaTypes0"))
+    (right (Maps.empty :: TTerm (M.Map Name TypeScheme)))
+    ("tmap0" <<= Eithers.bimap formatDecodingError ("x" ~> var "x") (Schemas.graphAsTypes @@ var "cx" @@ var "graph0" @@ var "schemaBindings") $
+      "tmap1" <<= adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
+      right $ Maps.map ("t" ~> Schemas.typeToTypeScheme @@ var "t") (var "tmap1")) $
   "adaptedSchemaTypes" <~ var "schemaResult" $
   "gterm0" <~ Core.termLet (Core.let_ (var "els0") Core.termUnit) $
-  "gterm1" <<~ Logic.ifElse (var "doExpand")
+  "gterm1" <~ Logic.ifElse (var "doExpand")
     (var "transform" @@ var "graph0" @@ var "gterm0")
-    (produce $ var "gterm0") $
-  "gterm2" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "gterm1" $
+    (var "gterm0") $
+  "gterm2" <<= adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "graph0" @@ var "gterm1" $
   -- Adapt lambda domains in the adapted term.
   -- Lambda domains carry pre-adaptation types (e.g. bigfloat) that must be adapted to match
   -- the post-adaptation terms (e.g. float64). This preserves type annotations.
-  "gterm3" <<~ Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "gterm2" $
+  "gterm3" <<= Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "gterm2" $
   "els1Raw" <~ Schemas.termAsBindings @@ var "gterm3" $
 
   -- Adapt nested let binding TypeSchemes within each top-level binding's term.
@@ -173,44 +181,47 @@ adaptDataGraph = define "adaptDataGraph" $
   -- Adapting (rather than stripping) TypeSchemes converts stale types like bigfloat→float64
   -- while preserving type-class constraints like Ord needed by decodeSet.
   "processBinding" <~ ("el" ~>
-    "newTerm" <<~ Rewriting.rewriteTermM @@ (adaptNestedTypes @@ var "constraints" @@ var "litmap") @@ (Core.bindingTerm $ var "el") $
-    "adaptedType" <<~ optCases (Core.bindingType $ var "el")
-      (produce nothing)
+    "newTerm" <<= Rewriting.rewriteTermM @@ (adaptNestedTypes @@ var "constraints" @@ var "litmap") @@ (Core.bindingTerm $ var "el") $
+    "adaptedType" <<= optCases (Core.bindingType $ var "el")
+      (right nothing)
       ("ts" ~>
-        "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
-        produce $ just $ var "ts1") $
-    produce $ Core.binding
+        "ts1" <<= adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
+        right $ just $ var "ts1") $
+    right $ Core.binding
       (Core.bindingName $ var "el")
       (var "newTerm")
       (var "adaptedType")) $
-  "els1" <<~ Flows.mapList (var "processBinding") (var "els1Raw") $
-  "prims1" <<~ Flows.mapElems (adaptPrimitive @@ var "constraints" @@ var "litmap") (var "prims0") $
+  "els1" <<= Eithers.mapList (var "processBinding") (var "els1Raw") $
+  "primPairs" <<= Eithers.mapList ("kv" ~>
+    "prim1" <<= adaptPrimitive @@ var "constraints" @@ var "litmap" @@ (Pairs.second $ var "kv") $
+    right $ pair (Pairs.first $ var "kv") (var "prim1")) (Maps.toList (var "prims0")) $
+  "prims1" <~ Maps.fromList (var "primPairs") $
   "adaptedGraph" <~ Graph.graphWithSchemaTypes
     (Lexical.buildGraph @@ var "els1" @@ Maps.empty @@ var "prims1")
     (var "adaptedSchemaTypes") $
-  produce $ pair (var "adaptedGraph") (var "els1")
+  right $ pair (var "adaptedGraph") (var "els1")
 
 -- | Rewrite callback for adapting lambda domains in a term.
 -- Dispatches on Term variants: for TermFunction, adapts the lambda domain type;
 -- for all other variants, returns the term unchanged.
 -- This is a top-level function (not inline) so the Python code generator can emit match statements.
-adaptLambdaDomains :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Flow s Term) -> Term -> Flow s Term)
+adaptLambdaDomains :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Prelude.Either String Term) -> Term -> Prelude.Either String Term)
 adaptLambdaDomains = define "adaptLambdaDomains" $
   doc "Rewrite callback for adapting lambda domain types in a term" $
   "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
-  "rewritten" <<~ var "recurse" @@ var "term" $
+  "rewritten" <<= var "recurse" @@ var "term" $
   cases _Term (var "rewritten")
-    (Just $ produce $ var "rewritten") [
+    (Just $ right $ var "rewritten") [
     _Term_function>>: "f" ~>
       cases _Function (var "f")
-        (Just $ produce $ Core.termFunction $ var "f") [
+        (Just $ right $ Core.termFunction $ var "f") [
         _Function_lambda>>: "l" ~>
-          "adaptedDomain" <<~ optCases (Core.lambdaDomain $ var "l")
-            (produce nothing)
+          "adaptedDomain" <<= optCases (Core.lambdaDomain $ var "l")
+            (right nothing)
             ("dom" ~>
-              "dom1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "dom" $
-              produce $ just $ var "dom1") $
-          produce $ Core.termFunction $ Core.functionLambda $ Core.lambda
+              "dom1" <<= adaptType @@ var "constraints" @@ var "litmap" @@ var "dom" $
+              right $ just $ var "dom1") $
+          right $ Core.termFunction $ Core.functionLambda $ Core.lambda
             (Core.lambdaParameter $ var "l")
             (var "adaptedDomain")
             (Core.lambdaBody $ var "l")]]
@@ -219,40 +230,40 @@ adaptLambdaDomains = define "adaptLambdaDomains" $
 -- Dispatches on Term variants: for TermLet, adapts the binding TypeSchemes;
 -- for all other variants, returns the term unchanged.
 -- This is a top-level function (not inline) so the Python code generator can emit match statements.
-adaptNestedTypes :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Flow s Term) -> Term -> Flow s Term)
+adaptNestedTypes :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> (Term -> Prelude.Either String Term) -> Term -> Prelude.Either String Term)
 adaptNestedTypes = define "adaptNestedTypes" $
   doc "Rewrite callback for adapting nested let binding TypeSchemes in a term" $
   "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
-  "rewritten" <<~ var "recurse" @@ var "term" $
+  "rewritten" <<= var "recurse" @@ var "term" $
   cases _Term (var "rewritten")
-    (Just $ produce $ var "rewritten") [
+    (Just $ right $ var "rewritten") [
     _Term_let>>: "lt" ~>
       "adaptB" <~ ("b" ~>
-        "adaptedBType" <<~ optCases (Core.bindingType $ var "b")
-          (produce nothing)
+        "adaptedBType" <<= optCases (Core.bindingType $ var "b")
+          (right nothing)
           ("ts" ~>
-            "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
-            produce $ just $ var "ts1") $
-        produce $ Core.binding
+            "ts1" <<= adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
+            right $ just $ var "ts1") $
+        right $ Core.binding
           (Core.bindingName $ var "b")
           (Core.bindingTerm $ var "b")
           (var "adaptedBType")) $
-      "adaptedBindings" <<~ Flows.mapList (var "adaptB") (Core.letBindings $ var "lt") $
-      produce $ Core.termLet $ Core.let_
+      "adaptedBindings" <<= Eithers.mapList (var "adaptB") (Core.letBindings $ var "lt") $
+      right $ Core.termLet $ Core.let_
         (var "adaptedBindings")
         (Core.letBody $ var "lt")]
 
-adaptGraphSchema :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Flow s (M.Map Name Type))
+adaptGraphSchema :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> M.Map Name Type -> Prelude.Either String (M.Map Name Type))
 adaptGraphSchema = define "adaptGraphSchema" $
   doc "Adapt a schema graph to the given language constraints" $
   "constraints" ~> "litmap" ~> "types0" ~>
   "mapPair" <~ ("pair" ~>
     "name" <~ Pairs.first (var "pair") $
     "typ" <~ Pairs.second (var "pair") $
-    "typ1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
-    produce $ pair (var "name") (var "typ1")) $
-  "pairs" <<~ Flows.mapList (var "mapPair") (Maps.toList $ var "types0") $
-  produce $ Maps.fromList (var "pairs")
+    "typ1" <<= adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
+    right $ pair (var "name") (var "typ1")) $
+  "pairs" <<= Eithers.mapList (var "mapPair") (Maps.toList $ var "types0") $
+  right $ Maps.fromList (var "pairs")
 
 adaptIntegerType :: TBinding (LanguageConstraints -> IntegerType -> Maybe IntegerType)
 adaptIntegerType = define "adaptIntegerType" $
@@ -330,38 +341,38 @@ adaptLiteralValue = define "adaptLiteralValue" $
     (Core.literalString $ ShowCore.literal @@ var "l")
     ("lt2" ~> adaptLiteral @@ var "lt2" @@ var "l")
 
-adaptPrimitive :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Primitive -> Flow s Primitive)
+adaptPrimitive :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Primitive -> Prelude.Either String Primitive)
 adaptPrimitive = define "adaptPrimitive" $
   doc "Adapt a primitive to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "prim0" ~>
   "ts0" <~ Graph.primitiveType (var "prim0") $
-  "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
-  produce $ Graph.primitiveWithType (var "prim0") (var "ts1")
+  "ts1" <<= adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
+  right $ Graph.primitiveWithType (var "prim0") (var "ts1")
 
 -- Note: this function could be made more efficient through precomputation of alternatives,
 --       similar to what is done for literals.
-adaptTerm :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Term -> Flow Graph Term)
+adaptTerm :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Context -> Graph -> Term -> Prelude.Either String Term)
 adaptTerm = define "adaptTerm" $
   doc "Adapt a term using the given language constraints" $
-  "constraints" ~> "litmap" ~> "term0" ~>
+  "constraints" ~> "litmap" ~> "cx" ~> "graph" ~> "term0" ~>
   "rewrite" <~ ("recurse" ~> "term0" ~> lets [
     "forSupported">: ("term" ~> cases _Term (var "term")
-      (Just $ produce $ just $ var "term") [
+      (Just $ right $ just $ var "term") [
       _Term_literal>>: "l" ~>
         "lt" <~ Reflect.literalType @@ var "l" $
-        produce $ just $ Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
+        right $ just $ Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
           (var "term")
           (Core.termLiteral $ adaptLiteralValue @@ var "litmap" @@ var "lt" @@ var "l")]),
     "forUnsupported">: ("term" ~> lets [
       "forNonNull">: ("alts" ~>
-        "mterm" <<~ var "tryTerm" @@ Lists.head (var "alts") $
+        "mterm" <<= var "tryTerm" @@ Lists.head (var "alts") $
         optCases (var "mterm")
           (var "tryAlts" @@ Lists.tail (var "alts"))
-          ("t" ~> produce $ just $ var "t")),
+          ("t" ~> right $ just $ var "t")),
       "tryAlts">: ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
-        (produce nothing)
+        (right nothing)
         (var "forNonNull" @@ var "alts"))] $
-      "alts0" <<~ termAlternatives @@ var "term" $
+      "alts0" <<= termAlternatives @@ var "cx" @@ var "graph" @@ var "term" $
       var "tryAlts" @@ var "alts0"),
     "tryTerm">: ("term" ~>
       "supportedVariant" <~ Sets.member
@@ -370,25 +381,25 @@ adaptTerm = define "adaptTerm" $
       Logic.ifElse (var "supportedVariant")
         (var "forSupported" @@ var "term")
         (var "forUnsupported" @@ var "term"))] $
-    "term1" <<~ var "recurse" @@ var "term0" $
+    "term1" <<= var "recurse" @@ var "term0" $
     -- Type application/lambda wrappers pass through unconditionally.
     -- fsub already recursed into their bodies; we must not strip the wrappers
     -- because they carry type information needed by typeOf in the coders.
     cases _Term (var "term1")
       (Just $
-        "mterm" <<~ var "tryTerm" @@ var "term1" $
+        "mterm" <<= var "tryTerm" @@ var "term1" $
         optCases (var "mterm")
-          (Flows.fail $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
-          ("term2" ~> produce $ var "term2"))
+          (left $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
+          ("term2" ~> right $ var "term2"))
       [_Term_typeApplication>>: "ta" ~>
-         "atyp" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ (Core.typeApplicationTermType $ var "ta") $
-         produce $ Core.termTypeApplication $ Core.typeApplicationTerm
+         "atyp" <<= adaptType @@ var "constraints" @@ var "litmap" @@ (Core.typeApplicationTermType $ var "ta") $
+         right $ Core.termTypeApplication $ Core.typeApplicationTerm
            (Core.typeApplicationTermBody $ var "ta")
            (var "atyp"),
-       _Term_typeLambda>>:      "_" ~> produce $ var "term1"]) $
+       _Term_typeLambda>>:      "_" ~> right $ var "term1"]) $
   Rewriting.rewriteTermM @@ var "rewrite" @@ var "term0"
 
-adaptType :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Flow s Type)
+adaptType :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> Type -> Prelude.Either String Type)
 adaptType = define "adaptType" $
   doc "Adapt a type using the given language constraints" $
   "constraints" ~> "litmap" ~> "type0" ~>
@@ -416,20 +427,20 @@ adaptType = define "adaptType" $
       (var "forSupported" @@ var "typ")
       (var "forUnsupported" @@ var "typ"))] $
   "rewrite" <~ ("recurse" ~> "typ" ~>
-    "type1" <<~ var "recurse" @@ var "typ" $
+    "type1" <<= var "recurse" @@ var "typ" $
     optCases (var "tryType" @@ var "type1")
-      (Flows.fail $ (string "no alternatives for type: ") ++ (ShowCore.type_ @@ var "typ"))
-      ("type2" ~> produce $ var "type2")) $
+      (left $ (string "no alternatives for type: ") ++ (ShowCore.type_ @@ var "typ"))
+      ("type2" ~> right $ var "type2")) $
   Rewriting.rewriteTypeM @@ var "rewrite" @@ var "type0"
 
-adaptTypeScheme :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> TypeScheme -> Flow s TypeScheme)
+adaptTypeScheme :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralType -> TypeScheme -> Prelude.Either String TypeScheme)
 adaptTypeScheme = define "adaptTypeScheme" $
   doc "Adapt a type scheme to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "ts0" ~>
   "vars0" <~ Core.typeSchemeVariables (var "ts0") $
   "t0" <~ Core.typeSchemeType (var "ts0") $
-  "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
-  produce $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
+  "t1" <<= adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
+  right $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
 
 pushTypeAppsInward :: TBinding (Term -> Term)
 pushTypeAppsInward = define "pushTypeAppsInward" $
@@ -534,7 +545,7 @@ pushTypeAppsInward = define "pushTypeAppsInward" $
         (var "go" @@ (Core.wrappedTermBody $ var "wt"))])] $
   var "go" @@ var "term"
 
-dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Graph -> [Namespace] -> Flow s (Graph, [[TermDefinition]]))
+dataGraphToDefinitions :: TBinding (LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Graph -> [Namespace] -> Context -> Prelude.Either String (Graph, [[TermDefinition]]))
 dataGraphToDefinitions = define "dataGraphToDefinitions" $
   doc ("Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces,"
     <> " adapt the graph to the language constraints,"
@@ -549,7 +560,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     <> " The originalBindings parameter provides the original ordered bindings (from module elements).") $
   "constraints" ~>
   "doInfer" ~> "doExpand" ~> "doHoistCaseStatements" ~> "doHoistPolymorphicLetBindings" ~>
-  "originalBindings" ~> "graph0" ~> "namespaces" ~>
+  "originalBindings" ~> "graph0" ~> "namespaces" ~> "cx" ~>
 
   "namespacesSet" <~ Sets.fromList (var "namespaces") $
 
@@ -589,8 +600,8 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
     "untypedBindings" <~ Lists.map ("b" ~> Core.unName (Core.bindingName $ var "b"))
       (Lists.filter ("b" ~> Logic.not $ Maybes.isJust (Core.bindingType $ var "b")) (var "bindings")) $
     Logic.ifElse (Lists.null $ var "untypedBindings")
-      (produce $ var "bindings")
-      (Flows.fail $ Strings.concat [
+      (right $ var "bindings")
+      (left $ Strings.concat [
         string "Found untyped bindings (", var "debugLabel", string "): ",
         Strings.intercalate (string ", ") (var "untypedBindings")])) $
 
@@ -618,26 +629,27 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
 
   -- Step 2: infer types if necessary
   -- inferGraphTypes now takes ordered bindings and returns (Graph, [Binding])
-  "bins2" <<~ Logic.ifElse (var "doInfer")
-     (Flows.map ("result" ~> Pairs.second (var "result"))
-       (Inference.inferGraphTypes @@ var "bins1" @@ (var "rebuildGraph" @@ var "bins1")))
+  "bins2" <<= Logic.ifElse (var "doInfer")
+     (Eithers.map ("result" ~> Pairs.second (Pairs.first (var "result")))
+       (Eithers.bimap formatOtherError ("x" ~> var "x")
+         (Inference.inferGraphTypes @@ var "cx" @@ var "bins1" @@ (var "rebuildGraph" @@ var "bins1"))))
      (var "checkBindingsTyped" @@ string "after case hoisting" @@ var "bins1") $
 
   -- Step 3: hoist let bindings if necessary (currently, for the Java target)
-  "bins3" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
+  "bins3" <<= Logic.ifElse (var "doHoistPolymorphicLetBindings")
     (var "checkBindingsTyped" @@ string "after let hoisting"
       @@ (var "hoistPoly" @@ var "bins2"))
-    (produce $ var "bins2") $
+    (right $ var "bins2") $
 
   -- Step 4: adapt the graph (includes eta expansion if enabled).
   -- Adaptation preserves type application/lambda wrappers and adapts embedded types
   -- (literal types, lambda domains, TypeSchemes).
   -- Pass ordered bins3 to adaptDataGraph so it uses them instead of graphToBindings.
   -- adaptDataGraph returns (Graph, [Binding]) preserving binding order.
-  "adaptResult" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "bins3" @@ (var "rebuildGraph" @@ var "bins3") $
+  "adaptResult" <<= adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "bins3" @@ var "cx" @@ (var "rebuildGraph" @@ var "bins3") $
   "adapted" <~ Pairs.first (var "adaptResult") $
   "adaptedBindings" <~ Pairs.second (var "adaptResult") $
-  "bins4" <<~ var "checkBindingsTyped" @@ (string "after adaptation") @@ var "adaptedBindings" $
+  "bins4" <<= var "checkBindingsTyped" @@ (string "after adaptation") @@ var "adaptedBindings" $
 
   -- Step 5: normalize bindings
   "bins5" <~ var "normalizeBindings" @@ var "bins4" $
@@ -673,7 +685,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       Maybes.cat (Lists.map (var "toDef") (var "elsForNs")))
     (var "namespaces") $
 
-  produce $ pair
+  right $ pair
     (Graph.graphWithSchemaTypes
       (Lexical.buildGraph @@ var "bins5" @@ Maps.empty @@ Graph.graphPrimitives (var "adapted"))
       (Graph.graphSchemaTypes (var "adapted")))
@@ -694,43 +706,42 @@ literalTypeSupported = define "literalTypeSupported" $
     (var "forType" @@ var "lt")
     false
 
-schemaGraphToDefinitions :: TBinding (LanguageConstraints -> Graph -> [[Name]] -> Flow s (M.Map Name Type, [[TypeDefinition]]))
+schemaGraphToDefinitions :: TBinding (LanguageConstraints -> Graph -> [[Name]] -> Context -> Prelude.Either String (M.Map Name Type, [[TypeDefinition]]))
 schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
   doc ("Given a schema graph along with language constraints and a designated list of element names,"
     <> " adapt the graph to the language constraints,"
     <> " then return a corresponding type definition for each element name.") $
-  "constraints" ~> "graph" ~> "nameLists" ~>
+  "constraints" ~> "graph" ~> "nameLists" ~> "cx" ~>
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
-  "tmap0" <<~ Schemas.graphAsTypes @@ (Lexical.graphToBindings @@ var "graph") $
-  "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
+  "tmap0" <<= Eithers.bimap formatDecodingError ("x" ~> var "x") (Schemas.graphAsTypes @@ var "cx" @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
+  "tmap1" <<= adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
   "toDef" <~ ("pair" ~> Module.typeDefinition (Pairs.first $ var "pair") (Pairs.second $ var "pair")) $
-  produce $ pair
+  right $ pair
     (var "tmap1")
     (Lists.map
       ("names" ~> Lists.map (var "toDef") $
         Lists.map ("n" ~> pair (var "n") (Maybes.fromJust $ Maps.lookup (var "n") (var "tmap1"))) (var "names"))
       (var "nameLists"))
---  Flows.fail $ "schema graph for definitions: " ++ (ShowGraph.graph @@ var "graph")
 
-termAlternatives :: TBinding (Term -> Flow Graph [Term])
+termAlternatives :: TBinding (Context -> Graph -> Term -> Prelude.Either String [Term])
 termAlternatives = define "termAlternatives" $
   doc "Find a list of alternatives for a given term, if any" $
-  "term" ~> cases _Term (var "term")
-    (Just $ produce $ list ([] :: [TTerm Term])) [
+  "cx" ~> "graph" ~> "term" ~> cases _Term (var "term")
+    (Just $ right $ list ([] :: [TTerm Term])) [
     _Term_annotated>>: "at" ~>
       "term2" <~ Core.annotatedTermBody (var "at") $
-      produce $ list [
+      right $ list [
         var "term2"], -- TODO: lossy
-    _Term_maybe>>: "ot" ~> produce $ list [
+    _Term_maybe>>: "ot" ~> right $ list [
       Core.termList $ optCases (var "ot")
         (list ([] :: [TTerm Term]))
         ("term2" ~> list [var "term2"])],
     _Term_typeLambda>>: "abs" ~>
       "term2" <~ Core.typeLambdaBody (var "abs") $
-      produce $ list [var "term2"],
+      right $ list [var "term2"],
     _Term_typeApplication>>: "ta" ~>
       "term2" <~ Core.typeApplicationTermBody (var "ta") $
-      produce $ list [var "term2"],
+      right $ list [var "term2"],
     _Term_union>>: "inj" ~>
       "tname" <~ Core.injectionTypeName (var "inj") $
       "field" <~ Core.injectionField (var "inj") $
@@ -741,14 +752,14 @@ termAlternatives = define "termAlternatives" $
         Core.field (var "fname") $ Core.termMaybe $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
           (just $ var "fterm")
           (nothing)) $
-      "rt" <<~ Schemas.requireUnionType @@ var "tname" $
-      produce $ list [
+      "rt" <<= Eithers.bimap formatOtherError ("x" ~> var "x") (Schemas.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") $
+      right $ list [
         Core.termRecord $ Core.record (var "tname") (Lists.map (var "forFieldType") (Core.rowTypeFields $ var "rt"))],
-    _Term_unit>>: constant $ produce $ list [
+    _Term_unit>>: constant $ right $ list [
       Core.termLiteral $ Core.literalBoolean true],
     _Term_wrap>>: "wt" ~>
       "term2" <~ Core.wrappedTermBody (var "wt") $
-      produce $ list [
+      right $ list [
          var "term2"]]
 
 typeAlternatives :: TBinding (Type -> [Type])

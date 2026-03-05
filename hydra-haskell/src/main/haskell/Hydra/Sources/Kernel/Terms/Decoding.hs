@@ -19,7 +19,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -48,6 +47,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
+import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
@@ -112,6 +112,10 @@ module_ = Module ns elements
 
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_
+
+-- | Bridge helper: format InContext DecodingError as a string
+formatDecodingError :: TTerm (InContext DecodingError -> String)
+formatDecodingError = "ic" ~> Error.unDecodingError @@ Ctx.inContextObject (var "ic")
 
 --------------------------------------------------------------------------------
 -- Helper functions
@@ -419,18 +423,17 @@ decoderFullResultType = define "decoderFullResultType" $
       Core.typeVariable (Core.wrappedTypeTypeName (var "wt"))]
 
 -- | Decode a single type binding into a decoder binding
--- Uses Flow to decode the Type from the binding's term, then generates decoder
-decodeBinding :: TBinding (Binding -> Flow Graph Binding)
+-- Decodes the Type from the binding's term, then generates decoder
+decodeBinding :: TBinding (Context -> Graph -> Binding -> Either (InContext DecodingError) Binding)
 decodeBinding = define "decodeBinding" $
   doc "Transform a type binding into a decoder binding" $
-  "b" ~>
-    "graph" <<~ Monads.getState $
-    Flows.bind (Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) $
+  "cx" ~> "graph" ~> "b" ~>
+    Eithers.bind (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
       "typ" ~>
-      Flows.pure (Core.binding
+      right (Core.binding
         (decodeBindingName @@ (Core.bindingName (var "b")))
         (decodeType @@ (var "typ"))
-        (just (decoderTypeScheme @@ var "typ")))
+        (just (decoderTypeScheme @@ var "typ"))))
 
 -- | Generate a fully qualified binding name for a decoder function from a type name
 -- For example, "hydra.util.CaseConvention" -> "hydra.decode.util.caseConvention"
@@ -520,15 +523,18 @@ decodeLiteralType = define "decodeLiteralType" $
 
 -- | Transform a type module into a decoder module
 -- Returns Nothing if the module has no decodable type definitions
-decodeModule :: TBinding (Module -> Flow Graph (Maybe Module))
+decodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContext OtherError) (Maybe Module))
 decodeModule = define "decodeModule" $
   doc "Transform a type module into a decoder module" $
-  "mod" ~>
-    "typeBindings" <<~ (filterTypeBindings @@ (Module.moduleElements (var "mod"))) $
+  "cx" ~> "graph" ~> "mod" ~>
+    "typeBindings" <<= (filterTypeBindings @@ var "cx" @@ var "graph" @@ (Module.moduleElements (var "mod"))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
-      (Flows.pure nothing)
-      (Flows.bind (Flows.mapList decodeBinding (var "typeBindings")) $
-        "decodedBindings" ~>
+      (right nothing)
+      ("decodedBindings" <<= Eithers.mapList ("b" ~>
+        Eithers.bimap
+          ("ic" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
+          ("x" ~> var "x")
+          (decodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- Decoder modules need:
         -- 1. hydra.lexical (for strip_and_dereference_term_either)
         -- 2. hydra.rewriting (for rewriting utilities)
@@ -540,7 +546,7 @@ decodeModule = define "decodeModule" $
         "decodedTermDeps" <~ (Lists.map decodeNamespace (Module.moduleTermDependencies (var "mod"))) $
         -- Use nub to remove duplicates (a module may appear in both type and term dependencies)
         "allDecodedDeps" <~ (primitive _lists_nub @@ Lists.concat2 (var "decodedTypeDeps") (var "decodedTermDeps")) $
-        Flows.pure (just (Module.module_
+        right (just (Module.module_
           (decodeNamespace @@ (Module.moduleNamespace (var "mod")))
           (var "decodedBindings")
           (Lists.concat2
@@ -763,19 +769,18 @@ decodeWrappedType = define "decodeWrappedType" $
           @@@ (DC.project _WrappedTerm _WrappedTerm_body @@@ DC.var "wrappedTerm"))]
 
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: TBinding ([Binding] -> Flow Graph [Binding])
+filterTypeBindings :: TBinding (Context -> Graph -> [Binding] -> Prelude.Either (InContext OtherError) [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only decodable type definitions" $
-  "bindings" ~>
-  Flows.map (primitive _maybes_cat) $
-    Flows.mapList isDecodableBinding $
+  "cx" ~> "graph" ~> "bindings" ~>
+  Eithers.map (primitive _maybes_cat) $
+    Eithers.mapList (isDecodableBinding @@ var "cx" @@ var "graph") $
       primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Check if a binding is decodable and return Just binding if so, Nothing otherwise
-isDecodableBinding :: TBinding (Binding -> Flow Graph (Maybe Binding))
+isDecodableBinding :: TBinding (Context -> Graph -> Binding -> Prelude.Either (InContext OtherError) (Maybe Binding))
 isDecodableBinding = define "isDecodableBinding" $
   doc "Check if a binding is decodable (serializable type)" $
-  "b" ~>
-  Flows.map
-    ("serializable" ~> Logic.ifElse (var "serializable") (just (var "b")) nothing)
-    (Schemas.isSerializableByName @@ (Core.bindingName (var "b")))
+  "cx" ~> "graph" ~> "b" ~>
+    "serializable" <<= Schemas.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
+    right (Logic.ifElse (var "serializable") (just (var "b")) nothing)

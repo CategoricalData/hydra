@@ -19,7 +19,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -47,6 +46,8 @@ import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
 import qualified Hydra.Dsl.Meta.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
+import qualified Hydra.Dsl.Meta.Context      as Ctx
+import qualified Hydra.Dsl.Meta.Error        as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -61,6 +62,7 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
 import qualified Hydra.Sources.Kernel.Terms.Inference as Inference
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
@@ -75,7 +77,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
+    [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns, Monads.ns,
       Rewriting.ns,
       Schemas.ns, ShowCore.ns]
     kernelTypesNamespaces $
@@ -95,6 +97,15 @@ module_ = Module ns elements
      toBinding termIsClosed,
      toBinding termIsValue]
 
+formatOtherError :: TTerm (InContext OtherError -> String)
+formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+
+formatError :: TTerm (InContext Error -> String)
+formatError = "_fic" ~> cases _Error (Ctx.inContextObject $ var "_fic") Nothing [
+  _Error_decoding>>: "_de" ~> Error.unDecodingError @@ var "_de",
+  _Error_other>>: "_oe" ~> Error.unOtherError @@ var "_oe",
+  _Error_unification>>: "_ue" ~> Error.unificationErrorMessage (var "_ue")]
+
 alphaConvert :: TBinding (Name -> Name -> Term -> Term)
 alphaConvert = define "alphaConvert" $
   doc "Alpha convert a variable in a term" $
@@ -103,32 +114,32 @@ alphaConvert = define "alphaConvert" $
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: TBinding (Type -> Flow Graph Type)
+betaReduceType :: TBinding (Context -> Graph -> Type -> Prelude.Either String Type)
 betaReduceType = define "betaReduceType" $
   doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
-  "typ" ~>
+  "cx" ~> "graph" ~> "typ" ~>
   "reduceApp" <~ ("app" ~>
     "lhs" <~ Core.applicationTypeFunction (var "app") $
     "rhs" <~ Core.applicationTypeArgument (var "app") $
     cases _Type (var "lhs") Nothing [
       _Type_annotated>>: "at" ~>
-        "a" <<~ var "reduceApp" @@ (Core.applicationType
+        "a" <<= var "reduceApp" @@ (Core.applicationType
           (Core.annotatedTypeBody $ var "at")
           (var "rhs")) $
-        Flows.pure $ Core.typeAnnotated $ Core.annotatedType (var "a") (Core.annotatedTypeAnnotation $ var "at"),
+        right $ Core.typeAnnotated $ Core.annotatedType (var "a") (Core.annotatedTypeAnnotation $ var "at"),
       _Type_forall>>: "ft" ~>
-        betaReduceType @@ (Rewriting.replaceFreeTypeVariable
+        betaReduceType @@ var "cx" @@ var "graph" @@ (Rewriting.replaceFreeTypeVariable
           @@ (Core.forallTypeParameter $ var "ft")
           @@ var "rhs"
           @@ (Core.forallTypeBody $ var "ft")),
       _Type_variable>>: "name" ~>
-        "t'" <<~ Schemas.requireType @@ var "name" $
-        betaReduceType @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))]) $
+        "t'" <<= Eithers.bimap formatOtherError ("x" ~> var "x") (Schemas.requireType @@ var "cx" @@ var "graph" @@ var "name") $
+        betaReduceType @@ var "cx" @@ var "graph" @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))]) $
   "mapExpr" <~ ("recurse" ~> "t" ~>
     "findApp" <~ ("r" ~> cases _Type (var "r")
-      (Just $ Flows.pure $ var "r") [
+      (Just $ right $ var "r") [
       _Type_application>>: "a" ~> var "reduceApp" @@ var "a"]) $
-    "r" <<~ var "recurse" @@ var "t" $
+    "r" <<= var "recurse" @@ var "t" $
     var "findApp" @@ var "r") $
   Rewriting.rewriteTypeM @@ var "mapExpr" @@ var "typ"
 
@@ -207,7 +218,7 @@ etaExpandTerm = define "etaExpandTerm" $
 -- for all in-scope variables.
 --
 -- The key differences from etaExpandTypedTerm:
--- 1. Pure (no Flow monad needed) because we look up types directly from the context
+-- 1. Pure because we look up types directly from the context
 -- 2. Manually tracks Graph when entering lambdas, lets, and type lambdas
 -- 3. Preserves existing type annotations where possible
 etaExpandTermNew :: TBinding (Graph -> Term -> Term)
@@ -557,7 +568,7 @@ etaExpansionArity = define "etaExpansionArity" $
           ("b" ~> Core.bindingType $ var "b"))]
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
-etaExpandTypedTerm :: TBinding (Graph -> Term -> Flow s Term)
+etaExpandTypedTerm :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Term)
 etaExpandTypedTerm = define "etaExpandTypedTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x',"
     <> " eliminating partial application. Variable references are not expanded."
@@ -566,40 +577,41 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     <> " It also assumes that type inference has already been performed."
     <> " After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added."
     ) $
-  "tx0" ~> "term0" ~>
+  "cx" ~> "tx0" ~> "term0" ~>
   "rewrite" <~ ("topLevel" ~> "forced" ~> "typeArgs" ~> "recurse" ~> "tx" ~> "term" ~>
     "rewriteSpine" <~ ("term" ~> cases _Term (var "term")
       (Just $ var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ var "term") [
       _Term_annotated>>: "at" ~>
-        "body" <<~ var "rewriteSpine" @@ Core.annotatedTermBody (var "at") $
+        "body" <<= var "rewriteSpine" @@ Core.annotatedTermBody (var "at") $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
-        produce (Core.termAnnotated $ Core.annotatedTerm (var "body") (var "ann")),
+        right (Core.termAnnotated $ Core.annotatedTerm (var "body") (var "ann")),
       _Term_application>>: "a" ~>
         "l" <~ Logic.ifElse false (list [Core.typeLiteral Core.literalTypeString]) (list ([] :: [TTerm Type])) $ -- TODO: hack for type checking
-        "lhs" <<~ var "rewriteSpine" @@ Core.applicationFunction (var "a") $
-        "rhs" <<~ var "rewrite" @@ true @@ false @@ var "l" @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
-        produce (Core.termApplication $ Core.application (var "lhs") (var "rhs")),
+        "lhs" <<= var "rewriteSpine" @@ Core.applicationFunction (var "a") $
+        "rhs" <<= var "rewrite" @@ true @@ false @@ var "l" @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
+        right (Core.termApplication $ Core.application (var "lhs") (var "rhs")),
       _Term_typeApplication>>: "tat" ~>
-        "body" <<~ var "rewriteSpine" @@ Core.typeApplicationTermBody (var "tat") $
+        "body" <<= var "rewriteSpine" @@ Core.typeApplicationTermBody (var "tat") $
         "typ" <~ Core.typeApplicationTermType (var "tat") $
-        produce (Core.termTypeApplication $ Core.typeApplicationTerm (var "body") (var "typ"))]) $
+        right (Core.termTypeApplication $ Core.typeApplicationTerm (var "body") (var "typ"))]) $
 
     -- Arity as provided by type checking, but with exceptions which give us the desired behavior for
     -- targets including Python. Remove the special cases and see which regression tests fail.
     -- TODO: this function is moving toward "syntactic" arity which does not require type checking; only
     --       type lookups.
     "arityOf" <~ ("tx" ~> "term" ~>
-      "dflt" <~ Flows.map Arity.typeArity (Checking.typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "term") $
+      "dflt" <~ (Eithers.map ("_tc" ~> Arity.typeArity @@ Pairs.first (var "_tc"))
+          (Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "term")) $
       "forFunction" <~ ("tx" ~> "f" ~> cases _Function (var "f")
         Nothing [
-        _Function_elimination>>: constant $ produce $ int32 1,
+        _Function_elimination>>: constant $ right $ int32 1,
         _Function_lambda>>: "l" ~>
           "txl" <~ Schemas.extendGraphForLambda @@ var "tx" @@ var "l" $
           var "arityOf" @@ var "txl" @@ Core.lambdaBody (var "l"),
-        _Function_primitive>>: "name" ~> Flows.map
-          (Arity.typeSchemeArity)
-          (Lexical.requirePrimitiveType @@ var "tx" @@ var "name")]) $
---      trace ("arityOf(" ++ (ShowCore.term @@ var "term") ++ ")") $
+        _Function_primitive>>: "name" ~>
+          Eithers.map
+          ("_ts" ~> Arity.typeSchemeArity @@ var "_ts")
+          (Lexical.requirePrimitiveType @@ var "cx" @@ var "tx" @@ var "name")]) $
       cases _Term (var "term")
         (Just $ var "dflt") [
         _Term_annotated>>: "at" ~> var "arityOf" @@ var "tx" @@ Core.annotatedTermBody (var "at"),
@@ -617,12 +629,10 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         _Term_variable>>: "name" ~> optCases (Maybes.map (Rewriting.typeSchemeToFType) $ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tx"))
           -- Variable not in graphBoundTypes; use typeOf with CURRENT context and variable term as fallback
           -- This can happen with local let bindings that aren't yet in scope during eta expansion
-          (Flows.map Arity.typeArity (Checking.typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ Core.termVariable (var "name")))
-          ("t" ~> produce $ Arity.typeArity @@ var "t")]) $
+          (Eithers.map ("_tc" ~> Arity.typeArity @@ Pairs.first (var "_tc"))
+            (Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TTerm Type]) @@ Core.termVariable (var "name")))
+          ("t" ~> right $ Arity.typeArity @@ var "t")]) $
 
---    "arityOf" <~ ("term" ~> Flows.map
---      (Arity.typeArity)
---      (Checking.typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "term")) $
 
     "extraVariables" <~ ("n" ~> Lists.map ("i" ~> Core.name $ Strings.cat2 (string "v") (Literals.showInt32 $ var "i")) $
       Math.range (int32 1) (var "n")) $
@@ -639,17 +649,17 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       (var "term") (var "typeArgs")) $
 
     "forceExpansion" <~ ("t" ~>
-      "typ" <<~ Checking.typeOf @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "t" $
-      "arity" <~ Arity.typeArity @@ var "typ" $
-      produce $ var "padn" @@ var "arity" @@ (var "unwind" @@ var "t")) $
+      "typCx" <<= Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "t" $
+      "arity" <~ Arity.typeArity @@ Pairs.first (var "typCx") $
+      right $ var "padn" @@ var "arity" @@ (var "unwind" @@ var "t")) $
 
     "recurseOrForce" <~ ("term" ~> Logic.ifElse (var "forced")
       (var "forceExpansion" @@ var "term")
       (var "recurse" @@ var "tx" @@ (var "unwind" @@ var "term"))) $
 
     "forCase" <~ ("f" ~>
-      "r" <<~ var "rewrite" @@ false @@ true @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
-      produce $ Core.fieldWithTerm (var "r") (var "f")) $
+      "r" <<= var "rewrite" @@ false @@ true @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
+      right $ Core.fieldWithTerm (var "r") (var "f")) $
 
     -- Forcing case statement branches is intended for Python, where we cannot accept a branch which is simply
     -- a variable or a primitive reference; we need to expand these to lambdas.
@@ -658,17 +668,17 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       "tname" <~ Core.caseStatementTypeName (var "cs") $
       "dflt" <~ Core.caseStatementDefault (var "cs") $
       "cases" <~ Core.caseStatementCases (var "cs") $
-      "rdflt" <<~ Flows.mapMaybe (var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx") (var "dflt") $
-      "rcases" <<~ Flows.mapList (var "forCase") (var "cases") $
-      produce $ Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
+      "rdflt" <<= Eithers.mapMaybe (var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx") (var "dflt") $
+      "rcases" <<= Eithers.mapList (var "forCase") (var "cases") $
+      right $ Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
         Core.caseStatement (var "tname") (var "rdflt") (var "rcases")) $
 
     "forElimination" <~ ("elm" ~>
       "checkBase" <~ ("elm" ~> cases _Elimination (var "elm")
         (Just $ var "recurse" @@ var "tx" @@ var "term") [
         _Elimination_union>>: "cs" ~> var "forCaseStatement" @@ var "cs"]) $
-      "base" <<~ Flows.map (var "unwind") (var "checkBase" @@ var "elm") $
-      produce $ Logic.ifElse (Logic.or (var "topLevel") (var "forced"))
+      "base" <<= Eithers.map (var "unwind") (var "checkBase" @@ var "elm") $
+      right $ Logic.ifElse (Logic.or (var "topLevel") (var "forced"))
         (var "padn" @@ int32 1 @@ var "base")
         (var "base")) $
 
@@ -677,11 +687,11 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       _Term_application>>: "a" ~>
         "lhs" <~ Core.applicationFunction (var "a") $
         "rhs" <~ Core.applicationArgument (var "a") $
-        "rhs2" <<~ var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ var "rhs" $
-        "lhsarity" <<~ var "arityOf" @@ var "tx" @@ var "lhs" $
-        "lhs2" <<~ var "rewriteSpine" @@ var "lhs" $
+        "rhs2" <<= var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ var "rhs" $
+        "lhsarity" <<= var "arityOf" @@ var "tx" @@ var "lhs" $
+        "lhs2" <<= var "rewriteSpine" @@ var "lhs" $
         "a2" <~ Core.termApplication (Core.application (var "lhs2") (var "rhs2")) $
-        produce $ Logic.ifElse (Equality.gt (var "lhsarity") (int32 1))
+        right $ Logic.ifElse (Equality.gt (var "lhsarity") (int32 1))
           (var "padn" @@ (Math.sub (var "lhsarity") (int32 1)) @@ var "a2")
           (var "a2"),
       _Term_function>>: "f" ~> cases _Function (var "f")
@@ -689,7 +699,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
         _Function_elimination>>: "elm" ~> var "forElimination" @@ var "elm",
         _Function_lambda>>: "l" ~>
           "txl" <~ Schemas.extendGraphForLambda @@ var "tx" @@ var "l" $
-           Flows.map (var "unwind") (var "recurse" @@ var "txl" @@ var "term")],
+           Eithers.map (var "unwind") (var "recurse" @@ var "txl" @@ var "term")],
       _Term_let>>: "l" ~>
         "txlt" <~ Schemas.extendGraphForLet @@ constant (constant nothing) @@ var "tx" @@ var "l" $
         var "recurse" @@ var "txlt" @@ var "term",
@@ -700,7 +710,6 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       _Term_typeLambda>>: "tl" ~>
         "txt" <~ Schemas.extendGraphForTypeLambda @@ var "tx" @@ var "tl" $
         var "recurse" @@ var "txt" @@ var "term"]) $
---  trace ("term0: " ++ (ShowCore.term @@ var "term0")) $
   Rewriting.rewriteTermWithContextM @@ (var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type])) @@ var "tx0" @@ var "term0"
 
 etaReduceTerm :: TBinding (Term -> Term)
@@ -742,11 +751,11 @@ etaReduceTerm = define "etaReduceTerm" $
         (Just $ var "noChange") [
         _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]]
 
-reduceTerm :: TBinding (Bool -> Term -> Flow Graph Term)
+reduceTerm :: TBinding (Context -> Graph -> Bool -> Term -> Prelude.Either (InContext OtherError) Term)
 reduceTerm = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
-  "eager" ~> "term" ~>
-  "reduce" <~ ("eager" ~> reduceTerm @@ var "eager") $
+  "cx" ~> "graph" ~> "eager" ~> "term" ~>
+  "reduce" <~ ("eager" ~> reduceTerm @@ var "cx" @@ var "graph" @@ var "eager") $
   "doRecurse" <~ ("eager" ~> "term" ~>
     "isNonLambda" <~ ("f" ~> cases _Function (var "f")
       (Just true) [
@@ -759,7 +768,7 @@ reduceTerm = define "reduceTerm" $
     Logic.and (var "eager") (var "isNonLambdaTerm")) $
   "reduceArg" <~ ("eager" ~> "arg" ~>
     Logic.ifElse (var "eager")
-      (Flows.pure $ var "arg")
+      (right $ var "arg")
       (var "reduce" @@ false @@ var "arg")) $
   "applyToArguments" <~ ("fun" ~> "args" ~>
     Logic.ifElse (Lists.null $ var "args")
@@ -767,94 +776,100 @@ reduceTerm = define "reduceTerm" $
       (var "applyToArguments" @@
         (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
         (Lists.tail $ var "args"))) $
+  "mapErrorToOtherError" <~ ("ic" ~>
+    Ctx.inContext
+      (Error.otherError (cases _Error (Ctx.inContextObject $ var "ic") Nothing [
+        _Error_decoding>>: "_de" ~> Error.unDecodingError @@ var "_de",
+        _Error_other>>: "_oe" ~> Error.unOtherError @@ var "_oe",
+        _Error_unification>>: "_ue" ~> Error.unificationErrorMessage (var "_ue")]))
+      (Ctx.inContextContext $ var "ic")) $
   "applyElimination" <~ ("elm" ~> "reducedArg" ~>
     cases _Elimination (var "elm") Nothing [
       _Elimination_record>>: "proj" ~>
-        "fields" <<~ ExtractCore.record @@ (Core.projectionTypeName $ var "proj") @@ (Rewriting.deannotateTerm @@ var "reducedArg") $
+        "fields" <<= ExtractCore.record @@ var "cx" @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Rewriting.deannotateTerm @@ var "reducedArg") $
         "matchingFields" <~ Lists.filter
           ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
           (var "fields") $
         Logic.ifElse
           (Lists.null $ var "matchingFields")
-          (Flows.fail $ Strings.cat $ list [
+          (Ctx.failInContext (Error.otherError (Strings.cat $ list [
             string "no such field: ",
             unwrap _Name @@ (Core.projectionField $ var "proj"),
             string " in ",
             unwrap _Name @@ (Core.projectionTypeName $ var "proj"),
-            string " record"])
-          (Flows.pure $ Core.fieldTerm $ Lists.head $ var "matchingFields"),
+            string " record"])) (var "cx"))
+          (right $ Core.fieldTerm $ Lists.head $ var "matchingFields"),
       _Elimination_union>>: "cs" ~>
-        "field" <<~ ExtractCore.injection @@ (Core.caseStatementTypeName $ var "cs") @@ var "reducedArg" $
+        "field" <<= ExtractCore.injection @@ var "cx" @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
         "matchingFields" <~ Lists.filter
           ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
           (Core.caseStatementCases $ var "cs") $
         Logic.ifElse (Lists.null $ var "matchingFields")
           (Maybes.maybe
-            (Flows.fail $ Strings.cat $ list [
+            (Ctx.failInContext (Error.otherError (Strings.cat $ list [
               string "no such field ",
               unwrap _Name @@ (Core.fieldName $ var "field"),
               string " in ",
               unwrap _Name @@ (Core.caseStatementTypeName $ var "cs"),
-              string " case statement"])
-            (unaryFunction Flows.pure)
+              string " case statement"])) (var "cx"))
+            (unaryFunction right)
             (Core.caseStatementDefault $ var "cs"))
-          (Flows.pure $ Core.termApplication $ Core.application
+          (right $ Core.termApplication $ Core.application
             (Core.fieldTerm $ Lists.head $ var "matchingFields")
             (Core.fieldTerm $ var "field")),
-      _Elimination_wrap>>: "name" ~> ExtractCore.wrap @@ var "name" @@ var "reducedArg"]) $
+      _Elimination_wrap>>: "name" ~> ExtractCore.wrap @@ var "cx" @@ var "name" @@ var "graph" @@ var "reducedArg"]) $
   "applyIfNullary" <~ ("eager" ~> "original" ~> "args" ~>
     "stripped" <~ Rewriting.deannotateTerm @@ var "original" $
     "forElimination" <~ ("elm" ~> "args" ~>
       "arg" <~ Lists.head (var "args") $
       "remainingArgs" <~ Lists.tail (var "args") $
-      "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Rewriting.deannotateTerm @@ var "arg") $
-      "reducedResult" <<~ Flows.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager") $
+      "reducedArg" <<= var "reduceArg" @@ var "eager" @@ (Rewriting.deannotateTerm @@ var "arg") $
+      "reducedResult" <<= Eithers.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager") $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     "forLambda" <~ ("l" ~> "args" ~>
       "param" <~ Core.lambdaParameter (var "l") $
       "body" <~ Core.lambdaBody (var "l") $
       "arg" <~ Lists.head (var "args") $
       "remainingArgs" <~ Lists.tail (var "args") $
-      "reducedArg" <<~ var "reduce" @@ var "eager" @@ (Rewriting.deannotateTerm @@ var "arg") $
-      "reducedResult" <<~ var "reduce" @@ var "eager"
+      "reducedArg" <<= var "reduce" @@ var "eager" @@ (Rewriting.deannotateTerm @@ var "arg") $
+      "reducedResult" <<= var "reduce" @@ var "eager"
         @@ (Rewriting.replaceFreeTermVariable @@ var "param" @@ var "reducedArg" @@ var "body") $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     "forPrimitive" <~ ("prim" ~> "arity" ~> "args" ~>
       "argList" <~ Lists.take (var "arity") (var "args") $
       "remainingArgs" <~ Lists.drop (var "arity") (var "args") $
-      "reducedArgs" <<~ Flows.mapList (var "reduceArg" @@ var "eager") (var "argList") $
+      "reducedArgs" <<= Eithers.mapList (var "reduceArg" @@ var "eager") (var "argList") $
       -- Strip annotations from reduced args so primitives can extract values properly
       "strippedArgs" <~ Lists.map Rewriting.deannotateTerm (var "reducedArgs") $
-      "reducedResult" <<~ Flows.bind
-        (Graph.primitiveImplementation (var "prim") @@ var "strippedArgs")
-        (var "reduce" @@ var "eager") $
+      "primResult" <<= Eithers.bimap (var "mapErrorToOtherError") ("x" ~> var "x") (Graph.primitiveImplementation (var "prim") @@ var "cx" @@ var "graph" @@ var "strippedArgs") $
+      "reducedResult" <<= var "reduce" @@ var "eager" @@ var "primResult" $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     cases _Term (var "stripped")
-      (Just $ Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args") [
+      (Just $ right $ var "applyToArguments" @@ var "original" @@ var "args") [
       _Term_application>>: "app" ~> var "applyIfNullary" @@ var "eager" @@
         (Core.applicationFunction $ var "app") @@
         (Lists.cons (Core.applicationArgument $ var "app") (var "args")),
       _Term_function>>: match _Function Nothing [
           _Function_elimination>>: "elm" ~>
             Logic.ifElse (Lists.null $ var "args")
-              (Flows.pure $ var "original")
+              (right $ var "original")
               (var "forElimination" @@ var "elm" @@ var "args"),
           _Function_lambda>>: "l" ~>
             Logic.ifElse (Lists.null $ var "args")
-              (Flows.pure $ var "original")
+              (right $ var "original")
               (var "forLambda" @@ var "l" @@ var "args"),
           _Function_primitive>>: "name" ~>
-            "prim" <<~ Lexical.requirePrimitive @@ var "name" $
+            "prim" <<= Lexical.requirePrimitive @@ var "cx" @@ var "graph" @@ var "name" $
             "arity" <~ Arity.primitiveArity @@ var "prim" $
             Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
-              (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
+              (right $ var "applyToArguments" @@ var "original" @@ var "args")
               (var "forPrimitive" @@ var "prim" @@ var "arity" @@ var "args")],
       _Term_variable>>: "v" ~>
         -- Look up the variable in the graph; if found, reduce its definition
-        "mBinding" <<~ Lexical.dereferenceElement @@ var "v" $
+        "mBinding" <~ Lexical.dereferenceElement @@ var "graph" @@ var "v" $
         Maybes.maybe
           -- Not found: lambda-bound variable, return with args applied
-          (Flows.pure $ var "applyToArguments" @@ var "original" @@ var "args")
+          (right $ var "applyToArguments" @@ var "original" @@ var "args")
           -- Found: reduce the element's term with the accumulated args
           ("binding" ~> var "applyIfNullary" @@ var "eager" @@ (Core.bindingTerm $ var "binding") @@ var "args")
           (var "mBinding"),
@@ -887,12 +902,12 @@ reduceTerm = define "reduceTerm" $
         "substituteAll" <~ ("bs" ~> "term" ~>
           Lists.foldl (var "substituteBinding") (var "term") (var "bs")) $
         "expandedBody" <~ var "substituteAll" @@ var "expandedBindings" @@ var "body" $
-        "reducedBody" <<~ var "reduce" @@ var "eager" @@ var "expandedBody" $
+        "reducedBody" <<= var "reduce" @@ var "eager" @@ var "expandedBody" $
         var "applyIfNullary" @@ var "eager" @@ var "reducedBody" @@ var "args"]) $
   "mapping" <~ ("recurse" ~> "mid" ~>
-    "inner" <<~ Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
+    "inner" <<= Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
       (var "recurse" @@ var "mid")
-      (Flows.pure $ var "mid") $
+      (right $ var "mid") $
     var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list ([] :: [TTerm Term]))) $
   Rewriting.rewriteTermM @@ var "mapping" @@ var "term"
 

@@ -19,7 +19,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -48,6 +47,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Meta.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
+import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
@@ -105,16 +105,19 @@ module_ = Module ns elements
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_
 
+-- | Bridge helper: format InContext DecodingError as a string
+formatDecodingError :: TTerm (InContext DecodingError -> String)
+formatDecodingError = "ic" ~> Error.unDecodingError @@ Ctx.inContextObject (var "ic")
+
 -- | Encode a single type binding into an encoder binding
 -- This decodes the term to a Type, then generates an encoder function
-encodeBinding :: TBinding (Binding -> Flow Graph Binding)
+encodeBinding :: TBinding (Context -> Graph -> Binding -> Either (InContext DecodingError) Binding)
 encodeBinding = define "encodeBinding" $
   doc "Transform a type binding into an encoder binding" $
-  "b" ~>
-    "graph" <<~ Monads.getState $
-    Flows.bind (Monads.eitherToFlow_ @@ Error.unDecodingError @@ (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
+  "cx" ~> "graph" ~> "b" ~>
+    Eithers.bind (Ctx.withContext (var "cx") (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b")))) (
       "typ" ~>
-      Flows.pure (Core.binding
+      right (Core.binding
         (encodeBindingName @@ (Core.bindingName (var "b")))
         (encodeType @@ (var "typ"))
         nothing))
@@ -197,18 +200,21 @@ encodeLiteralType = define "encodeLiteralType" $
 
 -- | Transform a type module into an encoder module
 -- Returns Nothing if the module has no encodable type definitions
-encodeModule :: TBinding (Module -> Flow Graph (Maybe Module))
+encodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContext OtherError) (Maybe Module))
 encodeModule = define "encodeModule" $
   doc "Transform a type module into an encoder module" $
-  "mod" ~>
-    "typeBindings" <<~ (filterTypeBindings @@ (Module.moduleElements (var "mod"))) $
+  "cx" ~> "graph" ~> "mod" ~>
+    "typeBindings" <<= (filterTypeBindings @@ var "cx" @@ var "graph" @@ (Module.moduleElements (var "mod"))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
-      (Flows.pure nothing)
-      (Flows.bind (Flows.mapList encodeBinding (var "typeBindings")) (
-        "encodedBindings" ~>
+      (right nothing)
+      ("encodedBindings" <<= Eithers.mapList ("b" ~>
+        Eithers.bimap
+          ("ic" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
+          ("x" ~> var "x")
+          (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- The encoder module depends on encoder modules for the type dependencies
         -- E.g., hydra.encode.module depends on hydra.encode.core
-        Flows.pure (just (Module.module_
+        right (just (Module.module_
           (encodeNamespace @@ (Module.moduleNamespace (var "mod")))
           (var "encodedBindings")
           -- Transform each type dependency namespace to its encoder namespace
@@ -217,7 +223,7 @@ encodeModule = define "encodeModule" $
           (list [Module.moduleNamespace (var "mod")])
           (just (Strings.cat $ list [
             string "Term encoders for ",
-            Module.unNamespace (Module.moduleNamespace (var "mod"))]))))))
+            Module.unNamespace (Module.moduleNamespace (var "mod"))])))))
 
 -- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
 encodeName :: TBinding (Name -> Term)
@@ -350,23 +356,22 @@ encodeWrappedType = define "encodeWrappedType" $
 
 -- | Filter bindings to only encodable type definitions
 -- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)
-filterTypeBindings :: TBinding ([Binding] -> Flow Graph [Binding])
+filterTypeBindings :: TBinding (Context -> Graph -> [Binding] -> Prelude.Either (InContext OtherError) [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only encodable type definitions" $
-  "bindings" ~>
+  "cx" ~> "graph" ~> "bindings" ~>
     -- First filter to native types, then check serializability for each
-    Flows.map (primitive _maybes_cat) $
-      Flows.mapList isEncodableBinding $
+    Eithers.map (primitive _maybes_cat) $
+      Eithers.mapList (isEncodableBinding @@ var "cx" @@ var "graph") $
         primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Check if a binding is encodable and return Just binding if so, Nothing otherwise
-isEncodableBinding :: TBinding (Binding -> Flow Graph (Maybe Binding))
+isEncodableBinding :: TBinding (Context -> Graph -> Binding -> Prelude.Either (InContext OtherError) (Maybe Binding))
 isEncodableBinding = define "isEncodableBinding" $
   doc "Check if a binding is encodable (serializable type)" $
-  "b" ~>
-    Flows.map
-      ("serializable" ~> Logic.ifElse (var "serializable") (just (var "b")) nothing)
-      (Schemas.isSerializableByName @@ (Core.bindingName (var "b")))
+  "cx" ~> "graph" ~> "b" ~>
+    "serializable" <<= Schemas.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
+    right (Logic.ifElse (var "serializable") (just (var "b")) nothing)
 
 -- | Check whether a type is the unit type
 isUnitType_ :: TBinding (Type -> Bool)
