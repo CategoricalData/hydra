@@ -478,10 +478,10 @@ testCodec = define "TestCodec" $
       Module.fileExtension,
     "encodeTerm">:
       doc "A function for encoding Hydra terms into the target language" $
-      Core.term ~> Compute.flow @@ Graph.graph @@ T.string,
+      Core.term ~> Graph.graph ~> T.either_ T.string T.string,
     "encodeType">:
       doc "A function for encoding Hydra types into the target language" $
-      Core.type_ ~> Compute.flow @@ Graph.graph @@ T.string,
+      Core.type_ ~> Graph.graph ~> T.either_ T.string T.string,
     "formatTestName">:
       doc "A function for formatting test case names according to the target language's conventions" $
       T.string ~> T.string,
@@ -542,7 +542,7 @@ testCase = define "TestCase" $
       doc "A type inference failure test"
       inferenceFailureTestCase,
     "jsonCoder">:
-      doc "A JSON coder (round-trip) test using Flow-based coder"
+      doc "A JSON coder (round-trip) test"
       jsonCoderTestCase,
     "jsonDecode">:
       doc "A JSON decode test using Either-based decoder"
