@@ -1,11 +1,8 @@
 package hydra.lib.strings;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -18,6 +15,10 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Converts a list of character code points to a string.
@@ -45,10 +46,10 @@ public class FromList extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
-            Flow<Graph, List<Integer>> list = Expect.list(Expect::int32, args.get(0));
-            return Flows.map(list, l -> Terms.string(FromList.apply(l)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> {
+            Either<InContext<OtherError>, List<Integer>> list = hydra.extract.core.Core.listOf(cx, t -> hydra.extract.core.Core.int32(cx, graph, t), graph, args.get(0));
+            return hydra.lib.eithers.Map.apply(l -> Terms.string(FromList.apply(l)), list);
         };
     }
 

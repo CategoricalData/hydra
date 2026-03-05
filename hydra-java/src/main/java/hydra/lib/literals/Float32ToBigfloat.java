@@ -1,11 +1,8 @@
 package hydra.lib.literals;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
@@ -17,6 +14,10 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Primitive function which converts a float32 (32-bit floating-point) to a bigfloat (arbitrary-precision decimal).
@@ -45,8 +46,8 @@ public class Float32ToBigfloat extends PrimitiveFunction {
      * @return a function that converts float32 terms to bigfloat terms
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.float32(args.get(0)), s -> Terms.bigfloat(apply(s)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.bigfloat(apply(s)), hydra.extract.core.Core.float32(cx, graph, args.get(0)));
     }
 
     /**

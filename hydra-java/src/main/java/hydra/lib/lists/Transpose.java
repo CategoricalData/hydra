@@ -1,11 +1,8 @@
 package hydra.lib.lists;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
@@ -15,10 +12,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -35,26 +35,26 @@ public class Transpose extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.bind(Expect.list(Flows::pure, args.get(0)), outerList -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(0)), outerList -> {
             // Parse each inner list
-            Flow<Graph, List<List<Term>>> matrixFlow = pure(new ArrayList<>());
+            Either<InContext<OtherError>, List<List<Term>>> matrixFlow = Either.right(new ArrayList<>());
             for (Term inner : outerList) {
-                matrixFlow = Flows.bind(matrixFlow, acc ->
-                    Flows.map(Expect.list(Flows::pure, inner), row -> {
+                matrixFlow = hydra.lib.eithers.Bind.apply(matrixFlow, acc ->
+                    hydra.lib.eithers.Map.apply(row -> {
                         List<List<Term>> newAcc = new ArrayList<>(acc);
                         newAcc.add(row);
                         return newAcc;
-                    }));
+                    }, hydra.extract.core.Core.list(cx, graph, inner)));
             }
-            return Flows.map(matrixFlow, matrix -> {
+            return hydra.lib.eithers.Map.apply(matrix -> {
                 List<List<Term>> transposed = apply(matrix);
                 List<Term> result = new ArrayList<>();
                 for (List<Term> row : transposed) {
                     result.add(Terms.list(row));
                 }
                 return Terms.list(result);
-            });
+            }, matrixFlow);
         });
     }
 

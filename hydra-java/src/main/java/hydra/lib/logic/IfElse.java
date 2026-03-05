@@ -1,11 +1,8 @@
 package hydra.lib.logic;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
@@ -17,6 +14,10 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Performs conditional branching based on a boolean condition.
@@ -42,12 +43,12 @@ public class IfElse extends PrimitiveFunction {
     }
 
     /**
-     * Returns the implementation of this primitive function as a Flow computation.
-     * @return a function that takes a list of terms and returns a Flow producing the selected value
+     * Returns the implementation of this primitive function as an Either computation.
+     * @return a function that takes a list of terms and returns an Either producing the selected value
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.boolean_(args.get(0)), b -> IfElse.apply(b, args.get(1), args.get(2)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(b -> IfElse.apply(b, args.get(1), args.get(2)), hydra.extract.core.Core.boolean_(cx, graph, args.get(0)));
     }
 
     /**

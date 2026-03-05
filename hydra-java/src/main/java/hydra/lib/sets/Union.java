@@ -1,11 +1,8 @@
 package hydra.lib.sets;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
@@ -19,6 +16,10 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Computes the union of two sets.
@@ -46,11 +47,8 @@ public class Union extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map2(
-                Expect.set(Flows::pure, args.get(0)),
-                Expect.set(Flows::pure, args.get(1)),
-                (s1, s2) -> Terms.set(apply(s1, s2)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.set(cx, graph, args.get(0)), s1 -> hydra.lib.eithers.Map.apply(s2 -> Terms.set(apply(s1, s2)), hydra.extract.core.Core.set(cx, graph, args.get(1))));
     }
 
     /**

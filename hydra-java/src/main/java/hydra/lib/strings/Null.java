@@ -1,10 +1,8 @@
 package hydra.lib.strings;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -12,11 +10,14 @@ import hydra.tools.PrimitiveFunction;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.map;
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Determines whether a string is empty (null check).
@@ -44,8 +45,8 @@ public class Null extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> map(Expect.string(args.get(0)), s -> Terms.boolean_(apply(s)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.boolean_(apply(s)), hydra.extract.core.Core.string(cx, graph, args.get(0)));
     }
 
     /**

@@ -1,11 +1,8 @@
 package hydra.lib.literals;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -16,6 +13,10 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Primitive function which converts a string to its quoted string literal representation.
@@ -44,8 +45,8 @@ public class ShowString extends PrimitiveFunction {
      * @return a function that converts string terms to quoted string literal terms
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.string(args.get(0)), (Function<String, Term>) s -> Terms.string(apply(s)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<String, Term>) s -> Terms.string(apply(s)), hydra.extract.core.Core.string(cx, graph, args.get(0)));
     }
 
     /**

@@ -1,11 +1,8 @@
 package hydra.lib.maybes;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
@@ -13,11 +10,13 @@ import hydra.util.Maybe;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.bind;
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -46,10 +45,10 @@ public class FromMaybe extends PrimitiveFunction {
      * @return a function that extracts the value from an optional or returns a default
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(pure(args.get(0)), defaultTerm ->
-            bind(Expect.optional(Flows::pure, args.get(1)), opt ->
-                pure(opt.isJust() ? opt.fromJust() : defaultTerm)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(Either.right(args.get(0)), defaultTerm ->
+            hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(1)), opt ->
+                Either.right(opt.isJust() ? opt.fromJust() : defaultTerm)));
     }
 
     /**

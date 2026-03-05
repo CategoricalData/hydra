@@ -1,10 +1,8 @@
 package hydra.lib.maybes;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -13,11 +11,13 @@ import hydra.util.Maybe;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.bind;
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -47,9 +47,8 @@ public class Map extends PrimitiveFunction {
      * @return a function that maps a function over an optional value
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.optional(instance -> pure(Terms.apply(args.get(0), instance)), args.get(1)),
-            opt -> pure(Terms.optional(opt)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, instance -> Either.right(Terms.apply(args.get(0), instance)), graph, args.get(1)), opt -> Either.right(Terms.optional(opt)));
     }
 
     /**

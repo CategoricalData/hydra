@@ -1,11 +1,8 @@
 package hydra.lib.maybes;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -17,24 +14,20 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
  * Composes two Maybe-returning functions.
  */
 public class Compose extends PrimitiveFunction {
-    /**
-     * Returns the name of this primitive function.
-     * @return the name "hydra.lib.maybes.compose"
-     */
     public Name name() {
         return new Name("hydra.lib.maybes.compose");
     }
 
-    /**
-     * Returns the type scheme of this primitive function.
-     * @return the type scheme for composing two optional-returning functions
-     */
     @Override
     public TypeScheme type() {
         return scheme("a", "b", "c",
@@ -43,25 +36,26 @@ public class Compose extends PrimitiveFunction {
                         function("a", optional("c"))));
     }
 
-    /**
-     * Returns the implementation of this primitive function.
-     * @return a function that composes two Maybe-returning functions
-     */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.bind(Flows.<Graph>getState(), graph -> {
-            Function<Term, Maybe<Term>> nativeF = val -> {
-                Term reduced = Flows.fromFlow(graph,
-                    hydra.reduction.Reduction.reduceTerm(true, Terms.apply(args.get(0), val)));
-                return Flows.fromFlow(graph, Expect.optional(Flows::pure, reduced));
-            };
-            Function<Term, Maybe<Term>> nativeG = val -> {
-                Term reduced = Flows.fromFlow(graph,
-                    hydra.reduction.Reduction.reduceTerm(true, Terms.apply(args.get(1), val)));
-                return Flows.fromFlow(graph, Expect.optional(Flows::pure, reduced));
-            };
-            return Flows.pure(Terms.optional(Compose.apply(nativeF, nativeG, args.get(2))));
-        });
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> {
+            Function<Term, Either<InContext<OtherError>, Maybe<Term>>> nativeF = val ->
+                hydra.lib.eithers.Bind.apply(
+                    hydra.reduction.Reduction.reduceTerm(hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), val)),
+                    reduced -> hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
+            Function<Term, Either<InContext<OtherError>, Maybe<Term>>> nativeG = val ->
+                hydra.lib.eithers.Bind.apply(
+                    hydra.reduction.Reduction.reduceTerm(hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(1), val)),
+                    reduced -> hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
+            return hydra.lib.eithers.Bind.apply(nativeF.apply(args.get(2)), maybeB -> {
+                if (!maybeB.isJust()) {
+                    return Either.right(Terms.optional(Maybe.nothing()));
+                }
+                return hydra.lib.eithers.Map.apply(
+                    m -> Terms.optional(m),
+                    nativeG.apply(maybeB.fromJust()));
+            });
+        };
     }
 
     /**

@@ -1,7 +1,5 @@
 package hydra.lib.sets;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
@@ -17,6 +15,10 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -45,8 +47,8 @@ public class Empty extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return ignored -> Flows.pure(Terms.set(apply()));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return ignored -> cx -> graph -> Either.right(Terms.set(apply()));
     }
 
     /**

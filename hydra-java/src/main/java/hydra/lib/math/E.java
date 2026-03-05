@@ -1,10 +1,8 @@
 package hydra.lib.math;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -14,6 +12,10 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.float64;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -42,8 +44,8 @@ public class E extends PrimitiveFunction {
      * @return a function that maps terms to a flow of terms
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.pure(Terms.float64(apply()));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> Either.right(Terms.float64(apply()));
     }
 
     /**

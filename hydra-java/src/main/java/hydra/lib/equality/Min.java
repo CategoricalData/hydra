@@ -1,7 +1,5 @@
 package hydra.lib.equality;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
@@ -14,6 +12,10 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -30,11 +32,11 @@ public class Min extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> {
             // Simple comparison based on term structure
             int cmp = args.get(0).toString().compareTo(args.get(1).toString());
-            return Flows.pure(cmp <= 0 ? args.get(0) : args.get(1));
+            return Either.right(cmp <= 0 ? args.get(0) : args.get(1));
         };
     }
 

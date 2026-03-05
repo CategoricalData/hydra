@@ -1,11 +1,8 @@
 package hydra.lib.maybes;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -15,10 +12,13 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.map2;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -48,12 +48,14 @@ public class Apply extends PrimitiveFunction {
      * @return a function that applies an optional function to an optional argument
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> map2(Expect.optional(Flows::pure, args.get(0)), Expect.optional(Flows::pure, args.get(1)),
-            (BiFunction<Maybe<Term>, Maybe<Term>, Term>) (optionalF, optionalArg) ->
-                (optionalF.isJust() && optionalArg.isJust())
-                    ? Terms.optional(Maybe.just(Terms.apply(optionalF.fromJust(), optionalArg.fromJust())))
-                    : Terms.optional(Maybe.nothing()));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph ->
+            hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), optionalF ->
+                hydra.lib.eithers.Map.apply(optionalArg ->
+                    (optionalF.isJust() && optionalArg.isJust())
+                        ? Terms.optional(Maybe.just(Terms.apply(optionalF.fromJust(), optionalArg.fromJust())))
+                        : Terms.optional(Maybe.nothing()),
+                    hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(1))));
     }
 
     /**

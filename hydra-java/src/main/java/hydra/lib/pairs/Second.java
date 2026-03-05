@@ -1,11 +1,8 @@
 package hydra.lib.pairs;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
@@ -17,6 +14,10 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -45,9 +46,8 @@ public class Second extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.pair(Flows::pure, Flows::pure, args.get(0)),
-                (Function<Pair<Term, Term>, Term>) pair -> apply(pair));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Pair<Term, Term>, Term>) pair -> apply(pair), hydra.extract.core.Core.pair(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

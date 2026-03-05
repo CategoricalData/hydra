@@ -1,11 +1,8 @@
 package hydra.lib.eithers;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -19,6 +16,10 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Extract all Right values from a list of Eithers.
@@ -37,10 +38,8 @@ public class Rights extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(
-            Expect.list(arg -> Expect.<Graph, Term, Term>either(arg), args.get(0)),
-            eithers -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(eithers -> {
                 List<Term> rights = new ArrayList<>();
                 for (hydra.util.Either<Term, Term> e : eithers) {
                     e.accept(new hydra.util.Either.Visitor<Term, Term, Void>() {
@@ -57,7 +56,7 @@ public class Rights extends PrimitiveFunction {
                     });
                 }
                 return new Term.List(rights);
-            });
+            }, hydra.extract.core.Core.listOf(cx, arg -> hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
     }
 
     /**

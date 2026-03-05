@@ -1,10 +1,8 @@
 package hydra.lib.math;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -15,11 +13,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static hydra.dsl.Flows.map2;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -48,11 +49,10 @@ public class Range extends PrimitiveFunction {
      * @return a function that maps terms to a flow of terms
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> map2(Expect.int32(args.get(0)), Expect.int32(args.get(1)),
-            (arg0, arg1) -> Terms.list(apply(arg0, arg1).stream()
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.int32(cx, graph, args.get(0)), arg0 -> hydra.lib.eithers.Map.apply(arg1 -> Terms.list(apply(arg0, arg1).stream()
                 .map(Terms::int32)
-                .collect(Collectors.toList())));
+                .collect(Collectors.toList())), hydra.extract.core.Core.int32(cx, graph, args.get(1))));
     }
 
     /**

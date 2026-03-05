@@ -1,11 +1,8 @@
 package hydra.lib.maybes;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -14,11 +11,13 @@ import hydra.util.Maybe;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.bind;
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -47,11 +46,11 @@ public class Cases extends PrimitiveFunction {
      * @return a function that performs pattern matching on optional values
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.optional(Flows::pure, args.get(0)), opt ->
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), opt ->
             opt.isJust()
-                ? pure(Terms.apply(args.get(2), opt.fromJust()))
-                : pure(args.get(1)));
+                ? Either.right(Terms.apply(args.get(2), opt.fromJust()))
+                : Either.right(args.get(1)));
     }
 
     /**

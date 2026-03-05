@@ -1,16 +1,14 @@
 package hydra.lib.lists;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,6 +16,10 @@ import java.util.stream.Collectors;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -35,17 +37,21 @@ public class Bind extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.bind(Flows.<Graph>getState(), graph ->
-            Flows.bind(Expect.list(Flows::pure, args.get(0)), argsArg -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(0)), argsArg -> {
                 Term mapping = args.get(1);
-                Function<Term, List<Term>> f = a -> {
-                    Term reduced = Flows.fromFlow(graph,
-                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(mapping, a)));
-                    return Flows.fromFlow(graph, Expect.list(Flows::pure, reduced));
-                };
-                return Flows.pure(Terms.list(Bind.apply(argsArg, f)));
-            }));
+                List<Term> allResults = new ArrayList<>();
+                for (Term a : argsArg) {
+                    Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(mapping, a));
+                    if (r.isLeft()) return (Either) r;
+                    Either<InContext<OtherError>, List<Term>> inner = hydra.extract.core.Core.list(cx, graph,
+                        ((Either.Right<InContext<OtherError>, Term>) r).value);
+                    if (inner.isLeft()) return (Either) inner;
+                    allResults.addAll(((Either.Right<InContext<OtherError>, List<Term>>) inner).value);
+                }
+                return Either.right(Terms.list(allResults));
+            });
     }
 
     /**

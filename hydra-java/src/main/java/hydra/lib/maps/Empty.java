@@ -1,7 +1,5 @@
 package hydra.lib.maps;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
@@ -17,6 +15,10 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Creates an empty map.
@@ -44,8 +46,8 @@ public class Empty extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return ignored -> Flows.pure(Terms.map(apply()));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return ignored -> cx -> graph -> Either.right(Terms.map(apply()));
     }
 
     /**

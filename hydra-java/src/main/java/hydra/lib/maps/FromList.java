@@ -1,11 +1,8 @@
 package hydra.lib.maps;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
@@ -17,13 +14,16 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
 
-import static hydra.dsl.Expect.list;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Creates a map from a list of pairs.
@@ -52,9 +52,8 @@ public class FromList extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(list(term -> Expect.pair(Flows::pure, Flows::pure, term), args.get(0)),
-                (Function<List<Pair<Term, Term>>, Term>) pairs -> new Term.Map(apply(pairs)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Pair<Term, Term>>, Term>) pairs -> new Term.Map(apply(pairs)), hydra.extract.core.Core.listOf(cx, term -> hydra.extract.core.Core.pair(cx, t -> Either.right(t), t -> Either.right(t), graph, term), graph, args.get(0)));
     }
 
     /**
