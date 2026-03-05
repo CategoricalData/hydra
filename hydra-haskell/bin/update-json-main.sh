@@ -10,4 +10,4 @@ stack build hydra:update-json-main
 
 echo ""
 echo "Running update-json-main..."
-stack exec update-json-main
+stack exec update-json-main -- --output-dir "$(pwd)/src/gen-main/json"

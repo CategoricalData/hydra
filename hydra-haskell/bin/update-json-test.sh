@@ -10,4 +10,4 @@ stack build hydra:update-json-test
 
 echo ""
 echo "Running update-json-test..."
-stack exec update-json-test
+stack exec update-json-test -- --output-dir "$(pwd)/src/gen-test/json"
