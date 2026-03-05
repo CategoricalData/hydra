@@ -1,14 +1,11 @@
 package hydra.pg;
 
-import hydra.dsl.Flows;
-// import hydra.basics.Basics; // TODO: restore when kernel terms modules are generated
-import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
 import hydra.compute.StatelessCoder;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
+import hydra.util.Either;
 import hydra.util.Maybe;
-import hydra.util.Unit;
 import hydra.dsl.LiteralTypes;
 import hydra.dsl.Literals;
 import hydra.pg.model.Edge;
@@ -41,18 +38,18 @@ public class Merging {
     public static final Merging.IdAdapters<LiteralType, Literal> STRING_ID_ADAPTERS
         = stringIdAdapters(
         LiteralTypes.string(),
-        new Function<Literal, Flow<Unit, String>>() {
+        new Function<Literal, Either<String, String>>() {
             @Override
-            public Flow<Unit, String> apply(Literal literal) {
+            public Either<String, String> apply(Literal literal) {
                 return literal.accept(new Literal.PartialVisitor<>() {
                     @Override
-                    public Flow<Unit, String> otherwise(Literal instance) {
-                        return Flows.unexpected("string literal", instance);
+                    public Either<String, String> otherwise(Literal instance) {
+                        return Either.left("Expected string literal, found " + instance);
                     }
 
                     @Override
-                    public Flow<Unit, String> visit(Literal.String_ instance) {
-                        return Flows.pure(instance.value);
+                    public Either<String, String> visit(Literal.String_ instance) {
+                        return Either.right(instance.value);
                     }
                 });
             }
@@ -67,20 +64,21 @@ public class Merging {
      * @param types the list of vertex types to merge
      * @param idAdapters the id adapters for encoding/decoding vertex and edge ids
      * @param unifyIdenticalTypes whether to unify identical property types across vertex types
-     * @return a flow producing a stateless adapter for the merged vertex type
+     * @return an Either containing a stateless adapter for the merged vertex type, or an error
      */
-    public static <T, V> Flow<Unit, StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>>
+    public static <T, V> Either<String, StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>>
     createVertexAdapter(List<VertexType<T>> types,
         IdAdapters<T, V> idAdapters,
         boolean unifyIdenticalTypes) {
-        return Flows.map(Flows.check(types,
-            Merging::checkNontrivial,
-            Merging::checkNoDuplicatedVertexLabels), safeTypes -> {
-            MergedEntity<VertexType<T>> mergedType = mergeVertexTypes(safeTypes, idAdapters, unifyIdenticalTypes);
-            return new StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>(
-                false, types, mergedType.entity,
-                constructMergedVertexCoder(safeTypes, idAdapters, mergedType.unifiedProperties));
-        });
+        Maybe<String> err1 = checkNontrivial(types);
+        if (err1.isJust()) return Either.left(err1.fromJust());
+        Maybe<String> err2 = checkNoDuplicatedVertexLabels(types);
+        if (err2.isJust()) return Either.left(err2.fromJust());
+
+        MergedEntity<VertexType<T>> mergedType = mergeVertexTypes(types, idAdapters, unifyIdenticalTypes);
+        return Either.right(new StatelessAdapter<List<VertexType<T>>, VertexType<T>, Vertex<V>, Vertex<V>>(
+            false, types, mergedType.entity,
+            constructMergedVertexCoder(types, idAdapters, mergedType.unifiedProperties)));
     }
 
     /**
@@ -91,20 +89,21 @@ public class Merging {
      * @param types the list of edge types to merge
      * @param idAdapters the id adapters for encoding/decoding vertex and edge ids
      * @param unifyIdenticalTypes whether to unify identical property types across edge types
-     * @return a flow producing a stateless adapter for the merged edge type
+     * @return an Either containing a stateless adapter for the merged edge type, or an error
      */
-    public static <T, V> Flow<Unit, StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>>
+    public static <T, V> Either<String, StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>>
     createEdgeAdapter(List<EdgeType<T>> types,
         IdAdapters<T, V> idAdapters,
         boolean unifyIdenticalTypes) {
-        return Flows.map(Flows.check(types,
-            Merging::checkNontrivial,
-            Merging::checkNoDuplicatedEdgeLabels), safeTypes -> {
-            MergedEntity<EdgeType<T>> mergedType = mergeEdgeTypes(safeTypes, idAdapters, unifyIdenticalTypes);
-            return new StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>(
-                false, types, mergedType.entity,
-                constructMergedEdgeCoder(safeTypes, idAdapters, mergedType.unifiedProperties));
-        });
+        Maybe<String> err1 = checkNontrivial(types);
+        if (err1.isJust()) return Either.left(err1.fromJust());
+        Maybe<String> err2 = checkNoDuplicatedEdgeLabels(types);
+        if (err2.isJust()) return Either.left(err2.fromJust());
+
+        MergedEntity<EdgeType<T>> mergedType = mergeEdgeTypes(types, idAdapters, unifyIdenticalTypes);
+        return Either.right(new StatelessAdapter<List<EdgeType<T>>, EdgeType<T>, Edge<V>, Edge<V>>(
+            false, types, mergedType.entity,
+            constructMergedEdgeCoder(types, idAdapters, mergedType.unifiedProperties)));
     }
 
     private static <A> Maybe<String> checkNontrivial(List<A> types) {
@@ -140,8 +139,18 @@ public class Merging {
         Map<VertexLabel, StatelessCoder<Vertex<V>, Vertex<V>>> coders
             = constructVertexCoders(types, idAdapters, unifiedPropertyKeys);
         return new StatelessCoder<Vertex<V>, Vertex<V>>(
-            v -> Flows.bind(getCoder(coders, v.label), coder -> coder.encode.apply(v)),
-            v -> Flows.bind(getCoder(coders, v.label), coder -> coder.decode.apply(v)));
+            v -> {
+                Either<String, StatelessCoder<Vertex<V>, Vertex<V>>> coderResult = getCoder(coders, v.label);
+                if (coderResult.isLeft()) return Either.left(((Either.Left<String, StatelessCoder<Vertex<V>, Vertex<V>>>) coderResult).value);
+                StatelessCoder<Vertex<V>, Vertex<V>> coder = ((Either.Right<String, StatelessCoder<Vertex<V>, Vertex<V>>>) coderResult).value;
+                return applyCoderEncode(coder, v);
+            },
+            v -> {
+                Either<String, StatelessCoder<Vertex<V>, Vertex<V>>> coderResult = getCoder(coders, v.label);
+                if (coderResult.isLeft()) return Either.left(((Either.Left<String, StatelessCoder<Vertex<V>, Vertex<V>>>) coderResult).value);
+                StatelessCoder<Vertex<V>, Vertex<V>> coder = ((Either.Right<String, StatelessCoder<Vertex<V>, Vertex<V>>>) coderResult).value;
+                return applyCoderDecode(coder, v);
+            });
     }
 
     private static <T, V> StatelessCoder<Edge<V>, Edge<V>> constructMergedEdgeCoder(
@@ -151,8 +160,46 @@ public class Merging {
         Map<EdgeLabel, StatelessCoder<Edge<V>, Edge<V>>> coders
             = constructEdgeCoders(types, idAdapters, unifiedPropertyKeys);
         return new StatelessCoder<Edge<V>, Edge<V>>(
-            e -> Flows.bind(getCoder(coders, e.label), coder -> coder.encode.apply(e)),
-            e -> Flows.bind(getCoder(coders, e.label), coder -> coder.decode.apply(e)));
+            e -> {
+                Either<String, StatelessCoder<Edge<V>, Edge<V>>> coderResult = getCoder(coders, e.label);
+                if (coderResult.isLeft()) return Either.left(((Either.Left<String, StatelessCoder<Edge<V>, Edge<V>>>) coderResult).value);
+                StatelessCoder<Edge<V>, Edge<V>> coder = ((Either.Right<String, StatelessCoder<Edge<V>, Edge<V>>>) coderResult).value;
+                return applyCoderEncode(coder, e);
+            },
+            e -> {
+                Either<String, StatelessCoder<Edge<V>, Edge<V>>> coderResult = getCoder(coders, e.label);
+                if (coderResult.isLeft()) return Either.left(((Either.Left<String, StatelessCoder<Edge<V>, Edge<V>>>) coderResult).value);
+                StatelessCoder<Edge<V>, Edge<V>> coder = ((Either.Right<String, StatelessCoder<Edge<V>, Edge<V>>>) coderResult).value;
+                return applyCoderDecode(coder, e);
+            });
+    }
+
+    /**
+     * Apply a StatelessCoder's encode function (via its Coder.encode, which takes Context).
+     */
+    private static <V> Either<String, V> applyCoderEncode(StatelessCoder<V, V> coder, V value) {
+        hydra.context.Context cx = new hydra.context.Context(
+            java.util.Collections.emptyList(), java.util.Collections.emptyList(), java.util.Collections.emptyMap());
+        hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V> result = coder.encode.apply(cx).apply(value);
+        if (result.isRight()) {
+            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.OtherError>, V>) result).value);
+        } else {
+            return Either.left(((Either.Left<hydra.context.InContext<hydra.error.OtherError>, V>) result).value.object.value);
+        }
+    }
+
+    /**
+     * Apply a StatelessCoder's decode function (via its Coder.decode, which takes Context).
+     */
+    private static <V> Either<String, V> applyCoderDecode(StatelessCoder<V, V> coder, V value) {
+        hydra.context.Context cx = new hydra.context.Context(
+            java.util.Collections.emptyList(), java.util.Collections.emptyList(), java.util.Collections.emptyMap());
+        hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V> result = coder.decode.apply(cx).apply(value);
+        if (result.isRight()) {
+            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.OtherError>, V>) result).value);
+        } else {
+            return Either.left(((Either.Left<hydra.context.InContext<hydra.error.OtherError>, V>) result).value.object.value);
+        }
     }
 
     private static <T, V> StatelessCoder<Vertex<V>, Vertex<V>> constructVertexCoder(
@@ -163,14 +210,24 @@ public class Merging {
             = constructPropertiesCoder(type.label.value, unifiedPropertyKeys);
 
         return new StatelessCoder<Vertex<V>, Vertex<V>>(
-            v -> Flows.map2(
-                idAdapters.forVertexId.apply(type.label).encode.apply(v.id),
-                propertiesCoder.encode.apply(v.properties),
-                (id, props) -> new Vertex<V>(v.label, id, props)),
-            v -> Flows.map2(
-                idAdapters.forVertexId.apply(type.label).decode.apply(v.id),
-                propertiesCoder.decode.apply(v.properties),
-                (id, props) -> new Vertex<V>(v.label, id, props)));
+            v -> {
+                Either<String, V> idResult = applyCoderEncode(idAdapters.forVertexId.apply(type.label), v.id);
+                if (idResult.isLeft()) return Either.left(((Either.Left<String, V>) idResult).value);
+                Either<String, Map<PropertyKey, V>> propsResult = applyCoderEncode(propertiesCoder, v.properties);
+                if (propsResult.isLeft()) return Either.left(((Either.Left<String, Map<PropertyKey, V>>) propsResult).value);
+                return Either.right(new Vertex<V>(v.label,
+                    ((Either.Right<String, V>) idResult).value,
+                    ((Either.Right<String, Map<PropertyKey, V>>) propsResult).value));
+            },
+            v -> {
+                Either<String, V> idResult = applyCoderDecode(idAdapters.forVertexId.apply(type.label), v.id);
+                if (idResult.isLeft()) return Either.left(((Either.Left<String, V>) idResult).value);
+                Either<String, Map<PropertyKey, V>> propsResult = applyCoderDecode(propertiesCoder, v.properties);
+                if (propsResult.isLeft()) return Either.left(((Either.Left<String, Map<PropertyKey, V>>) propsResult).value);
+                return Either.right(new Vertex<V>(v.label,
+                    ((Either.Right<String, V>) idResult).value,
+                    ((Either.Right<String, Map<PropertyKey, V>>) propsResult).value));
+            });
     }
 
     private static <T, V> StatelessCoder<Edge<V>, Edge<V>> constructEdgeCoder(
@@ -181,37 +238,55 @@ public class Merging {
             = constructPropertiesCoder(type.label.value, unifiedPropertyKeys);
 
         return new StatelessCoder<Edge<V>, Edge<V>>(
-            e -> Flows.map4(
-                idAdapters.forEdgeId.apply(type.label).encode.apply(e.id),
-                idAdapters.forVertexId.apply(type.out).encode.apply(e.out),
-                idAdapters.forVertexId.apply(type.in).encode.apply(e.in),
-                propertiesCoder.encode.apply(e.properties),
-                (id, outId, inId, props) -> new Edge<V>(e.label, id, outId, inId, props)),
-            e -> Flows.map4(
-                idAdapters.forEdgeId.apply(type.label).decode.apply(e.id),
-                idAdapters.forVertexId.apply(type.out).decode.apply(e.out),
-                idAdapters.forVertexId.apply(type.in).decode.apply(e.in),
-                propertiesCoder.decode.apply(e.properties),
-                (id, outId, inId, props) -> new Edge<V>(e.label, id, outId, inId, props)));
+            e -> {
+                Either<String, V> idResult = applyCoderEncode(idAdapters.forEdgeId.apply(type.label), e.id);
+                if (idResult.isLeft()) return Either.left(((Either.Left<String, V>) idResult).value);
+                Either<String, V> outResult = applyCoderEncode(idAdapters.forVertexId.apply(type.out), e.out);
+                if (outResult.isLeft()) return Either.left(((Either.Left<String, V>) outResult).value);
+                Either<String, V> inResult = applyCoderEncode(idAdapters.forVertexId.apply(type.in), e.in);
+                if (inResult.isLeft()) return Either.left(((Either.Left<String, V>) inResult).value);
+                Either<String, Map<PropertyKey, V>> propsResult = applyCoderEncode(propertiesCoder, e.properties);
+                if (propsResult.isLeft()) return Either.left(((Either.Left<String, Map<PropertyKey, V>>) propsResult).value);
+                return Either.right(new Edge<V>(e.label,
+                    ((Either.Right<String, V>) idResult).value,
+                    ((Either.Right<String, V>) outResult).value,
+                    ((Either.Right<String, V>) inResult).value,
+                    ((Either.Right<String, Map<PropertyKey, V>>) propsResult).value));
+            },
+            e -> {
+                Either<String, V> idResult = applyCoderDecode(idAdapters.forEdgeId.apply(type.label), e.id);
+                if (idResult.isLeft()) return Either.left(((Either.Left<String, V>) idResult).value);
+                Either<String, V> outResult = applyCoderDecode(idAdapters.forVertexId.apply(type.out), e.out);
+                if (outResult.isLeft()) return Either.left(((Either.Left<String, V>) outResult).value);
+                Either<String, V> inResult = applyCoderDecode(idAdapters.forVertexId.apply(type.in), e.in);
+                if (inResult.isLeft()) return Either.left(((Either.Left<String, V>) inResult).value);
+                Either<String, Map<PropertyKey, V>> propsResult = applyCoderDecode(propertiesCoder, e.properties);
+                if (propsResult.isLeft()) return Either.left(((Either.Left<String, Map<PropertyKey, V>>) propsResult).value);
+                return Either.right(new Edge<V>(e.label,
+                    ((Either.Right<String, V>) idResult).value,
+                    ((Either.Right<String, V>) outResult).value,
+                    ((Either.Right<String, V>) inResult).value,
+                    ((Either.Right<String, Map<PropertyKey, V>>) propsResult).value));
+            });
     }
 
     private static <V> StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>> constructPropertiesCoder(
         String label,
         Set<PropertyKey> unifiedPropertyKeys) {
-        Function<Map<PropertyKey, V>, Flow<Unit, Map<PropertyKey, V>>> encode = before -> {
+        Function<Map<PropertyKey, V>, Either<String, Map<PropertyKey, V>>> encode = before -> {
             Map<PropertyKey, V> after = new HashMap<PropertyKey, V>();
             for (Map.Entry<PropertyKey, V> entry : before.entrySet()) {
                 after.put(encodePropertyKey(label, entry.getKey(), unifiedPropertyKeys), entry.getValue());
             }
-            return Flows.pure(after);
+            return Either.right(after);
         };
 
-        Function<Map<PropertyKey, V>, Flow<Unit, Map<PropertyKey, V>>> decode = before -> {
+        Function<Map<PropertyKey, V>, Either<String, Map<PropertyKey, V>>> decode = before -> {
             Map<PropertyKey, V> after = new HashMap<PropertyKey, V>();
             for (Map.Entry<PropertyKey, V> entry : before.entrySet()) {
                 after.put(decodePropertyKey(label, entry.getKey(), unifiedPropertyKeys), entry.getValue());
             }
-            return Flows.pure(after);
+            return Either.right(after);
         };
 
         return new StatelessCoder<Map<PropertyKey, V>, Map<PropertyKey, V>>(encode, decode);
@@ -261,11 +336,11 @@ public class Merging {
         }
     }
 
-    private static <L, E> Flow<Unit, StatelessCoder<E, E>> getCoder(Map<L, StatelessCoder<E, E>> coders, L label) {
+    private static <L, E> Either<String, StatelessCoder<E, E>> getCoder(Map<L, StatelessCoder<E, E>> coders, L label) {
         StatelessCoder<E, E> helper = coders.get(label);
         return helper == null
-            ? Flows.fail("No coder associated with label " + label)
-            : Flows.pure(helper);
+            ? Either.left("No coder associated with label " + label)
+            : Either.right(helper);
     }
 
     private static <T, V> MergedEntity<VertexType<T>> mergeVertexTypes(List<VertexType<T>> types,
@@ -421,21 +496,33 @@ public class Merging {
      */
     public static <T, V> Merging.IdAdapters<T, V> stringIdAdapters(
         T stringType,
-        Function<V, Flow<Unit, String>> fromLiteral,
+        Function<V, Either<String, String>> fromLiteral,
         Function<String, V> toLiteral) {
         return new Merging.IdAdapters<>(
             stringType,
             stringType,
             label -> StatelessCoder.of(
-                literal -> Flows.map(fromLiteral.apply(literal),
-                    s -> toLiteral.apply(decapitalize(label.value) + "_" + s)),
-                literal -> Flows.map(fromLiteral.apply(literal),
-                    id -> toLiteral.apply(id.substring(label.value.length() + 1)))),
+                literal -> {
+                    Either<String, String> r = fromLiteral.apply(literal);
+                    if (r.isLeft()) return Either.left(((Either.Left<String, String>) r).value);
+                    return Either.right(toLiteral.apply(decapitalize(label.value) + "_" + ((Either.Right<String, String>) r).value));
+                },
+                literal -> {
+                    Either<String, String> r = fromLiteral.apply(literal);
+                    if (r.isLeft()) return Either.left(((Either.Left<String, String>) r).value);
+                    return Either.right(toLiteral.apply(((Either.Right<String, String>) r).value.substring(label.value.length() + 1)));
+                }),
             label -> StatelessCoder.of(
-                literal -> Flows.map(fromLiteral.apply(literal),
-                    s -> toLiteral.apply(decapitalize(label.value) + "_" + s)),
-                literal -> Flows.map(fromLiteral.apply(literal),
-                    id -> toLiteral.apply(id.substring(label.value.length() + 1)))));
+                literal -> {
+                    Either<String, String> r = fromLiteral.apply(literal);
+                    if (r.isLeft()) return Either.left(((Either.Left<String, String>) r).value);
+                    return Either.right(toLiteral.apply(decapitalize(label.value) + "_" + ((Either.Right<String, String>) r).value));
+                },
+                literal -> {
+                    Either<String, String> r = fromLiteral.apply(literal);
+                    if (r.isLeft()) return Either.left(((Either.Left<String, String>) r).value);
+                    return Either.right(toLiteral.apply(((Either.Right<String, String>) r).value.substring(label.value.length() + 1)));
+                }));
     }
 
     private static class MergedEntity<A> {

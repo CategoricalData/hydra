@@ -1,29 +1,37 @@
 package hydra.compute;
 
-import hydra.dsl.Flows;
-import hydra.util.Unit;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
+
+import java.util.function.Function;
 
 /**
- * A convenience class for stateless coders; we use Hydra's Unit as the state type.
- * Note: using Java's Void is problematic because of the interaction of Optional with null values.
+ * A convenience class for stateless coders that wraps simple encode/decode functions.
+ * Since Coder no longer has state type parameters, this class provides convenience
+ * constructors that accept simple functions and adapt them to the Coder signature
+ * (which takes a Context parameter and returns Either).
+ *
  * @param <V1> the source value type
  * @param <V2> the target value type
  */
-public class StatelessCoder<V1, V2> extends Coder<Unit, Unit, V1, V2> {
+public class StatelessCoder<V1, V2> extends Coder<V1, V2> {
 
     /**
-     * Construct a stateless coder.
+     * Construct a stateless coder from simple Either-based encode/decode functions.
+     * The Context parameter is ignored.
      * @param encode the encoding function
      * @param decode the decoding function
      */
     public StatelessCoder(
-            java.util.function.Function<V1, hydra.compute.Flow<Unit, V2>> encode,
-            java.util.function.Function<V2, hydra.compute.Flow<Unit, V1>> decode) {
-        super(encode, decode);
+            Function<V1, Either<String, V2>> encode,
+            Function<V2, Either<String, V1>> decode) {
+        super(toCoderFn(encode), toCoderFn(decode));
     }
 
     /**
-     * Construct a stateless coder.
+     * Construct a stateless coder from simple Either-based encode/decode functions.
      * @param <V1> the source value type
      * @param <V2> the target value type
      * @param encode the encoding function
@@ -31,8 +39,8 @@ public class StatelessCoder<V1, V2> extends Coder<Unit, Unit, V1, V2> {
      * @return a new stateless coder
      */
     public static <V1, V2> StatelessCoder<V1, V2> of(
-            java.util.function.Function<V1, hydra.compute.Flow<Unit, V2>> encode,
-            java.util.function.Function<V2, hydra.compute.Flow<Unit, V1>> decode) {
+            Function<V1, Either<String, V2>> encode,
+            Function<V2, Either<String, V1>> decode) {
         return new StatelessCoder<>(encode, decode);
     }
 
@@ -44,7 +52,24 @@ public class StatelessCoder<V1, V2> extends Coder<Unit, Unit, V1, V2> {
      * @return a new unidirectional coder
      */
     public static <V1, V2> StatelessCoder<V1, V2> unidirectional(
-            java.util.function.Function<V1, hydra.compute.Flow<Unit, V2>> encode) {
-        return StatelessCoder.of(encode, v2 -> Flows.fail("decoding is not supported"));
+            Function<V1, Either<String, V2>> encode) {
+        return StatelessCoder.of(encode, v2 -> Either.left("decoding is not supported"));
+    }
+
+    /**
+     * Convert a simple Either-based function to the Coder encode/decode signature.
+     * The Context parameter is ignored; Either Left strings are wrapped in InContext OtherError.
+     */
+    private static <A, B> Function<Context, Function<A, Either<InContext<OtherError>, B>>>
+            toCoderFn(Function<A, Either<String, B>> fn) {
+        return cx -> a -> {
+            Either<String, B> result = fn.apply(a);
+            if (result.isRight()) {
+                return Either.right(((Either.Right<String, B>) result).value);
+            } else {
+                String msg = ((Either.Left<String, B>) result).value;
+                return Either.left(new InContext<>(new OtherError(msg), cx));
+            }
+        };
     }
 }

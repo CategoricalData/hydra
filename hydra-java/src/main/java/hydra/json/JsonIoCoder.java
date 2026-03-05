@@ -1,79 +1,102 @@
 package hydra.json;
 
 import com.cedarsoftware.util.io.JsonObject;
-import hydra.dsl.Flows;
 import hydra.compute.Coder;
-import hydra.compute.Flow;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
 import hydra.json.model.Value;
+import hydra.util.Either;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * A bidirectional coder between Hydra's native JSON values and the JSON objects supported by json-io.
- *
- * @param <S1> the state type for encoding
- * @param <S2> the state type for decoding
  */
-public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
+public class JsonIoCoder extends Coder<Value, Object> {
     /**
      * Constructs a new JsonIoCoder.
      */
     public JsonIoCoder() {
-        super(JsonIoCoder::encode, JsonIoCoder::decode);
+        super(toCoderFn(JsonIoCoder::encode), toCoderFn(JsonIoCoder::decode));
+    }
+
+    /**
+     * Convert a simple Either-based function to the Coder's Context-based Either signature.
+     */
+    private static <A, B> java.util.function.Function<Context, java.util.function.Function<A, Either<InContext<OtherError>, B>>>
+            toCoderFn(java.util.function.Function<A, Either<String, B>> fn) {
+        return cx -> a -> {
+            Either<String, B> result = fn.apply(a);
+            if (result.isRight()) {
+                return Either.right(((Either.Right<String, B>) result).value);
+            } else {
+                String msg = ((Either.Left<String, B>) result).value;
+                return Either.left(new InContext<>(new OtherError(msg), cx));
+            }
+        };
     }
 
     /**
      * Encode a JSON value as a json-io object.
      *
-     * @param <S> the state type
      * @param value the JSON value to encode
-     * @return a flow containing the encoded json-io object
+     * @return an Either containing the encoded json-io object or an error message
      */
-    public static <S> Flow<S, Object> encode(Value value) {
-        return value.accept(new Value.Visitor<Flow<S, Object>>() {
+    public static Either<String, Object> encode(Value value) {
+        return value.accept(new Value.Visitor<Either<String, Object>>() {
             @Override
-            public Flow<S, Object> visit(Value.Array instance) {
-                return Flows.map(Flows.mapM(instance.value, JsonIoCoder::encode), List::toArray);
+            public Either<String, Object> visit(Value.Array instance) {
+                List<Object> list = new ArrayList<>();
+                for (Value v : instance.value) {
+                    Either<String, Object> r = encode(v);
+                    if (r.isLeft()) return Either.left(((Either.Left<String, Object>) r).value);
+                    list.add(((Either.Right<String, Object>) r).value);
+                }
+                return Either.right(list.toArray());
             }
 
             @Override
-            public Flow<S, Object> visit(Value.Boolean_ instance) {
-                return Flows.pure(instance.value);
+            public Either<String, Object> visit(Value.Boolean_ instance) {
+                return Either.right(instance.value);
             }
 
             @Override
-            public Flow<S, Object> visit(Value.Null instance) {
-                // Note: we return an object here rather than a null, as Hydra flows cannot accept nulls as values.
-                //       This is acceptable so long as we are only using the generated java-io objects internally,
+            public Either<String, Object> visit(Value.Null instance) {
+                // Note: we return an object here rather than a null, as Either cannot accept nulls as values.
+                //       This is acceptable so long as we are only using the generated json-io objects internally,
                 //       for serialization. See normalizeEncoded().
-                return Flows.pure(instance);
+                return Either.right(instance);
             }
 
             @Override
-            public Flow<S, Object> visit(Value.Number_ instance) {
-                // Value.Number_ now stores the number as a String, so we parse it back to Double
+            public Either<String, Object> visit(Value.Number_ instance) {
                 try {
-                    return Flows.pure(instance.value.doubleValue());
+                    return Either.right(instance.value.doubleValue());
                 } catch (NumberFormatException e) {
-                    return Flows.fail("Invalid number format: " + instance.value, e);
+                    return Either.left("Invalid number format: " + instance.value);
                 }
             }
 
             @Override
-            public Flow<S, Object> visit(Value.Object_ instance) {
-                return Flows.map(Flows.mapM(instance.value, Flows::pure, JsonIoCoder::encode), m -> {
-                    JsonObject obj = new JsonObject();
-                    obj.putAll(m);
-                    return obj;
-                });
+            public Either<String, Object> visit(Value.Object_ instance) {
+                JsonObject obj = new JsonObject();
+                for (Map.Entry<String, Value> entry : instance.value.entrySet()) {
+                    Either<String, Object> r = encode(entry.getValue());
+                    if (r.isLeft()) return Either.left(((Either.Left<String, Object>) r).value);
+                    obj.put(entry.getKey(), ((Either.Right<String, Object>) r).value);
+                }
+                return Either.right(obj);
             }
 
             @Override
-            public Flow<S, Object> visit(Value.String_ instance) {
-                return Flows.pure(instance.value);
+            public Either<String, Object> visit(Value.String_ instance) {
+                return Either.right(instance.value);
             }
         });
     }
@@ -81,27 +104,41 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
     /**
      * Decode a json-io object as a JSON value.
      *
-     * @param <S> the state type
      * @param value the json-io object to decode
-     * @return a flow containing the decoded JSON value
+     * @return an Either containing the decoded JSON value or an error message
      */
-    public static <S> Flow<S, Value> decode(Object value) {
+    public static Either<String, Value> decode(Object value) {
         if (value == null) {
-            return Flows.pure(new Value.Null());
+            return Either.right(new Value.Null());
         } else if (value.getClass().isArray()) {
             Object[] array = (Object[]) value;
-            return Flows.map(Flows.mapM(array, JsonIoCoder::decode), Value.Array::new);
+            List<Value> list = new ArrayList<>();
+            for (Object item : array) {
+                Either<String, Value> r = decode(item);
+                if (r.isLeft()) return Either.left(((Either.Left<String, Value>) r).value);
+                list.add(((Either.Right<String, Value>) r).value);
+            }
+            return Either.right(new Value.Array(list));
         } else if (value instanceof JsonObject) {
-            return Flows.map(Flows.mapM((Map<Object, Object>) value, JsonIoCoder::decodeKey, JsonIoCoder::decode),
-                    Value.Object_::new);
+            Map<String, Value> map = new LinkedHashMap<>();
+            Collection<Map.Entry<Object, Object>> entries = ((JsonObject) value).entrySet();
+            for (Map.Entry<Object, Object> entry : entries) {
+                Either<String, String> keyResult = decodeKey(entry.getKey());
+                if (keyResult.isLeft()) return Either.left(((Either.Left<String, String>) keyResult).value);
+                Either<String, Value> valResult = decode(entry.getValue());
+                if (valResult.isLeft()) return Either.left(((Either.Left<String, Value>) valResult).value);
+                map.put(((Either.Right<String, String>) keyResult).value,
+                        ((Either.Right<String, Value>) valResult).value);
+            }
+            return Either.right(new Value.Object_(map));
         } else if (value instanceof String) {
-            return Flows.pure(new Value.String_((String) value));
+            return Either.right(new Value.String_((String) value));
         } else if (value instanceof Boolean) {
-            return Flows.pure(new Value.Boolean_((Boolean) value));
+            return Either.right(new Value.Boolean_((Boolean) value));
         } else if (value instanceof Number) {
-            return Flows.pure(new Value.Number_(BigDecimal.valueOf(((Number) value).doubleValue())));
+            return Either.right(new Value.Number_(BigDecimal.valueOf(((Number) value).doubleValue())));
         } else {
-            return Flows.unexpected("object, array, string, boolean, or number", value.getClass().getName());
+            return Either.left("Expected object, array, string, boolean, or number, found " + value.getClass().getName());
         }
     }
 
@@ -137,15 +174,14 @@ public class JsonIoCoder<S1, S2> extends Coder<S1, S2, Value, Object> {
     /**
      * Decode a json-io object key as a string.
      *
-     * @param <S> the state type
      * @param key the key object to decode
-     * @return a flow containing the decoded string key
+     * @return an Either containing the decoded string key or an error message
      */
-    private static <S> Flow<S, String> decodeKey(Object key) {
+    private static Either<String, String> decodeKey(Object key) {
         if (key instanceof String) {
-            return Flows.pure((String) key);
+            return Either.right((String) key);
         } else {
-            return Flows.unexpected("string", key.getClass().getName());
+            return Either.left("Expected string, found " + key.getClass().getName());
         }
     }
 }

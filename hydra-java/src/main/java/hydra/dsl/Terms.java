@@ -1,6 +1,5 @@
 package hydra.dsl;
 
-import hydra.compute.FlowState;
 import hydra.core.AnnotatedTerm;
 import hydra.core.Application;
 import hydra.core.Binding;
@@ -1191,43 +1190,4 @@ public interface Terms {
         return tyapps(term, types);
     }
 
-    // ===== Flow monad helpers =====
-
-    /**
-     * Construct a flow state term (used with the Flow monad).
-     * @param value the value term
-     * @param state the state term
-     * @param trace the trace term
-     * @return the flow state term
-     */
-    static Term flowState(Term value, Term state, Term trace) {
-        return record(FlowState.TYPE_,
-                field(FlowState.VALUE, value),
-                field(FlowState.STATE, state),
-                field(FlowState.TRACE, trace));
-    }
-
-    /**
-     * Construct a value projection (used with the Flow monad).
-     * @return the value projection term
-     */
-    static Term flowStateValue() {
-        return project(FlowState.TYPE_, FlowState.VALUE);
-    }
-
-    /**
-     * Construct a state projection (used with the Flow monad).
-     * @return the state projection term
-     */
-    static Term flowStateState() {
-        return project(FlowState.TYPE_, FlowState.STATE);
-    }
-
-    /**
-     * Construct a trace projection (used with the Flow monad).
-     * @return the trace projection term
-     */
-    static Term flowStateTrace() {
-        return project(FlowState.TYPE_, FlowState.TRACE);
-    }
 }

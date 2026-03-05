@@ -2,59 +2,75 @@ package hydra.json;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
-import hydra.dsl.Flows;
 import hydra.compute.Coder;
-import hydra.compute.Flow;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
 import hydra.json.model.Value;
+import hydra.util.Either;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * A bidirectional coder between Hydra's native JSON values and strings (via json-io).
- *
- * @param <S1> the state type for encoding
- * @param <S2> the state type for decoding
  */
-public class JsonSerde<S1, S2> extends Coder<S1, S2, Value, String> {
+public class JsonSerde extends Coder<Value, String> {
     private static final Map<String, Object> WRITER_ARGS = new HashMap<String, Object>() {{
         put(JsonWriter.TYPE, false);
         put(JsonWriter.PRETTY_PRINT, false);
-        //put(JsonWriter.SKIP_NULL_FIELDS, true);
     }};
 
     /**
      * Constructs a new JsonSerde.
      */
     public JsonSerde() {
-        super(JsonSerde::encode, JsonSerde::decode);
+        super(toCoderFn(JsonSerde::encode), toCoderFn(JsonSerde::decode));
+    }
+
+    /**
+     * Convert a simple Either-based function to the Coder's Context-based Either signature.
+     */
+    private static <A, B> java.util.function.Function<Context, java.util.function.Function<A, Either<InContext<OtherError>, B>>>
+            toCoderFn(java.util.function.Function<A, Either<String, B>> fn) {
+        return cx -> a -> {
+            Either<String, B> result = fn.apply(a);
+            if (result.isRight()) {
+                return Either.right(((Either.Right<String, B>) result).value);
+            } else {
+                String msg = ((Either.Left<String, B>) result).value;
+                return Either.left(new InContext<>(new OtherError(msg), cx));
+            }
+        };
     }
 
     /**
      * Encode a JSON value to a string.
      *
-     * @param <S> the state type
      * @param value the JSON value to encode
-     * @return a flow containing the encoded string
+     * @return an Either containing the encoded string or an error message
      */
-    public static <S> Flow<S, String> encode(Value value) {
-        return Flows.map(JsonIoCoder.encode(value),
-                raw -> JsonWriter.objectToJson(JsonIoCoder.normalizeEncoded(raw), WRITER_ARGS));
+    public static Either<String, String> encode(Value value) {
+        Either<String, Object> ioResult = JsonIoCoder.encode(value);
+        if (ioResult.isLeft()) {
+            return Either.left(((Either.Left<String, Object>) ioResult).value);
+        }
+        Object raw = ((Either.Right<String, Object>) ioResult).value;
+        return Either.right(JsonWriter.objectToJson(JsonIoCoder.normalizeEncoded(raw), WRITER_ARGS));
     }
 
     /**
      * Decode a JSON value from a string.
      *
-     * @param <S> the state type
      * @param value the string to decode
-     * @return a flow containing the decoded JSON value
+     * @return an Either containing the decoded JSON value or an error message
      */
-    public static <S> Flow<S, Value> decode(String value) {
+    public static Either<String, Value> decode(String value) {
         Object json;
         try {
             json = JsonReader.jsonToJava(value);
         } catch (Exception e) {
-            return Flows.fail("JSON parse error", e);
+            return Either.left("JSON parse error: " + e.getMessage());
         }
 
         return JsonIoCoder.decode(json);
