@@ -7,12 +7,12 @@ import java.io.Serializable;
 /**
  * A base interface for Edge or Vertex Property features.
  */
-public class PropertyFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.PropertyFeatures");
+public class PropertyFeatures implements Serializable, Comparable<PropertyFeatures> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.PropertyFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_TYPE_FEATURES = new hydra.core.Name("dataTypeFeatures");
+  public static final hydra.core.Name DATA_TYPE_FEATURES = new hydra.core.Name("dataTypeFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_PROPERTIES = new hydra.core.Name("supportsProperties");
+  public static final hydra.core.Name SUPPORTS_PROPERTIES = new hydra.core.Name("supportsProperties");
   
   public final hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures;
   
@@ -22,8 +22,6 @@ public class PropertyFeatures implements Serializable {
   public final Boolean supportsProperties;
   
   public PropertyFeatures (hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures, Boolean supportsProperties) {
-    java.util.Objects.requireNonNull((dataTypeFeatures));
-    java.util.Objects.requireNonNull((supportsProperties));
     this.dataTypeFeatures = dataTypeFeatures;
     this.supportsProperties = supportsProperties;
   }
@@ -33,22 +31,35 @@ public class PropertyFeatures implements Serializable {
     if (!(other instanceof PropertyFeatures)) {
       return false;
     }
-    PropertyFeatures o = (PropertyFeatures) (other);
-    return dataTypeFeatures.equals(o.dataTypeFeatures) && supportsProperties.equals(o.supportsProperties);
+    PropertyFeatures o = (PropertyFeatures) other;
+    return java.util.Objects.equals(
+      this.dataTypeFeatures,
+      o.dataTypeFeatures) && java.util.Objects.equals(
+      this.supportsProperties,
+      o.supportsProperties);
   }
   
   @Override
   public int hashCode() {
-    return 2 * dataTypeFeatures.hashCode() + 3 * supportsProperties.hashCode();
+    return 2 * java.util.Objects.hashCode(dataTypeFeatures) + 3 * java.util.Objects.hashCode(supportsProperties);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(PropertyFeatures other) {
+    int cmp = 0;
+    cmp = ((Comparable) dataTypeFeatures).compareTo(other.dataTypeFeatures);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) supportsProperties).compareTo(other.supportsProperties);
   }
   
   public PropertyFeatures withDataTypeFeatures(hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {
-    java.util.Objects.requireNonNull((dataTypeFeatures));
     return new PropertyFeatures(dataTypeFeatures, supportsProperties);
   }
   
   public PropertyFeatures withSupportsProperties(Boolean supportsProperties) {
-    java.util.Objects.requireNonNull((supportsProperties));
     return new PropertyFeatures(dataTypeFeatures, supportsProperties);
   }
 }

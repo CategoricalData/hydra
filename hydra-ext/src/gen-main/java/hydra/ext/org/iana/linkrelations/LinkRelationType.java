@@ -7,250 +7,250 @@ import java.io.Serializable;
 /**
  * An IANA link relation type
  */
-public abstract class LinkRelationType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.iana.linkrelations.LinkRelationType");
+public abstract class LinkRelationType implements Serializable, Comparable<LinkRelationType> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.iana.linkrelations.LinkRelationType");
   
-  public static final hydra.core.Name FIELD_NAME_ABOUT = new hydra.core.Name("about");
+  public static final hydra.core.Name ABOUT = new hydra.core.Name("about");
   
-  public static final hydra.core.Name FIELD_NAME_ACL = new hydra.core.Name("acl");
+  public static final hydra.core.Name ACL = new hydra.core.Name("acl");
   
-  public static final hydra.core.Name FIELD_NAME_ALTERNATE = new hydra.core.Name("alternate");
+  public static final hydra.core.Name ALTERNATE = new hydra.core.Name("alternate");
   
-  public static final hydra.core.Name FIELD_NAME_AMPHTML = new hydra.core.Name("amphtml");
+  public static final hydra.core.Name AMPHTML = new hydra.core.Name("amphtml");
   
-  public static final hydra.core.Name FIELD_NAME_APPENDIX = new hydra.core.Name("appendix");
+  public static final hydra.core.Name APPENDIX = new hydra.core.Name("appendix");
   
-  public static final hydra.core.Name FIELD_NAME_APPLE_TOUCH_ICON = new hydra.core.Name("apple-touch-icon");
+  public static final hydra.core.Name APPLE_TOUCH_ICON = new hydra.core.Name("apple-touch-icon");
   
-  public static final hydra.core.Name FIELD_NAME_APPLE_TOUCH_STARTUP_IMAGE = new hydra.core.Name("apple-touch-startup-image");
+  public static final hydra.core.Name APPLE_TOUCH_STARTUP_IMAGE = new hydra.core.Name("apple-touch-startup-image");
   
-  public static final hydra.core.Name FIELD_NAME_ARCHIVES = new hydra.core.Name("archives");
+  public static final hydra.core.Name ARCHIVES = new hydra.core.Name("archives");
   
-  public static final hydra.core.Name FIELD_NAME_AUTHOR = new hydra.core.Name("author");
+  public static final hydra.core.Name AUTHOR = new hydra.core.Name("author");
   
-  public static final hydra.core.Name FIELD_NAME_BLOCKED_BY = new hydra.core.Name("blocked-by");
+  public static final hydra.core.Name BLOCKED_BY = new hydra.core.Name("blocked-by");
   
-  public static final hydra.core.Name FIELD_NAME_BOOKMARK = new hydra.core.Name("bookmark");
+  public static final hydra.core.Name BOOKMARK = new hydra.core.Name("bookmark");
   
-  public static final hydra.core.Name FIELD_NAME_CANONICAL = new hydra.core.Name("canonical");
+  public static final hydra.core.Name CANONICAL = new hydra.core.Name("canonical");
   
-  public static final hydra.core.Name FIELD_NAME_CHAPTER = new hydra.core.Name("chapter");
+  public static final hydra.core.Name CHAPTER = new hydra.core.Name("chapter");
   
-  public static final hydra.core.Name FIELD_NAME_CITE_AS = new hydra.core.Name("cite-as");
+  public static final hydra.core.Name CITE_AS = new hydra.core.Name("cite-as");
   
-  public static final hydra.core.Name FIELD_NAME_COLLECTION = new hydra.core.Name("collection");
+  public static final hydra.core.Name COLLECTION = new hydra.core.Name("collection");
   
-  public static final hydra.core.Name FIELD_NAME_CONTENTS = new hydra.core.Name("contents");
+  public static final hydra.core.Name CONTENTS = new hydra.core.Name("contents");
   
-  public static final hydra.core.Name FIELD_NAME_CONVERTEDFROM = new hydra.core.Name("convertedfrom");
+  public static final hydra.core.Name CONVERTEDFROM = new hydra.core.Name("convertedfrom");
   
-  public static final hydra.core.Name FIELD_NAME_COPYRIGHT = new hydra.core.Name("copyright");
+  public static final hydra.core.Name COPYRIGHT = new hydra.core.Name("copyright");
   
-  public static final hydra.core.Name FIELD_NAME_CREATE_FORM = new hydra.core.Name("create-form");
+  public static final hydra.core.Name CREATE_FORM = new hydra.core.Name("create-form");
   
-  public static final hydra.core.Name FIELD_NAME_CURRENT = new hydra.core.Name("current");
+  public static final hydra.core.Name CURRENT = new hydra.core.Name("current");
   
-  public static final hydra.core.Name FIELD_NAME_DESCRIBEDBY = new hydra.core.Name("describedby");
+  public static final hydra.core.Name DESCRIBEDBY = new hydra.core.Name("describedby");
   
-  public static final hydra.core.Name FIELD_NAME_DESCRIBES = new hydra.core.Name("describes");
+  public static final hydra.core.Name DESCRIBES = new hydra.core.Name("describes");
   
-  public static final hydra.core.Name FIELD_NAME_DISCLOSURE = new hydra.core.Name("disclosure");
+  public static final hydra.core.Name DISCLOSURE = new hydra.core.Name("disclosure");
   
-  public static final hydra.core.Name FIELD_NAME_DNS_PREFETCH = new hydra.core.Name("dns-prefetch");
+  public static final hydra.core.Name DNS_PREFETCH = new hydra.core.Name("dns-prefetch");
   
-  public static final hydra.core.Name FIELD_NAME_DUPLICATE = new hydra.core.Name("duplicate");
+  public static final hydra.core.Name DUPLICATE = new hydra.core.Name("duplicate");
   
-  public static final hydra.core.Name FIELD_NAME_EDIT = new hydra.core.Name("edit");
+  public static final hydra.core.Name EDIT = new hydra.core.Name("edit");
   
-  public static final hydra.core.Name FIELD_NAME_EDIT_FORM = new hydra.core.Name("edit-form");
+  public static final hydra.core.Name EDIT_FORM = new hydra.core.Name("edit-form");
   
-  public static final hydra.core.Name FIELD_NAME_EDIT_MEDIA = new hydra.core.Name("edit-media");
+  public static final hydra.core.Name EDIT_MEDIA = new hydra.core.Name("edit-media");
   
-  public static final hydra.core.Name FIELD_NAME_ENCLOSURE = new hydra.core.Name("enclosure");
+  public static final hydra.core.Name ENCLOSURE = new hydra.core.Name("enclosure");
   
-  public static final hydra.core.Name FIELD_NAME_EXTERNAL = new hydra.core.Name("external");
+  public static final hydra.core.Name EXTERNAL = new hydra.core.Name("external");
   
-  public static final hydra.core.Name FIELD_NAME_FIRST = new hydra.core.Name("first");
+  public static final hydra.core.Name FIRST = new hydra.core.Name("first");
   
-  public static final hydra.core.Name FIELD_NAME_GLOSSARY = new hydra.core.Name("glossary");
+  public static final hydra.core.Name GLOSSARY = new hydra.core.Name("glossary");
   
-  public static final hydra.core.Name FIELD_NAME_HELP = new hydra.core.Name("help");
+  public static final hydra.core.Name HELP = new hydra.core.Name("help");
   
-  public static final hydra.core.Name FIELD_NAME_HOSTS = new hydra.core.Name("hosts");
+  public static final hydra.core.Name HOSTS = new hydra.core.Name("hosts");
   
-  public static final hydra.core.Name FIELD_NAME_HUB = new hydra.core.Name("hub");
+  public static final hydra.core.Name HUB = new hydra.core.Name("hub");
   
-  public static final hydra.core.Name FIELD_NAME_ICON = new hydra.core.Name("icon");
+  public static final hydra.core.Name ICON = new hydra.core.Name("icon");
   
-  public static final hydra.core.Name FIELD_NAME_INDEX = new hydra.core.Name("index");
+  public static final hydra.core.Name INDEX = new hydra.core.Name("index");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALAFTER = new hydra.core.Name("intervalafter");
+  public static final hydra.core.Name INTERVALAFTER = new hydra.core.Name("intervalafter");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALBEFORE = new hydra.core.Name("intervalbefore");
+  public static final hydra.core.Name INTERVALBEFORE = new hydra.core.Name("intervalbefore");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALCONTAINS = new hydra.core.Name("intervalcontains");
+  public static final hydra.core.Name INTERVALCONTAINS = new hydra.core.Name("intervalcontains");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALDISJOINT = new hydra.core.Name("intervaldisjoint");
+  public static final hydra.core.Name INTERVALDISJOINT = new hydra.core.Name("intervaldisjoint");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALDURING = new hydra.core.Name("intervalduring");
+  public static final hydra.core.Name INTERVALDURING = new hydra.core.Name("intervalduring");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALEQUALS = new hydra.core.Name("intervalequals");
+  public static final hydra.core.Name INTERVALEQUALS = new hydra.core.Name("intervalequals");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALFINISHEDBY = new hydra.core.Name("intervalfinishedby");
+  public static final hydra.core.Name INTERVALFINISHEDBY = new hydra.core.Name("intervalfinishedby");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALFINISHES = new hydra.core.Name("intervalfinishes");
+  public static final hydra.core.Name INTERVALFINISHES = new hydra.core.Name("intervalfinishes");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALIN = new hydra.core.Name("intervalin");
+  public static final hydra.core.Name INTERVALIN = new hydra.core.Name("intervalin");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALMEETS = new hydra.core.Name("intervalmeets");
+  public static final hydra.core.Name INTERVALMEETS = new hydra.core.Name("intervalmeets");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALMETBY = new hydra.core.Name("intervalmetby");
+  public static final hydra.core.Name INTERVALMETBY = new hydra.core.Name("intervalmetby");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALOVERLAPPEDBY = new hydra.core.Name("intervaloverlappedby");
+  public static final hydra.core.Name INTERVALOVERLAPPEDBY = new hydra.core.Name("intervaloverlappedby");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALOVERLAPS = new hydra.core.Name("intervaloverlaps");
+  public static final hydra.core.Name INTERVALOVERLAPS = new hydra.core.Name("intervaloverlaps");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALSTARTEDBY = new hydra.core.Name("intervalstartedby");
+  public static final hydra.core.Name INTERVALSTARTEDBY = new hydra.core.Name("intervalstartedby");
   
-  public static final hydra.core.Name FIELD_NAME_INTERVALSTARTS = new hydra.core.Name("intervalstarts");
+  public static final hydra.core.Name INTERVALSTARTS = new hydra.core.Name("intervalstarts");
   
-  public static final hydra.core.Name FIELD_NAME_ITEM = new hydra.core.Name("item");
+  public static final hydra.core.Name ITEM = new hydra.core.Name("item");
   
-  public static final hydra.core.Name FIELD_NAME_LAST = new hydra.core.Name("last");
+  public static final hydra.core.Name LAST = new hydra.core.Name("last");
   
-  public static final hydra.core.Name FIELD_NAME_LATEST_VERSION = new hydra.core.Name("latest-version");
+  public static final hydra.core.Name LATEST_VERSION = new hydra.core.Name("latest-version");
   
-  public static final hydra.core.Name FIELD_NAME_LICENSE = new hydra.core.Name("license");
+  public static final hydra.core.Name LICENSE = new hydra.core.Name("license");
   
-  public static final hydra.core.Name FIELD_NAME_LINKSET = new hydra.core.Name("linkset");
+  public static final hydra.core.Name LINKSET = new hydra.core.Name("linkset");
   
-  public static final hydra.core.Name FIELD_NAME_LRDD = new hydra.core.Name("lrdd");
+  public static final hydra.core.Name LRDD = new hydra.core.Name("lrdd");
   
-  public static final hydra.core.Name FIELD_NAME_MANIFEST = new hydra.core.Name("manifest");
+  public static final hydra.core.Name MANIFEST = new hydra.core.Name("manifest");
   
-  public static final hydra.core.Name FIELD_NAME_MASK_ICON = new hydra.core.Name("mask-icon");
+  public static final hydra.core.Name MASK_ICON = new hydra.core.Name("mask-icon");
   
-  public static final hydra.core.Name FIELD_NAME_MEDIA_FEED = new hydra.core.Name("media-feed");
+  public static final hydra.core.Name MEDIA_FEED = new hydra.core.Name("media-feed");
   
-  public static final hydra.core.Name FIELD_NAME_MEMENTO = new hydra.core.Name("memento");
+  public static final hydra.core.Name MEMENTO = new hydra.core.Name("memento");
   
-  public static final hydra.core.Name FIELD_NAME_MICROPUB = new hydra.core.Name("micropub");
+  public static final hydra.core.Name MICROPUB = new hydra.core.Name("micropub");
   
-  public static final hydra.core.Name FIELD_NAME_MODULEPRELOAD = new hydra.core.Name("modulepreload");
+  public static final hydra.core.Name MODULEPRELOAD = new hydra.core.Name("modulepreload");
   
-  public static final hydra.core.Name FIELD_NAME_MONITOR = new hydra.core.Name("monitor");
+  public static final hydra.core.Name MONITOR = new hydra.core.Name("monitor");
   
-  public static final hydra.core.Name FIELD_NAME_MONITOR_GROUP = new hydra.core.Name("monitor-group");
+  public static final hydra.core.Name MONITOR_GROUP = new hydra.core.Name("monitor-group");
   
-  public static final hydra.core.Name FIELD_NAME_NEXT = new hydra.core.Name("next");
+  public static final hydra.core.Name NEXT = new hydra.core.Name("next");
   
-  public static final hydra.core.Name FIELD_NAME_NEXT_ARCHIVE = new hydra.core.Name("next-archive");
+  public static final hydra.core.Name NEXT_ARCHIVE = new hydra.core.Name("next-archive");
   
-  public static final hydra.core.Name FIELD_NAME_NOFOLLOW = new hydra.core.Name("nofollow");
+  public static final hydra.core.Name NOFOLLOW = new hydra.core.Name("nofollow");
   
-  public static final hydra.core.Name FIELD_NAME_NOOPENER = new hydra.core.Name("noopener");
+  public static final hydra.core.Name NOOPENER = new hydra.core.Name("noopener");
   
-  public static final hydra.core.Name FIELD_NAME_NOREFERRER = new hydra.core.Name("noreferrer");
+  public static final hydra.core.Name NOREFERRER = new hydra.core.Name("noreferrer");
   
-  public static final hydra.core.Name FIELD_NAME_OPENER = new hydra.core.Name("opener");
+  public static final hydra.core.Name OPENER = new hydra.core.Name("opener");
   
-  public static final hydra.core.Name FIELD_NAME_OPENID2_LOCAL_ID = new hydra.core.Name("openid2.local_id");
+  public static final hydra.core.Name OPENID2_LOCAL_ID = new hydra.core.Name("openid2.local_id");
   
-  public static final hydra.core.Name FIELD_NAME_OPENID2_PROVIDER = new hydra.core.Name("openid2.provider");
+  public static final hydra.core.Name OPENID2_PROVIDER = new hydra.core.Name("openid2.provider");
   
-  public static final hydra.core.Name FIELD_NAME_ORIGINAL = new hydra.core.Name("original");
+  public static final hydra.core.Name ORIGINAL = new hydra.core.Name("original");
   
-  public static final hydra.core.Name FIELD_NAME_P3PV1 = new hydra.core.Name("p3pv1");
+  public static final hydra.core.Name P3PV1 = new hydra.core.Name("p3pv1");
   
-  public static final hydra.core.Name FIELD_NAME_PAYMENT = new hydra.core.Name("payment");
+  public static final hydra.core.Name PAYMENT = new hydra.core.Name("payment");
   
-  public static final hydra.core.Name FIELD_NAME_PINGBACK = new hydra.core.Name("pingback");
+  public static final hydra.core.Name PINGBACK = new hydra.core.Name("pingback");
   
-  public static final hydra.core.Name FIELD_NAME_PRECONNECT = new hydra.core.Name("preconnect");
+  public static final hydra.core.Name PRECONNECT = new hydra.core.Name("preconnect");
   
-  public static final hydra.core.Name FIELD_NAME_PREDECESSOR_VERSION = new hydra.core.Name("predecessor-version");
+  public static final hydra.core.Name PREDECESSOR_VERSION = new hydra.core.Name("predecessor-version");
   
-  public static final hydra.core.Name FIELD_NAME_PREFETCH = new hydra.core.Name("prefetch");
+  public static final hydra.core.Name PREFETCH = new hydra.core.Name("prefetch");
   
-  public static final hydra.core.Name FIELD_NAME_PRELOAD = new hydra.core.Name("preload");
+  public static final hydra.core.Name PRELOAD = new hydra.core.Name("preload");
   
-  public static final hydra.core.Name FIELD_NAME_PRERENDER = new hydra.core.Name("prerender");
+  public static final hydra.core.Name PRERENDER = new hydra.core.Name("prerender");
   
-  public static final hydra.core.Name FIELD_NAME_PREV = new hydra.core.Name("prev");
+  public static final hydra.core.Name PREV = new hydra.core.Name("prev");
   
-  public static final hydra.core.Name FIELD_NAME_PREVIEW = new hydra.core.Name("preview");
+  public static final hydra.core.Name PREVIEW = new hydra.core.Name("preview");
   
-  public static final hydra.core.Name FIELD_NAME_PREVIOUS = new hydra.core.Name("previous");
+  public static final hydra.core.Name PREVIOUS = new hydra.core.Name("previous");
   
-  public static final hydra.core.Name FIELD_NAME_PREV_ARCHIVE = new hydra.core.Name("prev-archive");
+  public static final hydra.core.Name PREV_ARCHIVE = new hydra.core.Name("prev-archive");
   
-  public static final hydra.core.Name FIELD_NAME_PRIVACY_POLICY = new hydra.core.Name("privacy-policy");
+  public static final hydra.core.Name PRIVACY_POLICY = new hydra.core.Name("privacy-policy");
   
-  public static final hydra.core.Name FIELD_NAME_PROFILE = new hydra.core.Name("profile");
+  public static final hydra.core.Name PROFILE = new hydra.core.Name("profile");
   
-  public static final hydra.core.Name FIELD_NAME_PUBLICATION = new hydra.core.Name("publication");
+  public static final hydra.core.Name PUBLICATION = new hydra.core.Name("publication");
   
-  public static final hydra.core.Name FIELD_NAME_RELATED = new hydra.core.Name("related");
+  public static final hydra.core.Name RELATED = new hydra.core.Name("related");
   
-  public static final hydra.core.Name FIELD_NAME_RESTCONF = new hydra.core.Name("restconf");
+  public static final hydra.core.Name RESTCONF = new hydra.core.Name("restconf");
   
-  public static final hydra.core.Name FIELD_NAME_REPLIES = new hydra.core.Name("replies");
+  public static final hydra.core.Name REPLIES = new hydra.core.Name("replies");
   
-  public static final hydra.core.Name FIELD_NAME_RULEINPUT = new hydra.core.Name("ruleinput");
+  public static final hydra.core.Name RULEINPUT = new hydra.core.Name("ruleinput");
   
-  public static final hydra.core.Name FIELD_NAME_SEARCH = new hydra.core.Name("search");
+  public static final hydra.core.Name SEARCH = new hydra.core.Name("search");
   
-  public static final hydra.core.Name FIELD_NAME_SECTION = new hydra.core.Name("section");
+  public static final hydra.core.Name SECTION = new hydra.core.Name("section");
   
-  public static final hydra.core.Name FIELD_NAME_SELF = new hydra.core.Name("self");
+  public static final hydra.core.Name SELF = new hydra.core.Name("self");
   
-  public static final hydra.core.Name FIELD_NAME_SERVICE = new hydra.core.Name("service");
+  public static final hydra.core.Name SERVICE = new hydra.core.Name("service");
   
-  public static final hydra.core.Name FIELD_NAME_SERVICE_DESC = new hydra.core.Name("service-desc");
+  public static final hydra.core.Name SERVICE_DESC = new hydra.core.Name("service-desc");
   
-  public static final hydra.core.Name FIELD_NAME_SERVICE_DOC = new hydra.core.Name("service-doc");
+  public static final hydra.core.Name SERVICE_DOC = new hydra.core.Name("service-doc");
   
-  public static final hydra.core.Name FIELD_NAME_SERVICE_META = new hydra.core.Name("service-meta");
+  public static final hydra.core.Name SERVICE_META = new hydra.core.Name("service-meta");
   
-  public static final hydra.core.Name FIELD_NAME_SIPTRUNKINGCAPABILITY = new hydra.core.Name("siptrunkingcapability");
+  public static final hydra.core.Name SIPTRUNKINGCAPABILITY = new hydra.core.Name("siptrunkingcapability");
   
-  public static final hydra.core.Name FIELD_NAME_SPONSORED = new hydra.core.Name("sponsored");
+  public static final hydra.core.Name SPONSORED = new hydra.core.Name("sponsored");
   
-  public static final hydra.core.Name FIELD_NAME_START = new hydra.core.Name("start");
+  public static final hydra.core.Name START = new hydra.core.Name("start");
   
-  public static final hydra.core.Name FIELD_NAME_STATUS = new hydra.core.Name("status");
+  public static final hydra.core.Name STATUS = new hydra.core.Name("status");
   
-  public static final hydra.core.Name FIELD_NAME_STYLESHEET = new hydra.core.Name("stylesheet");
+  public static final hydra.core.Name STYLESHEET = new hydra.core.Name("stylesheet");
   
-  public static final hydra.core.Name FIELD_NAME_SUBSECTION = new hydra.core.Name("subsection");
+  public static final hydra.core.Name SUBSECTION = new hydra.core.Name("subsection");
   
-  public static final hydra.core.Name FIELD_NAME_SUCCESSOR_VERSION = new hydra.core.Name("successor-version");
+  public static final hydra.core.Name SUCCESSOR_VERSION = new hydra.core.Name("successor-version");
   
-  public static final hydra.core.Name FIELD_NAME_SUNSET = new hydra.core.Name("sunset");
+  public static final hydra.core.Name SUNSET = new hydra.core.Name("sunset");
   
-  public static final hydra.core.Name FIELD_NAME_TAG = new hydra.core.Name("tag");
+  public static final hydra.core.Name TAG = new hydra.core.Name("tag");
   
-  public static final hydra.core.Name FIELD_NAME_TERMS_OF_SERVICE = new hydra.core.Name("terms-of-service");
+  public static final hydra.core.Name TERMS_OF_SERVICE = new hydra.core.Name("terms-of-service");
   
-  public static final hydra.core.Name FIELD_NAME_TIMEGATE = new hydra.core.Name("timegate");
+  public static final hydra.core.Name TIMEGATE = new hydra.core.Name("timegate");
   
-  public static final hydra.core.Name FIELD_NAME_TIMEMAP = new hydra.core.Name("timemap");
+  public static final hydra.core.Name TIMEMAP = new hydra.core.Name("timemap");
   
-  public static final hydra.core.Name FIELD_NAME_TYPE = new hydra.core.Name("type");
+  public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name FIELD_NAME_UGC = new hydra.core.Name("ugc");
+  public static final hydra.core.Name UGC = new hydra.core.Name("ugc");
   
-  public static final hydra.core.Name FIELD_NAME_UP = new hydra.core.Name("up");
+  public static final hydra.core.Name UP = new hydra.core.Name("up");
   
-  public static final hydra.core.Name FIELD_NAME_VERSION_HISTORY = new hydra.core.Name("version-history");
+  public static final hydra.core.Name VERSION_HISTORY = new hydra.core.Name("version-history");
   
-  public static final hydra.core.Name FIELD_NAME_VIA = new hydra.core.Name("via");
+  public static final hydra.core.Name VIA = new hydra.core.Name("via");
   
-  public static final hydra.core.Name FIELD_NAME_WEBMENTION = new hydra.core.Name("webmention");
+  public static final hydra.core.Name WEBMENTION = new hydra.core.Name("webmention");
   
-  public static final hydra.core.Name FIELD_NAME_WORKING_COPY = new hydra.core.Name("working-copy");
+  public static final hydra.core.Name WORKING_COPY = new hydra.core.Name("working-copy");
   
-  public static final hydra.core.Name FIELD_NAME_WORKING_COPY_OF = new hydra.core.Name("working-copy-of");
+  public static final hydra.core.Name WORKING_COPY_OF = new hydra.core.Name("working-copy-of");
   
   private LinkRelationType () {
   
@@ -504,491 +504,491 @@ public abstract class LinkRelationType implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(LinkRelationType instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(About instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Acl instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Alternate instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Amphtml instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Appendix instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Apple_touch_icon instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Apple_touch_startup_image instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Archives instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Author instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Blocked_by instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Bookmark instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Canonical instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Chapter instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Cite_as instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Collection instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Contents instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Convertedfrom instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Copyright instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Create_form instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Current instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Describedby instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Describes instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Disclosure instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Dns_prefetch instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Duplicate instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Edit instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Edit_form instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Edit_media instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Enclosure instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(External instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(First instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Glossary instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Help instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Hosts instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Hub instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Icon instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Index instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalafter instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalbefore instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalcontains instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervaldisjoint instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalduring instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalequals instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalfinishedby instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalfinishes instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalin instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalmeets instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalmetby instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervaloverlappedby instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervaloverlaps instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalstartedby instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Intervalstarts instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Item instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Last instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Latest_version instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(License instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Linkset instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Lrdd instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Manifest instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Mask_icon instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Media_feed instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Memento instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Micropub instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Modulepreload instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Monitor instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Monitor_group instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Next instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Next_archive instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Nofollow instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Noopener instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Noreferrer instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Opener instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(local_id instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(provider instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Original instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(P3pv1 instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Payment instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Pingback instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Preconnect instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Predecessor_version instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Prefetch instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Preload instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Prerender instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Prev instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Preview instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Previous instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Prev_archive instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Privacy_policy instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Profile instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Publication instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Related instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Restconf instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Replies instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Ruleinput instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Search instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Section instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Self instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Service instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Service_desc instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Service_doc instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Service_meta instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Siptrunkingcapability instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Sponsored instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Start instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Status instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Stylesheet instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Subsection instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Successor_version instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Sunset instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Tag instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Terms_of_service instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Timegate instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Timemap instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Type instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Ugc instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Up instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Version_history instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Via instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Webmention instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Working_copy instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Working_copy_of instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -1005,12 +1005,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof About)) {
         return false;
       }
-      About o = (About) (other);
+      About o = (About) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1033,12 +1043,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Acl)) {
         return false;
       }
-      Acl o = (Acl) (other);
+      Acl o = (Acl) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1061,12 +1081,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Alternate)) {
         return false;
       }
-      Alternate o = (Alternate) (other);
+      Alternate o = (Alternate) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1089,12 +1119,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Amphtml)) {
         return false;
       }
-      Amphtml o = (Amphtml) (other);
+      Amphtml o = (Amphtml) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1117,12 +1157,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Appendix)) {
         return false;
       }
-      Appendix o = (Appendix) (other);
+      Appendix o = (Appendix) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1145,12 +1195,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Apple_touch_icon)) {
         return false;
       }
-      Apple_touch_icon o = (Apple_touch_icon) (other);
+      Apple_touch_icon o = (Apple_touch_icon) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1173,12 +1233,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Apple_touch_startup_image)) {
         return false;
       }
-      Apple_touch_startup_image o = (Apple_touch_startup_image) (other);
+      Apple_touch_startup_image o = (Apple_touch_startup_image) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1201,12 +1271,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Archives)) {
         return false;
       }
-      Archives o = (Archives) (other);
+      Archives o = (Archives) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1229,12 +1309,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Author)) {
         return false;
       }
-      Author o = (Author) (other);
+      Author o = (Author) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1257,12 +1347,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Blocked_by)) {
         return false;
       }
-      Blocked_by o = (Blocked_by) (other);
+      Blocked_by o = (Blocked_by) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1285,12 +1385,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Bookmark)) {
         return false;
       }
-      Bookmark o = (Bookmark) (other);
+      Bookmark o = (Bookmark) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1313,12 +1423,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Canonical)) {
         return false;
       }
-      Canonical o = (Canonical) (other);
+      Canonical o = (Canonical) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1341,12 +1461,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Chapter)) {
         return false;
       }
-      Chapter o = (Chapter) (other);
+      Chapter o = (Chapter) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1369,12 +1499,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Cite_as)) {
         return false;
       }
-      Cite_as o = (Cite_as) (other);
+      Cite_as o = (Cite_as) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1397,12 +1537,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Collection)) {
         return false;
       }
-      Collection o = (Collection) (other);
+      Collection o = (Collection) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1425,12 +1575,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Contents)) {
         return false;
       }
-      Contents o = (Contents) (other);
+      Contents o = (Contents) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1453,12 +1613,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Convertedfrom)) {
         return false;
       }
-      Convertedfrom o = (Convertedfrom) (other);
+      Convertedfrom o = (Convertedfrom) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1481,12 +1651,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Copyright)) {
         return false;
       }
-      Copyright o = (Copyright) (other);
+      Copyright o = (Copyright) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1509,12 +1689,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Create_form)) {
         return false;
       }
-      Create_form o = (Create_form) (other);
+      Create_form o = (Create_form) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1537,12 +1727,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Current)) {
         return false;
       }
-      Current o = (Current) (other);
+      Current o = (Current) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1565,12 +1765,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Describedby)) {
         return false;
       }
-      Describedby o = (Describedby) (other);
+      Describedby o = (Describedby) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1593,12 +1803,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Describes)) {
         return false;
       }
-      Describes o = (Describes) (other);
+      Describes o = (Describes) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1621,12 +1841,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Disclosure)) {
         return false;
       }
-      Disclosure o = (Disclosure) (other);
+      Disclosure o = (Disclosure) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1649,12 +1879,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Dns_prefetch)) {
         return false;
       }
-      Dns_prefetch o = (Dns_prefetch) (other);
+      Dns_prefetch o = (Dns_prefetch) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1677,12 +1917,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Duplicate)) {
         return false;
       }
-      Duplicate o = (Duplicate) (other);
+      Duplicate o = (Duplicate) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1705,12 +1955,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Edit)) {
         return false;
       }
-      Edit o = (Edit) (other);
+      Edit o = (Edit) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1733,12 +1993,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Edit_form)) {
         return false;
       }
-      Edit_form o = (Edit_form) (other);
+      Edit_form o = (Edit_form) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1761,12 +2031,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Edit_media)) {
         return false;
       }
-      Edit_media o = (Edit_media) (other);
+      Edit_media o = (Edit_media) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1789,12 +2069,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Enclosure)) {
         return false;
       }
-      Enclosure o = (Enclosure) (other);
+      Enclosure o = (Enclosure) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1817,12 +2107,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof External)) {
         return false;
       }
-      External o = (External) (other);
+      External o = (External) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1845,12 +2145,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof First)) {
         return false;
       }
-      First o = (First) (other);
+      First o = (First) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1873,12 +2183,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Glossary)) {
         return false;
       }
-      Glossary o = (Glossary) (other);
+      Glossary o = (Glossary) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1901,12 +2221,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Help)) {
         return false;
       }
-      Help o = (Help) (other);
+      Help o = (Help) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1929,12 +2259,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Hosts)) {
         return false;
       }
-      Hosts o = (Hosts) (other);
+      Hosts o = (Hosts) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1957,12 +2297,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Hub)) {
         return false;
       }
-      Hub o = (Hub) (other);
+      Hub o = (Hub) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -1985,12 +2335,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Icon)) {
         return false;
       }
-      Icon o = (Icon) (other);
+      Icon o = (Icon) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2013,12 +2373,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Index)) {
         return false;
       }
-      Index o = (Index) (other);
+      Index o = (Index) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2041,12 +2411,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalafter)) {
         return false;
       }
-      Intervalafter o = (Intervalafter) (other);
+      Intervalafter o = (Intervalafter) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2069,12 +2449,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalbefore)) {
         return false;
       }
-      Intervalbefore o = (Intervalbefore) (other);
+      Intervalbefore o = (Intervalbefore) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2097,12 +2487,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalcontains)) {
         return false;
       }
-      Intervalcontains o = (Intervalcontains) (other);
+      Intervalcontains o = (Intervalcontains) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2125,12 +2525,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervaldisjoint)) {
         return false;
       }
-      Intervaldisjoint o = (Intervaldisjoint) (other);
+      Intervaldisjoint o = (Intervaldisjoint) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2153,12 +2563,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalduring)) {
         return false;
       }
-      Intervalduring o = (Intervalduring) (other);
+      Intervalduring o = (Intervalduring) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2181,12 +2601,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalequals)) {
         return false;
       }
-      Intervalequals o = (Intervalequals) (other);
+      Intervalequals o = (Intervalequals) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2209,12 +2639,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalfinishedby)) {
         return false;
       }
-      Intervalfinishedby o = (Intervalfinishedby) (other);
+      Intervalfinishedby o = (Intervalfinishedby) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2237,12 +2677,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalfinishes)) {
         return false;
       }
-      Intervalfinishes o = (Intervalfinishes) (other);
+      Intervalfinishes o = (Intervalfinishes) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2265,12 +2715,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalin)) {
         return false;
       }
-      Intervalin o = (Intervalin) (other);
+      Intervalin o = (Intervalin) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2293,12 +2753,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalmeets)) {
         return false;
       }
-      Intervalmeets o = (Intervalmeets) (other);
+      Intervalmeets o = (Intervalmeets) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2321,12 +2791,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalmetby)) {
         return false;
       }
-      Intervalmetby o = (Intervalmetby) (other);
+      Intervalmetby o = (Intervalmetby) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2349,12 +2829,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervaloverlappedby)) {
         return false;
       }
-      Intervaloverlappedby o = (Intervaloverlappedby) (other);
+      Intervaloverlappedby o = (Intervaloverlappedby) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2377,12 +2867,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervaloverlaps)) {
         return false;
       }
-      Intervaloverlaps o = (Intervaloverlaps) (other);
+      Intervaloverlaps o = (Intervaloverlaps) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2405,12 +2905,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalstartedby)) {
         return false;
       }
-      Intervalstartedby o = (Intervalstartedby) (other);
+      Intervalstartedby o = (Intervalstartedby) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2433,12 +2943,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Intervalstarts)) {
         return false;
       }
-      Intervalstarts o = (Intervalstarts) (other);
+      Intervalstarts o = (Intervalstarts) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2461,12 +2981,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Item)) {
         return false;
       }
-      Item o = (Item) (other);
+      Item o = (Item) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2489,12 +3019,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Last)) {
         return false;
       }
-      Last o = (Last) (other);
+      Last o = (Last) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2517,12 +3057,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Latest_version)) {
         return false;
       }
-      Latest_version o = (Latest_version) (other);
+      Latest_version o = (Latest_version) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2545,12 +3095,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof License)) {
         return false;
       }
-      License o = (License) (other);
+      License o = (License) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2573,12 +3133,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Linkset)) {
         return false;
       }
-      Linkset o = (Linkset) (other);
+      Linkset o = (Linkset) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2601,12 +3171,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Lrdd)) {
         return false;
       }
-      Lrdd o = (Lrdd) (other);
+      Lrdd o = (Lrdd) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2629,12 +3209,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Manifest)) {
         return false;
       }
-      Manifest o = (Manifest) (other);
+      Manifest o = (Manifest) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2657,12 +3247,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Mask_icon)) {
         return false;
       }
-      Mask_icon o = (Mask_icon) (other);
+      Mask_icon o = (Mask_icon) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2685,12 +3285,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Media_feed)) {
         return false;
       }
-      Media_feed o = (Media_feed) (other);
+      Media_feed o = (Media_feed) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2713,12 +3323,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Memento)) {
         return false;
       }
-      Memento o = (Memento) (other);
+      Memento o = (Memento) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2741,12 +3361,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Micropub)) {
         return false;
       }
-      Micropub o = (Micropub) (other);
+      Micropub o = (Micropub) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2769,12 +3399,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Modulepreload)) {
         return false;
       }
-      Modulepreload o = (Modulepreload) (other);
+      Modulepreload o = (Modulepreload) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2797,12 +3437,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Monitor)) {
         return false;
       }
-      Monitor o = (Monitor) (other);
+      Monitor o = (Monitor) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2825,12 +3475,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Monitor_group)) {
         return false;
       }
-      Monitor_group o = (Monitor_group) (other);
+      Monitor_group o = (Monitor_group) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2853,12 +3513,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Next)) {
         return false;
       }
-      Next o = (Next) (other);
+      Next o = (Next) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2881,12 +3551,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Next_archive)) {
         return false;
       }
-      Next_archive o = (Next_archive) (other);
+      Next_archive o = (Next_archive) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2897,7 +3577,7 @@ public abstract class LinkRelationType implements Serializable {
   }
   
   /**
-   * Indicates that the context’s original author or publisher does not endorse the link target. [HTML]
+   * Indicates that the context's original author or publisher does not endorse the link target. [HTML]
    */
   public static final class Nofollow extends hydra.ext.org.iana.linkrelations.LinkRelationType implements Serializable {
     public Nofollow () {
@@ -2909,12 +3589,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Nofollow)) {
         return false;
       }
-      Nofollow o = (Nofollow) (other);
+      Nofollow o = (Nofollow) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2937,12 +3627,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Noopener)) {
         return false;
       }
-      Noopener o = (Noopener) (other);
+      Noopener o = (Noopener) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2965,12 +3665,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Noreferrer)) {
         return false;
       }
-      Noreferrer o = (Noreferrer) (other);
+      Noreferrer o = (Noreferrer) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -2993,12 +3703,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Opener)) {
         return false;
       }
-      Opener o = (Opener) (other);
+      Opener o = (Opener) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3021,12 +3741,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof local_id)) {
         return false;
       }
-      local_id o = (local_id) (other);
+      local_id o = (local_id) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3049,12 +3779,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof provider)) {
         return false;
       }
-      provider o = (provider) (other);
+      provider o = (provider) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3077,12 +3817,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Original)) {
         return false;
       }
-      Original o = (Original) (other);
+      Original o = (Original) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3105,12 +3855,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof P3pv1)) {
         return false;
       }
-      P3pv1 o = (P3pv1) (other);
+      P3pv1 o = (P3pv1) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3133,12 +3893,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Payment)) {
         return false;
       }
-      Payment o = (Payment) (other);
+      Payment o = (Payment) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3161,12 +3931,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Pingback)) {
         return false;
       }
-      Pingback o = (Pingback) (other);
+      Pingback o = (Pingback) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3189,12 +3969,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Preconnect)) {
         return false;
       }
-      Preconnect o = (Preconnect) (other);
+      Preconnect o = (Preconnect) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3217,12 +4007,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Predecessor_version)) {
         return false;
       }
-      Predecessor_version o = (Predecessor_version) (other);
+      Predecessor_version o = (Predecessor_version) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3245,12 +4045,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Prefetch)) {
         return false;
       }
-      Prefetch o = (Prefetch) (other);
+      Prefetch o = (Prefetch) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3273,12 +4083,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Preload)) {
         return false;
       }
-      Preload o = (Preload) (other);
+      Preload o = (Preload) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3301,12 +4121,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Prerender)) {
         return false;
       }
-      Prerender o = (Prerender) (other);
+      Prerender o = (Prerender) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3329,12 +4159,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Prev)) {
         return false;
       }
-      Prev o = (Prev) (other);
+      Prev o = (Prev) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3357,12 +4197,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Preview)) {
         return false;
       }
-      Preview o = (Preview) (other);
+      Preview o = (Preview) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3385,12 +4235,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Previous)) {
         return false;
       }
-      Previous o = (Previous) (other);
+      Previous o = (Previous) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3413,12 +4273,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Prev_archive)) {
         return false;
       }
-      Prev_archive o = (Prev_archive) (other);
+      Prev_archive o = (Prev_archive) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3441,12 +4311,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Privacy_policy)) {
         return false;
       }
-      Privacy_policy o = (Privacy_policy) (other);
+      Privacy_policy o = (Privacy_policy) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3469,12 +4349,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Profile)) {
         return false;
       }
-      Profile o = (Profile) (other);
+      Profile o = (Profile) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3497,12 +4387,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Publication)) {
         return false;
       }
-      Publication o = (Publication) (other);
+      Publication o = (Publication) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3525,12 +4425,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Related)) {
         return false;
       }
-      Related o = (Related) (other);
+      Related o = (Related) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3553,12 +4463,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Restconf)) {
         return false;
       }
-      Restconf o = (Restconf) (other);
+      Restconf o = (Restconf) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3581,12 +4501,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Replies)) {
         return false;
       }
-      Replies o = (Replies) (other);
+      Replies o = (Replies) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3609,12 +4539,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Ruleinput)) {
         return false;
       }
-      Ruleinput o = (Ruleinput) (other);
+      Ruleinput o = (Ruleinput) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3637,12 +4577,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Search)) {
         return false;
       }
-      Search o = (Search) (other);
+      Search o = (Search) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3665,12 +4615,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Section)) {
         return false;
       }
-      Section o = (Section) (other);
+      Section o = (Section) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3693,12 +4653,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Self)) {
         return false;
       }
-      Self o = (Self) (other);
+      Self o = (Self) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3721,12 +4691,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Service)) {
         return false;
       }
-      Service o = (Service) (other);
+      Service o = (Service) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3749,12 +4729,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Service_desc)) {
         return false;
       }
-      Service_desc o = (Service_desc) (other);
+      Service_desc o = (Service_desc) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3777,12 +4767,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Service_doc)) {
         return false;
       }
-      Service_doc o = (Service_doc) (other);
+      Service_doc o = (Service_doc) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3805,12 +4805,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Service_meta)) {
         return false;
       }
-      Service_meta o = (Service_meta) (other);
+      Service_meta o = (Service_meta) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3833,12 +4843,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Siptrunkingcapability)) {
         return false;
       }
-      Siptrunkingcapability o = (Siptrunkingcapability) (other);
+      Siptrunkingcapability o = (Siptrunkingcapability) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3861,12 +4881,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Sponsored)) {
         return false;
       }
-      Sponsored o = (Sponsored) (other);
+      Sponsored o = (Sponsored) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3889,12 +4919,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Start)) {
         return false;
       }
-      Start o = (Start) (other);
+      Start o = (Start) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3917,12 +4957,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Status)) {
         return false;
       }
-      Status o = (Status) (other);
+      Status o = (Status) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3945,12 +4995,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Stylesheet)) {
         return false;
       }
-      Stylesheet o = (Stylesheet) (other);
+      Stylesheet o = (Stylesheet) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -3973,12 +5033,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Subsection)) {
         return false;
       }
-      Subsection o = (Subsection) (other);
+      Subsection o = (Subsection) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4001,12 +5071,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Successor_version)) {
         return false;
       }
-      Successor_version o = (Successor_version) (other);
+      Successor_version o = (Successor_version) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4029,12 +5109,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Sunset)) {
         return false;
       }
-      Sunset o = (Sunset) (other);
+      Sunset o = (Sunset) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4057,12 +5147,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Tag)) {
         return false;
       }
-      Tag o = (Tag) (other);
+      Tag o = (Tag) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4085,12 +5185,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Terms_of_service)) {
         return false;
       }
-      Terms_of_service o = (Terms_of_service) (other);
+      Terms_of_service o = (Terms_of_service) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4113,12 +5223,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Timegate)) {
         return false;
       }
-      Timegate o = (Timegate) (other);
+      Timegate o = (Timegate) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4141,12 +5261,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Timemap)) {
         return false;
       }
-      Timemap o = (Timemap) (other);
+      Timemap o = (Timemap) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4169,12 +5299,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Type)) {
         return false;
       }
-      Type o = (Type) (other);
+      Type o = (Type) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4197,12 +5337,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Ugc)) {
         return false;
       }
-      Ugc o = (Ugc) (other);
+      Ugc o = (Ugc) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4225,12 +5375,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Up)) {
         return false;
       }
-      Up o = (Up) (other);
+      Up o = (Up) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4253,12 +5413,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Version_history)) {
         return false;
       }
-      Version_history o = (Version_history) (other);
+      Version_history o = (Version_history) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4281,12 +5451,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Via)) {
         return false;
       }
-      Via o = (Via) (other);
+      Via o = (Via) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4309,12 +5489,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Webmention)) {
         return false;
       }
-      Webmention o = (Webmention) (other);
+      Webmention o = (Webmention) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4337,12 +5527,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Working_copy)) {
         return false;
       }
-      Working_copy o = (Working_copy) (other);
+      Working_copy o = (Working_copy) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -4365,12 +5565,22 @@ public abstract class LinkRelationType implements Serializable {
       if (!(other instanceof Working_copy_of)) {
         return false;
       }
-      Working_copy_of o = (Working_copy_of) (other);
+      Working_copy_of o = (Working_copy_of) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(LinkRelationType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     

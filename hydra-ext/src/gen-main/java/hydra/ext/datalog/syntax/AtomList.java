@@ -4,12 +4,12 @@ package hydra.ext.datalog.syntax;
 
 import java.io.Serializable;
 
-public abstract class AtomList implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.AtomList");
+public abstract class AtomList implements Serializable, Comparable<AtomList> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.datalog.syntax.AtomList");
   
-  public static final hydra.core.Name FIELD_NAME_SINGLE = new hydra.core.Name("single");
+  public static final hydra.core.Name SINGLE = new hydra.core.Name("single");
   
-  public static final hydra.core.Name FIELD_NAME_MULTIPLE = new hydra.core.Name("multiple");
+  public static final hydra.core.Name MULTIPLE = new hydra.core.Name("multiple");
   
   private AtomList () {
   
@@ -25,15 +25,15 @@ public abstract class AtomList implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(AtomList instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Single instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Multiple instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -41,7 +41,6 @@ public abstract class AtomList implements Serializable {
     public final hydra.ext.datalog.syntax.Atom value;
     
     public Single (hydra.ext.datalog.syntax.Atom value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -50,13 +49,26 @@ public abstract class AtomList implements Serializable {
       if (!(other instanceof Single)) {
         return false;
       }
-      Single o = (Single) (other);
-      return value.equals(o.value);
+      Single o = (Single) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(AtomList other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Single o = (Single) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -69,7 +81,6 @@ public abstract class AtomList implements Serializable {
     public final hydra.ext.datalog.syntax.AtomList_Multiple value;
     
     public Multiple (hydra.ext.datalog.syntax.AtomList_Multiple value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -78,13 +89,26 @@ public abstract class AtomList implements Serializable {
       if (!(other instanceof Multiple)) {
         return false;
       }
-      Multiple o = (Multiple) (other);
-      return value.equals(o.value);
+      Multiple o = (Multiple) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(AtomList other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Multiple o = (Multiple) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

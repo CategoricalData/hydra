@@ -327,13 +327,13 @@ decodePyComparisonToPyAwaitPrimary c =
       termLhs = (Syntax.termLhs sumRhs)
       termRhs = (Syntax.termRhs sumRhs)
   in (Logic.ifElse (Logic.not (Lists.null rhs)) Nothing (Logic.ifElse (Maybes.isJust orLhs) Nothing (Logic.ifElse (Maybes.isJust xorLhs) Nothing (Logic.ifElse (Maybes.isJust andLhs) Nothing (Logic.ifElse (Maybes.isJust shiftLhs) Nothing (Logic.ifElse (Maybes.isJust sumLhs) Nothing (Logic.ifElse (Maybes.isJust termLhs) Nothing ((\x -> case x of
-    Syntax.FactorSimple v1 -> (decodePyPowerToPyPrimary v1)
+    Syntax.FactorSimple v0 -> (decodePyPowerToPyPrimary v0)
     _ -> Nothing) termRhs))))))))
 
 -- | Decode an Inversion to a Primary if possible
 decodePyInversionToPyPrimary :: (Syntax.Inversion -> Maybe Syntax.Primary)
 decodePyInversionToPyPrimary i = ((\x -> case x of
-  Syntax.InversionSimple v1 -> (decodePyComparisonToPyAwaitPrimary v1)
+  Syntax.InversionSimple v0 -> (decodePyComparisonToPyAwaitPrimary v0)
   _ -> Nothing) i)
 
 -- | Decode a Conjunction to a Primary if possible
@@ -345,8 +345,8 @@ decodePyConjunctionToPyPrimary c =
 -- | Decode an Expression to a Primary if possible
 decodePyExpressionToPyPrimary :: (Syntax.Expression -> Maybe Syntax.Primary)
 decodePyExpressionToPyPrimary e = ((\x -> case x of
-  Syntax.ExpressionSimple v1 ->  
-    let conjunctions = (Syntax.unDisjunction v1)
+  Syntax.ExpressionSimple v0 ->  
+    let conjunctions = (Syntax.unDisjunction v0)
     in (Logic.ifElse (Equality.equal (Lists.length conjunctions) 1) (decodePyConjunctionToPyPrimary (Lists.head conjunctions)) Nothing)
   _ -> Nothing) e)
 
@@ -357,7 +357,7 @@ pyExpressionToPyPrimary e = (Maybes.maybe (Syntax.PrimarySimple (Syntax.AtomGrou
 -- | Convert an Expression to a Disjunction, wrapping in parens if needed
 pyExpressionToDisjunction :: (Syntax.Expression -> Syntax.Disjunction)
 pyExpressionToDisjunction e = ((\x -> case x of
-  Syntax.ExpressionSimple v1 -> v1
+  Syntax.ExpressionSimple v0 -> v0
   _ -> (Syntax.Disjunction [
     pyPrimaryToPyConjunction (Syntax.PrimarySimple (Syntax.AtomGroup (Syntax.GroupExpression (Syntax.NamedExpressionSimple e))))])) e)
 

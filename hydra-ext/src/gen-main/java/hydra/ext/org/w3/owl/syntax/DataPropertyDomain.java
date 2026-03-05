@@ -4,14 +4,14 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class DataPropertyDomain implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataPropertyDomain");
+public class DataPropertyDomain implements Serializable, Comparable<DataPropertyDomain> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataPropertyDomain");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public static final hydra.core.Name FIELD_NAME_DOMAIN = new hydra.core.Name("domain");
+  public static final hydra.core.Name DOMAIN = new hydra.core.Name("domain");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
@@ -20,9 +20,6 @@ public class DataPropertyDomain implements Serializable {
   public final hydra.ext.org.w3.owl.syntax.ClassExpression domain;
   
   public DataPropertyDomain (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression domain) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((property));
-    java.util.Objects.requireNonNull((domain));
     this.annotations = annotations;
     this.property = property;
     this.domain = domain;
@@ -33,27 +30,47 @@ public class DataPropertyDomain implements Serializable {
     if (!(other instanceof DataPropertyDomain)) {
       return false;
     }
-    DataPropertyDomain o = (DataPropertyDomain) (other);
-    return annotations.equals(o.annotations) && property.equals(o.property) && domain.equals(o.domain);
+    DataPropertyDomain o = (DataPropertyDomain) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.property,
+      o.property) && java.util.Objects.equals(
+      this.domain,
+      o.domain);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * property.hashCode() + 5 * domain.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(property) + 5 * java.util.Objects.hashCode(domain);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(DataPropertyDomain other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) property).compareTo(other.property);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) domain).compareTo(other.domain);
   }
   
   public DataPropertyDomain withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new DataPropertyDomain(annotations, property, domain);
   }
   
   public DataPropertyDomain withProperty(hydra.ext.org.w3.owl.syntax.DataPropertyExpression property) {
-    java.util.Objects.requireNonNull((property));
     return new DataPropertyDomain(annotations, property, domain);
   }
   
   public DataPropertyDomain withDomain(hydra.ext.org.w3.owl.syntax.ClassExpression domain) {
-    java.util.Objects.requireNonNull((domain));
     return new DataPropertyDomain(annotations, property, domain);
   }
 }

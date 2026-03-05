@@ -4,20 +4,18 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class DataSomeValuesFrom implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataSomeValuesFrom");
+public class DataSomeValuesFrom implements Serializable, Comparable<DataSomeValuesFrom> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataSomeValuesFrom");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  public static final hydra.core.Name RANGE = new hydra.core.Name("range");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> property;
   
   public final hydra.ext.org.w3.owl.syntax.DataRange range;
   
   public DataSomeValuesFrom (java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> property, hydra.ext.org.w3.owl.syntax.DataRange range) {
-    java.util.Objects.requireNonNull((property));
-    java.util.Objects.requireNonNull((range));
     this.property = property;
     this.range = range;
   }
@@ -27,22 +25,37 @@ public class DataSomeValuesFrom implements Serializable {
     if (!(other instanceof DataSomeValuesFrom)) {
       return false;
     }
-    DataSomeValuesFrom o = (DataSomeValuesFrom) (other);
-    return property.equals(o.property) && range.equals(o.range);
+    DataSomeValuesFrom o = (DataSomeValuesFrom) other;
+    return java.util.Objects.equals(
+      this.property,
+      o.property) && java.util.Objects.equals(
+      this.range,
+      o.range);
   }
   
   @Override
   public int hashCode() {
-    return 2 * property.hashCode() + 3 * range.hashCode();
+    return 2 * java.util.Objects.hashCode(property) + 3 * java.util.Objects.hashCode(range);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(DataSomeValuesFrom other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      property.hashCode(),
+      other.property.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) range).compareTo(other.range);
   }
   
   public DataSomeValuesFrom withProperty(java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> property) {
-    java.util.Objects.requireNonNull((property));
     return new DataSomeValuesFrom(property, range);
   }
   
   public DataSomeValuesFrom withRange(hydra.ext.org.w3.owl.syntax.DataRange range) {
-    java.util.Objects.requireNonNull((range));
     return new DataSomeValuesFrom(property, range);
   }
 }

@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * Represents a subfield of StructType with additional properties and metadata.
  */
-public class StructField implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.delta.parquet.StructField");
+public class StructField implements Serializable, Comparable<StructField> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.delta.parquet.StructField");
   
-  public static final hydra.core.Name FIELD_NAME_NAME = new hydra.core.Name("name");
+  public static final hydra.core.Name NAME = new hydra.core.Name("name");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_TYPE = new hydra.core.Name("dataType");
+  public static final hydra.core.Name DATA_TYPE = new hydra.core.Name("dataType");
   
-  public static final hydra.core.Name FIELD_NAME_NULLABLE = new hydra.core.Name("nullable");
+  public static final hydra.core.Name NULLABLE = new hydra.core.Name("nullable");
   
   public final String name;
   
@@ -23,9 +23,6 @@ public class StructField implements Serializable {
   public final Boolean nullable;
   
   public StructField (String name, hydra.ext.io.delta.parquet.DataType dataType, Boolean nullable) {
-    java.util.Objects.requireNonNull((name));
-    java.util.Objects.requireNonNull((dataType));
-    java.util.Objects.requireNonNull((nullable));
     this.name = name;
     this.dataType = dataType;
     this.nullable = nullable;
@@ -36,27 +33,45 @@ public class StructField implements Serializable {
     if (!(other instanceof StructField)) {
       return false;
     }
-    StructField o = (StructField) (other);
-    return name.equals(o.name) && dataType.equals(o.dataType) && nullable.equals(o.nullable);
+    StructField o = (StructField) other;
+    return java.util.Objects.equals(
+      this.name,
+      o.name) && java.util.Objects.equals(
+      this.dataType,
+      o.dataType) && java.util.Objects.equals(
+      this.nullable,
+      o.nullable);
   }
   
   @Override
   public int hashCode() {
-    return 2 * name.hashCode() + 3 * dataType.hashCode() + 5 * nullable.hashCode();
+    return 2 * java.util.Objects.hashCode(name) + 3 * java.util.Objects.hashCode(dataType) + 5 * java.util.Objects.hashCode(nullable);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(StructField other) {
+    int cmp = 0;
+    cmp = ((Comparable) name).compareTo(other.name);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) dataType).compareTo(other.dataType);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) nullable).compareTo(other.nullable);
   }
   
   public StructField withName(String name) {
-    java.util.Objects.requireNonNull((name));
     return new StructField(name, dataType, nullable);
   }
   
   public StructField withDataType(hydra.ext.io.delta.parquet.DataType dataType) {
-    java.util.Objects.requireNonNull((dataType));
     return new StructField(name, dataType, nullable);
   }
   
   public StructField withNullable(Boolean nullable) {
-    java.util.Objects.requireNonNull((nullable));
     return new StructField(name, dataType, nullable);
   }
 }

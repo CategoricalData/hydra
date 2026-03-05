@@ -39,12 +39,12 @@ validateEdge checkValue showValue labelForVertexId typ el =
 
 validateElement :: ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Maybe (t1 -> Maybe Model.VertexLabel) -> Model.ElementType t0 -> Model.Element t1 -> Maybe String)
 validateElement checkValue showValue labelForVertexId typ el = ((\x -> case x of
-  Model.ElementTypeVertex v1 -> ((\x -> case x of
-    Model.ElementEdge v2 -> (Just (prepend "Edge instead of vertex" (showValue (Model.edgeId v2))))
-    Model.ElementVertex v2 -> (validateVertex checkValue showValue v1 v2)) el)
-  Model.ElementTypeEdge v1 -> ((\x -> case x of
-    Model.ElementVertex v2 -> (Just (prepend "Vertex instead of edge" (showValue (Model.vertexId v2))))
-    Model.ElementEdge v2 -> (validateEdge checkValue showValue labelForVertexId v1 v2)) el)) typ)
+  Model.ElementTypeVertex v0 -> ((\x -> case x of
+    Model.ElementEdge v1 -> (Just (prepend "Edge instead of vertex" (showValue (Model.edgeId v1))))
+    Model.ElementVertex v1 -> (validateVertex checkValue showValue v0 v1)) el)
+  Model.ElementTypeEdge v0 -> ((\x -> case x of
+    Model.ElementVertex v1 -> (Just (prepend "Vertex instead of edge" (showValue (Model.vertexId v1))))
+    Model.ElementEdge v1 -> (validateEdge checkValue showValue labelForVertexId v0 v1)) el)) typ)
 
 validateGraph :: Ord t1 => ((t0 -> t1 -> Maybe String) -> (t1 -> String) -> Model.GraphSchema t0 -> Model.Graph t1 -> Maybe String)
 validateGraph checkValue showValue schema graph =  

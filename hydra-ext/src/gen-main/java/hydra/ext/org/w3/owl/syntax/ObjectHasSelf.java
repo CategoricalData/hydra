@@ -4,15 +4,14 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class ObjectHasSelf implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectHasSelf");
+public class ObjectHasSelf implements Serializable, Comparable<ObjectHasSelf> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectHasSelf");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression value;
   
   public ObjectHasSelf (hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -21,12 +20,20 @@ public class ObjectHasSelf implements Serializable {
     if (!(other instanceof ObjectHasSelf)) {
       return false;
     }
-    ObjectHasSelf o = (ObjectHasSelf) (other);
-    return value.equals(o.value);
+    ObjectHasSelf o = (ObjectHasSelf) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ObjectHasSelf other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

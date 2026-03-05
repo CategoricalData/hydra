@@ -4,22 +4,20 @@ package hydra.ext.datalog.syntax;
 
 import java.io.Serializable;
 
-public class Fact implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.Fact");
+public class Fact implements Serializable, Comparable<Fact> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.datalog.syntax.Fact");
   
-  public static final hydra.core.Name FIELD_NAME_RELATION = new hydra.core.Name("relation");
+  public static final hydra.core.Name RELATION = new hydra.core.Name("Relation");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTANT_LIST = new hydra.core.Name("constantList");
+  public static final hydra.core.Name CONSTANT_LIST = new hydra.core.Name("ConstantList");
   
-  public final hydra.ext.datalog.syntax.Relation relation;
+  public final hydra.ext.datalog.syntax.Relation Relation;
   
-  public final hydra.ext.datalog.syntax.ConstantList constantList;
+  public final hydra.ext.datalog.syntax.ConstantList ConstantList;
   
-  public Fact (hydra.ext.datalog.syntax.Relation relation, hydra.ext.datalog.syntax.ConstantList constantList) {
-    java.util.Objects.requireNonNull((relation));
-    java.util.Objects.requireNonNull((constantList));
-    this.relation = relation;
-    this.constantList = constantList;
+  public Fact (hydra.ext.datalog.syntax.Relation Relation, hydra.ext.datalog.syntax.ConstantList ConstantList) {
+    this.Relation = Relation;
+    this.ConstantList = ConstantList;
   }
   
   @Override
@@ -27,22 +25,35 @@ public class Fact implements Serializable {
     if (!(other instanceof Fact)) {
       return false;
     }
-    Fact o = (Fact) (other);
-    return relation.equals(o.relation) && constantList.equals(o.constantList);
+    Fact o = (Fact) other;
+    return java.util.Objects.equals(
+      this.Relation,
+      o.Relation) && java.util.Objects.equals(
+      this.ConstantList,
+      o.ConstantList);
   }
   
   @Override
   public int hashCode() {
-    return 2 * relation.hashCode() + 3 * constantList.hashCode();
+    return 2 * java.util.Objects.hashCode(Relation) + 3 * java.util.Objects.hashCode(ConstantList);
   }
   
-  public Fact withRelation(hydra.ext.datalog.syntax.Relation relation) {
-    java.util.Objects.requireNonNull((relation));
-    return new Fact(relation, constantList);
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Fact other) {
+    int cmp = 0;
+    cmp = ((Comparable) Relation).compareTo(other.Relation);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) ConstantList).compareTo(other.ConstantList);
   }
   
-  public Fact withConstantList(hydra.ext.datalog.syntax.ConstantList constantList) {
-    java.util.Objects.requireNonNull((constantList));
-    return new Fact(relation, constantList);
+  public Fact withRelation(hydra.ext.datalog.syntax.Relation Relation) {
+    return new Fact(Relation, ConstantList);
+  }
+  
+  public Fact withConstantList(hydra.ext.datalog.syntax.ConstantList ConstantList) {
+    return new Fact(Relation, ConstantList);
   }
 }

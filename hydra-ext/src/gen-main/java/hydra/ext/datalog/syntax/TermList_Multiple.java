@@ -4,22 +4,20 @@ package hydra.ext.datalog.syntax;
 
 import java.io.Serializable;
 
-public class TermList_Multiple implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.TermList_Multiple");
+public class TermList_Multiple implements Serializable, Comparable<TermList_Multiple> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.datalog.syntax.TermList_Multiple");
   
-  public static final hydra.core.Name FIELD_NAME_TERM = new hydra.core.Name("term");
+  public static final hydra.core.Name TERM = new hydra.core.Name("Term");
   
-  public static final hydra.core.Name FIELD_NAME_TERM_LIST = new hydra.core.Name("termList");
+  public static final hydra.core.Name TERM_LIST = new hydra.core.Name("TermList");
   
-  public final hydra.ext.datalog.syntax.Term term;
+  public final hydra.ext.datalog.syntax.Term Term;
   
-  public final hydra.ext.datalog.syntax.TermList termList;
+  public final hydra.ext.datalog.syntax.TermList TermList;
   
-  public TermList_Multiple (hydra.ext.datalog.syntax.Term term, hydra.ext.datalog.syntax.TermList termList) {
-    java.util.Objects.requireNonNull((term));
-    java.util.Objects.requireNonNull((termList));
-    this.term = term;
-    this.termList = termList;
+  public TermList_Multiple (hydra.ext.datalog.syntax.Term Term, hydra.ext.datalog.syntax.TermList TermList) {
+    this.Term = Term;
+    this.TermList = TermList;
   }
   
   @Override
@@ -27,22 +25,35 @@ public class TermList_Multiple implements Serializable {
     if (!(other instanceof TermList_Multiple)) {
       return false;
     }
-    TermList_Multiple o = (TermList_Multiple) (other);
-    return term.equals(o.term) && termList.equals(o.termList);
+    TermList_Multiple o = (TermList_Multiple) other;
+    return java.util.Objects.equals(
+      this.Term,
+      o.Term) && java.util.Objects.equals(
+      this.TermList,
+      o.TermList);
   }
   
   @Override
   public int hashCode() {
-    return 2 * term.hashCode() + 3 * termList.hashCode();
+    return 2 * java.util.Objects.hashCode(Term) + 3 * java.util.Objects.hashCode(TermList);
   }
   
-  public TermList_Multiple withTerm(hydra.ext.datalog.syntax.Term term) {
-    java.util.Objects.requireNonNull((term));
-    return new TermList_Multiple(term, termList);
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(TermList_Multiple other) {
+    int cmp = 0;
+    cmp = ((Comparable) Term).compareTo(other.Term);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) TermList).compareTo(other.TermList);
   }
   
-  public TermList_Multiple withTermList(hydra.ext.datalog.syntax.TermList termList) {
-    java.util.Objects.requireNonNull((termList));
-    return new TermList_Multiple(term, termList);
+  public TermList_Multiple withTerm(hydra.ext.datalog.syntax.Term Term) {
+    return new TermList_Multiple(Term, TermList);
+  }
+  
+  public TermList_Multiple withTermList(hydra.ext.datalog.syntax.TermList TermList) {
+    return new TermList_Multiple(Term, TermList);
   }
 }

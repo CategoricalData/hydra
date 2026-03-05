@@ -4,20 +4,18 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class InverseFunctionalObjectProperty implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.InverseFunctionalObjectProperty");
+public class InverseFunctionalObjectProperty implements Serializable, Comparable<InverseFunctionalObjectProperty> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.InverseFunctionalObjectProperty");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
   
   public InverseFunctionalObjectProperty (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((property));
     this.annotations = annotations;
     this.property = property;
   }
@@ -27,22 +25,37 @@ public class InverseFunctionalObjectProperty implements Serializable {
     if (!(other instanceof InverseFunctionalObjectProperty)) {
       return false;
     }
-    InverseFunctionalObjectProperty o = (InverseFunctionalObjectProperty) (other);
-    return annotations.equals(o.annotations) && property.equals(o.property);
+    InverseFunctionalObjectProperty o = (InverseFunctionalObjectProperty) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.property,
+      o.property);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * property.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(property);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(InverseFunctionalObjectProperty other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) property).compareTo(other.property);
   }
   
   public InverseFunctionalObjectProperty withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new InverseFunctionalObjectProperty(annotations, property);
   }
   
   public InverseFunctionalObjectProperty withProperty(hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
-    java.util.Objects.requireNonNull((property));
     return new InverseFunctionalObjectProperty(annotations, property);
   }
 }

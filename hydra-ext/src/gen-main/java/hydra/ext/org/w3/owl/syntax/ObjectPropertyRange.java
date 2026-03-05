@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * See https://www.w3.org/TR/owl2-syntax/#Object_Property_Range
  */
-public class ObjectPropertyRange implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyRange");
+public class ObjectPropertyRange implements Serializable, Comparable<ObjectPropertyRange> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectPropertyRange");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  public static final hydra.core.Name RANGE = new hydra.core.Name("range");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
@@ -23,9 +23,6 @@ public class ObjectPropertyRange implements Serializable {
   public final hydra.ext.org.w3.owl.syntax.ClassExpression range;
   
   public ObjectPropertyRange (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression range) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((property));
-    java.util.Objects.requireNonNull((range));
     this.annotations = annotations;
     this.property = property;
     this.range = range;
@@ -36,27 +33,47 @@ public class ObjectPropertyRange implements Serializable {
     if (!(other instanceof ObjectPropertyRange)) {
       return false;
     }
-    ObjectPropertyRange o = (ObjectPropertyRange) (other);
-    return annotations.equals(o.annotations) && property.equals(o.property) && range.equals(o.range);
+    ObjectPropertyRange o = (ObjectPropertyRange) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.property,
+      o.property) && java.util.Objects.equals(
+      this.range,
+      o.range);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * property.hashCode() + 5 * range.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(property) + 5 * java.util.Objects.hashCode(range);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ObjectPropertyRange other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) property).compareTo(other.property);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) range).compareTo(other.range);
   }
   
   public ObjectPropertyRange withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new ObjectPropertyRange(annotations, property, range);
   }
   
   public ObjectPropertyRange withProperty(hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
-    java.util.Objects.requireNonNull((property));
     return new ObjectPropertyRange(annotations, property, range);
   }
   
   public ObjectPropertyRange withRange(hydra.ext.org.w3.owl.syntax.ClassExpression range) {
-    java.util.Objects.requireNonNull((range));
     return new ObjectPropertyRange(annotations, property, range);
   }
 }

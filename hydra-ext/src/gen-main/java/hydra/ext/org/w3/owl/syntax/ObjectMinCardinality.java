@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * See https://www.w3.org/TR/owl2-syntax/#Minimum_Cardinality
  */
-public class ObjectMinCardinality implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectMinCardinality");
+public class ObjectMinCardinality implements Serializable, Comparable<ObjectMinCardinality> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectMinCardinality");
   
-  public static final hydra.core.Name FIELD_NAME_BOUND = new hydra.core.Name("bound");
+  public static final hydra.core.Name BOUND = new hydra.core.Name("bound");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  public static final hydra.core.Name CLASS = new hydra.core.Name("class");
   
   public final java.math.BigInteger bound;
   
@@ -23,9 +23,6 @@ public class ObjectMinCardinality implements Serializable {
   public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
   
   public ObjectMinCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
-    java.util.Objects.requireNonNull((bound));
-    java.util.Objects.requireNonNull((property));
-    java.util.Objects.requireNonNull((class_));
     this.bound = bound;
     this.property = property;
     this.class_ = class_;
@@ -36,27 +33,45 @@ public class ObjectMinCardinality implements Serializable {
     if (!(other instanceof ObjectMinCardinality)) {
       return false;
     }
-    ObjectMinCardinality o = (ObjectMinCardinality) (other);
-    return bound.equals(o.bound) && property.equals(o.property) && class_.equals(o.class_);
+    ObjectMinCardinality o = (ObjectMinCardinality) other;
+    return this.bound.compareTo(o.bound) == 0 && java.util.Objects.equals(
+      this.property,
+      o.property) && java.util.Objects.equals(
+      this.class_,
+      o.class_);
   }
   
   @Override
   public int hashCode() {
-    return 2 * bound.hashCode() + 3 * property.hashCode() + 5 * class_.hashCode();
+    return 2 * java.util.Objects.hashCode(bound) + 3 * java.util.Objects.hashCode(property) + 5 * java.util.Objects.hashCode(class_);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ObjectMinCardinality other) {
+    int cmp = 0;
+    cmp = ((Comparable) bound).compareTo(other.bound);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) property).compareTo(other.property);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      class_.hashCode(),
+      other.class_.hashCode());
   }
   
   public ObjectMinCardinality withBound(java.math.BigInteger bound) {
-    java.util.Objects.requireNonNull((bound));
     return new ObjectMinCardinality(bound, property, class_);
   }
   
   public ObjectMinCardinality withProperty(hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
-    java.util.Objects.requireNonNull((property));
     return new ObjectMinCardinality(bound, property, class_);
   }
   
   public ObjectMinCardinality withClass(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
-    java.util.Objects.requireNonNull((class_));
     return new ObjectMinCardinality(bound, property, class_);
   }
 }

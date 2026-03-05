@@ -4,15 +4,14 @@ package hydra.ext.org.w3.xml.schema;
 
 import java.io.Serializable;
 
-public class Boolean_ implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.xml.schema.Boolean");
+public class Boolean_ implements Serializable, Comparable<Boolean_> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.xml.schema.Boolean");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final Boolean value;
   
   public Boolean_ (Boolean value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -21,12 +20,20 @@ public class Boolean_ implements Serializable {
     if (!(other instanceof Boolean_)) {
       return false;
     }
-    Boolean_ o = (Boolean_) (other);
-    return value.equals(o.value);
+    Boolean_ o = (Boolean_) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Boolean_ other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

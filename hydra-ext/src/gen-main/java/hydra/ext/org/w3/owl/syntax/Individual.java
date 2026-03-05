@@ -4,12 +4,12 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public abstract class Individual implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.Individual");
+public abstract class Individual implements Serializable, Comparable<Individual> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.Individual");
   
-  public static final hydra.core.Name FIELD_NAME_NAMED = new hydra.core.Name("named");
+  public static final hydra.core.Name NAMED = new hydra.core.Name("named");
   
-  public static final hydra.core.Name FIELD_NAME_ANONYMOUS = new hydra.core.Name("anonymous");
+  public static final hydra.core.Name ANONYMOUS = new hydra.core.Name("anonymous");
   
   private Individual () {
   
@@ -25,15 +25,15 @@ public abstract class Individual implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Individual instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Named instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Anonymous instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -41,7 +41,6 @@ public abstract class Individual implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.NamedIndividual value;
     
     public Named (hydra.ext.org.w3.owl.syntax.NamedIndividual value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -50,13 +49,26 @@ public abstract class Individual implements Serializable {
       if (!(other instanceof Named)) {
         return false;
       }
-      Named o = (Named) (other);
-      return value.equals(o.value);
+      Named o = (Named) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Individual other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Named o = (Named) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -69,7 +81,6 @@ public abstract class Individual implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.AnonymousIndividual value;
     
     public Anonymous (hydra.ext.org.w3.owl.syntax.AnonymousIndividual value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -78,13 +89,26 @@ public abstract class Individual implements Serializable {
       if (!(other instanceof Anonymous)) {
         return false;
       }
-      Anonymous o = (Anonymous) (other);
-      return value.equals(o.value);
+      Anonymous o = (Anonymous) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Individual other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Anonymous o = (Anonymous) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

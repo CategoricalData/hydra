@@ -4,14 +4,14 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public abstract class AnnotationValue implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationValue");
+public abstract class AnnotationValue implements Serializable, Comparable<AnnotationValue> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationValue");
   
-  public static final hydra.core.Name FIELD_NAME_ANONYMOUS_INDIVIDUAL = new hydra.core.Name("anonymousIndividual");
+  public static final hydra.core.Name ANONYMOUS_INDIVIDUAL = new hydra.core.Name("anonymousIndividual");
   
-  public static final hydra.core.Name FIELD_NAME_IRI = new hydra.core.Name("iri");
+  public static final hydra.core.Name IRI = new hydra.core.Name("iri");
   
-  public static final hydra.core.Name FIELD_NAME_LITERAL = new hydra.core.Name("literal");
+  public static final hydra.core.Name LITERAL = new hydra.core.Name("literal");
   
   private AnnotationValue () {
   
@@ -29,19 +29,19 @@ public abstract class AnnotationValue implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(AnnotationValue instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(AnonymousIndividual instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Iri instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Literal instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -49,7 +49,6 @@ public abstract class AnnotationValue implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.AnonymousIndividual value;
     
     public AnonymousIndividual (hydra.ext.org.w3.owl.syntax.AnonymousIndividual value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -58,13 +57,26 @@ public abstract class AnnotationValue implements Serializable {
       if (!(other instanceof AnonymousIndividual)) {
         return false;
       }
-      AnonymousIndividual o = (AnonymousIndividual) (other);
-      return value.equals(o.value);
+      AnonymousIndividual o = (AnonymousIndividual) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(AnnotationValue other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      AnonymousIndividual o = (AnonymousIndividual) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -77,7 +89,6 @@ public abstract class AnnotationValue implements Serializable {
     public final hydra.ext.org.w3.rdf.syntax.Iri value;
     
     public Iri (hydra.ext.org.w3.rdf.syntax.Iri value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -86,13 +97,26 @@ public abstract class AnnotationValue implements Serializable {
       if (!(other instanceof Iri)) {
         return false;
       }
-      Iri o = (Iri) (other);
-      return value.equals(o.value);
+      Iri o = (Iri) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(AnnotationValue other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Iri o = (Iri) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -105,7 +129,6 @@ public abstract class AnnotationValue implements Serializable {
     public final hydra.ext.org.w3.rdf.syntax.Literal value;
     
     public Literal (hydra.ext.org.w3.rdf.syntax.Literal value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -114,13 +137,26 @@ public abstract class AnnotationValue implements Serializable {
       if (!(other instanceof Literal)) {
         return false;
       }
-      Literal o = (Literal) (other);
-      return value.equals(o.value);
+      Literal o = (Literal) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(AnnotationValue other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Literal o = (Literal) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

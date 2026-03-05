@@ -4,16 +4,16 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public abstract class AnnotationAxiom implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationAxiom");
+public abstract class AnnotationAxiom implements Serializable, Comparable<AnnotationAxiom> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.AnnotationAxiom");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION_ASSERTION = new hydra.core.Name("annotationAssertion");
+  public static final hydra.core.Name ANNOTATION_ASSERTION = new hydra.core.Name("annotationAssertion");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION_PROPERTY_DOMAIN = new hydra.core.Name("annotationPropertyDomain");
+  public static final hydra.core.Name ANNOTATION_PROPERTY_DOMAIN = new hydra.core.Name("annotationPropertyDomain");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATION_PROPERTY_RANGE = new hydra.core.Name("annotationPropertyRange");
+  public static final hydra.core.Name ANNOTATION_PROPERTY_RANGE = new hydra.core.Name("annotationPropertyRange");
   
-  public static final hydra.core.Name FIELD_NAME_SUB_ANNOTATION_PROPERTY_OF = new hydra.core.Name("subAnnotationPropertyOf");
+  public static final hydra.core.Name SUB_ANNOTATION_PROPERTY_OF = new hydra.core.Name("subAnnotationPropertyOf");
   
   private AnnotationAxiom () {
   
@@ -33,23 +33,23 @@ public abstract class AnnotationAxiom implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(AnnotationAxiom instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(AnnotationAssertion instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(AnnotationPropertyDomain instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(AnnotationPropertyRange instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(SubAnnotationPropertyOf instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -57,7 +57,6 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.AnnotationAssertion value;
     
     public AnnotationAssertion (hydra.ext.org.w3.owl.syntax.AnnotationAssertion value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -66,13 +65,26 @@ public abstract class AnnotationAxiom implements Serializable {
       if (!(other instanceof AnnotationAssertion)) {
         return false;
       }
-      AnnotationAssertion o = (AnnotationAssertion) (other);
-      return value.equals(o.value);
+      AnnotationAssertion o = (AnnotationAssertion) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(AnnotationAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      AnnotationAssertion o = (AnnotationAssertion) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -85,7 +97,6 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.AnnotationPropertyDomain value;
     
     public AnnotationPropertyDomain (hydra.ext.org.w3.owl.syntax.AnnotationPropertyDomain value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -94,13 +105,26 @@ public abstract class AnnotationAxiom implements Serializable {
       if (!(other instanceof AnnotationPropertyDomain)) {
         return false;
       }
-      AnnotationPropertyDomain o = (AnnotationPropertyDomain) (other);
-      return value.equals(o.value);
+      AnnotationPropertyDomain o = (AnnotationPropertyDomain) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(AnnotationAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      AnnotationPropertyDomain o = (AnnotationPropertyDomain) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -113,7 +137,6 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.AnnotationPropertyRange value;
     
     public AnnotationPropertyRange (hydra.ext.org.w3.owl.syntax.AnnotationPropertyRange value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -122,13 +145,26 @@ public abstract class AnnotationAxiom implements Serializable {
       if (!(other instanceof AnnotationPropertyRange)) {
         return false;
       }
-      AnnotationPropertyRange o = (AnnotationPropertyRange) (other);
-      return value.equals(o.value);
+      AnnotationPropertyRange o = (AnnotationPropertyRange) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(AnnotationAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      AnnotationPropertyRange o = (AnnotationPropertyRange) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -141,7 +177,6 @@ public abstract class AnnotationAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.SubAnnotationPropertyOf value;
     
     public SubAnnotationPropertyOf (hydra.ext.org.w3.owl.syntax.SubAnnotationPropertyOf value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -150,13 +185,26 @@ public abstract class AnnotationAxiom implements Serializable {
       if (!(other instanceof SubAnnotationPropertyOf)) {
         return false;
       }
-      SubAnnotationPropertyOf o = (SubAnnotationPropertyOf) (other);
-      return value.equals(o.value);
+      SubAnnotationPropertyOf o = (SubAnnotationPropertyOf) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(AnnotationAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      SubAnnotationPropertyOf o = (SubAnnotationPropertyOf) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

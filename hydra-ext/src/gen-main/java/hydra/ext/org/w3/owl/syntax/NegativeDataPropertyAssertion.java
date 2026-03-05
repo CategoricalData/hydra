@@ -4,16 +4,16 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class NegativeDataPropertyAssertion implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.NegativeDataPropertyAssertion");
+public class NegativeDataPropertyAssertion implements Serializable, Comparable<NegativeDataPropertyAssertion> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.NegativeDataPropertyAssertion");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public static final hydra.core.Name FIELD_NAME_SOURCE = new hydra.core.Name("source");
+  public static final hydra.core.Name SOURCE = new hydra.core.Name("source");
   
-  public static final hydra.core.Name FIELD_NAME_TARGET = new hydra.core.Name("target");
+  public static final hydra.core.Name TARGET = new hydra.core.Name("target");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
@@ -24,10 +24,6 @@ public class NegativeDataPropertyAssertion implements Serializable {
   public final hydra.ext.org.w3.owl.syntax.Individual target;
   
   public NegativeDataPropertyAssertion (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.ext.org.w3.owl.syntax.Individual source, hydra.ext.org.w3.owl.syntax.Individual target) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((property));
-    java.util.Objects.requireNonNull((source));
-    java.util.Objects.requireNonNull((target));
     this.annotations = annotations;
     this.property = property;
     this.source = source;
@@ -39,32 +35,57 @@ public class NegativeDataPropertyAssertion implements Serializable {
     if (!(other instanceof NegativeDataPropertyAssertion)) {
       return false;
     }
-    NegativeDataPropertyAssertion o = (NegativeDataPropertyAssertion) (other);
-    return annotations.equals(o.annotations) && property.equals(o.property) && source.equals(o.source) && target.equals(o.target);
+    NegativeDataPropertyAssertion o = (NegativeDataPropertyAssertion) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.property,
+      o.property) && java.util.Objects.equals(
+      this.source,
+      o.source) && java.util.Objects.equals(
+      this.target,
+      o.target);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * property.hashCode() + 5 * source.hashCode() + 7 * target.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(property) + 5 * java.util.Objects.hashCode(source) + 7 * java.util.Objects.hashCode(target);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(NegativeDataPropertyAssertion other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) property).compareTo(other.property);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) source).compareTo(other.source);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) target).compareTo(other.target);
   }
   
   public NegativeDataPropertyAssertion withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new NegativeDataPropertyAssertion(annotations, property, source, target);
   }
   
   public NegativeDataPropertyAssertion withProperty(hydra.ext.org.w3.owl.syntax.DataPropertyExpression property) {
-    java.util.Objects.requireNonNull((property));
     return new NegativeDataPropertyAssertion(annotations, property, source, target);
   }
   
   public NegativeDataPropertyAssertion withSource(hydra.ext.org.w3.owl.syntax.Individual source) {
-    java.util.Objects.requireNonNull((source));
     return new NegativeDataPropertyAssertion(annotations, property, source, target);
   }
   
   public NegativeDataPropertyAssertion withTarget(hydra.ext.org.w3.owl.syntax.Individual target) {
-    java.util.Objects.requireNonNull((target));
     return new NegativeDataPropertyAssertion(annotations, property, source, target);
   }
 }

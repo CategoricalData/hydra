@@ -4,20 +4,18 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class DisjointClasses implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DisjointClasses");
+public class DisjointClasses implements Serializable, Comparable<DisjointClasses> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DisjointClasses");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_CLASSES = new hydra.core.Name("classes");
+  public static final hydra.core.Name CLASSES = new hydra.core.Name("classes");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes;
   
   public DisjointClasses (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((classes));
     this.annotations = annotations;
     this.classes = classes;
   }
@@ -27,22 +25,39 @@ public class DisjointClasses implements Serializable {
     if (!(other instanceof DisjointClasses)) {
       return false;
     }
-    DisjointClasses o = (DisjointClasses) (other);
-    return annotations.equals(o.annotations) && classes.equals(o.classes);
+    DisjointClasses o = (DisjointClasses) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.classes,
+      o.classes);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * classes.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(classes);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(DisjointClasses other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      classes.hashCode(),
+      other.classes.hashCode());
   }
   
   public DisjointClasses withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new DisjointClasses(annotations, classes);
   }
   
   public DisjointClasses withClasses(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
-    java.util.Objects.requireNonNull((classes));
     return new DisjointClasses(annotations, classes);
   }
 }

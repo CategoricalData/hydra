@@ -4,15 +4,14 @@ package hydra.ext.org.w3.xml.schema;
 
 import java.io.Serializable;
 
-public class UnsignedByte implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.xml.schema.UnsignedByte");
+public class UnsignedByte implements Serializable, Comparable<UnsignedByte> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.xml.schema.UnsignedByte");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final Character value;
+  public final Short value;
   
-  public UnsignedByte (Character value) {
-    java.util.Objects.requireNonNull((value));
+  public UnsignedByte (Short value) {
     this.value = value;
   }
   
@@ -21,12 +20,20 @@ public class UnsignedByte implements Serializable {
     if (!(other instanceof UnsignedByte)) {
       return false;
     }
-    UnsignedByte o = (UnsignedByte) (other);
-    return value.equals(o.value);
+    UnsignedByte o = (UnsignedByte) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(UnsignedByte other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

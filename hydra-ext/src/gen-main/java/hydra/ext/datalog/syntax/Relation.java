@@ -4,15 +4,14 @@ package hydra.ext.datalog.syntax;
 
 import java.io.Serializable;
 
-public class Relation implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.Relation");
+public class Relation implements Serializable, Comparable<Relation> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.datalog.syntax.Relation");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   
   public Relation (String value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -21,12 +20,20 @@ public class Relation implements Serializable {
     if (!(other instanceof Relation)) {
       return false;
     }
-    Relation o = (Relation) (other);
-    return value.equals(o.value);
+    Relation o = (Relation) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Relation other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

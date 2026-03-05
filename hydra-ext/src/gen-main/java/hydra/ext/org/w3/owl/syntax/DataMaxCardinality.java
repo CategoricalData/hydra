@@ -4,14 +4,14 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class DataMaxCardinality implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataMaxCardinality");
+public class DataMaxCardinality implements Serializable, Comparable<DataMaxCardinality> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataMaxCardinality");
   
-  public static final hydra.core.Name FIELD_NAME_BOUND = new hydra.core.Name("bound");
+  public static final hydra.core.Name BOUND = new hydra.core.Name("bound");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTY = new hydra.core.Name("property");
+  public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  public static final hydra.core.Name RANGE = new hydra.core.Name("range");
   
   public final java.math.BigInteger bound;
   
@@ -20,9 +20,6 @@ public class DataMaxCardinality implements Serializable {
   public final java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> range;
   
   public DataMaxCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> range) {
-    java.util.Objects.requireNonNull((bound));
-    java.util.Objects.requireNonNull((property));
-    java.util.Objects.requireNonNull((range));
     this.bound = bound;
     this.property = property;
     this.range = range;
@@ -33,27 +30,45 @@ public class DataMaxCardinality implements Serializable {
     if (!(other instanceof DataMaxCardinality)) {
       return false;
     }
-    DataMaxCardinality o = (DataMaxCardinality) (other);
-    return bound.equals(o.bound) && property.equals(o.property) && range.equals(o.range);
+    DataMaxCardinality o = (DataMaxCardinality) other;
+    return this.bound.compareTo(o.bound) == 0 && java.util.Objects.equals(
+      this.property,
+      o.property) && java.util.Objects.equals(
+      this.range,
+      o.range);
   }
   
   @Override
   public int hashCode() {
-    return 2 * bound.hashCode() + 3 * property.hashCode() + 5 * range.hashCode();
+    return 2 * java.util.Objects.hashCode(bound) + 3 * java.util.Objects.hashCode(property) + 5 * java.util.Objects.hashCode(range);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(DataMaxCardinality other) {
+    int cmp = 0;
+    cmp = ((Comparable) bound).compareTo(other.bound);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) property).compareTo(other.property);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      range.hashCode(),
+      other.range.hashCode());
   }
   
   public DataMaxCardinality withBound(java.math.BigInteger bound) {
-    java.util.Objects.requireNonNull((bound));
     return new DataMaxCardinality(bound, property, range);
   }
   
   public DataMaxCardinality withProperty(hydra.ext.org.w3.owl.syntax.DataPropertyExpression property) {
-    java.util.Objects.requireNonNull((property));
     return new DataMaxCardinality(bound, property, range);
   }
   
   public DataMaxCardinality withRange(java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> range) {
-    java.util.Objects.requireNonNull((range));
     return new DataMaxCardinality(bound, property, range);
   }
 }
