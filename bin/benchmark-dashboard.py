@@ -22,6 +22,7 @@ Options:
     --last N            Show only the N most recent runs (history mode)
     --depth N           How many levels deep to display (default: 2)
     --slowdown N        Highlight times exceeding Nx Haskell's in red (default: 10)
+    --run RUN           Show a specific run directory in latest mode (e.g. 'baseline')
     --old RUN           Run directory for 'previous' in diff mode (default: run before --new)
     --new RUN           Run directory for 'current' in diff mode (default: latest)
 
@@ -311,7 +312,27 @@ def print_run_header(lang, run):
 
 def cmd_latest(args, runs):
     """Show the most recent run for each language, side by side."""
-    latest = latest_run_per_language(runs)
+    if args.run:
+        # Filter to runs matching the specified directory
+        matching = [r for r in runs if _match_run_dir(r.get("_file", ""), args.run)]
+        if not matching:
+            # Distinguish between missing directory and empty/incomplete run
+            runs_path = Path(args.dir)
+            matching_dirs = [d for d in runs_path.iterdir()
+                             if d.is_dir() and _match_run_dir(d.name, args.run)] if runs_path.exists() else []
+            if matching_dirs:
+                dir_name = matching_dirs[0].name
+                json_count = len(list(matching_dirs[0].glob("*.json")))
+                if json_count == 0:
+                    print(f"Run '{dir_name}' exists but contains no benchmark data (incomplete run?).")
+                else:
+                    print(f"Run '{dir_name}' exists with {json_count} JSON file(s) but none could be loaded.")
+            else:
+                print(f"No run directory found matching '{args.run}'.")
+            return
+        latest = latest_run_per_language(matching)
+    else:
+        latest = latest_run_per_language(runs)
     if not latest:
         print("No benchmark runs found.")
         return
@@ -738,6 +759,8 @@ def main():
                         help="How many levels deep to display (default: 2)")
     parser.add_argument("--slowdown", type=float, default=10.0,
                         help="Highlight times exceeding N times Haskell's (default: 10)")
+    parser.add_argument("--run",
+                        help="Show a specific run directory in latest mode (e.g. run_2026-02-26_063120_353 or just 'baseline')")
     parser.add_argument("--old",
                         help="Run directory name for 'previous' in diff mode (e.g. run_2026-02-26_063120_353)")
     parser.add_argument("--new",
