@@ -23,7 +23,6 @@ import qualified Hydra.Dsl.Meta.Json                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
@@ -40,6 +39,8 @@ import qualified Hydra.Dsl.Meta.Types                      as MetaTypes
 import qualified Hydra.Dsl.Meta.Typing                     as Typing
 import qualified Hydra.Dsl.Meta.Util                       as Util
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
+import qualified Hydra.Dsl.Meta.Context                    as Ctx
+import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Prims                           as Prims
 import qualified Hydra.Dsl.Tabular                         as Tabular
 import qualified Hydra.Dsl.Terms                           as Terms
@@ -98,6 +99,13 @@ import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
 
 
+formatOtherError :: TTerm (InContext OtherError -> String)
+formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+
+-- | Lift Either String to Either (InContext OtherError) using a context
+liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either (InContext OtherError) a)
+liftStringError cx = Eithers.bimap ("_s" ~> Ctx.inContext (Error.otherError $ var "_s") cx) ("_x" ~> var "_x")
+
 type HaskellNamespaces = Namespaces H.ModuleName
 
 haskellCoderDefinition :: String -> TTerm a -> TBinding a
@@ -150,11 +158,16 @@ keyHaskellVar = haskellCoderDefinition "keyHaskellVar" $
   doc "The key used to track Haskell variable depth in annotations" $
   wrap _Name $ string "haskellVar"
 
-adaptTypeToHaskellAndEncode :: TBinding (HaskellNamespaces -> Type -> Flow Graph H.Type)
+adaptTypeToHaskellAndEncode :: TBinding (HaskellNamespaces -> Type -> Context -> Graph -> Either (InContext OtherError) H.Type)
 adaptTypeToHaskellAndEncode = haskellCoderDefinition "adaptTypeToHaskellAndEncode" $
   doc "Adapt a Hydra type to Haskell's type system and encode it" $
-  "namespaces" ~>
-    AdaptModules.adaptTypeToLanguageAndEncode @@ (HaskellLanguage.haskellLanguage) @@ (encodeType @@ var "namespaces")
+  "namespaces" ~> "typ" ~> "cx" ~> "g" ~>
+  "enc" <~ ("t" ~> encodeType @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") $
+  cases _Type (Rewriting.deannotateType @@ var "typ")
+    (Just (
+      "adaptedType" <<= liftStringError (var "cx") (AdaptModules.adaptTypeToLanguage @@ HaskellLanguage.haskellLanguage @@ var "cx" @@ var "g" @@ var "typ") $
+      var "enc" @@ var "adaptedType")) [
+    _Type_variable>>: constant (var "enc" @@ var "typ")]
 
 constantForFieldName :: TBinding (Name -> Name -> String)
 constantForFieldName = haskellCoderDefinition "constantForFieldName" $
@@ -172,21 +185,21 @@ constantForTypeName = haskellCoderDefinition "constantForTypeName" $
   "tname" ~>
     Strings.cat2 (string "_") (Names.localNameOf @@ var "tname")
 
-constructModule :: TBinding (HaskellNamespaces -> Module -> [Definition] -> Flow Graph H.Module)
+constructModule :: TBinding (HaskellNamespaces -> Module -> [Definition] -> Context -> Graph -> Either (InContext OtherError) H.Module)
 constructModule = haskellCoderDefinition "constructModule" $
   doc "Construct a Haskell module from a Hydra module and its definitions" $
-  "namespaces" ~> "mod" ~> "defs" ~> lets [
+  "namespaces" ~> "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
   "h">: "namespace" ~>
     unwrap _Namespace @@ var "namespace",
-  "createDeclarations">: "g" ~> "def" ~>
+  "createDeclarations">: "def" ~>
     cases _Definition (var "def") Nothing [
       _Definition_type>>: "type" ~> lets [
         "name">: Module.typeDefinitionName $ var "type",
         "typ">: Module.typeDefinitionType $ var "type"] $
-        toTypeDeclarationsFrom @@ var "namespaces" @@ var "name" @@ var "typ",
+        toTypeDeclarationsFrom @@ var "namespaces" @@ var "name" @@ var "typ" @@ var "cx" @@ var "g",
       _Definition_term>>: "term" ~>
-        "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" $
-        Flows.pure $ list [var "d"]],
+        "d" <<= toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
+        right $ list [var "d"]],
     "importName">: "name" ~>
       wrap H._ModuleName $ Strings.intercalate (string ".") (Lists.map (Formatting.capitalize) (Strings.splitOn (string ".") (var "name"))),
     "imports">: Lists.concat2 (var "domainImports") (var "standardImports"),
@@ -230,11 +243,10 @@ constructModule = haskellCoderDefinition "constructModule" $
         (Logic.ifElse (Schemas.moduleContainsBinaryLiterals @@ var "mod")
           (list [pair (pair (string "Hydra.Lib.Literals") (just $ string "Literals")) (list ([] :: [TTerm String]))])
           (list ([] :: [TTerm ((String, Maybe String), [String])])))] $
-    "g" <<~ Monads.getState $
-    "declLists" <<~ Flows.mapList (var "createDeclarations" @@ var "g") (var "defs") $ lets [
+    "declLists" <<= Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
     "decls">: Lists.concat $ var "declLists",
     "mc">: Module.moduleDescription $ var "mod"] $
-    Flows.pure $ record H._Module [
+    right $ record H._Module [
       H._Module_head>>: just $ record H._ModuleHead [
         H._ModuleHead_comments>>: var "mc",
         H._ModuleHead_name>>: var "importName" @@ (var "h" @@ (Module.moduleNamespace $ var "mod")),
@@ -242,169 +254,161 @@ constructModule = haskellCoderDefinition "constructModule" $
       H._Module_imports>>: var "imports",
       H._Module_declarations>>: var "decls"]
 
-encodeFunction :: TBinding (HaskellNamespaces -> Function -> Flow Graph H.Expression)
+encodeFunction :: TBinding (Int -> HaskellNamespaces -> Function -> Context -> Graph -> Either (InContext OtherError) H.Expression)
 encodeFunction = haskellCoderDefinition "encodeFunction" $
   doc "Encode a Hydra function as a Haskell expression" $
-  "namespaces" ~> "fun" ~>
+  "depth" ~> "namespaces" ~> "fun" ~> "cx" ~> "g" ~>
     cases _Function (var "fun") Nothing [
       _Function_elimination>>: "e" ~>
         cases _Elimination (var "e") Nothing [
           _Elimination_wrap>>: "name" ~>
-            Flows.pure $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@
+            right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@
               (Names.qname @@ (Maybes.fromJust $ Names.namespaceOf @@ var "name") @@ (HaskellUtils.newtypeAccessorName @@ var "name")),
           _Elimination_record>>: "proj" ~> lets [
             "dn">: Core.projectionTypeName $ var "proj",
             "fname">: Core.projectionField $ var "proj"] $
-            Flows.pure $ inject H._Expression H._Expression_variable $ HaskellUtils.recordFieldReference @@ var "namespaces" @@ var "dn" @@ var "fname",
+            right $ inject H._Expression H._Expression_variable $ HaskellUtils.recordFieldReference @@ var "namespaces" @@ var "dn" @@ var "fname",
           _Elimination_union>>: "stmt" ~> lets [
             "dn">: Core.caseStatementTypeName $ var "stmt",
             "def">: Core.caseStatementDefault $ var "stmt",
             "fields">: Core.caseStatementCases $ var "stmt",
             "caseExpr">:
-              "rt" <<~ (Schemas.requireUnionType @@ var "dn") $ lets [
+              "rt" <<= Schemas.requireUnionType @@ var "cx" @@ var "g" @@ var "dn" $ lets [
               "toFieldMapEntry">: "f" ~>
                 pair (Core.fieldTypeName $ var "f") (var "f"),
               "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (Core.rowTypeFields $ var "rt")] $
-              "ecases" <<~ Flows.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
-              "dcases" <<~ (Maybes.cases (var "def")
-                (Flows.pure $ list ([] :: [TTerm H.CaseRhs])) $
+              "ecases" <<= Eithers.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
+              "dcases" <<= (Maybes.cases (var "def")
+                (right $ list ([] :: [TTerm H.CaseRhs])) $
                 "d" ~>
-                  "cs" <<~ (Flows.map (unaryFunction $ wrap H._CaseRhs) $ encodeTerm @@ var "namespaces" @@ var "d") $ lets [
+                  "cs" <<= Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ var "depth" @@ var "namespaces" @@ var "d" @@ var "cx" @@ var "g") $ lets [
                   "lhs">: inject H._Pattern H._Pattern_name $ HaskellUtils.rawName @@ (Constants.ignoredVariable),
                   "alt">: record H._Alternative [
                     H._Alternative_pattern>>: var "lhs",
                     H._Alternative_rhs>>: var "cs",
                     H._Alternative_binds>>: nothing]] $
-                  Flows.pure $ list [var "alt"]) $
-              Flows.pure $ inject H._Expression H._Expression_case $ record H._CaseExpression [
+                  right $ list [var "alt"]) $
+              right $ inject H._Expression H._Expression_case $ record H._CaseExpression [
                 H._CaseExpression_case>>: HaskellUtils.hsvar @@ string "x",
                 H._CaseExpression_alternatives>>: Lists.concat2 (var "ecases") (var "dcases")],
               "toAlt">: "fieldMap" ~> "field" ~> lets [
                 "fn">: Core.fieldName $ var "field",
-                "fun'">: Core.fieldTerm $ var "field"] $
-                Annotations.withDepth @@ keyHaskellVar @@ (
-                  "depth" ~> lets [
-                    "v0">: Strings.cat2 (string "v") (Literals.showInt32 $ var "depth"),
-                    "raw">: MetaTerms.apply (var "fun'") (Core.termVariable $ Core.name $ var "v0"),
-                    "rhsTerm">: Rewriting.simplifyTerm @@ var "raw",
-                    "v1">: Logic.ifElse (Rewriting.isFreeVariableInTerm @@ (wrap _Name $ var "v0") @@ var "rhsTerm")
-                      (Constants.ignoredVariable)
-                      (var "v0")] $
-                    "g_ufr" <<~ Monads.getState $ lets [
-                    "hname">: HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g_ufr"))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
-                    "args" <<~ (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
-                        (Flows.fail $ Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
-                          string " not found in ", Literals.showString $ (Core.unName $ var "dn")]) $
+                "fun'">: Core.fieldTerm $ var "field",
+                "v0">: Strings.cat2 (string "v") (Literals.showInt32 $ var "depth"),
+                "raw">: MetaTerms.apply (var "fun'") (Core.termVariable $ Core.name $ var "v0"),
+                "rhsTerm">: Rewriting.simplifyTerm @@ var "raw",
+                "v1">: Logic.ifElse (Rewriting.isFreeVariableInTerm @@ (wrap _Name $ var "v0") @@ var "rhsTerm")
+                  (Constants.ignoredVariable)
+                  (var "v0"),
+                "hname">: HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
+                    "args" <<= (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
+                        (Ctx.failInContext (Error.otherError (Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
+                          string " not found in ", Literals.showString $ (Core.unName $ var "dn")])) (var "cx")) $
                         "fieldType" ~> lets [
                           "ft">: Core.fieldTypeType $ var "fieldType",
-                          "noArgs">: Flows.pure $ list ([] :: [TTerm H.Pattern]),
-                          "singleArg">: Flows.pure $ list [inject H._Pattern H._Pattern_name $ HaskellUtils.rawName @@ var "v1"]] $
+                          "noArgs">: list ([] :: [TTerm H.Pattern]),
+                          "singleArg">: list [inject H._Pattern H._Pattern_name $ HaskellUtils.rawName @@ var "v1"]] $
                           cases _Type (Rewriting.deannotateType @@ var "ft")
-                            (Just $ var "singleArg") [
-                            _Type_unit>>: constant $ var "noArgs"]) $ lets [
+                            (Just $ right $ var "singleArg") [
+                            _Type_unit>>: constant $ right $ var "noArgs"]) $ lets [
                     "lhs">: HaskellUtils.applicationPattern @@ var "hname" @@ var "args"] $
-                    "rhs" <<~ (Flows.map (unaryFunction $ wrap H._CaseRhs) $ encodeTerm @@ var "namespaces" @@ var "rhsTerm") $
-                    Flows.pure $ record H._Alternative [
+                    "rhs" <<= Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ (Math.add (var "depth") (int32 1)) @@ var "namespaces" @@ var "rhsTerm" @@ var "cx" @@ var "g") $
+                    right $ record H._Alternative [
                       H._Alternative_pattern>>: var "lhs",
                       H._Alternative_rhs>>: var "rhs",
-                      H._Alternative_binds>>: nothing])] $
-            Flows.map (HaskellUtils.hslambda @@ (HaskellUtils.rawName @@ string "x")) (var "caseExpr")],
+                      H._Alternative_binds>>: nothing]] $
+            Eithers.map (HaskellUtils.hslambda @@ (HaskellUtils.rawName @@ string "x")) (var "caseExpr")],
       _Function_lambda>>: "lam" ~> lets [
         "v">: Core.lambdaParameter $ var "lam",
         "body">: Core.lambdaBody $ var "lam"] $
-        Flows.bind (encodeTerm @@ var "namespaces" @@ var "body") $ "hbody" ~>
-          Flows.pure $ HaskellUtils.hslambda @@ (HaskellUtils.elementReference @@ var "namespaces" @@ var "v") @@ var "hbody",
+        "hbody" <<= encodeTerm @@ var "depth" @@ var "namespaces" @@ var "body" @@ var "cx" @@ var "g" $
+          right $ HaskellUtils.hslambda @@ (HaskellUtils.elementReference @@ var "namespaces" @@ var "v") @@ var "hbody",
       _Function_primitive>>: "name" ~>
-        Flows.pure $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name"]
+        right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name"]
 
-encodeLiteral :: TBinding (Literal -> Flow Graph H.Expression)
+encodeLiteral :: TBinding (Literal -> Context -> Either (InContext OtherError) H.Expression)
 encodeLiteral = haskellCoderDefinition "encodeLiteral" $
   doc "Encode a Hydra literal as a Haskell expression" $
-  "l" ~>
+  "l" ~> "cx" ~>
     cases _Literal (var "l")
-      (Just $ Flows.fail $ Strings.cat2 (string "literal value ") (ShowCore.literal @@ var "l")) [
+      (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "literal value ") (ShowCore.literal @@ var "l"))) (var "cx")) [
       _Literal_binary>>: "bs" ~>
-        -- Generate: Literals.stringToBinary "base64string"
-        -- Binary data is stored as a ByteString; we encode to base64 for the source and decode at runtime
-        -- Note: Literals.binaryToString is called at coder-execution time to convert ByteString to base64 String
-        Flows.pure $ HaskellUtils.hsapp
+        right $ HaskellUtils.hsapp
           @@ (HaskellUtils.hsvar @@ string "Literals.stringToBinary")
           @@ (HaskellUtils.hslit @@ (inject H._Literal H._Literal_string
               $ Literals.binaryToString $ var "bs")),
       _Literal_boolean>>: "b" ~>
-        Flows.pure $ HaskellUtils.hsvar @@ Logic.ifElse (var "b") (string "True") (string "False"),
+        right $ HaskellUtils.hsvar @@ Logic.ifElse (var "b") (string "True") (string "False"),
       _Literal_float>>: "fv" ~>
         cases _FloatValue (var "fv") Nothing [
           _FloatValue_float32>>: "f" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_float $ var "f"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_float $ var "f"),
           _FloatValue_float64>>: "f" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_double $ var "f"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_double $ var "f"),
           _FloatValue_bigfloat>>: "f" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_double $ Literals.bigfloatToFloat64 $ var "f")],
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_double $ Literals.bigfloatToFloat64 $ var "f")],
       _Literal_integer>>: "iv" ~>
         cases _IntegerValue (var "iv") Nothing [
           _IntegerValue_bigint>>: "i" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ var "i"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ var "i"),
           _IntegerValue_int8>>: "i" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.int8ToBigint $ var "i"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.int8ToBigint $ var "i"),
           _IntegerValue_int16>>: "i" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.int16ToBigint $ var "i"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.int16ToBigint $ var "i"),
           _IntegerValue_int32>>: "i" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_int $ var "i"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_int $ var "i"),
           _IntegerValue_int64>>: "i" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.int64ToBigint $ var "i"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.int64ToBigint $ var "i"),
           _IntegerValue_uint8>>: "i" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.uint8ToBigint $ var "i"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.uint8ToBigint $ var "i"),
           _IntegerValue_uint16>>: "i" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.uint16ToBigint $ var "i"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.uint16ToBigint $ var "i"),
           _IntegerValue_uint32>>: "i" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.uint32ToBigint $ var "i"),
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.uint32ToBigint $ var "i"),
           _IntegerValue_uint64>>: "i" ~>
-            Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.uint64ToBigint $ var "i")],
+            right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_integer $ Literals.uint64ToBigint $ var "i")],
       _Literal_string>>: "s" ~>
-        Flows.pure $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_string $ var "s")]
+        right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_string $ var "s")]
 
-encodeTerm :: TBinding (HaskellNamespaces -> Term -> Flow Graph H.Expression)
+encodeTerm :: TBinding (Int -> HaskellNamespaces -> Term -> Context -> Graph -> Either (InContext OtherError) H.Expression)
 encodeTerm = haskellCoderDefinition "encodeTerm" $
   doc "Encode a Hydra term as a Haskell expression" $
-  "namespaces" ~> "term" ~> lets [
-    "encode">: encodeTerm @@ var "namespaces"] $
+  "depth" ~> "namespaces" ~> "term" ~> "cx" ~> "g" ~> lets [
+    "encode">: "t" ~> encodeTerm @@ var "depth" @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g"] $
     "nonemptyMap" <~ ("m" ~> lets [
       "lhs">: HaskellUtils.hsvar @@ string "M.fromList",
       "encodePair">: "pair" ~> lets [
         "k">: Pairs.first $ var "pair",
-        "v">: Pairs.second $ var "pair",
-        "hk">: var "encode" @@ var "k",
-        "hv">: var "encode" @@ var "v"] $
-        Flows.map
-          (unaryFunction $ inject H._Expression H._Expression_tuple)
-          (Flows.sequence $ list [var "hk", var "hv"])] $
-      "rhs" <<~ Flows.map
+        "v">: Pairs.second $ var "pair"] $
+        "hk" <<= var "encode" @@ var "k" $
+        "hv" <<= var "encode" @@ var "v" $
+        right $ inject H._Expression H._Expression_tuple $ list [var "hk", var "hv"]] $
+      "rhs" <<= Eithers.map
         (unaryFunction $ inject H._Expression H._Expression_list)
-        (Flows.mapList (var "encodePair") $ Maps.toList (var "m")) $
-      Flows.pure $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs") $
+        (Eithers.mapList (var "encodePair") $ Maps.toList (var "m")) $
+      right $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs") $
     "nonemptySet" <~ ("s" ~> lets [
       "lhs">: HaskellUtils.hsvar @@ string "S.fromList" ] $
-      "rhs" <<~ encodeTerm @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s") $
-      Flows.pure $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs") $
+      "rhs" <<= encodeTerm @@ var "depth" @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s") @@ var "cx" @@ var "g" $
+      right $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs") $
     cases _Term (Rewriting.deannotateTerm @@ var "term")
-      (Just $ Flows.fail $ Strings.cat2 (string "unexpected term: ") (ShowCore.term @@ var "term")) [
+      (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected term: ") (ShowCore.term @@ var "term"))) (var "cx")) [
       _Term_application>>: "app" ~> lets [
         "fun">: Core.applicationFunction $ var "app",
         "arg">: Core.applicationArgument $ var "app"] $
-        Flows.bind (var "encode" @@ var "fun") $ "hfun" ~>
-          Flows.bind (var "encode" @@ var "arg") $ "harg" ~>
-            Flows.pure $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg",
+        "hfun" <<= var "encode" @@ var "fun" $
+          "harg" <<= var "encode" @@ var "arg" $
+            right $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg",
       _Term_either>>: "e" ~> Eithers.either_
           ("l" ~>
-            Flows.bind (var "encode" @@ var "l") $ "hl" ~>
-              Flows.pure $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Left") @@ var "hl")
+            "hl" <<= var "encode" @@ var "l" $
+              right $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Left") @@ var "hl")
           ("r" ~>
-            Flows.bind (var "encode" @@ var "r") $ "hr" ~>
-              Flows.pure $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Right") @@ var "hr")
+            "hr" <<= var "encode" @@ var "r" $
+              right $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Right") @@ var "hr")
           (var "e"),
       _Term_function>>: "f" ~>
-        encodeFunction @@ var "namespaces" @@ var "f",
+        encodeFunction @@ var "depth" @@ var "namespaces" @@ var "f" @@ var "cx" @@ var "g",
       _Term_let>>: "letTerm" ~> lets [
         "bindings">: Core.letBindings $ var "letTerm",
         "env">: Core.letBody $ var "letTerm",
@@ -412,31 +416,31 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
           "name">: Core.bindingName $ var "binding",
           "term'">: Core.bindingTerm $ var "binding",
           "hname">: HaskellUtils.simpleName @@ (Core.unName $ var "name")] $
-          "hexpr" <<~ var "encode" @@ var "term'" $
-          Flows.pure $ inject H._LocalBinding H._LocalBinding_value $ HaskellUtils.simpleValueBinding @@ var "hname" @@ var "hexpr" @@ nothing] $
-        "hbindings" <<~ Flows.mapList (var "encodeBinding") (var "bindings") $
-        "hinner" <<~ var "encode" @@ var "env" $
-        Flows.pure $ inject H._Expression H._Expression_let $ record H._LetExpression [
+          "hexpr" <<= var "encode" @@ var "term'" $
+          right $ inject H._LocalBinding H._LocalBinding_value $ HaskellUtils.simpleValueBinding @@ var "hname" @@ var "hexpr" @@ nothing] $
+        "hbindings" <<= Eithers.mapList (var "encodeBinding") (var "bindings") $
+        "hinner" <<= var "encode" @@ var "env" $
+        right $ inject H._Expression H._Expression_let $ record H._LetExpression [
           H._LetExpression_bindings>>: var "hbindings",
           H._LetExpression_inner>>: var "hinner"],
       _Term_list>>: "els" ~>
-        Flows.bind (Flows.mapList (var "encode") (var "els")) $ "helems" ~>
-          Flows.pure $ inject H._Expression H._Expression_list $ var "helems",
+        "helems" <<= Eithers.mapList (var "encode") (var "els") $
+          right $ inject H._Expression H._Expression_list $ var "helems",
       _Term_literal>>: "v" ~>
-        encodeLiteral @@ var "v",
+        encodeLiteral @@ var "v" @@ var "cx",
       _Term_map>>: "m" ~> Logic.ifElse (Maps.null $ var "m")
-        (produce $ HaskellUtils.hsvar @@ string "M.empty")
+        (right $ HaskellUtils.hsvar @@ string "M.empty")
         (var "nonemptyMap" @@ var "m"),
       _Term_maybe>>: "m" ~>
         Maybes.cases (var "m")
-          (Flows.pure $ HaskellUtils.hsvar @@ string "Nothing") $
+          (right $ HaskellUtils.hsvar @@ string "Nothing") $
           "t" ~>
-            Flows.bind (var "encode" @@ var "t") $ "ht" ~>
-              Flows.pure $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Just") @@ var "ht",
+            "ht" <<= var "encode" @@ var "t" $
+              right $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Just") @@ var "ht",
       _Term_pair>>: "p" ~>
-        "f" <<~ var "encode" @@ Pairs.first (var "p") $
-        "s" <<~ var "encode" @@ Pairs.second (var "p") $
-        Flows.pure $ inject H._Expression H._Expression_tuple $ list [var "f", var "s"],
+        "f" <<= var "encode" @@ Pairs.first (var "p") $
+        "s" <<= var "encode" @@ Pairs.second (var "p") $
+        right $ inject H._Expression H._Expression_tuple $ list [var "f", var "s"],
       _Term_record>>: "record" ~> lets [
         "sname">: Core.recordTypeName $ var "record",
         "fields">: Core.recordFields $ var "record",
@@ -444,17 +448,17 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
           "fn">: Core.fieldName $ var "field",
           "ft">: Core.fieldTerm $ var "field",
           "fieldRef">: HaskellUtils.recordFieldReference @@ var "namespaces" @@ var "sname" @@ var "fn"] $
-          "hft" <<~ var "encode" @@ var "ft" $
-          Flows.pure $ record H._FieldUpdate [
+          "hft" <<= var "encode" @@ var "ft" $
+          right $ record H._FieldUpdate [
             H._FieldUpdate_name>>: var "fieldRef",
             H._FieldUpdate_value>>: var "hft"],
           "typeName">: HaskellUtils.elementReference @@ var "namespaces" @@ var "sname"] $
-          "updates" <<~ Flows.mapList (var "toFieldUpdate") (var "fields") $
-          Flows.pure $ inject H._Expression H._Expression_constructRecord $ record H._ConstructRecordExpression [
+          "updates" <<= Eithers.mapList (var "toFieldUpdate") (var "fields") $
+          right $ inject H._Expression H._Expression_constructRecord $ record H._ConstructRecordExpression [
             H._ConstructRecordExpression_name>>: var "typeName",
             H._ConstructRecordExpression_fields>>: var "updates"],
       _Term_set>>: "s" ~> Logic.ifElse (Sets.null $ var "s")
-        (produce $ HaskellUtils.hsvar @@ string "S.empty")
+        (right $ HaskellUtils.hsvar @@ string "S.empty")
         (var "nonemptySet" @@ var "s"),
       _Term_typeLambda>>: "abs" ~> lets [
         "term1">: Core.typeLambdaBody $ var "abs"] $
@@ -466,57 +470,55 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "sname">: Core.injectionTypeName $ var "injection",
         "field">: Core.injectionField $ var "injection",
         "fn">: Core.fieldName $ var "field",
-        "ft">: Core.fieldTerm $ var "field"] $
-        "g_ufr2" <<~ Monads.getState $ lets [
-        "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g_ufr2"))) @@ var "namespaces" @@ var "sname" @@ var "fn",
-        "dflt">: Flows.map (HaskellUtils.hsapp @@ var "lhs") (var "encode" @@ var "ft")] $
-        "ftyp" <<~ Schemas.requireUnionField_ @@ var "sname" @@ var "fn" $
+        "ft">: Core.fieldTerm $ var "field",
+        "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "namespaces" @@ var "sname" @@ var "fn",
+        "dflt">: Eithers.map (HaskellUtils.hsapp @@ var "lhs") (var "encode" @@ var "ft")] $
+        "ftyp" <<= Schemas.requireUnionField_ @@ var "cx" @@ var "g" @@ var "sname" @@ var "fn" $
         cases _Type (Rewriting.deannotateType @@ var "ftyp")
           (Just $ var "dflt") [
-          _Type_unit>>: constant $ Flows.pure $ var "lhs"],
-      _Term_unit>>: constant $ Flows.pure $ inject H._Expression H._Expression_tuple $ list ([] :: [TTerm H.Expression]),
+          _Type_unit>>: constant $ right $ var "lhs"],
+      _Term_unit>>: constant $ right $ inject H._Expression H._Expression_tuple $ list ([] :: [TTerm H.Expression]),
       _Term_variable>>: "name" ~>
-        Flows.pure $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name",
+        right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name",
       _Term_wrap>>: "wrapped" ~> lets [
         "tname">: Core.wrappedTermTypeName $ var "wrapped",
         "term'">: Core.wrappedTermBody $ var "wrapped",
         "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "tname"] $
-        "rhs" <<~ var "encode" @@ var "term'" $
-        Flows.pure $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs"]
+        "rhs" <<= var "encode" @@ var "term'" $
+        right $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs"]
 
-encodeType :: TBinding (HaskellNamespaces -> Type -> Flow Graph H.Type)
+encodeType :: TBinding (HaskellNamespaces -> Type -> Context -> Graph -> Either (InContext OtherError) H.Type)
 encodeType = haskellCoderDefinition "encodeType" $
   doc "Encode a Hydra type as a Haskell type" $
   "namespaces" ~>
-  "typ" ~> lets [
-  "encode">: encodeType @@ var "namespaces",
+  "typ" ~> "cx" ~> "g" ~> lets [
+  "encode">: "t" ~> encodeType @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g",
   "ref">: "name" ~>
-    Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name",
+    right $ inject H._Type H._Type_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name",
   "unitTuple">: inject H._Type H._Type_tuple $ list ([] :: [TTerm H.Type])] $
-  trace (string "encode type") $
   cases _Type (Rewriting.deannotateType @@ var "typ")
-    (Just $ Flows.fail $ Strings.cat2 (string "unexpected type: ") (ShowCore.type_ @@ var "typ")) [
+    (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected type: ") (ShowCore.type_ @@ var "typ"))) (var "cx")) [
     _Type_application>>: "app" ~> lets [
       "lhs">: Core.applicationTypeFunction $ var "app",
       "rhs">: Core.applicationTypeArgument $ var "app"] $
-      Flows.bind (var "encode" @@ var "lhs") $ "hlhs" ~>
-        Flows.bind (var "encode" @@ var "rhs") $ "hrhs" ~>
-          Flows.pure $ HaskellUtils.toTypeApplication @@ list [var "hlhs", var "hrhs"],
+      "hlhs" <<= var "encode" @@ var "lhs" $
+        "hrhs" <<= var "encode" @@ var "rhs" $
+          right $ HaskellUtils.toTypeApplication @@ list [var "hlhs", var "hrhs"],
     _Type_either>>: "eitherType" ~> lets [
-      "left">: Core.eitherTypeLeft $ var "eitherType",
-      "right">: Core.eitherTypeRight $ var "eitherType"] $
-      Flows.map
-        (HaskellUtils.toTypeApplication)
-        (Flows.sequence $ list [
-          Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Either",
-          var "encode" @@ var "left",
-          var "encode" @@ var "right"]),
+      "left'">: Core.eitherTypeLeft $ var "eitherType",
+      "right'">: Core.eitherTypeRight $ var "eitherType"] $
+      "hleft" <<= var "encode" @@ var "left'" $
+      "hright" <<= var "encode" @@ var "right'" $
+      right $ HaskellUtils.toTypeApplication @@ list [
+          inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Either",
+          var "hleft",
+          var "hright"],
     _Type_function>>: "funType" ~> lets [
       "dom">: Core.functionTypeDomain $ var "funType",
       "cod">: Core.functionTypeCodomain $ var "funType"] $
-      Flows.bind (var "encode" @@ var "dom") $ "hdom" ~>
-        Flows.bind (var "encode" @@ var "cod") $ "hcod" ~>
-          Flows.pure $ inject H._Type H._Type_function $ record H._FunctionType [
+      "hdom" <<= var "encode" @@ var "dom" $
+        "hcod" <<= var "encode" @@ var "cod" $
+          right $ inject H._Type H._Type_function $ record H._FunctionType [
             H._FunctionType_domain>>: var "hdom",
             H._FunctionType_codomain>>: var "hcod"],
     _Type_forall>>: "forallType" ~> lets [
@@ -524,77 +526,75 @@ encodeType = haskellCoderDefinition "encodeType" $
       "body">: Core.forallTypeBody $ var "forallType"] $
       var "encode" @@ var "body",
     _Type_list>>: "lt" ~>
-      Flows.bind (var "encode" @@ var "lt") $ "hlt" ~>
-        Flows.pure $ inject H._Type H._Type_list $ var "hlt",
+      "hlt" <<= var "encode" @@ var "lt" $
+        right $ inject H._Type H._Type_list $ var "hlt",
     _Type_literal>>: "lt" ~>
       cases _LiteralType (var "lt")
-        (Just $ Flows.fail $ Strings.cat2 (string "unexpected literal type: ") (ShowCore.literalType @@ var "lt")) [
+        (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected literal type: ") (ShowCore.literalType @@ var "lt"))) (var "cx")) [
         _LiteralType_binary>>: constant $
-          Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "B.ByteString",
+          right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "B.ByteString",
         _LiteralType_boolean>>: constant $
-          Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Bool",
+          right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Bool",
         _LiteralType_float>>: "ft" ~>
           cases _FloatType (var "ft") Nothing [
             _FloatType_float32>>: constant $
-              Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Float",
+              right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Float",
             _FloatType_float64>>: constant $
-              Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Double",
+              right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Double",
             _FloatType_bigfloat>>: constant $
-              Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Double"],
+              right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Double"],
         _LiteralType_integer>>: "it" ~>
           cases _IntegerType (var "it")
-            (Just $ Flows.fail $ Strings.cat2 (string "unexpected integer type: ") (ShowCore.integerType @@ var "it")) [
+            (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected integer type: ") (ShowCore.integerType @@ var "it"))) (var "cx")) [
             _IntegerType_bigint>>: constant $
-              Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Integer",
+              right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Integer",
             _IntegerType_int8>>: constant $
-              Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "I.Int8",
+              right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "I.Int8",
             _IntegerType_int16>>: constant $
-              Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "I.Int16",
+              right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "I.Int16",
             _IntegerType_int32>>: constant $
-              Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Int",
+              right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Int",
             _IntegerType_int64>>: constant $
-              Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "I.Int64"],
+              right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "I.Int64"],
         _LiteralType_string>>: constant $
-          Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "String"],
+          right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "String"],
     _Type_map>>: "mapType" ~> lets [
       "kt">: Core.mapTypeKeys $ var "mapType",
       "vt">: Core.mapTypeValues $ var "mapType"] $
-      Flows.map
-        (HaskellUtils.toTypeApplication)
-        (Flows.sequence $ list [
-          Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "M.Map",
-          var "encode" @@ var "kt",
-          var "encode" @@ var "vt"]),
+      "hkt" <<= var "encode" @@ var "kt" $
+      "hvt" <<= var "encode" @@ var "vt" $
+      right $ HaskellUtils.toTypeApplication @@ list [
+          inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "M.Map",
+          var "hkt",
+          var "hvt"],
     _Type_maybe>>: "ot" ~>
-      Flows.map
-        (HaskellUtils.toTypeApplication)
-        (Flows.sequence $ list [
-          Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Maybe",
-          var "encode" @@ var "ot"]),
+      "hot" <<= var "encode" @@ var "ot" $
+      right $ HaskellUtils.toTypeApplication @@ list [
+          inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Maybe",
+          var "hot"],
     _Type_pair>>: "pt" ~>
-      "f" <<~ var "encode" @@ (Core.pairTypeFirst $ var "pt") $
-      "s" <<~ var "encode" @@ (Core.pairTypeSecond $ var "pt") $
-        Flows.pure $ inject H._Type H._Type_tuple $ list [var "f", var "s"],
+      "f" <<= var "encode" @@ (Core.pairTypeFirst $ var "pt") $
+      "s" <<= var "encode" @@ (Core.pairTypeSecond $ var "pt") $
+        right $ inject H._Type H._Type_tuple $ list [var "f", var "s"],
     _Type_record>>: "rt" ~> var "ref" @@ (Core.rowTypeTypeName $ var "rt"),
     _Type_set>>: "st" ~>
-      Flows.map
-        (HaskellUtils.toTypeApplication)
-        (Flows.sequence $ list [
-          Flows.pure $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "S.Set",
-          var "encode" @@ var "st"]),
+      "hst" <<= var "encode" @@ var "st" $
+      right $ HaskellUtils.toTypeApplication @@ list [
+          inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "S.Set",
+          var "hst"],
     _Type_union>>: "rt" ~> lets [
       "typeName">: Core.rowTypeTypeName $ var "rt"] $
       var "ref" @@ var "typeName",
-    _Type_unit>>: constant $ Flows.pure $ var "unitTuple",
+    _Type_unit>>: constant $ right $ var "unitTuple",
     _Type_variable>>: "v1" ~> var "ref" @@ var "v1",
     _Type_wrap>>: "wrapped" ~> lets [
       "name">: Core.wrappedTypeTypeName $ var "wrapped"] $
       var "ref" @@ var "name"]
 
-encodeTypeWithClassAssertions :: TBinding (HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Flow Graph H.Type)
+encodeTypeWithClassAssertions :: TBinding (HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Context -> Graph -> Either (InContext OtherError) H.Type)
 encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAssertions" $
   doc "Encode a Hydra type as a Haskell type with typeclass assertions" $
-  "namespaces" ~> "explicitClasses" ~> "typ" ~> lets [
+  "namespaces" ~> "explicitClasses" ~> "typ" ~> "cx" ~> "g" ~> lets [
     "classes">: Maps.union (var "explicitClasses") (getImplicitTypeClasses @@ var "typ"),
     "implicitClasses">: getImplicitTypeClasses @@ var "typ",
     "encodeAssertion">: "pair" ~> lets [
@@ -614,17 +614,16 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
       "toPair">: "c" ~>
         pair (var "name") (var "c")] $
       Lists.map (var "toPair") (Sets.toList $ var "clsSet")] $
-    Monads.withTrace @@ (string "encode with assertions") @@
-      ("htyp" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" $
+      "htyp" <<= adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g" $
       Logic.ifElse (Lists.null $ var "assertPairs")
-        (Flows.pure $ var "htyp") (lets [
+        (right $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
           "hassert">: Logic.ifElse (Equality.equal (Lists.length $ var "encoded") (int32 1))
             (Lists.head $ var "encoded")
             (inject H._Assertion H._Assertion_tuple $ var "encoded")] $
-          Flows.pure $ inject H._Type H._Type_ctx $ record H._ContextType [
+          right $ inject H._Type H._Type_ctx $ record H._ContextType [
             H._ContextType_ctx>>: var "hassert",
-            H._ContextType_type>>: var "htyp"]))
+            H._ContextType_type>>: var "htyp"])
 
 findOrdVariables :: TBinding (Type -> S.Set Name)
 findOrdVariables = haskellCoderDefinition "findOrdVariables" $
@@ -660,21 +659,21 @@ getImplicitTypeClasses = haskellCoderDefinition "getImplicitTypeClasses" $
       pair (var "name") (Sets.fromList $ list [Graph.typeClassOrdering])] $
     Maps.fromList $ Lists.map (var "toPair") (Sets.toList $ findOrdVariables @@ var "typ")
 
-moduleToHaskellModule :: TBinding (Module -> [Definition] -> Flow Graph H.Module)
+moduleToHaskellModule :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext OtherError) H.Module)
 moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
   doc "Convert a Hydra module and definitions to a Haskell module AST" $
-  "mod" ~> "defs" ~>
-    "namespaces" <<~ HaskellUtils.namespacesForModule @@ var "mod" $
-      constructModule @@ var "namespaces" @@ var "mod" @@ var "defs"
+  "mod" ~> "defs" ~> "cx" ~> "g" ~>
+    "namespaces" <<= HaskellUtils.namespacesForModule @@ var "mod" @@ var "cx" @@ var "g" $
+      constructModule @@ var "namespaces" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
 
-moduleToHaskell :: TBinding (Module -> [Definition] -> Flow Graph (M.Map String String))
+moduleToHaskell :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext OtherError) (M.Map String String))
 moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   doc "Convert a Hydra module to Haskell source code as a filepath-to-content map" $
-  "mod" ~> "defs" ~>
-  "hsmod" <<~ moduleToHaskellModule @@ var "mod" @@ var "defs" $ lets [
+  "mod" ~> "defs" ~> "cx" ~> "g" ~>
+  "hsmod" <<= moduleToHaskellModule @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g" $ lets [
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
   "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Module.moduleNamespace $ var "mod")] $
-  Flows.pure $ Maps.singleton (var "filepath") (var "s")
+  right $ Maps.singleton (var "filepath") (var "s")
 
 nameDecls :: TBinding (HaskellNamespaces -> Name -> Type -> [H.DeclarationWithComments])
 nameDecls = haskellCoderDefinition "nameDecls" $
@@ -702,10 +701,10 @@ nameDecls = haskellCoderDefinition "nameDecls" $
       (Lists.cons (var "toDecl" @@ Core.nameLift _Name @@ var "nameDecl") (Lists.map (var "toDecl" @@ Core.nameLift _Name) (var "fieldDecls")))
       (list ([] :: [TTerm H.DeclarationWithComments]))
 
-toDataDeclaration :: TBinding (HaskellNamespaces -> TermDefinition -> Flow Graph H.DeclarationWithComments)
+toDataDeclaration :: TBinding (HaskellNamespaces -> TermDefinition -> Context -> Graph -> Either (InContext OtherError) H.DeclarationWithComments)
 toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   doc "Convert a Hydra term definition to a Haskell declaration with comments" $
-  "namespaces" ~> "def" ~> lets [
+  "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
     "name">: Module.termDefinitionName $ var "def",
     "term">: Module.termDefinitionTerm $ var "def",
     "typ">: Module.termDefinitionType $ var "def",
@@ -736,21 +735,21 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
     "toDecl">: "comments" ~> "hname'" ~> "term'" ~> "bindings" ~>
       cases _Term (Rewriting.deannotateTerm @@ var "term'")
         (Just $
-          "hterm" <<~ encodeTerm @@ var "namespaces" @@ var "term'" $ lets [
+          "hterm" <<= encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term'" @@ var "cx" @@ var "g" $ lets [
          "vb">: HaskellUtils.simpleValueBinding @@ var "hname'" @@ var "hterm" @@ var "bindings",
          -- Extract constraints from the TypeScheme and convert to class assertions
          "schemeConstraints">: Core.typeSchemeConstraints (var "typ"),
          "schemeClasses">: typeSchemeConstraintsToClassMap @@ var "schemeConstraints"] $
-         "explicitClasses" <<~ Annotations.getTypeClasses @@ (Rewriting.removeTypesFromTerm @@ var "term") $
+         "explicitClasses" <<= Annotations.getTypeClasses @@ var "cx" @@ var "g" @@ (Rewriting.removeTypesFromTerm @@ var "term") $
          -- Combine constraints from TypeScheme with any explicit annotations
          "combinedClasses" <~ Maps.union (var "schemeClasses") (var "explicitClasses") $
-         "htype" <<~ encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ (Core.typeSchemeType $ var "typ") $ lets [
+         "htype" <<= encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ (Core.typeSchemeType $ var "typ") @@ var "cx" @@ var "g" $ lets [
          "decl">: inject H._Declaration H._Declaration_typedBinding $ record H._TypedBinding [
            H._TypedBinding_typeSignature>>: record H._TypeSignature [
              H._TypeSignature_name>>: var "hname'",
              H._TypeSignature_type>>: var "htype"],
            H._TypedBinding_valueBinding>>: var "rewriteValueBinding" @@ var "vb"]] $
-          Flows.pure $ record H._DeclarationWithComments [
+          right $ record H._DeclarationWithComments [
             H._DeclarationWithComments_body>>: var "decl",
             H._DeclarationWithComments_comments>>: var "comments"]) [
         _Term_let>>: "letTerm" ~> lets [
@@ -761,144 +760,21 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
             inject H._LocalBinding H._LocalBinding_value $ HaskellUtils.simpleValueBinding @@ var "hname''" @@ var "hterm'" @@ nothing,
           "hnames">: Lists.map ("binding" ~> HaskellUtils.simpleName @@ (Core.unName $ Core.bindingName $ var "binding")) (var "lbindings"),
           "terms">: Lists.map (unaryFunction $ Core.bindingTerm) (var "lbindings")] $
-          "hterms" <<~ Flows.mapList (encodeTerm @@ var "namespaces") (var "terms") $ lets [
+          "hterms" <<= Eithers.mapList ("t" ~> encodeTerm @@ int32 0 @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") (var "terms") $ lets [
           "hbindings">: Lists.zipWith (var "toBinding") (var "hnames") (var "hterms"),
           -- Merge new bindings with any previously accumulated bindings from outer lets
           "prevBindings">: Maybes.maybe (list ([] :: [TTerm H.LocalBinding])) ("lb" ~> unwrap H._LocalBindings @@ var "lb") (var "bindings"),
           "allBindings">: Lists.concat2 (var "prevBindings") (var "hbindings")] $
           var "toDecl" @@ var "comments" @@ var "hname'" @@ var "env" @@ (just $ wrap H._LocalBindings $ var "allBindings")]] $
-    "comments" <<~ Annotations.getTermDescription @@ var "term" $
+    "comments" <<= Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term" $
     var "toDecl" @@ var "comments" @@ var "hname" @@ var "term" @@ nothing
-
---toTypeDeclarations :: TBinding (HaskellNamespaces -> Binding -> Term -> Flow Graph [H.DeclarationWithComments])
---toTypeDeclarations = haskellCoderDefinition "toTypeDeclarations" $
---  "namespaces" ~> "el" ~> "term" ~> lets [
---    "elementName">: Core.bindingName $ var "el",
---    "lname">: Names.localNameOf @@ var "elementName",
---    "hname">: HaskellUtils.simpleName @@ var "lname",
---    "declHead">: "name" ~> "vars'" ~> Logic.ifElse (Lists.null $ var "vars'")
---      (inject H._DeclarationHead H._DeclarationHead_simple $ var "name")
---      (lets [
---        "h">: Lists.head $ var "vars'",
---        "rest">: Lists.tail $ var "vars'",
---        "hvar">: wrap H._Variable $ HaskellUtils.simpleName @@ (Core.unName $ var "h")] $
---        inject H._DeclarationHead H._DeclarationHead_application $ record H._ApplicationDeclarationHead [
---          H._ApplicationDeclarationHead_function>>: var "declHead" @@ var "name" @@ var "rest",
---          H._ApplicationDeclarationHead_operand>>: var "hvar"]),
---    "newtypeCons">: "el'" ~> "typ'" ~> lets [
---      "hname">: HaskellUtils.simpleName @@ (HaskellUtils.newtypeAccessorName @@ (Core.bindingName $ var "el'"))] $
---      "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" $ lets [
---      "hfield">: record H._FieldWithComments [
---        H._FieldWithComments_field>>: record H._Field [
---          H._Field_name>>: var "hname",
---          H._Field_type>>: var "htype"],
---        H._FieldWithComments_comments>>: nothing],
---      "constructorName">: HaskellUtils.simpleName @@ (Names.localNameOf @@ (Core.bindingName $ var "el'"))] $
---      Flows.pure $ record H._ConstructorWithComments [
---        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
---          H._RecordConstructor_name>>: var "constructorName",
---          H._RecordConstructor_fields>>: list [var "hfield"]],
---        H._ConstructorWithComments_comments>>: nothing],
---    "recordCons">: "lname'" ~> "fields" ~> lets [
---      "toField">: "fieldType" ~> lets [
---        "fname">: Core.fieldTypeName $ var "fieldType",
---        "ftype">: Core.fieldTypeType $ var "fieldType",
---        "hname'">: HaskellUtils.simpleName @@ Strings.cat2
---          (Formatting.decapitalize @@ var "lname'")
---          (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
---        "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" $
---        "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $
---        Flows.pure $ record H._FieldWithComments [
---          H._FieldWithComments_field>>: record H._Field [
---            H._Field_name>>: var "hname'",
---            H._Field_type>>: var "htype"],
---          H._FieldWithComments_comments>>: var "comments"]] $
---      "hFields" <<~ Flows.mapList (var "toField") (var "fields") $
---      Flows.pure $ record H._ConstructorWithComments [
---        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
---          H._RecordConstructor_name>>: HaskellUtils.simpleName @@ var "lname'",
---          H._RecordConstructor_fields>>: var "hFields"],
---        H._ConstructorWithComments_comments>>: nothing],
---    "unionCons">: "g'" ~> "lname'" ~> "fieldType" ~> lets [
---      "fname">: Core.fieldTypeName $ var "fieldType",
---      "ftype">: Core.fieldTypeType $ var "fieldType",
---      "deconflict">: "name" ~> lets [
---        "tname">: Names.unqualifyName @@ record _QualifiedName [
---          _QualifiedName_namespace>>: just $ Pairs.first $ Module.namespacesFocus $ var "namespaces",
---          _QualifiedName_local>>: var "name"]] $
---        Logic.ifElse (Maybes.isJust $ Maps.lookup (var "tname") (Lexical.graphToBindings @@ var "g'"))
---          (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
---          (var "name")] $
---      "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $ lets [
---      "nm">: var "deconflict" @@ Strings.cat2 (Formatting.capitalize @@ var "lname'") (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
---      "typeList" <<~ (Logic.ifElse (Equality.equal (Rewriting.deannotateType @@ var "ftype") MetaTypes.unit)
---        (Flows.pure $ list ([] :: [TTerm H.CaseRhs])) $
---        Flows.bind (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype") $ "htype" ~>
---          Flows.pure $ list [var "htype"]) $
---      Flows.pure $ record H._ConstructorWithComments [
---        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_ordinary $ record H._OrdinaryConstructor [
---          H._OrdinaryConstructor_name>>: HaskellUtils.simpleName @@ var "nm",
---          H._OrdinaryConstructor_fields>>: var "typeList"],
---        H._ConstructorWithComments_comments>>: var "comments"]] $
---    Monads.withTrace @@ (Strings.cat2 (string "type element ") (Core.unName $ var "elementName")) @@ (
---      "g" <<~ Monads.getState $
---      "t" <<~ (trace (string "to type declarations") $ DecodeCore.type_ @@ var "term") $
---      "isSer" <<~ (Schemas.isSerializable @@ var "el") $ lets [
---      "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
---        (Lists.map (HaskellUtils.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
---        (list ([] :: [TTerm H.Name])),
---      "unpackResult">: HaskellUtils.unpackForallType @@ var "g" @@ var "t",
---      "vars">: Pairs.first $ var "unpackResult",
---      "t'">: Pairs.second $ var "unpackResult",
---      "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
---      "decl" <<~ (cases _Type (Rewriting.deannotateType @@ var "t'")
---        (Just $ "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "t" $
---          Flows.pure $ inject H._Declaration H._Declaration_type $ record H._TypeDeclaration [
---            H._TypeDeclaration_name>>: var "hd",
---            H._TypeDeclaration_type>>: var "htype"]) [
---        _Type_record>>: "rt" ~>
---          "cons" <<~ (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
---          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
---            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
---            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
---            H._DataDeclaration_head>>: var "hd",
---            H._DataDeclaration_constructors>>: list [var "cons"],
---            H._DataDeclaration_deriving>>: list [var "deriv"]],
---        _Type_union>>: "rt" ~>
---          "cons" <<~ Flows.mapList (var "unionCons" @@ var "g" @@ var "lname") (Core.rowTypeFields $ var "rt") $
---          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
---            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
---            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
---            H._DataDeclaration_head>>: var "hd",
---            H._DataDeclaration_constructors>>: var "cons",
---            H._DataDeclaration_deriving>>: list [var "deriv"]],
---        _Type_wrap>>: "wrapped" ~> lets [
---          "tname">: Core.wrappedTypeTypeName $ var "wrapped",
---          "wt">: Core.wrappedTypeBody $ var "wrapped"] $
---          "cons" <<~ var "newtypeCons" @@ var "el" @@ var "wt" $
---            Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
---              H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_newtype,
---              H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
---              H._DataDeclaration_head>>: var "hd",
---              H._DataDeclaration_constructors>>: list [var "cons"],
---              H._DataDeclaration_deriving>>: list [var "deriv"]]]) $
---      "comments" <<~ Annotations.getTermDescription @@ var "term" $
---      "tdecls" <<~ (Logic.ifElse (includeTypeDefinitions)
---        (Flows.bind (typeDecl @@ var "namespaces" @@ var "elementName" @@ var "t") $ "decl'" ~>
---          Flows.pure $ list [var "decl'"])
---        (Flows.pure $ list ([] :: [TTerm H.DeclarationWithComments]))) $ lets [
---      "mainDecl">: record H._DeclarationWithComments [
---        H._DeclarationWithComments_body>>: var "decl",
---        H._DeclarationWithComments_comments>>: var "comments"],
---      "nameDecls'">: nameDecls @@ var "g" @@ var "namespaces" @@ var "elementName" @@ var "t"] $
---      Flows.pure $ Lists.concat $ list [list [var "mainDecl"], var "nameDecls'", var "tdecls"])
 
 -- | Simplified version of toTypeDeclarations that works with Name and Type directly
 -- This is used with the new Definition-based API
-toTypeDeclarationsFrom :: TBinding (HaskellNamespaces -> Name -> Type -> Flow Graph [H.DeclarationWithComments])
+toTypeDeclarationsFrom :: TBinding (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either (InContext OtherError) [H.DeclarationWithComments])
 toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
   doc "Convert a Hydra type definition to Haskell declarations" $
-  "namespaces" ~> "elementName" ~> "typ" ~> lets [
+  "namespaces" ~> "elementName" ~> "typ" ~> "cx" ~> "g" ~> lets [
     "lname">: Names.localNameOf @@ var "elementName",
     "hname">: HaskellUtils.simpleName @@ var "lname",
     "declHead">: "name" ~> "vars'" ~> Logic.ifElse (Lists.null $ var "vars'")
@@ -911,15 +787,15 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
           H._ApplicationDeclarationHead_function>>: var "declHead" @@ var "name" @@ var "rest",
           H._ApplicationDeclarationHead_operand>>: var "hvar"]),
     "newtypeCons">: "tname" ~> "typ'" ~> lets [
-      "hname">: HaskellUtils.simpleName @@ (HaskellUtils.newtypeAccessorName @@ var "tname")] $
-      "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" $ lets [
+      "hname0">: HaskellUtils.simpleName @@ (HaskellUtils.newtypeAccessorName @@ var "tname")] $
+      "htype" <<= adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" @@ var "cx" @@ var "g" $ lets [
       "hfield">: record H._FieldWithComments [
         H._FieldWithComments_field>>: record H._Field [
-          H._Field_name>>: var "hname",
+          H._Field_name>>: var "hname0",
           H._Field_type>>: var "htype"],
         H._FieldWithComments_comments>>: nothing],
       "constructorName">: HaskellUtils.simpleName @@ (Names.localNameOf @@ var "tname")] $
-      Flows.pure $ record H._ConstructorWithComments [
+      right $ record H._ConstructorWithComments [
         H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
           H._RecordConstructor_name>>: var "constructorName",
           H._RecordConstructor_fields>>: list [var "hfield"]],
@@ -931,15 +807,15 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
         "hname'">: HaskellUtils.simpleName @@ Strings.cat2
           (Formatting.decapitalize @@ var "lname'")
           (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
-        "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" $
-        "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $
-        Flows.pure $ record H._FieldWithComments [
+        "htype" <<= adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
+        "comments" <<= Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "ftype" $
+        right $ record H._FieldWithComments [
           H._FieldWithComments_field>>: record H._Field [
             H._Field_name>>: var "hname'",
             H._Field_type>>: var "htype"],
           H._FieldWithComments_comments>>: var "comments"]] $
-      "hFields" <<~ Flows.mapList (var "toField") (var "fields") $
-      Flows.pure $ record H._ConstructorWithComments [
+      "hFields" <<= Eithers.mapList (var "toField") (var "fields") $
+      right $ record H._ConstructorWithComments [
         H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
           H._RecordConstructor_name>>: HaskellUtils.simpleName @@ var "lname'",
           H._RecordConstructor_fields>>: var "hFields"],
@@ -954,20 +830,18 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
         Logic.ifElse (Sets.member (var "tname") (var "boundNames'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
           (var "name")] $
-      "comments" <<~ Annotations.getTypeDescription @@ var "ftype" $ lets [
+      "comments" <<= Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "ftype" $ lets [
       "nm">: var "deconflict" @@ Strings.cat2 (Formatting.capitalize @@ var "lname'") (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
-      "typeList" <<~ (Logic.ifElse (Equality.equal (Rewriting.deannotateType @@ var "ftype") MetaTypes.unit)
-        (Flows.pure $ list ([] :: [TTerm H.CaseRhs])) $
-        Flows.bind (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype") $ "htype" ~>
-          Flows.pure $ list [var "htype"]) $
-      Flows.pure $ record H._ConstructorWithComments [
+      "typeList" <<= (Logic.ifElse (Equality.equal (Rewriting.deannotateType @@ var "ftype") MetaTypes.unit)
+        (right $ list ([] :: [TTerm H.CaseRhs])) $
+        "htype" <<= adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
+          right $ list [var "htype"]) $
+      right $ record H._ConstructorWithComments [
         H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_ordinary $ record H._OrdinaryConstructor [
           H._OrdinaryConstructor_name>>: HaskellUtils.simpleName @@ var "nm",
           H._OrdinaryConstructor_fields>>: var "typeList"],
         H._ConstructorWithComments_comments>>: var "comments"]] $
-    Monads.withTrace @@ (Strings.cat2 (string "type definition ") (Core.unName $ var "elementName")) @@ (
-      "g" <<~ Monads.getState $
-      "isSer" <<~ (Schemas.isSerializableByName @@ var "elementName") $ lets [
+      "isSer" <<= Schemas.isSerializableByName @@ var "cx" @@ var "g" @@ var "elementName" $ lets [
       "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
         (Lists.map (HaskellUtils.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
         (list ([] :: [TTerm H.Name])),
@@ -975,22 +849,22 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "vars">: Pairs.first $ var "unpackResult",
       "t'">: Pairs.second $ var "unpackResult",
       "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
-      "decl" <<~ (cases _Type (Rewriting.deannotateType @@ var "t'")
-        (Just $ "htype" <<~ (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ") $
-          Flows.pure $ inject H._Declaration H._Declaration_type $ record H._TypeDeclaration [
+      "decl" <<= (cases _Type (Rewriting.deannotateType @@ var "t'")
+        (Just $ "htype" <<= (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g") $
+          right $ inject H._Declaration H._Declaration_type $ record H._TypeDeclaration [
             H._TypeDeclaration_name>>: var "hd",
             H._TypeDeclaration_type>>: var "htype"]) [
         _Type_record>>: "rt" ~>
-          "cons" <<~ (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
-          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
+          "cons" <<= (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
+          right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
             H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
             H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
             H._DataDeclaration_head>>: var "hd",
             H._DataDeclaration_constructors>>: list [var "cons"],
             H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_union>>: "rt" ~>
-          "cons" <<~ Flows.mapList (var "unionCons" @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "lname") (Core.rowTypeFields $ var "rt") $
-          Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
+          "cons" <<= Eithers.mapList (var "unionCons" @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "lname") (Core.rowTypeFields $ var "rt") $
+          right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
             H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
             H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
             H._DataDeclaration_head>>: var "hd",
@@ -998,28 +872,28 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
             H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_wrap>>: "wrapped" ~> lets [
           "wt">: Core.wrappedTypeBody $ var "wrapped"] $
-          "cons" <<~ var "newtypeCons" @@ var "elementName" @@ var "wt" $
-            Flows.pure $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
+          "cons" <<= var "newtypeCons" @@ var "elementName" @@ var "wt" $
+            right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
               H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_newtype,
               H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
               H._DataDeclaration_head>>: var "hd",
               H._DataDeclaration_constructors>>: list [var "cons"],
               H._DataDeclaration_deriving>>: list [var "deriv"]]]) $
-      "comments" <<~ Annotations.getTypeDescription @@ var "typ" $
-      "tdecls" <<~ (Logic.ifElse (includeTypeDefinitions)
-        (Flows.bind (typeDecl @@ var "namespaces" @@ var "elementName" @@ var "typ") $ "decl'" ~>
-          Flows.pure $ list [var "decl'"])
-        (Flows.pure $ list ([] :: [TTerm H.DeclarationWithComments]))) $ lets [
+      "comments" <<= Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ" $
+      "tdecls" <<= (Logic.ifElse (includeTypeDefinitions)
+        ("decl'" <<= typeDecl @@ var "namespaces" @@ var "elementName" @@ var "typ" @@ var "cx" @@ var "g" $
+          right $ list [var "decl'"])
+        (right $ list ([] :: [TTerm H.DeclarationWithComments]))) $ lets [
       "mainDecl">: record H._DeclarationWithComments [
         H._DeclarationWithComments_body>>: var "decl",
         H._DeclarationWithComments_comments>>: var "comments"],
       "nameDecls'">: nameDecls @@ var "namespaces" @@ var "elementName" @@ var "typ"] $
-      Flows.pure $ Lists.concat $ list [list [var "mainDecl"], var "nameDecls'", var "tdecls"])
+      right $ Lists.concat $ list [list [var "mainDecl"], var "nameDecls'", var "tdecls"]
 
-typeDecl :: TBinding (HaskellNamespaces -> Name -> Type -> Flow Graph H.DeclarationWithComments)
+typeDecl :: TBinding (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either (InContext OtherError) H.DeclarationWithComments)
 typeDecl = haskellCoderDefinition "typeDecl" $
   doc "Generate a Haskell declaration for a type definition constant" $
-  "namespaces" ~> "name" ~> "typ" ~> lets [
+  "namespaces" ~> "name" ~> "typ" ~> "cx" ~> "g" ~> lets [
     "typeName">: "ns" ~> "name'" ~>
       Names.qname @@ var "ns" @@ (var "typeNameLocal" @@ var "name'"),
     "typeNameLocal">: "name'" ~>
@@ -1056,9 +930,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
         Maybes.map ("ns" ~> Core.termVariable $ Names.qname @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
       Maybes.fromMaybe (var "recurse" @@ var "term") (Maybes.bind (var "variantResult") (var "forType")),
     "finalTerm">: Rewriting.rewriteTerm @@ var "rewrite" @@ var "rawTerm"] $
-    -- Note: consider constructing this coder just once, then reusing it
-    "coder" <<~ AdaptModules.constructCoder @@ (HaskellLanguage.haskellLanguage) @@ (encodeTerm @@ var "namespaces") @@ (Core.typeVariable $ Core.nameLift _Type) $
-    "expr" <<~ Compute.coderEncode (var "coder") @@ var "finalTerm" $ lets [
+    "expr" <<= encodeTerm @@ int32 0 @@ var "namespaces" @@ var "finalTerm" @@ var "cx" @@ var "g" $ lets [
     "rhs">: wrap H._RightHandSide $ var "expr",
     "hname">: HaskellUtils.simpleName @@ (var "typeNameLocal" @@ var "name"),
     "pat">: HaskellUtils.applicationPattern @@ var "hname" @@ list ([] :: [TTerm H.Pattern]),
@@ -1066,7 +938,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
       H._SimpleValueBinding_pattern>>: var "pat",
       H._SimpleValueBinding_rhs>>: var "rhs",
       H._SimpleValueBinding_localBindings>>: nothing]] $
-    Flows.pure $ record H._DeclarationWithComments [
+    right $ record H._DeclarationWithComments [
       H._DeclarationWithComments_body>>: var "decl",
       H._DeclarationWithComments_comments>>: nothing]
 
