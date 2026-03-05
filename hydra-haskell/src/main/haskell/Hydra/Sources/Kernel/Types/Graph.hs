@@ -6,8 +6,10 @@ import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Compute as Compute
+import qualified Hydra.Sources.Kernel.Types.Context as Context
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Hydra.Sources.Kernel.Types.Error as Error
 
 
 ns :: Namespace
@@ -17,7 +19,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Compute.ns] [Compute.ns] $
+module_ = Module ns elements [Compute.ns, Context.ns, Core.ns, Error.ns] [Compute.ns, Context.ns, Core.ns, Error.ns] $
     Just "The extension to graphs of Hydra's core type system (hydra.core)"
   where
     elements = [
@@ -67,15 +69,18 @@ primitive = define "Primitive" $
       Core.typeScheme,
     "implementation">:
       doc "A concrete implementation of the primitive function" $
-      T.list Core.term ~> Compute.flow @@ graph @@ Core.term]
+      Context.context ~> graph ~> T.list Core.term ~> T.either_ (Context.inContext @@ Error.error_) Core.term]
 
 termCoder :: Binding
 termCoder = define "TermCoder" $
-  doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms" $
+  doc "A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms." $
   T.forAll "a" $ T.record [
     "type">:
       doc "The Hydra type of encoded terms"
       Core.type_,
-    "coder">:
-      doc "A coder between Hydra terms and instances of the given type" $
-      Compute.coder @@ graph @@ graph @@ Core.term @@ "a"]
+    "encode">:
+      doc "An encode function from terms to native values" $
+      Context.context ~> graph ~> Core.term ~> T.either_ (Context.inContext @@ Error.otherError) "a",
+    "decode">:
+      doc "A decode function from native values to terms" $
+      Context.context ~> "a" ~> T.either_ (Context.inContext @@ Error.otherError) Core.term]
