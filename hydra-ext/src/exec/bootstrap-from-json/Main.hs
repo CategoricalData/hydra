@@ -235,15 +235,21 @@ main = do
     putStrLn ""
 
   -- Optionally filter to ext Java modules only
-  extJavaMods <- if optExtJavaOnly opts
+  -- When --ext-java-only is used, load the ext Java modules from JSON
+  -- (they are in hydraExtJavaModules, not in hydraCoderModules)
+  (extJavaMods, allMainModsFinal) <- if optExtJavaOnly opts
     then do
       extJavaNamespaces <- readManifestField extJsonDir "hydraExtJavaModules"
-      let extJavaNsSet = fmap unNamespace extJavaNamespaces
-          filtered = Prelude.filter (\m -> unNamespace (moduleNamespace m) `elem` extJavaNsSet) allMainMods
-      putStrLn $ "Filtering to ext Java modules: " ++ show (length filtered) ++ " of " ++ show (length allMainMods)
+      -- Filter out modules already loaded as kernel or coder modules
+      let loadedNsSet = fmap (unNamespace . moduleNamespace) allMainMods
+          toLoad = Prelude.filter (\ns -> unNamespace ns `notElem` loadedNsSet) extJavaNamespaces
+      putStrLn $ "Loading " ++ show (length toLoad) ++ " ext Java modules from JSON..."
+      extMods <- loadModulesFromJson False extJsonDir kernelModules toLoad
+      putStrLn $ "  Loaded " ++ show (length extMods) ++ " ext Java modules"
       putStrLn ""
-      return filtered
-    else return allMainMods
+      let allModsWithExt = allMainMods ++ extMods
+      return (extMods, allModsWithExt)
+    else return (allMainMods, allMainMods)
 
   let modsToGenerate = extJavaMods
 
@@ -253,9 +259,9 @@ main = do
 
   genStart <- getCurrentTime
   case target of
-    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allMainMods modsToGenerate
-    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain allMainMods modsToGenerate
-    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allMainMods modsToGenerate
+    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allMainModsFinal modsToGenerate
+    "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outMain allMainModsFinal modsToGenerate
+    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allMainModsFinal modsToGenerate
     _ -> do
       putStrLn $ "Unknown target: " ++ target
       exitFailure
@@ -288,7 +294,7 @@ main = do
           putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."
           case target of
             "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allUniverse extModsForTests
-            "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain allUniverse extModsForTests
+            "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outMain allUniverse extModsForTests
             "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allUniverse extModsForTests
             _ -> return ()
           putStrLn ""
@@ -298,7 +304,7 @@ main = do
       testStart <- getCurrentTime
       case target of
         "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outTest allUniverse testMods
-        "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outTest allUniverse testMods
+        "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outTest allUniverse testMods
         "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outTest allUniverse testMods
         _ -> return ()
       testEnd <- getCurrentTime
