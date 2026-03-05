@@ -19,7 +19,6 @@ import qualified Data.Map                     as M
 import qualified Hydra.Sources.Test.Lib.Chars as Chars
 import qualified Hydra.Sources.Test.Lib.Eithers as Eithers
 import qualified Hydra.Sources.Test.Lib.Equality as Equality
-import qualified Hydra.Sources.Test.Lib.Flows as Flows
 import qualified Hydra.Sources.Test.Lib.Lists as Lists
 import qualified Hydra.Sources.Test.Lib.Literals as Literals
 import qualified Hydra.Sources.Test.Lib.Logic as Logic
@@ -28,7 +27,6 @@ import qualified Hydra.Sources.Test.Lib.Math as Math
 import qualified Hydra.Sources.Test.Lib.Maybes as Maybes
 import qualified Hydra.Sources.Test.Annotations as Annotations
 import qualified Hydra.Sources.Test.Ordering as Ordering
-import qualified Hydra.Sources.Test.Monads as Monads
 import qualified Hydra.Sources.Test.Lib.Pairs as Pairs
 import qualified Hydra.Sources.Test.Lib.Sets as Sets
 import qualified Hydra.Sources.Test.Lib.Strings as Strings
@@ -52,7 +50,9 @@ import qualified Hydra.Sources.Test.Json.Coder as JsonCoder
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Roundtrip as JsonRoundtrip
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
-import qualified Hydra.Sources.Test.Hoisting as Hoisting
+import qualified Hydra.Sources.Test.Hoisting.All as HoistingAll
+import qualified Hydra.Sources.Test.Hoisting.Cases as HoistingCases
+import qualified Hydra.Sources.Test.Hoisting.Let as HoistingLet
 import qualified Hydra.Sources.Test.Reduction as Reduction
 import qualified Hydra.Sources.Test.Rewriting as Rewriting
 import qualified Hydra.Sources.Test.Serialization as Serialization
@@ -84,7 +84,6 @@ libPairs = [
   (Chars.ns, Chars.allTests),
   (Eithers.ns, Eithers.allTests),
   (Equality.ns, Equality.allTests),
-  (Flows.ns, Flows.allTests),
   (Lists.ns, Lists.allTests),
   (Literals.ns, Literals.allTests),
   (Logic.ns, Logic.allTests),
@@ -101,13 +100,12 @@ otherPairs = [
   (CheckingAll.ns, CheckingAll.allTests),
   (EtaExpansion.ns, EtaExpansion.allTests),
   (Formatting.ns, Formatting.allTests),
-  (Hoisting.ns, Hoisting.allTests),
+  (HoistingAll.ns, HoistingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
   (JsonCoder.ns, JsonCoder.allTests),
   (JsonParser.ns, JsonParser.allTests),
   (JsonRoundtrip.ns, JsonRoundtrip.allTests),
   (JsonWriter.ns, JsonWriter.allTests),
-  (Monads.ns, Monads.allTests),
   -- TODO: (Ordering.ns, Ordering.allTests) temporarily removed - needs investigation
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
@@ -123,13 +121,15 @@ testPairs = libPairs ++ otherPairs
 testSuiteModules :: [Module]
 testSuiteModules =
   -- Lib tests
-  [Chars.module_, Eithers.module_, Equality.module_, Flows.module_,
+  [Chars.module_, Eithers.module_, Equality.module_,
    Lists.module_, Literals.module_, Logic.module_, Maps.module_,
    Math.module_, Maybes.module_, Pairs.module_, Sets.module_, Strings.module_,
+   -- Hoisting tests (including sub-modules)
+   HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
-   Annotations.module_, EtaExpansion.module_, Formatting.module_, Hoisting.module_,
+   Annotations.module_, EtaExpansion.module_, Formatting.module_,
    JsonCoder.module_, JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_,
-   Monads.module_, Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
+   Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
    -- TODO: Ordering.module_ temporarily removed - needs investigation
    -- Checking tests (including sub-modules)
    CheckingAll.module_,

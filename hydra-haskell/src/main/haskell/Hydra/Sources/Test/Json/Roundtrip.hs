@@ -1,11 +1,8 @@
--- | Round-trip test cases for the Either-based JSON encoder and decoder
+-- | Round-trip test cases for the JSON encoder and decoder
 --
 -- These tests verify that:
 -- 1. Terms can be encoded to JSON and decoded back to the original term
 -- 2. The encoder and decoder handle all supported term constructs correctly
---
--- Note: These tests use the existing Flow-based JSON coder for now.
--- The Either-based encoder/decoder will be used once generated.
 module Hydra.Sources.Test.Json.Roundtrip where
 
 -- Standard imports for shallow DSL tests

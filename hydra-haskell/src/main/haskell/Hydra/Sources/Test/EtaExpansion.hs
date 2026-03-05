@@ -384,20 +384,20 @@ allTests = define "allTests" $
 
     nonExpansionOfEliminations = testGroup (Phantoms.string "Non-expansion of eliminations which produce functions") Phantoms.nothing (Phantoms.list ([] :: [TTerm TestGroup])) (Phantoms.list [
       noChange "applied case statement"
-        (tylams ["t0", "t1"] $
+        (tylams ["t0"] $
           lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
-            lambdaTyped "coder" (T.applys (T.var "hydra.compute.Coder") (T.var <$> ["t0", "t0", "t1", "t1"])) $
-              match (Core.nameLift _CoderDirection)
-                nothing [
-                "encode">: lambdaTyped "_" T.unit $
-                  lambdaTyped "v12" (T.var "t1") $
-                    tyapps (project (Core.nameLift _Coder) (Core.name (Phantoms.string "encode"))) (T.var <$> ["t0", "t0", "t1", "t1"])
-                      @@ var "coder" @@ var "v12",
-                "decode">: lambdaTyped "_" T.unit $
-                  lambdaTyped "v12" (T.var "t1") $
-                    tyapps (project (Core.nameLift _Coder) (Core.name (Phantoms.string "decode"))) (T.var <$> ["t0", "t0", "t1", "t1"])
-                      @@ var "coder" @@ var "v12"]
-              @@ var "dir"),
+            lambdaTyped "coder" (T.applys (T.var "hydra.compute.Coder") (T.var <$> ["t0", "t0"])) $
+              lambdaTyped "cx" (T.var "hydra.context.Context") $
+                lambdaTyped "v1" (T.var "t0") $
+                  match (Core.nameLift _CoderDirection)
+                    nothing [
+                    "encode">: lambdaTyped "_" T.unit $
+                      tyapps (project (Core.nameLift _Coder) (Core.name (Phantoms.string "encode"))) (T.var <$> ["t0", "t0"])
+                        @@ var "coder" @@ var "cx" @@ var "v1",
+                    "decode">: lambdaTyped "_" T.unit $
+                      tyapps (project (Core.nameLift _Coder) (Core.name (Phantoms.string "decode"))) (T.var <$> ["t0", "t0"])
+                        @@ var "coder" @@ var "cx" @@ var "v1"]
+                  @@ var "dir"),
       noChange "applied projection"
         (tyapps (project TestTypes.testTypeTripleName (Core.name (Phantoms.string "third"))) [T.int32, T.int32, T.function T.string T.string]
         @@ (record TestTypes.testTypeTripleName [

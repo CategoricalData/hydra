@@ -33,10 +33,6 @@ module_ = Module ns elements
       toBinding testTypeComparisonName,
       toBinding testTypeEither,
       toBinding testTypeEitherName,
-      toBinding testTypeFlow,
-      toBinding testTypeFlowName,
-      toBinding testTypeFlowState,
-      toBinding testTypeFlowStateName,
       toBinding testTypeHydraLiteralType,
       toBinding testTypeHydraLiteralTypeName,
       toBinding testTypeHydraType,
@@ -65,8 +61,6 @@ module_ = Module ns elements
       toBinding testTypeSymmetricTripleName,
       toBinding testTypeTimestamp,
       toBinding testTypeTimestampName,
-      toBinding testTypeTrace,
-      toBinding testTypeTraceName,
       toBinding testTypeTriple,
       toBinding testTypeTripleName,
       toBinding testTypeUnionMonomorphic,
@@ -122,14 +116,6 @@ testTypeComparisonName = define "testTypeComparisonName" $
 testTypeEitherName :: TBinding Name
 testTypeEitherName = define "testTypeEitherName" $
   testTypesName "Either"
-
-testTypeFlowName :: TBinding Name
-testTypeFlowName = define "testTypeFlowName" $
-  name "hydra.compute.Flow"
-
-testTypeFlowStateName :: TBinding Name
-testTypeFlowStateName = define "testTypeFlowStateName" $
-  name "hydra.compute.FlowState"
 
 testTypeHydraLiteralTypeName :: TBinding Name
 testTypeHydraLiteralTypeName = define "testTypeHydraLiteralTypeName" $
@@ -187,10 +173,6 @@ testTypeTimestampName :: TBinding Name
 testTypeTimestampName = define "testTypeTimestampName" $
   testTypesName "Timestamp"
 
-testTypeTraceName :: TBinding Name
-testTypeTraceName = define "testTypeTraceName" $
-  name "hydra.compute.Trace"
-
 testTypeTripleName :: TBinding Name
 testTypeTripleName = define "testTypeTripleName" $
   testTypesName "Triple"
@@ -234,18 +216,6 @@ testTypeEither = defineType "testTypeEither" $
   T.forAll "a" $ T.forAll "b" $ T.union testTypeEitherName [
     "left">: T.variable "a",
     "right">: T.variable "b"]
-
-testTypeFlow :: TBinding Type
-testTypeFlow = defineType "testTypeFlow" $
-  T.forAll "s" $ T.forAll "a" $ T.record testTypeFlowName [
-    "value">: T.function (T.variable "s") (T.apply (T.apply (Core.typeVariable testTypeFlowStateName) (T.variable "s")) (T.variable "a"))]
-
-testTypeFlowState :: TBinding Type
-testTypeFlowState = defineType "testTypeFlowState" $
-  T.forAll "s" $ T.forAll "a" $ T.record testTypeFlowStateName [
-    "value">: T.maybe (T.variable "a"),
-    "state">: T.variable "s",
-    "trace">: Core.typeVariable testTypeTraceName]
 
 testTypeHydraLiteralType :: TBinding Type
 testTypeHydraLiteralType = defineType "testTypeHydraLiteralType" $
@@ -327,13 +297,6 @@ testTypeTimestamp = defineType "testTypeTimestamp" $
   T.union testTypeTimestampName [
     "unixTimeMillis">: T.uint64,
     "date">: T.string]
-
-testTypeTrace :: TBinding Type
-testTypeTrace = defineType "testTypeTrace" $
-  T.record testTypeTraceName [
-    "stack">: T.list T.string,
-    "messages">: T.list T.string,
-    "other">: T.map T.string T.string]
 
 testTypeTriple :: TBinding Type
 testTypeTriple = defineType "testTypeTriple" $
