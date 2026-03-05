@@ -198,31 +198,21 @@ and code-generated into [Hydra.Core](https://github.com/CategoricalData/hydra/bl
 
 See [Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts) for detailed explanations.
 
-### The Flow monad
+### Error handling and Context
 
-Transformations in Hydra use the `Flow` monad for:
-- State management (graph context)
-- Error handling
-- Logging and tracing
-
-```haskell
-type Flow s a = s -> Trace -> FlowState s a
-```
-
-Common usage pattern:
+Hydra uses `Either (InContext OtherError) a` for computations that can fail,
+where `InContext` pairs an error with a `Context` carrying debug traces and metadata.
+Graph and Context are passed as explicit parameters.
 
 ```haskell
-import Hydra.Compute (Flow, FlowState, unFlow, emptyTrace)
-
--- Create a Flow
-myComputation :: Flow Graph String
-myComputation = pure "result"
+-- A function that may fail
+myComputation :: Context -> Graph -> Either (InContext OtherError) String
+myComputation cx g = Right "result"
 
 -- Execute it
-let state = unFlow myComputation graph emptyTrace
-case flowStateValue state of
-  Just result -> putStrLn result
-  Nothing -> print (flowStateMessages $ flowStateTrace state)
+case myComputation emptyContext myGraph of
+  Right result -> putStrLn result
+  Left ic -> print (unOtherError (inContextObject ic))
 ```
 
 ### Coders and adapters
@@ -230,9 +220,9 @@ case flowStateValue state of
 **Coders** are bidirectional transformations:
 
 ```haskell
-data Coder s1 s2 v1 v2 = Coder {
-  coderEncode :: v1 -> Flow s2 v2,
-  coderDecode :: v2 -> Flow s1 v1
+data Coder v1 v2 = Coder {
+  coderEncode :: v1 -> Context -> Graph -> Either (InContext OtherError) v2,
+  coderDecode :: v2 -> Context -> Graph -> Either (InContext OtherError) v1
 }
 ```
 
