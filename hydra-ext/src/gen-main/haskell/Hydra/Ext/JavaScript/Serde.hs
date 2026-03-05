@@ -29,13 +29,13 @@ identifierToExpr id = (Serialization.cst (Syntax.unIdentifier id))
 -- | Convert a literal to an AST expression
 literalToExpr :: (Syntax.Literal -> Ast.Expr)
 literalToExpr lit = ((\x -> case x of
-  Syntax.LiteralString v1 -> (stringLiteralToExpr v1)
-  Syntax.LiteralNumber v1 -> (numericLiteralToExpr v1)
-  Syntax.LiteralBoolean v1 -> (Serialization.cst (Logic.ifElse v1 "true" "false"))
+  Syntax.LiteralString v0 -> (stringLiteralToExpr v0)
+  Syntax.LiteralNumber v0 -> (numericLiteralToExpr v0)
+  Syntax.LiteralBoolean v0 -> (Serialization.cst (Logic.ifElse v0 "true" "false"))
   Syntax.LiteralNull -> (Serialization.cst "null")
   Syntax.LiteralUndefined -> (Serialization.cst "undefined")
-  Syntax.LiteralBigInt v1 -> (Serialization.cst (Strings.cat2 (Literals.showBigint v1) "n"))
-  Syntax.LiteralTemplate v1 -> (templateLiteralToExpr v1)) lit)
+  Syntax.LiteralBigInt v0 -> (Serialization.cst (Strings.cat2 (Literals.showBigint v0) "n"))
+  Syntax.LiteralTemplate v0 -> (templateLiteralToExpr v0)) lit)
 
 -- | Convert a string literal to an AST expression
 stringLiteralToExpr :: (Syntax.StringLiteral -> Ast.Expr)
@@ -66,37 +66,37 @@ templateLiteralToExpr t =
 -- | Convert a numeric literal to an AST expression
 numericLiteralToExpr :: (Syntax.NumericLiteral -> Ast.Expr)
 numericLiteralToExpr n = ((\x -> case x of
-  Syntax.NumericLiteralInteger v1 -> (Serialization.cst (Literals.showInt64 v1))
-  Syntax.NumericLiteralFloat v1 -> (Serialization.cst (Literals.showFloat64 v1))) n)
+  Syntax.NumericLiteralInteger v0 -> (Serialization.cst (Literals.showInt64 v0))
+  Syntax.NumericLiteralFloat v0 -> (Serialization.cst (Literals.showFloat64 v0))) n)
 
 -- | Convert a JavaScript expression to an AST expression
 expressionToExpr :: (Syntax.Expression -> Ast.Expr)
 expressionToExpr expr = ((\x -> case x of
-  Syntax.ExpressionIdentifier v1 -> (identifierToExpr v1)
-  Syntax.ExpressionLiteral v1 -> (literalToExpr v1)
-  Syntax.ExpressionArray v1 -> (arrayExpressionToExpr v1)
-  Syntax.ExpressionObject v1 -> (objectExpressionToExpr v1)
-  Syntax.ExpressionFunction v1 -> (functionExpressionToExpr v1)
-  Syntax.ExpressionArrow v1 -> (arrowFunctionExpressionToExpr v1)
-  Syntax.ExpressionCall v1 -> (callExpressionToExpr v1)
-  Syntax.ExpressionMember v1 -> (memberExpressionToExpr v1)
-  Syntax.ExpressionConditional v1 -> (conditionalExpressionToExpr v1)
-  Syntax.ExpressionBinary v1 -> (binaryExpressionToExpr v1)
-  Syntax.ExpressionUnary v1 -> (unaryExpressionToExpr v1)
-  Syntax.ExpressionAssignment v1 -> (assignmentExpressionToExpr v1)
-  Syntax.ExpressionSequence v1 -> (Serialization.parenList False (Lists.map expressionToExpr v1))
+  Syntax.ExpressionIdentifier v0 -> (identifierToExpr v0)
+  Syntax.ExpressionLiteral v0 -> (literalToExpr v0)
+  Syntax.ExpressionArray v0 -> (arrayExpressionToExpr v0)
+  Syntax.ExpressionObject v0 -> (objectExpressionToExpr v0)
+  Syntax.ExpressionFunction v0 -> (functionExpressionToExpr v0)
+  Syntax.ExpressionArrow v0 -> (arrowFunctionExpressionToExpr v0)
+  Syntax.ExpressionCall v0 -> (callExpressionToExpr v0)
+  Syntax.ExpressionMember v0 -> (memberExpressionToExpr v0)
+  Syntax.ExpressionConditional v0 -> (conditionalExpressionToExpr v0)
+  Syntax.ExpressionBinary v0 -> (binaryExpressionToExpr v0)
+  Syntax.ExpressionUnary v0 -> (unaryExpressionToExpr v0)
+  Syntax.ExpressionAssignment v0 -> (assignmentExpressionToExpr v0)
+  Syntax.ExpressionSequence v0 -> (Serialization.parenList False (Lists.map expressionToExpr v0))
   Syntax.ExpressionThis -> (Serialization.cst "this")
-  Syntax.ExpressionNew v1 -> (Serialization.spaceSep [
+  Syntax.ExpressionNew v0 -> (Serialization.spaceSep [
     Serialization.cst "new",
-    (callExpressionToExpr v1)])
-  Syntax.ExpressionYield v1 -> (Maybes.maybe (Serialization.cst "yield") (\e -> Serialization.spaceSep [
+    (callExpressionToExpr v0)])
+  Syntax.ExpressionYield v0 -> (Maybes.maybe (Serialization.cst "yield") (\e -> Serialization.spaceSep [
     Serialization.cst "yield",
-    (expressionToExpr e)]) v1)
-  Syntax.ExpressionAwait v1 -> (Serialization.spaceSep [
+    (expressionToExpr e)]) v0)
+  Syntax.ExpressionAwait v0 -> (Serialization.spaceSep [
     Serialization.cst "await",
-    (expressionToExpr v1)])
-  Syntax.ExpressionSpread v1 -> (Serialization.prefix "..." (expressionToExpr (Syntax.unSpreadElement v1)))
-  Syntax.ExpressionParenthesized v1 -> (Serialization.parenthesize (expressionToExpr v1))) expr)
+    (expressionToExpr v0)])
+  Syntax.ExpressionSpread v0 -> (Serialization.prefix "..." (expressionToExpr (Syntax.unSpreadElement v0)))
+  Syntax.ExpressionParenthesized v0 -> (Serialization.parenthesize (expressionToExpr v0))) expr)
 
 -- | Convert an array expression to an AST expression
 arrayExpressionToExpr :: ([Syntax.ArrayElement] -> Ast.Expr)
@@ -105,8 +105,8 @@ arrayExpressionToExpr arr = (Serialization.bracketList Serialization.inlineStyle
 -- | Convert an array element to an AST expression
 arrayElementToExpr :: (Syntax.ArrayElement -> Ast.Expr)
 arrayElementToExpr elem = ((\x -> case x of
-  Syntax.ArrayElementExpression v1 -> (expressionToExpr v1)
-  Syntax.ArrayElementSpread v1 -> (Serialization.prefix "..." (expressionToExpr (Syntax.unSpreadElement v1)))
+  Syntax.ArrayElementExpression v0 -> (expressionToExpr v0)
+  Syntax.ArrayElementSpread v0 -> (Serialization.prefix "..." (expressionToExpr (Syntax.unSpreadElement v0)))
   Syntax.ArrayElementHole -> (Serialization.cst "")) elem)
 
 -- | Convert an object expression to an AST expression
@@ -156,8 +156,8 @@ arrowFunctionExpressionToExpr arrow =
               Serialization.cst "async"] [])
       paramsExpr = (Logic.ifElse (Equality.equal (Lists.length params) 1) (patternToExpr (Lists.head params)) (Serialization.parenList False (Lists.map patternToExpr params)))
       bodyExpr = ((\x -> case x of
-              Syntax.ArrowFunctionBodyExpression v1 -> (expressionToExpr v1)
-              Syntax.ArrowFunctionBodyBlock v1 -> (blockStatementToExpr v1)) body)
+              Syntax.ArrowFunctionBodyExpression v0 -> (expressionToExpr v0)
+              Syntax.ArrowFunctionBodyBlock v0 -> (blockStatementToExpr v0)) body)
   in (Serialization.spaceSep (Lists.concat [
     asyncKw,
     [
@@ -237,11 +237,11 @@ assignmentExpressionToExpr assign =
 -- | Convert a pattern to an AST expression
 patternToExpr :: (Syntax.Pattern -> Ast.Expr)
 patternToExpr pat = ((\x -> case x of
-  Syntax.PatternIdentifier v1 -> (identifierToExpr v1)
-  Syntax.PatternObject v1 -> (objectPatternToExpr v1)
-  Syntax.PatternArray v1 -> (arrayPatternToExpr v1)
-  Syntax.PatternAssignment v1 -> (assignmentPatternToExpr v1)
-  Syntax.PatternRest v1 -> (Serialization.prefix "..." (patternToExpr (Syntax.unRestElement v1)))) pat)
+  Syntax.PatternIdentifier v0 -> (identifierToExpr v0)
+  Syntax.PatternObject v0 -> (objectPatternToExpr v0)
+  Syntax.PatternArray v0 -> (arrayPatternToExpr v0)
+  Syntax.PatternAssignment v0 -> (assignmentPatternToExpr v0)
+  Syntax.PatternRest v0 -> (Serialization.prefix "..." (patternToExpr (Syntax.unRestElement v0)))) pat)
 
 -- | Convert an object pattern to an AST expression
 objectPatternToExpr :: (Syntax.ObjectPattern -> Ast.Expr)
@@ -252,8 +252,8 @@ objectPatternToExpr obj =
 -- | Convert an object pattern property to an AST expression
 objectPatternPropertyToExpr :: (Syntax.ObjectPatternProperty -> Ast.Expr)
 objectPatternPropertyToExpr prop = ((\x -> case x of
-  Syntax.ObjectPatternPropertyProperty v1 -> (propertyToExpr v1)
-  Syntax.ObjectPatternPropertyRest v1 -> (Serialization.prefix "..." (patternToExpr (Syntax.unRestElement v1)))) prop)
+  Syntax.ObjectPatternPropertyProperty v0 -> (propertyToExpr v0)
+  Syntax.ObjectPatternPropertyRest v0 -> (Serialization.prefix "..." (patternToExpr (Syntax.unRestElement v0)))) prop)
 
 -- | Convert an array pattern to an AST expression
 arrayPatternToExpr :: ([Maybe Syntax.Pattern] -> Ast.Expr)
@@ -269,26 +269,26 @@ assignmentPatternToExpr assign =
 -- | Convert a statement to an AST expression
 statementToExpr :: (Syntax.Statement -> Ast.Expr)
 statementToExpr stmt = ((\x -> case x of
-  Syntax.StatementExpression v1 -> (Serialization.suffix ";" (expressionToExpr v1))
-  Syntax.StatementBlock v1 -> (blockStatementToExpr v1)
+  Syntax.StatementExpression v0 -> (Serialization.suffix ";" (expressionToExpr v0))
+  Syntax.StatementBlock v0 -> (blockStatementToExpr v0)
   Syntax.StatementEmpty -> (Serialization.cst ";")
   Syntax.StatementDebugger -> (Serialization.cst "debugger;")
-  Syntax.StatementReturn v1 -> (returnStatementToExpr v1)
-  Syntax.StatementBreak v1 -> (breakStatementToExpr v1)
-  Syntax.StatementContinue v1 -> (continueStatementToExpr v1)
-  Syntax.StatementIf v1 -> (ifStatementToExpr v1)
-  Syntax.StatementSwitch v1 -> (switchStatementToExpr v1)
-  Syntax.StatementThrow v1 -> (throwStatementToExpr v1)
-  Syntax.StatementTry v1 -> (tryStatementToExpr v1)
-  Syntax.StatementWhile v1 -> (whileStatementToExpr v1)
-  Syntax.StatementDoWhile v1 -> (doWhileStatementToExpr v1)
-  Syntax.StatementFor v1 -> (forStatementToExpr v1)
-  Syntax.StatementForIn v1 -> (forInStatementToExpr v1)
-  Syntax.StatementForOf v1 -> (forOfStatementToExpr v1)
-  Syntax.StatementVariableDeclaration v1 -> (variableDeclarationToExpr v1)
-  Syntax.StatementFunctionDeclaration v1 -> (functionDeclarationToExpr v1)
-  Syntax.StatementClassDeclaration v1 -> (classDeclarationToExpr v1)
-  Syntax.StatementLabeled v1 -> (labeledStatementToExpr v1)) stmt)
+  Syntax.StatementReturn v0 -> (returnStatementToExpr v0)
+  Syntax.StatementBreak v0 -> (breakStatementToExpr v0)
+  Syntax.StatementContinue v0 -> (continueStatementToExpr v0)
+  Syntax.StatementIf v0 -> (ifStatementToExpr v0)
+  Syntax.StatementSwitch v0 -> (switchStatementToExpr v0)
+  Syntax.StatementThrow v0 -> (throwStatementToExpr v0)
+  Syntax.StatementTry v0 -> (tryStatementToExpr v0)
+  Syntax.StatementWhile v0 -> (whileStatementToExpr v0)
+  Syntax.StatementDoWhile v0 -> (doWhileStatementToExpr v0)
+  Syntax.StatementFor v0 -> (forStatementToExpr v0)
+  Syntax.StatementForIn v0 -> (forInStatementToExpr v0)
+  Syntax.StatementForOf v0 -> (forOfStatementToExpr v0)
+  Syntax.StatementVariableDeclaration v0 -> (variableDeclarationToExpr v0)
+  Syntax.StatementFunctionDeclaration v0 -> (functionDeclarationToExpr v0)
+  Syntax.StatementClassDeclaration v0 -> (classDeclarationToExpr v0)
+  Syntax.StatementLabeled v0 -> (labeledStatementToExpr v0)) stmt)
 
 -- | Convert a block statement to an AST expression
 blockStatementToExpr :: ([Syntax.Statement] -> Ast.Expr)
@@ -439,8 +439,8 @@ forStatementToExpr f =
       update = (Syntax.forStatementUpdate f)
       body = (Syntax.forStatementBody f)
       initExpr = (Maybes.maybe (Serialization.cst "") (\i -> (\x -> case x of
-              Syntax.ForInitVariable v1 -> (variableDeclarationToExpr v1)
-              Syntax.ForInitExpression v1 -> (expressionToExpr v1)) i) init)
+              Syntax.ForInitVariable v0 -> (variableDeclarationToExpr v0)
+              Syntax.ForInitExpression v0 -> (expressionToExpr v0)) i) init)
       testExpr = (Maybes.maybe (Serialization.cst "") expressionToExpr test)
       updateExpr = (Maybes.maybe (Serialization.cst "") expressionToExpr update)
   in (Serialization.spaceSep [
@@ -458,8 +458,8 @@ forInStatementToExpr f =
       right = (Syntax.forInStatementRight f)
       body = (Syntax.forInStatementBody f)
       leftExpr = ((\x -> case x of
-              Syntax.ForInLeftVariable v1 -> (variableDeclarationToExpr v1)
-              Syntax.ForInLeftPattern v1 -> (patternToExpr v1)) left)
+              Syntax.ForInLeftVariable v0 -> (variableDeclarationToExpr v0)
+              Syntax.ForInLeftPattern v0 -> (patternToExpr v0)) left)
   in (Serialization.spaceSep [
     Serialization.cst "for",
     (Serialization.parenthesize (Serialization.spaceSep [
@@ -477,8 +477,8 @@ forOfStatementToExpr f =
       body = (Syntax.forOfStatementBody f)
       forKw = (Logic.ifElse await (Serialization.cst "for await") (Serialization.cst "for"))
       leftExpr = ((\x -> case x of
-              Syntax.ForInLeftVariable v1 -> (variableDeclarationToExpr v1)
-              Syntax.ForInLeftPattern v1 -> (patternToExpr v1)) left)
+              Syntax.ForInLeftVariable v0 -> (variableDeclarationToExpr v0)
+              Syntax.ForInLeftPattern v0 -> (patternToExpr v0)) left)
   in (Serialization.spaceSep [
     forKw,
     (Serialization.parenthesize (Serialization.spaceSep [
@@ -577,9 +577,9 @@ programToExpr prog =
 -- | Convert a module item to an AST expression
 moduleItemToExpr :: (Syntax.ModuleItem -> Ast.Expr)
 moduleItemToExpr item = ((\x -> case x of
-  Syntax.ModuleItemStatement v1 -> (statementToExpr v1)
-  Syntax.ModuleItemImport v1 -> (importDeclarationToExpr v1)
-  Syntax.ModuleItemExport v1 -> (exportDeclarationToExpr v1)) item)
+  Syntax.ModuleItemStatement v0 -> (statementToExpr v0)
+  Syntax.ModuleItemImport v0 -> (importDeclarationToExpr v0)
+  Syntax.ModuleItemExport v0 -> (exportDeclarationToExpr v0)) item)
 
 -- | Convert an import declaration to an AST expression
 importDeclarationToExpr :: (Syntax.ImportDeclaration -> Ast.Expr)
@@ -599,18 +599,18 @@ importDeclarationToExpr imp =
 -- | Convert an import specifier to an AST expression
 importSpecifierToExpr :: (Syntax.ImportClause -> Ast.Expr)
 importSpecifierToExpr spec = ((\x -> case x of
-  Syntax.ImportClauseNamed v1 ->  
-    let imported = (Syntax.importSpecifierImported v1) 
-        local = (Syntax.importSpecifierLocal v1)
+  Syntax.ImportClauseNamed v0 ->  
+    let imported = (Syntax.importSpecifierImported v0) 
+        local = (Syntax.importSpecifierLocal v0)
     in (Logic.ifElse (Equality.equal (Syntax.unIdentifier imported) (Syntax.unIdentifier local)) (identifierToExpr local) (Serialization.spaceSep [
       identifierToExpr imported,
       (Serialization.cst "as"),
       (identifierToExpr local)]))
-  Syntax.ImportClauseDefault v1 -> (identifierToExpr (Syntax.unImportDefaultSpecifier v1))
-  Syntax.ImportClauseNamespace v1 -> (Serialization.spaceSep [
+  Syntax.ImportClauseDefault v0 -> (identifierToExpr (Syntax.unImportDefaultSpecifier v0))
+  Syntax.ImportClauseNamespace v0 -> (Serialization.spaceSep [
     Serialization.cst "*",
     (Serialization.cst "as"),
-    (identifierToExpr (Syntax.unImportNamespaceSpecifier v1))])) spec)
+    (identifierToExpr (Syntax.unImportNamespaceSpecifier v0))])) spec)
 
 -- | Format import specifiers, handling default vs named imports
 formatImportSpecifiers :: ([Ast.Expr] -> Ast.Expr)
@@ -619,15 +619,15 @@ formatImportSpecifiers specs = (Serialization.curlyBracesList Nothing Serializat
 -- | Convert an export declaration to an AST expression
 exportDeclarationToExpr :: (Syntax.ExportDeclaration -> Ast.Expr)
 exportDeclarationToExpr exp = ((\x -> case x of
-  Syntax.ExportDeclarationNamed v1 -> (namedExportToExpr v1)
-  Syntax.ExportDeclarationDefault v1 -> (Serialization.suffix ";" (Serialization.spaceSep [
+  Syntax.ExportDeclarationNamed v0 -> (namedExportToExpr v0)
+  Syntax.ExportDeclarationDefault v0 -> (Serialization.suffix ";" (Serialization.spaceSep [
     Serialization.cst "export",
     (Serialization.cst "default"),
-    (expressionToExpr v1)]))
-  Syntax.ExportDeclarationDeclaration v1 -> (Serialization.spaceSep [
+    (expressionToExpr v0)]))
+  Syntax.ExportDeclarationDeclaration v0 -> (Serialization.spaceSep [
     Serialization.cst "export",
-    (statementToExpr v1)])
-  Syntax.ExportDeclarationAll v1 -> (exportAllToExpr v1)) exp)
+    (statementToExpr v0)])
+  Syntax.ExportDeclarationAll v0 -> (exportAllToExpr v0)) exp)
 
 -- | Convert a named export to an AST expression
 namedExportToExpr :: (Syntax.NamedExport -> Ast.Expr)
@@ -777,24 +777,24 @@ documentationTagToLine tag =
 -- | Convert a type expression to a string for JSDoc
 typeExpressionToString :: (Syntax.TypeExpression -> String)
 typeExpressionToString typ = ((\x -> case x of
-  Syntax.TypeExpressionIdentifier v1 -> (Syntax.unIdentifier v1)
+  Syntax.TypeExpressionIdentifier v0 -> (Syntax.unIdentifier v0)
   Syntax.TypeExpressionAny -> "*"
   Syntax.TypeExpressionVoid -> "void"
   Syntax.TypeExpressionNever -> "never"
   Syntax.TypeExpressionLiteral _ -> "literal"
-  Syntax.TypeExpressionArray v1 -> (Strings.cat2 (typeExpressionToString (Syntax.unArrayTypeExpression v1)) "[]")
+  Syntax.TypeExpressionArray v0 -> (Strings.cat2 (typeExpressionToString (Syntax.unArrayTypeExpression v0)) "[]")
   Syntax.TypeExpressionFunction _ -> "Function"
   Syntax.TypeExpressionObject _ -> "Object"
-  Syntax.TypeExpressionUnion v1 -> (Strings.intercalate "|" (Lists.map typeExpressionToString v1))
-  Syntax.TypeExpressionParameterized v1 ->  
-    let base = (Syntax.parameterizedTypeExpressionBase v1) 
-        args = (Syntax.parameterizedTypeExpressionArguments v1)
+  Syntax.TypeExpressionUnion v0 -> (Strings.intercalate "|" (Lists.map typeExpressionToString v0))
+  Syntax.TypeExpressionParameterized v0 ->  
+    let base = (Syntax.parameterizedTypeExpressionBase v0) 
+        args = (Syntax.parameterizedTypeExpressionArguments v0)
     in (Strings.cat [
       typeExpressionToString base,
       "<",
       (Strings.intercalate ", " (Lists.map typeExpressionToString args)),
       ">"])
-  Syntax.TypeExpressionOptional v1 -> (Strings.cat2 "?" (typeExpressionToString v1))) typ)
+  Syntax.TypeExpressionOptional v0 -> (Strings.cat2 "?" (typeExpressionToString v0))) typ)
 
 -- | Convert a string to a JavaScript line comment
 toLineComment :: (String -> String)

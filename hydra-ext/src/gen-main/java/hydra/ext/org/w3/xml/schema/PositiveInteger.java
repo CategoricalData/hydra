@@ -4,15 +4,14 @@ package hydra.ext.org.w3.xml.schema;
 
 import java.io.Serializable;
 
-public class PositiveInteger implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.xml.schema.PositiveInteger");
+public class PositiveInteger implements Serializable, Comparable<PositiveInteger> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.xml.schema.PositiveInteger");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.math.BigInteger value;
   
   public PositiveInteger (java.math.BigInteger value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -21,12 +20,18 @@ public class PositiveInteger implements Serializable {
     if (!(other instanceof PositiveInteger)) {
       return false;
     }
-    PositiveInteger o = (PositiveInteger) (other);
-    return value.equals(o.value);
+    PositiveInteger o = (PositiveInteger) other;
+    return this.value.compareTo(o.value) == 0;
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(PositiveInteger other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

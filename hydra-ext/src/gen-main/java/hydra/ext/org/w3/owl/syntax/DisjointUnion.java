@@ -7,14 +7,14 @@ import java.io.Serializable;
 /**
  * See https://www.w3.org/TR/owl2-syntax/#Disjoint_Union_of_Class_Expressions
  */
-public class DisjointUnion implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DisjointUnion");
+public class DisjointUnion implements Serializable, Comparable<DisjointUnion> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DisjointUnion");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  public static final hydra.core.Name CLASS = new hydra.core.Name("class");
   
-  public static final hydra.core.Name FIELD_NAME_CLASSES = new hydra.core.Name("classes");
+  public static final hydra.core.Name CLASSES = new hydra.core.Name("classes");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
@@ -23,9 +23,6 @@ public class DisjointUnion implements Serializable {
   public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes;
   
   public DisjointUnion (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Class_ class_, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((class_));
-    java.util.Objects.requireNonNull((classes));
     this.annotations = annotations;
     this.class_ = class_;
     this.classes = classes;
@@ -36,27 +33,49 @@ public class DisjointUnion implements Serializable {
     if (!(other instanceof DisjointUnion)) {
       return false;
     }
-    DisjointUnion o = (DisjointUnion) (other);
-    return annotations.equals(o.annotations) && class_.equals(o.class_) && classes.equals(o.classes);
+    DisjointUnion o = (DisjointUnion) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.class_,
+      o.class_) && java.util.Objects.equals(
+      this.classes,
+      o.classes);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * class_.hashCode() + 5 * classes.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(class_) + 5 * java.util.Objects.hashCode(classes);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(DisjointUnion other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) class_).compareTo(other.class_);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      classes.hashCode(),
+      other.classes.hashCode());
   }
   
   public DisjointUnion withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new DisjointUnion(annotations, class_, classes);
   }
   
   public DisjointUnion withClass(hydra.ext.org.w3.owl.syntax.Class_ class_) {
-    java.util.Objects.requireNonNull((class_));
     return new DisjointUnion(annotations, class_, classes);
   }
   
   public DisjointUnion withClasses(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
-    java.util.Objects.requireNonNull((classes));
     return new DisjointUnion(annotations, class_, classes);
   }
 }

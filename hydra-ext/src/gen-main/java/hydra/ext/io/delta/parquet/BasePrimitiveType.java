@@ -7,30 +7,30 @@ import java.io.Serializable;
 /**
  * Base class for all primitive types DataType.
  */
-public abstract class BasePrimitiveType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.delta.parquet.BasePrimitiveType");
+public abstract class BasePrimitiveType implements Serializable, Comparable<BasePrimitiveType> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.delta.parquet.BasePrimitiveType");
   
-  public static final hydra.core.Name FIELD_NAME_BINARY = new hydra.core.Name("binary");
+  public static final hydra.core.Name BINARY = new hydra.core.Name("binary");
   
-  public static final hydra.core.Name FIELD_NAME_BOOLEAN = new hydra.core.Name("boolean");
+  public static final hydra.core.Name BOOLEAN = new hydra.core.Name("boolean");
   
-  public static final hydra.core.Name FIELD_NAME_BYTE = new hydra.core.Name("byte");
+  public static final hydra.core.Name BYTE = new hydra.core.Name("byte");
   
-  public static final hydra.core.Name FIELD_NAME_DATE = new hydra.core.Name("date");
+  public static final hydra.core.Name DATE = new hydra.core.Name("date");
   
-  public static final hydra.core.Name FIELD_NAME_DOUBLE = new hydra.core.Name("double");
+  public static final hydra.core.Name DOUBLE = new hydra.core.Name("double");
   
-  public static final hydra.core.Name FIELD_NAME_FLOAT = new hydra.core.Name("float");
+  public static final hydra.core.Name FLOAT = new hydra.core.Name("float");
   
-  public static final hydra.core.Name FIELD_NAME_INTEGER = new hydra.core.Name("integer");
+  public static final hydra.core.Name INTEGER = new hydra.core.Name("integer");
   
-  public static final hydra.core.Name FIELD_NAME_LONG = new hydra.core.Name("long");
+  public static final hydra.core.Name LONG = new hydra.core.Name("long");
   
-  public static final hydra.core.Name FIELD_NAME_SHORT = new hydra.core.Name("short");
+  public static final hydra.core.Name SHORT = new hydra.core.Name("short");
   
-  public static final hydra.core.Name FIELD_NAME_STRING = new hydra.core.Name("string");
+  public static final hydra.core.Name STRING = new hydra.core.Name("string");
   
-  public static final hydra.core.Name FIELD_NAME_TIMESTAMP = new hydra.core.Name("timestamp");
+  public static final hydra.core.Name TIMESTAMP = new hydra.core.Name("timestamp");
   
   private BasePrimitiveType () {
   
@@ -64,51 +64,51 @@ public abstract class BasePrimitiveType implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(BasePrimitiveType instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Binary instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Boolean_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Byte_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Date instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Double_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Float_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Integer_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Long_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Short_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(String_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Timestamp instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -125,12 +125,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Binary)) {
         return false;
       }
-      Binary o = (Binary) (other);
+      Binary o = (Binary) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -153,12 +163,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Boolean_)) {
         return false;
       }
-      Boolean_ o = (Boolean_) (other);
+      Boolean_ o = (Boolean_) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -181,12 +201,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Byte_)) {
         return false;
       }
-      Byte_ o = (Byte_) (other);
+      Byte_ o = (Byte_) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -209,12 +239,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Date)) {
         return false;
       }
-      Date o = (Date) (other);
+      Date o = (Date) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -237,12 +277,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Double_)) {
         return false;
       }
-      Double_ o = (Double_) (other);
+      Double_ o = (Double_) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -265,12 +315,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Float_)) {
         return false;
       }
-      Float_ o = (Float_) (other);
+      Float_ o = (Float_) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -293,12 +353,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Integer_)) {
         return false;
       }
-      Integer_ o = (Integer_) (other);
+      Integer_ o = (Integer_) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -321,12 +391,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Long_)) {
         return false;
       }
-      Long_ o = (Long_) (other);
+      Long_ o = (Long_) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -349,12 +429,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Short_)) {
         return false;
       }
-      Short_ o = (Short_) (other);
+      Short_ o = (Short_) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -377,12 +467,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof String_)) {
         return false;
       }
-      String_ o = (String_) (other);
+      String_ o = (String_) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     
@@ -405,12 +505,22 @@ public abstract class BasePrimitiveType implements Serializable {
       if (!(other instanceof Timestamp)) {
         return false;
       }
-      Timestamp o = (Timestamp) (other);
+      Timestamp o = (Timestamp) other;
       return true;
     }
     
     @Override
     public int hashCode() {
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(BasePrimitiveType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
       return 0;
     }
     

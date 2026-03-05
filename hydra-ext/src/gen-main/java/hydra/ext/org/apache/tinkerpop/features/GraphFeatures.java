@@ -7,24 +7,24 @@ import java.io.Serializable;
 /**
  * Features specific to a operations of a graph.
  */
-public class GraphFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.GraphFeatures");
+public class GraphFeatures implements Serializable, Comparable<GraphFeatures> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.GraphFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_COMPUTER = new hydra.core.Name("supportsComputer");
+  public static final hydra.core.Name SUPPORTS_COMPUTER = new hydra.core.Name("supportsComputer");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_CONCURRENT_ACCESS = new hydra.core.Name("supportsConcurrentAccess");
+  public static final hydra.core.Name SUPPORTS_CONCURRENT_ACCESS = new hydra.core.Name("supportsConcurrentAccess");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_IO_READ = new hydra.core.Name("supportsIoRead");
+  public static final hydra.core.Name SUPPORTS_IO_READ = new hydra.core.Name("supportsIoRead");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_IO_WRITE = new hydra.core.Name("supportsIoWrite");
+  public static final hydra.core.Name SUPPORTS_IO_WRITE = new hydra.core.Name("supportsIoWrite");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_PERSISTENCE = new hydra.core.Name("supportsPersistence");
+  public static final hydra.core.Name SUPPORTS_PERSISTENCE = new hydra.core.Name("supportsPersistence");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_THREADED_TRANSACTIONS = new hydra.core.Name("supportsThreadedTransactions");
+  public static final hydra.core.Name SUPPORTS_THREADED_TRANSACTIONS = new hydra.core.Name("supportsThreadedTransactions");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_TRANSACTIONS = new hydra.core.Name("supportsTransactions");
+  public static final hydra.core.Name SUPPORTS_TRANSACTIONS = new hydra.core.Name("supportsTransactions");
   
-  public static final hydra.core.Name FIELD_NAME_VARIABLES = new hydra.core.Name("variables");
+  public static final hydra.core.Name VARIABLES = new hydra.core.Name("variables");
   
   /**
    * Determines if the Graph implementation supports GraphComputer based processing.
@@ -67,14 +67,6 @@ public class GraphFeatures implements Serializable {
   public final hydra.ext.org.apache.tinkerpop.features.VariableFeatures variables;
   
   public GraphFeatures (Boolean supportsComputer, Boolean supportsConcurrentAccess, Boolean supportsIoRead, Boolean supportsIoWrite, Boolean supportsPersistence, Boolean supportsThreadedTransactions, Boolean supportsTransactions, hydra.ext.org.apache.tinkerpop.features.VariableFeatures variables) {
-    java.util.Objects.requireNonNull((supportsComputer));
-    java.util.Objects.requireNonNull((supportsConcurrentAccess));
-    java.util.Objects.requireNonNull((supportsIoRead));
-    java.util.Objects.requireNonNull((supportsIoWrite));
-    java.util.Objects.requireNonNull((supportsPersistence));
-    java.util.Objects.requireNonNull((supportsThreadedTransactions));
-    java.util.Objects.requireNonNull((supportsTransactions));
-    java.util.Objects.requireNonNull((variables));
     this.supportsComputer = supportsComputer;
     this.supportsConcurrentAccess = supportsConcurrentAccess;
     this.supportsIoRead = supportsIoRead;
@@ -90,52 +82,95 @@ public class GraphFeatures implements Serializable {
     if (!(other instanceof GraphFeatures)) {
       return false;
     }
-    GraphFeatures o = (GraphFeatures) (other);
-    return supportsComputer.equals(o.supportsComputer) && supportsConcurrentAccess.equals(o.supportsConcurrentAccess) && supportsIoRead.equals(o.supportsIoRead) && supportsIoWrite.equals(o.supportsIoWrite) && supportsPersistence.equals(o.supportsPersistence) && supportsThreadedTransactions.equals(o.supportsThreadedTransactions) && supportsTransactions.equals(o.supportsTransactions) && variables.equals(o.variables);
+    GraphFeatures o = (GraphFeatures) other;
+    return java.util.Objects.equals(
+      this.supportsComputer,
+      o.supportsComputer) && java.util.Objects.equals(
+      this.supportsConcurrentAccess,
+      o.supportsConcurrentAccess) && java.util.Objects.equals(
+      this.supportsIoRead,
+      o.supportsIoRead) && java.util.Objects.equals(
+      this.supportsIoWrite,
+      o.supportsIoWrite) && java.util.Objects.equals(
+      this.supportsPersistence,
+      o.supportsPersistence) && java.util.Objects.equals(
+      this.supportsThreadedTransactions,
+      o.supportsThreadedTransactions) && java.util.Objects.equals(
+      this.supportsTransactions,
+      o.supportsTransactions) && java.util.Objects.equals(
+      this.variables,
+      o.variables);
   }
   
   @Override
   public int hashCode() {
-    return 2 * supportsComputer.hashCode() + 3 * supportsConcurrentAccess.hashCode() + 5 * supportsIoRead.hashCode() + 7 * supportsIoWrite.hashCode() + 11 * supportsPersistence.hashCode() + 13 * supportsThreadedTransactions.hashCode() + 17 * supportsTransactions.hashCode() + 19 * variables.hashCode();
+    return 2 * java.util.Objects.hashCode(supportsComputer) + 3 * java.util.Objects.hashCode(supportsConcurrentAccess) + 5 * java.util.Objects.hashCode(supportsIoRead) + 7 * java.util.Objects.hashCode(supportsIoWrite) + 11 * java.util.Objects.hashCode(supportsPersistence) + 13 * java.util.Objects.hashCode(supportsThreadedTransactions) + 17 * java.util.Objects.hashCode(supportsTransactions) + 19 * java.util.Objects.hashCode(variables);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(GraphFeatures other) {
+    int cmp = 0;
+    cmp = ((Comparable) supportsComputer).compareTo(other.supportsComputer);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) supportsConcurrentAccess).compareTo(other.supportsConcurrentAccess);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) supportsIoRead).compareTo(other.supportsIoRead);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) supportsIoWrite).compareTo(other.supportsIoWrite);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) supportsPersistence).compareTo(other.supportsPersistence);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) supportsThreadedTransactions).compareTo(other.supportsThreadedTransactions);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) supportsTransactions).compareTo(other.supportsTransactions);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) variables).compareTo(other.variables);
   }
   
   public GraphFeatures withSupportsComputer(Boolean supportsComputer) {
-    java.util.Objects.requireNonNull((supportsComputer));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsConcurrentAccess(Boolean supportsConcurrentAccess) {
-    java.util.Objects.requireNonNull((supportsConcurrentAccess));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsIoRead(Boolean supportsIoRead) {
-    java.util.Objects.requireNonNull((supportsIoRead));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsIoWrite(Boolean supportsIoWrite) {
-    java.util.Objects.requireNonNull((supportsIoWrite));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsPersistence(Boolean supportsPersistence) {
-    java.util.Objects.requireNonNull((supportsPersistence));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsThreadedTransactions(Boolean supportsThreadedTransactions) {
-    java.util.Objects.requireNonNull((supportsThreadedTransactions));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withSupportsTransactions(Boolean supportsTransactions) {
-    java.util.Objects.requireNonNull((supportsTransactions));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
   
   public GraphFeatures withVariables(hydra.ext.org.apache.tinkerpop.features.VariableFeatures variables) {
-    java.util.Objects.requireNonNull((variables));
     return new GraphFeatures(supportsComputer, supportsConcurrentAccess, supportsIoRead, supportsIoWrite, supportsPersistence, supportsThreadedTransactions, supportsTransactions, variables);
   }
 }

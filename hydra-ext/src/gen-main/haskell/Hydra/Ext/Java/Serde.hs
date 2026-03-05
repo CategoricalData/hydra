@@ -67,9 +67,9 @@ writeAdditionalBound ab = (Serialization.spaceSep [
 
 writeAdditiveExpression :: (Syntax.AdditiveExpression -> Ast.Expr)
 writeAdditiveExpression e = ((\x -> case x of
-  Syntax.AdditiveExpressionUnary v1 -> (writeMultiplicativeExpression v1)
-  Syntax.AdditiveExpressionPlus v1 -> (Serialization.infixWs "+" (writeAdditiveExpression (Syntax.additiveExpression_BinaryLhs v1)) (writeMultiplicativeExpression (Syntax.additiveExpression_BinaryRhs v1)))
-  Syntax.AdditiveExpressionMinus v1 -> (Serialization.infixWs "-" (writeAdditiveExpression (Syntax.additiveExpression_BinaryLhs v1)) (writeMultiplicativeExpression (Syntax.additiveExpression_BinaryRhs v1)))) e)
+  Syntax.AdditiveExpressionUnary v0 -> (writeMultiplicativeExpression v0)
+  Syntax.AdditiveExpressionPlus v0 -> (Serialization.infixWs "+" (writeAdditiveExpression (Syntax.additiveExpression_BinaryLhs v0)) (writeMultiplicativeExpression (Syntax.additiveExpression_BinaryRhs v0)))
+  Syntax.AdditiveExpressionMinus v0 -> (Serialization.infixWs "-" (writeAdditiveExpression (Syntax.additiveExpression_BinaryLhs v0)) (writeMultiplicativeExpression (Syntax.additiveExpression_BinaryRhs v0)))) e)
 
 writeAmbiguousName :: (Syntax.AmbiguousName -> Ast.Expr)
 writeAmbiguousName an = (Serialization.dotSep (Lists.map writeIdentifier (Syntax.unAmbiguousName an)))
@@ -82,9 +82,9 @@ writeAnnotatedIdentifier ai = (writeIdentifier (Syntax.annotatedIdentifierIdenti
 
 writeAnnotation :: (Syntax.Annotation -> Ast.Expr)
 writeAnnotation ann = ((\x -> case x of
-  Syntax.AnnotationNormal v1 -> (writeNormalAnnotation v1)
-  Syntax.AnnotationMarker v1 -> (writeMarkerAnnotation v1)
-  Syntax.AnnotationSingleElement v1 -> (writeSingleElementAnnotation v1)) ann)
+  Syntax.AnnotationNormal v0 -> (writeNormalAnnotation v0)
+  Syntax.AnnotationMarker v0 -> (writeMarkerAnnotation v0)
+  Syntax.AnnotationSingleElement v0 -> (writeSingleElementAnnotation v0)) ann)
 
 writeAnnotationTypeDeclaration :: (t0 -> Ast.Expr)
 writeAnnotationTypeDeclaration _ = (Serialization.cst "STUB:AnnotationTypeDeclaration")
@@ -94,9 +94,9 @@ writeArrayAccess _ = (Serialization.cst "STUB:ArrayAccess")
 
 writeArrayCreationExpression :: (Syntax.ArrayCreationExpression -> Ast.Expr)
 writeArrayCreationExpression ace = ((\x -> case x of
-  Syntax.ArrayCreationExpressionPrimitiveArray v1 ->  
-    let pt = (Syntax.arrayCreationExpression_PrimitiveArrayType v1) 
-        ai = (Syntax.arrayCreationExpression_PrimitiveArrayArray v1)
+  Syntax.ArrayCreationExpressionPrimitiveArray v0 ->  
+    let pt = (Syntax.arrayCreationExpression_PrimitiveArrayType v0) 
+        ai = (Syntax.arrayCreationExpression_PrimitiveArrayArray v0)
     in (Serialization.spaceSep [
       Serialization.cst "new",
       (Serialization.noSep [
@@ -120,9 +120,9 @@ writeArrayType at =
   let dims = (Syntax.arrayTypeDims at) 
       variant = (Syntax.arrayTypeVariant at)
       varExpr = ((\x -> case x of
-              Syntax.ArrayType_VariantPrimitive v1 -> (writePrimitiveTypeWithAnnotations v1)
-              Syntax.ArrayType_VariantClassOrInterface v1 -> (writeClassOrInterfaceType v1)
-              Syntax.ArrayType_VariantVariable v1 -> (writeTypeVariable v1)) variant)
+              Syntax.ArrayType_VariantPrimitive v0 -> (writePrimitiveTypeWithAnnotations v0)
+              Syntax.ArrayType_VariantClassOrInterface v0 -> (writeClassOrInterfaceType v0)
+              Syntax.ArrayType_VariantVariable v0 -> (writeTypeVariable v0)) variant)
   in (Serialization.noSep [
     varExpr,
     (writeDims dims)])
@@ -152,17 +152,17 @@ writeAssignment a =
 
 writeAssignmentExpression :: (Syntax.AssignmentExpression -> Ast.Expr)
 writeAssignmentExpression e = ((\x -> case x of
-  Syntax.AssignmentExpressionConditional v1 -> (writeConditionalExpression v1)
-  Syntax.AssignmentExpressionAssignment v1 -> (writeAssignment v1)) e)
+  Syntax.AssignmentExpressionConditional v0 -> (writeConditionalExpression v0)
+  Syntax.AssignmentExpressionAssignment v0 -> (writeAssignment v0)) e)
 
 writeBlock :: (Syntax.Block -> Ast.Expr)
 writeBlock b = (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map writeBlockStatement (Syntax.unBlock b))))
 
 writeBlockStatement :: (Syntax.BlockStatement -> Ast.Expr)
 writeBlockStatement s = ((\x -> case x of
-  Syntax.BlockStatementLocalVariableDeclaration v1 -> (writeLocalVariableDeclarationStatement v1)
-  Syntax.BlockStatementClass v1 -> (writeClassDeclaration v1)
-  Syntax.BlockStatementStatement v1 -> (writeStatement v1)) s)
+  Syntax.BlockStatementLocalVariableDeclaration v0 -> (writeLocalVariableDeclarationStatement v0)
+  Syntax.BlockStatementClass v0 -> (writeClassDeclaration v0)
+  Syntax.BlockStatementStatement v0 -> (writeStatement v0)) s)
 
 writeBreakStatement :: (Syntax.BreakStatement -> Ast.Expr)
 writeBreakStatement bs =  
@@ -173,9 +173,9 @@ writeBreakStatement bs =
 
 writeCastExpression :: (Syntax.CastExpression -> Ast.Expr)
 writeCastExpression e = ((\x -> case x of
-  Syntax.CastExpressionPrimitive v1 -> (writeCastExpression_Primitive v1)
-  Syntax.CastExpressionNotPlusMinus v1 -> (writeCastExpression_NotPlusMinus v1)
-  Syntax.CastExpressionLambda v1 -> (writeCastExpression_Lambda v1)) e)
+  Syntax.CastExpressionPrimitive v0 -> (writeCastExpression_Primitive v0)
+  Syntax.CastExpressionNotPlusMinus v0 -> (writeCastExpression_NotPlusMinus v0)
+  Syntax.CastExpressionLambda v0 -> (writeCastExpression_Lambda v0)) e)
 
 writeCastExpression_Lambda :: (t0 -> Ast.Expr)
 writeCastExpression_Lambda _ = (Serialization.cst "STUB:CastExpression_Lambda")
@@ -211,10 +211,10 @@ writeClassBody cb = (Serialization.curlyBlock Serialization.fullBlockStyle (Seri
 
 writeClassBodyDeclaration :: (Syntax.ClassBodyDeclaration -> Ast.Expr)
 writeClassBodyDeclaration d = ((\x -> case x of
-  Syntax.ClassBodyDeclarationClassMember v1 -> (writeClassMemberDeclaration v1)
-  Syntax.ClassBodyDeclarationInstanceInitializer v1 -> (writeInstanceInitializer v1)
-  Syntax.ClassBodyDeclarationStaticInitializer v1 -> (writeStaticInitializer v1)
-  Syntax.ClassBodyDeclarationConstructorDeclaration v1 -> (writeConstructorDeclaration v1)) d)
+  Syntax.ClassBodyDeclarationClassMember v0 -> (writeClassMemberDeclaration v0)
+  Syntax.ClassBodyDeclarationInstanceInitializer v0 -> (writeInstanceInitializer v0)
+  Syntax.ClassBodyDeclarationStaticInitializer v0 -> (writeStaticInitializer v0)
+  Syntax.ClassBodyDeclarationConstructorDeclaration v0 -> (writeConstructorDeclaration v0)) d)
 
 writeClassBodyDeclarationWithComments :: (Syntax.ClassBodyDeclarationWithComments -> Ast.Expr)
 writeClassBodyDeclarationWithComments cbdwc =  
@@ -224,8 +224,8 @@ writeClassBodyDeclarationWithComments cbdwc =
 
 writeClassDeclaration :: (Syntax.ClassDeclaration -> Ast.Expr)
 writeClassDeclaration d = ((\x -> case x of
-  Syntax.ClassDeclarationNormal v1 -> (writeNormalClassDeclaration v1)
-  Syntax.ClassDeclarationEnum v1 -> (writeEnumDeclaration v1)) d)
+  Syntax.ClassDeclarationNormal v0 -> (writeNormalClassDeclaration v0)
+  Syntax.ClassDeclarationEnum v0 -> (writeEnumDeclaration v0)) d)
 
 writeClassInstanceCreationExpression :: (Syntax.ClassInstanceCreationExpression -> Ast.Expr)
 writeClassInstanceCreationExpression cice =  
@@ -237,23 +237,23 @@ writeClassInstanceCreationExpression cice =
 
 writeClassInstanceCreationExpression_Qualifier :: (Syntax.ClassInstanceCreationExpression_Qualifier -> Ast.Expr)
 writeClassInstanceCreationExpression_Qualifier q = ((\x -> case x of
-  Syntax.ClassInstanceCreationExpression_QualifierExpression v1 -> (writeExpressionName v1)
-  Syntax.ClassInstanceCreationExpression_QualifierPrimary v1 -> (writePrimary v1)) q)
+  Syntax.ClassInstanceCreationExpression_QualifierExpression v0 -> (writeExpressionName v0)
+  Syntax.ClassInstanceCreationExpression_QualifierPrimary v0 -> (writePrimary v0)) q)
 
 writeClassLiteral :: (t0 -> Ast.Expr)
 writeClassLiteral _ = (Serialization.cst "STUB:ClassLiteral")
 
 writeClassMemberDeclaration :: (Syntax.ClassMemberDeclaration -> Ast.Expr)
 writeClassMemberDeclaration d = ((\x -> case x of
-  Syntax.ClassMemberDeclarationField v1 -> (writeFieldDeclaration v1)
-  Syntax.ClassMemberDeclarationMethod v1 -> (writeMethodDeclaration v1)
-  Syntax.ClassMemberDeclarationClass v1 -> (writeClassDeclaration v1)
-  Syntax.ClassMemberDeclarationInterface v1 -> (writeInterfaceDeclaration v1)
+  Syntax.ClassMemberDeclarationField v0 -> (writeFieldDeclaration v0)
+  Syntax.ClassMemberDeclarationMethod v0 -> (writeMethodDeclaration v0)
+  Syntax.ClassMemberDeclarationClass v0 -> (writeClassDeclaration v0)
+  Syntax.ClassMemberDeclarationInterface v0 -> (writeInterfaceDeclaration v0)
   Syntax.ClassMemberDeclarationNone -> (Serialization.cst ";")) d)
 
 writeClassModifier :: (Syntax.ClassModifier -> Ast.Expr)
 writeClassModifier m = ((\x -> case x of
-  Syntax.ClassModifierAnnotation v1 -> (writeAnnotation v1)
+  Syntax.ClassModifierAnnotation v0 -> (writeAnnotation v0)
   Syntax.ClassModifierPublic -> (Serialization.cst "public")
   Syntax.ClassModifierProtected -> (Serialization.cst "protected")
   Syntax.ClassModifierPrivate -> (Serialization.cst "private")
@@ -264,8 +264,8 @@ writeClassModifier m = ((\x -> case x of
 
 writeClassOrInterfaceType :: (Syntax.ClassOrInterfaceType -> Ast.Expr)
 writeClassOrInterfaceType cit = ((\x -> case x of
-  Syntax.ClassOrInterfaceTypeClass v1 -> (writeClassType v1)
-  Syntax.ClassOrInterfaceTypeInterface v1 -> (writeInterfaceType v1)) cit)
+  Syntax.ClassOrInterfaceTypeClass v0 -> (writeClassType v0)
+  Syntax.ClassOrInterfaceTypeInterface v0 -> (writeInterfaceType v0)) cit)
 
 writeClassOrInterfaceTypeToInstantiate :: (Syntax.ClassOrInterfaceTypeToInstantiate -> Ast.Expr)
 writeClassOrInterfaceTypeToInstantiate coitti =  
@@ -283,11 +283,11 @@ writeClassType ct =
       args = (Syntax.classTypeArguments ct)
       qualifiedId = ((\x -> case x of
               Syntax.ClassTypeQualifierNone -> (writeTypeIdentifier id)
-              Syntax.ClassTypeQualifierPackage v1 -> (Serialization.dotSep [
-                writePackageName v1,
+              Syntax.ClassTypeQualifierPackage v0 -> (Serialization.dotSep [
+                writePackageName v0,
                 (writeTypeIdentifier id)])
-              Syntax.ClassTypeQualifierParent v1 -> (Serialization.dotSep [
-                writeClassOrInterfaceType v1,
+              Syntax.ClassTypeQualifierParent v0 -> (Serialization.dotSep [
+                writeClassOrInterfaceType v0,
                 (writeTypeIdentifier id)])) qual)
   in (Serialization.noSep (Maybes.cat [
     Just (Serialization.spaceSep (Maybes.cat [
@@ -297,10 +297,10 @@ writeClassType ct =
 
 writeCompilationUnit :: (Syntax.CompilationUnit -> Ast.Expr)
 writeCompilationUnit u = ((\x -> case x of
-  Syntax.CompilationUnitOrdinary v1 ->  
-    let mpkg = (Syntax.ordinaryCompilationUnitPackage v1) 
-        imports = (Syntax.ordinaryCompilationUnitImports v1)
-        types = (Syntax.ordinaryCompilationUnitTypes v1)
+  Syntax.CompilationUnitOrdinary v0 ->  
+    let mpkg = (Syntax.ordinaryCompilationUnitPackage v0) 
+        imports = (Syntax.ordinaryCompilationUnitImports v0)
+        types = (Syntax.ordinaryCompilationUnitTypes v0)
         warning = (Just (singleLineComment Constants.warningAutoGeneratedFile))
         pkgSec = (Maybes.map writePackageDeclaration mpkg)
         importsSec = (Logic.ifElse (Lists.null imports) Nothing (Just (Serialization.newlineSep (Lists.map writeImportDeclaration imports))))
@@ -316,9 +316,9 @@ writeConditionalAndExpression cae = (Serialization.infixWsList "&&" (Lists.map w
 
 writeConditionalExpression :: (Syntax.ConditionalExpression -> Ast.Expr)
 writeConditionalExpression c = ((\x -> case x of
-  Syntax.ConditionalExpressionSimple v1 -> (writeConditionalOrExpression v1)
-  Syntax.ConditionalExpressionTernaryCond v1 -> (writeConditionalExpression_TernaryCond v1)
-  Syntax.ConditionalExpressionTernaryLambda v1 -> (writeConditionalExpression_TernaryLambda v1)) c)
+  Syntax.ConditionalExpressionSimple v0 -> (writeConditionalOrExpression v0)
+  Syntax.ConditionalExpressionTernaryCond v0 -> (writeConditionalExpression_TernaryCond v0)
+  Syntax.ConditionalExpressionTernaryLambda v0 -> (writeConditionalExpression_TernaryLambda v0)) c)
 
 writeConditionalExpression_TernaryCond :: (t0 -> Ast.Expr)
 writeConditionalExpression_TernaryCond _ = (Serialization.cst "STUB:ConditionalExpression_TernaryCond")
@@ -374,7 +374,7 @@ writeConstructorDeclarator cd =
 
 writeConstructorModifier :: (Syntax.ConstructorModifier -> Ast.Expr)
 writeConstructorModifier m = ((\x -> case x of
-  Syntax.ConstructorModifierAnnotation v1 -> (writeAnnotation v1)
+  Syntax.ConstructorModifierAnnotation v0 -> (writeAnnotation v0)
   Syntax.ConstructorModifierPublic -> (Serialization.cst "public")
   Syntax.ConstructorModifierProtected -> (Serialization.cst "protected")
   Syntax.ConstructorModifierPrivate -> (Serialization.cst "private")) m)
@@ -394,9 +394,9 @@ writeDoStatement _ = (Serialization.cst "STUB:DoStatement")
 
 writeElementValue :: (Syntax.ElementValue -> Ast.Expr)
 writeElementValue ev = ((\x -> case x of
-  Syntax.ElementValueConditionalExpression v1 -> (writeConditionalExpression v1)
-  Syntax.ElementValueElementValueArrayInitializer v1 -> (Serialization.commaSep Serialization.inlineStyle (Lists.map writeElementValue (Syntax.unElementValueArrayInitializer v1)))
-  Syntax.ElementValueAnnotation v1 -> (writeAnnotation v1)) ev)
+  Syntax.ElementValueConditionalExpression v0 -> (writeConditionalExpression v0)
+  Syntax.ElementValueElementValueArrayInitializer v0 -> (Serialization.commaSep Serialization.inlineStyle (Lists.map writeElementValue (Syntax.unElementValueArrayInitializer v0)))
+  Syntax.ElementValueAnnotation v0 -> (writeAnnotation v0)) ev)
 
 writeElementValuePair :: (Syntax.ElementValuePair -> Ast.Expr)
 writeElementValuePair evp =  
@@ -409,9 +409,9 @@ writeEnumDeclaration _ = (Serialization.cst "STUB:EnumDeclaration")
 
 writeEqualityExpression :: (Syntax.EqualityExpression -> Ast.Expr)
 writeEqualityExpression e = ((\x -> case x of
-  Syntax.EqualityExpressionUnary v1 -> (writeRelationalExpression v1)
-  Syntax.EqualityExpressionEqual v1 -> (Serialization.infixWs "==" (writeEqualityExpression (Syntax.equalityExpression_BinaryLhs v1)) (writeRelationalExpression (Syntax.equalityExpression_BinaryRhs v1)))
-  Syntax.EqualityExpressionNotEqual v1 -> (Serialization.infixWs "!=" (writeEqualityExpression (Syntax.equalityExpression_BinaryLhs v1)) (writeRelationalExpression (Syntax.equalityExpression_BinaryRhs v1)))) e)
+  Syntax.EqualityExpressionUnary v0 -> (writeRelationalExpression v0)
+  Syntax.EqualityExpressionEqual v0 -> (Serialization.infixWs "==" (writeEqualityExpression (Syntax.equalityExpression_BinaryLhs v0)) (writeRelationalExpression (Syntax.equalityExpression_BinaryRhs v0)))
+  Syntax.EqualityExpressionNotEqual v0 -> (Serialization.infixWs "!=" (writeEqualityExpression (Syntax.equalityExpression_BinaryLhs v0)) (writeRelationalExpression (Syntax.equalityExpression_BinaryRhs v0)))) e)
 
 writeExclusiveOrExpression :: (Syntax.ExclusiveOrExpression -> Ast.Expr)
 writeExclusiveOrExpression eoe = (Serialization.infixWsList "^" (Lists.map writeAndExpression (Syntax.unExclusiveOrExpression eoe)))
@@ -421,8 +421,8 @@ writeExplicitConstructorInvocation _ = (Serialization.cst "STUB:ExplicitConstruc
 
 writeExpression :: (Syntax.Expression -> Ast.Expr)
 writeExpression e = ((\x -> case x of
-  Syntax.ExpressionLambda v1 -> (writeLambdaExpression v1)
-  Syntax.ExpressionAssignment v1 -> (writeAssignmentExpression v1)) e)
+  Syntax.ExpressionLambda v0 -> (writeLambdaExpression v0)
+  Syntax.ExpressionAssignment v0 -> (writeAssignmentExpression v0)) e)
 
 writeExpressionName :: (Syntax.ExpressionName -> Ast.Expr)
 writeExpressionName en =  
@@ -440,14 +440,14 @@ writeFieldAccess fa =
   let qual = (Syntax.fieldAccessQualifier fa) 
       id = (Syntax.fieldAccessIdentifier fa)
   in ((\x -> case x of
-    Syntax.FieldAccess_QualifierPrimary v1 -> (Serialization.dotSep [
-      writePrimary v1,
+    Syntax.FieldAccess_QualifierPrimary v0 -> (Serialization.dotSep [
+      writePrimary v0,
       (writeIdentifier id)])
     Syntax.FieldAccess_QualifierSuper -> (Serialization.dotSep [
       Serialization.cst "super",
       (writeIdentifier id)])
-    Syntax.FieldAccess_QualifierTyped v1 -> (Serialization.dotSep [
-      writeTypeName v1,
+    Syntax.FieldAccess_QualifierTyped v0 -> (Serialization.dotSep [
+      writeTypeName v0,
       (Serialization.cst "super"),
       (writeIdentifier id)])) qual)
 
@@ -463,7 +463,7 @@ writeFieldDeclaration fd =
 
 writeFieldModifier :: (Syntax.FieldModifier -> Ast.Expr)
 writeFieldModifier m = ((\x -> case x of
-  Syntax.FieldModifierAnnotation v1 -> (writeAnnotation v1)
+  Syntax.FieldModifierAnnotation v0 -> (writeAnnotation v0)
   Syntax.FieldModifierPublic -> (Serialization.cst "public")
   Syntax.FieldModifierProtected -> (Serialization.cst "protected")
   Syntax.FieldModifierPrivate -> (Serialization.cst "private")
@@ -485,8 +485,8 @@ writeForStatement _ = (Serialization.cst "STUB:ForStatement")
 
 writeFormalParameter :: (Syntax.FormalParameter -> Ast.Expr)
 writeFormalParameter p = ((\x -> case x of
-  Syntax.FormalParameterSimple v1 -> (writeFormalParameter_Simple v1)
-  Syntax.FormalParameterVariableArity v1 -> (writeVariableArityParameter v1)) p)
+  Syntax.FormalParameterSimple v0 -> (writeFormalParameter_Simple v0)
+  Syntax.FormalParameterVariableArity v0 -> (writeVariableArityParameter v0)) p)
 
 writeFormalParameter_Simple :: (Syntax.FormalParameter_Simple -> Ast.Expr)
 writeFormalParameter_Simple fps =  
@@ -516,9 +516,9 @@ writeIfThenElseStatement _ = (Serialization.cst "STUB:IfThenElseStatement")
 
 writeImportDeclaration :: (Syntax.ImportDeclaration -> Ast.Expr)
 writeImportDeclaration imp = ((\x -> case x of
-  Syntax.ImportDeclarationSingleType v1 -> (Serialization.withSemi (Serialization.spaceSep [
+  Syntax.ImportDeclarationSingleType v0 -> (Serialization.withSemi (Serialization.spaceSep [
     Serialization.cst "import",
-    (writeTypeName (Syntax.unSingleTypeImportDeclaration v1))]))
+    (writeTypeName (Syntax.unSingleTypeImportDeclaration v0))]))
   Syntax.ImportDeclarationTypeImportOnDemand _ -> (Serialization.cst "STUB:ImportDeclarationTypeImportOnDemand")
   Syntax.ImportDeclarationSingleStaticImport _ -> (Serialization.cst "STUB:ImportDeclarationSingleStaticImport")
   Syntax.ImportDeclarationStaticImportOnDemand _ -> (Serialization.cst "STUB:ImportDeclarationStaticImportOnDemand")) imp)
@@ -548,15 +548,15 @@ writeInterfaceBody ib = (Serialization.curlyBlock Serialization.fullBlockStyle (
 
 writeInterfaceDeclaration :: (Syntax.InterfaceDeclaration -> Ast.Expr)
 writeInterfaceDeclaration d = ((\x -> case x of
-  Syntax.InterfaceDeclarationNormalInterface v1 -> (writeNormalInterfaceDeclaration v1)
-  Syntax.InterfaceDeclarationAnnotationType v1 -> (writeAnnotationTypeDeclaration v1)) d)
+  Syntax.InterfaceDeclarationNormalInterface v0 -> (writeNormalInterfaceDeclaration v0)
+  Syntax.InterfaceDeclarationAnnotationType v0 -> (writeAnnotationTypeDeclaration v0)) d)
 
 writeInterfaceMemberDeclaration :: (Syntax.InterfaceMemberDeclaration -> Ast.Expr)
 writeInterfaceMemberDeclaration d = ((\x -> case x of
-  Syntax.InterfaceMemberDeclarationConstant v1 -> (writeConstantDeclaration v1)
-  Syntax.InterfaceMemberDeclarationInterfaceMethod v1 -> (writeInterfaceMethodDeclaration v1)
-  Syntax.InterfaceMemberDeclarationClass v1 -> (writeClassDeclaration v1)
-  Syntax.InterfaceMemberDeclarationInterface v1 -> (writeInterfaceDeclaration v1)) d)
+  Syntax.InterfaceMemberDeclarationConstant v0 -> (writeConstantDeclaration v0)
+  Syntax.InterfaceMemberDeclarationInterfaceMethod v0 -> (writeInterfaceMethodDeclaration v0)
+  Syntax.InterfaceMemberDeclarationClass v0 -> (writeClassDeclaration v0)
+  Syntax.InterfaceMemberDeclarationInterface v0 -> (writeInterfaceDeclaration v0)) d)
 
 writeInterfaceMethodDeclaration :: (Syntax.InterfaceMethodDeclaration -> Ast.Expr)
 writeInterfaceMethodDeclaration imd =  
@@ -570,7 +570,7 @@ writeInterfaceMethodDeclaration imd =
 
 writeInterfaceMethodModifier :: (Syntax.InterfaceMethodModifier -> Ast.Expr)
 writeInterfaceMethodModifier m = ((\x -> case x of
-  Syntax.InterfaceMethodModifierAnnotation v1 -> (writeAnnotation v1)
+  Syntax.InterfaceMethodModifierAnnotation v0 -> (writeAnnotation v0)
   Syntax.InterfaceMethodModifierPublic -> (Serialization.cst "public")
   Syntax.InterfaceMethodModifierPrivate -> (Serialization.cst "private")
   Syntax.InterfaceMethodModifierAbstract -> (Serialization.cst "abstract")
@@ -580,7 +580,7 @@ writeInterfaceMethodModifier m = ((\x -> case x of
 
 writeInterfaceModifier :: (Syntax.InterfaceModifier -> Ast.Expr)
 writeInterfaceModifier m = ((\x -> case x of
-  Syntax.InterfaceModifierAnnotation v1 -> (writeAnnotation v1)
+  Syntax.InterfaceModifierAnnotation v0 -> (writeAnnotation v0)
   Syntax.InterfaceModifierPublic -> (Serialization.cst "public")
   Syntax.InterfaceModifierProtected -> (Serialization.cst "protected")
   Syntax.InterfaceModifierPrivate -> (Serialization.cst "private")
@@ -596,8 +596,8 @@ writeLabeledStatement _ = (Serialization.cst "STUB:LabeledStatement")
 
 writeLambdaBody :: (Syntax.LambdaBody -> Ast.Expr)
 writeLambdaBody b = ((\x -> case x of
-  Syntax.LambdaBodyExpression v1 -> (writeExpression v1)
-  Syntax.LambdaBodyBlock v1 -> (writeBlock v1)) b)
+  Syntax.LambdaBodyExpression v0 -> (writeExpression v0)
+  Syntax.LambdaBodyBlock v0 -> (writeBlock v0)) b)
 
 writeLambdaExpression :: (Syntax.LambdaExpression -> Ast.Expr)
 writeLambdaExpression le =  
@@ -607,26 +607,26 @@ writeLambdaExpression le =
 
 writeLambdaParameters :: (Syntax.LambdaParameters -> Ast.Expr)
 writeLambdaParameters p = ((\x -> case x of
-  Syntax.LambdaParametersTuple v1 -> (Serialization.parenList False (Lists.map writeLambdaParameters v1))
-  Syntax.LambdaParametersSingle v1 -> (writeIdentifier v1)) p)
+  Syntax.LambdaParametersTuple v0 -> (Serialization.parenList False (Lists.map writeLambdaParameters v0))
+  Syntax.LambdaParametersSingle v0 -> (writeIdentifier v0)) p)
 
 writeLeftHandSide :: (Syntax.LeftHandSide -> Ast.Expr)
 writeLeftHandSide lhs = ((\x -> case x of
-  Syntax.LeftHandSideExpressionName v1 -> (writeExpressionName v1)
-  Syntax.LeftHandSideFieldAccess v1 -> (writeFieldAccess v1)
-  Syntax.LeftHandSideArrayAccess v1 -> (writeArrayAccess v1)) lhs)
+  Syntax.LeftHandSideExpressionName v0 -> (writeExpressionName v0)
+  Syntax.LeftHandSideFieldAccess v0 -> (writeFieldAccess v0)
+  Syntax.LeftHandSideArrayAccess v0 -> (writeArrayAccess v0)) lhs)
 
 writeLiteral :: (Syntax.Literal -> Ast.Expr)
 writeLiteral l = ((\x -> case x of
   Syntax.LiteralNull -> (Serialization.cst "null")
-  Syntax.LiteralInteger v1 -> (writeIntegerLiteral v1)
-  Syntax.LiteralFloatingPoint v1 -> (writeFloatingPointLiteral v1)
-  Syntax.LiteralBoolean v1 -> (Serialization.cst (Logic.ifElse v1 "true" "false"))
-  Syntax.LiteralCharacter v1 ->  
-    let ci = (Literals.bigintToInt32 (Literals.uint16ToBigint v1))
+  Syntax.LiteralInteger v0 -> (writeIntegerLiteral v0)
+  Syntax.LiteralFloatingPoint v0 -> (writeFloatingPointLiteral v0)
+  Syntax.LiteralBoolean v0 -> (Serialization.cst (Logic.ifElse v0 "true" "false"))
+  Syntax.LiteralCharacter v0 ->  
+    let ci = (Literals.bigintToInt32 (Literals.uint16ToBigint v0))
     in (Serialization.cst (Strings.cat2 "'" (Strings.cat2 (Logic.ifElse (Equality.equal ci 39) "\\'" (Logic.ifElse (Equality.equal ci 92) "\\\\" (Logic.ifElse (Equality.equal ci 10) "\\n" (Logic.ifElse (Equality.equal ci 13) "\\r" (Logic.ifElse (Equality.equal ci 9) "\\t" (Logic.ifElse (Logic.and (Equality.gte ci 32) (Equality.lt ci 127)) (Strings.fromList [
       ci]) (javaUnicodeEscape ci))))))) "'")))
-  Syntax.LiteralString v1 -> (writeStringLiteral v1)) l)
+  Syntax.LiteralString v0 -> (writeStringLiteral v0)) l)
 
 writeLocalVariableDeclaration :: (Syntax.LocalVariableDeclaration -> Ast.Expr)
 writeLocalVariableDeclaration lvd =  
@@ -643,7 +643,7 @@ writeLocalVariableDeclarationStatement lvds = (Serialization.withSemi (writeLoca
 
 writeLocalName :: (Syntax.LocalVariableType -> Ast.Expr)
 writeLocalName t = ((\x -> case x of
-  Syntax.LocalVariableTypeType v1 -> (writeUnannType v1)
+  Syntax.LocalVariableTypeType v0 -> (writeUnannType v0)
   Syntax.LocalVariableTypeVar -> (Serialization.cst "var")) t)
 
 writeMarkerAnnotation :: (Syntax.MarkerAnnotation -> Ast.Expr)
@@ -651,7 +651,7 @@ writeMarkerAnnotation ma = (Serialization.prefix "@" (writeTypeName (Syntax.unMa
 
 writeMethodBody :: (Syntax.MethodBody -> Ast.Expr)
 writeMethodBody b = ((\x -> case x of
-  Syntax.MethodBodyBlock v1 -> (writeBlock v1)
+  Syntax.MethodBodyBlock v0 -> (writeBlock v0)
   Syntax.MethodBodyNone -> (Serialization.cst ";")) b)
 
 writeMethodDeclaration :: (Syntax.MethodDeclaration -> Ast.Expr)
@@ -694,29 +694,29 @@ writeMethodInvocation mi =
       args = (Syntax.methodInvocationArguments mi)
       argSec = (Serialization.parenList True (Lists.map writeExpression args))
       headerSec = ((\x -> case x of
-              Syntax.MethodInvocation_HeaderSimple v1 -> (writeMethodName v1)
-              Syntax.MethodInvocation_HeaderComplex v1 ->  
-                let cvar = (Syntax.methodInvocation_ComplexVariant v1) 
-                    targs = (Syntax.methodInvocation_ComplexTypeArguments v1)
-                    cid = (Syntax.methodInvocation_ComplexIdentifier v1)
+              Syntax.MethodInvocation_HeaderSimple v0 -> (writeMethodName v0)
+              Syntax.MethodInvocation_HeaderComplex v0 ->  
+                let cvar = (Syntax.methodInvocation_ComplexVariant v0) 
+                    targs = (Syntax.methodInvocation_ComplexTypeArguments v0)
+                    cid = (Syntax.methodInvocation_ComplexIdentifier v0)
                     idSec = (Serialization.noSep (Maybes.cat [
                             Logic.ifElse (Lists.null targs) Nothing (Just (Serialization.angleBracesList Serialization.inlineStyle (Lists.map writeTypeArgument targs))),
                             (Just (writeIdentifier cid))]))
                 in ((\x -> case x of
-                  Syntax.MethodInvocation_VariantType v2 -> (Serialization.dotSep [
-                    writeTypeName v2,
+                  Syntax.MethodInvocation_VariantType v1 -> (Serialization.dotSep [
+                    writeTypeName v1,
                     idSec])
-                  Syntax.MethodInvocation_VariantExpression v2 -> (Serialization.dotSep [
-                    writeExpressionName v2,
+                  Syntax.MethodInvocation_VariantExpression v1 -> (Serialization.dotSep [
+                    writeExpressionName v1,
                     idSec])
-                  Syntax.MethodInvocation_VariantPrimary v2 -> (Serialization.dotSep [
-                    writePrimary v2,
+                  Syntax.MethodInvocation_VariantPrimary v1 -> (Serialization.dotSep [
+                    writePrimary v1,
                     idSec])
                   Syntax.MethodInvocation_VariantSuper -> (Serialization.dotSep [
                     Serialization.cst "super",
                     idSec])
-                  Syntax.MethodInvocation_VariantTypeSuper v2 -> (Serialization.dotSep [
-                    writeTypeName v2,
+                  Syntax.MethodInvocation_VariantTypeSuper v1 -> (Serialization.dotSep [
+                    writeTypeName v1,
                     (Serialization.cst "super"),
                     idSec])) cvar)) header)
   in (Serialization.noSep [
@@ -725,7 +725,7 @@ writeMethodInvocation mi =
 
 writeMethodModifier :: (Syntax.MethodModifier -> Ast.Expr)
 writeMethodModifier m = ((\x -> case x of
-  Syntax.MethodModifierAnnotation v1 -> (writeAnnotation v1)
+  Syntax.MethodModifierAnnotation v0 -> (writeAnnotation v0)
   Syntax.MethodModifierPublic -> (Serialization.cst "public")
   Syntax.MethodModifierProtected -> (Serialization.cst "protected")
   Syntax.MethodModifierPrivate -> (Serialization.cst "private")
@@ -743,10 +743,10 @@ writeMethodReference _ = (Serialization.cst "STUB:MethodReference")
 
 writeMultiplicativeExpression :: (Syntax.MultiplicativeExpression -> Ast.Expr)
 writeMultiplicativeExpression e = ((\x -> case x of
-  Syntax.MultiplicativeExpressionUnary v1 -> (writeUnaryExpression v1)
-  Syntax.MultiplicativeExpressionTimes v1 -> (Serialization.infixWs "*" (writeMultiplicativeExpression (Syntax.multiplicativeExpression_BinaryLhs v1)) (writeUnaryExpression (Syntax.multiplicativeExpression_BinaryRhs v1)))
-  Syntax.MultiplicativeExpressionDivide v1 -> (Serialization.infixWs "/" (writeMultiplicativeExpression (Syntax.multiplicativeExpression_BinaryLhs v1)) (writeUnaryExpression (Syntax.multiplicativeExpression_BinaryRhs v1)))
-  Syntax.MultiplicativeExpressionMod v1 -> (Serialization.infixWs "%" (writeMultiplicativeExpression (Syntax.multiplicativeExpression_BinaryLhs v1)) (writeUnaryExpression (Syntax.multiplicativeExpression_BinaryRhs v1)))) e)
+  Syntax.MultiplicativeExpressionUnary v0 -> (writeUnaryExpression v0)
+  Syntax.MultiplicativeExpressionTimes v0 -> (Serialization.infixWs "*" (writeMultiplicativeExpression (Syntax.multiplicativeExpression_BinaryLhs v0)) (writeUnaryExpression (Syntax.multiplicativeExpression_BinaryRhs v0)))
+  Syntax.MultiplicativeExpressionDivide v0 -> (Serialization.infixWs "/" (writeMultiplicativeExpression (Syntax.multiplicativeExpression_BinaryLhs v0)) (writeUnaryExpression (Syntax.multiplicativeExpression_BinaryRhs v0)))
+  Syntax.MultiplicativeExpressionMod v0 -> (Serialization.infixWs "%" (writeMultiplicativeExpression (Syntax.multiplicativeExpression_BinaryLhs v0)) (writeUnaryExpression (Syntax.multiplicativeExpression_BinaryRhs v0)))) e)
 
 writeNormalAnnotation :: (Syntax.NormalAnnotation -> Ast.Expr)
 writeNormalAnnotation na =  
@@ -798,8 +798,8 @@ writeNormalInterfaceDeclaration nid =
 
 writeNumericType :: (Syntax.NumericType -> Ast.Expr)
 writeNumericType nt = ((\x -> case x of
-  Syntax.NumericTypeIntegral v1 -> (writeIntegralType v1)
-  Syntax.NumericTypeFloatingPoint v1 -> (writeFloatingPointType v1)) nt)
+  Syntax.NumericTypeIntegral v0 -> (writeIntegralType v0)
+  Syntax.NumericTypeFloatingPoint v0 -> (writeFloatingPointType v0)) nt)
 
 writePackageDeclaration :: (Syntax.PackageDeclaration -> Ast.Expr)
 writePackageDeclaration pd =  
@@ -828,10 +828,10 @@ writePostIncrementExpression _ = (Serialization.cst "STUB:PostIncrementExpressio
 
 writePostfixExpression :: (Syntax.PostfixExpression -> Ast.Expr)
 writePostfixExpression e = ((\x -> case x of
-  Syntax.PostfixExpressionPrimary v1 -> (writePrimary v1)
-  Syntax.PostfixExpressionName v1 -> (writeExpressionName v1)
-  Syntax.PostfixExpressionPostIncrement v1 -> (writePostIncrementExpression v1)
-  Syntax.PostfixExpressionPostDecrement v1 -> (writePostDecrementExpression v1)) e)
+  Syntax.PostfixExpressionPrimary v0 -> (writePrimary v0)
+  Syntax.PostfixExpressionName v0 -> (writeExpressionName v0)
+  Syntax.PostfixExpressionPostIncrement v0 -> (writePostIncrementExpression v0)
+  Syntax.PostfixExpressionPostDecrement v0 -> (writePostDecrementExpression v0)) e)
 
 writePreDecrementExpression :: (t0 -> Ast.Expr)
 writePreDecrementExpression _ = (Serialization.cst "STUB:PreDecrementExpression")
@@ -841,28 +841,28 @@ writePreIncrementExpression _ = (Serialization.cst "STUB:PreIncrementExpression"
 
 writePrimary :: (Syntax.Primary -> Ast.Expr)
 writePrimary p = ((\x -> case x of
-  Syntax.PrimaryNoNewArray_ v1 -> (writePrimaryNoNewArray v1)
-  Syntax.PrimaryArrayCreation v1 -> (writeArrayCreationExpression v1)) p)
+  Syntax.PrimaryNoNewArray_ v0 -> (writePrimaryNoNewArray v0)
+  Syntax.PrimaryArrayCreation v0 -> (writeArrayCreationExpression v0)) p)
 
 writePrimaryNoNewArray :: (Syntax.PrimaryNoNewArray -> Ast.Expr)
 writePrimaryNoNewArray p = ((\x -> case x of
-  Syntax.PrimaryNoNewArrayLiteral v1 -> (writeLiteral v1)
-  Syntax.PrimaryNoNewArrayClassLiteral v1 -> (writeClassLiteral v1)
+  Syntax.PrimaryNoNewArrayLiteral v0 -> (writeLiteral v0)
+  Syntax.PrimaryNoNewArrayClassLiteral v0 -> (writeClassLiteral v0)
   Syntax.PrimaryNoNewArrayThis -> (Serialization.cst "this")
-  Syntax.PrimaryNoNewArrayDotThis v1 -> (Serialization.dotSep [
-    writeTypeName v1,
+  Syntax.PrimaryNoNewArrayDotThis v0 -> (Serialization.dotSep [
+    writeTypeName v0,
     (Serialization.cst "this")])
-  Syntax.PrimaryNoNewArrayParens v1 -> (Serialization.parenList False [
-    writeExpression v1])
-  Syntax.PrimaryNoNewArrayClassInstance v1 -> (writeClassInstanceCreationExpression v1)
-  Syntax.PrimaryNoNewArrayFieldAccess v1 -> (writeFieldAccess v1)
-  Syntax.PrimaryNoNewArrayArrayAccess v1 -> (writeArrayAccess v1)
-  Syntax.PrimaryNoNewArrayMethodInvocation v1 -> (writeMethodInvocation v1)
-  Syntax.PrimaryNoNewArrayMethodReference v1 -> (writeMethodReference v1)) p)
+  Syntax.PrimaryNoNewArrayParens v0 -> (Serialization.parenList False [
+    writeExpression v0])
+  Syntax.PrimaryNoNewArrayClassInstance v0 -> (writeClassInstanceCreationExpression v0)
+  Syntax.PrimaryNoNewArrayFieldAccess v0 -> (writeFieldAccess v0)
+  Syntax.PrimaryNoNewArrayArrayAccess v0 -> (writeArrayAccess v0)
+  Syntax.PrimaryNoNewArrayMethodInvocation v0 -> (writeMethodInvocation v0)
+  Syntax.PrimaryNoNewArrayMethodReference v0 -> (writeMethodReference v0)) p)
 
 writePrimitiveType :: (Syntax.PrimitiveType -> Ast.Expr)
 writePrimitiveType pt = ((\x -> case x of
-  Syntax.PrimitiveTypeNumeric v1 -> (writeNumericType v1)
+  Syntax.PrimitiveTypeNumeric v0 -> (writeNumericType v0)
   Syntax.PrimitiveTypeBoolean -> (Serialization.cst "boolean")) pt)
 
 writePrimitiveTypeWithAnnotations :: (Syntax.PrimitiveTypeWithAnnotations -> Ast.Expr)
@@ -878,18 +878,18 @@ writeReceiverParameter _ = (Serialization.cst "STUB:ReceiverParameter")
 
 writeReferenceType :: (Syntax.ReferenceType -> Ast.Expr)
 writeReferenceType rt = ((\x -> case x of
-  Syntax.ReferenceTypeClassOrInterface v1 -> (writeClassOrInterfaceType v1)
-  Syntax.ReferenceTypeVariable v1 -> (writeTypeVariable v1)
-  Syntax.ReferenceTypeArray v1 -> (writeArrayType v1)) rt)
+  Syntax.ReferenceTypeClassOrInterface v0 -> (writeClassOrInterfaceType v0)
+  Syntax.ReferenceTypeVariable v0 -> (writeTypeVariable v0)
+  Syntax.ReferenceTypeArray v0 -> (writeArrayType v0)) rt)
 
 writeRelationalExpression :: (Syntax.RelationalExpression -> Ast.Expr)
 writeRelationalExpression e = ((\x -> case x of
-  Syntax.RelationalExpressionSimple v1 -> (writeShiftExpression v1)
-  Syntax.RelationalExpressionLessThan v1 -> (writeRelationalExpression_LessThan v1)
-  Syntax.RelationalExpressionGreaterThan v1 -> (writeRelationalExpression_GreaterThan v1)
-  Syntax.RelationalExpressionLessThanEqual v1 -> (writeRelationalExpression_LessThanEqual v1)
-  Syntax.RelationalExpressionGreaterThanEqual v1 -> (writeRelationalExpression_GreaterThanEqual v1)
-  Syntax.RelationalExpressionInstanceof v1 -> (writeRelationalExpression_InstanceOf v1)) e)
+  Syntax.RelationalExpressionSimple v0 -> (writeShiftExpression v0)
+  Syntax.RelationalExpressionLessThan v0 -> (writeRelationalExpression_LessThan v0)
+  Syntax.RelationalExpressionGreaterThan v0 -> (writeRelationalExpression_GreaterThan v0)
+  Syntax.RelationalExpressionLessThanEqual v0 -> (writeRelationalExpression_LessThanEqual v0)
+  Syntax.RelationalExpressionGreaterThanEqual v0 -> (writeRelationalExpression_GreaterThanEqual v0)
+  Syntax.RelationalExpressionInstanceof v0 -> (writeRelationalExpression_InstanceOf v0)) e)
 
 writeRelationalExpression_GreaterThan :: (Syntax.RelationalExpression_GreaterThan -> Ast.Expr)
 writeRelationalExpression_GreaterThan gt = (Serialization.infixWs ">" (writeRelationalExpression (Syntax.relationalExpression_GreaterThanLhs gt)) (writeShiftExpression (Syntax.relationalExpression_GreaterThanRhs gt)))
@@ -908,7 +908,7 @@ writeRelationalExpression_LessThanEqual lte = (Serialization.infixWs "<=" (write
 
 writeResult :: (Syntax.Result -> Ast.Expr)
 writeResult r = ((\x -> case x of
-  Syntax.ResultType v1 -> (writeUnannType v1)
+  Syntax.ResultType v0 -> (writeUnannType v0)
   Syntax.ResultVoid -> (Serialization.cst "void")) r)
 
 writeReturnStatement :: (Syntax.ReturnStatement -> Ast.Expr)
@@ -920,10 +920,10 @@ writeReturnStatement rs =
 
 writeShiftExpression :: (Syntax.ShiftExpression -> Ast.Expr)
 writeShiftExpression e = ((\x -> case x of
-  Syntax.ShiftExpressionUnary v1 -> (writeAdditiveExpression v1)
-  Syntax.ShiftExpressionShiftLeft v1 -> (Serialization.infixWs "<<" (writeShiftExpression (Syntax.shiftExpression_BinaryLhs v1)) (writeAdditiveExpression (Syntax.shiftExpression_BinaryRhs v1)))
-  Syntax.ShiftExpressionShiftRight v1 -> (Serialization.infixWs ">>" (writeShiftExpression (Syntax.shiftExpression_BinaryLhs v1)) (writeAdditiveExpression (Syntax.shiftExpression_BinaryRhs v1)))
-  Syntax.ShiftExpressionShiftRightZeroFill v1 -> (Serialization.infixWs ">>>" (writeShiftExpression (Syntax.shiftExpression_BinaryLhs v1)) (writeAdditiveExpression (Syntax.shiftExpression_BinaryRhs v1)))) e)
+  Syntax.ShiftExpressionUnary v0 -> (writeAdditiveExpression v0)
+  Syntax.ShiftExpressionShiftLeft v0 -> (Serialization.infixWs "<<" (writeShiftExpression (Syntax.shiftExpression_BinaryLhs v0)) (writeAdditiveExpression (Syntax.shiftExpression_BinaryRhs v0)))
+  Syntax.ShiftExpressionShiftRight v0 -> (Serialization.infixWs ">>" (writeShiftExpression (Syntax.shiftExpression_BinaryLhs v0)) (writeAdditiveExpression (Syntax.shiftExpression_BinaryRhs v0)))
+  Syntax.ShiftExpressionShiftRightZeroFill v0 -> (Serialization.infixWs ">>>" (writeShiftExpression (Syntax.shiftExpression_BinaryLhs v0)) (writeAdditiveExpression (Syntax.shiftExpression_BinaryRhs v0)))) e)
 
 writeSimpleTypeName :: (Syntax.SimpleTypeName -> Ast.Expr)
 writeSimpleTypeName stn = (writeTypeIdentifier (Syntax.unSimpleTypeName stn))
@@ -939,37 +939,37 @@ writeSingleElementAnnotation sea =
 
 writeStatement :: (Syntax.Statement -> Ast.Expr)
 writeStatement s = ((\x -> case x of
-  Syntax.StatementWithoutTrailing v1 -> (writeStatementWithoutTrailingSubstatement v1)
-  Syntax.StatementLabeled v1 -> (writeLabeledStatement v1)
-  Syntax.StatementIfThen v1 -> (writeIfThenStatement v1)
-  Syntax.StatementIfThenElse v1 -> (writeIfThenElseStatement v1)
-  Syntax.StatementWhile v1 -> (writeWhileStatement v1)
-  Syntax.StatementFor v1 -> (writeForStatement v1)) s)
+  Syntax.StatementWithoutTrailing v0 -> (writeStatementWithoutTrailingSubstatement v0)
+  Syntax.StatementLabeled v0 -> (writeLabeledStatement v0)
+  Syntax.StatementIfThen v0 -> (writeIfThenStatement v0)
+  Syntax.StatementIfThenElse v0 -> (writeIfThenElseStatement v0)
+  Syntax.StatementWhile v0 -> (writeWhileStatement v0)
+  Syntax.StatementFor v0 -> (writeForStatement v0)) s)
 
 writeStatementExpression :: (Syntax.StatementExpression -> Ast.Expr)
 writeStatementExpression e = ((\x -> case x of
-  Syntax.StatementExpressionAssignment v1 -> (writeAssignment v1)
-  Syntax.StatementExpressionPreIncrement v1 -> (writePreIncrementExpression v1)
-  Syntax.StatementExpressionPreDecrement v1 -> (writePreDecrementExpression v1)
-  Syntax.StatementExpressionPostIncrement v1 -> (writePostIncrementExpression v1)
-  Syntax.StatementExpressionPostDecrement v1 -> (writePostDecrementExpression v1)
-  Syntax.StatementExpressionMethodInvocation v1 -> (writeMethodInvocation v1)
-  Syntax.StatementExpressionClassInstanceCreation v1 -> (writeClassInstanceCreationExpression v1)) e)
+  Syntax.StatementExpressionAssignment v0 -> (writeAssignment v0)
+  Syntax.StatementExpressionPreIncrement v0 -> (writePreIncrementExpression v0)
+  Syntax.StatementExpressionPreDecrement v0 -> (writePreDecrementExpression v0)
+  Syntax.StatementExpressionPostIncrement v0 -> (writePostIncrementExpression v0)
+  Syntax.StatementExpressionPostDecrement v0 -> (writePostDecrementExpression v0)
+  Syntax.StatementExpressionMethodInvocation v0 -> (writeMethodInvocation v0)
+  Syntax.StatementExpressionClassInstanceCreation v0 -> (writeClassInstanceCreationExpression v0)) e)
 
 writeStatementWithoutTrailingSubstatement :: (Syntax.StatementWithoutTrailingSubstatement -> Ast.Expr)
 writeStatementWithoutTrailingSubstatement s = ((\x -> case x of
-  Syntax.StatementWithoutTrailingSubstatementBlock v1 -> (writeBlock v1)
+  Syntax.StatementWithoutTrailingSubstatementBlock v0 -> (writeBlock v0)
   Syntax.StatementWithoutTrailingSubstatementEmpty -> (Serialization.cst ";")
-  Syntax.StatementWithoutTrailingSubstatementExpression v1 -> (writeExpressionStatement v1)
-  Syntax.StatementWithoutTrailingSubstatementAssert v1 -> (writeAssertStatement v1)
-  Syntax.StatementWithoutTrailingSubstatementSwitch v1 -> (writeSwitchStatement v1)
-  Syntax.StatementWithoutTrailingSubstatementDo v1 -> (writeDoStatement v1)
-  Syntax.StatementWithoutTrailingSubstatementBreak v1 -> (writeBreakStatement v1)
-  Syntax.StatementWithoutTrailingSubstatementContinue v1 -> (writeContinueStatement v1)
-  Syntax.StatementWithoutTrailingSubstatementReturn v1 -> (writeReturnStatement v1)
-  Syntax.StatementWithoutTrailingSubstatementSynchronized v1 -> (writeSynchronizedStatement v1)
-  Syntax.StatementWithoutTrailingSubstatementThrow v1 -> (writeThrowStatement v1)
-  Syntax.StatementWithoutTrailingSubstatementTry v1 -> (writeTryStatement v1)) s)
+  Syntax.StatementWithoutTrailingSubstatementExpression v0 -> (writeExpressionStatement v0)
+  Syntax.StatementWithoutTrailingSubstatementAssert v0 -> (writeAssertStatement v0)
+  Syntax.StatementWithoutTrailingSubstatementSwitch v0 -> (writeSwitchStatement v0)
+  Syntax.StatementWithoutTrailingSubstatementDo v0 -> (writeDoStatement v0)
+  Syntax.StatementWithoutTrailingSubstatementBreak v0 -> (writeBreakStatement v0)
+  Syntax.StatementWithoutTrailingSubstatementContinue v0 -> (writeContinueStatement v0)
+  Syntax.StatementWithoutTrailingSubstatementReturn v0 -> (writeReturnStatement v0)
+  Syntax.StatementWithoutTrailingSubstatementSynchronized v0 -> (writeSynchronizedStatement v0)
+  Syntax.StatementWithoutTrailingSubstatementThrow v0 -> (writeThrowStatement v0)
+  Syntax.StatementWithoutTrailingSubstatementTry v0 -> (writeTryStatement v0)) s)
 
 writeStaticInitializer :: (t0 -> Ast.Expr)
 writeStaticInitializer _ = (Serialization.cst "STUB:StaticInitializer")
@@ -999,31 +999,31 @@ writeTryStatement _ = (Serialization.cst "STUB:TryStatement")
 
 writeType :: (Syntax.Type -> Ast.Expr)
 writeType t = ((\x -> case x of
-  Syntax.TypePrimitive v1 -> (writePrimitiveTypeWithAnnotations v1)
-  Syntax.TypeReference v1 -> (writeReferenceType v1)) t)
+  Syntax.TypePrimitive v0 -> (writePrimitiveTypeWithAnnotations v0)
+  Syntax.TypeReference v0 -> (writeReferenceType v0)) t)
 
 writeTypeArgument :: (Syntax.TypeArgument -> Ast.Expr)
 writeTypeArgument a = ((\x -> case x of
-  Syntax.TypeArgumentReference v1 -> (writeReferenceType v1)
-  Syntax.TypeArgumentWildcard v1 -> (writeWildcard v1)) a)
+  Syntax.TypeArgumentReference v0 -> (writeReferenceType v0)
+  Syntax.TypeArgumentWildcard v0 -> (writeWildcard v0)) a)
 
 writeTypeArgumentsOrDiamond :: (Syntax.TypeArgumentsOrDiamond -> Ast.Expr)
 writeTypeArgumentsOrDiamond targs = ((\x -> case x of
-  Syntax.TypeArgumentsOrDiamondArguments v1 -> (Serialization.angleBracesList Serialization.inlineStyle (Lists.map writeTypeArgument v1))
+  Syntax.TypeArgumentsOrDiamondArguments v0 -> (Serialization.angleBracesList Serialization.inlineStyle (Lists.map writeTypeArgument v0))
   Syntax.TypeArgumentsOrDiamondDiamond -> (Serialization.cst "<>")) targs)
 
 writeTypeBound :: (Syntax.TypeBound -> Ast.Expr)
 writeTypeBound b = ((\x -> case x of
-  Syntax.TypeBoundVariable v1 -> (writeTypeVariable v1)
-  Syntax.TypeBoundClassOrInterface v1 ->  
-    let cit = (Syntax.typeBound_ClassOrInterfaceType v1) 
-        additional = (Syntax.typeBound_ClassOrInterfaceAdditional v1)
+  Syntax.TypeBoundVariable v0 -> (writeTypeVariable v0)
+  Syntax.TypeBoundClassOrInterface v0 ->  
+    let cit = (Syntax.typeBound_ClassOrInterfaceType v0) 
+        additional = (Syntax.typeBound_ClassOrInterfaceAdditional v0)
     in (Logic.ifElse (Lists.null additional) (writeClassOrInterfaceType cit) (Serialization.spaceSep (Lists.cons (writeClassOrInterfaceType cit) (Lists.map writeAdditionalBound additional))))) b)
 
 writeTypeDeclaration :: (Syntax.TypeDeclaration -> Ast.Expr)
 writeTypeDeclaration d = ((\x -> case x of
-  Syntax.TypeDeclarationClass v1 -> (writeClassDeclaration v1)
-  Syntax.TypeDeclarationInterface v1 -> (writeInterfaceDeclaration v1)
+  Syntax.TypeDeclarationClass v0 -> (writeClassDeclaration v0)
+  Syntax.TypeDeclarationInterface v0 -> (writeInterfaceDeclaration v0)
   Syntax.TypeDeclarationNone -> (Serialization.cst ";")) d)
 
 writeTypeDeclarationWithComments :: (Syntax.TypeDeclarationWithComments -> Ast.Expr)
@@ -1071,26 +1071,26 @@ writeUnannType ut = (writeType (Syntax.unUnannType ut))
 
 writeUnaryExpression :: (Syntax.UnaryExpression -> Ast.Expr)
 writeUnaryExpression e = ((\x -> case x of
-  Syntax.UnaryExpressionPreIncrement v1 -> (writePreIncrementExpression v1)
-  Syntax.UnaryExpressionPreDecrement v1 -> (writePreDecrementExpression v1)
-  Syntax.UnaryExpressionPlus v1 -> (Serialization.spaceSep [
+  Syntax.UnaryExpressionPreIncrement v0 -> (writePreIncrementExpression v0)
+  Syntax.UnaryExpressionPreDecrement v0 -> (writePreDecrementExpression v0)
+  Syntax.UnaryExpressionPlus v0 -> (Serialization.spaceSep [
     Serialization.cst "+",
-    (writeUnaryExpression v1)])
-  Syntax.UnaryExpressionMinus v1 -> (Serialization.spaceSep [
+    (writeUnaryExpression v0)])
+  Syntax.UnaryExpressionMinus v0 -> (Serialization.spaceSep [
     Serialization.cst "-",
-    (writeUnaryExpression v1)])
-  Syntax.UnaryExpressionOther v1 -> (writeUnaryExpressionNotPlusMinus v1)) e)
+    (writeUnaryExpression v0)])
+  Syntax.UnaryExpressionOther v0 -> (writeUnaryExpressionNotPlusMinus v0)) e)
 
 writeUnaryExpressionNotPlusMinus :: (Syntax.UnaryExpressionNotPlusMinus -> Ast.Expr)
 writeUnaryExpressionNotPlusMinus e = ((\x -> case x of
-  Syntax.UnaryExpressionNotPlusMinusPostfix v1 -> (writePostfixExpression v1)
-  Syntax.UnaryExpressionNotPlusMinusTilde v1 -> (Serialization.spaceSep [
+  Syntax.UnaryExpressionNotPlusMinusPostfix v0 -> (writePostfixExpression v0)
+  Syntax.UnaryExpressionNotPlusMinusTilde v0 -> (Serialization.spaceSep [
     Serialization.cst "~",
-    (writeUnaryExpression v1)])
-  Syntax.UnaryExpressionNotPlusMinusNot v1 -> (Serialization.noSep [
+    (writeUnaryExpression v0)])
+  Syntax.UnaryExpressionNotPlusMinusNot v0 -> (Serialization.noSep [
     Serialization.cst "!",
-    (writeUnaryExpression v1)])
-  Syntax.UnaryExpressionNotPlusMinusCast v1 -> (writeCastExpression v1)) e)
+    (writeUnaryExpression v0)])
+  Syntax.UnaryExpressionNotPlusMinusCast v0 -> (writeCastExpression v0)) e)
 
 writeUnqualifiedClassInstanceCreationExpression :: (Syntax.UnqualifiedClassInstanceCreationExpression -> Ast.Expr)
 writeUnqualifiedClassInstanceCreationExpression ucice =  
@@ -1126,12 +1126,12 @@ writeVariableDeclaratorId vdi =
 
 writeVariableInitializer :: (Syntax.VariableInitializer -> Ast.Expr)
 writeVariableInitializer i = ((\x -> case x of
-  Syntax.VariableInitializerExpression v1 -> (writeExpression v1)
-  Syntax.VariableInitializerArrayInitializer v1 -> (writeArrayInitializer v1)) i)
+  Syntax.VariableInitializerExpression v0 -> (writeExpression v0)
+  Syntax.VariableInitializerArrayInitializer v0 -> (writeArrayInitializer v0)) i)
 
 writeVariableModifier :: (Syntax.VariableModifier -> Ast.Expr)
 writeVariableModifier m = ((\x -> case x of
-  Syntax.VariableModifierAnnotation v1 -> (writeAnnotation v1)
+  Syntax.VariableModifierAnnotation v0 -> (writeAnnotation v0)
   Syntax.VariableModifierFinal -> (Serialization.cst "final")) m)
 
 writeWhileStatement :: (Syntax.WhileStatement -> Ast.Expr)
@@ -1156,12 +1156,12 @@ writeWildcard w =
 
 writeWildcardBounds :: (Syntax.WildcardBounds -> Ast.Expr)
 writeWildcardBounds b = ((\x -> case x of
-  Syntax.WildcardBoundsExtends v1 -> (Serialization.spaceSep [
+  Syntax.WildcardBoundsExtends v0 -> (Serialization.spaceSep [
     Serialization.cst "extends",
-    (writeReferenceType v1)])
-  Syntax.WildcardBoundsSuper v1 -> (Serialization.spaceSep [
+    (writeReferenceType v0)])
+  Syntax.WildcardBoundsSuper v0 -> (Serialization.spaceSep [
     Serialization.cst "super",
-    (writeReferenceType v1)])) b)
+    (writeReferenceType v0)])) b)
 
 -- | Sanitize a string for use in a Java comment
 sanitizeJavaComment :: (String -> String)

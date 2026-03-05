@@ -4,22 +4,20 @@ package hydra.ext.datalog.syntax;
 
 import java.io.Serializable;
 
-public class ConstantList_Multiple implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.datalog.syntax.ConstantList_Multiple");
+public class ConstantList_Multiple implements Serializable, Comparable<ConstantList_Multiple> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.datalog.syntax.ConstantList_Multiple");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTANT = new hydra.core.Name("constant");
+  public static final hydra.core.Name CONSTANT = new hydra.core.Name("Constant");
   
-  public static final hydra.core.Name FIELD_NAME_CONSTANT_LIST = new hydra.core.Name("constantList");
+  public static final hydra.core.Name CONSTANT_LIST = new hydra.core.Name("ConstantList");
   
-  public final hydra.ext.datalog.syntax.Constant constant;
+  public final hydra.ext.datalog.syntax.Constant Constant;
   
-  public final hydra.ext.datalog.syntax.ConstantList constantList;
+  public final hydra.ext.datalog.syntax.ConstantList ConstantList;
   
-  public ConstantList_Multiple (hydra.ext.datalog.syntax.Constant constant, hydra.ext.datalog.syntax.ConstantList constantList) {
-    java.util.Objects.requireNonNull((constant));
-    java.util.Objects.requireNonNull((constantList));
-    this.constant = constant;
-    this.constantList = constantList;
+  public ConstantList_Multiple (hydra.ext.datalog.syntax.Constant Constant, hydra.ext.datalog.syntax.ConstantList ConstantList) {
+    this.Constant = Constant;
+    this.ConstantList = ConstantList;
   }
   
   @Override
@@ -27,22 +25,35 @@ public class ConstantList_Multiple implements Serializable {
     if (!(other instanceof ConstantList_Multiple)) {
       return false;
     }
-    ConstantList_Multiple o = (ConstantList_Multiple) (other);
-    return constant.equals(o.constant) && constantList.equals(o.constantList);
+    ConstantList_Multiple o = (ConstantList_Multiple) other;
+    return java.util.Objects.equals(
+      this.Constant,
+      o.Constant) && java.util.Objects.equals(
+      this.ConstantList,
+      o.ConstantList);
   }
   
   @Override
   public int hashCode() {
-    return 2 * constant.hashCode() + 3 * constantList.hashCode();
+    return 2 * java.util.Objects.hashCode(Constant) + 3 * java.util.Objects.hashCode(ConstantList);
   }
   
-  public ConstantList_Multiple withConstant(hydra.ext.datalog.syntax.Constant constant) {
-    java.util.Objects.requireNonNull((constant));
-    return new ConstantList_Multiple(constant, constantList);
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ConstantList_Multiple other) {
+    int cmp = 0;
+    cmp = ((Comparable) Constant).compareTo(other.Constant);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) ConstantList).compareTo(other.ConstantList);
   }
   
-  public ConstantList_Multiple withConstantList(hydra.ext.datalog.syntax.ConstantList constantList) {
-    java.util.Objects.requireNonNull((constantList));
-    return new ConstantList_Multiple(constant, constantList);
+  public ConstantList_Multiple withConstant(hydra.ext.datalog.syntax.Constant Constant) {
+    return new ConstantList_Multiple(Constant, ConstantList);
+  }
+  
+  public ConstantList_Multiple withConstantList(hydra.ext.datalog.syntax.ConstantList ConstantList) {
+    return new ConstantList_Multiple(Constant, ConstantList);
   }
 }

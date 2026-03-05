@@ -36,7 +36,8 @@
     "hydra.decode.pg.mapping",
     "hydra.decode.pg.model",
     "hydra.encode.pg.mapping",
-    "hydra.encode.pg.model"],
+    "hydra.encode.pg.model",
+    "hydra.demos.genpg.transform"],
   "hydraExtModules": [
     "hydra.ext.org.apache.atlas",
     "hydra.ext.org.apache.avro.schema",

@@ -4,15 +4,14 @@ package hydra.ext.org.w3.xml.schema;
 
 import java.io.Serializable;
 
-public class Integer_ implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.xml.schema.Integer");
+public class Integer_ implements Serializable, Comparable<Integer_> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.xml.schema.Integer");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.math.BigInteger value;
   
   public Integer_ (java.math.BigInteger value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -21,12 +20,18 @@ public class Integer_ implements Serializable {
     if (!(other instanceof Integer_)) {
       return false;
     }
-    Integer_ o = (Integer_) (other);
-    return value.equals(o.value);
+    Integer_ o = (Integer_) other;
+    return this.value.compareTo(o.value) == 0;
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Integer_ other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

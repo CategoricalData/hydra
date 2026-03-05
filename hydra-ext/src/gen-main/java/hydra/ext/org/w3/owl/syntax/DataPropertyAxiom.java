@@ -4,20 +4,20 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public abstract class DataPropertyAxiom implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataPropertyAxiom");
+public abstract class DataPropertyAxiom implements Serializable, Comparable<DataPropertyAxiom> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataPropertyAxiom");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_PROPERTY_AXIOM = new hydra.core.Name("dataPropertyAxiom");
+  public static final hydra.core.Name DATA_PROPERTY_AXIOM = new hydra.core.Name("dataPropertyAxiom");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_PROPERTY_RANGE = new hydra.core.Name("dataPropertyRange");
+  public static final hydra.core.Name DATA_PROPERTY_RANGE = new hydra.core.Name("dataPropertyRange");
   
-  public static final hydra.core.Name FIELD_NAME_DISJOINT_DATA_PROPERTIES = new hydra.core.Name("disjointDataProperties");
+  public static final hydra.core.Name DISJOINT_DATA_PROPERTIES = new hydra.core.Name("disjointDataProperties");
   
-  public static final hydra.core.Name FIELD_NAME_EQUIVALENT_DATA_PROPERTIES = new hydra.core.Name("equivalentDataProperties");
+  public static final hydra.core.Name EQUIVALENT_DATA_PROPERTIES = new hydra.core.Name("equivalentDataProperties");
   
-  public static final hydra.core.Name FIELD_NAME_FUNCTIONAL_DATA_PROPERTY = new hydra.core.Name("functionalDataProperty");
+  public static final hydra.core.Name FUNCTIONAL_DATA_PROPERTY = new hydra.core.Name("functionalDataProperty");
   
-  public static final hydra.core.Name FIELD_NAME_SUB_DATA_PROPERTY_OF = new hydra.core.Name("subDataPropertyOf");
+  public static final hydra.core.Name SUB_DATA_PROPERTY_OF = new hydra.core.Name("subDataPropertyOf");
   
   private DataPropertyAxiom () {
   
@@ -41,31 +41,31 @@ public abstract class DataPropertyAxiom implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(DataPropertyAxiom instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(DataPropertyAxiom_ instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DataPropertyRange instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DisjointDataProperties instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(EquivalentDataProperties instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(FunctionalDataProperty instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(SubDataPropertyOf instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -73,7 +73,6 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.DataPropertyAxiom value;
     
     public DataPropertyAxiom_ (hydra.ext.org.w3.owl.syntax.DataPropertyAxiom value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -82,13 +81,26 @@ public abstract class DataPropertyAxiom implements Serializable {
       if (!(other instanceof DataPropertyAxiom_)) {
         return false;
       }
-      DataPropertyAxiom_ o = (DataPropertyAxiom_) (other);
-      return value.equals(o.value);
+      DataPropertyAxiom_ o = (DataPropertyAxiom_) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DataPropertyAxiom_ o = (DataPropertyAxiom_) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -101,7 +113,6 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.DataPropertyRange value;
     
     public DataPropertyRange (hydra.ext.org.w3.owl.syntax.DataPropertyRange value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -110,13 +121,26 @@ public abstract class DataPropertyAxiom implements Serializable {
       if (!(other instanceof DataPropertyRange)) {
         return false;
       }
-      DataPropertyRange o = (DataPropertyRange) (other);
-      return value.equals(o.value);
+      DataPropertyRange o = (DataPropertyRange) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DataPropertyRange o = (DataPropertyRange) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -129,7 +153,6 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.DisjointDataProperties value;
     
     public DisjointDataProperties (hydra.ext.org.w3.owl.syntax.DisjointDataProperties value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -138,13 +161,26 @@ public abstract class DataPropertyAxiom implements Serializable {
       if (!(other instanceof DisjointDataProperties)) {
         return false;
       }
-      DisjointDataProperties o = (DisjointDataProperties) (other);
-      return value.equals(o.value);
+      DisjointDataProperties o = (DisjointDataProperties) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DisjointDataProperties o = (DisjointDataProperties) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -157,7 +193,6 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.EquivalentDataProperties value;
     
     public EquivalentDataProperties (hydra.ext.org.w3.owl.syntax.EquivalentDataProperties value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -166,13 +201,26 @@ public abstract class DataPropertyAxiom implements Serializable {
       if (!(other instanceof EquivalentDataProperties)) {
         return false;
       }
-      EquivalentDataProperties o = (EquivalentDataProperties) (other);
-      return value.equals(o.value);
+      EquivalentDataProperties o = (EquivalentDataProperties) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      EquivalentDataProperties o = (EquivalentDataProperties) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -185,7 +233,6 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.FunctionalDataProperty value;
     
     public FunctionalDataProperty (hydra.ext.org.w3.owl.syntax.FunctionalDataProperty value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -194,13 +241,26 @@ public abstract class DataPropertyAxiom implements Serializable {
       if (!(other instanceof FunctionalDataProperty)) {
         return false;
       }
-      FunctionalDataProperty o = (FunctionalDataProperty) (other);
-      return value.equals(o.value);
+      FunctionalDataProperty o = (FunctionalDataProperty) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      FunctionalDataProperty o = (FunctionalDataProperty) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -213,7 +273,6 @@ public abstract class DataPropertyAxiom implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.SubDataPropertyOf value;
     
     public SubDataPropertyOf (hydra.ext.org.w3.owl.syntax.SubDataPropertyOf value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -222,13 +281,26 @@ public abstract class DataPropertyAxiom implements Serializable {
       if (!(other instanceof SubDataPropertyOf)) {
         return false;
       }
-      SubDataPropertyOf o = (SubDataPropertyOf) (other);
-      return value.equals(o.value);
+      SubDataPropertyOf o = (SubDataPropertyOf) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataPropertyAxiom other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      SubDataPropertyOf o = (SubDataPropertyOf) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

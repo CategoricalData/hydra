@@ -7,18 +7,18 @@ import java.io.Serializable;
 /**
  * Features that are related to Edge operations.
  */
-public class EdgeFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.EdgeFeatures");
+public class EdgeFeatures implements Serializable, Comparable<EdgeFeatures> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.EdgeFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_ELEMENT_FEATURES = new hydra.core.Name("elementFeatures");
+  public static final hydra.core.Name ELEMENT_FEATURES = new hydra.core.Name("elementFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_ADD_EDGES = new hydra.core.Name("supportsAddEdges");
+  public static final hydra.core.Name SUPPORTS_ADD_EDGES = new hydra.core.Name("supportsAddEdges");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_REMOVE_EDGES = new hydra.core.Name("supportsRemoveEdges");
+  public static final hydra.core.Name SUPPORTS_REMOVE_EDGES = new hydra.core.Name("supportsRemoveEdges");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_UPSERT = new hydra.core.Name("supportsUpsert");
+  public static final hydra.core.Name SUPPORTS_UPSERT = new hydra.core.Name("supportsUpsert");
   
   public final hydra.ext.org.apache.tinkerpop.features.ElementFeatures elementFeatures;
   
@@ -40,11 +40,6 @@ public class EdgeFeatures implements Serializable {
   public final Boolean supportsUpsert;
   
   public EdgeFeatures (hydra.ext.org.apache.tinkerpop.features.ElementFeatures elementFeatures, hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures properties, Boolean supportsAddEdges, Boolean supportsRemoveEdges, Boolean supportsUpsert) {
-    java.util.Objects.requireNonNull((elementFeatures));
-    java.util.Objects.requireNonNull((properties));
-    java.util.Objects.requireNonNull((supportsAddEdges));
-    java.util.Objects.requireNonNull((supportsRemoveEdges));
-    java.util.Objects.requireNonNull((supportsUpsert));
     this.elementFeatures = elementFeatures;
     this.properties = properties;
     this.supportsAddEdges = supportsAddEdges;
@@ -57,37 +52,65 @@ public class EdgeFeatures implements Serializable {
     if (!(other instanceof EdgeFeatures)) {
       return false;
     }
-    EdgeFeatures o = (EdgeFeatures) (other);
-    return elementFeatures.equals(o.elementFeatures) && properties.equals(o.properties) && supportsAddEdges.equals(o.supportsAddEdges) && supportsRemoveEdges.equals(o.supportsRemoveEdges) && supportsUpsert.equals(o.supportsUpsert);
+    EdgeFeatures o = (EdgeFeatures) other;
+    return java.util.Objects.equals(
+      this.elementFeatures,
+      o.elementFeatures) && java.util.Objects.equals(
+      this.properties,
+      o.properties) && java.util.Objects.equals(
+      this.supportsAddEdges,
+      o.supportsAddEdges) && java.util.Objects.equals(
+      this.supportsRemoveEdges,
+      o.supportsRemoveEdges) && java.util.Objects.equals(
+      this.supportsUpsert,
+      o.supportsUpsert);
   }
   
   @Override
   public int hashCode() {
-    return 2 * elementFeatures.hashCode() + 3 * properties.hashCode() + 5 * supportsAddEdges.hashCode() + 7 * supportsRemoveEdges.hashCode() + 11 * supportsUpsert.hashCode();
+    return 2 * java.util.Objects.hashCode(elementFeatures) + 3 * java.util.Objects.hashCode(properties) + 5 * java.util.Objects.hashCode(supportsAddEdges) + 7 * java.util.Objects.hashCode(supportsRemoveEdges) + 11 * java.util.Objects.hashCode(supportsUpsert);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(EdgeFeatures other) {
+    int cmp = 0;
+    cmp = ((Comparable) elementFeatures).compareTo(other.elementFeatures);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) properties).compareTo(other.properties);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) supportsAddEdges).compareTo(other.supportsAddEdges);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) supportsRemoveEdges).compareTo(other.supportsRemoveEdges);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) supportsUpsert).compareTo(other.supportsUpsert);
   }
   
   public EdgeFeatures withElementFeatures(hydra.ext.org.apache.tinkerpop.features.ElementFeatures elementFeatures) {
-    java.util.Objects.requireNonNull((elementFeatures));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withProperties(hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures properties) {
-    java.util.Objects.requireNonNull((properties));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withSupportsAddEdges(Boolean supportsAddEdges) {
-    java.util.Objects.requireNonNull((supportsAddEdges));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withSupportsRemoveEdges(Boolean supportsRemoveEdges) {
-    java.util.Objects.requireNonNull((supportsRemoveEdges));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
   
   public EdgeFeatures withSupportsUpsert(Boolean supportsUpsert) {
-    java.util.Objects.requireNonNull((supportsUpsert));
     return new EdgeFeatures(elementFeatures, properties, supportsAddEdges, supportsRemoveEdges, supportsUpsert);
   }
 }

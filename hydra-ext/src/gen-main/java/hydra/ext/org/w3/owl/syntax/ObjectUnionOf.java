@@ -4,15 +4,14 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class ObjectUnionOf implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectUnionOf");
+public class ObjectUnionOf implements Serializable, Comparable<ObjectUnionOf> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.ObjectUnionOf");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> value;
   
   public ObjectUnionOf (java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -21,12 +20,22 @@ public class ObjectUnionOf implements Serializable {
     if (!(other instanceof ObjectUnionOf)) {
       return false;
     }
-    ObjectUnionOf o = (ObjectUnionOf) (other);
-    return value.equals(o.value);
+    ObjectUnionOf o = (ObjectUnionOf) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ObjectUnionOf other) {
+    return Integer.compare(
+      value.hashCode(),
+      other.value.hashCode());
   }
 }

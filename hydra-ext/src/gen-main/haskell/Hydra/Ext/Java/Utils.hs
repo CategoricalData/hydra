@@ -4,8 +4,9 @@
 
 module Hydra.Ext.Java.Utils where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Ext.Java.Helpers as Helpers
 import qualified Hydra.Ext.Java.Language as Language
 import qualified Hydra.Ext.Java.Names as Names
@@ -13,7 +14,6 @@ import qualified Hydra.Ext.Java.Syntax as Syntax
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -362,7 +362,7 @@ javaTypeToJavaResult jt = (Syntax.ResultType (Syntax.UnannType jt))
 
 javaTypeToJavaTypeArgument :: (Syntax.Type -> Syntax.TypeArgument)
 javaTypeToJavaTypeArgument t = ((\x -> case x of
-  Syntax.TypeReference v1 -> (Syntax.TypeArgumentReference v1)
+  Syntax.TypeReference v0 -> (Syntax.TypeArgumentReference v0)
   Syntax.TypePrimitive _ -> (Syntax.TypeArgumentWildcard (Syntax.Wildcard {
     Syntax.wildcardAnnotations = [],
     Syntax.wildcardWildcard = Nothing}))) t)
@@ -732,43 +732,49 @@ toAcceptMethod abstract vtparams =
   in (methodDeclaration mods tparams anns Names.acceptMethodName [
     param] result body)
 
-toJavaArrayType :: (Syntax.Type -> Compute.Flow t0 Syntax.Type)
-toJavaArrayType t = ((\x -> case x of
-  Syntax.TypeReference v1 -> ((\x -> case x of
-    Syntax.ReferenceTypeClassOrInterface v2 -> (Flows.pure (Syntax.TypeReference (Syntax.ReferenceTypeArray (Syntax.ArrayType {
+toJavaArrayType :: (Syntax.Type -> Context.Context -> Either (Context.InContext Error.OtherError) Syntax.Type)
+toJavaArrayType t cx = ((\x -> case x of
+  Syntax.TypeReference v0 -> ((\x -> case x of
+    Syntax.ReferenceTypeClassOrInterface v1 -> (Right (Syntax.TypeReference (Syntax.ReferenceTypeArray (Syntax.ArrayType {
       Syntax.arrayTypeDims = (Syntax.Dims [
         []]),
-      Syntax.arrayTypeVariant = (Syntax.ArrayType_VariantClassOrInterface v2)}))))
-    Syntax.ReferenceTypeArray v2 ->  
-      let oldDims = (Syntax.unDims (Syntax.arrayTypeDims v2)) 
+      Syntax.arrayTypeVariant = (Syntax.ArrayType_VariantClassOrInterface v1)}))))
+    Syntax.ReferenceTypeArray v1 ->  
+      let oldDims = (Syntax.unDims (Syntax.arrayTypeDims v1)) 
           newDims = (Syntax.Dims (Lists.concat2 oldDims [
                   []]))
-          variant = (Syntax.arrayTypeVariant v2)
-      in (Flows.pure (Syntax.TypeReference (Syntax.ReferenceTypeArray (Syntax.ArrayType {
+          variant = (Syntax.arrayTypeVariant v1)
+      in (Right (Syntax.TypeReference (Syntax.ReferenceTypeArray (Syntax.ArrayType {
         Syntax.arrayTypeDims = newDims,
         Syntax.arrayTypeVariant = variant}))))
-    Syntax.ReferenceTypeVariable _ -> (Flows.fail "don't know how to make Java reference type into array type")) v1)
-  Syntax.TypePrimitive _ -> (Flows.fail "don't know how to make Java type into array type")) t)
+    Syntax.ReferenceTypeVariable _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError "don't know how to make Java reference type into array type"),
+      Context.inContextContext = cx}))) v0)
+  Syntax.TypePrimitive _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError "don't know how to make Java type into array type"),
+    Context.inContextContext = cx}))) t)
 
-javaTypeToJavaReferenceType :: (Syntax.Type -> Compute.Flow t0 Syntax.ReferenceType)
-javaTypeToJavaReferenceType t = ((\x -> case x of
-  Syntax.TypeReference v1 -> (Flows.pure v1)
-  Syntax.TypePrimitive _ -> (Flows.fail "expected a Java reference type")) t)
+javaTypeToJavaReferenceType :: (Syntax.Type -> Context.Context -> Either (Context.InContext Error.OtherError) Syntax.ReferenceType)
+javaTypeToJavaReferenceType t cx = ((\x -> case x of
+  Syntax.TypeReference v0 -> (Right v0)
+  Syntax.TypePrimitive _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError "expected a Java reference type"),
+    Context.inContextContext = cx}))) t)
 
 javaReferenceTypeToRawType :: (Syntax.ReferenceType -> Syntax.ReferenceType)
 javaReferenceTypeToRawType rt = ((\x -> case x of
-  Syntax.ReferenceTypeClassOrInterface v1 -> ((\x -> case x of
-    Syntax.ClassOrInterfaceTypeClass v2 ->  
-      let anns = (Syntax.classTypeAnnotations v2) 
-          qual = (Syntax.classTypeQualifier v2)
-          id = (Syntax.classTypeIdentifier v2)
+  Syntax.ReferenceTypeClassOrInterface v0 -> ((\x -> case x of
+    Syntax.ClassOrInterfaceTypeClass v1 ->  
+      let anns = (Syntax.classTypeAnnotations v1) 
+          qual = (Syntax.classTypeQualifier v1)
+          id = (Syntax.classTypeIdentifier v1)
       in (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Syntax.ClassType {
         Syntax.classTypeAnnotations = anns,
         Syntax.classTypeQualifier = qual,
         Syntax.classTypeIdentifier = id,
         Syntax.classTypeArguments = []})))
-    Syntax.ClassOrInterfaceTypeInterface v2 ->  
-      let ct = (Syntax.unInterfaceType v2) 
+    Syntax.ClassOrInterfaceTypeInterface v1 ->  
+      let ct = (Syntax.unInterfaceType v1) 
           anns = (Syntax.classTypeAnnotations ct)
           qual = (Syntax.classTypeQualifier ct)
           id = (Syntax.classTypeIdentifier ct)
@@ -776,28 +782,34 @@ javaReferenceTypeToRawType rt = ((\x -> case x of
         Syntax.classTypeAnnotations = anns,
         Syntax.classTypeQualifier = qual,
         Syntax.classTypeIdentifier = id,
-        Syntax.classTypeArguments = []}))))) v1)
+        Syntax.classTypeArguments = []}))))) v0)
   _ -> rt) rt)
 
-addJavaTypeParameter :: (Syntax.ReferenceType -> Syntax.Type -> Compute.Flow t0 Syntax.Type)
-addJavaTypeParameter rt t = ((\x -> case x of
-  Syntax.TypeReference v1 -> ((\x -> case x of
-    Syntax.ReferenceTypeClassOrInterface v2 -> ((\x -> case x of
-      Syntax.ClassOrInterfaceTypeClass v3 ->  
-        let anns = (Syntax.classTypeAnnotations v3) 
-            qual = (Syntax.classTypeQualifier v3)
-            id = (Syntax.classTypeIdentifier v3)
-            args = (Syntax.classTypeArguments v3)
-        in (Flows.pure (Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Syntax.ClassType {
+addJavaTypeParameter :: (Syntax.ReferenceType -> Syntax.Type -> Context.Context -> Either (Context.InContext Error.OtherError) Syntax.Type)
+addJavaTypeParameter rt t cx = ((\x -> case x of
+  Syntax.TypeReference v0 -> ((\x -> case x of
+    Syntax.ReferenceTypeClassOrInterface v1 -> ((\x -> case x of
+      Syntax.ClassOrInterfaceTypeClass v2 ->  
+        let anns = (Syntax.classTypeAnnotations v2) 
+            qual = (Syntax.classTypeQualifier v2)
+            id = (Syntax.classTypeIdentifier v2)
+            args = (Syntax.classTypeArguments v2)
+        in (Right (Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Syntax.ClassType {
           Syntax.classTypeAnnotations = anns,
           Syntax.classTypeQualifier = qual,
           Syntax.classTypeIdentifier = id,
           Syntax.classTypeArguments = (Lists.concat2 args [
             Syntax.TypeArgumentReference rt])})))))
-      Syntax.ClassOrInterfaceTypeInterface _ -> (Flows.fail "expected a Java class type")) v2)
-    Syntax.ReferenceTypeVariable v2 -> (Flows.pure (javaTypeVariableToType v2))
-    Syntax.ReferenceTypeArray _ -> (Flows.fail "expected a Java class or interface type, or a variable")) v1)
-  Syntax.TypePrimitive _ -> (Flows.fail "expected a reference type")) t)
+      Syntax.ClassOrInterfaceTypeInterface _ -> (Left (Context.InContext {
+        Context.inContextObject = (Error.OtherError "expected a Java class type"),
+        Context.inContextContext = cx}))) v1)
+    Syntax.ReferenceTypeVariable v1 -> (Right (javaTypeVariableToType v1))
+    Syntax.ReferenceTypeArray _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError "expected a Java class or interface type, or a variable"),
+      Context.inContextContext = cx}))) v0)
+  Syntax.TypePrimitive _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError "expected a reference type"),
+    Context.inContextContext = cx}))) t)
 
 uniqueVarName :: (Helpers.Aliases -> Core.Name -> Core.Name)
 uniqueVarName aliases name = (Logic.ifElse (Sets.member name (Helpers.aliasesInScopeJavaVars aliases)) (uniqueVarName_go aliases (Core.unName name) 2) name)

@@ -4,15 +4,14 @@ package hydra.ext.org.w3.xml.schema;
 
 import java.io.Serializable;
 
-public class DateTime implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.xml.schema.DateTime");
+public class DateTime implements Serializable, Comparable<DateTime> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.xml.schema.DateTime");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   
   public DateTime (String value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -21,12 +20,20 @@ public class DateTime implements Serializable {
     if (!(other instanceof DateTime)) {
       return false;
     }
-    DateTime o = (DateTime) (other);
-    return value.equals(o.value);
+    DateTime o = (DateTime) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(DateTime other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

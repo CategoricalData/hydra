@@ -4,15 +4,17 @@
 
 module Hydra.Pg.Graphson.Utils where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Pg.Graphson.Construct as Construct
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import qualified Hydra.Pg.Model as Model_
@@ -28,8 +30,8 @@ import qualified Data.Set as S
 elementsToVerticesWithAdjacentEdges :: Ord t0 => ([Model_.Element t0] -> [Model_.VertexWithAdjacentEdges t0])
 elementsToVerticesWithAdjacentEdges els =  
   let partitioned = (Lists.foldl (\acc -> \el -> (\x -> case x of
-          Model_.ElementVertex v1 -> (Lists.cons v1 (Pairs.first acc), (Pairs.second acc))
-          Model_.ElementEdge v1 -> (Pairs.first acc, (Lists.cons v1 (Pairs.second acc)))) el) ([], []) els)
+          Model_.ElementVertex v0 -> (Lists.cons v0 (Pairs.first acc), (Pairs.second acc))
+          Model_.ElementEdge v0 -> (Pairs.first acc, (Lists.cons v0 (Pairs.second acc)))) el) ([], []) els)
   in  
     let vertices = (Lists.reverse (Pairs.first partitioned))
     in  
@@ -74,30 +76,38 @@ elementsToVerticesWithAdjacentEdges els =
           in (Maps.elems vertexMap1)
 
 -- | Encode a String value as a GraphSON Value
-encodeStringValue :: (String -> Compute.Flow t0 Syntax.Value)
-encodeStringValue s = (Flows.pure (Syntax.ValueString s))
+encodeStringValue :: (String -> Either t0 Syntax.Value)
+encodeStringValue s = (Right (Syntax.ValueString s))
 
 -- | Encode a Hydra Term as a GraphSON Value. Supports literals and unit values.
-encodeTermValue :: (Core.Term -> Compute.Flow t0 Syntax.Value)
+encodeTermValue :: (Core.Term -> Either (Context.InContext Error.OtherError) Syntax.Value)
 encodeTermValue term = ((\x -> case x of
-  Core.TermLiteral v1 -> ((\x -> case x of
-    Core.LiteralBinary v2 -> (Flows.pure (Syntax.ValueBinary (Literals.binaryToString v2)))
-    Core.LiteralBoolean v2 -> (Flows.pure (Syntax.ValueBoolean v2))
-    Core.LiteralFloat v2 -> ((\x -> case x of
-      Core.FloatValueBigfloat v3 -> (Flows.pure (Syntax.ValueBigDecimal (Syntax.BigDecimalValue (Literals.showBigfloat v3))))
-      Core.FloatValueFloat32 v3 -> (Flows.pure (Syntax.ValueFloat (Syntax.FloatValueFinite v3)))
-      Core.FloatValueFloat64 v3 -> (Flows.pure (Syntax.ValueDouble (Syntax.DoubleValueFinite v3)))
-      _ -> (Flows.fail "unsupported float type")) v2)
-    Core.LiteralInteger v2 -> ((\x -> case x of
-      Core.IntegerValueBigint v3 -> (Flows.pure (Syntax.ValueBigInteger v3))
-      Core.IntegerValueInt32 v3 -> (Flows.pure (Syntax.ValueInteger v3))
-      Core.IntegerValueInt64 v3 -> (Flows.pure (Syntax.ValueLong v3))
-      _ -> (Flows.fail "unsupported integer type")) v2)
-    Core.LiteralString v2 -> (Flows.pure (Syntax.ValueString v2))
-    _ -> (Flows.fail "unsupported literal type for GraphSON encoding")) v1)
-  Core.TermUnit -> (Flows.pure Syntax.ValueNull)
-  _ -> (Flows.fail "unsupported term variant for GraphSON encoding")) (Rewriting.deannotateTerm term))
+  Core.TermLiteral v0 -> ((\x -> case x of
+    Core.LiteralBinary v1 -> (Right (Syntax.ValueBinary (Literals.binaryToString v1)))
+    Core.LiteralBoolean v1 -> (Right (Syntax.ValueBoolean v1))
+    Core.LiteralFloat v1 -> ((\x -> case x of
+      Core.FloatValueBigfloat v2 -> (Right (Syntax.ValueBigDecimal (Syntax.BigDecimalValue (Literals.showBigfloat v2))))
+      Core.FloatValueFloat32 v2 -> (Right (Syntax.ValueFloat (Syntax.FloatValueFinite v2)))
+      Core.FloatValueFloat64 v2 -> (Right (Syntax.ValueDouble (Syntax.DoubleValueFinite v2)))
+      _ -> (Left (Context.InContext {
+        Context.inContextObject = (Error.OtherError "unsupported float type"),
+        Context.inContextContext = Monads.emptyContext}))) v1)
+    Core.LiteralInteger v1 -> ((\x -> case x of
+      Core.IntegerValueBigint v2 -> (Right (Syntax.ValueBigInteger v2))
+      Core.IntegerValueInt32 v2 -> (Right (Syntax.ValueInteger v2))
+      Core.IntegerValueInt64 v2 -> (Right (Syntax.ValueLong v2))
+      _ -> (Left (Context.InContext {
+        Context.inContextObject = (Error.OtherError "unsupported integer type"),
+        Context.inContextContext = Monads.emptyContext}))) v1)
+    Core.LiteralString v1 -> (Right (Syntax.ValueString v1))
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError "unsupported literal type for GraphSON encoding"),
+      Context.inContextContext = Monads.emptyContext}))) v0)
+  Core.TermUnit -> (Right Syntax.ValueNull)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError "unsupported term variant for GraphSON encoding"),
+    Context.inContextContext = Monads.emptyContext}))) (Rewriting.deannotateTerm term))
 
 -- | Convert property graph elements to a list of GraphSON JSON values
-pgElementsToGraphson :: Ord t0 => ((t0 -> Compute.Flow t1 Syntax.Value) -> [Model_.Element t0] -> Compute.Flow t1 [Model.Value])
-pgElementsToGraphson encodeValue els = (Flows.mapList (Construct.pgVertexWithAdjacentEdgesToJson encodeValue) (elementsToVerticesWithAdjacentEdges els))
+pgElementsToGraphson :: Ord t0 => ((t0 -> Either t1 Syntax.Value) -> [Model_.Element t0] -> Either t1 [Model.Value])
+pgElementsToGraphson encodeValue els = (Eithers.mapList (Construct.pgVertexWithAdjacentEdgesToJson encodeValue) (elementsToVerticesWithAdjacentEdges els))

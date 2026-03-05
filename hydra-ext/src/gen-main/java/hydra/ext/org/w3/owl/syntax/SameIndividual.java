@@ -4,20 +4,18 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class SameIndividual implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.SameIndividual");
+public class SameIndividual implements Serializable, Comparable<SameIndividual> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.SameIndividual");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_INDIVIDUALS = new hydra.core.Name("individuals");
+  public static final hydra.core.Name INDIVIDUALS = new hydra.core.Name("individuals");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Individual> individuals;
   
   public SameIndividual (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((individuals));
     this.annotations = annotations;
     this.individuals = individuals;
   }
@@ -27,22 +25,39 @@ public class SameIndividual implements Serializable {
     if (!(other instanceof SameIndividual)) {
       return false;
     }
-    SameIndividual o = (SameIndividual) (other);
-    return annotations.equals(o.annotations) && individuals.equals(o.individuals);
+    SameIndividual o = (SameIndividual) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.individuals,
+      o.individuals);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * individuals.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(individuals);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(SameIndividual other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      individuals.hashCode(),
+      other.individuals.hashCode());
   }
   
   public SameIndividual withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new SameIndividual(annotations, individuals);
   }
   
   public SameIndividual withIndividuals(java.util.List<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
-    java.util.Objects.requireNonNull((individuals));
     return new SameIndividual(annotations, individuals);
   }
 }

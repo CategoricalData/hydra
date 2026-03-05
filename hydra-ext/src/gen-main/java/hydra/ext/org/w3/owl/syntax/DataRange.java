@@ -7,20 +7,20 @@ import java.io.Serializable;
 /**
  * See https://www.w3.org/TR/owl2-syntax/#Data_Ranges
  */
-public abstract class DataRange implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataRange");
+public abstract class DataRange implements Serializable, Comparable<DataRange> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DataRange");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_COMPLEMENT_OF = new hydra.core.Name("dataComplementOf");
+  public static final hydra.core.Name DATA_COMPLEMENT_OF = new hydra.core.Name("dataComplementOf");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_INTERSECTION_OF = new hydra.core.Name("dataIntersectionOf");
+  public static final hydra.core.Name DATA_INTERSECTION_OF = new hydra.core.Name("dataIntersectionOf");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_ONE_OF = new hydra.core.Name("dataOneOf");
+  public static final hydra.core.Name DATA_ONE_OF = new hydra.core.Name("dataOneOf");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_UNION_OF = new hydra.core.Name("dataUnionOf");
+  public static final hydra.core.Name DATA_UNION_OF = new hydra.core.Name("dataUnionOf");
   
-  public static final hydra.core.Name FIELD_NAME_DATATYPE = new hydra.core.Name("datatype");
+  public static final hydra.core.Name DATATYPE = new hydra.core.Name("datatype");
   
-  public static final hydra.core.Name FIELD_NAME_DATATYPE_RESTRICTION = new hydra.core.Name("datatypeRestriction");
+  public static final hydra.core.Name DATATYPE_RESTRICTION = new hydra.core.Name("datatypeRestriction");
   
   private DataRange () {
   
@@ -44,31 +44,31 @@ public abstract class DataRange implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(DataRange instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(DataComplementOf instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DataIntersectionOf instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DataOneOf instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DataUnionOf instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Datatype instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(DatatypeRestriction instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -76,7 +76,6 @@ public abstract class DataRange implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.DataComplementOf value;
     
     public DataComplementOf (hydra.ext.org.w3.owl.syntax.DataComplementOf value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -85,13 +84,26 @@ public abstract class DataRange implements Serializable {
       if (!(other instanceof DataComplementOf)) {
         return false;
       }
-      DataComplementOf o = (DataComplementOf) (other);
-      return value.equals(o.value);
+      DataComplementOf o = (DataComplementOf) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataRange other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DataComplementOf o = (DataComplementOf) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -104,7 +116,6 @@ public abstract class DataRange implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.DataIntersectionOf value;
     
     public DataIntersectionOf (hydra.ext.org.w3.owl.syntax.DataIntersectionOf value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -113,13 +124,26 @@ public abstract class DataRange implements Serializable {
       if (!(other instanceof DataIntersectionOf)) {
         return false;
       }
-      DataIntersectionOf o = (DataIntersectionOf) (other);
-      return value.equals(o.value);
+      DataIntersectionOf o = (DataIntersectionOf) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataRange other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DataIntersectionOf o = (DataIntersectionOf) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -132,7 +156,6 @@ public abstract class DataRange implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.DataOneOf value;
     
     public DataOneOf (hydra.ext.org.w3.owl.syntax.DataOneOf value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -141,13 +164,26 @@ public abstract class DataRange implements Serializable {
       if (!(other instanceof DataOneOf)) {
         return false;
       }
-      DataOneOf o = (DataOneOf) (other);
-      return value.equals(o.value);
+      DataOneOf o = (DataOneOf) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataRange other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DataOneOf o = (DataOneOf) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -160,7 +196,6 @@ public abstract class DataRange implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.DataUnionOf value;
     
     public DataUnionOf (hydra.ext.org.w3.owl.syntax.DataUnionOf value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -169,13 +204,26 @@ public abstract class DataRange implements Serializable {
       if (!(other instanceof DataUnionOf)) {
         return false;
       }
-      DataUnionOf o = (DataUnionOf) (other);
-      return value.equals(o.value);
+      DataUnionOf o = (DataUnionOf) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataRange other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DataUnionOf o = (DataUnionOf) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -188,7 +236,6 @@ public abstract class DataRange implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.Datatype value;
     
     public Datatype (hydra.ext.org.w3.owl.syntax.Datatype value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -197,13 +244,26 @@ public abstract class DataRange implements Serializable {
       if (!(other instanceof Datatype)) {
         return false;
       }
-      Datatype o = (Datatype) (other);
-      return value.equals(o.value);
+      Datatype o = (Datatype) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataRange other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Datatype o = (Datatype) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -216,7 +276,6 @@ public abstract class DataRange implements Serializable {
     public final hydra.ext.org.w3.owl.syntax.DatatypeRestriction value;
     
     public DatatypeRestriction (hydra.ext.org.w3.owl.syntax.DatatypeRestriction value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -225,13 +284,26 @@ public abstract class DataRange implements Serializable {
       if (!(other instanceof DatatypeRestriction)) {
         return false;
       }
-      DatatypeRestriction o = (DatatypeRestriction) (other);
-      return value.equals(o.value);
+      DatatypeRestriction o = (DatatypeRestriction) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataRange other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      DatatypeRestriction o = (DatatypeRestriction) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

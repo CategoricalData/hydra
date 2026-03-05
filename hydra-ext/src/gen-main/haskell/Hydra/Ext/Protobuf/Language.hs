@@ -74,8 +74,8 @@ protobufLanguage = Coders.Language {
       Variants.TypeVariantVariable,
       Variants.TypeVariantWrap])
     typePredicate = (\typ -> (\x -> case x of
-      Core.TypeMap v1 ->  
-        let valuesType = (Core.mapTypeValues v1) 
+      Core.TypeMap v0 ->  
+        let valuesType = (Core.mapTypeValues v0) 
             stripped = (Rewriting.deannotateType valuesType)
         in ((\x -> case x of
           Core.TypeMaybe _ -> False

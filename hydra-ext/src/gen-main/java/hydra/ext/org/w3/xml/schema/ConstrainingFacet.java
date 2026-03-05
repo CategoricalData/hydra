@@ -7,11 +7,15 @@ import java.io.Serializable;
 /**
  * See https://www.w3.org/TR/xmlschema-2/#non-fundamental
  */
-public class ConstrainingFacet implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.xml.schema.ConstrainingFacet");
+public class ConstrainingFacet implements Serializable, Comparable<ConstrainingFacet> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.xml.schema.ConstrainingFacet");
   
-  public ConstrainingFacet () {
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
+  public final java.lang.Void value;
+  
+  public ConstrainingFacet (java.lang.Void value) {
+    this.value = value;
   }
   
   @Override
@@ -19,12 +23,22 @@ public class ConstrainingFacet implements Serializable {
     if (!(other instanceof ConstrainingFacet)) {
       return false;
     }
-    ConstrainingFacet o = (ConstrainingFacet) (other);
-    return true;
+    ConstrainingFacet o = (ConstrainingFacet) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 0;
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(ConstrainingFacet other) {
+    return Integer.compare(
+      value.hashCode(),
+      other.value.hashCode());
   }
 }

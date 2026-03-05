@@ -26,7 +26,7 @@ encodeAnnotatedRhs :: (Syntax.AnnotatedRhs -> Ast.Expr)
 encodeAnnotatedRhs arhs = (Serialization.spaceSep [
   Serialization.cst "=",
   ((\x -> case x of
-    Syntax.AnnotatedRhsStar v1 -> (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeStarExpression v1))
+    Syntax.AnnotatedRhsStar v0 -> (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeStarExpression v0))
     Syntax.AnnotatedRhsYield _ -> (Serialization.cst "yield ...")) arhs)])
 
 -- | Serialize an annotated statement (with optional doc comment)
@@ -58,8 +58,8 @@ encodeArgs args =
 -- | Serialize an assignment
 encodeAssignment :: (Syntax.Assignment -> Ast.Expr)
 encodeAssignment a = ((\x -> case x of
-  Syntax.AssignmentTyped v1 -> (encodeTypedAssignment v1)
-  Syntax.AssignmentUntyped v1 -> (encodeUntypedAssignment v1)
+  Syntax.AssignmentTyped v0 -> (encodeTypedAssignment v0)
+  Syntax.AssignmentUntyped v0 -> (encodeUntypedAssignment v0)
   Syntax.AssignmentAug _ -> (Serialization.cst "... += ...")) a)
 
 -- | Serialize an assignment expression (walrus operator)
@@ -75,22 +75,22 @@ encodeAssignmentExpression ae =
 -- | Serialize a Python atom (literal or basic expression)
 encodeAtom :: (Syntax.Atom -> Ast.Expr)
 encodeAtom atom = ((\x -> case x of
-  Syntax.AtomDict v1 -> (encodeDict v1)
+  Syntax.AtomDict v0 -> (encodeDict v0)
   Syntax.AtomDictcomp _ -> (Serialization.cst "{...}")
   Syntax.AtomEllipsis -> (Serialization.cst "...")
   Syntax.AtomFalse -> (Serialization.cst "False")
   Syntax.AtomGenexp _ -> (Serialization.cst "(...)")
-  Syntax.AtomGroup v1 -> (encodeGroup v1)
-  Syntax.AtomList v1 -> (encodeList v1)
+  Syntax.AtomGroup v0 -> (encodeGroup v0)
+  Syntax.AtomList v0 -> (encodeList v0)
   Syntax.AtomListcomp _ -> (Serialization.cst "[...]")
-  Syntax.AtomName v1 -> (encodeName v1)
+  Syntax.AtomName v0 -> (encodeName v0)
   Syntax.AtomNone -> (Serialization.cst "None")
-  Syntax.AtomNumber v1 -> (encodeNumber v1)
-  Syntax.AtomSet v1 -> (encodeSet v1)
+  Syntax.AtomNumber v0 -> (encodeNumber v0)
+  Syntax.AtomSet v0 -> (encodeSet v0)
   Syntax.AtomSetcomp _ -> (Serialization.cst "{...}")
-  Syntax.AtomString v1 -> (encodeString v1)
+  Syntax.AtomString v0 -> (encodeString v0)
   Syntax.AtomTrue -> (Serialization.cst "True")
-  Syntax.AtomTuple v1 -> (encodeTuple v1)) atom)
+  Syntax.AtomTuple v0 -> (encodeTuple v0)) atom)
 
 -- | Serialize an attribute access
 encodeAttribute :: (Syntax.Attribute -> Ast.Expr)
@@ -141,8 +141,8 @@ encodeBitwiseXor bxor =
 -- | Serialize a block
 encodeBlock :: (Syntax.Block -> Ast.Expr)
 encodeBlock b = ((\x -> case x of
-  Syntax.BlockIndented v1 -> (Serialization.tabIndentDoubleSpace (Lists.map (\stmts -> Serialization.newlineSep (Lists.map encodeStatement stmts)) v1))
-  Syntax.BlockSimple v1 -> (Serialization.semicolonSep (Lists.map encodeSimpleStatement v1))) b)
+  Syntax.BlockIndented v0 -> (Serialization.tabIndentDoubleSpace (Lists.map (\stmts -> Serialization.newlineSep (Lists.map encodeStatement stmts)) v0))
+  Syntax.BlockSimple v0 -> (Serialization.semicolonSep (Lists.map encodeSimpleStatement v0))) b)
 
 -- | Serialize a capture pattern
 encodeCapturePattern :: (Syntax.CapturePattern -> Ast.Expr)
@@ -201,13 +201,13 @@ encodeClassPattern cp =
 encodeClosedPattern :: (Syntax.ClosedPattern -> Ast.Expr)
 encodeClosedPattern cp = ((\x -> case x of
   Syntax.ClosedPatternLiteral _ -> (Serialization.cst "...")
-  Syntax.ClosedPatternCapture v1 -> (encodeCapturePattern v1)
+  Syntax.ClosedPatternCapture v0 -> (encodeCapturePattern v0)
   Syntax.ClosedPatternWildcard -> (Serialization.cst "_")
-  Syntax.ClosedPatternValue v1 -> (encodeValuePattern v1)
+  Syntax.ClosedPatternValue v0 -> (encodeValuePattern v0)
   Syntax.ClosedPatternGroup _ -> (Serialization.cst "(...)")
   Syntax.ClosedPatternSequence _ -> (Serialization.cst "[...]")
   Syntax.ClosedPatternMapping _ -> (Serialization.cst "{...}")
-  Syntax.ClosedPatternClass v1 -> (encodeClassPattern v1)) cp)
+  Syntax.ClosedPatternClass v0 -> (encodeClassPattern v0)) cp)
 
 -- | Serialize a comparison expression
 encodeComparison :: (Syntax.Comparison -> Ast.Expr)
@@ -229,14 +229,14 @@ encodeConditional c =
 -- | Serialize a compound (multi-line) Python statement
 encodeCompoundStatement :: (Syntax.CompoundStatement -> Ast.Expr)
 encodeCompoundStatement cs = ((\x -> case x of
-  Syntax.CompoundStatementFunction v1 -> (encodeFunctionDefinition v1)
+  Syntax.CompoundStatementFunction v0 -> (encodeFunctionDefinition v0)
   Syntax.CompoundStatementIf _ -> (Serialization.cst "if ...")
-  Syntax.CompoundStatementClassDef v1 -> (encodeClassDefinition v1)
+  Syntax.CompoundStatementClassDef v0 -> (encodeClassDefinition v0)
   Syntax.CompoundStatementWith _ -> (Serialization.cst "with ...")
   Syntax.CompoundStatementFor _ -> (Serialization.cst "for ...")
   Syntax.CompoundStatementTry _ -> (Serialization.cst "try ...")
-  Syntax.CompoundStatementWhile v1 -> (encodeWhileStatement v1)
-  Syntax.CompoundStatementMatch v1 -> (encodeMatchStatement v1)) cs)
+  Syntax.CompoundStatementWhile v0 -> (encodeWhileStatement v0)
+  Syntax.CompoundStatementMatch v0 -> (encodeMatchStatement v0)) cs)
 
 -- | Serialize a conjunction (and expression)
 encodeConjunction :: (Syntax.Conjunction -> Ast.Expr)
@@ -274,31 +274,31 @@ encodeDottedName dn = (Serialization.cst (Strings.intercalate "." (Lists.map (\n
 -- | Serialize a double-starred key-value pair
 encodeDoubleStarredKvpair :: (Syntax.DoubleStarredKvpair -> Ast.Expr)
 encodeDoubleStarredKvpair dskv = ((\x -> case x of
-  Syntax.DoubleStarredKvpairPair v1 -> (encodeKvpair v1)
-  Syntax.DoubleStarredKvpairStarred v1 -> (Serialization.noSep [
+  Syntax.DoubleStarredKvpairPair v0 -> (encodeKvpair v0)
+  Syntax.DoubleStarredKvpairStarred v0 -> (Serialization.noSep [
     Serialization.cst "**",
-    (encodeBitwiseOr v1)])) dskv)
+    (encodeBitwiseOr v0)])) dskv)
 
 -- | Serialize a Python expression
 encodeExpression :: (Syntax.Expression -> Ast.Expr)
 encodeExpression expr = ((\x -> case x of
-  Syntax.ExpressionSimple v1 -> (encodeDisjunction v1)
-  Syntax.ExpressionConditional v1 -> (encodeConditional v1)
-  Syntax.ExpressionLambda v1 -> (encodeLambda v1)) expr)
+  Syntax.ExpressionSimple v0 -> (encodeDisjunction v0)
+  Syntax.ExpressionConditional v0 -> (encodeConditional v0)
+  Syntax.ExpressionLambda v0 -> (encodeLambda v0)) expr)
 
 -- | Serialize a factor expression
 encodeFactor :: (Syntax.Factor -> Ast.Expr)
 encodeFactor f = ((\x -> case x of
-  Syntax.FactorPositive v1 -> (Serialization.noSep [
+  Syntax.FactorPositive v0 -> (Serialization.noSep [
     Serialization.cst "+",
-    (encodeFactor v1)])
-  Syntax.FactorNegative v1 -> (Serialization.noSep [
+    (encodeFactor v0)])
+  Syntax.FactorNegative v0 -> (Serialization.noSep [
     Serialization.cst "-",
-    (encodeFactor v1)])
-  Syntax.FactorComplement v1 -> (Serialization.noSep [
+    (encodeFactor v0)])
+  Syntax.FactorComplement v0 -> (Serialization.noSep [
     Serialization.cst "~",
-    (encodeFactor v1)])
-  Syntax.FactorSimple v1 -> (encodePower v1)) f)
+    (encodeFactor v0)])
+  Syntax.FactorSimple v0 -> (encodePower v0)) f)
 
 -- | Serialize a raw function definition
 encodeFunctionDefRaw :: (Syntax.FunctionDefRaw -> Ast.Expr)
@@ -342,7 +342,7 @@ encodeFunctionDefinition fd =
 -- | Serialize a parenthesized group
 encodeGroup :: (Syntax.Group -> Ast.Expr)
 encodeGroup g = ((\x -> case x of
-  Syntax.GroupExpression v1 -> (encodeNamedExpression v1)
+  Syntax.GroupExpression v0 -> (encodeNamedExpression v0)
   Syntax.GroupYield _ -> (Serialization.cst "(yield ...)")) g)
 
 -- | Serialize a guard clause
@@ -380,10 +380,10 @@ encodeImportFromAsName ifan =
 -- | Serialize import from targets
 encodeImportFromTargets :: (Syntax.ImportFromTargets -> Ast.Expr)
 encodeImportFromTargets t = ((\x -> case x of
-  Syntax.ImportFromTargetsSimple v1 -> (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeImportFromAsName v1))
-  Syntax.ImportFromTargetsParens v1 -> (Serialization.noSep [
+  Syntax.ImportFromTargetsSimple v0 -> (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeImportFromAsName v0))
+  Syntax.ImportFromTargetsParens v0 -> (Serialization.noSep [
     Serialization.cst "(",
-    (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeImportFromAsName v1)),
+    (Serialization.commaSep Serialization.inlineStyle (Lists.map encodeImportFromAsName v0)),
     (Serialization.cst ")")])
   Syntax.ImportFromTargetsStar -> (Serialization.cst "*")) t)
 
@@ -396,16 +396,16 @@ encodeImportName in_ = (Serialization.spaceSep [
 -- | Serialize an import statement
 encodeImportStatement :: (Syntax.ImportStatement -> Ast.Expr)
 encodeImportStatement is_ = ((\x -> case x of
-  Syntax.ImportStatementName v1 -> (encodeImportName v1)
-  Syntax.ImportStatementFrom v1 -> (encodeImportFrom v1)) is_)
+  Syntax.ImportStatementName v0 -> (encodeImportName v0)
+  Syntax.ImportStatementFrom v0 -> (encodeImportFrom v0)) is_)
 
 -- | Serialize an inversion (not expression)
 encodeInversion :: (Syntax.Inversion -> Ast.Expr)
 encodeInversion i = ((\x -> case x of
-  Syntax.InversionNot v1 -> (Serialization.spaceSep [
+  Syntax.InversionNot v0 -> (Serialization.spaceSep [
     Serialization.cst "not",
-    (encodeInversion v1)])
-  Syntax.InversionSimple v1 -> (encodeComparison v1)) i)
+    (encodeInversion v0)])
+  Syntax.InversionSimple v0 -> (encodeComparison v0)) i)
 
 -- | Serialize a keyword pattern
 encodeKeywordPattern :: (Syntax.KeywordPattern -> Ast.Expr)
@@ -445,16 +445,16 @@ encodeKwarg k =
 -- | Serialize a kwarg or double starred
 encodeKwargOrDoubleStarred :: (Syntax.KwargOrDoubleStarred -> Ast.Expr)
 encodeKwargOrDoubleStarred kds = ((\x -> case x of
-  Syntax.KwargOrDoubleStarredKwarg v1 -> (encodeKwarg v1)
-  Syntax.KwargOrDoubleStarredDoubleStarred v1 -> (Serialization.noSep [
+  Syntax.KwargOrDoubleStarredKwarg v0 -> (encodeKwarg v0)
+  Syntax.KwargOrDoubleStarredDoubleStarred v0 -> (Serialization.noSep [
     Serialization.cst "**",
-    (encodeExpression v1)])) kds)
+    (encodeExpression v0)])) kds)
 
 -- | Serialize a kwarg or starred
 encodeKwargOrStarred :: (Syntax.KwargOrStarred -> Ast.Expr)
 encodeKwargOrStarred ks = ((\x -> case x of
-  Syntax.KwargOrStarredKwarg v1 -> (encodeKwarg v1)
-  Syntax.KwargOrStarredStarred v1 -> (encodeStarredExpression v1)) ks)
+  Syntax.KwargOrStarredKwarg v0 -> (encodeKwarg v0)
+  Syntax.KwargOrStarredStarred v0 -> (encodeStarredExpression v0)) ks)
 
 -- | Serialize a lambda expression
 encodeLambda :: (Syntax.Lambda -> Ast.Expr)
@@ -481,7 +481,7 @@ encodeLambdaParameters lp =
 -- | Serialize lambda star etc
 encodeLambdaStarEtc :: (Syntax.LambdaStarEtc -> Ast.Expr)
 encodeLambdaStarEtc lse = ((\x -> case x of
-  Syntax.LambdaStarEtcParamNoDefault v1 -> (encodeLambdaParamNoDefault v1)
+  Syntax.LambdaStarEtcParamNoDefault v0 -> (encodeLambdaParamNoDefault v0)
   Syntax.LambdaStarEtcStar _ -> (Serialization.cst "*...")
   Syntax.LambdaStarEtcParamMaybeDefault _ -> (Serialization.cst "...")
   Syntax.LambdaStarEtcKwds _ -> (Serialization.cst "**...")) lse)
@@ -517,8 +517,8 @@ encodeName n = (Serialization.cst (Syntax.unName n))
 -- | Serialize a named expression
 encodeNamedExpression :: (Syntax.NamedExpression -> Ast.Expr)
 encodeNamedExpression ne = ((\x -> case x of
-  Syntax.NamedExpressionSimple v1 -> (encodeExpression v1)
-  Syntax.NamedExpressionAssignment v1 -> (encodeAssignmentExpression v1)) ne)
+  Syntax.NamedExpressionSimple v0 -> (encodeExpression v0)
+  Syntax.NamedExpressionAssignment v0 -> (encodeAssignmentExpression v0)) ne)
 
 -- | Serialize a name or attribute
 encodeNameOrAttribute :: (Syntax.NameOrAttribute -> Ast.Expr)
@@ -527,8 +527,8 @@ encodeNameOrAttribute noa = (Serialization.dotSep (Lists.map encodeName (Syntax.
 -- | Serialize a Python number literal
 encodeNumber :: (Syntax.Number -> Ast.Expr)
 encodeNumber num = ((\x -> case x of
-  Syntax.NumberFloat v1 -> (Serialization.cst (Literals.showBigfloat v1))
-  Syntax.NumberInteger v1 -> (Serialization.cst (Literals.showBigint v1))) num)
+  Syntax.NumberFloat v0 -> (Serialization.cst (Literals.showBigfloat v0))
+  Syntax.NumberInteger v0 -> (Serialization.cst (Literals.showBigint v0))) num)
 
 -- | Serialize an or pattern
 encodeOrPattern :: (Syntax.OrPattern -> Ast.Expr)
@@ -556,14 +556,14 @@ encodeParamNoDefaultParameters pndp =
 -- | Serialize function parameters
 encodeParameters :: (Syntax.Parameters -> Ast.Expr)
 encodeParameters p = ((\x -> case x of
-  Syntax.ParametersParamNoDefault v1 -> (encodeParamNoDefaultParameters v1)
+  Syntax.ParametersParamNoDefault v0 -> (encodeParamNoDefaultParameters v0)
   Syntax.ParametersSlashNoDefault _ -> (Serialization.cst "...")
   Syntax.ParametersSlashWithDefault _ -> (Serialization.cst "...")) p)
 
 -- | Serialize a pattern
 encodePattern :: (Syntax.Pattern -> Ast.Expr)
 encodePattern p = ((\x -> case x of
-  Syntax.PatternOr v1 -> (encodeOrPattern v1)
+  Syntax.PatternOr v0 -> (encodeOrPattern v0)
   Syntax.PatternAs _ -> (Serialization.cst "... as ...")) p)
 
 -- | Serialize a pattern capture target
@@ -573,15 +573,15 @@ encodePatternCaptureTarget pct = (encodeName (Syntax.unPatternCaptureTarget pct)
 -- | Serialize patterns
 encodePatterns :: (Syntax.Patterns -> Ast.Expr)
 encodePatterns ps = ((\x -> case x of
-  Syntax.PatternsPattern v1 -> (encodePattern v1)
+  Syntax.PatternsPattern v0 -> (encodePattern v0)
   Syntax.PatternsSequence _ -> (Serialization.cst "...")) ps)
 
 -- | Serialize a positional argument
 encodePosArg :: (Syntax.PosArg -> Ast.Expr)
 encodePosArg pa = ((\x -> case x of
-  Syntax.PosArgStarred v1 -> (encodeStarredExpression v1)
-  Syntax.PosArgAssignment v1 -> (encodeAssignmentExpression v1)
-  Syntax.PosArgExpression v1 -> (encodeExpression v1)) pa)
+  Syntax.PosArgStarred v0 -> (encodeStarredExpression v0)
+  Syntax.PosArgAssignment v0 -> (encodeAssignmentExpression v0)
+  Syntax.PosArgExpression v0 -> (encodeExpression v0)) pa)
 
 -- | Serialize positional patterns
 encodePositionalPatterns :: (Syntax.PositionalPatterns -> Ast.Expr)
@@ -601,22 +601,22 @@ encodePower p =
 -- | Serialize a primary expression
 encodePrimary :: (Syntax.Primary -> Ast.Expr)
 encodePrimary p = ((\x -> case x of
-  Syntax.PrimarySimple v1 -> (encodeAtom v1)
-  Syntax.PrimaryCompound v1 -> (encodePrimaryWithRhs v1)) p)
+  Syntax.PrimarySimple v0 -> (encodeAtom v0)
+  Syntax.PrimaryCompound v0 -> (encodePrimaryWithRhs v0)) p)
 
 -- | Serialize a primary RHS
 encodePrimaryRhs :: (Syntax.PrimaryRhs -> Ast.Expr)
 encodePrimaryRhs rhs = ((\x -> case x of
-  Syntax.PrimaryRhsCall v1 -> (Serialization.noSep [
+  Syntax.PrimaryRhsCall v0 -> (Serialization.noSep [
     Serialization.cst "(",
-    (encodeArgs v1),
+    (encodeArgs v0),
     (Serialization.cst ")")])
-  Syntax.PrimaryRhsProject v1 -> (Serialization.noSep [
+  Syntax.PrimaryRhsProject v0 -> (Serialization.noSep [
     Serialization.cst ".",
-    (encodeName v1)])
-  Syntax.PrimaryRhsSlices v1 -> (Serialization.noSep [
+    (encodeName v0)])
+  Syntax.PrimaryRhsSlices v0 -> (Serialization.noSep [
     Serialization.cst "[",
-    (encodeSlices v1),
+    (encodeSlices v0),
     (Serialization.cst "]")])
   Syntax.PrimaryRhsGenexp _ -> (Serialization.cst "[...]")) rhs)
 
@@ -669,15 +669,15 @@ encodeShiftExpression se = (encodeSum (Syntax.shiftExpressionRhs se))
 -- | Serialize a simple (single-line) Python statement
 encodeSimpleStatement :: (Syntax.SimpleStatement -> Ast.Expr)
 encodeSimpleStatement ss = ((\x -> case x of
-  Syntax.SimpleStatementAssignment v1 -> (encodeAssignment v1)
-  Syntax.SimpleStatementStarExpressions v1 -> (Serialization.newlineSep (Lists.map encodeStarExpression v1))
-  Syntax.SimpleStatementReturn v1 -> (encodeReturnStatement v1)
-  Syntax.SimpleStatementRaise v1 -> (encodeRaiseStatement v1)
+  Syntax.SimpleStatementAssignment v0 -> (encodeAssignment v0)
+  Syntax.SimpleStatementStarExpressions v0 -> (Serialization.newlineSep (Lists.map encodeStarExpression v0))
+  Syntax.SimpleStatementReturn v0 -> (encodeReturnStatement v0)
+  Syntax.SimpleStatementRaise v0 -> (encodeRaiseStatement v0)
   Syntax.SimpleStatementPass -> (Serialization.cst "pass")
   Syntax.SimpleStatementBreak -> (Serialization.cst "break")
   Syntax.SimpleStatementContinue -> (Serialization.cst "continue")
-  Syntax.SimpleStatementImport v1 -> (encodeImportStatement v1)
-  Syntax.SimpleStatementTypeAlias v1 -> (encodeTypeAlias v1)
+  Syntax.SimpleStatementImport v0 -> (encodeImportStatement v0)
+  Syntax.SimpleStatementTypeAlias v0 -> (encodeTypeAlias v0)
   Syntax.SimpleStatementAssert _ -> (Serialization.cst "assert ...")
   Syntax.SimpleStatementGlobal _ -> (Serialization.cst "global ...")
   Syntax.SimpleStatementNonlocal _ -> (Serialization.cst "nonlocal ...")
@@ -690,21 +690,21 @@ encodeSimpleTypeParameter stp = (encodeName (Syntax.simpleTypeParameterName stp)
 -- | Serialize a single target
 encodeSingleTarget :: (Syntax.SingleTarget -> Ast.Expr)
 encodeSingleTarget st = ((\x -> case x of
-  Syntax.SingleTargetName v1 -> (encodeName v1)
+  Syntax.SingleTargetName v0 -> (encodeName v0)
   Syntax.SingleTargetParens _ -> (Serialization.cst "(...)")
   Syntax.SingleTargetSubscriptAttributeTarget _ -> (Serialization.cst "...")) st)
 
 -- | Serialize a slice
 encodeSlice :: (Syntax.Slice -> Ast.Expr)
 encodeSlice s = ((\x -> case x of
-  Syntax.SliceNamed v1 -> (encodeNamedExpression v1)
+  Syntax.SliceNamed v0 -> (encodeNamedExpression v0)
   Syntax.SliceSlice_ _ -> (Serialization.cst ":")) s)
 
 -- | Serialize a slice or starred expression
 encodeSliceOrStarredExpression :: (Syntax.SliceOrStarredExpression -> Ast.Expr)
 encodeSliceOrStarredExpression s = ((\x -> case x of
-  Syntax.SliceOrStarredExpressionSlice v1 -> (encodeSlice v1)
-  Syntax.SliceOrStarredExpressionStarred v1 -> (encodeStarredExpression v1)) s)
+  Syntax.SliceOrStarredExpressionSlice v0 -> (encodeSlice v0)
+  Syntax.SliceOrStarredExpressionStarred v0 -> (encodeStarredExpression v0)) s)
 
 -- | Serialize slices
 encodeSlices :: (Syntax.Slices -> Ast.Expr)
@@ -716,7 +716,7 @@ encodeSlices s =
 -- | Serialize a star atom
 encodeStarAtom :: (Syntax.StarAtom -> Ast.Expr)
 encodeStarAtom sa = ((\x -> case x of
-  Syntax.StarAtomName v1 -> (encodeName v1)
+  Syntax.StarAtomName v0 -> (encodeName v0)
   Syntax.StarAtomTargetWithStarAtom _ -> (Serialization.cst "(...)")
   Syntax.StarAtomStarTargetsTupleSeq _ -> (Serialization.cst "(...)")
   Syntax.StarAtomStarTargetsListSeq _ -> (Serialization.cst "[...]")) sa)
@@ -724,26 +724,26 @@ encodeStarAtom sa = ((\x -> case x of
 -- | Serialize a star expression
 encodeStarExpression :: (Syntax.StarExpression -> Ast.Expr)
 encodeStarExpression se = ((\x -> case x of
-  Syntax.StarExpressionStar v1 -> (Serialization.noSep [
+  Syntax.StarExpressionStar v0 -> (Serialization.noSep [
     Serialization.cst "*",
-    (encodeBitwiseOr v1)])
-  Syntax.StarExpressionSimple v1 -> (encodeExpression v1)) se)
+    (encodeBitwiseOr v0)])
+  Syntax.StarExpressionSimple v0 -> (encodeExpression v0)) se)
 
 -- | Serialize a star named expression
 encodeStarNamedExpression :: (Syntax.StarNamedExpression -> Ast.Expr)
 encodeStarNamedExpression sne = ((\x -> case x of
-  Syntax.StarNamedExpressionStar v1 -> (Serialization.noSep [
+  Syntax.StarNamedExpressionStar v0 -> (Serialization.noSep [
     Serialization.cst "*",
-    (encodeBitwiseOr v1)])
-  Syntax.StarNamedExpressionSimple v1 -> (encodeNamedExpression v1)) sne)
+    (encodeBitwiseOr v0)])
+  Syntax.StarNamedExpressionSimple v0 -> (encodeNamedExpression v0)) sne)
 
 -- | Serialize a star target
 encodeStarTarget :: (Syntax.StarTarget -> Ast.Expr)
 encodeStarTarget st = ((\x -> case x of
-  Syntax.StarTargetUnstarred v1 -> (encodeTargetWithStarAtom v1)
-  Syntax.StarTargetStarred v1 -> (Serialization.noSep [
+  Syntax.StarTargetUnstarred v0 -> (encodeTargetWithStarAtom v0)
+  Syntax.StarTargetStarred v0 -> (Serialization.noSep [
     Serialization.cst "*",
-    (encodeStarTarget v1)])) st)
+    (encodeStarTarget v0)])) st)
 
 -- | Serialize a starred expression
 encodeStarredExpression :: (Syntax.StarredExpression -> Ast.Expr)
@@ -754,9 +754,9 @@ encodeStarredExpression se = (Serialization.noSep [
 -- | Serialize a Python statement
 encodeStatement :: (Syntax.Statement -> Ast.Expr)
 encodeStatement stmt = ((\x -> case x of
-  Syntax.StatementAnnotated v1 -> (encodeAnnotatedStatement v1)
-  Syntax.StatementSimple v1 -> (Serialization.newlineSep (Lists.map encodeSimpleStatement v1))
-  Syntax.StatementCompound v1 -> (encodeCompoundStatement v1)) stmt)
+  Syntax.StatementAnnotated v0 -> (encodeAnnotatedStatement v0)
+  Syntax.StatementSimple v0 -> (Serialization.newlineSep (Lists.map encodeSimpleStatement v0))
+  Syntax.StatementCompound v0 -> (encodeCompoundStatement v0)) stmt)
 
 -- | Serialize a Python string literal
 encodeString :: (Syntax.String_ -> Ast.Expr)
@@ -774,7 +774,7 @@ encodeString s =
 -- | Serialize a subject expression
 encodeSubjectExpression :: (Syntax.SubjectExpression -> Ast.Expr)
 encodeSubjectExpression se = ((\x -> case x of
-  Syntax.SubjectExpressionSimple v1 -> (encodeNamedExpression v1)
+  Syntax.SubjectExpressionSimple v0 -> (encodeNamedExpression v0)
   Syntax.SubjectExpressionTuple _ -> (Serialization.cst "*...")) se)
 
 -- | Serialize a sum expression
@@ -788,8 +788,8 @@ encodeTerm t = (encodeFactor (Syntax.termRhs t))
 -- | Serialize a target with star atom
 encodeTargetWithStarAtom :: (Syntax.TargetWithStarAtom -> Ast.Expr)
 encodeTargetWithStarAtom t = ((\x -> case x of
-  Syntax.TargetWithStarAtomAtom v1 -> (encodeStarAtom v1)
-  Syntax.TargetWithStarAtomProject v1 -> (encodeTPrimaryAndName v1)
+  Syntax.TargetWithStarAtomAtom v0 -> (encodeStarAtom v0)
+  Syntax.TargetWithStarAtomProject v0 -> (encodeTPrimaryAndName v0)
   Syntax.TargetWithStarAtomSlices _ -> (Serialization.cst "...")) t)
 
 -- | Serialize a TPrimaryAndName as primary.name
@@ -805,8 +805,8 @@ encodeTPrimaryAndName pn =
 -- | Serialize a target-side primary expression
 encodeTPrimary :: (Syntax.TPrimary -> Ast.Expr)
 encodeTPrimary tp = ((\x -> case x of
-  Syntax.TPrimaryAtom v1 -> (encodeAtom v1)
-  Syntax.TPrimaryPrimaryAndName v1 -> (encodeTPrimaryAndName v1)
+  Syntax.TPrimaryAtom v0 -> (encodeAtom v0)
+  Syntax.TPrimaryPrimaryAndName v0 -> (encodeTPrimaryAndName v0)
   Syntax.TPrimaryPrimaryAndSlices _ -> (Serialization.cst "...")
   Syntax.TPrimaryPrimaryAndGenexp _ -> (Serialization.cst "...")
   Syntax.TPrimaryPrimaryAndArguments _ -> (Serialization.cst "...")) tp)
@@ -837,7 +837,7 @@ encodeTypeAlias ta =
 -- | Serialize a type parameter
 encodeTypeParameter :: (Syntax.TypeParameter -> Ast.Expr)
 encodeTypeParameter tp = ((\x -> case x of
-  Syntax.TypeParameterSimple v1 -> (encodeSimpleTypeParameter v1)
+  Syntax.TypeParameterSimple v0 -> (encodeSimpleTypeParameter v0)
   Syntax.TypeParameterStar _ -> (Serialization.cst "*...")
   Syntax.TypeParameterDoubleStar _ -> (Serialization.cst "**...")) tp)
 

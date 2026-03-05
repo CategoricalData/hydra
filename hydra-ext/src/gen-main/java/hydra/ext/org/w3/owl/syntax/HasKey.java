@@ -7,16 +7,16 @@ import java.io.Serializable;
 /**
  * See https://www.w3.org/TR/owl2-syntax/#Keys
  */
-public class HasKey implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.HasKey");
+public class HasKey implements Serializable, Comparable<HasKey> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.HasKey");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_CLASS = new hydra.core.Name("class");
+  public static final hydra.core.Name CLASS = new hydra.core.Name("class");
   
-  public static final hydra.core.Name FIELD_NAME_OBJECT_PROPERTIES = new hydra.core.Name("objectProperties");
+  public static final hydra.core.Name OBJECT_PROPERTIES = new hydra.core.Name("objectProperties");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_PROPERTIES = new hydra.core.Name("dataProperties");
+  public static final hydra.core.Name DATA_PROPERTIES = new hydra.core.Name("dataProperties");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
@@ -27,10 +27,6 @@ public class HasKey implements Serializable {
   public final java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> dataProperties;
   
   public HasKey (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression class_, java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> objectProperties, java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> dataProperties) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((class_));
-    java.util.Objects.requireNonNull((objectProperties));
-    java.util.Objects.requireNonNull((dataProperties));
     this.annotations = annotations;
     this.class_ = class_;
     this.objectProperties = objectProperties;
@@ -42,32 +38,61 @@ public class HasKey implements Serializable {
     if (!(other instanceof HasKey)) {
       return false;
     }
-    HasKey o = (HasKey) (other);
-    return annotations.equals(o.annotations) && class_.equals(o.class_) && objectProperties.equals(o.objectProperties) && dataProperties.equals(o.dataProperties);
+    HasKey o = (HasKey) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.class_,
+      o.class_) && java.util.Objects.equals(
+      this.objectProperties,
+      o.objectProperties) && java.util.Objects.equals(
+      this.dataProperties,
+      o.dataProperties);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * class_.hashCode() + 5 * objectProperties.hashCode() + 7 * dataProperties.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(class_) + 5 * java.util.Objects.hashCode(objectProperties) + 7 * java.util.Objects.hashCode(dataProperties);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(HasKey other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) class_).compareTo(other.class_);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = Integer.compare(
+      objectProperties.hashCode(),
+      other.objectProperties.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      dataProperties.hashCode(),
+      other.dataProperties.hashCode());
   }
   
   public HasKey withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new HasKey(annotations, class_, objectProperties, dataProperties);
   }
   
   public HasKey withClass(hydra.ext.org.w3.owl.syntax.ClassExpression class_) {
-    java.util.Objects.requireNonNull((class_));
     return new HasKey(annotations, class_, objectProperties, dataProperties);
   }
   
   public HasKey withObjectProperties(java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> objectProperties) {
-    java.util.Objects.requireNonNull((objectProperties));
     return new HasKey(annotations, class_, objectProperties, dataProperties);
   }
   
   public HasKey withDataProperties(java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> dataProperties) {
-    java.util.Objects.requireNonNull((dataProperties));
     return new HasKey(annotations, class_, objectProperties, dataProperties);
   }
 }

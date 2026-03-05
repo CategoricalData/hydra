@@ -1084,51 +1084,11 @@
                                                                                                                         "term": {
                                                                                                                           "union": {
                                                                                                                             "field": {
-                                                                                                                              "name": "application",
+                                                                                                                              "name": "variable",
                                                                                                                               "term": {
-                                                                                                                                "record": {
-                                                                                                                                  "fields": [
-                                                                                                                                    {
-                                                                                                                                      "name": "function",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "application",
-                                                                                                                                            "term": {
-                                                                                                                                              "record": {
-                                                                                                                                                "fields": [
-                                                                                                                                                  {
-                                                                                                                                                    "name": "function",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {
-                                                                                                                                                              "body": {"literal": {"string": "hydra.compute.Coder"}},
-                                                                                                                                                              "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}},
-                                                                                                                                                  {
-                                                                                                                                                    "name": "argument",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                                                                                                "typeName": "hydra.core.ApplicationType"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}},
-                                                                                                                                    {
-                                                                                                                                      "name": "argument",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "variable",
-                                                                                                                                            "term": {
-                                                                                                                                              "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}}],
-                                                                                                                                  "typeName": "hydra.core.ApplicationType"}}},
+                                                                                                                                "wrap": {
+                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
                                                                                                                         "name": "argument",
@@ -1187,51 +1147,11 @@
                                                                                                                         "term": {
                                                                                                                           "union": {
                                                                                                                             "field": {
-                                                                                                                              "name": "application",
+                                                                                                                              "name": "variable",
                                                                                                                               "term": {
-                                                                                                                                "record": {
-                                                                                                                                  "fields": [
-                                                                                                                                    {
-                                                                                                                                      "name": "function",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "application",
-                                                                                                                                            "term": {
-                                                                                                                                              "record": {
-                                                                                                                                                "fields": [
-                                                                                                                                                  {
-                                                                                                                                                    "name": "function",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {
-                                                                                                                                                              "body": {"literal": {"string": "hydra.compute.Coder"}},
-                                                                                                                                                              "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}},
-                                                                                                                                                  {
-                                                                                                                                                    "name": "argument",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                                                                                                "typeName": "hydra.core.ApplicationType"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}},
-                                                                                                                                    {
-                                                                                                                                      "name": "argument",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "variable",
-                                                                                                                                            "term": {
-                                                                                                                                              "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}}],
-                                                                                                                                  "typeName": "hydra.core.ApplicationType"}}},
+                                                                                                                                "wrap": {
+                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
                                                                                                                         "name": "argument",
@@ -1290,51 +1210,11 @@
                                                                                                                         "term": {
                                                                                                                           "union": {
                                                                                                                             "field": {
-                                                                                                                              "name": "application",
+                                                                                                                              "name": "variable",
                                                                                                                               "term": {
-                                                                                                                                "record": {
-                                                                                                                                  "fields": [
-                                                                                                                                    {
-                                                                                                                                      "name": "function",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "application",
-                                                                                                                                            "term": {
-                                                                                                                                              "record": {
-                                                                                                                                                "fields": [
-                                                                                                                                                  {
-                                                                                                                                                    "name": "function",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {
-                                                                                                                                                              "body": {"literal": {"string": "hydra.compute.Coder"}},
-                                                                                                                                                              "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}},
-                                                                                                                                                  {
-                                                                                                                                                    "name": "argument",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                                                                                                "typeName": "hydra.core.ApplicationType"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}},
-                                                                                                                                    {
-                                                                                                                                      "name": "argument",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "variable",
-                                                                                                                                            "term": {
-                                                                                                                                              "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}}],
-                                                                                                                                  "typeName": "hydra.core.ApplicationType"}}},
+                                                                                                                                "wrap": {
+                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
                                                                                                                         "name": "argument",
@@ -1393,51 +1273,11 @@
                                                                                                                         "term": {
                                                                                                                           "union": {
                                                                                                                             "field": {
-                                                                                                                              "name": "application",
+                                                                                                                              "name": "variable",
                                                                                                                               "term": {
-                                                                                                                                "record": {
-                                                                                                                                  "fields": [
-                                                                                                                                    {
-                                                                                                                                      "name": "function",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "application",
-                                                                                                                                            "term": {
-                                                                                                                                              "record": {
-                                                                                                                                                "fields": [
-                                                                                                                                                  {
-                                                                                                                                                    "name": "function",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {
-                                                                                                                                                              "body": {"literal": {"string": "hydra.compute.Coder"}},
-                                                                                                                                                              "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}},
-                                                                                                                                                  {
-                                                                                                                                                    "name": "argument",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                                                                                                "typeName": "hydra.core.ApplicationType"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}},
-                                                                                                                                    {
-                                                                                                                                      "name": "argument",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "variable",
-                                                                                                                                            "term": {
-                                                                                                                                              "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}}],
-                                                                                                                                  "typeName": "hydra.core.ApplicationType"}}},
+                                                                                                                                "wrap": {
+                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
                                                                                                                         "name": "argument",
@@ -1496,51 +1336,11 @@
                                                                                                                         "term": {
                                                                                                                           "union": {
                                                                                                                             "field": {
-                                                                                                                              "name": "application",
+                                                                                                                              "name": "variable",
                                                                                                                               "term": {
-                                                                                                                                "record": {
-                                                                                                                                  "fields": [
-                                                                                                                                    {
-                                                                                                                                      "name": "function",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "application",
-                                                                                                                                            "term": {
-                                                                                                                                              "record": {
-                                                                                                                                                "fields": [
-                                                                                                                                                  {
-                                                                                                                                                    "name": "function",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {
-                                                                                                                                                              "body": {"literal": {"string": "hydra.compute.Coder"}},
-                                                                                                                                                              "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}},
-                                                                                                                                                  {
-                                                                                                                                                    "name": "argument",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                                                                                                "typeName": "hydra.core.ApplicationType"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}},
-                                                                                                                                    {
-                                                                                                                                      "name": "argument",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "variable",
-                                                                                                                                            "term": {
-                                                                                                                                              "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}}],
-                                                                                                                                  "typeName": "hydra.core.ApplicationType"}}},
+                                                                                                                                "wrap": {
+                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
                                                                                                                         "name": "argument",
@@ -1599,51 +1399,11 @@
                                                                                                                         "term": {
                                                                                                                           "union": {
                                                                                                                             "field": {
-                                                                                                                              "name": "application",
+                                                                                                                              "name": "variable",
                                                                                                                               "term": {
-                                                                                                                                "record": {
-                                                                                                                                  "fields": [
-                                                                                                                                    {
-                                                                                                                                      "name": "function",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "application",
-                                                                                                                                            "term": {
-                                                                                                                                              "record": {
-                                                                                                                                                "fields": [
-                                                                                                                                                  {
-                                                                                                                                                    "name": "function",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {
-                                                                                                                                                              "body": {"literal": {"string": "hydra.compute.Coder"}},
-                                                                                                                                                              "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}},
-                                                                                                                                                  {
-                                                                                                                                                    "name": "argument",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "union": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {
-                                                                                                                                                            "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                                                                                                "typeName": "hydra.core.ApplicationType"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}},
-                                                                                                                                    {
-                                                                                                                                      "name": "argument",
-                                                                                                                                      "term": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {
-                                                                                                                                            "name": "variable",
-                                                                                                                                            "term": {
-                                                                                                                                              "wrap": {"body": {"literal": {"string": "s"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                          "typeName": "hydra.core.Type"}}}],
-                                                                                                                                  "typeName": "hydra.core.ApplicationType"}}},
+                                                                                                                                "wrap": {
+                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
                                                                                                                         "name": "argument",

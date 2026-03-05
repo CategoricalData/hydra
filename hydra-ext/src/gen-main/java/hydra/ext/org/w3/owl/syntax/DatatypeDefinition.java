@@ -4,14 +4,14 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class DatatypeDefinition implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DatatypeDefinition");
+public class DatatypeDefinition implements Serializable, Comparable<DatatypeDefinition> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.DatatypeDefinition");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_DATATYPE = new hydra.core.Name("datatype");
+  public static final hydra.core.Name DATATYPE = new hydra.core.Name("datatype");
   
-  public static final hydra.core.Name FIELD_NAME_RANGE = new hydra.core.Name("range");
+  public static final hydra.core.Name RANGE = new hydra.core.Name("range");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
@@ -20,9 +20,6 @@ public class DatatypeDefinition implements Serializable {
   public final hydra.ext.org.w3.owl.syntax.DataRange range;
   
   public DatatypeDefinition (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Datatype datatype, hydra.ext.org.w3.owl.syntax.DataRange range) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((datatype));
-    java.util.Objects.requireNonNull((range));
     this.annotations = annotations;
     this.datatype = datatype;
     this.range = range;
@@ -33,27 +30,47 @@ public class DatatypeDefinition implements Serializable {
     if (!(other instanceof DatatypeDefinition)) {
       return false;
     }
-    DatatypeDefinition o = (DatatypeDefinition) (other);
-    return annotations.equals(o.annotations) && datatype.equals(o.datatype) && range.equals(o.range);
+    DatatypeDefinition o = (DatatypeDefinition) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.datatype,
+      o.datatype) && java.util.Objects.equals(
+      this.range,
+      o.range);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * datatype.hashCode() + 5 * range.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(datatype) + 5 * java.util.Objects.hashCode(range);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(DatatypeDefinition other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) datatype).compareTo(other.datatype);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) range).compareTo(other.range);
   }
   
   public DatatypeDefinition withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new DatatypeDefinition(annotations, datatype, range);
   }
   
   public DatatypeDefinition withDatatype(hydra.ext.org.w3.owl.syntax.Datatype datatype) {
-    java.util.Objects.requireNonNull((datatype));
     return new DatatypeDefinition(annotations, datatype, range);
   }
   
   public DatatypeDefinition withRange(hydra.ext.org.w3.owl.syntax.DataRange range) {
-    java.util.Objects.requireNonNull((range));
     return new DatatypeDefinition(annotations, datatype, range);
   }
 }

@@ -5,14 +5,14 @@
 module Hydra.Demos.Genpg.Transform where
 
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -51,25 +51,25 @@ decodeCell colType mvalue =
                       ": ",
                       value])
               in ((\x -> case x of
-                Core.TypeLiteral v1 -> ((\x -> case x of
+                Core.TypeLiteral v0 -> ((\x -> case x of
                   Core.LiteralTypeBoolean -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralBoolean parsed)))) (Literals.readBoolean value))
-                  Core.LiteralTypeFloat v2 -> ((\x -> case x of
+                  Core.LiteralTypeFloat v1 -> ((\x -> case x of
                     Core.FloatTypeBigfloat -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat parsed))))) (Literals.readBigfloat value))
                     Core.FloatTypeFloat32 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 parsed))))) (Literals.readFloat32 value))
                     Core.FloatTypeFloat64 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 parsed))))) (Literals.readFloat64 value))
                     _ -> (Left (Strings.cat [
                       "Unsupported float type for column ",
-                      cname]))) v2)
-                  Core.LiteralTypeInteger v2 -> ((\x -> case x of
+                      cname]))) v1)
+                  Core.LiteralTypeInteger v1 -> ((\x -> case x of
                     Core.IntegerTypeInt32 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 parsed))))) (Literals.readInt32 value))
                     Core.IntegerTypeInt64 -> (Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 parsed))))) (Literals.readInt64 value))
                     _ -> (Left (Strings.cat [
                       "Unsupported integer type for column ",
-                      cname]))) v2)
+                      cname]))) v1)
                   Core.LiteralTypeString -> (Right (Just (Core.TermLiteral (Core.LiteralString value))))
                   _ -> (Left (Strings.cat [
                     "Unsupported literal type for column ",
-                    cname]))) v1)
+                    cname]))) v0)
                 _ -> (Left (Strings.cat [
                   "Unsupported type for column ",
                   cname]))) typ))
@@ -140,8 +140,8 @@ elementSpecsByTable graph =
           in (Right (Lists.foldl addEdge vertexMap edgePairs)))))
 
 -- | Evaluate an edge specification against a record term to produce an optional edge
-evaluateEdge :: (Model.Edge Core.Term -> Core.Term -> Compute.Flow Graph.Graph (Maybe (Model.Edge Core.Term)))
-evaluateEdge edgeSpec record =  
+evaluateEdge :: (Context.Context -> Graph.Graph -> Model.Edge Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) (Maybe (Model.Edge Core.Term)))
+evaluateEdge cx g edgeSpec record =  
   let label = (Model.edgeLabel edgeSpec)
   in  
     let idSpec = (Model.edgeId edgeSpec)
@@ -151,13 +151,13 @@ evaluateEdge edgeSpec record =
         let inSpec = (Model.edgeIn edgeSpec)
         in  
           let propSpecs = (Model.edgeProperties edgeSpec)
-          in (Flows.bind (Reduction.reduceTerm True (Core.TermApplication (Core.Application {
+          in (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
             Core.applicationFunction = idSpec,
-            Core.applicationArgument = record}))) (\id -> Flows.bind (Flows.bind (Reduction.reduceTerm True (Core.TermApplication (Core.Application {
+            Core.applicationArgument = record}))) (\id -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
             Core.applicationFunction = outSpec,
-            Core.applicationArgument = record}))) (Core_.maybeTerm (\t -> Flows.pure t))) (\mOutId -> Flows.bind (Flows.bind (Reduction.reduceTerm True (Core.TermApplication (Core.Application {
+            Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm cx (\t -> Right t) g _term)) (\mOutId -> Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
             Core.applicationFunction = inSpec,
-            Core.applicationArgument = record}))) (Core_.maybeTerm (\t -> Flows.pure t))) (\mInId -> Flows.bind (evaluateProperties propSpecs record) (\props -> Flows.pure (Maybes.bind mOutId (\outId -> Maybes.map (\inId -> Model.Edge {
+            Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm cx (\t -> Right t) g _term)) (\mInId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.bind mOutId (\outId -> Maybes.map (\inId -> Model.Edge {
             Model.edgeLabel = label,
             Model.edgeId = id,
             Model.edgeOut = outId,
@@ -165,29 +165,29 @@ evaluateEdge edgeSpec record =
             Model.edgeProperties = props}) mInId)))))))
 
 -- | Evaluate property specifications against a record term
-evaluateProperties :: Ord t0 => (M.Map t0 Core.Term -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 Core.Term))
-evaluateProperties specs record =  
+evaluateProperties :: Ord t0 => (Context.Context -> Graph.Graph -> M.Map t0 Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) (M.Map t0 Core.Term))
+evaluateProperties cx g specs record =  
   let extractMaybe = (\k -> \term -> (\x -> case x of
-          Core.TermMaybe v1 -> (Flows.pure (Maybes.map (\v -> (k, v)) v1))) term)
-  in (Flows.map (\pairs -> Maps.fromList (Maybes.cat pairs)) (Flows.mapList (\pair ->  
+          Core.TermMaybe v0 -> (Right (Maybes.map (\v -> (k, v)) v0))) term)
+  in (Eithers.map (\pairs -> Maps.fromList (Maybes.cat pairs)) (Eithers.mapList (\pair ->  
     let k = (Pairs.first pair)
     in  
       let spec = (Pairs.second pair)
-      in (Flows.bind (Reduction.reduceTerm True (Core.TermApplication (Core.Application {
+      in (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = spec,
         Core.applicationArgument = record}))) (\value -> extractMaybe k (Rewriting.deannotateTerm value)))) (Maps.toList specs)))
 
 -- | Evaluate a vertex specification against a record term to produce an optional vertex
-evaluateVertex :: (Model.Vertex Core.Term -> Core.Term -> Compute.Flow Graph.Graph (Maybe (Model.Vertex Core.Term)))
-evaluateVertex vertexSpec record =  
+evaluateVertex :: (Context.Context -> Graph.Graph -> Model.Vertex Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) (Maybe (Model.Vertex Core.Term)))
+evaluateVertex cx g vertexSpec record =  
   let label = (Model.vertexLabel vertexSpec)
   in  
     let idSpec = (Model.vertexId vertexSpec)
     in  
       let propSpecs = (Model.vertexProperties vertexSpec)
-      in (Flows.bind (Flows.bind (Reduction.reduceTerm True (Core.TermApplication (Core.Application {
+      in (Eithers.bind (Eithers.bind (Reduction.reduceTerm cx g True (Core.TermApplication (Core.Application {
         Core.applicationFunction = idSpec,
-        Core.applicationArgument = record}))) (Core_.maybeTerm (\t -> Flows.pure t))) (\mId -> Flows.bind (evaluateProperties propSpecs record) (\props -> Flows.pure (Maybes.map (\id -> Model.Vertex {
+        Core.applicationArgument = record}))) (\_term -> Core_.maybeTerm cx (\t -> Right t) g _term)) (\mId -> Eithers.bind (evaluateProperties cx g propSpecs record) (\props -> Right (Maybes.map (\id -> Model.Vertex {
         Model.vertexLabel = label,
         Model.vertexId = id,
         Model.vertexProperties = props}) mId))))
@@ -195,11 +195,11 @@ evaluateVertex vertexSpec record =
 -- | Find table names referenced in a term by looking for record projections
 findTablesInTerm :: (Core.Term -> S.Set String)
 findTablesInTerm term = (Rewriting.foldOverTerm Coders.TraversalOrderPre (\names -> \t -> (\x -> case x of
-  Core.TermFunction v1 -> ((\x -> case x of
-    Core.FunctionElimination v2 -> ((\x -> case x of
-      Core.EliminationRecord v3 -> (Sets.insert (Core.unName (Core.projectionTypeName v3)) names)
-      _ -> names) v2)
-    _ -> names) v1)
+  Core.TermFunction v0 -> ((\x -> case x of
+    Core.FunctionElimination v1 -> ((\x -> case x of
+      Core.EliminationRecord v2 -> (Sets.insert (Core.unName (Core.projectionTypeName v2)) names)
+      _ -> names) v1)
+    _ -> names) v0)
   _ -> names) t) Sets.empty term)
 
 -- | Find table names referenced in multiple terms
@@ -337,9 +337,9 @@ termRowToRecord tableType row =
             Core.fieldTerm = (Core.TermMaybe mvalue)}) colTypes cells)}))
 
 -- | Transform a record through vertex and edge specifications to produce vertices and edges
-transformRecord :: ([Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Core.Term -> Compute.Flow Graph.Graph ([Model.Vertex Core.Term], [Model.Edge Core.Term]))
-transformRecord vspecs especs record = (Flows.bind (Flows.mapList (\spec -> evaluateVertex spec record) vspecs) (\mVertices -> Flows.bind (Flows.mapList (\spec -> evaluateEdge spec record) especs) (\mEdges -> Flows.pure (Maybes.cat mVertices, (Maybes.cat mEdges)))))
+transformRecord :: (Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Core.Term -> Either (Context.InContext Error.OtherError) ([Model.Vertex Core.Term], [Model.Edge Core.Term]))
+transformRecord cx g vspecs especs record = (Eithers.bind (Eithers.mapList (\spec -> evaluateVertex cx g spec record) vspecs) (\mVertices -> Eithers.bind (Eithers.mapList (\spec -> evaluateEdge cx g spec record) especs) (\mEdges -> Right (Maybes.cat mVertices, (Maybes.cat mEdges)))))
 
 -- | Transform all rows from a table through vertex/edge specifications
-transformTableRows :: ([Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Compute.Flow Graph.Graph ([Model.Vertex Core.Term], [Model.Edge Core.Term]))
-transformTableRows vspecs especs tableType rows = (Flows.map (\pairs -> Lists.foldl concatPairs ([], []) pairs) (Flows.mapList (\row -> transformRecord vspecs especs (termRowToRecord tableType row)) rows))
+transformTableRows :: (Context.Context -> Graph.Graph -> [Model.Vertex Core.Term] -> [Model.Edge Core.Term] -> Tabular.TableType -> [Tabular.DataRow Core.Term] -> Either (Context.InContext Error.OtherError) ([Model.Vertex Core.Term], [Model.Edge Core.Term]))
+transformTableRows cx g vspecs especs tableType rows = (Eithers.map (\pairs -> Lists.foldl concatPairs ([], []) pairs) (Eithers.mapList (\row -> transformRecord cx g vspecs especs (termRowToRecord tableType row)) rows))

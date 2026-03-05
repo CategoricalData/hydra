@@ -7,15 +7,14 @@ import java.io.Serializable;
 /**
  * Features that are related to Edge Property objects.
  */
-public class EdgePropertyFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures");
+public class EdgePropertyFeatures implements Serializable, Comparable<EdgePropertyFeatures> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTY_FEATURES = new hydra.core.Name("propertyFeatures");
+  public static final hydra.core.Name PROPERTY_FEATURES = new hydra.core.Name("propertyFeatures");
   
   public final hydra.ext.org.apache.tinkerpop.features.PropertyFeatures propertyFeatures;
   
   public EdgePropertyFeatures (hydra.ext.org.apache.tinkerpop.features.PropertyFeatures propertyFeatures) {
-    java.util.Objects.requireNonNull((propertyFeatures));
     this.propertyFeatures = propertyFeatures;
   }
   
@@ -24,12 +23,20 @@ public class EdgePropertyFeatures implements Serializable {
     if (!(other instanceof EdgePropertyFeatures)) {
       return false;
     }
-    EdgePropertyFeatures o = (EdgePropertyFeatures) (other);
-    return propertyFeatures.equals(o.propertyFeatures);
+    EdgePropertyFeatures o = (EdgePropertyFeatures) other;
+    return java.util.Objects.equals(
+      this.propertyFeatures,
+      o.propertyFeatures);
   }
   
   @Override
   public int hashCode() {
-    return 2 * propertyFeatures.hashCode();
+    return 2 * java.util.Objects.hashCode(propertyFeatures);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(EdgePropertyFeatures other) {
+    return ((Comparable) propertyFeatures).compareTo(other.propertyFeatures);
   }
 }

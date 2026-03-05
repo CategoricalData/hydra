@@ -7,12 +7,12 @@ import java.io.Serializable;
 /**
  * Features for Graph.Variables.
  */
-public class VariableFeatures implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.VariableFeatures");
+public class VariableFeatures implements Serializable, Comparable<VariableFeatures> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.apache.tinkerpop.features.VariableFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_DATA_TYPE_FEATURES = new hydra.core.Name("dataTypeFeatures");
+  public static final hydra.core.Name DATA_TYPE_FEATURES = new hydra.core.Name("dataTypeFeatures");
   
-  public static final hydra.core.Name FIELD_NAME_SUPPORTS_VARIABLES = new hydra.core.Name("supportsVariables");
+  public static final hydra.core.Name SUPPORTS_VARIABLES = new hydra.core.Name("supportsVariables");
   
   public final hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures;
   
@@ -22,8 +22,6 @@ public class VariableFeatures implements Serializable {
   public final Boolean supportsVariables;
   
   public VariableFeatures (hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures, Boolean supportsVariables) {
-    java.util.Objects.requireNonNull((dataTypeFeatures));
-    java.util.Objects.requireNonNull((supportsVariables));
     this.dataTypeFeatures = dataTypeFeatures;
     this.supportsVariables = supportsVariables;
   }
@@ -33,22 +31,35 @@ public class VariableFeatures implements Serializable {
     if (!(other instanceof VariableFeatures)) {
       return false;
     }
-    VariableFeatures o = (VariableFeatures) (other);
-    return dataTypeFeatures.equals(o.dataTypeFeatures) && supportsVariables.equals(o.supportsVariables);
+    VariableFeatures o = (VariableFeatures) other;
+    return java.util.Objects.equals(
+      this.dataTypeFeatures,
+      o.dataTypeFeatures) && java.util.Objects.equals(
+      this.supportsVariables,
+      o.supportsVariables);
   }
   
   @Override
   public int hashCode() {
-    return 2 * dataTypeFeatures.hashCode() + 3 * supportsVariables.hashCode();
+    return 2 * java.util.Objects.hashCode(dataTypeFeatures) + 3 * java.util.Objects.hashCode(supportsVariables);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(VariableFeatures other) {
+    int cmp = 0;
+    cmp = ((Comparable) dataTypeFeatures).compareTo(other.dataTypeFeatures);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) supportsVariables).compareTo(other.supportsVariables);
   }
   
   public VariableFeatures withDataTypeFeatures(hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures dataTypeFeatures) {
-    java.util.Objects.requireNonNull((dataTypeFeatures));
     return new VariableFeatures(dataTypeFeatures, supportsVariables);
   }
   
   public VariableFeatures withSupportsVariables(Boolean supportsVariables) {
-    java.util.Objects.requireNonNull((supportsVariables));
     return new VariableFeatures(dataTypeFeatures, supportsVariables);
   }
 }

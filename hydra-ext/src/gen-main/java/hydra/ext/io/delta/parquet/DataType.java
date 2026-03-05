@@ -4,18 +4,18 @@ package hydra.ext.io.delta.parquet;
 
 import java.io.Serializable;
 
-public abstract class DataType implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.io.delta.parquet.DataType");
+public abstract class DataType implements Serializable, Comparable<DataType> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.io.delta.parquet.DataType");
   
-  public static final hydra.core.Name FIELD_NAME_ARRAY = new hydra.core.Name("array");
+  public static final hydra.core.Name ARRAY = new hydra.core.Name("array");
   
-  public static final hydra.core.Name FIELD_NAME_BASE = new hydra.core.Name("base");
+  public static final hydra.core.Name BASE = new hydra.core.Name("base");
   
-  public static final hydra.core.Name FIELD_NAME_DECIMAL = new hydra.core.Name("decimal");
+  public static final hydra.core.Name DECIMAL = new hydra.core.Name("decimal");
   
-  public static final hydra.core.Name FIELD_NAME_MAP = new hydra.core.Name("map");
+  public static final hydra.core.Name MAP = new hydra.core.Name("map");
   
-  public static final hydra.core.Name FIELD_NAME_STRUCT = new hydra.core.Name("struct");
+  public static final hydra.core.Name STRUCT = new hydra.core.Name("struct");
   
   private DataType () {
   
@@ -37,27 +37,27 @@ public abstract class DataType implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(DataType instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Array instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Base instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Decimal instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Map instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Struct instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -68,7 +68,6 @@ public abstract class DataType implements Serializable {
     public final hydra.ext.io.delta.parquet.ArrayType value;
     
     public Array (hydra.ext.io.delta.parquet.ArrayType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -77,13 +76,26 @@ public abstract class DataType implements Serializable {
       if (!(other instanceof Array)) {
         return false;
       }
-      Array o = (Array) (other);
-      return value.equals(o.value);
+      Array o = (Array) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Array o = (Array) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -99,7 +111,6 @@ public abstract class DataType implements Serializable {
     public final hydra.ext.io.delta.parquet.BasePrimitiveType value;
     
     public Base (hydra.ext.io.delta.parquet.BasePrimitiveType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -108,13 +119,26 @@ public abstract class DataType implements Serializable {
       if (!(other instanceof Base)) {
         return false;
       }
-      Base o = (Base) (other);
-      return value.equals(o.value);
+      Base o = (Base) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Base o = (Base) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -130,7 +154,6 @@ public abstract class DataType implements Serializable {
     public final hydra.ext.io.delta.parquet.DecimalType value;
     
     public Decimal (hydra.ext.io.delta.parquet.DecimalType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -139,13 +162,26 @@ public abstract class DataType implements Serializable {
       if (!(other instanceof Decimal)) {
         return false;
       }
-      Decimal o = (Decimal) (other);
-      return value.equals(o.value);
+      Decimal o = (Decimal) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Decimal o = (Decimal) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -161,7 +197,6 @@ public abstract class DataType implements Serializable {
     public final hydra.ext.io.delta.parquet.MapType value;
     
     public Map (hydra.ext.io.delta.parquet.MapType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -170,13 +205,26 @@ public abstract class DataType implements Serializable {
       if (!(other instanceof Map)) {
         return false;
       }
-      Map o = (Map) (other);
-      return value.equals(o.value);
+      Map o = (Map) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Map o = (Map) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -192,7 +240,6 @@ public abstract class DataType implements Serializable {
     public final hydra.ext.io.delta.parquet.StructType value;
     
     public Struct (hydra.ext.io.delta.parquet.StructType value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -201,13 +248,26 @@ public abstract class DataType implements Serializable {
       if (!(other instanceof Struct)) {
         return false;
       }
-      Struct o = (Struct) (other);
-      return value.equals(o.value);
+      Struct o = (Struct) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(DataType other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Struct o = (Struct) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -57,9 +57,9 @@ typeScriptLanguage = Coders.Language {
       Variants.TypeVariantRecord,
       Variants.TypeVariantUnion])
     types = (\x -> case x of
-      Core.TypeMap v1 -> ((\x -> case x of
+      Core.TypeMap v0 -> ((\x -> case x of
         Core.TypeMaybe _ -> False
-        _ -> True) (Rewriting.deannotateType (Core.mapTypeValues v1)))
+        _ -> True) (Rewriting.deannotateType (Core.mapTypeValues v0)))
       _ -> True)
 
 -- | A set of reserved words in TypeScript. Taken directly from https://github.com/microsoft/TypeScript/issues/2536

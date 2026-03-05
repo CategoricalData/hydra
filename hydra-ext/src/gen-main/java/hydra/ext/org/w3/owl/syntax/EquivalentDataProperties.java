@@ -4,20 +4,18 @@ package hydra.ext.org.w3.owl.syntax;
 
 import java.io.Serializable;
 
-public class EquivalentDataProperties implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.EquivalentDataProperties");
+public class EquivalentDataProperties implements Serializable, Comparable<EquivalentDataProperties> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.ext.org.w3.owl.syntax.EquivalentDataProperties");
   
-  public static final hydra.core.Name FIELD_NAME_ANNOTATIONS = new hydra.core.Name("annotations");
+  public static final hydra.core.Name ANNOTATIONS = new hydra.core.Name("annotations");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> properties;
   
   public EquivalentDataProperties (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> properties) {
-    java.util.Objects.requireNonNull((annotations));
-    java.util.Objects.requireNonNull((properties));
     this.annotations = annotations;
     this.properties = properties;
   }
@@ -27,22 +25,39 @@ public class EquivalentDataProperties implements Serializable {
     if (!(other instanceof EquivalentDataProperties)) {
       return false;
     }
-    EquivalentDataProperties o = (EquivalentDataProperties) (other);
-    return annotations.equals(o.annotations) && properties.equals(o.properties);
+    EquivalentDataProperties o = (EquivalentDataProperties) other;
+    return java.util.Objects.equals(
+      this.annotations,
+      o.annotations) && java.util.Objects.equals(
+      this.properties,
+      o.properties);
   }
   
   @Override
   public int hashCode() {
-    return 2 * annotations.hashCode() + 3 * properties.hashCode();
+    return 2 * java.util.Objects.hashCode(annotations) + 3 * java.util.Objects.hashCode(properties);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(EquivalentDataProperties other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      annotations.hashCode(),
+      other.annotations.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      properties.hashCode(),
+      other.properties.hashCode());
   }
   
   public EquivalentDataProperties withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
-    java.util.Objects.requireNonNull((annotations));
     return new EquivalentDataProperties(annotations, properties);
   }
   
   public EquivalentDataProperties withProperties(java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> properties) {
-    java.util.Objects.requireNonNull((properties));
     return new EquivalentDataProperties(annotations, properties);
   }
 }
