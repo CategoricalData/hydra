@@ -22,6 +22,7 @@ _hydra_lib_eithers = Namespace "hydra.lib.eithers"
 _eithers_bind             = qname _hydra_lib_eithers "bind" :: Name
 _eithers_bimap            = qname _hydra_lib_eithers "bimap" :: Name
 _eithers_either           = qname _hydra_lib_eithers "either" :: Name
+_eithers_foldl            = qname _hydra_lib_eithers "foldl" :: Name
 _eithers_fromLeft         = qname _hydra_lib_eithers "fromLeft" :: Name
 _eithers_fromRight        = qname _hydra_lib_eithers "fromRight" :: Name
 _eithers_isLeft           = qname _hydra_lib_eithers "isLeft" :: Name
@@ -30,8 +31,10 @@ _eithers_lefts            = qname _hydra_lib_eithers "lefts" :: Name
 _eithers_map              = qname _hydra_lib_eithers "map" :: Name
 _eithers_mapList          = qname _hydra_lib_eithers "mapList" :: Name
 _eithers_mapMaybe         = qname _hydra_lib_eithers "mapMaybe" :: Name
+_eithers_mapSet           = qname _hydra_lib_eithers "mapSet" :: Name
 _eithers_partitionEithers = qname _hydra_lib_eithers "partitionEithers" :: Name
 _eithers_rights           = qname _hydra_lib_eithers "rights" :: Name
+
 
 _hydra_lib_equality :: Namespace
 _hydra_lib_equality = Namespace "hydra.lib.equality"
@@ -46,22 +49,6 @@ _equality_lte      = qname _hydra_lib_equality "lte" :: Name
 _equality_max      = qname _hydra_lib_equality "max" :: Name
 _equality_min      = qname _hydra_lib_equality "min" :: Name
 
-_hydra_lib_flows :: Namespace
-_hydra_lib_flows = Namespace "hydra.lib.flows"
-
-_flows_apply       = qname _hydra_lib_flows "apply" :: Name
-_flows_bind        = qname _hydra_lib_flows "bind" :: Name
-_flows_fail        = qname _hydra_lib_flows "fail" :: Name
-_flows_foldl       = qname _hydra_lib_flows "foldl" :: Name
-_flows_map         = qname _hydra_lib_flows "map" :: Name
-_flows_mapElems    = qname _hydra_lib_flows "mapElems" :: Name
-_flows_mapKeys     = qname _hydra_lib_flows "mapKeys" :: Name
-_flows_mapList     = qname _hydra_lib_flows "mapList" :: Name
-_flows_mapMaybe    = qname _hydra_lib_flows "mapMaybe" :: Name
-_flows_mapSet      = qname _hydra_lib_flows "mapSet" :: Name
-_flows_pure        = qname _hydra_lib_flows "pure" :: Name
-_flows_sequence    = qname _hydra_lib_flows "sequence" :: Name
-_flows_withDefault = qname _hydra_lib_flows "withDefault" :: Name
 
 _hydra_lib_lists :: Namespace
 _hydra_lib_lists = Namespace "hydra.lib.lists"

@@ -8,7 +8,6 @@ import Hydra.Tools.Bytestrings
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 
 import qualified Data.ByteString.Lazy as BS
-import qualified Control.Monad as CM
 import qualified Data.YAML as DY
 import qualified Data.YAML.Event as DYE
 import qualified Data.List as L
@@ -17,36 +16,36 @@ import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as LB
 
 
-bytesToHsYaml :: BS.ByteString -> Flow (Graph) (DY.Node DY.Pos)
+bytesToHsYaml :: BS.ByteString -> Either String (DY.Node DY.Pos)
 bytesToHsYaml bs = case DY.decodeNode bs of
-    Left (pos, msg) -> fail $ "YAML parser failure at " ++ show pos ++ ": " ++ msg
+    Left (pos, msg) -> Left $ "YAML parser failure at " ++ show pos ++ ": " ++ msg
     Right docs -> if L.null docs
-      then fail "no YAML document"
+      then Left "no YAML document"
       else if L.length docs > 1
-      then fail "multiple YAML documents"
+      then Left "multiple YAML documents"
       else case L.head docs of
-        (DY.Doc node) -> pure node
+        (DY.Doc node) -> Right node
 
-bytesToHydraYaml :: BS.ByteString -> Flow (Graph) YM.Node
-bytesToHydraYaml = bytesToHsYaml CM.>=> hsYamlToHydraYaml
+bytesToHydraYaml :: BS.ByteString -> Either String YM.Node
+bytesToHydraYaml bs = bytesToHsYaml bs >>= hsYamlToHydraYaml
 
 hsYamlToBytes :: DY.Node () -> BS.ByteString
 hsYamlToBytes node = DY.encodeNode [DY.Doc node]
 
-hsYamlToHydraYaml :: DY.Node x -> Flow (Graph) YM.Node
+hsYamlToHydraYaml :: DY.Node x -> Either String YM.Node
 hsYamlToHydraYaml hs = case hs of
   DY.Scalar _ s -> YM.NodeScalar <$> case s of
-     DY.SNull -> pure YM.ScalarNull
-     DY.SBool b -> pure $ YM.ScalarBool b
-     DY.SFloat f -> pure $ YM.ScalarFloat f
-     DY.SInt i -> pure $ YM.ScalarInt i
-     DY.SStr t -> pure $ YM.ScalarStr $ T.unpack t
-     DY.SUnknown _ _ -> fail "YAML unknown scalars are unsupported"
-  DY.Mapping _ _ m -> YM.NodeMapping . M.fromList <$> CM.mapM mapPair (M.toList m)
+     DY.SNull -> Right YM.ScalarNull
+     DY.SBool b -> Right $ YM.ScalarBool b
+     DY.SFloat f -> Right $ YM.ScalarFloat f
+     DY.SInt i -> Right $ YM.ScalarInt i
+     DY.SStr t -> Right $ YM.ScalarStr $ T.unpack t
+     DY.SUnknown _ _ -> Left "YAML unknown scalars are unsupported"
+  DY.Mapping _ _ m -> YM.NodeMapping . M.fromList <$> mapM mapPair (M.toList m)
     where
       mapPair (k, v) = (,) <$> hsYamlToHydraYaml k <*> hsYamlToHydraYaml v
-  DY.Sequence _ _ s -> YM.NodeSequence <$> CM.mapM hsYamlToHydraYaml s
-  DY.Anchor {} -> fail "YAML anchors are unsupported"
+  DY.Sequence _ _ s -> YM.NodeSequence <$> mapM hsYamlToHydraYaml s
+  DY.Anchor {} -> Left "YAML anchors are unsupported"
 
 hydraYamlToBytes :: YM.Node -> BS.ByteString
 hydraYamlToBytes = hsYamlToBytes . hydraYamlToHsYaml
@@ -67,16 +66,26 @@ hydraYamlToHsYaml hy = case hy of
 hydraYamlToString :: YM.Node -> String
 hydraYamlToString = bytesToString . hydraYamlToBytes
 
-yamlByteStringCoder :: Type -> Flow (Graph) (Coder (Graph) (Graph) (Term) BS.ByteString)
-yamlByteStringCoder typ = do
-  coder <- yamlCoder typ
-  return Coder {
-    coderEncode = fmap hydraYamlToBytes . coderEncode coder,
-    coderDecode = bytesToHydraYaml CM.>=> coderDecode coder}
+-- | YAML byte string coder
+yamlByteStringCoder :: Context -> Graph -> Type -> Either (InContext OtherError) (Coder (Term) BS.ByteString)
+yamlByteStringCoder cx g typ = do
+  coder <- yamlCoder cx g typ
+  Right $ Coder
+    (\cx' term -> do
+      node <- coderEncode coder cx' term
+      Right $ hydraYamlToBytes node)
+    (\cx' bs -> case bytesToHydraYaml bs of
+      Left err -> Left $ InContext (OtherError err) cx'
+      Right node -> coderDecode coder cx' node)
 
-yamlStringCoder :: Type -> Flow (Graph) (Coder (Graph) (Graph) (Term) String)
-yamlStringCoder typ = do
-  serde <- yamlByteStringCoder typ
-  return Coder {
-    coderEncode = fmap LB.unpack . coderEncode serde,
-    coderDecode = coderDecode serde . LB.pack}
+-- | YAML string coder
+yamlStringCoder :: Context -> Graph -> Type -> Either (InContext OtherError) (Coder (Term) String)
+yamlStringCoder cx g typ = do
+  coder <- yamlCoder cx g typ
+  Right $ Coder
+    (\cx' term -> do
+      node <- coderEncode coder cx' term
+      Right $ hydraYamlToString node)
+    (\cx' s -> case bytesToHydraYaml (LB.pack s) of
+      Left err -> Left $ InContext (OtherError err) cx'
+      Right node -> coderDecode coder cx' node)
