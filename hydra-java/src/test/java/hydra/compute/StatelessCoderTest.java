@@ -1,45 +1,43 @@
 package hydra.compute;
 
 import hydra.HydraTestBase;
+import hydra.util.Either;
 import org.junit.jupiter.api.Test;
 
 import static hydra.Coders.composeStateless;
 import static hydra.Coders.inverseStateless;
-import static hydra.dsl.Flows.fail;
-import static hydra.dsl.Flows.pure;
 
 
 /**
  * A collection of tests illustrating the use of stateless coders, for simplicity.
- * Stateful coders are no different except that they involve stateful flows.
  */
 public class StatelessCoderTest extends HydraTestBase {
     private static final StatelessCoder<Integer, Integer> addOneCoder = new StatelessCoder<>(
-            i -> pure(i + 1),
-            i -> pure(i - 1)
+            i -> Either.right(i + 1),
+            i -> Either.right(i - 1)
     );
 
     private static final StatelessCoder<Integer, Integer> mod7Coder = new StatelessCoder<>(
-            i -> pure(i % 7),
-            i -> fail("modulus operation is not reversible")
+            i -> Either.right(i % 7),
+            i -> Either.left("modulus operation is not reversible")
     );
 
     private static final StatelessCoder<Integer, String> toStringCoder = new StatelessCoder<>(
-            i -> pure(i.toString()),
+            i -> Either.right(i.toString()),
             s -> {
                 try {
-                    return pure(Integer.parseInt(s));
+                    return Either.right(Integer.parseInt(s));
                 } catch (NumberFormatException e) {
-                    return fail(e.getMessage());
+                    return Either.left(e.getMessage());
                 }
             });
 
     @Test
     public void checkBidirectionalCoder() {
         // 1 is encoded to 2
-        assertSucceedsWith(2, addOneCoder.encode.apply(1));
+        assertSucceedsWith(2, coderEncode(addOneCoder, 1));
         // 2 is decoded back to 1
-        assertSucceedsWith(1, addOneCoder.decode.apply(2));
+        assertSucceedsWith(1, coderDecode(addOneCoder, 2));
 
         // Round-trip from 1 to 2 and back to 1 is a no-op
         assertRoundTripIsNoop(addOneCoder, 1);
@@ -48,10 +46,10 @@ public class StatelessCoderTest extends HydraTestBase {
     @Test
     public void checkOneWayCoder() {
         // Normally, every coder has at least a working encode function
-        assertSucceedsWith(2, mod7Coder.encode.apply(9));
+        assertSucceedsWith(2, coderEncode(mod7Coder, 9));
 
         // This coder has a decode function which always fails; it is not meant to be used for decoding
-        assertFails(mod7Coder.decode.apply(2));
+        assertFails(coderDecode(mod7Coder, 2));
     }
 
     @Test
@@ -60,7 +58,7 @@ public class StatelessCoderTest extends HydraTestBase {
         assertRoundTripIsNoop(toStringCoder, 1);
 
         // For certain values, a round-trip "from the right" is also a no-op
-        StatelessCoder<String, Integer> inverse = inverseStateless(toStringCoder);
+        Coder<String, Integer> inverse = inverseStateless(toStringCoder);
         assertRoundTripIsNoop(inverse, "42");
 
         // However, for some values, a round-trip "from the right" fails.
@@ -72,22 +70,22 @@ public class StatelessCoderTest extends HydraTestBase {
     public void checkInverses() {
         // The inverse of the "add one" coder is a "subtract one" coder;
         // it just swaps the encode and decode functions.
-        StatelessCoder<Integer, Integer> subtractOneCoder = inverseStateless(addOneCoder);
-        assertSucceedsWith(0, subtractOneCoder.encode.apply(1));
-        assertSucceedsWith(1, subtractOneCoder.decode.apply(0));
+        Coder<Integer, Integer> subtractOneCoder = inverseStateless(addOneCoder);
+        assertSucceedsWith(0, coderEncode(subtractOneCoder, 1));
+        assertSucceedsWith(1, coderDecode(subtractOneCoder, 0));
     }
 
     @Test
     public void checkComposition() {
         // Compose two coders to create a new coder
-        StatelessCoder<Integer, String> composed = composeStateless(addOneCoder, toStringCoder);
-        StatelessCoder<String, Integer> inverse = inverseStateless(composed);
+        Coder<Integer, String> composed = composeStateless(addOneCoder, toStringCoder);
+        Coder<String, Integer> inverse = inverseStateless(composed);
 
         // The composed encode function adds one, then converts the number to a string
-        assertSucceedsWith("2", composed.encode.apply(1));
+        assertSucceedsWith("2", coderEncode(composed, 1));
 
         // The composed decode function converts the string to a number, then subtracts one
-        assertSucceedsWith(41, inverse.encode.apply("42"));
+        assertSucceedsWith(41, coderEncode(inverse, "42"));
 
         // All round-trips "from the left" are no-ops
         assertRoundTripIsNoop(composed, 1);
@@ -97,5 +95,39 @@ public class StatelessCoderTest extends HydraTestBase {
 
         // Other round-trips "from the right" fail, for the same reason that round-trips through toStringCoder fail
         assertRoundTripFails(inverse, "not a number");
+    }
+
+    /**
+     * Apply a Coder's encode function, converting InContext errors to simple strings.
+     */
+    private static <V1, V2> Either<String, V2> coderEncode(Coder<V1, V2> coder, V1 value) {
+        hydra.context.Context cx = new hydra.context.Context(
+            java.util.Collections.emptyList(),
+            java.util.Collections.emptyList(),
+            java.util.Collections.emptyMap());
+        Either<hydra.context.InContext<hydra.error.OtherError>, V2> result =
+            coder.encode.apply(cx).apply(value);
+        if (result.isRight()) {
+            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.OtherError>, V2>) result).value);
+        } else {
+            return Either.left(((Either.Left<hydra.context.InContext<hydra.error.OtherError>, V2>) result).value.object.value);
+        }
+    }
+
+    /**
+     * Apply a Coder's decode function, converting InContext errors to simple strings.
+     */
+    private static <V1, V2> Either<String, V1> coderDecode(Coder<V1, V2> coder, V2 value) {
+        hydra.context.Context cx = new hydra.context.Context(
+            java.util.Collections.emptyList(),
+            java.util.Collections.emptyList(),
+            java.util.Collections.emptyMap());
+        Either<hydra.context.InContext<hydra.error.OtherError>, V1> result =
+            coder.decode.apply(cx).apply(value);
+        if (result.isRight()) {
+            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.OtherError>, V1>) result).value);
+        } else {
+            return Either.left(((Either.Left<hydra.context.InContext<hydra.error.OtherError>, V1>) result).value.object.value);
+        }
     }
 }
