@@ -6,6 +6,7 @@ import Hydra.Phantoms
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Terms as Terms
 import Hydra.Sources.Libraries
+import qualified Data.Set as S
 
 
 bind :: TTerm (Either a b) -> TTerm (b -> Either a c) -> TTerm (Either a c)
@@ -16,6 +17,9 @@ bimap = primitive3 _eithers_bimap
 
 either_ :: TTerm (a -> c) -> TTerm (b -> c) -> TTerm (Either a b) -> TTerm c
 either_ = primitive3 _eithers_either
+
+foldl :: TTerm (a -> b -> Either c a) -> TTerm a -> TTerm [b] -> TTerm (Either c a)
+foldl = primitive3 _eithers_foldl
 
 fromLeft :: TTerm a -> TTerm (Either a b) -> TTerm a
 fromLeft = primitive2 _eithers_fromLeft
@@ -40,6 +44,9 @@ mapList = primitive2 _eithers_mapList
 
 mapMaybe :: TTerm (a -> Either c b) -> TTerm (Maybe a) -> TTerm (Either c (Maybe b))
 mapMaybe = primitive2 _eithers_mapMaybe
+
+mapSet :: TTerm (a -> Either c b) -> TTerm (S.Set a) -> TTerm (Either c (S.Set b))
+mapSet = primitive2 _eithers_mapSet
 
 partitionEithers :: TTerm [Either a b] -> TTerm ([a], [b])
 partitionEithers = primitive1 _eithers_partitionEithers

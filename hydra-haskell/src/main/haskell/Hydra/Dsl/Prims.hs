@@ -8,10 +8,10 @@ import Hydra.Core
 import Hydra.Classes
 import Hydra.Graph
 import Hydra.Util
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Extract.Core as ExtractCore
+import qualified Hydra.Context as Context
 import qualified Hydra.Error as Error
 import qualified Hydra.Extract.Util as ExtractUtil
 import qualified Hydra.Dsl.Terms as Terms
@@ -26,6 +26,11 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import Hydra.Rewriting (removeTermAnnotations)
 import Data.String(IsString(..))
+import Data.Either (Either)
+
+-- | A helper to create an OtherError InContext from a string message and context
+otherErr :: Context.Context -> String -> Context.InContext Error.OtherError
+otherErr cx msg = Context.InContext (Error.OtherError msg) cx
 
 -- | A type variable specification with optional class constraints
 data TypeVar = TypeVar {
@@ -66,197 +71,193 @@ buildTypeScheme vars typ =
 instance IsString (TermCoder Term) where fromString = variable
 
 bigfloat :: TermCoder Double
-bigfloat = TermCoder Types.bigfloat $ Coder encode decode
+bigfloat = TermCoder Types.bigfloat encode decode
   where
-    encode = ExtractCore.bigfloat
-    decode = pure . Terms.bigfloat
+    encode cx g = ExtractCore.bigfloat cx g
+    decode _cx = Right . Terms.bigfloat
 
 bigint :: TermCoder Integer
-bigint = TermCoder Types.bigint $ Coder encode decode
+bigint = TermCoder Types.bigint encode decode
   where
-    encode = ExtractCore.bigint
-    decode = pure . Terms.bigint
+    encode cx g = ExtractCore.bigint cx g
+    decode _cx = Right . Terms.bigint
 
 binary :: TermCoder B.ByteString
-binary = TermCoder Types.binary $ Coder encode decode
+binary = TermCoder Types.binary encode decode
   where
-    encode = ExtractCore.binary
-    decode = pure . Terms.binary
+    encode cx g = ExtractCore.binary cx g
+    decode _cx = Right . Terms.binary
 
 boolean :: TermCoder Bool
-boolean = TermCoder Types.boolean $ Coder encode decode
+boolean = TermCoder Types.boolean encode decode
   where
-    encode = ExtractCore.boolean
-    decode = pure . Terms.boolean
+    encode cx g = ExtractCore.boolean cx g
+    decode _cx = Right . Terms.boolean
 
 comparison :: TermCoder Comparison
-comparison = TermCoder (TypeVariable _Comparison) $ Coder encode decode
+comparison = TermCoder (TypeVariable _Comparison) encode decode
   where
-    encode = ExtractUtil.comparison
-    decode = pure . Terms.comparison
+    encode cx g = ExtractUtil.comparison cx g
+    decode _cx = Right . Terms.comparison
 
 either_ :: TermCoder x -> TermCoder y -> TermCoder (Prelude.Either x y)
-either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCoderType yCoder)) $ Coder encode decode
+either_ xCoder yCoder = TermCoder (Types.either_ (termCoderType xCoder) (termCoderType yCoder)) encode decode
   where
-    encode term = case term of
-      TermEither (Prelude.Left l) -> Prelude.Left <$> coderEncode (termCoderCoder xCoder) l
-      TermEither (Prelude.Right r) -> Prelude.Right <$> coderEncode (termCoderCoder yCoder) r
-      _ -> fail $ "expected either term, got: " ++ show term
-    decode ev = case ev of
+    encode cx g term = case term of
+      TermEither (Prelude.Left l) -> Prelude.Left <$> termCoderEncode xCoder cx g l
+      TermEither (Prelude.Right r) -> Prelude.Right <$> termCoderEncode yCoder cx g r
+      _ -> Left $ otherErr cx $ "expected either term, got: " ++ show term
+    decode cx ev = case ev of
       Prelude.Left x -> do
-        xTerm <- coderDecode (termCoderCoder xCoder) x
+        xTerm <- termCoderDecode xCoder cx x
         return $ Terms.left xTerm
       Prelude.Right y -> do
-        yTerm <- coderDecode (termCoderCoder yCoder) y
+        yTerm <- termCoderDecode yCoder cx y
         return $ Terms.right yTerm
 
 floatType :: TermCoder FloatType
-floatType = TermCoder (TypeVariable _FloatType) $ Coder encode decode
+floatType = TermCoder (TypeVariable _FloatType) encode decode
   where
-    encode term = do
-      g <- Monads.getState
-      Monads.eitherToFlow Error.unDecodingError $ DecodeCore.floatType (g) term
-    decode = pure . EncodeCore.floatType
+    encode _cx g term = case DecodeCore.floatType g term of
+      Left err -> Left $ Context.InContext (Error.OtherError (Error.unDecodingError err)) _cx
+      Right v -> Right v
+    decode _cx = Right . EncodeCore.floatType
 
 floatValue :: TermCoder FloatValue
-floatValue = TermCoder (TypeVariable _FloatValue) $ Coder encode decode
+floatValue = TermCoder (TypeVariable _FloatValue) encode decode
   where
-    encode = ExtractCore.floatValue
-    decode = pure . Terms.float
+    encode cx g = ExtractCore.floatValue cx g
+    decode _cx = Right . Terms.float
 
 float32 :: TermCoder Float
-float32 = TermCoder Types.float32 $ Coder encode decode
+float32 = TermCoder Types.float32 encode decode
   where
-    encode = ExtractCore.float32
-    decode = pure . Terms.float32
+    encode cx g = ExtractCore.float32 cx g
+    decode _cx = Right . Terms.float32
 
 float64 :: TermCoder Double
-float64 = TermCoder Types.float64 $ Coder encode decode
+float64 = TermCoder Types.float64 encode decode
   where
-    encode = ExtractCore.float64
-    decode = pure . Terms.float64
-
-flow :: TermCoder s -> TermCoder x -> TermCoder (Flow s x)
-flow states values = TermCoder (TypeVariable _Flow Types.@@ (termCoderType states) Types.@@ (termCoderType values)) $
-    Coder encode decode
-  where
-    encode _ = fail $ "cannot currently encode flows from terms"
-    decode _ = fail $ "cannot decode flows to terms"
+    encode cx g = ExtractCore.float64 cx g
+    decode _cx = Right . Terms.float64
 
 function :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
-function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
+function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
   where
-    encode term = fail $ "cannot encode term to a function: " ++ ShowCore.term term
-    decode _ = fail $ "cannot decode functions to terms"
+    encode cx _g term = Left $ otherErr cx $ "cannot encode term to a function: " ++ ShowCore.term term
+    decode cx _val = Left $ otherErr cx "cannot decode functions to terms"
 
 -- | A TermCoder for function types, using a reducer to bridge term-level functions to native functions.
 --   The reducer is called to evaluate function application at the term level.
 --   Failures in reduction or encoding/decoding will result in a runtime error.
-functionWithReduce :: (Term -> Flow Graph Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
-functionWithReduce reduce dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) $ Coder encode decode
+functionWithReduce :: (Context.Context -> Graph -> Term -> Either (Context.InContext Error.OtherError) Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
+functionWithReduce reduce dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
   where
-    encode funTerm = do
-      g <- Monads.getState
-      pure $ \x ->
-        let argTerm = Monads.fromFlow (error "functionWithReduce: failed to encode argument") g
-                        (coderDecode (termCoderCoder dom) x)
-            resultTerm = Monads.fromFlow (error "functionWithReduce: failed to reduce application") g
-                           (reduce (TermApplication (Application funTerm argTerm)))
-        in Monads.fromFlow (error "functionWithReduce: failed to decode result") g
-             (coderEncode (termCoderCoder cod) resultTerm)
-    decode _ = fail $ "cannot decode functions to terms"
+    encode cx g funTerm = Right $ \x ->
+      let argTerm = case termCoderDecode dom cx x of
+            Left _ -> error "functionWithReduce: failed to encode argument"
+            Right t -> t
+          resultTerm = case reduce cx g (TermApplication (Application funTerm argTerm)) of
+            Left _ -> error "functionWithReduce: failed to reduce application"
+            Right t -> t
+      in case termCoderEncode cod cx g resultTerm of
+           Left _ -> error "functionWithReduce: failed to decode result"
+           Right v -> v
+    decode cx _val = Left $ otherErr cx "cannot decode functions to terms"
 
 integerType :: TermCoder IntegerType
-integerType = TermCoder (TypeVariable _IntegerType) $ Coder encode decode
+integerType = TermCoder (TypeVariable _IntegerType) encode decode
   where
-    encode term = do
-      g <- Monads.getState
-      Monads.eitherToFlow Error.unDecodingError $ DecodeCore.integerType (g) term
-    decode = pure . EncodeCore.integerType
+    encode _cx g term = case DecodeCore.integerType g term of
+      Left err -> Left $ Context.InContext (Error.OtherError (Error.unDecodingError err)) _cx
+      Right v -> Right v
+    decode _cx = Right . EncodeCore.integerType
 
 integerValue :: TermCoder IntegerValue
-integerValue = TermCoder (TypeVariable _IntegerValue) $ Coder encode decode
+integerValue = TermCoder (TypeVariable _IntegerValue) encode decode
   where
-    encode = ExtractCore.integerValue
-    decode = pure . Terms.integer
+    encode cx g = ExtractCore.integerValue cx g
+    decode _cx = Right . Terms.integer
 
 int8 :: TermCoder Int8
-int8 = TermCoder Types.int8 $ Coder encode decode
+int8 = TermCoder Types.int8 encode decode
   where
-    encode = ExtractCore.int8
-    decode = pure . Terms.int8
+    encode cx g = ExtractCore.int8 cx g
+    decode _cx = Right . Terms.int8
 
 int16 :: TermCoder Int16
-int16 = TermCoder Types.int16 $ Coder encode decode
+int16 = TermCoder Types.int16 encode decode
   where
-    encode = ExtractCore.int16
-    decode = pure . Terms.int16
+    encode cx g = ExtractCore.int16 cx g
+    decode _cx = Right . Terms.int16
 
 int32 :: TermCoder Int
-int32 = TermCoder Types.int32 $ Coder encode decode
+int32 = TermCoder Types.int32 encode decode
   where
-    encode = ExtractCore.int32
-    decode = pure . Terms.int32
+    encode cx g = ExtractCore.int32 cx g
+    decode _cx = Right . Terms.int32
 
 int64 :: TermCoder Int64
-int64 = TermCoder Types.int64 $ Coder encode decode
+int64 = TermCoder Types.int64 encode decode
   where
-    encode = ExtractCore.int64
-    decode = pure . Terms.int64
+    encode cx g = ExtractCore.int64 cx g
+    decode _cx = Right . Terms.int64
 
 list :: TermCoder x -> TermCoder [x]
-list els = TermCoder (Types.list $ termCoderType els) $ Coder encode decode
+list els = TermCoder (Types.list $ termCoderType els) encode decode
   where
-    encode = ExtractCore.listOf (coderEncode $ termCoderCoder els)
-    decode l = Terms.list <$> mapM (coderDecode $ termCoderCoder els) l
+    encode cx g = ExtractCore.listOf cx (termCoderEncode els cx g) g
+    decode cx l = Terms.list <$> mapM (termCoderDecode els cx) l
 
 literal :: TermCoder Literal
-literal = TermCoder (TypeVariable _Literal) $ Coder encode decode
+literal = TermCoder (TypeVariable _Literal) encode decode
   where
-    encode = ExtractCore.literal
-    decode = pure . Terms.literal
+    encode cx g = ExtractCore.literal cx g
+    decode _cx = Right . Terms.literal
 
 literalType :: TermCoder LiteralType
-literalType = TermCoder (TypeVariable _LiteralType) $ Coder encode decode
+literalType = TermCoder (TypeVariable _LiteralType) encode decode
   where
-    encode term = do
-      g <- Monads.getState
-      Monads.eitherToFlow Error.unDecodingError $ DecodeCore.literalType (g) term
-    decode = pure . EncodeCore.literalType
+    encode _cx g term = case DecodeCore.literalType g term of
+      Left err -> Left $ Context.InContext (Error.OtherError (Error.unDecodingError err)) _cx
+      Right v -> Right v
+    decode _cx = Right . EncodeCore.literalType
 
 map :: Ord k => TermCoder k -> TermCoder v -> TermCoder (M.Map k v)
-map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) $ Coder encode decode
+map keys values = TermCoder (Types.map (termCoderType keys) (termCoderType values)) encode decode
   where
-    encode = ExtractCore.map (coderEncode $ termCoderCoder keys) (coderEncode $ termCoderCoder values)
-    decode m = Terms.map . M.fromList <$> mapM decodePair (M.toList m)
+    encode cx g = ExtractCore.map cx (termCoderEncode keys cx g) (termCoderEncode values cx g) g
+    decode cx m = Terms.map . M.fromList <$> mapM decodePair (M.toList m)
       where
         decodePair (k, v) = do
-          ke <- (coderDecode $ termCoderCoder keys) k
-          ve <- (coderDecode $ termCoderCoder values) v
+          ke <- termCoderDecode keys cx k
+          ve <- termCoderDecode values cx v
           return (ke, ve)
 
 optional :: TermCoder x -> TermCoder (Y.Maybe x)
-optional mel = TermCoder (Types.optional $ termCoderType mel) $ Coder encode decode
+optional mel = TermCoder (Types.optional $ termCoderType mel) encode decode
   where
-    encode = ExtractCore.maybeTerm (coderEncode $ termCoderCoder mel)
-    decode mv = Terms.optional <$> case mv of
+    encode cx g = ExtractCore.maybeTerm cx (termCoderEncode mel cx g) g
+    decode cx mv = Terms.optional <$> case mv of
       Nothing -> pure Nothing
-      Just v -> Just <$> (coderDecode $ termCoderCoder mel) v
+      Just v -> Just <$> termCoderDecode mel cx v
 
 pair :: TermCoder x -> TermCoder y -> TermCoder (x, y)
-pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType yCoder)) $ Coder encode decode
+pair xCoder yCoder = TermCoder (Types.pair (termCoderType xCoder) (termCoderType yCoder)) encode decode
   where
-    encode = ExtractCore.pair (coderEncode $ termCoderCoder xCoder) (coderEncode $ termCoderCoder yCoder)
-    decode (x, y) = do
-      xTerm <- coderDecode (termCoderCoder xCoder) x
-      yTerm <- coderDecode (termCoderCoder yCoder) y
+    encode cx g = ExtractCore.pair cx (termCoderEncode xCoder cx g) (termCoderEncode yCoder cx g) g
+    decode cx (x, y) = do
+      xTerm <- termCoderDecode xCoder cx x
+      yTerm <- termCoderDecode yCoder cx y
       return $ Terms.pair xTerm yTerm
 
 prim0 :: Name -> x -> [TypeVar] -> TermCoder x -> Primitive
 prim0 name value vars output = Primitive name typ impl
   where
     typ = buildTypeScheme vars $ termCoderType output
-    impl _ = coderDecode (termCoderCoder output) value
+    impl cx _g _args = case termCoderDecode output cx value of
+      Left icoe -> Left $ Context.InContext (Error.ErrorOther (Context.inContextObject icoe)) (Context.inContextContext icoe)
+      Right v -> Right v
 
 prim1 :: Name -> (x -> y) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
 prim1 name compute vars input1 output = Primitive name typ impl
@@ -264,10 +265,10 @@ prim1 name compute vars input1 output = Primitive name typ impl
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType output]
-    impl args = do
-      ExtractCore.nArgs name 1 args
-      arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
-      coderDecode (termCoderCoder output) $ compute arg1
+    impl cx g args = wrapOther cx $ do
+      ExtractCore.nArgs cx name 1 args
+      arg1 <- termCoderEncode input1 cx g (args !! 0)
+      termCoderDecode output cx $ compute arg1
 
 prim2 :: Name -> (x -> y -> z) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim2 name compute vars input1 input2 output = Primitive name typ impl
@@ -276,11 +277,11 @@ prim2 name compute vars input1 input2 output = Primitive name typ impl
       termCoderType input1,
       termCoderType input2,
       termCoderType output]
-    impl args = do
-      ExtractCore.nArgs name 2 args
-      arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
-      arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
-      coderDecode (termCoderCoder output) $ compute arg1 arg2
+    impl cx g args = wrapOther cx $ do
+      ExtractCore.nArgs cx name 2 args
+      arg1 <- termCoderEncode input1 cx g (args !! 0)
+      arg2 <- termCoderEncode input2 cx g (args !! 1)
+      termCoderDecode output cx $ compute arg1 arg2
 
 prim3 :: Name -> (w -> x -> y -> z) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
 prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
@@ -290,98 +291,70 @@ prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
       termCoderType input2,
       termCoderType input3,
       termCoderType output]
-    impl args = do
-      ExtractCore.nArgs name 3 args
-      arg1 <- coderEncode (termCoderCoder input1) (args !! 0)
-      arg2 <- coderEncode (termCoderCoder input2) (args !! 1)
-      arg3 <- coderEncode (termCoderCoder input3) (args !! 2)
-      coderDecode (termCoderCoder output) $ compute arg1 arg2 arg3
+    impl cx g args = wrapOther cx $ do
+      ExtractCore.nArgs cx name 3 args
+      arg1 <- termCoderEncode input1 cx g (args !! 0)
+      arg2 <- termCoderEncode input2 cx g (args !! 1)
+      arg3 <- termCoderEncode input3 cx g (args !! 2)
+      termCoderDecode output cx $ compute arg1 arg2 arg3
 
-prim1Eval :: Name -> (Term -> Flow Graph Term) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
-prim1Eval name compute vars input1 output = Primitive name typ impl
-  where
-    typ = buildTypeScheme vars $ Types.functionMany [
-      termCoderType input1,
-      termCoderType output]
-    impl args = do
-      ExtractCore.nArgs name 1 args
-      compute (args !! 0)
-
-prim2Eval :: Name -> (Term -> Term -> Flow Graph Term) -> [TypeVar] -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim2Eval name compute vars input1 input2 output = Primitive name typ impl
-  where
-    typ = buildTypeScheme vars $ Types.functionMany [
-      termCoderType input1,
-      termCoderType input2,
-      termCoderType output]
-    impl args = do
-      ExtractCore.nArgs name 2 args
-      compute (args !! 0) (args !! 1)
-
-prim3Eval :: Name -> (Term -> Term -> Term -> Flow Graph Term) -> [TypeVar] -> TermCoder w -> TermCoder x -> TermCoder y -> TermCoder z -> Primitive
-prim3Eval name compute vars input1 input2 input3 output = Primitive name typ impl
-  where
-    typ = buildTypeScheme vars $ Types.functionMany [
-      termCoderType input1,
-      termCoderType input2,
-      termCoderType input3,
-      termCoderType output]
-    impl args = do
-      ExtractCore.nArgs name 3 args
-      compute (args !! 0) (args !! 1) (args !! 2)
+-- | Wrap an Either (InContext OtherError) into Either (InContext Error)
+wrapOther :: Context.Context -> Either (Context.InContext Error.OtherError) a -> Either (Context.InContext Error.Error) a
+wrapOther _cx (Right v) = Right v
+wrapOther _cx (Left (Context.InContext oe cx')) = Left $ Context.InContext (Error.ErrorOther oe) cx'
 
 set :: Ord x => TermCoder x -> TermCoder (S.Set x)
-set els = TermCoder (Types.set $ termCoderType els) $ Coder encode decode
+set els = TermCoder (Types.set $ termCoderType els) encode decode
   where
-    encode = ExtractCore.setOf (coderEncode $ termCoderCoder els)
-    decode s = Terms.set . S.fromList <$> mapM (coderDecode $ termCoderCoder els) (S.toList s)
+    encode cx g = ExtractCore.setOf cx (termCoderEncode els cx g) g
+    decode cx s = Terms.set . S.fromList <$> mapM (termCoderDecode els cx) (S.toList s)
 
 string :: TermCoder String
-string = TermCoder Types.string $ Coder encode decode
+string = TermCoder Types.string encode decode
   where
-    encode = ExtractCore.string
-    decode = pure . Terms.string
+    encode cx g = ExtractCore.string cx g
+    decode _cx = Right . Terms.string
 
 term :: TermCoder Term
-term = TermCoder (TypeVariable _Term) $ Coder encode decode
+term = TermCoder (TypeVariable _Term) encode decode
   where
-    encode = pure
-    decode = pure
+    encode _cx _g = Right
+    decode _cx = Right
 
 type_ :: TermCoder Type
-type_ = TermCoder (TypeVariable _Type) $ Coder encode decode
+type_ = TermCoder (TypeVariable _Type) encode decode
   where
-    encode term = do
-      g <- Monads.getState
-      Monads.eitherToFlow Error.unDecodingError $ DecodeCore.type_ (g) term
-    decode = pure . EncodeCore.type_
+    encode _cx g t = case DecodeCore.type_ g t of
+      Left err -> Left $ Context.InContext (Error.OtherError (Error.unDecodingError err)) _cx
+      Right v -> Right v
+    decode _cx = Right . EncodeCore.type_
 
 uint8 :: TermCoder Int16
-uint8 = TermCoder Types.uint8 $ Coder encode decode
+uint8 = TermCoder Types.uint8 encode decode
   where
-    encode = ExtractCore.uint8
-    decode = pure . Terms.uint8
+    encode cx g = ExtractCore.uint8 cx g
+    decode _cx = Right . Terms.uint8
 
 uint16 :: TermCoder Int
-uint16 = TermCoder Types.uint16 $ Coder encode decode
+uint16 = TermCoder Types.uint16 encode decode
   where
-    encode = ExtractCore.uint16
-    decode = pure . Terms.uint16
+    encode cx g = ExtractCore.uint16 cx g
+    decode _cx = Right . Terms.uint16
 
 uint32 :: TermCoder Int64
-uint32 = TermCoder Types.uint32 $ Coder encode decode
+uint32 = TermCoder Types.uint32 encode decode
   where
-    encode = ExtractCore.uint32
-    decode = pure . Terms.uint32
+    encode cx g = ExtractCore.uint32 cx g
+    decode _cx = Right . Terms.uint32
 
 uint64 :: TermCoder Integer
-uint64 = TermCoder Types.uint64 $ Coder encode decode
+uint64 = TermCoder Types.uint64 encode decode
   where
-    encode = ExtractCore.uint64
-    decode = pure . Terms.uint64
+    encode cx g = ExtractCore.uint64 cx g
+    decode _cx = Right . Terms.uint64
 
 variable :: String -> TermCoder Term
-variable v = TermCoder (Types.var v) $ Coder encode decode
+variable v = TermCoder (Types.var v) encode decode
   where
-    encode = pure
-    decode = pure
+    encode _cx _g = Right
+    decode _cx = Right
