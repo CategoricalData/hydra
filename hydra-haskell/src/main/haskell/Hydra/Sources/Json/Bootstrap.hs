@@ -1,8 +1,9 @@
 -- | A module which provides a minimal typing environment for decoding other Modules from JSON.
 --
 -- This module contains a single binding, typesByName, which maps type Names to Types
--- for all types defined in the four kernel modules needed to decode the Module type:
--- hydra.core, hydra.compute, hydra.graph, and hydra.module.
+-- for all types defined in the kernel modules needed to decode the Module type
+-- and to provide schema types for inference tests:
+-- hydra.coders, hydra.compute, hydra.context, hydra.core, hydra.error, hydra.graph, and hydra.module.
 --
 -- By consolidating these types into a single map, we avoid the need to generate
 -- individual Source modules for each kernel type module (which can exceed the JVM's
@@ -13,8 +14,11 @@ module Hydra.Sources.Json.Bootstrap where
 -- Note: non-standard imports; this module is constructed dynamically from other modules.
 import Hydra.Kernel
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Compute as Compute
+import qualified Hydra.Sources.Kernel.Types.Context as Context
+import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Hydra.Sources.Kernel.Types.Error as Error
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Module as Module
 
@@ -24,11 +28,15 @@ import qualified Data.Map as M
 ns :: Namespace
 ns = Namespace "hydra.json.bootstrap"
 
--- | The four kernel type modules whose types are needed to decode Module from JSON.
+-- | The kernel type modules whose types are needed to decode Module from JSON
+-- and to provide schema types for inference tests.
 bootstrapTypeModules :: [Module]
 bootstrapTypeModules = [
-  Core.module_,
+  Coders.module_,
   Compute.module_,
+  Context.module_,
+  Core.module_,
+  Error.module_,
   Graph.module_,
   Module.module_]
 

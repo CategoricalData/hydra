@@ -23,7 +23,6 @@ import qualified Hydra.Dsl.Meta.Json                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
@@ -121,86 +120,86 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-expectArray :: TBinding (Value -> Flow s [Value])
+expectArray :: TBinding (Value -> Either String [Value])
 expectArray = define "expectArray" $
   doc "Extract an array from a JSON value, failing if the value is not an array" $
   lambda "value" $ cases _Value (var "value")
-    (Just $ Monads.unexpected @@ string "JSON array" @@ (showValue @@ var "value")) [
-    _Value_array>>: lambda "els" $ Flows.pure $ var "els"]
+    (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON array")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
+    _Value_array>>: lambda "els" $ right $ var "els"]
 
-expectNumber :: TBinding (Value -> Flow s Double)
+expectNumber :: TBinding (Value -> Either String Double)
 expectNumber = define "expectNumber" $
   doc "Extract a number from a JSON value, failing if the value is not a number" $
   lambda "value" $ cases _Value (var "value")
-    (Just $ Monads.unexpected @@ string "JSON number" @@ (showValue @@ var "value")) [
-    _Value_number>>: lambda "d" $ Flows.pure $ var "d"]
+    (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON number")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
+    _Value_number>>: lambda "d" $ right $ var "d"]
 
-expectObject :: TBinding (Value -> Flow s (M.Map String Value))
+expectObject :: TBinding (Value -> Either String (M.Map String Value))
 expectObject = define "expectObject" $
   doc "Extract an object from a JSON value, failing if the value is not an object" $
   lambda "value" $ cases _Value (var "value")
-    (Just $ Monads.unexpected @@ string "JSON object" @@ (showValue @@ var "value")) [
-    _Value_object>>: lambda "m" $ Flows.pure $ var "m"]
+    (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON object")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
+    _Value_object>>: lambda "m" $ right $ var "m"]
 
-expectString :: TBinding (Value -> Flow s String)
+expectString :: TBinding (Value -> Either String String)
 expectString = define "expectString" $
   doc "Extract a string from a JSON value, failing if the value is not a string" $
   lambda "value" $ cases _Value (var "value")
-    (Just $ Monads.unexpected @@ string "JSON string" @@ (showValue @@ var "value")) [
-    _Value_string>>: lambda "s" $ Flows.pure $ var "s"]
+    (Just $ left $ Strings.cat2 (Strings.cat2 (string "expected ") (string "JSON string")) (Strings.cat2 (string " but found ") (showValue @@ var "value"))) [
+    _Value_string>>: lambda "s" $ right $ var "s"]
 
 opt :: TBinding (String -> M.Map String Value -> Maybe Value)
 opt = define "opt" $
   doc "Look up an optional field in a JSON object" $
   lambdas ["fname", "m"] $ Maps.lookup (var "fname") (var "m")
 
-optArray :: TBinding (String -> M.Map String Value -> Flow s (Maybe [Value]))
+optArray :: TBinding (String -> M.Map String Value -> Either String (Maybe [Value]))
 optArray = define "optArray" $
   doc "Look up an optional array field in a JSON object" $
   lambdas ["fname", "m"] $ Maybes.maybe
-    (Flows.pure nothing)
-    (lambda "a" $ Flows.map (unaryFunction just) $ expectArray @@ var "a")
+    (right nothing)
+    (lambda "a" $ Eithers.map (lambda "x" (just $ var "x")) $ expectArray @@ var "a")
     (opt @@ var "fname" @@ var "m")
 
-optString :: TBinding (String -> M.Map String Value -> Flow s (Maybe String))
+optString :: TBinding (String -> M.Map String Value -> Either String (Maybe String))
 optString = define "optString" $
   doc "Look up an optional string field in a JSON object" $
   lambdas ["fname", "m"] $ Maybes.maybe
-    (Flows.pure nothing)
-    (lambda "s" $ Flows.map (unaryFunction just) $ expectString @@ var "s")
+    (right nothing)
+    (lambda "s" $ Eithers.map (lambda "x" (just $ var "x")) $ expectString @@ var "s")
     (opt @@ var "fname" @@ var "m")
 
-require :: TBinding (String -> M.Map String Value -> Flow s Value)
+require :: TBinding (String -> M.Map String Value -> Either String Value)
 require = define "require" $
   doc "Look up a required field in a JSON object, failing if not found" $
   lambdas ["fname", "m"] $ Maybes.maybe
-    (Flows.fail $ Strings.cat $ list [
+    (left $ Strings.cat $ list [
       string "required attribute ",
       showValue @@ var "fname",
       string " not found"])
-    (lambda "value" $ Flows.pure $ var "value")
+    (lambda "value" $ right $ var "value")
     (Maps.lookup (var "fname") (var "m"))
 
-requireArray :: TBinding (String -> M.Map String Value -> Flow s [Value])
+requireArray :: TBinding (String -> M.Map String Value -> Either String [Value])
 requireArray = define "requireArray" $
   doc "Look up a required array field in a JSON object" $
-  lambdas ["fname", "m"] $ Flows.bind
+  lambdas ["fname", "m"] $ Eithers.bind
     (require @@ var "fname" @@ var "m")
-    (expectArray)
+    (asTerm expectArray)
 
-requireNumber :: TBinding (String -> M.Map String Value -> Flow s Double)
+requireNumber :: TBinding (String -> M.Map String Value -> Either String Double)
 requireNumber = define "requireNumber" $
   doc "Look up a required number field in a JSON object" $
-  lambdas ["fname", "m"] $ Flows.bind
+  lambdas ["fname", "m"] $ Eithers.bind
     (require @@ var "fname" @@ var "m")
-    (expectNumber)
+    (asTerm expectNumber)
 
-requireString :: TBinding (String -> M.Map String Value -> Flow s String)
+requireString :: TBinding (String -> M.Map String Value -> Either String String)
 requireString = define "requireString" $
   doc "Look up a required string field in a JSON object" $
-  lambdas ["fname", "m"] $ Flows.bind
+  lambdas ["fname", "m"] $ Eithers.bind
     (require @@ var "fname" @@ var "m")
-    (expectString)
+    (asTerm expectString)
 
 -- TODO: implement this function, and deduplicate with hydra.json.coder.showValue
 showValue :: TBinding (Value -> String)

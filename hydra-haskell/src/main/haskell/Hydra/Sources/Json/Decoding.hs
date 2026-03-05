@@ -23,7 +23,6 @@ import qualified Hydra.Dsl.Meta.Json                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
@@ -116,51 +115,51 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define label = definitionInModule module_ ("decode" <> label)
 
-decodeArray :: TBinding ((Value -> Flow s a) -> Value -> Flow s [a])
+decodeArray :: TBinding ((Value -> Either String a) -> Value -> Either String [a])
 decodeArray  = define "Array" $
   doc "Decode a JSON array using a decoder for elements" $
-  lambda "decodeElem" $ match _Value (Just $ Flows.fail (string "expected an array")) [
-    _Value_array>>: lambda "a" $ Flows.mapList (var "decodeElem") $ var "a"]
+  lambda "decodeElem" $ match _Value (Just $ left (string "expected an array")) [
+    _Value_array>>: lambda "a" $ Eithers.mapList (var "decodeElem") $ var "a"]
 
-decodeBoolean :: TBinding (Value -> Flow s Bool)
+decodeBoolean :: TBinding (Value -> Either String Bool)
 decodeBoolean  = define "Boolean" $
   doc "Decode a JSON boolean value" $
-  match _Value (Just $ Flows.fail (string "expected a boolean")) [
-    _Value_boolean>>: lambda "b" $ Flows.pure $ var "b"]
+  match _Value (Just $ left (string "expected a boolean")) [
+    _Value_boolean>>: lambda "b" $ right $ var "b"]
 
-decodeField :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s a)
+decodeField :: TBinding ((Value -> Either String a) -> String -> (M.Map String Value) -> Either String a)
 decodeField  = define "Field" $
   doc "Decode a required field from a JSON object" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
-    Flows.bind
+    Eithers.bind
       (decodeOptionalField @@ var "decodeValue" @@ var "name" @@ var "m")
       (primitive _maybes_maybe
-        @@ (Flows.fail $ Strings.cat2 (string "missing field: ") (var "name"))
-        @@ (lambda "f" $ Flows.pure $ var "f"))
+        @@ (left $ Strings.cat2 (string "missing field: ") (var "name"))
+        @@ (lambda "f" $ right $ var "f"))
 
-decodeNumber :: TBinding (Value -> Flow s Double)
+decodeNumber :: TBinding (Value -> Either String Double)
 decodeNumber  = define "Number" $
   doc "Decode a JSON number value" $
-  match _Value (Just $ Flows.fail (string "expected a number")) [
-    _Value_number>>: lambda "n" $ Flows.pure $ var "n"]
+  match _Value (Just $ left (string "expected a number")) [
+    _Value_number>>: lambda "n" $ right $ var "n"]
 
-decodeObject :: TBinding (Value -> Flow s (M.Map String Value))
+decodeObject :: TBinding (Value -> Either String (M.Map String Value))
 decodeObject  = define "Object" $
   doc "Decode a JSON object value" $
-  match _Value (Just $ Flows.fail (string "expected an object")) [
-    _Value_object>>: lambda "o" $ Flows.pure $ var "o"]
+  match _Value (Just $ left (string "expected an object")) [
+    _Value_object>>: lambda "o" $ right $ var "o"]
 
-decodeOptionalField :: TBinding ((Value -> Flow s a) -> String -> (M.Map String Value) -> Flow s (Maybe a))
+decodeOptionalField :: TBinding ((Value -> Either String a) -> String -> (M.Map String Value) -> Either String (Maybe a))
 decodeOptionalField  = define "OptionalField" $
   doc "Decode an optional field from a JSON object" $
   lambda "decodeValue" $ lambda "name" $ lambda "m" $
     (primitive _maybes_maybe
-        @@ (Flows.pure nothing)
-        @@ (lambda "v" (Flows.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v"))))
+        @@ (right nothing)
+        @@ (lambda "v" (Eithers.map (lambda "x" (just $ var "x")) (var "decodeValue" @@ var "v"))))
       @@ (Maps.lookup (var "name") (var "m"))
 
-decodeString :: TBinding (Value -> Flow s String)
+decodeString :: TBinding (Value -> Either String String)
 decodeString  = define "String" $
   doc "Decode a JSON string value" $
-  match _Value (Just $ Flows.fail (string "expected a string")) [
-    _Value_string>>: lambda "s" $ Flows.pure $ var "s"]
+  match _Value (Just $ left (string "expected a string")) [
+    _Value_string>>: lambda "s" $ right $ var "s"]

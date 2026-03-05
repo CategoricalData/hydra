@@ -16,13 +16,13 @@ import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Compute                    as Compute
 import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Meta.Json                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
@@ -194,11 +194,11 @@ hsvar = haskellUtilsDefinition "hsvar" $
   "s" ~>
     inject H._Expression H._Expression_variable $ (rawName @@ var "s")
 
-namespacesForModule :: TBinding (Module -> Flow Graph HaskellNamespaces)
+namespacesForModule :: TBinding (Module -> Context -> Graph -> Either (InContext OtherError) HaskellNamespaces)
 namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   doc "Compute the Haskell module namespaces for a Hydra module" $
-  "mod" ~>
-    "nss" <<~ Schemas.moduleDependencyNamespaces @@ true @@ true @@ true @@ true @@ var "mod" $
+  "mod" ~> "cx" ~> "g" ~>
+    "nss" <<= Schemas.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ true @@ true @@ true @@ var "mod" $
     "ns" <~ (Module.moduleNamespace $ var "mod") $
     "toModuleName" <~ ("namespace" ~> lets [
       "namespaceStr">: unwrap _Namespace @@ var "namespace",
@@ -223,7 +223,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
     "emptyState" <~ (pair Maps.empty Sets.empty) $
     "finalState" <~ (Lists.foldl (var "addPair") (var "emptyState") (var "nssPairs")) $
     "resultMap" <~ (Pairs.first $ var "finalState") $
-    Flows.pure $ Module.namespaces (var "focusPair") (var "resultMap")
+    right $ Module.namespaces (var "focusPair") (var "resultMap")
 
 newtypeAccessorName :: TBinding (Name -> String)
 newtypeAccessorName = haskellUtilsDefinition "newtypeAccessorName" $

@@ -25,6 +25,7 @@ import qualified Hydra.Dsl.Bootstrap     as Bootstrap
 import qualified Hydra.Dsl.Meta.Coders        as Coders
 import qualified Hydra.Dsl.Meta.Compute       as Compute
 import qualified Hydra.Dsl.Meta.Core          as Core
+import qualified Hydra.Dsl.Meta.Error         as Error
 import qualified Hydra.Dsl.Meta.Grammar       as Grammar
 import qualified Hydra.Dsl.Grammars      as Grammars
 import qualified Hydra.Dsl.Meta.Graph         as Graph
@@ -32,7 +33,6 @@ import qualified Hydra.Dsl.Meta.Json          as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
@@ -72,7 +72,6 @@ import qualified Hydra.Sources.Kernel.Terms.Arity as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking as Checking
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 
@@ -85,7 +84,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Arity.ns, Checking.ns, Lexical.ns, Monads.ns, Rewriting.ns, Schemas.ns]
+    [Annotations.ns, Arity.ns, Checking.ns, Lexical.ns, Rewriting.ns, Schemas.ns]
     kernelTypesNamespaces $
     Just "Common utilities for language coders, providing shared patterns for term decomposition and analysis."
   where
@@ -104,11 +103,11 @@ module_ = Module ns elements
      -- Tail-call optimization detection
      toBinding isSelfTailRecursive,
      toBinding isTailRecursiveInTailPosition,
-     -- Flow-based utilities
+     -- Context/graph utilities
      toBinding commentsFromElement,
      toBinding commentsFromFieldType,
+     toBinding typeOfTerm,
      -- Function analysis helpers
-     toBinding tryTypeOf,
      toBinding bindingMetadata,
      toBinding analyzeFunctionTermWith_finish,
      toBinding analyzeFunctionTermWith_gather,
@@ -118,12 +117,7 @@ module_ = Module ns elements
      toBinding analyzeFunctionTermNoInferWith,
      toBinding analyzeFunctionTerm,
      toBinding analyzeFunctionTermInline,
-     toBinding analyzeFunctionTermNoInfer,
-     -- State management helpers for coders
-     toBinding updateCoderMetadata,
-     toBinding withUpdatedCoderGraph,
-     toBinding withGraphBindings,
-     toBinding inCoderGraphContext]
+     toBinding analyzeFunctionTermNoInfer]
 
 
 --------------------------------------------------------------------------------
@@ -459,35 +453,38 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
 
 
 --------------------------------------------------------------------------------
--- Flow-based utilities
+-- Context/graph utilities
 --------------------------------------------------------------------------------
 
 -- | Extract comments/description from a Binding (element definition).
 -- This is a common pattern for coders that need to preserve documentation.
-commentsFromElement :: TBinding (Binding -> Flow Graph (Maybe String))
+commentsFromElement :: TBinding (Context -> Graph -> Binding -> Either (InContext OtherError) (Maybe String))
 commentsFromElement = define "commentsFromElement" $
   doc "Extract comments/description from a Binding" $
-  "b" ~> Annotations.getTermDescription @@ (Core.bindingTerm $ var "b")
+  "cx" ~> "g" ~> "b" ~>
+  Annotations.getTermDescription @@ var "cx" @@ var "g" @@ (Core.bindingTerm $ var "b")
 
 -- | Extract comments/description from a FieldType.
 -- This is a common pattern for coders that need to preserve field documentation.
-commentsFromFieldType :: TBinding (FieldType -> Flow Graph (Maybe String))
+commentsFromFieldType :: TBinding (Context -> Graph -> FieldType -> Either (InContext OtherError) (Maybe String))
 commentsFromFieldType = define "commentsFromFieldType" $
   doc "Extract comments/description from a FieldType" $
-  "ft" ~> Annotations.getTypeDescription @@ (Core.fieldTypeType $ var "ft")
+  "cx" ~> "g" ~> "ft" ~>
+  Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")
+
+-- | Check/reconstruct the type of a term, discarding the updated Context.
+-- Wraps Checking.typeOf and returns just the Type.
+typeOfTerm :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) Type)
+typeOfTerm = define "typeOfTerm" $
+  doc "Check the type of a term" $
+  "cx" ~> "g" ~> "term" ~>
+  Eithers.map (primitive _pairs_first)
+    (Checking.typeOf @@ var "cx" @@ var "g" @@ list ([] :: [TTerm Type]) @@ var "term")
 
 
 --------------------------------------------------------------------------------
 -- Function analysis utilities
 --------------------------------------------------------------------------------
-
--- | Infer the type of a term using the given Graph.
--- This is a helper that adds tracing for debugging purposes.
-tryTypeOf :: TBinding (String -> Graph -> Term -> Flow s Type)
-tryTypeOf = define "tryTypeOf" $
-  doc "Infer the type of a term with tracing" $
-  "msg" ~> "tc" ~> "term" ~>
-  Monads.withTrace @@ var "msg" @@ (Checking.typeOf @@ var "tc" @@ list ([] :: [TTerm Type]) @@ var "term")
 
 -- | Produces a simple 'true' value if the binding is complex (needs to be treated as a function)
 bindingMetadata :: TBinding (Graph -> Binding -> Maybe Term)
@@ -508,18 +505,20 @@ bindingMetadata = define "bindingMetadata" $
 -- collecting lambda parameters (vs. having seen a let which stops parameter collection).
 -- | Finish helper for analyzeFunctionTermWith: reapply type applications and infer return type
 analyzeFunctionTermWith_finish :: TBinding (
+  Context ->
   (env -> Graph) ->
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Flow s (FunctionStructure env))
+  Either (InContext OtherError) (FunctionStructure env))
 analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
-  "getTC" ~> "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
+  "cx" ~> "getTC" ~> "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
   "bodyWithTapps" <~ Lists.foldl
     ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
     (var "body")
     (var "tapps") $
-  "mcod" <<~ Flows.withDefault (nothing :: TTerm (Maybe Type))
-    (Flows.map (primitive _maybes_pure) (tryTypeOf @@ string "analyzeFunctionTermWith" @@ (var "getTC" @@ var "fEnv") @@ var "bodyWithTapps")) $
-  Flows.pure $ record _FunctionStructure [
+  -- Use typeOfTerm but fall back to Nothing if type inference fails (e.g. for untyped hoisted bindings)
+  "mcod" <~ Eithers.either_ (constant nothing) ("c" ~> just (var "c"))
+    (typeOfTerm @@ var "cx" @@ (var "getTC" @@ var "fEnv") @@ var "bodyWithTapps") $
+  right $ record _FunctionStructure [
     _FunctionStructure_typeParams>>: Lists.reverse (var "tparams"),
     _FunctionStructure_params>>: Lists.reverse (var "args"),
     _FunctionStructure_bindings>>: var "bindings",
@@ -530,26 +529,27 @@ analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
 
 -- | Gather helper for analyzeFunctionTermWith: recursively collect function components
 analyzeFunctionTermWith_gather :: TBinding (
+  Context ->
   (Graph -> Binding -> Maybe Term) ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
   Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Flow s (FunctionStructure env))
+  Either (InContext OtherError) (FunctionStructure env))
 analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
-  "forBinding" ~> "getTC" ~> "setTC" ~>
+  "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~>
   "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
   cases _Term (Rewriting.deannotateTerm @@ var "t")
-    (Just $ analyzeFunctionTermWith_finish @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
+    (Just $ analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
     _Term_function>>: "f" ~>
       cases _Function (var "f")
-        (Just $ analyzeFunctionTermWith_finish @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
+        (Just $ analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
         _Function_lambda>>: "lam" ~>
           Logic.ifElse (var "argMode")
             ("v" <~ Core.lambdaParameter (var "lam") $
              "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
              "body" <~ Core.lambdaBody (var "lam") $
              "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
-             analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+             analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
                @@ var "argMode" @@ var "newEnv"
                @@ var "tparams"
                @@ (Lists.cons (var "v") (var "args"))
@@ -557,12 +557,12 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
                @@ (Lists.cons (var "dom") (var "doms"))
                @@ var "tapps"
                @@ var "body")
-            (analyzeFunctionTermWith_finish @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t")],
+            (analyzeFunctionTermWith_finish @@ var "cx" @@ var "getTC" @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t")],
     _Term_let>>: "lt" ~>
       "newBindings" <~ Core.letBindings (var "lt") $
       "body" <~ Core.letBody (var "lt") $
       "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
-      analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+      analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ boolean False @@ var "newEnv"
         @@ var "tparams"
         @@ var "args"
@@ -573,7 +573,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
     _Term_typeApplication>>: "ta" ~>
       "taBody" <~ Core.typeApplicationTermBody (var "ta") $
       "typ" <~ Core.typeApplicationTermType (var "ta") $
-      analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+      analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ var "argMode" @@ var "gEnv"
         @@ var "tparams"
         @@ var "args"
@@ -585,7 +585,7 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
       "tvar" <~ Core.typeLambdaParameter (var "tl") $
       "tlBody" <~ Core.typeLambdaBody (var "tl") $
       "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
-      analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+      analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
         @@ var "argMode" @@ var "newEnv"
         @@ (Lists.cons (var "tvar") (var "tparams"))
         @@ var "args"
@@ -595,16 +595,17 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
         @@ var "tlBody"]
 
 analyzeFunctionTermWith :: TBinding (
+  Context ->
   (Graph -> Binding -> Maybe Term) ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
   env ->
   Term ->
-  Flow s (FunctionStructure env))
+  Either (InContext OtherError) (FunctionStructure env))
 analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
   doc "Analyze a function term with configurable binding metadata" $
-  "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  analyzeFunctionTermWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+  "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
+  analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
     @@ boolean True @@ var "env"
     @@ list ([] :: [TTerm Name])
     @@ list ([] :: [TTerm Name])
@@ -616,14 +617,14 @@ analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
 -- | Finish helper for analyzeFunctionTermNoInferWith: reapply type applications, skip type inference
 analyzeFunctionTermNoInferWith_finish :: TBinding (
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Flow s (FunctionStructure env))
+  Either (InContext OtherError) (FunctionStructure env))
 analyzeFunctionTermNoInferWith_finish = define "analyzeFunctionTermNoInferWith_finish" $
   "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
   "bodyWithTapps" <~ Lists.foldl
     ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
     (var "body")
     (var "tapps") $
-  Flows.pure $ record _FunctionStructure [
+  right $ record _FunctionStructure [
     _FunctionStructure_typeParams>>: Lists.reverse (var "tparams"),
     _FunctionStructure_params>>: Lists.reverse (var "args"),
     _FunctionStructure_bindings>>: var "bindings",
@@ -638,7 +639,7 @@ analyzeFunctionTermNoInferWith_gather :: TBinding (
   (env -> Graph) ->
   (Graph -> env -> env) ->
   Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Flow s (FunctionStructure env))
+  Either (InContext OtherError) (FunctionStructure env))
 analyzeFunctionTermNoInferWith_gather = define "analyzeFunctionTermNoInferWith_gather" $
   "forBinding" ~> "getTC" ~> "setTC" ~>
   "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
@@ -705,7 +706,7 @@ analyzeFunctionTermNoInferWith :: TBinding (
   (Graph -> env -> env) ->
   env ->
   Term ->
-  Flow s (FunctionStructure env))
+  Either (InContext OtherError) (FunctionStructure env))
 analyzeFunctionTermNoInferWith = define "analyzeFunctionTermNoInferWith" $
   doc "Analyze a function term without type inference, with configurable binding metadata" $
   "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
@@ -722,29 +723,31 @@ analyzeFunctionTermNoInferWith = define "analyzeFunctionTermNoInferWith" $
 -- This is a common pattern across all language coders: we need to understand the structure of a function
 -- to properly encode it in the target language.
 analyzeFunctionTerm :: TBinding (
+  Context ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
   env ->
   Term ->
-  Flow s (FunctionStructure env))
+  Either (InContext OtherError) (FunctionStructure env))
 analyzeFunctionTerm = define "analyzeFunctionTerm" $
   doc "Analyze a function term, collecting lambdas, type lambdas, lets, and type applications" $
-  "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  analyzeFunctionTermWith @@ bindingMetadata @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
+  "cx" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
+  analyzeFunctionTermWith @@ var "cx" @@ bindingMetadata @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
 
 -- | Like analyzeFunctionTerm, but without recording binding metadata. This is used for inline
 -- lambda expressions where let bindings are encoded as walrus operators (which evaluate
 -- immediately and share values, so don't need thunking or function call syntax).
 analyzeFunctionTermInline :: TBinding (
+  Context ->
   (env -> Graph) ->
   (Graph -> env -> env) ->
   env ->
   Term ->
-  Flow s (FunctionStructure env))
+  Either (InContext OtherError) (FunctionStructure env))
 analyzeFunctionTermInline = define "analyzeFunctionTermInline" $
   doc "Analyze a function term without recording binding metadata" $
-  "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  analyzeFunctionTermWith @@ (constant (constant nothing)) @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
+  "cx" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
+  analyzeFunctionTermWith @@ var "cx" @@ (constant (constant nothing)) @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
 
 -- | Analyze a function term without inferring the return type.
 -- This is a performance optimization for dynamically-typed target languages (like Python)
@@ -754,100 +757,10 @@ analyzeFunctionTermNoInfer :: TBinding (
   (Graph -> env -> env) ->
   env ->
   Term ->
-  Flow s (FunctionStructure env))
+  Either (InContext OtherError) (FunctionStructure env))
 analyzeFunctionTermNoInfer = define "analyzeFunctionTermNoInfer" $
   doc "Analyze a function term without type inference (performance optimization)" $
   "getTC" ~> "setTC" ~> "env" ~> "term" ~>
   analyzeFunctionTermNoInferWith @@ bindingMetadata @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
 
 
---------------------------------------------------------------------------------
--- State management helpers for coders
---------------------------------------------------------------------------------
-
--- | Update the metadata portion of a coder state.
--- This is useful for tracking language-specific metadata during code generation.
---
--- Parameters:
--- - getMeta: Extract metadata from state
--- - makeCoder: Construct state from Graph and metadata
--- - getGraph: Extract Graph from state
--- - f: Transformation to apply to metadata
-updateCoderMetadata :: TBinding (
-  (state -> metadata) ->
-  (Graph -> metadata -> state) ->
-  (state -> Graph) ->
-  (metadata -> metadata) ->
-  Flow state ())
-updateCoderMetadata = define "updateCoderMetadata" $
-  doc "Update the metadata portion of a coder state" $
-  "getMeta" ~> "makeCoder" ~> "getGraph" ~> "f" ~>
-  "st" <<~ Monads.getState $
-  Monads.putState @@ (var "makeCoder" @@ (var "getGraph" @@ var "st") @@ (var "f" @@ (var "getMeta" @@ var "st")))
-
--- | Temporarily update the graph for a computation, then restore it.
--- The metadata remains mutable throughout the flow (any changes are preserved).
---
--- This pattern is useful when you need to:
--- - Try encoding with an extended graph but not commit the extensions
--- - Test something in a modified graph context
--- - Keep metadata changes but discard graph changes
-withUpdatedCoderGraph :: TBinding (
-  (state -> Graph) ->
-  (state -> metadata) ->
-  (Graph -> metadata -> state) ->
-  (Graph -> Graph) ->
-  Flow state a ->
-  Flow state a)
-withUpdatedCoderGraph = define "withUpdatedCoderGraph" $
-  doc "Temporarily update the graph for a computation, then restore it" $
-  "getGraph" ~> "getMeta" ~> "makeCoder" ~> "f" ~> "flow" ~>
-  "st" <<~ Monads.getState $
-  exec (Monads.putState @@ (var "makeCoder" @@ (var "f" @@ (var "getGraph" @@ var "st")) @@ (var "getMeta" @@ var "st"))) $
-  "r" <<~ var "flow" $
-  "st2" <<~ Monads.getState $
-  exec (Monads.putState @@ (var "makeCoder" @@ (var "getGraph" @@ var "st") @@ (var "getMeta" @@ var "st2"))) $
-  Flows.pure (var "r")
-
--- | Temporarily extend the graph with additional bindings for a computation.
--- The bindings are only visible within the provided flow action.
---
--- This is commonly used when encoding terms that introduce local bindings
--- (like let expressions), where we need those bindings available in the graph
--- for type checking and term resolution.
-withGraphBindings :: TBinding (
-  (state -> Graph) ->
-  (Graph -> metadata -> state) ->
-  (state -> metadata) ->
-  [Binding] ->
-  Flow state a ->
-  Flow state a)
-withGraphBindings = define "withGraphBindings" $
-  doc "Temporarily extend the graph with additional bindings for a computation" $
-  "getGraph" ~> "makeCoder" ~> "getMeta" ~> "bindings" ~> "flow" ~>
-  withUpdatedCoderGraph @@ var "getGraph" @@ var "getMeta" @@ var "makeCoder"
-    @@ (Lexical.extendGraphWithBindings @@ var "bindings")
-    @@ var "flow"
-
--- | Run a Flow Graph computation within a Flow state computation.
--- This allows you to execute graph-level operations (like type inference,
--- term lookups, etc.) while maintaining a richer coder state with metadata.
---
--- The graph changes from the inner computation are preserved, but run in
--- the context of the coder's graph.
-inCoderGraphContext :: TBinding (
-  (state -> Graph) ->
-  (state -> metadata) ->
-  (Graph -> metadata -> state) ->
-  Flow Graph a ->
-  Flow state a)
-inCoderGraphContext = define "inCoderGraphContext" $
-  doc "Run a Flow Graph computation within a Flow state computation" $
-  "getGraph" ~> "getMeta" ~> "makeCoder" ~> "graphFlow" ~>
-  "st" <<~ Monads.getState $
-  "result" <<~ Monads.withState @@ (var "getGraph" @@ var "st") @@ (
-    "ret" <<~ var "graphFlow" $
-    "g2" <<~ Monads.getState $
-    Flows.pure (pair (var "ret") (var "g2"))) $
-  exec (Monads.putState @@ (var "makeCoder" @@ (Pairs.second (var "result")) @@ (var "getMeta" @@ var "st"))) $
-  Flows.pure (Pairs.first (var "result"))
