@@ -31,9 +31,7 @@ module_ = Module ns elements
       Phantoms.toBinding annotatedTermsTests,
       Phantoms.toBinding topLevelAnnotationsTests,
       Phantoms.toBinding nestedAnnotationsTests,
-      Phantoms.toBinding annotationsInComplexContextsTests,
-      Phantoms.toBinding flowsTests,
-      Phantoms.toBinding flowsWithFailureAcrossLetBindingsTests]
+      Phantoms.toBinding annotationsInComplexContextsTests]
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -42,8 +40,7 @@ allTests :: TBinding TestGroup
 allTests = define "allTests" $
   Phantoms.doc "Advanced type checking test cases" $
   supergroup "Advanced" [
-    annotatedTermsTests,
-    flowsTests]
+    annotatedTermsTests]
 
 ------ Helper functions ------
 
@@ -143,48 +140,4 @@ annotationsInComplexContextsTests = define "annotationsInComplexContextsTests" $
 --        var "add" @@ annotated (int32 10) M.empty @@ annotated (int32 20) M.empty)
 --      Types.int32
 
------- Flows ------
 
-flowsTests :: TBinding TestGroup
-flowsTests = define "flowsTests" $
-  supergroup "Flows" [
-    flowsWithFailureAcrossLetBindingsTests]
-
-flowsWithFailureAcrossLetBindingsTests :: TBinding TestGroup
-flowsWithFailureAcrossLetBindingsTests = define "flowsWithFailureAcrossLetBindingsTests" $
-  subgroup "Flows with failure across let bindings" [
-    checkTest "mutually referential failure functions with Flow monad" [tag_disabledForPython]  -- Very slow in Python (47+ seconds)
-      (lets ["conditionalUnexpected">: lambda "s" $ lambda "b" $ lambda "ignored" $
-               primitive _logic_ifElse @@ var "b" @@
-                 (var "unexpected" @@ string "oops") @@
-                 (var "unexpected" @@ var "s"),
-             "unexpected">: lambda "s" $ primitive _flows_fail @@ var "s"] $
-        var "conditionalUnexpected")
-      (tylams ["t0", "t1", "t2"] $
-        letsTyped [
-          ("conditionalUnexpected",
-           tylams ["t3", "t4", "t5"] $
-           lambdaTyped "s" T.string $
-           lambdaTyped "b" T.boolean $
-           lambdaTyped "ignored" (T.var "t3") $
-           tyapp (primitive _logic_ifElse) (T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t4", T.var "t5"]) @@ var "b" @@
-             (tyapps (var "unexpected") [T.var "t4", T.var "t5"] @@ string "oops") @@
-             (tyapps (var "unexpected") [T.var "t4", T.var "t5"] @@ var "s"),
-           T.poly ["t3", "t4", "t5"] $
-             T.function T.string $
-             T.function T.boolean $
-             T.function (T.var "t3") $
-             T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t4", T.var "t5"]),
-          ("unexpected",
-           tylams ["t3", "t4"] $
-           lambdaTyped "s" T.string $
-             tyapps (primitive _flows_fail) [T.var "t3", T.var "t4"] @@ var "s",
-           T.poly ["t3", "t4"] $
-             T.function T.string $
-             T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t3", T.var "t4"])] $
-        tyapps (var "conditionalUnexpected") [T.var "t0", T.var "t1", T.var "t2"])
-      (T.forAlls ["t0", "t1", "t2"] $
-        T.function T.string $
-        T.function T.boolean $
-        T.function (T.var "t0") $
-        T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t1", T.var "t2"])]

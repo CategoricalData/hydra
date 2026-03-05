@@ -1012,26 +1012,27 @@ usingKernelTypesTests = define "usingKernelTypesTests" $
               project (name "hydra.compute.Coder") (name "decode")
                 @@ var "coder" @@ var "v12"]
           @@ var "dir")
-    (tylams ["t0", "t1"] $
+    (tylams ["t0"] $
       lambdaTyped "dir" (T.var "hydra.coders.CoderDirection") $
-        lambdaTyped "coder" (T.applys (T.var "hydra.compute.Coder") (T.var <$> ["t0", "t0", "t1", "t1"])) $
+        lambdaTyped "coder" (T.applys (T.var "hydra.compute.Coder") (T.var <$> ["t0", "t0"])) $
           match (name "hydra.coders.CoderDirection")
             nothing [
             "encode">: lambdaTyped "_" T.unit $
-              lambdaTyped "v12" (T.var "t1") $
-                tyapps (project (name "hydra.compute.Coder") (name "encode")) (T.var <$> ["t0", "t0", "t1", "t1"])
+              lambdaTyped "v12" (T.var "hydra.context.Context") $
+                tyapps (project (name "hydra.compute.Coder") (name "encode")) (T.var <$> ["t0", "t0"])
                   @@ var "coder" @@ var "v12",
             "decode">: lambdaTyped "_" T.unit $
-              lambdaTyped "v12" (T.var "t1") $
-                tyapps (project (name "hydra.compute.Coder") (name "decode")) (T.var <$> ["t0", "t0", "t1", "t1"])
+              lambdaTyped "v12" (T.var "hydra.context.Context") $
+                tyapps (project (name "hydra.compute.Coder") (name "decode")) (T.var <$> ["t0", "t0"])
                   @@ var "coder" @@ var "v12"]
           @@ var "dir")
-    (T.forAlls ["t0", "t1"] $
+    (T.forAll "t0" $
       T.functionMany [
         T.var "hydra.coders.CoderDirection",
-        T.applys (T.var "hydra.compute.Coder") (T.var <$> ["t0", "t0", "t1", "t1"]),
-        T.var "t1",
-        T.applys (Core.typeVariable $ name "hydra.compute.Flow") [T.var "t0", T.var "t1"]])]
+        T.applys (T.var "hydra.compute.Coder") (T.var <$> ["t0", "t0"]),
+        T.var "hydra.context.Context",
+        T.var "t0",
+        T.either_ (T.applys (T.var "hydra.context.InContext") [T.var "hydra.error.OtherError"]) (T.var "t0")])]
 
 unionEliminationsWithDefaultsTests :: TBinding TestGroup
 unionEliminationsWithDefaultsTests = define "unionEliminationsWithDefaultsTests" $
