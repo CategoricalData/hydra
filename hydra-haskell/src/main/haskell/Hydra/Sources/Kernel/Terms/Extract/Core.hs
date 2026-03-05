@@ -17,7 +17,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -56,11 +55,19 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Dsl.Meta.Context      as Ctx
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
+formatOtherError :: TTerm (InContext OtherError -> String)
+formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+
+-- Helper for Either-based unexpected errors (replaces Monads.unexpected for migrated functions)
+unexpected :: TTerm Context -> TTerm String -> TTerm String -> TTerm (Prelude.Either (InContext OtherError) a)
+unexpected cx expected actual = Ctx.failInContext (Error.otherError (Phantoms.string "expected " ++ expected ++ Phantoms.string " but found " ++ actual)) cx
 
 ns :: Namespace
 ns = Namespace "hydra.extract.core"
@@ -143,718 +150,629 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-bigfloat :: TBinding (Term -> Flow Graph Double)
+bigfloat :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Double)
 bigfloat = define "bigfloat" $
   doc "Extract an arbitrary-precision floating-point value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "f" <<~ floatLiteral @@ var "l" $
-  bigfloatValue @@ var "f"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "f" <<= floatLiteral @@ var "cx" @@ var "l" $
+  bigfloatValue @@ var "cx" @@ var "f"
 
-bigfloatValue :: TBinding (FloatValue -> Flow Graph Double)
+bigfloatValue :: TBinding (Context -> FloatValue -> Prelude.Either (InContext OtherError) Double)
 bigfloatValue = define "bigfloatValue" $
   doc "Extract a bigfloat value from a FloatValue" $
-  "v" ~> Phantoms.cases _FloatValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("bigfloat")
-      @@ (ShowCore.floatValue @@ var "v"))) [
-    _FloatValue_bigfloat>>: "f" ~> Flows.pure (var "f")]
+  "cx" ~> "v" ~> Phantoms.cases _FloatValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "bigfloat") (ShowCore.floatValue @@ var "v"))) [
+    _FloatValue_bigfloat>>: "f" ~> right (var "f")]
 
-bigint :: TBinding (Term -> Flow Graph Integer)
+bigint :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Integer)
 bigint = define "bigint" $
   doc "Extract an arbitrary-precision integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "i" <<~ integerLiteral @@ var "l" $
-  bigintValue @@ var "i"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  bigintValue @@ var "cx" @@ var "i"
 
-bigintValue :: TBinding (IntegerValue -> Flow Graph Integer)
+bigintValue :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) Integer)
 bigintValue = define "bigintValue" $
   doc "Extract a bigint value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("bigint")
-      @@ (ShowCore.integerValue @@ var "v"))) [
-    _IntegerValue_bigint>>: "i" ~> Flows.pure (var "i")]
+  "cx" ~> "v" ~> Phantoms.cases _IntegerValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "bigint") (ShowCore.integerValue @@ var "v"))) [
+    _IntegerValue_bigint>>: "i" ~> right (var "i")]
 
-binary :: TBinding (Term -> Flow Graph String)
+binary :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) String)
 binary = define "binary" $
   doc "Extract a binary data value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  binaryLiteral @@ var "l"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  binaryLiteral @@ var "cx" @@ var "l"
 
-binaryLiteral :: TBinding (Literal -> Flow Graph String)
+binaryLiteral :: TBinding (Context -> Literal -> Prelude.Either (InContext OtherError) String)
 binaryLiteral = define "binaryLiteral" $
   doc "Extract a binary literal from a Literal value" $
-  "v" ~> Phantoms.cases _Literal (var "v")
-    (Just (Monads.unexpected
-      @@ ("binary")
-      @@ (ShowCore.literal @@ var "v"))) [
-    _Literal_binary>>: "b" ~> Flows.pure (var "b")]
+  "cx" ~> "v" ~> Phantoms.cases _Literal (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "binary") (ShowCore.literal @@ var "v"))) [
+    _Literal_binary>>: "b" ~> right (var "b")]
 
-boolean :: TBinding (Term -> Flow Graph Bool)
+boolean :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Bool)
 boolean = define "boolean" $
   doc "Extract a boolean value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  booleanLiteral @@ var "l"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  booleanLiteral @@ var "cx" @@ var "l"
 
-booleanLiteral :: TBinding (Literal -> Flow Graph Bool)
+booleanLiteral :: TBinding (Context -> Literal -> Prelude.Either (InContext OtherError) Bool)
 booleanLiteral = define "booleanLiteral" $
   doc "Extract a boolean literal from a Literal value" $
-  "v" ~> Phantoms.cases _Literal (var "v")
-    (Just (Monads.unexpected
-      @@ ("boolean")
-      @@ (ShowCore.literal @@ var "v"))) [
-    _Literal_boolean>>: "b" ~> Flows.pure (var "b")]
+  "cx" ~> "v" ~> Phantoms.cases _Literal (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "boolean") (ShowCore.literal @@ var "v"))) [
+    _Literal_boolean>>: "b" ~> right (var "b")]
 
 -- TODO: nonstandard; move me
-caseField :: TBinding (Name -> String -> Term -> Flow Graph Field)
+caseField :: TBinding (Context -> Name -> String -> Graph -> Term -> Prelude.Either (InContext OtherError) Field)
 caseField = define "caseField" $
   doc "Extract a specific case handler from a case statement term" $
-  "name" ~> "n" ~> "term" ~>
+  "cx" ~> "name" ~> "n" ~> "graph" ~> "term" ~>
   "fieldName" <~ Core.name (var "n") $
-  "cs" <<~ cases @@ var "name" @@ var "term" $
+  "cs" <<= cases @@ var "cx" @@ var "name" @@ var "graph" @@ var "term" $
   "matching" <~ Lists.filter
     ("f" ~> Core.equalName_ (Core.fieldName (var "f")) (var "fieldName"))
     (Core.caseStatementCases (var "cs")) $
   Logic.ifElse (Lists.null (var "matching"))
-    (Flows.fail ("not enough cases"))
-    (Flows.pure (Lists.head (var "matching")))
+    (Ctx.failInContext (Error.otherError (Phantoms.string "not enough cases")) (var "cx"))
+    (right (Lists.head (var "matching")))
 
 -- TODO: nonstandard; move me
-cases :: TBinding (Name -> Term -> Flow Graph CaseStatement)
+cases :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InContext OtherError) CaseStatement)
 cases = define "cases" $
   doc "Extract case statement from a term" $
-  "name" ~> "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ ("case statement")
-      @@ (ShowCore.term @@ var "term"))) [
+  "cx" ~> "name" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx") (Phantoms.string "case statement") (ShowCore.term @@ var "term"))) [
     _Term_function>>: "function" ~> Phantoms.cases _Function (var "function")
-      (Just (Monads.unexpected
-        @@ ("case statement")
-        @@ (ShowCore.term @@ var "term"))) [
+      (Just (unexpected (var "cx") (Phantoms.string "case statement") (ShowCore.term @@ var "term"))) [
       _Function_elimination>>: "elimination" ~> Phantoms.cases _Elimination (var "elimination")
-        (Just (Monads.unexpected
-          @@ ("case statement")
-          @@ (ShowCore.term @@ var "term"))) [
+        (Just (unexpected (var "cx") (Phantoms.string "case statement") (ShowCore.term @@ var "term"))) [
         _Elimination_union>>: "cs" ~>
           Logic.ifElse (Core.equalName_ (Core.caseStatementTypeName (var "cs")) (var "name"))
-            (Flows.pure (var "cs"))
-            (Monads.unexpected
-              @@ (("case statement for type ") ++ (Core.unName (var "name")))
-              @@ (ShowCore.term @@ var "term"))]]]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+            (right (var "cs"))
+            (unexpected (var "cx")
+              (Phantoms.string "case statement for type " ++ (Core.unName (var "name")))
+              (ShowCore.term @@ var "term"))]]]
 
 -- TODO: nonstandard; move me
-field :: TBinding (Name -> (Term -> Flow Graph x) -> [Field] -> Flow Graph x)
+field :: TBinding (Context -> Name -> (Term -> Prelude.Either (InContext OtherError) x) -> Graph -> [Field] -> Prelude.Either (InContext OtherError) x)
 field = define "field" $
   doc "Extract a field value from a list of fields" $
-  "fname" ~> "mapping" ~> "fields" ~>
+  "cx" ~> "fname" ~> "mapping" ~> "graph" ~> "fields" ~>
   "matchingFields" <~ Lists.filter
     ("f" ~> Core.equalName_ (Core.fieldName (var "f")) (var "fname"))
     (var "fields") $
   Logic.ifElse (Lists.null (var "matchingFields"))
-    (Flows.fail (("field ") ++ (Core.unName (var "fname")) ++ (" not found")))
+    (unexpected (var "cx") (Phantoms.string "field " ++ (Core.unName (var "fname"))) (Phantoms.string "no matching field"))
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) $ Phantoms.int32 1)
-      ("stripped" <<~ Lexical.stripAndDereferenceTerm @@ (Core.fieldTerm (Lists.head (var "matchingFields"))) $
+      ("stripped" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ (Core.fieldTerm (Lists.head (var "matchingFields"))) $
        var "mapping" @@ var "stripped")
-      (Flows.fail (("multiple fields named ") ++ (Core.unName (var "fname")))))
+      (unexpected (var "cx") (Phantoms.string "single field") (Phantoms.string "multiple fields named " ++ (Core.unName (var "fname")))))
 
-float32 :: TBinding (Term -> Flow Graph Float)
+float32 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Float)
 float32 = define "float32" $
   doc "Extract a 32-bit floating-point value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "f" <<~ floatLiteral @@ var "l" $
-  float32Value @@ var "f"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "f" <<= floatLiteral @@ var "cx" @@ var "l" $
+  float32Value @@ var "cx" @@ var "f"
 
-float32Value :: TBinding (FloatValue -> Flow Graph Float)
+float32Value :: TBinding (Context -> FloatValue -> Prelude.Either (InContext OtherError) Float)
 float32Value = define "float32Value" $
   doc "Extract a float32 value from a FloatValue" $
-  "v" ~> Phantoms.cases _FloatValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("float32")
-      @@ (ShowCore.floatValue @@ var "v"))) [
-    _FloatValue_float32>>: "f" ~> Flows.pure (var "f")]
+  "cx" ~> "v" ~> Phantoms.cases _FloatValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "float32") (ShowCore.floatValue @@ var "v"))) [
+    _FloatValue_float32>>: "f" ~> right (var "f")]
 
-float64 :: TBinding (Term -> Flow Graph Double)
+float64 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Double)
 float64 = define "float64" $
   doc "Extract a 64-bit floating-point value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "f" <<~ floatLiteral @@ var "l" $
-  float64Value @@ var "f"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "f" <<= floatLiteral @@ var "cx" @@ var "l" $
+  float64Value @@ var "cx" @@ var "f"
 
-float64Value :: TBinding (FloatValue -> Flow Graph Double)
+float64Value :: TBinding (Context -> FloatValue -> Prelude.Either (InContext OtherError) Double)
 float64Value = define "float64Value" $
   doc "Extract a float64 value from a FloatValue" $
-  "v" ~> Phantoms.cases _FloatValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("float64")
-      @@ (ShowCore.floatValue @@ var "v"))) [
-    _FloatValue_float64>>: "f" ~> Flows.pure (var "f")]
+  "cx" ~> "v" ~> Phantoms.cases _FloatValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "float64") (ShowCore.floatValue @@ var "v"))) [
+    _FloatValue_float64>>: "f" ~> right (var "f")]
 
-floatLiteral :: TBinding (Literal -> Flow Graph FloatValue)
+floatLiteral :: TBinding (Context -> Literal -> Prelude.Either (InContext OtherError) FloatValue)
 floatLiteral = define "floatLiteral" $
   doc "Extract a floating-point literal from a Literal value" $
-  "lit" ~> Phantoms.cases _Literal (var "lit")
-    (Just (Monads.unexpected
-      @@ ("floating-point value")
-      @@ (ShowCore.literal @@ var "lit"))) [
-    _Literal_float>>: "v" ~> Flows.pure (var "v")]
+  "cx" ~> "lit" ~> Phantoms.cases _Literal (var "lit")
+    (Just (unexpected (var "cx") (Phantoms.string "floating-point value") (ShowCore.literal @@ var "lit"))) [
+    _Literal_float>>: "v" ~> right (var "v")]
 
-floatValue :: TBinding (Term -> Flow Graph FloatValue)
+floatValue :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) FloatValue)
 floatValue = define "floatValue" $
   doc "Extract a float value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  floatLiteral @@ var "l"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  floatLiteral @@ var "cx" @@ var "l"
 
-eitherTerm :: TBinding ((Term -> Flow Graph x) -> (Term -> Flow Graph y) -> Term -> Flow Graph (Either x y))
+eitherTerm :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) x) -> (Term -> Prelude.Either (InContext OtherError) y) -> Graph -> Term -> Prelude.Either (InContext OtherError) (Either x y))
 eitherTerm = define "eitherTerm" $
   doc "Extract an either value from a term, applying functions to the left and right values" $
-  "leftFun" ~> "rightFun" ~> "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ ("either value")
-      @@ (ShowCore.term @@ var "term"))) [
+  "cx" ~> "leftFun" ~> "rightFun" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx")
+      (Phantoms.string "either value")
+      (ShowCore.term @@ var "term"))) [
     _Term_either>>: "et" ~> Eithers.either_
-      ("l" ~> Flows.map (unaryFunction left) (var "leftFun" @@ var "l"))
-      ("r" ~> Flows.map (unaryFunction right) (var "rightFun" @@ var "r"))
-      (var "et")]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+      ("l" ~> Eithers.map (unaryFunction left) (var "leftFun" @@ var "l"))
+      ("r" ~> Eithers.map (unaryFunction right) (var "rightFun" @@ var "r"))
+      (var "et")]
 
-eitherType :: TBinding (Type -> Flow s EitherType)
+eitherType :: TBinding (Context -> Type -> Prelude.Either (InContext OtherError) EitherType)
 eitherType = define "eitherType" $
   doc "Extract the left and right types from an either type" $
-  "typ" ~>
+  "cx" ~> "typ" ~>
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (Monads.unexpected
-      @@ ("either type")
-      @@ (ShowCore.type_ @@ var "typ"))) [
-    _Type_either>>: "et" ~> Flows.pure (var "et")]
+    (Just (unexpected (var "cx") (Phantoms.string "either type") (ShowCore.type_ @@ var "typ"))) [
+    _Type_either>>: "et" ~> right (var "et")]
 
-functionType :: TBinding (Type -> Flow s FunctionType)
+functionType :: TBinding (Context -> Type -> Prelude.Either (InContext OtherError) FunctionType)
 functionType = define "functionType" $
   doc "Extract a function type from a type" $
-  "typ" ~>
+  "cx" ~> "typ" ~>
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (Monads.unexpected
-      @@ ("function type")
-      @@ (ShowCore.type_ @@ var "typ"))) [
-    _Type_function>>: "ft" ~> Flows.pure (var "ft")]
+    (Just (unexpected (var "cx") (Phantoms.string "function type") (ShowCore.type_ @@ var "typ"))) [
+    _Type_function>>: "ft" ~> right (var "ft")]
 
 -- TODO: nonstandard; move me
-injection :: TBinding (Name -> Term -> Flow Graph Field)
+injection :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InContext OtherError) Field)
 injection = define "injection" $
   doc "Extract a field from a union term" $
-  "expected" ~> "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ ("injection")
-      @@ (ShowCore.term @@ var "term"))) [
+  "cx" ~> "expected" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx") (Phantoms.string "injection") (ShowCore.term @@ var "term"))) [
     _Term_union>>: "injection" ~>
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "expected"))
-        (Flows.pure (Core.injectionField (var "injection")))
-        (Monads.unexpected
-          @@ (("injection of type ") ++ (Core.unName (var "expected")))
-          @@ (Core.unName (Core.injectionTypeName (var "injection"))))]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+        (right (Core.injectionField (var "injection")))
+        (unexpected (var "cx")
+          (Phantoms.string "injection of type " ++ (Core.unName (var "expected")))
+          (Core.unName (Core.injectionTypeName (var "injection"))))]
 
-int16 :: TBinding (Term -> Flow Graph I.Int16)
+int16 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) I.Int16)
 int16 = define "int16" $
   doc "Extract a 16-bit signed integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "i" <<~ integerLiteral @@ var "l" $
-  int16Value @@ var "i"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  int16Value @@ var "cx" @@ var "i"
 
-int16Value :: TBinding (IntegerValue -> Flow Graph I.Int16)
+int16Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int16)
 int16Value = define "int16Value" $
   doc "Extract an int16 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("int16")
-      @@ (ShowCore.integerValue @@ var "v"))) [
-    _IntegerValue_int16>>: "i" ~> Flows.pure (var "i")]
+  "cx" ~> "v" ~> Phantoms.cases _IntegerValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "int16") (ShowCore.integerValue @@ var "v"))) [
+    _IntegerValue_int16>>: "i" ~> right (var "i")]
 
-int32 :: TBinding (Term -> Flow Graph Int)
+int32 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Int)
 int32 = define "int32" $
   doc "Extract a 32-bit signed integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "i" <<~ integerLiteral @@ var "l" $
-  int32Value @@ var "i"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  int32Value @@ var "cx" @@ var "i"
 
-int32Value :: TBinding (IntegerValue -> Flow Graph Int)
+int32Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) Int)
 int32Value = define "int32Value" $
   doc "Extract an int32 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
-    (Just (Monads.unexpected
-      @@ "int32"
-      @@ (ShowCore.integerValue @@ var "v"))) [
-    _IntegerValue_int32>>: "i" ~> Flows.pure (var "i")]
+  "cx" ~> "v" ~> Phantoms.cases _IntegerValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "int32") (ShowCore.integerValue @@ var "v"))) [
+    _IntegerValue_int32>>: "i" ~> right (var "i")]
 
-int64 :: TBinding (Term -> Flow Graph I.Int64)
+int64 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) I.Int64)
 int64 = define "int64" $
   doc "Extract a 64-bit signed integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "i" <<~ integerLiteral @@ var "l" $
-  int64Value @@ var "i"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  int64Value @@ var "cx" @@ var "i"
 
-int64Value :: TBinding (IntegerValue -> Flow Graph I.Int64)
+int64Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int64)
 int64Value = define "int64Value" $
   doc "Extract an int64 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("int64")
-      @@ (ShowCore.integerValue @@ var "v"))) [
-    _IntegerValue_int64>>: "i" ~> Flows.pure (var "i")]
+  "cx" ~> "v" ~> Phantoms.cases _IntegerValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "int64") (ShowCore.integerValue @@ var "v"))) [
+    _IntegerValue_int64>>: "i" ~> right (var "i")]
 
-int8 :: TBinding (Term -> Flow Graph I.Int8)
+int8 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) I.Int8)
 int8 = define "int8" $
   doc "Extract an 8-bit signed integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "i" <<~ integerLiteral @@ var "l" $
-  int8Value @@ var "i"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  int8Value @@ var "cx" @@ var "i"
 
-int8Value :: TBinding (IntegerValue -> Flow Graph I.Int8)
+int8Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int8)
 int8Value = define "int8Value" $
   doc "Extract an int8 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("int8")
-      @@ (ShowCore.integerValue @@ var "v"))) [
-    _IntegerValue_int8>>: "i" ~> Flows.pure (var "i")]
+  "cx" ~> "v" ~> Phantoms.cases _IntegerValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "int8") (ShowCore.integerValue @@ var "v"))) [
+    _IntegerValue_int8>>: "i" ~> right (var "i")]
 
-integerLiteral :: TBinding (Literal -> Flow Graph IntegerValue)
+integerLiteral :: TBinding (Context -> Literal -> Prelude.Either (InContext OtherError) IntegerValue)
 integerLiteral = define "integerLiteral" $
   doc "Extract an integer literal from a Literal value" $
-  "lit" ~> Phantoms.cases _Literal (var "lit")
-    (Just (Monads.unexpected
-      @@ ("integer value")
-      @@ (ShowCore.literal @@ var "lit"))) [
-    _Literal_integer>>: "v" ~> Flows.pure (var "v")]
+  "cx" ~> "lit" ~> Phantoms.cases _Literal (var "lit")
+    (Just (unexpected (var "cx") (Phantoms.string "integer value") (ShowCore.literal @@ var "lit"))) [
+    _Literal_integer>>: "v" ~> right (var "v")]
 
-integerValue :: TBinding (Term -> Flow Graph IntegerValue)
+integerValue :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) IntegerValue)
 integerValue = define "integerValue" $
   doc "Extract an integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  integerLiteral @@ var "l"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  integerLiteral @@ var "cx" @@ var "l"
 
-lambdaBody :: TBinding (Term -> Flow Graph Term)
+lambdaBody :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Term)
 lambdaBody = define "lambdaBody" $
   doc "Extract the body of a lambda term" $
-  "term" ~> Flows.map (unaryFunction Core.lambdaBody) (lambda @@ var "term")
+  "cx" ~> "graph" ~> "term" ~> Eithers.map (unaryFunction Core.lambdaBody) (lambda @@ var "cx" @@ var "graph" @@ var "term")
 
-lambda :: TBinding (Term -> Flow Graph Lambda)
+lambda :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Lambda)
 lambda = define "lambda" $
   doc "Extract a lambda from a term" $
-  "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ "lambda"
-      @@ (ShowCore.term @@ var "term"))) [
+  "cx" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx") (Phantoms.string "lambda") (ShowCore.term @@ var "term"))) [
     _Term_function>>: "function" ~> Phantoms.cases _Function (var "function")
-      (Just (Monads.unexpected
-        @@ ("lambda")
-        @@ (ShowCore.term @@ var "term"))) [
-      _Function_lambda>>: "l" ~> Flows.pure (var "l")]]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+      (Just (unexpected (var "cx") (Phantoms.string "lambda") (ShowCore.term @@ var "term"))) [
+      _Function_lambda>>: "l" ~> right (var "l")]]
 
 -- TODO: nonstandard; move me
-letBinding :: TBinding (String -> Term -> Flow Graph Term)
+letBinding :: TBinding (Context -> String -> Graph -> Term -> Prelude.Either (InContext OtherError) Term)
 letBinding = define "letBinding" $
   doc "Extract a binding with the given name from a let term" $
-  "n" ~> "term" ~>
+  "cx" ~> "n" ~> "graph" ~> "term" ~>
   "name" <~ Core.name (var "n") $
-  "letExpr" <<~ let_ @@ var "term" $
+  "letExpr" <<= let_ @@ var "cx" @@ var "graph" @@ var "term" $
   "matchingBindings" <~ Lists.filter
     ("b" ~> Core.equalName_ (Core.bindingName (var "b")) (var "name"))
     (Core.letBindings (var "letExpr")) $
   Logic.ifElse (Lists.null (var "matchingBindings"))
-    (Flows.fail (("no such binding: ") ++ var "n"))
+    (Ctx.failInContext (Error.otherError (Phantoms.string "no such binding: " ++ var "n")) (var "cx"))
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingBindings")) $ Phantoms.int32 1)
-      (Flows.pure (Core.bindingTerm (Lists.head (var "matchingBindings"))))
-      (Flows.fail (("multiple bindings named ") ++ var "n")))
+      (right (Core.bindingTerm (Lists.head (var "matchingBindings"))))
+      (Ctx.failInContext (Error.otherError (Phantoms.string "multiple bindings named " ++ var "n")) (var "cx")))
 
-let_ :: TBinding (Term -> Flow Graph Let)
+let_ :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Let)
 let_ = define "let" $
   doc "Extract a let expression from a term" $
-  "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ ("let term")
-      @@ (ShowCore.term @@ var "term"))) [
-    _Term_let>>: "lt" ~> Flows.pure (var "lt")]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+  "cx" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx") (Phantoms.string "let term") (ShowCore.term @@ var "term"))) [
+    _Term_let>>: "lt" ~> right (var "lt")]
 
-list :: TBinding (Term -> Flow Graph [Term])
+list :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) [Term])
 list = define "list" $
   doc "Extract a list of terms from a term" $
-  "term" ~>
-  "extract" <~ ("stripped" ~> Phantoms.cases _Term (var "stripped")
-    (Just (Monads.unexpected
-      @@ "list"
-      @@ (ShowCore.term @@ var "stripped"))) [
-    _Term_list>>: "l" ~> produce (var "l")]) $
-  "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "term" $
-  var "extract" @@ var "stripped"
+  "cx" ~> "graph" ~> "term" ~>
+  "stripped" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term" $
+  Phantoms.cases _Term (var "stripped")
+    (Just (unexpected (var "cx") (Phantoms.string "list") (ShowCore.term @@ var "stripped"))) [
+    _Term_list>>: "l" ~> right (var "l")]
 
-listHead :: TBinding (Term -> Flow Graph Term)
+listHead :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Term)
 listHead = define "listHead" $
   doc "Extract the first element of a list term" $
-  "term" ~>
-  "l" <<~ list @@ var "term" $
+  "cx" ~> "graph" ~> "term" ~>
+  "l" <<= list @@ var "cx" @@ var "graph" @@ var "term" $
   Logic.ifElse (Lists.null (var "l"))
-    (Flows.fail "empty list")
-    (Flows.pure (Lists.head (var "l")))
+    (Ctx.failInContext (Error.otherError (Phantoms.string "empty list")) (var "cx"))
+    (right (Lists.head (var "l")))
 
-listOf :: TBinding ((Term -> Flow Graph x) -> Term -> Flow Graph [x])
+listOf :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) x) -> Graph -> Term -> Prelude.Either (InContext OtherError) [x])
 listOf = define "listOf" $
   doc "Extract a list of values from a term, mapping a function over each element" $
-  "f" ~> "term" ~>
-  "els" <<~ list @@ var "term" $
-  Flows.mapList (var "f") (var "els")
+  "cx" ~> "f" ~> "graph" ~> "term" ~>
+  "els" <<= list @@ var "cx" @@ var "graph" @@ var "term" $
+  Eithers.mapList (var "f") (var "els")
 
-listType :: TBinding (Type -> Flow s Type)
+listType :: TBinding (Context -> Type -> Prelude.Either (InContext OtherError) Type)
 listType = define "listType" $
   doc "Extract the element type from a list type" $
-  "typ" ~>
+  "cx" ~> "typ" ~>
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (Monads.unexpected
-      @@ ("list type")
-      @@ (ShowCore.type_ @@ var "typ"))) [
-    _Type_list>>: "t" ~> Flows.pure (var "t")]
+    (Just (unexpected (var "cx") (Phantoms.string "list type") (ShowCore.type_ @@ var "typ"))) [
+    _Type_list>>: "t" ~> right (var "t")]
 
-literal :: TBinding (Term -> Flow Graph Literal)
+literal :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Literal)
 literal = define "literal" $
   doc "Extract a literal value from a term" $
-  "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ ("literal")
-      @@ (ShowCore.term @@ var "term"))) [
-    _Term_literal>>: "lit" ~> Flows.pure (var "lit")]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+  "cx" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx") (Phantoms.string "literal") (ShowCore.term @@ var "term"))) [
+    _Term_literal>>: "lit" ~> right (var "lit")]
 
-map :: TBinding ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> Flow Graph (M.Map k v))
+map :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) k) -> (Term -> Prelude.Either (InContext OtherError) v) -> Graph -> Term -> Prelude.Either (InContext OtherError) (M.Map k v))
 map = define "map" $
   doc "Extract a map of key-value pairs from a term, mapping functions over each key and value" $
-  "fk" ~> "fv" ~> "term0" ~>
+  "cx" ~> "fk" ~> "fv" ~> "graph" ~> "term0" ~>
   "pair" <~ ("kvPair" ~>
     "kterm" <~ Pairs.first (var "kvPair") $
     "vterm" <~ Pairs.second (var "kvPair") $
-    "kval" <<~ var "fk" @@ var "kterm" $
-    "vval" <<~ var "fv" @@ var "vterm" $
-    produce (Phantoms.pair (var "kval") (var "vval"))) $
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ "map"
-      @@ (ShowCore.term @@ var "term"))) [
-    _Term_map>>: "m" ~> Flows.map (unaryFunction Maps.fromList) (Flows.mapList (var "pair") (Maps.toList (var "m")))]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+    "kval" <<= var "fk" @@ var "kterm" $
+    "vval" <<= var "fv" @@ var "vterm" $
+    right (Phantoms.pair (var "kval") (var "vval"))) $
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx")
+      (Phantoms.string "map")
+      (ShowCore.term @@ var "term"))) [
+    _Term_map>>: "m" ~> Eithers.map (unaryFunction Maps.fromList) (Eithers.mapList (var "pair") (Maps.toList (var "m")))]
 
-mapType :: TBinding (Type -> Flow s MapType)
+mapType :: TBinding (Context -> Type -> Prelude.Either (InContext OtherError) MapType)
 mapType = define "mapType" $
   doc "Extract the key and value types from a map type" $
-  "typ" ~>
+  "cx" ~> "typ" ~>
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (Monads.unexpected
-      @@ ("map type")
-      @@ (ShowCore.type_ @@ var "typ"))) [
-    _Type_map>>: "mt" ~> Flows.pure (var "mt")]
+    (Just (unexpected (var "cx") (Phantoms.string "map type") (ShowCore.type_ @@ var "typ"))) [
+    _Type_map>>: "mt" ~> right (var "mt")]
 
 -- TODO: nonstandard; move me
-nArgs :: TBinding (Name -> Int -> [a] -> Flow s ())
+nArgs :: TBinding (Context -> Name -> Int -> [a] -> Prelude.Either (InContext OtherError) ())
 nArgs = define "nArgs" $
   doc "Ensure a function has the expected number of arguments" $
-  "name" ~> "n" ~> "args" ~>
+  "cx" ~> "name" ~> "n" ~> "args" ~>
   Logic.ifElse (Equality.equal (Lists.length (var "args")) (var "n"))
-    (produce Phantoms.unit)
-    (Monads.unexpected @@ (Strings.concat [
+    (right Phantoms.unit)
+    (unexpected (var "cx") (Strings.concat [
       Literals.showInt32 (var "n"),
       Phantoms.string " arguments to primitive ",
-      Literals.showString (Core.unName (var "name"))]) @@ (Literals.showInt32 (Lists.length (var "args"))))
+      Literals.showString (Core.unName (var "name"))]) (Literals.showInt32 (Lists.length (var "args"))))
 
-maybeTerm :: TBinding ((Term -> Flow Graph x) -> Term -> Flow Graph (Maybe x))
+maybeTerm :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) x) -> Graph -> Term -> Prelude.Either (InContext OtherError) (Maybe x))
 maybeTerm = define "maybeTerm" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
-  "f" ~> "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ ("maybe value")
-      @@ (ShowCore.term @@ var "term"))) [
+  "cx" ~> "f" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx")
+      (Phantoms.string "maybe value")
+      (ShowCore.term @@ var "term"))) [
     _Term_maybe>>: "mt" ~> Maybes.maybe
-      (produce nothing)
-      ("t" ~> Flows.map (unaryFunction just) (var "f" @@ var "t"))
-      (var "mt")]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+      (right nothing)
+      ("t" ~> Eithers.map (unaryFunction just) (var "f" @@ var "t"))
+      (var "mt")]
 
-maybeType :: TBinding (Type -> Flow s Type)
+maybeType :: TBinding (Context -> Type -> Prelude.Either (InContext OtherError) Type)
 maybeType = define "maybeType" $
   doc "Extract the base type from an optional type" $
-  "typ" ~>
+  "cx" ~> "typ" ~>
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (Monads.unexpected
-      @@ ("maybe type")
-      @@ (ShowCore.type_ @@ var "typ"))) [
-    _Type_maybe>>: "t" ~> Flows.pure (var "t")]
+    (Just (unexpected (var "cx") (Phantoms.string "maybe type") (ShowCore.type_ @@ var "typ"))) [
+    _Type_maybe>>: "t" ~> right (var "t")]
 
-pair :: TBinding ((Term -> Flow Graph k) -> (Term -> Flow Graph v) -> Term -> Flow Graph (k, v))
+pair :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) k) -> (Term -> Prelude.Either (InContext OtherError) v) -> Graph -> Term -> Prelude.Either (InContext OtherError) (k, v))
 pair = define "pair" $
   doc "Extract a pair of values from a term, applying functions to each component" $
-  "kf" ~> "vf" ~> "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ "pair"
-      @@ (ShowCore.term @@ var "term"))) [
+  "cx" ~> "kf" ~> "vf" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx")
+      (Phantoms.string "pair")
+      (ShowCore.term @@ var "term"))) [
     _Term_pair>>: "p" ~>
-      "kVal" <<~ var "kf" @@ (Pairs.first $ var "p") $
-      "vVal" <<~ var "vf" @@ (Pairs.second $ var "p") $
-      produce (Phantoms.pair (var "kVal") (var "vVal"))]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+      "kVal" <<= var "kf" @@ (Pairs.first $ var "p") $
+      "vVal" <<= var "vf" @@ (Pairs.second $ var "p") $
+      right (Phantoms.pair (var "kVal") (var "vVal"))]
 
 -- TODO: nonstandard; move me
-record :: TBinding (Name -> Term -> Flow Graph [Field])
+record :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InContext OtherError) [Field])
 record = define "record" $
   doc "Extract a record's fields from a term" $
-  "expected" ~> "term0" ~>
-  "record" <<~ termRecord @@ var "term0" $
+  "cx" ~> "expected" ~> "graph" ~> "term0" ~>
+  "record" <<= termRecord @@ var "cx" @@ var "graph" @@ var "term0" $
   Logic.ifElse (Equality.equal (Core.recordTypeName (var "record")) (var "expected"))
-    (Flows.pure (Core.recordFields (var "record")))
-    (Monads.unexpected
-      @@ (("record of type ") ++ (Core.unName (var "expected")))
-      @@ (Core.unName (Core.recordTypeName (var "record"))))
+    (right (Core.recordFields (var "record")))
+    (unexpected (var "cx")
+      (Phantoms.string "record of type " ++ (Core.unName (var "expected")))
+      (Core.unName (Core.recordTypeName (var "record"))))
 
 -- TODO: nonstandard; move me
-recordType :: TBinding (Name -> Type -> Flow s [FieldType])
+recordType :: TBinding (Context -> Name -> Type -> Prelude.Either (InContext OtherError) [FieldType])
 recordType = define "recordType" $
   doc "Extract the field types from a record type" $
-  "ename" ~> "typ" ~>
+  "cx" ~> "ename" ~> "typ" ~>
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (Monads.unexpected
-      @@ ("record type")
-      @@ (ShowCore.type_ @@ var "typ"))) [
+    (Just (unexpected (var "cx") (Phantoms.string "record type") (ShowCore.type_ @@ var "typ"))) [
     _Type_record>>: "rowType" ~>
       Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName (var "rowType")) (var "ename"))
-        (Flows.pure (Core.rowTypeFields (var "rowType")))
-        (Monads.unexpected
-          @@ (("record of type ") ++ (Core.unName (var "ename")))
-          @@ (("record of type ") ++ (Core.unName (Core.rowTypeTypeName (var "rowType")))))]
+        (right (Core.rowTypeFields (var "rowType")))
+        (unexpected (var "cx")
+          (Phantoms.string "record of type " ++ (Core.unName (var "ename")))
+          (Phantoms.string "record of type " ++ (Core.unName (Core.rowTypeTypeName (var "rowType")))))]
 
-set :: TBinding (Term -> Flow Graph (S.Set Term))
+set :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) (S.Set Term))
 set = define "set" $
   doc "Extract a set of terms from a term" $
-  "term" ~>
-  "extract" <~ ("stripped" ~> Phantoms.cases _Term (var "stripped")
-    (Just $ Monads.unexpected
-      @@ "set"
-      @@ (ShowCore.term @@ var "stripped")) [
-    _Term_set>>: "s" ~> produce $ var "s"]) $
-  "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "term" $
-  var "extract" @@ var "stripped"
+  "cx" ~> "graph" ~> "term" ~>
+  "stripped" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term" $
+  Phantoms.cases _Term (var "stripped")
+    (Just (unexpected (var "cx") (Phantoms.string "set") (ShowCore.term @@ var "stripped"))) [
+    _Term_set>>: "s" ~> right (var "s")]
 
-setOf :: TBinding ((Term -> Flow Graph x) -> Term -> Flow Graph (S.Set x))
+setOf :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) x) -> Graph -> Term -> Prelude.Either (InContext OtherError) (S.Set x))
 setOf = define "setOf" $
   doc "Extract a set of values from a term, mapping a function over each element" $
-  "f" ~> "term" ~>
-  "els" <<~ set @@ var "term" $
-  Flows.mapSet (var "f") (var "els")
+  "cx" ~> "f" ~> "graph" ~> "term" ~>
+  "els" <<= set @@ var "cx" @@ var "graph" @@ var "term" $
+  Eithers.mapSet (var "f") (var "els")
 
-setType :: TBinding (Type -> Flow s Type)
+setType :: TBinding (Context -> Type -> Prelude.Either (InContext OtherError) Type)
 setType = define "setType" $
   doc "Extract the element type from a set type" $
-  "typ" ~>
+  "cx" ~> "typ" ~>
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (Monads.unexpected
-      @@ "set type"
-      @@ (ShowCore.type_ @@ var "typ"))) [
-    _Type_set>>: "t" ~> Flows.pure (var "t")]
+    (Just (unexpected (var "cx") (Phantoms.string "set type") (ShowCore.type_ @@ var "typ"))) [
+    _Type_set>>: "t" ~> right (var "t")]
 
-string :: TBinding (Term -> Flow Graph String)
+string :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) String)
 string = define "string" $
   doc "Extract a string value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  stringLiteral @@ var "l"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  stringLiteral @@ var "cx" @@ var "l"
 
-stringLiteral :: TBinding (Literal -> Flow Graph String)
+stringLiteral :: TBinding (Context -> Literal -> Prelude.Either (InContext OtherError) String)
 stringLiteral = define "stringLiteral" $
   doc "Extract a string literal from a Literal value" $
-  "v" ~> Phantoms.cases _Literal (var "v")
-    (Just (Monads.unexpected
-      @@ ("string")
-      @@ (ShowCore.literal @@ var "v"))) [
-    _Literal_string>>: "s" ~> Flows.pure (var "s")]
+  "cx" ~> "v" ~> Phantoms.cases _Literal (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "string") (ShowCore.literal @@ var "v"))) [
+    _Literal_string>>: "s" ~> right (var "s")]
 
-termRecord :: TBinding (Term -> Flow Graph Record)
+termRecord :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Record)
 termRecord = define "termRecord" $
   doc "Extract a record from a term" $
-  "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ ("record")
-      @@ (ShowCore.term @@ var "term"))) [
-    _Term_record>>: "record" ~> produce (var "record")]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+  "cx" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx") (Phantoms.string "record") (ShowCore.term @@ var "term"))) [
+    _Term_record>>: "record" ~> right (var "record")]
 
-uint16 :: TBinding (Term -> Flow Graph Int)
+uint16 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Int)
 uint16 = define "uint16" $
   doc "Extract a 16-bit unsigned integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "i" <<~ integerLiteral @@ var "l" $
-  uint16Value @@ var "i"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  uint16Value @@ var "cx" @@ var "i"
 
-uint16Value :: TBinding (IntegerValue -> Flow Graph Int)
+uint16Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) Int)
 uint16Value = define "uint16Value" $
   doc "Extract a uint16 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("uint16")
-      @@ (ShowCore.integerValue @@ var "v"))) [
-    _IntegerValue_uint16>>: "i" ~> Flows.pure (var "i")]
+  "cx" ~> "v" ~> Phantoms.cases _IntegerValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "uint16") (ShowCore.integerValue @@ var "v"))) [
+    _IntegerValue_uint16>>: "i" ~> right (var "i")]
 
-uint32 :: TBinding (Term -> Flow Graph I.Int64)
+uint32 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) I.Int64)
 uint32 = define "uint32" $
   doc "Extract a 32-bit unsigned integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "i" <<~ integerLiteral @@ var "l" $
-  uint32Value @@ var "i"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  uint32Value @@ var "cx" @@ var "i"
 
-uint32Value :: TBinding (IntegerValue -> Flow Graph I.Int64)
+uint32Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int64)
 uint32Value = define "uint32Value" $
   doc "Extract a uint32 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("uint32")
-      @@ (ShowCore.integerValue @@ var "v"))) [
-    _IntegerValue_uint32>>: "i" ~> Flows.pure (var "i")]
+  "cx" ~> "v" ~> Phantoms.cases _IntegerValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "uint32") (ShowCore.integerValue @@ var "v"))) [
+    _IntegerValue_uint32>>: "i" ~> right (var "i")]
 
-uint64 :: TBinding (Term -> Flow Graph Integer)
+uint64 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Integer)
 uint64 = define "uint64" $
   doc "Extract a 64-bit unsigned integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "i" <<~ integerLiteral @@ var "l" $
-  uint64Value @@ var "i"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  uint64Value @@ var "cx" @@ var "i"
 
-uint64Value :: TBinding (IntegerValue -> Flow Graph Integer)
+uint64Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) Integer)
 uint64Value = define "uint64Value" $
   doc "Extract a uint64 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("uint64")
-      @@ (ShowCore.integerValue @@ var "v"))) [
-    _IntegerValue_uint64>>: "i" ~> Flows.pure (var "i")]
+  "cx" ~> "v" ~> Phantoms.cases _IntegerValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "uint64") (ShowCore.integerValue @@ var "v"))) [
+    _IntegerValue_uint64>>: "i" ~> right (var "i")]
 
-uint8 :: TBinding (Term -> Flow Graph I.Int16)
+uint8 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) I.Int16)
 uint8 = define "uint8" $
   doc "Extract an 8-bit unsigned integer value from a term" $
-  "t" ~>
-  "l" <<~ literal @@ var "t" $
-  "i" <<~ integerLiteral @@ var "l" $
-  uint8Value @@ var "i"
+  "cx" ~> "graph" ~> "t" ~>
+  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  uint8Value @@ var "cx" @@ var "i"
 
-uint8Value :: TBinding (IntegerValue -> Flow Graph I.Int16)
+uint8Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int16)
 uint8Value = define "uint8Value" $
   doc "Extract a uint8 value from an IntegerValue" $
-  "v" ~> Phantoms.cases _IntegerValue (var "v")
-    (Just (Monads.unexpected
-      @@ ("uint8")
-      @@ (ShowCore.integerValue @@ var "v"))) [
-    _IntegerValue_uint8>>: "i" ~> Flows.pure (var "i")]
+  "cx" ~> "v" ~> Phantoms.cases _IntegerValue (var "v")
+    (Just (unexpected (var "cx") (Phantoms.string "uint8") (ShowCore.integerValue @@ var "v"))) [
+    _IntegerValue_uint8>>: "i" ~> right (var "i")]
 
 -- TODO: nonstandard; move me
-unionType :: TBinding (Name -> Type -> Flow s [FieldType])
+unionType :: TBinding (Context -> Name -> Type -> Prelude.Either (InContext OtherError) [FieldType])
 unionType = define "unionType" $
   doc "Extract the field types from a union type" $
-  "ename" ~> "typ" ~>
+  "cx" ~> "ename" ~> "typ" ~>
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (Monads.unexpected
-      @@ ("union type")
-      @@ (ShowCore.type_ @@ var "typ"))) [
+    (Just (unexpected (var "cx") (Phantoms.string "union type") (ShowCore.type_ @@ var "typ"))) [
     _Type_union>>: "rowType" ~>
       Logic.ifElse (Equality.equal (Core.rowTypeTypeName (var "rowType")) (var "ename"))
-        (Flows.pure (Core.rowTypeFields (var "rowType")))
-        (Monads.unexpected
-          @@ (("union of type ") ++ (Core.unName (var "ename")))
-          @@ (("union of type ") ++ (Core.unName (Core.rowTypeTypeName (var "rowType")))))]
+        (right (Core.rowTypeFields (var "rowType")))
+        (unexpected (var "cx")
+          (Phantoms.string "union of type " ++ (Core.unName (var "ename")))
+          (Phantoms.string "union of type " ++ (Core.unName (Core.rowTypeTypeName (var "rowType")))))]
 
-unit :: TBinding (Term -> Flow Graph ())
+unit :: TBinding (Context -> Term -> Prelude.Either (InContext OtherError) ())
 unit = define "unit" $
   doc "Extract a unit value from a term" $
-  "term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ "unit"
-      @@ (ShowCore.term @@ var "term"))) [
-    _Term_unit>>: constant (Flows.pure Phantoms.unit)]
+  "cx" ~> "term" ~> Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx") (Phantoms.string "unit") (ShowCore.term @@ var "term"))) [
+    _Term_unit>>: constant (right Phantoms.unit)]
 
-unitVariant :: TBinding (Name -> Term -> Flow Graph Name)
+unitVariant :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InContext OtherError) Name)
 unitVariant = define "unitVariant" $
   doc "Extract a unit variant (a variant with an empty record value) from a union term" $
-  "tname" ~> "term" ~>
-  "field" <<~ injection @@ var "tname" @@ var "term" $
-  "ignored" <<~ unit @@ (Core.fieldTerm (var "field")) $
-  produce (Core.fieldName (var "field"))
+  "cx" ~> "tname" ~> "graph" ~> "term" ~>
+  "field" <<= injection @@ var "cx" @@ var "tname" @@ var "graph" @@ var "term" $
+  "ignored" <<= unit @@ var "cx" @@ (Core.fieldTerm (var "field")) $
+  right (Core.fieldName (var "field"))
 
 -- TODO: nonstandard; move me
-wrap :: TBinding (Name -> Term -> Flow Graph Term)
+wrap :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InContext OtherError) Term)
 wrap = define "wrap" $
   doc "Extract the wrapped value from a wrapped term" $
-  "expected" ~> "term0" ~>
-  "extract" <~ ("term" ~> Phantoms.cases _Term (var "term")
-    (Just (Monads.unexpected
-      @@ (("wrap(") ++ (Core.unName (var "expected")) ++ (")"))
-      @@ (ShowCore.term @@ var "term"))) [
+  "cx" ~> "expected" ~> "graph" ~> "term0" ~>
+  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  Phantoms.cases _Term (var "term")
+    (Just (unexpected (var "cx")
+      (Phantoms.string "wrap(" ++ (Core.unName (var "expected")) ++ Phantoms.string ")")
+      (ShowCore.term @@ var "term"))) [
     _Term_wrap>>: "wrappedTerm" ~>
       Logic.ifElse (Core.equalName_ (Core.wrappedTermTypeName (var "wrappedTerm")) (var "expected"))
-        (Flows.pure (Core.wrappedTermBody (var "wrappedTerm")))
-        (Monads.unexpected
-          @@ (("wrapper of type ") ++ (Core.unName (var "expected")))
-          @@ (Core.unName (Core.wrappedTermTypeName (var "wrappedTerm"))))]) $
-  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "term0" $
-  var "extract" @@ var "term"
+        (right (Core.wrappedTermBody (var "wrappedTerm")))
+        (unexpected (var "cx")
+          (Phantoms.string "wrapper of type " ++ (Core.unName (var "expected")))
+          (Core.unName (Core.wrappedTermTypeName (var "wrappedTerm"))))]
 
 -- TODO: nonstandard; move me
-wrappedType :: TBinding (Name -> Type -> Flow s Type)
+wrappedType :: TBinding (Context -> Name -> Type -> Prelude.Either (InContext OtherError) Type)
 wrappedType = define "wrappedType" $
   doc "Extract the wrapped type from a wrapper type" $
-  "ename" ~> "typ" ~>
+  "cx" ~> "ename" ~> "typ" ~>
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
-    (Just (Monads.unexpected
-      @@ ("wrapped type")
-      @@ (ShowCore.type_ @@ var "typ"))) [
+    (Just (unexpected (var "cx") (Phantoms.string "wrapped type") (ShowCore.type_ @@ var "typ"))) [
     _Type_wrap>>: "wrappedType" ~>
       Logic.ifElse (Core.equalName_ (Core.wrappedTypeTypeName (var "wrappedType")) (var "ename"))
-        (Flows.pure (Core.wrappedTypeBody (var "wrappedType")))
-        (Monads.unexpected
-          @@ (("wrapped type ") ++ (Core.unName (var "ename")))
-          @@ (("wrapped type ") ++ (Core.unName (Core.wrappedTypeTypeName (var "wrappedType")))))]
+        (right (Core.wrappedTypeBody (var "wrappedType")))
+        (unexpected (var "cx")
+          (Phantoms.string "wrapped type " ++ (Core.unName (var "ename")))
+          (Phantoms.string "wrapped type " ++ (Core.unName (Core.wrappedTypeTypeName (var "wrappedType")))))]

@@ -2,7 +2,7 @@
 module Hydra.Sources.Kernel.Terms.Lexical where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyGraph, extendGraphWithBindings, fieldsOf, getField, graphToBindings, lookupElement, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither, withEmptyGraph)
+import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyGraph, extendGraphWithBindings, fieldsOf, getField, graphToBindings, lookupElement, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -46,6 +45,8 @@ import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Meta.Typing       as Typing
 import qualified Hydra.Dsl.Meta.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
+import qualified Hydra.Dsl.Meta.Context      as Ctx
+import qualified Hydra.Dsl.Meta.Error        as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -96,8 +97,10 @@ module_ = Module ns elements
       toBinding requireTerm,
       toBinding resolveTerm,
       toBinding stripAndDereferenceTerm,
-      toBinding stripAndDereferenceTermEither,
-      toBinding withEmptyGraph]
+      toBinding stripAndDereferenceTermEither]
+
+formatOtherError :: TTerm (InContext OtherError -> String)
+formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
 
 -- | Build a Graph from element bindings, environment, and primitives.
 buildGraph :: TBinding ([Binding] -> M.Map Name (Maybe Term) -> M.Map Name Primitive -> Graph)
@@ -135,12 +138,10 @@ chooseUniqueName = define "chooseUniqueName" $
       (var "candidate")) $
   var "tryName" @@ (int32 1)
 
-dereferenceElement :: TBinding (Name -> Flow Graph (Maybe Binding))
+dereferenceElement :: TBinding (Graph -> Name -> Maybe Binding)
 dereferenceElement = define "dereferenceElement" $
-  doc "Look up an element in the current graph context" $
-  "name" ~> Flows.map
-    ("graph" ~> lookupElement @@ var "graph" @@ var "name")
-    (Monads.getState)
+  doc "Look up an element in a graph" $
+  "graph" ~> "name" ~> lookupElement @@ var "graph" @@ var "name"
 
 dereferenceSchemaType :: TBinding (Name -> M.Map Name TypeScheme -> Maybe TypeScheme)
 dereferenceSchemaType = define "dereferenceSchemaType" $
@@ -232,11 +233,11 @@ fieldsOf = define "fieldsOf" $
     _Type_record>>: "rt" ~> Core.rowTypeFields (var "rt"),
     _Type_union>>: "rt" ~> Core.rowTypeFields (var "rt")]
 
-getField :: TBinding (M.Map Name Term -> Name -> (Term -> Flow Graph b) -> Flow Graph b)
+getField :: TBinding (Context -> M.Map Name Term -> Name -> (Term -> Either (InContext OtherError) b) -> Either (InContext OtherError) b)
 getField = define "getField" $
-  "m" ~> "fname" ~> "decode" ~>
+  "cx" ~> "m" ~> "fname" ~> "decode" ~>
   Maybes.maybe
-    (Flows.fail ((string "expected field ") ++ (Core.unName (var "fname")) ++ (string " not found")))
+    (Ctx.failInContext (Error.otherError ((string "expected field ") ++ (Core.unName (var "fname")) ++ (string " not found"))) (var "cx"))
     (var "decode")
     (Maps.lookup (var "fname") (var "m"))
 
@@ -261,128 +262,123 @@ lookupTerm = define "lookupTerm" $
   "graph" ~> "name" ~>
   Maps.lookup (var "name") (Graph.graphBoundTerms (var "graph"))
 
-matchEnum :: TBinding (Name -> [(Name, b)] -> Term -> Flow Graph b)
+matchEnum :: TBinding (Context -> Graph -> Name -> [(Name, b)] -> Term -> Either (InContext OtherError) b)
 matchEnum = define "matchEnum" $
-  "tname" ~> "pairs" ~>
-  matchUnion @@ var "tname" @@ (Lists.map ("pair" ~>
+  "cx" ~> "graph" ~> "tname" ~> "pairs" ~>
+  matchUnion @@ var "cx" @@ var "graph" @@ var "tname" @@ (Lists.map ("pair" ~>
     matchUnitField @@ (Pairs.first (var "pair")) @@ (Pairs.second (var "pair"))) (var "pairs"))
 
-matchRecord :: TBinding ((M.Map Name Term -> Flow Graph b) -> Term -> Flow Graph b)
+matchRecord :: TBinding (Context -> Graph -> (M.Map Name Term -> Either (InContext OtherError) b) -> Term -> Either (InContext OtherError) b)
 matchRecord = define "matchRecord" $
-  "decode" ~> "term" ~>
+  "cx" ~> "graph" ~> "decode" ~> "term" ~>
   "stripped" <~ Rewriting.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
-    (Just (Monads.unexpected @@ (string "record") @@ (ShowCore.term @@ var "term"))) [
+    (Just (Ctx.failInContext (Error.otherError ((string "expected a record, got ") ++ (ShowCore.term @@ var "term"))) (var "cx"))) [
     _Term_record>>: "record" ~> var "decode" @@
       (Maps.fromList (Lists.map
         ("field" ~> pair (Core.fieldName (var "field")) (Core.fieldTerm (var "field")))
         (Core.recordFields (var "record"))))]
 
-matchUnion :: TBinding (Name -> [(Name, Term -> Flow Graph b)] -> Term -> Flow Graph b)
+matchUnion :: TBinding (Context -> Graph -> Name -> [(Name, Term -> Either (InContext OtherError) b)] -> Term -> Either (InContext OtherError) b)
 matchUnion = define "matchUnion" $
-  "tname" ~> "pairs" ~> "term" ~>
+  "cx" ~> "graph" ~> "tname" ~> "pairs" ~> "term" ~>
   "stripped" <~ Rewriting.deannotateAndDetypeTerm @@ var "term" $
   "mapping" <~ Maps.fromList (var "pairs") $
---  trace "match union" $
   cases _Term (var "stripped")
-    (Just (Monads.unexpected @@
-      (Strings.cat $ list [
-        string "inject(", Core.unName (var "tname"),
+    (Just (Ctx.failInContext (Error.otherError (Strings.cat $ list [
+        string "expected inject(", Core.unName (var "tname"),
         string ") with one of {",
         (Strings.intercalate (string ", ") (Lists.map ("pair" ~> Core.unName (Pairs.first (var "pair"))) (var "pairs"))),
-        string "}"]) @@
-      (ShowCore.term @@ var "stripped"))) [
+        string "}, got ",
+        (ShowCore.term @@ var "stripped")])) (var "cx"))) [
     _Term_variable>>: "name" ~>
-      "el" <<~ requireElement @@ var "name" $
-      matchUnion @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm (var "el")),
+      "el" <<= requireElement @@ var "cx" @@ var "graph" @@ var "name" $
+      matchUnion @@ var "cx" @@ var "graph" @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm (var "el")),
     _Term_union>>: "injection" ~>
       "exp" <~ (
         "fname" <~ Core.fieldName (Core.injectionField (var "injection")) $
         "val" <~ Core.fieldTerm (Core.injectionField (var "injection")) $
         Maybes.maybe
-          (Flows.fail ((string "no matching case for field \"") ++ (Core.unName (var "fname"))
-            ++ (string "\" in union type ") ++ (Core.unName (var "tname"))))
+          (Ctx.failInContext (Error.otherError ((string "no matching case for field \"") ++ (Core.unName (var "fname"))
+            ++ (string "\" in union type ") ++ (Core.unName (var "tname")))) (var "cx"))
           ("f" ~> var "f" @@ var "val")
           (Maps.lookup (var "fname") (var "mapping"))) $
       Logic.ifElse (Core.equalName_ (Core.injectionTypeName (var "injection")) (var "tname"))
         (var "exp")
-        (Monads.unexpected @@ ((string "injection for type ") ++ (Core.unName (var "tname"))) @@ (ShowCore.term @@ var "term"))]
+        (Ctx.failInContext (Error.otherError ((string "expected injection for type ") ++ (Core.unName (var "tname"))
+          ++ (string ", got ") ++ (ShowCore.term @@ var "term"))) (var "cx"))]
 
-matchUnitField :: TBinding (Name -> y -> (Name, x -> Flow Graph y))
+matchUnitField :: TBinding (Name -> y -> (Name, x -> Either (InContext OtherError) y))
 matchUnitField = define "matchUnitField" $
-  "fname" ~> "x" ~> pair (var "fname") ("ignored" ~> produce (var "x"))
+  "fname" ~> "x" ~> pair (var "fname") ("ignored" ~> right (var "x"))
 
-requireElement :: TBinding (Name -> Flow Graph Binding)
+requireElement :: TBinding (Context -> Graph -> Name -> Either (InContext OtherError) Binding)
 requireElement = define "requireElement" $
-  "name" ~>
+  "cx" ~> "graph" ~> "name" ~>
   "showAll" <~ false $
   "ellipsis" <~ ("strings" ~>
     Logic.ifElse (Logic.and (Equality.gt (Lists.length (var "strings")) (int32 3)) (Logic.not (var "showAll")))
       (Lists.concat2 (Lists.take (int32 3) (var "strings")) (list [string "..."]))
       (var "strings")) $
-  "err" <~ ("graph" ~> Flows.fail (
+  "errMsg" <~ (
     (string "no such element: ") ++ (Core.unName (var "name")) ++
     (string ". Available elements: {") ++
     (Strings.intercalate (string ", ") (var "ellipsis" @@ (Lists.map (unaryFunction Core.unName) (Maps.keys (Graph.graphBoundTerms (var "graph")))))) ++
-    (string "}"))) $
-  "mel" <<~ dereferenceElement @@ var "name" $
+    (string "}")) $
   Maybes.maybe
-    ("graph" <<~ Monads.getState $ var "err" @@ var "graph")
-    (unaryFunction Flows.pure)
-    (var "mel")
+    (Ctx.failInContext (Error.otherError (var "errMsg")) (var "cx"))
+    (unaryFunction right)
+    (dereferenceElement @@ var "graph" @@ var "name")
 
-requirePrimitive :: TBinding (Name -> Flow Graph Primitive)
+requirePrimitive :: TBinding (Context -> Graph -> Name -> Either (InContext OtherError) Primitive)
 requirePrimitive = define "requirePrimitive" $
-  "name" ~>
-  "graph" <<~ Monads.getState $
+  "cx" ~> "graph" ~> "name" ~>
   Maybes.maybe
-    (Flows.fail ((string "no such primitive function: ") ++ (Core.unName (var "name"))))
-    (unaryFunction Flows.pure)
+    (Ctx.failInContext (Error.otherError ((string "no such primitive function: ") ++ (Core.unName (var "name")))) (var "cx"))
+    (unaryFunction right)
     (lookupPrimitive @@ var "graph" @@ var "name")
 
-requirePrimitiveType :: TBinding (Graph -> Name -> Flow s TypeScheme)
+requirePrimitiveType :: TBinding (Context -> Graph -> Name -> Either (InContext OtherError) TypeScheme)
 requirePrimitiveType = define "requirePrimitiveType" $
-  "tx" ~> "name" ~>
+  "cx" ~> "tx" ~> "name" ~>
   "mts" <~ Maps.lookup
     (var "name" )
     (Graph.graphPrimitiveTypes $ var "tx") $
   optCases (var "mts")
-    (Flows.fail ((string "no such primitive function: ") ++ (Core.unName (var "name"))))
-    ("ts" ~> produce $ var "ts")
+    (Ctx.failInContext (Error.otherError ((string "no such primitive function: ") ++ (Core.unName (var "name")))) (var "cx"))
+    ("ts" ~> right $ var "ts")
 
-requireTerm :: TBinding (Name -> Flow Graph Term)
+requireTerm :: TBinding (Context -> Graph -> Name -> Either (InContext OtherError) Term)
 requireTerm = define "requireTerm" $
-  "name" ~>
-  "mt" <<~ resolveTerm @@ var "name" $
+  "cx" ~> "graph" ~> "name" ~>
   Maybes.maybe
-    (Flows.fail ((string "no such element: ") ++ (Core.unName (var "name"))))
-    (unaryFunction Flows.pure)
-    (var "mt")
+    (Ctx.failInContext (Error.otherError ((string "no such element: ") ++ (Core.unName (var "name")))) (var "cx"))
+    (unaryFunction right)
+    (resolveTerm @@ var "graph" @@ var "name")
 
-resolveTerm :: TBinding (Name -> Flow Graph (Maybe Term))
+resolveTerm :: TBinding (Graph -> Name -> Maybe Term)
 resolveTerm = define "resolveTerm" $
   doc "TODO: distinguish between lambda-bound and let-bound variables" $
-  "name" ~>
+  "graph" ~> "name" ~>
   "recurse" <~ ("term" ~>
     "stripped" <~ Rewriting.deannotateTerm @@ var "term" $
     cases _Term (var "stripped")
-      (Just (produce (just (var "term")))) [
-      _Term_variable>>: "name'" ~> resolveTerm @@ var "name'"]) $
-  "graph" <<~ Monads.getState $
+      (Just (just (var "term"))) [
+      _Term_variable>>: "name'" ~> resolveTerm @@ var "graph" @@ var "name'"]) $
   Maybes.maybe
-    (produce nothing)
+    nothing
     (var "recurse")
     (lookupTerm @@ var "graph" @@ var "name")
 
-stripAndDereferenceTerm :: TBinding (Term -> Flow Graph Term)
+stripAndDereferenceTerm :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) Term)
 stripAndDereferenceTerm = define "stripAndDereferenceTerm" $
-  "term" ~>
+  "cx" ~> "graph" ~> "term" ~>
   "stripped" <~ Rewriting.deannotateAndDetypeTerm @@ var "term" $
   cases _Term (var "stripped")
-    (Just (produce (var "stripped"))) [
+    (Just (right (var "stripped"))) [
     _Term_variable>>: "v" ~>
-      "t" <<~ requireTerm @@ var "v" $
-      stripAndDereferenceTerm @@ var "t"]
+      Eithers.bind (requireTerm @@ var "cx" @@ var "graph" @@ var "v") (
+        "t" ~> stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "t")]
 
 stripAndDereferenceTermEither :: TBinding (Graph -> Term -> Either String Term)
 stripAndDereferenceTermEither = define "stripAndDereferenceTermEither" $
@@ -397,9 +393,4 @@ stripAndDereferenceTermEither = define "stripAndDereferenceTermEither" $
         ("binding" ~> stripAndDereferenceTermEither @@ var "graph" @@ (Core.bindingTerm (var "binding")))
         (dereferenceVariable @@ var "graph" @@ var "v")]
 
--- TODO: move into hydra.lexical
-withEmptyGraph :: TBinding (Flow Graph a -> Flow s a)
-withEmptyGraph = define "withEmptyGraph" $
-  doc "Execute flow with empty graph" $
-  Monads.withState @@ Graph.emptyGraph
 

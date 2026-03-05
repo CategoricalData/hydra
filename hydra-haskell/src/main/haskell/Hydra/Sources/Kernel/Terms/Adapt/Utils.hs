@@ -13,7 +13,9 @@ import qualified Hydra.Dsl.Meta.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Coders       as Coders
 import qualified Hydra.Dsl.Meta.Compute      as Compute
+import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Grammar      as Grammar
 import qualified Hydra.Dsl.Grammars          as Grammars
 import qualified Hydra.Dsl.Meta.Graph        as Graph
@@ -21,7 +23,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -90,21 +91,21 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-bidirectional :: TBinding ((CoderDirection -> b -> Flow s b) -> Coder s s b b)
+bidirectional :: TBinding ((CoderDirection -> Context -> b -> Either (InContext OtherError) b) -> Coder b b)
 bidirectional = define "bidirectional" $
   doc "Create a bidirectional coder from a direction-aware function" $
   "f" ~> Compute.coder (var "f" @@ Coders.coderDirectionEncode) (var "f" @@ Coders.coderDirectionDecode)
 
-chooseAdapter :: TBinding ((t -> Flow so [SymmetricAdapter si t v]) -> (t -> Bool) -> (t -> String ) -> (t -> String) -> t -> Flow so (SymmetricAdapter si t v))
+chooseAdapter :: TBinding ((t -> Either String [SymmetricAdapter t v]) -> (t -> Bool) -> (t -> String ) -> (t -> String) -> t -> Either String (SymmetricAdapter t v))
 chooseAdapter = define "chooseAdapter" $
   doc "Choose an appropriate adapter for a type" $
   "alts" ~> "supported" ~> "show" ~> "describe" ~> "typ" ~>
   Logic.ifElse (var "supported" @@ var "typ")
-    (produce (Compute.adapter false (var "typ") (var "typ") idCoder))
-    ("raw" <<~ var "alts" @@ var "typ" $
+    (right (Compute.adapter false (var "typ") (var "typ") idCoder))
+    ("raw" <<= var "alts" @@ var "typ" $
      "candidates" <~ Lists.filter ("adapter" ~> var "supported" @@ Compute.adapterTarget (var "adapter")) (var "raw") $
      Logic.ifElse (Lists.null (var "candidates"))
-       (Flows.fail (Strings.cat (list [
+       (left (Strings.cat (list [
          string "no adapters found for ",
          var "describe" @@ var "typ",
          Logic.ifElse (Lists.null (var "raw"))
@@ -117,24 +118,24 @@ chooseAdapter = define "chooseAdapter" $
              string ")"])),
          string ". Original type: ",
          var "show" @@ var "typ"])))
-       (produce (Lists.head (var "candidates"))))
+       (right (Lists.head (var "candidates"))))
 
-composeCoders :: TBinding (Coder s s a b -> Coder s s b c -> Coder s s a c)
+composeCoders :: TBinding (Coder a b -> Coder b c -> Coder a c)
 composeCoders = define "composeCoders" $
   doc "Compose two coders" $
   "c1" ~> "c2" ~>
   Compute.coder
-    ("a" ~> "b1" <<~ Compute.coderEncode (var "c1") @@ var "a" $ Compute.coderEncode (var "c2") @@ var "b1")
-    ("c" ~> "b2" <<~ Compute.coderDecode (var "c2") @@ var "c" $ Compute.coderDecode (var "c1") @@ var "b2")
+    ("cx" ~> "a" ~> "b1" <<= Compute.coderEncode (var "c1") @@ var "cx" @@ var "a" $ Compute.coderEncode (var "c2") @@ var "cx" @@ var "b1")
+    ("cx" ~> "c" ~> "b2" <<= Compute.coderDecode (var "c2") @@ var "cx" @@ var "c" $ Compute.coderDecode (var "c1") @@ var "cx" @@ var "b2")
 
-encodeDecode :: TBinding (CoderDirection -> Coder s s x x -> x -> Flow s x)
+encodeDecode :: TBinding (CoderDirection -> Coder x x -> Context -> x -> Either (InContext OtherError) x)
 encodeDecode = define "encodeDecode" $
   doc "Apply coder in the specified direction" $
-  "dir" ~> "coder" ~> "term" ~>
+  "dir" ~> "coder" ~> "cx" ~> "term" ~>
   cases _CoderDirection (var "dir")
     Nothing [
-    _CoderDirection_encode>>: constant (Compute.coderEncode (var "coder") @@ var "term"),
-    _CoderDirection_decode>>: constant (Compute.coderDecode (var "coder") @@ var "term")]
+    _CoderDirection_encode>>: constant (Compute.coderEncode (var "coder") @@ var "cx" @@ var "term"),
+    _CoderDirection_decode>>: constant (Compute.coderDecode (var "coder") @@ var "cx" @@ var "term")]
 
 floatTypeIsSupported :: TBinding (LanguageConstraints -> FloatType -> Bool)
 floatTypeIsSupported = define "floatTypeIsSupported" $
@@ -142,15 +143,15 @@ floatTypeIsSupported = define "floatTypeIsSupported" $
   "constraints" ~> "ft" ~>
   Sets.member (var "ft") (Coders.languageConstraintsFloatTypes (var "constraints"))
 
-idAdapter :: TBinding (t -> SymmetricAdapter s t v)
+idAdapter :: TBinding (t -> SymmetricAdapter t v)
 idAdapter = define "idAdapter" $
   doc "Identity adapter" $
   "t" ~> Compute.adapter false (var "t") (var "t") idCoder
 
-idCoder :: TBinding (Coder s s a a)
+idCoder :: TBinding (Coder a a)
 idCoder = define "idCoder" $
   doc "Identity coder" $
-  Compute.coder (unaryFunction Flows.pure) (unaryFunction Flows.pure)
+  Compute.coder ("_cx" ~> "x" ~> right (var "x")) ("_cx" ~> "x" ~> right (var "x"))
 
 integerTypeIsSupported :: TBinding (LanguageConstraints -> IntegerType -> Bool)
 integerTypeIsSupported = define "integerTypeIsSupported" $
@@ -241,10 +242,10 @@ typeIsSupported = define "typeIsSupported" $
   where
     andAll = Lists.foldl (binaryFunction Logic.and) true
 
-unidirectionalCoder :: TBinding ((a -> Flow s b) -> Coder s s a b)
+unidirectionalCoder :: TBinding ((Context -> a -> Either (InContext OtherError) b) -> Coder a b)
 unidirectionalCoder = define "unidirectionalCoder" $
   doc "Create a unidirectional coder" $
   "m" ~>
   Compute.coder
     (var "m")
-    (constant (Flows.fail (string "inbound mapping is unsupported")))
+    ("cx" ~> "_" ~> Ctx.failInContext (Error.otherError (string "inbound mapping is unsupported")) (var "cx"))

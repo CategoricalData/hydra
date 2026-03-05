@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Meta.Json         as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars    as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers  as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows    as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists    as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic    as Logic
@@ -54,6 +53,8 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Dsl.Meta.Context      as Ctx
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 
@@ -73,16 +74,18 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-comparison :: TBinding (Term -> Flow Graph Comparison)
+formatOtherError :: TTerm (InContext OtherError -> String)
+formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+
+comparison :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Comparison)
 comparison = define "comparison" $
   doc "Extract a comparison from a term" $
-  lambda "term" $
-    Flows.bind (ExtractCore.unitVariant @@ Core.nameLift _Comparison @@ var "term") $
-      lambda "fname" $
+  "cx" ~> "graph" ~> "term" ~>
+    "fname" <<= ExtractCore.unitVariant @@ var "cx" @@ Core.nameLift _Comparison @@ var "graph" @@ var "term" $
         Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_equalTo))
-          (Flows.pure Graph.comparisonEqualTo)
+          (right Graph.comparisonEqualTo)
           (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_lessThan))
-            (Flows.pure Graph.comparisonLessThan)
+            (right Graph.comparisonLessThan)
             (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
-              (Flows.pure Graph.comparisonGreaterThan)
-              (Monads.unexpected @@ string "comparison" @@ Core.unName (var "fname"))))
+              (right Graph.comparisonGreaterThan)
+              (Ctx.failInContext (Error.otherError (string "expected comparison but found " ++ Core.unName (var "fname"))) (var "cx"))))
