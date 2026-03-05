@@ -7,7 +7,6 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Compute as Compute
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Module as Module
 
@@ -19,12 +18,11 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Compute.ns, Graph.ns, Module.ns] [Core.ns] $
+module_ = Module ns elements [Graph.ns, Module.ns] [Core.ns] $
     Just "A model for Hydra transformation workflows"
   where
     elements = [
       hydraSchemaSpec,
-      lastMile,
       schemaSpec,
       transformWorkflow]
 
@@ -38,21 +36,6 @@ hydraSchemaSpec = define "HydraSchemaSpec" $
     "typeName">:
       doc "The name of the top-level type; all data which passes through the workflow will be instances of this type"
       Core.name]
-
-lastMile :: Binding
-lastMile = define "LastMile" $
-  doc "The last mile of a transformation, which encodes and serializes terms to a file" $
-  T.forAlls ["s", "a"] $ T.record [
-    "encoder">:
-      doc "An encoder for terms to a list of output objects" $
-      Core.type_ ~> Compute.flow @@ "s"
-        @@ (Core.term ~> Graph.graph ~> Compute.flow @@ "s" @@ T.list "a"),
-    "serializer">:
-      doc "A function which serializes a list of output objects to a string representation" $
-      T.list "a" ~> Compute.flow @@ "s" @@ T.string,
-    "fileExtension">:
-      doc "A file extension for the generated file(s)" $
-      T.string]
 
 schemaSpec :: Binding
 schemaSpec = define "SchemaSpec" $
