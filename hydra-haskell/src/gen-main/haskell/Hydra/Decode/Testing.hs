@@ -31,8 +31,8 @@ import qualified Data.Set as S
 
 alphaConversionTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.AlphaConversionTestCase)
 alphaConversionTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "term" Core_.term fieldMap cx) (\field_term -> Eithers.bind (Helpers.requireField "oldVariable" Core_.name fieldMap cx) (\field_oldVariable -> Eithers.bind (Helpers.requireField "newVariable" Core_.name fieldMap cx) (\field_newVariable -> Eithers.bind (Helpers.requireField "result" Core_.term fieldMap cx) (\field_result -> Right (Testing.AlphaConversionTestCase {
       Testing.alphaConversionTestCaseTerm = field_term,
       Testing.alphaConversionTestCaseOldVariable = field_oldVariable,
@@ -42,9 +42,9 @@ alphaConversionTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingEr
 
 evaluationStyle :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.EvaluationStyle)
 evaluationStyle cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -59,16 +59,16 @@ evaluationStyle cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)
 
 caseConversionTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.CaseConversionTestCase)
 caseConversionTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "fromConvention" Util.caseConvention fieldMap cx) (\field_fromConvention -> Eithers.bind (Helpers.requireField "toConvention" Util.caseConvention fieldMap cx) (\field_toConvention -> Eithers.bind (Helpers.requireField "fromString" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_fromString -> Eithers.bind (Helpers.requireField "toString" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_toString -> Right (Testing.CaseConversionTestCase {
       Testing.caseConversionTestCaseFromConvention = field_fromConvention,
       Testing.caseConversionTestCaseToConvention = field_toConvention,
@@ -78,8 +78,8 @@ caseConversionTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingErr
 
 delegatedEvaluationTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.DelegatedEvaluationTestCase)
 delegatedEvaluationTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.DelegatedEvaluationTestCase {
       Testing.delegatedEvaluationTestCaseInput = field_input,
       Testing.delegatedEvaluationTestCaseOutput = field_output}))))
@@ -87,8 +87,8 @@ delegatedEvaluationTestCase cx raw = (Eithers.either (\err -> Left (Error.Decodi
 
 etaExpansionTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.EtaExpansionTestCase)
 etaExpansionTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.EtaExpansionTestCase {
       Testing.etaExpansionTestCaseInput = field_input,
       Testing.etaExpansionTestCaseOutput = field_output}))))
@@ -96,8 +96,8 @@ etaExpansionTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError
 
 deannotateTermTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.DeannotateTermTestCase)
 deannotateTermTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.DeannotateTermTestCase {
       Testing.deannotateTermTestCaseInput = field_input,
       Testing.deannotateTermTestCaseOutput = field_output}))))
@@ -105,8 +105,8 @@ deannotateTermTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingErr
 
 deannotateTypeTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.DeannotateTypeTestCase)
 deannotateTypeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.type_ fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.type_ fieldMap cx) (\field_output -> Right (Testing.DeannotateTypeTestCase {
       Testing.deannotateTypeTestCaseInput = field_input,
       Testing.deannotateTypeTestCaseOutput = field_output}))))
@@ -114,8 +114,8 @@ deannotateTypeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingErr
 
 flattenLetTermsTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.FlattenLetTermsTestCase)
 flattenLetTermsTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.FlattenLetTermsTestCase {
       Testing.flattenLetTermsTestCaseInput = field_input,
       Testing.flattenLetTermsTestCaseOutput = field_output}))))
@@ -123,9 +123,9 @@ flattenLetTermsTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingEr
 
 foldOperation :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.FoldOperation)
 foldOperation cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -141,8 +141,8 @@ foldOperation cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
 
 foldOverTermTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.FoldOverTermTestCase)
 foldOverTermTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "traversalOrder" Coders.traversalOrder fieldMap cx) (\field_traversalOrder -> Eithers.bind (Helpers.requireField "operation" foldOperation fieldMap cx) (\field_operation -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.FoldOverTermTestCase {
       Testing.foldOverTermTestCaseInput = field_input,
       Testing.foldOverTermTestCaseTraversalOrder = field_traversalOrder,
@@ -152,8 +152,8 @@ foldOverTermTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError
 
 freeVariablesTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.FreeVariablesTestCase)
 freeVariablesTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" (Helpers.decodeSet Core_.name) fieldMap cx) (\field_output -> Right (Testing.FreeVariablesTestCase {
       Testing.freeVariablesTestCaseInput = field_input,
       Testing.freeVariablesTestCaseOutput = field_output}))))
@@ -161,9 +161,9 @@ freeVariablesTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingErro
 
 hoistPredicate :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.HoistPredicate)
 hoistPredicate cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -180,8 +180,8 @@ hoistPredicate cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
 
 hoistLetBindingsTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.HoistLetBindingsTestCase)
 hoistLetBindingsTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.let_ fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.let_ fieldMap cx) (\field_output -> Right (Testing.HoistLetBindingsTestCase {
       Testing.hoistLetBindingsTestCaseInput = field_input,
       Testing.hoistLetBindingsTestCaseOutput = field_output}))))
@@ -189,8 +189,8 @@ hoistLetBindingsTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingE
 
 hoistPolymorphicLetBindingsTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.HoistPolymorphicLetBindingsTestCase)
 hoistPolymorphicLetBindingsTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.let_ fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.let_ fieldMap cx) (\field_output -> Right (Testing.HoistPolymorphicLetBindingsTestCase {
       Testing.hoistPolymorphicLetBindingsTestCaseInput = field_input,
       Testing.hoistPolymorphicLetBindingsTestCaseOutput = field_output}))))
@@ -198,8 +198,8 @@ hoistPolymorphicLetBindingsTestCase cx raw = (Eithers.either (\err -> Left (Erro
 
 hoistSubtermsTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.HoistSubtermsTestCase)
 hoistSubtermsTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "predicate" hoistPredicate fieldMap cx) (\field_predicate -> Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.HoistSubtermsTestCase {
       Testing.hoistSubtermsTestCasePredicate = field_predicate,
       Testing.hoistSubtermsTestCaseInput = field_input,
@@ -208,8 +208,8 @@ hoistSubtermsTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingErro
 
 hoistCaseStatementsTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.HoistCaseStatementsTestCase)
 hoistCaseStatementsTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.HoistCaseStatementsTestCase {
       Testing.hoistCaseStatementsTestCaseInput = field_input,
       Testing.hoistCaseStatementsTestCaseOutput = field_output}))))
@@ -217,9 +217,9 @@ hoistCaseStatementsTestCase cx raw = (Eithers.either (\err -> Left (Error.Decodi
 
 termRewriter :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TermRewriter)
 termRewriter cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -234,8 +234,8 @@ termRewriter cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
 
 rewriteTermTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.RewriteTermTestCase)
 rewriteTermTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "rewriter" termRewriter fieldMap cx) (\field_rewriter -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.RewriteTermTestCase {
       Testing.rewriteTermTestCaseInput = field_input,
       Testing.rewriteTermTestCaseRewriter = field_rewriter,
@@ -244,9 +244,9 @@ rewriteTermTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError 
 
 typeRewriter :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TypeRewriter)
 typeRewriter cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -260,8 +260,8 @@ typeRewriter cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
 
 rewriteTypeTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.RewriteTypeTestCase)
 rewriteTypeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.type_ fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "rewriter" typeRewriter fieldMap cx) (\field_rewriter -> Eithers.bind (Helpers.requireField "output" Core_.type_ fieldMap cx) (\field_output -> Right (Testing.RewriteTypeTestCase {
       Testing.rewriteTypeTestCaseInput = field_input,
       Testing.rewriteTypeTestCaseRewriter = field_rewriter,
@@ -270,8 +270,8 @@ rewriteTypeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError 
 
 evaluationTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.EvaluationTestCase)
 evaluationTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "evaluationStyle" evaluationStyle fieldMap cx) (\field_evaluationStyle -> Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.EvaluationTestCase {
       Testing.evaluationTestCaseEvaluationStyle = field_evaluationStyle,
       Testing.evaluationTestCaseInput = field_input,
@@ -280,16 +280,16 @@ evaluationTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError e
 
 inferenceFailureTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.InferenceFailureTestCase)
 inferenceFailureTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Right (Testing.InferenceFailureTestCase {
       Testing.inferenceFailureTestCaseInput = field_input})))
   _ -> (Left (Error.DecodingError "expected record of type hydra.testing.InferenceFailureTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 inferenceTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.InferenceTestCase)
 inferenceTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.typeScheme fieldMap cx) (\field_output -> Right (Testing.InferenceTestCase {
       Testing.inferenceTestCaseInput = field_input,
       Testing.inferenceTestCaseOutput = field_output}))))
@@ -297,8 +297,8 @@ inferenceTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError er
 
 jsonCoderTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.JsonCoderTestCase)
 jsonCoderTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "term" Core_.term fieldMap cx) (\field_term -> Eithers.bind (Helpers.requireField "json" Model.value fieldMap cx) (\field_json -> Right (Testing.JsonCoderTestCase {
       Testing.jsonCoderTestCaseType = field_type,
       Testing.jsonCoderTestCaseTerm = field_term,
@@ -307,12 +307,12 @@ jsonCoderTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError er
 
 jsonDecodeTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.JsonDecodeTestCase)
 jsonDecodeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "json" Model.value fieldMap cx) (\field_json -> Eithers.bind (Helpers.requireField "expected" (Helpers.decodeEither (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) Core_.term) fieldMap cx) (\field_expected -> Right (Testing.JsonDecodeTestCase {
       Testing.jsonDecodeTestCaseType = field_type,
       Testing.jsonDecodeTestCaseJson = field_json,
@@ -321,12 +321,12 @@ jsonDecodeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError e
 
 jsonEncodeTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.JsonEncodeTestCase)
 jsonEncodeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "term" Core_.term fieldMap cx) (\field_term -> Eithers.bind (Helpers.requireField "expected" (Helpers.decodeEither (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) Model.value) fieldMap cx) (\field_expected -> Right (Testing.JsonEncodeTestCase {
       Testing.jsonEncodeTestCaseTerm = field_term,
       Testing.jsonEncodeTestCaseExpected = field_expected}))))
@@ -337,8 +337,8 @@ jsonParserTestCase = (parserTestCase Model.value)
 
 jsonRoundtripTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.JsonRoundtripTestCase)
 jsonRoundtripTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "term" Core_.term fieldMap cx) (\field_term -> Right (Testing.JsonRoundtripTestCase {
       Testing.jsonRoundtripTestCaseType = field_type,
       Testing.jsonRoundtripTestCaseTerm = field_term}))))
@@ -346,8 +346,8 @@ jsonRoundtripTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingErro
 
 liftLambdaAboveLetTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.LiftLambdaAboveLetTestCase)
 liftLambdaAboveLetTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.LiftLambdaAboveLetTestCase {
       Testing.liftLambdaAboveLetTestCaseInput = field_input,
       Testing.liftLambdaAboveLetTestCaseOutput = field_output}))))
@@ -358,12 +358,12 @@ jsonWriterTestCase = (writerTestCase Model.value)
 
 parserTestCase :: ((Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Testing.ParserTestCase t0))
 parserTestCase a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" (Parsing.parseResult a) fieldMap cx) (\field_output -> Right (Testing.ParserTestCase {
       Testing.parserTestCaseInput = field_input,
       Testing.parserTestCaseOutput = field_output}))))
@@ -371,18 +371,18 @@ parserTestCase a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err
 
 tag :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.Tag)
 tag cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v1 -> (Eithers.map (\b -> Testing.Tag b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-    Core.TermLiteral v2 -> ((\x -> case x of
-      Core.LiteralString v3 -> (Right v3)
-      _ -> (Left (Error.DecodingError "expected string literal"))) v2)
-    _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v1)))
+  Core.TermWrap v0 -> (Eithers.map (\b -> Testing.Tag b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
+    Core.TermLiteral v1 -> ((\x -> case x of
+      Core.LiteralString v2 -> (Right v2)
+      _ -> (Left (Error.DecodingError "expected string literal"))) v1)
+    _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
   _ -> (Left (Error.DecodingError "expected wrapped type hydra.testing.Tag"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 testCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TestCase)
 testCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -434,16 +434,16 @@ testCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\str
 
 testCaseWithMetadata :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TestCaseWithMetadata)
 testCaseWithMetadata cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "name" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "case" testCase fieldMap cx) (\field_case -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_description -> Eithers.bind (Helpers.requireField "tags" (Helpers.decodeList tag) fieldMap cx) (\field_tags -> Right (Testing.TestCaseWithMetadata {
       Testing.testCaseWithMetadataName = field_name,
       Testing.testCaseWithMetadataCase = field_case,
@@ -453,16 +453,16 @@ testCaseWithMetadata cx raw = (Eithers.either (\err -> Left (Error.DecodingError
 
 testGroup :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TestGroup)
 testGroup cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "name" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "description" (Helpers.decodeMaybe (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_description -> Eithers.bind (Helpers.requireField "subgroups" (Helpers.decodeList testGroup) fieldMap cx) (\field_subgroups -> Eithers.bind (Helpers.requireField "cases" (Helpers.decodeList testCaseWithMetadata) fieldMap cx) (\field_cases -> Right (Testing.TestGroup {
       Testing.testGroupName = field_name,
       Testing.testGroupDescription = field_description,
@@ -472,8 +472,8 @@ testGroup cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\st
 
 typeCheckingTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TypeCheckingTestCase)
 typeCheckingTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "outputTerm" Core_.term fieldMap cx) (\field_outputTerm -> Eithers.bind (Helpers.requireField "outputType" Core_.type_ fieldMap cx) (\field_outputType -> Right (Testing.TypeCheckingTestCase {
       Testing.typeCheckingTestCaseInput = field_input,
       Testing.typeCheckingTestCaseOutputTerm = field_outputTerm,
@@ -482,16 +482,16 @@ typeCheckingTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError
 
 typeCheckingFailureTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TypeCheckingFailureTestCase)
 typeCheckingFailureTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Right (Testing.TypeCheckingFailureTestCase {
       Testing.typeCheckingFailureTestCaseInput = field_input})))
   _ -> (Left (Error.DecodingError "expected record of type hydra.testing.TypeCheckingFailureTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 topologicalSortBindingsTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TopologicalSortBindingsTestCase)
 topologicalSortBindingsTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "bindings" (Helpers.decodeList (Helpers.decodePair Core_.name Core_.term)) fieldMap cx) (\field_bindings -> Eithers.bind (Helpers.requireField "expected" (Helpers.decodeList (Helpers.decodeList (Helpers.decodePair Core_.name Core_.term))) fieldMap cx) (\field_expected -> Right (Testing.TopologicalSortBindingsTestCase {
       Testing.topologicalSortBindingsTestCaseBindings = field_bindings,
       Testing.topologicalSortBindingsTestCaseExpected = field_expected}))))
@@ -499,32 +499,32 @@ topologicalSortBindingsTestCase cx raw = (Eithers.either (\err -> Left (Error.De
 
 topologicalSortTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TopologicalSortTestCase)
 topologicalSortTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "adjacencyList" (Helpers.decodeList (Helpers.decodePair (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Helpers.decodeList (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))))) fieldMap cx) (\field_adjacencyList -> Eithers.bind (Helpers.requireField "expected" (Helpers.decodeEither (Helpers.decodeList (Helpers.decodeList (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)))) (Helpers.decodeList (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)))) fieldMap cx) (\field_expected -> Right (Testing.TopologicalSortTestCase {
       Testing.topologicalSortTestCaseAdjacencyList = field_adjacencyList,
       Testing.topologicalSortTestCaseExpected = field_expected}))))
@@ -532,26 +532,26 @@ topologicalSortTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingEr
 
 topologicalSortSCCTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TopologicalSortSCCTestCase)
 topologicalSortSCCTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "adjacencyList" (Helpers.decodeList (Helpers.decodePair (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Helpers.decodeList (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))))) fieldMap cx) (\field_adjacencyList -> Eithers.bind (Helpers.requireField "expected" (Helpers.decodeList (Helpers.decodeList (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)))) fieldMap cx) (\field_expected -> Right (Testing.TopologicalSortSCCTestCase {
       Testing.topologicalSortSCCTestCaseAdjacencyList = field_adjacencyList,
       Testing.topologicalSortSCCTestCaseExpected = field_expected}))))
@@ -559,12 +559,12 @@ topologicalSortSCCTestCase cx raw = (Eithers.either (\err -> Left (Error.Decodin
 
 serializationTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.SerializationTestCase)
 serializationTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Ast.expr fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_output -> Right (Testing.SerializationTestCase {
       Testing.serializationTestCaseInput = field_input,
       Testing.serializationTestCaseOutput = field_output}))))
@@ -572,8 +572,8 @@ serializationTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingErro
 
 simplifyTermTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.SimplifyTermTestCase)
 simplifyTermTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.SimplifyTermTestCase {
       Testing.simplifyTermTestCaseInput = field_input,
       Testing.simplifyTermTestCaseOutput = field_output}))))
@@ -581,8 +581,8 @@ simplifyTermTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError
 
 normalizeTypeVariablesTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.NormalizeTypeVariablesTestCase)
 normalizeTypeVariablesTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.NormalizeTypeVariablesTestCase {
       Testing.normalizeTypeVariablesTestCaseInput = field_input,
       Testing.normalizeTypeVariablesTestCaseOutput = field_output}))))
@@ -590,8 +590,8 @@ normalizeTypeVariablesTestCase cx raw = (Eithers.either (\err -> Left (Error.Dec
 
 typeReductionTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.TypeReductionTestCase)
 typeReductionTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.type_ fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.type_ fieldMap cx) (\field_output -> Right (Testing.TypeReductionTestCase {
       Testing.typeReductionTestCaseInput = field_input,
       Testing.typeReductionTestCaseOutput = field_output}))))
@@ -599,12 +599,12 @@ typeReductionTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingErro
 
 writerTestCase :: ((Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Testing.WriterTestCase t0))
 writerTestCase a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" a fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_output -> Right (Testing.WriterTestCase {
       Testing.writerTestCaseInput = field_input,
       Testing.writerTestCaseOutput = field_output}))))
@@ -612,8 +612,8 @@ writerTestCase a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err
 
 substInTypeTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.SubstInTypeTestCase)
 substInTypeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "substitution" (Helpers.decodeList (Helpers.decodePair Core_.name Core_.type_)) fieldMap cx) (\field_substitution -> Eithers.bind (Helpers.requireField "input" Core_.type_ fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.type_ fieldMap cx) (\field_output -> Right (Testing.SubstInTypeTestCase {
       Testing.substInTypeTestCaseSubstitution = field_substitution,
       Testing.substInTypeTestCaseInput = field_input,
@@ -622,12 +622,12 @@ substInTypeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError 
 
 variableOccursInTypeTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.VariableOccursInTypeTestCase)
 variableOccursInTypeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "variable" Core_.name fieldMap cx) (\field_variable -> Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "expected" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralBoolean v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected boolean literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralBoolean v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected boolean literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_expected -> Right (Testing.VariableOccursInTypeTestCase {
       Testing.variableOccursInTypeTestCaseVariable = field_variable,
       Testing.variableOccursInTypeTestCaseType = field_type,
@@ -636,8 +636,8 @@ variableOccursInTypeTestCase cx raw = (Eithers.either (\err -> Left (Error.Decod
 
 unshadowVariablesTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.UnshadowVariablesTestCase)
 unshadowVariablesTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "input" Core_.term fieldMap cx) (\field_input -> Eithers.bind (Helpers.requireField "output" Core_.term fieldMap cx) (\field_output -> Right (Testing.UnshadowVariablesTestCase {
       Testing.unshadowVariablesTestCaseInput = field_input,
       Testing.unshadowVariablesTestCaseOutput = field_output}))))
@@ -645,12 +645,12 @@ unshadowVariablesTestCase cx raw = (Eithers.either (\err -> Left (Error.Decoding
 
 unifyTypesTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.UnifyTypesTestCase)
 unifyTypesTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "schemaTypes" (Helpers.decodeList Core_.name) fieldMap cx) (\field_schemaTypes -> Eithers.bind (Helpers.requireField "left" Core_.type_ fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" Core_.type_ fieldMap cx) (\field_right -> Eithers.bind (Helpers.requireField "expected" (Helpers.decodeEither (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) Typing.typeSubst) fieldMap cx) (\field_expected -> Right (Testing.UnifyTypesTestCase {
       Testing.unifyTypesTestCaseSchemaTypes = field_schemaTypes,
       Testing.unifyTypesTestCaseLeft = field_left,
@@ -660,8 +660,8 @@ unifyTypesTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError e
 
 joinTypesTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.JoinTypesTestCase)
 joinTypesTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "left" Core_.type_ fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" Core_.type_ fieldMap cx) (\field_right -> Eithers.bind (Helpers.requireField "expected" (Helpers.decodeEither Helpers.decodeUnit (Helpers.decodeList Typing.typeConstraint)) fieldMap cx) (\field_expected -> Right (Testing.JoinTypesTestCase {
       Testing.joinTypesTestCaseLeft = field_left,
       Testing.joinTypesTestCaseRight = field_right,

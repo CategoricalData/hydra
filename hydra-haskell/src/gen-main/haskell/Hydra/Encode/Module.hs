@@ -20,16 +20,16 @@ import qualified Data.Set as S
 
 definition :: (Module.Definition -> Core.Term)
 definition x = case x of
-  Module.DefinitionTerm v1 -> (Core.TermUnion (Core.Injection {
+  Module.DefinitionTerm v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.module.Definition"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (termDefinition v1)}}))
-  Module.DefinitionType v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (termDefinition v0)}}))
+  Module.DefinitionType v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.module.Definition"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (typeDefinition v1)}}))
+      Core.fieldTerm = (typeDefinition v0)}}))
 
 fileExtension :: (Module.FileExtension -> Core.Term)
 fileExtension x = (Core.TermWrap (Core.WrappedTerm {

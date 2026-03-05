@@ -5,17 +5,16 @@
 module Hydra.Annotations where
 
 import qualified Hydra.Classes as Classes
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Encode.Core as Core__
 import qualified Hydra.Error as Error
 import qualified Hydra.Extract.Core as Core___
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -23,7 +22,7 @@ import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
-import qualified Hydra.Monads as Monads
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core____
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -39,73 +38,90 @@ aggregateAnnotations getValue getX getAnns t =
   let toPairs = (\rest -> \t -> Maybes.maybe rest (\yy -> toPairs (Lists.cons (Maps.toList (getAnns yy)) rest) (getX yy)) (getValue t))
   in (Maps.fromList (Lists.concat (toPairs [] t)))
 
--- | Debug if the debug ID matches
-debugIf :: (t0 -> String -> Compute.Flow t1 ())
-debugIf debugId message =  
-  let checkAndFail = (\desc -> Logic.ifElse (Equality.equal desc (Just "debugId")) (Flows.fail message) (Flows.pure ()))
-  in (Flows.bind getDebugId checkAndFail)
+-- | Debug if the debug ID matches (Either version)
+debugIf :: (Context.Context -> String -> String -> Either (Context.InContext Error.OtherError) ())
+debugIf cx debugId message = (Eithers.bind (getDebugId cx) (\mid -> Logic.ifElse (Equality.equal mid (Just debugId)) (Left (Context.InContext {
+  Context.inContextObject = (Error.OtherError message),
+  Context.inContextContext = cx})) (Right ())))
 
--- | Fail if the given flag is set
-failOnFlag :: (Core.Name -> String -> Compute.Flow t0 ())
-failOnFlag flag msg = (Flows.bind (hasFlag flag) (\val -> Logic.ifElse val (Flows.fail msg) (Flows.pure ())))
+-- | Fail if the given flag is set (Either version)
+failOnFlag :: (Context.Context -> Core.Name -> String -> Either (Context.InContext Error.OtherError) ())
+failOnFlag cx flag msg = (Eithers.bind (hasFlag cx flag) (\val -> Logic.ifElse val (Left (Context.InContext {
+  Context.inContextObject = (Error.OtherError msg),
+  Context.inContextContext = cx})) (Right ())))
 
--- | Get the debug ID from flow state
-getDebugId :: (Compute.Flow t0 (Maybe String))
-getDebugId = (Lexical.withEmptyGraph (Flows.bind (getAttr Constants.key_debugId) (\desc -> Flows.mapMaybe Core___.string desc)))
+-- | Get the debug ID from context (Either version)
+getDebugId :: (Context.Context -> Either (Context.InContext Error.OtherError) (Maybe String))
+getDebugId cx = (Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (Core___.string cx (Graph.Graph {
+  Graph.graphBoundTerms = Maps.empty,
+  Graph.graphBoundTypes = Maps.empty,
+  Graph.graphClassConstraints = Maps.empty,
+  Graph.graphLambdaVariables = Sets.empty,
+  Graph.graphMetadata = Maps.empty,
+  Graph.graphPrimitives = Maps.empty,
+  Graph.graphSchemaTypes = Maps.empty,
+  Graph.graphTypeVariables = Sets.empty}) term)) (getAttr Constants.key_debugId cx))
 
--- | Get an attribute from the trace
-getAttr :: (Core.Name -> Compute.Flow t0 (Maybe Core.Term))
-getAttr key = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
-  Compute.flowStateValue = (Just (Maps.lookup key (Compute.traceOther t0))),
-  Compute.flowStateState = s0,
-  Compute.flowStateTrace = t0}))
+-- | Get an attribute from a context (pure version)
+getAttr :: (Core.Name -> Context.Context -> Maybe Core.Term)
+getAttr key cx = (Maps.lookup key (Context.contextOther cx))
 
--- | Get an attribute with a default value
-getAttrWithDefault :: (Core.Name -> Core.Term -> Compute.Flow t0 Core.Term)
-getAttrWithDefault key def = (Flows.map (\mval -> Maybes.fromMaybe def mval) (getAttr key))
+-- | Get an attribute with a default value from context (pure version)
+getAttrWithDefault :: (Core.Name -> Core.Term -> Context.Context -> Core.Term)
+getAttrWithDefault key def cx = (Maybes.fromMaybe def (getAttr key cx))
 
--- | Get a counter value
-getCount :: (Core.Name -> Compute.Flow t0 Int)
-getCount key = (Lexical.withEmptyGraph (Flows.bind (getAttrWithDefault key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))) Core___.int32))
+-- | Get a counter value from context (pure version)
+getCount :: (Core.Name -> Context.Context -> Int)
+getCount key cx = (Maybes.maybe 0 (\term -> (\x -> case x of
+  Core.TermLiteral v0 -> ((\x -> case x of
+    Core.LiteralInteger v1 -> ((\x -> case x of
+      Core.IntegerValueInt32 v2 -> v2
+      _ -> 0) v1)
+    _ -> 0) v0)
+  _ -> 0) term) (Maps.lookup key (Context.contextOther cx)))
 
--- | Get description from annotations map
-getDescription :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe String))
-getDescription anns = (Maybes.maybe (Flows.pure Nothing) (\term -> Flows.map Maybes.pure (Core___.string term)) (Maps.lookup (Core.Name "description") anns))
+-- | Get description from annotations map (Either version)
+getDescription :: (Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Either (Context.InContext Error.OtherError) (Maybe String))
+getDescription cx graph anns = (Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (Core___.string cx graph term)) (Maps.lookup (Core.Name "description") anns))
 
 -- | Get a term annotation
 getTermAnnotation :: (Core.Name -> Core.Term -> Maybe Core.Term)
 getTermAnnotation key term = (Maps.lookup key (termAnnotationInternal term))
 
--- | Get term description. Peels through TermTypeLambda and TermTypeApplication wrappers (added by inference for polymorphic bindings) to find the description annotation underneath.
-getTermDescription :: (Core.Term -> Compute.Flow Graph.Graph (Maybe String))
-getTermDescription term =  
+-- | Get term description (Either version)
+getTermDescription :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (Maybe String))
+getTermDescription cx graph term =  
   let peel = (\t -> (\x -> case x of
-          Core.TermTypeLambda v1 -> (peel (Core.typeLambdaBody v1))
-          Core.TermTypeApplication v1 -> (peel (Core.typeApplicationTermBody v1))
+          Core.TermTypeLambda v0 -> (peel (Core.typeLambdaBody v0))
+          Core.TermTypeApplication v0 -> (peel (Core.typeApplicationTermBody v0))
           _ -> t) t)
-  in (getDescription (termAnnotationInternal (peel term)))
+  in (getDescription cx graph (termAnnotationInternal (peel term)))
 
 -- | Get type from annotations
-getType :: (M.Map Core.Name Core.Term -> Compute.Flow Graph.Graph (Maybe Core.Type))
-getType anns = (Flows.bind Monads.getState (\graph -> Maybes.maybe (Flows.pure Nothing) (\dat -> Flows.map Maybes.pure (Monads.withTrace "get type" (Monads.eitherToFlow Error.unDecodingError (Core_.type_ graph dat)))) (Maps.lookup Constants.key_type anns)))
+getType :: (Graph.Graph -> M.Map Core.Name Core.Term -> Either Error.DecodingError (Maybe Core.Type))
+getType graph anns = (Maybes.maybe (Right Nothing) (\dat -> Eithers.map Maybes.pure (Core_.type_ graph dat)) (Maps.lookup Constants.key_type anns))
 
 -- | Get a type annotation
 getTypeAnnotation :: (Core.Name -> Core.Type -> Maybe Core.Term)
 getTypeAnnotation key typ = (Maps.lookup key (typeAnnotationInternal typ))
 
 -- | Get type classes from term
-getTypeClasses :: (Core.Term -> Compute.Flow Graph.Graph (M.Map Core.Name (S.Set Classes.TypeClass)))
-getTypeClasses term = (Flows.bind Monads.getState (\graph ->  
+getTypeClasses :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (M.Map Core.Name (S.Set Classes.TypeClass)))
+getTypeClasses cx graph term =  
   let decodeClass = (\term ->  
           let byName = (Maps.fromList [
                   (Core.Name "equality", Classes.TypeClassEquality),
                   (Core.Name "ordering", Classes.TypeClassOrdering)])
-          in (Flows.bind (Core___.unitVariant (Core.Name "hydra.classes.TypeClass") term) (\fn -> Maybes.maybe (Monads.unexpected "type class" (Core____.term term)) Flows.pure (Maps.lookup fn byName))))
-  in (Maybes.maybe (Flows.pure Maps.empty) (\term -> Core___.map (\t -> Monads.eitherToFlow Error.unDecodingError (Core_.name graph t)) (Core___.setOf decodeClass) term) (getTermAnnotation Constants.key_classes term))))
+          in (Eithers.bind (Core___.unitVariant cx (Core.Name "hydra.classes.TypeClass") graph term) (\fn -> Maybes.maybe (Left (Context.InContext {
+            Context.inContextObject = (Error.OtherError (Strings.cat2 "unexpected: expected type class, got " (Core____.term term))),
+            Context.inContextContext = cx})) (\x -> Right x) (Maps.lookup fn byName))))
+  in (Maybes.maybe (Right Maps.empty) (\term -> Core___.map cx (\t -> Eithers.bimap (\de -> Context.InContext {
+    Context.inContextObject = (Error.OtherError (Error.unDecodingError de)),
+    Context.inContextContext = cx}) (\x -> x) (Core_.name graph t)) (Core___.setOf cx decodeClass graph) graph term) (getTermAnnotation Constants.key_classes term))
 
--- | Get type description
-getTypeDescription :: (Core.Type -> Compute.Flow Graph.Graph (Maybe String))
-getTypeDescription typ = (getDescription (typeAnnotationInternal typ))
+-- | Get type description (Either version)
+getTypeDescription :: (Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.OtherError) (Maybe String))
+getTypeDescription cx graph typ = (getDescription cx graph (typeAnnotationInternal typ))
 
 -- | For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
 isNativeType :: (Core.Binding -> Bool)
@@ -120,17 +136,29 @@ isNativeType el =
 hasDescription :: (M.Map Core.Name t0 -> Bool)
 hasDescription anns = (Maybes.isJust (Maps.lookup Constants.key_description anns))
 
--- | Check if flag is set
-hasFlag :: (Core.Name -> Compute.Flow t0 Bool)
-hasFlag flag = (Lexical.withEmptyGraph (Flows.bind (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False))) (\term -> Core___.boolean term)))
+-- | Check if flag is set (Either version)
+hasFlag :: (Context.Context -> Core.Name -> Either (Context.InContext Error.OtherError) Bool)
+hasFlag cx flag =  
+  let term = (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False)) cx)
+  in (Core___.boolean cx (Graph.Graph {
+    Graph.graphBoundTerms = Maps.empty,
+    Graph.graphBoundTypes = Maps.empty,
+    Graph.graphClassConstraints = Maps.empty,
+    Graph.graphLambdaVariables = Sets.empty,
+    Graph.graphMetadata = Maps.empty,
+    Graph.graphPrimitives = Maps.empty,
+    Graph.graphSchemaTypes = Maps.empty,
+    Graph.graphTypeVariables = Sets.empty}) term)
 
 -- | Check if type has description
 hasTypeDescription :: (Core.Type -> Bool)
 hasTypeDescription typ = (hasDescription (typeAnnotationInternal typ))
 
--- | Return a zero-indexed counter for the given key: 0, 1, 2, ...
-nextCount :: (Core.Name -> Compute.Flow t0 Int)
-nextCount key = (Flows.bind (getCount key) (\count -> Flows.map (\_ -> count) (putCount key (Math.add count 1))))
+-- | Return a zero-indexed counter for the given key and updated context (pure version)
+nextCount :: (Core.Name -> Context.Context -> (Int, Context.Context))
+nextCount key cx =  
+  let count = (getCount key cx)
+  in (count, (putCount key (Math.add count 1) cx))
 
 -- | Normalize term annotations
 normalizeTermAnnotations :: (Core.Term -> Core.Term)
@@ -152,23 +180,20 @@ normalizeTypeAnnotations typ =
       Core.annotatedTypeBody = stripped,
       Core.annotatedTypeAnnotation = anns})))
 
--- | Set an attribute in the trace
-putAttr :: (Core.Name -> Core.Term -> Compute.Flow t0 ())
-putAttr key val = (Compute.Flow (\s0 -> \t0 -> Compute.FlowState {
-  Compute.flowStateValue = (Just ()),
-  Compute.flowStateState = s0,
-  Compute.flowStateTrace = Compute.Trace {
-    Compute.traceStack = (Compute.traceStack t0),
-    Compute.traceMessages = (Compute.traceMessages t0),
-    Compute.traceOther = (Maps.insert key val (Compute.traceOther t0))}}))
+-- | Set an attribute in a context
+putAttr :: (Core.Name -> Core.Term -> Context.Context -> Context.Context)
+putAttr key val cx = Context.Context {
+  Context.contextTrace = (Context.contextTrace cx),
+  Context.contextMessages = (Context.contextMessages cx),
+  Context.contextOther = (Maps.insert key val (Context.contextOther cx))}
 
--- | Set counter value
-putCount :: (Core.Name -> Int -> Compute.Flow t0 ())
-putCount key count = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 count))))
+-- | Set counter value in context
+putCount :: (Core.Name -> Int -> Context.Context -> Context.Context)
+putCount key count cx = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 count))) cx)
 
--- | Reset counter to zero
-resetCount :: (Core.Name -> Compute.Flow t0 ())
-resetCount key = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))))
+-- | Reset counter to zero in context
+resetCount :: (Core.Name -> Context.Context -> Context.Context)
+resetCount key cx = (putAttr key (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))) cx)
 
 -- | Set annotation in map
 setAnnotation :: Ord t0 => (t0 -> Maybe t1 -> M.Map t0 t1 -> M.Map t0 t1)
@@ -238,7 +263,7 @@ setTypeDescription d = (setTypeAnnotation Constants.key_description (Maybes.map 
 termAnnotationInternal :: (Core.Term -> M.Map Core.Name Core.Term)
 termAnnotationInternal term =  
   let getAnn = (\t -> (\x -> case x of
-          Core.TermAnnotated v1 -> (Just v1)
+          Core.TermAnnotated v0 -> (Just v0)
           _ -> Nothing) t)
   in (aggregateAnnotations getAnn (\at -> Core.annotatedTermBody at) (\at -> Core.annotatedTermAnnotation at) term)
 
@@ -246,7 +271,7 @@ termAnnotationInternal term =
 typeAnnotationInternal :: (Core.Type -> M.Map Core.Name Core.Term)
 typeAnnotationInternal typ =  
   let getAnn = (\t -> (\x -> case x of
-          Core.TypeAnnotated v1 -> (Just v1)
+          Core.TypeAnnotated v0 -> (Just v0)
           _ -> Nothing) t)
   in (aggregateAnnotations getAnn (\at -> Core.annotatedTypeBody at) (\at -> Core.annotatedTypeAnnotation at) typ)
 
@@ -267,12 +292,6 @@ typeElement name typ =
         Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.core.Type")),
         Core.typeSchemeConstraints = Nothing}))}
 
--- | Execute different flows based on flag
-whenFlag :: (Core.Name -> Compute.Flow t0 t1 -> Compute.Flow t0 t1 -> Compute.Flow t0 t1)
-whenFlag flag fthen felse = (Flows.bind (hasFlag flag) (\b -> Logic.ifElse b fthen felse))
-
--- | Provide an one-indexed, integer-valued 'depth' to a flow, where the depth is the number of nested calls. This is useful for generating variable names while avoiding conflicts between the variables of parents and children. E.g. a variable in an outer case/match statement might be "v1", whereas the variable of another case/match statement inside of the first one becomes "v2". See also nextCount.
-withDepth :: (Core.Name -> (Int -> Compute.Flow t0 t1) -> Compute.Flow t0 t1)
-withDepth key f = (Flows.bind (getCount key) (\count ->  
-  let inc = (Math.add count 1)
-  in (Flows.bind (putCount key inc) (\_ -> Flows.bind (f inc) (\r -> Flows.bind (putCount key count) (\_ -> Flows.pure r))))))
+-- | Execute different branches based on flag (Either version)
+whenFlag :: (Context.Context -> Core.Name -> Either (Context.InContext Error.OtherError) t0 -> Either (Context.InContext Error.OtherError) t0 -> Either (Context.InContext Error.OtherError) t0)
+whenFlag cx flag ethen eelse = (Eithers.bind (hasFlag cx flag) (\b -> Logic.ifElse b ethen eelse))

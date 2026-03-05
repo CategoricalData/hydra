@@ -5,10 +5,11 @@
 module Hydra.Unification where
 
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -26,8 +27,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Join two types, producing a list of type constraints.The comment is used to provide context for the constraints.
-joinTypes :: (Core.Type -> Core.Type -> String -> Compute.Flow t0 [Typing.TypeConstraint])
-joinTypes left right comment =  
+joinTypes :: (Context.Context -> Core.Type -> Core.Type -> String -> Either (Context.InContext Error.UnificationError) [Typing.TypeConstraint])
+joinTypes cx left right comment =  
   let sleft = (Rewriting.deannotateType left)
   in  
     let sright = (Rewriting.deannotateType right)
@@ -37,64 +38,69 @@ joinTypes left right comment =
               Typing.typeConstraintRight = r,
               Typing.typeConstraintComment = (Strings.cat2 "join types; " comment)})
       in  
-        let cannotUnify = (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (Core_.type_ sleft)) " with ") (Core_.type_ sright)))
+        let cannotUnify = (Left (Context.InContext {
+                Context.inContextObject = Error.UnificationError {
+                  Error.unificationErrorLeftType = sleft,
+                  Error.unificationErrorRightType = sright,
+                  Error.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 "cannot unify " (Core_.type_ sleft)) " with ") (Core_.type_ sright))},
+                Context.inContextContext = cx}))
         in  
-          let assertEqual = (Logic.ifElse (Equality.equal sleft sright) (Flows.pure []) cannotUnify)
+          let assertEqual = (Logic.ifElse (Equality.equal sleft sright) (Right []) cannotUnify)
           in  
-            let joinList = (\lefts -> \rights -> Logic.ifElse (Equality.equal (Lists.length lefts) (Lists.length rights)) (Flows.pure (Lists.zipWith joinOne lefts rights)) cannotUnify)
+            let joinList = (\lefts -> \rights -> Logic.ifElse (Equality.equal (Lists.length lefts) (Lists.length rights)) (Right (Lists.zipWith joinOne lefts rights)) cannotUnify)
             in  
               let joinRowTypes = (\left -> \right -> Logic.ifElse (Logic.and (Equality.equal (Core.unName (Core.rowTypeTypeName left)) (Core.unName (Core.rowTypeTypeName right))) (Logic.and (Equality.equal (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields left))) (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))) (Lists.foldl Logic.and True (Lists.zipWith (\left -> \right -> Equality.equal (Core.unName left) (Core.unName right)) (Lists.map Core.fieldTypeName (Core.rowTypeFields left)) (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))))) (joinList (Lists.map Core.fieldTypeType (Core.rowTypeFields left)) (Lists.map Core.fieldTypeType (Core.rowTypeFields right))) cannotUnify)
               in ((\x -> case x of
-                Core.TypeApplication v1 -> ((\x -> case x of
-                  Core.TypeApplication v2 -> (Flows.pure [
-                    joinOne (Core.applicationTypeFunction v1) (Core.applicationTypeFunction v2),
-                    (joinOne (Core.applicationTypeArgument v1) (Core.applicationTypeArgument v2))])
+                Core.TypeApplication v0 -> ((\x -> case x of
+                  Core.TypeApplication v1 -> (Right [
+                    joinOne (Core.applicationTypeFunction v0) (Core.applicationTypeFunction v1),
+                    (joinOne (Core.applicationTypeArgument v0) (Core.applicationTypeArgument v1))])
                   _ -> cannotUnify) sright)
-                Core.TypeEither v1 -> ((\x -> case x of
-                  Core.TypeEither v2 -> (Flows.pure [
-                    joinOne (Core.eitherTypeLeft v1) (Core.eitherTypeLeft v2),
-                    (joinOne (Core.eitherTypeRight v1) (Core.eitherTypeRight v2))])
+                Core.TypeEither v0 -> ((\x -> case x of
+                  Core.TypeEither v1 -> (Right [
+                    joinOne (Core.eitherTypeLeft v0) (Core.eitherTypeLeft v1),
+                    (joinOne (Core.eitherTypeRight v0) (Core.eitherTypeRight v1))])
                   _ -> cannotUnify) sright)
-                Core.TypeFunction v1 -> ((\x -> case x of
-                  Core.TypeFunction v2 -> (Flows.pure [
-                    joinOne (Core.functionTypeDomain v1) (Core.functionTypeDomain v2),
-                    (joinOne (Core.functionTypeCodomain v1) (Core.functionTypeCodomain v2))])
+                Core.TypeFunction v0 -> ((\x -> case x of
+                  Core.TypeFunction v1 -> (Right [
+                    joinOne (Core.functionTypeDomain v0) (Core.functionTypeDomain v1),
+                    (joinOne (Core.functionTypeCodomain v0) (Core.functionTypeCodomain v1))])
                   _ -> cannotUnify) sright)
-                Core.TypeList v1 -> ((\x -> case x of
-                  Core.TypeList v2 -> (Flows.pure [
-                    joinOne v1 v2])
+                Core.TypeList v0 -> ((\x -> case x of
+                  Core.TypeList v1 -> (Right [
+                    joinOne v0 v1])
                   _ -> cannotUnify) sright)
                 Core.TypeLiteral _ -> assertEqual
-                Core.TypeMap v1 -> ((\x -> case x of
-                  Core.TypeMap v2 -> (Flows.pure [
-                    joinOne (Core.mapTypeKeys v1) (Core.mapTypeKeys v2),
-                    (joinOne (Core.mapTypeValues v1) (Core.mapTypeValues v2))])
+                Core.TypeMap v0 -> ((\x -> case x of
+                  Core.TypeMap v1 -> (Right [
+                    joinOne (Core.mapTypeKeys v0) (Core.mapTypeKeys v1),
+                    (joinOne (Core.mapTypeValues v0) (Core.mapTypeValues v1))])
                   _ -> cannotUnify) sright)
-                Core.TypeMaybe v1 -> ((\x -> case x of
-                  Core.TypeMaybe v2 -> (Flows.pure [
-                    joinOne v1 v2])
+                Core.TypeMaybe v0 -> ((\x -> case x of
+                  Core.TypeMaybe v1 -> (Right [
+                    joinOne v0 v1])
                   _ -> cannotUnify) sright)
-                Core.TypePair v1 -> ((\x -> case x of
-                  Core.TypePair v2 -> (Flows.pure [
-                    joinOne (Core.pairTypeFirst v1) (Core.pairTypeFirst v2),
-                    (joinOne (Core.pairTypeSecond v1) (Core.pairTypeSecond v2))])
+                Core.TypePair v0 -> ((\x -> case x of
+                  Core.TypePair v1 -> (Right [
+                    joinOne (Core.pairTypeFirst v0) (Core.pairTypeFirst v1),
+                    (joinOne (Core.pairTypeSecond v0) (Core.pairTypeSecond v1))])
                   _ -> cannotUnify) sright)
-                Core.TypeRecord v1 -> ((\x -> case x of
-                  Core.TypeRecord v2 -> (joinRowTypes v1 v2)
+                Core.TypeRecord v0 -> ((\x -> case x of
+                  Core.TypeRecord v1 -> (joinRowTypes v0 v1)
                   _ -> cannotUnify) sright)
-                Core.TypeSet v1 -> ((\x -> case x of
-                  Core.TypeSet v2 -> (Flows.pure [
-                    joinOne v1 v2])
+                Core.TypeSet v0 -> ((\x -> case x of
+                  Core.TypeSet v1 -> (Right [
+                    joinOne v0 v1])
                   _ -> cannotUnify) sright)
-                Core.TypeUnion v1 -> ((\x -> case x of
-                  Core.TypeUnion v2 -> (joinRowTypes v1 v2)
+                Core.TypeUnion v0 -> ((\x -> case x of
+                  Core.TypeUnion v1 -> (joinRowTypes v0 v1)
                   _ -> cannotUnify) sright)
                 Core.TypeUnit -> ((\x -> case x of
-                  Core.TypeUnit -> (Flows.pure [])
+                  Core.TypeUnit -> (Right [])
                   _ -> cannotUnify) sright)
-                Core.TypeWrap v1 -> ((\x -> case x of
-                  Core.TypeWrap v2 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName (Core.wrappedTypeTypeName v2))) (Flows.pure [
-                    joinOne (Core.wrappedTypeBody v1) (Core.wrappedTypeBody v2)]) cannotUnify)
+                Core.TypeWrap v0 -> ((\x -> case x of
+                  Core.TypeWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v0)) (Core.unName (Core.wrappedTypeTypeName v1))) (Right [
+                    joinOne (Core.wrappedTypeBody v0) (Core.wrappedTypeBody v1)]) cannotUnify)
                   _ -> cannotUnify) sright)
                 _ -> cannotUnify) sleft)
 
@@ -104,8 +110,8 @@ joinTypes left right comment =
 -- |   * Unify(∅) = I (the identity substitution x ↦ x)
 -- |   * Unify({(x, x)} ∪ E) = Unify(E)
 -- |   * Unify({(f(s1, ..., sn), f(t1, ..., tn))} ∪ E) = Unify({(s1, t1), ..., (sn, tn)} ∪ E))
-unifyTypeConstraints :: (M.Map Core.Name t0 -> [Typing.TypeConstraint] -> Compute.Flow t1 Typing.TypeSubst)
-unifyTypeConstraints schemaTypes constraints =  
+unifyTypeConstraints :: (Context.Context -> M.Map Core.Name t0 -> [Typing.TypeConstraint] -> Either (Context.InContext Error.UnificationError) Typing.TypeSubst)
+unifyTypeConstraints cx schemaTypes constraints =  
   let withConstraint = (\c -> \rest ->  
           let sleft = (Rewriting.deannotateType (Typing.typeConstraintLeft c))
           in  
@@ -117,34 +123,44 @@ unifyTypeConstraints schemaTypes constraints =
                         let subst = (Substitution.singletonTypeSubst v t)
                         in  
                           let withResult = (\s -> Substitution.composeTypeSubst subst s)
-                          in (Flows.map withResult (unifyTypeConstraints schemaTypes (Substitution.substituteInConstraints subst rest))))
+                          in (Eithers.map withResult (unifyTypeConstraints cx schemaTypes (Substitution.substituteInConstraints subst rest))))
                 in  
-                  let tryBinding = (\v -> \t -> Logic.ifElse (variableOccursInType v t) (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (Core_.type_ t)) " (") comment) ")")) (bind v t))
+                  let tryBinding = (\v -> \t -> Logic.ifElse (variableOccursInType v t) (Left (Context.InContext {
+                          Context.inContextObject = Error.UnificationError {
+                            Error.unificationErrorLeftType = sleft,
+                            Error.unificationErrorRightType = sright,
+                            Error.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Variable " (Core.unName v)) " appears free in type ") (Core_.type_ t)) " (") comment) ")")},
+                          Context.inContextContext = cx})) (bind v t))
                   in  
                     let noVars =  
-                            let withConstraints = (\constraints2 -> unifyTypeConstraints schemaTypes (Lists.concat2 constraints2 rest))
-                            in (Flows.bind (joinTypes sleft sright comment) withConstraints)
+                            let withConstraints = (\constraints2 -> unifyTypeConstraints cx schemaTypes (Lists.concat2 constraints2 rest))
+                            in (Eithers.bind (joinTypes cx sleft sright comment) withConstraints)
                     in  
                       let dflt = ((\x -> case x of
-                              Core.TypeVariable v1 -> (tryBinding v1 sleft)
+                              Core.TypeVariable v0 -> (tryBinding v0 sleft)
                               _ -> noVars) sright)
                       in ((\x -> case x of
-                        Core.TypeVariable v1 -> ((\x -> case x of
-                          Core.TypeVariable v2 -> (Logic.ifElse (Equality.equal (Core.unName v1) (Core.unName v2)) (unifyTypeConstraints schemaTypes rest) (Logic.ifElse (Maybes.isJust (Maps.lookup v1 schemaTypes)) (Logic.ifElse (Maybes.isJust (Maps.lookup v2 schemaTypes)) (Flows.fail (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v1)) " and ") (Core.unName v2)) " (") comment) ")")) (bind v2 sleft)) (bind v1 sright)))
-                          _ -> (tryBinding v1 sright)) sright)
+                        Core.TypeVariable v0 -> ((\x -> case x of
+                          Core.TypeVariable v1 -> (Logic.ifElse (Equality.equal (Core.unName v0) (Core.unName v1)) (unifyTypeConstraints cx schemaTypes rest) (Logic.ifElse (Maybes.isJust (Maps.lookup v0 schemaTypes)) (Logic.ifElse (Maybes.isJust (Maps.lookup v1 schemaTypes)) (Left (Context.InContext {
+                            Context.inContextObject = Error.UnificationError {
+                              Error.unificationErrorLeftType = sleft,
+                              Error.unificationErrorRightType = sright,
+                              Error.unificationErrorMessage = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Attempted to unify schema names " (Core.unName v0)) " and ") (Core.unName v1)) " (") comment) ")")},
+                            Context.inContextContext = cx})) (bind v1 sleft)) (bind v0 sright)))
+                          _ -> (tryBinding v0 sright)) sright)
                         _ -> dflt) sleft))
-  in (Logic.ifElse (Lists.null constraints) (Flows.pure Substitution.idTypeSubst) (withConstraint (Lists.head constraints) (Lists.tail constraints)))
+  in (Logic.ifElse (Lists.null constraints) (Right Substitution.idTypeSubst) (withConstraint (Lists.head constraints) (Lists.tail constraints)))
 
-unifyTypeLists :: (M.Map Core.Name t0 -> [Core.Type] -> [Core.Type] -> String -> Compute.Flow t1 Typing.TypeSubst)
-unifyTypeLists schemaTypes l r comment =  
+unifyTypeLists :: (Context.Context -> M.Map Core.Name t0 -> [Core.Type] -> [Core.Type] -> String -> Either (Context.InContext Error.UnificationError) Typing.TypeSubst)
+unifyTypeLists cx schemaTypes l r comment =  
   let toConstraint = (\l -> \r -> Typing.TypeConstraint {
           Typing.typeConstraintLeft = l,
           Typing.typeConstraintRight = r,
           Typing.typeConstraintComment = comment})
-  in (unifyTypeConstraints schemaTypes (Lists.zipWith toConstraint l r))
+  in (unifyTypeConstraints cx schemaTypes (Lists.zipWith toConstraint l r))
 
-unifyTypes :: (M.Map Core.Name t0 -> Core.Type -> Core.Type -> String -> Compute.Flow t1 Typing.TypeSubst)
-unifyTypes schemaTypes l r comment = (unifyTypeConstraints schemaTypes [
+unifyTypes :: (Context.Context -> M.Map Core.Name t0 -> Core.Type -> Core.Type -> String -> Either (Context.InContext Error.UnificationError) Typing.TypeSubst)
+unifyTypes cx schemaTypes l r comment = (unifyTypeConstraints cx schemaTypes [
   Typing.TypeConstraint {
     Typing.typeConstraintLeft = l,
     Typing.typeConstraintRight = r,
@@ -154,6 +170,6 @@ unifyTypes schemaTypes l r comment = (unifyTypeConstraints schemaTypes [
 variableOccursInType :: (Core.Name -> Core.Type -> Bool)
 variableOccursInType var typ0 =  
   let tryType = (\b -> \typ -> (\x -> case x of
-          Core.TypeVariable v1 -> (Logic.or b (Equality.equal (Core.unName v1) (Core.unName var)))
+          Core.TypeVariable v0 -> (Logic.or b (Equality.equal (Core.unName v0) (Core.unName var)))
           _ -> b) typ)
   in (Rewriting.foldOverType Coders.TraversalOrderPre tryType False typ0)

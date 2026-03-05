@@ -87,26 +87,6 @@
                     "typeApplication": {
                       "body": {
                         "pair": {
-                          "@first": {"variable": "hydra.test.testTypes.testTypeFlowName"},
-                          "@second": {"variable": "hydra.test.testTypes.testTypeFlow"}}},
-                      "type": {"variable": "hydra.core.Name"}}},
-                  "type": {"variable": "hydra.core.Type"}}},
-              {
-                "typeApplication": {
-                  "body": {
-                    "typeApplication": {
-                      "body": {
-                        "pair": {
-                          "@first": {"variable": "hydra.test.testTypes.testTypeFlowStateName"},
-                          "@second": {"variable": "hydra.test.testTypes.testTypeFlowState"}}},
-                      "type": {"variable": "hydra.core.Name"}}},
-                  "type": {"variable": "hydra.core.Type"}}},
-              {
-                "typeApplication": {
-                  "body": {
-                    "typeApplication": {
-                      "body": {
-                        "pair": {
                           "@first": {"variable": "hydra.test.testTypes.testTypeHydraLiteralTypeName"},
                           "@second": {"variable": "hydra.test.testTypes.testTypeHydraLiteralType"}}},
                       "type": {"variable": "hydra.core.Name"}}},
@@ -247,16 +227,6 @@
                     "typeApplication": {
                       "body": {
                         "pair": {
-                          "@first": {"variable": "hydra.test.testTypes.testTypeTraceName"},
-                          "@second": {"variable": "hydra.test.testTypes.testTypeTrace"}}},
-                      "type": {"variable": "hydra.core.Name"}}},
-                  "type": {"variable": "hydra.core.Type"}}},
-              {
-                "typeApplication": {
-                  "body": {
-                    "typeApplication": {
-                      "body": {
-                        "pair": {
                           "@first": {"variable": "hydra.test.testTypes.testTypeTripleName"},
                           "@second": {"variable": "hydra.test.testTypes.testTypeTriple"}}},
                       "type": {"variable": "hydra.core.Name"}}},
@@ -338,7 +308,9 @@
     "hydra.coders",
     "hydra.compute",
     "hydra.constraints",
+    "hydra.context",
     "hydra.core",
+    "hydra.error",
     "hydra.grammar",
     "hydra.graph",
     "hydra.json.model",

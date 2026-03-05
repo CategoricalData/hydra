@@ -23,16 +23,16 @@ import qualified Data.Set as S
 
 parseError :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Parsing.ParseError)
 parseError cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "message" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_message -> Eithers.bind (Helpers.requireField "remainder" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_remainder -> Right (Parsing.ParseError {
       Parsing.parseErrorMessage = field_message,
       Parsing.parseErrorRemainder = field_remainder}))))
@@ -40,9 +40,9 @@ parseError cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
 
 parseResult :: ((Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Parsing.ParseResult t0))
 parseResult a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -57,12 +57,12 @@ parseResult a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
 
 parseSuccess :: ((Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Parsing.ParseSuccess t0))
 parseSuccess a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "value" a fieldMap cx) (\field_value -> Eithers.bind (Helpers.requireField "remainder" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_remainder -> Right (Parsing.ParseSuccess {
       Parsing.parseSuccessValue = field_value,
       Parsing.parseSuccessRemainder = field_remainder}))))

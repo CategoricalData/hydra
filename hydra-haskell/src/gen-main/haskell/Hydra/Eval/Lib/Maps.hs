@@ -4,13 +4,13 @@
 
 module Hydra.Eval.Lib.Maps where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Error as Error
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Monads as Monads
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -20,15 +20,15 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly alter for Map terms.
-alter :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-alter funTerm keyTerm mapTerm = ((\x -> case x of
-  Core.TermMap v1 ->  
-    let currentVal = (Maps.lookup keyTerm v1)
+alter :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+alter cx g funTerm keyTerm mapTerm = ((\x -> case x of
+  Core.TermMap v0 ->  
+    let currentVal = (Maps.lookup keyTerm v0)
     in  
       let newVal = (Core.TermApplication (Core.Application {
               Core.applicationFunction = funTerm,
               Core.applicationArgument = (Core.TermMaybe currentVal)}))
-      in (Flows.pure (Core.TermApplication (Core.Application {
+      in (Right (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermApplication (Core.Application {
           Core.applicationFunction = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.maybe"))),
@@ -48,14 +48,16 @@ alter funTerm keyTerm mapTerm = ((\x -> case x of
                 Core.applicationArgument = (Core.TermVariable (Core.Name "newV"))})),
               Core.applicationArgument = mapTerm}))})))})),
         Core.applicationArgument = newVal})))
-  _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly bimap for Map terms.
-bimap :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-bimap keyFun valFun mapTerm = ((\x -> case x of
-  Core.TermMap v1 ->  
-    let pairs = (Maps.toList v1)
-    in (Flows.pure (Core.TermMap (Maps.fromList (Lists.map (\p ->  
+bimap :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+bimap cx g keyFun valFun mapTerm = ((\x -> case x of
+  Core.TermMap v0 ->  
+    let pairs = (Maps.toList v0)
+    in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->  
       let k = (Pairs.first p)
       in  
         let v = (Pairs.second p)
@@ -64,14 +66,16 @@ bimap keyFun valFun mapTerm = ((\x -> case x of
           Core.applicationArgument = k}), (Core.TermApplication (Core.Application {
           Core.applicationFunction = valFun,
           Core.applicationArgument = v})))) pairs))))
-  _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly filter for Map terms.
-filter :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-filter valPred mapTerm = ((\x -> case x of
-  Core.TermMap v1 ->  
-    let pairs = (Maps.toList v1)
-    in (Flows.pure (Core.TermApplication (Core.Application {
+filter :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+filter cx g valPred mapTerm = ((\x -> case x of
+  Core.TermMap v0 ->  
+    let pairs = (Maps.toList v0)
+    in (Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.fromList"))),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
@@ -86,14 +90,16 @@ filter valPred mapTerm = ((\x -> case x of
                   Core.applicationArgument = v}))})),
               Core.applicationArgument = (Core.TermList (Lists.pure (Core.TermPair (Pairs.first p, v))))})),
             Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
-  _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly filterWithKey for Map terms.
-filterWithKey :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-filterWithKey pred mapTerm = ((\x -> case x of
-  Core.TermMap v1 ->  
-    let pairs = (Maps.toList v1)
-    in (Flows.pure (Core.TermApplication (Core.Application {
+filterWithKey :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+filterWithKey cx g pred mapTerm = ((\x -> case x of
+  Core.TermMap v0 ->  
+    let pairs = (Maps.toList v0)
+    in (Right (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.fromList"))),
       Core.applicationArgument = (Core.TermApplication (Core.Application {
         Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.concat"))),
@@ -112,32 +118,38 @@ filterWithKey pred mapTerm = ((\x -> case x of
                     Core.applicationArgument = v}))})),
                 Core.applicationArgument = (Core.TermList (Lists.pure (Core.TermPair (k, v))))})),
               Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
-  _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly map for Map terms.
-map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-map valFun mapTerm = ((\x -> case x of
-  Core.TermMap v1 ->  
-    let pairs = (Maps.toList v1)
-    in (Flows.pure (Core.TermMap (Maps.fromList (Lists.map (\p ->  
+map :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+map cx g valFun mapTerm = ((\x -> case x of
+  Core.TermMap v0 ->  
+    let pairs = (Maps.toList v0)
+    in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->  
       let k = (Pairs.first p)
       in  
         let v = (Pairs.second p)
         in (k, (Core.TermApplication (Core.Application {
           Core.applicationFunction = valFun,
           Core.applicationArgument = v})))) pairs))))
-  _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly mapKeys for Map terms.
-mapKeys :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-mapKeys keyFun mapTerm = ((\x -> case x of
-  Core.TermMap v1 ->  
-    let pairs = (Maps.toList v1)
-    in (Flows.pure (Core.TermMap (Maps.fromList (Lists.map (\p ->  
+mapKeys :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+mapKeys cx g keyFun mapTerm = ((\x -> case x of
+  Core.TermMap v0 ->  
+    let pairs = (Maps.toList v0)
+    in (Right (Core.TermMap (Maps.fromList (Lists.map (\p ->  
       let k = (Pairs.first p)
       in  
         let v = (Pairs.second p)
         in (Core.TermApplication (Core.Application {
           Core.applicationFunction = keyFun,
           Core.applicationArgument = k}), v)) pairs))))
-  _ -> (Monads.unexpected "map value" (Core_.term mapTerm))) mapTerm)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextContext = cx}))) mapTerm)

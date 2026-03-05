@@ -34,16 +34,16 @@ termAccessor accessor =
       Accessors.TermAccessorApplicationArgument -> (Just "arg")
       Accessors.TermAccessorLambdaBody -> (Just "body")
       Accessors.TermAccessorUnionCasesDefault -> (Just "default")
-      Accessors.TermAccessorUnionCasesBranch v1 -> (Just (Strings.cat2 "." (Core.unName v1)))
+      Accessors.TermAccessorUnionCasesBranch v0 -> (Just (Strings.cat2 "." (Core.unName v0)))
       Accessors.TermAccessorLetBody -> (Just "in")
-      Accessors.TermAccessorLetBinding v1 -> (Just (Strings.cat2 (Core.unName v1) "="))
-      Accessors.TermAccessorListElement v1 -> (idx v1)
-      Accessors.TermAccessorMapKey v1 -> (idxSuff ".key" v1)
-      Accessors.TermAccessorMapValue v1 -> (idxSuff ".value" v1)
+      Accessors.TermAccessorLetBinding v0 -> (Just (Strings.cat2 (Core.unName v0) "="))
+      Accessors.TermAccessorListElement v0 -> (idx v0)
+      Accessors.TermAccessorMapKey v0 -> (idxSuff ".key" v0)
+      Accessors.TermAccessorMapValue v0 -> (idxSuff ".value" v0)
       Accessors.TermAccessorMaybeTerm -> (Just "just")
-      Accessors.TermAccessorProductTerm v1 -> (idx v1)
-      Accessors.TermAccessorRecordField v1 -> (Just (Strings.cat2 "." (Core.unName v1)))
-      Accessors.TermAccessorSetElement v1 -> (idx v1)
+      Accessors.TermAccessorProductTerm v0 -> (idx v0)
+      Accessors.TermAccessorRecordField v0 -> (Just (Strings.cat2 "." (Core.unName v0)))
+      Accessors.TermAccessorSetElement v0 -> (idx v0)
       Accessors.TermAccessorSumTerm -> Nothing
       Accessors.TermAccessorTypeLambdaBody -> Nothing
       Accessors.TermAccessorTypeApplicationTerm -> Nothing
@@ -63,9 +63,9 @@ termToAccessorGraph namespaces term =
                   edges = (Pairs.second nodesEdges)
                   nextPath = (Lists.cons accessor path)
               in ((\x -> case x of
-                Core.TermLet v1 ->  
-                  let bindings = (Core.letBindings v1) 
-                      env = (Core.letBody v1)
+                Core.TermLet v0 ->  
+                  let bindings = (Core.letBindings v0) 
+                      env = (Core.letBody v0)
                       bindingNames = (Lists.map Core.bindingName bindings)
                       addBindingName = (\nodesVisitedIds -> \name ->  
                               let currentNodesVisited = (Pairs.first nodesVisitedIds) 
@@ -94,13 +94,13 @@ termToAccessorGraph namespaces term =
                       nodeBindingPairs = (Lists.zip nodes1 bindings)
                       stateAfterBindings = (Lists.foldl addBindingTerm ((Lists.concat2 nodes1 nodes, edges), visited1) nodeBindingPairs)
                   in (helper ids1 mroot nextPath stateAfterBindings (Accessors.TermAccessorLetBody, env))
-                Core.TermVariable v1 -> (Maybes.maybe state (\root -> Maybes.maybe state (\node ->  
+                Core.TermVariable v0 -> (Maybes.maybe state (\root -> Maybes.maybe state (\node ->  
                   let edge = Accessors.AccessorEdge {
                           Accessors.accessorEdgeSource = root,
                           Accessors.accessorEdgePath = (Accessors.AccessorPath (Lists.reverse nextPath)),
                           Accessors.accessorEdgeTarget = node} 
                       newEdges = (Lists.cons edge edges)
-                  in ((nodes, newEdges), visited)) (Maps.lookup v1 ids)) mroot)
+                  in ((nodes, newEdges), visited)) (Maps.lookup v0 ids)) mroot)
                 _ -> (Lists.foldl (helper ids mroot nextPath) state (Rewriting.subtermsWithAccessors currentTerm))) currentTerm))
       initialState = (([], []), Sets.empty)
       result = (helper Maps.empty Nothing [] initialState (dontCareAccessor, term))

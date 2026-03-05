@@ -54,7 +54,7 @@ jsonLanguage = Coders.Language {
       Variants.TypeVariantMaybe,
       Variants.TypeVariantRecord])
     typePredicate = (\typ -> (\x -> case x of
-      Core.TypeMaybe v1 -> ((\x -> case x of
+      Core.TypeMaybe v0 -> ((\x -> case x of
         Core.TypeMaybe _ -> False
-        _ -> True) v1)
+        _ -> True) v0)
       _ -> True) (Rewriting.deannotateType typ))

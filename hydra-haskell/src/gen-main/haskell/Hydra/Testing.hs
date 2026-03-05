@@ -6,7 +6,6 @@ module Hydra.Testing where
 
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Json.Model as Model
@@ -527,9 +526,9 @@ data TestCodec =
     -- | The file extension for test files (e.g., 'hs', 'java', 'py')
     testCodecFileExtension :: Module.FileExtension,
     -- | A function for encoding Hydra terms into the target language
-    testCodecEncodeTerm :: (Core.Term -> Compute.Flow Graph.Graph String),
+    testCodecEncodeTerm :: (Core.Term -> Graph.Graph -> Either String String),
     -- | A function for encoding Hydra types into the target language
-    testCodecEncodeType :: (Core.Type -> Compute.Flow Graph.Graph String),
+    testCodecEncodeType :: (Core.Type -> Graph.Graph -> Either String String),
     -- | A function for formatting test case names according to the target language's conventions
     testCodecFormatTestName :: (String -> String),
     -- | A function for formatting module names according to the target language's conventions
@@ -593,7 +592,7 @@ data TestCase =
   TestCaseInference InferenceTestCase |
   -- | A type inference failure test
   TestCaseInferenceFailure InferenceFailureTestCase |
-  -- | A JSON coder (round-trip) test using Flow-based coder
+  -- | A JSON coder (round-trip) test
   TestCaseJsonCoder JsonCoderTestCase |
   -- | A JSON decode test using Either-based decoder
   TestCaseJsonDecode JsonDecodeTestCase |

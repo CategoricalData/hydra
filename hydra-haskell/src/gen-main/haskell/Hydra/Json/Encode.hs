@@ -27,20 +27,20 @@ toJson :: (Core.Term -> Either String Model.Value)
 toJson term =  
   let stripped = (Rewriting.deannotateTerm term)
   in ((\x -> case x of
-    Core.TermLiteral v1 -> (encodeLiteral v1)
-    Core.TermList v1 ->  
-      let results = (Eithers.mapList (\t -> toJson t) v1)
+    Core.TermLiteral v0 -> (encodeLiteral v0)
+    Core.TermList v0 ->  
+      let results = (Eithers.mapList (\t -> toJson t) v0)
       in (Eithers.map (\vs -> Model.ValueArray vs) results)
-    Core.TermSet v1 ->  
-      let terms = (Sets.toList v1)
+    Core.TermSet v0 ->  
+      let terms = (Sets.toList v0)
       in  
         let results = (Eithers.mapList (\t -> toJson t) terms)
         in (Eithers.map (\vs -> Model.ValueArray vs) results)
-    Core.TermMaybe v1 -> (Maybes.maybe (Right Model.ValueNull) (\v ->  
+    Core.TermMaybe v0 -> (Maybes.maybe (Right Model.ValueNull) (\v ->  
       let encodedMaybe = (toJson v)
       in (Eithers.map (\encoded -> Model.ValueArray [
-        encoded]) encodedMaybe)) v1)
-    Core.TermRecord v1 ->  
+        encoded]) encodedMaybe)) v0)
+    Core.TermRecord v0 ->  
       let encodeField = (\f ->  
               let fname = (Core.unName (Core.fieldName f))
               in  
@@ -49,12 +49,12 @@ toJson term =
                   let encodedField = (toJson fterm)
                   in (Eithers.map (\v -> (fname, v)) encodedField))
       in  
-        let fields = (Core.recordFields v1)
+        let fields = (Core.recordFields v0)
         in  
           let encodedFields = (Eithers.mapList encodeField fields)
           in (Eithers.map (\fs -> Model.ValueObject (Maps.fromList fs)) encodedFields)
-    Core.TermUnion v1 ->  
-      let field = (Core.injectionField v1)
+    Core.TermUnion v0 ->  
+      let field = (Core.injectionField v0)
       in  
         let fname = (Core.unName (Core.fieldName field))
         in  
@@ -64,8 +64,8 @@ toJson term =
             in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
               (fname, v)])) encodedUnion)
     Core.TermUnit -> (Right (Model.ValueObject Maps.empty))
-    Core.TermWrap v1 -> (toJson (Core.wrappedTermBody v1))
-    Core.TermMap v1 ->  
+    Core.TermWrap v0 -> (toJson (Core.wrappedTermBody v0))
+    Core.TermMap v0 ->  
       let encodeEntry = (\kv ->  
               let k = (Pairs.first kv)
               in  
@@ -78,12 +78,12 @@ toJson term =
                       ("@key", ek),
                       ("@value", ev)])) encodedV) encodedK))
       in  
-        let entries = (Eithers.mapList encodeEntry (Maps.toList v1))
+        let entries = (Eithers.mapList encodeEntry (Maps.toList v0))
         in (Eithers.map (\es -> Model.ValueArray es) entries)
-    Core.TermPair v1 ->  
-      let first = (Pairs.first v1)
+    Core.TermPair v0 ->  
+      let first = (Pairs.first v0)
       in  
-        let second = (Pairs.second v1)
+        let second = (Pairs.second v0)
         in  
           let encodedFirst = (toJson first)
           in  
@@ -91,13 +91,13 @@ toJson term =
             in (Eithers.either (\err -> Left err) (\ef -> Eithers.map (\es -> Model.ValueObject (Maps.fromList [
               ("@first", ef),
               ("@second", es)])) encodedSecond) encodedFirst)
-    Core.TermEither v1 -> (Eithers.either (\l ->  
+    Core.TermEither v0 -> (Eithers.either (\l ->  
       let encodedL = (toJson l)
       in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
         ("@left", v)])) encodedL)) (\r ->  
       let encodedR = (toJson r)
       in (Eithers.map (\v -> Model.ValueObject (Maps.fromList [
-        ("@right", v)])) encodedR)) v1)
+        ("@right", v)])) encodedR)) v0)
     _ -> (Left (Strings.cat [
       "unsupported term variant for JSON encoding: ",
       (Core_.term term)]))) stripped)
@@ -105,28 +105,28 @@ toJson term =
 -- | Encode a Hydra literal to a JSON value
 encodeLiteral :: (Core.Literal -> Either t0 Model.Value)
 encodeLiteral lit = ((\x -> case x of
-  Core.LiteralBinary v1 -> (Right (Model.ValueString (Literals.binaryToString v1)))
-  Core.LiteralBoolean v1 -> (Right (Model.ValueBoolean v1))
-  Core.LiteralFloat v1 -> (encodeFloat v1)
-  Core.LiteralInteger v1 -> (encodeInteger v1)
-  Core.LiteralString v1 -> (Right (Model.ValueString v1))) lit)
+  Core.LiteralBinary v0 -> (Right (Model.ValueString (Literals.binaryToString v0)))
+  Core.LiteralBoolean v0 -> (Right (Model.ValueBoolean v0))
+  Core.LiteralFloat v0 -> (encodeFloat v0)
+  Core.LiteralInteger v0 -> (encodeInteger v0)
+  Core.LiteralString v0 -> (Right (Model.ValueString v0))) lit)
 
 -- | Encode a float value to JSON. Float64/Bigfloat use native numbers; Float32 uses string.
 encodeFloat :: (Core.FloatValue -> Either t0 Model.Value)
 encodeFloat fv = ((\x -> case x of
-  Core.FloatValueBigfloat v1 -> (Right (Model.ValueNumber v1))
-  Core.FloatValueFloat32 v1 -> (Right (Model.ValueString (Literals.showFloat32 v1)))
-  Core.FloatValueFloat64 v1 -> (Right (Model.ValueNumber (Literals.float64ToBigfloat v1)))) fv)
+  Core.FloatValueBigfloat v0 -> (Right (Model.ValueNumber v0))
+  Core.FloatValueFloat32 v0 -> (Right (Model.ValueString (Literals.showFloat32 v0)))
+  Core.FloatValueFloat64 v0 -> (Right (Model.ValueNumber (Literals.float64ToBigfloat v0)))) fv)
 
 -- | Encode an integer value to JSON. Small ints use native numbers; large ints use strings.
 encodeInteger :: (Core.IntegerValue -> Either t0 Model.Value)
 encodeInteger iv = ((\x -> case x of
-  Core.IntegerValueBigint v1 -> (Right (Model.ValueString (Literals.showBigint v1)))
-  Core.IntegerValueInt64 v1 -> (Right (Model.ValueString (Literals.showInt64 v1)))
-  Core.IntegerValueUint32 v1 -> (Right (Model.ValueString (Literals.showUint32 v1)))
-  Core.IntegerValueUint64 v1 -> (Right (Model.ValueString (Literals.showUint64 v1)))
-  Core.IntegerValueInt8 v1 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int8ToBigint v1))))
-  Core.IntegerValueInt16 v1 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int16ToBigint v1))))
-  Core.IntegerValueInt32 v1 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v1))))
-  Core.IntegerValueUint8 v1 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint8ToBigint v1))))
-  Core.IntegerValueUint16 v1 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint16ToBigint v1))))) iv)
+  Core.IntegerValueBigint v0 -> (Right (Model.ValueString (Literals.showBigint v0)))
+  Core.IntegerValueInt64 v0 -> (Right (Model.ValueString (Literals.showInt64 v0)))
+  Core.IntegerValueUint32 v0 -> (Right (Model.ValueString (Literals.showUint32 v0)))
+  Core.IntegerValueUint64 v0 -> (Right (Model.ValueString (Literals.showUint64 v0)))
+  Core.IntegerValueInt8 v0 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int8ToBigint v0))))
+  Core.IntegerValueInt16 v0 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int16ToBigint v0))))
+  Core.IntegerValueInt32 v0 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.int32ToBigint v0))))
+  Core.IntegerValueUint8 v0 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint8ToBigint v0))))
+  Core.IntegerValueUint16 v0 -> (Right (Model.ValueNumber (Literals.bigintToBigfloat (Literals.uint16ToBigint v0))))) iv)

@@ -4,11 +4,11 @@
 
 module Hydra.Eval.Lib.Pairs where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Error as Error
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Monads as Monads
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -18,15 +18,17 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly bimap for Pair terms.
-bimap :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-bimap firstFun secondFun pairTerm = ((\x -> case x of
-  Core.TermPair v1 ->  
-    let fst = (Pairs.first v1)
+bimap :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+bimap cx g firstFun secondFun pairTerm = ((\x -> case x of
+  Core.TermPair v0 ->  
+    let fst = (Pairs.first v0)
     in  
-      let snd = (Pairs.second v1)
-      in (Flows.pure (Core.TermPair (Core.TermApplication (Core.Application {
+      let snd = (Pairs.second v0)
+      in (Right (Core.TermPair (Core.TermApplication (Core.Application {
         Core.applicationFunction = firstFun,
         Core.applicationArgument = fst}), (Core.TermApplication (Core.Application {
         Core.applicationFunction = secondFun,
         Core.applicationArgument = snd})))))
-  _ -> (Monads.unexpected "pair value" (Core_.term pairTerm))) pairTerm)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair value") " but found ") (Core_.term pairTerm))),
+    Context.inContextContext = cx}))) pairTerm)

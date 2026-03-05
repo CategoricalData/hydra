@@ -4,14 +4,15 @@
 
 module Hydra.Eval.Lib.Maybes where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Monads as Monads
+import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Show.Core as Core__
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -21,34 +22,42 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly applicative apply for Maybe terms.
-apply :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-apply funOptTerm argOptTerm = ((\x -> case x of
-  Core.TermMaybe v1 -> ((\x -> case x of
-    Core.TermMaybe v2 -> (Flows.pure (Core.TermMaybe (Maybes.bind v1 (\f -> Maybes.map (\x -> Core.TermApplication (Core.Application {
+apply :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+apply cx g funOptTerm argOptTerm = ((\x -> case x of
+  Core.TermMaybe v0 -> ((\x -> case x of
+    Core.TermMaybe v1 -> (Right (Core.TermMaybe (Maybes.bind v0 (\f -> Maybes.map (\x -> Core.TermApplication (Core.Application {
       Core.applicationFunction = f,
-      Core.applicationArgument = x})) v2))))
-    _ -> (Monads.unexpected "optional value" (Core__.term argOptTerm))) argOptTerm)
-  _ -> (Monads.unexpected "optional function" (Core__.term funOptTerm))) funOptTerm)
+      Core.applicationArgument = x})) v1))))
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term argOptTerm))),
+      Context.inContextContext = cx}))) argOptTerm)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional function") " but found ") (Core__.term funOptTerm))),
+    Context.inContextContext = cx}))) funOptTerm)
 
 -- | Interpreter-friendly monadic bind for Maybe terms.
-bind :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-bind optTerm funTerm = ((\x -> case x of
-  Core.TermMaybe v1 -> (Flows.pure (Maybes.maybe (Core.TermMaybe Nothing) (\val -> Core.TermApplication (Core.Application {
+bind :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+bind cx g optTerm funTerm = ((\x -> case x of
+  Core.TermMaybe v0 -> (Right (Maybes.maybe (Core.TermMaybe Nothing) (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
-    Core.applicationArgument = val})) v1))
-  _ -> (Monads.unexpected "optional value" (Core__.term optTerm))) optTerm)
+    Core.applicationArgument = val})) v0))
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm))),
+    Context.inContextContext = cx}))) optTerm)
 
 -- | Interpreter-friendly case analysis for Maybe terms (cases argument order).
-cases :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-cases optTerm defaultTerm funTerm = ((\x -> case x of
-  Core.TermMaybe v1 -> (Flows.pure (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {
+cases :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+cases cx g optTerm defaultTerm funTerm = ((\x -> case x of
+  Core.TermMaybe v0 -> (Right (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
-    Core.applicationArgument = val})) v1))
-  _ -> (Monads.unexpected "optional value" (Core__.term optTerm))) optTerm)
+    Core.applicationArgument = val})) v0))
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm))),
+    Context.inContextContext = cx}))) optTerm)
 
 -- | Interpreter-friendly Kleisli composition for Maybe.
-compose :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-compose funF funG xTerm = (Flows.pure (Core.TermApplication (Core.Application {
+compose :: (t0 -> t1 -> Core.Term -> Core.Term -> Core.Term -> Either t2 Core.Term)
+compose cx g funF funG xTerm = (Right (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermApplication (Core.Application {
     Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.bind"))),
     Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -57,25 +66,29 @@ compose funF funG xTerm = (Flows.pure (Core.TermApplication (Core.Application {
   Core.applicationArgument = funG})))
 
 -- | Interpreter-friendly map for Maybe terms.
-map :: (Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-map funTerm optTerm = ((\x -> case x of
-  Core.TermMaybe v1 -> (Flows.pure (Core.TermMaybe (Maybes.map (\val -> Core.TermApplication (Core.Application {
+map :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+map cx g funTerm optTerm = ((\x -> case x of
+  Core.TermMaybe v0 -> (Right (Core.TermMaybe (Maybes.map (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
-    Core.applicationArgument = val})) v1)))
-  _ -> (Monads.unexpected "optional value" (Core__.term optTerm))) optTerm)
+    Core.applicationArgument = val})) v0)))
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm))),
+    Context.inContextContext = cx}))) optTerm)
 
 -- | Interpreter-friendly mapMaybe for List terms.
-mapMaybe :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
-mapMaybe funTerm listTerm = (Flows.bind (Core_.list listTerm) (\elements -> Flows.pure (Core.TermApplication (Core.Application {
+mapMaybe :: (Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+mapMaybe cx g funTerm listTerm = (Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.cat"))),
   Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
     Core.applicationArgument = el})) elements))}))))
 
 -- | Interpreter-friendly case analysis for Maybe terms.
-maybe :: (Core.Term -> Core.Term -> Core.Term -> Compute.Flow t0 Core.Term)
-maybe defaultTerm funTerm optTerm = ((\x -> case x of
-  Core.TermMaybe v1 -> (Flows.pure (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {
+maybe :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+maybe cx g defaultTerm funTerm optTerm = ((\x -> case x of
+  Core.TermMaybe v0 -> (Right (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
-    Core.applicationArgument = val})) v1))
-  _ -> (Monads.unexpected "optional value" (Core__.term optTerm))) optTerm)
+    Core.applicationArgument = val})) v0))
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm))),
+    Context.inContextContext = cx}))) optTerm)

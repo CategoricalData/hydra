@@ -36,9 +36,9 @@ augmentBindingsWithNewFreeVars cx boundVars bindings =
   let types = (Maps.map Rewriting.typeSchemeToFType (Graph.graphBoundTypes cx))
   in  
     let wrapAfterTypeLambdas = (\vars -> \term -> (\x -> case x of
-            Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
-              Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
-              Core.typeLambdaBody = (wrapAfterTypeLambdas vars (Core.typeLambdaBody v1))}))
+            Core.TermTypeLambda v0 -> (Core.TermTypeLambda (Core.TypeLambda {
+              Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
+              Core.typeLambdaBody = (wrapAfterTypeLambdas vars (Core.typeLambdaBody v0))}))
             _ -> (Lists.foldl (\t -> \p -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
               Core.lambdaParameter = (Pairs.first p),
               Core.lambdaDomain = (Pairs.second p),
@@ -82,7 +82,7 @@ countVarOccurrences :: (Core.Name -> Core.Term -> Int)
 countVarOccurrences name term =  
   let childCount = (Lists.foldl (\acc -> \t -> Math.add acc (countVarOccurrences name t)) 0 (Rewriting.subterms term))
   in ((\x -> case x of
-    Core.TermVariable v1 -> (Logic.ifElse (Equality.equal v1 name) (Math.add 1 childCount) childCount)
+    Core.TermVariable v0 -> (Logic.ifElse (Equality.equal v0 name) (Math.add 1 childCount) childCount)
     _ -> childCount) term)
 
 -- | Transform a let-term by pulling ALL let bindings to the top level. This is useful for targets like Java that don't support nested let expressions at all. If a hoisted binding captures lambda-bound variables from an enclosing scope, the binding is wrapped in lambdas for those variables, and references are replaced with applications. Note: Assumes no variable shadowing; use hydra.rewriting.unshadowVariables first.
@@ -204,10 +204,10 @@ hoistLetBindingsWithPredicate isParentBinding shouldHoistBinding cx0 let0 =
                       in  
                         let newTerm = (Pairs.second result)
                         in ((\x -> case x of
-                          Core.TermLet v1 ->  
-                            let body = (Core.letBody v1)
+                          Core.TermLet v0 ->  
+                            let body = (Core.letBody v0)
                             in  
-                              let partitionPair = (Lists.partition (shouldHoistBinding cx) (Core.letBindings v1))
+                              let partitionPair = (Lists.partition (shouldHoistBinding cx) (Core.letBindings v0))
                               in  
                                 let hoistUs = (Pairs.first partitionPair)
                                 in  
@@ -453,7 +453,7 @@ hoistSubterms shouldHoist cx0 term0 =
                   in  
                     let recursedTerm = (Pairs.second recursed)
                     in ((\x -> case x of
-                      Core.TermLet v2 -> (processLetTerm cx newCounter path v2)
+                      Core.TermLet v1 -> (processLetTerm cx newCounter path v1)
                       _ -> (newCounter, recursedTerm)) recursedTerm)
               _ -> (recurse counter term)) term)
       in (Pairs.second (rewriteAndFoldTermWithTypeContextAndPath rewrite cx0 1 term0))
@@ -466,9 +466,9 @@ isApplicationFunction acc = ((\x -> case x of
 -- | Check if a function is a union elimination
 isEliminationUnion :: (Core.Function -> Bool)
 isEliminationUnion f = ((\x -> case x of
-  Core.FunctionElimination v1 -> ((\x -> case x of
+  Core.FunctionElimination v0 -> ((\x -> case x of
     Core.EliminationUnion _ -> True
-    _ -> False) v1)
+    _ -> False) v0)
   _ -> False) f)
 
 isLambdaBody :: (Accessors.TermAccessor -> Bool)
@@ -479,13 +479,13 @@ isLambdaBody acc = ((\x -> case x of
 -- | Check if a term is a union elimination (case statement)
 isUnionElimination :: (Core.Term -> Bool)
 isUnionElimination term = ((\x -> case x of
-  Core.TermFunction v1 -> (isEliminationUnion v1)
+  Core.TermFunction v0 -> (isEliminationUnion v0)
   _ -> False) term)
 
 -- | Check if a term is an application of a union elimination (case statement applied to an argument)
 isUnionEliminationApplication :: (Core.Term -> Bool)
 isUnionEliminationApplication term = ((\x -> case x of
-  Core.TermApplication v1 -> (isUnionElimination (Rewriting.deannotateAndDetypeTerm (Core.applicationFunction v1)))
+  Core.TermApplication v0 -> (isUnionElimination (Rewriting.deannotateAndDetypeTerm (Core.applicationFunction v0)))
   _ -> False) term)
 
 -- | Normalize a path for hoisting by treating immediately-applied lambdas as let bindings. Replaces [applicationFunction, lambdaBody, ...] with [letBody, ...].
@@ -509,11 +509,11 @@ rewriteAndFoldTermWithTypeContext f cx0 val0 term0 =
             let cx = (Pairs.second valAndCx)
             in  
               let cx1 = ((\x -> case x of
-                      Core.TermFunction v1 -> ((\x -> case x of
-                        Core.FunctionLambda v2 -> (Schemas.extendGraphForLambda cx v2)
-                        _ -> cx) v1)
-                      Core.TermLet v1 -> (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v1)
-                      Core.TermTypeLambda v1 -> (Schemas.extendGraphForTypeLambda cx v1)
+                      Core.TermFunction v0 -> ((\x -> case x of
+                        Core.FunctionLambda v1 -> (Schemas.extendGraphForLambda cx v1)
+                        _ -> cx) v0)
+                      Core.TermLet v0 -> (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v0)
+                      Core.TermTypeLambda v0 -> (Schemas.extendGraphForTypeLambda cx v0)
                       _ -> cx) term)
               in  
                 let recurseForUser = (\newVal -> \subterm ->  
@@ -535,11 +535,11 @@ rewriteAndFoldTermWithTypeContextAndPath f cx0 val0 term0 =
             let val = (Pairs.second cxAndVal)
             in  
               let cx1 = ((\x -> case x of
-                      Core.TermFunction v1 -> ((\x -> case x of
-                        Core.FunctionLambda v2 -> (Schemas.extendGraphForLambda cx v2)
-                        _ -> cx) v1)
-                      Core.TermLet v1 -> (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v1)
-                      Core.TermTypeLambda v1 -> (Schemas.extendGraphForTypeLambda cx v1)
+                      Core.TermFunction v0 -> ((\x -> case x of
+                        Core.FunctionLambda v1 -> (Schemas.extendGraphForLambda cx v1)
+                        _ -> cx) v0)
+                      Core.TermLet v0 -> (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v0)
+                      Core.TermTypeLambda v0 -> (Schemas.extendGraphForTypeLambda cx v0)
                       _ -> cx) term)
               in  
                 let recurseForUser = (\valIn -> \termIn ->  
@@ -558,20 +558,20 @@ rewriteTermWithTypeContext f cx0 term0 =
   let f2 = (\recurse -> \cx -> \term ->  
           let recurse1 = (\term -> recurse cx term)
           in ((\x -> case x of
-            Core.TermFunction v1 -> ((\x -> case x of
-              Core.FunctionLambda v2 ->  
-                let cx1 = (Schemas.extendGraphForLambda cx v2)
+            Core.TermFunction v0 -> ((\x -> case x of
+              Core.FunctionLambda v1 ->  
+                let cx1 = (Schemas.extendGraphForLambda cx v1)
                 in  
                   let recurse2 = (\term -> recurse cx1 term)
                   in (f recurse2 cx1 term)
-              _ -> (f recurse1 cx term)) v1)
-            Core.TermLet v1 ->  
-              let cx1 = (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v1)
+              _ -> (f recurse1 cx term)) v0)
+            Core.TermLet v0 ->  
+              let cx1 = (Schemas.extendGraphForLet (\_ -> \_ -> Nothing) cx v0)
               in  
                 let recurse2 = (\term -> recurse cx1 term)
                 in (f recurse2 cx1 term)
-            Core.TermTypeLambda v1 ->  
-              let cx1 = (Schemas.extendGraphForTypeLambda cx v1)
+            Core.TermTypeLambda v0 ->  
+              let cx1 = (Schemas.extendGraphForTypeLambda cx v0)
               in  
                 let recurse2 = (\term -> recurse cx1 term)
                 in (f recurse2 cx1 term)

@@ -390,5 +390,5 @@
               "domain": {"variable": "hydra.compute.Trace"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.compute",
-  "termDependencies": ["hydra.encode.core"],
+  "termDependencies": ["hydra.encode.context", "hydra.encode.core", "hydra.encode.error"],
   "typeDependencies": ["hydra.compute"]}

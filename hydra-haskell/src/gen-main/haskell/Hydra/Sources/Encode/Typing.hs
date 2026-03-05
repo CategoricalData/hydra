@@ -315,6 +315,23 @@ module_ = Module.Module {
                               Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
                                 Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
                                 Core.projectionField = (Core.Name "classConstraints")})))),
+                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
+                    (Core.TermRecord (Core.Record {
+                      Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                      Core.recordFields = [
+                        Core.Field {
+                          Core.fieldName = (Core.Name "name"),
+                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "context"))}))},
+                        Core.Field {
+                          Core.fieldName = (Core.Name "term"),
+                          Core.fieldTerm = (Core.TermApplication (Core.Application {
+                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.context.context")),
+                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+                                Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
+                                Core.projectionField = (Core.Name "context")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
       Core.bindingType = Nothing},
     Core.Binding {
@@ -477,7 +494,8 @@ module_ = Module.Module {
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
       Core.bindingType = Nothing}],
   Module.moduleTermDependencies = [
-    Module.Namespace "hydra.encode.core"],
+    Module.Namespace "hydra.encode.core",
+    (Module.Namespace "hydra.encode.context")],
   Module.moduleTypeDependencies = [
     Module.Namespace "hydra.typing"],
   Module.moduleDescription = (Just "Term encoders for hydra.typing")}

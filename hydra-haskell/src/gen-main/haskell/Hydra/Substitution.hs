@@ -175,11 +175,11 @@ substituteInTerm subst term0 =
                             Core.letBindings = (Lists.map rewriteBinding bindings),
                             Core.letBody = (substituteInTerm subst2 (Core.letBody lt))})))
               in ((\x -> case x of
-                Core.TermFunction v1 -> ((\x -> case x of
-                  Core.FunctionLambda v2 -> (withLambda v2)
-                  _ -> (recurse term)) v1)
-                Core.TermLet v1 -> (withLet v1)
-                Core.TermVariable v1 -> (Maybes.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v1 s))
+                Core.TermFunction v0 -> ((\x -> case x of
+                  Core.FunctionLambda v1 -> (withLambda v1)
+                  _ -> (recurse term)) v0)
+                Core.TermLet v0 -> (withLet v0)
+                Core.TermVariable v0 -> (Maybes.maybe (recurse term) (\sterm -> sterm) (Maps.lookup v0 s))
                 _ -> (recurse term)) term))
   in (Rewriting.rewriteTerm rewrite term0)
 
@@ -191,10 +191,10 @@ substInType subst typ0 = (Logic.ifElse (Maps.null (Typing.unTypeSubst subst)) ty
 substInTypeNonEmpty :: (Typing.TypeSubst -> Core.Type -> Core.Type)
 substInTypeNonEmpty subst typ0 =  
   let rewrite = (\recurse -> \typ -> (\x -> case x of
-          Core.TypeForall v1 -> (Maybes.maybe (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
-            Core.forallTypeParameter = (Core.forallTypeParameter v1),
-            Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v1)) (Core.forallTypeBody v1))})) (Maps.lookup (Core.forallTypeParameter v1) (Typing.unTypeSubst subst)))
-          Core.TypeVariable v1 -> (Maybes.maybe typ (\styp -> styp) (Maps.lookup v1 (Typing.unTypeSubst subst)))
+          Core.TypeForall v0 -> (Maybes.maybe (recurse typ) (\styp -> Core.TypeForall (Core.ForallType {
+            Core.forallTypeParameter = (Core.forallTypeParameter v0),
+            Core.forallTypeBody = (substInType (removeVar (Core.forallTypeParameter v0)) (Core.forallTypeBody v0))})) (Maps.lookup (Core.forallTypeParameter v0) (Typing.unTypeSubst subst)))
+          Core.TypeVariable v0 -> (Maybes.maybe typ (\styp -> styp) (Maps.lookup v0 (Typing.unTypeSubst subst)))
           _ -> (recurse typ)) typ) 
       removeVar = (\v -> Typing.TypeSubst (Maps.delete v (Typing.unTypeSubst subst)))
   in (Rewriting.rewriteType rewrite typ0)
@@ -213,7 +213,7 @@ substTypesInTerm subst term0 =
           let dflt = (recurse term) 
               forFunction = (\f -> (\x -> case x of
                       Core.FunctionElimination _ -> dflt
-                      Core.FunctionLambda v1 -> (forLambda v1)
+                      Core.FunctionLambda v0 -> (forLambda v0)
                       _ -> dflt) f)
               forLambda = (\l -> Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                       Core.lambdaParameter = (Core.lambdaParameter l),
@@ -237,9 +237,9 @@ substTypesInTerm subst term0 =
                         Core.typeLambdaParameter = param,
                         Core.typeLambdaBody = (substTypesInTerm subst2 (Core.typeLambdaBody ta))})))
           in ((\x -> case x of
-            Core.TermFunction v1 -> (forFunction v1)
-            Core.TermLet v1 -> (forLet v1)
-            Core.TermTypeApplication v1 -> (forTypeApplication v1)
-            Core.TermTypeLambda v1 -> (forTypeLambda v1)
+            Core.TermFunction v0 -> (forFunction v0)
+            Core.TermLet v0 -> (forLet v0)
+            Core.TermTypeApplication v0 -> (forTypeApplication v0)
+            Core.TermTypeLambda v0 -> (forTypeLambda v0)
             _ -> dflt) term))
   in (Rewriting.rewriteTerm rewrite term0)

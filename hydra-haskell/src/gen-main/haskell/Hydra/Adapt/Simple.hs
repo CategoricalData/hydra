@@ -5,15 +5,15 @@
 module Hydra.Adapt.Simple where
 
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Hoisting as Hoisting
 import qualified Hydra.Inference as Inference
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -51,15 +51,15 @@ adaptFloatType constraints ft =
       in (Logic.ifElse supported (Just ft) (forUnsupported ft))
 
 -- | Adapt a graph and its schema to the given language constraints. The doExpand flag controls eta expansion of partial applications. Adaptation is type-preserving: binding-level TypeSchemes are adapted (not stripped). Note: case statement hoisting is done separately, prior to adaptation. The els0 parameter provides the original ordered bindings. Returns both the adapted graph and the ordered adapted bindings.
-adaptDataGraph :: (Coders.LanguageConstraints -> Bool -> [Core.Binding] -> Graph.Graph -> Compute.Flow Graph.Graph (Graph.Graph, [Core.Binding]))
-adaptDataGraph constraints doExpand els0 graph0 =  
+adaptDataGraph :: (Coders.LanguageConstraints -> Bool -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either String (Graph.Graph, [Core.Binding]))
+adaptDataGraph constraints doExpand els0 cx graph0 =  
   let transform = (\g -> \gterm ->  
           let tx = g
           in  
             let gterm1 = (Rewriting.unshadowVariables (pushTypeAppsInward gterm))
             in  
               let gterm2 = (Rewriting.unshadowVariables (Logic.ifElse doExpand (pushTypeAppsInward (Reduction.etaExpandTermNew tx gterm1)) gterm1))
-              in (Flows.pure (Rewriting.liftLambdaAboveLet gterm2)))
+              in (Rewriting.liftLambdaAboveLet gterm2))
   in  
     let litmap = (adaptLiteralTypesMap constraints)
     in  
@@ -68,40 +68,44 @@ adaptDataGraph constraints doExpand els0 graph0 =
         let schemaTypes0 = (Graph.graphSchemaTypes graph0)
         in  
           let schemaBindings = (Schemas.typesToElements (Maps.map (\ts -> Rewriting.typeSchemeToFType ts) schemaTypes0))
-          in (Flows.bind (Logic.ifElse (Maps.null schemaTypes0) (Flows.pure Maps.empty) (Flows.bind (Schemas.graphAsTypes schemaBindings) (\tmap0 -> Flows.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Flows.pure (Maps.map (\t -> Schemas.typeToTypeScheme t) tmap1))))) (\schemaResult ->  
+          in (Eithers.bind (Logic.ifElse (Maps.null schemaTypes0) (Right Maps.empty) (Eithers.bind (Eithers.bimap (\ic -> Error.unDecodingError (Context.inContextObject ic)) (\x -> x) (Schemas.graphAsTypes cx graph0 schemaBindings)) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 -> Right (Maps.map (\t -> Schemas.typeToTypeScheme t) tmap1))))) (\schemaResult ->  
             let adaptedSchemaTypes = schemaResult
             in  
               let gterm0 = (Core.TermLet (Core.Let {
                       Core.letBindings = els0,
                       Core.letBody = Core.TermUnit}))
-              in (Flows.bind (Logic.ifElse doExpand (transform graph0 gterm0) (Flows.pure gterm0)) (\gterm1 -> Flows.bind (adaptTerm constraints litmap gterm1) (\gterm2 -> Flows.bind (Rewriting.rewriteTermM (adaptLambdaDomains constraints litmap) gterm2) (\gterm3 ->  
-                let els1Raw = (Schemas.termAsBindings gterm3)
-                in  
-                  let processBinding = (\el -> Flows.bind (Rewriting.rewriteTermM (adaptNestedTypes constraints litmap) (Core.bindingTerm el)) (\newTerm -> Flows.bind (Maybes.maybe (Flows.pure Nothing) (\ts -> Flows.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Flows.pure (Just ts1))) (Core.bindingType el)) (\adaptedType -> Flows.pure (Core.Binding {
-                          Core.bindingName = (Core.bindingName el),
-                          Core.bindingTerm = newTerm,
-                          Core.bindingType = adaptedType}))))
-                  in (Flows.bind (Flows.mapList processBinding els1Raw) (\els1 -> Flows.bind (Flows.mapElems (adaptPrimitive constraints litmap) prims0) (\prims1 ->  
-                    let adaptedGraph = Graph.Graph {
-                            Graph.graphBoundTerms = (Graph.graphBoundTerms (Lexical.buildGraph els1 Maps.empty prims1)),
-                            Graph.graphBoundTypes = (Graph.graphBoundTypes (Lexical.buildGraph els1 Maps.empty prims1)),
-                            Graph.graphClassConstraints = (Graph.graphClassConstraints (Lexical.buildGraph els1 Maps.empty prims1)),
-                            Graph.graphLambdaVariables = (Graph.graphLambdaVariables (Lexical.buildGraph els1 Maps.empty prims1)),
-                            Graph.graphMetadata = (Graph.graphMetadata (Lexical.buildGraph els1 Maps.empty prims1)),
-                            Graph.graphPrimitives = (Graph.graphPrimitives (Lexical.buildGraph els1 Maps.empty prims1)),
-                            Graph.graphSchemaTypes = adaptedSchemaTypes,
-                            Graph.graphTypeVariables = (Graph.graphTypeVariables (Lexical.buildGraph els1 Maps.empty prims1))}
-                    in (Flows.pure (adaptedGraph, els1)))))))))))
+              in  
+                let gterm1 = (Logic.ifElse doExpand (transform graph0 gterm0) gterm0)
+                in (Eithers.bind (adaptTerm constraints litmap cx graph0 gterm1) (\gterm2 -> Eithers.bind (Rewriting.rewriteTermM (adaptLambdaDomains constraints litmap) gterm2) (\gterm3 ->  
+                  let els1Raw = (Schemas.termAsBindings gterm3)
+                  in  
+                    let processBinding = (\el -> Eithers.bind (Rewriting.rewriteTermM (adaptNestedTypes constraints litmap) (Core.bindingTerm el)) (\newTerm -> Eithers.bind (Maybes.maybe (Right Nothing) (\ts -> Eithers.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Right (Just ts1))) (Core.bindingType el)) (\adaptedType -> Right (Core.Binding {
+                            Core.bindingName = (Core.bindingName el),
+                            Core.bindingTerm = newTerm,
+                            Core.bindingType = adaptedType}))))
+                    in (Eithers.bind (Eithers.mapList processBinding els1Raw) (\els1 -> Eithers.bind (Eithers.mapList (\kv -> Eithers.bind (adaptPrimitive constraints litmap (Pairs.second kv)) (\prim1 -> Right (Pairs.first kv, prim1))) (Maps.toList prims0)) (\primPairs ->  
+                      let prims1 = (Maps.fromList primPairs)
+                      in  
+                        let adaptedGraph = Graph.Graph {
+                                Graph.graphBoundTerms = (Graph.graphBoundTerms (Lexical.buildGraph els1 Maps.empty prims1)),
+                                Graph.graphBoundTypes = (Graph.graphBoundTypes (Lexical.buildGraph els1 Maps.empty prims1)),
+                                Graph.graphClassConstraints = (Graph.graphClassConstraints (Lexical.buildGraph els1 Maps.empty prims1)),
+                                Graph.graphLambdaVariables = (Graph.graphLambdaVariables (Lexical.buildGraph els1 Maps.empty prims1)),
+                                Graph.graphMetadata = (Graph.graphMetadata (Lexical.buildGraph els1 Maps.empty prims1)),
+                                Graph.graphPrimitives = (Graph.graphPrimitives (Lexical.buildGraph els1 Maps.empty prims1)),
+                                Graph.graphSchemaTypes = adaptedSchemaTypes,
+                                Graph.graphTypeVariables = (Graph.graphTypeVariables (Lexical.buildGraph els1 Maps.empty prims1))}
+                        in (Right (adaptedGraph, els1))))))))))
 
 -- | Adapt a schema graph to the given language constraints
-adaptGraphSchema :: Ord t0 => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Compute.Flow t1 (M.Map t0 Core.Type))
+adaptGraphSchema :: Ord t0 => (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> M.Map t0 Core.Type -> Either String (M.Map t0 Core.Type))
 adaptGraphSchema constraints litmap types0 =  
   let mapPair = (\pair ->  
           let name = (Pairs.first pair)
           in  
             let typ = (Pairs.second pair)
-            in (Flows.bind (adaptType constraints litmap typ) (\typ1 -> Flows.pure (name, typ1))))
-  in (Flows.bind (Flows.mapList mapPair (Maps.toList types0)) (\pairs -> Flows.pure (Maps.fromList pairs)))
+            in (Eithers.bind (adaptType constraints litmap typ) (\typ1 -> Right (name, typ1))))
+  in (Eithers.bind (Eithers.mapList mapPair (Maps.toList types0)) (\pairs -> Right (Maps.fromList pairs)))
 
 -- | Attempt to adapt an integer type using the given language constraints
 adaptIntegerType :: (Coders.LanguageConstraints -> Core.IntegerType -> Maybe Core.IntegerType)
@@ -123,27 +127,27 @@ adaptIntegerType constraints it =
       in (Logic.ifElse supported (Just it) (forUnsupported it))
 
 -- | Rewrite callback for adapting lambda domain types in a term
-adaptLambdaDomains :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Compute.Flow t1 Core.Term) -> t0 -> Compute.Flow t1 Core.Term)
-adaptLambdaDomains constraints litmap recurse term = (Flows.bind (recurse term) (\rewritten -> (\x -> case x of
-  Core.TermFunction v1 -> ((\x -> case x of
-    Core.FunctionLambda v2 -> (Flows.bind (Maybes.maybe (Flows.pure Nothing) (\dom -> Flows.bind (adaptType constraints litmap dom) (\dom1 -> Flows.pure (Just dom1))) (Core.lambdaDomain v2)) (\adaptedDomain -> Flows.pure (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-      Core.lambdaParameter = (Core.lambdaParameter v2),
+adaptLambdaDomains :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Either String Core.Term) -> t0 -> Either String Core.Term)
+adaptLambdaDomains constraints litmap recurse term = (Eithers.bind (recurse term) (\rewritten -> (\x -> case x of
+  Core.TermFunction v0 -> ((\x -> case x of
+    Core.FunctionLambda v1 -> (Eithers.bind (Maybes.maybe (Right Nothing) (\dom -> Eithers.bind (adaptType constraints litmap dom) (\dom1 -> Right (Just dom1))) (Core.lambdaDomain v1)) (\adaptedDomain -> Right (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+      Core.lambdaParameter = (Core.lambdaParameter v1),
       Core.lambdaDomain = adaptedDomain,
-      Core.lambdaBody = (Core.lambdaBody v2)})))))
-    _ -> (Flows.pure (Core.TermFunction v1))) v1)
-  _ -> (Flows.pure rewritten)) rewritten))
+      Core.lambdaBody = (Core.lambdaBody v1)})))))
+    _ -> (Right (Core.TermFunction v0))) v0)
+  _ -> (Right rewritten)) rewritten))
 
 -- | Convert a literal to a different type
 adaptLiteral :: (Core.LiteralType -> Core.Literal -> Core.Literal)
 adaptLiteral lt l = ((\x -> case x of
-  Core.LiteralBinary v1 -> ((\x -> case x of
-    Core.LiteralTypeString -> (Core.LiteralString (Literals.binaryToString v1))) lt)
-  Core.LiteralBoolean v1 -> ((\x -> case x of
-    Core.LiteralTypeInteger v2 -> (Core.LiteralInteger (Literals_.bigintToIntegerValue v2 (Logic.ifElse v1 1 0)))) lt)
-  Core.LiteralFloat v1 -> ((\x -> case x of
-    Core.LiteralTypeFloat v2 -> (Core.LiteralFloat (Literals_.bigfloatToFloatValue v2 (Literals_.floatValueToBigfloat v1)))) lt)
-  Core.LiteralInteger v1 -> ((\x -> case x of
-    Core.LiteralTypeInteger v2 -> (Core.LiteralInteger (Literals_.bigintToIntegerValue v2 (Literals_.integerValueToBigint v1)))) lt)) l)
+  Core.LiteralBinary v0 -> ((\x -> case x of
+    Core.LiteralTypeString -> (Core.LiteralString (Literals.binaryToString v0))) lt)
+  Core.LiteralBoolean v0 -> ((\x -> case x of
+    Core.LiteralTypeInteger v1 -> (Core.LiteralInteger (Literals_.bigintToIntegerValue v1 (Logic.ifElse v0 1 0)))) lt)
+  Core.LiteralFloat v0 -> ((\x -> case x of
+    Core.LiteralTypeFloat v1 -> (Core.LiteralFloat (Literals_.bigfloatToFloatValue v1 (Literals_.floatValueToBigfloat v0)))) lt)
+  Core.LiteralInteger v0 -> ((\x -> case x of
+    Core.LiteralTypeInteger v1 -> (Core.LiteralInteger (Literals_.bigintToIntegerValue v1 (Literals_.integerValueToBigint v0)))) lt)) l)
 
 -- | Attempt to adapt a literal type using the given language constraints
 adaptLiteralType :: (Coders.LanguageConstraints -> Core.LiteralType -> Maybe Core.LiteralType)
@@ -151,8 +155,8 @@ adaptLiteralType constraints lt =
   let forUnsupported = (\lt -> (\x -> case x of
           Core.LiteralTypeBinary -> (Just Core.LiteralTypeString)
           Core.LiteralTypeBoolean -> (Maybes.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints Core.IntegerTypeInt8))
-          Core.LiteralTypeFloat v1 -> (Maybes.map (\x -> Core.LiteralTypeFloat x) (adaptFloatType constraints v1))
-          Core.LiteralTypeInteger v1 -> (Maybes.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints v1))
+          Core.LiteralTypeFloat v0 -> (Maybes.map (\x -> Core.LiteralTypeFloat x) (adaptFloatType constraints v0))
+          Core.LiteralTypeInteger v0 -> (Maybes.map (\x -> Core.LiteralTypeInteger x) (adaptIntegerType constraints v0))
           _ -> Nothing) lt)
   in (Logic.ifElse (literalTypeSupported constraints lt) Nothing (forUnsupported lt))
 
@@ -167,56 +171,56 @@ adaptLiteralValue :: Ord t0 => (M.Map t0 Core.LiteralType -> t0 -> Core.Literal 
 adaptLiteralValue litmap lt l = (Maybes.maybe (Core.LiteralString (Core_.literal l)) (\lt2 -> adaptLiteral lt2 l) (Maps.lookup lt litmap))
 
 -- | Rewrite callback for adapting nested let binding TypeSchemes in a term
-adaptNestedTypes :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Compute.Flow t1 Core.Term) -> t0 -> Compute.Flow t1 Core.Term)
-adaptNestedTypes constraints litmap recurse term = (Flows.bind (recurse term) (\rewritten -> (\x -> case x of
-  Core.TermLet v1 ->  
-    let adaptB = (\b -> Flows.bind (Maybes.maybe (Flows.pure Nothing) (\ts -> Flows.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Flows.pure (Just ts1))) (Core.bindingType b)) (\adaptedBType -> Flows.pure (Core.Binding {
+adaptNestedTypes :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> (t0 -> Either String Core.Term) -> t0 -> Either String Core.Term)
+adaptNestedTypes constraints litmap recurse term = (Eithers.bind (recurse term) (\rewritten -> (\x -> case x of
+  Core.TermLet v0 ->  
+    let adaptB = (\b -> Eithers.bind (Maybes.maybe (Right Nothing) (\ts -> Eithers.bind (adaptTypeScheme constraints litmap ts) (\ts1 -> Right (Just ts1))) (Core.bindingType b)) (\adaptedBType -> Right (Core.Binding {
             Core.bindingName = (Core.bindingName b),
             Core.bindingTerm = (Core.bindingTerm b),
             Core.bindingType = adaptedBType})))
-    in (Flows.bind (Flows.mapList adaptB (Core.letBindings v1)) (\adaptedBindings -> Flows.pure (Core.TermLet (Core.Let {
+    in (Eithers.bind (Eithers.mapList adaptB (Core.letBindings v0)) (\adaptedBindings -> Right (Core.TermLet (Core.Let {
       Core.letBindings = adaptedBindings,
-      Core.letBody = (Core.letBody v1)}))))
-  _ -> (Flows.pure rewritten)) rewritten))
+      Core.letBody = (Core.letBody v0)}))))
+  _ -> (Right rewritten)) rewritten))
 
 -- | Adapt a primitive to the given language constraints, prior to inference
-adaptPrimitive :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Graph.Primitive -> Compute.Flow t0 Graph.Primitive)
+adaptPrimitive :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Graph.Primitive -> Either String Graph.Primitive)
 adaptPrimitive constraints litmap prim0 =  
   let ts0 = (Graph.primitiveType prim0)
-  in (Flows.bind (adaptTypeScheme constraints litmap ts0) (\ts1 -> Flows.pure (Graph.Primitive {
+  in (Eithers.bind (adaptTypeScheme constraints litmap ts0) (\ts1 -> Right (Graph.Primitive {
     Graph.primitiveName = (Graph.primitiveName prim0),
     Graph.primitiveType = ts1,
     Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)})))
 
 -- | Adapt a term using the given language constraints
-adaptTerm :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
-adaptTerm constraints litmap term0 =  
+adaptTerm :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Context.Context -> Graph.Graph -> Core.Term -> Either String Core.Term)
+adaptTerm constraints litmap cx graph term0 =  
   let rewrite = (\recurse -> \term0 ->  
           let forSupported = (\term -> (\x -> case x of
-                  Core.TermLiteral v1 ->  
-                    let lt = (Reflect.literalType v1)
-                    in (Flows.pure (Just (Logic.ifElse (literalTypeSupported constraints lt) term (Core.TermLiteral (adaptLiteralValue litmap lt v1)))))
-                  _ -> (Flows.pure (Just term))) term) 
+                  Core.TermLiteral v0 ->  
+                    let lt = (Reflect.literalType v0)
+                    in (Right (Just (Logic.ifElse (literalTypeSupported constraints lt) term (Core.TermLiteral (adaptLiteralValue litmap lt v0)))))
+                  _ -> (Right (Just term))) term) 
               forUnsupported = (\term ->  
-                      let forNonNull = (\alts -> Flows.bind (tryTerm (Lists.head alts)) (\mterm -> Maybes.maybe (tryAlts (Lists.tail alts)) (\t -> Flows.pure (Just t)) mterm)) 
-                          tryAlts = (\alts -> Logic.ifElse (Lists.null alts) (Flows.pure Nothing) (forNonNull alts))
-                      in (Flows.bind (termAlternatives term) (\alts0 -> tryAlts alts0)))
+                      let forNonNull = (\alts -> Eithers.bind (tryTerm (Lists.head alts)) (\mterm -> Maybes.maybe (tryAlts (Lists.tail alts)) (\t -> Right (Just t)) mterm)) 
+                          tryAlts = (\alts -> Logic.ifElse (Lists.null alts) (Right Nothing) (forNonNull alts))
+                      in (Eithers.bind (termAlternatives cx graph term) (\alts0 -> tryAlts alts0)))
               tryTerm = (\term ->  
                       let supportedVariant = (Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints))
                       in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term)))
-          in (Flows.bind (recurse term0) (\term1 -> (\x -> case x of
-            Core.TermTypeApplication v1 -> (Flows.bind (adaptType constraints litmap (Core.typeApplicationTermType v1)) (\atyp -> Flows.pure (Core.TermTypeApplication (Core.TypeApplicationTerm {
-              Core.typeApplicationTermBody = (Core.typeApplicationTermBody v1),
+          in (Eithers.bind (recurse term0) (\term1 -> (\x -> case x of
+            Core.TermTypeApplication v0 -> (Eithers.bind (adaptType constraints litmap (Core.typeApplicationTermType v0)) (\atyp -> Right (Core.TermTypeApplication (Core.TypeApplicationTerm {
+              Core.typeApplicationTermBody = (Core.typeApplicationTermBody v0),
               Core.typeApplicationTermType = atyp}))))
-            Core.TermTypeLambda _ -> (Flows.pure term1)
-            _ -> (Flows.bind (tryTerm term1) (\mterm -> Maybes.maybe (Flows.fail (Strings.cat2 "no alternatives for term: " (Core_.term term1))) (\term2 -> Flows.pure term2) mterm))) term1)))
+            Core.TermTypeLambda _ -> (Right term1)
+            _ -> (Eithers.bind (tryTerm term1) (\mterm -> Maybes.maybe (Left (Strings.cat2 "no alternatives for term: " (Core_.term term1))) (\term2 -> Right term2) mterm))) term1)))
   in (Rewriting.rewriteTermM rewrite term0)
 
 -- | Adapt a type using the given language constraints
-adaptType :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Type -> Compute.Flow t0 Core.Type)
+adaptType :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.Type -> Either String Core.Type)
 adaptType constraints litmap type0 =  
   let forSupported = (\typ -> (\x -> case x of
-          Core.TypeLiteral v1 -> (Logic.ifElse (literalTypeSupported constraints v1) (Just typ) (Maybes.maybe (Just (Core.TypeLiteral Core.LiteralTypeString)) (\lt2 -> Just (Core.TypeLiteral lt2)) (Maps.lookup v1 litmap)))
+          Core.TypeLiteral v0 -> (Logic.ifElse (literalTypeSupported constraints v0) (Just typ) (Maybes.maybe (Just (Core.TypeLiteral Core.LiteralTypeString)) (\lt2 -> Just (Core.TypeLiteral lt2)) (Maps.lookup v0 litmap)))
           _ -> (Just typ)) typ) 
       forUnsupported = (\typ ->  
               let tryAlts = (\alts -> Logic.ifElse (Lists.null alts) Nothing (Maybes.maybe (tryAlts (Lists.tail alts)) (\t -> Just t) (tryType (Lists.head alts))))
@@ -227,23 +231,23 @@ adaptType constraints litmap type0 =
               let supportedVariant = (Sets.member (Reflect.typeVariant typ) (Coders.languageConstraintsTypeVariants constraints))
               in (Logic.ifElse supportedVariant (forSupported typ) (forUnsupported typ)))
   in  
-    let rewrite = (\recurse -> \typ -> Flows.bind (recurse typ) (\type1 -> Maybes.maybe (Flows.fail (Strings.cat2 "no alternatives for type: " (Core_.type_ typ))) (\type2 -> Flows.pure type2) (tryType type1)))
+    let rewrite = (\recurse -> \typ -> Eithers.bind (recurse typ) (\type1 -> Maybes.maybe (Left (Strings.cat2 "no alternatives for type: " (Core_.type_ typ))) (\type2 -> Right type2) (tryType type1)))
     in (Rewriting.rewriteTypeM rewrite type0)
 
 -- | Adapt a type scheme to the given language constraints, prior to inference
-adaptTypeScheme :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.TypeScheme -> Compute.Flow t0 Core.TypeScheme)
+adaptTypeScheme :: (Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> Core.TypeScheme -> Either String Core.TypeScheme)
 adaptTypeScheme constraints litmap ts0 =  
   let vars0 = (Core.typeSchemeVariables ts0)
   in  
     let t0 = (Core.typeSchemeType ts0)
-    in (Flows.bind (adaptType constraints litmap t0) (\t1 -> Flows.pure (Core.TypeScheme {
+    in (Eithers.bind (adaptType constraints litmap t0) (\t1 -> Right (Core.TypeScheme {
       Core.typeSchemeVariables = vars0,
       Core.typeSchemeType = t1,
       Core.typeSchemeConstraints = (Core.typeSchemeConstraints ts0)})))
 
 -- | Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations. Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java). The originalBindings parameter provides the original ordered bindings (from module elements).
-dataGraphToDefinitions :: (Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Module.Namespace] -> Compute.Flow Graph.Graph (Graph.Graph, [[Module.TermDefinition]]))
-dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings originalBindings graph0 namespaces =  
+dataGraphToDefinitions :: (Coders.LanguageConstraints -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Graph.Graph -> [Module.Namespace] -> Context.Context -> Either String (Graph.Graph, [[Module.TermDefinition]]))
+dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings originalBindings graph0 namespaces cx =  
   let namespacesSet = (Sets.fromList namespaces)
   in  
     let isParentBinding = (\b -> Maybes.maybe False (\ns -> Sets.member ns namespacesSet) (Names.namespaceOf (Core.bindingName b)))
@@ -277,7 +281,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
         in  
           let checkBindingsTyped = (\debugLabel -> \bindings ->  
                   let untypedBindings = (Lists.map (\b -> Core.unName (Core.bindingName b)) (Lists.filter (\b -> Logic.not (Maybes.isJust (Core.bindingType b))) bindings))
-                  in (Logic.ifElse (Lists.null untypedBindings) (Flows.pure bindings) (Flows.fail (Strings.cat [
+                  in (Logic.ifElse (Lists.null untypedBindings) (Right bindings) (Left (Strings.cat [
                     "Found untyped bindings (",
                     debugLabel,
                     "): ",
@@ -301,11 +305,11 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                 let bins0 = originalBindings
                 in  
                   let bins1 = (Logic.ifElse doHoistCaseStatements (hoistCases bins0) bins0)
-                  in (Flows.bind (Logic.ifElse doInfer (Flows.map (\result -> Pairs.second result) (Inference.inferGraphTypes bins1 (rebuildGraph bins1))) (checkBindingsTyped "after case hoisting" bins1)) (\bins2 -> Flows.bind (Logic.ifElse doHoistPolymorphicLetBindings (checkBindingsTyped "after let hoisting" (hoistPoly bins2)) (Flows.pure bins2)) (\bins3 -> Flows.bind (adaptDataGraph constraints doExpand bins3 (rebuildGraph bins3)) (\adaptResult ->  
+                  in (Eithers.bind (Logic.ifElse doInfer (Eithers.map (\result -> Pairs.second (Pairs.first result)) (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx bins1 (rebuildGraph bins1)))) (checkBindingsTyped "after case hoisting" bins1)) (\bins2 -> Eithers.bind (Logic.ifElse doHoistPolymorphicLetBindings (checkBindingsTyped "after let hoisting" (hoistPoly bins2)) (Right bins2)) (\bins3 -> Eithers.bind (adaptDataGraph constraints doExpand bins3 cx (rebuildGraph bins3)) (\adaptResult ->  
                     let adapted = (Pairs.first adaptResult)
                     in  
                       let adaptedBindings = (Pairs.second adaptResult)
-                      in (Flows.bind (checkBindingsTyped "after adaptation" adaptedBindings) (\bins4 ->  
+                      in (Eithers.bind (checkBindingsTyped "after adaptation" adaptedBindings) (\bins4 ->  
                         let bins5 = (normalizeBindings bins4)
                         in  
                           let toDef = (\el -> Maybes.map (\ts -> Module.TermDefinition {
@@ -323,7 +327,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                                 let defsGrouped = (Lists.map (\ns ->  
                                         let elsForNs = (Maybes.maybe [] Equality.identity (Maps.lookup ns elementsByNamespace))
                                         in (Maybes.cat (Lists.map toDef elsForNs))) namespaces)
-                                in (Flows.pure (Graph.Graph {
+                                in (Right (Graph.Graph {
                                   Graph.graphBoundTerms = (Graph.graphBoundTerms (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))),
                                   Graph.graphBoundTypes = (Graph.graphBoundTypes (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))),
                                   Graph.graphClassConstraints = (Graph.graphClassConstraints (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))),
@@ -337,8 +341,8 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
 literalTypeSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)
 literalTypeSupported constraints lt =  
   let forType = (\lt -> (\x -> case x of
-          Core.LiteralTypeFloat v1 -> (Sets.member v1 (Coders.languageConstraintsFloatTypes constraints))
-          Core.LiteralTypeInteger v1 -> (Sets.member v1 (Coders.languageConstraintsIntegerTypes constraints))
+          Core.LiteralTypeFloat v0 -> (Sets.member v0 (Coders.languageConstraintsFloatTypes constraints))
+          Core.LiteralTypeInteger v0 -> (Sets.member v0 (Coders.languageConstraintsIntegerTypes constraints))
           _ -> True) lt)
   in (Logic.ifElse (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (forType lt) False)
 
@@ -346,25 +350,25 @@ literalTypeSupported constraints lt =
 pushTypeAppsInward :: (Core.Term -> Core.Term)
 pushTypeAppsInward term =  
   let push = (\body -> \typ -> (\x -> case x of
-          Core.TermApplication v1 -> (go (Core.TermApplication (Core.Application {
+          Core.TermApplication v0 -> (go (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-              Core.typeApplicationTermBody = (Core.applicationFunction v1),
+              Core.typeApplicationTermBody = (Core.applicationFunction v0),
               Core.typeApplicationTermType = typ})),
-            Core.applicationArgument = (Core.applicationArgument v1)})))
-          Core.TermFunction v1 -> ((\x -> case x of
-            Core.FunctionLambda v2 -> (go (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.lambdaParameter v2),
-              Core.lambdaDomain = (Core.lambdaDomain v2),
+            Core.applicationArgument = (Core.applicationArgument v0)})))
+          Core.TermFunction v0 -> ((\x -> case x of
+            Core.FunctionLambda v1 -> (go (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.lambdaParameter v1),
+              Core.lambdaDomain = (Core.lambdaDomain v1),
               Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                Core.typeApplicationTermBody = (Core.lambdaBody v2),
+                Core.typeApplicationTermBody = (Core.lambdaBody v1),
                 Core.typeApplicationTermType = typ}))}))))
             _ -> (Core.TermTypeApplication (Core.TypeApplicationTerm {
-              Core.typeApplicationTermBody = (Core.TermFunction v1),
-              Core.typeApplicationTermType = typ}))) v1)
-          Core.TermLet v1 -> (go (Core.TermLet (Core.Let {
-            Core.letBindings = (Core.letBindings v1),
+              Core.typeApplicationTermBody = (Core.TermFunction v0),
+              Core.typeApplicationTermType = typ}))) v0)
+          Core.TermLet v0 -> (go (Core.TermLet (Core.Let {
+            Core.letBindings = (Core.letBindings v0),
             Core.letBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-              Core.typeApplicationTermBody = (Core.letBody v1),
+              Core.typeApplicationTermBody = (Core.letBody v0),
               Core.typeApplicationTermType = typ}))})))
           _ -> (Core.TermTypeApplication (Core.TypeApplicationTerm {
             Core.typeApplicationTermBody = body,
@@ -375,20 +379,20 @@ pushTypeAppsInward term =
                       Core.fieldTerm = (go (Core.fieldTerm fld))})
               in  
                 let forElimination = (\elm -> (\x -> case x of
-                        Core.EliminationRecord v1 -> (Core.EliminationRecord v1)
-                        Core.EliminationUnion v1 -> (Core.EliminationUnion (Core.CaseStatement {
-                          Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
-                          Core.caseStatementDefault = (Maybes.map go (Core.caseStatementDefault v1)),
-                          Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v1))}))
-                        Core.EliminationWrap v1 -> (Core.EliminationWrap v1)) elm)
+                        Core.EliminationRecord v0 -> (Core.EliminationRecord v0)
+                        Core.EliminationUnion v0 -> (Core.EliminationUnion (Core.CaseStatement {
+                          Core.caseStatementTypeName = (Core.caseStatementTypeName v0),
+                          Core.caseStatementDefault = (Maybes.map go (Core.caseStatementDefault v0)),
+                          Core.caseStatementCases = (Lists.map forField (Core.caseStatementCases v0))}))
+                        Core.EliminationWrap v0 -> (Core.EliminationWrap v0)) elm)
                 in  
                   let forFunction = (\fun -> (\x -> case x of
-                          Core.FunctionElimination v1 -> (Core.FunctionElimination (forElimination v1))
-                          Core.FunctionLambda v1 -> (Core.FunctionLambda (Core.Lambda {
-                            Core.lambdaParameter = (Core.lambdaParameter v1),
-                            Core.lambdaDomain = (Core.lambdaDomain v1),
-                            Core.lambdaBody = (go (Core.lambdaBody v1))}))
-                          Core.FunctionPrimitive v1 -> (Core.FunctionPrimitive v1)) fun)
+                          Core.FunctionElimination v0 -> (Core.FunctionElimination (forElimination v0))
+                          Core.FunctionLambda v0 -> (Core.FunctionLambda (Core.Lambda {
+                            Core.lambdaParameter = (Core.lambdaParameter v0),
+                            Core.lambdaDomain = (Core.lambdaDomain v0),
+                            Core.lambdaBody = (go (Core.lambdaBody v0))}))
+                          Core.FunctionPrimitive v0 -> (Core.FunctionPrimitive v0)) fun)
                   in  
                     let forLet = (\lt ->  
                             let mapBinding = (\b -> Core.Binding {
@@ -403,72 +407,72 @@ pushTypeAppsInward term =
                               let forPair = (\p -> (go (Pairs.first p), (go (Pairs.second p))))
                               in (Maps.fromList (Lists.map forPair (Maps.toList m))))
                       in ((\x -> case x of
-                        Core.TermAnnotated v1 -> (Core.TermAnnotated (Core.AnnotatedTerm {
-                          Core.annotatedTermBody = (go (Core.annotatedTermBody v1)),
-                          Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v1)}))
-                        Core.TermApplication v1 -> (Core.TermApplication (Core.Application {
-                          Core.applicationFunction = (go (Core.applicationFunction v1)),
-                          Core.applicationArgument = (go (Core.applicationArgument v1))}))
-                        Core.TermEither v1 -> (Core.TermEither (Eithers.either (\l -> Left (go l)) (\r -> Right (go r)) v1))
-                        Core.TermFunction v1 -> (Core.TermFunction (forFunction v1))
-                        Core.TermLet v1 -> (Core.TermLet (forLet v1))
-                        Core.TermList v1 -> (Core.TermList (Lists.map go v1))
-                        Core.TermLiteral v1 -> (Core.TermLiteral v1)
-                        Core.TermMap v1 -> (Core.TermMap (forMap v1))
-                        Core.TermMaybe v1 -> (Core.TermMaybe (Maybes.map go v1))
-                        Core.TermPair v1 -> (Core.TermPair (go (Pairs.first v1), (go (Pairs.second v1))))
-                        Core.TermRecord v1 -> (Core.TermRecord (Core.Record {
-                          Core.recordTypeName = (Core.recordTypeName v1),
-                          Core.recordFields = (Lists.map forField (Core.recordFields v1))}))
-                        Core.TermSet v1 -> (Core.TermSet (Sets.fromList (Lists.map go (Sets.toList v1))))
-                        Core.TermTypeApplication v1 ->  
-                          let body1 = (go (Core.typeApplicationTermBody v1))
-                          in (push body1 (Core.typeApplicationTermType v1))
-                        Core.TermTypeLambda v1 -> (Core.TermTypeLambda (Core.TypeLambda {
-                          Core.typeLambdaParameter = (Core.typeLambdaParameter v1),
-                          Core.typeLambdaBody = (go (Core.typeLambdaBody v1))}))
-                        Core.TermUnion v1 -> (Core.TermUnion (Core.Injection {
-                          Core.injectionTypeName = (Core.injectionTypeName v1),
-                          Core.injectionField = (forField (Core.injectionField v1))}))
+                        Core.TermAnnotated v0 -> (Core.TermAnnotated (Core.AnnotatedTerm {
+                          Core.annotatedTermBody = (go (Core.annotatedTermBody v0)),
+                          Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)}))
+                        Core.TermApplication v0 -> (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (go (Core.applicationFunction v0)),
+                          Core.applicationArgument = (go (Core.applicationArgument v0))}))
+                        Core.TermEither v0 -> (Core.TermEither (Eithers.either (\l -> Left (go l)) (\r -> Right (go r)) v0))
+                        Core.TermFunction v0 -> (Core.TermFunction (forFunction v0))
+                        Core.TermLet v0 -> (Core.TermLet (forLet v0))
+                        Core.TermList v0 -> (Core.TermList (Lists.map go v0))
+                        Core.TermLiteral v0 -> (Core.TermLiteral v0)
+                        Core.TermMap v0 -> (Core.TermMap (forMap v0))
+                        Core.TermMaybe v0 -> (Core.TermMaybe (Maybes.map go v0))
+                        Core.TermPair v0 -> (Core.TermPair (go (Pairs.first v0), (go (Pairs.second v0))))
+                        Core.TermRecord v0 -> (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.recordTypeName v0),
+                          Core.recordFields = (Lists.map forField (Core.recordFields v0))}))
+                        Core.TermSet v0 -> (Core.TermSet (Sets.fromList (Lists.map go (Sets.toList v0))))
+                        Core.TermTypeApplication v0 ->  
+                          let body1 = (go (Core.typeApplicationTermBody v0))
+                          in (push body1 (Core.typeApplicationTermType v0))
+                        Core.TermTypeLambda v0 -> (Core.TermTypeLambda (Core.TypeLambda {
+                          Core.typeLambdaParameter = (Core.typeLambdaParameter v0),
+                          Core.typeLambdaBody = (go (Core.typeLambdaBody v0))}))
+                        Core.TermUnion v0 -> (Core.TermUnion (Core.Injection {
+                          Core.injectionTypeName = (Core.injectionTypeName v0),
+                          Core.injectionField = (forField (Core.injectionField v0))}))
                         Core.TermUnit -> Core.TermUnit
-                        Core.TermVariable v1 -> (Core.TermVariable v1)
-                        Core.TermWrap v1 -> (Core.TermWrap (Core.WrappedTerm {
-                          Core.wrappedTermTypeName = (Core.wrappedTermTypeName v1),
-                          Core.wrappedTermBody = (go (Core.wrappedTermBody v1))}))) t))
+                        Core.TermVariable v0 -> (Core.TermVariable v0)
+                        Core.TermWrap v0 -> (Core.TermWrap (Core.WrappedTerm {
+                          Core.wrappedTermTypeName = (Core.wrappedTermTypeName v0),
+                          Core.wrappedTermBody = (go (Core.wrappedTermBody v0))}))) t))
   in (go term)
 
 -- | Given a schema graph along with language constraints and a designated list of element names, adapt the graph to the language constraints, then return a corresponding type definition for each element name.
-schemaGraphToDefinitions :: (Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type, [[Module.TypeDefinition]]))
-schemaGraphToDefinitions constraints graph nameLists =  
+schemaGraphToDefinitions :: (Coders.LanguageConstraints -> Graph.Graph -> [[Core.Name]] -> Context.Context -> Either String (M.Map Core.Name Core.Type, [[Module.TypeDefinition]]))
+schemaGraphToDefinitions constraints graph nameLists cx =  
   let litmap = (adaptLiteralTypesMap constraints)
-  in (Flows.bind (Schemas.graphAsTypes (Lexical.graphToBindings graph)) (\tmap0 -> Flows.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->  
+  in (Eithers.bind (Eithers.bimap (\ic -> Error.unDecodingError (Context.inContextObject ic)) (\x -> x) (Schemas.graphAsTypes cx graph (Lexical.graphToBindings graph))) (\tmap0 -> Eithers.bind (adaptGraphSchema constraints litmap tmap0) (\tmap1 ->  
     let toDef = (\pair -> Module.TypeDefinition {
             Module.typeDefinitionName = (Pairs.first pair),
             Module.typeDefinitionType = (Pairs.second pair)})
-    in (Flows.pure (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Maybes.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
+    in (Right (tmap1, (Lists.map (\names -> Lists.map toDef (Lists.map (\n -> (n, (Maybes.fromJust (Maps.lookup n tmap1)))) names)) nameLists))))))
 
 -- | Find a list of alternatives for a given term, if any
-termAlternatives :: (Core.Term -> Compute.Flow Graph.Graph [Core.Term])
-termAlternatives term = ((\x -> case x of
-  Core.TermAnnotated v1 ->  
-    let term2 = (Core.annotatedTermBody v1)
-    in (Flows.pure [
+termAlternatives :: (Context.Context -> Graph.Graph -> Core.Term -> Either String [Core.Term])
+termAlternatives cx graph term = ((\x -> case x of
+  Core.TermAnnotated v0 ->  
+    let term2 = (Core.annotatedTermBody v0)
+    in (Right [
       term2])
-  Core.TermMaybe v1 -> (Flows.pure [
+  Core.TermMaybe v0 -> (Right [
     Core.TermList (Maybes.maybe [] (\term2 -> [
-      term2]) v1)])
-  Core.TermTypeLambda v1 ->  
-    let term2 = (Core.typeLambdaBody v1)
-    in (Flows.pure [
+      term2]) v0)])
+  Core.TermTypeLambda v0 ->  
+    let term2 = (Core.typeLambdaBody v0)
+    in (Right [
       term2])
-  Core.TermTypeApplication v1 ->  
-    let term2 = (Core.typeApplicationTermBody v1)
-    in (Flows.pure [
+  Core.TermTypeApplication v0 ->  
+    let term2 = (Core.typeApplicationTermBody v0)
+    in (Right [
       term2])
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0)
     in  
-      let field = (Core.injectionField v1)
+      let field = (Core.injectionField v0)
       in  
         let fname = (Core.fieldName field)
         in  
@@ -479,31 +483,31 @@ termAlternatives term = ((\x -> case x of
                     in Core.Field {
                       Core.fieldName = fname,
                       Core.fieldTerm = (Core.TermMaybe (Logic.ifElse (Equality.equal ftname fname) (Just fterm) Nothing))})
-            in (Flows.bind (Schemas.requireUnionType tname) (\rt -> Flows.pure [
+            in (Eithers.bind (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Schemas.requireUnionType cx graph tname)) (\rt -> Right [
               Core.TermRecord (Core.Record {
                 Core.recordTypeName = tname,
                 Core.recordFields = (Lists.map forFieldType (Core.rowTypeFields rt))})]))
-  Core.TermUnit -> (Flows.pure [
+  Core.TermUnit -> (Right [
     Core.TermLiteral (Core.LiteralBoolean True)])
-  Core.TermWrap v1 ->  
-    let term2 = (Core.wrappedTermBody v1)
-    in (Flows.pure [
+  Core.TermWrap v0 ->  
+    let term2 = (Core.wrappedTermBody v0)
+    in (Right [
       term2])
-  _ -> (Flows.pure [])) term)
+  _ -> (Right [])) term)
 
 -- | Find a list of alternatives for a given type, if any
 typeAlternatives :: (Core.Type -> [Core.Type])
 typeAlternatives type_ = ((\x -> case x of
-  Core.TypeAnnotated v1 ->  
-    let type2 = (Core.annotatedTypeBody v1)
+  Core.TypeAnnotated v0 ->  
+    let type2 = (Core.annotatedTypeBody v0)
     in [
       type2]
-  Core.TypeMaybe v1 -> [
-    Core.TypeList v1]
-  Core.TypeUnion v1 ->  
-    let tname = (Core.rowTypeTypeName v1)
+  Core.TypeMaybe v0 -> [
+    Core.TypeList v0]
+  Core.TypeUnion v0 ->  
+    let tname = (Core.rowTypeTypeName v0)
     in  
-      let fields = (Core.rowTypeFields v1)
+      let fields = (Core.rowTypeFields v0)
       in  
         let toOptField = (\f -> Core.FieldType {
                 Core.fieldTypeName = (Core.fieldTypeName f),

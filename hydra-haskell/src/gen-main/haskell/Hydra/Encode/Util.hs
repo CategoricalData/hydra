@@ -61,8 +61,8 @@ precision x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "arbitrary"),
       Core.fieldTerm = Core.TermUnit}}))
-  Util.PrecisionBits v1 -> (Core.TermUnion (Core.Injection {
+  Util.PrecisionBits v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.util.Precision"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "bits"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v1)))}}))
+      Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 v0)))}}))

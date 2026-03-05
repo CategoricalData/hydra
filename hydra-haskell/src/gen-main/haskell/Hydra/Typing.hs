@@ -4,6 +4,7 @@
 
 module Hydra.Typing where
 
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -57,7 +58,9 @@ data InferenceResult =
     -- | The type substitution resulting from unification
     inferenceResultSubst :: TypeSubst,
     -- | Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)
-    inferenceResultClassConstraints :: (M.Map Core.Name Core.TypeVariableMetadata)}
+    inferenceResultClassConstraints :: (M.Map Core.Name Core.TypeVariableMetadata),
+    -- | The updated context after inference (carries fresh variable state)
+    inferenceResultContext :: Context.Context}
   deriving (Eq, Ord, Read, Show)
 
 _InferenceResult = (Core.Name "hydra.typing.InferenceResult")
@@ -69,6 +72,8 @@ _InferenceResult_type = (Core.Name "type")
 _InferenceResult_subst = (Core.Name "subst")
 
 _InferenceResult_classConstraints = (Core.Name "classConstraints")
+
+_InferenceResult_context = (Core.Name "context")
 
 -- | A substitution of term variables for terms
 newtype TermSubst = 
