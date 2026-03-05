@@ -5,16 +5,18 @@ r"""Entry point for Hydra's adapter (type/term rewriting) framework."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import FrozenDict, frozenlist
+from hydra.dsl.python import Either, FrozenDict, Left, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.adapt.terms
 import hydra.adapt.utils
 import hydra.annotations
 import hydra.coders
 import hydra.compute
+import hydra.context
 import hydra.core
 import hydra.decode.core
-import hydra.lib.flows
+import hydra.error
+import hydra.lib.eithers
 import hydra.lib.lists
 import hydra.lib.logic
 import hydra.lib.maps
@@ -23,35 +25,31 @@ import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
 import hydra.module
-import hydra.monads
 import hydra.rewriting
 import hydra.schemas
-import hydra.show.core
-import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
-T2 = TypeVar("T2")
-T3 = TypeVar("T3")
 
-def language_adapter(lang: hydra.coders.Language, typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.compute.Adapter[T0, T1, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
+def language_adapter(lang: hydra.coders.Language, _cx: T0, g: hydra.graph.Graph, typ: hydra.core.Type) -> Either[str, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Given a target language and a source type, produce an adapter, which rewrites the type and its terms according to the language's constraints."""
     
-    def get_pair(typ2: hydra.core.Type) -> hydra.compute.Flow[hydra.coders.AdapterContext, tuple[hydra.compute.Adapter[hydra.coders.AdapterContext, hydra.coders.AdapterContext, hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term], hydra.coders.AdapterContext]]:
-        return hydra.lib.flows.bind(hydra.adapt.terms.term_adapter(typ2), (lambda ad: hydra.lib.flows.bind(hydra.monads.get_state(), (lambda cx: hydra.lib.flows.pure((ad, cx))))))
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda g: (cx0 := hydra.coders.AdapterContext(g, lang, hydra.lib.maps.empty()), hydra.lib.flows.bind(hydra.monads.with_state(cx0, get_pair(typ)), (lambda result: (adapter := hydra.lib.pairs.first(result), cx := hydra.lib.pairs.second(result), encode := (lambda term: hydra.monads.with_state(cx, adapter.coder.encode(term))), decode := (lambda term: hydra.monads.with_state(cx, adapter.coder.decode(term))), hydra.lib.flows.pure(hydra.compute.Adapter(adapter.is_lossy, adapter.source, adapter.target, hydra.compute.Coder((lambda x1: encode(x1)), (lambda x1: decode(x1))))))[4])))[1]))
+    @lru_cache(1)
+    def cx0() -> hydra.coders.AdapterContext:
+        return hydra.coders.AdapterContext(g, lang, hydra.lib.maps.empty())
+    return hydra.adapt.terms.term_adapter(cx0(), typ)
 
-def adapt_type_to_language(lang: hydra.coders.Language, typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Type]:
+def adapt_type_to_language(lang: hydra.coders.Language, cx: T0, g: hydra.graph.Graph, typ: hydra.core.Type) -> Either[str, hydra.core.Type]:
     r"""Given a target language and a source type, find the target type to which the latter will be adapted."""
     
-    return hydra.lib.flows.bind(language_adapter(lang, typ), (lambda adapter: hydra.lib.flows.pure(adapter.target)))
+    return hydra.lib.eithers.map((lambda v1: v1.target), language_adapter(lang, cx, g, typ))
 
-def adapt_type_to_language_and_encode(lang: hydra.coders.Language, enc: Callable[[hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, T0]], typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
+def adapt_type_to_language_and_encode(lang: hydra.coders.Language, enc: Callable[[hydra.core.Type], Either[str, T0]], cx: T1, g: hydra.graph.Graph, typ: hydra.core.Type) -> Either[str, T0]:
     r"""Given a target language, an encoding function, and a type, adapt and encode the type."""
     
     @lru_cache(1)
-    def dflt() -> hydra.compute.Flow[hydra.graph.Graph, T0]:
-        return hydra.lib.flows.bind(adapt_type_to_language(lang, typ), (lambda adapted_type: enc(adapted_type)))
+    def dflt() -> Either[str, T0]:
+        return hydra.lib.eithers.bind(adapt_type_to_language(lang, cx, g, typ), (lambda adapted_type: enc(adapted_type)))
     match hydra.rewriting.deannotate_type(typ):
         case hydra.core.TypeVariable():
             return enc(typ)
@@ -59,24 +57,35 @@ def adapt_type_to_language_and_encode(lang: hydra.coders.Language, enc: Callable
         case _:
             return dflt()
 
-def adapted_module_definitions(lang: hydra.coders.Language, mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.module.Definition]]:
+def adapted_module_definitions(lang: hydra.coders.Language, cx: hydra.context.Context, graph: hydra.graph.Graph, mod: hydra.module.Module) -> Either[str, frozenlist[hydra.module.Definition]]:
     r"""Map a Hydra module to a list of type and/or term definitions which have been adapted to the target language."""
     
-    return hydra.lib.flows.bind(hydra.monads.get_state(), (lambda graph: (els := mod.elements, adapters_for := (lambda types: hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: language_adapter(lang, v1)), types), (lambda adapters: hydra.lib.flows.pure(hydra.lib.maps.from_list(hydra.lib.lists.zip(types, adapters)))))), classify := (lambda adapters, pair: (el := hydra.lib.pairs.first(pair), tt := hydra.lib.pairs.second(pair), term := tt.body, typ := tt.type, name := el.name, hydra.lib.logic.if_else(hydra.annotations.is_native_type(el), (lambda : hydra.lib.flows.bind(hydra.lib.flows.bind(hydra.monads.with_trace("adapt module definitions", hydra.monads.either_to_flow((lambda v1: v1.value), hydra.decode.core.type(graph, term))), (lambda core_typ: adapt_type_to_language(lang, core_typ))), (lambda adapted_typ: hydra.lib.flows.pure(cast(hydra.module.Definition, hydra.module.DefinitionType(hydra.module.TypeDefinition(name, adapted_typ))))))), (lambda : hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat2("no adapter for element ", name.value)), (lambda adapter: hydra.lib.flows.bind(adapter.coder.encode(term), (lambda adapted: hydra.lib.flows.pure(cast(hydra.module.Definition, hydra.module.DefinitionTerm(hydra.module.TermDefinition(name, adapted, hydra.schemas.type_to_type_scheme(adapter.target)))))))), hydra.lib.maps.lookup(typ, adapters)))))[5]), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: hydra.schemas.element_as_type_application_term(x1)), els), (lambda tterms: (types := hydra.lib.sets.to_list(hydra.lib.sets.from_list(hydra.lib.lists.map((lambda arg_: hydra.rewriting.deannotate_type(arg_.type)), tterms))), hydra.lib.flows.bind(adapters_for(types), (lambda adapters: hydra.lib.flows.map_list((lambda v1: classify(adapters, v1)), hydra.lib.lists.zip(els, tterms)))))[1])))[3]))
+    els = mod.elements
+    def adapters_for(types: frozenlist[hydra.core.Type]) -> Either[str, FrozenDict[hydra.core.Type, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]]:
+        return hydra.lib.eithers.map((lambda adapters: hydra.lib.maps.from_list(hydra.lib.lists.zip(types, adapters))), hydra.lib.eithers.map_list((lambda v1: language_adapter(lang, cx, graph, v1)), types))
+    def classify(adapters: FrozenDict[hydra.core.Type, hydra.compute.Adapter[T0, hydra.core.Type, hydra.core.Term, hydra.core.Term]], pair: tuple[hydra.core.Binding, hydra.core.TypeApplicationTerm]) -> Either[str, hydra.module.Definition]:
+        @lru_cache(1)
+        def el() -> hydra.core.Binding:
+            return hydra.lib.pairs.first(pair)
+        @lru_cache(1)
+        def tt() -> hydra.core.TypeApplicationTerm:
+            return hydra.lib.pairs.second(pair)
+        term = tt().body
+        typ = tt().type
+        name = el().name
+        return hydra.lib.logic.if_else(hydra.annotations.is_native_type(el()), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda e: e.value), (lambda x: x), hydra.decode.core.type(graph, term)), (lambda core_typ: hydra.lib.eithers.bind(adapt_type_to_language(lang, cx, graph, core_typ), (lambda adapted_typ: Right(cast(hydra.module.Definition, hydra.module.DefinitionType(hydra.module.TypeDefinition(name, adapted_typ))))))))), (lambda : hydra.lib.maybes.maybe(Left(hydra.lib.strings.cat2("no adapter for element ", name.value)), (lambda adapter: hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x), adapter.coder.encode(cx, term)), (lambda adapted: Right(cast(hydra.module.Definition, hydra.module.DefinitionTerm(hydra.module.TermDefinition(name, adapted, hydra.schemas.type_to_type_scheme(adapter.target)))))))), hydra.lib.maps.lookup(typ, adapters))))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda _el: hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x), hydra.schemas.element_as_type_application_term(cx, _el))), els), (lambda tterms: (types := hydra.lib.sets.to_list(hydra.lib.sets.from_list(hydra.lib.lists.map((lambda arg_: hydra.rewriting.deannotate_type(arg_.type)), tterms))), hydra.lib.eithers.bind(adapters_for(types), (lambda adapters: hydra.lib.eithers.map_list((lambda v1: classify(adapters, v1)), hydra.lib.lists.zip(els, tterms)))))[1]))
 
-def construct_coder(lang: hydra.coders.Language, encode_term: Callable[[hydra.core.Term], hydra.compute.Flow[T0, T1]], typ: hydra.core.Type) -> hydra.compute.Flow[hydra.graph.Graph, hydra.compute.Coder[T0, T2, hydra.core.Term, T1]]:
+def construct_coder(lang: hydra.coders.Language, encode_term: Callable[[hydra.context.Context, hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], cx: T1, g: hydra.graph.Graph, typ: hydra.core.Type) -> Either[str, hydra.compute.Coder[hydra.core.Term, T0]]:
     r"""Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type."""
     
-    return hydra.monads.with_trace(hydra.lib.strings.cat2("coder for ", hydra.show.core.type(typ)), hydra.lib.flows.bind(language_adapter(lang, typ), (lambda adapter: hydra.lib.flows.pure(hydra.adapt.utils.compose_coders(adapter.coder, hydra.adapt.utils.unidirectional_coder(encode_term))))))
+    return hydra.lib.eithers.map((lambda adapter: hydra.adapt.utils.compose_coders(adapter.coder, hydra.adapt.utils.unidirectional_coder(encode_term))), language_adapter(lang, cx, g, typ))
 
-def transform_module(lang: hydra.coders.Language, encode_term: Callable[[hydra.core.Term], hydra.compute.Flow[T0, T1]], create_module: Callable[[
+def transform_module(lang: hydra.coders.Language, encode_term: Callable[[hydra.context.Context, hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], create_module: Callable[[
   hydra.module.Module,
-  FrozenDict[hydra.core.Type, hydra.compute.Coder[T0, T2, hydra.core.Term, T1]],
-  frozenlist[tuple[hydra.core.Binding, hydra.core.TypeApplicationTerm]]], hydra.compute.Flow[hydra.graph.Graph, T3]], mod: hydra.module.Module) -> hydra.compute.Flow[hydra.graph.Graph, T3]:
+  FrozenDict[hydra.core.Type, hydra.compute.Coder[hydra.core.Term, T0]],
+  frozenlist[tuple[hydra.core.Binding, hydra.core.TypeApplicationTerm]]], Either[str, T1]], cx: hydra.context.Context, g: hydra.graph.Graph, mod: hydra.module.Module) -> Either[str, T1]:
     r"""Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation."""
     
     els = mod.elements
-    @lru_cache(1)
-    def transform() -> hydra.compute.Flow[hydra.graph.Graph, T3]:
-        return hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda x1: hydra.schemas.element_as_type_application_term(x1)), els), (lambda tterms: (types := hydra.lib.lists.nub(hydra.lib.lists.map((lambda v1: v1.type), tterms)), hydra.lib.flows.bind(hydra.lib.flows.map_list((lambda v1: construct_coder(lang, encode_term, v1)), types), (lambda cdrs: (coders := hydra.lib.maps.from_list(hydra.lib.lists.zip(types, cdrs)), create_module(mod, coders, hydra.lib.lists.zip(els, tterms)))[1])))[1]))
-    return hydra.monads.with_trace(hydra.lib.strings.cat2("transform module ", mod.namespace.value), transform())
+    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda _el: hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x), hydra.schemas.element_as_type_application_term(cx, _el))), els), (lambda tterms: (types := hydra.lib.lists.nub(hydra.lib.lists.map((lambda v1: v1.type), tterms)), hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: construct_coder(lang, encode_term, cx, g, v1)), types), (lambda cdrs: (coders := hydra.lib.maps.from_list(hydra.lib.lists.zip(types, cdrs)), create_module(mod, coders, hydra.lib.lists.zip(els, tterms)))[1])))[1]))

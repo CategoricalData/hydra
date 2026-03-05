@@ -3,7 +3,9 @@
 r"""Functions dealing with arguments and arity."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import frozenlist
+from typing import cast
 import hydra.core
 import hydra.graph
 import hydra.lib.lists

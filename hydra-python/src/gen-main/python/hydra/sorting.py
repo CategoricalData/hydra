@@ -22,7 +22,7 @@ T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 
-def adjacency_list_to_map(pairs: frozenlist[tuple[T0, frozenlist[T1]]]) -> FrozenDict[T0, frozenlist[T1]]:
+def adjacency_list_to_map(pairs: frozenlist[tuple[T0, frozenlist[T1]]]) -> FrozenDict[T0, frozenlist[tuple[T0, frozenlist[T1]]]]:
     r"""Convert an adjacency list to a map, concatenating values for duplicate keys."""
     
     return hydra.lib.lists.foldl((lambda mp, p: (k := hydra.lib.pairs.first(p), vs := hydra.lib.pairs.second(p), existing := hydra.lib.maybes.maybe((), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.maps.lookup(k, mp)), hydra.lib.maps.insert(k, hydra.lib.lists.concat2(existing, vs), mp))[3]), hydra.lib.maps.empty(), pairs)
@@ -97,7 +97,7 @@ def topological_sort_nodes(get_key: Callable[[T0], T1], get_adj: Callable[[T0], 
     r"""Sort a directed acyclic graph (DAG) of nodes using two helper functions: one for node keys, and one for the adjacency list of connected node keys. The result is a list of strongly-connected components (cycles), in which singleton lists represent acyclic nodes."""
     
     @lru_cache(1)
-    def nodes_by_key() -> FrozenDict[T1, T0]:
+    def nodes_by_key() -> FrozenDict[T0, T0]:
         return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda n: (get_key(n), n)), nodes))
     @lru_cache(1)
     def pairs() -> frozenlist[tuple[T1, frozenlist[T1]]]:

@@ -4,6 +4,7 @@ r"""String representations of hydra.typing types."""
 
 from __future__ import annotations
 from functools import lru_cache
+from typing import cast
 import hydra.core
 import hydra.lib.lists
 import hydra.lib.maps

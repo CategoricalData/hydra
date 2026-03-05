@@ -6,8 +6,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum
+from functools import lru_cache
 from hydra.dsl.python import Maybe, Node, frozenlist
-from typing import TypeAlias
+from typing import TypeAlias, cast
 import hydra.core
 
 @dataclass(frozen=True)

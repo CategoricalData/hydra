@@ -3,6 +3,7 @@
 r"""AST operators for Haskell."""
 
 from __future__ import annotations
+from functools import lru_cache
 from typing import cast
 import hydra.ast
 import hydra.core

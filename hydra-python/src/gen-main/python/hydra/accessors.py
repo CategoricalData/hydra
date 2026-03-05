@@ -4,8 +4,9 @@ r"""A model for term access patterns."""
 
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import lru_cache
 from hydra.dsl.python import Node, frozenlist
-from typing import Annotated, TypeAlias
+from typing import Annotated, TypeAlias, cast
 import hydra.core
 
 @dataclass(frozen=True)

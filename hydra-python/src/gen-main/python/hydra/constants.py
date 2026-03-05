@@ -3,6 +3,8 @@
 r"""A module for tier-0 constants."""
 
 from __future__ import annotations
+from functools import lru_cache
+from typing import cast
 import hydra.core
 
 # Disable type checking by default, for better performance.
@@ -47,7 +49,7 @@ key_type = hydra.core.Name("type")
 # The maximum value of a 32-bit integer.
 max_int32 = 2147483647
 
-# A maximum depth for nested flows. Currently, this is set very high because deep flows are common in type inference over the Hydra kernel.
+# A maximum depth for nested computations. Currently, this is set very high because deep recursion is common in type inference over the Hydra kernel.
 max_trace_depth = 5000
 
 # A placeholder name for row types as they are being constructed.

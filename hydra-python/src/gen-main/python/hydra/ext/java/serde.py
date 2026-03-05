@@ -6,7 +6,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
-from typing import TypeVar
+from typing import TypeVar, cast
 import hydra.constants
 import hydra.core
 import hydra.ext.java.syntax

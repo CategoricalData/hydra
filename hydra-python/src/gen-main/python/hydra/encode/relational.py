@@ -4,6 +4,7 @@ r"""Term encoders for hydra.relational."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict
 from typing import TypeVar, cast
 import hydra.core

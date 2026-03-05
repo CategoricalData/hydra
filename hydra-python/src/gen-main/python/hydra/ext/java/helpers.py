@@ -4,8 +4,9 @@ r"""Helper types for Java code generation."""
 
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Maybe, Node
-from typing import Annotated, TypeAlias
+from typing import Annotated, TypeAlias, cast
 import hydra.core
 import hydra.ext.java.syntax
 import hydra.graph

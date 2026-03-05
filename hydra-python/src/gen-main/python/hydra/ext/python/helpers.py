@@ -5,8 +5,9 @@ r"""Helper types for Python code generation."""
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import Annotated, TypeAlias
+from typing import Annotated, TypeAlias, cast
 import hydra.core
 import hydra.ext.python.syntax
 import hydra.graph

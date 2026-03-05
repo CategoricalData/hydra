@@ -4,8 +4,9 @@ r"""A common API for BNF-based grammars, specifying context-free languages."""
 
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import lru_cache
 from hydra.dsl.python import Node, frozenlist
-from typing import Annotated, TypeAlias
+from typing import Annotated, TypeAlias, cast
 import hydra.core
 
 class Constant(Node[str]):

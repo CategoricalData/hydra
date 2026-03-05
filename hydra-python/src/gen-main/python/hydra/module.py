@@ -4,8 +4,9 @@ r"""A model for Hydra namespaces and modules."""
 
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Maybe, Node, frozenlist
-from typing import Annotated, Generic, TypeAlias, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar, cast
 import hydra.core
 import hydra.graph
 
