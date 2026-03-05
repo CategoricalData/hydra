@@ -5,8 +5,9 @@ r"""A model which provides a common syntax tree for Hydra serializers."""
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
+from functools import lru_cache
 from hydra.dsl.python import Maybe, Node
-from typing import Annotated, TypeAlias
+from typing import Annotated, TypeAlias, cast
 import hydra.core
 
 class Associativity(Enum):

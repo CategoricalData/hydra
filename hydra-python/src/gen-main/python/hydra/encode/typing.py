@@ -4,8 +4,10 @@ r"""Term encoders for hydra.typing."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from typing import TypeVar, cast
 import hydra.core
+import hydra.encode.context
 import hydra.encode.core
 import hydra.lib.lists
 import hydra.lib.maps
@@ -21,7 +23,7 @@ def type_subst(x: hydra.typing.TypeSubst) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.typing.TypeSubst"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x1: hydra.encode.core.name(x1)), (lambda x1: hydra.encode.core.type(x1)), x.value))))))
 
 def inference_result(x: hydra.typing.InferenceResult) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.typing.InferenceResult"), (hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("subst"), type_subst(x.subst)), hydra.core.Field(hydra.core.Name("classConstraints"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x1: hydra.encode.core.name(x1)), (lambda x1: hydra.encode.core.type_variable_metadata(x1)), x.class_constraints))))))))
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.typing.InferenceResult"), (hydra.core.Field(hydra.core.Name("term"), hydra.encode.core.term(x.term)), hydra.core.Field(hydra.core.Name("type"), hydra.encode.core.type(x.type)), hydra.core.Field(hydra.core.Name("subst"), type_subst(x.subst)), hydra.core.Field(hydra.core.Name("classConstraints"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x1: hydra.encode.core.name(x1)), (lambda x1: hydra.encode.core.type_variable_metadata(x1)), x.class_constraints)))), hydra.core.Field(hydra.core.Name("context"), hydra.encode.context.context(x.context))))))
 
 def term_subst(x: hydra.typing.TermSubst) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.typing.TermSubst"), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.bimap((lambda x1: hydra.encode.core.name(x1)), (lambda x1: hydra.encode.core.term(x1)), x.value))))))

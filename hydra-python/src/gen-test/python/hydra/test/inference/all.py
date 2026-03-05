@@ -5,6 +5,7 @@ r"""Hydra's inference test suite."""
 from __future__ import annotations
 from functools import lru_cache
 from hydra.dsl.python import Nothing
+from typing import cast
 import hydra.core
 import hydra.test.inference.algebraic_types
 import hydra.test.inference.algorithm_w

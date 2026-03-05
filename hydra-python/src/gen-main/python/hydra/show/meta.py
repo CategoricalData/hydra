@@ -3,6 +3,8 @@
 r"""String representations of hydra.meta types."""
 
 from __future__ import annotations
+from functools import lru_cache
+from typing import cast
 import hydra.core
 import hydra.variants
 

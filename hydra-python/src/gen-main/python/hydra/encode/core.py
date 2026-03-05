@@ -4,6 +4,7 @@ r"""Term encoders for hydra.core."""
 
 from __future__ import annotations
 from decimal import Decimal
+from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Maybe, frozenlist
 from typing import cast
 import hydra.core

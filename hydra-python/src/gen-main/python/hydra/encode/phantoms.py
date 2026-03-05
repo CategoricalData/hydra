@@ -4,6 +4,7 @@ r"""Term encoders for hydra.phantoms."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from typing import TypeVar, cast
 import hydra.core
 import hydra.encode.core

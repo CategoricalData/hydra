@@ -5,8 +5,9 @@ r"""A model for simple graphs as adjacency lists."""
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
-from typing import Annotated, Generic, TypeAlias, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar, cast
 import hydra.core
 
 A = TypeVar("A")

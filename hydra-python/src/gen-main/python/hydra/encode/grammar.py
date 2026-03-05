@@ -3,6 +3,7 @@
 r"""Term encoders for hydra.grammar."""
 
 from __future__ import annotations
+from functools import lru_cache
 from hydra.dsl.python import frozenlist
 from typing import cast
 import hydra.core

@@ -3,6 +3,7 @@
 r"""Term encoders for hydra.classes."""
 
 from __future__ import annotations
+from functools import lru_cache
 from typing import cast
 import hydra.classes
 import hydra.core

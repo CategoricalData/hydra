@@ -5,6 +5,7 @@ r"""Hydra's type checking test suite."""
 from __future__ import annotations
 from functools import lru_cache
 from hydra.dsl.python import Nothing
+from typing import cast
 import hydra.core
 import hydra.test.checking.advanced
 import hydra.test.checking.algebraic_types

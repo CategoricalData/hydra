@@ -4,7 +4,8 @@ r"""Type classes."""
 
 from __future__ import annotations
 from enum import Enum
-from typing import TypeAlias
+from functools import lru_cache
+from typing import TypeAlias, cast
 import hydra.core
 
 class TypeClass(Enum):

@@ -5,6 +5,7 @@ r"""Java naming constants and package name utilities."""
 from __future__ import annotations
 from functools import lru_cache
 from hydra.dsl.python import Just, Maybe, frozenlist
+from typing import cast
 import hydra.core
 import hydra.ext.java.syntax
 import hydra.lib.lists

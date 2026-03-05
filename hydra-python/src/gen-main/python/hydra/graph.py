@@ -5,10 +5,12 @@ r"""The extension to graphs of Hydra's core type system (hydra.core)."""
 from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
-from hydra.dsl.python import FrozenDict, frozenlist
-from typing import Annotated, Generic, TypeAlias, TypeVar
-import hydra.compute
+from functools import lru_cache
+from hydra.dsl.python import Either, FrozenDict, frozenlist
+from typing import Annotated, Generic, TypeAlias, TypeVar, cast
+import hydra.context
 import hydra.core
+import hydra.error
 
 A = TypeVar("A")
 
@@ -41,7 +43,7 @@ class Primitive:
     
     name: Annotated[hydra.core.Name, "The unique name of the primitive function"]
     type: Annotated[hydra.core.TypeScheme, "The type signature of the primitive function"]
-    implementation: Annotated[Callable[[frozenlist[hydra.core.Term]], hydra.compute.Flow[Graph, hydra.core.Term]], "A concrete implementation of the primitive function"]
+    implementation: Annotated[Callable[[hydra.context.Context, Graph, frozenlist[hydra.core.Term]], Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]], "A concrete implementation of the primitive function"]
     
     TYPE_ = hydra.core.Name("hydra.graph.Primitive")
     NAME = hydra.core.Name("name")
@@ -53,8 +55,10 @@ class TermCoder(Generic[A]):
     r"""A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."""
     
     type: Annotated[hydra.core.Type, "The Hydra type of encoded terms"]
-    coder: Annotated[hydra.compute.Coder[Graph, Graph, hydra.core.Term, A], "A coder between Hydra terms and instances of the given type"]
+    encode: Annotated[Callable[[hydra.context.Context, Graph, hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], A]], "An encode function from terms to native values"]
+    decode: Annotated[Callable[[hydra.context.Context, A], Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]], "A decode function from native values to terms"]
     
     TYPE_ = hydra.core.Name("hydra.graph.TermCoder")
     TYPE = hydra.core.Name("type")
-    CODER = hydra.core.Name("coder")
+    ENCODE = hydra.core.Name("encode")
+    DECODE = hydra.core.Name("decode")

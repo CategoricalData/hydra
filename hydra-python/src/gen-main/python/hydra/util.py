@@ -4,8 +4,9 @@ r"""General-purpose utility types used across Hydra."""
 
 from __future__ import annotations
 from enum import Enum
+from functools import lru_cache
 from hydra.dsl.python import Node
-from typing import TypeAlias
+from typing import TypeAlias, cast
 import hydra.core
 
 class CaseConvention(Enum):
@@ -31,11 +32,6 @@ class Comparison(Enum):
     GREATER_THAN = hydra.core.Name("greaterThan")
 
 Comparison.TYPE_ = hydra.core.Name("hydra.util.Comparison")
-
-class DecodingError(Node[str]):
-    r"""An error that occurred during decoding of a term."""
-
-DecodingError.TYPE_ = hydra.core.Name("hydra.util.DecodingError")
 
 class PrecisionArbitrary:
     r"""Arbitrary precision"""

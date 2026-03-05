@@ -6,11 +6,11 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 from enum import Enum
+from functools import lru_cache
 from hydra.dsl.python import Either, Maybe, Node, frozenlist
-from typing import Annotated, Generic, TypeAlias, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar, cast
 import hydra.ast
 import hydra.coders
-import hydra.compute
 import hydra.core
 import hydra.graph
 import hydra.json.model
@@ -383,8 +383,8 @@ class TestCodec:
     
     language: Annotated[hydra.coders.LanguageName, "The name of the target programming language"]
     file_extension: Annotated[hydra.module.FileExtension, "The file extension for test files (e.g., 'hs', 'java', 'py')"]
-    encode_term: Annotated[Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, str]], "A function for encoding Hydra terms into the target language"]
-    encode_type: Annotated[Callable[[hydra.core.Type], hydra.compute.Flow[hydra.graph.Graph, str]], "A function for encoding Hydra types into the target language"]
+    encode_term: Annotated[Callable[[hydra.core.Term, hydra.graph.Graph], Either[str, str]], "A function for encoding Hydra terms into the target language"]
+    encode_type: Annotated[Callable[[hydra.core.Type, hydra.graph.Graph], Either[str, str]], "A function for encoding Hydra types into the target language"]
     format_test_name: Annotated[Callable[[str], str], "A function for formatting test case names according to the target language's conventions"]
     format_module_name: Annotated[Callable[[hydra.module.Namespace], str], "A function for formatting module names according to the target language's conventions"]
     test_case_template: Annotated[str, "A template string for individual test case assertions"]
@@ -440,7 +440,7 @@ class TestCaseInferenceFailure(Node["InferenceFailureTestCase"]):
     r"""A type inference failure test"""
 
 class TestCaseJsonCoder(Node["JsonCoderTestCase"]):
-    r"""A JSON coder (round-trip) test using Flow-based coder"""
+    r"""A JSON coder (round-trip) test"""
 
 class TestCaseJsonDecode(Node["JsonDecodeTestCase"]):
     r"""A JSON decode test using Either-based decoder"""

@@ -5,6 +5,7 @@ r"""Type checking failure test cases."""
 from __future__ import annotations
 from functools import lru_cache
 from hydra.dsl.python import Nothing
+from typing import cast
 import hydra.core
 import hydra.testing
 

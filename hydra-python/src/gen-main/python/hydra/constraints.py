@@ -4,7 +4,8 @@ r"""A model for path- and pattern-based graph constraints, which may be consider
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Annotated, TypeAlias
+from functools import lru_cache
+from typing import Annotated, TypeAlias, cast
 import hydra.core
 import hydra.query
 

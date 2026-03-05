@@ -3,17 +3,12 @@
 r"""A model for Hydra transformation workflows."""
 
 from __future__ import annotations
-from collections.abc import Callable
 from dataclasses import dataclass
+from functools import lru_cache
 from hydra.dsl.python import Node, frozenlist
-from typing import Annotated, Generic, TypeAlias, TypeVar
-import hydra.compute
+from typing import Annotated, TypeAlias, cast
 import hydra.core
-import hydra.graph
 import hydra.module
-
-A = TypeVar("A")
-S = TypeVar("S")
 
 @dataclass(frozen=True)
 class HydraSchemaSpec:
@@ -25,19 +20,6 @@ class HydraSchemaSpec:
     TYPE_ = hydra.core.Name("hydra.workflow.HydraSchemaSpec")
     MODULES = hydra.core.Name("modules")
     TYPE_NAME = hydra.core.Name("typeName")
-
-@dataclass(frozen=True)
-class LastMile(Generic[S, A]):
-    r"""The last mile of a transformation, which encodes and serializes terms to a file."""
-    
-    encoder: Annotated[Callable[[hydra.core.Type], hydra.compute.Flow[S, Callable[[hydra.core.Term, hydra.graph.Graph], hydra.compute.Flow[S, frozenlist[A]]]]], "An encoder for terms to a list of output objects"]
-    serializer: Annotated[Callable[[frozenlist[A]], hydra.compute.Flow[S, str]], "A function which serializes a list of output objects to a string representation"]
-    file_extension: Annotated[str, "A file extension for the generated file(s)"]
-    
-    TYPE_ = hydra.core.Name("hydra.workflow.LastMile")
-    ENCODER = hydra.core.Name("encoder")
-    SERIALIZER = hydra.core.Name("serializer")
-    FILE_EXTENSION = hydra.core.Name("fileExtension")
 
 class SchemaSpecHydra(Node["HydraSchemaSpec"]):
     r"""A native Hydra schema"""

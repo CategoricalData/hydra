@@ -4,8 +4,9 @@ r"""An interpretation of Codd's Relational Model, as described in 'A Relational 
 
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Node, frozenlist
-from typing import Annotated, Generic, TypeAlias, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar, cast
 import hydra.core
 
 T = TypeVar("T")

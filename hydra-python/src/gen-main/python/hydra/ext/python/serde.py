@@ -7,6 +7,7 @@ from collections.abc import Callable
 from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Just, Maybe, Nothing, frozenlist
+from typing import cast
 import hydra.constants
 import hydra.core
 import hydra.ext.python.syntax

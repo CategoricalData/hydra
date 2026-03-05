@@ -4,6 +4,7 @@ r"""Term encoders for hydra.testing."""
 
 from __future__ import annotations
 from collections.abc import Callable
+from functools import lru_cache
 from hydra.dsl.python import frozenlist
 from typing import TypeVar, cast
 import hydra.core

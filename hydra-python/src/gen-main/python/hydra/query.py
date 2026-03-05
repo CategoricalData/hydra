@@ -5,8 +5,9 @@ r"""A model for language-agnostic graph pattern queries."""
 from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
+from functools import lru_cache
 from hydra.dsl.python import Maybe, Node, frozenlist
-from typing import Annotated, TypeAlias
+from typing import Annotated, TypeAlias, cast
 import hydra.core
 
 class ComparisonConstraint(Enum):

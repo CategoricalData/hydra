@@ -8,11 +8,12 @@ from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
+import hydra.context
 import hydra.core
+import hydra.error
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.equality
-import hydra.lib.flows
 import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
@@ -20,148 +21,145 @@ import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.strings
-import hydra.monads
 import hydra.rewriting
 import hydra.show.core
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 
-def bigfloat_value(v: hydra.core.FloatValue) -> hydra.compute.Flow[T0, Decimal]:
+def bigfloat_value(cx: hydra.context.Context, v: hydra.core.FloatValue) -> Either[hydra.context.InContext[hydra.error.OtherError], Decimal]:
     r"""Extract a bigfloat value from a FloatValue."""
     
     match v:
         case hydra.core.FloatValueBigfloat(value=f):
-            return hydra.lib.flows.pure(f)
+            return Right(f)
         
         case _:
-            return hydra.monads.unexpected("bigfloat", hydra.show.core.float(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "bigfloat"), " but found "), hydra.show.core.float(v))), cx))
 
-def float_literal(lit: hydra.core.Literal) -> hydra.compute.Flow[T0, hydra.core.FloatValue]:
+def float_literal(cx: hydra.context.Context, lit: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.FloatValue]:
     r"""Extract a floating-point literal from a Literal value."""
     
     match lit:
         case hydra.core.LiteralFloat(value=v):
-            return hydra.lib.flows.pure(v)
+            return Right(v)
         
         case _:
-            return hydra.monads.unexpected("floating-point value", hydra.show.core.literal(lit))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "floating-point value"), " but found "), hydra.show.core.literal(lit))), cx))
 
-def literal(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Literal]:
-    r"""Extract a literal value from a term."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Literal]:
-        match term:
+def literal(cx: hydra.context.Context, graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_literal_1(cx, term, v1):
+        match v1:
             case hydra.core.TermLiteral(value=lit):
-                return hydra.lib.flows.pure(lit)
+                return Right(lit)
             
             case _:
-                return hydra.monads.unexpected("literal", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "literal"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_literal_1(cx, term, term)))
 
-def bigfloat(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Decimal]:
+def bigfloat(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], Decimal]:
     r"""Extract an arbitrary-precision floating-point value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(float_literal(l), (lambda f: bigfloat_value(f)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(float_literal(cx, l), (lambda f: bigfloat_value(cx, f)))))
 
-def bigint_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
+def bigint_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a bigint value from an IntegerValue."""
     
     match v:
         case hydra.core.IntegerValueBigint(value=i):
-            return hydra.lib.flows.pure(i)
+            return Right(i)
         
         case _:
-            return hydra.monads.unexpected("bigint", hydra.show.core.integer(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "bigint"), " but found "), hydra.show.core.integer(v))), cx))
 
-def integer_literal(lit: hydra.core.Literal) -> hydra.compute.Flow[T0, hydra.core.IntegerValue]:
+def integer_literal(cx: hydra.context.Context, lit: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.IntegerValue]:
     r"""Extract an integer literal from a Literal value."""
     
     match lit:
         case hydra.core.LiteralInteger(value=v):
-            return hydra.lib.flows.pure(v)
+            return Right(v)
         
         case _:
-            return hydra.monads.unexpected("integer value", hydra.show.core.literal(lit))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "integer value"), " but found "), hydra.show.core.literal(lit))), cx))
 
-def bigint(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+def bigint(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract an arbitrary-precision integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: bigint_value(i)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: bigint_value(cx, i)))))
 
-def binary_literal(v: hydra.core.Literal) -> hydra.compute.Flow[T0, bytes]:
+def binary_literal(cx: hydra.context.Context, v: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.OtherError], bytes]:
     r"""Extract a binary literal from a Literal value."""
     
     match v:
         case hydra.core.LiteralBinary(value=b):
-            return hydra.lib.flows.pure(b)
+            return Right(b)
         
         case _:
-            return hydra.monads.unexpected("binary", hydra.show.core.literal(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "binary"), " but found "), hydra.show.core.literal(v))), cx))
 
-def binary(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, bytes]:
+def binary(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], bytes]:
     r"""Extract a binary data value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: binary_literal(l)))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: binary_literal(cx, l)))
 
-def boolean_literal(v: hydra.core.Literal) -> hydra.compute.Flow[T0, bool]:
+def boolean_literal(cx: hydra.context.Context, v: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.OtherError], bool]:
     r"""Extract a boolean literal from a Literal value."""
     
     match v:
         case hydra.core.LiteralBoolean(value=b):
-            return hydra.lib.flows.pure(b)
+            return Right(b)
         
         case _:
-            return hydra.monads.unexpected("boolean", hydra.show.core.literal(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "boolean"), " but found "), hydra.show.core.literal(v))), cx))
 
-def boolean(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, bool]:
+def boolean(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], bool]:
     r"""Extract a boolean value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: boolean_literal(l)))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: boolean_literal(cx, l)))
 
-def cases(name: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.CaseStatement]:
-    r"""Extract case statement from a term."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.CaseStatement]:
-        match term:
-            case hydra.core.TermFunction(value=function):
-                match function:
-                    case hydra.core.FunctionElimination(value=elimination):
-                        match elimination:
-                            case hydra.core.EliminationUnion(value=cs):
-                                return hydra.lib.logic.if_else(hydra.lib.equality.equal(cs.type_name.value, name.value), (lambda : hydra.lib.flows.pure(cs)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("case statement for type ", name.value), hydra.show.core.term(term))))
-                            
-                            case _:
-                                return hydra.monads.unexpected("case statement", hydra.show.core.term(term))
-                    
-                    case _:
-                        return hydra.monads.unexpected("case statement", hydra.show.core.term(term))
+def cases(cx: hydra.context.Context, name: hydra.core.Name, graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_cases_1(cx, name, term, v1):
+        match v1:
+            case hydra.core.EliminationUnion(value=cs):
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(cs.type_name.value, name.value), (lambda : Right(cs)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("case statement for type ", name.value)), " but found "), hydra.show.core.term(term))), cx))))
             
             case _:
-                return hydra.monads.unexpected("case statement", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "case statement"), " but found "), hydra.show.core.term(term))), cx))
+    def _hoist_hydra_extract_core_cases_2(cx, name, term, v1):
+        match v1:
+            case hydra.core.FunctionElimination(value=elimination):
+                return _hoist_hydra_extract_core_cases_1(cx, name, term, elimination)
+            
+            case _:
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "case statement"), " but found "), hydra.show.core.term(term))), cx))
+    def _hoist_hydra_extract_core_cases_3(cx, name, term, v1):
+        match v1:
+            case hydra.core.TermFunction(value=function):
+                return _hoist_hydra_extract_core_cases_2(cx, name, term, function)
+            
+            case _:
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "case statement"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_cases_3(cx, name, term, term)))
 
-def case_field(name: hydra.core.Name, n: str, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Field]:
+def case_field(cx: hydra.context.Context, name: hydra.core.Name, n: str, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Field]:
     r"""Extract a specific case handler from a case statement term."""
     
     @lru_cache(1)
     def field_name() -> hydra.core.Name:
         return hydra.core.Name(n)
-    return hydra.lib.flows.bind(cases(name, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name().value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : hydra.lib.flows.fail("not enough cases")), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching)))))[1]))
+    return hydra.lib.eithers.bind(cases(cx, name, graph, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name().value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : Left(hydra.context.InContext(hydra.error.OtherError("not enough cases"), cx))), (lambda : Right(hydra.lib.lists.head(matching)))))[1]))
 
-def either_term(left_fun: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], right_fun: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Either[T0, T1]]:
-    r"""Extract an either value from a term, applying functions to the left and right values."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Either[T0, T1]]:
-        match term:
+def either_term(cx: hydra.context.Context, left_fun: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], right_fun: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T1]], graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_either_term_1(cx, left_fun, right_fun, term, v1):
+        match v1:
             case hydra.core.TermEither(value=et):
-                return hydra.lib.eithers.either((lambda l: hydra.lib.flows.map((lambda x: Left(x)), left_fun(l))), (lambda r: hydra.lib.flows.map((lambda x: Right(x)), right_fun(r))), et)
+                return hydra.lib.eithers.either((lambda l: hydra.lib.eithers.map((lambda x: Left(x)), left_fun(l))), (lambda r: hydra.lib.eithers.map((lambda x: Right(x)), right_fun(r))), et)
             
             case _:
-                return hydra.monads.unexpected("either value", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "either value"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_either_term_1(cx, left_fun, right_fun, term, term)))
 
-def either_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.EitherType]:
+def either_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.EitherType]:
     r"""Extract the left and right types from an either type."""
     
     @lru_cache(1)
@@ -169,55 +167,55 @@ def either_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Eithe
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeEither(value=et):
-            return hydra.lib.flows.pure(et)
+            return Right(et)
         
         case _:
-            return hydra.monads.unexpected("either type", hydra.show.core.type(typ))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "either type"), " but found "), hydra.show.core.type(typ))), cx))
 
-def field(fname: hydra.core.Name, mapping: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], fields: frozenlist[hydra.core.Field]) -> hydra.compute.Flow[hydra.graph.Graph, T0]:
+def field(cx: hydra.context.Context, fname: hydra.core.Name, mapping: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], graph: hydra.graph.Graph, fields: frozenlist[hydra.core.Field]) -> Either[hydra.context.InContext[hydra.error.OtherError], T0]:
     r"""Extract a field value from a list of fields."""
     
     @lru_cache(1)
     def matching_fields() -> frozenlist[hydra.core.Field]:
         return hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, fname.value)), fields)
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2(hydra.lib.strings.cat2("field ", fname.value), " not found"))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields()), 1), (lambda : hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(hydra.lib.lists.head(matching_fields()).term), (lambda stripped: mapping(stripped)))), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("multiple fields named ", fname.value))))))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("field ", fname.value)), " but found "), "no matching field")), cx))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields()), 1), (lambda : hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, hydra.lib.lists.head(matching_fields()).term), (lambda stripped: mapping(stripped)))), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "single field"), " but found "), hydra.lib.strings.cat2("multiple fields named ", fname.value))), cx))))))
 
-def float32_value(v: hydra.core.FloatValue) -> hydra.compute.Flow[T0, float]:
+def float32_value(cx: hydra.context.Context, v: hydra.core.FloatValue) -> Either[hydra.context.InContext[hydra.error.OtherError], float]:
     r"""Extract a float32 value from a FloatValue."""
     
     match v:
         case hydra.core.FloatValueFloat32(value=f):
-            return hydra.lib.flows.pure(f)
+            return Right(f)
         
         case _:
-            return hydra.monads.unexpected("float32", hydra.show.core.float(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "float32"), " but found "), hydra.show.core.float(v))), cx))
 
-def float32(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, float]:
+def float32(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], float]:
     r"""Extract a 32-bit floating-point value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(float_literal(l), (lambda f: float32_value(f)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(float_literal(cx, l), (lambda f: float32_value(cx, f)))))
 
-def float64_value(v: hydra.core.FloatValue) -> hydra.compute.Flow[T0, float]:
+def float64_value(cx: hydra.context.Context, v: hydra.core.FloatValue) -> Either[hydra.context.InContext[hydra.error.OtherError], float]:
     r"""Extract a float64 value from a FloatValue."""
     
     match v:
         case hydra.core.FloatValueFloat64(value=f):
-            return hydra.lib.flows.pure(f)
+            return Right(f)
         
         case _:
-            return hydra.monads.unexpected("float64", hydra.show.core.float(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "float64"), " but found "), hydra.show.core.float(v))), cx))
 
-def float64(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, float]:
+def float64(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], float]:
     r"""Extract a 64-bit floating-point value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(float_literal(l), (lambda f: float64_value(f)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(float_literal(cx, l), (lambda f: float64_value(cx, f)))))
 
-def float_value(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.FloatValue]:
+def float_value(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.FloatValue]:
     r"""Extract a float value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: float_literal(l)))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: float_literal(cx, l)))
 
-def function_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.FunctionType]:
+def function_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.FunctionType]:
     r"""Extract a function type from a type."""
     
     @lru_cache(1)
@@ -225,153 +223,147 @@ def function_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Fun
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeFunction(value=ft):
-            return hydra.lib.flows.pure(ft)
+            return Right(ft)
         
         case _:
-            return hydra.monads.unexpected("function type", hydra.show.core.type(typ))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "function type"), " but found "), hydra.show.core.type(typ))), cx))
 
-def injection(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Field]:
-    r"""Extract a field from a union term."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Field]:
-        match term:
+def injection(cx: hydra.context.Context, expected: hydra.core.Name, graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_injection_1(cx, expected, term, v1):
+        match v1:
             case hydra.core.TermUnion(value=injection):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, expected.value), (lambda : hydra.lib.flows.pure(injection.field)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("injection of type ", expected.value), injection.type_name.value)))
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, expected.value), (lambda : Right(injection.field)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("injection of type ", expected.value)), " but found "), injection.type_name.value)), cx))))
             
             case _:
-                return hydra.monads.unexpected("injection", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "injection"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_injection_1(cx, expected, term, term)))
 
-def int16_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
+def int16_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract an int16 value from an IntegerValue."""
     
     match v:
         case hydra.core.IntegerValueInt16(value=i):
-            return hydra.lib.flows.pure(i)
+            return Right(i)
         
         case _:
-            return hydra.monads.unexpected("int16", hydra.show.core.integer(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "int16"), " but found "), hydra.show.core.integer(v))), cx))
 
-def int16(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+def int16(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a 16-bit signed integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: int16_value(i)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: int16_value(cx, i)))))
 
-def int32_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
+def int32_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract an int32 value from an IntegerValue."""
     
     match v:
         case hydra.core.IntegerValueInt32(value=i):
-            return hydra.lib.flows.pure(i)
+            return Right(i)
         
         case _:
-            return hydra.monads.unexpected("int32", hydra.show.core.integer(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "int32"), " but found "), hydra.show.core.integer(v))), cx))
 
-def int32(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+def int32(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a 32-bit signed integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: int32_value(i)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: int32_value(cx, i)))))
 
-def int64_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
+def int64_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract an int64 value from an IntegerValue."""
     
     match v:
         case hydra.core.IntegerValueInt64(value=i):
-            return hydra.lib.flows.pure(i)
+            return Right(i)
         
         case _:
-            return hydra.monads.unexpected("int64", hydra.show.core.integer(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "int64"), " but found "), hydra.show.core.integer(v))), cx))
 
-def int64(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+def int64(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a 64-bit signed integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: int64_value(i)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: int64_value(cx, i)))))
 
-def int8_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
+def int8_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract an int8 value from an IntegerValue."""
     
     match v:
         case hydra.core.IntegerValueInt8(value=i):
-            return hydra.lib.flows.pure(i)
+            return Right(i)
         
         case _:
-            return hydra.monads.unexpected("int8", hydra.show.core.integer(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "int8"), " but found "), hydra.show.core.integer(v))), cx))
 
-def int8(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+def int8(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract an 8-bit signed integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: int8_value(i)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: int8_value(cx, i)))))
 
-def integer_value(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.IntegerValue]:
+def integer_value(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.IntegerValue]:
     r"""Extract an integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: integer_literal(l)))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: integer_literal(cx, l)))
 
-def lambda_(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Lambda]:
-    r"""Extract a lambda from a term."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Lambda]:
-        match term:
-            case hydra.core.TermFunction(value=function):
-                match function:
-                    case hydra.core.FunctionLambda(value=l):
-                        return hydra.lib.flows.pure(l)
-                    
-                    case _:
-                        return hydra.monads.unexpected("lambda", hydra.show.core.term(term))
+def lambda_(cx: hydra.context.Context, graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_lambda_1(cx, term, v1):
+        match v1:
+            case hydra.core.FunctionLambda(value=l):
+                return Right(l)
             
             case _:
-                return hydra.monads.unexpected("lambda", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "lambda"), " but found "), hydra.show.core.term(term))), cx))
+    def _hoist_hydra_extract_core_lambda_2(cx, term, v1):
+        match v1:
+            case hydra.core.TermFunction(value=function):
+                return _hoist_hydra_extract_core_lambda_1(cx, term, function)
+            
+            case _:
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "lambda"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_lambda_2(cx, term, term)))
 
-def lambda_body(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+def lambda_body(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
     r"""Extract the body of a lambda term."""
     
-    return hydra.lib.flows.map((lambda v1: v1.body), lambda_(term))
+    return hydra.lib.eithers.map((lambda v1: v1.body), lambda_(cx, graph, term))
 
-def let(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Let]:
-    r"""Extract a let expression from a term."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Let]:
-        match term:
+def let(cx: hydra.context.Context, graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_let_1(cx, term, v1):
+        match v1:
             case hydra.core.TermLet(value=lt):
-                return hydra.lib.flows.pure(lt)
+                return Right(lt)
             
             case _:
-                return hydra.monads.unexpected("let term", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "let term"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_let_1(cx, term, term)))
 
-def let_binding(n: str, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+def let_binding(cx: hydra.context.Context, n: str, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
     r"""Extract a binding with the given name from a let term."""
     
     @lru_cache(1)
     def name() -> hydra.core.Name:
         return hydra.core.Name(n)
-    return hydra.lib.flows.bind(let(term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name().value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("no such binding: ", n))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(matching_bindings).term)), (lambda : hydra.lib.flows.fail(hydra.lib.strings.cat2("multiple bindings named ", n)))))))[1]))
+    return hydra.lib.eithers.bind(let(cx, graph, term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name().value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such binding: ", n)), cx))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : Right(hydra.lib.lists.head(matching_bindings).term)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("multiple bindings named ", n)), cx)))))))[1]))
 
-def list(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.core.Term]]:
-    r"""Extract a list of terms from a term."""
-    
-    def extract(stripped: hydra.core.Term) -> hydra.compute.Flow[T0, frozenlist[hydra.core.Term]]:
-        match stripped:
+def list(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_list_1(cx, stripped, v1):
+        match v1:
             case hydra.core.TermList(value=l):
-                return hydra.lib.flows.pure(l)
+                return Right(l)
             
             case _:
-                return hydra.monads.unexpected("list", hydra.show.core.term(stripped))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term), (lambda stripped: extract(stripped)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "list"), " but found "), hydra.show.core.term(stripped))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term), (lambda stripped: _hoist_hydra_extract_core_list_1(cx, stripped, stripped)))
 
-def list_head(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
+def list_head(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
     r"""Extract the first element of a list term."""
     
-    return hydra.lib.flows.bind(list(term), (lambda l: hydra.lib.logic.if_else(hydra.lib.lists.null(l), (lambda : hydra.lib.flows.fail("empty list")), (lambda : hydra.lib.flows.pure(hydra.lib.lists.head(l))))))
+    return hydra.lib.eithers.bind(list(cx, graph, term), (lambda l: hydra.lib.logic.if_else(hydra.lib.lists.null(l), (lambda : Left(hydra.context.InContext(hydra.error.OtherError("empty list"), cx))), (lambda : Right(hydra.lib.lists.head(l))))))
 
-def list_of(f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[T0]]:
+def list_of(cx: hydra.context.Context, f: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenlist[T0]]:
     r"""Extract a list of values from a term, mapping a function over each element."""
     
-    return hydra.lib.flows.bind(list(term), (lambda els: hydra.lib.flows.map_list(f, els)))
+    return hydra.lib.eithers.bind(list(cx, graph, term), (lambda els: hydra.lib.eithers.map_list(f, els)))
 
-def list_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+def list_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
     r"""Extract the element type from a list type."""
     
     @lru_cache(1)
@@ -379,32 +371,32 @@ def list_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeList(value=t):
-            return hydra.lib.flows.pure(t)
+            return Right(t)
         
         case _:
-            return hydra.monads.unexpected("list type", hydra.show.core.type(typ))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "list type"), " but found "), hydra.show.core.type(typ))), cx))
 
-def map(fk: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], fv: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
+def map(cx: hydra.context.Context, fk: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], fv: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T1]], graph: hydra.graph.Graph, term0: hydra.core.Term):
     r"""Extract a map of key-value pairs from a term, mapping functions over each key and value."""
     
-    def pair(kv_pair: tuple[hydra.core.Term, hydra.core.Term]) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, T1]]:
+    def pair(kv_pair: tuple[hydra.core.Term, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.OtherError], tuple[T0, T1]]:
         @lru_cache(1)
         def kterm() -> hydra.core.Term:
             return hydra.lib.pairs.first(kv_pair)
         @lru_cache(1)
         def vterm() -> hydra.core.Term:
             return hydra.lib.pairs.second(kv_pair)
-        return hydra.lib.flows.bind(fk(kterm()), (lambda kval: hydra.lib.flows.bind(fv(vterm()), (lambda vval: hydra.lib.flows.pure((kval, vval))))))
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, FrozenDict[T0, T1]]:
-        match term:
+        return hydra.lib.eithers.bind(fk(kterm()), (lambda kval: hydra.lib.eithers.bind(fv(vterm()), (lambda vval: Right((kval, vval))))))
+    def _hoist_body_1(term, v1):
+        match v1:
             case hydra.core.TermMap(value=m):
-                return hydra.lib.flows.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.flows.map_list((lambda x1: pair(x1)), hydra.lib.maps.to_list(m)))
+                return hydra.lib.eithers.map((lambda x1: hydra.lib.maps.from_list(x1)), hydra.lib.eithers.map_list((lambda x1: pair(x1)), hydra.lib.maps.to_list(m)))
             
             case _:
-                return hydra.monads.unexpected("map", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_body_1(term, term)))
 
-def map_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.MapType]:
+def map_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.MapType]:
     r"""Extract the key and value types from a map type."""
     
     @lru_cache(1)
@@ -412,24 +404,22 @@ def map_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.MapType]
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeMap(value=mt):
-            return hydra.lib.flows.pure(mt)
+            return Right(mt)
         
         case _:
-            return hydra.monads.unexpected("map type", hydra.show.core.type(typ))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "map type"), " but found "), hydra.show.core.type(typ))), cx))
 
-def maybe_term(f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
-    r"""Extract an optional value from a term, applying a function to the value if present."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, Maybe[T0]]:
-        match term:
+def maybe_term(cx: hydra.context.Context, f: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_maybe_term_1(cx, f, term, v1):
+        match v1:
             case hydra.core.TermMaybe(value=mt):
-                return hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda t: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), f(t))), mt)
+                return hydra.lib.maybes.maybe(Right(Nothing()), (lambda t: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), f(t))), mt)
             
             case _:
-                return hydra.monads.unexpected("maybe value", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "maybe value"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_maybe_term_1(cx, f, term, term)))
 
-def maybe_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+def maybe_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
     r"""Extract the base type from an optional type."""
     
     @lru_cache(1)
@@ -437,46 +427,42 @@ def maybe_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeMaybe(value=t):
-            return hydra.lib.flows.pure(t)
+            return Right(t)
         
         case _:
-            return hydra.monads.unexpected("maybe type", hydra.show.core.type(typ))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "maybe type"), " but found "), hydra.show.core.type(typ))), cx))
 
-def n_args(name: hydra.core.Name, n: int, args: frozenlist[T0]) -> hydra.compute.Flow[T1, None]:
+def n_args(cx: hydra.context.Context, name: hydra.core.Name, n: int, args: frozenlist[T0]) -> Either[hydra.context.InContext[hydra.error.OtherError], None]:
     r"""Ensure a function has the expected number of arguments."""
     
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(args), n), (lambda : hydra.lib.flows.pure(None)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat((hydra.lib.literals.show_int32(n), " arguments to primitive ", hydra.lib.literals.show_string(name.value))), hydra.lib.literals.show_int32(hydra.lib.lists.length(args)))))
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(args), n), (lambda : Right(None)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat((hydra.lib.literals.show_int32(n), " arguments to primitive ", hydra.lib.literals.show_string(name.value)))), " but found "), hydra.lib.literals.show_int32(hydra.lib.lists.length(args)))), cx))))
 
-def pair(kf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], vf: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T1]], term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, T1]]:
-    r"""Extract a pair of values from a term, applying functions to each component."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, tuple[T0, T1]]:
-        match term:
+def pair(cx: hydra.context.Context, kf: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], vf: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T1]], graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_pair_1(cx, kf, term, vf, v1):
+        match v1:
             case hydra.core.TermPair(value=p):
-                return hydra.lib.flows.bind(kf(hydra.lib.pairs.first(p)), (lambda k_val: hydra.lib.flows.bind(vf(hydra.lib.pairs.second(p)), (lambda v_val: hydra.lib.flows.pure((k_val, v_val))))))
+                return hydra.lib.eithers.bind(kf(hydra.lib.pairs.first(p)), (lambda k_val: hydra.lib.eithers.bind(vf(hydra.lib.pairs.second(p)), (lambda v_val: Right((k_val, v_val))))))
             
             case _:
-                return hydra.monads.unexpected("pair", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "pair"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_pair_1(cx, kf, term, vf, term)))
 
-def term_record(term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Record]:
-    r"""Extract a record from a term."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Record]:
-        match term:
+def term_record(cx: hydra.context.Context, graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_term_record_1(cx, term, v1):
+        match v1:
             case hydra.core.TermRecord(value=record):
-                return hydra.lib.flows.pure(record)
+                return Right(record)
             
             case _:
-                return hydra.monads.unexpected("record", hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "record"), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_term_record_1(cx, term, term)))
 
-def record(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenlist[hydra.core.Field]]:
+def record(cx: hydra.context.Context, expected: hydra.core.Name, graph: hydra.graph.Graph, term0: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenlist[hydra.core.Field]]:
     r"""Extract a record's fields from a term."""
     
-    return hydra.lib.flows.bind(term_record(term0), (lambda record: hydra.lib.logic.if_else(hydra.lib.equality.equal(record.type_name, expected), (lambda : hydra.lib.flows.pure(record.fields)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("record of type ", expected.value), record.type_name.value)))))
+    return hydra.lib.eithers.bind(term_record(cx, graph, term0), (lambda record: hydra.lib.logic.if_else(hydra.lib.equality.equal(record.type_name, expected), (lambda : Right(record.fields)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("record of type ", expected.value)), " but found "), record.type_name.value)), cx))))))
 
-def record_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydra.core.FieldType]]:
+def record_type(cx: hydra.context.Context, ename: hydra.core.Name, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenlist[hydra.core.FieldType]]:
     r"""Extract the field types from a record type."""
     
     @lru_cache(1)
@@ -484,29 +470,27 @@ def record_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.F
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeRecord(value=row_type):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name.value, ename.value), (lambda : hydra.lib.flows.pure(row_type.fields)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("record of type ", ename.value), hydra.lib.strings.cat2("record of type ", row_type.type_name.value))))
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name.value, ename.value), (lambda : Right(row_type.fields)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("record of type ", ename.value)), " but found "), hydra.lib.strings.cat2("record of type ", row_type.type_name.value))), cx))))
         
         case _:
-            return hydra.monads.unexpected("record type", hydra.show.core.type(typ))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "record type"), " but found "), hydra.show.core.type(typ))), cx))
 
-def set(term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenset[hydra.core.Term]]:
-    r"""Extract a set of terms from a term."""
-    
-    def extract(stripped: hydra.core.Term) -> hydra.compute.Flow[T0, frozenset[hydra.core.Term]]:
-        match stripped:
+def set(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term):
+    def _hoist_hydra_extract_core_set_1(cx, stripped, v1):
+        match v1:
             case hydra.core.TermSet(value=s):
-                return hydra.lib.flows.pure(s)
+                return Right(s)
             
             case _:
-                return hydra.monads.unexpected("set", hydra.show.core.term(stripped))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term), (lambda stripped: extract(stripped)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "set"), " but found "), hydra.show.core.term(stripped))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term), (lambda stripped: _hoist_hydra_extract_core_set_1(cx, stripped, stripped)))
 
-def set_of(f: Callable[[hydra.core.Term], hydra.compute.Flow[hydra.graph.Graph, T0]], term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, frozenset[T0]]:
+def set_of(cx: hydra.context.Context, f: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenset[T0]]:
     r"""Extract a set of values from a term, mapping a function over each element."""
     
-    return hydra.lib.flows.bind(set(term), (lambda els: hydra.lib.flows.map_set(f, els)))
+    return hydra.lib.eithers.bind(set(cx, graph, term), (lambda els: hydra.lib.eithers.map_set(f, els)))
 
-def set_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+def set_type(cx: hydra.context.Context, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
     r"""Extract the element type from a set type."""
     
     @lru_cache(1)
@@ -514,87 +498,87 @@ def set_type(typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeSet(value=t):
-            return hydra.lib.flows.pure(t)
+            return Right(t)
         
         case _:
-            return hydra.monads.unexpected("set type", hydra.show.core.type(typ))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "set type"), " but found "), hydra.show.core.type(typ))), cx))
 
-def string_literal(v: hydra.core.Literal) -> hydra.compute.Flow[T0, str]:
+def string_literal(cx: hydra.context.Context, v: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.OtherError], str]:
     r"""Extract a string literal from a Literal value."""
     
     match v:
         case hydra.core.LiteralString(value=s):
-            return hydra.lib.flows.pure(s)
+            return Right(s)
         
         case _:
-            return hydra.monads.unexpected("string", hydra.show.core.literal(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "string"), " but found "), hydra.show.core.literal(v))), cx))
 
-def string(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, str]:
+def string(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], str]:
     r"""Extract a string value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: string_literal(l)))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: string_literal(cx, l)))
 
-def uint16_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
+def uint16_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a uint16 value from an IntegerValue."""
     
     match v:
         case hydra.core.IntegerValueUint16(value=i):
-            return hydra.lib.flows.pure(i)
+            return Right(i)
         
         case _:
-            return hydra.monads.unexpected("uint16", hydra.show.core.integer(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "uint16"), " but found "), hydra.show.core.integer(v))), cx))
 
-def uint16(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+def uint16(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a 16-bit unsigned integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: uint16_value(i)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: uint16_value(cx, i)))))
 
-def uint32_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
+def uint32_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a uint32 value from an IntegerValue."""
     
     match v:
         case hydra.core.IntegerValueUint32(value=i):
-            return hydra.lib.flows.pure(i)
+            return Right(i)
         
         case _:
-            return hydra.monads.unexpected("uint32", hydra.show.core.integer(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "uint32"), " but found "), hydra.show.core.integer(v))), cx))
 
-def uint32(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+def uint32(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a 32-bit unsigned integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: uint32_value(i)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: uint32_value(cx, i)))))
 
-def uint64_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
+def uint64_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a uint64 value from an IntegerValue."""
     
     match v:
         case hydra.core.IntegerValueUint64(value=i):
-            return hydra.lib.flows.pure(i)
+            return Right(i)
         
         case _:
-            return hydra.monads.unexpected("uint64", hydra.show.core.integer(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "uint64"), " but found "), hydra.show.core.integer(v))), cx))
 
-def uint64(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+def uint64(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a 64-bit unsigned integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: uint64_value(i)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: uint64_value(cx, i)))))
 
-def uint8_value(v: hydra.core.IntegerValue) -> hydra.compute.Flow[T0, int]:
+def uint8_value(cx: hydra.context.Context, v: hydra.core.IntegerValue) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract a uint8 value from an IntegerValue."""
     
     match v:
         case hydra.core.IntegerValueUint8(value=i):
-            return hydra.lib.flows.pure(i)
+            return Right(i)
         
         case _:
-            return hydra.monads.unexpected("uint8", hydra.show.core.integer(v))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "uint8"), " but found "), hydra.show.core.integer(v))), cx))
 
-def uint8(t: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, int]:
+def uint8(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], int]:
     r"""Extract an 8-bit unsigned integer value from a term."""
     
-    return hydra.lib.flows.bind(literal(t), (lambda l: hydra.lib.flows.bind(integer_literal(l), (lambda i: uint8_value(i)))))
+    return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: uint8_value(cx, i)))))
 
-def union_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[T0, frozenlist[hydra.core.FieldType]]:
+def union_type(cx: hydra.context.Context, ename: hydra.core.Name, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenlist[hydra.core.FieldType]]:
     r"""Extract the field types from a union type."""
     
     @lru_cache(1)
@@ -602,39 +586,37 @@ def union_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Fl
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeUnion(value=row_type):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name, ename), (lambda : hydra.lib.flows.pure(row_type.fields)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("union of type ", ename.value), hydra.lib.strings.cat2("union of type ", row_type.type_name.value))))
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name, ename), (lambda : Right(row_type.fields)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("union of type ", ename.value)), " but found "), hydra.lib.strings.cat2("union of type ", row_type.type_name.value))), cx))))
         
         case _:
-            return hydra.monads.unexpected("union type", hydra.show.core.type(typ))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "union type"), " but found "), hydra.show.core.type(typ))), cx))
 
-def unit(term: hydra.core.Term) -> hydra.compute.Flow[T0, None]:
+def unit(cx: hydra.context.Context, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], None]:
     r"""Extract a unit value from a term."""
     
     match term:
         case hydra.core.TermUnit():
-            return hydra.lib.flows.pure(None)
+            return Right(None)
         
         case _:
-            return hydra.monads.unexpected("unit", hydra.show.core.term(term))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "unit"), " but found "), hydra.show.core.term(term))), cx))
 
-def unit_variant(tname: hydra.core.Name, term: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Name]:
+def unit_variant(cx: hydra.context.Context, tname: hydra.core.Name, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Name]:
     r"""Extract a unit variant (a variant with an empty record value) from a union term."""
     
-    return hydra.lib.flows.bind(injection(tname, term), (lambda field: hydra.lib.flows.bind(unit(field.term), (lambda ignored: hydra.lib.flows.pure(field.name)))))
+    return hydra.lib.eithers.bind(injection(cx, tname, graph, term), (lambda field: hydra.lib.eithers.bind(unit(cx, field.term), (lambda ignored: Right(field.name)))))
 
-def wrap(expected: hydra.core.Name, term0: hydra.core.Term) -> hydra.compute.Flow[hydra.graph.Graph, hydra.core.Term]:
-    r"""Extract the wrapped value from a wrapped term."""
-    
-    def extract(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.core.Term]:
-        match term:
+def wrap(cx: hydra.context.Context, expected: hydra.core.Name, graph: hydra.graph.Graph, term0: hydra.core.Term):
+    def _hoist_hydra_extract_core_wrap_1(cx, expected, term, v1):
+        match v1:
             case hydra.core.TermWrap(value=wrapped_term):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(wrapped_term.type_name.value, expected.value), (lambda : hydra.lib.flows.pure(wrapped_term.body)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("wrapper of type ", expected.value), wrapped_term.type_name.value)))
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(wrapped_term.type_name.value, expected.value), (lambda : Right(wrapped_term.body)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("wrapper of type ", expected.value)), " but found "), wrapped_term.type_name.value)), cx))))
             
             case _:
-                return hydra.monads.unexpected(hydra.lib.strings.cat2(hydra.lib.strings.cat2("wrap(", expected.value), ")"), hydra.show.core.term(term))
-    return hydra.lib.flows.bind(hydra.lexical.strip_and_dereference_term(term0), (lambda term: extract(term)))
+                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2(hydra.lib.strings.cat2("wrap(", expected.value), ")")), " but found "), hydra.show.core.term(term))), cx))
+    return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_wrap_1(cx, expected, term, term)))
 
-def wrapped_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.Flow[T0, hydra.core.Type]:
+def wrapped_type(cx: hydra.context.Context, ename: hydra.core.Name, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
     r"""Extract the wrapped type from a wrapper type."""
     
     @lru_cache(1)
@@ -642,7 +624,7 @@ def wrapped_type(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.compute.
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
         case hydra.core.TypeWrap(value=wrapped_type):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(wrapped_type.type_name.value, ename.value), (lambda : hydra.lib.flows.pure(wrapped_type.body)), (lambda : hydra.monads.unexpected(hydra.lib.strings.cat2("wrapped type ", ename.value), hydra.lib.strings.cat2("wrapped type ", wrapped_type.type_name.value))))
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(wrapped_type.type_name.value, ename.value), (lambda : Right(wrapped_type.body)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("wrapped type ", ename.value)), " but found "), hydra.lib.strings.cat2("wrapped type ", wrapped_type.type_name.value))), cx))))
         
         case _:
-            return hydra.monads.unexpected("wrapped type", hydra.show.core.type(typ))
+            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "wrapped type"), " but found "), hydra.show.core.type(typ))), cx))

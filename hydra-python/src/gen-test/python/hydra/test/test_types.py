@@ -59,16 +59,6 @@ test_type_either_name = hydra.core.Name("Either")
 
 test_type_either = cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("b"), cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(test_type_either_name, (hydra.core.FieldType(hydra.core.Name("left"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("a")))), hydra.core.FieldType(hydra.core.Name("right"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("b"))))))))))))))
 
-test_type_flow_name = hydra.core.Name("hydra.compute.Flow")
-
-test_type_flow_state_name = hydra.core.Name("hydra.compute.FlowState")
-
-test_type_flow = cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("s"), cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(test_type_flow_name, (hydra.core.FieldType(hydra.core.Name("value"), cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("s"))), cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(cast(hydra.core.Type, hydra.core.TypeVariable(test_type_flow_state_name)), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("s")))))), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("a")))))))))),))))))))))
-
-test_type_trace_name = hydra.core.Name("hydra.compute.Trace")
-
-test_type_flow_state = cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("s"), cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(test_type_flow_state_name, (hydra.core.FieldType(hydra.core.Name("value"), cast(hydra.core.Type, hydra.core.TypeMaybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("a")))))), hydra.core.FieldType(hydra.core.Name("state"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("s")))), hydra.core.FieldType(hydra.core.Name("trace"), cast(hydra.core.Type, hydra.core.TypeVariable(test_type_trace_name)))))))))))))
-
 test_type_hydra_literal_type_name = hydra.core.Name("HydraLiteralType")
 
 test_type_hydra_literal_type = cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(test_type_hydra_literal_type_name, (hydra.core.FieldType(hydra.core.Name("boolean"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean())))), hydra.core.FieldType(hydra.core.Name("string"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()))))))))
@@ -126,8 +116,6 @@ test_type_symmetric_triple = cast(hydra.core.Type, hydra.core.TypeForall(hydra.c
 test_type_timestamp_name = hydra.core.Name("Timestamp")
 
 test_type_timestamp = cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(test_type_timestamp_name, (hydra.core.FieldType(hydra.core.Name("unixTimeMillis"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(hydra.core.IntegerType.UINT64))))), hydra.core.FieldType(hydra.core.Name("date"), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()))))))))
-
-test_type_trace = cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(test_type_trace_name, (hydra.core.FieldType(hydra.core.Name("stack"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))), hydra.core.FieldType(hydra.core.Name("messages"), cast(hydra.core.Type, hydra.core.TypeList(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))), hydra.core.FieldType(hydra.core.Name("other"), cast(hydra.core.Type, hydra.core.TypeMap(hydra.core.MapType(cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()))), cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))))))))))
 
 test_type_triple = cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("a"), cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("b"), cast(hydra.core.Type, hydra.core.TypeForall(hydra.core.ForallType(hydra.core.Name("c"), cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(test_type_triple_name, (hydra.core.FieldType(hydra.core.Name("first"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("a")))), hydra.core.FieldType(hydra.core.Name("second"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("b")))), hydra.core.FieldType(hydra.core.Name("third"), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("c")))))))))))))))))
 

@@ -10,10 +10,10 @@ from typing import cast
 import hydra.constraints
 import hydra.core
 import hydra.decode.query
+import hydra.error
 import hydra.extract.helpers
 import hydra.lexical
 import hydra.lib.eithers
-import hydra.util
 
 def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_constraints_path_equation_1(cx, v1):
@@ -25,8 +25,8 @@ def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("left", (lambda x1, x2: hydra.decode.query.path(x1, x2)), field_map(), cx), (lambda field_left: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("right", (lambda x1, x2: hydra.decode.query.path(x1, x2)), field_map(), cx), (lambda field_right: Right(hydra.constraints.PathEquation(field_left, field_right))))))
             
             case _:
-                return Left(hydra.util.DecodingError("expected record of type hydra.constraints.PathEquation"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_constraints_path_equation_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+                return Left(hydra.error.DecodingError("expected record of type hydra.constraints.PathEquation"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_constraints_path_equation_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def pattern_implication(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_constraints_pattern_implication_1(cx, v1):
@@ -38,5 +38,5 @@ def pattern_implication(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("antecedent", (lambda x1, x2: hydra.decode.query.pattern(x1, x2)), field_map(), cx), (lambda field_antecedent: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("consequent", (lambda x1, x2: hydra.decode.query.pattern(x1, x2)), field_map(), cx), (lambda field_consequent: Right(hydra.constraints.PatternImplication(field_antecedent, field_consequent))))))
             
             case _:
-                return Left(hydra.util.DecodingError("expected record of type hydra.constraints.PatternImplication"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_constraints_pattern_implication_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+                return Left(hydra.error.DecodingError("expected record of type hydra.constraints.PatternImplication"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_constraints_pattern_implication_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))

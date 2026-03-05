@@ -4,8 +4,10 @@ r"""Types supporting type inference and type reconstruction."""
 
 from __future__ import annotations
 from dataclasses import dataclass
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Maybe, Node, frozenlist
-from typing import Annotated, Generic, TypeAlias, TypeVar
+from typing import Annotated, Generic, TypeAlias, TypeVar, cast
+import hydra.context
 import hydra.core
 
 Env = TypeVar("Env")
@@ -39,12 +41,14 @@ class InferenceResult:
     type: Annotated[hydra.core.Type, "The inferred type of the term"]
     subst: Annotated[TypeSubst, "The type substitution resulting from unification"]
     class_constraints: Annotated[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata], "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)"]
+    context: Annotated[hydra.context.Context, "The updated context after inference (carries fresh variable state)"]
     
     TYPE_ = hydra.core.Name("hydra.typing.InferenceResult")
     TERM = hydra.core.Name("term")
     TYPE = hydra.core.Name("type")
     SUBST = hydra.core.Name("subst")
     CLASS_CONSTRAINTS = hydra.core.Name("classConstraints")
+    CONTEXT = hydra.core.Name("context")
 
 class TermSubst(Node["FrozenDict[hydra.core.Name, hydra.core.Term]"]):
     r"""A substitution of term variables for terms."""

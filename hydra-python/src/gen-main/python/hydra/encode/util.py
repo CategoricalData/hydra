@@ -3,6 +3,7 @@
 r"""Term encoders for hydra.util."""
 
 from __future__ import annotations
+from functools import lru_cache
 from typing import cast
 import hydra.core
 import hydra.util
@@ -37,9 +38,6 @@ def comparison(v1: hydra.util.Comparison) -> hydra.core.Term:
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
-
-def decoding_error(x: hydra.util.DecodingError) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(hydra.core.Name("hydra.util.DecodingError"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(x.value)))))))
 
 def precision(v1: hydra.util.Precision) -> hydra.core.Term:
     match v1:

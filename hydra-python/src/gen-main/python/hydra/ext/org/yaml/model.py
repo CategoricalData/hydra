@@ -8,8 +8,9 @@ In addition, tags are omitted from this model, and non-standard scalars are unsu
 
 from __future__ import annotations
 from decimal import Decimal
+from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Node, frozenlist
-from typing import TypeAlias
+from typing import TypeAlias, cast
 import hydra.core
 
 class NodeMapping(Node["FrozenDict[Node_, Node_]"]):

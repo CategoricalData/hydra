@@ -5,6 +5,7 @@ r"""Conversion functions for literal values."""
 from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
+from functools import lru_cache
 from typing import cast
 import hydra.core
 import hydra.lib.literals

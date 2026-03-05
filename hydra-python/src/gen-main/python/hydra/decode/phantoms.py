@@ -9,11 +9,11 @@ from hydra.dsl.python import Either, Left, Right
 from typing import TypeVar, cast
 import hydra.core
 import hydra.decode.core
+import hydra.error
 import hydra.extract.helpers
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.phantoms
-import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -25,8 +25,8 @@ def t_term(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return hydra.lib.eithers.map((lambda b: hydra.phantoms.TTerm(b)), hydra.decode.core.term(cx, wrapped_term.body))
             
             case _:
-                return Left(hydra.util.DecodingError("expected wrapped type hydra.phantoms.TTerm"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_term_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+                return Left(hydra.error.DecodingError("expected wrapped type hydra.phantoms.TTerm"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_term_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_phantoms_t_binding_1(a, cx, v1):
@@ -38,5 +38,5 @@ def t_binding(a: T0, cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("name", (lambda x1, x2: hydra.decode.core.name(x1, x2)), field_map(), cx), (lambda field_name: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("term", (lambda v12, v2: t_term(a, v12, v2)), field_map(), cx), (lambda field_term: Right(hydra.phantoms.TBinding(field_name, field_term))))))
             
             case _:
-                return Left(hydra.util.DecodingError("expected record of type hydra.phantoms.TBinding"))
-    return hydra.lib.eithers.either((lambda err: Left(hydra.util.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_binding_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+                return Left(hydra.error.DecodingError("expected record of type hydra.phantoms.TBinding"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_phantoms_t_binding_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))

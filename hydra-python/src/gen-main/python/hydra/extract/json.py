@@ -5,96 +5,95 @@ r"""Utilities for extracting values from JSON objects."""
 from __future__ import annotations
 from collections.abc import Callable
 from decimal import Decimal
-from hydra.dsl.python import FrozenDict, Maybe, Nothing, frozenlist
-from typing import TypeVar
+from functools import lru_cache
+from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
+from typing import TypeVar, cast
 import hydra.core
 import hydra.json.model
-import hydra.lib.flows
+import hydra.lib.eithers
 import hydra.lib.maps
 import hydra.lib.maybes
 import hydra.lib.strings
-import hydra.monads
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
-T2 = TypeVar("T2")
 
 def show_value(value: T0) -> str:
     r"""Show a JSON value as a string (placeholder implementation)."""
     
     return "TODO: implement showValue"
 
-def expect_array(value: hydra.json.model.Value) -> hydra.compute.Flow[T0, frozenlist[hydra.json.model.Value]]:
+def expect_array(value: hydra.json.model.Value) -> Either[str, frozenlist[hydra.json.model.Value]]:
     r"""Extract an array from a JSON value, failing if the value is not an array."""
     
     match value:
         case hydra.json.model.ValueArray(value=els):
-            return hydra.lib.flows.pure(els)
+            return Right(els)
         
         case _:
-            return hydra.monads.unexpected("JSON array", show_value(value))
+            return Left(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "JSON array"), hydra.lib.strings.cat2(" but found ", show_value(value))))
 
-def expect_number(value: hydra.json.model.Value) -> hydra.compute.Flow[T0, Decimal]:
+def expect_number(value: hydra.json.model.Value) -> Either[str, Decimal]:
     r"""Extract a number from a JSON value, failing if the value is not a number."""
     
     match value:
         case hydra.json.model.ValueNumber(value=d):
-            return hydra.lib.flows.pure(d)
+            return Right(d)
         
         case _:
-            return hydra.monads.unexpected("JSON number", show_value(value))
+            return Left(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "JSON number"), hydra.lib.strings.cat2(" but found ", show_value(value))))
 
-def expect_object(value: hydra.json.model.Value) -> hydra.compute.Flow[T0, FrozenDict[str, hydra.json.model.Value]]:
+def expect_object(value: hydra.json.model.Value) -> Either[str, FrozenDict[str, hydra.json.model.Value]]:
     r"""Extract an object from a JSON value, failing if the value is not an object."""
     
     match value:
         case hydra.json.model.ValueObject(value=m):
-            return hydra.lib.flows.pure(m)
+            return Right(m)
         
         case _:
-            return hydra.monads.unexpected("JSON object", show_value(value))
+            return Left(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "JSON object"), hydra.lib.strings.cat2(" but found ", show_value(value))))
 
-def expect_string(value: hydra.json.model.Value) -> hydra.compute.Flow[T0, str]:
+def expect_string(value: hydra.json.model.Value) -> Either[str, str]:
     r"""Extract a string from a JSON value, failing if the value is not a string."""
     
     match value:
         case hydra.json.model.ValueString(value=s):
-            return hydra.lib.flows.pure(s)
+            return Right(s)
         
         case _:
-            return hydra.monads.unexpected("JSON string", show_value(value))
+            return Left(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "JSON string"), hydra.lib.strings.cat2(" but found ", show_value(value))))
 
 def opt(fname: T0, m: FrozenDict[T0, T1]) -> Maybe[T1]:
     r"""Look up an optional field in a JSON object."""
     
     return hydra.lib.maps.lookup(fname, m)
 
-def opt_array(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, Maybe[frozenlist[hydra.json.model.Value]]]:
+def opt_array(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> Either[str, Maybe[frozenlist[hydra.json.model.Value]]]:
     r"""Look up an optional array field in a JSON object."""
     
-    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda a: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), expect_array(a))), opt(fname, m))
+    return hydra.lib.maybes.maybe(Right(Nothing()), (lambda a: hydra.lib.eithers.map((lambda x: Just(x)), expect_array(a))), opt(fname, m))
 
-def opt_string(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, Maybe[str]]:
+def opt_string(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> Either[str, Maybe[str]]:
     r"""Look up an optional string field in a JSON object."""
     
-    return hydra.lib.maybes.maybe(hydra.lib.flows.pure(Nothing()), (lambda s: hydra.lib.flows.map((lambda x1: hydra.lib.maybes.pure(x1)), expect_string(s))), opt(fname, m))
+    return hydra.lib.maybes.maybe(Right(Nothing()), (lambda s: hydra.lib.eithers.map((lambda x: Just(x)), expect_string(s))), opt(fname, m))
 
-def require(fname: T0, m: FrozenDict[T0, T1]) -> hydra.compute.Flow[T2, T1]:
+def require(fname: T0, m: FrozenDict[T0, T1]) -> Either[str, T1]:
     r"""Look up a required field in a JSON object, failing if not found."""
     
-    return hydra.lib.maybes.maybe(hydra.lib.flows.fail(hydra.lib.strings.cat(("required attribute ", show_value(fname), " not found"))), (lambda value: hydra.lib.flows.pure(value)), hydra.lib.maps.lookup(fname, m))
+    return hydra.lib.maybes.maybe(Left(hydra.lib.strings.cat(("required attribute ", show_value(fname), " not found"))), (lambda value: Right(value)), hydra.lib.maps.lookup(fname, m))
 
-def require_array(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, frozenlist[hydra.json.model.Value]]:
+def require_array(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> Either[str, frozenlist[hydra.json.model.Value]]:
     r"""Look up a required array field in a JSON object."""
     
-    return hydra.lib.flows.bind(require(fname, m), (lambda x1: expect_array(x1)))
+    return hydra.lib.eithers.bind(require(fname, m), (lambda x1: expect_array(x1)))
 
-def require_number(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, Decimal]:
+def require_number(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> Either[str, Decimal]:
     r"""Look up a required number field in a JSON object."""
     
-    return hydra.lib.flows.bind(require(fname, m), (lambda x1: expect_number(x1)))
+    return hydra.lib.eithers.bind(require(fname, m), (lambda x1: expect_number(x1)))
 
-def require_string(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> hydra.compute.Flow[T1, str]:
+def require_string(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> Either[str, str]:
     r"""Look up a required string field in a JSON object."""
     
-    return hydra.lib.flows.bind(require(fname, m), (lambda x1: expect_string(x1)))
+    return hydra.lib.eithers.bind(require(fname, m), (lambda x1: expect_string(x1)))
