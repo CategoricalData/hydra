@@ -5,7 +5,6 @@ import qualified Hydra.Pg.Model as Pg
 import Hydra.Ext.Dsl.Pg.Mappings
 import Hydra.Dsl.Tabular
 import Hydra.Lib.Literals
-import Hydra.Tools.Monads
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Terms as Terms
@@ -21,36 +20,38 @@ import qualified Data.Maybe as Y
 type PgTransform = M.Map String ([Pg.Vertex Term], [Pg.Edge Term])
 
 
-evaluate :: Term -> Flow Graph Term
-evaluate = reduceTerm True
+type Result a = Either (InContext OtherError) a
 
-evaluateEdge :: Pg.Edge Term -> Term -> Flow Graph (Maybe (Pg.Edge Term))
-evaluateEdge (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
-    id <- evaluate $ Terms.apply idSpec term
-    mOutId <- evaluate (Terms.apply outSpec term) >>= (ExtractCore.maybeTerm pure)
-    mInId <- evaluate (Terms.apply inSpec term) >>= (ExtractCore.maybeTerm pure)
-    props <- evaluateProperties propSpecs term
+evaluate :: Context -> Graph -> Term -> Result Term
+evaluate cx g term = reduceTerm cx g True term
+
+evaluateEdge :: Context -> Graph -> Pg.Edge Term -> Term -> Result (Maybe (Pg.Edge Term))
+evaluateEdge cx g (Pg.Edge label idSpec outSpec inSpec propSpecs) term = do
+    id <- evaluate cx g $ Terms.apply idSpec term
+    mOutId <- evaluate cx g (Terms.apply outSpec term) >>= ExtractCore.maybeTerm cx Right g
+    mInId <- evaluate cx g (Terms.apply inSpec term) >>= ExtractCore.maybeTerm cx Right g
+    props <- evaluateProperties cx g propSpecs term
     return $ case mOutId of
       Nothing -> Nothing
       Just outId -> case mInId of
         Nothing -> Nothing
         Just inId -> Just $ Pg.Edge label id outId inId props
 
-evaluateProperties :: M.Map Pg.PropertyKey Term -> Term -> Flow Graph (M.Map Pg.PropertyKey Term)
-evaluateProperties specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair $ M.toList specs)
+evaluateProperties :: Context -> Graph -> M.Map Pg.PropertyKey Term -> Term -> Result (M.Map Pg.PropertyKey Term)
+evaluateProperties cx g specs record = M.fromList . Y.catMaybes <$> (CM.mapM forPair $ M.toList specs)
   where
     forPair (k, spec) = do
-      value <- (evaluate $ Terms.apply spec record)
+      value <- evaluate cx g $ Terms.apply spec record
       case deannotateTerm value of
         TermMaybe mv -> case mv of
           Nothing -> return Nothing
           Just v -> return $ Just (k, v)
-        _ -> fail $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value
+        _ -> Left $ InContext (OtherError $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value) cx
 
-evaluateVertex :: Pg.Vertex Term -> Term -> Flow Graph (Maybe (Pg.Vertex Term))
-evaluateVertex (Pg.Vertex label idSpec propSpecs) record = do
-  mId <- evaluate (Terms.apply idSpec record) >>= (ExtractCore.maybeTerm pure)
-  props <- evaluateProperties propSpecs record
+evaluateVertex :: Context -> Graph -> Pg.Vertex Term -> Term -> Result (Maybe (Pg.Vertex Term))
+evaluateVertex cx g (Pg.Vertex label idSpec propSpecs) record = do
+  mId <- evaluate cx g (Terms.apply idSpec record) >>= ExtractCore.maybeTerm cx Right g
+  props <- evaluateProperties cx g propSpecs record
   return $ case mId of
     Nothing -> Nothing
     Just id -> Just $ Pg.Vertex label id props
@@ -106,17 +107,19 @@ termRowToRecord (TableType (RelationName tname) colTypes) (DataRow cells) = Term
   where
     toField (ColumnType (ColumnName cname) _) mvalue = Field (Name cname) $ TermMaybe mvalue
 
-transformRecord :: [Pg.Vertex Term] -> [Pg.Edge Term] -> Term -> Flow Graph ([Pg.Vertex Term], [Pg.Edge Term])
-transformRecord vspecs especs term = do
-  vertices <- CM.mapM (\s -> evaluateVertex s term) vspecs
-  edges <- CM.mapM (\s -> evaluateEdge s term) especs
+transformRecord :: Context -> Graph -> [Pg.Vertex Term] -> [Pg.Edge Term] -> Term -> Result ([Pg.Vertex Term], [Pg.Edge Term])
+transformRecord cx g vspecs especs term = do
+  vertices <- CM.mapM (\s -> evaluateVertex cx g s term) vspecs
+  edges <- CM.mapM (\s -> evaluateEdge cx g s term) especs
   return (Y.catMaybes vertices, Y.catMaybes edges)
 
 transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] -> IO ([Pg.Vertex Term], [Pg.Edge Term])
 transformTable tableType@(TableType (RelationName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
-    pairs <- flowToIo (hydraCoreGraph) $ withTrace ("transforming " ++ filePath) $
-      CM.mapM (transformRecord vspecs especs . termRowToRecord tableType) rows
+    let cx = emptyContext
+    pairs <- case CM.mapM (transformRecord cx hydraCoreGraph vspecs especs . termRowToRecord tableType) rows of
+      Left (InContext (OtherError msg) _) -> fail msg
+      Right ps -> return ps
     return $ L.foldl addRow ([], []) pairs
   where
     filePath = tableName

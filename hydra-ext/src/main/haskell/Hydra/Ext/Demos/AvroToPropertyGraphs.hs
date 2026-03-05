@@ -8,7 +8,7 @@ import System.Directory
 
 
 -- | Last mile which transforms a graph into JSON. See the README for usage.
-transformAvroJsonToPg :: LastMile Graph x -> FilePath -> FilePath -> FilePath -> IO ()
+transformAvroJsonToPg :: LastMile x -> FilePath -> FilePath -> FilePath -> IO ()
 transformAvroJsonToPg lastMile schemaFile dataDir outDir = do
   pwd <- getCurrentDirectory
   executeAvroTransformWorkflow lastMile $ TransformWorkflow "airplane info"
