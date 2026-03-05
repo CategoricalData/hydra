@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Meta.Json          as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
@@ -54,7 +53,6 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
@@ -66,7 +64,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, Monads.ns, ShowCore.ns]
+    [ExtractCore.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of Map functions for the Hydra interpreter.")
   where
@@ -80,12 +78,13 @@ module_ = Module ns elements
 
 -- | Interpreter-friendly alter for Map terms.
 -- Applies funTerm to the current value (or Nothing) and updates accordingly.
-alter_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+alter_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
 alter_ = define "alter" $
   doc "Interpreter-friendly alter for Map terms." $
+  "cx" ~> "g" ~>
   "funTerm" ~> "keyTerm" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (Monads.unexpected @@ string "map value" @@ (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       -- Get current value: lookup key m
       "currentVal" <~ Maps.lookup (var "keyTerm") (var "m") $
@@ -96,7 +95,7 @@ alter_ = define "alter" $
       -- Result depends on newVal:
       -- If newVal is Nothing, delete the key
       -- If newVal is Just v', insert/update with v'
-      produce $ Core.termApplication $ Core.application
+      right $ Core.termApplication $ Core.application
         (Core.termApplication $ Core.application
           (Core.termApplication $ Core.application
             (Core.termFunction $ Core.functionPrimitive $ encodedName _maybes_maybe)
@@ -119,17 +118,18 @@ alter_ = define "alter" $
 
 -- | Interpreter-friendly bimap for Map terms.
 -- Applies keyFun to each key and valFun to each value.
-bimap_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Map terms." $
+  "cx" ~> "g" ~>
   "keyFun" ~> "valFun" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (Monads.unexpected @@ string "map value" @@ (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       -- m is Map Term Term, convert to list of pairs
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (map (\(k,v) -> (keyFun k, valFun v)) pairs)
-      produce $ Core.termMap $ Maps.fromList $ Lists.map
+      right $ Core.termMap $ Maps.fromList $ Lists.map
         ("p" ~>
           "k" <~ Pairs.first (var "p") $
           "v" <~ Pairs.second (var "p") $
@@ -140,16 +140,17 @@ bimap_ = define "bimap" $
 
 -- | Interpreter-friendly filter for Map terms.
 -- Keeps entries where valPred returns true for the value.
-filter_ :: TBinding (Term -> Term -> Flow s Term)
+filter_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for Map terms." $
+  "cx" ~> "g" ~>
   "valPred" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (Monads.unexpected @@ string "map value" @@ (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (concat (map (\(k,v) -> if valPred v then [(k,v)] else []) pairs))
-      produce $ Core.termApplication $ Core.application
+      right $ Core.termApplication $ Core.application
         (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_fromList)
         (Core.termApplication $ Core.application
           (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
@@ -167,16 +168,17 @@ filter_ = define "filter" $
 
 -- | Interpreter-friendly filterWithKey for Map terms.
 -- Keeps entries where pred returns true for the key and value.
-filterWithKey_ :: TBinding (Term -> Term -> Flow s Term)
+filterWithKey_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 filterWithKey_ = define "filterWithKey" $
   doc "Interpreter-friendly filterWithKey for Map terms." $
+  "cx" ~> "g" ~>
   "pred" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (Monads.unexpected @@ string "map value" @@ (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (concat (map (\(k,v) -> if pred k v then [(k,v)] else []) pairs))
-      produce $ Core.termApplication $ Core.application
+      right $ Core.termApplication $ Core.application
         (Core.termFunction $ Core.functionPrimitive $ encodedName _maps_fromList)
         (Core.termApplication $ Core.application
           (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
@@ -197,16 +199,17 @@ filterWithKey_ = define "filterWithKey" $
 
 -- | Interpreter-friendly map for Map terms.
 -- Applies valFun to each value.
-map_ :: TBinding (Term -> Term -> Flow s Term)
+map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Map terms." $
+  "cx" ~> "g" ~>
   "valFun" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (Monads.unexpected @@ string "map value" @@ (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (map (\(k,v) -> (k, valFun v)) pairs)
-      produce $ Core.termMap $ Maps.fromList $ Lists.map
+      right $ Core.termMap $ Maps.fromList $ Lists.map
         ("p" ~>
           "k" <~ Pairs.first (var "p") $
           "v" <~ Pairs.second (var "p") $
@@ -215,16 +218,17 @@ map_ = define "map" $
 
 -- | Interpreter-friendly mapKeys for Map terms.
 -- Applies keyFun to each key.
-mapKeys_ :: TBinding (Term -> Term -> Flow s Term)
+mapKeys_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 mapKeys_ = define "mapKeys" $
   doc "Interpreter-friendly mapKeys for Map terms." $
+  "cx" ~> "g" ~>
   "keyFun" ~> "mapTerm" ~>
   cases _Term (var "mapTerm")
-    (Just (Monads.unexpected @@ string "map value" @@ (ShowCore.term @@ var "mapTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "map value") (ShowCore.term @@ var "mapTerm"))) [
     _Term_map>>: "m" ~>
       "pairs" <~ Maps.toList (var "m") $
       -- Build: fromList (map (\(k,v) -> (keyFun k, v)) pairs)
-      produce $ Core.termMap $ Maps.fromList $ Lists.map
+      right $ Core.termMap $ Maps.fromList $ Lists.map
         ("p" ~>
           "k" <~ Pairs.first (var "p") $
           "v" <~ Pairs.second (var "p") $

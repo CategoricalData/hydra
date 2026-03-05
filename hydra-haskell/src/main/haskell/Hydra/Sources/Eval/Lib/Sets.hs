@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Meta.Json          as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
@@ -54,9 +53,7 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-
 
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.sets"
@@ -66,7 +63,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, Monads.ns, ShowCore.ns]
+    [ExtractCore.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of Set functions for the Hydra interpreter.")
   where
@@ -75,13 +72,14 @@ module_ = Module ns elements
 
 -- | Interpreter-friendly map for Set terms.
 -- Applies fun to each element.
-map_ :: TBinding (Term -> Term -> Flow s Term)
+map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Set terms." $
+  "cx" ~> "g" ~>
   "fun" ~> "setTerm" ~>
-  "elements" <<~ ExtractCore.set @@ var "setTerm" $
+  "elements" <<= (ExtractCore.set @@ var "cx" @@ var "g" @@ var "setTerm") $
   -- Build: fromList (map fun (toList elements))
-  produce $ Core.termApplication $ Core.application
+  right $ Core.termApplication $ Core.application
     (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_fromList)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "fun") (var "el"))

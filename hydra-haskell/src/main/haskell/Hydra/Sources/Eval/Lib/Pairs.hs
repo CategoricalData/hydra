@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Meta.Json          as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
@@ -53,7 +52,7 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
@@ -65,7 +64,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Monads.ns, ShowCore.ns]
+    [ExtractCore.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of Pair functions for the Hydra interpreter.")
   where
@@ -74,15 +73,16 @@ module_ = Module ns elements
 
 -- | Interpreter-friendly bimap for Pair terms.
 -- Applies firstFun to the first element and secondFun to the second element.
-bimap_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Pair terms." $
+  "cx" ~> "g" ~>
   "firstFun" ~> "secondFun" ~> "pairTerm" ~>
   cases _Term (var "pairTerm")
-    (Just (Monads.unexpected @@ string "pair value" @@ (ShowCore.term @@ var "pairTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "pair value") (ShowCore.term @@ var "pairTerm"))) [
     _Term_pair>>: "p" ~>
       "fst" <~ Pairs.first (var "p") $
       "snd" <~ Pairs.second (var "p") $
-      produce $ Core.termPair $ pair
+      right $ Core.termPair $ pair
         (Core.termApplication $ Core.application (var "firstFun") (var "fst"))
         (Core.termApplication $ Core.application (var "secondFun") (var "snd"))]
