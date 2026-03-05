@@ -15,7 +15,9 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Compute as TypeCompute
+import qualified Hydra.Sources.Kernel.Types.Context as TypeContext
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
+import qualified Hydra.Sources.Kernel.Types.Error as TypeError
 import qualified Hydra.Sources.Kernel.Terms.Annotations as TermAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as TermConstants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as TermExtractCore
@@ -45,7 +47,9 @@ import qualified Data.ByteString.Lazy as BS
 
 
 decodeSchemaTypes :: Graph -> M.Map Name TypeScheme
-decodeSchemaTypes sg = fromFlow M.empty sg (schemaGraphToTypingEnvironment sg)
+decodeSchemaTypes sg = case schemaGraphToTypingEnvironment (Context [] [] M.empty) sg of
+  Left _ -> M.empty
+  Right result -> result
 
 testGraph :: Graph
 testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
@@ -74,10 +78,15 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGra
     kernelElements = L.concat $ fmap moduleElements
       [ TypeCoders.module_
       , TypeCompute.module_
+      , TypeContext.module_
       , TypeCore.module_
+      , TypeError.module_
       ]
     testElements = fmap
       (\(n, t) -> Binding n (EncodeCore.type_ t) $ Just $ Types.mono $ TypeVariable _Type) $ M.toList testTypes
+
+testContext :: Context
+testContext = Context [] [] M.empty
 
 baseLanguage :: Language
 baseLanguage = hydraLanguage
@@ -90,26 +99,27 @@ check desc = H.describe $ "Check type inference for " <> desc
 
 checkAdapter :: (Eq t, Eq v, Show t, Show v)
   => (v -> v)
-  -> (t -> Flow AdapterContext (SymmetricAdapter AdapterContext t v))
+  -> (AdapterContext -> t -> Either String (SymmetricAdapter t v))
   -> ([r] -> AdapterContext)
   -> [r] -> t -> t -> Bool -> v -> v -> H.Expectation
 checkAdapter normalize mkAdapter mkContext variants source target lossy vs vt = do
     let cx0 = mkContext variants :: AdapterContext
     let g = adapterContextGraph cx0
-    let FlowState adapter' cx trace = unFlow (mkAdapter source) cx0 emptyTrace
-    if Y.isNothing adapter' then HL.assertFailure (traceSummary trace) else pure ()
-    let adapter = Y.fromJust adapter'
-    let step = Coder encode decode
-          where
-            encode = withState cx . coderEncode (adapterCoder adapter)
-            decode = withState cx . coderDecode (adapterCoder adapter)
-    adapterSource adapter `H.shouldBe` source
-    adapterTarget adapter `H.shouldBe` target
-    adapterIsLossy adapter `H.shouldBe` lossy
-    fromFlow vt g (normalize <$> coderEncode step vs) `H.shouldBe` (normalize vt)
-    if lossy
-      then True `H.shouldBe` True
-      else fromFlow vs g (coderEncode step vs >>= coderDecode step) `H.shouldBe` vs
+    case mkAdapter cx0 source of
+      Left err -> HL.assertFailure err
+      Right adapter -> do
+        let innerCoder = adapterCoder adapter
+        adapterSource adapter `H.shouldBe` source
+        adapterTarget adapter `H.shouldBe` target
+        adapterIsLossy adapter `H.shouldBe` lossy
+        case coderEncode innerCoder testContext vs of
+          Left ic -> HL.assertFailure (unOtherError (inContextObject ic))
+          Right encoded -> normalize encoded `H.shouldBe` normalize vt
+        if lossy
+          then True `H.shouldBe` True
+          else case coderEncode innerCoder testContext vs >>= coderDecode innerCoder testContext of
+            Left ic -> HL.assertFailure (unOtherError (inContextObject ic))
+            Right roundTripped -> roundTripped `H.shouldBe` vs
 
 checkLiteralAdapter :: [LiteralVariant] -> LiteralType -> LiteralType -> Bool -> Literal -> Literal -> H.Expectation
 checkLiteralAdapter = checkAdapter id literalAdapter context
@@ -145,120 +155,99 @@ checkIntegerAdapter = checkAdapter id integerAdapter context
 checkDataAdapter :: [TypeVariant] -> Type -> Type -> Bool -> Term -> Term -> H.Expectation
 checkDataAdapter = checkAdapter deannotateTerm termAdapter termTestContext
 
-checkSerdeRoundTrip :: (Type -> Flow Graph (Coder Graph Graph Term BS.ByteString))
+checkSerdeRoundTrip :: (Context -> Graph -> Type -> Either (InContext OtherError) (Coder Term BS.ByteString))
   -> TypeApplicationTerm -> H.Expectation
 checkSerdeRoundTrip mkSerde (TypeApplicationTerm term typ) = do
-    case mserde of
-      Nothing -> HL.assertFailure (traceSummary trace)
-      Just serde -> shouldSucceedWith
-        (deannotateTerm <$> (coderEncode serde term >>= coderDecode serde))
-        (deannotateTerm term)
-  where
-    FlowState mserde _ trace = unFlow (mkSerde typ) testGraph emptyTrace
+    case mkSerde testContext testGraph typ of
+      Left ic -> HL.assertFailure (unOtherError (inContextObject ic))
+      Right serde -> do
+        case coderEncode serde testContext term >>= coderDecode serde testContext of
+          Left ic -> HL.assertFailure (unOtherError (inContextObject ic))
+          Right roundTripped -> deannotateTerm roundTripped `H.shouldBe` deannotateTerm term
 
-checkSerialization :: (Type -> Flow Graph (Coder Graph Graph Term String))
+checkSerialization :: (Context -> Graph -> Type -> Either (InContext OtherError) (Coder Term String))
   -> TypeApplicationTerm -> String -> H.Expectation
 checkSerialization mkSerdeStr (TypeApplicationTerm term typ) expected = do
-    case mserde of
-      Nothing -> HL.assertFailure (traceSummary trace)
-      Just serde -> shouldSucceedWith
-        (normalize <$> coderEncode serde term)
+    case mkSerdeStr testContext testGraph typ of
+      Left ic -> HL.assertFailure (unOtherError (inContextObject ic))
+      Right serde -> shouldSucceedWith
+        (mapInContextError $ fmap normalize $ coderEncode serde testContext term)
         (normalize expected)
   where
     normalize = unlines . L.filter (not . L.null) . lines
-    FlowState mserde _ trace = unFlow (mkSerdeStr typ) testGraph emptyTrace
 
-eval :: Term -> Flow Graph Term
-eval = reduceTerm True
+eval :: Term -> Either String Term
+eval term = case reduceTerm testContext testGraph True term of
+    Left ic -> Left (unOtherError (inContextObject ic))
+    Right result -> Right result
 
 expectEtaExpansionResult :: String -> Term -> Term -> H.SpecWith ()
 expectEtaExpansionResult desc input output = H.it "eta expansion" $ do
-  -- Use the original etaExpandTypedTerm (monadic) instead of etaExpandTermNew (pure)
-  -- to test the production code path
-  result <- fromTestFlow desc $ etaExpandTypedTerm testGraph input
-  result `H.shouldBe` output
+  case etaExpandTypedTerm testContext testGraph input of
+    Left ic -> HL.assertFailure (unOtherError (inContextObject ic))
+    Right result -> result `H.shouldBe` output
 
-expectFailure :: (a -> String) -> String -> Flow () a -> H.Expectation
-expectFailure print desc f = case my of
-    Nothing -> return ()
-    Just v -> HL.assertFailure $ "Failure case succeeded with " ++ print v ++ "\n" ++ traceSummary trace
-  where
-    FlowState my _ trace = unFlow f2 () emptyTrace
-    f2 = do
-      putAttr key_debugId $ Terms.string desc
-      f
+expectFailure :: (a -> String) -> String -> Either String a -> H.Expectation
+expectFailure print desc f = case f of
+    Left _ -> return ()
+    Right v -> HL.assertFailure $ "Failure case succeeded with " ++ print v
 
 expectInferenceFailure :: String -> Term -> H.Expectation
-expectInferenceFailure desc term = expectFailure (ShowCore.typeScheme . snd) desc $ do
-  inferTypeOf testGraph term
+expectInferenceFailure desc term = case inferTypeOf testContext testGraph term of
+    Left _ -> return ()
+    Right ((_, ts), _) -> HL.assertFailure $ "Expected inference failure but got: " ++ ShowCore.typeScheme ts
 
 expectInferenceResult :: String -> Term -> TypeScheme -> H.SpecWith ()
 expectInferenceResult desc term expected = do
-  (iterm, its) <- H.runIO $ fromTestFlow desc $ do
-    inferTypeOf testGraph term
+  case inferTypeOf testContext testGraph term of
+    Left ic -> H.runIO (HL.assertFailure (unOtherError (inContextObject ic))) >> return ()
+    Right ((iterm, its), _cx') -> do
+      H.it "inferred type" $
+        H.shouldBe (ShowCore.typeScheme its) (ShowCore.typeScheme expected)
+      H.it "inferred term" $
+        H.shouldBe (ShowCore.term $ removeTypesFromTerm iterm) (ShowCore.term $ removeTypesFromTerm term)
 
-  H.it "inferred type" $
-    H.shouldBe (ShowCore.typeScheme its) (ShowCore.typeScheme expected)
-  H.it "inferred term" $
-    H.shouldBe (ShowCore.term $ removeTypesFromTerm iterm) (ShowCore.term $ removeTypesFromTerm term)
-
-expectSuccess :: (Eq a, Show a) => String -> Flow () a -> a -> H.Expectation
-expectSuccess desc flow x = case my of
-    Nothing -> HL.assertFailure $ traceSummary trace
-    Just y -> y `H.shouldBe` x
-  where
-    FlowState my _ trace = unFlow flow2 () emptyTrace
-    flow2 = do
-      putAttr key_debugId $ Terms.string desc
-      flow
+expectSuccess :: (Eq a, Show a) => String -> Either String a -> a -> H.Expectation
+expectSuccess desc result x = case result of
+    Left err -> HL.assertFailure err
+    Right y -> y `H.shouldBe` x
 
 expectTypeCheckingResult :: String -> Term -> Term -> Type -> H.SpecWith ()
 expectTypeCheckingResult desc input outputTerm outputType = do
-  (iterm, itype, rtype) <- H.runIO $ fromTestFlow desc $ do
-    -- typeOf is always called on System F terms
-    (iterm, ts) <- inferTypeOf testGraph input
-    let itype = typeSchemeToFType ts
-
-    rtype <- typeOf testGraph [] iterm
-    return (iterm, itype, rtype)
-
-  -- Three labeled assertions as per the type checking specification
-  H.it "inferred term" $
-    H.shouldBe (ShowCore.term iterm) (ShowCore.term outputTerm)
-  H.it "inferred type" $
-    H.shouldBe (ShowCore.type_ itype) (ShowCore.type_ outputType)
-  H.it "reconstructed type" $
-    H.shouldBe (ShowCore.type_ rtype) (ShowCore.type_ outputType)
-
-fromTestFlow :: String -> Flow () a -> IO a
-fromTestFlow desc flow = case my of
-    Nothing -> fail $ traceSummary trace
-    Just y -> return y
-  where
-    FlowState my _ trace = unFlow flow2 () emptyTrace
-    flow2 = do
-      putAttr key_debugId $ Terms.string desc
-      flow
+  case inferTypeOf testContext testGraph input of
+    Left ic -> H.runIO (HL.assertFailure (unOtherError (inContextObject ic))) >> return ()
+    Right ((iterm, ts), cx1) -> do
+      let itype = typeSchemeToFType ts
+      case typeOf cx1 testGraph [] iterm of
+        Left ic2 -> H.runIO (HL.assertFailure (unOtherError (inContextObject ic2))) >> return ()
+        Right (rtype, _cx2) -> do
+          H.it "inferred term" $
+            H.shouldBe (ShowCore.term iterm) (ShowCore.term outputTerm)
+          H.it "inferred type" $
+            H.shouldBe (ShowCore.type_ itype) (ShowCore.type_ outputType)
+          H.it "reconstructed type" $
+            H.shouldBe (ShowCore.type_ rtype) (ShowCore.type_ outputType)
 
 makeMap :: [(String, Int)] -> Term
 makeMap keyvals = Terms.map $ M.fromList $ ((\(k, v) -> (Terms.string k, Terms.int32 v)) <$> keyvals)
 
-shouldFail :: Flow Graph a -> H.Expectation
-shouldFail f = H.shouldBe True (Y.isNothing $ flowStateValue $ unFlow f testGraph emptyTrace)
+shouldFail :: Either String a -> H.Expectation
+shouldFail f = H.shouldBe True (either (const True) (const False) f)
 
-shouldSucceed :: Flow Graph a -> H.Expectation
-shouldSucceed f = case my of
-    Nothing -> HL.assertFailure (traceSummary trace)
-    Just y -> True `H.shouldBe` True
-  where
-    FlowState my _ trace = unFlow f testGraph emptyTrace
+shouldSucceed :: Either String a -> H.Expectation
+shouldSucceed f = case f of
+    Left err -> HL.assertFailure err
+    Right _ -> True `H.shouldBe` True
 
-shouldSucceedWith :: (Eq a, Show a) => Flow Graph a -> a -> H.Expectation
-shouldSucceedWith f x = case my of
-    Nothing -> HL.assertFailure (traceSummary trace)
-    Just y -> y `H.shouldBe` x
-  where
-    FlowState my _ trace = unFlow f testGraph emptyTrace
+shouldSucceedWith :: (Eq a, Show a) => Either String a -> a -> H.Expectation
+shouldSucceedWith f x = case f of
+    Left err -> HL.assertFailure err
+    Right y -> y `H.shouldBe` x
+
+-- | Map an InContext OtherError to a plain String error
+mapInContextError :: Either (InContext OtherError) a -> Either String a
+mapInContextError (Left ic) = Left (unOtherError (inContextObject ic))
+mapInContextError (Right a) = Right a
 
 strip :: Term -> Term
 strip = deannotateTerm

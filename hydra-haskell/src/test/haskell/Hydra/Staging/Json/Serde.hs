@@ -2,11 +2,11 @@
 
 module Hydra.Staging.Json.Serde where
 
-import Hydra.Tools.Monads
 import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
 import qualified Hydra.Tools.Bytestrings as Bytestrings
 import qualified Hydra.Json.Model as Json
@@ -45,22 +45,22 @@ bytesToAesonValue = A.eitherDecode
 bytesToJsonValue :: BS.ByteString -> Either String Json.Value
 bytesToJsonValue bs = aesonValueToJsonValue <$> bytesToAesonValue bs
 
-jsonByteStringCoder :: Core.Type -> Compute.Flow Graph.Graph (Compute.Coder Graph.Graph Graph.Graph Core.Term BS.ByteString)
-jsonByteStringCoder typ = do
-  coder <- JsonCoder.jsonCoder typ
+jsonByteStringCoder :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.OtherError) (Compute.Coder Core.Term BS.ByteString)
+jsonByteStringCoder cx g typ = do
+  coder <- JsonCoder.jsonCoder typ cx g
   return Compute.Coder {
-    Compute.coderEncode = fmap jsonValueToBytes . Compute.coderEncode coder,
-    Compute.coderDecode = \bs -> case bytesToJsonValue bs of
-        Left msg -> Monads.fail $ "JSON parsing failed: " ++ msg
-        Right v -> Compute.coderDecode coder v}
+    Compute.coderEncode = \cx term -> fmap jsonValueToBytes (Compute.coderEncode coder cx term),
+    Compute.coderDecode = \cx bs -> case bytesToJsonValue bs of
+        Left msg -> Left (Context.InContext (Error.OtherError ("JSON parsing failed: " ++ msg)) cx)
+        Right v -> Compute.coderDecode coder cx v}
 
 -- | A convenience which maps typed terms to and from pretty-printed JSON strings, as opposed to JSON objects
-jsonStringCoder :: Core.Type -> Compute.Flow Graph.Graph (Compute.Coder Graph.Graph Graph.Graph Core.Term String)
-jsonStringCoder typ = do
-  serde <- jsonByteStringCoder typ
+jsonStringCoder :: Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.OtherError) (Compute.Coder Core.Term String)
+jsonStringCoder cx g typ = do
+  serde <- jsonByteStringCoder cx g typ
   return Compute.Coder {
-    Compute.coderEncode = fmap Bytestrings.bytesToString . Compute.coderEncode serde,
-    Compute.coderDecode = Compute.coderDecode serde . Bytestrings.stringToBytes}
+    Compute.coderEncode = \cx term -> fmap Bytestrings.bytesToString (Compute.coderEncode serde cx term),
+    Compute.coderDecode = \cx s -> Compute.coderDecode serde cx (Bytestrings.stringToBytes s)}
 
 jsonValueToAesonValue :: Json.Value -> A.Value
 jsonValueToAesonValue v = case v of

@@ -270,11 +270,11 @@ fieldAdaptersAreAsExpected = H.describe "Check that field adapters are as expect
 
 roundTripIsNoop :: Type -> Term -> H.Expectation
 roundTripIsNoop typ term = shouldSucceedWith
-   (step coderEncode term >>= step coderDecode)
+   (do adapter <- languageAdapter testLanguage testContext testGraph typ
+       encoded <- mapInContextError $ coderEncode (adapterCoder adapter) testContext term
+       mapInContextError $ coderDecode (adapterCoder adapter) testContext encoded)
    term
   where
-    step = adapt typ
-
     -- Use a YAML-like language (but supporting unions) as the default target language
     testLanguage = Language (LanguageName "hydra.test") $ LanguageConstraints {
       languageConstraintsEliminationVariants = S.empty, -- S.fromList eliminationVariants,
@@ -290,11 +290,6 @@ roundTripIsNoop typ term = shouldSucceedWith
         TypeMaybe (TypeMaybe _) -> False
         _ -> True }
 
-    -- Note: in a real application, you wouldn't create the adapter just to use it once;
-    --       it should be created once, then applied to many terms.
-    adapt typ dir term = do
-      adapter <- languageAdapter testLanguage typ
-      dir (adapterCoder adapter) term
 
 spec :: H.Spec
 spec = do

@@ -97,13 +97,11 @@ spec = do
   unsupportedTypesAreTransformed
 
 checkYamlCoder :: Type -> Term -> YM.Node -> H.Expectation
-checkYamlCoder typ term node = case mstep of
-    Nothing -> HL.assertFailure (traceSummary trace)
-    Just step -> do
-      shouldSucceedWith (coderEncode step term) node
-      shouldSucceedWith (coderEncode step term >>= coderDecode step) term
-  where
-    FlowState mstep _ trace = unFlow (yamlCoder typ) testGraph emptyTrace
+checkYamlCoder typ term node = case yamlCoder emptyContext testGraph typ of
+    Left ic -> HL.assertFailure $ "yamlCoder failed: " ++ show (inContextObject ic)
+    Right step -> do
+      coderEncode step emptyContext term `H.shouldBe` Right node
+      (coderEncode step emptyContext term >>= coderDecode step emptyContext) `H.shouldBe` Right term
 
 yamlBool :: Bool -> YM.Node
 yamlBool = YM.NodeScalar . YM.ScalarBool

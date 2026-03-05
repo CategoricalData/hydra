@@ -47,7 +47,7 @@ import qualified System.Process as Proc
 type TestRunner = String -> TestCaseWithMetadata -> Y.Maybe (H.SpecWith ())
 
 defaultTestRunner :: TestRunner
-defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequiresFlowDecoding tcase
+defaultTestRunner desc tcase = if Testing.isDisabled tcase
   then Nothing
   else Just $ case testCaseWithMetadataCase tcase of
     TestCaseAlphaConversion (AlphaConversionTestCase term oldVar newVar result) ->
@@ -90,7 +90,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase || Testing.isRequires
       H.it "type checking failure" $ H.shouldBe True False  -- TODO: implement
     TestCaseTypeReduction (TypeReductionTestCase input output) ->
       H.it "type reduction" $ H.shouldBe
-        (fromFlow input testGraph (betaReduceType input))
+        (either (const input) id $ betaReduceType emptyContext testGraph input)
         output
     TestCaseTopologicalSort (TopologicalSortTestCase adjList expected) ->
       H.it "topological sort" $ H.shouldBe
@@ -246,29 +246,23 @@ spec = do
 -- | Check that the JSON coder correctly encodes a term to the expected JSON value
 -- and that decoding and re-encoding produces the same term (round-trip)
 checkJsonCoder :: Type -> Term -> Json.Value -> H.Expectation
-checkJsonCoder typ term expectedJson = case mstep of
-    Nothing -> HL.assertFailure (traceSummary trace)
-    Just step -> do
-      shouldSucceedWith (coderEncode step term) expectedJson
-      shouldSucceedWith (coderEncode step term >>= coderDecode step) term
-  where
-    FlowState mstep _ trace = unFlow (JsonCoder.jsonCoder typ) testGraph emptyTrace
+checkJsonCoder typ term expectedJson = case JsonCoder.jsonCoder typ emptyContext testGraph of
+    Left ic -> HL.assertFailure (unOtherError $ inContextObject ic)
+    Right step -> do
+      shouldSucceedWith (mapInContextError $ coderEncode step testContext term) expectedJson
+      shouldSucceedWith (mapInContextError $ coderEncode step testContext term >>= coderDecode step testContext) term
 
 -- | Check that JSON decoding produces the expected result (Either String Term)
 checkJsonDecode :: Type -> Json.Value -> Either String Term -> H.Expectation
-checkJsonDecode typ json expected = case mstep of
-    Nothing -> HL.assertFailure (traceSummary trace)
-    Just step -> case expected of
-      Left errMsg -> case runFlow (coderDecode step json) of
-        Nothing -> return ()  -- Expected failure, got failure
-        Just result -> HL.assertFailure $
+checkJsonDecode typ json expected = case JsonCoder.jsonCoder typ emptyContext testGraph of
+    Left ic -> HL.assertFailure (unOtherError $ inContextObject ic)
+    Right step -> case expected of
+      Left errMsg -> case coderDecode step testContext json of
+        Left _ -> return ()  -- Expected failure, got failure
+        Right result -> HL.assertFailure $
           "Expected decode failure with message containing '" ++ errMsg ++
           "' but got success: " ++ show result
-      Right expectedTerm -> shouldSucceedWith (coderDecode step json) expectedTerm
-  where
-    FlowState mstep _ trace = unFlow (JsonCoder.jsonCoder typ) testGraph emptyTrace
-    runFlow flow = case unFlow flow testGraph emptyTrace of
-      FlowState result _ _ -> result
+      Right expectedTerm -> shouldSucceedWith (mapInContextError $ coderDecode step testContext json) expectedTerm
 
 -- | Check that JSON encoding produces the expected result (Either String Value)
 checkJsonEncode :: Term -> Either String Json.Value -> H.Expectation
@@ -283,21 +277,17 @@ checkJsonEncode term expected = case expected of
 
 -- | Check that a term can be encoded to JSON and decoded back to the same term
 checkJsonRoundtrip :: Type -> Term -> H.Expectation
-checkJsonRoundtrip typ term = case mstep of
-    Nothing -> HL.assertFailure (traceSummary trace)
-    Just step -> do
+checkJsonRoundtrip typ term = case JsonCoder.jsonCoder typ emptyContext testGraph of
+    Left ic -> HL.assertFailure (unOtherError $ inContextObject ic)
+    Right step -> do
       -- Encode the term
-      case runFlow (coderEncode step term) of
-        Nothing -> HL.assertFailure "Failed to encode term to JSON"
-        Just json -> do
+      case coderEncode step testContext term of
+        Left ic -> HL.assertFailure ("Failed to encode term to JSON: " ++ unOtherError (inContextObject ic))
+        Right json -> do
           -- Decode it back
-          case runFlow (coderDecode step json) of
-            Nothing -> HL.assertFailure "Failed to decode JSON back to term"
-            Just decoded -> H.shouldBe decoded term
-  where
-    FlowState mstep _ trace = unFlow (JsonCoder.jsonCoder typ) testGraph emptyTrace
-    runFlow flow = case unFlow flow testGraph emptyTrace of
-      FlowState result _ _ -> result
+          case coderDecode step testContext json of
+            Left ic -> HL.assertFailure ("Failed to decode JSON back to term: " ++ unOtherError (inContextObject ic))
+            Right decoded -> H.shouldBe decoded term
 
 -- | Run a fold operation over a term
 runFoldOperation :: Coders.TraversalOrder -> FoldOperation -> Term -> Term
@@ -365,36 +355,34 @@ runHoistSubterms pred term = Hoisting.hoistSubterms (predicateFn pred) emptyGrap
 checkUnifyTypes :: [Name] -> Type -> Type -> Either String TypeSubst -> H.Expectation
 checkUnifyTypes schemaTypeNames left right expected = case expected of
     Left errSubstring -> case unifyResult of
-      Nothing -> return ()  -- Expected failure, got failure
-      Just result -> HL.assertFailure $
+      Left _ -> return ()  -- Expected failure, got failure
+      Right result -> HL.assertFailure $
         "Expected unification failure but got success: " ++ show (unTypeSubst result)
     Right expectedSubst -> case unifyResult of
-      Nothing -> HL.assertFailure $
-        "Expected unification success but got failure (trace: " ++ traceSummary trace ++ ")"
-      Just actualSubst -> H.shouldBe actualSubst expectedSubst
+      Left err -> HL.assertFailure $
+        "Expected unification success but got failure: " ++ unificationErrorMessage (inContextObject err)
+      Right actualSubst -> H.shouldBe actualSubst expectedSubst
   where
     -- Build schema types map from the list of names
     -- Each schema name gets a trivial type scheme (no free variables)
     schemaTypes = M.fromList [(n, TypeScheme [] (TypeVariable n) Nothing) | n <- schemaTypeNames]
-    FlowState unifyResult _ trace = unFlow
-      (Unification.unifyTypes schemaTypes left right "test")
-      testGraph emptyTrace
+    emptyCtx = Context [] [] M.empty
+    unifyResult = Unification.unifyTypes emptyCtx schemaTypes left right "test"
 
 -- | Check joinTypes result against expected
 checkJoinTypes :: Type -> Type -> Either () [TypeConstraint] -> H.Expectation
 checkJoinTypes left right expected = case expected of
     Left () -> case joinResult of
-      Nothing -> return ()  -- Expected failure, got failure
-      Just result -> HL.assertFailure $
+      Left _ -> return ()  -- Expected failure, got failure
+      Right result -> HL.assertFailure $
         "Expected join failure but got success with constraints: " ++ show result
     Right expectedConstraints -> case joinResult of
-      Nothing -> HL.assertFailure $
-        "Expected join success but got failure (trace: " ++ traceSummary trace ++ ")"
-      Just actualConstraints -> H.shouldBe actualConstraints expectedConstraints
+      Left err -> HL.assertFailure $
+        "Expected join success but got failure: " ++ unificationErrorMessage (inContextObject err)
+      Right actualConstraints -> H.shouldBe actualConstraints expectedConstraints
   where
-    FlowState joinResult _ trace = unFlow
-      (Unification.joinTypes left right "test")
-      testGraph emptyTrace
+    emptyCtx = Context [] [] M.empty
+    joinResult = Unification.joinTypes emptyCtx left right "test"
 
 -- ---- Benchmark JSON output ----
 
@@ -470,7 +458,7 @@ countTests :: TestGroup -> (Int, Int, Int)
 countTests group = (runnable + subRunnable, 0, skipped + subSkipped)
   where
     (runnable, skipped) = foldl (\(r, s) tc ->
-      if Testing.isDisabled tc || Testing.isRequiresFlowDecoding tc
+      if Testing.isDisabled tc
         then (r, s + 1)
         else (r + 1, s)) (0, 0) (testGroupCases group)
     (subRunnable, _, subSkipped) = foldl (\(r, f, s) sub ->

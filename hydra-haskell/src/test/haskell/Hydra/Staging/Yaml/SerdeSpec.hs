@@ -21,29 +21,36 @@ import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
 import qualified Data.List as L
 import qualified Test.QuickCheck as QC
+import qualified Data.ByteString.Lazy as BS
 import qualified Data.Maybe as Y
 
+
+yamlStringCoderE :: Context -> Graph -> Type -> Either (InContext OtherError) (Coder Term String)
+yamlStringCoderE = yamlStringCoder
+
+yamlByteStringCoderE :: Context -> Graph -> Type -> Either (InContext OtherError) (Coder Term BS.ByteString)
+yamlByteStringCoderE = yamlByteStringCoder
 
 checkLiterals :: H.SpecWith ()
 checkLiterals = H.describe "Test literal values" $ do
 
   H.it "Booleans become 'true' and 'false' (not 'y' and 'n')" $ do
-    QC.property $ \b -> checkSerialization yamlStringCoder
+    QC.property $ \b -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm (boolean b) Types.boolean)
       (if b then "true" else "false")
 
   H.it "int32's become ints, and are serialized in the obvious way" $ do
-    QC.property $ \i -> checkSerialization yamlStringCoder
+    QC.property $ \i -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm (int32 i) Types.int32)
       (show i)
 
   H.it "uint8's and other finite integer types become ints, and are serialized in the obvious way" $ do
-    QC.property $ \i -> checkSerialization yamlStringCoder
+    QC.property $ \i -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm (uint8 i) Types.uint8)
       (show i)
 
   H.it "bigints become ints" $ do
-    QC.property $ \i -> checkSerialization yamlStringCoder
+    QC.property $ \i -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm (bigint i) Types.bigint)
       (show i)
 
@@ -55,21 +62,21 @@ checkOptionals :: H.SpecWith ()
 checkOptionals = H.describe "Test and document serialization of optionals" $ do
 
   H.it "A 'nothing' becomes 'null' (except when it appears as a field)" $
-    QC.property $ \mi -> checkSerialization yamlStringCoder
+    QC.property $ \mi -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm
         (optional $ (Just . int32) =<< mi)
         (Types.maybe Types.int32))
       (Y.maybe "null" show mi)
 
   H.it "Nested optionals case #1: just x? :: optional<optional<int32>>" $
-    QC.property $ \mi -> checkSerialization yamlStringCoder
+    QC.property $ \mi -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm
         (optional $ Just $ optional $ (Just . int32) =<< mi)
         (Types.maybe $ Types.maybe Types.int32))
       ("- " ++ Y.maybe "null" show mi)
 
   H.it "Nested optionals case #2: nothing :: optional<optional<int32>>" $
-    QC.property $ \() -> checkSerialization yamlStringCoder
+    QC.property $ \() -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm
         (optional Nothing)
         (Types.maybe $ Types.maybe Types.int32))
@@ -79,24 +86,24 @@ checkRecordsAndUnions :: H.SpecWith ()
 checkRecordsAndUnions = H.describe "Test and document handling of optionals vs. nulls for record and union types" $ do
 
   H.it "Empty records become empty objects" $
-    QC.property $ \() -> checkSerialization yamlStringCoder
+    QC.property $ \() -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm unit Types.unit)
       "null"
 
   H.it "Simple records become simple objects" $
-    QC.property $ \() -> checkSerialization yamlStringCoder
+    QC.property $ \() -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm (latlonRecord 37.0 (negate 122.0)) testTypeLatLon)
       "lat: 37.0\nlon: -122.0"
 
   H.it "Optionals are omitted from record objects if 'nothing'" $
-    QC.property $ \() -> checkSerialization yamlStringCoder
+    QC.property $ \() -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm
         (record testTypeName [Field (Name "one") $ optional $ Just $ string "test", Field (Name "two") $ optional Nothing])
         (TypeRecord $ RowType testTypeName [Types.field "one" $ Types.maybe Types.string, Types.field "two" $ Types.maybe Types.int32]))
       "one: test"
 
   H.it "Simple unions become simple objects, via records" $
-    QC.property $ \() -> checkSerialization yamlStringCoder
+    QC.property $ \() -> checkSerialization yamlStringCoderE
       (TypeApplicationTerm
         (inject testTypeName (Name "left") (string "test"))
         (TypeUnion $ RowType testTypeName [Types.field "left" Types.string, Types.field "right" Types.int32]))
@@ -106,7 +113,7 @@ yamlByteStringCoderIsInformationPreserving :: H.SpecWith ()
 yamlByteStringCoderIsInformationPreserving = H.describe "Verify that a round trip from a type+term, to serialized YAML, and back again is a no-op" $ do
 
   H.it "Generate arbitrary type/term pairs, serialize the terms to YAML, deserialize them, and compare" $
-    QC.property (checkSerdeRoundTrip yamlByteStringCoder)
+    QC.property (checkSerdeRoundTrip yamlByteStringCoderE)
 
 spec :: H.Spec
 spec = do
