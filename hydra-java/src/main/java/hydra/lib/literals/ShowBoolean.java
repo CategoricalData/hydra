@@ -1,11 +1,8 @@
 package hydra.lib.literals;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -17,6 +14,10 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -46,9 +47,8 @@ public class ShowBoolean extends PrimitiveFunction {
      * @return a function that converts boolean terms to string terms
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.boolean_(args.get(0)),
-            (Function<Boolean, Term>) b -> Terms.string(apply(b)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Boolean, Term>) b -> Terms.string(apply(b)), hydra.extract.core.Core.boolean_(cx, graph, args.get(0)));
     }
 
     /**

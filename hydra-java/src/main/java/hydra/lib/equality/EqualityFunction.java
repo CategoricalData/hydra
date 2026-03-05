@@ -1,23 +1,23 @@
 package hydra.lib.equality;
 
-import hydra.compute.Flow;
+import hydra.context.Context;
+import hydra.context.InContext;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
-import hydra.dsl.Types;
+import hydra.error.OtherError;
 import hydra.graph.Graph;
 import hydra.lib.PrimitiveType;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.Either;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.map2;
-// import static hydra.basics.Basics.capitalize; // TODO: restore when kernel terms modules are generated
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -41,7 +41,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
 
     protected final Name name;
     protected final TypeScheme type;
-    protected final Function<Term, Flow<Graph, T>> expect;
+    protected final PrimitiveType.TriFunction<Context, Graph, Term, Either<InContext<OtherError>, T>> expect;
     protected final BiFunction<T, T, Boolean> criterion;
 
     public EqualityFunction(PrimitiveType<T> type, Relation relation) {
@@ -50,7 +50,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
 
     private EqualityFunction(String typeName,
                              Type datatype,
-                             Function<Term, Flow<Graph, T>> expect,
+                             PrimitiveType.TriFunction<Context, Graph, Term, Either<InContext<OtherError>, T>> expect,
                              Comparator<T> comparator,
                              Relation relation) {
         this.name = new Name("hydra.lib.equality." + relation.prefix + capitalize(typeName));
@@ -90,9 +90,12 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> map2(expect.apply(args.get(0)), expect.apply(args.get(1)),
-                (arg0, arg1) -> Terms.boolean_(criterion.apply(arg0, arg1)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph ->
+            hydra.lib.eithers.Bind.apply(expect.apply(cx, graph, args.get(0)), arg0 ->
+                hydra.lib.eithers.Map.apply(arg1 ->
+                    Terms.boolean_(criterion.apply(arg0, arg1)),
+                    expect.apply(cx, graph, args.get(1))));
     }
 
     // TODO: inline implementation until hydra.basics.Basics is generated

@@ -40,7 +40,6 @@ public class Libraries {
         prims.addAll(charsPrimitives());
         prims.addAll(eithersPrimitives());
         prims.addAll(equalityPrimitives());
-        prims.addAll(flowsPrimitives());
         prims.addAll(ioPrimitives());
         prims.addAll(listsPrimitives());
         prims.addAll(literalsPrimitives());
@@ -70,6 +69,7 @@ public class Libraries {
                 new hydra.lib.eithers.Bind(),
                 new hydra.lib.eithers.Bimap(),
                 new hydra.lib.eithers.Either(),
+                new hydra.lib.eithers.Foldl(),
                 new hydra.lib.eithers.FromLeft(),
                 new hydra.lib.eithers.FromRight(),
                 new hydra.lib.eithers.IsLeft(),
@@ -78,6 +78,7 @@ public class Libraries {
                 new hydra.lib.eithers.Map(),
                 new hydra.lib.eithers.MapList(),
                 new hydra.lib.eithers.MapMaybe(),
+                new hydra.lib.eithers.MapSet(),
                 new hydra.lib.eithers.PartitionEithers(),
                 new hydra.lib.eithers.Rights());
     }
@@ -93,23 +94,6 @@ public class Libraries {
                 new Lte(),
                 new Max(),
                 new Min());
-    }
-
-    private static List<PrimitiveFunction> flowsPrimitives() {
-        return Arrays.asList(
-                new hydra.lib.flows.Apply(),
-                new hydra.lib.flows.Bind(),
-                new hydra.lib.flows.Fail(),
-                new hydra.lib.flows.Foldl(),
-                new hydra.lib.flows.Map(),
-                new hydra.lib.flows.MapElems(),
-                new hydra.lib.flows.MapKeys(),
-                new hydra.lib.flows.MapList(),
-                new hydra.lib.flows.MapMaybe(),
-                new hydra.lib.flows.MapSet(),
-                new hydra.lib.flows.Pure(),
-                new hydra.lib.flows.Sequence(),
-                new hydra.lib.flows.WithDefault());
     }
 
     private static List<PrimitiveFunction> ioPrimitives() {

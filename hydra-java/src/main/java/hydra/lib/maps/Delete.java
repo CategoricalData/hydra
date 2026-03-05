@@ -1,11 +1,8 @@
 package hydra.lib.maps;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
@@ -18,6 +15,10 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Removes a key from the map.
@@ -46,11 +47,10 @@ public class Delete extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> {
             Term key = args.get(0);
-            return Flows.map(Expect.map(Flows::pure, Flows::pure, args.get(1)),
-                    before -> Terms.map(apply(key, before)));
+            return hydra.lib.eithers.Map.apply(before -> Terms.map(apply(key, before)), hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)));
         };
     }
 

@@ -1,7 +1,5 @@
 package hydra.lib.equality;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.*;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
@@ -16,6 +14,10 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -32,17 +34,17 @@ public class Compare extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> {
             // For Term comparison, we use a simple comparison based on the term structure
             // This is a simplified implementation; a full implementation would need proper Ord instance
             int cmp = compareTerms(args.get(0), args.get(1));
             if (cmp < 0) {
-                return Flows.pure(Terms.injectUnit(Comparison.TYPE_, Comparison.LESS_THAN));
+                return Either.right(Terms.injectUnit(Comparison.TYPE_, Comparison.LESS_THAN));
             } else if (cmp > 0) {
-                return Flows.pure(Terms.injectUnit(Comparison.TYPE_, Comparison.GREATER_THAN));
+                return Either.right(Terms.injectUnit(Comparison.TYPE_, Comparison.GREATER_THAN));
             } else {
-                return Flows.pure(Terms.injectUnit(Comparison.TYPE_, Comparison.EQUAL_TO));
+                return Either.right(Terms.injectUnit(Comparison.TYPE_, Comparison.EQUAL_TO));
             }
         };
     }

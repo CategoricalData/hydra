@@ -1,11 +1,8 @@
 package hydra.lib.maps;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -17,10 +14,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.bind;
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -52,11 +51,22 @@ public class Bimap extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.termFunction(args.get(0)), kf ->
-            bind(Expect.termFunction(args.get(1)), vf ->
-                bind(Expect.map(Flows::pure, Flows::pure, args.get(2)), mp ->
-                    pure(Terms.map(Bimap.apply(kf, vf, mp))))));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph ->
+            hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
+                java.util.LinkedHashMap<Term, Term> result = new java.util.LinkedHashMap<>();
+                for (Map.Entry<Term, Term> entry : mp.entrySet()) {
+                    Either<InContext<OtherError>, Term> kr = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
+                    if (kr.isLeft()) return (Either) kr;
+                    Either<InContext<OtherError>, Term> vr = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
+                    if (vr.isLeft()) return (Either) vr;
+                    result.put(((Either.Right<InContext<OtherError>, Term>) kr).value,
+                               ((Either.Right<InContext<OtherError>, Term>) vr).value);
+                }
+                return Either.right(Terms.map(FromList.orderedMap(result)));
+            });
     }
 
     /**

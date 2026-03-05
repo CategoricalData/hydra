@@ -1,11 +1,8 @@
 package hydra.lib.strings;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -17,6 +14,10 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Concatenates a list of strings into a single string.
@@ -44,9 +45,8 @@ public class Cat extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.list(Expect::string, args.get(0)),
-            strings -> Terms.string(apply(strings)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(strings -> Terms.string(apply(strings)), hydra.extract.core.Core.listOf(cx, t -> hydra.extract.core.Core.string(cx, graph, t), graph, args.get(0)));
     }
 
     /**

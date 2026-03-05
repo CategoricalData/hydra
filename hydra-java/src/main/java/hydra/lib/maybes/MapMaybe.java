@@ -1,11 +1,8 @@
 package hydra.lib.maybes;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -16,12 +13,14 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static hydra.dsl.Flows.bind;
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -50,17 +49,24 @@ public class MapMaybe extends PrimitiveFunction {
      * @return a function that maps an optional-returning function over a list
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Flows.<Graph>getState(), graph ->
-            bind(Expect.list(Flows::pure, args.get(1)), inputList -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), inputList -> {
                 Term f = args.get(0);
-                Function<Term, Maybe<Term>> nativeF = item -> {
-                    Term reduced = Flows.fromFlow(graph,
-                        hydra.reduction.Reduction.reduceTerm(true, Terms.apply(f, item)));
-                    return Flows.fromFlow(graph, Expect.optional(Flows::pure, reduced));
-                };
-                return pure(Terms.list(MapMaybe.apply(nativeF, inputList)));
-            }));
+                List<Term> results = new ArrayList<>();
+                for (Term item : inputList) {
+                    Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(f, item));
+                    if (r.isLeft()) return (Either) r;
+                    Either<InContext<OtherError>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
+                        t -> Either.right(t), graph, ((Either.Right<InContext<OtherError>, Term>) r).value);
+                    if (maybeResult.isLeft()) return (Either) maybeResult;
+                    Maybe<Term> maybe = ((Either.Right<InContext<OtherError>, Maybe<Term>>) maybeResult).value;
+                    if (maybe.isJust()) {
+                        results.add(maybe.fromJust());
+                    }
+                }
+                return Either.right(Terms.list(results));
+            });
     }
 
     /**

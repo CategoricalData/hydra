@@ -1,11 +1,8 @@
 package hydra.lib.sets;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
@@ -20,6 +17,10 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -48,12 +49,12 @@ public class ToList extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(Expect.set(Flows::pure, args.get(0)), terms -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(terms -> {
             java.util.List<Term> sorted = new java.util.ArrayList<>(terms);
             sorted.sort(hydra.lib.equality.Compare::compareTerms);
             return Terms.list(sorted);
-        });
+        }, hydra.extract.core.Core.set(cx, graph, args.get(0)));
     }
 
     /**

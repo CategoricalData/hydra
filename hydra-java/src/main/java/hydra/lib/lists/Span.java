@@ -1,11 +1,8 @@
 package hydra.lib.lists;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
@@ -16,12 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -39,13 +39,24 @@ public class Span extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.bind(Expect.predicate(args.get(0)), pred ->
-            Flows.bind(Expect.list(Flows::pure, args.get(1)), lst -> {
-                Pair<List<Term>, List<Term>> result =
-                    Span.apply((Function<Term, Boolean>) pred::apply, lst);
-                return pure(Terms.pair(Terms.list(result.first), Terms.list(result.second)));
-            }));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph ->
+            hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst -> {
+                int splitAt = 0;
+                for (Term x : lst) {
+                    Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), x));
+                    if (r.isLeft()) return (Either) r;
+                    Either<InContext<OtherError>, Boolean> b = hydra.extract.core.Core.boolean_(cx, graph,
+                        ((Either.Right<InContext<OtherError>, Term>) r).value);
+                    if (b.isLeft()) return (Either) b;
+                    if (!((Either.Right<InContext<OtherError>, Boolean>) b).value) break;
+                    splitAt++;
+                }
+                return Either.right(Terms.pair(
+                    Terms.list(new ArrayList<>(lst.subList(0, splitAt))),
+                    Terms.list(new ArrayList<>(lst.subList(splitAt, lst.size())))));
+            });
     }
 
     /**

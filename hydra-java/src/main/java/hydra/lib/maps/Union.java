@@ -1,11 +1,8 @@
 package hydra.lib.maps;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -15,11 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.bind;
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -49,13 +48,13 @@ public class Union extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.map(Flows::pure, Flows::pure, args.get(0)), mp1 ->
-            bind(Expect.map(Flows::pure, Flows::pure, args.get(1)), mp2 -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0)), mp1 ->
+            hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp2 -> {
                 // Left-biased union: mp1 values take precedence (matching Haskell's Data.Map.union)
                 Map<Term, Term> result = new HashMap<>(mp2);
                 result.putAll(mp1);
-                return pure(Terms.map(result));
+                return Either.right(Terms.map(result));
             }));
     }
 

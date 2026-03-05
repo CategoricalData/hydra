@@ -1,11 +1,8 @@
 package hydra.lib.strings;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -18,6 +15,10 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Joins a list of strings with newlines and appends a final newline.
@@ -45,10 +46,8 @@ public class Unlines extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(
-                Expect.list(Expect::string, args.get(0)),
-                lines -> Terms.string(apply(lines)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(lines -> Terms.string(apply(lines)), hydra.extract.core.Core.listOf(cx, t -> hydra.extract.core.Core.string(cx, graph, t), graph, args.get(0)));
     }
 
     /**

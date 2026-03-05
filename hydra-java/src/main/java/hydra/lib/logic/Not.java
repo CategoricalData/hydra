@@ -1,11 +1,8 @@
 package hydra.lib.logic;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -16,6 +13,10 @@ import java.util.function.Function;
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Performs logical negation on a boolean value.
@@ -39,14 +40,12 @@ public class Not extends PrimitiveFunction {
     }
 
     /**
-     * Returns the implementation of this primitive function as a Flow computation.
-     * @return a function that takes a list of terms and returns a Flow producing the negated boolean
+     * Returns the implementation of this primitive function as an Either computation.
+     * @return a function that takes a list of terms and returns an Either producing the negated boolean
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(
-                Expect.boolean_(args.get(0)),
-                b1 -> Terms.boolean_(Not.apply(b1)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(b1 -> Terms.boolean_(Not.apply(b1)), hydra.extract.core.Core.boolean_(cx, graph, args.get(0)));
     }
 
     /**

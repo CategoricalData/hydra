@@ -1,11 +1,8 @@
 package hydra.lib.maps;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -14,10 +11,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.map;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -47,9 +47,10 @@ public class Size extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> map(Expect.map(Flows::pure, Flows::pure, args.get(0)),
-                (Function<Map<Term, Term>, Term>) mp -> Terms.int32(mp.size()));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
+                (Function<Map<Term, Term>, Term>) mp -> Terms.int32(mp.size()),
+                hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0)));
     }
 
     /**

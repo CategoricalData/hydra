@@ -1,11 +1,8 @@
 package hydra.lib.logic;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -16,6 +13,10 @@ import java.util.function.Function;
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 /**
  * Performs logical OR on two boolean values.
@@ -39,15 +40,12 @@ public class Or extends PrimitiveFunction {
     }
 
     /**
-     * Returns the implementation of this primitive function as a Flow computation.
-     * @return a function that takes a list of terms and returns a Flow producing the OR result
+     * Returns the implementation of this primitive function as an Either computation.
+     * @return a function that takes a list of terms and returns an Either producing the OR result
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map2(
-                Expect.boolean_(args.get(0)),
-                Expect.boolean_(args.get(1)),
-                (b1, b2) -> Terms.boolean_(Or.apply(b1, b2)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.boolean_(cx, graph, args.get(0)), b1 -> hydra.lib.eithers.Map.apply(b2 -> Terms.boolean_(Or.apply(b1, b2)), hydra.extract.core.Core.boolean_(cx, graph, args.get(1))));
     }
 
     /**

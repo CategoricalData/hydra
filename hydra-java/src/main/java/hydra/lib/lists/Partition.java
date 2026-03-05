@@ -1,11 +1,8 @@
 package hydra.lib.lists;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -15,13 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.bind;
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.pair;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -40,13 +39,26 @@ public class Partition extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Expect.predicate(args.get(0)), pred ->
-            bind(Expect.list(Flows::pure, args.get(1)), lst -> {
-                Pair<List<Term>, List<Term>> result =
-                    Partition.apply((Function<Term, Boolean>) pred::apply, lst);
-                return pure(Terms.pair(Terms.list(result.first), Terms.list(result.second)));
-            }));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph ->
+            hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst -> {
+                List<Term> yes = new ArrayList<>();
+                List<Term> no = new ArrayList<>();
+                for (Term x : lst) {
+                    Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), x));
+                    if (r.isLeft()) return (Either) r;
+                    Either<InContext<OtherError>, Boolean> b = hydra.extract.core.Core.boolean_(cx, graph,
+                        ((Either.Right<InContext<OtherError>, Term>) r).value);
+                    if (b.isLeft()) return (Either) b;
+                    if (((Either.Right<InContext<OtherError>, Boolean>) b).value) {
+                        yes.add(x);
+                    } else {
+                        no.add(x);
+                    }
+                }
+                return Either.right(Terms.pair(Terms.list(yes), Terms.list(no)));
+            });
     }
 
     /**

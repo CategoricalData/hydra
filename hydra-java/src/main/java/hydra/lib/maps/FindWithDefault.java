@@ -1,11 +1,8 @@
 package hydra.lib.maps;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
@@ -14,9 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.map;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -46,12 +46,13 @@ public class FindWithDefault extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> map(Expect.map(Flows::pure, Flows::pure, args.get(2)),
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
                 (Function<Map<Term, Term>, Term>) mp -> {
                     Maybe<Term> result = Lookup.apply(args.get(1), mp);
                     return result.orElse(args.get(0));
-                });
+                },
+                hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)));
     }
 
     /**

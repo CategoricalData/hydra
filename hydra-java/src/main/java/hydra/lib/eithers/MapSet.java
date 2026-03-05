@@ -7,14 +7,15 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.either;
 import static hydra.dsl.Types.function;
-import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
+import static hydra.dsl.Types.set;
 import static hydra.dsl.Types.var;
 import hydra.context.Context;
 import hydra.context.InContext;
@@ -22,10 +23,10 @@ import hydra.error.OtherError;
 import hydra.util.Either;
 
 /**
- * Map a function that may fail over a list, collecting results or returning the first error.
+ * Map a function that may fail over a set, collecting results or returning the first error.
  */
-public class MapList extends PrimitiveFunction {
-    public static final Name NAME = new Name("hydra.lib.eithers.mapList");
+public class MapSet extends PrimitiveFunction {
+    public static final Name NAME = new Name("hydra.lib.eithers.mapSet");
 
     public Name name() {
         return NAME;
@@ -36,19 +37,19 @@ public class MapList extends PrimitiveFunction {
         return scheme("a", "b", "z",
             function(
                 function(var("a"), either(var("z"), var("b"))),
-                list(var("a")),
-                either(var("z"), list(var("b")))));
+                set(var("a")),
+                either(var("z"), set(var("b")))));
     }
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.set(cx, graph, args.get(1)), items -> {
                 Term fn = args.get(0);
-                List<Term> results = new ArrayList<>();
-                for (Term element : lst) {
+                Set<Term> results = new HashSet<>();
+                for (Term element : items) {
                     Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
                         hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(fn, element));
-                    if (r.isLeft()) return r;
+                    if (r.isLeft()) return (Either) r;
                     Either<InContext<OtherError>, hydra.util.Either<Term, Term>> eitherResult =
                         hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph,
                             ((Either.Right<InContext<OtherError>, Term>) r).value);
@@ -61,17 +62,17 @@ public class MapList extends PrimitiveFunction {
                     }
                     results.add(((hydra.util.Either.Right<Term, Term>) inner).value);
                 }
-                return Either.right(new Term.Either(new hydra.util.Either.Right<>(Terms.list(results))));
+                return Either.right(new Term.Either(new hydra.util.Either.Right<>(Terms.set(results))));
             });
     }
 
     /**
-     * Map a function over a list, returning Left on the first failure or Right with all results.
+     * Map a function over a set, returning Left on the first failure or Right with all results.
      */
-    public static <A, B, Z> hydra.util.Either<Z, List<B>> apply(
+    public static <A, B, Z> hydra.util.Either<Z, Set<B>> apply(
             Function<A, hydra.util.Either<Z, B>> fn,
-            List<A> items) {
-        List<B> results = new ArrayList<>();
+            Set<A> items) {
+        Set<B> results = new HashSet<>();
         for (A item : items) {
             hydra.util.Either<Z, B> result = fn.apply(item);
             if (result.isLeft()) {
@@ -85,7 +86,7 @@ public class MapList extends PrimitiveFunction {
     /**
      * Curried version for method references.
      */
-    public static <A, B, Z> Function<List<A>, hydra.util.Either<Z, List<B>>> apply(
+    public static <A, B, Z> Function<Set<A>, hydra.util.Either<Z, Set<B>>> apply(
             Function<A, hydra.util.Either<Z, B>> fn) {
         return items -> apply(fn, items);
     }

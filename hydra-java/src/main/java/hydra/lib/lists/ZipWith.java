@@ -1,11 +1,8 @@
 package hydra.lib.lists;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
@@ -18,10 +15,12 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.bind;
-import static hydra.dsl.Flows.pure;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -41,16 +40,20 @@ public class ZipWith extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> bind(Flows.<Graph>getState(), graph ->
-            bind(Expect.list(Flows::pure, args.get(1)), lst1 ->
-                bind(Expect.list(Flows::pure, args.get(2)), lst2 -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst1 ->
+                hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(2)), lst2 -> {
                     Term f = args.get(0);
-                    BiFunction<Term, Term, Term> nativeF = (a, b) ->
-                        Flows.fromFlow(graph,
-                            hydra.reduction.Reduction.reduceTerm(true, Terms.apply(Terms.apply(f, a), b)));
-                    return pure(Terms.list(ZipWith.apply(nativeF, lst1, lst2)));
-                })));
+                    List<Term> results = new ArrayList<>();
+                    int minSize = Math.min(lst1.size(), lst2.size());
+                    for (int i = 0; i < minSize; i++) {
+                        Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                            hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(Terms.apply(f, lst1.get(i)), lst2.get(i)));
+                        if (r.isLeft()) return (Either) r;
+                        results.add(((Either.Right<InContext<OtherError>, Term>) r).value);
+                    }
+                    return Either.right(Terms.list(results));
+                }));
     }
 
     /**

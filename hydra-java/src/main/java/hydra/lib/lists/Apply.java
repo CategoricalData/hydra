@@ -1,11 +1,8 @@
 package hydra.lib.lists;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
@@ -16,10 +13,13 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import static hydra.dsl.Flows.map2;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -37,17 +37,20 @@ public class Apply extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.bind(Flows.<Graph>getState(), graph ->
-            Flows.bind(Expect.list(Flows::pure, args.get(0)), functions ->
-                Flows.bind(Expect.list(Flows::pure, args.get(1)), arguments -> {
-                    List<Function<Term, Term>> nativeFunctions = new LinkedList<>();
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(0)), functions ->
+                hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), arguments -> {
+                    List<Term> results = new LinkedList<>();
                     for (Term f : functions) {
-                        nativeFunctions.add(a -> Flows.fromFlow(graph,
-                            hydra.reduction.Reduction.reduceTerm(true, Terms.apply(f, a))));
+                        for (Term a : arguments) {
+                            Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                                hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(f, a));
+                            if (r.isLeft()) return (Either) r;
+                            results.add(((Either.Right<InContext<OtherError>, Term>) r).value);
+                        }
                     }
-                    return Flows.pure(Terms.list(Apply.apply(nativeFunctions, arguments)));
-                })));
+                    return Either.right(Terms.list(results));
+                }));
     }
 
     /**

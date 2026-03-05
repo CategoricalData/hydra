@@ -1,11 +1,8 @@
 package hydra.lib.literals;
 
-import hydra.compute.Flow;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
-import hydra.dsl.Flows;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
@@ -17,6 +14,10 @@ import static hydra.dsl.Types.binary;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
+import hydra.context.Context;
+import hydra.context.InContext;
+import hydra.error.OtherError;
+import hydra.util.Either;
 
 
 /**
@@ -46,17 +47,17 @@ public class BinaryToString extends PrimitiveFunction {
      * @return a function that converts binary terms to string terms
      */
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> {
             Term term = args.get(0);
             if (term instanceof Term.Literal) {
                 hydra.core.Literal lit = ((Term.Literal) term).value;
                 if (lit instanceof hydra.core.Literal.Binary) {
                     byte[] bytes = ((hydra.core.Literal.Binary) lit).value;
-                    return Flows.pure(Terms.string(apply(bytes)));
+                    return Either.right(Terms.string(apply(bytes)));
                 }
             }
-            return Flows.fail("expected binary literal");
+            return Either.left(new InContext<>(new OtherError("expected binary literal"), cx));
         };
     }
 
