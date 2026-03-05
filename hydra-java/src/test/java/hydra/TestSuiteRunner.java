@@ -1,7 +1,5 @@
 package hydra;
 
-import hydra.compute.Flow;
-import hydra.compute.FlowState;
 import hydra.core.*;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
@@ -29,7 +27,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
-import static hydra.dsl.Flows.EMPTY_TRACE;
 import static hydra.dsl.Terms.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -106,6 +103,45 @@ public class TestSuiteRunner {
             primitives,
             Collections.emptyMap(),
             Collections.emptySet());
+    }
+
+    private static hydra.context.Context emptyContext() {
+        return new hydra.context.Context(
+            Collections.emptyList(),
+            Collections.emptyList(),
+            Collections.emptyMap());
+    }
+
+    /**
+     * Assert that an Either is a Right value. If it's a Left, fail with a message.
+     */
+    @SuppressWarnings("rawtypes")
+    private static void assertEitherRight(hydra.util.Either<?, ?> either, String message) {
+        if (either instanceof hydra.util.Either.Left) {
+            Object leftVal = ((hydra.util.Either.Left) either).value;
+            String detail = "";
+            if (leftVal instanceof hydra.context.InContext) {
+                Object obj = ((hydra.context.InContext<?>) leftVal).object;
+                if (obj instanceof hydra.error.OtherError) {
+                    detail = ": " + ((hydra.error.OtherError) obj).value;
+                } else if (obj instanceof hydra.error.UnificationError) {
+                    detail = ": " + obj;
+                } else {
+                    detail = ": " + obj;
+                }
+            } else {
+                detail = ": " + leftVal;
+            }
+            fail(message + detail);
+        }
+    }
+
+    /**
+     * Extract the Right value from an Either.
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static <R> R eitherRight(hydra.util.Either<?, R> either) {
+        return ((hydra.util.Either.Right<?, R>) either).value;
     }
 
     /**
@@ -202,149 +238,29 @@ public class TestSuiteRunner {
     }
 
     /**
-     * Add term-level bindings for hydra.monads functions needed by tests.
+     * Add term-level bindings for context and graph constants needed by tests.
      * These are hand-written because the generated source modules exceed JVM method size limits.
      */
     private static void addMonadsBindings(List<Binding> bindings) {
-        // Helper terms for Flow wrap/unwrap
-        Term wrapFlow = wrap("hydra.compute.Flow", var("__body"));
-        Term unwrapFlowApp = apply(apply(apply(unwrap("hydra.compute.Flow"), var("__f")), var("__s")), var("__t"));
-
-        // hydra.monads.emptyTrace = record(hydra.compute.Trace){stack=[], messages=[], other={}}
-        addConstantBinding(bindings, "hydra.monads.emptyTrace",
-            record("hydra.compute.Trace",
-                field("stack", list()),
+        // hydra.monads.emptyContext = record(Context){trace=[], messages=[], other={}}
+        addConstantBinding(bindings, "hydra.monads.emptyContext",
+            record("hydra.context.Context",
+                field("trace", list()),
                 field("messages", list()),
                 field("other", new Term.Map(Collections.emptyMap()))));
 
-        // hydra.monads.pure = \xp -> wrap(Flow, \s -> \t -> FlowState{value=Just(xp), state=s, trace=t})
-        addConstantBinding(bindings, "hydra.monads.pure",
-            lambda("xp",
-                wrap("hydra.compute.Flow",
-                    lambda("s", "t",
-                        flowState(just(var("xp")), var("s"), var("t"))))));
-
-        // hydra.monads.map = \f -> \f1 -> wrap(Flow, \s0 -> \t0 ->
-        //   let f2 = unwrap(Flow)(f1)(s0)(t0) in
-        //   FlowState{value=maybes.map(f, f2.value), state=f2.state, trace=f2.trace})
-        addConstantBinding(bindings, "hydra.monads.map",
-            lambda("f",
-                lambda("f1",
-                    wrap("hydra.compute.Flow",
-                        lambda("s0", "t0",
-                            let_("f2", apply(apply(apply(unwrap("hydra.compute.Flow"), var("f1")), var("s0")), var("t0")),
-                                flowState(
-                                    apply(apply(primitive("hydra.lib.maybes.map"), var("f")),
-                                        apply(flowStateValue(), var("f2"))),
-                                    apply(flowStateState(), var("f2")),
-                                    apply(flowStateTrace(), var("f2")))))))));
-
-        // hydra.monads.bind = \l -> \r -> wrap(Flow, \s0 -> \t0 ->
-        //   let fs1 = unwrap(Flow)(l)(s0)(t0) in
-        //   maybe(FlowState{nothing, fs1.state, fs1.trace},
-        //         \v -> unwrap(Flow)(r(v))(fs1.state)(fs1.trace),
-        //         fs1.value))
-        addConstantBinding(bindings, "hydra.monads.bind",
-            lambda("l",
-                lambda("r",
-                    wrap("hydra.compute.Flow",
-                        lambda("s0", "t0",
-                            let_("fs1", apply(apply(apply(unwrap("hydra.compute.Flow"), var("l")), var("s0")), var("t0")),
-                                apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
-                                    // default: FlowState{nothing, fs1.state, fs1.trace}
-                                    flowState(nothing(), apply(flowStateState(), var("fs1")), apply(flowStateTrace(), var("fs1")))),
-                                    // function: \v -> unwrap(Flow)(r(v))(fs1.state)(fs1.trace)
-                                    lambda("v",
-                                        apply(apply(apply(unwrap("hydra.compute.Flow"),
-                                            apply(var("r"), var("v"))),
-                                            apply(flowStateState(), var("fs1"))),
-                                            apply(flowStateTrace(), var("fs1"))))),
-                                    // maybe value: fs1.value
-                                    apply(flowStateValue(), var("fs1")))))))));
-
-        // hydra.monads.pushError = \msg -> \t ->
-        //   let errorMsg = concat ["Error: ", msg, " (", intercalate(" > ", reverse(t.stack)), ")"] in
-        //   Trace{stack=t.stack, messages=cons(errorMsg, t.messages), other=t.other}
-        addConstantBinding(bindings, "hydra.monads.pushError",
-            lambda("msg",
-                lambda("t",
-                    let_("errorMsg",
-                        apply(primitive("hydra.lib.strings.cat"),
-                            list(string("Error: "), var("msg"), string(" ("),
-                                apply(apply(primitive("hydra.lib.strings.intercalate"), string(" > ")),
-                                    apply(primitive("hydra.lib.lists.reverse"),
-                                        apply(project("hydra.compute.Trace", "stack"), var("t")))),
-                                string(")"))),
-                        record("hydra.compute.Trace",
-                            field("stack", apply(project("hydra.compute.Trace", "stack"), var("t"))),
-                            field("messages", apply(apply(primitive("hydra.lib.lists.cons"), var("errorMsg")),
-                                apply(project("hydra.compute.Trace", "messages"), var("t")))),
-                            field("other", apply(project("hydra.compute.Trace", "other"), var("t"))))))));
-
-        // hydra.monads.fail = \msg -> wrap(Flow, \s -> \t ->
-        //   FlowState{value=nothing, state=s, trace=pushError(msg, t)})
-        addConstantBinding(bindings, "hydra.monads.fail",
-            lambda("msg",
-                wrap("hydra.compute.Flow",
-                    lambda("s", "t",
-                        flowState(nothing(), var("s"),
-                            apply(apply(var("hydra.monads.pushError"), var("msg")), var("t")))))));
-
-        // hydra.monads.withTrace = \msg -> \f ->
-        //   mutateTrace(\t -> right(Trace{cons(msg,t.stack), t.messages, t.other}),
-        //               \t0 -> \t1 -> Trace{t0.stack, t1.messages, t1.other},
-        //               f)
-        addConstantBinding(bindings, "hydra.monads.withTrace",
-            lambda("msg",
-                lambda("f",
-                    apply(apply(apply(var("hydra.monads.mutateTrace"),
-                        // mutate: \t -> right(Trace{cons(msg, t.stack), t.messages, t.other})
-                        lambda("t",
-                            right(
-                                record("hydra.compute.Trace",
-                                    field("stack", apply(apply(primitive("hydra.lib.lists.cons"), var("msg")),
-                                        apply(project("hydra.compute.Trace", "stack"), var("t")))),
-                                    field("messages", apply(project("hydra.compute.Trace", "messages"), var("t"))),
-                                    field("other", apply(project("hydra.compute.Trace", "other"), var("t"))))))),
-                        // restore: \t0 -> \t1 -> Trace{t0.stack, t1.messages, t1.other}
-                        lambda("t0",
-                            lambda("t1",
-                                record("hydra.compute.Trace",
-                                    field("stack", apply(project("hydra.compute.Trace", "stack"), var("t0"))),
-                                    field("messages", apply(project("hydra.compute.Trace", "messages"), var("t1"))),
-                                    field("other", apply(project("hydra.compute.Trace", "other"), var("t1"))))))),
-                        var("f")))));
-
-        // hydra.monads.mutateTrace = \mutate -> \restore -> \f -> wrap(Flow, \s0 -> \t0 ->
-        //   either(\msg -> FlowState{nothing, s0, pushError(msg, t0)},
-        //          \t1 -> let f2 = unwrap(Flow)(f)(s0)(t1) in
-        //                 FlowState{f2.value, f2.state, restore(t0, f2.trace)},
-        //          mutate(t0)))
-        addConstantBinding(bindings, "hydra.monads.mutateTrace",
-            lambda("mutate",
-                lambda("restore",
-                    lambda("f",
-                        wrap("hydra.compute.Flow",
-                            lambda("s0", "t0",
-                                apply(apply(apply(primitive("hydra.lib.eithers.either"),
-                                    // left case: \msg -> FlowState{nothing, s0, pushError(msg, t0)}
-                                    lambda("msg",
-                                        flowState(nothing(), var("s0"),
-                                            apply(apply(var("hydra.monads.pushError"), var("msg")), var("t0"))))),
-                                    // right case: \t1 -> let f2 = ... in FlowState{...}
-                                    lambda("t1",
-                                        let_("f2",
-                                            apply(apply(apply(unwrap("hydra.compute.Flow"), var("f")), var("s0")), var("t1")),
-                                            flowState(
-                                                apply(flowStateValue(), var("f2")),
-                                                apply(flowStateState(), var("f2")),
-                                                apply(apply(var("restore"), var("t0")),
-                                                    apply(flowStateTrace(), var("f2"))))))),
-                                    // the either value: mutate(t0)
-                                    apply(var("mutate"), var("t0")))))))));
-
-        // hydra.constants.maxTraceDepth = 50
-        addConstantBinding(bindings, "hydra.constants.maxTraceDepth", int32(50));
+        // hydra.lexical.emptyGraph = record(Graph){boundTerms={}, boundTypes={}, classConstraints={},
+        //   lambdaVariables=set(), metadata={}, primitives={}, schemaTypes={}, typeVariables=set()}
+        addConstantBinding(bindings, "hydra.lexical.emptyGraph",
+            record("hydra.graph.Graph",
+                field("boundTerms", new Term.Map(Collections.emptyMap())),
+                field("boundTypes", new Term.Map(Collections.emptyMap())),
+                field("classConstraints", new Term.Map(Collections.emptyMap())),
+                field("lambdaVariables", new Term.Set(Collections.emptySet())),
+                field("metadata", new Term.Map(Collections.emptyMap())),
+                field("primitives", new Term.Map(Collections.emptyMap())),
+                field("schemaTypes", new Term.Map(Collections.emptyMap())),
+                field("typeVariables", new Term.Set(Collections.emptySet()))));
     }
 
     /**
@@ -429,6 +345,71 @@ public class TestSuiteRunner {
                             inject("hydra.core.Term", "literal",
                                 inject("hydra.core.Literal", "string", var("s"))))),
                         var("d")))));
+
+        // hydra.annotations.getDescription = \cx -> \g -> \anns ->
+        //   maybe(right(nothing),
+        //         \term -> case term of { literal(l) -> case l of { string(s) -> right(just(s)); _ -> left(...) }; _ -> left(...) },
+        //         maps.lookup(key_description, anns))
+        // Note: simplified string extraction (inlined) instead of calling ExtractCore.string
+        addConstantBinding(bindings, "hydra.annotations.getDescription",
+            lambda("cx",
+                lambda("g",
+                    lambda("anns",
+                        apply(apply(apply(primitive("hydra.lib.maybes.maybe"),
+                            // default: right(nothing)
+                            right(nothing())),
+                            // function: \descTerm -> extract string from term, return right(just(s))
+                            lambda("descTerm",
+                                apply(
+                                    match("hydra.core.Term", Maybe.just(
+                                        left(record("hydra.context.InContext",
+                                            field("object", wrap("hydra.error.OtherError", string("Expected string literal"))),
+                                            field("context", var("cx"))))),
+                                        field("literal", lambda("lit",
+                                            apply(
+                                                match("hydra.core.Literal", Maybe.just(
+                                                    left(record("hydra.context.InContext",
+                                                        field("object", wrap("hydra.error.OtherError", string("Expected string literal"))),
+                                                        field("context", var("cx"))))),
+                                                    field("string", lambda("s", right(just(var("s")))))),
+                                                var("lit"))))),
+                                    var("descTerm")))),
+                            // the maybe value: maps.lookup(key_description, anns)
+                            apply(apply(primitive("hydra.lib.maps.lookup"),
+                                var("hydra.constants.key_description")),
+                                var("anns")))))));
+
+        // hydra.annotations.getTermDescription = \cx -> \g -> \term ->
+        //   let peel = \t -> case t of
+        //     typeLambda(tl) -> peel(tl.body)
+        //     typeApplication(ta) -> peel(ta.body)
+        //     _ -> t
+        //   in getDescription(cx)(g)(termAnnotationInternal(peel(term)))
+        addConstantBinding(bindings, "hydra.annotations.getTermDescription",
+            lambda("cx",
+                lambda("g",
+                    lambda("term",
+                        let_("peel",
+                            lambda("t",
+                                apply(
+                                    match("hydra.core.Term", Maybe.just(var("t")),
+                                        field("typeLambda", lambda("tl",
+                                            apply(var("peel"),
+                                                apply(project("hydra.core.TypeLambda", "body"), var("tl"))))),
+                                        field("typeApplication", lambda("ta",
+                                            apply(var("peel"),
+                                                apply(project("hydra.core.TypeApplicationTerm", "body"), var("ta")))))),
+                                    var("t"))),
+                            apply(apply(apply(var("hydra.annotations.getDescription"), var("cx")), var("g")),
+                                apply(var("hydra.annotations.termAnnotationInternal"),
+                                    apply(var("peel"), var("term")))))))));
+
+        // hydra.annotations.getTermAnnotation = \key -> \term -> maps.lookup(key, termAnnotationInternal(term))
+        addConstantBinding(bindings, "hydra.annotations.getTermAnnotation",
+            lambda("key",
+                lambda("term",
+                    apply(apply(primitive("hydra.lib.maps.lookup"), var("key")),
+                        apply(var("hydra.annotations.termAnnotationInternal"), var("term"))))));
     }
 
     /**
@@ -517,20 +498,21 @@ public class TestSuiteRunner {
         Graph graph = getTestGraph();
         String suffix = " (" + name + ")";
 
-        Flow<Graph, Term> reduced = hydra.reduction.Reduction.reduceTerm(eager, input);
-        FlowState<Graph, Term> result = reduced.value.apply(graph).apply(EMPTY_TRACE);
-        if (result.value.isJust()) {
-            if (!result.value.fromJust().equals(output)) {
+        hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, Term> reduced =
+            hydra.reduction.Reduction.reduceTerm(emptyContext(), graph, eager, input);
+        if (reduced.isRight()) {
+            Term result = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.OtherError>, Term>) reduced).value;
+            if (!result.equals(output)) {
                 assertEquals(hydra.show.core.Core.term(output),
-                    hydra.show.core.Core.term(result.value.fromJust()),
+                    hydra.show.core.Core.term(result),
                     "Original term does not reduce to expected term" + suffix);
-                assertEquals(output, result.value.fromJust(),
+                assertEquals(output, result,
                     "Original term does not reduce to expected term" + suffix);
             }
-        } else if (result.trace.messages.isEmpty()) {
-            fail("Reduction failed" + suffix);
         } else {
-            fail("Reduction failed: " + result.trace.messages.get(0) + suffix);
+            hydra.context.InContext<hydra.error.OtherError> err =
+                ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.OtherError>, Term>) reduced).value;
+            fail("Reduction failed: " + err.object.value + suffix);
         }
     }
 
@@ -602,13 +584,11 @@ public class TestSuiteRunner {
     private static boolean shouldSkip(TestCaseWithMetadata tc) {
         Tag disabledTag = new Tag("disabled");
         Tag disabledForPythonTag = new Tag("disabledForPython");
-        Tag requiresFlowDecodingTag = new Tag("requiresFlowDecoding");
         // Note: disabledForPython tests are also skipped in Java because the same beta-reduction
         // term explosion occurs (e.g. deeply nested withTrace/mutateTrace). The Haskell evaluator
         // handles these efficiently via lazy evaluation, but Java's eager reducer cannot.
         return tc.tags.contains(disabledTag)
-            || tc.tags.contains(disabledForPythonTag)
-            || tc.tags.contains(requiresFlowDecodingTag);
+            || tc.tags.contains(disabledForPythonTag);
     }
 
     private static final Duration TEST_TIMEOUT = Duration.ofSeconds(10);
@@ -664,11 +644,13 @@ public class TestSuiteRunner {
                 EtaExpansionTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Object, Term> flow = hydra.reduction.Reduction.etaExpandTypedTerm(graph, tc.input);
-                    FlowState<Object, Term> state = flow.value.apply(UNIT).apply(EMPTY_TRACE);
-                    assertTrue(state.value.isJust(),
-                        "Eta expansion failed: " + state.trace.messages);
-                    assertEquals(tc.output, state.value.fromJust());
+                    hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, Term> result =
+                        hydra.reduction.Reduction.etaExpandTypedTerm(emptyContext(), graph, tc.input);
+                    assertTrue(result.isRight(),
+                        "Eta expansion failed: " + (result.isLeft()
+                            ? ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.OtherError>, Term>) result).value.object.value
+                            : ""));
+                    assertEquals(tc.output, ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.OtherError>, Term>) result).value);
                 });
             }
 
@@ -677,24 +659,20 @@ public class TestSuiteRunner {
                 EvaluationTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Graph, Term> flow = hydra.reduction.Reduction.reduceTerm(true, tc.input);
-                    FlowState<Graph, Term> state;
+                    hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, Term> reduced;
                     try {
-                        java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<Graph, Term>> fn = flow.value.apply(graph);
-                        if (fn == null) {
-                            throw new IllegalArgumentException(
-                                "flow.value.apply(graph) returned null for input: " + hydra.show.core.Core.term(tc.input));
-                        }
-                        state = fn.apply(EMPTY_TRACE);
+                        reduced = hydra.reduction.Reduction.reduceTerm(emptyContext(), graph, true, tc.input);
                     } catch (Exception e) {
                         throw new IllegalArgumentException(
                             "Exception during reduceTerm for input: " + hydra.show.core.Core.term(tc.input), e);
                     }
-                    assertTrue(state.value.isJust(),
+                    assertTrue(reduced.isRight(),
                         "Evaluation failed for input: " + hydra.show.core.Core.term(tc.input)
                         + "\nExpected: " + hydra.show.core.Core.term(tc.output)
-                        + "\nTrace: " + state.trace.messages);
-                    Term result = state.value.fromJust();
+                        + "\nError: " + (reduced.isLeft()
+                            ? ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.OtherError>, Term>) reduced).value.object.value
+                            : ""));
+                    Term result = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.OtherError>, Term>) reduced).value;
                     if (!termsEqual(tc.output, result)) {
                         String expectedStr = hydra.show.core.Core.term(tc.output);
                         String actualStr = hydra.show.core.Core.term(result);
@@ -710,15 +688,12 @@ public class TestSuiteRunner {
                 InferenceTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Object, Pair<Term, TypeScheme>> flow =
-                        hydra.inference.Inference.inferTypeOf(graph, tc.input);
-                    FlowState<Object, Pair<Term, TypeScheme>> state =
-                        flow.value.apply(UNIT).apply(EMPTY_TRACE);
-                    assertTrue(state.value.isJust(),
-                        "Inference failed: " + state.trace.messages);
-                    Pair<Term, TypeScheme> result = state.value.fromJust();
-                    Term inferredTerm = result.first;
-                    TypeScheme resultScheme = result.second;
+                    hydra.context.Context cx = emptyContext();
+                    var result = hydra.inference.Inference.inferTypeOf(cx, graph, tc.input);
+                    assertEitherRight(result, "Inference failed");
+                    var resultPair = eitherRight(result);
+                    Term inferredTerm = resultPair.first.first;
+                    TypeScheme resultScheme = resultPair.first.second;
                     assertEquals(
                         hydra.show.core.Core.typeScheme(tc.output),
                         hydra.show.core.Core.typeScheme(resultScheme),
@@ -736,15 +711,10 @@ public class TestSuiteRunner {
                 InferenceFailureTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Object, Pair<Term, TypeScheme>> flow =
-                        hydra.inference.Inference.inferTypeOf(graph, tc.input);
-                    FlowState<Object, Pair<Term, TypeScheme>> state =
-                        flow.value.apply(UNIT).apply(EMPTY_TRACE);
-                    assertFalse(state.value.isJust(),
-                        "Expected inference failure but got: " +
-                        (state.value.isJust()
-                            ? hydra.show.core.Core.typeScheme(state.value.fromJust().second)
-                            : ""));
+                    hydra.context.Context cx = emptyContext();
+                    var result = hydra.inference.Inference.inferTypeOf(cx, graph, tc.input);
+                    assertTrue(result instanceof hydra.util.Either.Left,
+                        "Expected inference failure but got success");
                 });
             }
 
@@ -753,26 +723,21 @@ public class TestSuiteRunner {
                 TypeCheckingTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
+                    hydra.context.Context cx = emptyContext();
 
                     // Infer type
-                    Flow<Object, Pair<Term, TypeScheme>> inferFlow =
-                        hydra.inference.Inference.inferTypeOf(graph, tc.input);
-                    FlowState<Object, Pair<Term, TypeScheme>> inferState =
-                        inferFlow.value.apply(UNIT).apply(EMPTY_TRACE);
-                    assertTrue(inferState.value.isJust(),
-                        "Inference failed: " + inferState.trace.messages);
-                    Pair<Term, TypeScheme> inferResult = inferState.value.fromJust();
-                    Term inferredTerm = inferResult.first;
-                    Type inferredType = typeSchemeToType(inferResult.second);
+                    var inferResult = hydra.inference.Inference.inferTypeOf(cx, graph, tc.input);
+                    assertEitherRight(inferResult, "Inference failed");
+                    var inferPair = eitherRight(inferResult);
+                    Term inferredTerm = inferPair.first.first;
+                    Type inferredType = typeSchemeToType(inferPair.first.second);
+                    hydra.context.Context inferCx = inferPair.second;
 
-                    // Reconstruct type - use trace from inference to continue fresh name counter
-                    Flow<Object, Type> typeOfFlow =
-                        hydra.checking.Checking.typeOf(graph, List.of(), inferredTerm);
-                    FlowState<Object, Type> typeOfState =
-                        typeOfFlow.value.apply(UNIT).apply(inferState.trace);
-                    assertTrue(typeOfState.value.isJust(),
-                        "Type reconstruction failed: " + typeOfState.trace.messages);
-                    Type reconstructedType = typeOfState.value.fromJust();
+                    // Reconstruct type - use context from inference to continue fresh name counter
+                    var typeOfResult =
+                        hydra.checking.Checking.typeOf(inferCx, graph, List.of(), inferredTerm);
+                    assertEitherRight(typeOfResult, "Type reconstruction failed");
+                    Type reconstructedType = eitherRight(typeOfResult).first;
 
                     // Compare inferred term using alpha-equivalence for type variables,
                     // since Java's inference may assign them in a different order than Haskell
@@ -795,11 +760,10 @@ public class TestSuiteRunner {
                 TypeReductionTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Graph, Type> flow = hydra.reduction.Reduction.betaReduceType(tc.input);
-                    FlowState<Graph, Type> state = flow.value.apply(graph).apply(EMPTY_TRACE);
-                    assertTrue(state.value.isJust(),
-                        "Type reduction failed: " + state.trace.messages);
-                    assertEquals(tc.output, state.value.fromJust());
+                    hydra.context.Context cx = emptyContext();
+                    var result = hydra.reduction.Reduction.betaReduceType(cx, graph, tc.input);
+                    assertEitherRight(result, "Type reduction failed");
+                    assertEquals(tc.output, eitherRight(result));
                 });
             }
 
@@ -961,39 +925,36 @@ public class TestSuiteRunner {
                 JsonCoderTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Graph, hydra.compute.Coder<Graph, Object, Term, hydra.json.model.Value>> coderFlow =
-                        hydra.ext.org.json.coder.Coder.jsonCoder(tc.type);
-                    FlowState<Graph, hydra.compute.Coder<Graph, Object, Term, hydra.json.model.Value>> coderState =
-                        coderFlow.value.apply(graph).apply(EMPTY_TRACE);
-                    assertTrue(coderState.value.isJust(),
-                        "Failed to create JSON coder: " + coderState.trace.messages);
-                    var coder = coderState.value.fromJust();
+                    hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>> coderResult =
+                        hydra.ext.org.json.coder.Coder.jsonCoder(tc.type, emptyContext(), graph);
+                    assertTrue(coderResult.isRight(),
+                        "Failed to create JSON coder: " + (coderResult.isLeft()
+                            ? ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value.object.value
+                            : ""));
+                    var coder = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value;
+                    hydra.context.Context cx = emptyContext();
 
                     // Encode and check
-                    Flow<Graph, hydra.json.model.Value> encodeFlow = coder.encode.apply(tc.term);
-                    FlowState<Graph, hydra.json.model.Value> encodeState =
-                        encodeFlow.value.apply(graph).apply(EMPTY_TRACE);
-                    assertTrue(encodeState.value.isJust(),
-                        "JSON encode failed: " + encodeState.trace.messages);
-                    if (!tc.json.equals(encodeState.value.fromJust())) {
+                    var encodeResult = coder.encode.apply(cx).apply(tc.term);
+                    assertEitherRight(encodeResult, "JSON encode failed");
+                    hydra.json.model.Value encoded = eitherRight(encodeResult);
+                    if (!tc.json.equals(encoded)) {
                         String expectedStr = hydra.json.writer.Writer.printJson(tc.json);
-                        String actualStr = hydra.json.writer.Writer.printJson(encodeState.value.fromJust());
+                        String actualStr = hydra.json.writer.Writer.printJson(encoded);
                         assertEquals(expectedStr, actualStr, "JSON encode mismatch (pretty-printed)");
                         fail("JSON encode: pretty print matches but equals() fails"
                             + "\nExpected class: " + tc.json.getClass().getSimpleName()
-                            + "\nActual class: " + encodeState.value.fromJust().getClass().getSimpleName());
+                            + "\nActual class: " + encoded.getClass().getSimpleName());
                     }
 
                     // Roundtrip: encode then decode
-                    Flow<Object, Term> decodeFlow = coder.decode.apply(encodeState.value.fromJust());
-                    FlowState<Object, Term> decodeState =
-                        decodeFlow.value.apply(graph).apply(EMPTY_TRACE);
-                    assertTrue(decodeState.value.isJust(),
-                        "JSON decode failed: " + decodeState.trace.messages);
-                    if (!termsEqual(tc.term, decodeState.value.fromJust())) {
+                    var decodeResult = coder.decode.apply(cx).apply(encoded);
+                    assertEitherRight(decodeResult, "JSON decode failed");
+                    Term decoded = eitherRight(decodeResult);
+                    if (!termsEqual(tc.term, decoded)) {
                         assertEquals(
                             hydra.show.core.Core.term(tc.term),
-                            hydra.show.core.Core.term(decodeState.value.fromJust()),
+                            hydra.show.core.Core.term(decoded),
                             "JSON roundtrip term mismatch");
                     }
                 });
@@ -1004,32 +965,30 @@ public class TestSuiteRunner {
                 JsonDecodeTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Graph, hydra.compute.Coder<Graph, Object, Term, hydra.json.model.Value>> coderFlow =
-                        hydra.ext.org.json.coder.Coder.jsonCoder(tc.type);
-                    FlowState<Graph, hydra.compute.Coder<Graph, Object, Term, hydra.json.model.Value>> coderState =
-                        coderFlow.value.apply(graph).apply(EMPTY_TRACE);
-                    assertTrue(coderState.value.isJust(),
-                        "Failed to create JSON coder: " + coderState.trace.messages);
-                    var coder = coderState.value.fromJust();
+                    hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>> coderResult =
+                        hydra.ext.org.json.coder.Coder.jsonCoder(tc.type, emptyContext(), graph);
+                    assertTrue(coderResult.isRight(),
+                        "Failed to create JSON coder: " + (coderResult.isLeft()
+                            ? ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value.object.value
+                            : ""));
+                    var coder = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value;
+                    hydra.context.Context cx = emptyContext();
 
-                    Flow<Object, Term> decodeFlow = coder.decode.apply(tc.json);
-                    FlowState<Object, Term> decodeState =
-                        decodeFlow.value.apply(graph).apply(EMPTY_TRACE);
+                    var decodeResult = coder.decode.apply(cx).apply(tc.json);
 
                     tc.expected.accept(new hydra.util.Either.Visitor<>() {
                         @Override
                         public Object visit(hydra.util.Either.Left<String, Term> left) {
                             // Expected failure
-                            assertFalse(decodeState.value.isJust(),
+                            assertTrue(decodeResult instanceof hydra.util.Either.Left,
                                 "Expected decode failure but succeeded");
                             return null;
                         }
                         @Override
                         public Object visit(hydra.util.Either.Right<String, Term> right) {
                             // Expected success
-                            assertTrue(decodeState.value.isJust(),
-                                "JSON decode failed: " + decodeState.trace.messages);
-                            assertEquals(right.value, decodeState.value.fromJust());
+                            assertEitherRight(decodeResult, "JSON decode failed");
+                            assertEquals(right.value, eitherRight(decodeResult));
                             return null;
                         }
                     });
@@ -1047,31 +1006,28 @@ public class TestSuiteRunner {
                 JsonRoundtripTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     Graph graph = getTestGraph();
-                    Flow<Graph, hydra.compute.Coder<Graph, Object, Term, hydra.json.model.Value>> coderFlow =
-                        hydra.ext.org.json.coder.Coder.jsonCoder(tc.type);
-                    FlowState<Graph, hydra.compute.Coder<Graph, Object, Term, hydra.json.model.Value>> coderState =
-                        coderFlow.value.apply(graph).apply(EMPTY_TRACE);
-                    assertTrue(coderState.value.isJust(),
-                        "Failed to create JSON coder: " + coderState.trace.messages);
-                    var coder = coderState.value.fromJust();
+                    hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>> coderResult =
+                        hydra.ext.org.json.coder.Coder.jsonCoder(tc.type, emptyContext(), graph);
+                    assertTrue(coderResult.isRight(),
+                        "Failed to create JSON coder: " + (coderResult.isLeft()
+                            ? ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value.object.value
+                            : ""));
+                    var coder = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value;
+                    hydra.context.Context cx = emptyContext();
 
                     // Encode
-                    Flow<Graph, hydra.json.model.Value> encodeFlow = coder.encode.apply(tc.term);
-                    FlowState<Graph, hydra.json.model.Value> encodeState =
-                        encodeFlow.value.apply(graph).apply(EMPTY_TRACE);
-                    assertTrue(encodeState.value.isJust(),
-                        "JSON encode failed: " + encodeState.trace.messages);
+                    var encodeResult = coder.encode.apply(cx).apply(tc.term);
+                    assertEitherRight(encodeResult, "JSON encode failed");
+                    hydra.json.model.Value encoded = eitherRight(encodeResult);
 
                     // Decode back
-                    Flow<Object, Term> decodeFlow = coder.decode.apply(encodeState.value.fromJust());
-                    FlowState<Object, Term> decodeState =
-                        decodeFlow.value.apply(graph).apply(EMPTY_TRACE);
-                    assertTrue(decodeState.value.isJust(),
-                        "JSON decode failed: " + decodeState.trace.messages);
-                    if (!termsEqual(tc.term, decodeState.value.fromJust())) {
+                    var decodeResult = coder.decode.apply(cx).apply(encoded);
+                    assertEitherRight(decodeResult, "JSON decode failed");
+                    Term decoded = eitherRight(decodeResult);
+                    if (!termsEqual(tc.term, decoded)) {
                         assertEquals(
                             hydra.show.core.Core.term(tc.term),
-                            hydra.show.core.Core.term(decodeState.value.fromJust()),
+                            hydra.show.core.Core.term(decoded),
                             "JSON roundtrip term mismatch");
                     }
                 });
@@ -1113,25 +1069,24 @@ public class TestSuiteRunner {
                             new Type.Variable(n),
                             hydra.util.Maybe.nothing()));
                     }
-                    Flow<Object, hydra.typing.TypeSubst> flow =
-                        hydra.unification.Unification.unifyTypes(schemaTypes, tc.left, tc.right, "test");
-                    FlowState<Object, hydra.typing.TypeSubst> state = flow.value.apply(UNIT).apply(EMPTY_TRACE);
+                    hydra.context.Context cx = emptyContext();
+                    var result =
+                        hydra.unification.Unification.unifyTypes(cx, schemaTypes, tc.left, tc.right, "test");
 
                     tc.expected.accept(new hydra.util.Either.Visitor<String, hydra.typing.TypeSubst, Void>() {
                         @Override
                         public Void visit(hydra.util.Either.Left<String, hydra.typing.TypeSubst> left) {
                             // Expected failure
-                            assertFalse(state.value.isJust(),
-                                "Expected unification failure but got success: " + state.value);
+                            assertTrue(result instanceof hydra.util.Either.Left,
+                                "Expected unification failure but got success");
                             return null;
                         }
 
                         @Override
                         public Void visit(hydra.util.Either.Right<String, hydra.typing.TypeSubst> right) {
                             // Expected success
-                            assertTrue(state.value.isJust(),
-                                "Expected unification success but got failure: " + state.trace.messages);
-                            assertEquals(right.value, state.value.fromJust());
+                            assertEitherRight(result, "Expected unification success but got failure");
+                            assertEquals(right.value, eitherRight(result));
                             return null;
                         }
                     });
@@ -1142,26 +1097,24 @@ public class TestSuiteRunner {
             public DynamicTest visit(TestCase.JoinTypes instance) {
                 JoinTypesTestCase tc = instance.value;
                 return withTimeout(name, () -> {
-                    Flow<Object, java.util.List<hydra.typing.TypeConstraint>> flow =
-                        hydra.unification.Unification.joinTypes(tc.left, tc.right, "test");
-                    FlowState<Object, java.util.List<hydra.typing.TypeConstraint>> state =
-                        flow.value.apply(UNIT).apply(EMPTY_TRACE);
+                    hydra.context.Context cx = emptyContext();
+                    var result =
+                        hydra.unification.Unification.joinTypes(cx, tc.left, tc.right, "test");
 
                     tc.expected.accept(new hydra.util.Either.Visitor<Void, java.util.List<hydra.typing.TypeConstraint>, Void>() {
                         @Override
                         public Void visit(hydra.util.Either.Left<Void, java.util.List<hydra.typing.TypeConstraint>> left) {
                             // Expected failure
-                            assertFalse(state.value.isJust(),
-                                "Expected join failure but got success: " + state.value);
+                            assertTrue(result instanceof hydra.util.Either.Left,
+                                "Expected join failure but got success");
                             return null;
                         }
 
                         @Override
                         public Void visit(hydra.util.Either.Right<Void, java.util.List<hydra.typing.TypeConstraint>> right) {
                             // Expected success
-                            assertTrue(state.value.isJust(),
-                                "Expected join success but got failure: " + state.trace.messages);
-                            assertEquals(right.value, state.value.fromJust());
+                            assertEitherRight(result, "Expected join success but got failure");
+                            assertEquals(right.value, eitherRight(result));
                             return null;
                         }
                     });
@@ -1368,32 +1321,58 @@ public class TestSuiteRunner {
                 new FieldType(new Name("encode"), new Type.Unit()),
                 new FieldType(new Name("decode"), new Type.Unit())))));
 
-        // Coder: ∀s1.∀s2.∀v1.∀v2. {encode: v1 -> Flow s1 v2, decode: v2 -> Flow s2 v1}
+        // Coder: ∀v1.∀v2. {encode: Context -> v1 -> Either (InContext OtherError) v2, decode: Context -> v2 -> Either (InContext OtherError) v1}
         Name coderName = new Name("hydra.compute.Coder");
-        Name flowName = new Name("hydra.compute.Flow");
+        Name contextName = new Name("hydra.context.Context");
+        Name inContextName = new Name("hydra.context.InContext");
+        Name otherErrorName = new Name("hydra.error.OtherError");
+        // InContext OtherError = Application(InContext, OtherError)
+        Type inContextOtherError = new Type.Application(new ApplicationType(
+            new Type.Variable(inContextName),
+            new Type.Variable(otherErrorName)));
+        // Either (InContext OtherError) v — uses built-in Type.Either
+        java.util.function.Function<Type, Type> eitherInContextError = v ->
+            new Type.Either(new EitherType(inContextOtherError, v));
+        // encode: Context -> v1 -> Either (InContext OtherError) v2
+        Type encodeType = new Type.Function(new FunctionType(
+            new Type.Variable(contextName),
+            new Type.Function(new FunctionType(
+                new Type.Variable(new Name("v1")),
+                eitherInContextError.apply(new Type.Variable(new Name("v2")))))));
+        // decode: Context -> v2 -> Either (InContext OtherError) v1
+        Type decodeType = new Type.Function(new FunctionType(
+            new Type.Variable(contextName),
+            new Type.Function(new FunctionType(
+                new Type.Variable(new Name("v2")),
+                eitherInContextError.apply(new Type.Variable(new Name("v1")))))));
         Type coderBody = new Type.Record(new RowType(coderName, List.of(
-            new FieldType(new Name("encode"),
-                new Type.Function(new FunctionType(
-                    new Type.Variable(new Name("v1")),
-                    new Type.Application(new ApplicationType(
-                        new Type.Application(new ApplicationType(
-                            new Type.Variable(flowName),
-                            new Type.Variable(new Name("s1")))),
-                        new Type.Variable(new Name("v2"))))))),
-            new FieldType(new Name("decode"),
-                new Type.Function(new FunctionType(
-                    new Type.Variable(new Name("v2")),
-                    new Type.Application(new ApplicationType(
-                        new Type.Application(new ApplicationType(
-                            new Type.Variable(flowName),
-                            new Type.Variable(new Name("s2")))),
-                        new Type.Variable(new Name("v1"))))))))));
-        // Wrap in foralls: ∀s1.∀s2.∀v1.∀v2. coderBody
+            new FieldType(new Name("encode"), encodeType),
+            new FieldType(new Name("decode"), decodeType))));
+        // Wrap in foralls: ∀v1.∀v2. coderBody
         types.put(coderName,
-            new Type.Forall(new ForallType(new Name("s1"),
-                new Type.Forall(new ForallType(new Name("s2"),
-                    new Type.Forall(new ForallType(new Name("v1"),
-                        new Type.Forall(new ForallType(new Name("v2"), coderBody)))))))));
+            new Type.Forall(new ForallType(new Name("v1"),
+                new Type.Forall(new ForallType(new Name("v2"), coderBody)))));
+
+        // Context: record with trace, messages, other
+        types.put(contextName,
+            new Type.Record(new RowType(contextName, List.of(
+                new FieldType(new Name("trace"), new Type.List(new Type.Literal(new LiteralType.String_()))),
+                new FieldType(new Name("messages"), new Type.List(new Type.Literal(new LiteralType.String_()))),
+                new FieldType(new Name("other"), new Type.Map(new MapType(
+                    new Type.Variable(new Name("hydra.core.Name")),
+                    new Type.Variable(new Name("hydra.core.Term")))))))));
+
+        // InContext: ∀e. record with object (e) and context (Context)
+        types.put(inContextName,
+            new Type.Forall(new ForallType(new Name("e"),
+                new Type.Record(new RowType(inContextName, List.of(
+                    new FieldType(new Name("object"), new Type.Variable(new Name("e"))),
+                    new FieldType(new Name("context"), new Type.Variable(contextName))))))));
+
+        // OtherError: wrapper over string
+        types.put(otherErrorName,
+            new Type.Wrap(new WrappedType(otherErrorName,
+                new Type.Literal(new LiteralType.String_()))));
 
         // Type: the hydra.core.Type union — large recursive type
         Name typeName = new Name("hydra.core.Type");
