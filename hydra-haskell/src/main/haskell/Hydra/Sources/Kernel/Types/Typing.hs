@@ -7,6 +7,7 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Hydra.Sources.Kernel.Types.Context as Context
 
 
 ns :: Namespace
@@ -16,7 +17,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Core.ns] [Core.ns] $
+module_ = Module ns elements [Core.ns, Context.ns] [Core.ns, Context.ns] $
     Just "Types supporting type inference and type reconstruction."
   where
     elements = [
@@ -41,7 +42,10 @@ inferenceResult = define "InferenceResult" $
       typeSubst,
     "classConstraints">:
       doc "Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)" $
-      T.map Core.name Core.typeVariableMetadata]
+      T.map Core.name Core.typeVariableMetadata,
+    "context">:
+      doc "The updated context after inference (carries fresh variable state)" $
+      Context.context]
 
 termSubst :: Binding
 termSubst = define "TermSubst" $
