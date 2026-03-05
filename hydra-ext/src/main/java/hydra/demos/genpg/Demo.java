@@ -1,10 +1,12 @@
 package hydra.demos.genpg;
 
 import hydra.Generation;
-import hydra.compute.Flow;
+import hydra.context.Context;
+import hydra.context.InContext;
 import hydra.core.Term;
-import hydra.dsl.Flows;
+import hydra.error.OtherError;
 import hydra.graph.Graph;
+import hydra.monads.Monads;
 import hydra.json.writer.Writer;
 import hydra.pg.model.Edge;
 import hydra.pg.model.Element;
@@ -13,7 +15,6 @@ import hydra.pg.model.Vertex;
 import hydra.relational.RelationName;
 import hydra.tabular.Table;
 import hydra.tabular.TableType;
-import hydra.tools.FlowException;
 import hydra.util.Either;
 import hydra.util.Pair;
 
@@ -81,11 +82,16 @@ public class Demo {
             TableType tableType,
             Path path,
             List<Vertex<Term>> vspecs,
-            List<Edge<Term>> especs) throws IOException, FlowException {
+            List<Edge<Term>> especs) throws IOException {
         Table<Term> table = decodeTableIo(tableType, path);
-        Flow<Graph, Pair<List<Vertex<Term>>, List<Edge<Term>>>> flow =
-            Transform.transformTableRows(vspecs, especs, tableType, table.data);
-        return Flows.fromFlow(graphContext, flow);
+        Context cx = Monads.emptyContext();
+        Either<InContext<OtherError>, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
+            Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
+        if (result.isLeft()) {
+            throw new RuntimeException(
+                "Transform error: " + ((Either.Left<InContext<OtherError>, ?>) result).value.object.value);
+        }
+        return ((Either.Right<InContext<OtherError>, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
     }
 
     /**
@@ -94,7 +100,7 @@ public class Demo {
     public LazyGraph<Term> transformTables(
             Path sourceRoot,
             List<TableType> tableTypes,
-            LazyGraph<Term> spec) throws IOException, FlowException {
+            LazyGraph<Term> spec) throws IOException {
         Either<String, Map<String, Pair<List<Vertex<Term>>, List<Edge<Term>>>>> specsResult =
             Transform.elementSpecsByTable(spec);
         if (specsResult.isLeft()) {
@@ -137,7 +143,7 @@ public class Demo {
             Path sourceRoot,
             List<TableType> tableSchemas,
             LazyGraph<Term> graphMapping,
-            Path outputPath) throws IOException, FlowException {
+            Path outputPath) throws IOException {
         System.out.println("Reading CSV files from " + sourceRoot + "/");
         StringJoiner tableNames = new StringJoiner(", ");
         for (TableType t : tableSchemas) {
@@ -156,9 +162,13 @@ public class Demo {
         System.out.println("  Edges: " + edgeCount);
 
         System.out.println("Writing GraphSON to " + outputPath);
-        Flow<Graph, List<hydra.json.model.Value>> flow = Utils.pgElementsToGraphson(
+        Either<?, List<hydra.json.model.Value>> jsonResult = Utils.pgElementsToGraphson(
             v -> Utils.encodeTermValue(v), els);
-        List<hydra.json.model.Value> jsonValues = Flows.fromFlow(graphContext, flow);
+        if (jsonResult.isLeft()) {
+            throw new RuntimeException("GraphSON encoding error: " + jsonResult);
+        }
+        List<hydra.json.model.Value> jsonValues =
+            ((Either.Right<?, List<hydra.json.model.Value>>) jsonResult).value;
 
         List<String> jsonStrings = jsonValues.stream()
             .map(Writer::printJson)
@@ -201,7 +211,7 @@ public class Demo {
             "Cannot find hydra-ext root. Run from the repository root or hydra-ext directory.");
     }
 
-    public void generateSalesGraphson() throws IOException, FlowException {
+    public void generateSalesGraphson() throws IOException {
         Path root = findHydraExtRoot();
         List<TableType> tableSchemas = Sales.salesDatabaseSchema();
         LazyGraph<Term> graph = Sales.salesMapping();
@@ -213,7 +223,7 @@ public class Demo {
             root.resolve("demos/genpg/output/sales.jsonl"));
     }
 
-    public void generateHealthGraphson() throws IOException, FlowException {
+    public void generateHealthGraphson() throws IOException {
         Path root = findHydraExtRoot();
         List<TableType> tableSchemas = Health.healthDatabaseSchema();
         LazyGraph<Term> graph = Health.healthMapping();

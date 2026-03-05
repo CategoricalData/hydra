@@ -46,7 +46,7 @@ for d in lib dsl compute json util; do
 done
 
 mkdir -p "$JAVA_DST/tools"
-for f in FlowException.java Function3.java Function4.java LList.java MapperBase.java PrettyPrinter.java PrimitiveFunction.java; do
+for f in Function3.java Function4.java LList.java MapperBase.java PrettyPrinter.java PrimitiveFunction.java; do
     cp "$JAVA_SRC/tools/$f" "$JAVA_DST/tools/"
 done
 
