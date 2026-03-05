@@ -63,6 +63,21 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
 HYDRA_EXT_DIR="$HYDRA_ROOT/hydra-ext"
 
+# Ensure JAVA_HOME is set to JDK 17 (required for Gradle builds)
+if [ -z "$JAVA_HOME" ] || ! "$JAVA_HOME/bin/java" --version 2>&1 | grep -q "17\."; then
+    if [ -d "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" ]; then
+        export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"
+    elif command -v /usr/libexec/java_home &>/dev/null; then
+        export JAVA_HOME="$(/usr/libexec/java_home -v 17 2>/dev/null || true)"
+    fi
+    if [ -z "$JAVA_HOME" ] || ! "$JAVA_HOME/bin/java" --version 2>&1 | grep -q "17\."; then
+        echo "Warning: JDK 17 not found. Java compilation steps may fail."
+        echo "Set JAVA_HOME to a JDK 17 installation before running this script."
+    else
+        echo "Using JAVA_HOME=$JAVA_HOME"
+    fi
+fi
+
 START_TIME=$SECONDS
 
 print_elapsed() {
@@ -157,9 +172,11 @@ fi
 echo ""
 echo "Step 1h: Exporting and verifying JSON..."
 echo ""
-stack build hydra:exe:update-json-kernel hydra:exe:update-json-main hydra:exe:verify-json-kernel
-stack exec update-json-kernel -- $RTS_FLAGS
+stack build hydra:exe:update-json-main hydra:exe:verify-json-kernel hydra:exe:update-json-test
+#stack build hydra:exe:update-json-kernel hydra:exe:update-json-main hydra:exe:verify-json-kernel
+#stack exec update-json-kernel -- $RTS_FLAGS
 stack exec update-json-main -- $RTS_FLAGS
+stack exec update-json-test -- $RTS_FLAGS
 stack exec verify-json-kernel -- $RTS_FLAGS
 
 echo ""
