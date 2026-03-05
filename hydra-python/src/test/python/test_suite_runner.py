@@ -37,7 +37,6 @@ import hydra.formatting
 import hydra.graph
 import hydra.inference
 import hydra.lexical
-import hydra.lib.flows
 import hydra.reduction
 import hydra.serialization
 import hydra.sorting
@@ -52,7 +51,8 @@ import hydra.typing
 import hydra.hoisting
 import hydra.substitution
 import hydra.unification
-from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
+from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right, frozenlist
+import hydra.context
 
 # Manually load and register hydra.test package
 # Import the main hydra package first
@@ -84,11 +84,8 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     """
     Load kernel term bindings from JSON.
 
-    The test graph needs kernel term bindings (hydra.monads.pure,
-    hydra.monads.bind, etc.) so that the evaluator can resolve references
-    to these definitions at runtime. Without them, evaluation of expressions
-    like `unwrap(hydra.compute.Flow) @ (hydra.monads.pure @ 42)` would fail
-    because the evaluator cannot find the definition of `hydra.monads.pure`.
+    The test graph needs kernel term bindings so that the evaluator can
+    resolve references to kernel definitions at runtime.
 
     These are loaded from the JSON representation in hydra-haskell rather than
     from generated Python Source modules. This works because term modules don't
@@ -99,14 +96,13 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
         Dictionary mapping binding names to Binding objects
     """
     import sys
-    from hydra.generation import kernel_modules, load_modules_from_json, read_manifest_field, strip_all_term_types
+    from hydra.generation import load_modules_from_json, read_manifest_field, strip_all_term_types
 
     # Bump recursion limit for the recursive JSON decoder
     old_limit = sys.getrecursionlimit()
     sys.setrecursionlimit(10000)
 
     json_dir = "../hydra-haskell/src/gen-main/json"
-    km = kernel_modules()
 
     # Load only the essential evaluator term modules (hydra.monads + hydra.annotations
     # and their dependencies). Loading all 92 term modules from JSON is too slow.
@@ -123,7 +119,7 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
         hydra.core.Name("hydra.annotations"),
     ]
 
-    term_mods = load_modules_from_json(False, json_dir, km, evaluator_term_namespaces)
+    term_mods = load_modules_from_json(False, json_dir, evaluator_term_namespaces)
 
     # Strip System F type annotations (TypeLambda, TypeApplication, etc.) from
     # term bodies. The JSON representation preserves the full System F encoding,
@@ -140,54 +136,25 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
     return bindings
 
 
-def _load_kernel_type_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
+def _load_bootstrap_type_schemes() -> FrozenDict:
     """
-    Load kernel type bindings from the generated sources modules.
+    Load bootstrap type schemes for the test schema graph.
 
-    This loads bindings from hydra.sources.* modules which contain the type-level
-    kernel definitions (hydra.core.Type, hydra.core.Name, etc.). These are added
-    to the schema graph so that inference tests can reference kernel types.
+    Uses hydra.json.bootstrap.types_by_name (the same bootstrap type map
+    used for JSON decoding) to build a Map[Name, TypeScheme] suitable for
+    the test graph's schema_types. This provides type definitions for
+    hydra.core, hydra.compute, hydra.context, hydra.error, hydra.graph,
+    and hydra.module — all the types needed by inference tests.
 
-    This mirrors how Haskell includes kernelTypesModules in testSchemaGraph:
-        kernelElements = L.concat $ fmap moduleElements kernelTypesModules
-
-    Returns:
-        Dictionary mapping binding names to Binding objects
+    This mirrors Java's Generation.bootstrapTypeSchemes().
     """
-    bindings = {}
+    from hydra.json.bootstrap import types_by_name
+    from hydra.rewriting import f_type_to_type_scheme
 
-    # Load only the kernel type modules that define the 5 types referenced by
-    # the test suite schema graph: CoderDirection (hydra.coders), Coder (hydra.compute),
-    # and Type/Name/ForallType (hydra.core). Loading all 21 kernel type modules is
-    # unnecessary and slow.
-    kernel_type_source_modules = [
-        "hydra.sources.coders",
-        "hydra.sources.compute",
-        "hydra.sources.core",       # Contains hydra.core.Type, hydra.core.Name, etc.
-    ]
-
-    for module_name in kernel_type_source_modules:
-        try:
-            # Dynamically import the module
-            import importlib
-            source_module = importlib.import_module(module_name)
-
-            # Call module() to get the Module object
-            mod = source_module.module()
-
-            # Extract bindings from the module
-            for binding in mod.elements:
-                bindings[binding.name] = binding
-
-        except ImportError as e:
-            # Module not yet generated - skip silently
-            pass
-        except Exception as e:
-            # Log but don't fail - allows tests to run with partial kernel
-            import sys
-            print(f"Warning: Failed to load {module_name}: {e}", file=sys.stderr)
-
-    return bindings
+    result = {}
+    for name, typ in types_by_name.items():
+        result[name] = f_type_to_type_scheme(typ)
+    return FrozenDict(result)
 
 
 def is_disabled(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
@@ -203,16 +170,6 @@ def is_disabled_for_python(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     """
     disabled_for_python_tag = hydra.testing.Tag("disabledForPython")
     return disabled_for_python_tag in tcase.tags
-
-def requires_flow_decoding(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
-    """Check if a test case requires decoding Flow values back to Terms.
-
-    These tests fail because when primitives like flows.pure are evaluated,
-    they create native Flow objects that cannot be decoded back to Term
-    representations. This is a fundamental limitation in both Haskell and Python.
-    """
-    requires_flow_decoding_tag = hydra.testing.Tag("requiresFlowDecoding")
-    return requires_flow_decoding_tag in tcase.tags
 
 import os
 import time
@@ -240,31 +197,21 @@ def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     - disabled: explicitly marked as not working
     - disabledForPython: causes RecursionError in Python
       unless HYDRA_RUN_SLOW_TESTS=1 is set
-    - requiresFlowDecoding: requires decoding Flow values back to Terms
-      (unsupported in both Haskell and Python)
     """
     if is_disabled(tcase):
         return True
     if is_disabled_for_python(tcase) and not RUN_SLOW_TESTS:
         return True
-    if requires_flow_decoding(tcase):
-        return True
     return False
 
 
-def _decode_schema_types(schema_graph: hydra.graph.Graph) -> FrozenDict:
-    """Decode schema types from a graph using schemaGraphToTypingEnvironment.
-
-    This mirrors Haskell's decodeSchemaTypes:
-        decodeSchemaTypes sg = fromFlow M.empty sg (schemaGraphToTypingEnvironment sg)
-    """
-    flow = hydra.schemas.schema_graph_to_typing_environment(schema_graph)
-    state = flow.value(schema_graph, hydra.monads.empty_trace())
-    match state.value:
-        case Just(value=result):
-            return result
-        case _:
-            return FrozenDict({})
+def _empty_context() -> hydra.context.Context:
+    """Create an empty Context for test use."""
+    return hydra.context.Context(
+        trace=(),
+        messages=(),
+        other=FrozenDict({}),
+    )
 
 
 def build_test_graph() -> hydra.graph.Graph:
@@ -281,99 +228,40 @@ def build_test_graph() -> hydra.graph.Graph:
         Graph: The test graph
     """
     from hydra.dsl.python import FrozenDict, Nothing, Just
-    import hydra.encode.core
     import hydra.lexical
-    import hydra.schemas
 
-    # Step 1: Build hydraCoreGraph - a graph with all kernel type definitions
-    # In Haskell this is Sources.Kernel.Types.Core.hydraCoreGraph
-    # We use the bootstrap graph (which has primitives) and build a schema graph from kernel type modules
-    from hydra.generation import bootstrap_graph, kernel_modules
-    from hydra.code_generation import modules_to_graph
+    from hydra.generation import bootstrap_graph
     bs_graph = bootstrap_graph()
-    km = kernel_modules()
-    hydra_core_graph = modules_to_graph(bs_graph, tuple(km), tuple(km))
 
-    # Step 2: Build testSchemaGraph
-    # Haskell: testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGraph) (kernelElements ++ testElements)
+    # Step 1: Build schema types from bootstrap type map + test types
+    # The bootstrap type schemes provide types for hydra.core, hydra.compute,
+    # hydra.context, hydra.error, hydra.graph, and hydra.module.
+    bootstrap_types = _load_bootstrap_type_schemes()
 
-    # Get kernel type bindings from kernel type modules
-    kernel_types = _load_kernel_type_bindings()
-    kernel_elements = list(kernel_types.values())
-
-    # Get test type bindings
+    # Get test type definitions and convert each to a TypeScheme
+    # (extracting forall variables, just like f_type_to_type_scheme does)
+    from hydra.rewriting import f_type_to_type_scheme
     test_types_dict = test_graph.test_types()
-    type_type_scheme = hydra.core.TypeScheme(
-        variables=(),
-        type=hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type")),
-        constraints=Nothing()
-    )
-    test_elements = []
+
+    # Merge bootstrap types with test-specific types
+    all_schema_types = dict(bootstrap_types)
     for name, typ in test_types_dict.items():
-        type_term = hydra.encode.core.type(typ)
-        test_elements.append(hydra.core.Binding(
-            name=name, term=type_term, type=Just(type_type_scheme)))
+        all_schema_types[name] = f_type_to_type_scheme(typ)
+    schema_types = FrozenDict(all_schema_types)
 
-    # Add Coder and CoderDirection types needed by tests
-    coder_name = hydra.core.Name("hydra.compute.Coder")
-    s1 = hydra.core.TypeVariable(hydra.core.Name("s1"))
-    s2 = hydra.core.TypeVariable(hydra.core.Name("s2"))
-    v1 = hydra.core.TypeVariable(hydra.core.Name("v1"))
-    v2 = hydra.core.TypeVariable(hydra.core.Name("v2"))
-    flow_name = hydra.core.Name("hydra.compute.Flow")
-    flow_s1_v2 = hydra.core.TypeApplication(hydra.core.ApplicationType(
-        hydra.core.TypeApplication(hydra.core.ApplicationType(
-            hydra.core.TypeVariable(flow_name), s1)), v2))
-    flow_s2_v1 = hydra.core.TypeApplication(hydra.core.ApplicationType(
-        hydra.core.TypeApplication(hydra.core.ApplicationType(
-            hydra.core.TypeVariable(flow_name), s2)), v1))
-    coder_type = hydra.core.TypeForall(hydra.core.ForallType(
-        hydra.core.Name("s1"), hydra.core.TypeForall(hydra.core.ForallType(
-            hydra.core.Name("s2"), hydra.core.TypeForall(hydra.core.ForallType(
-                hydra.core.Name("v1"), hydra.core.TypeForall(hydra.core.ForallType(
-                    hydra.core.Name("v2"), hydra.core.TypeRecord(hydra.core.RowType(
-                        coder_name, (
-                            hydra.core.FieldType(hydra.core.Name("encode"),
-                                hydra.core.TypeFunction(hydra.core.FunctionType(v1, flow_s1_v2))),
-                            hydra.core.FieldType(hydra.core.Name("decode"),
-                                hydra.core.TypeFunction(hydra.core.FunctionType(v2, flow_s2_v1))),
-                        )))))))))))
-    test_elements.append(hydra.core.Binding(
-        name=coder_name, term=hydra.encode.core.type(coder_type), type=Just(type_type_scheme)))
+    # Step 2: Build testGraph
+    # Load kernel term bindings from JSON
+    kernel_terms = _load_kernel_term_bindings()
+    kernel_term_bindings = list(kernel_terms.values())
 
-    coder_direction_name = hydra.core.Name("hydra.coders.CoderDirection")
-    coder_direction_type = hydra.core.TypeUnion(hydra.core.RowType(
-        coder_direction_name, (
-            hydra.core.FieldType(hydra.core.Name("encode"), hydra.core.TypeUnit()),
-            hydra.core.FieldType(hydra.core.Name("decode"), hydra.core.TypeUnit()),
-        )))
-    test_elements.append(hydra.core.Binding(
-        name=coder_direction_name, term=hydra.encode.core.type(coder_direction_type),
-        type=Just(type_type_scheme)))
-
-    # Build the schema graph using elementsToGraph
-    core_schema_types = _decode_schema_types(hydra_core_graph)
-    test_schema_graph = hydra.lexical.elements_to_graph(
-        hydra_core_graph, core_schema_types, tuple(kernel_elements + test_elements))
-
-    # Step 3: Build testGraph
-    # Haskell: testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
-
-    # Decode schema types from the test schema graph
-    test_schema_types = _decode_schema_types(test_schema_graph)
-
-    # Build term bindings
+    # Build term bindings from test data
     test_terms_dict = test_graph.test_terms()
     data_bindings = [hydra.core.Binding(name=name, term=term, type=Nothing())
                      for name, term in test_terms_dict.items()]
 
-    # Load kernel term bindings
-    kernel_terms = _load_kernel_term_bindings()
-    kernel_term_bindings = list(kernel_terms.values())
-
-    # Build the test graph using elementsToGraph
+    # Build the test graph with schema types and all term bindings
     return hydra.lexical.elements_to_graph(
-        hydra_core_graph, test_schema_types, tuple(kernel_term_bindings + data_bindings))
+        bs_graph, schema_types, tuple(kernel_term_bindings + data_bindings))
 
 
 # Cache the test graph at module level.
@@ -581,24 +469,22 @@ def run_inference_test(desc: str, test_case: hydra.testing.InferenceTestCase) ->
     input_term = test_case.input
     expected_scheme = test_case.output
 
-    # Get cached inference context (this is the key optimization)
-    cx = get_test_graph()
+    # Get cached test graph
+    graph = get_test_graph()
+    cx = _empty_context()
 
-    # Infer the type
-    result_flow = hydra.inference.infer_type_of(cx, input_term)
-    result_state = result_flow.value(None, hydra.monads.empty_trace())
+    # Infer the type — returns Either[InContext[OtherError], ((Term, TypeScheme), Context)]
+    result = hydra.inference.infer_type_of(cx, graph, input_term)
 
-    match result_state.value:
-        case Nothing():
-            # Extract error messages from trace
-            errors = "\n".join(result_state.trace.messages)
+    match result:
+        case Left(value=in_ctx):
             pytest.fail(
                 f"Type inference failed for {desc}:\n"
-                f"  Errors: {errors}\n"
+                f"  Error: {in_ctx.object}\n"
                 f"  Term: {hydra.show.core.term(input_term)}"
             )
             return
-        case Just(value=(inferred_term, inferred_scheme)):
+        case Right(value=((inferred_term, inferred_scheme), _cx2)):
             pass
 
     # Compare type schemes
@@ -636,18 +522,18 @@ def run_inference_failure_test(desc: str, test_case: hydra.testing.InferenceFail
     """
     input_term = test_case.input
 
-    # Get cached inference context (this is the key optimization)
-    cx = get_test_graph()
+    # Get cached test graph
+    graph = get_test_graph()
+    cx = _empty_context()
 
-    # Try to infer the type
-    result_flow = hydra.inference.infer_type_of(cx, input_term)
-    result_state = result_flow.value(None, hydra.monads.empty_trace())
+    # Try to infer the type — returns Either
+    result = hydra.inference.infer_type_of(cx, graph, input_term)
 
-    match result_state.value:
-        case Nothing():
+    match result:
+        case Left(_):
             # Expected failure - test passes
             pass
-        case Just(value=(_, inferred_scheme)):
+        case Right(value=((_, inferred_scheme), _)):
             pytest.fail(
                 f"Type inference should have failed for {desc}:\n"
                 f"  Term: {hydra.show.core.term(input_term)}\n"
@@ -695,25 +581,20 @@ def run_eta_expansion_test(desc: str, test_case: hydra.testing.EtaExpansionTestC
     Note: Uses eta_expand_typed_term (not eta_expand_term) to match Haskell behavior.
     The typed version uses type information to avoid expanding bare primitives at top level.
     """
-    # Use cached test graph and type context
     graph = get_test_graph()
-    tx = get_test_graph()
+    cx = _empty_context()
 
-    # Run the typed eta expansion (matches Haskell's etaExpandTypedTerm)
-    flow_result = hydra.reduction.eta_expand_typed_term(tx, test_case.input)
-    flow_state = flow_result.value(graph, hydra.compute.Trace((), (), hydra.lib.maps.empty()))
+    result = hydra.reduction.eta_expand_typed_term(cx, graph, test_case.input)
 
-    match flow_state.value:
-        case Nothing():
-            messages = flow_state.trace.messages
-            error_msg = "; ".join(messages) if messages else "unknown error"
-            pytest.fail(f"Eta expansion failed for {desc}: {error_msg}")
-        case Just(value=result):
+    match result:
+        case Left(value=err):
+            pytest.fail(f"Eta expansion failed for {desc}: {err.object.value}")
+        case Right(value=expanded):
             pass
-    assert result == test_case.output, (
+    assert expanded == test_case.output, (
         f"Eta expansion failed for {desc}:\n"
         f"  Expected: {hydra.show.core.term(test_case.output)}\n"
-        f"  Actual: {hydra.show.core.term(result)}"
+        f"  Actual: {hydra.show.core.term(expanded)}"
     )
 
 
@@ -739,31 +620,28 @@ def run_free_variables_test(test_case: hydra.testing.FreeVariablesTestCase) -> N
 
 def run_evaluation_test(desc: str, test_case: hydra.testing.EvaluationTestCase) -> None:
     """Execute a term evaluation test."""
-    # Use cached test graph
     graph = get_test_graph()
+    cx = _empty_context()
 
-    # Determine if eager or lazy evaluation
     eager = test_case.evaluation_style == hydra.testing.EvaluationStyle.EAGER
 
-    result_flow = hydra.reduction.reduce_term(eager, test_case.input)
-    result_state = result_flow.value(graph, hydra.monads.empty_trace())
+    result = hydra.reduction.reduce_term(cx, graph, eager, test_case.input)
 
-    match result_state.value:
-        case Nothing():
-            errors = "\n".join(result_state.trace.messages)
+    match result:
+        case Left(value=err):
             pytest.fail(
                 f"Evaluation failed for {desc}:\n"
-                f"  Errors: {errors}\n"
+                f"  Error: {err.object.value}\n"
                 f"  Term: {hydra.show.core.term(test_case.input)}"
             )
             return
-        case Just(value=result):
+        case Right(value=reduced):
             pass
 
-    assert result == test_case.output, (
+    assert reduced == test_case.output, (
         f"Evaluation mismatch for {desc}:\n"
         f"  Expected: {hydra.show.core.term(test_case.output)}\n"
-        f"  Actual: {hydra.show.core.term(result)}"
+        f"  Actual: {hydra.show.core.term(reduced)}"
     )
 
 
@@ -848,23 +726,22 @@ def run_topological_sort_scc_test(test_case: hydra.testing.TopologicalSortSCCTes
 
 def run_type_checking_test(desc: str, test_case: hydra.testing.TypeCheckingTestCase) -> None:
     """Execute a type checking test."""
-    # Get cached inference context (this is the key optimization)
-    cx = get_test_graph()
+    # Get cached test graph
+    graph = get_test_graph()
+    cx = _empty_context()
 
-    # Infer the type
-    result_flow = hydra.inference.infer_type_of(cx, test_case.input)
-    result_state = result_flow.value(None, hydra.monads.empty_trace())
+    # Infer the type — returns Either
+    result = hydra.inference.infer_type_of(cx, graph, test_case.input)
 
-    match result_state.value:
-        case Nothing():
-            errors = "\n".join(result_state.trace.messages)
+    match result:
+        case Left(value=in_ctx):
             pytest.fail(
                 f"Type checking failed for {desc}:\n"
-                f"  Errors: {errors}\n"
+                f"  Error: {in_ctx.object}\n"
                 f"  Term: {hydra.show.core.term(test_case.input)}"
             )
             return
-        case Just(value=(inferred_term, inferred_scheme)):
+        case Right(value=((inferred_term, inferred_scheme), _cx2)):
             pass
 
     # Compare the inferred type with expected output type
@@ -894,26 +771,26 @@ def run_type_reduction_test(desc: str, test_case: hydra.testing.TypeReductionTes
     """Execute a type reduction test."""
     # Use cached test graph - type reduction needs the graph with schema types
     graph = get_test_graph()
+    cx = _empty_context()
 
-    result_flow = hydra.reduction.beta_reduce_type(test_case.input)
-    result_state = result_flow.value(graph, hydra.monads.empty_trace())
+    # beta_reduce_type now takes (cx, graph, typ) and returns Either[str, Type]
+    result = hydra.reduction.beta_reduce_type(cx, graph, test_case.input)
 
-    match result_state.value:
-        case Nothing():
-            errors = "\n".join(result_state.trace.messages)
+    match result:
+        case Left(value=err):
             pytest.fail(
                 f"Type reduction failed for {desc}:\n"
-                f"  Errors: {errors}\n"
+                f"  Error: {err}\n"
                 f"  Type: {hydra.show.core.type(test_case.input)}"
             )
             return
-        case Just(value=result):
+        case Right(value=reduced):
             pass
 
-    assert result == test_case.output, (
+    assert reduced == test_case.output, (
         f"Type reduction mismatch for {desc}:\n"
         f"  Expected: {hydra.show.core.type(test_case.output)}\n"
-        f"  Actual: {hydra.show.core.type(result)}"
+        f"  Actual: {hydra.show.core.type(reduced)}"
     )
 
 
@@ -1035,41 +912,36 @@ def run_json_decode_test(test_case: hydra.testing.JsonDecodeTestCase) -> None:
     import hydra.ext.org.json.coder as json_coder
 
     graph = get_test_graph()
+    cx = _empty_context()
 
-    # Create a JSON coder for the specified type
-    coder_flow = json_coder.json_coder(test_case.type)
-    coder_state = coder_flow.value(graph, hydra.monads.empty_trace())
+    coder_result = json_coder.json_coder(test_case.type, cx, graph)
 
-    match coder_state.value:
-        case Nothing():
-            errors = "\n".join(coder_state.trace.messages)
-            pytest.fail(f"Failed to create JSON coder: {errors}")
+    match coder_result:
+        case Left(value=err):
+            pytest.fail(f"Failed to create JSON coder: {err.object.value}")
             return
-        case Just(value=coder):
+        case Right(value=coder):
             pass
 
-    # Try to decode the JSON
-    decode_flow = coder.decode(test_case.json)
-    decode_state = decode_flow.value(graph, hydra.monads.empty_trace())
+    decode_result = coder.decode(cx, test_case.json)
 
     match test_case.expected:
         case Left(value=_err_msg):
             # Expected failure
-            match decode_state.value:
-                case Nothing():
+            match decode_result:
+                case Left(_):
                     pass  # Expected failure, got failure
-                case Just(value=result):
+                case Right(value=result):
                     pytest.fail(
                         f"Expected decode failure but got success: "
                         f"{hydra.show.core.term(result)}"
                     )
         case Right(value=expected_term):
             # Expected success
-            match decode_state.value:
-                case Nothing():
-                    errors = "\n".join(decode_state.trace.messages)
-                    pytest.fail(f"JSON decode failed: {errors}")
-                case Just(value=result):
+            match decode_result:
+                case Left(value=err):
+                    pytest.fail(f"JSON decode failed: {err}")
+                case Right(value=result):
                     assert result == expected_term, (
                         f"JSON decode mismatch:\n"
                         f"  Expected: {hydra.show.core.term(expected_term)}\n"
@@ -1093,40 +965,33 @@ def run_json_roundtrip_test(test_case: hydra.testing.JsonRoundtripTestCase) -> N
     import hydra.ext.org.json.coder as json_coder
 
     graph = get_test_graph()
+    cx = _empty_context()
 
-    # Create a JSON coder for the specified type
-    coder_flow = json_coder.json_coder(test_case.type)
-    coder_state = coder_flow.value(graph, hydra.monads.empty_trace())
+    coder_result = json_coder.json_coder(test_case.type, cx, graph)
 
-    match coder_state.value:
-        case Nothing():
-            errors = "\n".join(coder_state.trace.messages)
-            pytest.fail(f"Failed to create JSON coder: {errors}")
+    match coder_result:
+        case Left(value=err):
+            pytest.fail(f"Failed to create JSON coder: {err.object.value}")
             return
-        case Just(value=coder):
+        case Right(value=coder):
             pass
 
-    # Encode the term
-    encode_flow = coder.encode(test_case.term)
-    encode_state = encode_flow.value(graph, hydra.monads.empty_trace())
+    encode_result = coder.encode(cx, test_case.term)
 
-    match encode_state.value:
-        case Nothing():
-            errors = "\n".join(encode_state.trace.messages)
-            pytest.fail(f"Failed to encode term to JSON: {errors}")
+    match encode_result:
+        case Left(value=err):
+            pytest.fail(f"Failed to encode term to JSON: {err}")
             return
-        case Just(value=json):
+        case Right(value=json):
             pass
 
     # Decode the JSON back
-    decode_flow = coder.decode(json)
-    decode_state = decode_flow.value(graph, hydra.monads.empty_trace())
+    decode_result = coder.decode(cx, json)
 
-    match decode_state.value:
-        case Nothing():
-            errors = "\n".join(decode_state.trace.messages)
-            pytest.fail(f"Failed to decode JSON back to term: {errors}")
-        case Just(value=decoded):
+    match decode_result:
+        case Left(value=err):
+            pytest.fail(f"Failed to decode JSON back to term: {err}")
+        case Right(value=decoded):
             assert decoded == test_case.term, (
                 f"JSON roundtrip mismatch:\n"
                 f"  Original: {hydra.show.core.term(test_case.term)}\n"
@@ -1237,27 +1102,26 @@ def run_unify_types_test(test_case: hydra.testing.UnifyTypesTestCase) -> None:
         for n in test_case.schema_types
     })
 
-    # Run unification
-    unify_flow = hydra.unification.unify_types(schema_types, test_case.left, test_case.right, "test")
-    unify_state = unify_flow.value(None, hydra.monads.empty_trace())
+    # Run unification — now takes Context as first param, returns Either directly
+    cx = _empty_context()
+    unify_result = hydra.unification.unify_types(cx, schema_types, test_case.left, test_case.right, "test")
 
     match test_case.expected:
         case Left(value=_err_substring):
             # Expected failure
-            match unify_state.value:
-                case Nothing():
+            match unify_result:
+                case Left(_):
                     pass  # Expected failure, got failure
-                case Just(value=result):
+                case Right(value=result):
                     pytest.fail(
                         f"Expected unification failure but got success: {result}"
                     )
         case Right(value=expected_subst):
             # Expected success
-            match unify_state.value:
-                case Nothing():
-                    errors = "\n".join(unify_state.trace.messages)
-                    pytest.fail(f"Expected unification success but got failure: {errors}")
-                case Just(value=actual_subst):
+            match unify_result:
+                case Left(value=err):
+                    pytest.fail(f"Expected unification success but got failure: {err}")
+                case Right(value=actual_subst):
                     assert actual_subst == expected_subst, (
                         f"Unification result mismatch:\n"
                         f"  Expected: {expected_subst}\n"
@@ -1267,27 +1131,26 @@ def run_unify_types_test(test_case: hydra.testing.UnifyTypesTestCase) -> None:
 
 def run_join_types_test(test_case: hydra.testing.JoinTypesTestCase) -> None:
     """Execute a type join test."""
-    # Run join
-    join_flow = hydra.unification.join_types(test_case.left, test_case.right, "test")
-    join_state = join_flow.value(None, hydra.monads.empty_trace())
+    # Run join — now takes Context as first param, returns Either directly
+    cx = _empty_context()
+    join_result = hydra.unification.join_types(cx, test_case.left, test_case.right, "test")
 
     match test_case.expected:
         case Left(value=_):
             # Expected failure (Left () indicates failure)
-            match join_state.value:
-                case Nothing():
+            match join_result:
+                case Left(_):
                     pass  # Expected failure, got failure
-                case Just(value=result):
+                case Right(value=result):
                     pytest.fail(
                         f"Expected join failure but got success with constraints: {result}"
                     )
         case Right(value=expected_constraints):
             # Expected success
-            match join_state.value:
-                case Nothing():
-                    errors = "\n".join(join_state.trace.messages)
-                    pytest.fail(f"Expected join success but got failure: {errors}")
-                case Just(value=actual_constraints):
+            match join_result:
+                case Left(value=err):
+                    pytest.fail(f"Expected join success but got failure: {err}")
+                case Right(value=actual_constraints):
                     assert actual_constraints == expected_constraints, (
                         f"Join constraints mismatch:\n"
                         f"  Expected: {expected_constraints}\n"
