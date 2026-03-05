@@ -69,7 +69,7 @@ The import block for a term-level source module is large but follows a consisten
 1. **Unqualified core imports** — `Hydra.Kernel`, `Hydra.Sources.Libraries`, `Hydra.Dsl.Meta.Phantoms`, `Hydra.Dsl.Meta.Lib.Strings`
 2. **Qualified DSL imports** — `Hydra.Dsl.*` modules (Bootstrap, Annotations, Grammars, LiteralTypes, Literals, Types, Terms, etc.)
 3. **Qualified meta DSL imports** — `Hydra.Dsl.Meta.*` modules (Accessors, Ast, Base, Coders, Compute, Core, Graph, Json, Module, Terms, Types, Variants, etc.)
-4. **Qualified library DSL imports** — `Hydra.Dsl.Meta.Lib.*` (Chars, Eithers, Equality, Flows, Lists, Literals, Logic, Maps, Math, Maybes, Pairs, Sets)
+4. **Qualified library DSL imports** — `Hydra.Dsl.Meta.Lib.*` (Chars, Eithers, Equality, Lists, Literals, Logic, Maps, Math, Maybes, Pairs, Sets)
 5. **Qualified kernel sources imports** — `Hydra.Sources.Kernel.Terms.*` modules for calling other promoted functions (Reduction, Rewriting, Inference, etc.)
 6. **Standard Haskell imports** — `Prelude hiding ((++))`, `Data.List as L`, `Data.Map as M`, `Data.Set as S`
 7. **Domain-specific imports** — generated phantom types for the types your module uses (e.g., `Hydra.Ext.Haskell.Ast as H`)
@@ -408,35 +408,30 @@ Eithers.bind (var "either") ("x" ~> ...)
 Eithers.mapList ("x" ~> ...) (var "xs")
 ```
 
-### Flow (monadic) operations
+### Either (error-handling) operations
 
-For code using the `Flow` monad (Hydra's effect system):
+Hydra computations use `Either (InContext OtherError) a` for error handling:
 
 ```haskell
--- Raw: pure x / return x
--- Promoted (either works):
-Flows.pure (var "x")
-produce (var "x")
-
--- Raw: flow >>= f
+-- Raw: Right x (success)
 -- Promoted:
-Flows.bind (var "flow") ("x" ~> ...)
--- Or using the bind operator:
-"x" <<~ var "flow" $
-...
+right (var "x")
 
--- Raw: flow >> next (sequencing without binding)
+-- Raw: Left err (failure)
 -- Promoted:
-exec (var "flow") $
-...
+Phantoms.left (var "err")
 
--- Raw: fmap f flow
+-- Raw: either >>= f (bind)
 -- Promoted:
-Flows.map ("x" ~> ...) (var "flow")
+Eithers.bind (var "either") ("x" ~> ...)
 
--- Raw: mapM f xs (for Flow)
+-- Raw: fmap f either
 -- Promoted:
-Flows.mapList ("x" ~> ...) (var "xs")
+Eithers.map ("x" ~> ...) (var "either")
+
+-- Raw: mapM f xs (for Either)
+-- Promoted:
+Eithers.mapList ("x" ~> ...) (var "xs")
 ```
 
 ### Literals, constructors, and common types
@@ -508,7 +503,7 @@ The DSL can handle mutual recursion directly — functions in the same module ca
    ```
 
 8. **DSL module naming conventions**: Functions in DSL modules often have different names than their Haskell counterparts:
-   - `Flows.getState` doesn't exist — use `Monads.getState`
+   - `Monads.getState` is used for accessing `Context` state
    - `Maybes.catMaybes` doesn't exist — use `Maybes.mapMaybe ("x" ~> var "x")`
    - `Maps.values` doesn't exist — use `Maps.elems`
    - `Lists.any` doesn't exist — use foldl with `Logic.or`
@@ -539,14 +534,14 @@ The DSL can handle mutual recursion directly — functions in the same module ca
 
     Note: `TBinding` values work fine with `@@` (application) without conversion, since `@@` has an `AsTerm` constraint. The issue only arises with DSL functions that expect `TTerm` directly.
 
-11. **Wrapping Haskell-level DSL functions in lambdas for higher-order use**: DSL library functions like `Lists.concat` are Haskell functions (`TTerm [[a]] -> TTerm [a]`), not DSL-level function values. When passing them to higher-order DSL functions like `Flows.map` (which expects an `AsTerm f (x -> y)`), wrap them in a lambda:
+11. **Wrapping Haskell-level DSL functions in lambdas for higher-order use**: DSL library functions like `Lists.concat` are Haskell functions (`TTerm [[a]] -> TTerm [a]`), not DSL-level function values. When passing them to higher-order DSL functions like `Eithers.map` or `Lists.map` (which expect an `AsTerm f (x -> y)`), wrap them in a lambda:
 
     ```haskell
     -- Wrong (type error — Lists.concat is a Haskell function, not a TTerm):
-    Flows.map Lists.concat (var "flowOfLists")
+    Eithers.map Lists.concat (var "eitherOfLists")
 
     -- Correct:
-    Flows.map ("xs" ~> Lists.concat (var "xs")) (var "flowOfLists")
+    Eithers.map ("xs" ~> Lists.concat (var "xs")) (var "eitherOfLists")
     ```
 
 12. **Record updates require setter functions**: The DSL has no record update syntax. If the original code uses `rec { field = newValue }`, create a setter function that reconstructs the entire record, copying all unchanged fields:
@@ -710,7 +705,7 @@ The DSL can handle mutual recursion directly — functions in the same module ca
     | `L.replicate n x` | `Lists.replicate n x` |
     | `x == y` | `Equality.equal x y` (not `Equality.eq`) |
     | `x /= y` | `Logic.not (Equality.equal x y)` |
-    | `foldM f acc xs` | `Flows.foldl f acc xs` (monadic fold) |
+    | `foldM f acc xs` | `Eithers.foldl f acc xs` (monadic fold over Either) |
     | `ShowCore.functionVariant` | `ShowCore.function` |
     | `ShowCore.type_` | `ShowCore.type_` |
 
@@ -760,7 +755,7 @@ The DSL can handle mutual recursion directly — functions in the same module ca
 
 32. **`Equality.lte`/`Equality.gte` for comparisons**: Use `Equality.lte (var "n") (int32 0)` for `n <= 0`, NOT `Math.lte`. The `Math` module handles arithmetic (`Math.sub`, `Math.add`), while `Equality` handles comparisons.
 
-33. **`Lists.zip` + `Flows.mapList` for `CM.zipWithM`**: Haskell's `Control.Monad.zipWithM f xs ys` becomes `Flows.mapList (lambda "pair" $ f @@ Pairs.first (var "pair") @@ Pairs.second (var "pair")) (Lists.zip xs ys)`. There is no `Flows.mapList2`.
+33. **`Lists.zip` + `Eithers.mapList` for `CM.zipWithM`**: Haskell's `Control.Monad.zipWithM f xs ys` becomes `Eithers.mapList (lambda "pair" $ f @@ Pairs.first (var "pair") @@ Pairs.second (var "pair")) (Lists.zip xs ys)`. There is no `Eithers.mapList2`.
 
 34. **Haskell code generator `PrimaryNoNewArray_` bug**: When a union variant name, capitalized and prefixed with the type name, collides with the type name itself (e.g., `Primary.noNewArray` → `PrimaryNoNewArray` collides with the type `PrimaryNoNewArray`), the Haskell code generator should append `_` to disambiguate. Inline `inject` calls may not handle this correctly. **Workaround**: Use a pre-existing helper function (e.g., `JavaUtilsSource.javaMethodInvocationToJavaPrimary`) that handles the wrapping, rather than constructing the Primary inline.
 
@@ -770,14 +765,14 @@ The DSL can handle mutual recursion directly — functions in the same module ca
 
 37. **`Serialization` module for `printExpr`/`parenthesize`**: These functions live in `Hydra.Sources.Kernel.Terms.Serialization`, NOT in the Java Serde module. Import as `qualified Hydra.Sources.Kernel.Terms.Serialization as SerializationSource` and add `SerializationSource.ns` to the module dependencies.
 
-38. **Empty list type ambiguity**: When using `list []` in a context where GHC cannot infer the element type (e.g., inside `optCases` branches or as an argument to `Flows.pure`), you may get "ambiguous type variable" errors because the `AsTerm` constraint on `list` cannot be resolved. The fix is to bypass `list` and construct directly from `Terms.list`:
+38. **Empty list type ambiguity**: When using `list []` in a context where GHC cannot infer the element type (e.g., inside `optCases` branches or as an argument to `right`), you may get "ambiguous type variable" errors because the `AsTerm` constraint on `list` cannot be resolved. The fix is to bypass `list` and construct directly from `Terms.list`:
 
     ```haskell
     -- Error: Ambiguous type variable 'a0' arising from a use of 'list'
-    Flows.pure (list [])
+    right (list [])
 
     -- Fix: construct via Terms.list with a type annotation
-    Flows.pure (TTerm (Terms.list []) :: TTerm [(String, String)])
+    right (TTerm (Terms.list []) :: TTerm [(String, String)])
     ```
 
     This works because `Terms.list` operates at the untyped term level and doesn't require the `AsTerm` constraint, while the outer `TTerm` annotation tells GHC the phantom type.
@@ -795,23 +790,21 @@ When the module to be promoted contains a mix of pure logic and I/O operations (
 2. **Extract the pure core.** For each I/O function, extract the pure computation as a separate function. The I/O function becomes a thin wrapper that:
    - Reads input (files, config)
    - Calls the pure function
-   - Evaluates the result (e.g., `runFlow`)
+   - Inspects the `Either` result (handling `Left` errors and `Right` successes)
    - Writes output (files, console)
 
    Example from `Generation.hs`:
    ```haskell
    -- Pure core (promotable):
-   generateSourceFiles :: ... -> Flow Graph [(FilePath, String)]
-   generateSourceFiles printDefs lang ... bsGraph universe mods = ...
+   generateSourceFiles :: ... -> Context -> Graph -> Either (InContext OtherError) [(FilePath, String)]
+   generateSourceFiles printDefs lang ... cx bsGraph universe mods = ...
 
    -- I/O wrapper (stays in Haskell):
    generateSources :: ... -> IO ()
-   generateSources printDefs lang ... basePath universe mods = do
-     mfiles <- runFlow bootstrapGraph $
-       generateSourceFiles printDefs lang ... bootstrapGraph universe mods
-     case mfiles of
-       Nothing -> fail "Failed"
-       Just files -> mapM_ writePair files
+   generateSources printDefs lang ... basePath universe mods =
+     case generateSourceFiles printDefs lang ... cx bootstrapGraph universe mods of
+       Left err -> fail (show err)
+       Right files -> mapM_ writePair files
    ```
 
 3. **Parameterize Haskell-specific values.** Some values exist only in Haskell (e.g., `bootstrapGraph` from `Hydra.Dsl.Bootstrap`). Instead of importing them in the pure code, pass them as explicit parameters. This makes the pure code language-independent — each language's I/O layer provides its own version:
@@ -839,15 +832,16 @@ When the module to be promoted contains a mix of pure logic and I/O operations (
    stripModuleTypeSchemes = Generated.stripModuleTypeSchemes
 
    -- I/O wrapper stays hand-written:
-   generateSources ... = do
-     mfiles <- runFlow bootstrapGraph $ generateSourceFiles ...
-     ...
+   generateSources ... =
+     case generateSourceFiles ... cx bootstrapGraph of
+       Left err -> fail (show err)
+       Right files -> mapM_ writePair files
    ```
 
 ### What typically stays behind
 
 - File I/O: `readFile`, `writeFile`, `createDirectoryIfMissing`, directory listing
-- Flow evaluation: `runFlow`, `printTrace`
+- Error handling: inspecting `Either` results, formatting error messages
 - Library-specific code: Aeson JSON parsing, ByteString processing
 - Haskell-specific encoders/decoders: `EncodeModule.module_`, `DecodeCore.type_`
 - Bootstrap graph: `bootstrapGraph` (Haskell's is defined in `Hydra.Dsl.Bootstrap`)

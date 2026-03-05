@@ -161,10 +161,10 @@ generated into `Hydra.Core`, `Hydra.Graph`, `Hydra.Module`.
 Based on System F with Hindley-Milner inference. Supports universal quantification,
 type abstraction/application, let-polymorphism. ~180+ primitive functions.
 
-### Flow monad
+### Error handling and state
 
-All Hydra transformations use `Flow s a` for state management, error handling,
-logging, and tracing.
+Hydra uses `Either (InContext OtherError) a` for computations that can fail.
+Debug traces and metadata are carried via explicit `Context` parameters.
 
 ### Coders
 
@@ -332,7 +332,7 @@ script enforces this order and stops at the first error.
 |----------|---------|------------|
 | `>:` | Field definition (string key) | 0 |
 | `<~` | Let binding | 0 |
-| `<<~` | Flow bind (monadic) | 0 |
+| `<<~` | Either bind (monadic) | 0 |
 | `@@` | Application (element definitions) | 1 |
 | `~>` | Lambda | -- |
 | `<.>` | Composition | 9 |
@@ -513,7 +513,7 @@ If step 4 fails, check the `implementation()` method of the primitive class.
 | Java primitive classes | `hydra-java/src/main/java/hydra/lib/<library>/` |
 | Java generated eval elements | `hydra-java/src/gen-main/java/hydra/eval/lib/` |
 | Java DSL term builders | `hydra-java/src/main/java/hydra/dsl/Terms.java` |
-| Java Flow utilities | `hydra-java/src/main/java/hydra/dsl/Flows.java` |
+| Java Either utilities | `hydra-java/src/main/java/hydra/util/Either.java` |
 | Java test runner | `hydra-java/src/test/java/hydra/TestSuiteRunner.java` |
 | Java reducer | `hydra-java/src/gen-main/java/hydra/reduction/Reduction.java` |
 | Haskell test definitions | `hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib/` |

@@ -28,7 +28,7 @@ For the Java DSLs, see [DSL Guide (Java)](dsl-guide-java.md).
 9. [Term definitions](#term-definitions)
 10. [Common patterns](#common-patterns)
 11. [Working with generated code](#working-with-generated-code)
-12. [Flow monad](#flow-monad)
+12. [Error handling](#error-handling)
 13. [Examples in the codebase](#examples-in-the-codebase)
 
 ## Overview
@@ -715,30 +715,34 @@ TERM__VARIABLE__NAME = Name("variable")
 # ...
 ```
 
-## Flow monad
+## Error handling
 
-Hydra computations use the `Flow` monad for state, error handling, and logging.
+Hydra computations use `Either[InContext[OtherError], A]` for error handling, where `InContext` carries execution state such as a trace stack, messages, and metadata via a `Context` object.
 
 ```python
-from hydra.compute import Flow, FlowState, unFlow, emptyTrace
-from hydra.dsl.flows import pure, map_, bind
+from hydra.util import Either
+from hydra.compute import Context, InContext, OtherError
 
-# Create a pure Flow
-pure_flow = pure("result")
+# Create a successful result
+ok = Either.right("result")
 
-# Map over a Flow
-mapped = map_(lambda s: len(s), pure_flow)
+# Map over a result
+mapped = hydra.lib.eithers.map_.apply(lambda s: len(s), ok)
 
-# Bind (flatMap) flows
-bound = bind(flow1, lambda value: pure(value + " processed"))
+# Chain computations (bind / flatMap)
+bound = hydra.lib.eithers.bind.apply(result1, lambda value: Either.right(value + " processed"))
 
-# Run a Flow and extract result
-state = unFlow(flow, graph, emptyTrace())
-if state.value is not None:
-    result = state.value
-else:
-    messages = state.trace.messages
-    # Handle failure
+# Create a failure
+err = Either.left(InContext(OtherError("something went wrong"), cx))
+
+# Inspect a result
+match result:
+    case Either.Right(value):
+        # use value
+        pass
+    case Either.Left(failure):
+        # failure.value is OtherError, failure.context is Context
+        pass
 ```
 
 ## Working with FrozenDict

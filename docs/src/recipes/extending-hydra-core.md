@@ -234,7 +234,7 @@ def "TypeVariant" $
 > **⚠️ Variable Naming:** Avoid using variable names that clash with Prelude functions (`fst`, `snd`, `head`, `tail`, `map`, `filter`, etc.). The DSL code generates Haskell that imports Prelude, so these names will cause compilation errors. Use descriptive names like `pairFst`, `pairSnd`, `listHead`, etc.
 
 ```haskell
-inferTypeOfEitherDef :: TBinding (InferenceContext -> Prelude.Either Term Term -> Flow s InferenceResult)
+inferTypeOfEitherDef :: TBinding (InferenceContext -> Prelude.Either Term Term -> Either (InContext OtherError) InferenceResult)
 inferTypeOfEitherDef = define "inferTypeOfEither" $
   doc "Infer the type of an either value" $
   "cx" ~> "e" ~>
@@ -306,7 +306,7 @@ import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 Type checking reconstructs types from terms that already have type applications (added during inference).
 
 ```haskell
-typeOfEitherDef :: TBinding (TypeContext -> [Type] -> Prelude.Either Term Term -> Flow s Type)
+typeOfEitherDef :: TBinding (TypeContext -> [Type] -> Prelude.Either Term Term -> Either (InContext OtherError) Type)
 typeOfEitherDef = define "typeOfEither" $
   doc "Reconstruct the type of an either value" $
   "tx" ~> "typeArgs" ~> "et" ~>
@@ -314,19 +314,19 @@ typeOfEitherDef = define "typeOfEither" $
   "checkLength" <~ (
     "n" <~ Lists.length (var "typeArgs") $
     Logic.ifElse (Equality.equal (var "n") (int32 2))
-      (Flows.pure unit)
-      (Flows.fail $ "either type requires 2 type arguments, got " ++ Literals.showInt32 (var "n"))) $
-  exec (var "checkLength") $
+      (right unit)
+      (Phantoms.left $ "either type requires 2 type arguments, got " ++ Literals.showInt32 (var "n"))) $
+  Eithers.bind (var "checkLength") ("_" ~>
   Eithers.either_
     ("leftTerm" ~>
-      "leftType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "leftTerm" $
-      exec (ref checkTypeVariablesDef @@ var "tx" @@ var "leftType") $
-      Flows.pure $ Core.typeEither $ Core.eitherType (var "leftType") (Lists.at (int32 1) $ var "typeArgs"))
+      Eithers.bind (ref typeOfDef @@ var "tx" @@ list [] @@ var "leftTerm") ("leftType" ~>
+      Eithers.bind (ref checkTypeVariablesDef @@ var "tx" @@ var "leftType") ("_" ~>
+      right $ Core.typeEither $ Core.eitherType (var "leftType") (Lists.at (int32 1) $ var "typeArgs"))))
     ("rightTerm" ~>
-      "rightType" <<~ ref typeOfDef @@ var "tx" @@ list [] @@ var "rightTerm" $
-      exec (ref checkTypeVariablesDef @@ var "tx" @@ var "rightType") $
-      Flows.pure $ Core.typeEither $ Core.eitherType (Lists.at (int32 0) $ var "typeArgs") (var "rightType"))
-    (var "et")
+      Eithers.bind (ref typeOfDef @@ var "tx" @@ list [] @@ var "rightTerm") ("rightType" ~>
+      Eithers.bind (ref checkTypeVariablesDef @@ var "tx" @@ var "rightType") ("_" ~>
+      right $ Core.typeEither $ Core.eitherType (Lists.at (int32 0) $ var "typeArgs") (var "rightType"))))
+    (var "et"))
 ```
 
 Add case to main checking function and register in elements list, similar to inference.
@@ -403,8 +403,8 @@ Common files to update:
 
 ```haskell
 _Term_either>>: "et" ~> Eithers.either_
-  ("l" ~> Flows.map (unaryFunction left) (var "leftFun" @@ var "l"))
-  ("r" ~> Flows.map (unaryFunction right) (var "rightFun" @@ var "r"))
+  ("l" ~> Eithers.map (unaryFunction left) (var "leftFun" @@ var "l"))
+  ("r" ~> Eithers.map (unaryFunction right) (var "rightFun" @@ var "r"))
   (var "et")
 ```
 
@@ -435,7 +435,7 @@ standardLibraries = [
   hydraLibChars,
   hydraLibEithers,  -- ← Verify this is included
   hydraLibEquality,
-  hydraLibFlows,
+  hydraLibEithers,
   -- ...
 ]
 ```
@@ -464,19 +464,19 @@ Add the inference function. Translate from the DSL source to plain Haskell:
 
 ```haskell
 -- Around line 570
-inferTypeOfEither :: (Typing_.InferenceContext -> Either Core.Term Core.Term -> Compute.Flow t0 Typing_.InferenceResult)
+inferTypeOfEither :: (Typing_.InferenceContext -> Either Core.Term Core.Term -> Either (Compute.InContext Compute.OtherError) Typing_.InferenceResult)
 inferTypeOfEither cx e = ((\x -> case x of
-    Left l -> (Flows.bind (inferTypeOfTerm cx l "either left value") (\r1 ->
+    Left l -> (Eithers.bind (inferTypeOfTerm cx l "either left value") (\r1 ->
       let leftType = (Typing_.inferenceResultType r1)
-      in (Flows.bind freshVariableType (\rightType -> Flows.pure (Typing_.InferenceResult {
+      in (Eithers.bind freshVariableType (\rightType -> Right (Typing_.InferenceResult {
         Typing_.inferenceResultTerm = (Core.TermEither (Left l)),
         Typing_.inferenceResultType = (Core.TypeEither (Core.EitherType {
           Core.eitherTypeLeft = leftType,
           Core.eitherTypeRight = rightType})),
         Typing_.inferenceResultSubst = (Typing_.inferenceResultSubst r1)})))))
-    Right r -> (Flows.bind (inferTypeOfTerm cx r "either right value") (\r1 ->
+    Right r -> (Eithers.bind (inferTypeOfTerm cx r "either right value") (\r1 ->
       let rightType = (Typing_.inferenceResultType r1)
-      in (Flows.bind freshVariableType (\leftType -> Flows.pure (Typing_.InferenceResult {
+      in (Eithers.bind freshVariableType (\leftType -> Right (Typing_.InferenceResult {
         Typing_.inferenceResultTerm = (Core.TermEither (Right r)),
         Typing_.inferenceResultType = (Core.TypeEither (Core.EitherType {
           Core.eitherTypeLeft = leftType,
@@ -497,7 +497,7 @@ Core.TermEither v1 -> (inferTypeOfEither cx v1)
 Similarly, add the type checking function. This requires exact type arguments:
 
 ```haskell
-typeOfEither :: (Typing_.TypeContext -> [Core.Type] -> Either Core.Term Core.Term -> Compute.Flow t0 Core.Type)
+typeOfEither :: (Typing_.TypeContext -> [Core.Type] -> Either Core.Term Core.Term -> Either (Compute.InContext Compute.OtherError) Core.Type)
 typeOfEither tx typeArgs et = -- Implementation similar to Checking.hs source
 ```
 
@@ -511,8 +511,8 @@ Add type encoding in `encodeType` function (after `Core.TypeApplication`, before
 Core.TypeEither v1 ->
   let left = (Core.eitherTypeLeft v1)
       right = (Core.eitherTypeRight v1)
-  in (Flows.map Utils.toTypeApplication (Flows.sequence [
-    Flows.pure (Ast.TypeVariable (Utils.rawName "Either")),
+  in (Eithers.map Utils.toTypeApplication (Eithers.sequence [
+    Right (Ast.TypeVariable (Utils.rawName "Either")),
     encode left,
     (encode right)]))
 ```
@@ -773,7 +773,7 @@ stack test
 | `Variable not bound to type: hydra.inference.inferTypeOfX` | Function not registered in module exports | Add `el inferTypeOfXDef` to elements list |
 | Using `cases _Either` on built-in types | Confusion between Hydra unions and Haskell types | Use library functions (`Eithers.either_`) for Haskell built-ins |
 | `unexpected type: either<...>` in codegen | Coder doesn't know how to encode the type | Manually patch `Hydra/Ext/Haskell/Coder.hs` |
-| Type signature mismatch | Using wrong Monad operations | Use `<<~` for `Flow` binds, `<~` for pure lets |
+| Type signature mismatch | Using wrong bind operations | Use `Eithers.bind` for Either binds, `<~` for pure lets |
 | Missing rewrite function cases | Forgot to add to all rewriting variants | Search for `_Term_maybe` in `Rewriting.hs` to find all functions needing updates |
 | Variants not updated | Missing from `Hydra.Variants` or `Hydra.Dsl.Mantle` | Add to `termVariant` function, `termVariants` list, and DSL helpers |
 | Language support missing | Constructor not in language definition | Add to `termVariants` in `Hydra/Ext/Sources/Python/Language.hs` (or other language) and regenerate |
