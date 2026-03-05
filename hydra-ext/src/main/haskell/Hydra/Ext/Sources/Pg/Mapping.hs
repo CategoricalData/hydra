@@ -112,12 +112,12 @@ schema = define "Schema" $
   doc "A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types" $
   T.forAlls ["s", "t", "v"] $
     T.record [
-      "vertexIdTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
-      "vertexIds">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",
-      "edgeIdTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
-      "edgeIds">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",
-      "propertyTypes">: compute "Coder" @@ "s" @@ "s" @@ core "Type" @@ "t",
-      "propertyValues">: compute "Coder" @@ "s" @@ "s" @@ core "Term" @@ "v",
+      "vertexIdTypes">: compute "Coder" @@ core "Type" @@ "t",
+      "vertexIds">: compute "Coder" @@ core "Term" @@ "v",
+      "edgeIdTypes">: compute "Coder" @@ core "Type" @@ "t",
+      "edgeIds">: compute "Coder" @@ core "Term" @@ "v",
+      "propertyTypes">: compute "Coder" @@ core "Type" @@ "t",
+      "propertyValues">: compute "Coder" @@ core "Term" @@ "v",
       "annotations">: mappings "AnnotationSchema",
       "defaultVertexId">: "v",
       "defaultEdgeId">: "v"]

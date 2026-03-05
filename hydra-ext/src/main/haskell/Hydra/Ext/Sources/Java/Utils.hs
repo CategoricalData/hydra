@@ -10,7 +10,8 @@ import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
+import qualified Hydra.Dsl.Meta.Context                    as Ctx
+import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
@@ -1266,13 +1267,14 @@ toAcceptMethod = def "toAcceptMethod" $
 -- =============================================================================
 
 -- | Convert a Java Type to an array type
-toJavaArrayType :: TBinding (Java.Type -> Flow Graph Java.Type)
+toJavaArrayType :: TBinding (Java.Type -> Context -> Either (InContext OtherError) Java.Type)
 toJavaArrayType = def "toJavaArrayType" $
-  lambda "t" $ cases Java._Type (var "t") Nothing [
+  lambda "t" $ "cx" ~>
+  cases Java._Type (var "t") Nothing [
     Java._Type_reference>>: lambda "rt" $
       cases Java._ReferenceType (var "rt") Nothing [
         Java._ReferenceType_classOrInterface>>: lambda "cit" $
-          Flows.pure (JavaDsl.typeReference (JavaDsl.referenceTypeArray
+          right (JavaDsl.typeReference (JavaDsl.referenceTypeArray
             (JavaDsl.arrayType
               (JavaDsl.dims (list [list ([] :: [TTerm Java.Annotation])]))
               (inject Java._ArrayType_Variant Java._ArrayType_Variant_classOrInterface (var "cit"))))),
@@ -1280,24 +1282,25 @@ toJavaArrayType = def "toJavaArrayType" $
           "oldDims">: unwrap Java._Dims @@ (project Java._ArrayType Java._ArrayType_dims @@ var "at"),
           "newDims">: JavaDsl.dims (Lists.concat2 (var "oldDims") (list [list ([] :: [TTerm Java.Annotation])])),
           "variant">: project Java._ArrayType Java._ArrayType_variant @@ var "at"] $
-          Flows.pure (JavaDsl.typeReference (JavaDsl.referenceTypeArray
+          right (JavaDsl.typeReference (JavaDsl.referenceTypeArray
             (JavaDsl.arrayType (var "newDims") (var "variant")))),
         Java._ReferenceType_variable>>: constant $
-          Flows.fail (string "don't know how to make Java reference type into array type")],
+          Ctx.failInContext (Error.otherError $ string "don't know how to make Java reference type into array type") (var "cx")],
     Java._Type_primitive>>: constant $
-      Flows.fail (string "don't know how to make Java type into array type")]
+      Ctx.failInContext (Error.otherError $ string "don't know how to make Java type into array type") (var "cx")]
 
 -- =============================================================================
 -- Type to reference type
 -- =============================================================================
 
 -- | Extract the reference type from a Java type, failing if it's a primitive type
-javaTypeToJavaReferenceType :: TBinding (Java.Type -> Flow Graph Java.ReferenceType)
+javaTypeToJavaReferenceType :: TBinding (Java.Type -> Context -> Either (InContext OtherError) Java.ReferenceType)
 javaTypeToJavaReferenceType = def "javaTypeToJavaReferenceType" $
-  lambda "t" $ cases Java._Type (var "t") Nothing [
-    Java._Type_reference>>: lambda "rt" $ Flows.pure (var "rt"),
+  lambda "t" $ "cx" ~>
+  cases Java._Type (var "t") Nothing [
+    Java._Type_reference>>: lambda "rt" $ right (var "rt"),
     Java._Type_primitive>>: constant $
-      Flows.fail (string "expected a Java reference type")]
+      Ctx.failInContext (Error.otherError $ string "expected a Java reference type") (var "cx")]
 
 -- =============================================================================
 -- Reference type to raw type
@@ -1334,9 +1337,10 @@ javaReferenceTypeToRawType = def "javaReferenceTypeToRawType" $
 -- =============================================================================
 
 -- | Add a reference type as a type argument to an existing Java type
-addJavaTypeParameter :: TBinding (Java.ReferenceType -> Java.Type -> Flow Graph Java.Type)
+addJavaTypeParameter :: TBinding (Java.ReferenceType -> Java.Type -> Context -> Either (InContext OtherError) Java.Type)
 addJavaTypeParameter = def "addJavaTypeParameter" $
-  lambda "rt" $ lambda "t" $ cases Java._Type (var "t") Nothing [
+  lambda "rt" $ lambda "t" $ "cx" ~>
+  cases Java._Type (var "t") Nothing [
     Java._Type_reference>>: lambda "rt1" $
       cases Java._ReferenceType (var "rt1") Nothing [
         Java._ReferenceType_classOrInterface>>: lambda "cit" $
@@ -1346,19 +1350,19 @@ addJavaTypeParameter = def "addJavaTypeParameter" $
               "qual">: project Java._ClassType Java._ClassType_qualifier @@ var "ct",
               "id">: project Java._ClassType Java._ClassType_identifier @@ var "ct",
               "args">: project Java._ClassType Java._ClassType_arguments @@ var "ct"] $
-              Flows.pure (JavaDsl.typeReference
+              right (JavaDsl.typeReference
                 (JavaDsl.referenceTypeClassOrInterface
                   (JavaDsl.classOrInterfaceTypeClass
                     (JavaDsl.classType (var "anns") (var "qual") (var "id")
                       (Lists.concat2 (var "args") (list [JavaDsl.typeArgumentReference (var "rt")])))))),
             Java._ClassOrInterfaceType_interface>>: constant $
-              Flows.fail (string "expected a Java class type")],
+              Ctx.failInContext (Error.otherError $ string "expected a Java class type") (var "cx")],
         Java._ReferenceType_variable>>: lambda "tv" $
-          Flows.pure (javaTypeVariableToType @@ var "tv"),
+          right (javaTypeVariableToType @@ var "tv"),
         Java._ReferenceType_array>>: constant $
-          Flows.fail (string "expected a Java class or interface type, or a variable")],
+          Ctx.failInContext (Error.otherError $ string "expected a Java class or interface type, or a variable") (var "cx")],
     Java._Type_primitive>>: constant $
-      Flows.fail (string "expected a reference type")]
+      Ctx.failInContext (Error.otherError $ string "expected a reference type") (var "cx")]
 
 -- =============================================================================
 -- Aliases modifiers

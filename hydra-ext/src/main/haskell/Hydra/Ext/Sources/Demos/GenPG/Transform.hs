@@ -15,6 +15,8 @@ import qualified Hydra.Dsl.Meta.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Compute                    as Compute
+import qualified Hydra.Dsl.Meta.Context                    as Ctx
+import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -22,7 +24,6 @@ import qualified Hydra.Dsl.Meta.Json                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
@@ -64,7 +65,6 @@ import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages      as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
-import qualified Hydra.Sources.Kernel.Terms.Monads         as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
@@ -147,55 +147,57 @@ tab :: String -> Type
 tab = Bootstrap.typeref TabularModel.ns
 
 -- | Evaluate properties by applying each spec to the record and extracting optional values
-evaluateProperties :: TBinding (M.Map PG.PropertyKey Term -> Term -> Flow Graph (M.Map PG.PropertyKey Term))
+evaluateProperties :: TBinding (Context -> Graph -> M.Map PG.PropertyKey Term -> Term -> Either (InContext OtherError) (M.Map PG.PropertyKey Term))
 evaluateProperties = define "evaluateProperties" $
   doc "Evaluate property specifications against a record term" $
-  "specs" ~> "record" ~>
+  "cx" ~> "g" ~> "specs" ~> "record" ~>
     -- Lift the match extractor outside the inner lambda to avoid Python inline match issues
     -- This takes the key as parameter so it doesn't need to capture it
     "extractMaybe" <~ ("k" ~> "term" ~>
       match _Term Nothing [
         _Term_maybe>>: "mv" ~>
-          Flows.pure $ Maybes.map ("v" ~> pair (var "k") (var "v")) (var "mv")]
+          right $ Maybes.map ("v" ~> pair (var "k") (var "v")) (var "mv")]
       @@ var "term") $
-    Flows.map
+    Eithers.map
       ("pairs" ~> Maps.fromList $ Maybes.cat $ var "pairs")
-      (Flows.mapList
+      (Eithers.mapList
         ("pair" ~>
           "k" <~ Pairs.first (var "pair") $
           "spec" <~ Pairs.second (var "pair") $
-          Flows.bind
-            (Reduction.reduceTerm @@ boolean True @@ (Core.termApplication $ Core.application (var "spec") (var "record")))
+          Eithers.bind
+            (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "spec") (var "record")))
             ("value" ~> var "extractMaybe" @@ var "k" @@ (Rewriting.deannotateTerm @@ var "value")))
         (Maps.toList $ var "specs"))
 
 -- | Evaluate an edge specification against a record term
-evaluateEdge :: TBinding (PG.Edge Term -> Term -> Flow Graph (Maybe (PG.Edge Term)))
+evaluateEdge :: TBinding (Context -> Graph -> PG.Edge Term -> Term -> Either (InContext OtherError) (Maybe (PG.Edge Term)))
 evaluateEdge = define "evaluateEdge" $
   doc "Evaluate an edge specification against a record term to produce an optional edge" $
-  "edgeSpec" ~> "record" ~>
+  "cx" ~> "g" ~> "edgeSpec" ~> "record" ~>
     "label" <~ (project PG._Edge PG._Edge_label @@ var "edgeSpec") $
     "idSpec" <~ (project PG._Edge PG._Edge_id @@ var "edgeSpec") $
     "outSpec" <~ (project PG._Edge PG._Edge_out @@ var "edgeSpec") $
     "inSpec" <~ (project PG._Edge PG._Edge_in @@ var "edgeSpec") $
     "propSpecs" <~ (project PG._Edge PG._Edge_properties @@ var "edgeSpec") $
-    Flows.bind
-      (Reduction.reduceTerm @@ boolean True @@ (Core.termApplication $ Core.application (var "idSpec") (var "record")))
+    Eithers.bind
+      (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "idSpec") (var "record")))
       ("id" ~>
-        Flows.bind
-          (Flows.bind
-            (Reduction.reduceTerm @@ boolean True @@ (Core.termApplication $ Core.application (var "outSpec") (var "record")))
-            (ExtractCore.maybeTerm @@ ("t" ~> Flows.pure (var "t"))))
+        Eithers.bind
+          (Eithers.bind
+            (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "outSpec") (var "record")))
+            ("__term" ~>
+              ExtractCore.maybeTerm @@ var "cx" @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
           ("mOutId" ~>
-            Flows.bind
-              (Flows.bind
-                (Reduction.reduceTerm @@ boolean True @@ (Core.termApplication $ Core.application (var "inSpec") (var "record")))
-                (ExtractCore.maybeTerm @@ ("t" ~> Flows.pure (var "t"))))
+            Eithers.bind
+              (Eithers.bind
+                (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "inSpec") (var "record")))
+                ("__term" ~>
+                  ExtractCore.maybeTerm @@ var "cx" @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
               ("mInId" ~>
-                Flows.bind
-                  (evaluateProperties @@ var "propSpecs" @@ var "record")
+                Eithers.bind
+                  (evaluateProperties @@ var "cx" @@ var "g" @@ var "propSpecs" @@ var "record")
                   ("props" ~>
-                    Flows.pure $
+                    right $
                       Maybes.bind (var "mOutId")
                         ("outId" ~>
                           Maybes.map
@@ -209,22 +211,23 @@ evaluateEdge = define "evaluateEdge" $
                             (var "mInId"))))))
 
 -- | Evaluate a vertex specification against a record term
-evaluateVertex :: TBinding (PG.Vertex Term -> Term -> Flow Graph (Maybe (PG.Vertex Term)))
+evaluateVertex :: TBinding (Context -> Graph -> PG.Vertex Term -> Term -> Either (InContext OtherError) (Maybe (PG.Vertex Term)))
 evaluateVertex = define "evaluateVertex" $
   doc "Evaluate a vertex specification against a record term to produce an optional vertex" $
-  "vertexSpec" ~> "record" ~>
+  "cx" ~> "g" ~> "vertexSpec" ~> "record" ~>
     "label" <~ (project PG._Vertex PG._Vertex_label @@ var "vertexSpec") $
     "idSpec" <~ (project PG._Vertex PG._Vertex_id @@ var "vertexSpec") $
     "propSpecs" <~ (project PG._Vertex PG._Vertex_properties @@ var "vertexSpec") $
-    Flows.bind
-      (Flows.bind
-        (Reduction.reduceTerm @@ boolean True @@ (Core.termApplication $ Core.application (var "idSpec") (var "record")))
-        (ExtractCore.maybeTerm @@ ("t" ~> Flows.pure (var "t"))))
+    Eithers.bind
+      (Eithers.bind
+        (Reduction.reduceTerm @@ var "cx" @@ var "g" @@ boolean True @@ (Core.termApplication $ Core.application (var "idSpec") (var "record")))
+        ("__term" ~>
+          ExtractCore.maybeTerm @@ var "cx" @@ ("t" ~> right (var "t")) @@ var "g" @@ var "__term"))
       ("mId" ~>
-        Flows.bind
-          (evaluateProperties @@ var "propSpecs" @@ var "record")
+        Eithers.bind
+          (evaluateProperties @@ var "cx" @@ var "g" @@ var "propSpecs" @@ var "record")
           ("props" ~>
-            Flows.pure $
+            right $
               Maybes.map
                 ("id" ~>
                   record PG._Vertex [
@@ -376,17 +379,17 @@ termRowToRecord = define "termRowToRecord" $
         (var "cells")
 
 -- | Transform a record through vertex and edge specifications
-transformRecord :: TBinding ([PG.Vertex Term] -> [PG.Edge Term] -> Term -> Flow Graph ([PG.Vertex Term], [PG.Edge Term]))
+transformRecord :: TBinding (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Term -> Either (InContext OtherError) ([PG.Vertex Term], [PG.Edge Term]))
 transformRecord = define "transformRecord" $
   doc "Transform a record through vertex and edge specifications to produce vertices and edges" $
-  "vspecs" ~> "especs" ~> "record" ~>
-    Flows.bind
-      (Flows.mapList ("spec" ~> evaluateVertex @@ var "spec" @@ var "record") (var "vspecs"))
+  "cx" ~> "g" ~> "vspecs" ~> "especs" ~> "record" ~>
+    Eithers.bind
+      (Eithers.mapList ("spec" ~> evaluateVertex @@ var "cx" @@ var "g" @@ var "spec" @@ var "record") (var "vspecs"))
       ("mVertices" ~>
-        Flows.bind
-          (Flows.mapList ("spec" ~> evaluateEdge @@ var "spec" @@ var "record") (var "especs"))
+        Eithers.bind
+          (Eithers.mapList ("spec" ~> evaluateEdge @@ var "cx" @@ var "g" @@ var "spec" @@ var "record") (var "especs"))
           ("mEdges" ~>
-            Flows.pure $ pair (Maybes.cat $ var "mVertices") (Maybes.cat $ var "mEdges")))
+            right $ pair (Maybes.cat $ var "mVertices") (Maybes.cat $ var "mEdges")))
 
 --------------------------------------------------------------------------------
 -- CSV Parsing (pure functions)
@@ -524,15 +527,15 @@ parseTableLines = define "parseTableLines" $
               Tab._Table_data>>: Lists.map ("r" ~> wrap Tab._DataRow (var "r")) (var "rows")]))
 
 -- | Transform all rows from a decoded table through vertex/edge specs
--- This is the pure part of table transformation (runs in Flow monad)
-transformTableRows :: TBinding ([PG.Vertex Term] -> [PG.Edge Term] -> Tab.TableType -> [Tab.DataRow Term] -> Flow Graph ([PG.Vertex Term], [PG.Edge Term]))
+-- This is the pure part of table transformation (runs in Either monad)
+transformTableRows :: TBinding (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Tab.TableType -> [Tab.DataRow Term] -> Either (InContext OtherError) ([PG.Vertex Term], [PG.Edge Term]))
 transformTableRows = define "transformTableRows" $
   doc "Transform all rows from a table through vertex/edge specifications" $
-  "vspecs" ~> "especs" ~> "tableType" ~> "rows" ~>
-    Flows.map
+  "cx" ~> "g" ~> "vspecs" ~> "especs" ~> "tableType" ~> "rows" ~>
+    Eithers.map
       ("pairs" ~> Lists.foldl concatPairs (pair (list ([] :: [TTerm (PG.Vertex Term)])) (list ([] :: [TTerm (PG.Edge Term)]))) (var "pairs"))
-      (Flows.mapList
-        ("row" ~> transformRecord @@ var "vspecs" @@ var "especs" @@ (termRowToRecord @@ var "tableType" @@ var "row"))
+      (Eithers.mapList
+        ("row" ~> transformRecord @@ var "cx" @@ var "g" @@ var "vspecs" @@ var "especs" @@ (termRowToRecord @@ var "tableType" @@ var "row"))
         (var "rows"))
 
 -- | Construct a LazyGraph from lists of vertices and edges

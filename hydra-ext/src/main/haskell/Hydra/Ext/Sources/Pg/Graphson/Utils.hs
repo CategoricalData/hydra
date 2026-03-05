@@ -24,7 +24,8 @@ import qualified Hydra.Dsl.Meta.Json                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
+import qualified Hydra.Dsl.Meta.Context                    as Ctx
+import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
@@ -131,50 +132,50 @@ jsonValue :: Type
 jsonValue = Bootstrap.typeref JsonModel.ns "Value"
 
 -- | Encode a String value to GraphSON
-encodeStringValue :: TBinding (String -> Flow s G.Value)
+encodeStringValue :: TBinding (String -> Either (InContext OtherError) G.Value)
 encodeStringValue = define "encodeStringValue" $
   doc "Encode a String value as a GraphSON Value" $
   "s" ~>
-    Flows.pure $ inject G._Value G._Value_string (var "s")
+    right $ inject G._Value G._Value_string (var "s")
 
 -- | Encode a Term value to GraphSON
-encodeTermValue :: TBinding (Term -> Flow s G.Value)
+encodeTermValue :: TBinding (Term -> Either (InContext OtherError) G.Value)
 encodeTermValue = define "encodeTermValue" $
   doc "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values." $
   "term" ~>
-    match _Term (Just $ Flows.fail $ string "unsupported term variant for GraphSON encoding") [
+    match _Term (Just $ left (Ctx.inContext (Error.otherError (string "unsupported term variant for GraphSON encoding")) (asTerm Monads.emptyContext))) [
       _Term_literal>>: "lit" ~>
-        match _Literal (Just $ Flows.fail $ string "unsupported literal type for GraphSON encoding") [
+        match _Literal (Just $ left (Ctx.inContext (Error.otherError (string "unsupported literal type for GraphSON encoding")) (asTerm Monads.emptyContext))) [
           _Literal_binary>>: "b" ~>
-            Flows.pure $ inject G._Value G._Value_binary (Literals.binaryToString $ var "b"),
+            right $ inject G._Value G._Value_binary (Literals.binaryToString $ var "b"),
           _Literal_boolean>>: "b" ~>
-            Flows.pure $ inject G._Value G._Value_boolean (var "b"),
+            right $ inject G._Value G._Value_boolean (var "b"),
           _Literal_float>>: "fv" ~>
-            match _FloatValue (Just $ Flows.fail $ string "unsupported float type") [
+            match _FloatValue (Just $ left (Ctx.inContext (Error.otherError (string "unsupported float type")) (asTerm Monads.emptyContext))) [
               _FloatValue_bigfloat>>: "f" ~>
-                Flows.pure $ inject G._Value G._Value_bigDecimal
+                right $ inject G._Value G._Value_bigDecimal
                   (wrap G._BigDecimalValue $ Literals.showBigfloat $ var "f"),
               _FloatValue_float32>>: "f" ~>
-                Flows.pure $ inject G._Value G._Value_float
+                right $ inject G._Value G._Value_float
                   (inject G._FloatValue G._FloatValue_finite (var "f")),
               _FloatValue_float64>>: "f" ~>
-                Flows.pure $ inject G._Value G._Value_double
+                right $ inject G._Value G._Value_double
                   (inject G._DoubleValue G._DoubleValue_finite (var "f"))]
             @@ var "fv",
           _Literal_integer>>: "iv" ~>
-            match _IntegerValue (Just $ Flows.fail $ string "unsupported integer type") [
+            match _IntegerValue (Just $ left (Ctx.inContext (Error.otherError (string "unsupported integer type")) (asTerm Monads.emptyContext))) [
               _IntegerValue_bigint>>: "i" ~>
-                Flows.pure $ inject G._Value G._Value_bigInteger (var "i"),
+                right $ inject G._Value G._Value_bigInteger (var "i"),
               _IntegerValue_int32>>: "i" ~>
-                Flows.pure $ inject G._Value G._Value_integer (var "i"),
+                right $ inject G._Value G._Value_integer (var "i"),
               _IntegerValue_int64>>: "i" ~>
-                Flows.pure $ inject G._Value G._Value_long (var "i")]
+                right $ inject G._Value G._Value_long (var "i")]
             @@ var "iv",
           _Literal_string>>: "s" ~>
-            Flows.pure $ inject G._Value G._Value_string (var "s")]
+            right $ inject G._Value G._Value_string (var "s")]
         @@ var "lit",
       _Term_unit>>: constant $
-        Flows.pure $ injectUnit G._Value G._Value_null]
+        right $ injectUnit G._Value G._Value_null]
     @@ (Rewriting.deannotateTerm @@ var "term")
 
 -- | Convert a list of PG elements to vertices with adjacent edges
@@ -257,10 +258,10 @@ elementsToVerticesWithAdjacentEdges = define "elementsToVerticesWithAdjacentEdge
     Maps.elems (var "vertexMap1")
 
 -- | Convert PG elements to GraphSON JSON values
-pgElementsToGraphson :: TBinding ((v -> Flow s G.Value) -> [PG.Element v] -> Flow s [JM.Value])
+pgElementsToGraphson :: TBinding ((v -> Either (InContext OtherError) G.Value) -> [PG.Element v] -> Either (InContext OtherError) [JM.Value])
 pgElementsToGraphson = define "pgElementsToGraphson" $
   doc "Convert property graph elements to a list of GraphSON JSON values" $
   "encodeValue" ~> "els" ~>
-    Flows.mapList
+    Eithers.mapList
       (GraphsonConstruct.pgVertexWithAdjacentEdgesToJson @@ var "encodeValue")
       (elementsToVerticesWithAdjacentEdges @@ var "els")

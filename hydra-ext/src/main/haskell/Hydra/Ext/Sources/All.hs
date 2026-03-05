@@ -277,6 +277,7 @@ hydraExtJavaModules =
   , DecodePgModel.module_
   , EncodePgMapping.module_
   , EncodePgModel.module_
+  , GenPGTransform.module_
   ]
 
 -- All hydra-ext modules for the GenPG demo
