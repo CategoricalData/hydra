@@ -18,6 +18,8 @@ public class InferenceResult implements Serializable, Comparable<InferenceResult
   
   public static final hydra.core.Name CLASS_CONSTRAINTS = new hydra.core.Name("classConstraints");
   
+  public static final hydra.core.Name CONTEXT = new hydra.core.Name("context");
+  
   /**
    * The term which was inferred
    */
@@ -38,11 +40,17 @@ public class InferenceResult implements Serializable, Comparable<InferenceResult
    */
   public final java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints;
   
-  public InferenceResult (hydra.core.Term term, hydra.core.Type type, hydra.typing.TypeSubst subst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
+  /**
+   * The updated context after inference (carries fresh variable state)
+   */
+  public final hydra.context.Context context;
+  
+  public InferenceResult (hydra.core.Term term, hydra.core.Type type, hydra.typing.TypeSubst subst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints, hydra.context.Context context) {
     this.term = term;
     this.type = type;
     this.subst = subst;
     this.classConstraints = classConstraints;
+    this.context = context;
   }
   
   @Override
@@ -59,12 +67,14 @@ public class InferenceResult implements Serializable, Comparable<InferenceResult
       this.subst,
       o.subst) && java.util.Objects.equals(
       this.classConstraints,
-      o.classConstraints);
+      o.classConstraints) && java.util.Objects.equals(
+      this.context,
+      o.context);
   }
   
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(term) + 3 * java.util.Objects.hashCode(type) + 5 * java.util.Objects.hashCode(subst) + 7 * java.util.Objects.hashCode(classConstraints);
+    return 2 * java.util.Objects.hashCode(term) + 3 * java.util.Objects.hashCode(type) + 5 * java.util.Objects.hashCode(subst) + 7 * java.util.Objects.hashCode(classConstraints) + 11 * java.util.Objects.hashCode(context);
   }
   
   @Override
@@ -83,24 +93,32 @@ public class InferenceResult implements Serializable, Comparable<InferenceResult
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
+    cmp = Integer.compare(
       classConstraints.hashCode(),
       other.classConstraints.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) context).compareTo(other.context);
   }
   
   public InferenceResult withTerm(hydra.core.Term term) {
-    return new InferenceResult(term, type, subst, classConstraints);
+    return new InferenceResult(term, type, subst, classConstraints, context);
   }
   
   public InferenceResult withType(hydra.core.Type type) {
-    return new InferenceResult(term, type, subst, classConstraints);
+    return new InferenceResult(term, type, subst, classConstraints, context);
   }
   
   public InferenceResult withSubst(hydra.typing.TypeSubst subst) {
-    return new InferenceResult(term, type, subst, classConstraints);
+    return new InferenceResult(term, type, subst, classConstraints, context);
   }
   
   public InferenceResult withClassConstraints(java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
-    return new InferenceResult(term, type, subst, classConstraints);
+    return new InferenceResult(term, type, subst, classConstraints, context);
+  }
+  
+  public InferenceResult withContext(hydra.context.Context context) {
+    return new InferenceResult(term, type, subst, classConstraints, context);
   }
 }

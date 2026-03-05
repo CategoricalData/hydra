@@ -28,25 +28,25 @@ public class MaybesTest {
 
     @Test
 
-    public void testApplyNothingFunction() {
+    public <T0, T1> void testApplyNothingFunction() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.maybes.Apply.apply(
-  (hydra.util.Maybe<java.util.function.Function<Integer, java.lang.Object>>) (hydra.util.Maybe.<java.util.function.Function<Integer, java.lang.Object>>nothing()),
+  (hydra.util.Maybe<java.util.function.Function<Integer, T1>>) (hydra.util.Maybe.<java.util.function.Function<Integer, T1>>nothing()),
   hydra.util.Maybe.just(5)));
 
     }
 
     @Test
 
-    public void testApplyNothingValue() {
+    public <T0> void testApplyNothingValue() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.maybes.Apply.apply(
   hydra.util.Maybe.just(hydra.lib.math.Add.apply(3)),
@@ -74,11 +74,11 @@ public class MaybesTest {
 
     @Test
 
-    public void testBindNothingToNothing() {
+    public <T0> void testBindNothingToNothing() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.maybes.Bind.apply(
   (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()),
@@ -161,27 +161,27 @@ public class MaybesTest {
 
     @Test
 
-    public void testCatAllNothings() {
+    public <T0, T3> void testCatAllNothings() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.maybes.Cat.apply(java.util.List.of(
-  (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
-  (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()))));
+  (hydra.util.Maybe<T3>) (hydra.util.Maybe.<T3>nothing()),
+  (hydra.util.Maybe<T3>) (hydra.util.Maybe.<T3>nothing()))));
 
     }
 
     @Test
 
-    public void testCatEmptyList() {
+    public <T0> void testCatEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.maybes.Cat.apply((java.util.List<hydra.util.Maybe<java.lang.Object>>) (java.util.List.<hydra.util.Maybe<java.lang.Object>>of())));
+            hydra.lib.maybes.Cat.apply((java.util.List<hydra.util.Maybe<T0>>) (java.util.List.<hydra.util.Maybe<T0>>of())));
 
     }
 
@@ -218,11 +218,11 @@ public class MaybesTest {
 
     @Test
 
-    public void testComposeFirstFails() {
+    public <T0> void testComposeFirstFails() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.maybes.Compose.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
@@ -247,11 +247,11 @@ public class MaybesTest {
 
     @Test
 
-    public void testComposeSecondFails() {
+    public <T0> void testComposeSecondFails() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.maybes.Compose.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
@@ -334,13 +334,13 @@ public class MaybesTest {
 
     @Test
 
-    public void testIsjustNothing() {
+    public <T1> void testIsjustNothing() {
 
         assertEquals(
 
             false,
 
-            hydra.lib.maybes.IsJust.apply((hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing())));
+            hydra.lib.maybes.IsJust.apply((hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing())));
 
     }
 
@@ -360,13 +360,13 @@ public class MaybesTest {
 
     @Test
 
-    public void testIsnothingNothing() {
+    public <T1> void testIsnothingNothing() {
 
         assertEquals(
 
             true,
 
-            hydra.lib.maybes.IsNothing.apply((hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing())));
+            hydra.lib.maybes.IsNothing.apply((hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing())));
 
     }
 
@@ -390,11 +390,11 @@ public class MaybesTest {
 
     @Test
 
-    public void testMapNothingUnchanged() {
+    public <T0> void testMapNothingUnchanged() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.maybes.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
@@ -437,11 +437,11 @@ public class MaybesTest {
 
     @Test
 
-    public void testMapmaybeEmptyResult() {
+    public <T0> void testMapmaybeEmptyResult() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.maybes.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
@@ -460,11 +460,11 @@ public class MaybesTest {
 
     @Test
 
-    public void testMapmaybeEmptyInput() {
+    public <T0> void testMapmaybeEmptyInput() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.maybes.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(

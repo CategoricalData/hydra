@@ -47,25 +47,6 @@ public interface TestTypes {
     return new hydra.core.Name("Either");
   }
   
-  static hydra.core.Type testTypeFlow() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("s"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeFlowName(), java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("value"), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("s")), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypeFlowStateName()), new hydra.core.Type.Variable(new hydra.core.Name("s")))), new hydra.core.Type.Variable(new hydra.core.Name("a"))))))))))))));
-  }
-  
-  static hydra.core.Name testTypeFlowName() {
-    return new hydra.core.Name("hydra.compute.Flow");
-  }
-  
-  static hydra.core.Type testTypeFlowState() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("s"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeFlowStateName(), java.util.List.of(
-      new hydra.core.FieldType(new hydra.core.Name("value"), new hydra.core.Type.Maybe(new hydra.core.Type.Variable(new hydra.core.Name("a")))),
-      new hydra.core.FieldType(new hydra.core.Name("state"), new hydra.core.Type.Variable(new hydra.core.Name("s"))),
-      new hydra.core.FieldType(new hydra.core.Name("trace"), new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypeTraceName())))))))));
-  }
-  
-  static hydra.core.Name testTypeFlowStateName() {
-    return new hydra.core.Name("hydra.compute.FlowState");
-  }
-  
   static hydra.core.Type testTypeHydraLiteralType() {
     return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeHydraLiteralTypeName(), java.util.List.of(
       new hydra.core.FieldType(new hydra.core.Name("boolean"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Boolean_())),
@@ -199,17 +180,6 @@ public interface TestTypes {
   
   static hydra.core.Name testTypeTimestampName() {
     return new hydra.core.Name("Timestamp");
-  }
-  
-  static hydra.core.Type testTypeTrace() {
-    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeTraceName(), java.util.List.of(
-      new hydra.core.FieldType(new hydra.core.Name("stack"), new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))),
-      new hydra.core.FieldType(new hydra.core.Name("messages"), new hydra.core.Type.List(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))),
-      new hydra.core.FieldType(new hydra.core.Name("other"), new hydra.core.Type.Map(new hydra.core.MapType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())))))));
-  }
-  
-  static hydra.core.Name testTypeTraceName() {
-    return new hydra.core.Name("hydra.compute.Trace");
   }
   
   static hydra.core.Type testTypeTriple() {

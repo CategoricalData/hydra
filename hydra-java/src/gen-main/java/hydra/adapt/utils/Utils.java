@@ -6,23 +6,23 @@ package hydra.adapt.utils;
  * Additional adapter utilities, above and beyond the generated ones.
  */
 public interface Utils {
-  static <T0, T1> hydra.compute.Coder<T1, T1, T0, T0> bidirectional(java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<T0, hydra.compute.Flow<T1, T0>>> f) {
-    return (hydra.compute.Coder<T1, T1, T0, T0>) ((hydra.compute.Coder<T1, T1, T0, T0>) ((hydra.compute.Coder<T1, T1, T0, T0>) ((hydra.compute.Coder<T1, T1, T0, T0>) (new hydra.compute.Coder<T1, T1, T0, T0>((java.util.function.Function<T0, hydra.compute.Flow<T1, T0>>) (v1 -> ((f).apply(new hydra.coders.CoderDirection.Encode())).apply(v1)), (java.util.function.Function<T0, hydra.compute.Flow<T1, T0>>) (v1 -> ((f).apply(new hydra.coders.CoderDirection.Decode())).apply(v1)))))));
+  static <T0> hydra.compute.Coder<T0, T0> bidirectional(java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>> f) {
+    return (hydra.compute.Coder<T0, T0>) ((hydra.compute.Coder<T0, T0>) (new hydra.compute.Coder<T0, T0>((java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>) (v1 -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (v2 -> (((f).apply(new hydra.coders.CoderDirection.Encode())).apply(v1)).apply(v2))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>) (v1 -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (v2 -> (((f).apply(new hydra.coders.CoderDirection.Decode())).apply(v1)).apply(v2))))));
   }
   
-  static <T0, T1, T2, T3, T4> hydra.compute.Flow<T1, hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>> chooseAdapter(java.util.function.Function<T0, hydra.compute.Flow<T1, java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>>> alts, java.util.function.Function<T0, Boolean> supported, java.util.function.Function<T0, String> show, java.util.function.Function<T0, String> describe, T0 typ) {
+  static <T0, T1> hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>> chooseAdapter(java.util.function.Function<T0, hydra.util.Either<String, java.util.List<hydra.compute.Adapter<T0, T0, T1, T1>>>> alts, java.util.function.Function<T0, Boolean> supported, java.util.function.Function<T0, String> show, java.util.function.Function<T0, String> describe, T0 typ) {
     return hydra.lib.logic.IfElse.lazy(
       (supported).apply(typ),
-      () -> hydra.lib.flows.Pure.apply((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) ((hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>) (new hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>(false, typ, typ, hydra.adapt.utils.Utils.<T2, T3, T4>idCoder())))))))),
-      () -> hydra.lib.flows.Bind.apply(
+      () -> (hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) ((hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) (hydra.util.Either.<String, hydra.compute.Adapter<T0, T0, T1, T1>>right((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) (new hydra.compute.Adapter<T0, T0, T1, T1>(false, typ, typ, hydra.adapt.utils.Utils.<T1>idCoder())))))))),
+      () -> hydra.lib.eithers.Bind.apply(
         (alts).apply(typ),
-        (java.util.function.Function<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>, hydra.compute.Flow<T1, hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>>) (raw -> {
-          hydra.util.Lazy<java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>>> candidates = new hydra.util.Lazy<>(() -> hydra.adapt.utils.Utils.<T0, T2, T3, T4>chooseAdapter_candidates(
+        (java.util.function.Function<java.util.List<hydra.compute.Adapter<T0, T0, T1, T1>>, hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>>) (raw -> {
+          hydra.util.Lazy<java.util.List<hydra.compute.Adapter<T0, T0, T1, T1>>> candidates = new hydra.util.Lazy<>(() -> hydra.adapt.utils.Utils.<T0, T1>chooseAdapter_candidates(
             raw,
             supported));
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.lists.Null.apply(candidates.get()),
-            () -> hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> (hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) ((hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) (hydra.util.Either.<String, hydra.compute.Adapter<T0, T0, T1, T1>>left(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no adapters found for ",
               (describe).apply(typ),
               hydra.lib.logic.IfElse.lazy(
@@ -35,39 +35,39 @@ public interface Utils {
                   hydra.show.core.Core.<T0>list(
                     show,
                     hydra.lib.lists.Map.apply(
-                      (java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) (projected -> projected.target)))))),
+                      (java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T1>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T1>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T1>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T1>, T0>) (projected -> projected.target)))),
                       raw)),
                   ")"))),
               ". Original type: ",
-              (show).apply(typ)))),
-            () -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Head.apply(candidates.get())));
+              (show).apply(typ)))))),
+            () -> (hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) ((hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) (hydra.util.Either.<String, hydra.compute.Adapter<T0, T0, T1, T1>>right(hydra.lib.lists.Head.apply(candidates.get())))));
         })));
   }
   
-  static <T0, T2, T3, T4> java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>> chooseAdapter_candidates(java.util.List<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>> raw, java.util.function.Function<T0, Boolean> supported) {
+  static <T0, T1> java.util.List<hydra.compute.Adapter<T0, T0, T1, T1>> chooseAdapter_candidates(java.util.List<hydra.compute.Adapter<T0, T0, T1, T1>> raw, java.util.function.Function<T0, Boolean> supported) {
     return hydra.lib.lists.Filter.apply(
-      (java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, Boolean>) (adapter -> (supported).apply(((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T2, T3, T0, T0, T4, T4>, T0>) (projected -> projected.target))))))).apply(adapter))),
+      (java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T1>, Boolean>) (adapter -> (supported).apply(((java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T1>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T1>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T1>, T0>) ((java.util.function.Function<hydra.compute.Adapter<T0, T0, T1, T1>, T0>) (projected -> projected.target))))).apply(adapter))),
       raw);
   }
   
-  static <T0, T1, T2, T3, T4> hydra.compute.Coder<T0, T1, T2, T4> composeCoders(hydra.compute.Coder<T0, T1, T2, T3> c1, hydra.compute.Coder<T0, T1, T3, T4> c2) {
-    return (hydra.compute.Coder<T0, T1, T2, T4>) ((hydra.compute.Coder<T0, T1, T2, T4>) ((hydra.compute.Coder<T0, T1, T2, T4>) ((hydra.compute.Coder<T0, T1, T2, T4>) (new hydra.compute.Coder<T0, T1, T2, T4>((java.util.function.Function<T2, hydra.compute.Flow<T0, T4>>) (a -> hydra.lib.flows.Bind.apply(
-      (((java.util.function.Function<hydra.compute.Coder<T0, T1, T2, T3>, java.util.function.Function<T2, hydra.compute.Flow<T0, T3>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T2, T3>, java.util.function.Function<T2, hydra.compute.Flow<T0, T3>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T2, T3>, java.util.function.Function<T2, hydra.compute.Flow<T0, T3>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T2, T3>, java.util.function.Function<T2, hydra.compute.Flow<T0, T3>>>) (projected -> projected.encode))))).apply(c1)).apply(a),
-      (java.util.function.Function<T3, hydra.compute.Flow<T0, T4>>) (b1 -> (((java.util.function.Function<hydra.compute.Coder<T0, T1, T3, T4>, java.util.function.Function<T3, hydra.compute.Flow<T0, T4>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T3, T4>, java.util.function.Function<T3, hydra.compute.Flow<T0, T4>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T3, T4>, java.util.function.Function<T3, hydra.compute.Flow<T0, T4>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T3, T4>, java.util.function.Function<T3, hydra.compute.Flow<T0, T4>>>) (projected -> projected.encode))))).apply(c2)).apply(b1)))), (java.util.function.Function<T4, hydra.compute.Flow<T1, T2>>) (c -> hydra.lib.flows.Bind.apply(
-      (((java.util.function.Function<hydra.compute.Coder<T0, T1, T3, T4>, java.util.function.Function<T4, hydra.compute.Flow<T1, T3>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T3, T4>, java.util.function.Function<T4, hydra.compute.Flow<T1, T3>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T3, T4>, java.util.function.Function<T4, hydra.compute.Flow<T1, T3>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T3, T4>, java.util.function.Function<T4, hydra.compute.Flow<T1, T3>>>) (projected -> projected.decode))))).apply(c2)).apply(c),
-      (java.util.function.Function<T3, hydra.compute.Flow<T1, T2>>) (b2 -> (((java.util.function.Function<hydra.compute.Coder<T0, T1, T2, T3>, java.util.function.Function<T3, hydra.compute.Flow<T1, T2>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T2, T3>, java.util.function.Function<T3, hydra.compute.Flow<T1, T2>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T2, T3>, java.util.function.Function<T3, hydra.compute.Flow<T1, T2>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1, T2, T3>, java.util.function.Function<T3, hydra.compute.Flow<T1, T2>>>) (projected -> projected.decode))))).apply(c1)).apply(b2)))))))));
+  static <T0, T1, T2> hydra.compute.Coder<T0, T2> composeCoders(hydra.compute.Coder<T0, T1> c1, hydra.compute.Coder<T1, T2> c2) {
+    return (hydra.compute.Coder<T0, T2>) ((hydra.compute.Coder<T0, T2>) (new hydra.compute.Coder<T0, T2>((java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>>>) (cx -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>>) (a -> hydra.lib.eithers.Bind.apply(
+      ((((java.util.function.Function<hydra.compute.Coder<T0, T1>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>>>>) (projected -> projected.encode))).apply(c1)).apply(cx)).apply(a),
+      (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>>) (b1 -> ((((java.util.function.Function<hydra.compute.Coder<T1, T2>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>>>>) ((java.util.function.Function<hydra.compute.Coder<T1, T2>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>>>>) (projected -> projected.encode))).apply(c2)).apply(cx)).apply(b1))))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<T2, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>) (cx -> (java.util.function.Function<T2, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (c -> hydra.lib.eithers.Bind.apply(
+      ((((java.util.function.Function<hydra.compute.Coder<T1, T2>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T2, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>>>>) ((java.util.function.Function<hydra.compute.Coder<T1, T2>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T2, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>>>>) (projected -> projected.decode))).apply(c2)).apply(cx)).apply(c),
+      (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (b2 -> ((((java.util.function.Function<hydra.compute.Coder<T0, T1>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T1>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>>) (projected -> projected.decode))).apply(c1)).apply(cx)).apply(b2))))))));
   }
   
-  static <T0, T1> hydra.compute.Flow<T0, T1> encodeDecode(hydra.coders.CoderDirection dir, hydra.compute.Coder<T0, T0, T1, T1> coder, T1 term) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0> encodeDecode(hydra.coders.CoderDirection dir, hydra.compute.Coder<T0, T0> coder, hydra.context.Context cx, T0 term) {
     return (dir).accept(new hydra.coders.CoderDirection.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T0, T1> visit(hydra.coders.CoderDirection.Encode ignored) {
-        return (((java.util.function.Function<hydra.compute.Coder<T0, T0, T1, T1>, java.util.function.Function<T1, hydra.compute.Flow<T0, T1>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T0, T1, T1>, java.util.function.Function<T1, hydra.compute.Flow<T0, T1>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T0, T1, T1>, java.util.function.Function<T1, hydra.compute.Flow<T0, T1>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T0, T1, T1>, java.util.function.Function<T1, hydra.compute.Flow<T0, T1>>>) (projected -> projected.encode))))).apply(coder)).apply(term);
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0> visit(hydra.coders.CoderDirection.Encode ignored) {
+        return ((((java.util.function.Function<hydra.compute.Coder<T0, T0>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T0>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>>) (projected -> projected.encode))).apply(coder)).apply(cx)).apply(term);
       }
       
       @Override
-      public hydra.compute.Flow<T0, T1> visit(hydra.coders.CoderDirection.Decode ignored) {
-        return (((java.util.function.Function<hydra.compute.Coder<T0, T0, T1, T1>, java.util.function.Function<T1, hydra.compute.Flow<T0, T1>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T0, T1, T1>, java.util.function.Function<T1, hydra.compute.Flow<T0, T1>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T0, T1, T1>, java.util.function.Function<T1, hydra.compute.Flow<T0, T1>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T0, T1, T1>, java.util.function.Function<T1, hydra.compute.Flow<T0, T1>>>) (projected -> projected.decode))))).apply(coder)).apply(term);
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0> visit(hydra.coders.CoderDirection.Decode ignored) {
+        return ((((java.util.function.Function<hydra.compute.Coder<T0, T0>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>>) ((java.util.function.Function<hydra.compute.Coder<T0, T0>, java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>>) (projected -> projected.decode))).apply(coder)).apply(cx)).apply(term);
       }
     });
   }
@@ -78,12 +78,12 @@ public interface Utils {
       (constraints).floatTypes);
   }
   
-  static <T0, T1, T2, T3> hydra.compute.Adapter<T1, T2, T0, T0, T3, T3> idAdapter(T0 t) {
-    return (hydra.compute.Adapter<T1, T2, T0, T0, T3, T3>) ((hydra.compute.Adapter<T1, T2, T0, T0, T3, T3>) ((hydra.compute.Adapter<T1, T2, T0, T0, T3, T3>) ((hydra.compute.Adapter<T1, T2, T0, T0, T3, T3>) ((hydra.compute.Adapter<T1, T2, T0, T0, T3, T3>) ((hydra.compute.Adapter<T1, T2, T0, T0, T3, T3>) (new hydra.compute.Adapter<T1, T2, T0, T0, T3, T3>(false, t, t, hydra.adapt.utils.Utils.<T1, T2, T3>idCoder())))))));
+  static <T0, T1> hydra.compute.Adapter<T0, T0, T1, T1> idAdapter(T0 t) {
+    return (hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) (new hydra.compute.Adapter<T0, T0, T1, T1>(false, t, t, hydra.adapt.utils.Utils.<T1>idCoder())))));
   }
   
-  static <T0, T1, T2> hydra.compute.Coder<T0, T1, T2, T2> idCoder() {
-    return new hydra.compute.Coder<T0, T1, T2, T2>((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T0, T2>>) (hydra.lib.flows.Pure::apply)), (java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) ((java.util.function.Function<T2, hydra.compute.Flow<T1, T2>>) (hydra.lib.flows.Pure::apply)));
+  static <T0> hydra.compute.Coder<T0, T0> idCoder() {
+    return new hydra.compute.Coder<T0, T0>((java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>) (_cx -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (x -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>right(x))))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>) (_cx -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (x -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>right(x))))));
   }
   
   static Boolean integerTypeIsSupported(hydra.coders.LanguageConstraints constraints, hydra.core.IntegerType it) {
@@ -319,7 +319,7 @@ public interface Utils {
         (isSupported).apply(base)));
   }
   
-  static <T0, T1, T2, T3> hydra.compute.Coder<T1, T3, T0, T2> unidirectionalCoder(java.util.function.Function<T0, hydra.compute.Flow<T1, T2>> m) {
-    return (hydra.compute.Coder<T1, T3, T0, T2>) ((hydra.compute.Coder<T1, T3, T0, T2>) ((hydra.compute.Coder<T1, T3, T0, T2>) ((hydra.compute.Coder<T1, T3, T0, T2>) (new hydra.compute.Coder<T1, T3, T0, T2>(m, (java.util.function.Function<T2, hydra.compute.Flow<T3, T0>>) (ignored -> hydra.lib.flows.Fail.apply("inbound mapping is unsupported")))))));
+  static <T0, T1> hydra.compute.Coder<T0, T1> unidirectionalCoder(java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>>> m) {
+    return (hydra.compute.Coder<T0, T1>) ((hydra.compute.Coder<T0, T1>) (new hydra.compute.Coder<T0, T1>(m, (java.util.function.Function<hydra.context.Context, java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>) (cx -> (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (ignored -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("inbound mapping is unsupported"), cx))))))))));
   }
 }

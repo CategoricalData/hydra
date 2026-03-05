@@ -50,12 +50,10 @@ public interface Lexical {
     return (tryName.get()).apply(1);
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Binding>> dereferenceElement(hydra.core.Name name) {
-    return hydra.lib.flows.Map.apply(
-      (java.util.function.Function<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Binding>>) (graph -> hydra.lexical.Lexical.lookupElement(
-        graph,
-        name)),
-      hydra.monads.Monads.<hydra.graph.Graph>getState());
+  static hydra.util.Maybe<hydra.core.Binding> dereferenceElement(hydra.graph.Graph graph, hydra.core.Name name) {
+    return hydra.lexical.Lexical.lookupElement(
+      graph,
+      name);
   }
   
   static hydra.util.Maybe<hydra.core.TypeScheme> dereferenceSchemaType(hydra.core.Name name, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types) {
@@ -192,13 +190,13 @@ public interface Lexical {
     });
   }
   
-  static <T0, T1, T2> hydra.compute.Flow<T1, T2> getField(java.util.Map<hydra.core.Name, T0> m, hydra.core.Name fname, java.util.function.Function<T0, hydra.compute.Flow<T1, T2>> decode) {
+  static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1> getField(hydra.context.Context cx, java.util.Map<hydra.core.Name, T0> m, hydra.core.Name fname, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>> decode) {
     return hydra.lib.maybes.Maybe.apply(
-      hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
+      (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T1>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           "expected field ",
           (fname).value),
-        " not found")),
+        " not found")), cx))))),
       decode,
       hydra.lib.maps.Lookup.apply(
         fname,
@@ -227,29 +225,31 @@ public interface Lexical {
       (graph).boundTerms);
   }
   
-  static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> matchEnum(hydra.core.Name tname, java.util.List<hydra.util.Pair<hydra.core.Name, T0>> pairs, hydra.core.Term v1) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0> matchEnum(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name tname, java.util.List<hydra.util.Pair<hydra.core.Name, T0>> pairs, hydra.core.Term v1) {
     return hydra.lexical.Lexical.<T0>matchUnion(
+      cx,
+      graph,
       tname,
       hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.util.Pair<hydra.core.Name, T0>, hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>>) (pair -> hydra.lexical.Lexical.matchUnitField(
+        (java.util.function.Function<hydra.util.Pair<hydra.core.Name, T0>, hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>>) (pair -> hydra.lexical.Lexical.matchUnitField(
           hydra.lib.pairs.First.apply(pair),
           hydra.lib.pairs.Second.apply(pair))),
         pairs),
       v1);
   }
   
-  static <T0, T1> hydra.compute.Flow<T0, T1> matchRecord(java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Term>, hydra.compute.Flow<T0, T1>> decode, hydra.core.Term term) {
+  static <T0, T1> hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1> matchRecord(hydra.context.Context cx, T0 graph, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>> decode, hydra.core.Term term) {
     hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateAndDetypeTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<T0, T1> otherwise(hydra.core.Term instance) {
-        return hydra.monads.Monads.<T0, T1>unexpected(
-          "record",
-          hydra.show.core.Core.term(term));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T1>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          "expected a record, got ",
+          hydra.show.core.Core.term(term))), cx)))));
       }
       
       @Override
-      public hydra.compute.Flow<T0, T1> visit(hydra.core.Term.Record record) {
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T1> visit(hydra.core.Term.Record record) {
         return (decode).apply(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (field -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>((field).name, (field).term)))),
           ((record).value).fields)));
@@ -257,80 +257,87 @@ public interface Lexical {
     });
   }
   
-  static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> matchUnion(hydra.core.Name tname, java.util.List<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>> pairs, hydra.core.Term term) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0> matchUnion(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name tname, java.util.List<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>> pairs, hydra.core.Term term) {
     hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateAndDetypeTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<hydra.graph.Graph, T0> otherwise(hydra.core.Term instance) {
-        return hydra.monads.Monads.unexpected(
-          hydra.lib.strings.Cat.apply(java.util.List.of(
-            "inject(",
-            (tname).value,
-            ") with one of {",
-            hydra.lib.strings.Intercalate.apply(
-              ", ",
-              hydra.lib.lists.Map.apply(
-                (java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>, String>) (pair -> (hydra.lib.pairs.First.apply(pair)).value),
-                pairs)),
-            "}")),
-          hydra.show.core.Core.term(stripped));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          "expected inject(",
+          (tname).value,
+          ") with one of {",
+          hydra.lib.strings.Intercalate.apply(
+            ", ",
+            hydra.lib.lists.Map.apply(
+              (java.util.function.Function<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>, String>) (pair -> (hydra.lib.pairs.First.apply(pair)).value),
+              pairs)),
+          "}, got ",
+          hydra.show.core.Core.term(stripped)))), cx)))));
       }
       
       @Override
-      public hydra.compute.Flow<hydra.graph.Graph, T0> visit(hydra.core.Term.Variable name) {
-        return hydra.lib.flows.Bind.apply(
-          hydra.lexical.Lexical.requireElement((name).value),
-          (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, T0>>) (el -> hydra.lexical.Lexical.<T0>matchUnion(
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0> visit(hydra.core.Term.Variable name) {
+        return hydra.lib.eithers.Bind.apply(
+          hydra.lexical.Lexical.requireElement(
+            cx,
+            graph,
+            (name).value),
+          (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (el -> hydra.lexical.Lexical.<T0>matchUnion(
+            cx,
+            graph,
             tname,
             pairs,
             (el).term)));
       }
       
       @Override
-      public hydra.compute.Flow<hydra.graph.Graph, T0> visit(hydra.core.Term.Union injection) {
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0> visit(hydra.core.Term.Union injection) {
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             (((injection).value).typeName).value,
             (tname).value),
           () -> hydra.lexical.Lexical.<T0>matchUnion_exp(
+            cx,
             (injection).value,
             hydra.lexical.Lexical.<T0>matchUnion_mapping(pairs),
             tname),
-          () -> hydra.monads.Monads.unexpected(
+          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
-              "injection for type ",
-              (tname).value),
-            hydra.show.core.Core.term(term)));
+              hydra.lib.strings.Cat2.apply(
+                "expected injection for type ",
+                (tname).value),
+              ", got "),
+            hydra.show.core.Core.term(term))), cx))))));
       }
     });
   }
   
-  static <T0> java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>> matchUnion_mapping(java.util.List<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>>> pairs) {
+  static <T0> java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>> matchUnion_mapping(java.util.List<hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>> pairs) {
     return hydra.lib.maps.FromList.apply(pairs);
   }
   
-  static <T0> hydra.compute.Flow<hydra.graph.Graph, T0> matchUnion_exp(hydra.core.Injection injection, java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>> mapping, hydra.core.Name tname) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0> matchUnion_exp(hydra.context.Context cx, hydra.core.Injection injection, java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>> mapping, hydra.core.Name tname) {
     hydra.core.Name fname = ((injection).field).name;
     hydra.core.Term val = ((injection).field).term;
     return hydra.lib.maybes.Maybe.apply(
-      hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
+      (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             "no matching case for field \"",
             (fname).value),
           "\" in union type "),
-        (tname).value)),
-      (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, T0>>, hydra.compute.Flow<hydra.graph.Graph, T0>>) (f -> (f).apply(val)),
+        (tname).value)), cx))))),
+      (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (f -> (f).apply(val)),
       hydra.lib.maps.Lookup.apply(
         fname,
         mapping));
   }
   
-  static <T0, T1, T2, T3> hydra.util.Pair<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>> matchUnitField(T0 fname, T1 x) {
-    return (hydra.util.Pair<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>>) ((hydra.util.Pair<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>>) (new hydra.util.Pair<T0, java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>>(fname, (java.util.function.Function<T2, hydra.compute.Flow<T3, T1>>) (ignored -> hydra.lib.flows.Pure.apply(x)))));
+  static <T0, T1, T2, T3> hydra.util.Pair<T0, java.util.function.Function<T2, hydra.util.Either<T3, T1>>> matchUnitField(T0 fname, T1 x) {
+    return (hydra.util.Pair<T0, java.util.function.Function<T2, hydra.util.Either<T3, T1>>>) ((hydra.util.Pair<T0, java.util.function.Function<T2, hydra.util.Either<T3, T1>>>) (new hydra.util.Pair<T0, java.util.function.Function<T2, hydra.util.Either<T3, T1>>>(fname, (java.util.function.Function<T2, hydra.util.Either<T3, T1>>) (ignored -> (hydra.util.Either<T3, T1>) ((hydra.util.Either<T3, T1>) (hydra.util.Either.<T3, T1>right(x)))))));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding> requireElement(hydra.core.Name name) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Binding> requireElement(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
     Boolean showAll = false;
     java.util.function.Function<java.util.List<String>, java.util.List<String>> ellipsis = (java.util.function.Function<java.util.List<String>, java.util.List<String>>) (strings -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
@@ -344,21 +351,7 @@ public interface Lexical {
           strings),
         java.util.List.of("...")),
       () -> strings));
-    return hydra.lib.flows.Bind.apply(
-      hydra.lexical.Lexical.dereferenceElement(name),
-      (java.util.function.Function<hydra.util.Maybe<hydra.core.Binding>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (mel -> hydra.lib.maybes.Maybe.apply(
-        hydra.lib.flows.Bind.apply(
-          hydra.monads.Monads.<hydra.graph.Graph>getState(),
-          (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (graph -> hydra.lexical.Lexical.requireElement_err(
-            ellipsis,
-            name,
-            graph))),
-        (java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) ((java.util.function.Function<hydra.core.Binding, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Binding>>) (hydra.lib.flows.Pure::apply)),
-        mel)));
-  }
-  
-  static <T0, T1> hydra.compute.Flow<T0, T1> requireElement_err(java.util.function.Function<java.util.List<String>, java.util.List<String>> ellipsis, hydra.core.Name name, hydra.graph.Graph graph) {
-    return hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
+    hydra.util.Lazy<String> errMsg = new hydra.util.Lazy<>(() -> hydra.lib.strings.Cat2.apply(
       hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
@@ -371,84 +364,94 @@ public interface Lexical {
             wrapped -> (wrapped).value,
             hydra.lib.maps.Keys.apply((graph).boundTerms))))),
       "}"));
+    return hydra.lib.maybes.Maybe.apply(
+      (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Binding>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Binding>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Binding>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(errMsg.get()), cx))))),
+      (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Binding>>) (x -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Binding>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Binding>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Binding>right(x)))),
+      hydra.lexical.Lexical.dereferenceElement(
+        graph,
+        name));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.graph.Primitive> requirePrimitive(hydra.core.Name name) {
-    return hydra.lib.flows.Bind.apply(
-      hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.graph.Primitive>>) (graph -> hydra.lib.maybes.Maybe.apply(
-        hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
-          "no such primitive function: ",
-          (name).value)),
-        (java.util.function.Function<hydra.graph.Primitive, hydra.compute.Flow<hydra.graph.Graph, hydra.graph.Primitive>>) ((java.util.function.Function<hydra.graph.Primitive, hydra.compute.Flow<hydra.graph.Graph, hydra.graph.Primitive>>) (hydra.lib.flows.Pure::apply)),
-        hydra.lexical.Lexical.lookupPrimitive(
-          graph,
-          name))));
+  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.graph.Primitive> requirePrimitive(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
+    return hydra.lib.maybes.Maybe.apply(
+      (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.graph.Primitive>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.graph.Primitive>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.graph.Primitive>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        "no such primitive function: ",
+        (name).value)), cx))))),
+      (java.util.function.Function<hydra.graph.Primitive, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.graph.Primitive>>) (x -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.graph.Primitive>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.graph.Primitive>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.graph.Primitive>right(x)))),
+      hydra.lexical.Lexical.lookupPrimitive(
+        graph,
+        name));
   }
   
-  static <T0> hydra.compute.Flow<T0, hydra.core.TypeScheme> requirePrimitiveType(hydra.graph.Graph tx, hydra.core.Name name) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeScheme> requirePrimitiveType(hydra.context.Context cx, hydra.graph.Graph tx, hydra.core.Name name) {
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> mts = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
       name,
       hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
         hydra.lib.maps.Elems.apply((tx).primitives)))));
     return hydra.lib.maybes.Maybe.apply(
-      hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
+      (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeScheme>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeScheme>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeScheme>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
         "no such primitive function: ",
-        (name).value)),
-      (java.util.function.Function<hydra.core.TypeScheme, hydra.compute.Flow<T0, hydra.core.TypeScheme>>) (ts -> hydra.lib.flows.Pure.apply(ts)),
+        (name).value)), cx))))),
+      (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeScheme>>) (ts -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeScheme>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeScheme>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeScheme>right(ts)))),
       mts.get());
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term> requireTerm(hydra.core.Name name) {
-    return hydra.lib.flows.Bind.apply(
-      hydra.lexical.Lexical.resolveTerm(name),
-      (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>>) (mt -> hydra.lib.maybes.Maybe.apply(
-        hydra.lib.flows.Fail.apply(hydra.lib.strings.Cat2.apply(
-          "no such element: ",
-          (name).value)),
-        (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>>) ((java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>>) (hydra.lib.flows.Pure::apply)),
-        mt)));
+  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term> requireTerm(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
+    return hydra.lib.maybes.Maybe.apply(
+      (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        "no such element: ",
+        (name).value)), cx))))),
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (x -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(x)))),
+      hydra.lexical.Lexical.resolveTerm(
+        graph,
+        name));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Term>> resolveTerm(hydra.core.Name name) {
-    java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Term>>> recurse = (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Term>>>) (term -> {
+  static hydra.util.Maybe<hydra.core.Term> resolveTerm(hydra.graph.Graph graph, hydra.core.Name name) {
+    java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Term>> recurse = (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Term>>) (term -> {
       hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateTerm(term);
       return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
-        public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Term>> otherwise(hydra.core.Term instance) {
-          return hydra.lib.flows.Pure.apply(hydra.util.Maybe.just(term));
+        public hydra.util.Maybe<hydra.core.Term> otherwise(hydra.core.Term instance) {
+          return hydra.util.Maybe.just(term);
         }
         
         @Override
-        public hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.Term.Variable name_) {
-          return hydra.lexical.Lexical.resolveTerm((name_).value);
+        public hydra.util.Maybe<hydra.core.Term> visit(hydra.core.Term.Variable name_) {
+          return hydra.lexical.Lexical.resolveTerm(
+            graph,
+            (name_).value);
         }
       });
     });
-    return hydra.lib.flows.Bind.apply(
-      hydra.monads.Monads.<hydra.graph.Graph>getState(),
-      (java.util.function.Function<hydra.graph.Graph, hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<hydra.core.Term>>>) (graph -> hydra.lib.maybes.Maybe.apply(
-        hydra.lib.flows.Pure.apply((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
-        recurse,
-        hydra.lexical.Lexical.lookupTerm(
-          graph,
-          name))));
+    return hydra.lib.maybes.Maybe.apply(
+      (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()),
+      recurse,
+      hydra.lexical.Lexical.lookupTerm(
+        graph,
+        name));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term> stripAndDereferenceTerm(hydra.core.Term term) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term> stripAndDereferenceTerm(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term term) {
     hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateAndDetypeTerm(term);
     return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term> otherwise(hydra.core.Term instance) {
-        return hydra.lib.flows.Pure.apply(stripped);
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(stripped)));
       }
       
       @Override
-      public hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term> visit(hydra.core.Term.Variable v) {
-        return hydra.lib.flows.Bind.apply(
-          hydra.lexical.Lexical.requireTerm((v).value),
-          (java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>>) (t -> hydra.lexical.Lexical.stripAndDereferenceTerm(t)));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term> visit(hydra.core.Term.Variable v) {
+        return hydra.lib.eithers.Bind.apply(
+          hydra.lexical.Lexical.requireTerm(
+            cx,
+            graph,
+            (v).value),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (t -> hydra.lexical.Lexical.stripAndDereferenceTerm(
+            cx,
+            graph,
+            t)));
       }
     });
   }
@@ -473,11 +476,5 @@ public interface Lexical {
             (v).value));
       }
     });
-  }
-  
-  static <T0, T1> hydra.compute.Flow<T1, T0> withEmptyGraph(hydra.compute.Flow<hydra.graph.Graph, T0> v1) {
-    return hydra.monads.Monads.withState(
-      new hydra.graph.Graph((java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeVariableMetadata>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply())), (java.util.Map<hydra.core.Name, hydra.graph.Primitive>) ((java.util.Map<hydra.core.Name, hydra.graph.Primitive>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.graph.Primitive>apply())), (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
-      v1);
   }
 }

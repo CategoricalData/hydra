@@ -14,13 +14,13 @@ public class SetsTest {
 
     @Test
 
-    public void testEmptyEmptySet() {
+    public <T0> void testEmptyEmptySet() {
 
         assertEquals(
 
-            (java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of()),
+            (java.util.Set<T0>) (java.util.Set.<T0>of()),
 
-            (java.util.Set<java.lang.Object>) (hydra.lib.sets.Empty.<java.lang.Object>apply()));
+            (java.util.Set<T0>) (hydra.lib.sets.Empty.<T0>apply()));
 
     }
 
@@ -79,13 +79,13 @@ public class SetsTest {
 
     @Test
 
-    public void testFromlistEmptyList() {
+    public <T0, T1> void testFromlistEmptyList() {
 
         assertEquals(
 
-            (java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of()),
+            (java.util.Set<T0>) (java.util.Set.<T0>of()),
 
-            hydra.lib.sets.FromList.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.sets.FromList.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -129,13 +129,13 @@ public class SetsTest {
 
     @Test
 
-    public void testTolistEmptySet() {
+    public <T0, T1> void testTolistEmptySet() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.sets.ToList.apply((java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of())));
+            hydra.lib.sets.ToList.apply((java.util.Set<T1>) (java.util.Set.<T1>of())));
 
     }
 
@@ -239,11 +239,11 @@ public class SetsTest {
 
     @Test
 
-    public void testDeleteDeleteFromEmpty() {
+    public <T0> void testDeleteDeleteFromEmpty() {
 
         assertEquals(
 
-            (java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of()),
+            (java.util.Set<T0>) (java.util.Set.<T0>of()),
 
             hydra.lib.sets.Delete.apply(
   1,
@@ -332,13 +332,13 @@ public class SetsTest {
 
     @Test
 
-    public void testSizeEmptySet() {
+    public <T1> void testSizeEmptySet() {
 
         assertEquals(
 
             0,
 
-            hydra.lib.sets.Size.apply((java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of())));
+            hydra.lib.sets.Size.apply((java.util.Set<T1>) (java.util.Set.<T1>of())));
 
     }
 
@@ -346,13 +346,13 @@ public class SetsTest {
 
     @Test
 
-    public void testNullEmptySet() {
+    public <T1> void testNullEmptySet() {
 
         assertEquals(
 
             true,
 
-            hydra.lib.sets.Null.apply((java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of())));
+            hydra.lib.sets.Null.apply((java.util.Set<T1>) (java.util.Set.<T1>of())));
 
     }
 
@@ -478,13 +478,13 @@ public class SetsTest {
 
     @Test
 
-    public void testUnionsEmptyListOfSets() {
+    public <T0> void testUnionsEmptyListOfSets() {
 
         assertEquals(
 
-            (java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of()),
+            (java.util.Set<T0>) (java.util.Set.<T0>of()),
 
-            hydra.lib.sets.Unions.apply((java.util.List<java.util.Set<java.lang.Object>>) (java.util.List.<java.util.Set<java.lang.Object>>of())));
+            hydra.lib.sets.Unions.apply((java.util.List<java.util.Set<T0>>) (java.util.List.<java.util.Set<T0>>of())));
 
     }
 
@@ -532,11 +532,11 @@ public class SetsTest {
 
     @Test
 
-    public void testIntersectionNoCommonElements() {
+    public <T0> void testIntersectionNoCommonElements() {
 
         assertEquals(
 
-            (java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of()),
+            (java.util.Set<T0>) (java.util.Set.<T0>of()),
 
             hydra.lib.sets.Intersection.apply(
   java.util.stream.Stream.of(
@@ -550,11 +550,11 @@ public class SetsTest {
 
     @Test
 
-    public void testIntersectionIntersectionWithEmpty() {
+    public <T0> void testIntersectionIntersectionWithEmpty() {
 
         assertEquals(
 
-            (java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of()),
+            (java.util.Set<T0>) (java.util.Set.<T0>of()),
 
             hydra.lib.sets.Intersection.apply(
   java.util.stream.Stream.of(
@@ -651,11 +651,11 @@ public class SetsTest {
 
     @Test
 
-    public void testMapMapOnEmpty() {
+    public <T0> void testMapMapOnEmpty() {
 
         assertEquals(
 
-            (java.util.Set<java.lang.Object>) (java.util.Set.<java.lang.Object>of()),
+            (java.util.Set<T0>) (java.util.Set.<T0>of()),
 
             hydra.lib.sets.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(

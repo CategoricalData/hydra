@@ -43,14 +43,14 @@ public class ListsTest {
 
     @Test
 
-    public void testApplyEdgeCasesEmptyFunctionList() {
+    public <T0, T1> void testApplyEdgeCasesEmptyFunctionList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Apply.apply(
-  (java.util.List<java.util.function.Function<String, java.lang.Object>>) (java.util.List.<java.util.function.Function<String, java.lang.Object>>of()),
+  (java.util.List<java.util.function.Function<String, T1>>) (java.util.List.<java.util.function.Function<String, T1>>of()),
   java.util.List.of(
     "a",
     "b")));
@@ -59,11 +59,11 @@ public class ListsTest {
 
     @Test
 
-    public void testApplyEdgeCasesEmptyInputList() {
+    public <T0> void testApplyEdgeCasesEmptyInputList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Apply.apply(
   java.util.List.of(hydra.lib.strings.ToUpper::apply),
@@ -212,11 +212,11 @@ public class ListsTest {
 
     @Test
 
-    public void testBindEmptyList() {
+    public <T0> void testBindEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Bind.apply(
   (java.util.List<Integer>) (java.util.List.<Integer>of()),
@@ -332,28 +332,28 @@ public class ListsTest {
 
     @Test
 
-    public void testConcatAllEmptyLists() {
+    public <T0, T4> void testConcatAllEmptyLists() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Concat.apply(java.util.List.of(
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()))));
+  (java.util.List<T4>) (java.util.List.<T4>of()),
+  (java.util.List<T4>) (java.util.List.<T4>of()),
+  (java.util.List<T4>) (java.util.List.<T4>of()))));
 
     }
 
     @Test
 
-    public void testConcatEmptyListOfLists() {
+    public <T0> void testConcatEmptyListOfLists() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.lists.Concat.apply((java.util.List<java.util.List<java.lang.Object>>) (java.util.List.<java.util.List<java.lang.Object>>of())));
+            hydra.lib.lists.Concat.apply((java.util.List<java.util.List<T0>>) (java.util.List.<java.util.List<T0>>of())));
 
     }
 
@@ -419,15 +419,15 @@ public class ListsTest {
 
     @Test
 
-    public void testConcat2BothListsEmpty() {
+    public <T0, T3> void testConcat2BothListsEmpty() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Concat2.apply(
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+  (java.util.List<T3>) (java.util.List.<T3>of()),
+  (java.util.List<T3>) (java.util.List.<T3>of())));
 
     }
 
@@ -585,11 +585,11 @@ public class ListsTest {
 
     @Test
 
-    public void testDropDropAllElements() {
+    public <T0> void testDropDropAllElements() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Drop.apply(
   3,
@@ -602,11 +602,11 @@ public class ListsTest {
 
     @Test
 
-    public void testDropDropMoreThanLength() {
+    public <T0> void testDropDropMoreThanLength() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Drop.apply(
   5,
@@ -618,15 +618,15 @@ public class ListsTest {
 
     @Test
 
-    public void testDropDropFromEmptyList() {
+    public <T0, T2> void testDropDropFromEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Drop.apply(
   3,
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+  (java.util.List<T2>) (java.util.List.<T2>of())));
 
     }
 
@@ -678,11 +678,11 @@ public class ListsTest {
 
     @Test
 
-    public void testDropwhileDropAllElements() {
+    public <T0> void testDropwhileDropAllElements() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.DropWhile.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
@@ -719,11 +719,11 @@ public class ListsTest {
 
     @Test
 
-    public void testDropwhileEmptyList() {
+    public <T0> void testDropwhileEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.DropWhile.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
@@ -912,11 +912,11 @@ public class ListsTest {
 
     @Test
 
-    public void testFilterFilterNoElements() {
+    public <T0> void testFilterFilterNoElements() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Filter.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
@@ -931,11 +931,11 @@ public class ListsTest {
 
     @Test
 
-    public void testFilterEmptyList() {
+    public <T0> void testFilterEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Filter.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
@@ -988,11 +988,11 @@ public class ListsTest {
 
     @Test
 
-    public void testFindFindNoMatch() {
+    public <T0> void testFindFindNoMatch() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.lists.Find.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
@@ -1007,11 +1007,11 @@ public class ListsTest {
 
     @Test
 
-    public void testFindFindInEmptyList() {
+    public <T0> void testFindFindInEmptyList() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.lists.Find.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
@@ -1202,13 +1202,13 @@ public class ListsTest {
 
     @Test
 
-    public void testGroupEmptyList() {
+    public <T0, T1> void testGroupEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.lists.Group.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.Group.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -1319,11 +1319,11 @@ public class ListsTest {
 
     @Test
 
-    public void testInitSingleElement() {
+    public <T0> void testInitSingleElement() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Init.apply(java.util.List.of(1)));
 
@@ -1435,11 +1435,11 @@ public class ListsTest {
 
     @Test
 
-    public void testIntercalateEmptyListOfLists() {
+    public <T0> void testIntercalateEmptyListOfLists() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Intercalate.apply(
   java.util.List.of(0),
@@ -1527,11 +1527,11 @@ public class ListsTest {
 
     @Test
 
-    public void testIntersperseEmptyList() {
+    public <T0> void testIntersperseEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Intersperse.apply(
   "x",
@@ -1657,13 +1657,13 @@ public class ListsTest {
 
     @Test
 
-    public void testLengthEmptyList() {
+    public <T1> void testLengthEmptyList() {
 
         assertEquals(
 
             0,
 
-            hydra.lib.lists.Length.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.Length.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -1738,11 +1738,11 @@ public class ListsTest {
 
     @Test
 
-    public void testMapEmptyList() {
+    public <T0> void testMapEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Map.apply(
   hydra.lib.strings.ToUpper::apply,
@@ -1863,13 +1863,13 @@ public class ListsTest {
 
     @Test
 
-    public void testNubEmptyList() {
+    public <T0, T1> void testNubEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.lists.Nub.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.Nub.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -1908,13 +1908,13 @@ public class ListsTest {
 
     @Test
 
-    public void testNullEmptyIntList() {
+    public <T1> void testNullEmptyIntList() {
 
         assertEquals(
 
             true,
 
-            hydra.lib.lists.Null.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.Null.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -1947,13 +1947,13 @@ public class ListsTest {
 
     @Test
 
-    public void testNullEmptyStringList() {
+    public <T1> void testNullEmptyStringList() {
 
         assertEquals(
 
             true,
 
-            hydra.lib.lists.Null.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.Null.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -2001,14 +2001,14 @@ public class ListsTest {
 
     @Test
 
-    public void testPartitionPartitionAllElements() {
+    public <T1> void testPartitionPartitionAllElements() {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>(java.util.List.of(
+            (hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>(java.util.List.of(
   1,
   2,
-  3), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
+  3), (java.util.List<T1>) (java.util.List.<T1>of())))),
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
@@ -2023,11 +2023,11 @@ public class ListsTest {
 
     @Test
 
-    public void testPartitionPartitionNoElements() {
+    public <T0> void testPartitionPartitionNoElements() {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), java.util.List.of(
+            (hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>((java.util.List<T0>) (java.util.List.<T0>of()), java.util.List.of(
   1,
   2,
   3)))),
@@ -2071,11 +2071,11 @@ public class ListsTest {
 
     @Test
 
-    public void testPartitionEmptyList() {
+    public <T0, T1> void testPartitionEmptyList() {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
+            (hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>((java.util.List<T0>) (java.util.List.<T0>of()), (java.util.List<T1>) (java.util.List.<T1>of())))),
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
@@ -2156,11 +2156,11 @@ public class ListsTest {
 
     @Test
 
-    public void testReplicateReplicateZeroTimes() {
+    public <T0> void testReplicateReplicateZeroTimes() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Replicate.apply(
   0,
@@ -2234,13 +2234,13 @@ public class ListsTest {
 
     @Test
 
-    public void testReverseEmptyList() {
+    public <T0, T1> void testReverseEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.lists.Reverse.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.Reverse.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -2297,13 +2297,13 @@ public class ListsTest {
 
     @Test
 
-    public void testSafeheadEmptyIntList() {
+    public <T0, T1> void testSafeheadEmptyIntList() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
-            hydra.lib.lists.SafeHead.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.SafeHead.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -2335,13 +2335,13 @@ public class ListsTest {
 
     @Test
 
-    public void testSafeheadEmptyStringList() {
+    public <T0, T1> void testSafeheadEmptyStringList() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
-            hydra.lib.lists.SafeHead.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.SafeHead.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -2469,13 +2469,13 @@ public class ListsTest {
 
     @Test
 
-    public void testSortEmptyList() {
+    public <T0, T1> void testSortEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.lists.Sort.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.Sort.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -2543,11 +2543,11 @@ public class ListsTest {
 
     @Test
 
-    public void testSortonEmptyStringList() {
+    public <T0> void testSortonEmptyStringList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.SortOn.apply(
   hydra.lib.strings.Length::apply,
@@ -2639,14 +2639,14 @@ public class ListsTest {
 
     @Test
 
-    public void testSpanSpanAllElements() {
+    public <T1> void testSpanSpanAllElements() {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<java.lang.Object>>(java.util.List.of(
+            (hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>(java.util.List.of(
   1,
   2,
-  3), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
+  3), (java.util.List<T1>) (java.util.List.<T1>of())))),
 
             hydra.lib.lists.Span.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
@@ -2661,11 +2661,11 @@ public class ListsTest {
 
     @Test
 
-    public void testSpanSpanNoElements() {
+    public <T0> void testSpanSpanNoElements() {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<Integer>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), java.util.List.of(
+            (hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>((java.util.List<T0>) (java.util.List.<T0>of()), java.util.List.of(
   1,
   2,
   3)))),
@@ -2683,11 +2683,11 @@ public class ListsTest {
 
     @Test
 
-    public void testSpanEmptyList() {
+    public <T0, T1> void testSpanEmptyList() {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) ((hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>) (new hydra.util.Pair<java.util.List<java.lang.Object>, java.util.List<java.lang.Object>>((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()), (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
+            (hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>((java.util.List<T0>) (java.util.List.<T0>of()), (java.util.List<T1>) (java.util.List.<T1>of())))),
 
             hydra.lib.lists.Span.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
@@ -2734,11 +2734,11 @@ public class ListsTest {
 
     @Test
 
-    public void testTailSingleElement() {
+    public <T0> void testTailSingleElement() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Tail.apply(java.util.List.of(1)));
 
@@ -2786,11 +2786,11 @@ public class ListsTest {
 
     @Test
 
-    public void testTakeTakeZeroElements() {
+    public <T0> void testTakeTakeZeroElements() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Take.apply(
   0,
@@ -2841,25 +2841,25 @@ public class ListsTest {
 
     @Test
 
-    public void testTakeTakeFromEmptyList() {
+    public <T0, T2> void testTakeTakeFromEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Take.apply(
   3,
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+  (java.util.List<T2>) (java.util.List.<T2>of())));
 
     }
 
     @Test
 
-    public void testTakeTakeNegativeAmount() {
+    public <T0> void testTakeTakeNegativeAmount() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Take.apply(
   -1,
@@ -2903,13 +2903,13 @@ public class ListsTest {
 
     @Test
 
-    public void testTransposeEmptyLists() {
+    public <T0> void testTransposeEmptyLists() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.lists.Transpose.apply((java.util.List<java.util.List<java.lang.Object>>) (java.util.List.<java.util.List<java.lang.Object>>of())));
+            hydra.lib.lists.Transpose.apply((java.util.List<java.util.List<T0>>) (java.util.List.<java.util.List<T0>>of())));
 
     }
 
@@ -3046,14 +3046,14 @@ public class ListsTest {
 
     @Test
 
-    public void testZipEmptyFirstList() {
+    public <T0, T2> void testZipEmptyFirstList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Zip.apply(
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+  (java.util.List<T2>) (java.util.List.<T2>of()),
   java.util.List.of(
     "a",
     "b")));
@@ -3062,31 +3062,31 @@ public class ListsTest {
 
     @Test
 
-    public void testZipEmptySecondList() {
+    public <T0, T4> void testZipEmptySecondList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Zip.apply(
   java.util.List.of(
     1,
     2),
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+  (java.util.List<T4>) (java.util.List.<T4>of())));
 
     }
 
     @Test
 
-    public void testZipBothEmptyLists() {
+    public <T0, T2, T4> void testZipBothEmptyLists() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.Zip.apply(
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
-  (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+  (java.util.List<T2>) (java.util.List.<T2>of()),
+  (java.util.List<T4>) (java.util.List.<T4>of())));
 
     }
 
@@ -3168,11 +3168,11 @@ public class ListsTest {
 
     @Test
 
-    public void testZipwithEmptyFirstList() {
+    public <T0> void testZipwithEmptyFirstList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
@@ -3188,11 +3188,11 @@ public class ListsTest {
 
     @Test
 
-    public void testZipwithEmptySecondList() {
+    public <T0> void testZipwithEmptySecondList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(

@@ -298,13 +298,13 @@ public class ReductionTest {
 
     @Test
 
-    public void testPolymorphicPrimitivesLengthOfEmptyList() {
+    public <T1> void testPolymorphicPrimitivesLengthOfEmptyList() {
 
         assertEquals(
 
             0,
 
-            hydra.lib.lists.Length.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.Length.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -424,13 +424,13 @@ public class ReductionTest {
 
     @Test
 
-    public void testPolymorphicPrimitivesReverseEmptyList() {
+    public <T0, T1> void testPolymorphicPrimitivesReverseEmptyList() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.lists.Reverse.apply((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())));
+            hydra.lib.lists.Reverse.apply((java.util.List<T1>) (java.util.List.<T1>of())));
 
     }
 
@@ -438,13 +438,13 @@ public class ReductionTest {
 
     @Test
 
-    public void testNullaryPrimitivesEmptySetHasSizeZero() {
+    public <T1> void testNullaryPrimitivesEmptySetHasSizeZero() {
 
         assertEquals(
 
             0,
 
-            hydra.lib.sets.Size.apply((java.util.Set<java.lang.Object>) (hydra.lib.sets.Empty.<java.lang.Object>apply())));
+            hydra.lib.sets.Size.apply((java.util.Set<T1>) (hydra.lib.sets.Empty.<T1>apply())));
 
     }
 
@@ -592,13 +592,13 @@ public class ReductionTest {
 
     @Test
 
-    public void testListReductionEmptyListIsAValue() {
+    public <T0> void testListReductionEmptyListIsAValue() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()));
+            (java.util.List<T0>) (java.util.List.<T0>of()));
 
     }
 
@@ -636,13 +636,13 @@ public class ReductionTest {
 
     @Test
 
-    public void testOptionalReductionNothingIsAValue() {
+    public <T0> void testOptionalReductionNothingIsAValue() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()));
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()));
 
     }
 

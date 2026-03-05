@@ -5,14 +5,16 @@ package hydra.graph;
 import java.io.Serializable;
 
 /**
- * A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
+ * A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms.
  */
 public class TermCoder<A> implements Serializable, Comparable<TermCoder<A>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.graph.TermCoder");
   
   public static final hydra.core.Name TYPE = new hydra.core.Name("type");
   
-  public static final hydra.core.Name CODER = new hydra.core.Name("coder");
+  public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
+  
+  public static final hydra.core.Name DECODE = new hydra.core.Name("decode");
   
   /**
    * The Hydra type of encoded terms
@@ -20,13 +22,19 @@ public class TermCoder<A> implements Serializable, Comparable<TermCoder<A>> {
   public final hydra.core.Type type;
   
   /**
-   * A coder between Hydra terms and instances of the given type
+   * An encode function from terms to native values
    */
-  public final hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, A> coder;
+  public final java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, A>>>> encode;
   
-  public TermCoder (hydra.core.Type type, hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, A> coder) {
+  /**
+   * A decode function from native values to terms
+   */
+  public final java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>> decode;
+  
+  public TermCoder (hydra.core.Type type, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, A>>>> encode, java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>> decode) {
     this.type = type;
-    this.coder = coder;
+    this.encode = encode;
+    this.decode = decode;
   }
   
   @Override
@@ -38,13 +46,15 @@ public class TermCoder<A> implements Serializable, Comparable<TermCoder<A>> {
     return java.util.Objects.equals(
       this.type,
       o.type) && java.util.Objects.equals(
-      this.coder,
-      o.coder);
+      this.encode,
+      o.encode) && java.util.Objects.equals(
+      this.decode,
+      o.decode);
   }
   
   @Override
   public int hashCode() {
-    return 2 * java.util.Objects.hashCode(type) + 3 * java.util.Objects.hashCode(coder);
+    return 2 * java.util.Objects.hashCode(type) + 3 * java.util.Objects.hashCode(encode) + 5 * java.util.Objects.hashCode(decode);
   }
   
   @Override
@@ -55,14 +65,26 @@ public class TermCoder<A> implements Serializable, Comparable<TermCoder<A>> {
     if (cmp != 0) {
       return cmp;
     }
-    return ((Comparable) coder).compareTo(other.coder);
+    cmp = Integer.compare(
+      encode.hashCode(),
+      other.encode.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      decode.hashCode(),
+      other.decode.hashCode());
   }
   
   public TermCoder withType(hydra.core.Type type) {
-    return new TermCoder(type, coder);
+    return new TermCoder(type, encode, decode);
   }
   
-  public TermCoder withCoder(hydra.compute.Coder<hydra.graph.Graph, hydra.graph.Graph, hydra.core.Term, A> coder) {
-    return new TermCoder(type, coder);
+  public TermCoder withEncode(java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, A>>>> encode) {
+    return new TermCoder(type, encode, decode);
+  }
+  
+  public TermCoder withDecode(java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>> decode) {
+    return new TermCoder(type, encode, decode);
   }
 }

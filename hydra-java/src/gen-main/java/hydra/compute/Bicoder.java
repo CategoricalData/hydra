@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A two-level encoder and decoder, operating both at a type level and an instance (data) level
  */
-public class Bicoder<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable<Bicoder<S1, S2, T1, T2, V1, V2>> {
+public class Bicoder<T1, T2, V1, V2> implements Serializable, Comparable<Bicoder<T1, T2, V1, V2>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.Bicoder");
   
   public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
@@ -17,14 +17,14 @@ public class Bicoder<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable
   /**
    * A function from source types to adapters
    */
-  public final java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode;
+  public final java.util.function.Function<T1, hydra.compute.Adapter<T1, T2, V1, V2>> encode;
   
   /**
    * A function from target types to adapters
    */
-  public final java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode;
+  public final java.util.function.Function<T2, hydra.compute.Adapter<T2, T1, V2, V1>> decode;
   
-  public Bicoder (java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode, java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode) {
+  public Bicoder (java.util.function.Function<T1, hydra.compute.Adapter<T1, T2, V1, V2>> encode, java.util.function.Function<T2, hydra.compute.Adapter<T2, T1, V2, V1>> decode) {
     this.encode = encode;
     this.decode = decode;
   }
@@ -62,11 +62,11 @@ public class Bicoder<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable
       other.decode.hashCode());
   }
   
-  public Bicoder withEncode(java.util.function.Function<T1, hydra.compute.Adapter<S1, S2, T1, T2, V1, V2>> encode) {
+  public Bicoder withEncode(java.util.function.Function<T1, hydra.compute.Adapter<T1, T2, V1, V2>> encode) {
     return new Bicoder(encode, decode);
   }
   
-  public Bicoder withDecode(java.util.function.Function<T2, hydra.compute.Adapter<S2, S1, T2, T1, V2, V1>> decode) {
+  public Bicoder withDecode(java.util.function.Function<T2, hydra.compute.Adapter<T2, T1, V2, V1>> decode) {
     return new Bicoder(encode, decode);
   }
 }

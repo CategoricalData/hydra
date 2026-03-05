@@ -29,9 +29,9 @@ public class Primitive implements Serializable, Comparable<Primitive> {
   /**
    * A concrete implementation of the primitive function
    */
-  public final java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>> implementation;
+  public final java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>> implementation;
   
-  public Primitive (hydra.core.Name name, hydra.core.TypeScheme type, java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>> implementation) {
+  public Primitive (hydra.core.Name name, hydra.core.TypeScheme type, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>> implementation) {
     this.name = name;
     this.type = type;
     this.implementation = implementation;
@@ -82,7 +82,7 @@ public class Primitive implements Serializable, Comparable<Primitive> {
     return new Primitive(name, type, implementation);
   }
   
-  public Primitive withImplementation(java.util.function.Function<java.util.List<hydra.core.Term>, hydra.compute.Flow<hydra.graph.Graph, hydra.core.Term>> implementation) {
+  public Primitive withImplementation(java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>> implementation) {
     return new Primitive(name, type, implementation);
   }
 }

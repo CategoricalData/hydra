@@ -125,11 +125,11 @@ public class MapsTest {
 
     @Test
 
-    public void testBimapEmptyMap() {
+    public <T0, T1> void testBimapEmptyMap() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (k -> hydra.lib.math.Mul.apply(
@@ -188,13 +188,13 @@ public class MapsTest {
 
     @Test
 
-    public void testElemsEmptyMap() {
+    public <T0, T2, T3> void testElemsEmptyMap() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.maps.Elems.apply((java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries()))));
+            hydra.lib.maps.Elems.apply((java.util.Map<T2, T3>) ((java.util.Map<T2, T3>) (java.util.Map.<T2, T3>ofEntries()))));
 
     }
 
@@ -202,13 +202,13 @@ public class MapsTest {
 
     @Test
 
-    public void testEmptyEmptyMap() {
+    public <T0, T1> void testEmptyEmptyMap() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (hydra.lib.maps.Empty.<java.lang.Object, java.lang.Object>apply())));
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (hydra.lib.maps.Empty.<T0, T1>apply())));
 
     }
 
@@ -249,11 +249,11 @@ public class MapsTest {
 
     @Test
 
-    public void testFilterFilterAll() {
+    public <T0, T1> void testFilterFilterAll() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Filter.apply(
   (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
@@ -273,11 +273,11 @@ public class MapsTest {
 
     @Test
 
-    public void testFilterEmptyMap() {
+    public <T0, T1, T9> void testFilterEmptyMap() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Filter.apply(
   (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
@@ -285,7 +285,7 @@ public class MapsTest {
       0,
       v),
     97)),
-  (java.util.Map<java.lang.Object, String>) ((java.util.Map<java.lang.Object, String>) (java.util.Map.<java.lang.Object, String>ofEntries()))));
+  (java.util.Map<T9, String>) ((java.util.Map<T9, String>) (java.util.Map.<T9, String>ofEntries()))));
 
     }
 
@@ -324,11 +324,11 @@ public class MapsTest {
 
     @Test
 
-    public void testFilterwithkeyFilterAll() {
+    public <T0, T1> void testFilterwithkeyFilterAll() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
             hydra.lib.maps.FilterWithKey.apply(
   (java.util.function.Function<Integer, java.util.function.Function<String, Boolean>>) (k -> (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Gt.apply(
@@ -342,17 +342,17 @@ public class MapsTest {
 
     @Test
 
-    public void testFilterwithkeyEmptyMap() {
+    public <T0, T1, T9> void testFilterwithkeyEmptyMap() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
             hydra.lib.maps.FilterWithKey.apply(
-  (java.util.function.Function<Integer, java.util.function.Function<java.lang.Object, Boolean>>) (k -> (java.util.function.Function<java.lang.Object, Boolean>) (v -> hydra.lib.equality.Gt.apply(
+  (java.util.function.Function<Integer, java.util.function.Function<T9, Boolean>>) (k -> (java.util.function.Function<T9, Boolean>) (v -> hydra.lib.equality.Gt.apply(
     k,
     1))),
-  (java.util.Map<Integer, java.lang.Object>) ((java.util.Map<Integer, java.lang.Object>) (java.util.Map.<Integer, java.lang.Object>ofEntries()))));
+  (java.util.Map<Integer, T9>) ((java.util.Map<Integer, T9>) (java.util.Map.<Integer, T9>ofEntries()))));
 
     }
 
@@ -440,13 +440,13 @@ public class MapsTest {
 
     @Test
 
-    public void testFromlistEmptyList() {
+    public <T0, T1> void testFromlistEmptyList() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
-            hydra.lib.maps.FromList.apply((java.util.List<hydra.util.Pair<java.lang.Object, java.lang.Object>>) (java.util.List.<hydra.util.Pair<java.lang.Object, java.lang.Object>>of())));
+            hydra.lib.maps.FromList.apply((java.util.List<hydra.util.Pair<T0, T1>>) (java.util.List.<hydra.util.Pair<T0, T1>>of())));
 
     }
 
@@ -578,13 +578,13 @@ public class MapsTest {
 
     @Test
 
-    public void testKeysEmptyMap() {
+    public <T0, T2, T3> void testKeysEmptyMap() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.maps.Keys.apply((java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries()))));
+            hydra.lib.maps.Keys.apply((java.util.Map<T2, T3>) ((java.util.Map<T2, T3>) (java.util.Map.<T2, T3>ofEntries()))));
 
     }
 
@@ -612,11 +612,11 @@ public class MapsTest {
 
     @Test
 
-    public void testLookupKeyNotFound() {
+    public <T0> void testLookupKeyNotFound() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.maps.Lookup.apply(
   3,
@@ -632,15 +632,15 @@ public class MapsTest {
 
     @Test
 
-    public void testLookupLookupInEmpty() {
+    public <T0, T4> void testLookupLookupInEmpty() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.maps.Lookup.apply(
   1,
-  (java.util.Map<Integer, java.lang.Object>) ((java.util.Map<Integer, java.lang.Object>) (java.util.Map.<Integer, java.lang.Object>ofEntries()))));
+  (java.util.Map<Integer, T4>) ((java.util.Map<Integer, T4>) (java.util.Map.<Integer, T4>ofEntries()))));
 
     }
 
@@ -674,15 +674,15 @@ public class MapsTest {
 
     @Test
 
-    public void testMapMapEmpty() {
+    public <T0, T1, T6> void testMapMapEmpty() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Map.apply(
   (java.util.function.Function<String, String>) (s -> hydra.lib.strings.ToUpper.apply(s)),
-  (java.util.Map<java.lang.Object, String>) ((java.util.Map<java.lang.Object, String>) (java.util.Map.<java.lang.Object, String>ofEntries()))));
+  (java.util.Map<T6, String>) ((java.util.Map<T6, String>) (java.util.Map.<T6, String>ofEntries()))));
 
     }
 
@@ -718,17 +718,17 @@ public class MapsTest {
 
     @Test
 
-    public void testMapkeysEmptyMap() {
+    public <T0, T1, T8> void testMapkeysEmptyMap() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
             hydra.lib.maps.MapKeys.apply(
   (java.util.function.Function<Integer, Integer>) (k -> hydra.lib.math.Mul.apply(
     k,
     2)),
-  (java.util.Map<Integer, java.lang.Object>) ((java.util.Map<Integer, java.lang.Object>) (java.util.Map.<Integer, java.lang.Object>ofEntries()))));
+  (java.util.Map<Integer, T8>) ((java.util.Map<Integer, T8>) (java.util.Map.<Integer, T8>ofEntries()))));
 
     }
 
@@ -776,7 +776,7 @@ public class MapsTest {
 
     @Test
 
-    public void testMemberEmptyMap() {
+    public <T4> void testMemberEmptyMap() {
 
         assertEquals(
 
@@ -784,7 +784,7 @@ public class MapsTest {
 
             hydra.lib.maps.Member.apply(
   1,
-  (java.util.Map<Integer, java.lang.Object>) ((java.util.Map<Integer, java.lang.Object>) (java.util.Map.<Integer, java.lang.Object>ofEntries()))));
+  (java.util.Map<Integer, T4>) ((java.util.Map<Integer, T4>) (java.util.Map.<Integer, T4>ofEntries()))));
 
     }
 
@@ -792,13 +792,13 @@ public class MapsTest {
 
     @Test
 
-    public void testNullEmptyMap() {
+    public <T2, T3> void testNullEmptyMap() {
 
         assertEquals(
 
             true,
 
-            hydra.lib.maps.Null.apply((java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries()))));
+            hydra.lib.maps.Null.apply((java.util.Map<T2, T3>) ((java.util.Map<T2, T3>) (java.util.Map.<T2, T3>ofEntries()))));
 
     }
 
@@ -875,15 +875,15 @@ public class MapsTest {
 
     @Test
 
-    public void testRemoveRemoveFromEmpty() {
+    public <T0, T1, T4> void testRemoveRemoveFromEmpty() {
 
         assertEquals(
 
-            (java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries())),
+            (java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (java.util.Map.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Delete.apply(
   1,
-  (java.util.Map<Integer, java.lang.Object>) ((java.util.Map<Integer, java.lang.Object>) (java.util.Map.<Integer, java.lang.Object>ofEntries()))));
+  (java.util.Map<Integer, T4>) ((java.util.Map<Integer, T4>) (java.util.Map.<Integer, T4>ofEntries()))));
 
     }
 
@@ -944,13 +944,13 @@ public class MapsTest {
 
     @Test
 
-    public void testSizeEmptyMap() {
+    public <T2, T3> void testSizeEmptyMap() {
 
         assertEquals(
 
             0,
 
-            hydra.lib.maps.Size.apply((java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries()))));
+            hydra.lib.maps.Size.apply((java.util.Map<T2, T3>) ((java.util.Map<T2, T3>) (java.util.Map.<T2, T3>ofEntries()))));
 
     }
 
@@ -1002,13 +1002,13 @@ public class MapsTest {
 
     @Test
 
-    public void testTolistEmptyMap() {
+    public <T0, T2, T3> void testTolistEmptyMap() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.lib.maps.ToList.apply((java.util.Map<java.lang.Object, java.lang.Object>) ((java.util.Map<java.lang.Object, java.lang.Object>) (java.util.Map.<java.lang.Object, java.lang.Object>ofEntries()))));
+            hydra.lib.maps.ToList.apply((java.util.Map<T2, T3>) ((java.util.Map<T2, T3>) (java.util.Map.<T2, T3>ofEntries()))));
 
     }
 

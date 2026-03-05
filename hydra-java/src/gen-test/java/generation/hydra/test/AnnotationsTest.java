@@ -116,11 +116,11 @@ public class AnnotationsTest {
 
     @Test
 
-    public void testArbitraryAnnotationsGetMissingAnnotationNum1() {
+    public <T0> void testArbitraryAnnotationsGetMissingAnnotationNum1() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.annotations.Annotations.getTermAnnotation(
   new hydra.core.Name("k1"),
@@ -130,11 +130,11 @@ public class AnnotationsTest {
 
     @Test
 
-    public void testArbitraryAnnotationsGetMissingAnnotationNum2() {
+    public <T0> void testArbitraryAnnotationsGetMissingAnnotationNum2() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.annotations.Annotations.getTermAnnotation(
   new hydra.core.Name("nonexistent"),
@@ -144,11 +144,11 @@ public class AnnotationsTest {
 
     @Test
 
-    public void testArbitraryAnnotationsGetMissingAnnotationNum3() {
+    public <T0> void testArbitraryAnnotationsGetMissingAnnotationNum3() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.annotations.Annotations.getTermAnnotation(
   new hydra.core.Name("k1"),
@@ -401,79 +401,97 @@ public class AnnotationsTest {
 
     @Test
 
-    public void testDescriptionsGetExistingDescriptionNum1() {
+    public <T1> void testDescriptionsGetExistingDescriptionNum1() {
 
         assertEquals(
 
-            (hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>) ((hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>) (new hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>(hydra.util.Maybe.just(hydra.util.Maybe.just("hello")), hydra.lexical.Lexical.emptyGraph(), hydra.monads.Monads.emptyTrace()))),
+            (hydra.util.Either<T1, hydra.util.Maybe<String>>) ((hydra.util.Either<T1, hydra.util.Maybe<String>>) (hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("hello")))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) ((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) (wrapped -> (wrapped).value))).apply(hydra.annotations.Annotations.getTermDescription(hydra.annotations.Annotations.setTermDescription(
-  hydra.util.Maybe.just("hello"),
-  new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))).apply(hydra.lexical.Lexical.emptyGraph())).apply(hydra.monads.Monads.emptyTrace()));
+            hydra.annotations.Annotations.getTermDescription(
+  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyGraph(),
+  hydra.annotations.Annotations.setTermDescription(
+    hydra.util.Maybe.just("hello"),
+    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))));
 
     }
 
     @Test
 
-    public void testDescriptionsGetExistingDescriptionNum2() {
+    public <T1> void testDescriptionsGetExistingDescriptionNum2() {
 
         assertEquals(
 
-            (hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>) ((hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>) (new hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>(hydra.util.Maybe.just(hydra.util.Maybe.just("")), hydra.lexical.Lexical.emptyGraph(), hydra.monads.Monads.emptyTrace()))),
+            (hydra.util.Either<T1, hydra.util.Maybe<String>>) ((hydra.util.Either<T1, hydra.util.Maybe<String>>) (hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("")))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) ((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) (wrapped -> (wrapped).value))).apply(hydra.annotations.Annotations.getTermDescription(hydra.annotations.Annotations.setTermDescription(
-  hydra.util.Maybe.just(""),
-  new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")))))).apply(hydra.lexical.Lexical.emptyGraph())).apply(hydra.monads.Monads.emptyTrace()));
+            hydra.annotations.Annotations.getTermDescription(
+  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyGraph(),
+  hydra.annotations.Annotations.setTermDescription(
+    hydra.util.Maybe.just(""),
+    new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")))));
 
     }
 
     @Test
 
-    public void testDescriptionsGetExistingDescriptionNum3() {
+    public <T1> void testDescriptionsGetExistingDescriptionNum3() {
 
         assertEquals(
 
-            (hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>) ((hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>) (new hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>(hydra.util.Maybe.just(hydra.util.Maybe.just("desc")), hydra.lexical.Lexical.emptyGraph(), hydra.monads.Monads.emptyTrace()))),
+            (hydra.util.Either<T1, hydra.util.Maybe<String>>) ((hydra.util.Either<T1, hydra.util.Maybe<String>>) (hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("desc")))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) ((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) (wrapped -> (wrapped).value))).apply(hydra.annotations.Annotations.getTermDescription(hydra.annotations.Annotations.setTermDescription(
-  hydra.util.Maybe.just("desc"),
-  new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false)))))).apply(hydra.lexical.Lexical.emptyGraph())).apply(hydra.monads.Monads.emptyTrace()));
+            hydra.annotations.Annotations.getTermDescription(
+  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyGraph(),
+  hydra.annotations.Annotations.setTermDescription(
+    hydra.util.Maybe.just("desc"),
+    new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false)))));
 
     }
 
     @Test
 
-    public void testDescriptionsGetMissingDescriptionNum1() {
+    public <T0, T1> void testDescriptionsGetMissingDescriptionNum1() {
 
         assertEquals(
 
-            (hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<java.lang.Object>>) ((hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<java.lang.Object>>) (new hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<java.lang.Object>>(hydra.util.Maybe.just((hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing())), hydra.lexical.Lexical.emptyGraph(), hydra.monads.Monads.emptyTrace()))),
+            (hydra.util.Either<T1, hydra.util.Maybe<T0>>) ((hydra.util.Either<T1, hydra.util.Maybe<T0>>) (hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) ((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) (wrapped -> (wrapped).value))).apply(hydra.annotations.Annotations.getTermDescription(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int16((short) (42))))))).apply(hydra.lexical.Lexical.emptyGraph())).apply(hydra.monads.Monads.emptyTrace()));
+            hydra.annotations.Annotations.getTermDescription(
+  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyGraph(),
+  new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int16((short) (42))))));
 
     }
 
     @Test
 
-    public void testDescriptionsGetMissingDescriptionNum2() {
+    public <T0, T1> void testDescriptionsGetMissingDescriptionNum2() {
 
         assertEquals(
 
-            (hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<java.lang.Object>>) ((hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<java.lang.Object>>) (new hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<java.lang.Object>>(hydra.util.Maybe.just((hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing())), hydra.lexical.Lexical.emptyGraph(), hydra.monads.Monads.emptyTrace()))),
+            (hydra.util.Either<T1, hydra.util.Maybe<T0>>) ((hydra.util.Either<T1, hydra.util.Maybe<T0>>) (hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) ((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) (wrapped -> (wrapped).value))).apply(hydra.annotations.Annotations.getTermDescription(new hydra.core.Term.Literal(new hydra.core.Literal.String_("no description here"))))).apply(hydra.lexical.Lexical.emptyGraph())).apply(hydra.monads.Monads.emptyTrace()));
+            hydra.annotations.Annotations.getTermDescription(
+  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyGraph(),
+  new hydra.core.Term.Literal(new hydra.core.Literal.String_("no description here"))));
 
     }
 
     @Test
 
-    public void testDescriptionsGetMissingDescriptionNum3() {
+    public <T0, T1> void testDescriptionsGetMissingDescriptionNum3() {
 
         assertEquals(
 
-            (hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<java.lang.Object>>) ((hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<java.lang.Object>>) (new hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<java.lang.Object>>(hydra.util.Maybe.just((hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing())), hydra.lexical.Lexical.emptyGraph(), hydra.monads.Monads.emptyTrace()))),
+            (hydra.util.Either<T1, hydra.util.Maybe<T0>>) ((hydra.util.Either<T1, hydra.util.Maybe<T0>>) (hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
 
-            ((((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) ((java.util.function.Function<hydra.compute.Flow<hydra.graph.Graph, hydra.util.Maybe<String>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.compute.Trace, hydra.compute.FlowState<hydra.graph.Graph, hydra.util.Maybe<String>>>>>) (wrapped -> (wrapped).value))).apply(hydra.annotations.Annotations.getTermDescription(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0)))))).apply(hydra.lexical.Lexical.emptyGraph())).apply(hydra.monads.Monads.emptyTrace()));
+            hydra.annotations.Annotations.getTermDescription(
+  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyGraph(),
+  new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0)))));
 
     }
 
@@ -549,11 +567,11 @@ public class AnnotationsTest {
 
     @Test
 
-    public void testLayeredAnnotationsGetAnnotationFromUnannotatedTerm() {
+    public <T0> void testLayeredAnnotationsGetAnnotationFromUnannotatedTerm() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.annotations.Annotations.getTermAnnotation(
   new hydra.core.Name("one"),
