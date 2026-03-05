@@ -45,7 +45,6 @@ adapterContext = define "AdapterContext" $
     "adapters">:
       doc "A map of type names to adapters for those types" $
       T.map Core.name (Compute.adapter
-        @@ adapterContext @@ adapterContext
         @@ Core.type_ @@ Core.type_
         @@ Core.term @@ Core.term)]
 
@@ -104,7 +103,7 @@ languageName = define "LanguageName" $
 symmetricAdapter :: Binding
 symmetricAdapter = define "SymmetricAdapter" $
   doc "A bidirectional encoder which maps between the same type and term languages on either side" $
-  T.forAlls ["s", "t", "v"] $ Compute.adapter @@ "s" @@ "s" @@ "t" @@ "t" @@ "v" @@ "v"
+  T.forAlls ["t", "v"] $ Compute.adapter @@ "t" @@ "t" @@ "v" @@ "v"
 
 traversalOrder :: Binding
 traversalOrder = define "TraversalOrder" $
@@ -116,5 +115,5 @@ traversalOrder = define "TraversalOrder" $
 typeAdapter :: Binding
 typeAdapter = define "TypeAdapter" $
   doc "A function which maps a Hydra type to a symmetric adapter between types and terms" $
-  Core.type_ ~> Compute.flow @@ adapterContext @@
-    (symmetricAdapter @@ adapterContext @@ Core.type_ @@ Core.term)
+  adapterContext ~> Core.type_ ~> T.either_ T.string
+    (symmetricAdapter @@ Core.type_ @@ Core.term)
