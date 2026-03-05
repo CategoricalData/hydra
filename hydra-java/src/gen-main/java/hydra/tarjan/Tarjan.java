@@ -86,24 +86,19 @@ public interface Tarjan {
   }
   
   static java.util.List<java.util.List<Integer>> stronglyConnectedComponents(java.util.Map<Integer, java.util.List<Integer>> graph) {
-    java.util.function.Function<Integer, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>> processVertex = (java.util.function.Function<Integer, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (v -> hydra.lib.flows.Bind.apply(
-      hydra.lib.flows.Map.apply(
-        (java.util.function.Function<hydra.topology.TarjanState, Boolean>) (st -> hydra.lib.maps.Member.apply(
+    hydra.util.Lazy<java.util.List<Integer>> verts = new hydra.util.Lazy<>(() -> hydra.lib.maps.Keys.apply(graph));
+    hydra.util.Lazy<hydra.topology.TarjanState> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.topology.TarjanState, java.util.function.Function<Integer, hydra.topology.TarjanState>>) (st -> (java.util.function.Function<Integer, hydra.topology.TarjanState>) (v -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.maps.Member.apply(
           v,
-          (st).indices)),
-        hydra.monads.Monads.<hydra.topology.TarjanState>getState()),
-      (java.util.function.Function<Boolean, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (visited -> hydra.lib.logic.IfElse.lazy(
-        hydra.lib.logic.Not.apply(visited),
+          (st).indices),
+        () -> st,
         () -> hydra.tarjan.Tarjan.strongConnect(
           graph,
-          v),
-        () -> hydra.lib.flows.Pure.apply(null)))));
-    hydra.util.Lazy<java.util.List<Integer>> verts = new hydra.util.Lazy<>(() -> hydra.lib.maps.Keys.apply(graph));
-    hydra.util.Lazy<hydra.topology.TarjanState> finalState = new hydra.util.Lazy<>(() -> hydra.monads.Monads.exec(
-      hydra.lib.flows.MapList.apply(
-        processVertex,
-        verts.get()),
-      hydra.tarjan.Tarjan.initialState()));
+          v,
+          st)))),
+      hydra.tarjan.Tarjan.initialState(),
+      verts.get()));
     return hydra.lib.lists.Reverse.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<java.util.List<Integer>, java.util.List<Integer>>) (hydra.lib.lists.Sort::apply),
       (finalState.get()).sccs));
@@ -113,146 +108,129 @@ public interface Tarjan {
     return new hydra.topology.TarjanState(0, (java.util.Map<Integer, Integer>) ((java.util.Map<Integer, Integer>) (hydra.lib.maps.Empty.<Integer, Integer>apply())), (java.util.Map<Integer, Integer>) ((java.util.Map<Integer, Integer>) (hydra.lib.maps.Empty.<Integer, Integer>apply())), (java.util.List<Integer>) (java.util.List.<Integer>of()), (java.util.Set<Integer>) (hydra.lib.sets.Empty.<Integer>apply()), (java.util.List<java.util.List<Integer>>) (java.util.List.<java.util.List<Integer>>of()));
   }
   
-  static hydra.compute.Flow<hydra.topology.TarjanState, java.util.List<Integer>> popStackUntil(Integer v) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<Integer>, hydra.compute.Flow<hydra.topology.TarjanState, java.util.List<Integer>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<java.util.List<Integer>, hydra.compute.Flow<hydra.topology.TarjanState, java.util.List<Integer>>>) (acc -> {
-      java.util.function.Function<hydra.topology.TarjanState, hydra.compute.Flow<hydra.topology.TarjanState, java.util.List<Integer>>> succeed = (java.util.function.Function<hydra.topology.TarjanState, hydra.compute.Flow<hydra.topology.TarjanState, java.util.List<Integer>>>) (st -> {
-        hydra.util.Lazy<Integer> x = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply((st).stack));
-        hydra.util.Lazy<java.util.List<Integer>> acc_ = new hydra.util.Lazy<>(() -> hydra.lib.lists.Cons.apply(
+  static hydra.util.Pair<java.util.List<Integer>, hydra.topology.TarjanState> popStackUntil(Integer v, hydra.topology.TarjanState st0) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<Integer>, java.util.function.Function<hydra.topology.TarjanState, hydra.util.Pair<java.util.List<Integer>, hydra.topology.TarjanState>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
+    go.set((java.util.function.Function<java.util.List<Integer>, java.util.function.Function<hydra.topology.TarjanState, hydra.util.Pair<java.util.List<Integer>, hydra.topology.TarjanState>>>) (acc -> (java.util.function.Function<hydra.topology.TarjanState, hydra.util.Pair<java.util.List<Integer>, hydra.topology.TarjanState>>) (st -> {
+      hydra.util.Lazy<Integer> x = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply((st).stack));
+      hydra.util.Lazy<java.util.List<Integer>> acc_ = new hydra.util.Lazy<>(() -> hydra.lib.lists.Cons.apply(
+        x.get(),
+        acc));
+      hydra.util.Lazy<java.util.List<Integer>> xs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply((st).stack));
+      hydra.topology.TarjanState newSt = new hydra.topology.TarjanState((st).counter, (st).indices, (st).lowLinks, xs.get(), (st).onStack, (st).sccs);
+      hydra.util.Lazy<hydra.topology.TarjanState> newSt2 = new hydra.util.Lazy<>(() -> new hydra.topology.TarjanState((newSt).counter, (newSt).indices, (newSt).lowLinks, (newSt).stack, hydra.lib.sets.Delete.apply(
+        x.get(),
+        (st).onStack), (newSt).sccs));
+      return hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
           x.get(),
-          acc));
-        hydra.util.Lazy<java.util.List<Integer>> xs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply((st).stack));
-        hydra.topology.TarjanState newSt = new hydra.topology.TarjanState((st).counter, (st).indices, (st).lowLinks, xs.get(), (st).onStack, (st).sccs);
-        hydra.util.Lazy<hydra.topology.TarjanState> newSt2 = new hydra.util.Lazy<>(() -> new hydra.topology.TarjanState((newSt).counter, (newSt).indices, (newSt).lowLinks, (newSt).stack, hydra.lib.sets.Delete.apply(
-          x.get(),
-          (st).onStack), (newSt).sccs));
-        return hydra.lib.flows.Bind.apply(
-          hydra.monads.Monads.putState(newSt2.get()),
-          (java.util.function.Function<java.lang.Void, hydra.compute.Flow<hydra.topology.TarjanState, java.util.List<Integer>>>) (ignored -> hydra.lib.logic.IfElse.lazy(
-            hydra.lib.equality.Equal.apply(
-              x.get(),
-              v),
-            () -> hydra.lib.flows.Pure.apply(hydra.lib.lists.Reverse.apply(acc_.get())),
-            () -> (go.get()).apply(acc_.get()))));
-      });
-      return hydra.lib.flows.Bind.apply(
-        hydra.monads.Monads.<hydra.topology.TarjanState>getState(),
-        (java.util.function.Function<hydra.topology.TarjanState, hydra.compute.Flow<hydra.topology.TarjanState, java.util.List<Integer>>>) (st -> hydra.lib.logic.IfElse.lazy(
-          hydra.lib.lists.Null.apply((st).stack),
-          () -> hydra.lib.flows.Fail.apply("popStackUntil: empty stack"),
-          () -> (succeed).apply(st))));
-    }));
-    return (go.get()).apply((java.util.List<Integer>) (java.util.List.<Integer>of()));
+          v),
+        () -> (hydra.util.Pair<java.util.List<Integer>, hydra.topology.TarjanState>) ((hydra.util.Pair<java.util.List<Integer>, hydra.topology.TarjanState>) (new hydra.util.Pair<java.util.List<Integer>, hydra.topology.TarjanState>(hydra.lib.lists.Reverse.apply(acc_.get()), newSt2.get()))),
+        () -> ((go.get()).apply(acc_.get())).apply(newSt2.get()));
+    })));
+    return ((go.get()).apply((java.util.List<Integer>) (java.util.List.<Integer>of()))).apply(st0);
   }
   
-  static hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void> strongConnect(java.util.Map<Integer, java.util.List<Integer>> graph, Integer v) {
-    return hydra.lib.flows.Bind.apply(
-      hydra.monads.Monads.<hydra.topology.TarjanState>getState(),
-      (java.util.function.Function<hydra.topology.TarjanState, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (st -> {
-        Integer i = (st).counter;
-        hydra.util.Lazy<java.util.List<Integer>> neighbors = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-          (java.util.List<Integer>) (java.util.List.<Integer>of()),
+  static hydra.topology.TarjanState strongConnect(java.util.Map<Integer, java.util.List<Integer>> graph, Integer v, hydra.topology.TarjanState st) {
+    Integer i = (st).counter;
+    hydra.util.Lazy<java.util.List<Integer>> neighbors = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
+      (java.util.List<Integer>) (java.util.List.<Integer>of()),
+      v,
+      graph));
+    hydra.util.Lazy<hydra.topology.TarjanState> newSt = new hydra.util.Lazy<>(() -> new hydra.topology.TarjanState(hydra.lib.math.Add.apply(
+      i,
+      1), hydra.lib.maps.Insert.apply(
+      v,
+      i,
+      (st).indices), hydra.lib.maps.Insert.apply(
+      v,
+      i,
+      (st).lowLinks), hydra.lib.lists.Cons.apply(
+      v,
+      (st).stack), hydra.lib.sets.Insert.apply(
+      v,
+      (st).onStack), (st).sccs));
+    java.util.function.Function<hydra.topology.TarjanState, java.util.function.Function<Integer, hydra.topology.TarjanState>> processNeighbor = (java.util.function.Function<hydra.topology.TarjanState, java.util.function.Function<Integer, hydra.topology.TarjanState>>) (st_ -> (java.util.function.Function<Integer, hydra.topology.TarjanState>) (w -> {
+      java.util.function.Function<hydra.topology.TarjanState, hydra.topology.TarjanState> lowLink = (java.util.function.Function<hydra.topology.TarjanState, hydra.topology.TarjanState>) (s -> {
+        hydra.util.Lazy<Integer> idx_w = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
+          hydra.constants.Constants.maxInt32(),
+          w,
+          (s).indices));
+        hydra.util.Lazy<Integer> lowV1 = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
+          hydra.constants.Constants.maxInt32(),
           v,
-          graph));
-        hydra.util.Lazy<hydra.topology.TarjanState> newSt = new hydra.util.Lazy<>(() -> new hydra.topology.TarjanState(hydra.lib.math.Add.apply(
-          i,
-          1), hydra.lib.maps.Insert.apply(
+          (s).lowLinks));
+        return new hydra.topology.TarjanState((s).counter, (s).indices, hydra.lib.maps.Insert.apply(
           v,
-          i,
-          (st).indices), hydra.lib.maps.Insert.apply(
-          v,
-          i,
-          (st).lowLinks), hydra.lib.lists.Cons.apply(
-          v,
-          (st).stack), hydra.lib.sets.Insert.apply(
-          v,
-          (st).onStack), (st).sccs));
-        java.util.function.Function<Integer, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>> processNeighbor = (java.util.function.Function<Integer, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (w -> {
-          java.util.function.Function<hydra.topology.TarjanState, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>> lowLink = (java.util.function.Function<hydra.topology.TarjanState, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (st_ -> {
-            hydra.util.Lazy<Integer> idx_w = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-              hydra.constants.Constants.maxInt32(),
-              w,
-              (st_).indices));
-            hydra.util.Lazy<Integer> low_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
+          hydra.lib.equality.Min.apply(
+            lowV1.get(),
+            idx_w.get()),
+          (s).lowLinks), (s).stack, (s).onStack, (s).sccs);
+      });
+      return hydra.lib.logic.IfElse.lazy(
+        hydra.lib.logic.Not.apply(hydra.lib.maps.Member.apply(
+          w,
+          (st_).indices)),
+        () -> ((java.util.function.Supplier<hydra.topology.TarjanState>) (() -> {
+          hydra.topology.TarjanState stAfter = hydra.tarjan.Tarjan.strongConnect(
+            graph,
+            w,
+            st_);
+          return ((java.util.function.Supplier<hydra.topology.TarjanState>) (() -> {
+            hydra.util.Lazy<Integer> lowV2 = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
               hydra.constants.Constants.maxInt32(),
               v,
-              (st_).lowLinks));
-            return hydra.lib.flows.Bind.apply(
-              hydra.monads.Monads.modify((java.util.function.Function<hydra.topology.TarjanState, hydra.topology.TarjanState>) (s -> new hydra.topology.TarjanState((s).counter, (s).indices, hydra.lib.maps.Insert.apply(
+              (stAfter).lowLinks));
+            return ((java.util.function.Supplier<hydra.topology.TarjanState>) (() -> {
+              hydra.util.Lazy<Integer> low_w = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
+                hydra.constants.Constants.maxInt32(),
+                w,
+                (stAfter).lowLinks));
+              return new hydra.topology.TarjanState((stAfter).counter, (stAfter).indices, hydra.lib.maps.Insert.apply(
                 v,
                 hydra.lib.equality.Min.apply(
-                  low_v.get(),
-                  idx_w.get()),
-                (s).lowLinks), (s).stack, (s).onStack, (s).sccs))),
-              (java.util.function.Function<java.lang.Void, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (ignored -> hydra.lib.flows.Pure.apply(null)));
-          });
-          return hydra.lib.flows.Bind.apply(
-            hydra.monads.Monads.<hydra.topology.TarjanState>getState(),
-            (java.util.function.Function<hydra.topology.TarjanState, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (st_ -> hydra.lib.logic.IfElse.lazy(
-              hydra.lib.logic.Not.apply(hydra.lib.maps.Member.apply(
-                w,
-                (st_).indices)),
-              () -> hydra.lib.flows.Bind.apply(
-                hydra.tarjan.Tarjan.strongConnect(
-                  graph,
-                  w),
-                (java.util.function.Function<java.lang.Void, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (ignored -> hydra.lib.flows.Bind.apply(
-                  hydra.monads.Monads.<hydra.topology.TarjanState>getState(),
-                  (java.util.function.Function<hydra.topology.TarjanState, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (stAfter -> {
-                    hydra.util.Lazy<Integer> low_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-                      hydra.constants.Constants.maxInt32(),
-                      v,
-                      (stAfter).lowLinks));
-                    hydra.util.Lazy<Integer> low_w = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-                      hydra.constants.Constants.maxInt32(),
-                      w,
-                      (stAfter).lowLinks));
-                    return hydra.lib.flows.Bind.apply(
-                      hydra.monads.Monads.modify((java.util.function.Function<hydra.topology.TarjanState, hydra.topology.TarjanState>) (s -> new hydra.topology.TarjanState((s).counter, (s).indices, hydra.lib.maps.Insert.apply(
-                        v,
-                        hydra.lib.equality.Min.apply(
-                          low_v.get(),
-                          low_w.get()),
-                        (s).lowLinks), (s).stack, (s).onStack, (s).sccs))),
-                      (java.util.function.Function<java.lang.Void, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (_2 -> hydra.lib.flows.Pure.apply(null)));
-                  })))),
-              () -> hydra.lib.logic.IfElse.lazy(
-                hydra.lib.sets.Member.apply(
-                  w,
-                  (st_).onStack),
-                () -> (lowLink).apply(st_),
-                () -> hydra.lib.flows.Pure.apply(null)))));
-        });
-        return hydra.lib.flows.Bind.apply(
-          hydra.monads.Monads.putState(newSt.get()),
-          (java.util.function.Function<java.lang.Void, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (ignored -> hydra.lib.flows.Bind.apply(
-            hydra.lib.flows.MapList.apply(
-              processNeighbor,
-              neighbors.get()),
-            (java.util.function.Function<java.util.List<java.lang.Void>, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (_2 -> hydra.lib.flows.Bind.apply(
-              hydra.monads.Monads.<hydra.topology.TarjanState>getState(),
-              (java.util.function.Function<hydra.topology.TarjanState, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (stFinal -> {
-                hydra.util.Lazy<Integer> idx_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-                  hydra.constants.Constants.maxInt32(),
-                  v,
-                  (stFinal).indices));
-                hydra.util.Lazy<Integer> low_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-                  hydra.constants.Constants.maxInt32(),
-                  v,
-                  (stFinal).lowLinks));
-                return hydra.lib.logic.IfElse.lazy(
-                  hydra.lib.equality.Equal.apply(
-                    low_v.get(),
-                    idx_v.get()),
-                  () -> hydra.lib.flows.Bind.apply(
-                    hydra.tarjan.Tarjan.popStackUntil(v),
-                    (java.util.function.Function<java.util.List<Integer>, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (comp -> hydra.lib.flows.Bind.apply(
-                      hydra.monads.Monads.modify((java.util.function.Function<hydra.topology.TarjanState, hydra.topology.TarjanState>) (s -> new hydra.topology.TarjanState((s).counter, (s).indices, (s).lowLinks, (s).stack, (s).onStack, hydra.lib.lists.Cons.apply(
-                        comp,
-                        (s).sccs)))),
-                      (java.util.function.Function<java.lang.Void, hydra.compute.Flow<hydra.topology.TarjanState, java.lang.Void>>) (_3 -> hydra.lib.flows.Pure.apply(null))))),
-                  () -> hydra.lib.flows.Pure.apply(null));
-              }))))));
-      }));
+                  lowV2.get(),
+                  low_w.get()),
+                (stAfter).lowLinks), (stAfter).stack, (stAfter).onStack, (stAfter).sccs);
+            })).get();
+          })).get();
+        })).get(),
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.sets.Member.apply(
+            w,
+            (st_).onStack),
+          () -> (lowLink).apply(st_),
+          () -> st_));
+    }));
+    hydra.util.Lazy<hydra.topology.TarjanState> stAfterNeighbors = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+      processNeighbor,
+      newSt.get(),
+      neighbors.get()));
+    hydra.util.Lazy<Integer> idx_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
+      hydra.constants.Constants.maxInt32(),
+      v,
+      (stAfterNeighbors.get()).indices));
+    hydra.util.Lazy<Integer> low_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
+      hydra.constants.Constants.maxInt32(),
+      v,
+      (stAfterNeighbors.get()).lowLinks));
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.equality.Equal.apply(
+        low_v.get(),
+        idx_v.get()),
+      () -> ((java.util.function.Supplier<hydra.topology.TarjanState>) (() -> {
+        hydra.util.Pair<java.util.List<Integer>, hydra.topology.TarjanState> compResult = hydra.tarjan.Tarjan.popStackUntil(
+          v,
+          stAfterNeighbors.get());
+        return ((java.util.function.Supplier<hydra.topology.TarjanState>) (() -> {
+          hydra.util.Lazy<java.util.List<Integer>> comp = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(compResult));
+          return ((java.util.function.Supplier<hydra.topology.TarjanState>) (() -> {
+            hydra.util.Lazy<hydra.topology.TarjanState> stPopped = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(compResult));
+            return new hydra.topology.TarjanState((stPopped.get()).counter, (stPopped.get()).indices, (stPopped.get()).lowLinks, (stPopped.get()).stack, (stPopped.get()).onStack, hydra.lib.lists.Cons.apply(
+              comp.get(),
+              (stPopped.get()).sccs));
+          })).get();
+        })).get();
+      })).get(),
+      () -> stAfterNeighbors.get());
   }
 }

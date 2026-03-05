@@ -1478,11 +1478,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadint8Invalid() {
+    public <T0> void testReadint8Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadInt8.apply("abc"));
 
@@ -1490,11 +1490,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadint8Overflow() {
+    public <T0> void testReadint8Overflow() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadInt8.apply("128"));
 
@@ -1528,11 +1528,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadint16Invalid() {
+    public <T0> void testReadint16Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadInt16.apply("abc"));
 
@@ -1566,11 +1566,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadint32Invalid() {
+    public <T0> void testReadint32Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadInt32.apply("abc"));
 
@@ -1604,11 +1604,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadint64Invalid() {
+    public <T0> void testReadint64Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadInt64.apply("abc"));
 
@@ -1654,11 +1654,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReaduint8Invalid() {
+    public <T0> void testReaduint8Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadUint8.apply("abc"));
 
@@ -1666,11 +1666,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReaduint8Negative() {
+    public <T0> void testReaduint8Negative() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadUint8.apply("-1"));
 
@@ -1704,11 +1704,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReaduint16Invalid() {
+    public <T0> void testReaduint16Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadUint16.apply("abc"));
 
@@ -1716,11 +1716,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReaduint16Negative() {
+    public <T0> void testReaduint16Negative() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadUint16.apply("-1"));
 
@@ -1754,11 +1754,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReaduint32Invalid() {
+    public <T0> void testReaduint32Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadUint32.apply("abc"));
 
@@ -1766,11 +1766,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReaduint32Negative() {
+    public <T0> void testReaduint32Negative() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadUint32.apply("-1"));
 
@@ -1804,11 +1804,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReaduint64Invalid() {
+    public <T0> void testReaduint64Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadUint64.apply("abc"));
 
@@ -1816,11 +1816,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReaduint64Negative() {
+    public <T0> void testReaduint64Negative() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadUint64.apply("-1"));
 
@@ -1878,11 +1878,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadbigintInvalid() {
+    public <T0> void testReadbigintInvalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadBigint.apply("abc"));
 
@@ -1916,11 +1916,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadfloat32Invalid() {
+    public <T0> void testReadfloat32Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadFloat32.apply("abc"));
 
@@ -1954,11 +1954,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadfloat64Invalid() {
+    public <T0> void testReadfloat64Invalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadFloat64.apply("abc"));
 
@@ -1980,11 +1980,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadbigfloatInvalid() {
+    public <T0> void testReadbigfloatInvalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadBigfloat.apply("abc"));
 
@@ -2018,11 +2018,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadbooleanInvalid() {
+    public <T0> void testReadbooleanInvalid() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadBoolean.apply("yes"));
 
@@ -2056,11 +2056,11 @@ public class LiteralsTest {
 
     @Test
 
-    public void testReadstringUnquoted() {
+    public <T0> void testReadstringUnquoted() {
 
         assertEquals(
 
-            (hydra.util.Maybe<java.lang.Object>) (hydra.util.Maybe.<java.lang.Object>nothing()),
+            (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
             hydra.lib.literals.ReadString.apply("hello"));
 

@@ -5,9 +5,9 @@ package hydra.compute;
 import java.io.Serializable;
 
 /**
- * An encoder and decoder; a bidirectional flow between two types
+ * An encoder and decoder; a bidirectional transformation between two types
  */
-public class Coder<S1, S2, V1, V2> implements Serializable, Comparable<Coder<S1, S2, V1, V2>> {
+public class Coder<V1, V2> implements Serializable, Comparable<Coder<V1, V2>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.Coder");
   
   public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
@@ -15,16 +15,16 @@ public class Coder<S1, S2, V1, V2> implements Serializable, Comparable<Coder<S1,
   public static final hydra.core.Name DECODE = new hydra.core.Name("decode");
   
   /**
-   * A function from source values to a flow of target values
+   * A function which encodes source values as target values in a given context
    */
-  public final java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode;
+  public final java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V2>>> encode;
   
   /**
-   * A function from target values to a flow of source values
+   * A function which decodes target values as source values in a given context
    */
-  public final java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode;
+  public final java.util.function.Function<hydra.context.Context, java.util.function.Function<V2, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V1>>> decode;
   
-  public Coder (java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode, java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode) {
+  public Coder (java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V2>>> encode, java.util.function.Function<hydra.context.Context, java.util.function.Function<V2, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V1>>> decode) {
     this.encode = encode;
     this.decode = decode;
   }
@@ -62,11 +62,11 @@ public class Coder<S1, S2, V1, V2> implements Serializable, Comparable<Coder<S1,
       other.decode.hashCode());
   }
   
-  public Coder withEncode(java.util.function.Function<V1, hydra.compute.Flow<S1, V2>> encode) {
+  public Coder withEncode(java.util.function.Function<hydra.context.Context, java.util.function.Function<V1, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V2>>> encode) {
     return new Coder(encode, decode);
   }
   
-  public Coder withDecode(java.util.function.Function<V2, hydra.compute.Flow<S2, V1>> decode) {
+  public Coder withDecode(java.util.function.Function<hydra.context.Context, java.util.function.Function<V2, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V1>>> decode) {
     return new Coder(encode, decode);
   }
 }

@@ -810,7 +810,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
   }
   
   /**
-   * A JSON coder (round-trip) test using Flow-based coder
+   * A JSON coder (round-trip) test
    */
   public static final class JsonCoder extends hydra.testing.TestCase implements Serializable {
     public final hydra.testing.JsonCoderTestCase value;

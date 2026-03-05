@@ -14,23 +14,23 @@ public class SortingTest {
 
     @Test
 
-    public void testTopologicalSortEmptySet() {
+    public <T0, T1> void testTopologicalSortEmptySet() {
 
         assertEquals(
 
-            (hydra.util.Either<java.lang.Object, java.util.List<java.lang.Object>>) ((hydra.util.Either<java.lang.Object, java.util.List<java.lang.Object>>) (hydra.util.Either.<java.lang.Object, java.util.List<java.lang.Object>>right((java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of())))),
+            (hydra.util.Either<T1, java.util.List<T0>>) ((hydra.util.Either<T1, java.util.List<T0>>) (hydra.util.Either.<T1, java.util.List<T0>>right((java.util.List<T0>) (java.util.List.<T0>of())))),
 
-            hydra.sorting.Sorting.topologicalSort((java.util.List<hydra.util.Pair<java.lang.Object, java.util.List<java.lang.Object>>>) (java.util.List.<hydra.util.Pair<java.lang.Object, java.util.List<java.lang.Object>>>of())));
+            hydra.sorting.Sorting.topologicalSort((java.util.List<hydra.util.Pair<T0, java.util.List<T0>>>) (java.util.List.<hydra.util.Pair<T0, java.util.List<T0>>>of())));
 
     }
 
     @Test
 
-    public void testTopologicalSortSingletonSet() {
+    public <T1> void testTopologicalSortSingletonSet() {
 
         assertEquals(
 
-            (hydra.util.Either<java.lang.Object, java.util.List<Integer>>) ((hydra.util.Either<java.lang.Object, java.util.List<Integer>>) (hydra.util.Either.<java.lang.Object, java.util.List<Integer>>right(java.util.List.of(1)))),
+            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(1)))),
 
             hydra.sorting.Sorting.topologicalSort(java.util.List.of((hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(1, (java.util.List<Integer>) (java.util.List.<Integer>of())))))));
 
@@ -38,11 +38,11 @@ public class SortingTest {
 
     @Test
 
-    public void testTopologicalSortDiscreteSetWithMultipleElements() {
+    public <T1> void testTopologicalSortDiscreteSetWithMultipleElements() {
 
         assertEquals(
 
-            (hydra.util.Either<java.lang.Object, java.util.List<Integer>>) ((hydra.util.Either<java.lang.Object, java.util.List<Integer>>) (hydra.util.Either.<java.lang.Object, java.util.List<Integer>>right(java.util.List.of(
+            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   1,
   2,
   3)))),
@@ -56,11 +56,11 @@ public class SortingTest {
 
     @Test
 
-    public void testTopologicalSortLinkedList() {
+    public <T1> void testTopologicalSortLinkedList() {
 
         assertEquals(
 
-            (hydra.util.Either<java.lang.Object, java.util.List<Integer>>) ((hydra.util.Either<java.lang.Object, java.util.List<Integer>>) (hydra.util.Either.<java.lang.Object, java.util.List<Integer>>right(java.util.List.of(
+            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   1,
   3,
   2)))),
@@ -74,11 +74,11 @@ public class SortingTest {
 
     @Test
 
-    public void testTopologicalSortBinaryTree() {
+    public <T1> void testTopologicalSortBinaryTree() {
 
         assertEquals(
 
-            (hydra.util.Either<java.lang.Object, java.util.List<Integer>>) ((hydra.util.Either<java.lang.Object, java.util.List<Integer>>) (hydra.util.Either.<java.lang.Object, java.util.List<Integer>>right(java.util.List.of(
+            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   5,
   1,
   2,
@@ -102,11 +102,11 @@ public class SortingTest {
 
     @Test
 
-    public void testTopologicalSortTwoTrees() {
+    public <T1> void testTopologicalSortTwoTrees() {
 
         assertEquals(
 
-            (hydra.util.Either<java.lang.Object, java.util.List<Integer>>) ((hydra.util.Either<java.lang.Object, java.util.List<Integer>>) (hydra.util.Either.<java.lang.Object, java.util.List<Integer>>right(java.util.List.of(
+            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   1,
   7,
   2,
@@ -132,11 +132,11 @@ public class SortingTest {
 
     @Test
 
-    public void testTopologicalSortDiamondDag() {
+    public <T1> void testTopologicalSortDiamondDag() {
 
         assertEquals(
 
-            (hydra.util.Either<java.lang.Object, java.util.List<Integer>>) ((hydra.util.Either<java.lang.Object, java.util.List<Integer>>) (hydra.util.Either.<java.lang.Object, java.util.List<Integer>>right(java.util.List.of(
+            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   5,
   2,
   3,
@@ -156,11 +156,11 @@ public class SortingTest {
 
     @Test
 
-    public void testTopologicalSortTwoNegnodeCycle() {
+    public <T2> void testTopologicalSortTwoNegnodeCycle() {
 
         assertEquals(
 
-            (hydra.util.Either<java.util.List<java.util.List<Integer>>, java.lang.Object>) ((hydra.util.Either<java.util.List<java.util.List<Integer>>, java.lang.Object>) (hydra.util.Either.<java.util.List<java.util.List<Integer>>, java.lang.Object>left(java.util.List.of(java.util.List.of(
+            (hydra.util.Either<java.util.List<java.util.List<Integer>>, T2>) ((hydra.util.Either<java.util.List<java.util.List<Integer>>, T2>) (hydra.util.Either.<java.util.List<java.util.List<Integer>>, T2>left(java.util.List.of(java.util.List.of(
   1,
   2))))),
 
@@ -172,11 +172,11 @@ public class SortingTest {
 
     @Test
 
-    public void testTopologicalSortCycleWithIncomingAndOutgoingEdges() {
+    public <T2> void testTopologicalSortCycleWithIncomingAndOutgoingEdges() {
 
         assertEquals(
 
-            (hydra.util.Either<java.util.List<java.util.List<Integer>>, java.lang.Object>) ((hydra.util.Either<java.util.List<java.util.List<Integer>>, java.lang.Object>) (hydra.util.Either.<java.util.List<java.util.List<Integer>>, java.lang.Object>left(java.util.List.of(java.util.List.of(
+            (hydra.util.Either<java.util.List<java.util.List<Integer>>, T2>) ((hydra.util.Either<java.util.List<java.util.List<Integer>>, T2>) (hydra.util.Either.<java.util.List<java.util.List<Integer>>, T2>left(java.util.List.of(java.util.List.of(
   2,
   3))))),
 
@@ -195,13 +195,13 @@ public class SortingTest {
 
     @Test
 
-    public void testTopologicalSortSccEmptySet() {
+    public <T0> void testTopologicalSortSccEmptySet() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
-            hydra.sorting.Sorting.topologicalSortComponents((java.util.List<hydra.util.Pair<java.lang.Object, java.util.List<java.lang.Object>>>) (java.util.List.<hydra.util.Pair<java.lang.Object, java.util.List<java.lang.Object>>>of())));
+            hydra.sorting.Sorting.topologicalSortComponents((java.util.List<hydra.util.Pair<T0, java.util.List<T0>>>) (java.util.List.<hydra.util.Pair<T0, java.util.List<T0>>>of())));
 
     }
 

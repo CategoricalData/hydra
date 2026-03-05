@@ -693,11 +693,11 @@ public class StringsTest {
 
     @Test
 
-    public void testLinesEmptyString() {
+    public <T0> void testLinesEmptyString() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.strings.Lines.apply(""));
 
@@ -1169,11 +1169,11 @@ public class StringsTest {
 
     @Test
 
-    public void testTolistEmptyString() {
+    public <T0> void testTolistEmptyString() {
 
         assertEquals(
 
-            (java.util.List<java.lang.Object>) (java.util.List.<java.lang.Object>of()),
+            (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.strings.ToList.apply(""));
 

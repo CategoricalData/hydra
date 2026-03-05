@@ -35,7 +35,8 @@ public interface Typing {
       new hydra.core.Field(new hydra.core.Name("classConstraints"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.core.Core::name,
         hydra.encode.core.Core::typeVariableMetadata,
-        (x).classConstraints))))));
+        (x).classConstraints))),
+      new hydra.core.Field(new hydra.core.Name("context"), hydra.encode.context.Context.context((x).context)))));
   }
   
   static hydra.core.Term termSubst(hydra.typing.TermSubst x) {

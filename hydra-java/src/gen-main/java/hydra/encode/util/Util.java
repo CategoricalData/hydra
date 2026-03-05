@@ -49,10 +49,6 @@ public interface Util {
     });
   }
   
-  static hydra.core.Term decodingError(hydra.util.DecodingError x) {
-    return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.util.DecodingError"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).value))));
-  }
-  
   static hydra.core.Term precision(hydra.util.Precision v1) {
     return (v1).accept(new hydra.util.Precision.PartialVisitor<>() {
       @Override

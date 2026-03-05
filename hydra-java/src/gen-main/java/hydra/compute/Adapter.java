@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A two-level bidirectional encoder which adapts types to types and terms to terms
  */
-public class Adapter<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable<Adapter<S1, S2, T1, T2, V1, V2>> {
+public class Adapter<T1, T2, V1, V2> implements Serializable, Comparable<Adapter<T1, T2, V1, V2>> {
   public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.Adapter");
   
   public static final hydra.core.Name IS_LOSSY = new hydra.core.Name("isLossy");
@@ -36,9 +36,9 @@ public class Adapter<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable
   /**
    * The coder for transforming instances of the source type to instances of the target type
    */
-  public final hydra.compute.Coder<S1, S2, V1, V2> coder;
+  public final hydra.compute.Coder<V1, V2> coder;
   
-  public Adapter (Boolean isLossy, T1 source, T2 target, hydra.compute.Coder<S1, S2, V1, V2> coder) {
+  public Adapter (Boolean isLossy, T1 source, T2 target, hydra.compute.Coder<V1, V2> coder) {
     this.isLossy = isLossy;
     this.source = source;
     this.target = target;
@@ -98,7 +98,7 @@ public class Adapter<S1, S2, T1, T2, V1, V2> implements Serializable, Comparable
     return new Adapter(isLossy, source, target, coder);
   }
   
-  public Adapter withCoder(hydra.compute.Coder<S1, S2, V1, V2> coder) {
+  public Adapter withCoder(hydra.compute.Coder<V1, V2> coder) {
     return new Adapter(isLossy, source, target, coder);
   }
 }

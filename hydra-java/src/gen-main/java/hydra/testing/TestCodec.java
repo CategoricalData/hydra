@@ -45,12 +45,12 @@ public class TestCodec implements Serializable, Comparable<TestCodec> {
   /**
    * A function for encoding Hydra terms into the target language
    */
-  public final java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, String>> encodeTerm;
+  public final java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeTerm;
   
   /**
    * A function for encoding Hydra types into the target language
    */
-  public final java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, String>> encodeType;
+  public final java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeType;
   
   /**
    * A function for formatting test case names according to the target language's conventions
@@ -87,7 +87,7 @@ public class TestCodec implements Serializable, Comparable<TestCodec> {
    */
   public final java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>> findImports;
   
-  public TestCodec (hydra.coders.LanguageName language, hydra.module.FileExtension fileExtension, java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, String>> encodeTerm, java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, String>> encodeType, java.util.function.Function<String, String> formatTestName, java.util.function.Function<hydra.module.Namespace, String> formatModuleName, String testCaseTemplate, String testGroupTemplate, String moduleTemplate, String importTemplate, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>> findImports) {
+  public TestCodec (hydra.coders.LanguageName language, hydra.module.FileExtension fileExtension, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeTerm, java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeType, java.util.function.Function<String, String> formatTestName, java.util.function.Function<hydra.module.Namespace, String> formatModuleName, String testCaseTemplate, String testGroupTemplate, String moduleTemplate, String importTemplate, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>> findImports) {
     this.language = language;
     this.fileExtension = fileExtension;
     this.encodeTerm = encodeTerm;
@@ -202,11 +202,11 @@ public class TestCodec implements Serializable, Comparable<TestCodec> {
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
-  public TestCodec withEncodeTerm(java.util.function.Function<hydra.core.Term, hydra.compute.Flow<hydra.graph.Graph, String>> encodeTerm) {
+  public TestCodec withEncodeTerm(java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeTerm) {
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
-  public TestCodec withEncodeType(java.util.function.Function<hydra.core.Type, hydra.compute.Flow<hydra.graph.Graph, String>> encodeType) {
+  public TestCodec withEncodeType(java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeType) {
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   

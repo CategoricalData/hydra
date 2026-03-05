@@ -57,15 +57,17 @@ public interface Utils {
     return new hydra.ext.haskell.ast.Expression.Variable(hydra.ext.haskell.utils.Utils.rawName(s));
   }
   
-  static hydra.compute.Flow<hydra.graph.Graph, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>> namespacesForModule(hydra.module.Module mod) {
-    return hydra.lib.flows.Bind.apply(
+  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>> namespacesForModule(hydra.module.Module mod, hydra.context.Context cx, hydra.graph.Graph g) {
+    return hydra.lib.eithers.Bind.apply(
       hydra.schemas.Schemas.moduleDependencyNamespaces(
+        cx,
+        g,
         true,
         true,
         true,
         true,
         mod),
-      (java.util.function.Function<java.util.Set<hydra.module.Namespace>, hydra.compute.Flow<hydra.graph.Graph, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>>) (nss -> {
+      (java.util.function.Function<java.util.Set<hydra.module.Namespace>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>>) (nss -> {
         hydra.util.Lazy<java.util.List<hydra.module.Namespace>> nssAsList = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(nss));
         java.util.function.Function<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName> toModuleName = (java.util.function.Function<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>) (namespace -> {
           String namespaceStr = (namespace).value;
@@ -89,7 +91,7 @@ public interface Utils {
         hydra.module.Namespace ns = (mod).namespace;
         hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName> focusPair = (toPair).apply(ns);
         hydra.util.Lazy<java.util.Map<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>> resultMap = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(finalState.get()));
-        return hydra.lib.flows.Pure.apply((hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>) (new hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>(focusPair, resultMap.get())));
+        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>right((hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>) (new hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>(focusPair, resultMap.get())))));
       }));
   }
   
