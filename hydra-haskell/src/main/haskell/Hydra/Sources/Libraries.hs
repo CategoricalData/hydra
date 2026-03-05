@@ -14,7 +14,6 @@ import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -24,14 +23,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-
-import qualified Hydra.Eval.Lib.Eithers as EvalEithers
-import qualified Hydra.Eval.Lib.Flows as EvalFlows
-import qualified Hydra.Eval.Lib.Lists as EvalLists
-import qualified Hydra.Eval.Lib.Maps as EvalMaps
-import qualified Hydra.Eval.Lib.Maybes as EvalMaybes
-import qualified Hydra.Eval.Lib.Pairs as EvalPairs
-import qualified Hydra.Eval.Lib.Sets as EvalSets
 
 import qualified Data.List as L
 
@@ -90,7 +81,6 @@ standardLibraries = [
   hydraLibChars,
   hydraLibEithers,
   hydraLibEquality,
-  hydraLibFlows,
   hydraLibLists,
   hydraLibLiterals,
   hydraLibLogic,
@@ -112,7 +102,7 @@ standardLibrary ns prims = Library {
 --   functions to native functions. This allows higher-order primitives like map,
 --   filter, foldl, etc. to use native implementations rather than eval-level ones.
 fun :: TermCoder x -> TermCoder y -> TermCoder (x -> y)
-fun = Prims.functionWithReduce (reduceTerm True)
+fun = Prims.functionWithReduce (\cx g t -> reduceTerm cx g True t)
 
 hydraLibChars :: Library
 hydraLibChars = standardLibrary _hydra_lib_chars [
@@ -128,6 +118,7 @@ hydraLibEithers = standardLibrary _hydra_lib_eithers [
     prim2       _eithers_bind             Eithers.bind             [_x, _y, _z]     (Prims.either_ x_ y_) (fun y_ (Prims.either_ x_ z_)) (Prims.either_ x_ z_),
     prim3       _eithers_bimap            Eithers.bimap            [_x, _y, _z, _w] (fun x_ z_) (fun y_ w_) (Prims.either_ x_ y_) (Prims.either_ z_ w_),
     prim3       _eithers_either           Eithers.either           [_x, _y, _z]     (fun x_ z_) (fun y_ z_) (Prims.either_ x_ y_) z_,
+    prim3       _eithers_foldl            Eithers.foldl            [_x, _y, _z]     (fun x_ (fun y_ (Prims.either_ z_ x_))) x_ (list y_) (Prims.either_ z_ x_),
     prim2       _eithers_fromLeft         Eithers.fromLeft         [_x, _y]         x_ (Prims.either_ x_ y_) x_,
     prim2       _eithers_fromRight        Eithers.fromRight        [_x, _y]         y_ (Prims.either_ x_ y_) y_,
     prim1       _eithers_isLeft           Eithers.isLeft           [_x, _y]         (Prims.either_ x_ y_) boolean,
@@ -136,6 +127,7 @@ hydraLibEithers = standardLibrary _hydra_lib_eithers [
     prim2       _eithers_map              Eithers.map              [_x, _y, _z]     (fun x_ y_) (Prims.either_ z_ x_) (Prims.either_ z_ y_),
     prim2       _eithers_mapList          Eithers.mapList          [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (list x_) (Prims.either_ z_ (list y_)),
     prim2       _eithers_mapMaybe         Eithers.mapMaybe         [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (optional x_) (Prims.either_ z_ (optional y_)),
+    prim2       _eithers_mapSet           Eithers.mapSet           [_x, _y, _z]     (fun x_ (Prims.either_ z_ y_)) (set x_) (Prims.either_ z_ (set y_)),
     prim1       _eithers_partitionEithers Eithers.partitionEithers [_x, _y]         (list $ Prims.either_ x_ y_) (pair (list x_) (list y_)),
     prim1       _eithers_rights           Eithers.rights           [_x, _y]         (list $ Prims.either_ x_ y_) (list y_)]
 
@@ -150,22 +142,6 @@ hydraLibEquality = standardLibrary _hydra_lib_equality [
     prim2 _equality_lte      Equality.lte      [_xOrd] x_ x_ boolean,
     prim2 _equality_max      Equality.max      [_xOrd] x_ x_ x_,
     prim2 _equality_min      Equality.min      [_xOrd] x_ x_ x_]
-
-hydraLibFlows :: Library
-hydraLibFlows = standardLibrary _hydra_lib_flows [
-    prim2Eval _flows_apply    EvalFlows.apply    [_s, _x, _y]                 (flow s_ (function x_ y_)) (flow s_ x_) (flow s_ y_),
-    prim2Eval _flows_bind     EvalFlows.bind     [_s, _x, _y]                 (flow s_ x_) (function x_ (flow s_ y_)) (flow s_ y_),
-    prim1     _flows_fail     Flows.fail         [_s, _x]                     string (flow s_ x_),
-    prim3Eval _flows_foldl    EvalFlows.foldl    [_y, _x, _s]                 (function y_ (function x_ (flow s_ y_))) y_ (list x_) (flow s_ y_),
-    prim2Eval _flows_map      EvalFlows.map      [_x, _y, _s]                 (function x_ y_) (flow s_ x_) (flow s_ y_),
-    prim2Eval _flows_mapElems EvalFlows.mapElems [_v1, _s, _v2, _kOrd]        (function v1_ (flow s_ v2_)) (Prims.map k_ v1_) (flow s_ (Prims.map k_ v2_)),
-    prim2Eval _flows_mapKeys  EvalFlows.mapKeys  [_k1Ord, _s, _k2Ord, _v]     (function k1_ (flow s_ k2_)) (Prims.map k1_ v_) (flow s_ (Prims.map k2_ v_)),
-    prim2Eval _flows_mapList  EvalFlows.mapList  [_x, _s, _y]                 (function x_ (flow s_ y_)) (list x_) (flow s_ (list y_)),
-    prim2Eval _flows_mapMaybe EvalFlows.mapMaybe [_x, _s, _y]                 (function x_ $ flow s_ y_) (optional x_) (flow s_ $ optional y_),
-    prim2Eval _flows_mapSet   EvalFlows.mapSet   [_xOrd, _s, _yOrd]           (function x_ (flow s_ y_)) (set x_) (flow s_ (set y_)),
-    prim1     _flows_pure     Flows.pure         [_s, _x]                     x_ (flow s_ x_),
-    prim1     _flows_sequence Flows.sequence     [_s, _x]                     (list (flow s_ x_)) (flow s_ (list x_)),
-    prim2Eval _flows_withDefault EvalFlows.withDefault [_s, _x]               x_ (flow s_ x_) (flow s_ x_)]
 
 hydraLibLists :: Library
 hydraLibLists = standardLibrary _hydra_lib_lists [
