@@ -5,6 +5,7 @@ module Hydra.Lib.Eithers where
 import qualified Control.Monad as CM
 import qualified Data.Bifunctor as BF
 import qualified Data.Either as E
+import qualified Data.Set as S
 
 
 -- | Bind (flatMap) for Either: if Right, apply the function; if Left, return unchanged.
@@ -18,6 +19,10 @@ bimap = BF.bimap
 -- | Eliminate an Either value by applying one of two functions.
 either :: (a -> c) -> (b -> c) -> Either a b -> c
 either = E.either
+
+-- | Left-fold over a list with an Either-returning function, short-circuiting on Left.
+foldl :: (a -> b -> Either c a) -> a -> [b] -> Either c a
+foldl = CM.foldM
 
 -- | Extract the Left value, or return a default.
 fromLeft :: a -> Either a b -> a
@@ -50,6 +55,10 @@ mapList = CM.mapM
 -- | Map a function returning Either over a Maybe, or return Right Nothing if Nothing.
 mapMaybe :: (a -> Either c b) -> Maybe a -> Either c (Maybe b)
 mapMaybe = CM.mapM
+
+-- | Map a function returning Either over a Set, collecting results or short-circuiting on Left.
+mapSet :: Ord b => (a -> Either c b) -> S.Set a -> Either c (S.Set b)
+mapSet f s = fmap S.fromList (CM.mapM f (S.toList s))
 
 -- | Partition a list of Eithers into lefts and rights.
 partitionEithers :: [Either a b] -> ([a], [b])
