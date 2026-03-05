@@ -9,8 +9,6 @@ module Hydra.Ext.Tools.AvroWorkflows (
   encodeStringValue,
   examplePgSchema,
   executeAvroTransformWorkflow,
-  propertyGraphGraphsonLastMile,
-  propertyGraphJsonLastMile,
   rdfDescriptionsToNtriples,
   shaclRdfLastMile,
   typeApplicationTermToShaclRdf,
@@ -18,7 +16,6 @@ module Hydra.Ext.Tools.AvroWorkflows (
 ) where
 
 import Hydra.Kernel
-import Hydra.Tools.Monads
 import Hydra.Dsl.Annotations
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json.Model as Json
@@ -27,7 +24,7 @@ import Hydra.Extract.Json
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 import qualified Hydra.Json.Parser as JsonParser
 import Hydra.Ext.Staging.Avro.Coder
-import Hydra.Ext.Staging.Avro.SchemaJson
+import Hydra.Ext.Staging.Avro.SchemaJson hiding (Result)
 import Hydra.Pg.Graphson.Utils
 import Hydra.Ext.Staging.Pg.Coder
 import qualified Hydra.Ext.Staging.Shacl.Coder as Shacl
@@ -39,7 +36,7 @@ import Hydra.Ext.Staging.Rdf.Serde
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Pg.Graphson.Coder
 import Hydra.Pg.Graphson.Syntax as G
-import Hydra.Ext.Staging.Pg.Utils
+import Hydra.Ext.Staging.Pg.Utils hiding (Result)
 
 import qualified Control.Monad as CM
 import qualified Data.Either as E
@@ -53,18 +50,34 @@ import System.FilePath.Posix
 import System.Directory
 
 
+type Result a = Either (InContext OtherError) a
+
+-- | The last mile of a transformation, which encodes and serializes terms to a file
+data LastMile a =
+  LastMile {
+    -- | An encoder for terms to a list of output objects
+    lastMileEncoder :: (Type -> Context -> Graph -> Result (Term -> Graph -> Context -> Result [a])),
+    -- | A function which serializes a list of output objects to a string representation
+    lastMileSerializer :: ([a] -> Result String),
+    -- | A file extension for the generated file(s)
+    lastMileFileExtension :: String}
+
 -- | Parse a JSON string, returning Either for compatibility
 parseJsonEither :: String -> Either String Json.Value
 parseJsonEither s = case JsonParser.parseJson s of
   ParseResultSuccess success -> Right (parseSuccessValue success)
   ParseResultFailure err -> Left (parseErrorMessage err)
 
+eitherToIo :: Result a -> IO a
+eitherToIo (Left (InContext (OtherError msg) _)) = fail msg
+eitherToIo (Right v) = return v
+
 data JsonPayloadFormat = Json | Jsonl
 
-type TermEncoder x = Term -> Graph -> Flow Graph [x]
+type TermEncoder x = Term -> Graph -> Context -> Result [x]
 
 -- | A convenience for transformAvroJsonDirectory, bundling all of the input parameters together as a workflow
-executeAvroTransformWorkflow :: LastMile Graph x -> TransformWorkflow -> IO ()
+executeAvroTransformWorkflow :: LastMile x -> TransformWorkflow -> IO ()
 executeAvroTransformWorkflow lastMile (TransformWorkflow name schemaSpec srcDir destDir) = do
     schemaPath <- case schemaSpec of
       SchemaSpecFile p -> pure p
@@ -86,69 +99,70 @@ listsToSets = rewriteTerm mapExpr
 rdfDescriptionsToNtriples :: [Rdf.Description] -> String
 rdfDescriptionsToNtriples = rdfGraphToNtriples . RdfUt.descriptionsToGraph
 
-shaclRdfLastMile :: LastMile Graph Rdf.Description
-shaclRdfLastMile = LastMile typeApplicationTermToShaclRdf (pure . rdfDescriptionsToNtriples) "nt"
+shaclRdfLastMile :: LastMile Rdf.Description
+shaclRdfLastMile = LastMile typeApplicationTermToShaclRdf (Right . rdfDescriptionsToNtriples) "nt"
 
-typeApplicationTermToShaclRdf :: Type -> Flow Graph (Term -> Graph -> Flow Graph [Rdf.Description])
-typeApplicationTermToShaclRdf _ = pure encode
+typeApplicationTermToShaclRdf :: Type -> Context -> Graph -> Result (Term -> Graph -> Context -> Result [Rdf.Description])
+typeApplicationTermToShaclRdf _ _cx _g = Right encode
   where
-    encode term graf = do
-        elDescs <- CM.mapM encodeElement $ graphToBindings graf
-        termDescs <- encodeBlankTerm
+    encode term graf cx = do
+        elDescs <- CM.mapM (encodeElement cx) $ graphToBindings graf
+        termDescs <- encodeBlankTerm cx
         return $ L.concat (termDescs:elDescs)
       where
-        encodeElement el = do
+        encodeElement cx' el = do
           let subject = Rdf.ResourceIri $ RdfUt.nameToIri $ bindingName el
-          Shacl.encodeTerm subject $ listsToSets $ bindingTerm el
-        encodeBlankTerm = if notInGraph
+          fst <$> Shacl.encodeTerm subject (listsToSets $ bindingTerm el) cx' graf
+        encodeBlankTerm cx' = if notInGraph
           then do
-            subject <- RdfUt.nextBlankNode
-            Shacl.encodeTerm subject $ listsToSets term
+            let (subject, cx'') = RdfUt.nextBlankNode cx'
+            fst <$> Shacl.encodeTerm subject (listsToSets term) cx'' graf
           else pure []
         notInGraph = L.null $ L.filter (\e -> bindingTerm e == term) $ graphToBindings graf
 
-transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter -> LastMile Graph x -> FilePath -> FilePath -> IO ()
+transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter -> LastMile x -> FilePath -> FilePath -> IO ()
 transformAvroJson format adapter lastMile inFile outFile = do
     putStr $ "\t" ++ inFile ++ " --> "
     contents <- readFile inFile
+    let cx = emptyContext
     let entities = case format of
           Json -> [contents]
           Jsonl -> L.filter (not . L.null) $ lines contents
-    lmEncoder <- flowToIo hydraCoreGraph $ lastMileEncoder lastMile (adapterTarget adapter)
-    descs <- L.concat <$> flowToIo hydraCoreGraph (CM.zipWithM (jsonToTarget inFile adapter lmEncoder) [1..] entities)
-    result <- flowToIo hydraCoreGraph $ lastMileSerializer lastMile descs
+    lmEncoder <- eitherToIo $ lastMileEncoder lastMile (adapterTarget adapter) cx hydraCoreGraph
+    descs <- L.concat <$> CM.mapM (jsonToTarget inFile adapter lmEncoder cx) (L.zip [1..] entities)
+    result <- eitherToIo $ lastMileSerializer lastMile descs
     writeFile outFile result
     putStrLn $ outFile ++ " (" ++ descEntities entities ++ ")"
   where
     descEntities entities = if L.length entities == 1 then "1 entity" else show (L.length entities) ++ " entities"
 
-    jsonToTarget inFile adapter lmEncoder index payload = case parseJsonEither payload of
-        Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile ++ ": " ++ msg
-        Right json -> withState emptyAvroEnvironment $ do
+    jsonToTarget inFile' adapter' lmEncoder cx (index, payload) = case parseJsonEither payload of
+        Left msg -> fail $ "Failed to read JSON payload #" ++ show index ++ " in file " ++ inFile' ++ ": " ++ msg
+        Right json -> do
           -- TODO; the core graph is neither the data nor the schema graph
           let dataGraph = hydraCoreGraph
-          term <- coderEncode (adapterCoder adapter) json
-          env <- getState
-          let graph = elementsToGraph dataGraph M.empty (M.elems $ avroEnvironmentElements env)
-          withState hydraCoreGraph $ lmEncoder term graph
+          term <- eitherToIo $ coderEncode (adapterCoder adapter') cx json
+          let graph = dataGraph  -- Note: elements from AvroEnvironment are no longer dynamically tracked
+          eitherToIo $ lmEncoder term graph cx
 
 -- | Given a payload format (one JSON object per file, or one per line),
 --   a path to an Avro *.avsc schema, a path to a source directory containing JSON files conforming to the schema,
 --   and a path to a destination directory, map each input file to a corresponding output file in the
 --   destination directory. This transformation is sensitive to Hydra-specific annotations (primaryKey/foreignKey)
 --   in the Avro schema, which tell Hydra which objects to treat as elements and which fields are references to elements.
-transformAvroJsonDirectory :: LastMile Graph x -> FilePath -> FilePath -> FilePath -> IO ()
+transformAvroJsonDirectory :: LastMile x -> FilePath -> FilePath -> FilePath -> IO ()
 transformAvroJsonDirectory lastMile schemaPath srcDir destDir = do
     createDirectoryIfMissing True destDir
     schemaStr <- readFile schemaPath
-    adapter <- flowToIo () $ loadAdapter schemaStr
+    let cx = emptyContext
+    adapter <- eitherToIo $ loadAdapter cx schemaStr
     paths <- getDirectoryContents srcDir
     conf <- CM.mapM (transformFile adapter) paths
     return ()
   where
-    loadAdapter schemaStr = do
-      avroSchema <- coderDecode avroSchemaStringCoder schemaStr
-      withState emptyAvroEnvironment $ avroHydraAdapter avroSchema
+    loadAdapter cx schemaStr = do
+      avroSchema <- coderDecode (avroSchemaStringCoder cx) cx schemaStr
+      fst <$> avroHydraAdapter cx avroSchema emptyAvroEnvironment
 
     transformFile adapter srcFile = do
       case jsonPayloadFormat srcFile of

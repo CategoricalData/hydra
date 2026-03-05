@@ -5,12 +5,11 @@
 import Hydra.Kernel
 import Hydra.Ext.Tools.Analysis.Summaries
 import Hydra.Sources.Kernel.Types.Core
-import Hydra.Tools.Monads
 import Hydra.Generation
 import Hydra.Sources.All
 
 -- Create an exhaustive list of Hydra kernel elements and primitives for code generation
-flowToIo hydraCoreGraph (graphSummary True $ modulesToGraph kernelModules) >>= putStrLn
+either (fail . show) putStrLn $ graphSummary True (modulesToGraph kernelModules) emptyContext
 -}
 module Hydra.Ext.Tools.Analysis.Summaries where
 
@@ -21,7 +20,6 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Util as Util
@@ -35,21 +33,25 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-elementSummary :: Bool -> Binding -> Flow Graph String
-elementSummary withTypes el = do
+type Result a = Either (InContext OtherError) a
+
+err :: Context -> String -> Result a
+err cx msg = Left (InContext (OtherError msg) cx)
+
+elementSummary :: Bool -> Binding -> Graph -> Result String
+elementSummary withTypes el g = do
     mt <- findTypeInfo
     return $ (unName $ bindingName el) ++ Y.fromMaybe "" mt
   where
     findTypeInfo = if withTypes
       then case bindingType el of
-        Nothing -> return Nothing
+        Nothing -> Right Nothing
         Just ts -> Just <$> if Schemas.isType (deannotateType $ typeSchemeType ts)
-          then do
-            g <- Monads.getState
-            typ <- Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g $ bindingTerm el
-            return $ " = " ++ ShowCore.type_ (deannotateType typ)
-          else pure $ " : " ++ ShowCore.typeScheme ts
-      else pure Nothing
+          then case DecodeCore.type_ g $ bindingTerm el of
+            Left de -> Left (InContext (OtherError (unDecodingError de)) emptyContext)
+            Right typ -> Right $ " = " ++ ShowCore.type_ (deannotateType typ)
+          else Right $ " : " ++ ShowCore.typeScheme ts
+      else Right Nothing
 
 elementsInModules :: [Module] -> [Binding]
 elementsInModules mods = L.sortBy (O.comparing bindingName) $ L.concat $ fmap moduleElements mods
@@ -63,12 +65,15 @@ fieldSummary = unName . fieldName
 fieldTypeSummary :: FieldType -> String
 fieldTypeSummary (FieldType fname ftype) = unName fname ++ " : " ++ ShowCore.type_ ftype
 
-graphSummary :: Bool -> Graph -> Flow Graph String
-graphSummary withTypes g = do
-  gi <- if withTypes then fst <$> inferGraphTypes (graphToBindings g) g else pure g
+graphSummary :: Bool -> Graph -> Context -> Result String
+graphSummary withTypes g cx = do
+  gi <- if withTypes then do
+      (result, _cx') <- inferGraphTypes cx (graphToBindings g) g
+      pure $ fst result
+    else pure g
   let els = L.sortBy (O.comparing bindingName) $ graphToBindings gi
   let prims = L.sortBy (O.comparing primitiveName) $ M.elems $ graphPrimitives gi
-  elSummaries <- CM.mapM (elementSummary withTypes) els
+  elSummaries <- CM.mapM (\el -> elementSummary withTypes el gi) els
   let primSummaries = fmap (primitiveSummary withTypes) prims
   return $ "Elements:\n" ++ showSummaries elSummaries ++ "\nPrimitives:\n" ++ showSummaries primSummaries
 

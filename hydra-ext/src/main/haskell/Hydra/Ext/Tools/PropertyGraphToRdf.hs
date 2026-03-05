@@ -13,14 +13,14 @@ import qualified Control.Monad as CM
 
 
 data PropertyGraphRdfHelper a v = PropertyGraphRdfHelper {
-    encodeEdgeId :: v -> Flow Graph Rdf.Iri,
-    encodeEdgeLabel :: PG.EdgeLabel -> Flow Graph Rdf.Iri,
-    encodePropertyKey :: PG.PropertyKey -> Flow Graph Rdf.Iri,
-    encodePropertyValue :: v -> Flow Graph Rdf.Literal,
-    encodeVertexId :: v -> Flow Graph Rdf.Iri,
-    encodeVertexLabel :: PG.VertexLabel -> Flow Graph Rdf.Iri}
+    encodeEdgeId :: v -> Either (InContext OtherError) Rdf.Iri,
+    encodeEdgeLabel :: PG.EdgeLabel -> Either (InContext OtherError) Rdf.Iri,
+    encodePropertyKey :: PG.PropertyKey -> Either (InContext OtherError) Rdf.Iri,
+    encodePropertyValue :: v -> Either (InContext OtherError) Rdf.Literal,
+    encodeVertexId :: v -> Either (InContext OtherError) Rdf.Iri,
+    encodeVertexLabel :: PG.VertexLabel -> Either (InContext OtherError) Rdf.Iri}
 
-encodeEdge ::  PropertyGraphRdfHelper a v -> PG.Edge v -> Flow Graph Rdf.Description
+encodeEdge ::  PropertyGraphRdfHelper a v -> PG.Edge v -> Either (InContext OtherError) Rdf.Description
 encodeEdge helper edge = do
     subj <- Rdf.ResourceIri <$> encodeVertexId helper eout
     obj <-  Rdf.NodeIri <$> encodeVertexId helper ein
@@ -30,7 +30,7 @@ encodeEdge helper edge = do
     -- Note: edge id and edge properties are discarded. An RDF-star encoding would preserve them
     PG.Edge elab _ eout ein _ = edge
 
-encodeVertex :: PropertyGraphRdfHelper a v -> PG.Vertex v -> Flow Graph Rdf.Description
+encodeVertex :: PropertyGraphRdfHelper a v -> PG.Vertex v -> Either (InContext OtherError) Rdf.Description
 encodeVertex helper vertex = do
     subj <- Rdf.ResourceIri <$> encodeVertexId helper vid
     rtype <- Rdf.NodeIri <$> encodeVertexLabel helper vlab
