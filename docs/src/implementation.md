@@ -429,7 +429,7 @@ The DSL provides convenient operators for readable code:
 -- Phantom-typed construction
 (~>) :: String -> TTerm a -> TTerm (x -> b)     -- Lambda
 (<~) :: String -> TTerm a -> TTerm b -> TTerm b  -- Let binding
-(<<~) :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)  -- Flow bind
+(<<~) :: String -> TTerm (Either e a) -> TTerm (Either e b) -> TTerm (Either e b)  -- Either bind
 
 -- Examples
 intToString = int32 --> string                -- Type
@@ -599,9 +599,9 @@ prim2Interp _lists_map (Just mapInterp) ["x", "y"]
     x = variable "x"
     y = variable "y"
 
-    mapInterp :: Term -> Term -> Flow Graph Term
-    mapInterp fun args' = do
-      args <- ExtractCore.list args'
+    mapInterp :: Term -> Term -> Context -> Graph -> Either (InContext OtherError) Term
+    mapInterp fun args' cx g = do
+      args <- ExtractCore.list cx args' g
       return $ Terms.list (Terms.apply fun <$> args)
 ```
 
@@ -630,7 +630,7 @@ function :: TermCoder a -> TermCoder b -> TermCoder (a -> b)
 
 -- Special types
 either_ :: TermCoder a -> TermCoder b -> TermCoder (Either a b)
-flow :: TermCoder s -> TermCoder a -> TermCoder (Flow s a)
+either_ :: TermCoder a -> TermCoder b -> TermCoder (Either a b)
 ```
 
 Each TermCoder contains:
@@ -719,24 +719,19 @@ prim2Interp _lists_map (Just mapInterp) ...
 prim1 _strings_toUpper Strings.toUpper [] string string
 ```
 
-#### Pattern 3: Flow Monads for Error Handling
+#### Pattern 3: Either for Error Handling
 
-All primitives operate within a `Flow` monad:
+All primitives operate within `Either (InContext OtherError) a`:
 
 ```haskell
-type Flow s a = s -> Trace -> FlowState s a
-
-data FlowState s a = FlowState {
-  flowStateValue :: Maybe a,      -- Success or failure
-  flowStateState :: s,            -- Threaded state
-  flowStateTrace :: Trace         -- Execution trace
-}
+type Result a = Either (InContext OtherError) a
 ```
 
+Where `InContext` pairs an error with a `Context` carrying debug traces and metadata.
 This provides:
-- Optional error handling
-- State threading (Graph context)
-- Logging via trace
+- Explicit error handling with short-circuit semantics
+- Debug traces via `Context` parameter
+- No hidden state — all context is passed explicitly
 
 ---
 
@@ -1153,9 +1148,9 @@ Hand-translate DSL definitions to Haskell in generated files:
 
 ```haskell
 -- Manually edit: src/gen-main/haskell/Hydra/Inference.hs
-inferTypeOfEither :: InferenceContext -> Either Term Term -> Flow s InferenceResult
-inferTypeOfEither cx (Left left) = do
-  leftResult <- inferType cx left
+inferTypeOfEither :: InferenceContext -> Either Term Term -> Context -> Graph -> Either (InContext OtherError) InferenceResult
+inferTypeOfEither cx (Left left) context graph = do
+  leftResult <- inferType cx left context graph
   let leftType = inferenceResultType leftResult
   let cx2 = inferenceResultContext leftResult
   return $ InferenceResult cx2 (TypeUnion [leftType, typeAny])
@@ -1238,7 +1233,7 @@ implementing native functions in `Lib/`, registering primitives, and creating DS
 ```
 ├── Core.hs              # hydra.core - foundation
 ├── Variants.hs          # hydra.variants - metadata
-├── Compute.hs           # hydra.compute - Flow monad
+├── Compute.hs           # hydra.compute - Coder, Adapter
 ├── Graph.hs             # hydra.graph - primitives
 ├── Module.hs            # hydra.module - namespaces
 └── ...                  # 16 more modules

@@ -317,7 +317,7 @@ These are language-specific representations of Hydra's core algebraic types:
 
 If you want your implementation to generate code (i.e. participate in the bootstrapping demo),
 you need an I/O wrapper that loads modules from JSON, assembles a bootstrap `Graph` with all
-standard primitives, runs the generated code generation `Flow`, and writes output files.
+standard primitives, runs the code generation pipeline, and writes output files.
 
 | Language | Module |
 |----------|--------|
@@ -424,7 +424,7 @@ Creating a new Hydra implementation involves:
 5. ✅ Create a serializer (AST to concrete syntax)
 6. ✅ Register code generation functions and generate native sources
 7. ✅ Implement standard library primitives
-8. ✅ Implement essential runtime support (foundation types, Flow execution, JSON I/O, etc.)
+8. ✅ Implement essential runtime support (foundation types, Either error handling, JSON I/O, etc.)
 9. ✅ Create test runners for kernel tests and generation tests
 10. ✅ Create native DSLs and build applications
 

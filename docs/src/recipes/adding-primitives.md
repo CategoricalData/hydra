@@ -208,15 +208,16 @@ Create `/hydra-java/src/main/java/hydra/lib/<library>/<FunctionName>.java`:
 ```java
 package hydra.lib.chars;
 
-import hydra.dsl.Flows;
-import hydra.compute.Flow;
+import hydra.compute.Context;
+import hydra.compute.InContext;
+import hydra.compute.OtherError;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Expect;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.Either;
 
 import java.util.List;
 import java.util.function.Function;
@@ -237,10 +238,10 @@ public class IsAlphaNum extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Flow<Graph, Term>> implementation() {
-        return args -> Flows.map(
-                Expect.int32(args.get(0)),
-                c -> Terms.boolean_(apply(c)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
+                c -> Terms.boolean_(apply(c)),
+                hydra.extract.core.Core.int32(cx, graph, args.get(0)));
     }
 
     public static boolean apply(int codePoint) {
@@ -252,7 +253,7 @@ public class IsAlphaNum extends PrimitiveFunction {
 **Structure:**
 - `name()`: Returns the fully qualified Hydra name
 - `type()`: Declares the type scheme (use type parameters for polymorphic functions)
-- `implementation()`: Flow-based wrapper that extracts arguments and wraps results
+- `implementation()`: Either-based wrapper that extracts arguments and wraps results, taking `Context` and `Graph` parameters
 - `apply()`: Static method(s) for direct Java usage
 
 ### 2. Register in Libraries

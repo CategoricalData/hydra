@@ -464,7 +464,7 @@ grep -rn 'OldTypeName' hydra-haskell/ hydra-java/ hydra-python/ hydra-ext/
 
 - **Silent semantic mismatches**: When a field changes meaning (not just name), consumers may compile but produce wrong results. For example, if a field changes from `Type` to `TypeScheme`, code that previously stored a bare type must now properly extract/wrap forall binders. Tests are essential for catching these.
 
-- **Intermediate types used as Flow state**: If the old type was used as state in `Flow OldType`, every `Monads.withState`, `Monads.getState`, and `Monads.setState` call must be updated. These are easy to miss because the compiler may not flag them if the new type happens to unify.
+- **Types threaded through computations**: If the old type was passed as a `Context` or `Graph` parameter through computations, every call site must be updated. These are easy to miss because the compiler may not flag them if the new type happens to unify.
 
 - **Multiple types with similar roles**: When consolidating types like `TypeContext`, `InferenceContext`, and `Graph` into a single `Graph`, different consumers may have used different subsets of the old types' fields. Map each consumer's actual field usage to the new type's fields rather than doing a mechanical rename.
 
@@ -492,9 +492,9 @@ Generated Haskell code depends on modules that need to be generated. Solution:
 The key insight: gen-main patches in step 3 are temporary scaffolding. They only need to be correct enough for the build to succeed so that regeneration can produce the real versions.
 
 ### Silent State Pipeline Bugs
-When refactoring types that are used as Flow state, a function may compile but produce wrong results because a field is empty or has the wrong representation. For example:
-- A graph used as Flow state might have an empty `schemaTypes` map, causing type alias lookups to silently fail and generate wrapper classes instead of transparent aliases.
-- A function that previously read schema types from a nested `Maybe Graph` field might now need to read from a flat `Map Name TypeScheme` field — the code compiles either way, but one path returns nothing.
+When refactoring types that are threaded through computations (e.g., as `Context` or `Graph` parameters), a function may compile but produce wrong results because a field is empty or has the wrong representation. For example:
+- A graph passed through computations might have an empty `schemaTypes` map, causing type alias lookups to silently fail and generate wrapper classes instead of transparent aliases.
+- A function that previously read schema types from a nested `Maybe Graph` field might now need to read from a flat `Map Name TypeScheme` field -- the code compiles either way, but one path returns nothing.
 
 These bugs don't cause compilation errors or even runtime exceptions — they produce subtly wrong output. The defense is to run the full test suite after every regeneration and investigate any new failures carefully, even if they seem unrelated to the change.
 

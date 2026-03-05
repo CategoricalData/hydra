@@ -27,7 +27,7 @@ For the Python DSLs, see [DSL Guide (Python)](dsl-guide-python.md).
 9. [Term definitions](#term-definitions)
 10. [Common patterns](#common-patterns)
 11. [Working with generated code](#working-with-generated-code)
-12. [Flow monad](#flow-monad)
+12. [Error handling](#error-handling)
 13. [Examples in the codebase](#examples-in-the-codebase)
 
 ## Overview
@@ -688,29 +688,38 @@ public abstract class Term implements Serializable, Comparable<Term> {
 }
 ```
 
-## Flow monad
+## Error handling
 
-Hydra computations use the `Flow` monad for state, error handling, and logging.
+Hydra computations use `Either<InContext<OtherError>, A>` for error handling, where `InContext` carries execution state such as a trace stack, messages, and metadata via a `Context` object.
 
 ```java
-import hydra.compute.*;
-import hydra.tools.FlowException;
+import hydra.util.Either;
+import hydra.compute.Context;
+import hydra.compute.InContext;
+import hydra.compute.OtherError;
+import hydra.graph.Graph;
 
-// Create a pure Flow
-Flow<Graph, String> pureFlow = Flows.pure("result");
+// Create a successful result
+Either<InContext<OtherError>, String> ok = Either.right("result");
 
-// Map over a Flow
-Flow<Graph, Integer> mapped = Flows.map(s -> s.length(), pureFlow);
+// Map over a result
+Either<InContext<OtherError>, Integer> mapped =
+    hydra.lib.eithers.Map.apply(s -> s.length(), ok);
 
-// Bind (flatMap) flows
-Flow<Graph, String> bound = Flows.bind(flow1, value ->
-    Flows.pure(value + " processed"));
+// Chain computations (bind / flatMap)
+Either<InContext<OtherError>, String> bound =
+    hydra.lib.eithers.Bind.apply(result1, value ->
+        Either.right(value + " processed"));
 
-// Run a Flow and extract result
-try {
-    String result = Flows.fromFlow(graph, flow);
-} catch (FlowException e) {
-    // Handle failure
+// Create a failure
+Either<InContext<OtherError>, String> err =
+    Either.left(new InContext<>(new OtherError("something went wrong"), cx));
+
+// Inspect a result
+if (result.isRight()) {
+    String value = result.get();
+} else {
+    InContext<OtherError> failure = result.getLeft();
 }
 ```
 

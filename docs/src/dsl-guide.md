@@ -934,46 +934,42 @@ match _Result Nothing [
   _Result_error >>: "err" ~> string "error"]
 ```
 
-## Flow operations
+## Error handling with Either
 
-`Flow` operations work with Hydra's `Flow` monad for computations that can fail or produce side effects.
+Hydra uses `Either` for computations that can fail. Error information is carried as `InContext OtherError`,
+which pairs an error message with a `Context` containing debug traces and metadata.
 
-### Basic flow operations
-
-```haskell
-import Hydra.Dsl.Meta.Lib.Flows as Flows
-
--- Pure value (lift into Flow)
-Flows.pure (int32 42)
-
--- Bind operation (>>= in Haskell)
-Flows.bind flowExpr (lambda "x" (processValue (var "x")))
-
--- Map over a flow
-Flows.map (lambda "x" (Math.add (var "x") (int32 1))) flowExpr
-```
-
-### Flow let bindings
+### Basic Either operations
 
 ```haskell
--- Sequential flow operations
-"x" <<~ fetchValue $
-"y" <<~ processValue (var "x") $
-Flows.pure (Math.add (var "x") (var "y"))
+import Hydra.Dsl.Meta.Lib.Eithers as Eithers
+
+-- Success value
+right (int32 42)
+
+-- Error value
+left (string "something went wrong")
+
+-- Bind operation (chain computations that may fail)
+Eithers.bind eitherExpr (lambda "x" (processValue (var "x")))
+
+-- Map over a successful value
+Eithers.map (lambda "x" (Math.add (var "x") (int32 1))) eitherExpr
 ```
 
-### Flow composition
+### Either let bindings
 
 ```haskell
--- Sequence flows, ignoring first result
-exec fetchData $ Flows.pure (int32 0)
-
--- Chain multiple flows
-"a" <<~ step1 $
-"b" <<~ step2 (var "a") $
-"c" <<~ step3 (var "a") (var "b") $
-Flows.pure (var "c")
+-- Sequential operations with error short-circuiting
+"x" <~ fetchValue $
+"y" <~ processValue (var "x") $
+right (Math.add (var "x") (var "y"))
 ```
+
+### Context for debug traces
+
+The `Context` type carries debug trace information (stack of messages, metadata) through computations.
+Functions that need tracing accept a `Context` parameter explicitly.
 
 ## Primitive functions
 
@@ -1239,22 +1235,19 @@ myPerson = Person {
 }
 ```
 
-### Integration with Flow monad
+### Integration with Either for error handling
 
 For computations that can fail:
 
 ```haskell
 import Hydra.Dsl.Meta.Lib.Logic as Logic
+import Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
-safeDivide :: TTerm (Flow s (Int -> Int -> Int))
+safeDivide :: TTerm (Int -> Int -> Either String Int)
 safeDivide = "x" ~> "y" ~>
-  "checkNonZero" <~ ("y" ~>
-    "isZero" <~ Math.eq (var "y") (int32 0) $
-    Logic.ifElse (var "isZero")
-      (Flows.fail (string "Division by zero"))
-      (Flows.pure (var "y"))) $
-  "result" <<~ var "checkNonZero" @@ var "y" $
-  Flows.pure (Math.div (var "x") (var "y"))
+  Logic.ifElse (Equality.eq (var "y") (int32 0))
+    (left (string "Division by zero"))
+    (right (Math.div (var "x") (var "y")))
 ```
 
 ## Related topics
