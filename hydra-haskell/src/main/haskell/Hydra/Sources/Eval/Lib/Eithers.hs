@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Meta.Json          as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
@@ -54,9 +53,7 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-
 
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.eithers"
@@ -66,7 +63,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Monads.ns, ShowCore.ns]
+    [ExtractCore.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of Either functions for the Hydra interpreter.")
   where
@@ -74,21 +71,24 @@ module_ = Module ns elements
       toBinding bind_,
       toBinding bimap_,
       toBinding either_,
+      toBinding foldl_,
       toBinding map_,
       toBinding mapList_,
-      toBinding mapMaybe_]
+      toBinding mapMaybe_,
+      toBinding mapSet_]
 
 -- | Interpreter-friendly bind for Either terms.
 -- Takes an Either term and a function term, applies the function to the Right
 -- value and returns the result (which should be an Either), or returns the Left unchanged.
-bind_ :: TBinding (Term -> Term -> Flow s Term)
+bind_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 bind_ = define "bind" $
   doc "Interpreter-friendly bind for Either terms." $
+  "cx" ~> "g" ~>
   "eitherTerm" ~> "funTerm" ~>
   cases _Term (var "eitherTerm")
-    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
     _Term_either>>: "e" ~>
-      produce $ Eithers.either_
+      right $ Eithers.either_
         -- If Left: return the Left unchanged
         ("val" ~> Core.termEither $ left $ var "val")
         -- If Right: apply funTerm to the value
@@ -98,14 +98,15 @@ bind_ = define "bind" $
 -- | Interpreter-friendly bimap for Either terms.
 -- Takes two function terms (for left and right) and an Either term, applies
 -- the appropriate function to the contained value and re-wraps the result.
-bimap_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Either terms." $
+  "cx" ~> "g" ~>
   "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
   cases _Term (var "eitherTerm")
-    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
     _Term_either>>: "e" ~>
-      produce $ Eithers.either_
+      right $ Eithers.either_
         ("val" ~> Core.termEither $ left $ Core.termApplication $ Core.application (var "leftFun") (var "val"))
         ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
         (var "e")]
@@ -113,26 +114,58 @@ bimap_ = define "bimap" $
 -- | Interpreter-friendly case analysis for Either terms.
 -- Takes two function terms and an Either term, applies the appropriate function
 -- to the contained value.
-either_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+either_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
 either_ = define "either" $
   doc "Interpreter-friendly case analysis for Either terms." $
+  "cx" ~> "g" ~>
   "leftFun" ~> "rightFun" ~> "eitherTerm" ~>
   cases _Term (var "eitherTerm")
-    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
     _Term_either>>: "e" ~>
-      produce $ Eithers.either_
+      right $ Eithers.either_
         ("val" ~> Core.termApplication $ Core.application (var "leftFun") (var "val"))
         ("val" ~> Core.termApplication $ Core.application (var "rightFun") (var "val"))
         (var "e")]
 
-map_ :: TBinding (Term -> Term -> Flow s Term)
+-- | Interpreter-friendly foldl for Either.
+-- foldl funTerm initTerm listTerm: folds funTerm over elements of listTerm,
+-- threading an accumulator starting from initTerm. Short-circuits on first Left.
+foldl_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+foldl_ = define "foldl" $
+  doc "Interpreter-friendly foldl for Either." $
+  "cx" ~> "g" ~>
+  "funTerm" ~> "initTerm" ~> "listTerm" ~>
+  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  -- Fold: for each element, apply funTerm acc el, then bind to check Left/Right
+  right $ Lists.foldl
+    ("acc" ~> "el" ~>
+      -- bind acc (\a -> funTerm a el)
+      Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_either)
+            -- If acc is Left: short-circuit
+            (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
+              Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
+          -- If acc is Right: apply funTerm to acc value and element
+          (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "a") nothing $
+            Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application (var "funTerm") (Core.termVariable $ wrap _Name $ string "a"))
+              (var "el")))
+        (var "acc"))
+    -- Initial accumulator: Right initTerm
+    (Core.termEither $ right $ var "initTerm")
+    (var "elements")
+
+map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Either terms." $
+  "cx" ~> "g" ~>
   "rightFun" ~> "eitherTerm" ~>
   cases _Term (var "eitherTerm")
-    (Just (Monads.unexpected @@ string "either value" @@ (ShowCore.term @@ var "eitherTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "either value") (ShowCore.term @@ var "eitherTerm"))) [
     _Term_either>>: "e" ~>
-      produce $ Eithers.either_
+      right $ Eithers.either_
         ("val" ~> Core.termEither $ left $ var "val")
         ("val" ~> Core.termEither $ right $ Core.termApplication $ Core.application (var "rightFun") (var "val"))
         (var "e")]
@@ -140,14 +173,15 @@ map_ = define "map" $
 -- | Interpreter-friendly mapList for Either (traverse).
 -- mapList funTerm listTerm: applies funTerm to each element, collecting results.
 -- Short-circuits on first Left error.
-mapList_ :: TBinding (Term -> Term -> Flow s Term)
+mapList_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 mapList_ = define "mapList" $
   doc "Interpreter-friendly mapList for Either (traverse)." $
+  "cx" ~> "g" ~>
   "funTerm" ~> "listTerm" ~>
-  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Fold over reversed elements so that cons builds list in original order
   -- foldl (\acc el -> bind (f el) (\y -> map (cons y) acc)) (Right []) (reverse xs)
-  produce $ Lists.foldl
+  right $ Lists.foldl
     -- Accumulator function: acc -> el -> Either err [results]
     ("acc" ~> "el" ~>
       -- First apply funTerm to element: funTerm el
@@ -183,16 +217,62 @@ mapList_ = define "mapList" $
     -- Reverse elements so foldl with cons builds list in original order
     (Lists.reverse $ var "elements")
 
+-- | Interpreter-friendly mapSet for Either (traverse over Set).
+-- mapSet funTerm setTerm: applies funTerm to each element, collecting results as a set.
+-- Short-circuits on first Left error.
+mapSet_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+mapSet_ = define "mapSet" $
+  doc "Interpreter-friendly mapSet for Either (traverse over Set)." $
+  "cx" ~> "g" ~>
+  "funTerm" ~> "setTerm" ~>
+  "elements" <<= (ExtractCore.set @@ var "cx" @@ var "g" @@ var "setTerm") $
+  -- Convert set to list, apply mapList logic, convert back to set
+  -- Fold over elements: foldl (\acc el -> either (\e -> Left e) (\y -> either (\e -> Left e) (\ys -> Right (cons y ys)) acc) (f el)) (Right []) elements
+  -- Then wrap result in Set
+  right $ Lists.foldl
+    ("acc" ~> "el" ~>
+      Core.termApplication $ Core.application
+        (Core.termApplication $ Core.application
+          (Core.termApplication $ Core.application
+            (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_either)
+            -- If Left: return the Left unchanged (short-circuit)
+            (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "err") nothing $
+              Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "err"))
+          -- If Right: check acc, if acc is Right then cons, else return acc's Left
+          (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "y") nothing $
+            Core.termApplication $ Core.application
+              (Core.termApplication $ Core.application
+                (Core.termApplication $ Core.application
+                  (Core.termFunction $ Core.functionPrimitive $ encodedName _eithers_either)
+                  -- If acc is Left: return it
+                  (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "accErr") nothing $
+                    Core.termEither $ left $ Core.termVariable $ wrap _Name $ string "accErr"))
+                -- If acc is Right: insert y into the set using primitive
+                (Core.termFunction $ Core.functionLambda $ Core.lambda (wrap _Name $ string "ys") nothing $
+                  Core.termEither $ right $
+                    Core.termApplication $ Core.application
+                      (Core.termApplication $ Core.application
+                        (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_insert)
+                        (Core.termVariable $ wrap _Name $ string "y"))
+                      (Core.termVariable $ wrap _Name $ string "ys")))
+              (var "acc")))
+        (Core.termApplication $ Core.application (var "funTerm") (var "el")))
+    -- Initial accumulator: Right (empty set)
+    (Core.termEither $ right $ Core.termSet $ Sets.fromList (list ([] :: [TTerm Term])))
+    -- Convert set elements to list for folding
+    (Sets.toList $ var "elements")
+
 -- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
 -- mapMaybe funTerm maybeTerm: if Just, applies funTerm to the value.
-mapMaybe_ :: TBinding (Term -> Term -> Flow s Term)
+mapMaybe_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 mapMaybe_ = define "mapMaybe" $
   doc "Interpreter-friendly mapMaybe for Either (traverse over Maybe)." $
+  "cx" ~> "g" ~>
   "funTerm" ~> "maybeTerm" ~>
   cases _Term (var "maybeTerm")
-    (Just (Monads.unexpected @@ string "maybe value" @@ (ShowCore.term @@ var "maybeTerm"))) [
+    (Just (ExtractCore.unexpected (var "cx") (string "maybe value") (ShowCore.term @@ var "maybeTerm"))) [
     _Term_maybe>>: "opt" ~>
-      produce $ Maybes.maybe
+      right $ Maybes.maybe
         -- Nothing: return Right Nothing
         (Core.termEither $ right $ Core.termMaybe nothing)
         -- Just val: apply funTerm, wrap result in Just

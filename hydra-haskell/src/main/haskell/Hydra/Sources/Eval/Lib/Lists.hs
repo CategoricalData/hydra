@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Meta.Json          as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
@@ -54,10 +53,10 @@ import qualified Data.Map                as M
 import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
+import qualified Hydra.Dsl.Meta.Context      as Ctx
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-
 
 ns :: Namespace
 ns = Namespace "hydra.eval.lib.lists"
@@ -67,7 +66,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, Monads.ns, ShowCore.ns]
+    [ExtractCore.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Evaluation-level implementations of List functions for the Hydra interpreter.")
   where
@@ -86,25 +85,27 @@ module_ = Module ns elements
 
 -- | Interpreter-friendly applicative apply for List terms.
 -- Applies each function in funsTerm to each argument in argsTerm.
-apply_ :: TBinding (Term -> Term -> Flow s Term)
+apply_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 apply_ = define "apply" $
   doc "Interpreter-friendly applicative apply for List terms." $
+  "cx" ~> "g" ~>
   "funsTerm" ~> "argsTerm" ~>
-  "funs" <<~ ExtractCore.list @@ var "funsTerm" $
-  "arguments" <<~ ExtractCore.list @@ var "argsTerm" $
+  "funs" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "funsTerm") $
+  "arguments" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "argsTerm") $
   "applyOne" <~ ("f" ~> Lists.map
     ("arg" ~> Core.termApplication $ Core.application (var "f") (var "arg"))
     (var "arguments")) $
-  produce $ Core.termList $ Lists.concat $ Lists.map (var "applyOne") (var "funs")
+  right $ Core.termList $ Lists.concat $ Lists.map (var "applyOne") (var "funs")
 
 -- | Interpreter-friendly monadic bind for List terms.
 -- Applies funTerm to each element and concatenates the results.
-bind_ :: TBinding (Term -> Term -> Flow s Term)
+bind_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 bind_ = define "bind" $
   doc "Interpreter-friendly monadic bind for List terms." $
+  "cx" ~> "g" ~>
   "listTerm" ~> "funTerm" ~>
-  "elements" <<~ ExtractCore.list @@ var "listTerm" $
-  produce $ Core.termApplication $ Core.application
+  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  right $ Core.termApplication $ Core.application
     (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application (var "funTerm") (var "el"))
@@ -112,12 +113,13 @@ bind_ = define "bind" $
 
 -- | Interpreter-friendly dropWhile for List terms.
 -- Drops elements from the front while predTerm returns true.
-dropWhile_ :: TBinding (Term -> Term -> Flow s Term)
+dropWhile_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 dropWhile_ = define "dropWhile" $
   doc "Interpreter-friendly dropWhile for List terms." $
+  "cx" ~> "g" ~>
   "predTerm" ~> "listTerm" ~>
   -- Build: snd (span predTerm listTerm) - delegate to span primitive
-  produce $ Core.termApplication $ Core.application
+  right $ Core.termApplication $ Core.application
     (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
@@ -127,13 +129,14 @@ dropWhile_ = define "dropWhile" $
 
 -- | Interpreter-friendly filter for List terms.
 -- Keeps elements where predTerm returns true.
-filter_ :: TBinding (Term -> Term -> Flow s Term)
+filter_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for List terms." $
+  "cx" ~> "g" ~>
   "predTerm" ~> "listTerm" ~>
-  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build: concat (map (\el -> ifElse (pred el) [el] []) elements)
-  produce $ Core.termApplication $ Core.application
+  right $ Core.termApplication $ Core.application
     (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
     (Core.termList $ Lists.map
       ("el" ~> Core.termApplication $ Core.application
@@ -147,12 +150,13 @@ filter_ = define "filter" $
 
 -- | Interpreter-friendly find for List terms.
 -- Returns the first element where predTerm returns true, or Nothing if none found.
-find_ :: TBinding (Term -> Term -> Flow s Term)
+find_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 find_ = define "find" $
   doc "Interpreter-friendly find for List terms." $
+  "cx" ~> "g" ~>
   "predTerm" ~> "listTerm" ~>
   -- Build: safeHead (filter predTerm listTerm) - delegate to filter and safeHead
-  produce $ Core.termApplication $ Core.application
+  right $ Core.termApplication $ Core.application
     (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_safeHead)
     (Core.termApplication $ Core.application
       (Core.termApplication $ Core.application
@@ -162,13 +166,14 @@ find_ = define "find" $
 
 -- | Interpreter-friendly left fold for List terms.
 -- Folds from the left: foldl f init [e1,e2,e3] = f (f (f init e1) e2) e3
-foldl_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+foldl_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
 foldl_ = define "foldl" $
   doc "Interpreter-friendly left fold for List terms." $
+  "cx" ~> "g" ~>
   "funTerm" ~> "initTerm" ~> "listTerm" ~>
-  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build nested applications: f (f (f init e1) e2) e3
-  produce $ Lists.foldl
+  right $ Lists.foldl
     ("acc" ~> "el" ~> Core.termApplication $ Core.application
       (Core.termApplication $ Core.application (var "funTerm") (var "acc"))
       (var "el"))
@@ -178,14 +183,15 @@ foldl_ = define "foldl" $
 -- | Interpreter-friendly map for List terms.
 -- Applies funTerm to each element of listTerm.
 -- Note: builds result directly using foldl to avoid recursive primitive calls.
-map_ :: TBinding (Term -> Term -> Flow s Term)
+map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for List terms." $
+  "cx" ~> "g" ~>
   "funTerm" ~> "listTerm" ~>
-  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build the mapped list by folding over elements and accumulating applications
   -- This avoids calling lists.map recursively
-  produce $ Core.termList $ Lists.reverse $ Lists.foldl
+  right $ Core.termList $ Lists.reverse $ Lists.foldl
     ("acc" ~> "el" ~> Lists.cons
       (Core.termApplication $ Core.application (var "funTerm") (var "el"))
       (var "acc"))
@@ -195,11 +201,12 @@ map_ = define "map" $
 -- | Interpreter-friendly partition for List terms.
 -- Partitions elements into (satisfying predicate, not satisfying predicate).
 -- Unlike span, partition checks ALL elements, not just the prefix.
-partition_ :: TBinding (Term -> Term -> Flow s Term)
+partition_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 partition_ = define "partition" $
   doc "Interpreter-friendly partition for List terms." $
+  "cx" ~> "g" ~>
   "predTerm" ~> "listTerm" ~>
-  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- State: (yeses, nos) - two accumulators
   -- Initial: ([], [])
   -- Step: ifElse (pred el) (append yeses [el], nos) (yeses, append nos [el])
@@ -242,20 +249,21 @@ partition_ = define "partition" $
     (var "initialState")
     (var "elements")) $
   -- Return the final state directly (it's already a pair)
-  produce $ var "finalState"
+  right $ var "finalState"
 
 -- | Interpreter-friendly sortOn for List terms.
 -- Sorts elements by comparing the results of applying projTerm to each.
 -- Uses insertion sort: for each element, use span to find insertion point.
-sortOn_ :: TBinding (Term -> Term -> Flow s Term)
+sortOn_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 sortOn_ = define "sortOn" $
   doc "Interpreter-friendly sortOn for List terms." $
+  "cx" ~> "g" ~>
   "projTerm" ~> "listTerm" ~>
-  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build: foldl (\sorted x -> insert x sorted) [] elements
   -- where insert x sorted = let (before, after) = span (\y -> lte (proj y) (proj x)) sorted
   --                         in concat [before, [x], after]
-  produce $ Lists.foldl
+  right $ Lists.foldl
     ("sorted" ~> "x" ~>
       -- Build the split using span with predicate: \y -> lte (proj y) (proj x)
       "splitResult" <~ (Core.termApplication $ Core.application
@@ -293,11 +301,12 @@ sortOn_ = define "sortOn" $
 -- | Interpreter-friendly span for List terms.
 -- Splits the list into (takeWhile pred list, dropWhile pred list).
 -- Uses foldl with state ((stillTaking, left), right) to track the split point.
-span_ :: TBinding (Term -> Term -> Flow s Term)
+span_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
 span_ = define "span" $
   doc "Interpreter-friendly span for List terms." $
+  "cx" ~> "g" ~>
   "predTerm" ~> "listTerm" ~>
-  "elements" <<~ ExtractCore.list @@ var "listTerm" $
+  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- State: ((taking, left), right) as nested pairs
   -- Initial: ((true, []), [])
   -- Step: ifElse (and taking (pred el))
@@ -358,7 +367,7 @@ span_ = define "span" $
     (var "initialState")
     (var "elements")) $
   -- Extract result: (snd (fst finalState), snd finalState)
-  produce $ Core.termPair $ pair
+  right $ Core.termPair $ pair
     (Core.termApplication $ Core.application
       (Core.termFunction $ Core.functionPrimitive $ encodedName _pairs_second)
       (Core.termApplication $ Core.application
@@ -370,14 +379,15 @@ span_ = define "span" $
 
 -- | Interpreter-friendly zipWith for List terms.
 -- Applies funTerm to corresponding pairs of elements.
-zipWith_ :: TBinding (Term -> Term -> Term -> Flow s Term)
+zipWith_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
 zipWith_ = define "zipWith" $
   doc "Interpreter-friendly zipWith for List terms." $
+  "cx" ~> "g" ~>
   "funTerm" ~> "listTerm1" ~> "listTerm2" ~>
-  "elements1" <<~ ExtractCore.list @@ var "listTerm1" $
-  "elements2" <<~ ExtractCore.list @@ var "listTerm2" $
+  "elements1" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm1") $
+  "elements2" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm2") $
   -- Build: [f a1 b1, f a2 b2, ...]
-  produce $ Core.termList $ Lists.map
+  right $ Core.termList $ Lists.map
     ("p" ~>
       "a" <~ Pairs.first (var "p") $
       "b" <~ Pairs.second (var "p") $

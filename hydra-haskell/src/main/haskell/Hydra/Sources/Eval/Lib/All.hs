@@ -18,7 +18,6 @@ import qualified Hydra.Dsl.Meta.Json          as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows     as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals  as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic     as Logic
@@ -54,7 +53,6 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Sources.Eval.Lib.Eithers as EvalEithers
-import qualified Hydra.Sources.Eval.Lib.Flows as EvalFlows
 import qualified Hydra.Sources.Eval.Lib.Lists as EvalLists
 import qualified Hydra.Sources.Eval.Lib.Maps as EvalMaps
 import qualified Hydra.Sources.Eval.Lib.Maybes as EvalMaybes
@@ -72,7 +70,6 @@ define = definitionInNamespace ns
 evalLibModules :: [Module]
 evalLibModules = [
   EvalEithers.module_,
-  EvalFlows.module_,
   EvalLists.module_,
   EvalMaps.module_,
   EvalMaybes.module_,
