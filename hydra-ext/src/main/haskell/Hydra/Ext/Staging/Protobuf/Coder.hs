@@ -6,11 +6,9 @@ import qualified Hydra.Ext.Protobuf.Proto3 as P3
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Schemas as Schemas
 import Hydra.Ext.Staging.Protobuf.Serde
 import qualified Hydra.Dsl.Types as Types
-import Hydra.Dsl.Annotations
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Util as Util
 
@@ -19,6 +17,19 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Maybe as Y
+
+
+type Result a = Either (InContext OtherError) a
+
+err :: Context -> String -> Result a
+err cx msg = Left (InContext (OtherError msg) cx)
+
+unexpectedE :: Context -> String -> String -> Result a
+unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
+
+fromEitherString :: Context -> Either String a -> Result a
+fromEitherString cx (Left msg) = err cx msg
+fromEitherString _ (Right a) = Right a
 
 
 key_proto_field_index = Name "proto_field_index"
@@ -61,45 +72,46 @@ structuralTypeName localNs ref = P3.TypeName $ case ref of
       _ -> "value"
 
 -- Generate a helper message definition for a structural type
-generateStructuralTypeMessage :: Namespace -> StructuralTypeRef -> Flow Graph P3.Definition
-generateStructuralTypeMessage localNs ref = do
-  resetCount key_proto_field_index
-  nextIndex
+-- Returns the definition and the updated context (counter state)
+generateStructuralTypeMessage :: Context -> Graph -> Namespace -> StructuralTypeRef -> Result (P3.Definition, Context)
+generateStructuralTypeMessage cx g localNs ref = do
+  let cx1 = resetCount key_proto_field_index cx
+  let (_, cx2) = nextCount key_proto_field_index cx1
   case ref of
     StructuralTypeRefEither lt rt -> do
-      leftField <- makeField localNs "left" lt
-      rightField <- makeField localNs "right" rt
-      return $ P3.DefinitionMessage P3.MessageDefinition {
+      (leftField, cx3) <- makeField cx2 localNs "left" lt
+      (rightField, cx4) <- makeField cx3 localNs "right" rt
+      return (P3.DefinitionMessage P3.MessageDefinition {
         P3.messageDefinitionName = structuralTypeName localNs ref,
         P3.messageDefinitionFields = [leftField, rightField],
-        P3.messageDefinitionOptions = []}
+        P3.messageDefinitionOptions = []}, cx4)
     StructuralTypeRefPair ft st -> do
-      firstField <- makeField localNs "first" ft
-      secondField <- makeField localNs "second" st
-      return $ P3.DefinitionMessage P3.MessageDefinition {
+      (firstField, cx3) <- makeField cx2 localNs "first" ft
+      (secondField, cx4) <- makeField cx3 localNs "second" st
+      return (P3.DefinitionMessage P3.MessageDefinition {
         P3.messageDefinitionName = structuralTypeName localNs ref,
         P3.messageDefinitionFields = [firstField, secondField],
-        P3.messageDefinitionOptions = []}
+        P3.messageDefinitionOptions = []}, cx4)
   where
-    makeField ns fname ftyp = do
-      ft <- encodeSimpleTypeForHelper ns ftyp
-      idx <- nextIndex
-      return $ P3.Field {
+    makeField cx0 ns fname ftyp = do
+      ft <- encodeSimpleTypeForHelper cx0 localNs ftyp
+      let (idx, cx1) = nextCount key_proto_field_index cx0
+      return (P3.Field {
         P3.fieldName = P3.FieldName fname,
         P3.fieldJsonName = Nothing,
         P3.fieldType = P3.FieldTypeSimple ft,
         P3.fieldNumber = idx,
-        P3.fieldOptions = []}
+        P3.fieldOptions = []}, cx1)
 
 -- Encode a simple type for helper message fields
-encodeSimpleTypeForHelper :: Namespace -> Type -> Flow Graph P3.SimpleType
-encodeSimpleTypeForHelper localNs typ = case simplifyType typ of
-  TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType lt
+encodeSimpleTypeForHelper :: Context -> Namespace -> Type -> Result P3.SimpleType
+encodeSimpleTypeForHelper cx localNs typ = case simplifyType typ of
+  TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType cx lt
   TypeRecord (RowType name _) -> forNominal name
   TypeUnion (RowType name _) -> forNominal name
   TypeUnit -> pure $ P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf.Empty"
   TypeVariable name -> forNominal name
-  t -> unexpected "simple type in structural type helper" $ show $ removeTypeAnnotations t
+  t -> unexpectedE cx "simple type in structural type helper" $ show $ removeTypeAnnotations t
   where
     forNominal name = pure $ P3.SimpleTypeReference $ encodeTypeReference localNs name
 
@@ -114,10 +126,10 @@ collectStructuralTypes types = L.foldl S.union S.empty (collectFromType <$> type
       _ -> acc
 
 -- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
-moduleToProtobuf :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
-moduleToProtobuf mod defs = withTrace ("encode module to Protobuf: " ++ unNamespace ns) $ do
+moduleToProtobuf :: Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String)
+moduleToProtobuf mod defs cx g = do
     let (typeDefs, _termDefs) = partitionDefinitions defs
-    pfile <- constructModule mod typeDefs
+    pfile <- constructModule cx g mod typeDefs
     let content = printExpr $ parenthesize $ writeProtoFile pfile
     return $ M.fromList [(path, content)]
   where
@@ -129,27 +141,29 @@ moduleToProtobuf mod defs = withTrace ("encode module to Protobuf: " ++ unNamesp
 javaMultipleFilesOptionName = "java_multiple_files"
 javaPackageOptionName = "java_package"
 
-constructModule :: Module -> [TypeDefinition] -> Flow Graph P3.ProtoFile
-constructModule mod@(Module ns _ _ _ desc) typeDefs = do
-    schemaImports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces True False False False mod
+constructModule :: Context -> Graph -> Module -> [TypeDefinition] -> Result P3.ProtoFile
+constructModule cx g mod@(Module ns _ _ _ desc) typeDefs = do
+    schemaImports <- (fmap namespaceToFileReference . S.toList) <$> moduleDependencyNamespaces cx g True False False False mod
+    let encodeDefEither name typ = encodeDefinition cx g ns name typ
+    let toDef (TypeDefinition name typ) =
+          fromEitherString cx $ adaptTypeToLanguageAndEncode protobufLanguage (encodeDefEither name) cx g $ flattenType typ
     definitions <- CM.mapM toDef typeDefs
     let types = typeDefinitionType <$> typeDefs
     -- Collect structural type references and generate helper messages
     let structRefs = collectStructuralTypes types
-    helperDefs <- CM.mapM (generateStructuralTypeMessage ns) (S.toList structRefs)
+    (helperDefs, _cx') <- mapAccumResult (generateStructuralTypeMessage' ns) cx (S.toList structRefs)
     return P3.ProtoFile {
       P3.protoFilePackage = namespaceToPackageName ns,
       P3.protoFileImports = schemaImports ++ wrapperImport types ++ emptyImport types,
       P3.protoFileTypes = helperDefs ++ definitions,
       P3.protoFileOptions = descOption:javaOptions}
   where
+    generateStructuralTypeMessage' ns0 cx0 ref = generateStructuralTypeMessage cx0 g ns0 ref
     javaOptions = [
       P3.Option javaMultipleFilesOptionName $ P3.ValueBoolean True,
       P3.Option javaPackageOptionName $ P3.ValueString $ P3.unPackageName $ namespaceToPackageName ns]
     descOption = P3.Option descriptionOptionName $ P3.ValueString $
       (Y.maybe "" (\d -> d ++ "\n\n") desc) ++ warningAutoGeneratedFile
-    toDef (TypeDefinition name typ) =
-      adaptTypeToLanguageAndEncode protobufLanguage (encodeDefinition ns name) $ flattenType typ
     checkFields checkType checkFieldType types = L.foldl (||) False (hasMatches <$> types)
       where
         hasMatches = foldOverType TraversalOrderPre (\b t -> b || hasMatch t) False
@@ -178,24 +192,35 @@ constructModule mod@(Module ns _ _ _ desc) typeDefs = do
           then Just False
           else Nothing
 
-encodeDefinition :: Namespace -> Name -> Type -> Flow Graph P3.Definition
-encodeDefinition localNs name typ = withTrace ("encoding " ++ unName name) $ do
-    resetCount key_proto_field_index
-    nextIndex
-    options <- findOptions typ
-    encode options typ
+-- Helper to thread context through a list, accumulating results
+mapAccumResult :: (cx -> a -> Result (b, cx)) -> cx -> [a] -> Result ([b], cx)
+mapAccumResult _ cx0 [] = Right ([], cx0)
+mapAccumResult f cx0 (x:xs) = do
+  (b, cx1) <- f cx0 x
+  (bs, cx2) <- mapAccumResult f cx1 xs
+  return (b:bs, cx2)
+
+encodeDefinition :: Context -> Graph -> Namespace -> Name -> Type -> Either String P3.Definition
+encodeDefinition cx g localNs name typ = do
+    let cx1 = resetCount key_proto_field_index cx
+    let (_, cx2) = nextCount key_proto_field_index cx1
+    options <- toEitherString $ findOptions cx g typ
+    toEitherString $ encode cx2 options typ
   where
     wrapAsRecordType t = TypeRecord $ RowType name [FieldType (Name "value") t]
-    encode options typ = case simplifyType typ of
-      TypeRecord rt -> P3.DefinitionMessage <$> encodeRecordType localNs options rt
+    encode cx0 options typ = case simplifyType typ of
+      TypeRecord rt -> P3.DefinitionMessage <$> encodeRecordType cx0 g localNs options rt
       TypeUnion rt -> if isEnumDefinition typ
-        then P3.DefinitionEnum <$> encodeEnumDefinition options rt
-        else encode options $ wrapAsRecordType $ TypeUnion rt
-      t -> encode options $ wrapAsRecordType t
+        then P3.DefinitionEnum <$> encodeEnumDefinition cx0 g options rt
+        else encode cx0 options $ wrapAsRecordType $ TypeUnion rt
+      t -> encode cx0 options $ wrapAsRecordType t
+    toEitherString :: Result a -> Either String a
+    toEitherString (Right a) = Right a
+    toEitherString (Left (InContext (OtherError msg) _)) = Left msg
 
-encodeEnumDefinition :: [P3.Option] -> RowType -> Flow Graph P3.EnumDefinition
-encodeEnumDefinition options (RowType tname fields) = do
-    values <- CM.zipWithM encodeEnumField fields [1..]
+encodeEnumDefinition :: Context -> Graph -> [P3.Option] -> RowType -> Result P3.EnumDefinition
+encodeEnumDefinition cx g options (RowType tname fields) = do
+    values <- CM.zipWithM (encodeEnumField cx g) fields [1..]
     return $ P3.EnumDefinition {
       P3.enumDefinitionName = encodeTypeName tname,
       P3.enumDefinitionValues = unspecifiedField:values,
@@ -205,8 +230,8 @@ encodeEnumDefinition options (RowType tname fields) = do
       P3.enumValueName = encodeEnumValueName tname $ Name "unspecified",
       P3.enumValueNumber = 0,
       P3.enumValueOptions = []}
-    encodeEnumField (FieldType fname ftype) idx = do
-      opts <- findOptions ftype
+    encodeEnumField cx0 g0 (FieldType fname ftype) idx = do
+      opts <- findOptions cx0 g0 ftype
       return $ P3.EnumValue {
         P3.enumValueName = encodeEnumValueName tname fname,
         P3.enumValueNumber = idx,
@@ -225,96 +250,99 @@ encodeFieldName preserve = P3.FieldName . toPname . unName
       then id
       else convertCaseCamelToLowerSnake
 
-encodeFieldType :: Namespace -> FieldType -> Flow Graph P3.Field
-encodeFieldType localNs (FieldType fname ftype) = withTrace ("encode field " ++ show (unName fname)) $ do
-    options <- findOptions ftype
-    ft <- encodeType ftype
-    idx <- nextIndex
-    preserve <- readBooleanAnnotation key_preserveFieldName ftype
-    return $ P3.Field {
+-- Returns the field and updated context (for counter threading)
+encodeFieldType :: Context -> Graph -> Namespace -> FieldType -> Result (P3.Field, Context)
+encodeFieldType cx g localNs (FieldType fname ftype) = do
+    options <- findOptions cx g ftype
+    ft <- encodeType cx g localNs ftype
+    let (idx, cx1) = nextCount key_proto_field_index cx
+    preserve <- readBooleanAnnotation cx g key_preserveFieldName ftype
+    return (P3.Field {
       P3.fieldName = encodeFieldName preserve fname,
       P3.fieldJsonName = Nothing,
       P3.fieldType = ft,
       P3.fieldNumber = idx,
-      P3.fieldOptions = options}
+      P3.fieldOptions = options}, cx1)
   where
-    encodeType typ = case simplifyType typ of
+    encodeType cx0 g0 ns0 typ = case simplifyType typ of
       TypeEither (EitherType lt rt) -> do
         -- Reference the generated helper message type for this Either instantiation
         let ref = StructuralTypeRefEither lt rt
-        return $ P3.FieldTypeSimple $ P3.SimpleTypeReference $ structuralTypeName localNs ref
+        return $ P3.FieldTypeSimple $ P3.SimpleTypeReference $ structuralTypeName ns0 ref
       TypePair (PairType ft st) -> do
         -- Reference the generated helper message type for this Pair instantiation
         let ref = StructuralTypeRefPair ft st
-        return $ P3.FieldTypeSimple $ P3.SimpleTypeReference $ structuralTypeName localNs ref
+        return $ P3.FieldTypeSimple $ P3.SimpleTypeReference $ structuralTypeName ns0 ref
       TypeList lt -> do
-        P3.FieldTypeRepeated <$> encodeSimpleType True lt
+        P3.FieldTypeRepeated <$> encodeSimpleType cx0 g0 ns0 True lt
       TypeSet st -> do
         -- Encode Set as a repeated field (same as List)
-        P3.FieldTypeRepeated <$> encodeSimpleType True st
-      TypeMap (MapType kt vt) -> P3.FieldTypeMap <$> (P3.MapType <$> encodeSimpleType False kt <*> encodeSimpleType True vt)
+        P3.FieldTypeRepeated <$> encodeSimpleType cx0 g0 ns0 True st
+      TypeMap (MapType kt vt) -> P3.FieldTypeMap <$> (P3.MapType <$> encodeSimpleType cx0 g0 ns0 False kt <*> encodeSimpleType cx0 g0 ns0 True vt)
       TypeMaybe ot -> case deannotateType ot of
-        TypeLiteral lt -> P3.FieldTypeSimple <$> encodeScalarTypeWrapped lt
-        _ -> encodeType ot -- TODO
+        TypeLiteral lt -> P3.FieldTypeSimple <$> encodeScalarTypeWrapped cx0 lt
+        _ -> encodeType cx0 g0 ns0 ot -- TODO
       TypeUnion (RowType _ fields) -> do
-        pfields <- CM.mapM (encodeFieldType localNs) fields
+        (pfields, _cx1) <- mapAccumResult (\cx' ft -> encodeFieldType cx' g0 ns0 ft) cx0 fields
         return $ P3.FieldTypeOneof pfields
       _ -> do
-        P3.FieldTypeSimple <$> encodeSimpleType True typ
-    encodeSimpleType noms typ = case simplifyType typ of
-        TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType lt
+        P3.FieldTypeSimple <$> encodeSimpleType cx0 g0 ns0 True typ
+    encodeSimpleType cx0 g0 ns0 noms typ = case simplifyType typ of
+        TypeLiteral lt -> P3.SimpleTypeScalar <$> encodeScalarType cx0 lt
         TypeRecord (RowType name _) -> forNominal name
         TypeUnion (RowType name _) -> forNominal name
         TypeUnit -> pure $ P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf.Empty"
         TypeVariable name -> if noms
           then forNominal name
           else do
-            g <- Monads.getState
-            term <- bindingTerm <$> requireElement name
-            typ <- Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g term
-            encodeSimpleType noms typ
-        t -> unexpected "simple type" $ show $ removeTypeAnnotations t
+            term <- bindingTerm <$> requireElement cx0 g0 name
+            typ <- case DecodeCore.type_ g0 term of
+              Left e -> err cx0 (show e)
+              Right t -> Right t
+            encodeSimpleType cx0 g0 ns0 noms typ
+        t -> unexpectedE cx0 "simple type" $ show $ removeTypeAnnotations t
       where
-        forNominal name = pure $ P3.SimpleTypeReference $ encodeTypeReference localNs name
+        forNominal name = pure $ P3.SimpleTypeReference $ encodeTypeReference ns0 name
 
-encodeRecordType :: Namespace -> [P3.Option] -> RowType -> Flow Graph P3.MessageDefinition
-encodeRecordType localNs options (RowType tname fields) = do
-    pfields <- CM.mapM (encodeFieldType localNs) fields
+-- Returns the message definition; counter is threaded via context
+encodeRecordType :: Context -> Graph -> Namespace -> [P3.Option] -> RowType -> Result P3.MessageDefinition
+encodeRecordType cx g localNs options (RowType tname fields) = do
+    (pfields, _cx') <- mapAccumResult (\cx' ft -> encodeFieldType cx' g localNs ft) cx fields
     return P3.MessageDefinition {
       P3.messageDefinitionName = encodeTypeName tname,
       P3.messageDefinitionFields = pfields,
       P3.messageDefinitionOptions = options}
 
-encodeScalarType :: LiteralType -> Flow s P3.ScalarType
-encodeScalarType lt = case lt of
+encodeScalarType :: Context -> LiteralType -> Result P3.ScalarType
+encodeScalarType cx lt = case lt of
   LiteralTypeBinary -> return P3.ScalarTypeBytes
   LiteralTypeBoolean -> return P3.ScalarTypeBool
   LiteralTypeFloat ft -> case ft of
     FloatTypeFloat32 -> return P3.ScalarTypeFloat
     FloatTypeFloat64 -> return P3.ScalarTypeDouble
-    _ -> unexpected "32-bit or 64-bit floating-point type" $ show ft
+    _ -> unexpectedE cx "32-bit or 64-bit floating-point type" $ show ft
   LiteralTypeInteger it -> case it of
     IntegerTypeInt32 -> return P3.ScalarTypeInt32
     IntegerTypeInt64 -> return P3.ScalarTypeInt64
     IntegerTypeUint32 -> return P3.ScalarTypeUint32
     IntegerTypeUint64 -> return P3.ScalarTypeUint64
-    _ -> unexpected "32-bit or 64-bit integer type" $ show it
+    _ -> unexpectedE cx "32-bit or 64-bit integer type" $ show it
   LiteralTypeString -> return P3.ScalarTypeString
 
-encodeScalarTypeWrapped :: LiteralType -> Flow s P3.SimpleType
-encodeScalarTypeWrapped lt = toType <$> case lt of
+encodeScalarTypeWrapped :: Context -> LiteralType -> Result P3.SimpleType
+encodeScalarTypeWrapped cx lt = toType <$> case lt of
     LiteralTypeBinary -> return "Bytes"
     LiteralTypeBoolean -> return "Bool"
     LiteralTypeFloat ft -> case ft of
       FloatTypeFloat32 -> return "Float"
       FloatTypeFloat64 -> return "Double"
-      _ -> unexpected "32-bit or 64-bit floating-point type" $ show ft
+      _ -> unexpectedE cx "32-bit or 64-bit floating-point type" $ show ft
     LiteralTypeInteger it -> case it of
       IntegerTypeInt32 -> return "Int32"
       IntegerTypeInt64 -> return "Int64"
       IntegerTypeUint32 -> return "UInt32"
       IntegerTypeUint64 -> return "UInt64"
-      _ -> unexpected "32-bit or 64-bit integer type" $ show it
+      _ -> unexpectedE cx "32-bit or 64-bit integer type" $ show it
     LiteralTypeString -> return "String"
   where
     toType label = P3.SimpleTypeReference $ P3.TypeName $ "google.protobuf." ++ label ++ "Value"
@@ -342,10 +370,10 @@ flattenType = rewriteType f
      TypeApplication (ApplicationType lhs _) -> recurse lhs
      _ -> recurse typ
 
-findOptions :: Type -> Flow Graph [P3.Option]
-findOptions typ = do
-  mdesc <- getTypeDescription typ
-  bdep <- readBooleanAnnotation key_deprecated typ
+findOptions :: Context -> Graph -> Type -> Result [P3.Option]
+findOptions cx g typ = do
+  mdesc <- getTypeDescription cx g typ
+  bdep <- readBooleanAnnotation cx g key_deprecated typ
   let mdescAnn = fmap (\desc -> P3.Option descriptionOptionName $ P3.ValueString desc) mdesc
   let mdepAnn = if bdep then Just (P3.Option deprecatedOptionName $ P3.ValueBoolean True) else Nothing
   return $ Y.catMaybes [mdescAnn, mdepAnn]
@@ -369,13 +397,10 @@ namespaceToPackageName :: Namespace -> P3.PackageName
 namespaceToPackageName (Namespace ns) = P3.PackageName $ Strings.intercalate "." $
   convertCaseCamelToLowerSnake <$> (L.init $ Strings.splitOn "." ns)
 
-nextIndex :: Flow s Int
-nextIndex = nextCount key_proto_field_index
-
-readBooleanAnnotation :: Name -> Type -> Flow Graph Bool
-readBooleanAnnotation key typ = case M.lookup key (typeAnnotationInternal typ) of
+readBooleanAnnotation :: Context -> Graph -> Name -> Type -> Result Bool
+readBooleanAnnotation cx g key typ = case M.lookup key (typeAnnotationInternal typ) of
   Nothing -> return False
-  Just term -> ExtractCore.boolean term
+  Just term -> ExtractCore.boolean cx g term
 
 -- Note: this should probably be done in the term adapters
 simplifyType :: Type -> Type

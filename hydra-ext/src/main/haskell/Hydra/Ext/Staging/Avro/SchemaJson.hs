@@ -4,7 +4,6 @@ import Hydra.Kernel
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Json.Parser as JsonParser
-import Hydra.Extract.Json
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json.Model as Json
 
@@ -13,6 +12,66 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
+
+type Result a = Either (InContext OtherError) a
+
+err :: Context -> String -> Result a
+err cx msg = Left (InContext (OtherError msg) cx)
+
+unexpectedE :: Context -> String -> String -> Result a
+unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
+
+-- | Either-based JSON extraction helpers
+
+expectArrayE :: Context -> Json.Value -> Result [Json.Value]
+expectArrayE cx value = case value of
+  Json.ValueArray v -> Right v
+  _ -> unexpectedE cx "JSON array" (showJsonValue value)
+
+expectNumberE :: Context -> Json.Value -> Result Double
+expectNumberE cx value = case value of
+  Json.ValueNumber v -> Right v
+  _ -> unexpectedE cx "JSON number" (showJsonValue value)
+
+expectObjectE :: Context -> Json.Value -> Result (M.Map String Json.Value)
+expectObjectE cx value = case value of
+  Json.ValueObject v -> Right v
+  _ -> unexpectedE cx "JSON object" (showJsonValue value)
+
+expectStringE :: Context -> Json.Value -> Result String
+expectStringE cx value = case value of
+  Json.ValueString v -> Right v
+  _ -> unexpectedE cx "JSON string" (showJsonValue value)
+
+requireE :: (Ord k, Show k) => Context -> k -> M.Map k v -> Result v
+requireE cx fname m = case M.lookup fname m of
+  Nothing -> err cx $ "required attribute " ++ show fname ++ " not found"
+  Just v -> Right v
+
+requireArrayE :: Context -> String -> M.Map String Json.Value -> Result [Json.Value]
+requireArrayE cx fname m = requireE cx fname m >>= expectArrayE cx
+
+requireNumberE :: Context -> String -> M.Map String Json.Value -> Result Double
+requireNumberE cx fname m = requireE cx fname m >>= expectNumberE cx
+
+requireStringE :: Context -> String -> M.Map String Json.Value -> Result String
+requireStringE cx fname m = requireE cx fname m >>= expectStringE cx
+
+optE :: Ord k => k -> M.Map k v -> Maybe v
+optE = M.lookup
+
+optArrayE :: Context -> String -> M.Map String Json.Value -> Result (Maybe [Json.Value])
+optArrayE cx fname m = case M.lookup fname m of
+  Nothing -> Right Nothing
+  Just v -> Just <$> expectArrayE cx v
+
+optStringE :: Context -> String -> M.Map String Json.Value -> Result (Maybe String)
+optStringE cx fname m = case M.lookup fname m of
+  Nothing -> Right Nothing
+  Just v -> Just <$> expectStringE cx v
+
+showJsonValue :: Json.Value -> String
+showJsonValue = show
 
 -- | Parse a JSON string, returning Either for compatibility
 stringToJsonValue :: String -> Either String Json.Value
@@ -50,108 +109,113 @@ avro_symbols = "symbols"
 avro_type = "type"
 avro_values = "values"
 
-avroSchemaJsonCoder :: Coder s s Avro.Schema Json.Value
-avroSchemaJsonCoder = Coder {
-  coderEncode = \schema -> fail "not implemented",
-  coderDecode = decodeNamedSchema}
+avroSchemaJsonCoder :: Context -> Coder Avro.Schema Json.Value
+avroSchemaJsonCoder cx = Coder encode decode
+  where
+    encode _cx _schema = err cx "not implemented"
+    decode cx' v = decodeNamedSchema cx' v
 
-avroSchemaStringCoder :: Coder s s Avro.Schema String
-avroSchemaStringCoder = Coder {
-  coderEncode = \schema -> JsonWriter.printJson <$> coderEncode avroSchemaJsonCoder schema,
-  coderDecode = \s -> do
-    json <- case stringToJsonValue s of
-      Left msg -> fail $ "failed to parse JSON: " ++ msg
-      Right j -> pure j
-    coderDecode avroSchemaJsonCoder json}
+avroSchemaStringCoder :: Context -> Coder Avro.Schema String
+avroSchemaStringCoder cx = Coder encode decode
+  where
+    jsonCoder = avroSchemaJsonCoder cx
+    encode cx' schema = do
+      json <- coderEncode jsonCoder cx' schema
+      Right $ JsonWriter.printJson json
+    decode cx' s = do
+      json <- case stringToJsonValue s of
+        Left msg -> err cx' $ "failed to parse JSON: " ++ msg
+        Right j -> Right j
+      coderDecode jsonCoder cx' json
 
-decodeAliases :: M.Map String Json.Value -> Flow s (Maybe [String])
-decodeAliases m = do
-  aliasesJson <- optArray avro_aliases m
+decodeAliases :: Context -> M.Map String Json.Value -> Result (Maybe [String])
+decodeAliases cx m = do
+  aliasesJson <- optArrayE cx avro_aliases m
   case aliasesJson of
-    Nothing -> pure Nothing
-    Just a -> Just <$> CM.mapM expectString a
+    Nothing -> Right Nothing
+    Just a -> Just <$> CM.mapM (expectStringE cx) a
 
-decodeEnum :: M.Map String Json.Value -> Flow s Avro.NamedType
-decodeEnum m = do
-  symbolsJson <- requireArray avro_symbols m
-  symbols <- CM.mapM expectString symbolsJson
-  dflt <- optString avro_default m
+decodeEnum :: Context -> M.Map String Json.Value -> Result Avro.NamedType
+decodeEnum cx m = do
+  symbolsJson <- requireArrayE cx avro_symbols m
+  symbols <- CM.mapM (expectStringE cx) symbolsJson
+  dflt <- optStringE cx avro_default m
   return $ Avro.NamedTypeEnum $ Avro.Enum symbols dflt
 
-decodeField :: M.Map String Json.Value -> Flow s Avro.Field
-decodeField m = do
-  fname <- requireString avro_name m
-  doc <- optString avro_doc m
-  typ <- require avro_type m >>= decodeSchema
-  let dflt = opt avro_default m
-  order <- case opt avro_order m of
-    Nothing -> pure Nothing
-    Just o -> Just <$> (expectString o >>= decodeOrder)
-  aliases <- decodeAliases m
+decodeField :: Context -> M.Map String Json.Value -> Result Avro.Field
+decodeField cx m = do
+  fname <- requireStringE cx avro_name m
+  doc <- optStringE cx avro_doc m
+  typ <- requireE cx avro_type m >>= decodeSchema cx
+  let dflt = optE avro_default m
+  order <- case optE avro_order m of
+    Nothing -> Right Nothing
+    Just o -> Just <$> (expectStringE cx o >>= decodeOrder cx)
+  aliases <- decodeAliases cx m
   let anns = getAnnotations m
   return $ Avro.Field fname doc typ dflt order aliases anns
 
-decodeFixed :: M.Map String Json.Value -> Flow s Avro.NamedType
-decodeFixed m = do
-    size <- doubleToInt <$> requireNumber avro_size m
+decodeFixed :: Context -> M.Map String Json.Value -> Result Avro.NamedType
+decodeFixed cx m = do
+    size <- doubleToInt <$> requireNumberE cx avro_size m
     return $ Avro.NamedTypeFixed $ Avro.Fixed size
   where
     doubleToInt d = if d < 0 then ceiling d else floor d
 
-decodeNamedSchema :: Json.Value -> Flow s Avro.Schema
-decodeNamedSchema value = do
-  m <- expectObject value
-  name <- requireString avro_name m
-  ns <- optString avro_namespace m
-  typ <- requireString avro_type m
+decodeNamedSchema :: Context -> Json.Value -> Result Avro.Schema
+decodeNamedSchema cx value = do
+  m <- expectObjectE cx value
+  name <- requireStringE cx avro_name m
+  ns <- optStringE cx avro_namespace m
+  typ <- requireStringE cx avro_type m
   nt <- case M.lookup typ decoders of
-    Nothing -> unexpected "Avro type" $ show typ
+    Nothing -> unexpectedE cx "Avro type" $ show typ
     Just d -> d m
-  aliases <- decodeAliases m
-  doc <- optString avro_doc m
+  aliases <- decodeAliases cx m
+  doc <- optStringE cx avro_doc m
   let anns = getAnnotations m
   return $ Avro.SchemaNamed $ Avro.Named name ns aliases doc nt anns
   where
     decoders = M.fromList [
-      (avro_enum, decodeEnum),
-      (avro_fixed, decodeFixed),
-      (avro_record, decodeRecord)]
+      (avro_enum, decodeEnum cx),
+      (avro_fixed, decodeFixed cx),
+      (avro_record, decodeRecord cx)]
 
-decodeOrder :: String -> Flow s Avro.Order
-decodeOrder o = case M.lookup o orderMap of
-    Nothing -> unexpected "ordering" $ show o
-    Just order -> pure order
+decodeOrder :: Context -> String -> Result Avro.Order
+decodeOrder cx o = case M.lookup o orderMap of
+    Nothing -> unexpectedE cx "ordering" $ show o
+    Just order -> Right order
   where
     orderMap = M.fromList [
       (avro_ascending, Avro.OrderAscending),
       (avro_descending, Avro.OrderDescending),
       (avro_ignore, Avro.OrderIgnore)]
 
-decodeRecord :: M.Map String Json.Value -> Flow s Avro.NamedType
-decodeRecord m = do
-  fields <- requireArray avro_fields m >>= CM.mapM expectObject >>= CM.mapM decodeField
+decodeRecord :: Context -> M.Map String Json.Value -> Result Avro.NamedType
+decodeRecord cx m = do
+  fields <- requireArrayE cx avro_fields m >>= CM.mapM (expectObjectE cx) >>= CM.mapM (decodeField cx)
   return $ Avro.NamedTypeRecord $ Avro.Record fields
 
-decodeSchema :: Json.Value -> Flow s Avro.Schema
-decodeSchema v = case v of
-  Json.ValueArray els -> Avro.SchemaUnion <$> (Avro.Union <$> (CM.mapM decodeSchema els))
+decodeSchema :: Context -> Json.Value -> Result Avro.Schema
+decodeSchema cx v = case v of
+  Json.ValueArray els -> Avro.SchemaUnion <$> (Avro.Union <$> (CM.mapM (decodeSchema cx) els))
   Json.ValueObject m -> do
-      typ <- requireString avro_type m
+      typ <- requireStringE cx avro_type m
       case M.lookup typ decoders of
-        Nothing -> unexpected "\"array\" or \"map\"" $ show typ
+        Nothing -> unexpectedE cx "\"array\" or \"map\"" $ show typ
         Just d -> d m
     where
       decoders = M.fromList [
         (avro_array, \m -> do
-          items <- require avro_items m >>= decodeSchema
+          items <- requireE cx avro_items m >>= decodeSchema cx
           return $ Avro.SchemaArray $ Avro.Array items),
-        (avro_enum, \m -> decodeNamedSchema $ Json.ValueObject m),
-        (avro_fixed, \m -> decodeNamedSchema $ Json.ValueObject m),
+        (avro_enum, \m -> decodeNamedSchema cx $ Json.ValueObject m),
+        (avro_fixed, \m -> decodeNamedSchema cx $ Json.ValueObject m),
         (avro_map, \m -> do
-          values <- require avro_values m >>= decodeSchema
+          values <- requireE cx avro_values m >>= decodeSchema cx
           return $ Avro.SchemaMap $ Avro.Map values),
-        (avro_record, \m -> decodeNamedSchema $ Json.ValueObject m)]
-  Json.ValueString s -> pure $ case M.lookup s schemas of
+        (avro_record, \m -> decodeNamedSchema cx $ Json.ValueObject m)]
+  Json.ValueString s -> Right $ case M.lookup s schemas of
       Just prim -> Avro.SchemaPrimitive prim
       Nothing -> Avro.SchemaReference s
     where
@@ -164,8 +228,8 @@ decodeSchema v = case v of
         (avro_long, Avro.PrimitiveLong),
         (avro_null, Avro.PrimitiveNull),
         (avro_string, Avro.PrimitiveString)]
-  Json.ValueNull -> pure $ Avro.SchemaPrimitive $ Avro.PrimitiveNull
-  _ -> unexpected "JSON array, object, or string" $ show v
+  Json.ValueNull -> Right $ Avro.SchemaPrimitive $ Avro.PrimitiveNull
+  _ -> unexpectedE cx "JSON array, object, or string" $ show v
 
 getAnnotations :: M.Map String Json.Value -> M.Map String Json.Value
 getAnnotations = M.fromList . Y.catMaybes . fmap toPair . M.toList

@@ -5,11 +5,7 @@ import Hydra.Ext.Staging.Rdf.Utils
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Org.W3.Shacl.Model as Shacl
 import qualified Hydra.Decode.Core as DecodeCore
-import qualified Hydra.Dsl.Literals as Literals
 import qualified Hydra.Extract.Core as ExtractCore
-import qualified Hydra.Dsl.Terms as Terms
-import qualified Hydra.Monads as Monads
-import qualified Hydra.Util as Util
 
 import qualified Control.Monad as CM
 import qualified Data.List as L
@@ -18,21 +14,28 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-shaclCoder :: Module -> Flow Graph (Shacl.ShapesGraph, Graph -> Flow Graph Rdf.Graph)
-shaclCoder mod = do
-    g <- getState
+type Result a = Either (InContext OtherError) a
+
+err :: Context -> String -> Result a
+err cx msg = Left (InContext (OtherError msg) cx)
+
+unexpectedE :: Context -> String -> String -> Result a
+unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
+
+shaclCoder :: Module -> Context -> Graph -> Result (Shacl.ShapesGraph, Context)
+shaclCoder mod cx g = do
     -- Note: untested since deprecation of element schemas
     let typeEls = L.filter isNativeType $ moduleElements mod
     shapes <- CM.mapM (toShape g) typeEls
     let sg = Shacl.ShapesGraph $ S.fromList shapes
-    let termFlow = \g -> do
-          fail "not implemented"
-    return (sg, termFlow)
+    return (sg, cx)
   where
     toShape g el = do
-      typ <- Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g $ bindingTerm el
-      common <- encodeType typ
-      return $ Shacl.Definition (elementIri el) $ Shacl.ShapeNode $ Shacl.NodeShape common
+      typ <- case DecodeCore.type_ g $ bindingTerm el of
+        Left de -> err cx (unDecodingError de)
+        Right t -> Right t
+      cp <- encodeType typ cx
+      return $ Shacl.Definition (elementIri el) $ Shacl.ShapeNode $ Shacl.NodeShape cp
 
 common :: [Shacl.CommonConstraint] -> Shacl.CommonProperties
 common constraints = defaultCommonProperties {
@@ -52,15 +55,15 @@ defaultCommonProperties = Shacl.CommonProperties {
 elementIri :: Binding -> Rdf.Iri
 elementIri = nameToIri . bindingName
 
-encodeField :: Name -> Rdf.Resource -> Field -> Flow Graph [Rdf.Triple]
-encodeField rname subject field = do
-  node <- nextBlankNode
-  descs <- encodeTerm node (fieldTerm field)
-  return $ triplesOf descs ++
-    forObjects subject (propertyIri rname $ fieldName field) (subjectsOf descs)
+encodeField :: Name -> Rdf.Resource -> Field -> Context -> Graph -> Either (InContext OtherError) ([Rdf.Triple], Context)
+encodeField rname subject field cx g = do
+  let (node, cx1) = nextBlankNode cx
+  (descs, cx2) <- encodeTerm node (fieldTerm field) cx1 g
+  return (triplesOf descs ++
+    forObjects subject (propertyIri rname $ fieldName field) (subjectsOf descs), cx2)
 
-encodeFieldType :: Name -> Maybe Integer -> FieldType -> Flow Graph (Shacl.Definition Shacl.PropertyShape)
-encodeFieldType rname order (FieldType fname ft) = do
+encodeFieldType :: Name -> Maybe Integer -> FieldType -> Context -> Result (Shacl.Definition Shacl.PropertyShape)
+encodeFieldType rname order (FieldType fname ft) cx = do
     shape <- forType (Just 1) (Just 1) ft
     return $ Shacl.Definition iri shape
   where
@@ -69,7 +72,7 @@ encodeFieldType rname order (FieldType fname ft) = do
       TypeMaybe ot -> forType (Just 0) mx ot
       TypeSet st -> forType mn Nothing st
       _ -> do
-        cp <- encodeType t
+        cp <- encodeType t cx
         let baseProp = property iri
         return $ baseProp {
           Shacl.propertyShapeCommon = cp,
@@ -100,75 +103,83 @@ encodeLiteralType lt = case lt of
   where
     xsd local = common [Shacl.CommonConstraintDatatype $ xmlSchemaDatatypeIri local]
 
-encodeTerm :: Rdf.Resource -> Term -> Flow Graph [Rdf.Description]
-encodeTerm subject term = case term of
-  TermAnnotated (AnnotatedTerm inner ann) -> encodeTerm subject inner -- TODO: extract an rdfs:comment
-  TermList terms -> encodeList subject terms
+encodeTerm :: Rdf.Resource -> Term -> Context -> Graph -> Either (InContext OtherError) ([Rdf.Description], Context)
+encodeTerm subject term cx g = case term of
+  TermAnnotated (AnnotatedTerm inner _ann) -> encodeTerm subject inner cx g -- TODO: extract an rdfs:comment
+  TermList terms -> encodeList subject terms cx
     where
-      encodeList subj terms = if L.null terms
-        then pure [emptyDescription $ (Rdf.NodeIri $ rdfIri "nil")]
+      encodeList subj terms cx0 = if L.null terms
+        then Right ([emptyDescription $ (Rdf.NodeIri $ rdfIri "nil")], cx0)
           else do
-            node <- nextBlankNode
-            fdescs <- encodeTerm node $ L.head terms
+            let (node, cx1) = nextBlankNode cx0
+            (fdescs, cx2) <- encodeTerm node (L.head terms) cx1 g
             let firstTriples = triplesOf fdescs ++
                   forObjects subj (rdfIri "first") (subjectsOf fdescs)
-            next <- nextBlankNode
-            rdescs <- encodeList next $ L.tail terms
+            let (next, cx3) = nextBlankNode cx2
+            (rdescs, cx4) <- encodeList next (L.tail terms) cx3
             let restTriples = triplesOf rdescs ++
                   forObjects subj (rdfIri "rest") (subjectsOf rdescs)
-            return [Rdf.Description (resourceToNode subj) (Rdf.Graph $ S.fromList $ firstTriples ++ restTriples)]
+            return ([Rdf.Description (resourceToNode subj) (Rdf.Graph $ S.fromList $ firstTriples ++ restTriples)], cx4)
   TermLiteral lit -> do
-    node <- Rdf.NodeLiteral <$> encodeLiteral lit
-    return [emptyDescription node]
+    let node = Rdf.NodeLiteral $ encodeLiteral lit
+    return ([emptyDescription node], cx)
   TermMap m -> do
-      triples <- L.concat <$> (CM.mapM (forKeyVal subject) $ M.toList m)
-      return [Rdf.Description (resourceToNode subject) $ Rdf.Graph $ S.fromList triples]
+      (tripless, cxFinal) <- foldAccumResult (\cx0 kv -> forKeyVal subject kv cx0) cx (M.toList m)
+      return ([Rdf.Description (resourceToNode subject) $ Rdf.Graph $ S.fromList $ L.concat tripless], cxFinal)
     where
-      forKeyVal subj (k, v) = do
+      forKeyVal subj (k, v) cx0 = do
         -- Note: only string-valued keys are supported
-        ks <- ExtractCore.string $ deannotateTerm k
-        node <- nextBlankNode
-        descs <- encodeTerm node v
+        ks <- ExtractCore.string cx0 g $ deannotateTerm k
+        let (node, cx1) = nextBlankNode cx0
+        (descs, cx2) <- encodeTerm node v cx1 g
         let pred = keyIri ks
         let objs = subjectsOf descs
         let triples = forObjects subj pred objs
-        return $ triples ++ triplesOf descs
+        return (triples ++ triplesOf descs, cx2)
   TermWrap (WrappedTerm name inner) -> do
-    descs <- encodeTerm subject inner
-    return $ (withType name $ L.head descs):(L.tail descs)
+    (descs, cx1) <- encodeTerm subject inner cx g
+    return ((withType name $ L.head descs):(L.tail descs), cx1)
   TermMaybe mterm -> case mterm of
-    Nothing -> pure []
-    Just inner -> encodeTerm subject inner
+    Nothing -> Right ([], cx)
+    Just inner -> encodeTerm subject inner cx g
   TermRecord (Record rname fields) -> do
-    tripless <- CM.mapM (encodeField rname subject) fields
-    return [withType rname $ Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList $ L.concat tripless)]
-  TermSet terms -> L.concat <$> CM.mapM encodeEl (S.toList terms)
-    where
-      encodeEl term = do
-        node <- nextBlankNode
-        encodeTerm node term
+    (tripless, cxFinal) <- foldAccumResult (\cx0 field -> encodeField rname subject field cx0 g) cx fields
+    return ([withType rname $ Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList $ L.concat tripless)], cxFinal)
+  TermSet terms -> do
+    (descss, cxFinal) <- foldAccumResult (\cx0 t -> do
+      let (node, cx1) = nextBlankNode cx0
+      encodeTerm node t cx1 g) cx (S.toList terms)
+    return (L.concat descss, cxFinal)
   TermUnion (Injection rname field) -> do
-    triples <- encodeField rname subject field
-    return [withType rname $ Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList triples)]
-  _ -> unexpected "RDF-compatible term" $ show term
+    (triples, cx1) <- encodeField rname subject field cx g
+    return ([withType rname $ Rdf.Description (resourceToNode subject) (Rdf.Graph $ S.fromList triples)], cx1)
+  _ -> unexpectedE cx "RDF-compatible term" $ show term
 
-encodeType :: Type -> Flow Graph Shacl.CommonProperties
-encodeType typ = case deannotateType typ of
+-- | Fold over a list, accumulating results and threading context
+foldAccumResult :: (Context -> a -> Either (InContext OtherError) (b, Context)) -> Context -> [a] -> Either (InContext OtherError) ([b], Context)
+foldAccumResult _ cx [] = Right ([], cx)
+foldAccumResult f cx (x:xs) = do
+  (b, cx1) <- f cx x
+  (bs, cx2) <- foldAccumResult f cx1 xs
+  return (b:bs, cx2)
+
+encodeType :: Type -> Context -> Result Shacl.CommonProperties
+encodeType typ cx = case deannotateType typ of
     TypeList _ -> any
     TypeLiteral lt -> pure $ encodeLiteralType lt
     TypeMap _ -> any
     TypeWrap name -> any -- TODO: include name
     TypeRecord (RowType rname fields) -> do
-      props <- CM.zipWithM (encodeFieldType rname) (Just <$> [0..]) fields
+      props <- CM.zipWithM (\order ft -> encodeFieldType rname order ft cx) (Just <$> [0..]) fields
       return $ common [Shacl.CommonConstraintProperty $ S.fromList (Shacl.ReferenceDefinition <$> props)]
     TypeSet _ -> any
     TypeUnion (RowType rname fields) -> do
-        props <- CM.mapM (encodeFieldType rname Nothing) fields
+        props <- CM.mapM (\ft -> encodeFieldType rname Nothing ft cx) fields
         let shapes = (Shacl.ReferenceAnonymous . toShape) <$> props
         return $ common [Shacl.CommonConstraintXone $ S.fromList shapes]
       where
         toShape prop = node [Shacl.CommonConstraintProperty $ S.fromList [Shacl.ReferenceDefinition prop]]
-    _ -> unexpected "type" $ show typ
+    _ -> unexpectedE cx "type" $ show typ
   where
     -- SHACL's built-in vocabulary is less expressive than Hydra's type system, so for now, SHACL validation simply ends
     -- when inexpressible types are encountered. However, certain constructs such as lists can be validated using

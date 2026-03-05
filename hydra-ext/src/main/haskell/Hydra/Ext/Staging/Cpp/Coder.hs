@@ -9,7 +9,6 @@ import Hydra.Ext.Staging.Cpp.Names
 import Hydra.Ext.Staging.Cpp.Utils
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Ext.Staging.Cpp.Serde as CppSer
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
@@ -28,6 +27,14 @@ import qualified Text.Read as TR
 --------------------------------------------------------------------------------
 -- Datatypes
 
+type Result a = Either (InContext OtherError) a
+
+err :: Context -> String -> Result a
+err cx msg = Left (InContext (OtherError msg) cx)
+
+unexpectedE :: Context -> String -> String -> Result a
+unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
+
 -- | Temporary metadata which is used to create the header section of a C++ file
 data CppModuleMetadata = CppModuleMetadata {
   cppModuleMetadataTypeVariables :: S.Set Name,
@@ -45,32 +52,32 @@ data CppModuleMetadata = CppModuleMetadata {
 -- Entry point
 
 -- | Convert a module to C++ code files
-moduleToCpp :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
-moduleToCpp mod defs = do
+moduleToCpp :: Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String)
+moduleToCpp mod defs cx g = do
     let (typeDefs, _termDefs) = partitionDefinitions defs
     let namespaces = namespacesForDefinitions encodeNamespace ns (DefinitionType <$> typeDefs)
     let env = CppEnvironment {
       cppEnvironmentNamespaces = namespaces,
       cppEnvironmentBoundTypeVariables = ([], M.empty)}
 
-    typeFiles <- generateTypeFiles env ns typeDefs
+    typeFiles <- generateTypeFiles env ns typeDefs cx g
 
     return $ M.fromList typeFiles -- TODO: also generate a term-level *.cpp file if nonempty
   where
     ns = moduleNamespace mod
 
-generateTypeFile :: CppEnvironment -> TypeDefinition -> Flow Graph (FilePath, String)
-generateTypeFile env def@(TypeDefinition name typ) = withTrace ("type definition " ++ show (unName name)) $ do
-    decls <- encodeTypeDefinition env name typ
+generateTypeFile :: CppEnvironment -> TypeDefinition -> Context -> Graph -> Result (FilePath, String)
+generateTypeFile env def@(TypeDefinition name typ) cx g = do
+    decls <- encodeTypeDefinition env name typ cx g
     return $ serializeHeaderFile name includes [namespaceDecl ns decls]
   where
     ns = Y.fromJust $ namespaceOf name
     includes = findIncludes True ns [def]
 
-generateTypeFiles :: CppEnvironment -> Namespace -> [TypeDefinition] -> Flow Graph [(FilePath, String)]
-generateTypeFiles env ns defs = do
+generateTypeFiles :: CppEnvironment -> Namespace -> [TypeDefinition] -> Context -> Graph -> Result [(FilePath, String)]
+generateTypeFiles env ns defs cx g = do
     fwdFile <- createFwdFile
-    classFiles <- CM.mapM (generateTypeFile env) classDefs
+    classFiles <- CM.mapM (\d -> generateTypeFile env d cx g) classDefs
     return (fwdFile:classFiles)
   where
     (usingDefs, classDefs) = L.partition (isUsingDef . typeDefinitionType) defs
@@ -88,8 +95,8 @@ generateTypeFiles env ns defs = do
       where
         includes = findIncludes False ns usingDefs
         usingDecl (TypeDefinition name typ) = do
-          comment <- fmap normalizeComment <$> getTypeDescription typ
-          encodeTypeAlias env name typ comment
+          comment <- fmap normalizeComment <$> getTypeDescription cx g typ
+          encodeTypeAlias env name typ comment cx g
         classDecl (TypeDefinition name typ) = if isEnumType typ
           then cppEnumForwardDeclaration $ localNameOf name
           else cppClassDeclaration (localNameOf name) [] Nothing
@@ -115,10 +122,10 @@ generateTypeFiles env ns defs = do
 --------------------------------------------------------------------------------
 -- Encoding functions
 
-encodeApplicationType :: CppEnvironment -> ApplicationType -> Flow Graph Cpp.TypeExpression
-encodeApplicationType env at = do
-  cppBody <- encodeType env body
-  cppArgs <- CM.mapM (encodeType env) args
+encodeApplicationType :: CppEnvironment -> ApplicationType -> Context -> Graph -> Result Cpp.TypeExpression
+encodeApplicationType env at cx g = do
+  cppBody <- encodeType env body cx g
+  cppArgs <- CM.mapM (\t -> encodeType env t cx g) args
   return $ createTemplateTypeFromBase cppBody cppArgs
   where
     (body, args) = gatherParams (TypeApplication at) []
@@ -131,8 +138,8 @@ encodeApplicationType env at = do
       Cpp.TypeExpressionBasic (Cpp.BasicTypeNamed name) -> createTemplateType name args
       _ -> error "Non-named type in template application"
 
-encodeEnumType :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Flow Graph [Cpp.Declaration]
-encodeEnumType env name tfields _comment = return [
+encodeEnumType :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Context -> Graph -> Result [Cpp.Declaration]
+encodeEnumType env name tfields _comment _cx _g = return [
     cppEnumDeclaration (encodeName False CaseConventionPascal env name)
       $ Just $ Cpp.ClassBody enumFields]
   where
@@ -145,10 +152,10 @@ encodeEnumType env name tfields _comment = return [
             False
       | (FieldType fname _, idx) <- zip tfields [0..]]
 
-encodeFieldType :: CppEnvironment -> Bool -> FieldType -> Flow Graph Cpp.VariableDeclaration
-encodeFieldType env isParameter (FieldType fname ftype) = do
-  _comment <- getTypeDescription ftype
-  cppType <- encodeType env ftype
+encodeFieldType :: CppEnvironment -> Bool -> FieldType -> Context -> Graph -> Result Cpp.VariableDeclaration
+encodeFieldType env isParameter (FieldType fname ftype) cx g = do
+  _comment <- getTypeDescription cx g ftype
+  cppType <- encodeType env ftype cx g
   let finalType = if isParameter then parameterType cppType else fieldType cppType
   return $ Cpp.VariableDeclaration
     (Just finalType)
@@ -172,9 +179,9 @@ encodeFieldType env isParameter (FieldType fname ftype) = do
                           Cpp.QualifiedType typ Cpp.TypeQualifierConst)
                         Cpp.TypeQualifierLvalueRef
 
-encodeForallType :: CppEnvironment -> ForallType -> Flow Graph Cpp.TypeExpression
-encodeForallType env lt = do
-  cppBody <- encodeType env body
+encodeForallType :: CppEnvironment -> ForallType -> Context -> Graph -> Result Cpp.TypeExpression
+encodeForallType env lt cx g = do
+  cppBody <- encodeType env body cx g
   return cppBody
   where
     (body, _) = gatherParams (TypeForall lt) []
@@ -183,13 +190,13 @@ encodeForallType env lt = do
       TypeForall (ForallType name body) -> gatherParams body (name:ps)
       _ -> (t, L.reverse ps)
 
-encodeFunctionType :: CppEnvironment -> FunctionType -> Flow Graph Cpp.TypeExpression
-encodeFunctionType env ft = do
+encodeFunctionType :: CppEnvironment -> FunctionType -> Context -> Graph -> Result Cpp.TypeExpression
+encodeFunctionType env ft cx g = do
   cppDoms <- CM.mapM encode doms
   cppCod <- encode cod
   return $ Cpp.TypeExpressionFunction $ Cpp.FunctionType cppCod (paramFromType <$> cppDoms)
   where
-    encode = encodeType env
+    encode = \t -> encodeType env t cx g
     (doms, cod) = gatherParams [] ft
 
     gatherParams rdoms (FunctionType dom cod) = case deannotateType cod of
@@ -198,8 +205,8 @@ encodeFunctionType env ft = do
 
     paramFromType t = Cpp.Parameter t "" False Nothing
 
-encodeLiteralType :: LiteralType -> Flow Graph Cpp.TypeExpression
-encodeLiteralType lt = do
+encodeLiteralType :: LiteralType -> Context -> Graph -> Result Cpp.TypeExpression
+encodeLiteralType lt _cx _g = do
   basicType <- findType
   return $ Cpp.TypeExpressionBasic basicType
   where
@@ -219,9 +226,9 @@ encodeLiteralType lt = do
         _ -> pure Cpp.BasicTypeInt
       LiteralTypeString -> pure Cpp.BasicTypeString
 
-encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Cpp.Declaration]
-encodeRecordType env name (RowType _ tfields) _comment = do
-    cppFields <- CM.mapM (encodeFieldType env False) tfields
+encodeRecordType :: CppEnvironment -> Name -> RowType -> Maybe String -> Context -> Graph -> Result [Cpp.Declaration]
+encodeRecordType env name (RowType _ tfields) _comment cx g = do
+    cppFields <- CM.mapM (\f -> encodeFieldType env False f cx g) tfields
     constructorParams <- createParameters tfields
     return [cppClassDeclaration (className name) [] $
       Just $ Cpp.ClassBody ([memberSpecificationPublic] ++ fieldDecls cppFields ++ constructor cppFields constructorParams),
@@ -245,52 +252,54 @@ encodeRecordType env name (RowType _ tfields) _comment = do
       CM.zipWithM createParam fieldNames fields
 
     createParam fieldName (FieldType _ ftype) = do
-      paramDecl <- encodeFieldType env True (FieldType fieldName ftype)
+      paramDecl <- encodeFieldType env True (FieldType fieldName ftype) cx g
       return $ Cpp.Parameter
         (Y.fromJust $ Cpp.variableDeclarationType paramDecl)
         (Cpp.variableDeclarationName paramDecl)
         False
         Nothing
 
-encodeType :: CppEnvironment -> Type -> Flow Graph Cpp.TypeExpression
-encodeType env typ = case deannotateType typ of
-    TypeApplication at -> encodeApplicationType env at
+encodeType :: CppEnvironment -> Type -> Context -> Graph -> Result Cpp.TypeExpression
+encodeType env typ cx g = case deannotateType typ of
+    TypeApplication at -> encodeApplicationType env at cx g
     TypeEither (EitherType lt rt) -> toConstType <$> (createTemplateType "std::variant" <$> sequence [encode lt, encode rt])
-    TypeFunction ft -> encodeFunctionType env ft
-    TypeForall lt -> encodeForallType env lt
+    TypeFunction ft -> encodeFunctionType env ft cx g
+    TypeForall lt -> encodeForallType env lt cx g
     TypeList et -> toConstType <$> (createTemplateType "std::vector" <$> ((:[]) <$> encode et))
     TypeMap (MapType kt vt) -> toConstType <$> (createTemplateType "std::map" <$> sequence [encode kt, encode vt])
-    TypeLiteral lt -> encodeLiteralType lt
+    TypeLiteral lt -> encodeLiteralType lt cx g
     TypeMaybe et -> toConstType <$> (createTemplateType "std::optional" <$> ((:[]) <$> encode et))
     TypePair (PairType ft st) -> toConstType <$> (createTemplateType "std::pair" <$> sequence [encode ft, encode st])
     TypeRecord rt -> typeref typ (rowTypeTypeName rt)
     TypeSet et -> toConstType <$> (createTemplateType "std::set" <$> ((:[]) <$> encode et))
     TypeUnion rt -> typeref typ (rowTypeTypeName rt)
     TypeVariable name -> do
-      g <- Monads.getState
-      term <- bindingTerm <$> requireElement name
-      t <- Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ g term
+      el <- requireElement cx g name
+      let term = bindingTerm el
+      t <- case DecodeCore.type_ g term of
+        Left de -> err cx (unDecodingError de)
+        Right t -> Right t
       typeref t name
     TypeWrap (WrappedType name _) -> typeref typ name
-    _ -> fail $ "Unsupported type: " ++ show (deannotateType typ)
+    _ -> err cx $ "Unsupported type: " ++ show (deannotateType typ)
   where
-    encode = encodeType env
+    encode = \t -> encodeType env t cx g
     typeref t name = pure $ if Schemas.isUnitType t
       then createTemplateType "std::tuple" []
       else createTypeReference (isStructType t) env name
 
-encodeTypeAlias :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph Cpp.Declaration
-encodeTypeAlias env name typ comment = do
-  cppType <- encodeType env typ
+encodeTypeAlias :: CppEnvironment -> Name -> Type -> Maybe String -> Context -> Graph -> Result Cpp.Declaration
+encodeTypeAlias env name typ comment cx g = do
+  cppType <- encodeType env typ cx g
   return $ Cpp.DeclarationTypedef $
     Cpp.TypedefDeclaration
       (encodeName False CaseConventionPascal env name)
       cppType
       True
 
-encodeTypeDefinition :: CppEnvironment -> Name -> Type -> Flow Graph [Cpp.Declaration]
-encodeTypeDefinition env name typ = do
-    comment <- fmap normalizeComment <$> getTypeDescription typ
+encodeTypeDefinition :: CppEnvironment -> Name -> Type -> Context -> Graph -> Result [Cpp.Declaration]
+encodeTypeDefinition env name typ cx g = do
+    comment <- fmap normalizeComment <$> getTypeDescription cx g typ
     encode env typ comment
   where
     -- TODO: use the comment
@@ -300,18 +309,19 @@ encodeTypeDefinition env name typ = do
         where
           (tparamList, tparamMap) = cppEnvironmentBoundTypeVariables env
           env2 = env { cppEnvironmentBoundTypeVariables = (tparamList ++ [var], M.insert var (unName var) tparamMap)}
-      TypeRecord rt -> encodeRecordType env name rt comment
-      TypeUnion rt -> encodeUnionType env name rt comment
-      TypeWrap (WrappedType _ t) -> encodeWrappedType env name t comment
-      _ -> fail $ "unexpected type in definition: " ++ ShowCore.type_ typ
+      TypeRecord rt -> encodeRecordType env name rt comment cx g
+      TypeUnion rt -> encodeUnionType env name rt comment cx g
+      TypeWrap (WrappedType _ t) -> encodeWrappedType env name t comment cx g
+      _ -> err cx $ "unexpected type in definition: " ++ ShowCore.type_ typ
 
-encodeUnionType :: CppEnvironment -> Name -> RowType -> Maybe String -> Flow Graph [Cpp.Declaration]
-encodeUnionType env name rt comment = if isEnumRowType rt
-  then encodeEnumType env name (rowTypeFields rt) comment
-  else encodeVariantType env name (rowTypeFields rt) comment
+encodeUnionType :: CppEnvironment -> Name -> RowType -> Maybe String -> Context -> Graph -> Result [Cpp.Declaration]
+encodeUnionType env name rt comment cx g = if isEnumRowType rt
+  then encodeEnumType env name (rowTypeFields rt) comment cx g
+  else encodeVariantType env name (rowTypeFields rt) comment cx g
 
-encodeVariantType env name variants comment = do
-    variantClasses <- CM.mapM (createVariantClass env name name) variants
+encodeVariantType :: CppEnvironment -> Name -> [FieldType] -> Maybe String -> Context -> Graph -> Result [Cpp.Declaration]
+encodeVariantType env name variants comment cx g = do
+    variantClasses <- CM.mapM (\v -> createVariantClass env name name v cx g) variants
     return $ forwardDecls ++ [visitorInterface, baseClass] ++ variantClasses ++ [partialVisitorInterface, acceptImpl]
   where
     forwardDecls = generateForwardDeclarations env name variants
@@ -320,8 +330,8 @@ encodeVariantType env name variants comment = do
     partialVisitorInterface = createPartialVisitorInterface env name variants
     acceptImpl = createAcceptImplementation env name variants
 
-encodeWrappedType :: CppEnvironment -> Name -> Type -> Maybe String -> Flow Graph [Cpp.Declaration]
-encodeWrappedType env name typ comment = encodeRecordType env name rt comment
+encodeWrappedType :: CppEnvironment -> Name -> Type -> Maybe String -> Context -> Graph -> Result [Cpp.Declaration]
+encodeWrappedType env name typ comment cx g = encodeRecordType env name rt comment cx g
   where
     rt = RowType name [FieldType (Name "value") typ]
 
@@ -472,18 +482,18 @@ createUnionBaseClass env name variants = cppClassDeclaration className [] $ Just
           [Cpp.FunctionSpecifierSuffixConst]
           Cpp.FunctionBodyDeclaration
 
-createVariantClass :: CppEnvironment -> Name -> Name -> FieldType -> Flow Graph Cpp.Declaration
-createVariantClass env tname parentClass (FieldType fname variantType) = do
+createVariantClass :: CppEnvironment -> Name -> Name -> FieldType -> Context -> Graph -> Result Cpp.Declaration
+createVariantClass env tname parentClass (FieldType fname variantType) cx g = do
     valueField <- if hasValue
       then do
-        cppType <- encodeType env (deannotateType variantType)
+        cppType <- encodeType env (deannotateType variantType) cx g
         return [Cpp.MemberSpecificationMember $ Cpp.MemberDeclarationVariable $
                   Cpp.VariableDeclaration (Just cppType) "value" Nothing False]
       else return []
 
     constructorParams <- if hasValue
       then do
-        paramType <- encodeType env (deannotateType variantType)
+        paramType <- encodeType env (deannotateType variantType) cx g
         return [Cpp.Parameter paramType "value" False Nothing]
       else return []
 
@@ -652,16 +662,6 @@ isTemplateType :: Type -> Bool
 isTemplateType typ = case deannotateType typ of
   TypeLiteral LiteralTypeString -> True
   _ -> isStdContainerType typ
-
-parameterType :: CppEnvironment -> Type -> Flow Graph Cpp.TypeExpression
-parameterType env typ = do
-  encoded <- encodeType env typ
-  return $
-    Cpp.TypeExpressionQualified $
-      Cpp.QualifiedType
-        (Cpp.TypeExpressionQualified $
-          Cpp.QualifiedType encoded Cpp.TypeQualifierConst)
-        Cpp.TypeQualifierLvalueRef
 
 serializeHeaderFile :: Name -> [Cpp.IncludeDirective] -> [Cpp.Declaration] -> (FilePath, String)
 serializeHeaderFile name includes decls = (
