@@ -177,22 +177,31 @@ stack build
 
 # Phase 7: Export and verify JSON
 # All main modules (kernel + eval lib + ext) are exported to JSON.
+# Test modules are exported to JSON for use by Java/Python test generation.
 # Only kernel modules are round-trip verified (loaded back and compared).
 echo ""
 echo "Step 7/$TOTAL_STEPS: Exporting and verifying JSON..."
 echo ""
-stack build hydra:exe:update-json-kernel hydra:exe:update-json-main hydra:exe:verify-json-kernel
-stack exec update-json-kernel -- $RTS_FLAGS
-
-if [ $? -ne 0 ]; then
-    echo "ERROR: JSON kernel export failed"
-    exit 1
-fi
+stack build hydra:exe:update-json-main hydra:exe:update-json-test hydra:exe:verify-json-kernel
+#stack build hydra:exe:update-json-kernel hydra:exe:update-json-main hydra:exe:update-json-test hydra:exe:verify-json-kernel
+#stack exec update-json-kernel -- $RTS_FLAGS
+#
+#if [ $? -ne 0 ]; then
+#    echo "ERROR: JSON kernel export failed"
+#    exit 1
+#fi
 
 stack exec update-json-main -- $RTS_FLAGS
 
 if [ $? -ne 0 ]; then
     echo "ERROR: JSON main export failed"
+    exit 1
+fi
+
+stack exec update-json-test -- $RTS_FLAGS
+
+if [ $? -ne 0 ]; then
+    echo "ERROR: JSON test export failed"
     exit 1
 fi
 
