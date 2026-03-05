@@ -6,13 +6,11 @@ module Hydra.Ext.Staging.Json.Schema.Coder (
 import Hydra.Kernel
 import qualified Hydra.Adapt.Terms as AdaptTerms
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Module as Module
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
 import qualified Hydra.Util as Util
 import qualified Hydra.Rewriting as Rewriting
@@ -34,18 +32,24 @@ data JsonSchemaOptions = JsonSchemaOptions {
   jsonSchemaOptionsShortNames :: Bool
 }
 
-moduleToJsonSchema :: JsonSchemaOptions -> Module.Module -> [Module.Definition] -> Compute.Flow Graph.Graph (M.Map FilePath String)
-moduleToJsonSchema opts mod defs = do
+type Result a = Either (InContext OtherError) a
+
+err :: Context -> String -> Result a
+err cx msg = Left (InContext (OtherError msg) cx)
+
+moduleToJsonSchema :: JsonSchemaOptions -> Module.Module -> [Module.Definition] -> Context -> Graph.Graph -> Result (M.Map FilePath String)
+moduleToJsonSchema opts mod defs cx g = do
   let (typeDefs, _termDefs) = partitionDefinitions defs
-  docs <- constructModule opts mod typeDefs
+  docs <- constructModule cx g opts mod typeDefs
   return $ fmap JsonSchemaSerde.jsonSchemaDocumentToString docs
 
 constructModule
-  :: JsonSchemaOptions
+  :: Context -> Graph.Graph
+  -> JsonSchemaOptions
   -> Module.Module
   -> [Module.TypeDefinition]
-  -> Compute.Flow Graph.Graph (M.Map FilePath JS.Document)
-constructModule opts mod typeDefs = M.fromList <$> CM.mapM toDocument typeDefs
+  -> Result (M.Map FilePath JS.Document)
+constructModule cx g opts mod typeDefs = M.fromList <$> CM.mapM toDocument typeDefs
   where
     -- Build a map from name to adapted type for lookups
     typeMap = M.fromList [(Module.typeDefinitionName td, Module.typeDefinitionType td) | td <- typeDefs]
@@ -72,7 +76,7 @@ constructModule opts mod typeDefs = M.fromList <$> CM.mapM toDocument typeDefs
     substName subst name = Y.fromMaybe name (M.lookup name subst)
 
     typeToKeywordDocumentPair name typ = do
-      schema <- JS.Schema <$> encodeNamedType name (excludeAnnotatedFields typ)
+      schema <- JS.Schema <$> encodeNamedType cx g name (excludeAnnotatedFields typ)
       return (JS.Keyword $ encodeName $ Core.Name $ Names.localNameOf name, schema)
 
     excludeAnnotatedFields = Rewriting.rewriteType $ \recurse typ -> case recurse typ of
@@ -89,32 +93,29 @@ constructModule opts mod typeDefs = M.fromList <$> CM.mapM toDocument typeDefs
           Nothing -> ""
           Just (Module.Namespace ns) -> ns ++ "/"
 
-encodeField :: Core.FieldType -> Compute.Flow Graph.Graph (JS.Keyword, JS.Schema)
-encodeField (Core.FieldType name typ) = do
-  res <- encodeType False typ
+encodeField :: Context -> Graph.Graph -> Core.FieldType -> Result (JS.Keyword, JS.Schema)
+encodeField cx g (Core.FieldType name typ) = do
+  res <- encodeType cx g False typ
   return (JS.Keyword $ Core.unName name, JS.Schema res)
 
 encodeName :: Core.Name -> String
 encodeName = Formatting.nonAlnumToUnderscores . Core.unName
 
-encodeTerm :: Core.Term -> Compute.Flow Graph.Graph ()
-encodeTerm term = Monads.fail "not yet implemented"
-
-encodeNamedType :: Core.Name -> Core.Type -> Compute.Flow Graph.Graph [JS.Restriction]
-encodeNamedType name typ = do
-  res <- encodeType False $ Rewriting.deannotateType typ
+encodeNamedType :: Context -> Graph.Graph -> Core.Name -> Core.Type -> Result [JS.Restriction]
+encodeNamedType cx g name typ = do
+  res <- encodeType cx g False $ Rewriting.deannotateType typ
   return $ [JS.RestrictionTitle $ Core.unName name] ++ res
 
-encodeType :: Bool -> Core.Type -> Compute.Flow Graph.Graph [JS.Restriction]
-encodeType optional typ = case typ of
+encodeType :: Context -> Graph.Graph -> Bool -> Core.Type -> Result [JS.Restriction]
+encodeType cx g optional typ = case typ of
     Core.TypeAnnotated _ -> do
-      res <- encodeType optional $ Rewriting.deannotateType typ
-      mdesc <- Annotations.getTypeDescription typ
+      res <- encodeType cx g optional $ Rewriting.deannotateType typ
+      mdesc <- Annotations.getTypeDescription cx g typ
       let desc = Y.maybe [] (\d -> [JS.RestrictionDescription d]) mdesc
       return $ desc ++ res
     Core.TypeEither (Core.EitherType lt rt) -> do
-      leftRes <- encodeType False lt
-      rightRes <- encodeType False rt
+      leftRes <- encodeType cx g False lt
+      rightRes <- encodeType cx g False rt
       let leftField = (JS.Keyword "left", JS.Schema leftRes)
       let rightField = (JS.Keyword "right", JS.Schema rightRes)
       let leftSchema = JS.Schema [
@@ -129,8 +130,8 @@ encodeType optional typ = case typ of
             JS.RestrictionObject $ JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsAny False]
       return [JS.RestrictionMultiple $ JS.MultipleRestrictionOneOf [leftSchema, rightSchema]]
     Core.TypePair (Core.PairType ft st) -> do
-      firstRes <- encodeType False ft
-      secondRes <- encodeType False st
+      firstRes <- encodeType cx g False ft
+      secondRes <- encodeType cx g False st
       let firstField = (JS.Keyword "first", JS.Schema firstRes)
       let secondField = (JS.Keyword "second", JS.Schema secondRes)
       let props = M.fromList [firstField, secondField]
@@ -140,20 +141,20 @@ encodeType optional typ = case typ of
          JS.RestrictionObject $ JS.ObjectRestrictionRequired reqs,
          JS.RestrictionObject $ JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsAny False]
     Core.TypeList lt -> do
-      elSchema <- JS.Schema <$> encodeType False lt
+      elSchema <- JS.Schema <$> encodeType cx g False lt
       let arrayRes = [JS.RestrictionArray $ JS.ArrayRestrictionItems $ JS.ItemsSameItems elSchema]
-      Monads.pure $ jsType JS.TypeNameArray ++ arrayRes
+      pure $ jsType JS.TypeNameArray ++ arrayRes
     Core.TypeLiteral lt -> case lt of
-      Core.LiteralTypeBinary -> Monads.pure $ jsType JS.TypeNameString
-      Core.LiteralTypeBoolean -> Monads.pure $ jsType JS.TypeNameBoolean
-      Core.LiteralTypeFloat ft -> Monads.pure $ jsType JS.TypeNameNumber
-      Core.LiteralTypeInteger ft -> Monads.pure $ jsType JS.TypeNameInteger
-      Core.LiteralTypeString -> Monads.pure $ jsType JS.TypeNameString
+      Core.LiteralTypeBinary -> pure $ jsType JS.TypeNameString
+      Core.LiteralTypeBoolean -> pure $ jsType JS.TypeNameBoolean
+      Core.LiteralTypeFloat ft -> pure $ jsType JS.TypeNameNumber
+      Core.LiteralTypeInteger ft -> pure $ jsType JS.TypeNameInteger
+      Core.LiteralTypeString -> pure $ jsType JS.TypeNameString
     Core.TypeMap (Core.MapType _ vt) -> do -- Note: we assume that keys are strings
-      vschema <- JS.Schema <$> encodeType False vt
+      vschema <- JS.Schema <$> encodeType cx g False vt
       let objRes = [JS.RestrictionObject $ JS.ObjectRestrictionAdditionalProperties $ JS.AdditionalItemsSchema vschema]
-      Monads.pure $ jsType JS.TypeNameObject ++ objRes
-    Core.TypeMaybe t -> encodeType True t -- Note: nested optionals are lost
+      pure $ jsType JS.TypeNameObject ++ objRes
+    Core.TypeMaybe t -> encodeType cx g True t -- Note: nested optionals are lost
     Core.TypeRecord rt -> encodeRecordOrUnion False rt
     Core.TypeUnion rt -> if L.null simpleFields
         then asRecord rt
@@ -169,18 +170,18 @@ encodeType optional typ = case typ of
         (simpleFields, nonsimpleFields) = L.partition isSimple $ Core.rowTypeFields rt
         isSimple (Core.FieldType _ ft) = Schemas.isUnitType $ Rewriting.deannotateType ft
     Core.TypeSet st -> do
-      elSchema <- JS.Schema <$> encodeType False st
+      elSchema <- JS.Schema <$> encodeType cx g False st
       let arrayRes = [JS.RestrictionArray $ JS.ArrayRestrictionItems $ JS.ItemsSameItems elSchema]
-      Monads.pure $ jsType JS.TypeNameArray ++ arrayRes
-    Core.TypeVariable name -> Monads.pure [referenceRestriction name]
-    Core.TypeWrap (Core.WrappedType _ inner) -> encodeType optional inner
-    _ -> Monads.fail $ "unsupported type variant: " ++ show (Reflect.typeVariant typ)
+      pure $ jsType JS.TypeNameArray ++ arrayRes
+    Core.TypeVariable name -> pure [referenceRestriction name]
+    Core.TypeWrap (Core.WrappedType _ inner) -> encodeType cx g optional inner
+    _ -> err cx $ "unsupported type variant: " ++ show (Reflect.typeVariant typ)
   where
     encodeRecordOrUnion union (Core.RowType _ fields) = do
-        props <- M.fromList <$> CM.mapM encodeField fields
+        props <- M.fromList <$> CM.mapM (encodeField cx g) fields
         let objRes = [JS.RestrictionObject $ JS.ObjectRestrictionProperties props]
         let reqRes = if L.null reqs then [] else [JS.RestrictionObject $ JS.ObjectRestrictionRequired reqs]
-        Monads.pure $ jsType JS.TypeNameObject ++ objRes ++ reqRes ++ cardRes
+        pure $ jsType JS.TypeNameObject ++ objRes ++ reqRes ++ cardRes
       where
         reqs = Y.catMaybes $ fmap ifReq fields
         ifReq field = if isRequiredField field then Just (JS.Keyword $ Core.unName $ Core.fieldTypeName field) else Nothing

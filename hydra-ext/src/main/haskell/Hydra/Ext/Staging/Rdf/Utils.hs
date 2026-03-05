@@ -23,15 +23,15 @@ emptyRdfGraph = Rdf.Graph S.empty
 emptyLangStrings :: Rdf.LangStrings
 emptyLangStrings = Rdf.LangStrings M.empty
 
-encodeLiteral :: Literal -> Flow (Graph) Rdf.Literal
+encodeLiteral :: Literal -> Rdf.Literal
 encodeLiteral lit = case lit of
-    LiteralBinary s -> pure $ xsd Literals.binaryToStringBS s "base64Binary"
-    LiteralBoolean b -> pure $ xsd (\b -> if b then "true" else "false") b "boolean"
-    LiteralFloat f -> pure $ case f of
+    LiteralBinary s -> xsd Literals.binaryToStringBS s "base64Binary"
+    LiteralBoolean b -> xsd (\b -> if b then "true" else "false") b "boolean"
+    LiteralFloat f -> case f of
       FloatValueBigfloat v -> xsd show v "decimal"
       FloatValueFloat32 v -> xsd show v "float"
       FloatValueFloat64 v -> xsd show v "double"
-    LiteralInteger i -> pure $ case i of
+    LiteralInteger i -> case i of
       IntegerValueBigint v -> xsd show v "integer"
       IntegerValueInt8 v   -> xsd show v "byte"
       IntegerValueInt16 v  -> xsd show v "short"
@@ -41,7 +41,7 @@ encodeLiteral lit = case lit of
       IntegerValueUint16 v -> xsd show v "unsignedShort"
       IntegerValueUint32 v -> xsd show v "unsignedInt"
       IntegerValueUint64 v -> xsd show v "unsignedLong"
-    LiteralString s -> pure $ xsd id s "string"
+    LiteralString s -> xsd id s "string"
   where
     -- TODO: using Haskell's built-in show function is a cheat, and may not be correct/optimal in all cases
     xsd ser x local = Rdf.Literal (ser x) (xmlSchemaDatatypeIri local) Nothing
@@ -61,10 +61,10 @@ mergeGraphs graphs = Rdf.Graph $ L.foldl S.union S.empty (Rdf.unGraph <$> graphs
 nameToIri :: Name -> Rdf.Iri
 nameToIri name = Rdf.Iri $ "urn:" ++ unName name
 
-nextBlankNode :: Flow (Graph) Rdf.Resource
-nextBlankNode = do
-  count <- nextCount key_rdfBlankNodeCounter
-  return $ Rdf.ResourceBnode $ Rdf.BlankNode $ "b" ++ show count
+nextBlankNode :: Context -> (Rdf.Resource, Context)
+nextBlankNode cx =
+  let (count, cx') = nextCount key_rdfBlankNodeCounter cx
+  in (Rdf.ResourceBnode $ Rdf.BlankNode $ "b" ++ show count, cx')
 
 -- Note: these are not "proper" URNs, as they do not use an established URN scheme
 propertyIri :: Name -> Name -> Rdf.Iri

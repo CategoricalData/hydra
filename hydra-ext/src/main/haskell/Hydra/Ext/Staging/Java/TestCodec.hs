@@ -28,21 +28,20 @@ import qualified Data.Map as M
 import qualified Data.List as L
 import qualified Data.Maybe as Y
 import qualified Data.Set as S
-import Data.Char (toLower, toUpper, isAlphaNum, isUpper)
+import Data.Char (isDigit, toLower, toUpper, isAlphaNum, isUpper)
 import qualified System.FilePath as FP
 
 
 -- | Convert a Hydra term to a Java expression string
--- Takes a pre-built Graph to avoid rebuilding it for every term
-termToJava :: Graph -> Term -> Flow Graph String
-termToJava tcontext term = do
-  let jenv = JavaEnvironment {
-        javaEnvironmentAliases = emptyAliases,
-        javaEnvironmentGraph = tcontext
-      }
-  jexpr <- encodeTerm jenv term
-  return $ printExpr $ parenthesize $ writeExpression jexpr
+termToJava :: Term -> Graph -> Either String String
+termToJava term g = case encodeTerm jenv term emptyContext g of
+    Left ic -> Left $ unOtherError (inContextObject ic)
+    Right jexpr -> Right $ printExpr $ parenthesize $ writeExpression jexpr
   where
+    jenv = JavaEnvironment {
+      javaEnvironmentAliases = emptyAliases,
+      javaEnvironmentGraph = g
+    }
     emptyAliases = Aliases {
       aliasesCurrentNamespace = Namespace "test",
       aliasesPackages = M.empty,
@@ -60,18 +59,16 @@ termToJava tcontext term = do
     }
 
 -- | Convert a Hydra type to a Java type expression string
-typeToJava :: Graph -> Type -> Flow Graph String
-typeToJava _ typ = do
-  -- For now, return a placeholder since type encoding isn't the main focus
-  return "Object"
+typeToJava :: Type -> Graph -> Either String String
+typeToJava _ _ = Right "Object"
 
 -- | Create a Java TestCodec
-javaTestCodec :: Graph -> TestCodec
-javaTestCodec tcontext = TestCodec {
+javaTestCodec :: TestCodec
+javaTestCodec = TestCodec {
     testCodecLanguage = LanguageName "java",
     testCodecFileExtension = FileExtension "java",
-    testCodecEncodeTerm = termToJava tcontext,
-    testCodecEncodeType = typeToJava tcontext,
+    testCodecEncodeTerm = termToJava,
+    testCodecEncodeType = typeToJava,
     testCodecFormatTestName = formatJavaTestName,
     testCodecFormatModuleName = namespaceToJavaClassName,
     testCodecTestCaseTemplate = javaTestCaseTemplate,
@@ -142,10 +139,10 @@ namespaceToJavaClassName (Namespace ns) =
 
 -- | Generate test hierarchy for Java
 -- The groupPath parameter accumulates parent group names to create unique test method names
-generateJavaTestGroupHierarchy :: Graph -> TestCodec -> [String] -> TestGroup -> Flow Graph String
-generateJavaTestGroupHierarchy tcontext codec groupPath testGroup = do
+generateJavaTestGroupHierarchy :: Graph -> TestCodec -> [String] -> TestGroup -> Either String String
+generateJavaTestGroupHierarchy g codec groupPath testGroup = do
   -- Generate test cases at the current level
-  testCaseLinesRaw <- mapM (generateJavaTestCase tcontext codec groupPath) (testGroupCases testGroup)
+  testCaseLinesRaw <- mapM (generateJavaTestCase g codec groupPath) (testGroupCases testGroup)
   let testCaseLines = concat testCaseLinesRaw
       testCasesStr = L.intercalate "\n\n" testCaseLines
 
@@ -156,10 +153,10 @@ generateJavaTestGroupHierarchy tcontext codec groupPath testGroup = do
   -- Combine test cases and subgroups
   return $ testCasesStr ++ (if null testCasesStr || null subgroupsStr then "" else "\n\n") ++ subgroupsStr
   where
-    generateSubgroupBlock :: TestGroup -> Flow Graph String
+    generateSubgroupBlock :: TestGroup -> Either String String
     generateSubgroupBlock subgroup = do
       let groupName = testGroupName subgroup
-      subgroupContent <- generateJavaTestGroupHierarchy tcontext codec (groupPath ++ [groupName]) subgroup
+      subgroupContent <- generateJavaTestGroupHierarchy g codec (groupPath ++ [groupName]) subgroup
       let header = "    // " ++ groupName
       return $ header ++ "\n\n" ++ subgroupContent
 
@@ -204,11 +201,11 @@ generateAssertion assertType outputCode inputCode = case assertType of
      "            1e-15);"]  -- Tolerance for floating-point comparison
 
 -- | Generate a single test case for Java/JUnit
-generateJavaTestCase :: Graph -> TestCodec -> [String] -> TestCaseWithMetadata -> Flow Graph [String]
-generateJavaTestCase tcontext codec groupPath (TestCaseWithMetadata name tcase _ _) = case tcase of
+generateJavaTestCase :: Graph -> TestCodec -> [String] -> TestCaseWithMetadata -> Either String [String]
+generateJavaTestCase g codec groupPath (TestCaseWithMetadata name tcase _ _) = case tcase of
   TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> do
-    inputCode <- testCodecEncodeTerm codec input
-    outputCode <- testCodecEncodeTerm codec output
+    inputCode <- testCodecEncodeTerm codec input g
+    outputCode <- testCodecEncodeTerm codec output g
 
     -- Include group path in test name to avoid collisions
     let fullName = if L.null groupPath
@@ -217,25 +214,39 @@ generateJavaTestCase tcontext codec groupPath (TestCaseWithMetadata name tcase _
         formattedName = testCodecFormatTestName codec fullName
         assertType = getAssertionType output
         assertionLines = generateAssertion assertType outputCode inputCode
+        -- Collect free type variables from both terms and declare them on the method
+        typeVars = L.sort $ S.toList $ S.filter isInferenceVar $
+          S.union (freeTypeVariablesInTerm input) (freeTypeVariablesInTerm output)
+        typeParamsStr = if null typeVars then ""
+          else "<" ++ L.intercalate ", " (map (Formatting.capitalize . unName) typeVars) ++ "> "
     return $ [
       "    @Test",
-      "    public void " ++ formattedName ++ "() {"] ++ assertionLines ++ ["    }"]
+      "    public " ++ typeParamsStr ++ "void " ++ formattedName ++ "() {"] ++ assertionLines ++ ["    }"]
 
   _ -> return []  -- Skip non-delegated tests
 
+-- | Check if a Name is an unresolved inference variable (matches pattern t\d+)
+isInferenceVar :: Name -> Bool
+isInferenceVar (Name n) = case n of
+  ('t':rest) -> not (null rest) && all isDigit rest
+  _ -> False
+
+
 -- | Generate test file using Java codec
-generateTestFileWithJavaCodec :: TestCodec -> Module -> TestGroup -> Graph -> Flow Graph (FilePath, String)
-generateTestFileWithJavaCodec codec testModule testGroup tcontext = do
+generateTestFileWithJavaCodec :: TestCodec -> Module -> TestGroup -> Graph -> Either String (FilePath, String)
+generateTestFileWithJavaCodec codec testModule testGroup g = do
   -- Generate test hierarchy
-  testBody <- generateJavaTestGroupHierarchy tcontext codec [] testGroup
+  testBody <- generateJavaTestGroupHierarchy g codec [] testGroup
 
   -- Build the complete test module
   let testModuleContent = buildJavaTestModule codec testModule testGroup testBody
 
   -- Generate file path: namespace -> path
+  -- Note: the "generation." prefix is already part of the base output directory,
+  -- so we strip it from the namespace to avoid double "generation/generation/..."
   let Namespace ns = moduleNamespace testModule
       parts = Strings.splitOn "." ns
-      dirParts = L.init parts
+      dirParts = drop 1 (L.init parts)  -- drop "generation" prefix
       -- Add "Test" suffix to class name for JUnit convention
       className = Formatting.capitalize (L.last parts) ++ "Test"
       fileName = className ++ ".java"
@@ -270,51 +281,47 @@ buildJavaTestModule codec testModule testGroup testBody = header ++ testBody ++ 
       "public class " ++ className ++ " {\n\n"
 
 -- | Generate Java test file for a test group
-generateJavaTestFile :: Module -> TestGroup -> Flow Graph (FilePath, String)
-generateJavaTestFile testModule testGroup = do
+generateJavaTestFile :: Module -> TestGroup -> Graph -> Either String (FilePath, String)
+generateJavaTestFile testModule testGroup g = do
   -- Run type inference on all test terms to ensure lambdas have domain types
   -- and generic types have their type arguments filled in
-  inferredTestGroup <- inferTestGroupTerms testGroup
-
-  -- Get Graph for term encoding
-  g <- getState
+  inferredTestGroup <- inferTestGroupTerms g testGroup
 
   -- Generate test file using the codec
-  generateTestFileWithJavaCodec (javaTestCodec g) testModule inferredTestGroup g
+  generateTestFileWithJavaCodec javaTestCodec testModule inferredTestGroup g
 
 -- | Run type inference on all terms in a TestGroup
 -- This ensures that lambdas have their domain types filled in and
 -- generic types (List, Maybe, Either, etc.) have their type arguments,
 -- which is required by the Java coder.
-inferTestGroupTerms :: TestGroup -> Flow Graph TestGroup
-inferTestGroupTerms (TestGroup name desc subgroups cases) = do
-  inferredSubgroups <- mapM inferTestGroupTerms subgroups
-  inferredCases <- mapM inferTestCase cases
+inferTestGroupTerms :: Graph -> TestGroup -> Either String TestGroup
+inferTestGroupTerms g (TestGroup name desc subgroups cases) = do
+  inferredSubgroups <- mapM (inferTestGroupTerms g) subgroups
+  inferredCases <- mapM (inferTestCase g) cases
   return $ TestGroup name desc inferredSubgroups inferredCases
 
 -- | Run type inference on the terms in a test case
-inferTestCase :: TestCaseWithMetadata -> Flow Graph TestCaseWithMetadata
-inferTestCase (TestCaseWithMetadata name tcase desc tags) = do
+inferTestCase :: Graph -> TestCaseWithMetadata -> Either String TestCaseWithMetadata
+inferTestCase g (TestCaseWithMetadata name tcase desc tags) = do
   inferredTcase <- case tcase of
     TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> do
-      inferredInput <- inferTerm input
-      inferredOutput <- inferTerm output
+      inferredInput <- inferTerm g input
+      inferredOutput <- inferTerm g output
       return $ TestCaseDelegatedEvaluation $ DelegatedEvaluationTestCase inferredInput inferredOutput
     other -> return other
   return $ TestCaseWithMetadata name inferredTcase desc tags
 
 -- | Run type inference on a single term
-inferTerm :: Term -> Flow Graph Term
-inferTerm term = do
-  g <- getState
-  result <- Inference.inferInGraphContext g term
-  return $ inferenceResultTerm result
+inferTerm :: Graph -> Term -> Either String Term
+inferTerm g term = case Inference.inferInGraphContext emptyContext g term of
+    Left ic -> Left (unOtherError (inContextObject ic))
+    Right result -> Right (inferenceResultTerm result)
 
 -- | Java-specific test generator
 javaTestGenerator :: TestGenerator ()
 javaTestGenerator = TestGenerator {
-  testGenNamespacesForModule = \_ -> return $ Namespaces (Namespace "", ()) M.empty,
-  testGenCreateCodec = \_ -> javaTestCodec emptyGraph,
+  testGenNamespacesForModule = \_ _ -> Right $ Namespaces (Namespace "", ()) M.empty,
+  testGenCreateCodec = \_ -> javaTestCodec,
   testGenGenerateTestFile = generateJavaTestFile,
   testGenAggregatorFile = Nothing  -- Could add a test suite aggregator later
 }

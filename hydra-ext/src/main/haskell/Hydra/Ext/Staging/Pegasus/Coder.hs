@@ -13,23 +13,33 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-moduleToPdl :: Module -> [Definition] -> Flow Graph (M.Map FilePath String)
-moduleToPdl mod defs = do
-    files <- moduleToPegasusSchemas mod defs
+type Result a = Either (InContext OtherError) a
+
+err :: Context -> String -> Result a
+err cx msg = Left (InContext (OtherError msg) cx)
+
+unexpectedE :: Context -> String -> String -> Result a
+unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
+
+
+moduleToPdl :: Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String)
+moduleToPdl mod defs cx g = do
+    files <- moduleToPegasusSchemas cx g mod defs
     return $ M.fromList (mapPair <$> M.toList files)
   where
     mapPair (path, sf) = (path, printExpr $ parenthesize $ exprSchemaFile sf)
 
 constructModule ::
-  M.Map Namespace String
+  Context -> Graph
+  -> M.Map Namespace String
   -> Module
   -> [TypeDefinition]
-  -> Flow Graph (M.Map FilePath PDL.SchemaFile)
-constructModule aliases mod typeDefs = do
+  -> Result (M.Map FilePath PDL.SchemaFile)
+constructModule cx g aliases mod typeDefs = do
     -- Flatten the sorted groups; if any group has more than one element, it's a cycle
     let groups = topologicalSortTypeDefinitions typeDefs
-    sortedDefs <- case L.find (\g -> L.length g > 1) groups of
-      Just cycle -> fail $ "types form a cycle (unsupported in PDL): " ++ show (typeDefinitionName <$> cycle)
+    sortedDefs <- case L.find (\grp -> L.length grp > 1) groups of
+      Just cycle -> err cx $ "types form a cycle (unsupported in PDL): " ++ show (typeDefinitionName <$> cycle)
       Nothing -> pure $ L.concat groups
     schemas <- CM.mapM toSchema sortedDefs
     return $ M.fromList (toPair <$> schemas)
@@ -43,29 +53,29 @@ constructModule aliases mod typeDefs = do
 
     toSchema typeDef = typeToSchema typeDef (typeDefinitionType typeDef)
     typeToSchema typeDef typ = do
-        res <- encodeType aliases typ
+        res <- encodeType cx g aliases typ
         let ptype = case res of
               Left schema -> PDL.NamedSchemaTypeTyperef schema
               Right t -> t
-        descr <- getTypeDescription typ
+        descr <- getTypeDescription cx g typ
         let anns = doc descr
         return (PDL.NamedSchema qname ptype anns, imports)
       where
         qname = pdlNameForElement aliases False $ typeDefinitionName typeDef
         imports = []
 
-moduleToPegasusSchemas :: Module -> [Definition] -> Flow Graph (M.Map FilePath PDL.SchemaFile)
-moduleToPegasusSchemas mod defs = do
+moduleToPegasusSchemas :: Context -> Graph -> Module -> [Definition] -> Result (M.Map FilePath PDL.SchemaFile)
+moduleToPegasusSchemas cx g mod defs = do
   let (typeDefs, _termDefs) = partitionDefinitions defs
-  aliases <- importAliasesForModule mod
-  constructModule aliases mod typeDefs
+  aliases <- importAliasesForModule cx g mod
+  constructModule cx g aliases mod typeDefs
 
 doc :: Y.Maybe String -> PDL.Annotations
 doc s = PDL.Annotations s False
 
-encodeType :: M.Map Namespace String -> Type -> Flow Graph (Either PDL.Schema PDL.NamedSchemaType)
-encodeType aliases typ = case typ of
-    TypeAnnotated (AnnotatedType typ' _) -> encodeType aliases typ'
+encodeType :: Context -> Graph -> M.Map Namespace String -> Type -> Result (Either PDL.Schema PDL.NamedSchemaType)
+encodeType cx g aliases typ = case typ of
+    TypeAnnotated (AnnotatedType typ' _) -> encodeType cx g aliases typ'
     TypeEither (EitherType lt rt) -> do
       -- Encode Either as a union with "left" and "right" variants
       leftSchema <- encode lt
@@ -80,11 +90,11 @@ encodeType aliases typ = case typ of
       LiteralTypeFloat ft -> case ft of
         FloatTypeFloat32 -> pure PDL.PrimitiveTypeFloat
         FloatTypeFloat64 -> pure PDL.PrimitiveTypeDouble
-        _ -> unexpected "float32 or float64" $ show ft
+        _ -> unexpectedE cx "float32 or float64" $ show ft
       LiteralTypeInteger it -> case it of
         IntegerTypeInt32 -> pure PDL.PrimitiveTypeInt
         IntegerTypeInt64 -> pure PDL.PrimitiveTypeLong
-        _ -> unexpected "int32 or int64" $ show it
+        _ -> unexpectedE cx "int32 or int64" $ show it
       LiteralTypeString -> pure PDL.PrimitiveTypeString
     TypeMap (MapType kt vt) -> Left . PDL.SchemaMap <$> encode vt -- note: we simply assume string as a key type
     TypePair (PairType ft st) -> do
@@ -96,8 +106,8 @@ encodeType aliases typ = case typ of
       return $ Right $ PDL.NamedSchemaTypeRecord $ PDL.RecordSchema [firstField, secondField] []
     TypeSet st -> Left . PDL.SchemaArray <$> encode st  -- Encode Set as array (PDL has no native set type)
     TypeVariable name -> pure $ Left $ PDL.SchemaNamed $ pdlNameForElement aliases True name
-    TypeWrap (WrappedType _ inner) -> encodeType aliases inner  -- Unwrap to inner type
-    TypeMaybe ot -> fail $ "optionals unexpected at top level"
+    TypeWrap (WrappedType _ inner) -> encodeType cx g aliases inner  -- Unwrap to inner type
+    TypeMaybe ot -> err cx "optionals unexpected at top level"
     TypeRecord rt -> do
       let includes = []
       rfields <- CM.mapM encodeRecordField $ rowTypeFields rt
@@ -109,15 +119,15 @@ encodeType aliases typ = case typ of
         else Left . PDL.SchemaUnion . PDL.UnionSchema <$> CM.mapM encodeUnionField (rowTypeFields rt)
       where
         isEnum = L.foldl (\b t -> b && deannotateType t == Types.unit) True $ fmap fieldTypeType (rowTypeFields rt)
-    _ -> unexpected "PDL-supported type" $ show typ
+    _ -> unexpectedE cx "PDL-supported type" $ show typ
   where
     encode t = case deannotateType t of
       TypeRecord (RowType _ []) -> encode Types.int32 -- special case for the unit type
       _ -> do
-        res <- encodeType aliases t
+        res <- encodeType cx g aliases t
         case res of
           Left schema -> pure schema
-          Right _ -> fail $ "type resolved to an unsupported nested named schema: " ++ show t
+          Right _ -> err cx $ "type resolved to an unsupported nested named schema: " ++ show t
     encodeRecordField (FieldType (Name name) typ) = do
       anns <- getAnns typ
       (schema, optional) <- encodePossiblyOptionalType typ
@@ -150,11 +160,12 @@ encodeType aliases typ = case typ of
         t <- encode typ
         return (t, False)
     getAnns typ = do
-      r <- getTypeDescription typ
+      r <- getTypeDescription cx g typ
       return $ doc r
 
-importAliasesForModule mod = do
-    nss <- moduleDependencyNamespaces False True True False mod
+importAliasesForModule :: Context -> Graph -> Module -> Result (M.Map Namespace String)
+importAliasesForModule cx g mod = do
+    nss <- moduleDependencyNamespaces cx g False True True False mod
     return $ M.fromList (toPair <$> S.toList nss)
   where
     toPair ns = (ns, slashesToDots $ unNamespace ns)

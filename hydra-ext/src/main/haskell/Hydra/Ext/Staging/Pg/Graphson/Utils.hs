@@ -1,6 +1,7 @@
 module Hydra.Ext.Staging.Pg.Graphson.Utils where
 
 import Hydra.Kernel
+import Hydra.Ext.Tools.AvroWorkflows (LastMile(..))
 import Hydra.Ext.Staging.Pg.Graphson.Coder
 import Hydra.Ext.Org.Json.Coder
 import Hydra.Ext.Dsl.Pg.Mappings
@@ -10,7 +11,7 @@ import qualified Hydra.Pg.Graphson.Syntax as G
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Pg.Mapping as PGM
 import qualified Hydra.Show.Core as ShowCore
-import Hydra.Ext.Staging.Pg.Utils hiding (pgElementToJson, pgElementsToJson, lazyGraphToElements)
+import Hydra.Ext.Staging.Pg.Utils hiding (pgElementToJson, pgElementsToJson, lazyGraphToElements, err, unexpectedE, Result)
 import qualified Hydra.Json.Writer as JsonWriter
 
 import qualified Control.Monad as CM
@@ -19,6 +20,14 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
+
+type Result a = Either (InContext OtherError) a
+
+err :: Context -> String -> Result a
+err cx msg = Left (InContext (OtherError msg) cx)
+
+unexpectedE :: Context -> String -> String -> Result a
+unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
 
 elementsToVerticesWithAdjacentEdges :: Ord v => [PG.Element v] -> [PG.VertexWithAdjacentEdges v]
 elementsToVerticesWithAdjacentEdges els = M.elems vertexMap1
@@ -49,27 +58,30 @@ elementsToVerticesWithAdjacentEdges els = M.elems vertexMap1
                   else v {PG.vertexWithAdjacentEdgesIns = (adjEdge:(PG.vertexWithAdjacentEdgesIns v))}
 
 exampleGraphsonContext :: GraphsonContext s String
-exampleGraphsonContext = GraphsonContext $ Coder encodeValue decodeValue
-  where
-    encodeValue s = pure $ G.ValueString s
-    decodeValue _ = fail "decoding from GraphSON is not yet supported"
+exampleGraphsonContext = GraphsonContext $ Coder
+    (\_ s -> Right $ G.ValueString s)
+    (\_ _ -> Left $ InContext (OtherError "decoding from GraphSON is not yet supported") emptyContext)
 
-pgElementToJson :: PGM.Schema s t v -> PG.Element v -> Flow s Json.Value
-pgElementToJson schema el = case el of
+pgElementToJson :: PGM.Schema s t v -> PG.Element v -> Context -> Result Json.Value
+pgElementToJson schema el cx = case el of
     PG.ElementVertex vertex -> do
-      let labelJson = Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex
-      idJson <- coderDecode (PGM.schemaVertexIds schema) (PG.vertexId vertex) >>= untypedTermToJson
+      term <- coderDecode (PGM.schemaVertexIds schema) cx (PG.vertexId vertex)
+      idJson <- liftEither $ untypedTermToJson term
       propsJson <- propsToJson $ PG.vertexProperties vertex
+      let labelJson = Json.ValueString $ PG.unVertexLabel $ PG.vertexLabel vertex
       return $ Json.ValueObject $ M.fromList $ Y.catMaybes [
         Just ("label", labelJson),
         Just ("id", idJson),
         propsJson]
     PG.ElementEdge edge -> do
-      let labelJson = Json.ValueString $ PG.unEdgeLabel $ PG.edgeLabel edge
-      idJson <- coderDecode (PGM.schemaEdgeIds schema) (PG.edgeId edge) >>= untypedTermToJson
-      outJson <- coderDecode (PGM.schemaVertexIds schema) (PG.edgeOut edge) >>= untypedTermToJson
-      inJson <- coderDecode (PGM.schemaVertexIds schema) (PG.edgeIn edge) >>= untypedTermToJson
+      term <- coderDecode (PGM.schemaEdgeIds schema) cx (PG.edgeId edge)
+      idJson <- liftEither $ untypedTermToJson term
+      termOut <- coderDecode (PGM.schemaVertexIds schema) cx (PG.edgeOut edge)
+      outJson <- liftEither $ untypedTermToJson termOut
+      termIn <- coderDecode (PGM.schemaVertexIds schema) cx (PG.edgeIn edge)
+      inJson <- liftEither $ untypedTermToJson termIn
       propsJson <- propsToJson $ PG.edgeProperties edge
+      let labelJson = Json.ValueString $ PG.unEdgeLabel $ PG.edgeLabel edge
       return $ Json.ValueObject $ M.fromList $ Y.catMaybes [
         Just ("label", labelJson),
         Just ("id", idJson),
@@ -77,6 +89,8 @@ pgElementToJson schema el = case el of
         Just ("in", inJson),
         propsJson]
   where
+    liftEither (Left _) = Left $ InContext (OtherError "untypedTermToJson failed") cx
+    liftEither (Right v) = Right v
     propsToJson pairs = if L.null pairs
         then pure Nothing
         else do
@@ -84,43 +98,52 @@ pgElementToJson schema el = case el of
           return $ Just $ ("properties", Json.ValueObject $ M.fromList p)
       where
         propToJson (PG.PropertyKey key, v) = do
-          json <- coderDecode (PGM.schemaPropertyValues schema) v >>= untypedTermToJson
+          term <- coderDecode (PGM.schemaPropertyValues schema) cx v
+          json <- liftEither $ untypedTermToJson term
           return (key, json)
 
 lazyGraphToElements :: PG.LazyGraph v -> [PG.Element v]
 lazyGraphToElements (PG.LazyGraph vertices edges) = fmap PG.ElementVertex vertices ++ fmap PG.ElementEdge edges
 
-pgElementsToGraphson :: (Ord v, Show v) => GraphsonContext s v -> [PG.Element v] -> Flow s [Json.Value]
-pgElementsToGraphson ctx els = CM.mapM encode vertices
+pgElementsToGraphson :: (Ord v) => GraphsonContext s v -> Context -> [PG.Element v] -> Result [Json.Value]
+pgElementsToGraphson ctx cx els =
+    CM.mapM (\v -> coderEncode (pgVertexWithAdjacentEdgesToJsonCoder ctx) cx v) vertices
   where
     vertices = elementsToVerticesWithAdjacentEdges els
-    encode = coderEncode (pgVertexWithAdjacentEdgesToJsonCoder ctx)
 
-pgElementsToJson :: PGM.Schema s t v -> [PG.Element v] -> Flow s Json.Value
-pgElementsToJson schema els = Json.ValueArray <$> CM.mapM (pgElementToJson schema) els
+pgElementsToGraphsonE :: (Ord v) => GraphsonContext Graph v -> Context -> [PG.Element v] -> Result [Json.Value]
+pgElementsToGraphsonE ctx cx els =
+    CM.mapM (\v -> coderEncode (pgVertexWithAdjacentEdgesToJsonCoder ctx) cx v) vertices
+  where
+    vertices = elementsToVerticesWithAdjacentEdges els
 
-propertyGraphGraphsonLastMile :: (Ord v, Show t, Show v) => GraphsonContext Graph v -> PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
+pgElementsToJson :: PGM.Schema s t v -> [PG.Element v] -> Context -> Result Json.Value
+pgElementsToJson schema els cx = Json.ValueArray <$> CM.mapM (\el -> pgElementToJson schema el cx) els
+
+propertyGraphGraphsonLastMile :: (Ord v, Show t, Show v) => GraphsonContext Graph v -> PGM.Schema Graph t v -> t -> t -> LastMile (PG.Element v)
 propertyGraphGraphsonLastMile ctx schema vidType eidType =
-  LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> jsonValuesToString <$> pgElementsToGraphson ctx els) "jsonl"
+  LastMile (\typ cx g -> typeApplicationTermToPropertyGraph schema typ vidType eidType cx g >>= \enc ->
+    Right $ \term _graph cx' -> enc term cx') (\els -> jsonValuesToString <$> pgElementsToGraphsonE ctx emptyContext els) "jsonl"
   where
     jsonValuesToString = L.intercalate "\n" . fmap JsonWriter.printJson
 
-propertyGraphJsonLastMile :: (Show t, Show v) => PGM.Schema Graph t v -> t -> t -> LastMile Graph (PG.Element v)
+propertyGraphJsonLastMile :: (Show t, Show v) => PGM.Schema Graph t v -> t -> t -> LastMile (PG.Element v)
 propertyGraphJsonLastMile schema vidType eidType =
-  LastMile (\typ -> typeApplicationTermToPropertyGraph schema typ vidType eidType) (\els -> JsonWriter.printJson <$> pgElementsToJson schema els) "json"
+  LastMile (\typ cx g -> typeApplicationTermToPropertyGraph schema typ vidType eidType cx g >>= \enc ->
+    Right $ \term _graph cx' -> enc term cx') (\els -> JsonWriter.printJson <$> pgElementsToJson schema els emptyContext) "json"
 
 stringGraphsonContext :: GraphsonContext s String
 stringGraphsonContext = GraphsonContext $ Coder encodeString decodeString
   where
-    encodeString s = pure $ G.ValueString s
-    decodeString v = case v of
-      G.ValueString s -> pure s
-      _ -> fail $ "expected a string value, got: " ++ show v
+    encodeString _cx s = Right $ G.ValueString s
+    decodeString _cx v = case v of
+      G.ValueString s -> Right s
+      _ -> Left $ InContext (OtherError $ "expected a string value, got: " ++ show v) _cx
 
 termGraphsonContext :: GraphsonContext s Term
 termGraphsonContext = GraphsonContext $ Coder encodeTerm decodeTerm
   where
-    encodeTerm term = case deannotateTerm term of
+    encodeTerm cx term = case deannotateTerm term of
         TermLiteral lv -> case lv of
           LiteralBinary s -> pure $ G.ValueBinary $ Literals.binaryToStringBS s
           LiteralBoolean b -> pure $ G.ValueBoolean b
@@ -132,11 +155,11 @@ termGraphsonContext = GraphsonContext $ Coder encodeTerm decodeTerm
             IntegerValueBigint i -> pure $ G.ValueBigInteger i
             IntegerValueInt32 i -> pure $ G.ValueInteger i
             IntegerValueInt64 i -> pure $ G.ValueLong i
-            _ -> fail $ "integer type is not yet supported: " ++ show (integerValueType iv)
+            _ -> err cx $ "integer type is not yet supported: " ++ show (integerValueType iv)
           LiteralString s -> pure $ G.ValueString s
-        TermRecord r@(Record tname _) -> unexp $ TermRecord r
+        TermRecord r@(Record tname _) -> unexp (TermRecord r)
         TermUnit -> pure G.ValueNull
         t -> unexp t
       where
-        unexp t = unexpected "literal or unit value" $ ShowCore.term t
-    decodeTerm _ = fail "decoding from GraphSON is not yet supported"
+        unexp t = unexpectedE cx "literal or unit value" $ ShowCore.term t
+    decodeTerm cx _ = err cx "decoding from GraphSON is not yet supported"
