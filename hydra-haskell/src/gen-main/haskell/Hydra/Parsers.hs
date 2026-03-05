@@ -21,8 +21,8 @@ import qualified Data.Set as S
 alt :: (Parsing.Parser t0 -> Parsing.Parser t0 -> Parsing.Parser t0)
 alt p1 p2 =  
   let parse = (\input -> (\x -> case x of
-          Parsing.ParseResultSuccess v1 -> (Parsing.ParseResultSuccess v1)
-          Parsing.ParseResultFailure v1 -> (Logic.ifElse (Equality.equal (Parsing.parseErrorRemainder v1) input) (Parsing.unParser p2 input) (Parsing.ParseResultFailure v1))) (Parsing.unParser p1 input))
+          Parsing.ParseResultSuccess v0 -> (Parsing.ParseResultSuccess v0)
+          Parsing.ParseResultFailure v0 -> (Logic.ifElse (Equality.equal (Parsing.parseErrorRemainder v0) input) (Parsing.unParser p2 input) (Parsing.ParseResultFailure v0))) (Parsing.unParser p1 input))
   in (Parsing.Parser parse)
 
 -- | Parse any single character (codepoint)
@@ -33,12 +33,12 @@ anyChar = (satisfy (\_ -> True))
 apply :: (Parsing.Parser (t0 -> t1) -> Parsing.Parser t0 -> Parsing.Parser t1)
 apply pf pa =  
   let parse = (\input -> (\x -> case x of
-          Parsing.ParseResultSuccess v1 -> ((\x -> case x of
-            Parsing.ParseResultSuccess v2 -> (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-              Parsing.parseSuccessValue = (Parsing.parseSuccessValue v1 (Parsing.parseSuccessValue v2)),
-              Parsing.parseSuccessRemainder = (Parsing.parseSuccessRemainder v2)}))
-            Parsing.ParseResultFailure v2 -> (Parsing.ParseResultFailure v2)) (Parsing.unParser pa (Parsing.parseSuccessRemainder v1)))
-          Parsing.ParseResultFailure v1 -> (Parsing.ParseResultFailure v1)) (Parsing.unParser pf input))
+          Parsing.ParseResultSuccess v0 -> ((\x -> case x of
+            Parsing.ParseResultSuccess v1 -> (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
+              Parsing.parseSuccessValue = (Parsing.parseSuccessValue v0 (Parsing.parseSuccessValue v1)),
+              Parsing.parseSuccessRemainder = (Parsing.parseSuccessRemainder v1)}))
+            Parsing.ParseResultFailure v1 -> (Parsing.ParseResultFailure v1)) (Parsing.unParser pa (Parsing.parseSuccessRemainder v0)))
+          Parsing.ParseResultFailure v0 -> (Parsing.ParseResultFailure v0)) (Parsing.unParser pf input))
   in (Parsing.Parser parse)
 
 -- | Parse something between an opening and closing parser
@@ -49,8 +49,8 @@ between open close p = (bind open (\_ -> bind p (\x -> bind close (\_ -> pure x)
 bind :: (Parsing.Parser t0 -> (t0 -> Parsing.Parser t1) -> Parsing.Parser t1)
 bind pa f =  
   let parse = (\input -> (\x -> case x of
-          Parsing.ParseResultSuccess v1 -> (Parsing.unParser (f (Parsing.parseSuccessValue v1)) (Parsing.parseSuccessRemainder v1))
-          Parsing.ParseResultFailure v1 -> (Parsing.ParseResultFailure v1)) (Parsing.unParser pa input))
+          Parsing.ParseResultSuccess v0 -> (Parsing.unParser (f (Parsing.parseSuccessValue v0)) (Parsing.parseSuccessRemainder v0))
+          Parsing.ParseResultFailure v0 -> (Parsing.ParseResultFailure v0)) (Parsing.unParser pa input))
   in (Parsing.Parser parse)
 
 -- | Parse a specific character (codepoint)
@@ -87,10 +87,10 @@ many p = (alt (some p) (pure []))
 map :: ((t0 -> t1) -> Parsing.Parser t0 -> Parsing.Parser t1)
 map f pa =  
   let parse = (\input -> (\x -> case x of
-          Parsing.ParseResultSuccess v1 -> (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
-            Parsing.parseSuccessValue = (f (Parsing.parseSuccessValue v1)),
-            Parsing.parseSuccessRemainder = (Parsing.parseSuccessRemainder v1)}))
-          Parsing.ParseResultFailure v1 -> (Parsing.ParseResultFailure v1)) (Parsing.unParser pa input))
+          Parsing.ParseResultSuccess v0 -> (Parsing.ParseResultSuccess (Parsing.ParseSuccess {
+            Parsing.parseSuccessValue = (f (Parsing.parseSuccessValue v0)),
+            Parsing.parseSuccessRemainder = (Parsing.parseSuccessRemainder v0)}))
+          Parsing.ParseResultFailure v0 -> (Parsing.ParseResultFailure v0)) (Parsing.unParser pa input))
   in (Parsing.Parser parse)
 
 -- | Optionally parse something, returning Nothing if it fails

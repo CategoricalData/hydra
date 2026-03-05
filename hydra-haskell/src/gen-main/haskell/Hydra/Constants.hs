@@ -72,7 +72,7 @@ maxInt32 = 2147483647
 placeholderName :: Core.Name
 placeholderName = (Core.Name "Placeholder")
 
--- | A maximum depth for nested flows. Currently, this is set very high because deep flows are common in type inference over the Hydra kernel.
+-- | A maximum depth for nested computations. Currently, this is set very high because deep recursion is common in type inference over the Hydra kernel.
 maxTraceDepth :: Int
 maxTraceDepth = 5000
 

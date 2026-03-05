@@ -4,13 +4,13 @@
 
 module Hydra.Extract.Core where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -18,7 +18,6 @@ import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -29,418 +28,506 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Extract an arbitrary-precision floating-point value from a term
-bigfloat :: (Core.Term -> Compute.Flow Graph.Graph Double)
-bigfloat t = (Flows.bind (literal t) (\l -> Flows.bind (floatLiteral l) (\f -> bigfloatValue f)))
+bigfloat :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Double)
+bigfloat cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (floatLiteral cx l) (\f -> bigfloatValue cx f)))
 
 -- | Extract a bigfloat value from a FloatValue
-bigfloatValue :: (Core.FloatValue -> Compute.Flow t0 Double)
-bigfloatValue v = ((\x -> case x of
-  Core.FloatValueBigfloat v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "bigfloat" (Core_.float v))) v)
+bigfloatValue :: (Context.Context -> Core.FloatValue -> Either (Context.InContext Error.OtherError) Double)
+bigfloatValue cx v = ((\x -> case x of
+  Core.FloatValueBigfloat v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "bigfloat") " but found ") (Core_.float v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract an arbitrary-precision integer value from a term
-bigint :: (Core.Term -> Compute.Flow Graph.Graph Integer)
-bigint t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> bigintValue i)))
+bigint :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Integer)
+bigint cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (integerLiteral cx l) (\i -> bigintValue cx i)))
 
 -- | Extract a bigint value from an IntegerValue
-bigintValue :: (Core.IntegerValue -> Compute.Flow t0 Integer)
-bigintValue v = ((\x -> case x of
-  Core.IntegerValueBigint v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "bigint" (Core_.integer v))) v)
+bigintValue :: (Context.Context -> Core.IntegerValue -> Either (Context.InContext Error.OtherError) Integer)
+bigintValue cx v = ((\x -> case x of
+  Core.IntegerValueBigint v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "bigint") " but found ") (Core_.integer v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a binary data value from a term
-binary :: (Core.Term -> Compute.Flow Graph.Graph B.ByteString)
-binary t = (Flows.bind (literal t) (\l -> binaryLiteral l))
+binary :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) B.ByteString)
+binary cx graph t = (Eithers.bind (literal cx graph t) (\l -> binaryLiteral cx l))
 
 -- | Extract a binary literal from a Literal value
-binaryLiteral :: (Core.Literal -> Compute.Flow t0 B.ByteString)
-binaryLiteral v = ((\x -> case x of
-  Core.LiteralBinary v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "binary" (Core_.literal v))) v)
+binaryLiteral :: (Context.Context -> Core.Literal -> Either (Context.InContext Error.OtherError) B.ByteString)
+binaryLiteral cx v = ((\x -> case x of
+  Core.LiteralBinary v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "binary") " but found ") (Core_.literal v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a boolean value from a term
-boolean :: (Core.Term -> Compute.Flow Graph.Graph Bool)
-boolean t = (Flows.bind (literal t) (\l -> booleanLiteral l))
+boolean :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Bool)
+boolean cx graph t = (Eithers.bind (literal cx graph t) (\l -> booleanLiteral cx l))
 
 -- | Extract a boolean literal from a Literal value
-booleanLiteral :: (Core.Literal -> Compute.Flow t0 Bool)
-booleanLiteral v = ((\x -> case x of
-  Core.LiteralBoolean v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "boolean" (Core_.literal v))) v)
+booleanLiteral :: (Context.Context -> Core.Literal -> Either (Context.InContext Error.OtherError) Bool)
+booleanLiteral cx v = ((\x -> case x of
+  Core.LiteralBoolean v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "boolean") " but found ") (Core_.literal v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a specific case handler from a case statement term
-caseField :: (Core.Name -> String -> Core.Term -> Compute.Flow Graph.Graph Core.Field)
-caseField name n term =  
+caseField :: (Context.Context -> Core.Name -> String -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Field)
+caseField cx name n graph term =  
   let fieldName = (Core.Name n)
-  in (Flows.bind (cases name term) (\cs ->  
+  in (Eithers.bind (cases cx name graph term) (\cs ->  
     let matching = (Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fieldName)) (Core.caseStatementCases cs))
-    in (Logic.ifElse (Lists.null matching) (Flows.fail "not enough cases") (Flows.pure (Lists.head matching)))))
+    in (Logic.ifElse (Lists.null matching) (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError "not enough cases"),
+      Context.inContextContext = cx})) (Right (Lists.head matching)))))
 
 -- | Extract case statement from a term
-cases :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.CaseStatement)
-cases name term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermFunction v1 -> ((\x -> case x of
-            Core.FunctionElimination v2 -> ((\x -> case x of
-              Core.EliminationUnion v3 -> (Logic.ifElse (Equality.equal (Core.unName (Core.caseStatementTypeName v3)) (Core.unName name)) (Flows.pure v3) (Monads.unexpected (Strings.cat2 "case statement for type " (Core.unName name)) (Core_.term term)))
-              _ -> (Monads.unexpected "case statement" (Core_.term term))) v2)
-            _ -> (Monads.unexpected "case statement" (Core_.term term))) v1)
-          _ -> (Monads.unexpected "case statement" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+cases :: (Context.Context -> Core.Name -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.CaseStatement)
+cases cx name graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermFunction v0 -> ((\x -> case x of
+    Core.FunctionElimination v1 -> ((\x -> case x of
+      Core.EliminationUnion v2 -> (Logic.ifElse (Equality.equal (Core.unName (Core.caseStatementTypeName v2)) (Core.unName name)) (Right v2) (Left (Context.InContext {
+        Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "case statement for type " (Core.unName name))) " but found ") (Core_.term term))),
+        Context.inContextContext = cx})))
+      _ -> (Left (Context.InContext {
+        Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "case statement") " but found ") (Core_.term term))),
+        Context.inContextContext = cx}))) v1)
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "case statement") " but found ") (Core_.term term))),
+      Context.inContextContext = cx}))) v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "case statement") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract a field value from a list of fields
-field :: (Core.Name -> (Core.Term -> Compute.Flow Graph.Graph t0) -> [Core.Field] -> Compute.Flow Graph.Graph t0)
-field fname mapping fields =  
+field :: (Context.Context -> Core.Name -> (Core.Term -> Either (Context.InContext Error.OtherError) t0) -> Graph.Graph -> [Core.Field] -> Either (Context.InContext Error.OtherError) t0)
+field cx fname mapping graph fields =  
   let matchingFields = (Lists.filter (\f -> Equality.equal (Core.unName (Core.fieldName f)) (Core.unName fname)) fields)
-  in (Logic.ifElse (Lists.null matchingFields) (Flows.fail (Strings.cat2 (Strings.cat2 "field " (Core.unName fname)) " not found")) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Flows.bind (Lexical.stripAndDereferenceTerm (Core.fieldTerm (Lists.head matchingFields))) (\stripped -> mapping stripped)) (Flows.fail (Strings.cat2 "multiple fields named " (Core.unName fname)))))
+  in (Logic.ifElse (Lists.null matchingFields) (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "field " (Core.unName fname))) " but found ") "no matching field")),
+    Context.inContextContext = cx})) (Logic.ifElse (Equality.equal (Lists.length matchingFields) 1) (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph (Core.fieldTerm (Lists.head matchingFields))) (\stripped -> mapping stripped)) (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "single field") " but found ") (Strings.cat2 "multiple fields named " (Core.unName fname)))),
+    Context.inContextContext = cx}))))
 
 -- | Extract a 32-bit floating-point value from a term
-float32 :: (Core.Term -> Compute.Flow Graph.Graph Float)
-float32 t = (Flows.bind (literal t) (\l -> Flows.bind (floatLiteral l) (\f -> float32Value f)))
+float32 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Float)
+float32 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (floatLiteral cx l) (\f -> float32Value cx f)))
 
 -- | Extract a float32 value from a FloatValue
-float32Value :: (Core.FloatValue -> Compute.Flow t0 Float)
-float32Value v = ((\x -> case x of
-  Core.FloatValueFloat32 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "float32" (Core_.float v))) v)
+float32Value :: (Context.Context -> Core.FloatValue -> Either (Context.InContext Error.OtherError) Float)
+float32Value cx v = ((\x -> case x of
+  Core.FloatValueFloat32 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "float32") " but found ") (Core_.float v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a 64-bit floating-point value from a term
-float64 :: (Core.Term -> Compute.Flow Graph.Graph Double)
-float64 t = (Flows.bind (literal t) (\l -> Flows.bind (floatLiteral l) (\f -> float64Value f)))
+float64 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Double)
+float64 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (floatLiteral cx l) (\f -> float64Value cx f)))
 
 -- | Extract a float64 value from a FloatValue
-float64Value :: (Core.FloatValue -> Compute.Flow t0 Double)
-float64Value v = ((\x -> case x of
-  Core.FloatValueFloat64 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "float64" (Core_.float v))) v)
+float64Value :: (Context.Context -> Core.FloatValue -> Either (Context.InContext Error.OtherError) Double)
+float64Value cx v = ((\x -> case x of
+  Core.FloatValueFloat64 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "float64") " but found ") (Core_.float v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a floating-point literal from a Literal value
-floatLiteral :: (Core.Literal -> Compute.Flow t0 Core.FloatValue)
-floatLiteral lit = ((\x -> case x of
-  Core.LiteralFloat v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "floating-point value" (Core_.literal lit))) lit)
+floatLiteral :: (Context.Context -> Core.Literal -> Either (Context.InContext Error.OtherError) Core.FloatValue)
+floatLiteral cx lit = ((\x -> case x of
+  Core.LiteralFloat v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "floating-point value") " but found ") (Core_.literal lit))),
+    Context.inContextContext = cx}))) lit)
 
 -- | Extract a float value from a term
-floatValue :: (Core.Term -> Compute.Flow Graph.Graph Core.FloatValue)
-floatValue t = (Flows.bind (literal t) (\l -> floatLiteral l))
+floatValue :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.FloatValue)
+floatValue cx graph t = (Eithers.bind (literal cx graph t) (\l -> floatLiteral cx l))
 
 -- | Extract an either value from a term, applying functions to the left and right values
-eitherTerm :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (Either t0 t1))
-eitherTerm leftFun rightFun term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermEither v1 -> (Eithers.either (\l -> Flows.map (\x -> Left x) (leftFun l)) (\r -> Flows.map (\x -> Right x) (rightFun r)) v1)
-          _ -> (Monads.unexpected "either value" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+eitherTerm :: (Context.Context -> (Core.Term -> Either (Context.InContext Error.OtherError) t0) -> (Core.Term -> Either (Context.InContext Error.OtherError) t1) -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (Either t0 t1))
+eitherTerm cx leftFun rightFun graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermEither v0 -> (Eithers.either (\l -> Eithers.map (\x -> Left x) (leftFun l)) (\r -> Eithers.map (\x -> Right x) (rightFun r)) v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either value") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract the left and right types from an either type
-eitherType :: (Core.Type -> Compute.Flow t0 Core.EitherType)
-eitherType typ =  
+eitherType :: (Context.Context -> Core.Type -> Either (Context.InContext Error.OtherError) Core.EitherType)
+eitherType cx typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeEither v1 -> (Flows.pure v1)
-    _ -> (Monads.unexpected "either type" (Core_.type_ typ))) stripped)
+    Core.TypeEither v0 -> (Right v0)
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "either type") " but found ") (Core_.type_ typ))),
+      Context.inContextContext = cx}))) stripped)
 
 -- | Extract a function type from a type
-functionType :: (Core.Type -> Compute.Flow t0 Core.FunctionType)
-functionType typ =  
+functionType :: (Context.Context -> Core.Type -> Either (Context.InContext Error.OtherError) Core.FunctionType)
+functionType cx typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeFunction v1 -> (Flows.pure v1)
-    _ -> (Monads.unexpected "function type" (Core_.type_ typ))) stripped)
+    Core.TypeFunction v0 -> (Right v0)
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "function type") " but found ") (Core_.type_ typ))),
+      Context.inContextContext = cx}))) stripped)
 
 -- | Extract a field from a union term
-injection :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Field)
-injection expected term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermUnion v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v1)) (Core.unName expected)) (Flows.pure (Core.injectionField v1)) (Monads.unexpected (Strings.cat2 "injection of type " (Core.unName expected)) (Core.unName (Core.injectionTypeName v1))))
-          _ -> (Monads.unexpected "injection" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+injection :: (Context.Context -> Core.Name -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Field)
+injection cx expected graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermUnion v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v0)) (Core.unName expected)) (Right (Core.injectionField v0)) (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "injection of type " (Core.unName expected))) " but found ") (Core.unName (Core.injectionTypeName v0)))),
+    Context.inContextContext = cx})))
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "injection") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract a 16-bit signed integer value from a term
-int16 :: (Core.Term -> Compute.Flow Graph.Graph I.Int16)
-int16 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int16Value i)))
+int16 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) I.Int16)
+int16 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (integerLiteral cx l) (\i -> int16Value cx i)))
 
 -- | Extract an int16 value from an IntegerValue
-int16Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int16)
-int16Value v = ((\x -> case x of
-  Core.IntegerValueInt16 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "int16" (Core_.integer v))) v)
+int16Value :: (Context.Context -> Core.IntegerValue -> Either (Context.InContext Error.OtherError) I.Int16)
+int16Value cx v = ((\x -> case x of
+  Core.IntegerValueInt16 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "int16") " but found ") (Core_.integer v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a 32-bit signed integer value from a term
-int32 :: (Core.Term -> Compute.Flow Graph.Graph Int)
-int32 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int32Value i)))
+int32 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Int)
+int32 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (integerLiteral cx l) (\i -> int32Value cx i)))
 
 -- | Extract an int32 value from an IntegerValue
-int32Value :: (Core.IntegerValue -> Compute.Flow t0 Int)
-int32Value v = ((\x -> case x of
-  Core.IntegerValueInt32 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "int32" (Core_.integer v))) v)
+int32Value :: (Context.Context -> Core.IntegerValue -> Either (Context.InContext Error.OtherError) Int)
+int32Value cx v = ((\x -> case x of
+  Core.IntegerValueInt32 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "int32") " but found ") (Core_.integer v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a 64-bit signed integer value from a term
-int64 :: (Core.Term -> Compute.Flow Graph.Graph I.Int64)
-int64 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int64Value i)))
+int64 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) I.Int64)
+int64 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (integerLiteral cx l) (\i -> int64Value cx i)))
 
 -- | Extract an int64 value from an IntegerValue
-int64Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int64)
-int64Value v = ((\x -> case x of
-  Core.IntegerValueInt64 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "int64" (Core_.integer v))) v)
+int64Value :: (Context.Context -> Core.IntegerValue -> Either (Context.InContext Error.OtherError) I.Int64)
+int64Value cx v = ((\x -> case x of
+  Core.IntegerValueInt64 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "int64") " but found ") (Core_.integer v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract an 8-bit signed integer value from a term
-int8 :: (Core.Term -> Compute.Flow Graph.Graph I.Int8)
-int8 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> int8Value i)))
+int8 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) I.Int8)
+int8 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (integerLiteral cx l) (\i -> int8Value cx i)))
 
 -- | Extract an int8 value from an IntegerValue
-int8Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int8)
-int8Value v = ((\x -> case x of
-  Core.IntegerValueInt8 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "int8" (Core_.integer v))) v)
+int8Value :: (Context.Context -> Core.IntegerValue -> Either (Context.InContext Error.OtherError) I.Int8)
+int8Value cx v = ((\x -> case x of
+  Core.IntegerValueInt8 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "int8") " but found ") (Core_.integer v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract an integer literal from a Literal value
-integerLiteral :: (Core.Literal -> Compute.Flow t0 Core.IntegerValue)
-integerLiteral lit = ((\x -> case x of
-  Core.LiteralInteger v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "integer value" (Core_.literal lit))) lit)
+integerLiteral :: (Context.Context -> Core.Literal -> Either (Context.InContext Error.OtherError) Core.IntegerValue)
+integerLiteral cx lit = ((\x -> case x of
+  Core.LiteralInteger v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "integer value") " but found ") (Core_.literal lit))),
+    Context.inContextContext = cx}))) lit)
 
 -- | Extract an integer value from a term
-integerValue :: (Core.Term -> Compute.Flow Graph.Graph Core.IntegerValue)
-integerValue t = (Flows.bind (literal t) (\l -> integerLiteral l))
+integerValue :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.IntegerValue)
+integerValue cx graph t = (Eithers.bind (literal cx graph t) (\l -> integerLiteral cx l))
 
 -- | Extract the body of a lambda term
-lambdaBody :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
-lambdaBody term = (Flows.map Core.lambdaBody (lambda term))
+lambdaBody :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+lambdaBody cx graph term = (Eithers.map Core.lambdaBody (lambda cx graph term))
 
 -- | Extract a lambda from a term
-lambda :: (Core.Term -> Compute.Flow Graph.Graph Core.Lambda)
-lambda term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermFunction v1 -> ((\x -> case x of
-            Core.FunctionLambda v2 -> (Flows.pure v2)
-            _ -> (Monads.unexpected "lambda" (Core_.term term))) v1)
-          _ -> (Monads.unexpected "lambda" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+lambda :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Lambda)
+lambda cx graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermFunction v0 -> ((\x -> case x of
+    Core.FunctionLambda v1 -> (Right v1)
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "lambda") " but found ") (Core_.term term))),
+      Context.inContextContext = cx}))) v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "lambda") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract a binding with the given name from a let term
-letBinding :: (String -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
-letBinding n term =  
+letBinding :: (Context.Context -> String -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+letBinding cx n graph term =  
   let name = (Core.Name n)
-  in (Flows.bind (let_ term) (\letExpr ->  
+  in (Eithers.bind (let_ cx graph term) (\letExpr ->  
     let matchingBindings = (Lists.filter (\b -> Equality.equal (Core.unName (Core.bindingName b)) (Core.unName name)) (Core.letBindings letExpr))
-    in (Logic.ifElse (Lists.null matchingBindings) (Flows.fail (Strings.cat2 "no such binding: " n)) (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Flows.pure (Core.bindingTerm (Lists.head matchingBindings))) (Flows.fail (Strings.cat2 "multiple bindings named " n))))))
+    in (Logic.ifElse (Lists.null matchingBindings) (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 "no such binding: " n)),
+      Context.inContextContext = cx})) (Logic.ifElse (Equality.equal (Lists.length matchingBindings) 1) (Right (Core.bindingTerm (Lists.head matchingBindings))) (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 "multiple bindings named " n)),
+      Context.inContextContext = cx}))))))
 
 -- | Extract a let expression from a term
-let_ :: (Core.Term -> Compute.Flow Graph.Graph Core.Let)
-let_ term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermLet v1 -> (Flows.pure v1)
-          _ -> (Monads.unexpected "let term" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+let_ :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Let)
+let_ cx graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermLet v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "let term") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract a list of terms from a term
-list :: (Core.Term -> Compute.Flow Graph.Graph [Core.Term])
-list term =  
-  let extract = (\stripped -> (\x -> case x of
-          Core.TermList v1 -> (Flows.pure v1)
-          _ -> (Monads.unexpected "list" (Core_.term stripped))) stripped)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term) (\stripped -> extract stripped))
+list :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) [Core.Term])
+list cx graph term = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term) (\stripped -> (\x -> case x of
+  Core.TermList v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "list") " but found ") (Core_.term stripped))),
+    Context.inContextContext = cx}))) stripped))
 
 -- | Extract the first element of a list term
-listHead :: (Core.Term -> Compute.Flow Graph.Graph Core.Term)
-listHead term = (Flows.bind (list term) (\l -> Logic.ifElse (Lists.null l) (Flows.fail "empty list") (Flows.pure (Lists.head l))))
+listHead :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+listHead cx graph term = (Eithers.bind (list cx graph term) (\l -> Logic.ifElse (Lists.null l) (Left (Context.InContext {
+  Context.inContextObject = (Error.OtherError "empty list"),
+  Context.inContextContext = cx})) (Right (Lists.head l))))
 
 -- | Extract a list of values from a term, mapping a function over each element
-listOf :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph [t0])
-listOf f term = (Flows.bind (list term) (\els -> Flows.mapList f els))
+listOf :: (Context.Context -> (Core.Term -> Either (Context.InContext Error.OtherError) t0) -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) [t0])
+listOf cx f graph term = (Eithers.bind (list cx graph term) (\els -> Eithers.mapList f els))
 
 -- | Extract the element type from a list type
-listType :: (Core.Type -> Compute.Flow t0 Core.Type)
-listType typ =  
+listType :: (Context.Context -> Core.Type -> Either (Context.InContext Error.OtherError) Core.Type)
+listType cx typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeList v1 -> (Flows.pure v1)
-    _ -> (Monads.unexpected "list type" (Core_.type_ typ))) stripped)
+    Core.TypeList v0 -> (Right v0)
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "list type") " but found ") (Core_.type_ typ))),
+      Context.inContextContext = cx}))) stripped)
 
 -- | Extract a literal value from a term
-literal :: (Core.Term -> Compute.Flow Graph.Graph Core.Literal)
-literal term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermLiteral v1 -> (Flows.pure v1)
-          _ -> (Monads.unexpected "literal" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+literal :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Literal)
+literal cx graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermLiteral v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "literal") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract a map of key-value pairs from a term, mapping functions over each key and value
-map :: Ord t0 => ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (M.Map t0 t1))
-map fk fv term0 =  
+map :: Ord t0 => (Context.Context -> (Core.Term -> Either (Context.InContext Error.OtherError) t0) -> (Core.Term -> Either (Context.InContext Error.OtherError) t1) -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (M.Map t0 t1))
+map cx fk fv graph term0 =  
   let pair = (\kvPair ->  
           let kterm = (Pairs.first kvPair)
           in  
             let vterm = (Pairs.second kvPair)
-            in (Flows.bind (fk kterm) (\kval -> Flows.bind (fv vterm) (\vval -> Flows.pure (kval, vval)))))
-  in  
-    let extract = (\term -> (\x -> case x of
-            Core.TermMap v1 -> (Flows.map Maps.fromList (Flows.mapList pair (Maps.toList v1)))
-            _ -> (Monads.unexpected "map" (Core_.term term))) term)
-    in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+            in (Eithers.bind (fk kterm) (\kval -> Eithers.bind (fv vterm) (\vval -> Right (kval, vval)))))
+  in (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+    Core.TermMap v0 -> (Eithers.map Maps.fromList (Eithers.mapList pair (Maps.toList v0)))
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map") " but found ") (Core_.term term))),
+      Context.inContextContext = cx}))) term))
 
 -- | Extract the key and value types from a map type
-mapType :: (Core.Type -> Compute.Flow t0 Core.MapType)
-mapType typ =  
+mapType :: (Context.Context -> Core.Type -> Either (Context.InContext Error.OtherError) Core.MapType)
+mapType cx typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeMap v1 -> (Flows.pure v1)
-    _ -> (Monads.unexpected "map type" (Core_.type_ typ))) stripped)
+    Core.TypeMap v0 -> (Right v0)
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map type") " but found ") (Core_.type_ typ))),
+      Context.inContextContext = cx}))) stripped)
 
 -- | Ensure a function has the expected number of arguments
-nArgs :: (Core.Name -> Int -> [t0] -> Compute.Flow t1 ())
-nArgs name n args = (Logic.ifElse (Equality.equal (Lists.length args) n) (Flows.pure ()) (Monads.unexpected (Strings.cat [
-  Literals.showInt32 n,
-  " arguments to primitive ",
-  (Literals.showString (Core.unName name))]) (Literals.showInt32 (Lists.length args))))
+nArgs :: (Context.Context -> Core.Name -> Int -> [t0] -> Either (Context.InContext Error.OtherError) ())
+nArgs cx name n args = (Logic.ifElse (Equality.equal (Lists.length args) n) (Right ()) (Left (Context.InContext {
+  Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat [
+    Literals.showInt32 n,
+    " arguments to primitive ",
+    (Literals.showString (Core.unName name))])) " but found ") (Literals.showInt32 (Lists.length args)))),
+  Context.inContextContext = cx})))
 
 -- | Extract an optional value from a term, applying a function to the value if present
-maybeTerm :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph (Maybe t0))
-maybeTerm f term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermMaybe v1 -> (Maybes.maybe (Flows.pure Nothing) (\t -> Flows.map Maybes.pure (f t)) v1)
-          _ -> (Monads.unexpected "maybe value" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+maybeTerm :: (Context.Context -> (Core.Term -> Either (Context.InContext Error.OtherError) t0) -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (Maybe t0))
+maybeTerm cx f graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermMaybe v0 -> (Maybes.maybe (Right Nothing) (\t -> Eithers.map Maybes.pure (f t)) v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "maybe value") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract the base type from an optional type
-maybeType :: (Core.Type -> Compute.Flow t0 Core.Type)
-maybeType typ =  
+maybeType :: (Context.Context -> Core.Type -> Either (Context.InContext Error.OtherError) Core.Type)
+maybeType cx typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeMaybe v1 -> (Flows.pure v1)
-    _ -> (Monads.unexpected "maybe type" (Core_.type_ typ))) stripped)
+    Core.TypeMaybe v0 -> (Right v0)
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "maybe type") " but found ") (Core_.type_ typ))),
+      Context.inContextContext = cx}))) stripped)
 
 -- | Extract a pair of values from a term, applying functions to each component
-pair :: ((Core.Term -> Compute.Flow Graph.Graph t0) -> (Core.Term -> Compute.Flow Graph.Graph t1) -> Core.Term -> Compute.Flow Graph.Graph (t0, t1))
-pair kf vf term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermPair v1 -> (Flows.bind (kf (Pairs.first v1)) (\kVal -> Flows.bind (vf (Pairs.second v1)) (\vVal -> Flows.pure (kVal, vVal))))
-          _ -> (Monads.unexpected "pair" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+pair :: (Context.Context -> (Core.Term -> Either (Context.InContext Error.OtherError) t0) -> (Core.Term -> Either (Context.InContext Error.OtherError) t1) -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (t0, t1))
+pair cx kf vf graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermPair v0 -> (Eithers.bind (kf (Pairs.first v0)) (\kVal -> Eithers.bind (vf (Pairs.second v0)) (\vVal -> Right (kVal, vVal))))
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "pair") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract a record's fields from a term
-record :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph [Core.Field])
-record expected term0 = (Flows.bind (termRecord term0) (\record -> Logic.ifElse (Equality.equal (Core.recordTypeName record) expected) (Flows.pure (Core.recordFields record)) (Monads.unexpected (Strings.cat2 "record of type " (Core.unName expected)) (Core.unName (Core.recordTypeName record)))))
+record :: (Context.Context -> Core.Name -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) [Core.Field])
+record cx expected graph term0 = (Eithers.bind (termRecord cx graph term0) (\record -> Logic.ifElse (Equality.equal (Core.recordTypeName record) expected) (Right (Core.recordFields record)) (Left (Context.InContext {
+  Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "record of type " (Core.unName expected))) " but found ") (Core.unName (Core.recordTypeName record)))),
+  Context.inContextContext = cx}))))
 
 -- | Extract the field types from a record type
-recordType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
-recordType ename typ =  
+recordType :: (Context.Context -> Core.Name -> Core.Type -> Either (Context.InContext Error.OtherError) [Core.FieldType])
+recordType cx ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeRecord v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.rowTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat2 "record of type " (Core.unName ename)) (Strings.cat2 "record of type " (Core.unName (Core.rowTypeTypeName v1)))))
-    _ -> (Monads.unexpected "record type" (Core_.type_ typ))) stripped)
+    Core.TypeRecord v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.rowTypeTypeName v0)) (Core.unName ename)) (Right (Core.rowTypeFields v0)) (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "record of type " (Core.unName ename))) " but found ") (Strings.cat2 "record of type " (Core.unName (Core.rowTypeTypeName v0))))),
+      Context.inContextContext = cx})))
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "record type") " but found ") (Core_.type_ typ))),
+      Context.inContextContext = cx}))) stripped)
 
 -- | Extract a set of terms from a term
-set :: (Core.Term -> Compute.Flow Graph.Graph (S.Set Core.Term))
-set term =  
-  let extract = (\stripped -> (\x -> case x of
-          Core.TermSet v1 -> (Flows.pure v1)
-          _ -> (Monads.unexpected "set" (Core_.term stripped))) stripped)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term) (\stripped -> extract stripped))
+set :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (S.Set Core.Term))
+set cx graph term = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term) (\stripped -> (\x -> case x of
+  Core.TermSet v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "set") " but found ") (Core_.term stripped))),
+    Context.inContextContext = cx}))) stripped))
 
 -- | Extract a set of values from a term, mapping a function over each element
-setOf :: Ord t0 => ((Core.Term -> Compute.Flow Graph.Graph t0) -> Core.Term -> Compute.Flow Graph.Graph (S.Set t0))
-setOf f term = (Flows.bind (set term) (\els -> Flows.mapSet f els))
+setOf :: Ord t0 => (Context.Context -> (Core.Term -> Either (Context.InContext Error.OtherError) t0) -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (S.Set t0))
+setOf cx f graph term = (Eithers.bind (set cx graph term) (\els -> Eithers.mapSet f els))
 
 -- | Extract the element type from a set type
-setType :: (Core.Type -> Compute.Flow t0 Core.Type)
-setType typ =  
+setType :: (Context.Context -> Core.Type -> Either (Context.InContext Error.OtherError) Core.Type)
+setType cx typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeSet v1 -> (Flows.pure v1)
-    _ -> (Monads.unexpected "set type" (Core_.type_ typ))) stripped)
+    Core.TypeSet v0 -> (Right v0)
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "set type") " but found ") (Core_.type_ typ))),
+      Context.inContextContext = cx}))) stripped)
 
 -- | Extract a string value from a term
-string :: (Core.Term -> Compute.Flow Graph.Graph String)
-string t = (Flows.bind (literal t) (\l -> stringLiteral l))
+string :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) String)
+string cx graph t = (Eithers.bind (literal cx graph t) (\l -> stringLiteral cx l))
 
 -- | Extract a string literal from a Literal value
-stringLiteral :: (Core.Literal -> Compute.Flow t0 String)
-stringLiteral v = ((\x -> case x of
-  Core.LiteralString v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "string" (Core_.literal v))) v)
+stringLiteral :: (Context.Context -> Core.Literal -> Either (Context.InContext Error.OtherError) String)
+stringLiteral cx v = ((\x -> case x of
+  Core.LiteralString v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "string") " but found ") (Core_.literal v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a record from a term
-termRecord :: (Core.Term -> Compute.Flow Graph.Graph Core.Record)
-termRecord term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermRecord v1 -> (Flows.pure v1)
-          _ -> (Monads.unexpected "record" (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+termRecord :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Record)
+termRecord cx graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermRecord v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "record") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract a 16-bit unsigned integer value from a term
-uint16 :: (Core.Term -> Compute.Flow Graph.Graph Int)
-uint16 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint16Value i)))
+uint16 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Int)
+uint16 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (integerLiteral cx l) (\i -> uint16Value cx i)))
 
 -- | Extract a uint16 value from an IntegerValue
-uint16Value :: (Core.IntegerValue -> Compute.Flow t0 Int)
-uint16Value v = ((\x -> case x of
-  Core.IntegerValueUint16 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "uint16" (Core_.integer v))) v)
+uint16Value :: (Context.Context -> Core.IntegerValue -> Either (Context.InContext Error.OtherError) Int)
+uint16Value cx v = ((\x -> case x of
+  Core.IntegerValueUint16 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "uint16") " but found ") (Core_.integer v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a 32-bit unsigned integer value from a term
-uint32 :: (Core.Term -> Compute.Flow Graph.Graph I.Int64)
-uint32 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint32Value i)))
+uint32 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) I.Int64)
+uint32 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (integerLiteral cx l) (\i -> uint32Value cx i)))
 
 -- | Extract a uint32 value from an IntegerValue
-uint32Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int64)
-uint32Value v = ((\x -> case x of
-  Core.IntegerValueUint32 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "uint32" (Core_.integer v))) v)
+uint32Value :: (Context.Context -> Core.IntegerValue -> Either (Context.InContext Error.OtherError) I.Int64)
+uint32Value cx v = ((\x -> case x of
+  Core.IntegerValueUint32 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "uint32") " but found ") (Core_.integer v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract a 64-bit unsigned integer value from a term
-uint64 :: (Core.Term -> Compute.Flow Graph.Graph Integer)
-uint64 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint64Value i)))
+uint64 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Integer)
+uint64 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (integerLiteral cx l) (\i -> uint64Value cx i)))
 
 -- | Extract a uint64 value from an IntegerValue
-uint64Value :: (Core.IntegerValue -> Compute.Flow t0 Integer)
-uint64Value v = ((\x -> case x of
-  Core.IntegerValueUint64 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "uint64" (Core_.integer v))) v)
+uint64Value :: (Context.Context -> Core.IntegerValue -> Either (Context.InContext Error.OtherError) Integer)
+uint64Value cx v = ((\x -> case x of
+  Core.IntegerValueUint64 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "uint64") " but found ") (Core_.integer v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract an 8-bit unsigned integer value from a term
-uint8 :: (Core.Term -> Compute.Flow Graph.Graph I.Int16)
-uint8 t = (Flows.bind (literal t) (\l -> Flows.bind (integerLiteral l) (\i -> uint8Value i)))
+uint8 :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) I.Int16)
+uint8 cx graph t = (Eithers.bind (literal cx graph t) (\l -> Eithers.bind (integerLiteral cx l) (\i -> uint8Value cx i)))
 
 -- | Extract a uint8 value from an IntegerValue
-uint8Value :: (Core.IntegerValue -> Compute.Flow t0 I.Int16)
-uint8Value v = ((\x -> case x of
-  Core.IntegerValueUint8 v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "uint8" (Core_.integer v))) v)
+uint8Value :: (Context.Context -> Core.IntegerValue -> Either (Context.InContext Error.OtherError) I.Int16)
+uint8Value cx v = ((\x -> case x of
+  Core.IntegerValueUint8 v0 -> (Right v0)
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "uint8") " but found ") (Core_.integer v))),
+    Context.inContextContext = cx}))) v)
 
 -- | Extract the field types from a union type
-unionType :: (Core.Name -> Core.Type -> Compute.Flow t0 [Core.FieldType])
-unionType ename typ =  
+unionType :: (Context.Context -> Core.Name -> Core.Type -> Either (Context.InContext Error.OtherError) [Core.FieldType])
+unionType cx ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeUnion v1 -> (Logic.ifElse (Equality.equal (Core.rowTypeTypeName v1) ename) (Flows.pure (Core.rowTypeFields v1)) (Monads.unexpected (Strings.cat2 "union of type " (Core.unName ename)) (Strings.cat2 "union of type " (Core.unName (Core.rowTypeTypeName v1)))))
-    _ -> (Monads.unexpected "union type" (Core_.type_ typ))) stripped)
+    Core.TypeUnion v0 -> (Logic.ifElse (Equality.equal (Core.rowTypeTypeName v0) ename) (Right (Core.rowTypeFields v0)) (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "union of type " (Core.unName ename))) " but found ") (Strings.cat2 "union of type " (Core.unName (Core.rowTypeTypeName v0))))),
+      Context.inContextContext = cx})))
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "union type") " but found ") (Core_.type_ typ))),
+      Context.inContextContext = cx}))) stripped)
 
 -- | Extract a unit value from a term
-unit :: (Core.Term -> Compute.Flow t0 ())
-unit term = ((\x -> case x of
-  Core.TermUnit -> (Flows.pure ())
-  _ -> (Monads.unexpected "unit" (Core_.term term))) term)
+unit :: (Context.Context -> Core.Term -> Either (Context.InContext Error.OtherError) ())
+unit cx term = ((\x -> case x of
+  Core.TermUnit -> (Right ())
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "unit") " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term)
 
 -- | Extract a unit variant (a variant with an empty record value) from a union term
-unitVariant :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Name)
-unitVariant tname term = (Flows.bind (injection tname term) (\field -> Flows.bind (unit (Core.fieldTerm field)) (\ignored -> Flows.pure (Core.fieldName field))))
+unitVariant :: (Context.Context -> Core.Name -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Name)
+unitVariant cx tname graph term = (Eithers.bind (injection cx tname graph term) (\field -> Eithers.bind (unit cx (Core.fieldTerm field)) (\ignored -> Right (Core.fieldName field))))
 
 -- | Extract the wrapped value from a wrapped term
-wrap :: (Core.Name -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
-wrap expected term0 =  
-  let extract = (\term -> (\x -> case x of
-          Core.TermWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTermTypeName v1)) (Core.unName expected)) (Flows.pure (Core.wrappedTermBody v1)) (Monads.unexpected (Strings.cat2 "wrapper of type " (Core.unName expected)) (Core.unName (Core.wrappedTermTypeName v1))))
-          _ -> (Monads.unexpected (Strings.cat2 (Strings.cat2 "wrap(" (Core.unName expected)) ")") (Core_.term term))) term)
-  in (Flows.bind (Lexical.stripAndDereferenceTerm term0) (\term -> extract term))
+wrap :: (Context.Context -> Core.Name -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+wrap cx expected graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx graph term0) (\term -> (\x -> case x of
+  Core.TermWrap v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTermTypeName v0)) (Core.unName expected)) (Right (Core.wrappedTermBody v0)) (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "wrapper of type " (Core.unName expected))) " but found ") (Core.unName (Core.wrappedTermTypeName v0)))),
+    Context.inContextContext = cx})))
+  _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 (Strings.cat2 "wrap(" (Core.unName expected)) ")")) " but found ") (Core_.term term))),
+    Context.inContextContext = cx}))) term))
 
 -- | Extract the wrapped type from a wrapper type
-wrappedType :: (Core.Name -> Core.Type -> Compute.Flow t0 Core.Type)
-wrappedType ename typ =  
+wrappedType :: (Context.Context -> Core.Name -> Core.Type -> Either (Context.InContext Error.OtherError) Core.Type)
+wrappedType cx ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v1)) (Core.unName ename)) (Flows.pure (Core.wrappedTypeBody v1)) (Monads.unexpected (Strings.cat2 "wrapped type " (Core.unName ename)) (Strings.cat2 "wrapped type " (Core.unName (Core.wrappedTypeTypeName v1)))))
-    _ -> (Monads.unexpected "wrapped type" (Core_.type_ typ))) stripped)
+    Core.TypeWrap v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v0)) (Core.unName ename)) (Right (Core.wrappedTypeBody v0)) (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "wrapped type " (Core.unName ename))) " but found ") (Strings.cat2 "wrapped type " (Core.unName (Core.wrappedTypeTypeName v0))))),
+      Context.inContextContext = cx})))
+    _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "wrapped type") " but found ") (Core_.type_ typ))),
+      Context.inContextContext = cx}))) stripped)

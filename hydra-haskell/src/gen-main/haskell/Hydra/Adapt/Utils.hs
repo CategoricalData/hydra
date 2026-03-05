@@ -6,9 +6,11 @@ module Hydra.Adapt.Utils where
 
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Formatting as Formatting
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
@@ -30,20 +32,20 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Create a bidirectional coder from a direction-aware function
-bidirectional :: ((Coders.CoderDirection -> t0 -> Compute.Flow t1 t0) -> Compute.Coder t1 t1 t0 t0)
+bidirectional :: ((Coders.CoderDirection -> Context.Context -> t0 -> Either (Context.InContext Error.OtherError) t0) -> Compute.Coder t0 t0)
 bidirectional f = Compute.Coder {
   Compute.coderEncode = (f Coders.CoderDirectionEncode),
   Compute.coderDecode = (f Coders.CoderDirectionDecode)}
 
 -- | Choose an appropriate adapter for a type
-chooseAdapter :: ((t0 -> Compute.Flow t1 [Compute.Adapter t2 t3 t0 t0 t4 t4]) -> (t0 -> Bool) -> (t0 -> String) -> (t0 -> String) -> t0 -> Compute.Flow t1 (Compute.Adapter t2 t3 t0 t0 t4 t4))
-chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (Flows.pure (Compute.Adapter {
+chooseAdapter :: ((t0 -> Either String [Compute.Adapter t0 t0 t1 t1]) -> (t0 -> Bool) -> (t0 -> String) -> (t0 -> String) -> t0 -> Either String (Compute.Adapter t0 t0 t1 t1))
+chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (Right (Compute.Adapter {
   Compute.adapterIsLossy = False,
   Compute.adapterSource = typ,
   Compute.adapterTarget = typ,
-  Compute.adapterCoder = idCoder})) (Flows.bind (alts typ) (\raw ->  
+  Compute.adapterCoder = idCoder})) (Eithers.bind (alts typ) (\raw ->  
   let candidates = (Lists.filter (\adapter -> supported (Compute.adapterTarget adapter)) raw)
-  in (Logic.ifElse (Lists.null candidates) (Flows.fail (Strings.cat [
+  in (Logic.ifElse (Lists.null candidates) (Left (Strings.cat [
     "no adapters found for ",
     (describe typ),
     (Logic.ifElse (Lists.null raw) "" (Strings.cat [
@@ -53,26 +55,26 @@ chooseAdapter alts supported show describe typ = (Logic.ifElse (supported typ) (
       (Core_.list show (Lists.map Compute.adapterTarget raw)),
       ")"])),
     ". Original type: ",
-    (show typ)])) (Flows.pure (Lists.head candidates))))))
+    (show typ)])) (Right (Lists.head candidates))))))
 
 -- | Compose two coders
-composeCoders :: (Compute.Coder t0 t1 t2 t3 -> Compute.Coder t0 t1 t3 t4 -> Compute.Coder t0 t1 t2 t4)
+composeCoders :: (Compute.Coder t0 t1 -> Compute.Coder t1 t2 -> Compute.Coder t0 t2)
 composeCoders c1 c2 = Compute.Coder {
-  Compute.coderEncode = (\a -> Flows.bind (Compute.coderEncode c1 a) (\b1 -> Compute.coderEncode c2 b1)),
-  Compute.coderDecode = (\c -> Flows.bind (Compute.coderDecode c2 c) (\b2 -> Compute.coderDecode c1 b2))}
+  Compute.coderEncode = (\cx -> \a -> Eithers.bind (Compute.coderEncode c1 cx a) (\b1 -> Compute.coderEncode c2 cx b1)),
+  Compute.coderDecode = (\cx -> \c -> Eithers.bind (Compute.coderDecode c2 cx c) (\b2 -> Compute.coderDecode c1 cx b2))}
 
 -- | Apply coder in the specified direction
-encodeDecode :: (Coders.CoderDirection -> Compute.Coder t0 t0 t1 t1 -> t1 -> Compute.Flow t0 t1)
-encodeDecode dir coder term = ((\x -> case x of
-  Coders.CoderDirectionEncode -> (Compute.coderEncode coder term)
-  Coders.CoderDirectionDecode -> (Compute.coderDecode coder term)) dir)
+encodeDecode :: (Coders.CoderDirection -> Compute.Coder t0 t0 -> Context.Context -> t0 -> Either (Context.InContext Error.OtherError) t0)
+encodeDecode dir coder cx term = ((\x -> case x of
+  Coders.CoderDirectionEncode -> (Compute.coderEncode coder cx term)
+  Coders.CoderDirectionDecode -> (Compute.coderDecode coder cx term)) dir)
 
 -- | Check if float type is supported by language constraints
 floatTypeIsSupported :: (Coders.LanguageConstraints -> Core.FloatType -> Bool)
 floatTypeIsSupported constraints ft = (Sets.member ft (Coders.languageConstraintsFloatTypes constraints))
 
 -- | Identity adapter
-idAdapter :: (t0 -> Compute.Adapter t1 t2 t0 t0 t3 t3)
+idAdapter :: (t0 -> Compute.Adapter t0 t0 t1 t1)
 idAdapter t = Compute.Adapter {
   Compute.adapterIsLossy = False,
   Compute.adapterSource = t,
@@ -80,10 +82,10 @@ idAdapter t = Compute.Adapter {
   Compute.adapterCoder = idCoder}
 
 -- | Identity coder
-idCoder :: (Compute.Coder t0 t1 t2 t2)
+idCoder :: (Compute.Coder t0 t0)
 idCoder = Compute.Coder {
-  Compute.coderEncode = Flows.pure,
-  Compute.coderDecode = Flows.pure}
+  Compute.coderEncode = (\_cx -> \x -> Right x),
+  Compute.coderDecode = (\_cx -> \x -> Right x)}
 
 -- | Check if integer type is supported by language constraints
 integerTypeIsSupported :: (Coders.LanguageConstraints -> Core.IntegerType -> Bool)
@@ -93,8 +95,8 @@ integerTypeIsSupported constraints it = (Sets.member it (Coders.languageConstrai
 literalTypeIsSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)
 literalTypeIsSupported constraints lt =  
   let isSupported = (\lt -> (\x -> case x of
-          Core.LiteralTypeFloat v1 -> (floatTypeIsSupported constraints v1)
-          Core.LiteralTypeInteger v1 -> (integerTypeIsSupported constraints v1)
+          Core.LiteralTypeFloat v0 -> (floatTypeIsSupported constraints v0)
+          Core.LiteralTypeInteger v0 -> (integerTypeIsSupported constraints v0)
           _ -> True) lt)
   in (Logic.and (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (isSupported lt))
 
@@ -130,26 +132,28 @@ typeIsSupported constraints t =
       let isSupportedVariant = (\v -> Logic.or (isVariable v) (Sets.member v (Coders.languageConstraintsTypeVariants constraints)))
       in  
         let isSupported = (\base -> (\x -> case x of
-                Core.TypeAnnotated v1 -> (typeIsSupported constraints (Core.annotatedTypeBody v1))
-                Core.TypeApplication v1 -> (Logic.and (typeIsSupported constraints (Core.applicationTypeFunction v1)) (typeIsSupported constraints (Core.applicationTypeArgument v1)))
-                Core.TypeEither v1 -> (Logic.and (typeIsSupported constraints (Core.eitherTypeLeft v1)) (typeIsSupported constraints (Core.eitherTypeRight v1)))
-                Core.TypeForall v1 -> (typeIsSupported constraints (Core.forallTypeBody v1))
-                Core.TypeFunction v1 -> (Logic.and (typeIsSupported constraints (Core.functionTypeDomain v1)) (typeIsSupported constraints (Core.functionTypeCodomain v1)))
-                Core.TypeList v1 -> (typeIsSupported constraints v1)
-                Core.TypeLiteral v1 -> (literalTypeIsSupported constraints v1)
-                Core.TypeMap v1 -> (Logic.and (typeIsSupported constraints (Core.mapTypeKeys v1)) (typeIsSupported constraints (Core.mapTypeValues v1)))
-                Core.TypeMaybe v1 -> (typeIsSupported constraints v1)
-                Core.TypePair v1 -> (Logic.and (typeIsSupported constraints (Core.pairTypeFirst v1)) (typeIsSupported constraints (Core.pairTypeSecond v1)))
-                Core.TypeRecord v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
-                Core.TypeSet v1 -> (typeIsSupported constraints v1)
-                Core.TypeUnion v1 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v1)))
+                Core.TypeAnnotated v0 -> (typeIsSupported constraints (Core.annotatedTypeBody v0))
+                Core.TypeApplication v0 -> (Logic.and (typeIsSupported constraints (Core.applicationTypeFunction v0)) (typeIsSupported constraints (Core.applicationTypeArgument v0)))
+                Core.TypeEither v0 -> (Logic.and (typeIsSupported constraints (Core.eitherTypeLeft v0)) (typeIsSupported constraints (Core.eitherTypeRight v0)))
+                Core.TypeForall v0 -> (typeIsSupported constraints (Core.forallTypeBody v0))
+                Core.TypeFunction v0 -> (Logic.and (typeIsSupported constraints (Core.functionTypeDomain v0)) (typeIsSupported constraints (Core.functionTypeCodomain v0)))
+                Core.TypeList v0 -> (typeIsSupported constraints v0)
+                Core.TypeLiteral v0 -> (literalTypeIsSupported constraints v0)
+                Core.TypeMap v0 -> (Logic.and (typeIsSupported constraints (Core.mapTypeKeys v0)) (typeIsSupported constraints (Core.mapTypeValues v0)))
+                Core.TypeMaybe v0 -> (typeIsSupported constraints v0)
+                Core.TypePair v0 -> (Logic.and (typeIsSupported constraints (Core.pairTypeFirst v0)) (typeIsSupported constraints (Core.pairTypeSecond v0)))
+                Core.TypeRecord v0 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v0)))
+                Core.TypeSet v0 -> (typeIsSupported constraints v0)
+                Core.TypeUnion v0 -> (Lists.foldl Logic.and True (Lists.map (\field -> typeIsSupported constraints (Core.fieldTypeType field)) (Core.rowTypeFields v0)))
                 Core.TypeUnit -> True
-                Core.TypeWrap v1 -> (typeIsSupported constraints (Core.wrappedTypeBody v1))
+                Core.TypeWrap v0 -> (typeIsSupported constraints (Core.wrappedTypeBody v0))
                 Core.TypeVariable _ -> True) base)
         in (Logic.and (Coders.languageConstraintsTypes constraints base) (Logic.and (isSupportedVariant (Reflect.typeVariant base)) (isSupported base)))
 
 -- | Create a unidirectional coder
-unidirectionalCoder :: ((t0 -> Compute.Flow t1 t2) -> Compute.Coder t1 t3 t0 t2)
+unidirectionalCoder :: ((Context.Context -> t0 -> Either (Context.InContext Error.OtherError) t1) -> Compute.Coder t0 t1)
 unidirectionalCoder m = Compute.Coder {
   Compute.coderEncode = m,
-  Compute.coderDecode = (\_ -> Flows.fail "inbound mapping is unsupported")}
+  Compute.coderDecode = (\cx -> \_ -> Left (Context.InContext {
+    Context.inContextObject = (Error.OtherError "inbound mapping is unsupported"),
+    Context.inContextContext = cx}))}

@@ -23,7 +23,7 @@ data AdapterContext =
     -- | The language being encoded or decoded
     adapterContextLanguage :: Language,
     -- | A map of type names to adapters for those types
-    adapterContextAdapters :: (M.Map Core.Name (Compute.Adapter AdapterContext AdapterContext Core.Type Core.Type Core.Term Core.Term))}
+    adapterContextAdapters :: (M.Map Core.Name (Compute.Adapter Core.Type Core.Type Core.Term Core.Term))}
 
 _AdapterContext = (Core.Name "hydra.coders.AdapterContext")
 
@@ -106,7 +106,7 @@ newtype LanguageName =
 _LanguageName = (Core.Name "hydra.coders.LanguageName")
 
 -- | A bidirectional encoder which maps between the same type and term languages on either side
-type SymmetricAdapter s t v = (Compute.Adapter s s t t v v)
+type SymmetricAdapter t v = (Compute.Adapter t t v v)
 
 _SymmetricAdapter = (Core.Name "hydra.coders.SymmetricAdapter")
 
@@ -125,6 +125,6 @@ _TraversalOrder_pre = (Core.Name "pre")
 _TraversalOrder_post = (Core.Name "post")
 
 -- | A function which maps a Hydra type to a symmetric adapter between types and terms
-type TypeAdapter = (Core.Type -> Compute.Flow AdapterContext (SymmetricAdapter AdapterContext Core.Type Core.Term))
+type TypeAdapter = (AdapterContext -> Core.Type -> Either String (SymmetricAdapter Core.Type Core.Term))
 
 _TypeAdapter = (Core.Name "hydra.coders.TypeAdapter")

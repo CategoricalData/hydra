@@ -8,13 +8,13 @@ import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Arity as Arity
 import qualified Hydra.Checking as Checking
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -23,7 +23,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Typing as Typing
@@ -48,10 +47,10 @@ normalizeComment s =
 gatherApplications :: (Core.Term -> ([Core.Term], Core.Term))
 gatherApplications term =  
   let go = (\args -> \t -> (\x -> case x of
-          Core.TermApplication v1 ->  
-            let lhs = (Core.applicationFunction v1)
+          Core.TermApplication v0 ->  
+            let lhs = (Core.applicationFunction v0)
             in  
-              let rhs = (Core.applicationArgument v1)
+              let rhs = (Core.applicationArgument v0)
               in (go (Lists.cons rhs args) lhs)
           _ -> (args, t)) (Rewriting.deannotateTerm t))
   in (go [] term)
@@ -59,55 +58,55 @@ gatherApplications term =
 -- | Gather term arguments, stripping type-level constructs
 gatherArgs :: (Core.Term -> [Core.Term] -> (Core.Term, [Core.Term]))
 gatherArgs term args = ((\x -> case x of
-  Core.TermApplication v1 ->  
-    let lhs = (Core.applicationFunction v1)
+  Core.TermApplication v0 ->  
+    let lhs = (Core.applicationFunction v0)
     in  
-      let rhs = (Core.applicationArgument v1)
+      let rhs = (Core.applicationArgument v0)
       in (gatherArgs lhs (Lists.cons rhs args))
-  Core.TermTypeLambda v1 ->  
-    let body = (Core.typeLambdaBody v1)
+  Core.TermTypeLambda v0 ->  
+    let body = (Core.typeLambdaBody v0)
     in (gatherArgs body args)
-  Core.TermTypeApplication v1 ->  
-    let body = (Core.typeApplicationTermBody v1)
+  Core.TermTypeApplication v0 ->  
+    let body = (Core.typeApplicationTermBody v0)
     in (gatherArgs body args)
   _ -> (term, args)) (Rewriting.deannotateTerm term))
 
 -- | Gather term and type arguments from a term
 gatherArgsWithTypeApps :: (Core.Term -> [Core.Term] -> [Core.Type] -> (Core.Term, ([Core.Term], [Core.Type])))
 gatherArgsWithTypeApps term args tyArgs = ((\x -> case x of
-  Core.TermApplication v1 ->  
-    let lhs = (Core.applicationFunction v1)
+  Core.TermApplication v0 ->  
+    let lhs = (Core.applicationFunction v0)
     in  
-      let rhs = (Core.applicationArgument v1)
+      let rhs = (Core.applicationArgument v0)
       in (gatherArgsWithTypeApps lhs (Lists.cons rhs args) tyArgs)
-  Core.TermTypeLambda v1 ->  
-    let body = (Core.typeLambdaBody v1)
+  Core.TermTypeLambda v0 ->  
+    let body = (Core.typeLambdaBody v0)
     in (gatherArgsWithTypeApps body args tyArgs)
-  Core.TermTypeApplication v1 ->  
-    let body = (Core.typeApplicationTermBody v1)
+  Core.TermTypeApplication v0 ->  
+    let body = (Core.typeApplicationTermBody v0)
     in  
-      let typ = (Core.typeApplicationTermType v1)
+      let typ = (Core.typeApplicationTermType v0)
       in (gatherArgsWithTypeApps body args (Lists.cons typ tyArgs))
   _ -> (term, (args, tyArgs))) (Rewriting.deannotateTerm term))
 
 -- | Check if a term can be encoded as a simple assignment
 isSimpleAssignment :: (Core.Term -> Bool)
 isSimpleAssignment term = ((\x -> case x of
-  Core.TermAnnotated v1 -> (isSimpleAssignment (Core.annotatedTermBody v1))
-  Core.TermFunction v1 -> ((\x -> case x of
+  Core.TermAnnotated v0 -> (isSimpleAssignment (Core.annotatedTermBody v0))
+  Core.TermFunction v0 -> ((\x -> case x of
     Core.FunctionLambda _ -> False
-    _ -> True) v1)
+    _ -> True) v0)
   Core.TermLet _ -> False
   Core.TermTypeLambda _ -> False
-  Core.TermTypeApplication v1 -> (isSimpleAssignment (Core.typeApplicationTermBody v1))
+  Core.TermTypeApplication v0 -> (isSimpleAssignment (Core.typeApplicationTermBody v0))
   _ ->  
     let baseTerm = (Pairs.first (gatherArgs term []))
     in ((\x -> case x of
-      Core.TermFunction v1 -> ((\x -> case x of
-        Core.FunctionElimination v2 -> ((\x -> case x of
+      Core.TermFunction v0 -> ((\x -> case x of
+        Core.FunctionElimination v1 -> ((\x -> case x of
           Core.EliminationUnion _ -> False
-          _ -> True) v2)
-        _ -> True) v1)
+          _ -> True) v1)
+        _ -> True) v0)
       _ -> True) baseTerm)) term)
 
 -- | Check if a term needs to be treated as a function rather than a simple value
@@ -116,7 +115,7 @@ isComplexTerm tc t = ((\x -> case x of
   Core.TermLet _ -> True
   Core.TermTypeApplication _ -> True
   Core.TermTypeLambda _ -> True
-  Core.TermVariable v1 -> (isComplexVariable tc v1)
+  Core.TermVariable v0 -> (isComplexVariable tc v0)
   _ -> (Lists.foldl (\b -> \sub -> Logic.or b (isComplexTerm tc sub)) False (Rewriting.subterms t))) t)
 
 -- | Check if a variable is bound to a complex term
@@ -147,20 +146,20 @@ isTrivialTerm t = ((\x -> case x of
   Core.TermLiteral _ -> True
   Core.TermVariable _ -> True
   Core.TermUnit -> True
-  Core.TermApplication v1 ->  
-    let fun = (Core.applicationFunction v1)
+  Core.TermApplication v0 ->  
+    let fun = (Core.applicationFunction v0)
     in  
-      let arg = (Core.applicationArgument v1)
+      let arg = (Core.applicationArgument v0)
       in ((\x -> case x of
-        Core.TermFunction v2 -> ((\x -> case x of
-          Core.FunctionElimination v3 -> ((\x -> case x of
+        Core.TermFunction v1 -> ((\x -> case x of
+          Core.FunctionElimination v2 -> ((\x -> case x of
             Core.EliminationRecord _ -> (isTrivialTerm arg)
-            _ -> False) v3)
-          _ -> False) v2)
+            _ -> False) v2)
+          _ -> False) v1)
         _ -> False) fun)
-  Core.TermMaybe v1 -> (Maybes.maybe True (\inner -> isTrivialTerm inner) v1)
-  Core.TermTypeApplication v1 -> (isTrivialTerm (Core.typeApplicationTermBody v1))
-  Core.TermTypeLambda v1 -> (isTrivialTerm (Core.typeLambdaBody v1))
+  Core.TermMaybe v0 -> (Maybes.maybe True (\inner -> isTrivialTerm inner) v0)
+  Core.TermTypeApplication v0 -> (isTrivialTerm (Core.typeApplicationTermBody v0))
+  Core.TermTypeLambda v0 -> (isTrivialTerm (Core.typeLambdaBody v0))
   _ -> False) (Rewriting.deannotateTerm t))
 
 -- | Check if a term body is self-tail-recursive with respect to a function name
@@ -183,23 +182,23 @@ isTailRecursiveInTailPosition funcName term =
           in  
             let strippedFun = (Rewriting.deannotateAndDetypeTerm gatherFun)
             in ((\x -> case x of
-              Core.TermVariable v2 -> (Logic.ifElse (Equality.equal v2 funcName) ( 
+              Core.TermVariable v1 -> (Logic.ifElse (Equality.equal v1 funcName) ( 
                 let argsNoFunc = (Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs)
                 in  
                   let argsNoLambda = (Lists.foldl (\ok -> \arg -> Logic.and ok (Logic.not (Rewriting.foldOverTerm Coders.TraversalOrderPre (\found -> \t -> Logic.or found ((\x -> case x of
-                          Core.TermFunction v3 -> ((\x -> case x of
-                            Core.FunctionLambda v4 ->  
-                              let ignore = (Core.lambdaBody v4)
+                          Core.TermFunction v2 -> ((\x -> case x of
+                            Core.FunctionLambda v3 ->  
+                              let ignore = (Core.lambdaBody v3)
                               in True
-                            _ -> False) v3)
+                            _ -> False) v2)
                           _ -> False) t)) False arg))) True gatherArgs)
                   in (Logic.and argsNoFunc argsNoLambda)) (Rewriting.isFreeVariableInTerm funcName term))
-              Core.TermFunction v2 -> ((\x -> case x of
-                Core.FunctionElimination v3 -> ((\x -> case x of
-                  Core.EliminationUnion v4 ->  
-                    let cases_ = (Core.caseStatementCases v4)
+              Core.TermFunction v1 -> ((\x -> case x of
+                Core.FunctionElimination v2 -> ((\x -> case x of
+                  Core.EliminationUnion v3 ->  
+                    let cases_ = (Core.caseStatementCases v3)
                     in  
-                      let dflt = (Core.caseStatementDefault v4)
+                      let dflt = (Core.caseStatementDefault v3)
                       in  
                         let branchesOk = (Lists.foldl (\ok -> \field -> Logic.and ok (isTailRecursiveInTailPosition funcName (Core.fieldTerm field))) True cases_)
                         in  
@@ -207,91 +206,93 @@ isTailRecursiveInTailPosition funcName term =
                           in  
                             let argsOk = (Lists.foldl (\ok -> \arg -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName arg)) True gatherArgs)
                             in (Logic.and (Logic.and branchesOk dfltOk) argsOk)
-                  _ -> (Rewriting.isFreeVariableInTerm funcName term)) v3)
-                _ -> (Rewriting.isFreeVariableInTerm funcName term)) v2)
+                  _ -> (Rewriting.isFreeVariableInTerm funcName term)) v2)
+                _ -> (Rewriting.isFreeVariableInTerm funcName term)) v1)
               _ -> (Rewriting.isFreeVariableInTerm funcName term)) strippedFun)
-    Core.TermFunction v1 -> ((\x -> case x of
-      Core.FunctionLambda v2 -> (isTailRecursiveInTailPosition funcName (Core.lambdaBody v2))
-      _ -> (Rewriting.isFreeVariableInTerm funcName term)) v1)
-    Core.TermLet v1 ->  
-      let bindingsOk = (Lists.foldl (\ok -> \b -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v1))
-      in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v1)))
+    Core.TermFunction v0 -> ((\x -> case x of
+      Core.FunctionLambda v1 -> (isTailRecursiveInTailPosition funcName (Core.lambdaBody v1))
+      _ -> (Rewriting.isFreeVariableInTerm funcName term)) v0)
+    Core.TermLet v0 ->  
+      let bindingsOk = (Lists.foldl (\ok -> \b -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v0))
+      in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v0)))
     _ -> (Rewriting.isFreeVariableInTerm funcName term)) stripped)
 
 -- | Extract comments/description from a Binding
-commentsFromElement :: (Core.Binding -> Compute.Flow Graph.Graph (Maybe String))
-commentsFromElement b = (Annotations.getTermDescription (Core.bindingTerm b))
+commentsFromElement :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.OtherError) (Maybe String))
+commentsFromElement cx g b = (Annotations.getTermDescription cx g (Core.bindingTerm b))
 
 -- | Extract comments/description from a FieldType
-commentsFromFieldType :: (Core.FieldType -> Compute.Flow Graph.Graph (Maybe String))
-commentsFromFieldType ft = (Annotations.getTypeDescription (Core.fieldTypeType ft))
+commentsFromFieldType :: (Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Error.OtherError) (Maybe String))
+commentsFromFieldType cx g ft = (Annotations.getTypeDescription cx g (Core.fieldTypeType ft))
 
--- | Infer the type of a term with tracing
-tryTypeOf :: (String -> Graph.Graph -> Core.Term -> Compute.Flow t0 Core.Type)
-tryTypeOf msg tc term = (Monads.withTrace msg (Checking.typeOf tc [] term))
+-- | Check the type of a term
+typeOfTerm :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Type)
+typeOfTerm cx g term = (Eithers.map Pairs.first (Checking.typeOf cx g [] term))
 
 -- | Produces metadata for a binding if it is complex
 bindingMetadata :: (Graph.Graph -> Core.Binding -> Maybe Core.Term)
 bindingMetadata tc b = (Logic.ifElse (isComplexBinding tc b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing)
 
-analyzeFunctionTermWith_finish :: ((t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermWith_finish getTC fEnv tparams args bindings doms tapps body =  
+analyzeFunctionTermWith_finish :: (Context.Context -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermWith_finish cx getTC fEnv tparams args bindings doms tapps body =  
   let bodyWithTapps = (Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
           Core.typeApplicationTermBody = trm,
           Core.typeApplicationTermType = typ})) body tapps)
-  in (Flows.bind (Flows.withDefault Nothing (Flows.map Maybes.pure (tryTypeOf "analyzeFunctionTermWith" (getTC fEnv) bodyWithTapps))) (\mcod -> Flows.pure (Typing.FunctionStructure {
-    Typing.functionStructureTypeParams = (Lists.reverse tparams),
-    Typing.functionStructureParams = (Lists.reverse args),
-    Typing.functionStructureBindings = bindings,
-    Typing.functionStructureBody = bodyWithTapps,
-    Typing.functionStructureDomains = (Lists.reverse doms),
-    Typing.functionStructureCodomain = mcod,
-    Typing.functionStructureEnvironment = fEnv})))
+  in  
+    let mcod = (Eithers.either (\_ -> Nothing) (\c -> Just c) (typeOfTerm cx (getTC fEnv) bodyWithTapps))
+    in (Right (Typing.FunctionStructure {
+      Typing.functionStructureTypeParams = (Lists.reverse tparams),
+      Typing.functionStructureParams = (Lists.reverse args),
+      Typing.functionStructureBindings = bindings,
+      Typing.functionStructureBody = bodyWithTapps,
+      Typing.functionStructureDomains = (Lists.reverse doms),
+      Typing.functionStructureCodomain = mcod,
+      Typing.functionStructureEnvironment = fEnv}))
 
-analyzeFunctionTermWith_gather :: ((Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t = ((\x -> case x of
-  Core.TermFunction v1 -> ((\x -> case x of
-    Core.FunctionLambda v2 -> (Logic.ifElse argMode ( 
-      let v = (Core.lambdaParameter v2)
+analyzeFunctionTermWith_gather :: (Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t = ((\x -> case x of
+  Core.TermFunction v0 -> ((\x -> case x of
+    Core.FunctionLambda v1 -> (Logic.ifElse argMode ( 
+      let v = (Core.lambdaParameter v1)
       in  
-        let dom = (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v2))
+        let dom = (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v1))
         in  
-          let body = (Core.lambdaBody v2)
+          let body = (Core.lambdaBody v1)
           in  
-            let newEnv = (setTC (Schemas.extendGraphForLambda (getTC gEnv) v2) gEnv)
-            in (analyzeFunctionTermWith_gather forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWith_finish getTC gEnv tparams args bindings doms tapps t))
-    _ -> (analyzeFunctionTermWith_finish getTC gEnv tparams args bindings doms tapps t)) v1)
-  Core.TermLet v1 ->  
-    let newBindings = (Core.letBindings v1)
+            let newEnv = (setTC (Schemas.extendGraphForLambda (getTC gEnv) v1) gEnv)
+            in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t))
+    _ -> (analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t)) v0)
+  Core.TermLet v0 ->  
+    let newBindings = (Core.letBindings v0)
     in  
-      let body = (Core.letBody v1)
+      let body = (Core.letBody v0)
       in  
-        let newEnv = (setTC (Schemas.extendGraphForLet forBinding (getTC gEnv) v1) gEnv)
-        in (analyzeFunctionTermWith_gather forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
-  Core.TermTypeApplication v1 ->  
-    let taBody = (Core.typeApplicationTermBody v1)
+        let newEnv = (setTC (Schemas.extendGraphForLet forBinding (getTC gEnv) v0) gEnv)
+        in (analyzeFunctionTermWith_gather cx forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
+  Core.TermTypeApplication v0 ->  
+    let taBody = (Core.typeApplicationTermBody v0)
     in  
-      let typ = (Core.typeApplicationTermType v1)
-      in (analyzeFunctionTermWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
-  Core.TermTypeLambda v1 ->  
-    let tvar = (Core.typeLambdaParameter v1)
+      let typ = (Core.typeApplicationTermType v0)
+      in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
+  Core.TermTypeLambda v0 ->  
+    let tvar = (Core.typeLambdaParameter v0)
     in  
-      let tlBody = (Core.typeLambdaBody v1)
+      let tlBody = (Core.typeLambdaBody v0)
       in  
-        let newEnv = (setTC (Schemas.extendGraphForTypeLambda (getTC gEnv) v1) gEnv)
-        in (analyzeFunctionTermWith_gather forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
-  _ -> (analyzeFunctionTermWith_finish getTC gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
+        let newEnv = (setTC (Schemas.extendGraphForTypeLambda (getTC gEnv) v0) gEnv)
+        in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
+  _ -> (analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
 
 -- | Analyze a function term with configurable binding metadata
-analyzeFunctionTermWith :: ((Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermWith forBinding getTC setTC env term = (analyzeFunctionTermWith_gather forBinding getTC setTC True env [] [] [] [] [] term)
+analyzeFunctionTermWith :: (Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermWith cx forBinding getTC setTC env term = (analyzeFunctionTermWith_gather cx forBinding getTC setTC True env [] [] [] [] [] term)
 
-analyzeFunctionTermNoInferWith_finish :: (t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermNoInferWith_finish :: (t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
 analyzeFunctionTermNoInferWith_finish fEnv tparams args bindings doms tapps body =  
   let bodyWithTapps = (Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
           Core.typeApplicationTermBody = trm,
           Core.typeApplicationTermType = typ})) body tapps)
-  in (Flows.pure (Typing.FunctionStructure {
+  in (Right (Typing.FunctionStructure {
     Typing.functionStructureTypeParams = (Lists.reverse tparams),
     Typing.functionStructureParams = (Lists.reverse args),
     Typing.functionStructureBindings = bindings,
@@ -300,68 +301,52 @@ analyzeFunctionTermNoInferWith_finish fEnv tparams args bindings doms tapps body
     Typing.functionStructureCodomain = Nothing,
     Typing.functionStructureEnvironment = fEnv}))
 
-analyzeFunctionTermNoInferWith_gather :: ((Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermNoInferWith_gather :: ((Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
 analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t = ((\x -> case x of
-  Core.TermFunction v1 -> ((\x -> case x of
-    Core.FunctionLambda v2 -> (Logic.ifElse argMode ( 
-      let v = (Core.lambdaParameter v2)
+  Core.TermFunction v0 -> ((\x -> case x of
+    Core.FunctionLambda v1 -> (Logic.ifElse argMode ( 
+      let v = (Core.lambdaParameter v1)
       in  
-        let dom = (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v2))
+        let dom = (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v1))
         in  
-          let body = (Core.lambdaBody v2)
+          let body = (Core.lambdaBody v1)
           in  
-            let newEnv = (setTC (Schemas.extendGraphForLambda (getTC gEnv) v2) gEnv)
+            let newEnv = (setTC (Schemas.extendGraphForLambda (getTC gEnv) v1) gEnv)
             in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t))
-    _ -> (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t)) v1)
-  Core.TermLet v1 ->  
-    let newBindings = (Core.letBindings v1)
+    _ -> (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t)) v0)
+  Core.TermLet v0 ->  
+    let newBindings = (Core.letBindings v0)
     in  
-      let body = (Core.letBody v1)
+      let body = (Core.letBody v0)
       in  
-        let newEnv = (setTC (Schemas.extendGraphForLet forBinding (getTC gEnv) v1) gEnv)
+        let newEnv = (setTC (Schemas.extendGraphForLet forBinding (getTC gEnv) v0) gEnv)
         in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
-  Core.TermTypeApplication v1 ->  
-    let taBody = (Core.typeApplicationTermBody v1)
+  Core.TermTypeApplication v0 ->  
+    let taBody = (Core.typeApplicationTermBody v0)
     in  
-      let typ = (Core.typeApplicationTermType v1)
+      let typ = (Core.typeApplicationTermType v0)
       in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
-  Core.TermTypeLambda v1 ->  
-    let tvar = (Core.typeLambdaParameter v1)
+  Core.TermTypeLambda v0 ->  
+    let tvar = (Core.typeLambdaParameter v0)
     in  
-      let tlBody = (Core.typeLambdaBody v1)
+      let tlBody = (Core.typeLambdaBody v0)
       in  
-        let newEnv = (setTC (Schemas.extendGraphForTypeLambda (getTC gEnv) v1) gEnv)
+        let newEnv = (setTC (Schemas.extendGraphForTypeLambda (getTC gEnv) v0) gEnv)
         in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
   _ -> (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
 
 -- | Analyze a function term without type inference, with configurable binding metadata
-analyzeFunctionTermNoInferWith :: ((Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermNoInferWith :: ((Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
 analyzeFunctionTermNoInferWith forBinding getTC setTC env term = (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC True env [] [] [] [] [] term)
 
 -- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
-analyzeFunctionTerm :: ((t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
-analyzeFunctionTerm getTC setTC env term = (analyzeFunctionTermWith bindingMetadata getTC setTC env term)
+analyzeFunctionTerm :: (Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
+analyzeFunctionTerm cx getTC setTC env term = (analyzeFunctionTermWith cx bindingMetadata getTC setTC env term)
 
 -- | Analyze a function term without recording binding metadata
-analyzeFunctionTermInline :: ((t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermInline getTC setTC env term = (analyzeFunctionTermWith (\_ -> \_ -> Nothing) getTC setTC env term)
+analyzeFunctionTermInline :: (Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermInline cx getTC setTC env term = (analyzeFunctionTermWith cx (\_ -> \_ -> Nothing) getTC setTC env term)
 
 -- | Analyze a function term without type inference (performance optimization)
-analyzeFunctionTermNoInfer :: ((t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Compute.Flow t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermNoInfer :: ((t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
 analyzeFunctionTermNoInfer getTC setTC env term = (analyzeFunctionTermNoInferWith bindingMetadata getTC setTC env term)
-
--- | Update the metadata portion of a coder state
-updateCoderMetadata :: ((t0 -> t1) -> (t2 -> t3 -> t0) -> (t0 -> t2) -> (t1 -> t3) -> Compute.Flow t0 ())
-updateCoderMetadata getMeta makeCoder getGraph f = (Flows.bind Monads.getState (\st -> Monads.putState (makeCoder (getGraph st) (f (getMeta st)))))
-
--- | Temporarily update the graph for a computation, then restore it
-withUpdatedCoderGraph :: ((t0 -> t1) -> (t0 -> t2) -> (t1 -> t2 -> t0) -> (t1 -> t1) -> Compute.Flow t0 t3 -> Compute.Flow t0 t3)
-withUpdatedCoderGraph getGraph getMeta makeCoder f flow = (Flows.bind Monads.getState (\st -> Flows.bind (Monads.putState (makeCoder (f (getGraph st)) (getMeta st))) (\_ -> Flows.bind flow (\r -> Flows.bind Monads.getState (\st2 -> Flows.bind (Monads.putState (makeCoder (getGraph st) (getMeta st2))) (\_ -> Flows.pure r))))))
-
--- | Temporarily extend the graph with additional bindings for a computation
-withGraphBindings :: ((t0 -> Graph.Graph) -> (Graph.Graph -> t1 -> t0) -> (t0 -> t1) -> [Core.Binding] -> Compute.Flow t0 t2 -> Compute.Flow t0 t2)
-withGraphBindings getGraph makeCoder getMeta bindings flow = (withUpdatedCoderGraph getGraph getMeta makeCoder (Lexical.extendGraphWithBindings bindings) flow)
-
--- | Run a Flow Graph computation within a Flow state computation
-inCoderGraphContext :: ((t0 -> t1) -> (t0 -> t2) -> (t1 -> t2 -> t0) -> Compute.Flow t1 t3 -> Compute.Flow t0 t3)
-inCoderGraphContext getGraph getMeta makeCoder graphFlow = (Flows.bind Monads.getState (\st -> Flows.bind (Monads.withState (getGraph st) (Flows.bind graphFlow (\ret -> Flows.bind Monads.getState (\g2 -> Flows.pure (ret, g2))))) (\result -> Flows.bind (Monads.putState (makeCoder (Pairs.second result) (getMeta st))) (\_ -> Flows.pure (Pairs.first result)))))

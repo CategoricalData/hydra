@@ -266,7 +266,7 @@
               "@key": "description",
               "@value": {
                 "literal": {
-                  "string": "A maximum depth for nested flows. Currently, this is set very high because deep flows are common in type inference over the Hydra kernel."}}}],
+                  "string": "A maximum depth for nested computations. Currently, this is set very high because deep recursion is common in type inference over the Hydra kernel."}}}],
           "body": {"literal": {"integer": {"int32": 5000}}}}},
       "type": [
         {

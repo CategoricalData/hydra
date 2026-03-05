@@ -632,7 +632,6 @@ module_ = Module.Module {
     (Module.Namespace "hydra.lexical"),
     (Module.Namespace "hydra.rewriting"),
     (Module.Namespace "hydra.decode.core"),
-    (Module.Namespace "hydra.decode.compute"),
     (Module.Namespace "hydra.decode.graph"),
     (Module.Namespace "hydra.decode.module")],
   Module.moduleTypeDependencies = [

@@ -5,19 +5,18 @@
 module Hydra.Encoding where
 
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Error as Error
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
 import qualified Hydra.Schemas as Schemas
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -28,11 +27,13 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Transform a type binding into an encoder binding
-encodeBinding :: (Core.Binding -> Compute.Flow Graph.Graph Core.Binding)
-encodeBinding b = (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.eitherToFlow Error.unDecodingError (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Flows.pure (Core.Binding {
+encodeBinding :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.DecodingError) Core.Binding)
+encodeBinding cx graph b = (Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
+  Context.inContextObject = _wc_e,
+  Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Right (Core.Binding {
   Core.bindingName = (encodeBindingName (Core.bindingName b)),
   Core.bindingTerm = (encodeType typ),
-  Core.bindingType = Nothing}))))
+  Core.bindingType = Nothing})))
 
 -- | Generate a binding name for an encoder function from a type name
 encodeBindingName :: (Core.Name -> Core.Name)
@@ -156,7 +157,7 @@ encodeLiteralType x = case x of
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "string"),
             Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})))
-  Core.LiteralTypeInteger v1 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+  Core.LiteralTypeInteger v0 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
     Core.lambdaParameter = (Core.Name "x"),
     Core.lambdaDomain = Nothing,
     Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -167,8 +168,8 @@ encodeLiteralType x = case x of
           Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "integer"),
-            Core.fieldTerm = (encodeIntegerValue v1 (Core.TermVariable (Core.Name "x")))}}))}}))})))
-  Core.LiteralTypeFloat v1 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+            Core.fieldTerm = (encodeIntegerValue v0 (Core.TermVariable (Core.Name "x")))}}))}}))})))
+  Core.LiteralTypeFloat v0 -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
     Core.lambdaParameter = (Core.Name "x"),
     Core.lambdaDomain = Nothing,
     Core.lambdaBody = (Core.TermUnion (Core.Injection {
@@ -179,7 +180,7 @@ encodeLiteralType x = case x of
           Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
           Core.injectionField = Core.Field {
             Core.fieldName = (Core.Name "float"),
-            Core.fieldTerm = (encodeFloatValue v1 (Core.TermVariable (Core.Name "x")))}}))}}))})))
+            Core.fieldTerm = (encodeFloatValue v0 (Core.TermVariable (Core.Name "x")))}}))}}))})))
   _ -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
     Core.lambdaParameter = (Core.Name "x"),
     Core.lambdaDomain = Nothing,
@@ -259,8 +260,10 @@ encodePairType pt = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}}))})))
 
 -- | Transform a type module into an encoder module
-encodeModule :: (Module.Module -> Compute.Flow Graph.Graph (Maybe Module.Module))
-encodeModule mod = (Flows.bind (filterTypeBindings (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Flows.pure Nothing) (Flows.bind (Flows.mapList encodeBinding typeBindings) (\encodedBindings -> Flows.pure (Just (Module.Module {
+encodeModule :: (Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Error.OtherError) (Maybe Module.Module))
+encodeModule cx graph mod = (Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
+  Context.inContextObject = (Error.OtherError (Error.unDecodingError (Context.inContextObject ic))),
+  Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Module.Module {
   Module.moduleNamespace = (encodeNamespace (Module.moduleNamespace mod)),
   Module.moduleElements = encodedBindings,
   Module.moduleTermDependencies = (Lists.map encodeNamespace (Module.moduleTypeDependencies mod)),
@@ -333,25 +336,25 @@ encodeSetType elemType = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
 -- | Generate an encoder term for a Type
 encodeType :: (Core.Type -> Core.Term)
 encodeType x = case x of
-  Core.TypeAnnotated v1 -> (encodeType (Core.annotatedTypeBody v1))
-  Core.TypeApplication v1 -> (Core.TermApplication (Core.Application {
-    Core.applicationFunction = (encodeType (Core.applicationTypeFunction v1)),
-    Core.applicationArgument = (encodeType (Core.applicationTypeArgument v1))}))
-  Core.TypeEither v1 -> (encodeEitherType v1)
-  Core.TypeForall v1 -> (encodeForallType v1)
+  Core.TypeAnnotated v0 -> (encodeType (Core.annotatedTypeBody v0))
+  Core.TypeApplication v0 -> (Core.TermApplication (Core.Application {
+    Core.applicationFunction = (encodeType (Core.applicationTypeFunction v0)),
+    Core.applicationArgument = (encodeType (Core.applicationTypeArgument v0))}))
+  Core.TypeEither v0 -> (encodeEitherType v0)
+  Core.TypeForall v0 -> (encodeForallType v0)
   Core.TypeFunction _ -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
     Core.lambdaParameter = (Core.Name "x"),
     Core.lambdaDomain = Nothing,
     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))
-  Core.TypeList v1 -> (encodeListType v1)
-  Core.TypeLiteral v1 -> (encodeLiteralType v1)
-  Core.TypeMap v1 -> (encodeMapType v1)
-  Core.TypeMaybe v1 -> (encodeOptionalType v1)
-  Core.TypePair v1 -> (encodePairType v1)
-  Core.TypeRecord v1 -> (encodeRecordType v1)
-  Core.TypeSet v1 -> (encodeSetType v1)
-  Core.TypeUnion v1 -> (encodeUnionType v1)
-  Core.TypeWrap v1 -> (encodeWrappedType v1)
+  Core.TypeList v0 -> (encodeListType v0)
+  Core.TypeLiteral v0 -> (encodeLiteralType v0)
+  Core.TypeMap v0 -> (encodeMapType v0)
+  Core.TypeMaybe v0 -> (encodeOptionalType v0)
+  Core.TypePair v0 -> (encodePairType v0)
+  Core.TypeRecord v0 -> (encodeRecordType v0)
+  Core.TypeSet v0 -> (encodeSetType v0)
+  Core.TypeUnion v0 -> (encodeUnionType v0)
+  Core.TypeWrap v0 -> (encodeWrappedType v0)
   Core.TypeUnit -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
     Core.lambdaParameter = (Core.Name "_"),
     Core.lambdaDomain = Nothing,
@@ -360,7 +363,7 @@ encodeType x = case x of
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "unit"),
         Core.fieldTerm = Core.TermUnit}}))})))
-  Core.TypeVariable v1 -> (Core.TermVariable (encodeBindingName v1))
+  Core.TypeVariable v0 -> (Core.TermVariable (encodeBindingName v0))
   _ -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
     Core.lambdaParameter = (Core.Name "x"),
     Core.lambdaDomain = Nothing,
@@ -399,12 +402,12 @@ encodeWrappedType wt = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})))
 
 -- | Filter bindings to only encodable type definitions
-filterTypeBindings :: ([Core.Binding] -> Compute.Flow Graph.Graph [Core.Binding])
-filterTypeBindings bindings = (Flows.map Maybes.cat (Flows.mapList isEncodableBinding (Lists.filter Annotations.isNativeType bindings)))
+filterTypeBindings :: (Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.OtherError) [Core.Binding])
+filterTypeBindings cx graph bindings = (Eithers.map Maybes.cat (Eithers.mapList (isEncodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings)))
 
 -- | Check if a binding is encodable (serializable type)
-isEncodableBinding :: (Core.Binding -> Compute.Flow Graph.Graph (Maybe Core.Binding))
-isEncodableBinding b = (Flows.map (\serializable -> Logic.ifElse serializable (Just b) Nothing) (Schemas.isSerializableByName (Core.bindingName b)))
+isEncodableBinding :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.OtherError) (Maybe Core.Binding))
+isEncodableBinding cx graph b = (Eithers.bind (Schemas.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing)))
 
 -- | Check whether a type is the unit type
 isUnitType :: (Core.Type -> Bool)

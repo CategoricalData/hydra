@@ -4,13 +4,11 @@
 
 module Hydra.Extract.Json where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Json.Model as Model
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Monads as Monads
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -19,59 +17,59 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Extract an array from a JSON value, failing if the value is not an array
-expectArray :: (Model.Value -> Compute.Flow t0 [Model.Value])
+expectArray :: (Model.Value -> Either String [Model.Value])
 expectArray value = ((\x -> case x of
-  Model.ValueArray v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "JSON array" (showValue value))) value)
+  Model.ValueArray v0 -> (Right v0)
+  _ -> (Left (Strings.cat2 (Strings.cat2 "expected " "JSON array") (Strings.cat2 " but found " (showValue value))))) value)
 
 -- | Extract a number from a JSON value, failing if the value is not a number
-expectNumber :: (Model.Value -> Compute.Flow t0 Double)
+expectNumber :: (Model.Value -> Either String Double)
 expectNumber value = ((\x -> case x of
-  Model.ValueNumber v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "JSON number" (showValue value))) value)
+  Model.ValueNumber v0 -> (Right v0)
+  _ -> (Left (Strings.cat2 (Strings.cat2 "expected " "JSON number") (Strings.cat2 " but found " (showValue value))))) value)
 
 -- | Extract an object from a JSON value, failing if the value is not an object
-expectObject :: (Model.Value -> Compute.Flow t0 (M.Map String Model.Value))
+expectObject :: (Model.Value -> Either String (M.Map String Model.Value))
 expectObject value = ((\x -> case x of
-  Model.ValueObject v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "JSON object" (showValue value))) value)
+  Model.ValueObject v0 -> (Right v0)
+  _ -> (Left (Strings.cat2 (Strings.cat2 "expected " "JSON object") (Strings.cat2 " but found " (showValue value))))) value)
 
 -- | Extract a string from a JSON value, failing if the value is not a string
-expectString :: (Model.Value -> Compute.Flow t0 String)
+expectString :: (Model.Value -> Either String String)
 expectString value = ((\x -> case x of
-  Model.ValueString v1 -> (Flows.pure v1)
-  _ -> (Monads.unexpected "JSON string" (showValue value))) value)
+  Model.ValueString v0 -> (Right v0)
+  _ -> (Left (Strings.cat2 (Strings.cat2 "expected " "JSON string") (Strings.cat2 " but found " (showValue value))))) value)
 
 -- | Look up an optional field in a JSON object
 opt :: Ord t0 => (t0 -> M.Map t0 t1 -> Maybe t1)
 opt fname m = (Maps.lookup fname m)
 
 -- | Look up an optional array field in a JSON object
-optArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 (Maybe [Model.Value]))
-optArray fname m = (Maybes.maybe (Flows.pure Nothing) (\a -> Flows.map Maybes.pure (expectArray a)) (opt fname m))
+optArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String (Maybe [Model.Value]))
+optArray fname m = (Maybes.maybe (Right Nothing) (\a -> Eithers.map (\x -> Just x) (expectArray a)) (opt fname m))
 
 -- | Look up an optional string field in a JSON object
-optString :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 (Maybe String))
-optString fname m = (Maybes.maybe (Flows.pure Nothing) (\s -> Flows.map Maybes.pure (expectString s)) (opt fname m))
+optString :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String (Maybe String))
+optString fname m = (Maybes.maybe (Right Nothing) (\s -> Eithers.map (\x -> Just x) (expectString s)) (opt fname m))
 
 -- | Look up a required field in a JSON object, failing if not found
-require :: Ord t0 => (t0 -> M.Map t0 t1 -> Compute.Flow t2 t1)
-require fname m = (Maybes.maybe (Flows.fail (Strings.cat [
+require :: Ord t0 => (t0 -> M.Map t0 t1 -> Either String t1)
+require fname m = (Maybes.maybe (Left (Strings.cat [
   "required attribute ",
   (showValue fname),
-  " not found"])) (\value -> Flows.pure value) (Maps.lookup fname m))
+  " not found"])) (\value -> Right value) (Maps.lookup fname m))
 
 -- | Look up a required array field in a JSON object
-requireArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 [Model.Value])
-requireArray fname m = (Flows.bind (require fname m) expectArray)
+requireArray :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String [Model.Value])
+requireArray fname m = (Eithers.bind (require fname m) expectArray)
 
 -- | Look up a required number field in a JSON object
-requireNumber :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 Double)
-requireNumber fname m = (Flows.bind (require fname m) expectNumber)
+requireNumber :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String Double)
+requireNumber fname m = (Eithers.bind (require fname m) expectNumber)
 
 -- | Look up a required string field in a JSON object
-requireString :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Compute.Flow t1 String)
-requireString fname m = (Flows.bind (require fname m) expectString)
+requireString :: Ord t0 => (t0 -> M.Map t0 Model.Value -> Either String String)
+requireString fname m = (Eithers.bind (require fname m) expectString)
 
 -- | Show a JSON value as a string (placeholder implementation)
 showValue :: (t0 -> String)

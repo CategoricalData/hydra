@@ -44,8 +44,8 @@ applicationPatternToExpr appPat =
 -- | Convert a type class assertion to an AST expression
 assertionToExpr :: (Ast_.Assertion -> Ast.Expr)
 assertionToExpr sert = ((\x -> case x of
-  Ast_.AssertionClass v1 -> (classAssertionToExpr v1)
-  Ast_.AssertionTuple v1 -> (Serialization.parenList False (Lists.map assertionToExpr v1))) sert)
+  Ast_.AssertionClass v0 -> (classAssertionToExpr v0)
+  Ast_.AssertionTuple v0 -> (Serialization.parenList False (Lists.map assertionToExpr v0))) sert)
 
 -- | Convert a case expression to an AST expression
 caseExpressionToExpr :: (Ast_.CaseExpression -> Ast.Expr)
@@ -80,14 +80,14 @@ classAssertionToExpr clsAsrt =
 -- | Convert a data constructor to an AST expression
 constructorToExpr :: (Ast_.Constructor -> Ast.Expr)
 constructorToExpr cons = ((\x -> case x of
-  Ast_.ConstructorOrdinary v1 ->  
-    let name = (Ast_.ordinaryConstructorName v1) 
-        types = (Ast_.ordinaryConstructorFields v1)
+  Ast_.ConstructorOrdinary v0 ->  
+    let name = (Ast_.ordinaryConstructorName v0) 
+        types = (Ast_.ordinaryConstructorFields v0)
     in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
       Serialization.spaceSep (Lists.map typeToExpr types)]))
-  Ast_.ConstructorRecord v1 ->  
-    let name = (Ast_.recordConstructorName v1) 
-        fields = (Ast_.recordConstructorFields v1)
+  Ast_.ConstructorRecord v0 ->  
+    let name = (Ast_.recordConstructorName v0) 
+        fields = (Ast_.recordConstructorFields v0)
     in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
       Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map fieldWithCommentsToExpr fields)]))) cons)
 
@@ -108,21 +108,21 @@ dataOrNewtypeToExpr kw = ((\x -> case x of
 -- | Convert a declaration head to an AST expression
 declarationHeadToExpr :: (Ast_.DeclarationHead -> Ast.Expr)
 declarationHeadToExpr hd = ((\x -> case x of
-  Ast_.DeclarationHeadApplication v1 ->  
-    let fun = (Ast_.applicationDeclarationHeadFunction v1) 
-        op = (Ast_.applicationDeclarationHeadOperand v1)
+  Ast_.DeclarationHeadApplication v0 ->  
+    let fun = (Ast_.applicationDeclarationHeadFunction v0) 
+        op = (Ast_.applicationDeclarationHeadOperand v0)
     in (Serialization.spaceSep (Lists.cons (declarationHeadToExpr fun) [
       variableToExpr op]))
-  Ast_.DeclarationHeadSimple v1 -> (nameToExpr v1)) hd)
+  Ast_.DeclarationHeadSimple v0 -> (nameToExpr v0)) hd)
 
 -- | Convert a declaration to an AST expression
 declarationToExpr :: (Ast_.Declaration -> Ast.Expr)
 declarationToExpr decl = ((\x -> case x of
-  Ast_.DeclarationData v1 ->  
-    let kw = (Ast_.dataDeclarationKeyword v1) 
-        hd = (Ast_.dataDeclarationHead v1)
-        cons = (Ast_.dataDeclarationConstructors v1)
-        deriv = (Ast_.dataDeclarationDeriving v1)
+  Ast_.DeclarationData v0 ->  
+    let kw = (Ast_.dataDeclarationKeyword v0) 
+        hd = (Ast_.dataDeclarationHead v0)
+        cons = (Ast_.dataDeclarationConstructors v0)
+        deriv = (Ast_.dataDeclarationDeriving v0)
         derivCat = (Lists.concat (Lists.map Ast_.unDeriving deriv))
         constructors = (Serialization.orSep Serialization.halfBlockStyle (Lists.map constructorWithCommentsToExpr cons))
         derivingClause = (Logic.ifElse (Lists.null derivCat) [] [
@@ -133,15 +133,15 @@ declarationToExpr decl = ((\x -> case x of
                   Serialization.cst "="])),
                 constructors]
     in (Serialization.indentBlock (Lists.concat2 mainParts derivingClause))
-  Ast_.DeclarationType v1 ->  
-    let hd = (Ast_.typeDeclarationName v1) 
-        typ = (Ast_.typeDeclarationType v1)
+  Ast_.DeclarationType v0 ->  
+    let hd = (Ast_.typeDeclarationName v0) 
+        typ = (Ast_.typeDeclarationType v0)
     in (Serialization.spaceSep (Lists.cons (Serialization.cst "type") (Lists.cons (declarationHeadToExpr hd) (Lists.cons (Serialization.cst "=") [
       typeToExpr typ]))))
-  Ast_.DeclarationValueBinding v1 -> (valueBindingToExpr v1)
-  Ast_.DeclarationTypedBinding v1 ->  
-    let typeSig = (Ast_.typedBindingTypeSignature v1) 
-        vb = (Ast_.typedBindingValueBinding v1)
+  Ast_.DeclarationValueBinding v0 -> (valueBindingToExpr v0)
+  Ast_.DeclarationTypedBinding v0 ->  
+    let typeSig = (Ast_.typedBindingTypeSignature v0) 
+        vb = (Ast_.typedBindingValueBinding v0)
         name = (Ast_.typeSignatureName typeSig)
         htype = (Ast_.typeSignatureType typeSig)
     in (Serialization.newlineSep (Lists.cons (Serialization.ifx Operators.typeOp (nameToExpr name) (typeToExpr htype)) [
@@ -158,25 +158,25 @@ declarationWithCommentsToExpr declWithComments =
 -- | Convert a Haskell expression to an AST expression
 expressionToExpr :: (Ast_.Expression -> Ast.Expr)
 expressionToExpr expr = ((\x -> case x of
-  Ast_.ExpressionApplication v1 -> (applicationExpressionToExpr v1)
-  Ast_.ExpressionCase v1 -> (caseExpressionToExpr v1)
-  Ast_.ExpressionConstructRecord v1 -> (constructRecordExpressionToExpr v1)
-  Ast_.ExpressionDo v1 -> (Serialization.indentBlock (Lists.cons (Serialization.cst "do") (Lists.map statementToExpr v1)))
-  Ast_.ExpressionIf v1 -> (ifExpressionToExpr v1)
-  Ast_.ExpressionLiteral v1 -> (literalToExpr v1)
-  Ast_.ExpressionLambda v1 -> (Serialization.parenthesize (lambdaExpressionToExpr v1))
-  Ast_.ExpressionLet v1 ->  
-    let bindings = (Ast_.letExpressionBindings v1) 
-        inner = (Ast_.letExpressionInner v1)
+  Ast_.ExpressionApplication v0 -> (applicationExpressionToExpr v0)
+  Ast_.ExpressionCase v0 -> (caseExpressionToExpr v0)
+  Ast_.ExpressionConstructRecord v0 -> (constructRecordExpressionToExpr v0)
+  Ast_.ExpressionDo v0 -> (Serialization.indentBlock (Lists.cons (Serialization.cst "do") (Lists.map statementToExpr v0)))
+  Ast_.ExpressionIf v0 -> (ifExpressionToExpr v0)
+  Ast_.ExpressionLiteral v0 -> (literalToExpr v0)
+  Ast_.ExpressionLambda v0 -> (Serialization.parenthesize (lambdaExpressionToExpr v0))
+  Ast_.ExpressionLet v0 ->  
+    let bindings = (Ast_.letExpressionBindings v0) 
+        inner = (Ast_.letExpressionInner v0)
         encodeBinding = (\binding -> Serialization.indentSubsequentLines "      " (localBindingToExpr binding))
     in (Serialization.indentBlock (Lists.cons (Serialization.cst "") (Lists.cons (Serialization.spaceSep (Lists.cons (Serialization.cst "let") [
       Serialization.customIndentBlock "    " (Lists.map encodeBinding bindings)])) [
       Serialization.spaceSep (Lists.cons (Serialization.cst "in") [
         expressionToExpr inner])])))
-  Ast_.ExpressionList v1 -> (Serialization.bracketList Serialization.halfBlockStyle (Lists.map expressionToExpr v1))
-  Ast_.ExpressionParens v1 -> (Serialization.parenthesize (expressionToExpr v1))
-  Ast_.ExpressionTuple v1 -> (Serialization.parenList False (Lists.map expressionToExpr v1))
-  Ast_.ExpressionVariable v1 -> (nameToExpr v1)) expr)
+  Ast_.ExpressionList v0 -> (Serialization.bracketList Serialization.halfBlockStyle (Lists.map expressionToExpr v0))
+  Ast_.ExpressionParens v0 -> (Serialization.parenthesize (expressionToExpr v0))
+  Ast_.ExpressionTuple v0 -> (Serialization.parenList False (Lists.map expressionToExpr v0))
+  Ast_.ExpressionVariable v0 -> (nameToExpr v0)) expr)
 
 -- | Convert a record construction expression to an AST expression
 constructRecordExpressionToExpr :: (Ast_.ConstructRecordExpression -> Ast.Expr)
@@ -240,8 +240,8 @@ importToExpr import_ =
       mspec = (Ast_.importSpec import_)
       name = (Ast_.unModuleName modName)
       hidingSec = (\spec -> (\x -> case x of
-              Ast_.SpecImportHiding v1 -> (Serialization.spaceSep (Lists.cons (Serialization.cst "hiding ") [
-                Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map importExportSpecToExpr v1))]))) spec)
+              Ast_.SpecImportHiding v0 -> (Serialization.spaceSep (Lists.cons (Serialization.cst "hiding ") [
+                Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map importExportSpecToExpr v0))]))) spec)
       parts = (Maybes.cat [
               Just (Serialization.cst "import"),
               (Logic.ifElse qual (Just (Serialization.cst "qualified")) Nothing),
@@ -267,18 +267,18 @@ literalToExpr lit =
           e,
           ")"]) e)
   in (Serialization.cst ((\x -> case x of
-    Ast_.LiteralChar v1 -> (Literals.showString (Literals.showUint16 v1))
-    Ast_.LiteralDouble v1 -> (parensIfNeg (Equality.lt v1 0.0) (Literals.showFloat64 v1))
-    Ast_.LiteralFloat v1 -> (parensIfNeg (Equality.lt v1 0.0) (Literals.showFloat32 v1))
-    Ast_.LiteralInt v1 -> (parensIfNeg (Equality.lt v1 0) (Literals.showInt32 v1))
-    Ast_.LiteralInteger v1 -> (parensIfNeg (Equality.lt v1 0) (Literals.showBigint v1))
-    Ast_.LiteralString v1 -> (Literals.showString v1)) lit))
+    Ast_.LiteralChar v0 -> (Literals.showString (Literals.showUint16 v0))
+    Ast_.LiteralDouble v0 -> (parensIfNeg (Equality.lt v0 0.0) (Literals.showFloat64 v0))
+    Ast_.LiteralFloat v0 -> (parensIfNeg (Equality.lt v0 0.0) (Literals.showFloat32 v0))
+    Ast_.LiteralInt v0 -> (parensIfNeg (Equality.lt v0 0) (Literals.showInt32 v0))
+    Ast_.LiteralInteger v0 -> (parensIfNeg (Equality.lt v0 0) (Literals.showBigint v0))
+    Ast_.LiteralString v0 -> (Literals.showString v0)) lit))
 
 -- | Convert a local binding to an AST expression
 localBindingToExpr :: (Ast_.LocalBinding -> Ast.Expr)
 localBindingToExpr binding = ((\x -> case x of
-  Ast_.LocalBindingSignature v1 -> (typeSignatureToExpr v1)
-  Ast_.LocalBindingValue v1 -> (valueBindingToExpr v1)) binding)
+  Ast_.LocalBindingSignature v0 -> (typeSignatureToExpr v0)
+  Ast_.LocalBindingValue v0 -> (valueBindingToExpr v0)) binding)
 
 -- | Convert a module head to an AST expression
 moduleHeadToExpr :: (Ast_.ModuleHead -> Ast.Expr)
@@ -313,22 +313,22 @@ moduleToExpr module_ =
 -- | Convert a Haskell name to an AST expression
 nameToExpr :: (Ast_.Name -> Ast.Expr)
 nameToExpr name = (Serialization.cst ((\x -> case x of
-  Ast_.NameImplicit v1 -> (Strings.cat2 "?" (writeQualifiedName v1))
-  Ast_.NameNormal v1 -> (writeQualifiedName v1)
-  Ast_.NameParens v1 -> (Strings.cat [
+  Ast_.NameImplicit v0 -> (Strings.cat2 "?" (writeQualifiedName v0))
+  Ast_.NameNormal v0 -> (writeQualifiedName v0)
+  Ast_.NameParens v0 -> (Strings.cat [
     "(",
-    (writeQualifiedName v1),
+    (writeQualifiedName v0),
     ")"])) name))
 
 -- | Convert a pattern to an AST expression
 patternToExpr :: (Ast_.Pattern -> Ast.Expr)
 patternToExpr pat = ((\x -> case x of
-  Ast_.PatternApplication v1 -> (applicationPatternToExpr v1)
-  Ast_.PatternList v1 -> (Serialization.bracketList Serialization.halfBlockStyle (Lists.map patternToExpr v1))
-  Ast_.PatternLiteral v1 -> (literalToExpr v1)
-  Ast_.PatternName v1 -> (nameToExpr v1)
-  Ast_.PatternParens v1 -> (Serialization.parenthesize (patternToExpr v1))
-  Ast_.PatternTuple v1 -> (Serialization.parenList False (Lists.map patternToExpr v1))
+  Ast_.PatternApplication v0 -> (applicationPatternToExpr v0)
+  Ast_.PatternList v0 -> (Serialization.bracketList Serialization.halfBlockStyle (Lists.map patternToExpr v0))
+  Ast_.PatternLiteral v0 -> (literalToExpr v0)
+  Ast_.PatternName v0 -> (nameToExpr v0)
+  Ast_.PatternParens v0 -> (Serialization.parenthesize (patternToExpr v0))
+  Ast_.PatternTuple v0 -> (Serialization.parenList False (Lists.map patternToExpr v0))
   Ast_.PatternWildcard -> (Serialization.cst "_")) pat)
 
 -- | Convert a right-hand side to an AST expression
@@ -350,30 +350,30 @@ typeSignatureToExpr typeSig =
 -- | Convert a Haskell type to an AST expression
 typeToExpr :: (Ast_.Type -> Ast.Expr)
 typeToExpr htype = ((\x -> case x of
-  Ast_.TypeApplication v1 ->  
-    let lhs = (Ast_.applicationTypeContext v1) 
-        rhs = (Ast_.applicationTypeArgument v1)
+  Ast_.TypeApplication v0 ->  
+    let lhs = (Ast_.applicationTypeContext v0) 
+        rhs = (Ast_.applicationTypeArgument v0)
     in (Serialization.ifx Operators.appOp (typeToExpr lhs) (typeToExpr rhs))
-  Ast_.TypeCtx v1 ->  
-    let ctx = (Ast_.contextTypeCtx v1) 
-        typ = (Ast_.contextTypeType v1)
+  Ast_.TypeCtx v0 ->  
+    let ctx = (Ast_.contextTypeCtx v0) 
+        typ = (Ast_.contextTypeType v0)
     in (Serialization.ifx Operators.assertOp (assertionToExpr ctx) (typeToExpr typ))
-  Ast_.TypeFunction v1 ->  
-    let dom = (Ast_.functionTypeDomain v1) 
-        cod = (Ast_.functionTypeCodomain v1)
+  Ast_.TypeFunction v0 ->  
+    let dom = (Ast_.functionTypeDomain v0) 
+        cod = (Ast_.functionTypeCodomain v0)
     in (Serialization.ifx Operators.arrowOp (typeToExpr dom) (typeToExpr cod))
-  Ast_.TypeList v1 -> (Serialization.bracketList Serialization.inlineStyle [
-    typeToExpr v1])
-  Ast_.TypeTuple v1 -> (Serialization.parenList False (Lists.map typeToExpr v1))
-  Ast_.TypeVariable v1 -> (nameToExpr v1)) htype)
+  Ast_.TypeList v0 -> (Serialization.bracketList Serialization.inlineStyle [
+    typeToExpr v0])
+  Ast_.TypeTuple v0 -> (Serialization.parenList False (Lists.map typeToExpr v0))
+  Ast_.TypeVariable v0 -> (nameToExpr v0)) htype)
 
 -- | Convert a value binding to an AST expression
 valueBindingToExpr :: (Ast_.ValueBinding -> Ast.Expr)
 valueBindingToExpr vb = ((\x -> case x of
-  Ast_.ValueBindingSimple v1 ->  
-    let pat = (Ast_.simpleValueBindingPattern v1) 
-        rhs = (Ast_.simpleValueBindingRhs v1)
-        local = (Ast_.simpleValueBindingLocalBindings v1)
+  Ast_.ValueBindingSimple v0 ->  
+    let pat = (Ast_.simpleValueBindingPattern v0) 
+        rhs = (Ast_.simpleValueBindingRhs v0)
+        local = (Ast_.simpleValueBindingLocalBindings v0)
         body = (Serialization.ifx Operators.defineOp (patternToExpr pat) (rightHandSideToExpr rhs))
     in (Maybes.maybe body (\localBindings ->  
       let bindings = (Ast_.unLocalBindings localBindings)

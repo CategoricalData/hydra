@@ -36,19 +36,19 @@ bigintToIntegerValue it bi = ((\x -> case x of
 -- | Convert a floating-point value of any precision to a bigfloat
 floatValueToBigfloat :: (Core.FloatValue -> Double)
 floatValueToBigfloat x = case x of
-  Core.FloatValueBigfloat v1 -> v1
-  Core.FloatValueFloat32 v1 -> (Literals.float32ToBigfloat v1)
-  Core.FloatValueFloat64 v1 -> (Literals.float64ToBigfloat v1)
+  Core.FloatValueBigfloat v0 -> v0
+  Core.FloatValueFloat32 v0 -> (Literals.float32ToBigfloat v0)
+  Core.FloatValueFloat64 v0 -> (Literals.float64ToBigfloat v0)
 
 -- | Convert an integer value of any precision to a bigint
 integerValueToBigint :: (Core.IntegerValue -> Integer)
 integerValueToBigint x = case x of
-  Core.IntegerValueBigint v1 -> v1
-  Core.IntegerValueInt8 v1 -> (Literals.int8ToBigint v1)
-  Core.IntegerValueInt16 v1 -> (Literals.int16ToBigint v1)
-  Core.IntegerValueInt32 v1 -> (Literals.int32ToBigint v1)
-  Core.IntegerValueInt64 v1 -> (Literals.int64ToBigint v1)
-  Core.IntegerValueUint8 v1 -> (Literals.uint8ToBigint v1)
-  Core.IntegerValueUint16 v1 -> (Literals.uint16ToBigint v1)
-  Core.IntegerValueUint32 v1 -> (Literals.uint32ToBigint v1)
-  Core.IntegerValueUint64 v1 -> (Literals.uint64ToBigint v1)
+  Core.IntegerValueBigint v0 -> v0
+  Core.IntegerValueInt8 v0 -> (Literals.int8ToBigint v0)
+  Core.IntegerValueInt16 v0 -> (Literals.int16ToBigint v0)
+  Core.IntegerValueInt32 v0 -> (Literals.int32ToBigint v0)
+  Core.IntegerValueInt64 v0 -> (Literals.int64ToBigint v0)
+  Core.IntegerValueUint8 v0 -> (Literals.uint8ToBigint v0)
+  Core.IntegerValueUint16 v0 -> (Literals.uint16ToBigint v0)
+  Core.IntegerValueUint32 v0 -> (Literals.uint32ToBigint v0)
+  Core.IntegerValueUint64 v0 -> (Literals.uint64ToBigint v0)

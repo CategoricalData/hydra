@@ -23,26 +23,26 @@ graph = (Helpers.decodeMap vertex (Helpers.decodeList vertex))
 
 tarjanState :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Topology.TarjanState)
 tarjanState cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "counter" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_counter -> Eithers.bind (Helpers.requireField "indices" (Helpers.decodeMap vertex (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_indices -> Eithers.bind (Helpers.requireField "lowLinks" (Helpers.decodeMap vertex (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralInteger v3 -> ((\x -> case x of
-          Core.IntegerValueInt32 v4 -> (Right v4)
-          _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-        _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralInteger v2 -> ((\x -> case x of
+          Core.IntegerValueInt32 v3 -> (Right v3)
+          _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+        _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))) fieldMap cx) (\field_lowLinks -> Eithers.bind (Helpers.requireField "stack" (Helpers.decodeList vertex) fieldMap cx) (\field_stack -> Eithers.bind (Helpers.requireField "onStack" (Helpers.decodeSet vertex) fieldMap cx) (\field_onStack -> Eithers.bind (Helpers.requireField "sccs" (Helpers.decodeList (Helpers.decodeList vertex)) fieldMap cx) (\field_sccs -> Right (Topology.TarjanState {
       Topology.tarjanStateCounter = field_counter,
       Topology.tarjanStateIndices = field_indices,
@@ -54,9 +54,9 @@ tarjanState cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
 
 vertex :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Int)
 vertex cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermLiteral v1 -> ((\x -> case x of
-    Core.LiteralInteger v2 -> ((\x -> case x of
-      Core.IntegerValueInt32 v3 -> (Right v3)
-      _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
-    _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
+  Core.TermLiteral v0 -> ((\x -> case x of
+    Core.LiteralInteger v1 -> ((\x -> case x of
+      Core.IntegerValueInt32 v2 -> (Right v2)
+      _ -> (Left (Error.DecodingError "expected int32 value"))) v1)
+    _ -> (Left (Error.DecodingError "expected int32 literal"))) v0)
   _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

@@ -4,14 +4,15 @@
 
 module Hydra.Ext.Haskell.Utils where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Ext.Haskell.Ast as Ast
 import qualified Hydra.Ext.Haskell.Language as Language
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -76,8 +77,8 @@ hsvar :: (String -> Ast.Expression)
 hsvar s = (Ast.ExpressionVariable (rawName s))
 
 -- | Compute the Haskell module namespaces for a Hydra module
-namespacesForModule :: (Module.Module -> Compute.Flow Graph.Graph (Module.Namespaces Ast.ModuleName))
-namespacesForModule mod = (Flows.bind (Schemas.moduleDependencyNamespaces True True True True mod) (\nss ->  
+namespacesForModule :: (Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) (Module.Namespaces Ast.ModuleName))
+namespacesForModule mod cx g = (Eithers.bind (Schemas.moduleDependencyNamespaces cx g True True True True mod) (\nss ->  
   let ns = (Module.moduleNamespace mod)
   in  
     let toModuleName = (\namespace ->  
@@ -108,7 +109,7 @@ namespacesForModule mod = (Flows.bind (Schemas.moduleDependencyNamespaces True T
                   let finalState = (Lists.foldl addPair emptyState nssPairs)
                   in  
                     let resultMap = (Pairs.first finalState)
-                    in (Flows.pure (Module.Namespaces {
+                    in (Right (Module.Namespaces {
                       Module.namespacesFocus = focusPair,
                       Module.namespacesMapping = resultMap}))))
 
@@ -197,9 +198,9 @@ unionFieldReference boundNames namespaces sname fname =
 -- | Unpack nested forall types into a list of type variables and the inner type
 unpackForallType :: (Core.Type -> ([Core.Name], Core.Type))
 unpackForallType t = ((\x -> case x of
-  Core.TypeForall v1 ->  
-    let v = (Core.forallTypeParameter v1) 
-        tbody = (Core.forallTypeBody v1)
+  Core.TypeForall v0 ->  
+    let v = (Core.forallTypeParameter v0) 
+        tbody = (Core.forallTypeBody v0)
         recursiveResult = (unpackForallType tbody)
         vars = (Pairs.first recursiveResult)
         finalType = (Pairs.second recursiveResult)

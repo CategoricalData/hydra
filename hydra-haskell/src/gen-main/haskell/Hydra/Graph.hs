@@ -4,8 +4,9 @@
 
 module Hydra.Graph where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -59,7 +60,7 @@ data Primitive =
     -- | The type signature of the primitive function
     primitiveType :: Core.TypeScheme,
     -- | A concrete implementation of the primitive function
-    primitiveImplementation :: ([Core.Term] -> Compute.Flow Graph Core.Term)}
+    primitiveImplementation :: (Context.Context -> Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term)}
 
 _Primitive = (Core.Name "hydra.graph.Primitive")
 
@@ -69,16 +70,20 @@ _Primitive_type = (Core.Name "type")
 
 _Primitive_implementation = (Core.Name "implementation")
 
--- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms
+-- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms.
 data TermCoder a = 
   TermCoder {
     -- | The Hydra type of encoded terms
     termCoderType :: Core.Type,
-    -- | A coder between Hydra terms and instances of the given type
-    termCoderCoder :: (Compute.Coder Graph Graph Core.Term a)}
+    -- | An encode function from terms to native values
+    termCoderEncode :: (Context.Context -> Graph -> Core.Term -> Either (Context.InContext Error.OtherError) a),
+    -- | A decode function from native values to terms
+    termCoderDecode :: (Context.Context -> a -> Either (Context.InContext Error.OtherError) Core.Term)}
 
 _TermCoder = (Core.Name "hydra.graph.TermCoder")
 
 _TermCoder_type = (Core.Name "type")
 
-_TermCoder_coder = (Core.Name "coder")
+_TermCoder_encode = (Core.Name "encode")
+
+_TermCoder_decode = (Core.Name "decode")

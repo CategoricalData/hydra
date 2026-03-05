@@ -23,35 +23,35 @@ import qualified Data.Set as S
 
 value :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Model.Value)
 value cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
                 (Core.Name "array", (\input -> Eithers.map (\t -> Model.ValueArray t) (Helpers.decodeList value cx input))),
                 (Core.Name "boolean", (\input -> Eithers.map (\t -> Model.ValueBoolean t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v2 -> ((\x -> case x of
-                    Core.LiteralBoolean v3 -> (Right v3)
-                    _ -> (Left (Error.DecodingError "expected boolean literal"))) v2)
+                  Core.TermLiteral v1 -> ((\x -> case x of
+                    Core.LiteralBoolean v2 -> (Right v2)
+                    _ -> (Left (Error.DecodingError "expected boolean literal"))) v1)
                   _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
                 (Core.Name "null", (\input -> Eithers.map (\t -> Model.ValueNull) (Helpers.decodeUnit cx input))),
                 (Core.Name "number", (\input -> Eithers.map (\t -> Model.ValueNumber t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v2 -> ((\x -> case x of
-                    Core.LiteralFloat v3 -> ((\x -> case x of
-                      Core.FloatValueBigfloat v4 -> (Right v4)
-                      _ -> (Left (Error.DecodingError "expected bigfloat value"))) v3)
-                    _ -> (Left (Error.DecodingError "expected bigfloat literal"))) v2)
+                  Core.TermLiteral v1 -> ((\x -> case x of
+                    Core.LiteralFloat v2 -> ((\x -> case x of
+                      Core.FloatValueBigfloat v3 -> (Right v3)
+                      _ -> (Left (Error.DecodingError "expected bigfloat value"))) v2)
+                    _ -> (Left (Error.DecodingError "expected bigfloat literal"))) v1)
                   _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
                 (Core.Name "object", (\input -> Eithers.map (\t -> Model.ValueObject t) (Helpers.decodeMap (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v2 -> ((\x -> case x of
-                    Core.LiteralString v3 -> (Right v3)
-                    _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+                  Core.TermLiteral v1 -> ((\x -> case x of
+                    Core.LiteralString v2 -> (Right v2)
+                    _ -> (Left (Error.DecodingError "expected string literal"))) v1)
                   _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) value cx input))),
                 (Core.Name "string", (\input -> Eithers.map (\t -> Model.ValueString t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v2 -> ((\x -> case x of
-                    Core.LiteralString v3 -> (Right v3)
-                    _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+                  Core.TermLiteral v1 -> ((\x -> case x of
+                    Core.LiteralString v2 -> (Right v2)
+                    _ -> (Left (Error.DecodingError "expected string literal"))) v1)
                   _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",

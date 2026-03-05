@@ -5,6 +5,7 @@
 module Hydra.Encode.Typing where
 
 import qualified Hydra.Core as Core
+import qualified Hydra.Encode.Context as Context
 import qualified Hydra.Encode.Core as Core_
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maps as Maps
@@ -58,7 +59,10 @@ inferenceResult x = (Core.TermRecord (Core.Record {
       Core.fieldTerm = (typeSubst (Typing.inferenceResultSubst x))},
     Core.Field {
       Core.fieldName = (Core.Name "classConstraints"),
-      Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.typeVariableMetadata m)) (Typing.inferenceResultClassConstraints x))}]}))
+      Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.typeVariableMetadata m)) (Typing.inferenceResultClassConstraints x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "context"),
+      Core.fieldTerm = (Context.context (Typing.inferenceResultContext x))}]}))
 
 termSubst :: (Typing.TermSubst -> Core.Term)
 termSubst x = (Core.TermWrap (Core.WrappedTerm {

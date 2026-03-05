@@ -7,7 +7,7 @@ module Hydra.CodeGeneration where
 import qualified Hydra.Adapt.Simple as Simple
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Decode.Module as Module
@@ -22,7 +22,6 @@ import qualified Hydra.Json.Writer as Writer
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
-import qualified Hydra.Lib.Flows as Flows
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -32,7 +31,6 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module__
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
@@ -104,12 +102,15 @@ modulesToGraph bsGraph universeModules modules =
           in  
             let schemaGraph = (Lexical.elementsToGraph bsGraph Maps.empty schemaElements)
             in  
-              let schemaTypes = (Monads.fromFlow Maps.empty schemaGraph (Schemas.schemaGraphToTypingEnvironment schemaGraph))
+              let schemaTypes = (Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment (Context.Context {
+                      Context.contextTrace = [],
+                      Context.contextMessages = [],
+                      Context.contextOther = Maps.empty}) schemaGraph))
               in (Lexical.elementsToGraph bsGraph schemaTypes dataElements)
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs.
-generateSourceFiles :: Ord t0 => ((Module__.Module -> [Module__.Definition] -> Compute.Flow Graph.Graph (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Compute.Flow Graph.Graph [(t0, t1)])
-generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modsToGenerate =  
+generateSourceFiles :: Ord t0 => ((Module__.Module -> [Module__.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Context.Context -> Either (Context.InContext Error.OtherError) [(t0, t1)])
+generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modsToGenerate cx =  
   let namespaceMap = (Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules modsToGenerate)))
   in  
     let constraints = (Coders.languageConstraints lang)
@@ -132,28 +133,37 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                     in  
                       let schemaGraph = (Lexical.elementsToGraph bsGraph Maps.empty schemaElements)
                       in  
-                        let schemaTypes2 = (Monads.fromFlow Maps.empty schemaGraph (Schemas.schemaGraphToTypingEnvironment schemaGraph))
+                        let schemaTypes2 = (Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment (Context.Context {
+                                Context.contextTrace = [],
+                                Context.contextMessages = [],
+                                Context.contextOther = Maps.empty}) schemaGraph))
                         in  
                           let dataGraph = (Lexical.elementsToGraph bsGraph schemaTypes2 dataElements)
-                          in (Flows.bind (Logic.ifElse (Lists.null typeModulesToGenerate) (Flows.pure []) (Monads.withTrace "generate type modules" ( 
+                          in (Eithers.bind (Logic.ifElse (Lists.null typeModulesToGenerate) (Right []) ( 
                             let nameLists = (Lists.map (\m -> Lists.map (\e -> Core.bindingName e) (Lists.filter (\e -> Annotations.isNativeType e) (Module__.moduleElements m))) typeModulesToGenerate)
-                            in (Flows.bind (Simple.schemaGraphToDefinitions constraints schemaGraph nameLists) (\schemaResult ->  
+                            in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
+                              Context.inContextObject = (Error.OtherError s),
+                              Context.inContextContext = cx}) (\r -> r) (Simple.schemaGraphToDefinitions constraints schemaGraph nameLists cx)) (\schemaResult ->  
                               let defLists = (Pairs.second schemaResult)
-                              in (Monads.withState (Graph.Graph {
-                                Graph.graphBoundTerms = (Graph.graphBoundTerms schemaGraph),
-                                Graph.graphBoundTypes = (Graph.graphBoundTypes schemaGraph),
-                                Graph.graphClassConstraints = (Graph.graphClassConstraints schemaGraph),
-                                Graph.graphLambdaVariables = (Graph.graphLambdaVariables schemaGraph),
-                                Graph.graphMetadata = (Graph.graphMetadata schemaGraph),
-                                Graph.graphPrimitives = (Graph.graphPrimitives schemaGraph),
-                                Graph.graphSchemaTypes = schemaTypes2,
-                                Graph.graphTypeVariables = (Graph.graphTypeVariables schemaGraph)}) (Flows.map (\xs -> Lists.concat xs) (Flows.mapList (\p ->  
-                                let mod = (Pairs.first p)
-                                in  
-                                  let defs = (Pairs.second p)
-                                  in (Monads.withTrace (Strings.cat2 "type module " (Module__.unNamespace (Module__.moduleNamespace mod))) (Flows.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Module__.DefinitionType d) defs))))) (Lists.zip typeModulesToGenerate defLists))))))))) (\schemaFiles -> Flows.bind (Logic.ifElse (Lists.null termModulesToGenerate) (Flows.pure []) (Monads.withTrace "generate term modules" ( 
+                              in  
+                                let schemaGraphWithTypes = Graph.Graph {
+                                        Graph.graphBoundTerms = (Graph.graphBoundTerms schemaGraph),
+                                        Graph.graphBoundTypes = (Graph.graphBoundTypes schemaGraph),
+                                        Graph.graphClassConstraints = (Graph.graphClassConstraints schemaGraph),
+                                        Graph.graphLambdaVariables = (Graph.graphLambdaVariables schemaGraph),
+                                        Graph.graphMetadata = (Graph.graphMetadata schemaGraph),
+                                        Graph.graphPrimitives = (Graph.graphPrimitives schemaGraph),
+                                        Graph.graphSchemaTypes = schemaTypes2,
+                                        Graph.graphTypeVariables = (Graph.graphTypeVariables schemaGraph)}
+                                in (Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (\p ->  
+                                  let mod = (Pairs.first p)
+                                  in  
+                                    let defs = (Pairs.second p)
+                                    in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Module__.DefinitionType d) defs) cx schemaGraphWithTypes))) (Lists.zip typeModulesToGenerate defLists))))))) (\schemaFiles -> Eithers.bind (Logic.ifElse (Lists.null termModulesToGenerate) (Right []) ( 
                             let namespaces = (Lists.map (\m -> Module__.moduleNamespace m) termModulesToGenerate)
-                            in (Flows.bind (Simple.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataElements dataGraph namespaces) (\dataResult ->  
+                            in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
+                              Context.inContextObject = (Error.OtherError s),
+                              Context.inContextContext = cx}) (\r -> r) (Simple.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataElements dataGraph namespaces cx)) (\dataResult ->  
                               let g1 = (Pairs.first dataResult)
                               in  
                                 let defLists = (Pairs.second dataResult)
@@ -166,11 +176,11 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                                           Module__.moduleDescription = (Module__.moduleDescription m)})
                                   in  
                                     let refreshedMods = (Lists.map (\m -> refreshModule (Lexical.graphToBindings g1) m) termModulesToGenerate)
-                                    in (Monads.withState g1 (Flows.map (\xs -> Lists.concat xs) (Flows.mapList (\p ->  
+                                    in (Eithers.map (\xs -> Lists.concat xs) (Eithers.mapList (\p ->  
                                       let mod = (Pairs.first p)
                                       in  
                                         let defs = (Pairs.second p)
-                                        in (Monads.withTrace (Strings.cat2 "term module " (Module__.unNamespace (Module__.moduleNamespace mod))) (Flows.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Module__.DefinitionTerm d) defs))))) (Lists.zip refreshedMods defLists))))))))) (\termFiles -> Flows.pure (Lists.concat2 schemaFiles termFiles))))
+                                        in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Module__.DefinitionTerm d) defs) cx g1))) (Lists.zip refreshedMods defLists))))))) (\termFiles -> Right (Lists.concat2 schemaFiles termFiles))))
 
 -- | Format a term binding for the lexicon
 formatTermBinding :: (Core.Binding -> String)
@@ -189,8 +199,8 @@ formatPrimitive prim =
     in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 
 -- | Format a type binding for the lexicon
-formatTypeBinding :: (Core.Binding -> Compute.Flow Graph.Graph String)
-formatTypeBinding binding = (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.eitherToFlow Error.unDecodingError (Core_.type_ graph (Core.bindingTerm binding))) (\typ -> Flows.pure (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core__.type_ typ)))))
+formatTypeBinding :: (Graph.Graph -> Core.Binding -> Either Error.DecodingError String)
+formatTypeBinding graph binding = (Eithers.bind (Core_.type_ graph (Core.bindingTerm binding)) (\typ -> Right (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " (Core.unName (Core.bindingName binding))) " = ") (Core__.type_ typ))))
 
 -- | Build a schema map (Name -> Type) from a graph's schema types
 buildSchemaMap :: (Graph.Graph -> M.Map Core.Name Core.Type)
@@ -218,7 +228,7 @@ moduleToSourceModule m =
         Module__.moduleDescription = (Just (Strings.cat2 "Source module for " (Module__.unNamespace (Module__.moduleNamespace m))))}
 
 -- | Generate the lexicon content from a graph
-generateLexicon :: (Graph.Graph -> Compute.Flow Graph.Graph String)
+generateLexicon :: (Graph.Graph -> Either Error.DecodingError String)
 generateLexicon graph =  
   let bindings = (Lexical.graphToBindings graph)
   in  
@@ -235,11 +245,11 @@ generateLexicon graph =
               let sortedTypes = (Lists.sortOn (\b -> Core.bindingName b) typeBindings)
               in  
                 let sortedTerms = (Lists.sortOn (\b -> Core.bindingName b) termBindings)
-                in (Flows.bind (Flows.mapList (\b -> formatTypeBinding b) sortedTypes) (\typeLines ->  
+                in (Eithers.bind (Eithers.mapList (\b -> formatTypeBinding graph b) sortedTypes) (\typeLines ->  
                   let termLines = (Lists.map (\b -> formatTermBinding b) sortedTerms)
                   in  
                     let primitiveLines = (Lists.map (\p -> formatPrimitive p) sortedPrimitives)
-                    in (Flows.pure (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Primitives:\n" (Strings.unlines primitiveLines)) "\nTypes:\n") (Strings.unlines typeLines)) "\nTerms:\n") (Strings.unlines termLines)))))
+                    in (Right (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "Primitives:\n" (Strings.unlines primitiveLines)) "\nTypes:\n") (Strings.unlines typeLines)) "\nTerms:\n") (Strings.unlines termLines)))))
 
 -- | Convert a Module to a JSON string
 moduleToJson :: (Module__.Module -> Either String String)
@@ -248,29 +258,31 @@ moduleToJson m =
   in (Eithers.map (\json -> Writer.printJson json) (Encode.toJson term))
 
 -- | Perform type inference on modules and reconstruct with inferred types
-inferModules :: (Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Compute.Flow t0 [Module__.Module])
-inferModules bsGraph universeMods targetMods =  
+inferModules :: (Context.Context -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Either (Context.InContext Error.OtherError) [Module__.Module])
+inferModules cx bsGraph universeMods targetMods =  
   let g0 = (modulesToGraph bsGraph universeMods universeMods)
   in  
     let dataElements = (Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) universeMods)))
-    in (Flows.bind (Inference.inferGraphTypes dataElements g0) (\inferResult ->  
-      let g1 = (Pairs.first inferResult)
+    in (Eithers.bind (Inference.inferGraphTypes cx dataElements g0) (\inferResultWithCx ->  
+      let inferResult = (Pairs.first inferResultWithCx)
       in  
-        let inferredElements = (Pairs.second inferResult)
+        let g1 = (Pairs.first inferResult)
         in  
-          let isTypeModule = (\mod -> Lists.null (Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Module__.moduleElements mod)))
+          let inferredElements = (Pairs.second inferResult)
           in  
-            let refreshModule = (\m -> Logic.ifElse (isTypeModule m) m (Module__.Module {
-                    Module__.moduleNamespace = (Module__.moduleNamespace m),
-                    Module__.moduleElements = (Maybes.cat (Lists.map (\e -> Lists.find (\b -> Equality.equal (Core.bindingName b) (Core.bindingName e)) inferredElements) (Module__.moduleElements m))),
-                    Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
-                    Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
-                    Module__.moduleDescription = (Module__.moduleDescription m)}))
-            in (Flows.pure (Lists.map refreshModule targetMods))))
+            let isTypeModule = (\mod -> Lists.null (Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Module__.moduleElements mod)))
+            in  
+              let refreshModule = (\m -> Logic.ifElse (isTypeModule m) m (Module__.Module {
+                      Module__.moduleNamespace = (Module__.moduleNamespace m),
+                      Module__.moduleElements = (Maybes.cat (Lists.map (\e -> Lists.find (\b -> Equality.equal (Core.bindingName b) (Core.bindingName e)) inferredElements) (Module__.moduleElements m))),
+                      Module__.moduleTermDependencies = (Module__.moduleTermDependencies m),
+                      Module__.moduleTypeDependencies = (Module__.moduleTypeDependencies m),
+                      Module__.moduleDescription = (Module__.moduleDescription m)}))
+              in (Right (Lists.map refreshModule targetMods))))
 
 -- | Generate encoder or decoder modules for a list of type modules
-generateCoderModules :: ((t0 -> Compute.Flow Graph.Graph (Maybe t1)) -> Graph.Graph -> [Module__.Module] -> [t0] -> Compute.Flow t2 [t1])
-generateCoderModules codec bsGraph universeModules typeModules =  
+generateCoderModules :: ((t0 -> Graph.Graph -> t1 -> Either t2 (Maybe t3)) -> Graph.Graph -> [Module__.Module] -> [t1] -> t0 -> Either t2 [t3])
+generateCoderModules codec bsGraph universeModules typeModules cx =  
   let universe = (Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules universeModules)))
   in  
     let schemaModules = (moduleTypeDepsTransitive universe universeModules)
@@ -283,22 +295,25 @@ generateCoderModules codec bsGraph universeModules typeModules =
           in  
             let schemaGraph = (Lexical.elementsToGraph bsGraph Maps.empty schemaElements)
             in  
-              let schemaTypes = (Monads.fromFlow Maps.empty schemaGraph (Schemas.schemaGraphToTypingEnvironment schemaGraph))
+              let schemaTypes = (Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment (Context.Context {
+                      Context.contextTrace = [],
+                      Context.contextMessages = [],
+                      Context.contextOther = Maps.empty}) schemaGraph))
               in  
                 let allElements = (Lists.concat2 schemaElements dataElements)
                 in  
                   let graph = (Lexical.elementsToGraph bsGraph schemaTypes allElements)
-                  in (Monads.withState graph (Flows.map (\results -> Maybes.cat results) (Flows.mapList codec typeModules)))
+                  in (Eithers.map (\results -> Maybes.cat results) (Eithers.mapList (\m -> codec cx graph m) typeModules))
 
 -- | Perform type inference and generate the lexicon for a set of modules
-inferAndGenerateLexicon :: (Graph.Graph -> [Module__.Module] -> Compute.Flow t0 String)
-inferAndGenerateLexicon bsGraph kernelModules =  
+inferAndGenerateLexicon :: (Context.Context -> Graph.Graph -> [Module__.Module] -> Either String String)
+inferAndGenerateLexicon cx bsGraph kernelModules =  
   let g0 = (modulesToGraph bsGraph kernelModules kernelModules)
   in  
     let dataElements = (Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) kernelModules)))
-    in (Flows.bind (Inference.inferGraphTypes dataElements g0) (\inferResult ->  
-      let g1 = (Pairs.first inferResult)
-      in (Monads.withState g1 (generateLexicon g1))))
+    in (Eithers.bind (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx dataElements g0)) (\inferResultWithCx ->  
+      let g1 = (Pairs.first (Pairs.first inferResultWithCx))
+      in (Eithers.bimap Error.unDecodingError (\x -> x) (generateLexicon g1))))
 
 -- | Escape unescaped control characters inside JSON string literals
 escapeControlCharsInJson :: ([Int] -> [Int])

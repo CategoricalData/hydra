@@ -4,18 +4,17 @@
 
 module Hydra.Templates where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Error as Error
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as Core__
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -25,19 +24,23 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Decode a list of type-encoding bindings into a map of named types
-graphToSchema :: ([Core.Binding] -> Compute.Flow Graph.Graph (M.Map Core.Name Core.Type))
-graphToSchema els =  
+graphToSchema :: (Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.DecodingError) (M.Map Core.Name Core.Type))
+graphToSchema cx graph els =  
   let toPair = (\el ->  
           let name = (Core.bindingName el)
-          in (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.withTrace "graph to schema" (Monads.eitherToFlow Error.unDecodingError (Core_.type_ graph (Core.bindingTerm el)))) (\t -> Flows.pure (name, t)))))
-  in (Flows.bind (Flows.mapList toPair els) (\pairs -> Flows.pure (Maps.fromList pairs)))
+          in (Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
+            Context.inContextObject = _wc_e,
+            Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm el))) (\t -> Right (name, t))))
+  in (Eithers.bind (Eithers.mapList toPair els) (\pairs -> Right (Maps.fromList pairs)))
 
 -- | Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals
-instantiateTemplate :: (Bool -> M.Map Core.Name Core.Type -> Core.Type -> Compute.Flow t0 Core.Term)
-instantiateTemplate minimal schema t =  
-  let inst = (instantiateTemplate minimal schema)
+instantiateTemplate :: (Context.Context -> Bool -> M.Map Core.Name Core.Type -> Core.Type -> Either (Context.InContext Error.OtherError) Core.Term)
+instantiateTemplate cx minimal schema t =  
+  let inst = (instantiateTemplate cx minimal schema)
   in  
-    let noPoly = (Flows.fail "Polymorphic and function types are not currently supported")
+    let noPoly = (Left (Context.InContext {
+            Context.inContextObject = (Error.OtherError "Polymorphic and function types are not currently supported"),
+            Context.inContextContext = cx}))
     in  
       let forFloat = (\ft -> (\x -> case x of
               Core.FloatTypeBigfloat -> (Core.FloatValueBigfloat 0.0)
@@ -58,41 +61,43 @@ instantiateTemplate minimal schema t =
           let forLiteral = (\lt -> (\x -> case x of
                   Core.LiteralTypeBinary -> (Core.LiteralString "")
                   Core.LiteralTypeBoolean -> (Core.LiteralBoolean False)
-                  Core.LiteralTypeInteger v1 -> (Core.LiteralInteger (forInteger v1))
-                  Core.LiteralTypeFloat v1 -> (Core.LiteralFloat (forFloat v1))
+                  Core.LiteralTypeInteger v0 -> (Core.LiteralInteger (forInteger v0))
+                  Core.LiteralTypeFloat v0 -> (Core.LiteralFloat (forFloat v0))
                   Core.LiteralTypeString -> (Core.LiteralString "")) lt)
           in ((\x -> case x of
-            Core.TypeAnnotated v1 -> (inst (Core.annotatedTypeBody v1))
+            Core.TypeAnnotated v0 -> (inst (Core.annotatedTypeBody v0))
             Core.TypeApplication _ -> noPoly
             Core.TypeFunction _ -> noPoly
             Core.TypeForall _ -> noPoly
-            Core.TypeList v1 -> (Logic.ifElse minimal (Flows.pure (Core.TermList [])) (Flows.bind (inst v1) (\e -> Flows.pure (Core.TermList [
+            Core.TypeList v0 -> (Logic.ifElse minimal (Right (Core.TermList [])) (Eithers.bind (inst v0) (\e -> Right (Core.TermList [
               e]))))
-            Core.TypeLiteral v1 -> (Flows.pure (Core.TermLiteral (forLiteral v1)))
-            Core.TypeMap v1 ->  
-              let kt = (Core.mapTypeKeys v1)
+            Core.TypeLiteral v0 -> (Right (Core.TermLiteral (forLiteral v0)))
+            Core.TypeMap v0 ->  
+              let kt = (Core.mapTypeKeys v0)
               in  
-                let vt = (Core.mapTypeValues v1)
-                in (Logic.ifElse minimal (Flows.pure (Core.TermMap Maps.empty)) (Flows.bind (inst kt) (\ke -> Flows.bind (inst vt) (\ve -> Flows.pure (Core.TermMap (Maps.singleton ke ve))))))
-            Core.TypeMaybe v1 -> (Logic.ifElse minimal (Flows.pure (Core.TermMaybe Nothing)) (Flows.bind (inst v1) (\e -> Flows.pure (Core.TermMaybe (Just e)))))
-            Core.TypeRecord v1 ->  
-              let tname = (Core.rowTypeTypeName v1)
+                let vt = (Core.mapTypeValues v0)
+                in (Logic.ifElse minimal (Right (Core.TermMap Maps.empty)) (Eithers.bind (inst kt) (\ke -> Eithers.bind (inst vt) (\ve -> Right (Core.TermMap (Maps.singleton ke ve))))))
+            Core.TypeMaybe v0 -> (Logic.ifElse minimal (Right (Core.TermMaybe Nothing)) (Eithers.bind (inst v0) (\e -> Right (Core.TermMaybe (Just e)))))
+            Core.TypeRecord v0 ->  
+              let tname = (Core.rowTypeTypeName v0)
               in  
-                let fields = (Core.rowTypeFields v1)
+                let fields = (Core.rowTypeFields v0)
                 in  
-                  let toField = (\ft -> Flows.bind (inst (Core.fieldTypeType ft)) (\e -> Flows.pure (Core.Field {
+                  let toField = (\ft -> Eithers.bind (inst (Core.fieldTypeType ft)) (\e -> Right (Core.Field {
                           Core.fieldName = (Core.fieldTypeName ft),
                           Core.fieldTerm = e})))
-                  in (Flows.bind (Flows.mapList toField fields) (\dfields -> Flows.pure (Core.TermRecord (Core.Record {
+                  in (Eithers.bind (Eithers.mapList toField fields) (\dfields -> Right (Core.TermRecord (Core.Record {
                     Core.recordTypeName = tname,
                     Core.recordFields = dfields}))))
-            Core.TypeSet v1 -> (Logic.ifElse minimal (Flows.pure (Core.TermSet Sets.empty)) (Flows.bind (inst v1) (\e -> Flows.pure (Core.TermSet (Sets.fromList [
+            Core.TypeSet v0 -> (Logic.ifElse minimal (Right (Core.TermSet Sets.empty)) (Eithers.bind (inst v0) (\e -> Right (Core.TermSet (Sets.fromList [
               e])))))
-            Core.TypeVariable v1 -> (Maybes.maybe (Flows.fail (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v1)) " not found in schema"))) inst (Maps.lookup v1 schema))
-            Core.TypeWrap v1 ->  
-              let tname = (Core.wrappedTypeTypeName v1)
+            Core.TypeVariable v0 -> (Maybes.maybe (Left (Context.InContext {
+              Context.inContextObject = (Error.OtherError (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v0)) " not found in schema"))),
+              Context.inContextContext = cx})) inst (Maps.lookup v0 schema))
+            Core.TypeWrap v0 ->  
+              let tname = (Core.wrappedTypeTypeName v0)
               in  
-                let t_ = (Core.wrappedTypeBody v1)
-                in (Flows.bind (inst t_) (\e -> Flows.pure (Core.TermWrap (Core.WrappedTerm {
+                let t_ = (Core.wrappedTypeBody v0)
+                in (Eithers.bind (inst t_) (\e -> Right (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = tname,
                   Core.wrappedTermBody = e}))))) t)

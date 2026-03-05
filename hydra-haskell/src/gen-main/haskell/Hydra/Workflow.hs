@@ -4,9 +4,7 @@
 
 module Hydra.Workflow where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
 import qualified Hydra.Module as Module
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -29,24 +27,6 @@ _HydraSchemaSpec = (Core.Name "hydra.workflow.HydraSchemaSpec")
 _HydraSchemaSpec_modules = (Core.Name "modules")
 
 _HydraSchemaSpec_typeName = (Core.Name "typeName")
-
--- | The last mile of a transformation, which encodes and serializes terms to a file
-data LastMile s a = 
-  LastMile {
-    -- | An encoder for terms to a list of output objects
-    lastMileEncoder :: (Core.Type -> Compute.Flow s (Core.Term -> Graph.Graph -> Compute.Flow s [a])),
-    -- | A function which serializes a list of output objects to a string representation
-    lastMileSerializer :: ([a] -> Compute.Flow s String),
-    -- | A file extension for the generated file(s)
-    lastMileFileExtension :: String}
-
-_LastMile = (Core.Name "hydra.workflow.LastMile")
-
-_LastMile_encoder = (Core.Name "encoder")
-
-_LastMile_serializer = (Core.Name "serializer")
-
-_LastMile_fileExtension = (Core.Name "fileExtension")
 
 -- | The specification of a schema at the source end of a workflow
 data SchemaSpec = 

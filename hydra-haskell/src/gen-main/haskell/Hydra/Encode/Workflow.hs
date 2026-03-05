@@ -29,16 +29,16 @@ hydraSchemaSpec x = (Core.TermRecord (Core.Record {
 
 schemaSpec :: (Workflow.SchemaSpec -> Core.Term)
 schemaSpec x = case x of
-  Workflow.SchemaSpecHydra v1 -> (Core.TermUnion (Core.Injection {
+  Workflow.SchemaSpecHydra v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.workflow.SchemaSpec"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "hydra"),
-      Core.fieldTerm = (hydraSchemaSpec v1)}}))
-  Workflow.SchemaSpecFile v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (hydraSchemaSpec v0)}}))
+  Workflow.SchemaSpecFile v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.workflow.SchemaSpec"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "file"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v1))}}))
+      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}}))
   Workflow.SchemaSpecProvided -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.workflow.SchemaSpec"),
     Core.injectionField = Core.Field {

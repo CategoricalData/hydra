@@ -411,201 +411,201 @@ tag x = (Core.TermWrap (Core.WrappedTerm {
 
 testCase :: (Testing.TestCase -> Core.Term)
 testCase x = case x of
-  Testing.TestCaseAlphaConversion v1 -> (Core.TermUnion (Core.Injection {
+  Testing.TestCaseAlphaConversion v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "alphaConversion"),
-      Core.fieldTerm = (alphaConversionTestCase v1)}}))
-  Testing.TestCaseCaseConversion v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (alphaConversionTestCase v0)}}))
+  Testing.TestCaseCaseConversion v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "caseConversion"),
-      Core.fieldTerm = (caseConversionTestCase v1)}}))
-  Testing.TestCaseDeannotateTerm v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (caseConversionTestCase v0)}}))
+  Testing.TestCaseDeannotateTerm v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "deannotateTerm"),
-      Core.fieldTerm = (deannotateTermTestCase v1)}}))
-  Testing.TestCaseDeannotateType v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (deannotateTermTestCase v0)}}))
+  Testing.TestCaseDeannotateType v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "deannotateType"),
-      Core.fieldTerm = (deannotateTypeTestCase v1)}}))
-  Testing.TestCaseDelegatedEvaluation v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (deannotateTypeTestCase v0)}}))
+  Testing.TestCaseDelegatedEvaluation v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "delegatedEvaluation"),
-      Core.fieldTerm = (delegatedEvaluationTestCase v1)}}))
-  Testing.TestCaseEtaExpansion v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (delegatedEvaluationTestCase v0)}}))
+  Testing.TestCaseEtaExpansion v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "etaExpansion"),
-      Core.fieldTerm = (etaExpansionTestCase v1)}}))
-  Testing.TestCaseFlattenLetTerms v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (etaExpansionTestCase v0)}}))
+  Testing.TestCaseFlattenLetTerms v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "flattenLetTerms"),
-      Core.fieldTerm = (flattenLetTermsTestCase v1)}}))
-  Testing.TestCaseFreeVariables v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (flattenLetTermsTestCase v0)}}))
+  Testing.TestCaseFreeVariables v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "freeVariables"),
-      Core.fieldTerm = (freeVariablesTestCase v1)}}))
-  Testing.TestCaseEvaluation v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (freeVariablesTestCase v0)}}))
+  Testing.TestCaseEvaluation v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "evaluation"),
-      Core.fieldTerm = (evaluationTestCase v1)}}))
-  Testing.TestCaseInference v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (evaluationTestCase v0)}}))
+  Testing.TestCaseInference v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "inference"),
-      Core.fieldTerm = (inferenceTestCase v1)}}))
-  Testing.TestCaseInferenceFailure v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (inferenceTestCase v0)}}))
+  Testing.TestCaseInferenceFailure v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "inferenceFailure"),
-      Core.fieldTerm = (inferenceFailureTestCase v1)}}))
-  Testing.TestCaseJsonCoder v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (inferenceFailureTestCase v0)}}))
+  Testing.TestCaseJsonCoder v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "jsonCoder"),
-      Core.fieldTerm = (jsonCoderTestCase v1)}}))
-  Testing.TestCaseJsonDecode v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (jsonCoderTestCase v0)}}))
+  Testing.TestCaseJsonDecode v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "jsonDecode"),
-      Core.fieldTerm = (jsonDecodeTestCase v1)}}))
-  Testing.TestCaseJsonEncode v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (jsonDecodeTestCase v0)}}))
+  Testing.TestCaseJsonEncode v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "jsonEncode"),
-      Core.fieldTerm = (jsonEncodeTestCase v1)}}))
-  Testing.TestCaseJsonParser v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (jsonEncodeTestCase v0)}}))
+  Testing.TestCaseJsonParser v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "jsonParser"),
-      Core.fieldTerm = (jsonParserTestCase v1)}}))
-  Testing.TestCaseJsonRoundtrip v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (jsonParserTestCase v0)}}))
+  Testing.TestCaseJsonRoundtrip v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "jsonRoundtrip"),
-      Core.fieldTerm = (jsonRoundtripTestCase v1)}}))
-  Testing.TestCaseJsonWriter v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (jsonRoundtripTestCase v0)}}))
+  Testing.TestCaseJsonWriter v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "jsonWriter"),
-      Core.fieldTerm = (jsonWriterTestCase v1)}}))
-  Testing.TestCaseLiftLambdaAboveLet v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (jsonWriterTestCase v0)}}))
+  Testing.TestCaseLiftLambdaAboveLet v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "liftLambdaAboveLet"),
-      Core.fieldTerm = (liftLambdaAboveLetTestCase v1)}}))
-  Testing.TestCaseSerialization v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (liftLambdaAboveLetTestCase v0)}}))
+  Testing.TestCaseSerialization v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "serialization"),
-      Core.fieldTerm = (serializationTestCase v1)}}))
-  Testing.TestCaseSimplifyTerm v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (serializationTestCase v0)}}))
+  Testing.TestCaseSimplifyTerm v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "simplifyTerm"),
-      Core.fieldTerm = (simplifyTermTestCase v1)}}))
-  Testing.TestCaseTopologicalSort v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (simplifyTermTestCase v0)}}))
+  Testing.TestCaseTopologicalSort v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "topologicalSort"),
-      Core.fieldTerm = (topologicalSortTestCase v1)}}))
-  Testing.TestCaseTopologicalSortBindings v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (topologicalSortTestCase v0)}}))
+  Testing.TestCaseTopologicalSortBindings v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "topologicalSortBindings"),
-      Core.fieldTerm = (topologicalSortBindingsTestCase v1)}}))
-  Testing.TestCaseTopologicalSortSCC v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (topologicalSortBindingsTestCase v0)}}))
+  Testing.TestCaseTopologicalSortSCC v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "topologicalSortSCC"),
-      Core.fieldTerm = (topologicalSortSCCTestCase v1)}}))
-  Testing.TestCaseTypeChecking v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (topologicalSortSCCTestCase v0)}}))
+  Testing.TestCaseTypeChecking v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "typeChecking"),
-      Core.fieldTerm = (typeCheckingTestCase v1)}}))
-  Testing.TestCaseTypeCheckingFailure v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (typeCheckingTestCase v0)}}))
+  Testing.TestCaseTypeCheckingFailure v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "typeCheckingFailure"),
-      Core.fieldTerm = (typeCheckingFailureTestCase v1)}}))
-  Testing.TestCaseTypeReduction v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (typeCheckingFailureTestCase v0)}}))
+  Testing.TestCaseTypeReduction v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "typeReduction"),
-      Core.fieldTerm = (typeReductionTestCase v1)}}))
-  Testing.TestCaseNormalizeTypeVariables v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (typeReductionTestCase v0)}}))
+  Testing.TestCaseNormalizeTypeVariables v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "normalizeTypeVariables"),
-      Core.fieldTerm = (normalizeTypeVariablesTestCase v1)}}))
-  Testing.TestCaseFoldOverTerm v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (normalizeTypeVariablesTestCase v0)}}))
+  Testing.TestCaseFoldOverTerm v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "foldOverTerm"),
-      Core.fieldTerm = (foldOverTermTestCase v1)}}))
-  Testing.TestCaseRewriteTerm v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (foldOverTermTestCase v0)}}))
+  Testing.TestCaseRewriteTerm v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "rewriteTerm"),
-      Core.fieldTerm = (rewriteTermTestCase v1)}}))
-  Testing.TestCaseRewriteType v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (rewriteTermTestCase v0)}}))
+  Testing.TestCaseRewriteType v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "rewriteType"),
-      Core.fieldTerm = (rewriteTypeTestCase v1)}}))
-  Testing.TestCaseHoistSubterms v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (rewriteTypeTestCase v0)}}))
+  Testing.TestCaseHoistSubterms v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "hoistSubterms"),
-      Core.fieldTerm = (hoistSubtermsTestCase v1)}}))
-  Testing.TestCaseHoistCaseStatements v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (hoistSubtermsTestCase v0)}}))
+  Testing.TestCaseHoistCaseStatements v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "hoistCaseStatements"),
-      Core.fieldTerm = (hoistCaseStatementsTestCase v1)}}))
-  Testing.TestCaseHoistLetBindings v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (hoistCaseStatementsTestCase v0)}}))
+  Testing.TestCaseHoistLetBindings v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "hoistLetBindings"),
-      Core.fieldTerm = (hoistLetBindingsTestCase v1)}}))
-  Testing.TestCaseHoistPolymorphicLetBindings v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (hoistLetBindingsTestCase v0)}}))
+  Testing.TestCaseHoistPolymorphicLetBindings v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "hoistPolymorphicLetBindings"),
-      Core.fieldTerm = (hoistPolymorphicLetBindingsTestCase v1)}}))
-  Testing.TestCaseSubstInType v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (hoistPolymorphicLetBindingsTestCase v0)}}))
+  Testing.TestCaseSubstInType v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "substInType"),
-      Core.fieldTerm = (substInTypeTestCase v1)}}))
-  Testing.TestCaseVariableOccursInType v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (substInTypeTestCase v0)}}))
+  Testing.TestCaseVariableOccursInType v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "variableOccursInType"),
-      Core.fieldTerm = (variableOccursInTypeTestCase v1)}}))
-  Testing.TestCaseUnifyTypes v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (variableOccursInTypeTestCase v0)}}))
+  Testing.TestCaseUnifyTypes v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "unifyTypes"),
-      Core.fieldTerm = (unifyTypesTestCase v1)}}))
-  Testing.TestCaseJoinTypes v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (unifyTypesTestCase v0)}}))
+  Testing.TestCaseJoinTypes v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "joinTypes"),
-      Core.fieldTerm = (joinTypesTestCase v1)}}))
-  Testing.TestCaseUnshadowVariables v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (joinTypesTestCase v0)}}))
+  Testing.TestCaseUnshadowVariables v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "unshadowVariables"),
-      Core.fieldTerm = (unshadowVariablesTestCase v1)}}))
+      Core.fieldTerm = (unshadowVariablesTestCase v0)}}))
 
 testCaseWithMetadata :: (Testing.TestCaseWithMetadata -> Core.Term)
 testCaseWithMetadata x = (Core.TermRecord (Core.Record {

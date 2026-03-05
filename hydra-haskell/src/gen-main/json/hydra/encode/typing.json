@@ -491,6 +491,28 @@
                                                       "keys": {"variable": "hydra.core.Name"},
                                                       "values": {"variable": "hydra.core.TypeVariableMetadata"}}}],
                                                 "parameter": "m"}}}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "context"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "context", "typeName": "hydra.typing.InferenceResult"}}}}}},
+                                          "function": {"variable": "hydra.encode.context.context"}}}}],
                                   "typeName": "hydra.core.Field"}}]}}],
                       "typeName": "hydra.core.Record"}}},
                 "typeName": "hydra.core.Term"}},
@@ -766,5 +788,5 @@
               "domain": {"variable": "hydra.typing.TypeSubst"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.typing",
-  "termDependencies": ["hydra.encode.core"],
+  "termDependencies": ["hydra.encode.core", "hydra.encode.context"],
   "typeDependencies": ["hydra.typing"]}

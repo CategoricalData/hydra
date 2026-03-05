@@ -23,9 +23,9 @@ import qualified Data.Set as S
 
 coderDirection :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.CoderDirection)
 coderDirection cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -40,18 +40,18 @@ coderDirection cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
 
 languageName :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.LanguageName)
 languageName cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v1 -> (Eithers.map (\b -> Coders.LanguageName b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-    Core.TermLiteral v2 -> ((\x -> case x of
-      Core.LiteralString v3 -> (Right v3)
-      _ -> (Left (Error.DecodingError "expected string literal"))) v2)
-    _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v1)))
+  Core.TermWrap v0 -> (Eithers.map (\b -> Coders.LanguageName b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
+    Core.TermLiteral v1 -> ((\x -> case x of
+      Core.LiteralString v2 -> (Right v2)
+      _ -> (Left (Error.DecodingError "expected string literal"))) v1)
+    _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
   _ -> (Left (Error.DecodingError "expected wrapped type hydra.coders.LanguageName"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 traversalOrder :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.TraversalOrder)
 traversalOrder cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [

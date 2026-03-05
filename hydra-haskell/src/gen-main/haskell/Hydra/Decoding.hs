@@ -5,14 +5,14 @@
 module Hydra.Decoding where
 
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
 import qualified Hydra.Error as Error
 import qualified Hydra.Extract.Helpers as Helpers
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
@@ -20,7 +20,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Names as Names
 import qualified Hydra.Schemas as Schemas
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -33,25 +32,25 @@ import qualified Data.Set as S
 -- | Collect forall type variable names from a type
 collectForallVariables :: (Core.Type -> [Core.Name])
 collectForallVariables typ = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (collectForallVariables (Core.annotatedTypeBody v1))
-  Core.TypeForall v1 -> (Lists.cons (Core.forallTypeParameter v1) (collectForallVariables (Core.forallTypeBody v1)))
+  Core.TypeAnnotated v0 -> (collectForallVariables (Core.annotatedTypeBody v0))
+  Core.TypeForall v0 -> (Lists.cons (Core.forallTypeParameter v0) (collectForallVariables (Core.forallTypeBody v0)))
   _ -> []) typ)
 
 -- | Collect type variables needing Ord constraints (from Set element types)
 collectOrdConstrainedVariables :: (Core.Type -> [Core.Name])
 collectOrdConstrainedVariables typ = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (collectOrdConstrainedVariables (Core.annotatedTypeBody v1))
-  Core.TypeApplication v1 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.applicationTypeFunction v1)) (collectOrdConstrainedVariables (Core.applicationTypeArgument v1)))
-  Core.TypeEither v1 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.eitherTypeLeft v1)) (collectOrdConstrainedVariables (Core.eitherTypeRight v1)))
-  Core.TypeForall v1 -> (collectOrdConstrainedVariables (Core.forallTypeBody v1))
-  Core.TypeList v1 -> (collectOrdConstrainedVariables v1)
-  Core.TypeMap v1 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.mapTypeKeys v1)) (collectOrdConstrainedVariables (Core.mapTypeValues v1)))
-  Core.TypeMaybe v1 -> (collectOrdConstrainedVariables v1)
-  Core.TypePair v1 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.pairTypeFirst v1)) (collectOrdConstrainedVariables (Core.pairTypeSecond v1)))
-  Core.TypeRecord v1 -> (Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) (Core.rowTypeFields v1)))
-  Core.TypeSet v1 -> (Lists.concat2 (collectTypeVariablesFromType v1) (collectOrdConstrainedVariables v1))
-  Core.TypeUnion v1 -> (Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) (Core.rowTypeFields v1)))
-  Core.TypeWrap v1 -> (collectOrdConstrainedVariables (Core.wrappedTypeBody v1))
+  Core.TypeAnnotated v0 -> (collectOrdConstrainedVariables (Core.annotatedTypeBody v0))
+  Core.TypeApplication v0 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.applicationTypeFunction v0)) (collectOrdConstrainedVariables (Core.applicationTypeArgument v0)))
+  Core.TypeEither v0 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.eitherTypeLeft v0)) (collectOrdConstrainedVariables (Core.eitherTypeRight v0)))
+  Core.TypeForall v0 -> (collectOrdConstrainedVariables (Core.forallTypeBody v0))
+  Core.TypeList v0 -> (collectOrdConstrainedVariables v0)
+  Core.TypeMap v0 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.mapTypeKeys v0)) (collectOrdConstrainedVariables (Core.mapTypeValues v0)))
+  Core.TypeMaybe v0 -> (collectOrdConstrainedVariables v0)
+  Core.TypePair v0 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.pairTypeFirst v0)) (collectOrdConstrainedVariables (Core.pairTypeSecond v0)))
+  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeSet v0 -> (Lists.concat2 (collectTypeVariablesFromType v0) (collectOrdConstrainedVariables v0))
+  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeWrap v0 -> (collectOrdConstrainedVariables (Core.wrappedTypeBody v0))
   _ -> []) typ)
 
 -- | Collect type variable names from a type (forall parameters only)
@@ -61,28 +60,30 @@ collectTypeVariables typ = (collectForallVariables typ)
 -- | Collect all type variable names from a type expression
 collectTypeVariablesFromType :: (Core.Type -> [Core.Name])
 collectTypeVariablesFromType typ = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (collectTypeVariablesFromType (Core.annotatedTypeBody v1))
-  Core.TypeApplication v1 -> (Lists.concat2 (collectTypeVariablesFromType (Core.applicationTypeFunction v1)) (collectTypeVariablesFromType (Core.applicationTypeArgument v1)))
-  Core.TypeEither v1 -> (Lists.concat2 (collectTypeVariablesFromType (Core.eitherTypeLeft v1)) (collectTypeVariablesFromType (Core.eitherTypeRight v1)))
-  Core.TypeForall v1 -> (collectTypeVariablesFromType (Core.forallTypeBody v1))
-  Core.TypeList v1 -> (collectTypeVariablesFromType v1)
-  Core.TypeMap v1 -> (Lists.concat2 (collectTypeVariablesFromType (Core.mapTypeKeys v1)) (collectTypeVariablesFromType (Core.mapTypeValues v1)))
-  Core.TypeMaybe v1 -> (collectTypeVariablesFromType v1)
-  Core.TypePair v1 -> (Lists.concat2 (collectTypeVariablesFromType (Core.pairTypeFirst v1)) (collectTypeVariablesFromType (Core.pairTypeSecond v1)))
-  Core.TypeRecord v1 -> (Lists.concat (Lists.map (\ft -> collectTypeVariablesFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v1)))
-  Core.TypeSet v1 -> (collectTypeVariablesFromType v1)
-  Core.TypeUnion v1 -> (Lists.concat (Lists.map (\ft -> collectTypeVariablesFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v1)))
-  Core.TypeVariable v1 -> [
-    v1]
-  Core.TypeWrap v1 -> (collectTypeVariablesFromType (Core.wrappedTypeBody v1))
+  Core.TypeAnnotated v0 -> (collectTypeVariablesFromType (Core.annotatedTypeBody v0))
+  Core.TypeApplication v0 -> (Lists.concat2 (collectTypeVariablesFromType (Core.applicationTypeFunction v0)) (collectTypeVariablesFromType (Core.applicationTypeArgument v0)))
+  Core.TypeEither v0 -> (Lists.concat2 (collectTypeVariablesFromType (Core.eitherTypeLeft v0)) (collectTypeVariablesFromType (Core.eitherTypeRight v0)))
+  Core.TypeForall v0 -> (collectTypeVariablesFromType (Core.forallTypeBody v0))
+  Core.TypeList v0 -> (collectTypeVariablesFromType v0)
+  Core.TypeMap v0 -> (Lists.concat2 (collectTypeVariablesFromType (Core.mapTypeKeys v0)) (collectTypeVariablesFromType (Core.mapTypeValues v0)))
+  Core.TypeMaybe v0 -> (collectTypeVariablesFromType v0)
+  Core.TypePair v0 -> (Lists.concat2 (collectTypeVariablesFromType (Core.pairTypeFirst v0)) (collectTypeVariablesFromType (Core.pairTypeSecond v0)))
+  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> collectTypeVariablesFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeSet v0 -> (collectTypeVariablesFromType v0)
+  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> collectTypeVariablesFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeVariable v0 -> [
+    v0]
+  Core.TypeWrap v0 -> (collectTypeVariablesFromType (Core.wrappedTypeBody v0))
   _ -> []) typ)
 
 -- | Transform a type binding into a decoder binding
-decodeBinding :: (Core.Binding -> Compute.Flow Graph.Graph Core.Binding)
-decodeBinding b = (Flows.bind Monads.getState (\graph -> Flows.bind (Monads.eitherToFlow Error.unDecodingError (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Flows.pure (Core.Binding {
+decodeBinding :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.DecodingError) Core.Binding)
+decodeBinding cx graph b = (Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
+  Context.inContextObject = _wc_e,
+  Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Right (Core.Binding {
   Core.bindingName = (decodeBindingName (Core.bindingName b)),
   Core.bindingTerm = (decodeType typ),
-  Core.bindingType = (Just (decoderTypeScheme typ))}))))
+  Core.bindingType = (Just (decoderTypeScheme typ))})))
 
 -- | Generate a binding name for a decoder function from a type name
 decodeBindingName :: (Core.Name -> Core.Name)
@@ -223,7 +224,7 @@ decodeLiteralType lt = ((\x -> case x of
             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
           Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))
-  Core.LiteralTypeFloat v1 -> ((\x -> case x of
+  Core.LiteralTypeFloat v0 -> ((\x -> case x of
     Core.FloatTypeBigfloat -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "cx"),
       Core.lambdaDomain = Nothing,
@@ -418,8 +419,8 @@ decodeLiteralType lt = ((\x -> case x of
             Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-            Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))) v1)
-  Core.LiteralTypeInteger v1 -> ((\x -> case x of
+            Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))) v0)
+  Core.LiteralTypeInteger v0 -> ((\x -> case x of
     Core.IntegerTypeBigint -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
       Core.lambdaParameter = (Core.Name "cx"),
       Core.lambdaDomain = Nothing,
@@ -1004,7 +1005,7 @@ decodeLiteralType lt = ((\x -> case x of
             Core.applicationFunction = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
               Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-            Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))) v1)
+            Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))) v0)
   Core.LiteralTypeString -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
     Core.lambdaParameter = (Core.Name "cx"),
     Core.lambdaDomain = Nothing,
@@ -1078,14 +1079,16 @@ decodeMaybeType elemType =
     Core.applicationArgument = elemDecoder}))
 
 -- | Transform a type module into a decoder module
-decodeModule :: (Module.Module -> Compute.Flow Graph.Graph (Maybe Module.Module))
-decodeModule mod = (Flows.bind (filterTypeBindings (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Flows.pure Nothing) (Flows.bind (Flows.mapList decodeBinding typeBindings) (\decodedBindings ->  
+decodeModule :: (Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Error.OtherError) (Maybe Module.Module))
+decodeModule cx graph mod = (Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
+  Context.inContextObject = (Error.OtherError (Error.unDecodingError (Context.inContextObject ic))),
+  Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->  
   let decodedTypeDeps = (Lists.map decodeNamespace (Module.moduleTypeDependencies mod))
   in  
     let decodedTermDeps = (Lists.map decodeNamespace (Module.moduleTermDependencies mod))
     in  
       let allDecodedDeps = (Lists.nub (Lists.concat2 decodedTypeDeps decodedTermDeps))
-      in (Flows.pure (Just (Module.Module {
+      in (Right (Just (Module.Module {
         Module.moduleNamespace = (decodeNamespace (Module.moduleNamespace mod)),
         Module.moduleElements = decodedBindings,
         Module.moduleTermDependencies = (Lists.concat2 [
@@ -1212,23 +1215,23 @@ decodeSetType elemType =
 -- | Generate a decoder term for a Type
 decodeType :: (Core.Type -> Core.Term)
 decodeType typ = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (decodeType (Core.annotatedTypeBody v1))
-  Core.TypeApplication v1 -> (Core.TermApplication (Core.Application {
-    Core.applicationFunction = (decodeType (Core.applicationTypeFunction v1)),
-    Core.applicationArgument = (decodeType (Core.applicationTypeArgument v1))}))
-  Core.TypeEither v1 -> (decodeEitherType v1)
-  Core.TypeForall v1 -> (decodeForallType v1)
-  Core.TypeList v1 -> (decodeListType v1)
-  Core.TypeLiteral v1 -> (decodeLiteralType v1)
-  Core.TypeMap v1 -> (decodeMapType v1)
-  Core.TypeMaybe v1 -> (decodeMaybeType v1)
-  Core.TypePair v1 -> (decodePairType v1)
-  Core.TypeRecord v1 -> (decodeRecordType v1)
-  Core.TypeSet v1 -> (decodeSetType v1)
-  Core.TypeUnion v1 -> (decodeUnionType v1)
+  Core.TypeAnnotated v0 -> (decodeType (Core.annotatedTypeBody v0))
+  Core.TypeApplication v0 -> (Core.TermApplication (Core.Application {
+    Core.applicationFunction = (decodeType (Core.applicationTypeFunction v0)),
+    Core.applicationArgument = (decodeType (Core.applicationTypeArgument v0))}))
+  Core.TypeEither v0 -> (decodeEitherType v0)
+  Core.TypeForall v0 -> (decodeForallType v0)
+  Core.TypeList v0 -> (decodeListType v0)
+  Core.TypeLiteral v0 -> (decodeLiteralType v0)
+  Core.TypeMap v0 -> (decodeMapType v0)
+  Core.TypeMaybe v0 -> (decodeMaybeType v0)
+  Core.TypePair v0 -> (decodePairType v0)
+  Core.TypeRecord v0 -> (decodeRecordType v0)
+  Core.TypeSet v0 -> (decodeSetType v0)
+  Core.TypeUnion v0 -> (decodeUnionType v0)
   Core.TypeUnit -> decodeUnitType
-  Core.TypeWrap v1 -> (decodeWrappedType v1)
-  Core.TypeVariable v1 -> (Core.TermVariable (decodeBindingName v1))
+  Core.TypeWrap v0 -> (decodeWrappedType v0)
+  Core.TypeVariable v0 -> (Core.TermVariable (decodeBindingName v0))
   _ -> (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
     Core.lambdaParameter = (Core.Name "cx"),
     Core.lambdaDomain = Nothing,
@@ -1442,43 +1445,43 @@ decodeWrappedType wt =
 -- | Get full result type for decoder
 decoderFullResultType :: (Core.Type -> Core.Type)
 decoderFullResultType typ = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (decoderFullResultType (Core.annotatedTypeBody v1))
-  Core.TypeApplication v1 -> (Core.TypeApplication (Core.ApplicationType {
-    Core.applicationTypeFunction = (decoderFullResultType (Core.applicationTypeFunction v1)),
-    Core.applicationTypeArgument = (Core.applicationTypeArgument v1)}))
-  Core.TypeEither v1 -> (Core.TypeEither (Core.EitherType {
-    Core.eitherTypeLeft = (decoderFullResultType (Core.eitherTypeLeft v1)),
-    Core.eitherTypeRight = (decoderFullResultType (Core.eitherTypeRight v1))}))
-  Core.TypeForall v1 -> (Core.TypeApplication (Core.ApplicationType {
-    Core.applicationTypeFunction = (decoderFullResultType (Core.forallTypeBody v1)),
-    Core.applicationTypeArgument = (Core.TypeVariable (Core.forallTypeParameter v1))}))
-  Core.TypeList v1 -> (Core.TypeList (decoderFullResultType v1))
+  Core.TypeAnnotated v0 -> (decoderFullResultType (Core.annotatedTypeBody v0))
+  Core.TypeApplication v0 -> (Core.TypeApplication (Core.ApplicationType {
+    Core.applicationTypeFunction = (decoderFullResultType (Core.applicationTypeFunction v0)),
+    Core.applicationTypeArgument = (Core.applicationTypeArgument v0)}))
+  Core.TypeEither v0 -> (Core.TypeEither (Core.EitherType {
+    Core.eitherTypeLeft = (decoderFullResultType (Core.eitherTypeLeft v0)),
+    Core.eitherTypeRight = (decoderFullResultType (Core.eitherTypeRight v0))}))
+  Core.TypeForall v0 -> (Core.TypeApplication (Core.ApplicationType {
+    Core.applicationTypeFunction = (decoderFullResultType (Core.forallTypeBody v0)),
+    Core.applicationTypeArgument = (Core.TypeVariable (Core.forallTypeParameter v0))}))
+  Core.TypeList v0 -> (Core.TypeList (decoderFullResultType v0))
   Core.TypeLiteral _ -> (Core.TypeVariable (Core.Name "hydra.core.Literal"))
-  Core.TypeMap v1 -> (Core.TypeMap (Core.MapType {
-    Core.mapTypeKeys = (decoderFullResultType (Core.mapTypeKeys v1)),
-    Core.mapTypeValues = (decoderFullResultType (Core.mapTypeValues v1))}))
-  Core.TypeMaybe v1 -> (Core.TypeMaybe (decoderFullResultType v1))
-  Core.TypePair v1 -> (Core.TypePair (Core.PairType {
-    Core.pairTypeFirst = (decoderFullResultType (Core.pairTypeFirst v1)),
-    Core.pairTypeSecond = (decoderFullResultType (Core.pairTypeSecond v1))}))
-  Core.TypeRecord v1 -> (Core.TypeVariable (Core.rowTypeTypeName v1))
-  Core.TypeSet v1 -> (Core.TypeSet (decoderFullResultType v1))
-  Core.TypeUnion v1 -> (Core.TypeVariable (Core.rowTypeTypeName v1))
+  Core.TypeMap v0 -> (Core.TypeMap (Core.MapType {
+    Core.mapTypeKeys = (decoderFullResultType (Core.mapTypeKeys v0)),
+    Core.mapTypeValues = (decoderFullResultType (Core.mapTypeValues v0))}))
+  Core.TypeMaybe v0 -> (Core.TypeMaybe (decoderFullResultType v0))
+  Core.TypePair v0 -> (Core.TypePair (Core.PairType {
+    Core.pairTypeFirst = (decoderFullResultType (Core.pairTypeFirst v0)),
+    Core.pairTypeSecond = (decoderFullResultType (Core.pairTypeSecond v0))}))
+  Core.TypeRecord v0 -> (Core.TypeVariable (Core.rowTypeTypeName v0))
+  Core.TypeSet v0 -> (Core.TypeSet (decoderFullResultType v0))
+  Core.TypeUnion v0 -> (Core.TypeVariable (Core.rowTypeTypeName v0))
   Core.TypeUnit -> Core.TypeUnit
-  Core.TypeVariable v1 -> (Core.TypeVariable v1)
-  Core.TypeWrap v1 -> (Core.TypeVariable (Core.wrappedTypeTypeName v1))
+  Core.TypeVariable v0 -> (Core.TypeVariable v0)
+  Core.TypeWrap v0 -> (Core.TypeVariable (Core.wrappedTypeTypeName v0))
   _ -> (Core.TypeVariable (Core.Name "hydra.core.Term"))) typ)
 
 -- | Compute the result type name for a decoder
 decoderResultType :: (Core.Type -> Core.Name)
 decoderResultType typ = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (decoderResultType (Core.annotatedTypeBody v1))
-  Core.TypeApplication v1 -> (decoderResultType (Core.applicationTypeFunction v1))
-  Core.TypeForall v1 -> (decoderResultType (Core.forallTypeBody v1))
+  Core.TypeAnnotated v0 -> (decoderResultType (Core.annotatedTypeBody v0))
+  Core.TypeApplication v0 -> (decoderResultType (Core.applicationTypeFunction v0))
+  Core.TypeForall v0 -> (decoderResultType (Core.forallTypeBody v0))
   Core.TypeLiteral _ -> (Core.Name "hydra.core.Literal")
-  Core.TypeRecord v1 -> (Core.rowTypeTypeName v1)
-  Core.TypeUnion v1 -> (Core.rowTypeTypeName v1)
-  Core.TypeWrap v1 -> (Core.wrappedTypeTypeName v1)
+  Core.TypeRecord v0 -> (Core.rowTypeTypeName v0)
+  Core.TypeUnion v0 -> (Core.rowTypeTypeName v0)
+  Core.TypeWrap v0 -> (Core.wrappedTypeTypeName v0)
   _ -> (Core.Name "hydra.core.Term")) typ)
 
 -- | Build decoder function type
@@ -1512,24 +1515,24 @@ decoderTypeScheme typ =
           Core.typeSchemeConstraints = constraints}
 
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: ([Core.Binding] -> Compute.Flow Graph.Graph [Core.Binding])
-filterTypeBindings bindings = (Flows.map Maybes.cat (Flows.mapList isDecodableBinding (Lists.filter Annotations.isNativeType bindings)))
+filterTypeBindings :: (Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.OtherError) [Core.Binding])
+filterTypeBindings cx graph bindings = (Eithers.map Maybes.cat (Eithers.mapList (isDecodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings)))
 
 -- | Check if a binding is decodable (serializable type)
-isDecodableBinding :: (Core.Binding -> Compute.Flow Graph.Graph (Maybe Core.Binding))
-isDecodableBinding b = (Flows.map (\serializable -> Logic.ifElse serializable (Just b) Nothing) (Schemas.isSerializableByName (Core.bindingName b)))
+isDecodableBinding :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.OtherError) (Maybe Core.Binding))
+isDecodableBinding cx graph b = (Eithers.bind (Schemas.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing)))
 
 -- | Prepend decoder types for forall parameters to base type
 prependForallDecoders :: (Core.Type -> Core.Type -> Core.Type)
 prependForallDecoders baseType typ = ((\x -> case x of
-  Core.TypeAnnotated v1 -> (prependForallDecoders baseType (Core.annotatedTypeBody v1))
-  Core.TypeForall v1 -> (Core.TypeFunction (Core.FunctionType {
+  Core.TypeAnnotated v0 -> (prependForallDecoders baseType (Core.annotatedTypeBody v0))
+  Core.TypeForall v0 -> (Core.TypeFunction (Core.FunctionType {
     Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
       Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
       Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
         Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
         Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
           Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.DecodingError")),
-          Core.eitherTypeRight = (Core.TypeVariable (Core.forallTypeParameter v1))}))}))})),
-    Core.functionTypeCodomain = (prependForallDecoders baseType (Core.forallTypeBody v1))}))
+          Core.eitherTypeRight = (Core.TypeVariable (Core.forallTypeParameter v0))}))}))})),
+    Core.functionTypeCodomain = (prependForallDecoders baseType (Core.forallTypeBody v0))}))
   _ -> baseType) typ)

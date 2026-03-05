@@ -598,23 +598,65 @@
                                                                                               "function": {
                                                                                                 "lambda": {
                                                                                                   "body": {
-                                                                                                    "typeApplication": {
-                                                                                                      "body": {
-                                                                                                        "typeApplication": {
-                                                                                                          "body": {
-                                                                                                            "either": {
-                                                                                                              "@right": {
-                                                                                                                "record": {
-                                                                                                                  "fields": [
-                                                                                                                    {"name": "term", "term": {"variable": "field_term"}},
-                                                                                                                    {"name": "type", "term": {"variable": "field_type"}},
-                                                                                                                    {"name": "subst", "term": {"variable": "field_subst"}},
-                                                                                                                    {
-                                                                                                                      "name": "classConstraints",
-                                                                                                                      "term": {"variable": "field_classConstraints"}}],
-                                                                                                                  "typeName": "hydra.typing.InferenceResult"}}}},
-                                                                                                          "type": {"variable": "hydra.error.DecodingError"}}},
-                                                                                                      "type": {"variable": "hydra.typing.InferenceResult"}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "function": {
+                                                                                                          "lambda": {
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {
+                                                                                                                      "either": {
+                                                                                                                        "@right": {
+                                                                                                                          "record": {
+                                                                                                                            "fields": [
+                                                                                                                              {"name": "term", "term": {"variable": "field_term"}},
+                                                                                                                              {"name": "type", "term": {"variable": "field_type"}},
+                                                                                                                              {"name": "subst", "term": {"variable": "field_subst"}},
+                                                                                                                              {
+                                                                                                                                "name": "classConstraints",
+                                                                                                                                "term": {"variable": "field_classConstraints"}},
+                                                                                                                              {"name": "context", "term": {"variable": "field_context"}}],
+                                                                                                                            "typeName": "hydra.typing.InferenceResult"}}}},
+                                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                                                "type": {"variable": "hydra.typing.InferenceResult"}}},
+                                                                                                            "domain": [{"variable": "hydra.context.Context"}],
+                                                                                                            "parameter": "field_context"}}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "cx"},
+                                                                                                              "function": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "fieldMap"},
+                                                                                                                  "function": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "hydra.decode.context.context"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"literal": {"string": "context"}},
+                                                                                                                          "function": {
+                                                                                                                            "typeApplication": {
+                                                                                                                              "body": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {
+                                                                                                                                    "typeApplication": {
+                                                                                                                                      "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                                                      "type": {"variable": "hydra.graph.Graph"}}},
+                                                                                                                                  "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                              "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
+                                                                                                          "function": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                                      "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                                                  "type": {"variable": "hydra.context.Context"}}},
+                                                                                                              "type": {"variable": "hydra.typing.InferenceResult"}}}}}}},
                                                                                                   "domain": [
                                                                                                     {
                                                                                                       "map": {
@@ -1538,5 +1580,6 @@
     "hydra.extract.helpers",
     "hydra.lexical",
     "hydra.rewriting",
-    "hydra.decode.core"],
+    "hydra.decode.core",
+    "hydra.decode.context"],
   "typeDependencies": ["hydra.typing", "hydra.util"]}

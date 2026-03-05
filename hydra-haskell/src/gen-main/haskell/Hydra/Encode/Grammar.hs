@@ -42,61 +42,61 @@ labeledPattern x = (Core.TermRecord (Core.Record {
 
 pattern :: (Grammar.Pattern -> Core.Term)
 pattern x = case x of
-  Grammar.PatternAlternatives v1 -> (Core.TermUnion (Core.Injection {
+  Grammar.PatternAlternatives v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "alternatives"),
-      Core.fieldTerm = (Core.TermList (Lists.map pattern v1))}}))
-  Grammar.PatternConstant v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (Core.TermList (Lists.map pattern v0))}}))
+  Grammar.PatternConstant v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "constant"),
-      Core.fieldTerm = (constant v1)}}))
-  Grammar.PatternIgnored v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (constant v0)}}))
+  Grammar.PatternIgnored v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "ignored"),
-      Core.fieldTerm = (pattern v1)}}))
-  Grammar.PatternLabeled v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (pattern v0)}}))
+  Grammar.PatternLabeled v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "labeled"),
-      Core.fieldTerm = (labeledPattern v1)}}))
+      Core.fieldTerm = (labeledPattern v0)}}))
   Grammar.PatternNil -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "nil"),
       Core.fieldTerm = Core.TermUnit}}))
-  Grammar.PatternNonterminal v1 -> (Core.TermUnion (Core.Injection {
+  Grammar.PatternNonterminal v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "nonterminal"),
-      Core.fieldTerm = (symbol v1)}}))
-  Grammar.PatternOption v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (symbol v0)}}))
+  Grammar.PatternOption v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "option"),
-      Core.fieldTerm = (pattern v1)}}))
-  Grammar.PatternPlus v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (pattern v0)}}))
+  Grammar.PatternPlus v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "plus"),
-      Core.fieldTerm = (pattern v1)}}))
-  Grammar.PatternRegex v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (pattern v0)}}))
+  Grammar.PatternRegex v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "regex"),
-      Core.fieldTerm = (regex v1)}}))
-  Grammar.PatternSequence v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (regex v0)}}))
+  Grammar.PatternSequence v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "sequence"),
-      Core.fieldTerm = (Core.TermList (Lists.map pattern v1))}}))
-  Grammar.PatternStar v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (Core.TermList (Lists.map pattern v0))}}))
+  Grammar.PatternStar v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "star"),
-      Core.fieldTerm = (pattern v1)}}))
+      Core.fieldTerm = (pattern v0)}}))
 
 production :: (Grammar.Production -> Core.Term)
 production x = (Core.TermRecord (Core.Record {

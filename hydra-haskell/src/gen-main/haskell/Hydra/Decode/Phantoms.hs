@@ -21,8 +21,8 @@ import qualified Data.Set as S
 
 tBinding :: (t0 -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Phantoms.TBinding t1))
 tBinding a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TBinding {
       Phantoms.tBindingName = field_name,
       Phantoms.tBindingTerm = field_term}))))
@@ -30,5 +30,5 @@ tBinding a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
 
 tTerm :: (t0 -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Phantoms.TTerm t1))
 tTerm a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v1 -> (Eithers.map (\b -> Phantoms.TTerm b) (Core_.term cx (Core.wrappedTermBody v1)))
+  Core.TermWrap v0 -> (Eithers.map (\b -> Phantoms.TTerm b) (Core_.term cx (Core.wrappedTermBody v0)))
   _ -> (Left (Error.DecodingError "expected wrapped type hydra.phantoms.TTerm"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

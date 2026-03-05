@@ -78,26 +78,26 @@ brackets x = (Core.TermRecord (Core.Record {
 
 expr :: (Ast.Expr -> Core.Term)
 expr x = case x of
-  Ast.ExprConst v1 -> (Core.TermUnion (Core.Injection {
+  Ast.ExprConst v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "const"),
-      Core.fieldTerm = (symbol v1)}}))
-  Ast.ExprIndent v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (symbol v0)}}))
+  Ast.ExprIndent v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "indent"),
-      Core.fieldTerm = (indentedExpression v1)}}))
-  Ast.ExprOp v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (indentedExpression v0)}}))
+  Ast.ExprOp v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "op"),
-      Core.fieldTerm = (opExpr v1)}}))
-  Ast.ExprBrackets v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (opExpr v0)}}))
+  Ast.ExprBrackets v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.ast.Expr"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "brackets"),
-      Core.fieldTerm = (bracketExpr v1)}}))
+      Core.fieldTerm = (bracketExpr v0)}}))
 
 indentedExpression :: (Ast.IndentedExpression -> Core.Term)
 indentedExpression x = (Core.TermRecord (Core.Record {
@@ -112,16 +112,16 @@ indentedExpression x = (Core.TermRecord (Core.Record {
 
 indentStyle :: (Ast.IndentStyle -> Core.Term)
 indentStyle x = case x of
-  Ast.IndentStyleAllLines v1 -> (Core.TermUnion (Core.Injection {
+  Ast.IndentStyleAllLines v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.ast.IndentStyle"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "allLines"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v1))}}))
-  Ast.IndentStyleSubsequentLines v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}}))
+  Ast.IndentStyleSubsequentLines v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.ast.IndentStyle"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "subsequentLines"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v1))}}))
+      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}}))
 
 op :: (Ast.Op -> Core.Term)
 op x = (Core.TermRecord (Core.Record {
@@ -192,11 +192,11 @@ ws x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "break"),
       Core.fieldTerm = Core.TermUnit}}))
-  Ast.WsBreakAndIndent v1 -> (Core.TermUnion (Core.Injection {
+  Ast.WsBreakAndIndent v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "breakAndIndent"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v1))}}))
+      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}}))
   Ast.WsDoubleBreak -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.ast.Ws"),
     Core.injectionField = Core.Field {

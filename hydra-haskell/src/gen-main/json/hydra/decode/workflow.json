@@ -1437,7 +1437,6 @@
     "hydra.lexical",
     "hydra.rewriting",
     "hydra.decode.core",
-    "hydra.decode.compute",
     "hydra.decode.graph",
     "hydra.decode.module"],
   "typeDependencies": ["hydra.workflow", "hydra.util"]}

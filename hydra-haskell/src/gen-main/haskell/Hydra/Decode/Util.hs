@@ -23,9 +23,9 @@ import qualified Data.Set as S
 
 caseConvention :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Util.CaseConvention)
 caseConvention cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -42,9 +42,9 @@ caseConvention cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
 
 comparison :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Util.Comparison)
 comparison cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -60,19 +60,19 @@ comparison cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
 
 precision :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Util.Precision)
 precision cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
                 (Core.Name "arbitrary", (\input -> Eithers.map (\t -> Util.PrecisionArbitrary) (Helpers.decodeUnit cx input))),
                 (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v2 -> ((\x -> case x of
-                    Core.LiteralInteger v3 -> ((\x -> case x of
-                      Core.IntegerValueInt32 v4 -> (Right v4)
-                      _ -> (Left (Error.DecodingError "expected int32 value"))) v3)
-                    _ -> (Left (Error.DecodingError "expected int32 literal"))) v2)
+                  Core.TermLiteral v1 -> ((\x -> case x of
+                    Core.LiteralInteger v2 -> ((\x -> case x of
+                      Core.IntegerValueInt32 v3 -> (Right v3)
+                      _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
+                    _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
                   _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",

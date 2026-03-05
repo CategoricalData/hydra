@@ -26,16 +26,16 @@ parseError x = (Core.TermRecord (Core.Record {
 
 parseResult :: ((t0 -> Core.Term) -> Parsing.ParseResult t0 -> Core.Term)
 parseResult a x = case x of
-  Parsing.ParseResultSuccess v1 -> (Core.TermUnion (Core.Injection {
+  Parsing.ParseResultSuccess v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "success"),
-      Core.fieldTerm = (parseSuccess a v1)}}))
-  Parsing.ParseResultFailure v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (parseSuccess a v0)}}))
+  Parsing.ParseResultFailure v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "failure"),
-      Core.fieldTerm = (parseError v1)}}))
+      Core.fieldTerm = (parseError v0)}}))
 
 parseSuccess :: ((t0 -> Core.Term) -> Parsing.ParseSuccess t0 -> Core.Term)
 parseSuccess a x = (Core.TermRecord (Core.Record {

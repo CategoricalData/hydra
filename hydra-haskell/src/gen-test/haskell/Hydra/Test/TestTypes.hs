@@ -4,7 +4,6 @@
 
 module Hydra.Test.TestTypes where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -83,48 +82,6 @@ testTypeEither = (Core.TypeForall (Core.ForallType {
 
 testTypeEitherName :: Core.Name
 testTypeEitherName = (Core.Name "Either")
-
-testTypeFlow :: Core.Type
-testTypeFlow = (Core.TypeForall (Core.ForallType {
-  Core.forallTypeParameter = (Core.Name "s"),
-  Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-    Core.forallTypeParameter = (Core.Name "a"),
-    Core.forallTypeBody = (Core.TypeRecord (Core.RowType {
-      Core.rowTypeTypeName = testTypeFlowName,
-      Core.rowTypeFields = [
-        Core.FieldType {
-          Core.fieldTypeName = (Core.Name "value"),
-          Core.fieldTypeType = (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "s")),
-            Core.functionTypeCodomain = (Core.TypeApplication (Core.ApplicationType {
-              Core.applicationTypeFunction = (Core.TypeApplication (Core.ApplicationType {
-                Core.applicationTypeFunction = (Core.TypeVariable testTypeFlowStateName),
-                Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "s"))})),
-              Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))}))}))}]}))}))}))
-
-testTypeFlowName :: Core.Name
-testTypeFlowName = (Core.Name "hydra.compute.Flow")
-
-testTypeFlowState :: Core.Type
-testTypeFlowState = (Core.TypeForall (Core.ForallType {
-  Core.forallTypeParameter = (Core.Name "s"),
-  Core.forallTypeBody = (Core.TypeForall (Core.ForallType {
-    Core.forallTypeParameter = (Core.Name "a"),
-    Core.forallTypeBody = (Core.TypeRecord (Core.RowType {
-      Core.rowTypeTypeName = testTypeFlowStateName,
-      Core.rowTypeFields = [
-        Core.FieldType {
-          Core.fieldTypeName = (Core.Name "value"),
-          Core.fieldTypeType = (Core.TypeMaybe (Core.TypeVariable (Core.Name "a")))},
-        Core.FieldType {
-          Core.fieldTypeName = (Core.Name "state"),
-          Core.fieldTypeType = (Core.TypeVariable (Core.Name "s"))},
-        Core.FieldType {
-          Core.fieldTypeName = (Core.Name "trace"),
-          Core.fieldTypeType = (Core.TypeVariable testTypeTraceName)}]}))}))}))
-
-testTypeFlowStateName :: Core.Name
-testTypeFlowStateName = (Core.Name "hydra.compute.FlowState")
 
 testTypeHydraLiteralType :: Core.Type
 testTypeHydraLiteralType = (Core.TypeUnion (Core.RowType {
@@ -326,25 +283,6 @@ testTypeTimestamp = (Core.TypeUnion (Core.RowType {
 
 testTypeTimestampName :: Core.Name
 testTypeTimestampName = (Core.Name "Timestamp")
-
-testTypeTrace :: Core.Type
-testTypeTrace = (Core.TypeRecord (Core.RowType {
-  Core.rowTypeTypeName = testTypeTraceName,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "stack"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "messages"),
-      Core.fieldTypeType = (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString))},
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "other"),
-      Core.fieldTypeType = (Core.TypeMap (Core.MapType {
-        Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
-        Core.mapTypeValues = (Core.TypeLiteral Core.LiteralTypeString)}))}]}))
-
-testTypeTraceName :: Core.Name
-testTypeTraceName = (Core.Name "hydra.compute.Trace")
 
 testTypeTriple :: Core.Type
 testTypeTriple = (Core.TypeForall (Core.ForallType {

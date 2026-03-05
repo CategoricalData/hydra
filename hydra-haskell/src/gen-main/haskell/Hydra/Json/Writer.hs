@@ -61,11 +61,11 @@ printJson value = (Serialization.printExpr (valueToExpr value))
 -- | Convert a JSON value to an AST expression for serialization
 valueToExpr :: (Model.Value -> Ast.Expr)
 valueToExpr value = ((\x -> case x of
-  Model.ValueArray v1 -> (Serialization.bracketListAdaptive (Lists.map valueToExpr v1))
-  Model.ValueBoolean v1 -> (Serialization.cst (Logic.ifElse v1 "true" "false"))
+  Model.ValueArray v0 -> (Serialization.bracketListAdaptive (Lists.map valueToExpr v0))
+  Model.ValueBoolean v0 -> (Serialization.cst (Logic.ifElse v0 "true" "false"))
   Model.ValueNull -> (Serialization.cst "null")
-  Model.ValueNumber v1 ->  
-    let rounded = (Literals.bigfloatToBigint v1)
-    in (Serialization.cst (Logic.ifElse (Equality.equal v1 (Literals.bigintToBigfloat rounded)) (Literals.showBigint rounded) (Literals.showBigfloat v1)))
-  Model.ValueObject v1 -> (Serialization.bracesListAdaptive (Lists.map keyValueToExpr (Maps.toList v1)))
-  Model.ValueString v1 -> (Serialization.cst (jsonString v1))) value)
+  Model.ValueNumber v0 ->  
+    let rounded = (Literals.bigfloatToBigint v0)
+    in (Serialization.cst (Logic.ifElse (Equality.equal v0 (Literals.bigintToBigfloat rounded)) (Literals.showBigint rounded) (Literals.showBigfloat v0)))
+  Model.ValueObject v0 -> (Serialization.bracesListAdaptive (Lists.map keyValueToExpr (Maps.toList v0)))
+  Model.ValueString v0 -> (Serialization.cst (jsonString v0))) value)

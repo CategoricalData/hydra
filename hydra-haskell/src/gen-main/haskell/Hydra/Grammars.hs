@@ -78,9 +78,9 @@ grammarToModule ns grammar desc =
 -- | Check if pattern is complex
 isComplex :: (Grammar.Pattern -> Bool)
 isComplex pat = ((\x -> case x of
-  Grammar.PatternLabeled v1 -> (isComplex (Grammar.labeledPatternPattern v1))
-  Grammar.PatternSequence v1 -> (isNontrivial True v1)
-  Grammar.PatternAlternatives v1 -> (isNontrivial False v1)
+  Grammar.PatternLabeled v0 -> (isComplex (Grammar.labeledPatternPattern v0))
+  Grammar.PatternSequence v0 -> (isNontrivial True v0)
+  Grammar.PatternAlternatives v0 -> (isNontrivial False v0)
   _ -> False) pat)
 
 -- | Check if patterns are nontrivial
@@ -107,23 +107,23 @@ makeElements omitTrivial ns lname pat =
       let mod = (\n -> \f -> \p -> descend n (\pairs -> Lists.cons (lname, (f (Pairs.second (Lists.head pairs)))) (Lists.tail pairs)) p)
       in  
         let forPat = (\pat -> (\x -> case x of
-                Grammar.PatternAlternatives v1 -> (forRecordOrUnion False (\fields -> Core.TypeUnion (Core.RowType {
+                Grammar.PatternAlternatives v0 -> (forRecordOrUnion False (\fields -> Core.TypeUnion (Core.RowType {
                   Core.rowTypeTypeName = Constants.placeholderName,
-                  Core.rowTypeFields = fields})) v1)
+                  Core.rowTypeFields = fields})) v0)
                 Grammar.PatternConstant _ -> trivial
                 Grammar.PatternIgnored _ -> []
-                Grammar.PatternLabeled v1 -> (forPat (Grammar.labeledPatternPattern v1))
+                Grammar.PatternLabeled v0 -> (forPat (Grammar.labeledPatternPattern v0))
                 Grammar.PatternNil -> trivial
-                Grammar.PatternNonterminal v1 -> [
-                  (lname, (Core.TypeVariable (toName ns (Grammar.unSymbol v1))))]
-                Grammar.PatternOption v1 -> (mod "Option" (\x -> Core.TypeMaybe x) v1)
-                Grammar.PatternPlus v1 -> (mod "Elmt" (\x -> Core.TypeList x) v1)
+                Grammar.PatternNonterminal v0 -> [
+                  (lname, (Core.TypeVariable (toName ns (Grammar.unSymbol v0))))]
+                Grammar.PatternOption v0 -> (mod "Option" (\x -> Core.TypeMaybe x) v0)
+                Grammar.PatternPlus v0 -> (mod "Elmt" (\x -> Core.TypeList x) v0)
                 Grammar.PatternRegex _ -> [
                   (lname, (Core.TypeLiteral Core.LiteralTypeString))]
-                Grammar.PatternSequence v1 -> (forRecordOrUnion True (\fields -> Core.TypeRecord (Core.RowType {
+                Grammar.PatternSequence v0 -> (forRecordOrUnion True (\fields -> Core.TypeRecord (Core.RowType {
                   Core.rowTypeTypeName = Constants.placeholderName,
-                  Core.rowTypeFields = fields})) v1)
-                Grammar.PatternStar v1 -> (mod "Elmt" (\x -> Core.TypeList x) v1)) pat) 
+                  Core.rowTypeFields = fields})) v0)
+                Grammar.PatternStar v0 -> (mod "Elmt" (\x -> Core.TypeList x) v0)) pat) 
             forRecordOrUnion = (\isRecord -> \construct -> \pats ->  
                     let minPats = (simplify isRecord pats)
                     in  
@@ -145,16 +145,16 @@ makeElements omitTrivial ns lname pat =
 rawName :: (Grammar.Pattern -> String)
 rawName pat = ((\x -> case x of
   Grammar.PatternAlternatives _ -> "alts"
-  Grammar.PatternConstant v1 -> (Formatting.capitalize (Formatting.withCharacterAliases (Grammar.unConstant v1)))
+  Grammar.PatternConstant v0 -> (Formatting.capitalize (Formatting.withCharacterAliases (Grammar.unConstant v0)))
   Grammar.PatternIgnored _ -> "ignored"
-  Grammar.PatternLabeled v1 -> (Grammar.unLabel (Grammar.labeledPatternLabel v1))
+  Grammar.PatternLabeled v0 -> (Grammar.unLabel (Grammar.labeledPatternLabel v0))
   Grammar.PatternNil -> "none"
-  Grammar.PatternNonterminal v1 -> (Formatting.capitalize (Grammar.unSymbol v1))
-  Grammar.PatternOption v1 -> (Formatting.capitalize (rawName v1))
-  Grammar.PatternPlus v1 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v1)))
+  Grammar.PatternNonterminal v0 -> (Formatting.capitalize (Grammar.unSymbol v0))
+  Grammar.PatternOption v0 -> (Formatting.capitalize (rawName v0))
+  Grammar.PatternPlus v0 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v0)))
   Grammar.PatternRegex _ -> "regex"
   Grammar.PatternSequence _ -> "sequence"
-  Grammar.PatternStar v1 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v1)))) pat)
+  Grammar.PatternStar v0 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v0)))) pat)
 
 -- | Remove trivial patterns from records
 simplify :: (Bool -> [Grammar.Pattern] -> [Grammar.Pattern])

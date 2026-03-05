@@ -21,8 +21,8 @@ import qualified Data.Set as S
 
 pathEquation :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Constraints.PathEquation)
 pathEquation cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "left" Query.path fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" Query.path fieldMap cx) (\field_right -> Right (Constraints.PathEquation {
       Constraints.pathEquationLeft = field_left,
       Constraints.pathEquationRight = field_right}))))
@@ -30,8 +30,8 @@ pathEquation cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
 
 patternImplication :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Constraints.PatternImplication)
 patternImplication cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "antecedent" Query.pattern fieldMap cx) (\field_antecedent -> Eithers.bind (Helpers.requireField "consequent" Query.pattern fieldMap cx) (\field_consequent -> Right (Constraints.PatternImplication {
       Constraints.patternImplicationAntecedent = field_antecedent,
       Constraints.patternImplicationConsequent = field_consequent}))))

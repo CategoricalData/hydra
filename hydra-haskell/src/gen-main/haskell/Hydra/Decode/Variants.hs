@@ -23,9 +23,9 @@ import qualified Data.Set as S
 
 eliminationVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.EliminationVariant)
 eliminationVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -41,9 +41,9 @@ eliminationVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError e
 
 functionVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.FunctionVariant)
 functionVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -59,9 +59,9 @@ functionVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)
 
 literalVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.LiteralVariant)
 literalVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -79,9 +79,9 @@ literalVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
 
 termVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.TermVariant)
 termVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -112,9 +112,9 @@ termVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
 
 typeVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.TypeVariant)
 typeVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [

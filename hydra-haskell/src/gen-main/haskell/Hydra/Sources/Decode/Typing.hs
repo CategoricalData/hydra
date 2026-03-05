@@ -332,21 +332,39 @@ module_ = Module.Module {
                                           Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                             Core.lambdaParameter = (Core.Name "field_classConstraints"),
                                             Core.lambdaDomain = Nothing,
-                                            Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
-                                              Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
-                                              Core.recordFields = [
-                                                Core.Field {
-                                                  Core.fieldName = (Core.Name "term"),
-                                                  Core.fieldTerm = (Core.TermVariable (Core.Name "field_term"))},
-                                                Core.Field {
-                                                  Core.fieldName = (Core.Name "type"),
-                                                  Core.fieldTerm = (Core.TermVariable (Core.Name "field_type"))},
-                                                Core.Field {
-                                                  Core.fieldName = (Core.Name "subst"),
-                                                  Core.fieldTerm = (Core.TermVariable (Core.Name "field_subst"))},
-                                                Core.Field {
-                                                  Core.fieldName = (Core.Name "classConstraints"),
-                                                  Core.fieldTerm = (Core.TermVariable (Core.Name "field_classConstraints"))}]}))))})))}))})))}))})))}))})))}))}))})))}]})))),
+                                            Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bind"))),
+                                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
+                                                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "context"))})),
+                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.context.context"))})),
+                                                    Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
+                                                  Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
+                                              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                                                Core.lambdaParameter = (Core.Name "field_context"),
+                                                Core.lambdaDomain = Nothing,
+                                                Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
+                                                  Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
+                                                  Core.recordFields = [
+                                                    Core.Field {
+                                                      Core.fieldName = (Core.Name "term"),
+                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_term"))},
+                                                    Core.Field {
+                                                      Core.fieldName = (Core.Name "type"),
+                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_type"))},
+                                                    Core.Field {
+                                                      Core.fieldName = (Core.Name "subst"),
+                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_subst"))},
+                                                    Core.Field {
+                                                      Core.fieldName = (Core.Name "classConstraints"),
+                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_classConstraints"))},
+                                                    Core.Field {
+                                                      Core.fieldName = (Core.Name "context"),
+                                                      Core.fieldTerm = (Core.TermVariable (Core.Name "field_context"))}]}))))})))}))})))}))})))}))})))}))})))}))}))})))}]})))),
                   Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
             Core.applicationArgument = (Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -673,7 +691,8 @@ module_ = Module.Module {
     Module.Namespace "hydra.extract.helpers",
     (Module.Namespace "hydra.lexical"),
     (Module.Namespace "hydra.rewriting"),
-    (Module.Namespace "hydra.decode.core")],
+    (Module.Namespace "hydra.decode.core"),
+    (Module.Namespace "hydra.decode.context")],
   Module.moduleTypeDependencies = [
     Module.Namespace "hydra.typing",
     (Module.Namespace "hydra.util")],

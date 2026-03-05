@@ -5877,55 +5877,55 @@
                                                                               "term": {
                                                                                 "union": {
                                                                                   "field": {
-                                                                                    "name": "application",
+                                                                                    "name": "function",
                                                                                     "term": {
                                                                                       "record": {
                                                                                         "fields": [
                                                                                           {
-                                                                                            "name": "function",
+                                                                                            "name": "domain",
                                                                                             "term": {
                                                                                               "union": {
                                                                                                 "field": {
-                                                                                                  "name": "application",
+                                                                                                  "name": "variable",
+                                                                                                  "term": {
+                                                                                                    "wrap": {
+                                                                                                      "body": {"literal": {"string": "hydra.graph.Graph"}},
+                                                                                                      "typeName": "hydra.core.Name"}}},
+                                                                                                "typeName": "hydra.core.Type"}}},
+                                                                                          {
+                                                                                            "name": "codomain",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {
+                                                                                                  "name": "either",
                                                                                                   "term": {
                                                                                                     "record": {
                                                                                                       "fields": [
                                                                                                         {
-                                                                                                          "name": "function",
+                                                                                                          "name": "left",
                                                                                                           "term": {
                                                                                                             "union": {
                                                                                                               "field": {
-                                                                                                                "name": "variable",
+                                                                                                                "name": "literal",
                                                                                                                 "term": {
-                                                                                                                  "wrap": {
-                                                                                                                    "body": {"literal": {"string": "hydra.compute.Flow"}},
-                                                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                                                                  "union": {
+                                                                                                                    "field": {"name": "string", "term": {"unit": {}}},
+                                                                                                                    "typeName": "hydra.core.LiteralType"}}},
                                                                                                               "typeName": "hydra.core.Type"}}},
                                                                                                         {
-                                                                                                          "name": "argument",
+                                                                                                          "name": "right",
                                                                                                           "term": {
                                                                                                             "union": {
                                                                                                               "field": {
-                                                                                                                "name": "variable",
+                                                                                                                "name": "literal",
                                                                                                                 "term": {
-                                                                                                                  "wrap": {
-                                                                                                                    "body": {"literal": {"string": "hydra.graph.Graph"}},
-                                                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                                                                  "union": {
+                                                                                                                    "field": {"name": "string", "term": {"unit": {}}},
+                                                                                                                    "typeName": "hydra.core.LiteralType"}}},
                                                                                                               "typeName": "hydra.core.Type"}}}],
-                                                                                                      "typeName": "hydra.core.ApplicationType"}}},
-                                                                                                "typeName": "hydra.core.Type"}}},
-                                                                                          {
-                                                                                            "name": "argument",
-                                                                                            "term": {
-                                                                                              "union": {
-                                                                                                "field": {
-                                                                                                  "name": "literal",
-                                                                                                  "term": {
-                                                                                                    "union": {
-                                                                                                      "field": {"name": "string", "term": {"unit": {}}},
-                                                                                                      "typeName": "hydra.core.LiteralType"}}},
+                                                                                                      "typeName": "hydra.core.EitherType"}}},
                                                                                                 "typeName": "hydra.core.Type"}}}],
-                                                                                        "typeName": "hydra.core.ApplicationType"}}},
+                                                                                        "typeName": "hydra.core.FunctionType"}}},
                                                                                   "typeName": "hydra.core.Type"}}}],
                                                                           "typeName": "hydra.core.FunctionType"}}},
                                                                     "typeName": "hydra.core.Type"}}},
@@ -5997,55 +5997,55 @@
                                                                               "term": {
                                                                                 "union": {
                                                                                   "field": {
-                                                                                    "name": "application",
+                                                                                    "name": "function",
                                                                                     "term": {
                                                                                       "record": {
                                                                                         "fields": [
                                                                                           {
-                                                                                            "name": "function",
+                                                                                            "name": "domain",
                                                                                             "term": {
                                                                                               "union": {
                                                                                                 "field": {
-                                                                                                  "name": "application",
+                                                                                                  "name": "variable",
+                                                                                                  "term": {
+                                                                                                    "wrap": {
+                                                                                                      "body": {"literal": {"string": "hydra.graph.Graph"}},
+                                                                                                      "typeName": "hydra.core.Name"}}},
+                                                                                                "typeName": "hydra.core.Type"}}},
+                                                                                          {
+                                                                                            "name": "codomain",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {
+                                                                                                  "name": "either",
                                                                                                   "term": {
                                                                                                     "record": {
                                                                                                       "fields": [
                                                                                                         {
-                                                                                                          "name": "function",
+                                                                                                          "name": "left",
                                                                                                           "term": {
                                                                                                             "union": {
                                                                                                               "field": {
-                                                                                                                "name": "variable",
+                                                                                                                "name": "literal",
                                                                                                                 "term": {
-                                                                                                                  "wrap": {
-                                                                                                                    "body": {"literal": {"string": "hydra.compute.Flow"}},
-                                                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                                                                  "union": {
+                                                                                                                    "field": {"name": "string", "term": {"unit": {}}},
+                                                                                                                    "typeName": "hydra.core.LiteralType"}}},
                                                                                                               "typeName": "hydra.core.Type"}}},
                                                                                                         {
-                                                                                                          "name": "argument",
+                                                                                                          "name": "right",
                                                                                                           "term": {
                                                                                                             "union": {
                                                                                                               "field": {
-                                                                                                                "name": "variable",
+                                                                                                                "name": "literal",
                                                                                                                 "term": {
-                                                                                                                  "wrap": {
-                                                                                                                    "body": {"literal": {"string": "hydra.graph.Graph"}},
-                                                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                                                                  "union": {
+                                                                                                                    "field": {"name": "string", "term": {"unit": {}}},
+                                                                                                                    "typeName": "hydra.core.LiteralType"}}},
                                                                                                               "typeName": "hydra.core.Type"}}}],
-                                                                                                      "typeName": "hydra.core.ApplicationType"}}},
-                                                                                                "typeName": "hydra.core.Type"}}},
-                                                                                          {
-                                                                                            "name": "argument",
-                                                                                            "term": {
-                                                                                              "union": {
-                                                                                                "field": {
-                                                                                                  "name": "literal",
-                                                                                                  "term": {
-                                                                                                    "union": {
-                                                                                                      "field": {"name": "string", "term": {"unit": {}}},
-                                                                                                      "typeName": "hydra.core.LiteralType"}}},
+                                                                                                      "typeName": "hydra.core.EitherType"}}},
                                                                                                 "typeName": "hydra.core.Type"}}}],
-                                                                                        "typeName": "hydra.core.ApplicationType"}}},
+                                                                                        "typeName": "hydra.core.FunctionType"}}},
                                                                                   "typeName": "hydra.core.Type"}}}],
                                                                           "typeName": "hydra.core.FunctionType"}}},
                                                                     "typeName": "hydra.core.Type"}}},
@@ -7204,8 +7204,7 @@
                                                                               "union": {
                                                                                 "field": {
                                                                                   "name": "string",
-                                                                                  "term": {
-                                                                                    "literal": {"string": "A JSON coder (round-trip) test using Flow-based coder"}}},
+                                                                                  "term": {"literal": {"string": "A JSON coder (round-trip) test"}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}}}]}}],
                                                             "typeName": "hydra.core.AnnotatedType"}}},

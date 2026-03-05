@@ -4,11 +4,12 @@
 
 module Hydra.Eval.Lib.Sets where
 
-import qualified Hydra.Compute as Compute
+import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
+import qualified Hydra.Error as Error
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Lib.Flows as Flows
+import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Sets as Sets
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -19,8 +20,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly map for Set terms.
-map :: (Core.Term -> Core.Term -> Compute.Flow Graph.Graph Core.Term)
-map fun setTerm = (Flows.bind (Core_.set setTerm) (\elements -> Flows.pure (Core.TermApplication (Core.Application {
+map :: (Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+map cx g fun setTerm = (Eithers.bind (Core_.set cx g setTerm) (\elements -> Right (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),
   Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
     Core.applicationFunction = fun,

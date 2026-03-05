@@ -25,8 +25,8 @@ import qualified Data.Set as S
 
 hydraSchemaSpec :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Workflow.HydraSchemaSpec)
 hydraSchemaSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "modules" (Helpers.decodeList Module.module_) fieldMap cx) (\field_modules -> Eithers.bind (Helpers.requireField "typeName" Core_.name fieldMap cx) (\field_typeName -> Right (Workflow.HydraSchemaSpec {
       Workflow.hydraSchemaSpecModules = field_modules,
       Workflow.hydraSchemaSpecTypeName = field_typeName}))))
@@ -34,17 +34,17 @@ hydraSchemaSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)
 
 schemaSpec :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Workflow.SchemaSpec)
 schemaSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v1 ->  
-    let tname = (Core.injectionTypeName v1) 
-        field = (Core.injectionField v1)
+  Core.TermUnion v0 ->  
+    let tname = (Core.injectionTypeName v0) 
+        field = (Core.injectionField v0)
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
                 (Core.Name "hydra", (\input -> Eithers.map (\t -> Workflow.SchemaSpecHydra t) (hydraSchemaSpec cx input))),
                 (Core.Name "file", (\input -> Eithers.map (\t -> Workflow.SchemaSpecFile t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v2 -> ((\x -> case x of
-                    Core.LiteralString v3 -> (Right v3)
-                    _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+                  Core.TermLiteral v1 -> ((\x -> case x of
+                    Core.LiteralString v2 -> (Right v2)
+                    _ -> (Left (Error.DecodingError "expected string literal"))) v1)
                   _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
                 (Core.Name "provided", (\input -> Eithers.map (\t -> Workflow.SchemaSpecProvided) (Helpers.decodeUnit cx input)))])
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
@@ -56,20 +56,20 @@ schemaSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
 
 transformWorkflow :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Workflow.TransformWorkflow)
 transformWorkflow cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v1 ->  
-    let fieldMap = (Helpers.toFieldMap v1)
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "name" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "schemaSpec" schemaSpec fieldMap cx) (\field_schemaSpec -> Eithers.bind (Helpers.requireField "srcDir" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_srcDir -> Eithers.bind (Helpers.requireField "destDir" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v2 -> ((\x -> case x of
-        Core.LiteralString v3 -> (Right v3)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v2)
+      Core.TermLiteral v1 -> ((\x -> case x of
+        Core.LiteralString v2 -> (Right v2)
+        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_destDir -> Right (Workflow.TransformWorkflow {
       Workflow.transformWorkflowName = field_name,
       Workflow.transformWorkflowSchemaSpec = field_schemaSpec,

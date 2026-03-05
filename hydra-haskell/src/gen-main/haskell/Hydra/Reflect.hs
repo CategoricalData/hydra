@@ -121,8 +121,8 @@ literalType :: (Core.Literal -> Core.LiteralType)
 literalType x = case x of
   Core.LiteralBinary _ -> Core.LiteralTypeBinary
   Core.LiteralBoolean _ -> Core.LiteralTypeBoolean
-  Core.LiteralFloat v1 -> ((\injected_ -> Core.LiteralTypeFloat injected_) (floatValueType v1))
-  Core.LiteralInteger v1 -> ((\injected_ -> Core.LiteralTypeInteger injected_) (integerValueType v1))
+  Core.LiteralFloat v0 -> ((\injected_ -> Core.LiteralTypeFloat injected_) (floatValueType v0))
+  Core.LiteralInteger v0 -> ((\injected_ -> Core.LiteralTypeInteger injected_) (integerValueType v0))
   Core.LiteralString _ -> Core.LiteralTypeString
 
 -- | Find the literal type inject (constructor) for a given literal value
