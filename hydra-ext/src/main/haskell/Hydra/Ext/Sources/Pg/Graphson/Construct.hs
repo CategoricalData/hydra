@@ -18,6 +18,8 @@ import qualified Hydra.Dsl.Meta.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Compute                    as Compute
+import qualified Hydra.Dsl.Meta.Context                    as Ctx
+import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
@@ -25,7 +27,6 @@ import qualified Hydra.Dsl.Meta.Json                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
-import qualified Hydra.Dsl.Meta.Lib.Flows                  as Flows
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
@@ -155,11 +156,11 @@ aggregateMap = define "aggregateMap" $
       (var "pairs")
 
 -- | Convert a PG edge property to GraphSON format
-edgePropertyToGraphson :: TBinding ((v -> Flow s G.Value) -> (PG.PropertyKey, v) -> Flow s (G.PropertyKey, G.Value))
+edgePropertyToGraphson :: TBinding ((v -> Either (InContext OtherError) G.Value) -> (PG.PropertyKey, v) -> Either (InContext OtherError) (G.PropertyKey, G.Value))
 edgePropertyToGraphson = define "edgePropertyToGraphson" $
   doc "Convert a property graph edge property to a GraphSON property" $
   "encodeValue" ~> "prop" ~>
-    Flows.map
+    Eithers.map
       ("gv" ~>
         pair
           (wrap G._PropertyKey (unwrap PG._PropertyKey @@ (Pairs.first $ var "prop")))
@@ -167,11 +168,11 @@ edgePropertyToGraphson = define "edgePropertyToGraphson" $
       (var "encodeValue" @@ (Pairs.second $ var "prop"))
 
 -- | Convert a PG vertex property to GraphSON format
-vertexPropertyToGraphson :: TBinding ((v -> Flow s G.Value) -> (PG.PropertyKey, v) -> Flow s (G.PropertyKey, G.VertexPropertyValue))
+vertexPropertyToGraphson :: TBinding ((v -> Either (InContext OtherError) G.Value) -> (PG.PropertyKey, v) -> Either (InContext OtherError) (G.PropertyKey, G.VertexPropertyValue))
 vertexPropertyToGraphson = define "vertexPropertyToGraphson" $
   doc "Convert a property graph vertex property to a GraphSON vertex property" $
   "encodeValue" ~> "prop" ~>
-    Flows.map
+    Eithers.map
       ("gv" ~>
         pair
           (wrap G._PropertyKey (unwrap PG._PropertyKey @@ (Pairs.first $ var "prop")))
@@ -181,7 +182,7 @@ vertexPropertyToGraphson = define "vertexPropertyToGraphson" $
       (var "encodeValue" @@ (Pairs.second $ var "prop"))
 
 -- | Convert a PG adjacent edge to GraphSON format
-adjacentEdgeToGraphson :: TBinding ((v -> Flow s G.Value) -> PG.AdjacentEdge v -> Flow s (G.EdgeLabel, G.AdjacentEdge))
+adjacentEdgeToGraphson :: TBinding ((v -> Either (InContext OtherError) G.Value) -> PG.AdjacentEdge v -> Either (InContext OtherError) (G.EdgeLabel, G.AdjacentEdge))
 adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
   doc "Convert a property graph adjacent edge to a GraphSON adjacent edge" $
   "encodeValue" ~> "edge" ~>
@@ -189,16 +190,16 @@ adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
     "edgeId" <~ (project PG._AdjacentEdge PG._AdjacentEdge_id @@ var "edge") $
     "vertexId" <~ (project PG._AdjacentEdge PG._AdjacentEdge_vertex @@ var "edge") $
     "props" <~ (project PG._AdjacentEdge PG._AdjacentEdge_properties @@ var "edge") $
-    Flows.bind
+    Eithers.bind
       (var "encodeValue" @@ var "edgeId")
       ("gid" ~>
-        Flows.bind
+        Eithers.bind
           (var "encodeValue" @@ var "vertexId")
           ("gv" ~>
-            Flows.bind
-              (Flows.mapList (edgePropertyToGraphson @@ var "encodeValue") (Maps.toList $ var "props"))
+            Eithers.bind
+              (Eithers.mapList (edgePropertyToGraphson @@ var "encodeValue") (Maps.toList $ var "props"))
               ("propPairs" ~>
-                Flows.pure $
+                right $
                   pair
                     (wrap G._EdgeLabel (unwrap PG._EdgeLabel @@ var "label"))
                     (record G._AdjacentEdge [
@@ -207,7 +208,7 @@ adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
                       G._AdjacentEdge_properties>>: Maps.fromList (var "propPairs")]))))
 
 -- | Convert a PG vertex with adjacent edges to a GraphSON vertex
-pgVertexWithAdjacentEdgesToGraphsonVertex :: TBinding ((v -> Flow s G.Value) -> PG.VertexWithAdjacentEdges v -> Flow s G.Vertex)
+pgVertexWithAdjacentEdgesToGraphsonVertex :: TBinding ((v -> Either (InContext OtherError) G.Value) -> PG.VertexWithAdjacentEdges v -> Either (InContext OtherError) G.Vertex)
 pgVertexWithAdjacentEdgesToGraphsonVertex = define "pgVertexWithAdjacentEdgesToGraphsonVertex" $
   doc "Convert a property graph vertex with adjacent edges to a GraphSON vertex" $
   "encodeValue" ~> "vae" ~>
@@ -217,19 +218,19 @@ pgVertexWithAdjacentEdgesToGraphsonVertex = define "pgVertexWithAdjacentEdgesToG
     "label" <~ (project PG._Vertex PG._Vertex_label @@ var "vertex") $
     "vertexId" <~ (project PG._Vertex PG._Vertex_id @@ var "vertex") $
     "props" <~ (project PG._Vertex PG._Vertex_properties @@ var "vertex") $
-    Flows.bind
+    Eithers.bind
       (var "encodeValue" @@ var "vertexId")
       ("gid" ~>
-        Flows.bind
-          (Flows.mapList (vertexPropertyToGraphson @@ var "encodeValue") (Maps.toList $ var "props"))
+        Eithers.bind
+          (Eithers.mapList (vertexPropertyToGraphson @@ var "encodeValue") (Maps.toList $ var "props"))
           ("propPairs" ~>
-            Flows.bind
-              (Flows.mapList (adjacentEdgeToGraphson @@ var "encodeValue") (var "ins"))
+            Eithers.bind
+              (Eithers.mapList (adjacentEdgeToGraphson @@ var "encodeValue") (var "ins"))
               ("inPairs" ~>
-                Flows.bind
-                  (Flows.mapList (adjacentEdgeToGraphson @@ var "encodeValue") (var "outs"))
+                Eithers.bind
+                  (Eithers.mapList (adjacentEdgeToGraphson @@ var "encodeValue") (var "outs"))
                   ("outPairs" ~>
-                    Flows.pure $
+                    right $
                       record G._Vertex [
                         G._Vertex_id>>: var "gid",
                         G._Vertex_label>>: just (wrap G._VertexLabel (unwrap PG._VertexLabel @@ var "label")),
@@ -238,19 +239,19 @@ pgVertexWithAdjacentEdgesToGraphsonVertex = define "pgVertexWithAdjacentEdgesToG
                         G._Vertex_properties>>: aggregateMap @@ var "propPairs"]))))
 
 -- | A coder that converts GraphSON vertices to JSON
-graphsonVertexToJsonCoder :: TBinding (Coder s s G.Vertex JM.Value)
+graphsonVertexToJsonCoder :: TBinding (Coder G.Vertex JM.Value)
 graphsonVertexToJsonCoder = define "graphsonVertexToJsonCoder" $
   doc "A coder that converts GraphSON vertices to JSON. Decoding is not supported." $
   Compute.coder
-    ("v" ~> Flows.pure $ Coder.vertexToJson @@ var "v")
-    ("_" ~> Flows.fail $ string "decoding GraphSON JSON is currently unsupported")
+    ("_cx" ~> "v" ~> right (Coder.vertexToJson @@ var "v"))
+    ("_cx" ~> "_" ~> Ctx.failInContext (Error.otherError $ string "decoding GraphSON JSON is currently unsupported") (var "_cx"))
 
 -- | Convert a PG vertex with adjacent edges directly to JSON
-pgVertexWithAdjacentEdgesToJson :: TBinding ((v -> Flow s G.Value) -> PG.VertexWithAdjacentEdges v -> Flow s JM.Value)
+pgVertexWithAdjacentEdgesToJson :: TBinding ((v -> Either (InContext OtherError) G.Value) -> PG.VertexWithAdjacentEdges v -> Either (InContext OtherError) JM.Value)
 pgVertexWithAdjacentEdgesToJson = define "pgVertexWithAdjacentEdgesToJson" $
   doc "Convert a property graph vertex with adjacent edges to JSON" $
   "encodeValue" ~> "vertex" ~>
-    Flows.bind
+    Eithers.bind
       (pgVertexWithAdjacentEdgesToGraphsonVertex @@ var "encodeValue" @@ var "vertex")
       ("gVertex" ~>
-        Flows.pure $ Coder.vertexToJson @@ var "gVertex")
+        right $ Coder.vertexToJson @@ var "gVertex")
