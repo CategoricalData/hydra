@@ -9,121 +9,151 @@ import Hydra.Adapt.Utils
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 import qualified Hydra.Dsl.Terms as Terms
 
-import qualified Control.Monad as CM
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-literalCoder :: LiteralType -> Flow Graph (Coder Graph Graph Literal YM.Scalar)
-literalCoder at = pure $ case at of
+literalCoder :: LiteralType -> Coder Literal YM.Scalar
+literalCoder at = case at of
   LiteralTypeBoolean -> Coder {
-    coderEncode = \(LiteralBoolean b) -> pure $ YM.ScalarBool b,
-    coderDecode = \s -> case s of
-      YM.ScalarBool b -> pure $ LiteralBoolean b
-      _ -> unexpected "boolean" $ show s}
+    coderEncode = \_ (LiteralBoolean b) -> Right $ YM.ScalarBool b,
+    coderDecode = \cx s -> case s of
+      YM.ScalarBool b -> Right $ LiteralBoolean b
+      _ -> unexpectedE cx "boolean" $ show s}
   LiteralTypeFloat _ -> Coder {
-    coderEncode = \(LiteralFloat (FloatValueBigfloat f)) -> pure $ YM.ScalarFloat f,
-    coderDecode = \s -> case s of
-      YM.ScalarFloat f -> pure $ LiteralFloat $ FloatValueBigfloat f
-      _ -> unexpected "floating-point value" $ show s}
+    coderEncode = \_ (LiteralFloat (FloatValueBigfloat f)) -> Right $ YM.ScalarFloat f,
+    coderDecode = \cx s -> case s of
+      YM.ScalarFloat f -> Right $ LiteralFloat $ FloatValueBigfloat f
+      _ -> unexpectedE cx "floating-point value" $ show s}
   LiteralTypeInteger _ -> Coder {
-    coderEncode = \(LiteralInteger (IntegerValueBigint i)) -> pure $ YM.ScalarInt i,
-    coderDecode = \s -> case s of
-      YM.ScalarInt i -> pure $ LiteralInteger $ IntegerValueBigint i
-      _ -> unexpected "integer" $ show s}
+    coderEncode = \_ (LiteralInteger (IntegerValueBigint i)) -> Right $ YM.ScalarInt i,
+    coderDecode = \cx s -> case s of
+      YM.ScalarInt i -> Right $ LiteralInteger $ IntegerValueBigint i
+      _ -> unexpectedE cx "integer" $ show s}
   LiteralTypeString -> Coder {
-    coderEncode = \(LiteralString s) -> pure $ YM.ScalarStr s,
-    coderDecode = \s -> case s of
-      YM.ScalarStr s' -> pure $ LiteralString s'
-      _ -> unexpected "string" $ show s}
-
-recordCoder :: RowType -> Flow Graph (Coder Graph Graph Term YM.Node)
-recordCoder rt = do
-    coders <- CM.mapM (\f -> (,) <$> pure f <*> termCoder (fieldTypeType f)) (rowTypeFields rt)
-    return $ Coder (encode coders) (decode coders)
+    coderEncode = \_ (LiteralString s) -> Right $ YM.ScalarStr s,
+    coderDecode = \cx s -> case s of
+      YM.ScalarStr s' -> Right $ LiteralString s'
+      _ -> unexpectedE cx "string" $ show s}
   where
-    encode coders term = case deannotateTerm term of
-      TermRecord (Record _ fields) -> YM.NodeMapping . M.fromList . Y.catMaybes <$> CM.zipWithM encodeField coders fields
-        where
-          encodeField (ft, coder) (Field (Name fn) fv) = case (fieldTypeType ft, fv) of
-            (TypeMaybe _, TermMaybe Nothing) -> pure Nothing
-            _ -> Just <$> ((,) <$> pure (yamlString fn) <*> coderEncode coder fv)
-      _ -> unexpected "record" $ show term
-    decode coders n = case n of
-      YM.NodeMapping m -> Terms.record (rowTypeTypeName rt) <$>
-          CM.mapM (decodeField m) coders -- Note: unknown fields are ignored
-        where
-          decodeField a (FieldType fname@(Name fn) ft, coder) = do
-            v <- coderDecode coder $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m
-            return $ Field fname v
-      _ -> unexpected "mapping" $ show n
-    getCoder coders fname = Y.maybe error pure $ M.lookup fname coders
-      where
-        error = fail $ "no such field: " ++ fname
+    unexpectedE cx expected actual = Left (InContext (OtherError ("expected " ++ expected ++ ", found " ++ actual)) cx)
 
-termCoder :: Type -> Flow Graph (Coder Graph Graph Term YM.Node)
+recordCoder :: RowType -> Coder Term YM.Node
+recordCoder rt = Coder encode decode
+  where
+    encode cx term = case deannotateTerm term of
+      TermRecord (Record _ fields) ->
+        YM.NodeMapping . M.fromList . Y.catMaybes <$> zipWithM' (encodeField cx) (rowTypeFields rt) fields
+      _ -> Left $ InContext (OtherError ("expected record, found " ++ show term)) cx
+    decode cx n = case n of
+      YM.NodeMapping m ->
+        Terms.record (rowTypeTypeName rt) <$> mapM' (decodeField cx m) (rowTypeFields rt)
+      _ -> Left $ InContext (OtherError ("expected mapping, found " ++ show n)) cx
+
+    encodeField cx ft (Field (Name fn) fv) = case (fieldTypeType ft, fv) of
+      (TypeMaybe _, TermMaybe Nothing) -> Right Nothing
+      _ -> do
+        let coder = termCoder (fieldTypeType ft)
+        node <- coderEncode coder cx fv
+        Right $ Just (yamlString fn, node)
+
+    decodeField cx m (FieldType fname@(Name fn) ft) = do
+      let coder = termCoder ft
+      v <- coderDecode coder cx $ Y.fromMaybe yamlNull $ M.lookup (yamlString fn) m
+      Right $ Field fname v
+
+termCoder :: Type -> Coder Term YM.Node
 termCoder typ = case deannotateType typ of
-  TypeLiteral at -> do
-    ac <- literalCoder at
-    return Coder {
-      coderEncode = \t -> case t of
-         TermLiteral av -> YM.NodeScalar <$> coderEncode ac av
-         _ -> unexpected "literal" $ show t,
-      coderDecode = \n -> case n of
-        YM.NodeScalar s -> Terms.literal <$> coderDecode ac s
-        _ -> unexpected "scalar node" $ show n}
-  TypeList lt -> do
-    lc <- termCoder lt
-    return Coder {
-      coderEncode = \t -> case t of
-         TermList els -> YM.NodeSequence <$> CM.mapM (coderEncode lc) els
-         _ -> unexpected "list" $ show t,
-      coderDecode = \n -> case n of
-        YM.NodeSequence nodes -> Terms.list <$> CM.mapM (coderDecode lc) nodes
-        _ -> unexpected "sequence" $ show n}
-  TypeMaybe ot -> do
-    oc <- termCoder ot
-    return Coder {
-      coderEncode = \t -> case t of
-         TermMaybe el -> Y.maybe (pure yamlNull) (coderEncode oc) el
-         _ -> unexpected "maybe" $ show t,
-      coderDecode = \n -> case n of
-        YM.NodeScalar YM.ScalarNull -> pure $ Terms.optional Nothing
-        _ -> Terms.optional . Just <$> coderDecode oc n}
-  TypeMap (MapType kt vt) -> do
-    kc <- termCoder kt
-    vc <- termCoder vt
-    let encodeEntry (k, v) = (,) <$> coderEncode kc k <*> coderEncode vc v
-    let decodeEntry (k, v) = (,) <$> coderDecode kc k <*> coderDecode vc v
-    return Coder {
-      coderEncode = \t -> case t of
-        TermMap m -> YM.NodeMapping . M.fromList <$> CM.mapM encodeEntry (M.toList m)
-        _ -> unexpected "term" $ show t,
-      coderDecode = \n -> case n of
-        YM.NodeMapping m -> Terms.map . M.fromList <$> CM.mapM decodeEntry (M.toList m)
-        _ -> unexpected "mapping" $ show n}
+  TypeLiteral at -> Coder encode decode
+    where
+      ac = literalCoder at
+      encode cx t = case t of
+        TermLiteral av -> YM.NodeScalar <$> coderEncode ac cx av
+        _ -> Left $ InContext (OtherError ("expected literal, found " ++ show t)) cx
+      decode cx n = case n of
+        YM.NodeScalar s -> Terms.literal <$> coderDecode ac cx s
+        _ -> Left $ InContext (OtherError ("expected scalar node, found " ++ show n)) cx
+  TypeList lt -> Coder encode decode
+    where
+      lc = termCoder lt
+      encode cx t = case t of
+        TermList els -> YM.NodeSequence <$> mapM' (\e -> coderEncode lc cx e) els
+        _ -> Left $ InContext (OtherError ("expected list, found " ++ show t)) cx
+      decode cx n = case n of
+        YM.NodeSequence nodes -> Terms.list <$> mapM' (\nd -> coderDecode lc cx nd) nodes
+        _ -> Left $ InContext (OtherError ("expected sequence, found " ++ show n)) cx
+  TypeMaybe ot -> Coder encode decode
+    where
+      oc = termCoder ot
+      encode cx t = case t of
+        TermMaybe el -> case el of
+          Nothing -> Right yamlNull
+          Just v -> coderEncode oc cx v
+        _ -> Left $ InContext (OtherError ("expected maybe, found " ++ show t)) cx
+      decode cx n = case n of
+        YM.NodeScalar YM.ScalarNull -> Right $ Terms.optional Nothing
+        _ -> Terms.optional . Just <$> coderDecode oc cx n
+  TypeMap (MapType kt vt) -> Coder encode decode
+    where
+      kc = termCoder kt
+      vc = termCoder vt
+      encode cx t = case t of
+        TermMap m -> YM.NodeMapping . M.fromList <$> mapM' (encodeEntry cx) (M.toList m)
+        _ -> Left $ InContext (OtherError ("expected map, found " ++ show t)) cx
+      decode cx n = case n of
+        YM.NodeMapping m -> Terms.map . M.fromList <$> mapM' (decodeEntry cx) (M.toList m)
+        _ -> Left $ InContext (OtherError ("expected mapping, found " ++ show n)) cx
+      encodeEntry cx (k, v) = do
+        k' <- coderEncode kc cx k
+        v' <- coderEncode vc cx v
+        Right (k', v')
+      decodeEntry cx (k, v) = do
+        k' <- coderDecode kc cx k
+        v' <- coderDecode vc cx v
+        Right (k', v')
   TypeRecord rt -> recordCoder rt
-  TypeUnit -> pure unitCoder
-  _ -> fail $ "unsupported type variant: " ++ show (typeVariant typ)
+  TypeUnit -> unitCoder
+  _ -> Coder
+    (\cx _ -> Left $ InContext (OtherError ("unsupported type variant: " ++ show (typeVariant typ))) cx)
+    (\cx _ -> Left $ InContext (OtherError ("unsupported type variant: " ++ show (typeVariant typ))) cx)
 
-unitCoder :: Coder Graph Graph Term YM.Node
+unitCoder :: Coder Term YM.Node
 unitCoder = Coder encode decode
   where
-    encode term = case deannotateTerm term of
-      TermUnit -> pure $ YM.NodeScalar $ YM.ScalarNull
-      _ -> unexpected "unit" $ show term
-    decode n = case n of
-      (YM.NodeScalar YM.ScalarNull) -> pure Terms.unit
-      _ -> unexpected "null" $ show n
+    encode cx term = case deannotateTerm term of
+      TermUnit -> Right $ YM.NodeScalar $ YM.ScalarNull
+      _ -> Left $ InContext (OtherError ("expected unit, found " ++ show term)) cx
+    decode cx n = case n of
+      (YM.NodeScalar YM.ScalarNull) -> Right Terms.unit
+      _ -> Left $ InContext (OtherError ("expected null, found " ++ show n)) cx
 
-yamlCoder :: Type -> Flow Graph (Coder Graph Graph Term YM.Node)
-yamlCoder typ = do
-  adapter <- languageAdapter yamlLanguage typ
-  coder <- termCoder $ adapterTarget adapter
-  return $ composeCoders (adapterCoder adapter) coder
+yamlCoder :: Context -> Graph -> Type -> Either (InContext OtherError) (Coder Term YM.Node)
+yamlCoder cx g typ = do
+  adapter <- case languageAdapter yamlLanguage cx g typ of
+    Left err -> Left $ InContext (OtherError err) cx
+    Right a -> Right a
+  let coder = termCoder $ adapterTarget adapter
+  Right $ composeCoders (adapterCoder adapter) coder
 
 yamlNull :: YM.Node
 yamlNull = YM.NodeScalar YM.ScalarNull
 
 yamlString :: String -> YM.Node
 yamlString = YM.NodeScalar . YM.ScalarStr
+
+-- | Either-based mapM
+mapM' :: (a -> Either e b) -> [a] -> Either e [b]
+mapM' _ [] = Right []
+mapM' f (x:xs) = do
+  y <- f x
+  ys <- mapM' f xs
+  Right (y:ys)
+
+-- | Either-based zipWithM
+zipWithM' :: (a -> b -> Either e c) -> [a] -> [b] -> Either e [c]
+zipWithM' _ [] _ = Right []
+zipWithM' _ _ [] = Right []
+zipWithM' f (a:as) (b:bs) = do
+  c <- f a b
+  cs <- zipWithM' f as bs
+  Right (c:cs)

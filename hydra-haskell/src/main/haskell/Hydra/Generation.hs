@@ -13,8 +13,11 @@ import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
+import qualified Hydra.Context as Context
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encoding as Encoding
+import qualified Hydra.Error as Error
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
@@ -38,10 +41,18 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
+-- | Format an InContext OtherError with trace information
+formatError :: Context.InContext Error.OtherError -> String
+formatError ic = formatError ic ++ traceInfo
+  where
+    cx = Context.inContextContext ic
+    stack = Context.contextTrace cx
+    traceInfo = if L.null stack then "" else " (" ++ L.intercalate " > " (reverse stack) ++ ")"
+
 -- | Generate source files and write them to disk.
 -- This is a thin I/O wrapper around 'generateSourceFiles'.
 generateSources
-  :: (Module -> [Definition] -> Flow Graph (M.Map FilePath String))
+  :: (Module -> [Definition] -> Context.Context -> Graph -> Either (Context.InContext Error.OtherError) (M.Map FilePath String))
   -> Language
   -> Bool  -- ^ doInfer
   -> Bool  -- ^ doExpand
@@ -52,11 +63,10 @@ generateSources
   -> [Module]  -- ^ Modules to generate
   -> IO ()
 generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
-    mfiles <- runFlow bootstrapGraph $
-      CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate
-    case mfiles of
-      Nothing -> fail "Failed to generate source files"
-      Just files -> mapM_ writePair files
+    let cx = Monads.emptyContext
+    case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
+      Left ic -> fail $ "Failed to generate source files: " ++ formatError ic
+      Right files -> mapM_ writePair files
   where
     writePair (path, s) = do
         let fullPath = FP.combine basePath path
@@ -70,18 +80,6 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
 modulesToGraph :: [Module] -> [Module] -> Graph
 modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
 
-printTrace :: Bool -> Trace -> IO ()
-printTrace isError t = do
-  CM.unless (L.null $ traceMessages t) $ do
-      putStrLn $ if isError then "Flow failed. Messages:" else "Messages:"
-      putStrLn $ indentLines $ traceSummary t
-
-runFlow :: s -> Flow s a -> IO (Maybe a)
-runFlow s f = do
-    printTrace (Y.isNothing v) t
-    return v
-  where
-    FlowState v _ t = unFlow f s emptyTrace
 
 -- | Generate Haskell source files from modules.
 -- First argument: output directory
@@ -98,12 +96,12 @@ writeHaskell = generateSources moduleToHaskell haskellLanguage True False False 
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 writeYaml :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeYaml basePath universeModules modulesToGenerate = do
-    mfiles <- runFlow bootstrapGraph (generateFiles modulesToGenerate)
-    case mfiles of
-      Nothing -> fail "Failed to generate YAML files"
-      Just files -> mapM_ writePair files
+writeYaml basePath universeModules modulesToGenerate =
+    case generateFiles modulesToGenerate of
+      Left ic -> fail $ "Failed to generate YAML files: " ++ formatError ic
+      Right files -> mapM_ writePair files
   where
+    cx = Monads.emptyContext
     constraints = languageConstraints yamlLanguage
     hasNativeTypes mod = not $ L.null $ L.filter isNativeType $ moduleElements mod
 
@@ -128,25 +126,24 @@ writeYaml basePath universeModules modulesToGenerate = do
     completeUniverse = [m | ns <- S.toList allNeededNamespaces, Just m <- [M.lookup ns namespaceMap]]
                     ++ modulesToGenerate
 
-    generateFiles mods = do
-        -- Only process data modules (modules without native types)
+    generateFiles mods =
         let dataModules = L.filter (not . hasNativeTypes) mods
-        if L.null dataModules
-          then pure []
-          else withTrace "generate YAML files" $ do
-            let g0 = modulesToGraph completeUniverse completeUniverse  -- Use complete universe for full dependency resolution
+        in if L.null dataModules
+          then Right []
+          else do
+            let g0 = modulesToGraph completeUniverse completeUniverse
                 namespaces = fmap moduleNamespace dataModules
-                -- Get original ordered data elements for binding order preservation
                 dataElements = L.filter (not . isNativeType) $ L.concatMap moduleElements completeUniverse
             -- Infer types on the data graph before adaptation (eta expansion requires types)
-            (g0', _inferredBindings) <- inferGraphTypes dataElements g0
-            (g1, defLists) <- dataGraphToDefinitions constraints True True False False dataElements g0' namespaces
-            withState g1 $ do
-              maps <- CM.zipWithM forEachModule dataModules defLists
-              return $ L.concat (M.toList <$> maps)
-      where
-        forEachModule mod defs = withTrace ("data module " ++ unNamespace (moduleNamespace mod)) $
-          moduleToYaml mod (fmap DefinitionTerm defs)
+            ((g0', _inferredBindings), _cx1) <- inferGraphTypes cx dataElements g0
+            (g1, defLists) <- wrapStringError $ dataGraphToDefinitions constraints True True False False dataElements g0' namespaces cx
+            L.concat . fmap M.toList <$> CM.zipWithM (forEachModule g1) dataModules defLists
+
+    forEachModule g1 mod defs = moduleToYaml mod (fmap DefinitionTerm defs) cx g1
+
+    wrapStringError :: Either String a -> Either (Context.InContext Error.OtherError) a
+    wrapStringError (Left err) = Left $ Context.InContext (Error.OtherError err) cx
+    wrapStringError (Right a) = Right a
 
     writePair (path, contents) = do
       let fullPath = basePath FP.</> path
@@ -156,11 +153,9 @@ writeYaml basePath universeModules modulesToGenerate = do
 -- | Generate and write the lexicon file (IO wrapper).
 writeLexicon :: FilePath -> IO ()
 writeLexicon path = do
-  mcontent <- runFlow bootstrapGraph
-    (CodeGeneration.inferAndGenerateLexicon bootstrapGraph Sources.kernelModules)
-  case mcontent of
-    Nothing -> fail "Lexicon generation failed"
-    Just content -> do
+  case CodeGeneration.inferAndGenerateLexicon Monads.emptyContext bootstrapGraph Sources.kernelModules of
+    Left err -> fail $ "Lexicon generation failed: " ++ err
+    Right content -> do
       writeFile path content
       putStrLn $ "Lexicon written to " ++ path
 
@@ -170,14 +165,13 @@ writeLexiconToStandardPath = writeLexicon "../docs/hydra-lexicon.txt"
 
 ----------------------------------------
 
--- | IO wrapper for generateCoderModules. Evaluates the Flow and handles errors.
-generateCoderModulesIO :: (Module -> Flow Graph (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
+-- | IO wrapper for generateCoderModules. Evaluates the Either and handles errors.
+generateCoderModulesIO :: (Context.Context -> Graph -> Module -> Either (Context.InContext Error.OtherError) (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
 generateCoderModulesIO codec label universeModules typeModules = do
-    let graph = modulesToGraph universeModules universeModules
-    mresult <- runFlow graph (CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules)
-    case mresult of
-      Nothing -> fail $ "Failed to generate " ++ label ++ " modules"
-      Just results -> return results
+    let cx = Monads.emptyContext
+    case CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules cx of
+      Left ic -> fail $ "Failed to generate " ++ label ++ " modules: " ++ formatError ic
+      Right results -> return results
 
 generateDecoderModules :: [Module] -> [Module] -> IO [Module]
 generateDecoderModules = generateCoderModulesIO Decoding.decodeModule "decoder"
@@ -246,14 +240,12 @@ writeEncoderHaskell = writeCoderHaskell generateEncoderModules
 -- Module Inference
 ----------------------------------------
 
--- | IO wrapper for inferModules. Evaluates the Flow and handles errors.
+-- | IO wrapper for inferModules. Evaluates the Either and handles errors.
 inferModulesIO :: [Module] -> [Module] -> IO [Module]
 inferModulesIO universeMods targetMods = do
-  let g0 = modulesToGraph universeMods universeMods
-  mresult <- runFlow g0 (CodeGeneration.inferModules bootstrapGraph universeMods targetMods)
-  case mresult of
-    Nothing -> fail "Type inference failed on modules"
-    Just mods -> return mods
+  case CodeGeneration.inferModules Monads.emptyContext bootstrapGraph universeMods targetMods of
+    Left ic -> fail $ "Type inference failed: " ++ formatError ic
+    Right mods -> return mods
 
 ----------------------------------------
 -- JSON Module Export

@@ -10,10 +10,6 @@ import qualified Data.Map as M
 import qualified Data.List as L
 
 
--- | Tag for tests that require decoding Flow values back to Terms (unsupported in generation tests)
-tag_requiresFlowDecoding :: Tag
-tag_requiresFlowDecoding = Tag "requiresFlowDecoding"
-
 -- | Transform test group hierarchy to only include delegated evaluation tests.
 -- These are the test cases which can be meaningfully transformed into executable code.
 -- For example, a test case like `add 1 2 == 3` can be transformed into application-level code which is evaluated in

@@ -83,7 +83,7 @@ import Hydra.Context
 import Hydra.Core
 import Hydra.Error
 import Hydra.Languages
-import Hydra.Monads hiding (bind, exec, fail, pure)
+import Hydra.Monads
 import Hydra.Formatting
 import Hydra.Graph
 import Hydra.Inference
