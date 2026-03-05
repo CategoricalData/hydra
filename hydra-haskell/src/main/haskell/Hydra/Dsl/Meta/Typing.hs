@@ -13,12 +13,13 @@ import qualified Data.Map as M
 import Prelude hiding (map, product, sum)
 
 
-inferenceResult :: AsTerm t TypeSubst => TTerm Term -> TTerm Type -> t -> TTerm (M.Map Name TypeVariableMetadata) -> TTerm InferenceResult
-inferenceResult term type_ subst classConstraints = Phantoms.record _InferenceResult [
+inferenceResult :: AsTerm t TypeSubst => TTerm Term -> TTerm Type -> t -> TTerm (M.Map Name TypeVariableMetadata) -> TTerm Context -> TTerm InferenceResult
+inferenceResult term type_ subst classConstraints context = Phantoms.record _InferenceResult [
   _InferenceResult_term>>: term,
   _InferenceResult_type>>: type_,
   _InferenceResult_subst>>: asTerm subst,
-  _InferenceResult_classConstraints>>: classConstraints]
+  _InferenceResult_classConstraints>>: classConstraints,
+  _InferenceResult_context>>: context]
 
 inferenceResultTerm :: TTerm InferenceResult -> TTerm Term
 inferenceResultTerm ir = Phantoms.project _InferenceResult _InferenceResult_term @@ ir
@@ -31,6 +32,9 @@ inferenceResultSubst ir = Phantoms.project _InferenceResult _InferenceResult_sub
 
 inferenceResultClassConstraints :: TTerm InferenceResult -> TTerm (M.Map Name TypeVariableMetadata)
 inferenceResultClassConstraints ir = Phantoms.project _InferenceResult _InferenceResult_classConstraints @@ ir
+
+inferenceResultContext :: TTerm InferenceResult -> TTerm Context
+inferenceResultContext ir = Phantoms.project _InferenceResult _InferenceResult_context @@ ir
 
 termSubst :: TTerm (M.Map Name Term) -> TTerm TermSubst
 termSubst = Phantoms.wrap _TermSubst

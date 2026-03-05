@@ -35,10 +35,6 @@ infixl 1 <~
 (<~) :: String -> TTerm a -> TTerm b -> TTerm b
 name <~ value = let1 name value
 
-infixl 1 <<~
-(<<~) :: AsTerm t (Flow s a) => String -> t -> TTerm (Flow s b) -> TTerm (Flow s b)
-name <<~ def = bind name (asTerm def)
-
 infixl 1 <<=
 (<<=) :: AsTerm t (Either e a) => String -> t -> TTerm (Either e b) -> TTerm (Either e b)
 name <<= def = eitherBind name (asTerm def)
@@ -82,8 +78,7 @@ annot key mvalue (TTerm term) = TTerm $ Ann.annotateTerm key mvalue term
 apply :: TTerm (a -> b) -> TTerm a -> TTerm b
 apply (TTerm lhs) (TTerm rhs) = TTerm $ Terms.apply lhs rhs
 
-bind :: AsTerm t (Flow s a) => String -> t -> TTerm (Flow s b) -> TTerm (Flow s b)
-bind v def body = primitive2 _flows_bind (asTerm def) $ lambda v $ body
+
 
 -- | Bind over Either: extracts the Right value into a variable, short-circuiting on Left
 eitherBind :: AsTerm t (Either e a) => String -> t -> TTerm (Either e b) -> TTerm (Either e b)
@@ -94,10 +89,7 @@ binaryFunction f = case (unTTerm $ f (var "x") (var "y")) of
   TermApplication (Application (TermApplication (Application lhs _)) _) -> TTerm lhs
   t -> TTerm $ Terms.string $ "unexpected term as binary function: " <> ShowCore.term t
 
-binds :: [Field] -> TTerm (Flow s a) -> TTerm (Flow s a)
-binds fields rhs = L.foldr withField rhs fields
-  where
-    withField (Field (Name fname) fterm) b = bind fname (TTerm fterm) b
+
 
 -- | Apply a named case match to an argument
 -- Example: cases resultTypeName myResult Nothing [onSuccess, onError]
@@ -234,8 +226,7 @@ encoderFor typeName = var $ unName $ encodeBindingName typeName
 el :: TBinding a -> Binding
 el = toBinding
 
-exec :: TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b)
-exec f b = primitive2 _flows_bind f (lambda ignoredVariable b)
+
 
 -- | Create a field with the given name and value
 -- Example: field (Name "age") (int32 30)
@@ -375,9 +366,6 @@ primitive2 primName (TTerm a) (TTerm b) = TTerm $ Terms.primitive primName Terms
 primitive3 :: Name -> TTerm a -> TTerm b -> TTerm c -> TTerm d
 primitive3 primName (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.primitive primName Terms.@@ a Terms.@@ b Terms.@@ c
 
-produce :: AsTerm t a => t -> TTerm (Flow s a)
-produce x = primitive1 _flows_pure (asTerm x)
-
 -- | Extract a field from a record
 -- Example: project (Name "Person") (Name "name")
 project :: Name -> Name -> TTerm (a -> b)
@@ -398,8 +386,6 @@ set = TTerm . Terms.set . S.fromList . fmap unTTerm
 toBinding :: TBinding a -> Binding
 toBinding (TBinding name (TTerm term)) = Binding name term Nothing
 
-trace :: TTerm String -> TTerm (Flow s a) -> TTerm (Flow s a)
-trace msg flow = var "hydra.monads.withTrace" @@ msg @@ flow
 
 triple :: TTerm a -> TTerm b -> TTerm c -> TTerm (a, b, c)
 triple (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.triple a b c

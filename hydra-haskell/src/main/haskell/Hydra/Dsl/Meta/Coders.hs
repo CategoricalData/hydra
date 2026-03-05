@@ -14,7 +14,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 
-adapterContext :: TTerm Graph -> TTerm Language -> TTerm (M.Map Name (Adapter AdapterContext AdapterContext Type Type Term Term)) -> TTerm AdapterContext
+adapterContext :: TTerm Graph -> TTerm Language -> TTerm (M.Map Name (Adapter Type Type Term Term)) -> TTerm AdapterContext
 adapterContext graph language adapters = Phantoms.record _AdapterContext [
   _AdapterContext_graph>>: graph,
   _AdapterContext_language>>: language,
@@ -26,7 +26,7 @@ adapterContextGraph c = project _AdapterContext _AdapterContext_graph @@ c
 adapterContextLanguage :: TTerm AdapterContext -> TTerm Language
 adapterContextLanguage c = project _AdapterContext _AdapterContext_language @@ c
 
-adapterContextAdapters :: TTerm AdapterContext -> TTerm (M.Map Name (Adapter AdapterContext AdapterContext Type Type Term Term))
+adapterContextAdapters :: TTerm AdapterContext -> TTerm (M.Map Name (Adapter Type Type Term Term))
 adapterContextAdapters c = project _AdapterContext _AdapterContext_adapters @@ c
 
 coderDirectionEncode :: TTerm CoderDirection

@@ -515,20 +515,3 @@ comparison t = case t of
   ComparisonLessThan -> Phantoms.injectUnit _Comparison _Comparison_lessThan
   ComparisonGreaterThan -> Phantoms.injectUnit _Comparison _Comparison_greaterThan
 
--- hydra.compute at the `TTerm Term` level
-
-flowStateTerm :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
-flowStateTerm value state trace = recordLift _FlowState [
-  _FlowState_value>>: value,
-  _FlowState_state>>: state,
-  _FlowState_trace>>: trace]
-
--- | Build a trace term at the meta level with custom stack, messages, and other
-traceTerm :: TTerm Term -> TTerm Term -> TTerm Term -> TTerm Term
-traceTerm stack messages other = recordLift _Trace [
-  _Trace_stack>>: stack,
-  _Trace_messages>>: messages,
-  _Trace_other>>: other]
-
-unFlowTerm :: TTerm Term
-unFlowTerm = unwrap $ Core.nameLift _Flow

@@ -161,7 +161,7 @@ graphWithTypeVariables g newTV = graph
 
 primitive :: TTerm Name
     -> TTerm TypeScheme
-    -> TTerm ([Term] -> Flow Graph Term)
+    -> TTerm (Context -> Graph -> [Term] -> Either (InContext Error) Term)
     -> TTerm Primitive
 primitive name typ implementation = record _Primitive [
     _Primitive_name>>: name,
@@ -174,7 +174,7 @@ primitiveName p = project _Primitive _Primitive_name @@ p
 primitiveType :: TTerm Primitive -> TTerm TypeScheme
 primitiveType p = project _Primitive _Primitive_type @@ p
 
-primitiveImplementation :: TTerm Primitive -> TTerm ([Term] -> Flow Graph Term)
+primitiveImplementation :: TTerm Primitive -> TTerm (Context -> Graph -> [Term] -> Either (InContext Error) Term)
 primitiveImplementation p = project _Primitive _Primitive_implementation @@ p
 
 primitiveWithType :: TTerm Primitive -> TTerm TypeScheme -> TTerm Primitive
