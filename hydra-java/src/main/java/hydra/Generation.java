@@ -2,14 +2,10 @@ package hydra;
 
 import hydra.annotations.Annotations;
 import hydra.codeGeneration.CodeGeneration;
-import hydra.compute.Flow;
-import hydra.compute.FlowState;
-import hydra.compute.Trace;
 import hydra.core.Binding;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
-import hydra.dsl.Flows;
 
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
@@ -19,7 +15,6 @@ import hydra.module.Definition;
 import hydra.module.Module;
 import hydra.module.Namespace;
 import hydra.rewriting.Rewriting;
-import hydra.tools.FlowException;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Either;
 import hydra.util.Maybe;
@@ -41,7 +36,7 @@ import java.util.function.Function;
 
 /**
  * I/O wrapper for Hydra code generation in Java.
- * Provides file I/O around the pure/Flow-based functions in CodeGeneration.
+ * Provides file I/O around the pure Either-based functions in CodeGeneration.
  */
 public class Generation {
 
@@ -64,13 +59,6 @@ public class Generation {
         java.util.Set<Name> typeVariables = Collections.emptySet();
 
         return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
-    }
-
-    /**
-     * Evaluate a Flow computation, throwing on failure.
-     */
-    public static <S, A> A runFlow(S state, Flow<S, A> flow) {
-        return Flows.fromFlow(state, flow);
     }
 
     /**
@@ -281,16 +269,16 @@ public class Generation {
             @Override
             public Module visit(Either.Right<String, hydra.core.Term> instance) {
                 hydra.core.Term term = instance.value;
-                Either<hydra.util.DecodingError, Module> modResult =
+                Either<hydra.error.DecodingError, Module> modResult =
                     hydra.decode.module.Module.module(bsGraph, term);
-                return modResult.accept(new Either.Visitor<hydra.util.DecodingError, Module, Module>() {
+                return modResult.accept(new Either.Visitor<hydra.error.DecodingError, Module, Module>() {
                     @Override
-                    public Module visit(Either.Left<hydra.util.DecodingError, Module> left) {
+                    public Module visit(Either.Left<hydra.error.DecodingError, Module> left) {
                         throw new RuntimeException("Module decode error: " + left.value.value);
                     }
 
                     @Override
-                    public Module visit(Either.Right<hydra.util.DecodingError, Module> right) {
+                    public Module visit(Either.Right<hydra.error.DecodingError, Module> right) {
                         Module mod = right.value;
                         return stripTypeSchemes
                             ? CodeGeneration.stripModuleTypeSchemes(mod)
@@ -389,7 +377,7 @@ public class Generation {
      * Generate source files and write them to disk.
      */
     public static void generateSources(
-            Function<Module, Function<List<Definition>, Flow<Graph, Map<String, String>>>> coder,
+            Function<Module, Function<List<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.context.InContext<hydra.error.OtherError>, Map<String, String>>>>>> coder,
             hydra.coders.Language language,
             boolean doInfer,
             boolean doExpand,
@@ -399,39 +387,18 @@ public class Generation {
             List<Module> universe,
             List<Module> modulesToGenerate) {
         Graph bsGraph = bootstrapGraph();
-        Flow<Graph, List<Pair<String, String>>> flow =
+        hydra.context.Context cx = new hydra.context.Context(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
+        Either<hydra.context.InContext<hydra.error.OtherError>, List<Pair<String, String>>> result =
                 CodeGeneration.generateSourceFiles(coder, language,
                         doInfer, doExpand, doHoistCase, doHoistPoly,
-                        bsGraph, universe, modulesToGenerate);
+                        bsGraph, universe, modulesToGenerate, cx);
         List<Pair<String, String>> files;
-        try {
-            files = runFlow(bsGraph, flow);
-        } catch (Exception e) {
-            // Print trace for debugging
-            FlowState<Graph, List<Pair<String, String>>> state =
-                    flow.value.apply(bsGraph).apply(new Trace(Collections.emptyList(), Collections.emptyList(), Collections.emptyMap()));
-            if (state.trace != null) {
-                if (state.trace.stack != null && !state.trace.stack.isEmpty()) {
-                    System.err.println("Trace stack:");
-                    for (String s : state.trace.stack) {
-                        System.err.println("  > " + s);
-                    }
-                }
-                if (state.trace.messages != null) {
-                    System.err.println("Trace messages (" + state.trace.messages.size() + "):");
-                    int count = 0;
-                    for (String msg : state.trace.messages) {
-                        System.err.println("  " + msg);
-                        if (++count > 50) {
-                            System.err.println("  ... (" + (state.trace.messages.size() - 50) + " more)");
-                            break;
-                        }
-                    }
-                }
-            }
-            // Error already logged via instrumented Unification.joinTypes_cannotUnify
-            throw e;
+        if (result.isLeft()) {
+            hydra.context.InContext<hydra.error.OtherError> err = ((Either.Left<hydra.context.InContext<hydra.error.OtherError>, List<Pair<String, String>>>) result).value;
+            throw new RuntimeException("Code generation failed: " + err.object.value);
         }
+        files = ((Either.Right<hydra.context.InContext<hydra.error.OtherError>, List<Pair<String, String>>>) result).value;
         for (Pair<String, String> pair : files) {
             String filePath = basePath + File.separator + pair.first;
             String content = pair.second;
@@ -453,7 +420,7 @@ public class Generation {
      */
     public static void writeJava(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
-                mod -> defs -> hydra.ext.java.coder.Coder.moduleToJava(mod, defs),
+                mod -> defs -> cx -> g -> hydra.ext.java.coder.Coder.moduleToJava(mod, defs, cx, g),
                 hydra.ext.java.language.Language.javaLanguage(),
                 false, true, false, true,
                 basePath, universe, mods);
@@ -464,7 +431,7 @@ public class Generation {
      */
     public static void writePython(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
-                mod -> defs -> hydra.ext.python.coder.Coder.moduleToPython(mod, defs),
+                mod -> defs -> cx -> g -> hydra.ext.python.coder.Coder.moduleToPython(mod, defs, cx, g),
                 hydra.ext.python.language.Language.pythonLanguage(),
                 false, true, true, false,
                 basePath, universe, mods);
@@ -475,7 +442,7 @@ public class Generation {
      */
     public static void writeHaskell(String basePath, List<Module> universe, List<Module> mods) {
         generateSources(
-                mod -> defs -> hydra.ext.haskell.coder.Coder.moduleToHaskell(mod, defs),
+                mod -> defs -> cx -> g -> hydra.ext.haskell.coder.Coder.moduleToHaskell(mod, defs, cx, g),
                 hydra.ext.haskell.language.Language.haskellLanguage(),
                 false, false, false, false,
                 basePath, universe, mods);

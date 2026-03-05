@@ -1,21 +1,17 @@
 package hydra;
 
 import hydra.compute.Adapter;
-import hydra.compute.Flow;
 import hydra.compute.StatelessAdapter;
-import hydra.util.Unit;
+import hydra.util.Either;
 
-import hydra.dsl.Flows;
 import java.util.function.Function;
 
 /**
- * Convenience functions for working with Hydra coders.
+ * Convenience functions for working with Hydra adapters.
  */
 public class Adapters {
     /**
      * Compose two adapters, in turn composing their coders.
-     * @param <S1> the first source state type
-     * @param <S2> the second source state type
      * @param <T1> the first source type
      * @param <T2> the intermediate target type
      * @param <T3> the final target type
@@ -26,9 +22,9 @@ public class Adapters {
      * @param adapter2 the second adapter
      * @return the composed adapter
      */
-    public static <S1, S2, T1, T2, T3, V1, V2, V3> Adapter<S1, S2, T1, T3, V1, V3> compose(
-            Adapter<S1, S2, T1, T2, V1, V2> adapter1,
-            Adapter<S1, S2, T2, T3, V2, V3> adapter2) {
+    public static <T1, T2, T3, V1, V2, V3> Adapter<T1, T3, V1, V3> compose(
+            Adapter<T1, T2, V1, V2> adapter1,
+            Adapter<T2, T3, V2, V3> adapter2) {
 
         return new Adapter<>(
                 adapter1.isLossy || adapter2.isLossy,
@@ -39,9 +35,6 @@ public class Adapters {
 
     /**
      * Compose two adapters constructed from their source types, in turn composing their coders.
-     * @param <S0> the initial state type
-     * @param <S1> the first source state type
-     * @param <S2> the second source state type
      * @param <T1> the first source type
      * @param <T2> the intermediate target type
      * @param <T3> the final target type
@@ -52,14 +45,18 @@ public class Adapters {
      * @param constructor2 the second adapter constructor
      * @return a function that constructs the composed adapter
      */
-    public static <S0, S1, S2, T1, T2, T3, V1, V2, V3> Function<T1, Flow<S0, Adapter<S1, S2, T1, T3, V1, V3>>> compose(
-            Function<T1, Flow<S0, Adapter<S1, S2, T1, T2, V1, V2>>> constructor1,
-            Function<T2, Flow<S0, Adapter<S1, S2, T2, T3, V2, V3>>> constructor2) {
-        return t1 -> Flows.bind(
-                constructor1.apply(t1),
-                firstMile -> Flows.map(
-                        constructor2.apply(firstMile.target),
-                        lastMile -> compose(firstMile, lastMile)));
+    public static <T1, T2, T3, V1, V2, V3> Function<T1, Either<String, Adapter<T1, T3, V1, V3>>> compose(
+            Function<T1, Either<String, Adapter<T1, T2, V1, V2>>> constructor1,
+            Function<T2, Either<String, Adapter<T2, T3, V2, V3>>> constructor2) {
+        return t1 -> {
+            Either<String, Adapter<T1, T2, V1, V2>> r1 = constructor1.apply(t1);
+            if (r1.isLeft()) return Either.left(((Either.Left<String, Adapter<T1, T2, V1, V2>>) r1).value);
+            Adapter<T1, T2, V1, V2> firstMile = ((Either.Right<String, Adapter<T1, T2, V1, V2>>) r1).value;
+            Either<String, Adapter<T2, T3, V2, V3>> r2 = constructor2.apply(firstMile.target);
+            if (r2.isLeft()) return Either.left(((Either.Left<String, Adapter<T2, T3, V2, V3>>) r2).value);
+            Adapter<T2, T3, V2, V3> lastMile = ((Either.Right<String, Adapter<T2, T3, V2, V3>>) r2).value;
+            return Either.right(compose(firstMile, lastMile));
+        };
     }
 
     /**
@@ -97,13 +94,17 @@ public class Adapters {
      * @param constructor2 the second stateless adapter constructor
      * @return a function that constructs the composed stateless adapter
      */
-    public static <T1, T2, T3, V1, V2, V3> Function<T1, Flow<Unit, StatelessAdapter<T1, T3, V1, V3>>> composeStateless(
-            Function<T1, Flow<Unit, StatelessAdapter<T1, T2, V1, V2>>> constructor1,
-            Function<T2, Flow<Unit, StatelessAdapter<T2, T3, V2, V3>>> constructor2) {
-        return t1 -> Flows.bind(
-                constructor1.apply(t1),
-                firstMile -> Flows.map(
-                        constructor2.apply(firstMile.target),
-                        lastMile -> composeStateless(firstMile, lastMile)));
+    public static <T1, T2, T3, V1, V2, V3> Function<T1, Either<String, StatelessAdapter<T1, T3, V1, V3>>> composeStateless(
+            Function<T1, Either<String, StatelessAdapter<T1, T2, V1, V2>>> constructor1,
+            Function<T2, Either<String, StatelessAdapter<T2, T3, V2, V3>>> constructor2) {
+        return t1 -> {
+            Either<String, StatelessAdapter<T1, T2, V1, V2>> r1 = constructor1.apply(t1);
+            if (r1.isLeft()) return Either.left(((Either.Left<String, StatelessAdapter<T1, T2, V1, V2>>) r1).value);
+            StatelessAdapter<T1, T2, V1, V2> firstMile = ((Either.Right<String, StatelessAdapter<T1, T2, V1, V2>>) r1).value;
+            Either<String, StatelessAdapter<T2, T3, V2, V3>> r2 = constructor2.apply(firstMile.target);
+            if (r2.isLeft()) return Either.left(((Either.Left<String, StatelessAdapter<T2, T3, V2, V3>>) r2).value);
+            StatelessAdapter<T2, T3, V2, V3> lastMile = ((Either.Right<String, StatelessAdapter<T2, T3, V2, V3>>) r2).value;
+            return Either.right(composeStateless(firstMile, lastMile));
+        };
     }
 }

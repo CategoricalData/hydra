@@ -624,38 +624,6 @@ public interface Types {
         return set(var(elements));
     }
 
-    /**
-     * Flow type (monadic computation with state, trace, and error handling).
-     * Example: {@literal flow(var("s"), var("x"))  // Flow<S, X>}
-     * @param state the state type
-     * @param value the value type
-     * @return the flow type
-     */
-    static Type flow(Type state, Type value) {
-        return apply(apply(new Type.Variable(new Name("hydra.compute.Flow")), state), value);
-    }
-
-    /**
-     * Flow type (with string variable names).
-     * Example: {@literal flow("s", "x")  // Flow<S, X>}
-     * @param state the state type variable name
-     * @param value the value type variable name
-     * @return the flow type
-     */
-    static Type flow(String state, String value) {
-        return flow(var(state), var(value));
-    }
-
-    /**
-     * Flow type with Type state and String value variable.
-     * @param state the state type variable name
-     * @param value the value type
-     * @return the flow type
-     */
-    static Type flow(String state, Type value) {
-        return flow(var(state), value);
-    }
-
     // ===== Pair types =====
 
     /**
