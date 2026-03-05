@@ -10,15 +10,15 @@ import Hydra.Sources.Kernel.Types.All
 import Hydra.Sources.Kernel.Terms.All
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Data.List as L
-import Hydra.Tools.Monads
 import Hydra.Ext.Tools.Analysis.Dependencies
 import Hydra.Generation (modulesToGraph)
 import System.IO
 
 let jsonValuesToString = L.intercalate "\n" . fmap JsonWriter.printJson
-termModulesToGraphson withPrims modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> termGraphToDependencyGraphson withPrims False (modulesToGraph modules)) >>= writeFile outFile
-typeModulesToGraphson modules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> typeGraphToDependencyGraphson (modulesToGraph modules)) >>= writeFile outFile
-combinedModulesToGraphson dataModules schemaModules outFile = flowToIo hydraCoreGraph (jsonValuesToString <$> combinedGraphToDependencyGraphson (modulesToGraph dataModules) (modulesToGraph schemaModules)) >>= writeFile outFile
+let eitherToIo = either (\msg -> fail msg) return
+termModulesToGraphson withPrims modules outFile = eitherToIo (jsonValuesToString <$> termGraphToDependencyGraphson withPrims False (modulesToGraph modules)) >>= writeFile outFile
+typeModulesToGraphson modules outFile = eitherToIo (jsonValuesToString <$> typeGraphToDependencyGraphson (modulesToGraph modules)) >>= writeFile outFile
+combinedModulesToGraphson dataModules schemaModules outFile = eitherToIo (jsonValuesToString <$> combinedGraphToDependencyGraphson (modulesToGraph dataModules) (modulesToGraph schemaModules)) >>= writeFile outFile
 
 typeModulesToGraphson [module_] "/tmp/hydra-core-deps.json"
 typeModulesToGraphson kernelTypesModules "/tmp/kernel-types-deps.json"
@@ -48,13 +48,12 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Meta as ShowMeta
 import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
-import qualified Hydra.Util as Util
+import qualified Hydra.Error as Error
 import Hydra.Ext.Staging.Pg.Utils
 import Hydra.Pg.Graphson.Utils
 
@@ -86,12 +85,14 @@ propertyKey_typeVariant = PG.PropertyKey "typeVariant"
 
 --
 
-combinedGraphToDependencyGraphson :: Graph -> Graph -> Flow Graph [Json.Value]
+combinedGraphToDependencyGraphson :: Graph -> Graph -> Either String [Json.Value]
 combinedGraphToDependencyGraphson dataGraph schemaGraph = do
   pg <- combinedGraphToDependencyPropertyGraph dataGraph schemaGraph
-  pgElementsToGraphson encodeStringValue $ propertyGraphElements pg
+  case pgElementsToGraphson encodeStringValue $ propertyGraphElements pg of
+    Left (InContext (OtherError msg) _) -> Left msg
+    Right v -> Right v
 
-combinedGraphToDependencyPropertyGraph :: Graph -> Graph -> Flow Graph (PG.Graph String)
+combinedGraphToDependencyPropertyGraph :: Graph -> Graph -> Either String (PG.Graph String)
 combinedGraphToDependencyPropertyGraph dataGraph schemaGraph = do
   let pgDataGraph = termGraphToDependencyPropertyGraph True True dataGraph
   pgSchemaGraph <- typeGraphToDependencyPropertyGraph schemaGraph
@@ -115,9 +116,11 @@ nameToNamespace name = Y.maybe "default" unNamespace $ namespaceOf name
 nameToVertexId :: Name -> String
 nameToVertexId = unName
 
-termGraphToDependencyGraphson :: Bool -> Bool -> Graph -> Flow s [Json.Value]
-termGraphToDependencyGraphson withPrims withTypes g = pgElementsToGraphson encodeStringValue $
-  propertyGraphElements $ termGraphToDependencyPropertyGraph withPrims withTypes g
+termGraphToDependencyGraphson :: Bool -> Bool -> Graph -> Either String [Json.Value]
+termGraphToDependencyGraphson withPrims withTypes g = case pgElementsToGraphson encodeStringValue $
+    propertyGraphElements $ termGraphToDependencyPropertyGraph withPrims withTypes g of
+  Left (InContext (OtherError msg) _) -> Left msg
+  Right v -> Right v
 
 -- | Given a Hydra graph, create a property graph in which the vertices are all elements of the graph
 --   (plus all primitives, if selected) and the edges are all direct dependencies between elements
@@ -177,14 +180,18 @@ termGraphToDependencyPropertyGraph withPrims withTypes g = PG.Graph vertexMap ed
                 edgesFrom el = fmap (namePairToEdge edgeLabel_subterm (bindingName el)) $
                   S.toList $ freeVariablesInTerm $ bindingTerm el
 
-typeGraphToDependencyGraphson :: Graph -> Flow Graph [Json.Value]
+typeGraphToDependencyGraphson :: Graph -> Either String [Json.Value]
 typeGraphToDependencyGraphson g = do
   pg <- typeGraphToDependencyPropertyGraph g
-  pgElementsToGraphson encodeStringValue $ propertyGraphElements pg
+  case pgElementsToGraphson encodeStringValue $ propertyGraphElements pg of
+    Left (InContext (OtherError msg) _) -> Left msg
+    Right v -> Right v
 
-typeGraphToDependencyPropertyGraph :: Graph -> Flow Graph (PG.Graph String)
+typeGraphToDependencyPropertyGraph :: Graph -> Either String (PG.Graph String)
 typeGraphToDependencyPropertyGraph g = do
-    types <- CM.mapM (\t -> Monads.eitherToFlow Util.unDecodingError $ DecodeCore.type_ (g) t) terms
+    types <- CM.mapM (\t -> case DecodeCore.type_ (g) t of
+      Left e -> Left $ Error.unDecodingError e
+      Right v -> Right v) terms
     let vertices = L.zipWith toVertex names types
     let edges = L.concat $ L.zipWith toEdges names $ fmap (S.toList . freeVariablesInType) types
     return $ PG.Graph

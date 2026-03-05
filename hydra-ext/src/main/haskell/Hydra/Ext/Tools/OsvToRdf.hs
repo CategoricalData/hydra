@@ -6,7 +6,6 @@ module Hydra.Ext.Tools.OsvToRdf (
 ) where
 
 import Hydra.Kernel
-import Hydra.Tools.Monads
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 import qualified Hydra.Json.Parser as JsonParser
 import Hydra.Ext.Org.Json.Coder
@@ -64,8 +63,13 @@ listsToSets = rewriteTerm mapExpr
 --   transform the content of each file to a corresponding RDF (N-Triples) file in the destination directory.
 osvJsonDirectoryToNtriples :: FilePath -> FilePath -> IO ()
 osvJsonDirectoryToNtriples srcDir destDir = do
-    entryType <- flowToIo (osvContext) (requireType Osv._Entry)
-    coder <- flowToIo (osvInstanceContext) $ jsonCoder entryType
+    let cx = emptyContext
+    entryType <- case requireType cx osvContext Osv._Entry of
+      Left (InContext (OtherError msg) _) -> fail msg
+      Right t -> return t
+    coder <- case jsonCoder entryType cx osvInstanceContext of
+      Left (InContext (OtherError msg) _) -> fail msg
+      Right c -> return c
     paths <- getDirectoryContents srcDir
     conf <- CM.mapM (transformFile coder) paths
     let count = L.length $ L.filter id conf
@@ -83,17 +87,22 @@ osvContext = modulesToGraph [OsvSource.module_] [OsvSource.module_]
 
 osvInstanceContext = emptyInstanceContext osvContext
 
-osvJsonToNtriples :: Coder (Graph) (Graph) (Term) Json.Value -> FilePath -> FilePath -> IO ()
+osvJsonToNtriples :: Coder (Term) Json.Value -> FilePath -> FilePath -> IO ()
 osvJsonToNtriples coder inFile outFile = do
     contents <- readFile inFile
     case parseJsonEither contents of
       Left msg -> fail $ "Failed to read JSON value in file " ++ inFile ++ ": " ++ msg
       Right v -> do
         let v' = rewriteJsonFieldCase v
-        term0 <- flowToIo (osvInstanceContext) $ coderDecode coder v'
+        let cx = emptyContext
+        term0 <- case coderDecode coder cx v' of
+          Left (InContext (OtherError msg) _) -> fail msg
+          Right t -> return t
         let term1 = listsToSets term0
-        node <- flowToIo (osvInstanceContext) $ RdfUt.nextBlankNode
-        graph <- flowToIo (osvInstanceContext) $ (RdfUt.descriptionsToGraph <$> Shacl.encodeTerm node term1)
+        let (node, _cx') = RdfUt.nextBlankNode emptyContext
+        graph <- case Shacl.encodeTerm node term1 emptyContext osvContext of
+          Left (InContext (OtherError msg) _) -> fail msg
+          Right (descs, _) -> return $ RdfUt.descriptionsToGraph descs
         let graphStr = rdfGraphToNtriples graph
         writeFile outFile graphStr
 

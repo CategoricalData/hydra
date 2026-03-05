@@ -17,76 +17,76 @@ import qualified Data.Maybe as Y
 
 -- | Encodes a single DataRow as a line of a CSV, and vice versa.
 --   No support for optional cells; only empty strings. No attempt is made to check that rows are of a consistent width.
-dataRowCsvCoder :: Coder s s (DataRow String) String
+dataRowCsvCoder :: Coder (DataRow String) String
 dataRowCsvCoder = Coder encode decode
   where
-    encode (DataRow cells) = pure $ encodeCsvLine $ Y.catMaybes cells
-    decode line = pure $ DataRow $ fmap Just $ decodeCsvLine line
+    encode _cx (DataRow cells) = Right $ encodeCsvLine $ Y.catMaybes cells
+    decode _cx line = Right $ DataRow $ fmap Just $ decodeCsvLine line
 
-tableCsvCoder :: Bool -> Coder s s (Table String) [String]
+tableCsvCoder :: Bool -> Coder (Table String) [String]
 tableCsvCoder hasHeader = Coder encode decode
   where
-    encode (Table mheader rows) = do
+    encode cx (Table mheader rows) = do
         hrows <- headerRows
-        drows <- CM.mapM (coderEncode dataRowCsvCoder) rows
+        drows <- CM.mapM (coderEncode dataRowCsvCoder cx) rows
         return $ hrows ++ drows
       where
         headerRows = if hasHeader
           then case mheader of
-            Just (HeaderRow names) -> pure [encodeCsvLine names]
-            Nothing -> fail "missing header"
-          else pure []
-    decode rows = do
+            Just (HeaderRow names) -> Right [encodeCsvLine names]
+            Nothing -> Left $ InContext (OtherError "missing header") cx
+          else Right []
+    decode cx rows = do
         (mheader, rest) <- if hasHeader
           then if L.null rows
-            then fail "missing header"
-            else pure (Just $ HeaderRow $ decodeCsvLine $ head rows, tail rows)
-          else pure (Nothing, rows)
-        drows <- CM.mapM (coderDecode dataRowCsvCoder) rest
+            then Left $ InContext (OtherError "missing header") cx
+            else Right (Just $ HeaderRow $ decodeCsvLine $ head rows, tail rows)
+          else Right (Nothing, rows)
+        drows <- CM.mapM (coderDecode dataRowCsvCoder cx) rest
         return $ Table mheader drows
 
 
 -- Relational tables -----------------------------------------------------------
 
-type DomainCoders t v s = M.Map t (Coder s s v String)
+type DomainCoders t v = M.Map t (Coder v String)
 
-relationCsvCoder :: (Ord t, Show t) => DomainCoders t v s -> RM.RelationSchema t -> Bool -> Flow s (Coder s s (RM.Relation v) [String])
-relationCsvCoder coderMap schema hasHeader = do
-    coder <- rowCsvCoder coderMap schema
+relationCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> Bool -> Context -> Either (InContext OtherError) (Coder (RM.Relation v) [String])
+relationCsvCoder coderMap schema hasHeader cx = do
+    coder <- rowCsvCoder coderMap schema cx
     return $ Coder (encode coder) (decode coder)
   where
-    encode coder (RM.Relation rows) = do
-        dataRows <- CM.mapM (coderEncode coder) rows
+    encode coder cx (RM.Relation rows) = do
+        dataRows <- CM.mapM (coderEncode coder cx) rows
         return $ headerRows ++ dataRows
       where
         headerRows = if hasHeader
           then [encodeCsvLine (RM.unColumnName . RM.columnSchemaName <$> (RM.relationSchemaColumns schema))]
           else []
-    decode coder inRows = do
-        outRows <- CM.mapM (coderDecode coder) dataRows
+    decode coder cx inRows = do
+        outRows <- CM.mapM (coderDecode coder cx) dataRows
         return $ RM.Relation outRows
       where
         dataRows = if hasHeader then L.tail inRows else inRows
 
 -- | Encodes a single Row as a line of a CSV, and vice versa.
-rowCsvCoder :: (Ord t, Show t) => DomainCoders t v s -> RM.RelationSchema t -> Flow s (Coder s s (RM.Row v) String)
-rowCsvCoder coderMap schema = do
+rowCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> Context -> Either (InContext OtherError) (Coder (RM.Row v) String)
+rowCsvCoder coderMap schema cx = do
     coders <- CM.mapM findCoder (RM.columnSchemaDomain <$> RM.relationSchemaColumns schema)
     return $ Coder (encode coders) (decode coders)
   where
-    encode coders (RM.Row cells) = encodeCsvLine <$> (encodeCells coders cells)
-    decode coders line = RM.Row <$> (decodeCells coders $ decodeCsvLine line)
+    encode coders cx' (RM.Row cells) = encodeCsvLine <$> (encodeCells cx' coders cells)
+    decode coders cx' line = RM.Row <$> (decodeCells cx' coders $ decodeCsvLine line)
     findCoder typ = case M.lookup typ coderMap of
-      Nothing -> fail $ "no coder for type: " ++ show typ
+      Nothing -> Left $ InContext (OtherError $ "no coder for type: " ++ show typ) cx
       Just c -> pure c
-    encodeCells coders = CM.zipWithM coderEncode coders
-    decodeCells coders = CM.zipWithM coderDecode coders
+    encodeCells cx' coders = CM.zipWithM (\c v -> coderEncode c cx' v) coders
+    decodeCells cx' coders = CM.zipWithM (\c v -> coderDecode c cx' v) coders
 
-stringCoders :: DomainCoders () String s
+stringCoders :: DomainCoders () String
 stringCoders = M.singleton () $ Coder encode decode
   where
-    encode s = pure s
-    decode s = pure s
+    encode _cx s = Right s
+    decode _cx s = Right s
 
 stringSchema :: Int -> RM.RelationSchema ()
 stringSchema len = RM.RelationSchema (RM.RelationName $ "StringTable" ++ show len) (colSchema <$> [1..len]) [] []
