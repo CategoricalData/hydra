@@ -36,13 +36,12 @@ testModule = Module testNs elements [] [] Nothing
 
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
-    let state = unFlow evaluateSelectedTerm (context) emptyTrace
-    putStrLn $ traceSummary (flowStateTrace state)
-    let result = flowStateValue state
-    putStrLn $ "result: " <> show result
+    case result of
+      Left (InContext (OtherError msg) _) -> putStrLn $ "error: " <> msg
+      Right reduced -> putStrLn $ "result: " <> show reduced
   where
-    context = modulesToGraph [testModule] [testModule]
-    evaluateSelectedTerm = do
-      original <- bindingTerm <$> (requireElement $ unqualifyName $ QualifiedName (Just testNs) "catStrings")
-      reduced <- reduceTerm False original
-      return reduced
+    graph = modulesToGraph [testModule] [testModule]
+    cx = emptyContext
+    result = do
+      original <- bindingTerm <$> requireElement cx graph (unqualifyName $ QualifiedName (Just testNs) "catStrings")
+      reduceTerm cx graph False original

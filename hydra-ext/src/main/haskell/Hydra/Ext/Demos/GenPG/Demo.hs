@@ -15,7 +15,6 @@ import qualified Hydra.Demos.Genpg.Transform as Transform
 import Hydra.Ext.Staging.Pg.Printing
 import Hydra.Ext.Staging.Pg.Utils
 import Hydra.Sources.Kernel.Types.Core
-import Hydra.Tools.Monads
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Pg.Model as Pg
 import qualified Hydra.Tabular as Tab
@@ -51,7 +50,9 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
   log $ "  Vertices: " ++ show (L.length vertices)
   log $ "  Edges: " ++ show (L.length edges)
   log $ "Writing GraphSON to " ++ outputPath
-  jsonResult <- flowToIo (hydraCoreGraph) (pgElementsToGraphson encodeTermValue els)
+  jsonResult <- case pgElementsToGraphson encodeTermValue els of
+    Left (InContext (OtherError msg) _) -> fail msg
+    Right v -> return v
   writeFile outputPath (jsonValuesToString jsonResult)
   log $ "Done. Output written to " ++ outputPath
   where
@@ -67,8 +68,9 @@ generateGraphSON sourceRoot tableSchemas graphMapping outputPath = do
 transformTable :: TableType -> FilePath -> [Pg.Vertex Term] -> [Pg.Edge Term] -> IO ([Pg.Vertex Term], [Pg.Edge Term])
 transformTable tableType@(TableType (RelationName tableName) _) path vspecs especs = do
     (Table _ rows) <- decodeTableIo tableType path
-    flowToIo (hydraCoreGraph) $ withTrace ("transforming " ++ tableName) $
-      Transform.transformTableRows vspecs especs tableType rows
+    case Transform.transformTableRows emptyContext hydraCoreGraph vspecs especs tableType rows of
+      Left (InContext (OtherError msg) _) -> fail $ "Error transforming " ++ tableName ++ ": " ++ msg
+      Right v -> return v
 
 -- | Transform multiple tables according to a graph mapping specification
 transformTables :: FilePath -> [TableType] -> Pg.LazyGraph Term -> IO (Pg.LazyGraph Term)
