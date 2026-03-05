@@ -20,7 +20,7 @@ def if_else(b: bool, x: A | Callable[[], A], y: A | Callable[[], A]) -> A:
 
     When x and y are callable (lambdas), only the chosen branch is called.
     This enables lazy evaluation for expensive computations or side-effecting operations,
-    which is critical for correct Flow/state monad semantics.
+    which is critical for correct evaluation semantics.
     """
     if b:
         return x() if callable(x) else x  # type: ignore[return-value]

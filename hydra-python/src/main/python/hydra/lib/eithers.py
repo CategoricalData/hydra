@@ -87,6 +87,18 @@ def map_list(f: Callable[[A], Either[C, B]], xs: frozenlist[A]) -> Either[C, fro
     return Right(tuple(results))
 
 
+def map_set(f: Callable[[A], Either[C, B]], xs: frozenset[A]) -> Either[C, frozenset[B]]:
+    """Map a function returning Either over a set, collecting results or short-circuiting on Left."""
+    results: list[B] = []
+    for x in xs:
+        match f(x):
+            case Left(err):
+                return Left(err)
+            case Right(val):
+                results.append(val)
+    return Right(frozenset(results))
+
+
 def from_left(default: A, e: Either[A, B]) -> A:
     """Extract the Left value, or return a default."""
     match e:

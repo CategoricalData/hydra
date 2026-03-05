@@ -16,7 +16,7 @@ def fun(dom, cod):
     functions to native functions. This allows higher-order primitives like map,
     filter, foldl, etc. to use native implementations rather than eval-level ones."""
     import hydra.reduction as reduction
-    return prims.function_with_reduce(lambda t: reduction.reduce_term(True, t), dom, cod)
+    return prims.function_with_reduce(lambda cx, g, t: reduction.reduce_term(cx, g, True, t), dom, cod)
 
 
 def register_chars_primitives() -> dict[Name, Primitive]:
@@ -167,92 +167,6 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "rights")] = prims.prim1(
         qname(namespace, "rights"), eithers.rights, ["x", "y"],
         prims.list_(prims.either(x, y)), prims.list_(y)
-    )
-
-    return primitives
-
-
-def register_flows_primitives() -> dict[Name, Primitive]:
-    """Register all flows primitive functions."""
-    from hydra.lib import flows
-    from hydra.eval.lib import flows as eval_flows
-    from hydra.dsl.python import Just
-
-    namespace = "hydra.lib.flows"
-    primitives: dict[Name, Primitive] = {}
-
-    s = prims.variable("s")
-    x = prims.variable("x")
-    y = prims.variable("y")
-    k = prims.variable("k")
-    v1 = prims.variable("v1")
-    v2 = prims.variable("v2")
-
-    # apply :: Flow s (x -> y) -> Flow s x -> Flow s y
-    primitives[qname(namespace, "apply")] = prims.prim2_interp(
-        qname(namespace, "apply"), Just(eval_flows.apply), ["s", "x", "y"],
-        prims.flow(s, prims.function(x, y)), prims.flow(s, x), prims.flow(s, y)
-    )
-    # bind :: Flow s x -> (x -> Flow s y) -> Flow s y
-    primitives[qname(namespace, "bind")] = prims.prim2_interp(
-        qname(namespace, "bind"), Just(eval_flows.bind), ["s", "x", "y"],
-        prims.flow(s, x), prims.function(x, prims.flow(s, y)), prims.flow(s, y)
-    )
-    primitives[qname(namespace, "fail")] = prims.prim1(
-        qname(namespace, "fail"), flows.fail, ["s", "x"],
-        prims.string(), prims.flow(s, x)
-    )
-    # foldl :: (a -> b -> Flow s a) -> a -> [b] -> Flow s a
-    primitives[qname(namespace, "foldl")] = prims.prim3(
-        qname(namespace, "foldl"),
-        lambda f, init, xs: flows.foldl(lambda acc, el: f(acc)(el), init, xs),
-        ["y", "x", "s"],
-        prims.function(y, prims.function(x, prims.flow(s, y))), y, prims.list_(x), prims.flow(s, y)
-    )
-    # map :: (x -> y) -> Flow s x -> Flow s y
-    primitives[qname(namespace, "map")] = prims.prim2_interp(
-        qname(namespace, "map"), Just(eval_flows.map), ["x", "y", "s"],
-        prims.function(x, y), prims.flow(s, x), prims.flow(s, y)
-    )
-    # mapElems :: (v1 -> Flow s v2) -> Map k v1 -> Flow s (Map k v2)
-    primitives[qname(namespace, "mapElems")] = prims.prim2_interp(
-        qname(namespace, "mapElems"), Just(eval_flows.map_elems), ["v1", "s", "v2", "k"],
-        prims.function(v1, prims.flow(s, v2)), prims.map_(k, v1), prims.flow(s, prims.map_(k, v2))
-    )
-    # mapKeys :: (k1 -> Flow s k2) -> Map k1 v -> Flow s (Map k2 v)
-    primitives[qname(namespace, "mapKeys")] = prims.prim2_interp(
-        qname(namespace, "mapKeys"), Just(eval_flows.map_keys), ["k1", "s", "k2", "v"],
-        prims.function(prims.variable("k1"), prims.flow(s, prims.variable("k2"))),
-        prims.map_(prims.variable("k1"), prims.variable("v")),
-        prims.flow(s, prims.map_(prims.variable("k2"), prims.variable("v")))
-    )
-    # mapList :: (x -> Flow s y) -> [x] -> Flow s [y]
-    primitives[qname(namespace, "mapList")] = prims.prim2_interp(
-        qname(namespace, "mapList"), Just(eval_flows.map_list), ["x", "s", "y"],
-        prims.function(x, prims.flow(s, y)), prims.list_(x), prims.flow(s, prims.list_(y))
-    )
-    # mapMaybe :: (x -> Flow s y) -> Maybe x -> Flow s (Maybe y)
-    primitives[qname(namespace, "mapMaybe")] = prims.prim2_interp(
-        qname(namespace, "mapMaybe"), Just(eval_flows.map_maybe), ["x", "s", "y"],
-        prims.function(x, prims.flow(s, y)), prims.optional(x), prims.flow(s, prims.optional(y))
-    )
-    # mapSet :: (x -> Flow s y) -> Set x -> Flow s (Set y)
-    primitives[qname(namespace, "mapSet")] = prims.prim2_interp(
-        qname(namespace, "mapSet"), Just(eval_flows.map_set), ["x", "s", "y"],
-        prims.function(x, prims.flow(s, y)), prims.set_(x), prims.flow(s, prims.set_(y))
-    )
-    primitives[qname(namespace, "pure")] = prims.prim1(
-        qname(namespace, "pure"), flows.pure, ["s", "x"],
-        x, prims.flow(s, x)
-    )
-    primitives[qname(namespace, "sequence")] = prims.prim1(
-        qname(namespace, "sequence"), flows.sequence, ["s", "x"],
-        prims.list_(prims.flow(s, x)), prims.flow(s, prims.list_(x))
-    )
-    # withDefault :: x -> Flow s x -> Flow s x
-    primitives[qname(namespace, "withDefault")] = prims.prim2_interp(
-        qname(namespace, "withDefault"), Just(eval_flows.with_default), ["s", "x"],
-        x, prims.flow(s, x), prims.flow(s, x)
     )
 
     return primitives
@@ -1188,7 +1102,6 @@ def standard_library() -> dict[Name, Primitive]:
     primitives.update(register_chars_primitives())
     primitives.update(register_eithers_primitives())
     primitives.update(register_equality_primitives())
-    primitives.update(register_flows_primitives())
     primitives.update(register_lists_primitives())
     primitives.update(register_literals_primitives())
     primitives.update(register_logic_primitives())

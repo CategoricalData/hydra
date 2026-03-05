@@ -77,7 +77,6 @@ def un_tterm(t: TTerm[A]) -> Term:
 # Operators - Python equivalents for Haskell operators
 # (~>) :: String -> TTerm x -> TTerm (a -> b) - use lam(name, body)
 # (<~) :: String -> TTerm a -> TTerm b -> TTerm b - use let1(name, value, body)
-# (<<~) :: String -> TTerm (Flow s a) -> TTerm (Flow s b) -> TTerm (Flow s b) - use bind(name, def_, body)
 # (<.>) :: TTerm (b -> c) -> TTerm (a -> b) -> TTerm (a -> c) - use compose(f, g)
 # (@@) :: TTerm (a -> b) -> TTerm a -> TTerm b - use apply(fun, arg)
 # (>:) :: String -> TTerm a -> Field - use field_op(name, term)
@@ -104,25 +103,6 @@ def binary_function(f) -> TTerm[A]:
             return TTerm[A](lhs)
         case _:
             return TTerm[A](terms.string(f"unexpected term as binary function: {term}"))
-
-
-def bind(v: str, def_: TTerm[A], body: TTerm[B]) -> TTerm[B]:
-    """Bind a value in a Flow context."""
-    return primitive2(
-        Name("hydra.lib.flows.bind"),
-        def_,
-        lam(v, body)
-    )
-
-
-def binds(fields: Sequence[Field], rhs: TTerm[A]) -> TTerm[A]:
-    """Create multiple bindings in a Flow context."""
-    result = rhs
-    for field in reversed(fields):
-        fname = field.name.value
-        fterm = TTerm[A](field.term)
-        result = bind(fname, fterm, result)
-    return result
 
 
 def cases(name: Name, arg: TTerm[A], dflt: Maybe[TTerm[B]], fields: Sequence[Field]) -> TTerm[B]:
@@ -244,15 +224,6 @@ def doc_wrapped(length: int, s: str, term: TTerm[A]) -> TTerm[A]:
 def el(binding: TBinding[A]) -> terms.Binding:
     """Convert a typed element to an untyped element."""
     return terms.Binding(binding.name, un_tterm(binding.term), Nothing())
-
-
-def exec_(f: TTerm[A], b: TTerm[B]) -> TTerm[B]:
-    """Execute a Flow action and discard its result."""
-    return primitive2(
-        Name("hydra.lib.flows.bind"),
-        f,
-        lam(hydra.constants.ignored_variable, b)
-    )
 
 
 def field(fname: Name, val: TTerm[A]) -> Field:
@@ -565,11 +536,6 @@ def primitive3(prim_name: Name, a: TTerm[A], b: TTerm[B], c: TTerm[C]) -> TTerm[
     )
 
 
-def produce(value: TTerm[A]) -> TTerm[A]:
-    """Lift a value into a Flow context."""
-    return primitive1(Name("hydra.lib.flows.pure"), value)
-
-
 def project(name: Name, fname: Name) -> TTerm[A]:
     """Extract a field from a record."""
     return TTerm[A](terms.project(name, fname))
@@ -593,11 +559,6 @@ def second(pair: TTerm[tuple[A, B]]) -> TTerm[B]:
 def set_(els: Sequence[TTerm[A]]) -> TTerm[set[A]]:
     """Create a set of terms."""
     return TTerm[set[A]](terms.set_({un_tterm(el) for el in els}))
-
-
-def trace(msg: TTerm[str], flow: TTerm[A]) -> TTerm[A]:
-    """Add tracing to a Flow."""
-    return apply(apply(var("hydra.monads.withTrace"), msg), flow)
 
 
 def triple(a: TTerm[A], b: TTerm[B], c: TTerm[C]) -> TTerm[tuple[A, B, C]]:

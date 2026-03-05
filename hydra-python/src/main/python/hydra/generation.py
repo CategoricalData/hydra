@@ -1,6 +1,6 @@
 """I/O wrapper for Hydra code generation in Python.
 
-Provides file I/O around the pure/Flow-based functions in hydra.code_generation.
+Provides file I/O around the pure Either-based functions in hydra.code_generation.
 This is the Python equivalent of Haskell's Hydra.Generation module.
 """
 
@@ -15,73 +15,40 @@ sys.setrecursionlimit(10000)
 
 from hydra.annotations import is_native_type
 from hydra.code_generation import (
-    build_schema_map,
-    decode_module_from_json,
     generate_source_files,
-    modules_to_graph,
     namespace_to_path,
     strip_module_type_schemes,
 )
-from hydra.compute import Trace
+from hydra.context import Context, InContext
 from hydra.core import Binding
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 from hydra.graph import Graph
 from hydra.json import model as JsonModel
 from hydra.module import Module, Namespace
-from hydra.rewriting import remove_types_from_term
+from hydra.rewriting import deannotate_type_recursive, f_type_to_type_scheme, remove_types_from_term
 from hydra.sources.libraries import standard_library
 
 
 @lru_cache(1)
-def kernel_modules():
-    """Load the kernel type Source modules (the 22 kernelTypesModules).
+def bootstrap_schema_map():
+    """Build a schema map from the bootstrap type map.
 
-    These provide the type universe needed for decoding modules from JSON.
-    Only type-defining modules are needed; term modules contribute nothing
-    to the schema map used for JSON decoding.
+    This mirrors Java's Generation.bootstrapSchemaMap(): reads the hard-coded
+    type map from hydra.json.bootstrap.types_by_name (generated from the Haskell
+    DSL), strips forall/annotation wrappers, and returns a Map[Name, Type]
+    suitable for the JSON decoder.
 
-    We keep generated Python Source modules for the kernel *type* modules
-    because they are needed to bootstrap the JSON decoder: you need a type
-    universe (schema map) before you can decode any JSON module, and the
-    type universe comes from these Source modules. Kernel *term* modules,
-    on the other hand, are loaded from JSON at runtime. This works because
-    (a) term modules don't contribute to the schema map, so they don't
-    create a chicken-and-egg problem, and (b) modules loaded from JSON
-    already carry full type annotations, so no further inference is needed.
+    The bootstrap type map contains types from the kernel modules needed to
+    decode Module from JSON: hydra.compute, hydra.context, hydra.core,
+    hydra.error, hydra.graph, and hydra.module.
     """
-    from hydra.sources import accessors as src_accessors
-    from hydra.sources import ast as src_ast
-    from hydra.sources import classes as src_classes
-    from hydra.sources import coders as src_coders
-    from hydra.sources import compute as src_compute
-    from hydra.sources import constraints as src_constraints
-    from hydra.sources import core as src_core
-    from hydra.sources import grammar as src_grammar
-    from hydra.sources import graph as src_graph
-    from hydra.sources.json import model as src_json_model
-    from hydra.sources import module as src_module
-    from hydra.sources import parsing as src_parsing
-    from hydra.sources import phantoms as src_phantoms
-    from hydra.sources import query as src_query
-    from hydra.sources import relational as src_relational
-    from hydra.sources import tabular as src_tabular
-    from hydra.sources import testing as src_testing
-    from hydra.sources import topology as src_topology
-    from hydra.sources import typing as src_typing
-    from hydra.sources import util as src_util
-    from hydra.sources import variants as src_variants
-    from hydra.sources import workflow as src_workflow
+    from hydra.json.bootstrap import types_by_name
 
-    return [
-        src_accessors.module(), src_ast.module(), src_classes.module(),
-        src_coders.module(), src_compute.module(), src_constraints.module(),
-        src_core.module(), src_grammar.module(), src_graph.module(),
-        src_json_model.module(), src_module.module(), src_parsing.module(),
-        src_phantoms.module(), src_query.module(), src_relational.module(),
-        src_tabular.module(), src_testing.module(), src_topology.module(),
-        src_typing.module(), src_util.module(), src_variants.module(),
-        src_workflow.module(),
-    ]
+    result = {}
+    for name, typ in types_by_name.items():
+        ts = f_type_to_type_scheme(typ)
+        result[name] = deannotate_type_recursive(ts.type)
+    return FrozenDict(result)
 
 
 def bootstrap_graph():
@@ -99,16 +66,23 @@ def bootstrap_graph():
     )
 
 
-def run_flow(state, flow):
-    """Evaluate a Flow computation, raising on failure."""
-    empty_trace = Trace(stack=(), messages=(), other=FrozenDict({}))
-    result = flow.value(state, empty_trace)
-    match result.value:
-        case Just(v):
+def empty_context():
+    """Create an empty Context."""
+    return Context(elements=(), primitive_functions=(), other=FrozenDict({}))
+
+
+def unwrap_either(result):
+    """Unwrap an Either value, raising on Left."""
+    match result:
+        case Left(value=err):
+            # err may be an InContext wrapping an OtherError
+            if hasattr(err, 'object') and hasattr(err.object, 'value'):
+                raise RuntimeError(f"Error: {err.object.value}")
+            raise RuntimeError(f"Error: {err}")
+        case Right(value=v):
             return v
-        case Nothing():
-            msgs = list(result.trace.messages) if result.trace.messages else []
-            raise RuntimeError("Flow failed: " + "; ".join(msgs))
+        case _:
+            raise RuntimeError(f"Unexpected result type: {type(result)}")
 
 
 def _python_to_hydra_json(obj):
@@ -141,18 +115,16 @@ def parse_json_file(path):
     return _python_to_hydra_json(obj)
 
 
-def decode_module(bs_graph, universe_modules, do_strip_type_schemes, json_val):
+def decode_module(bs_graph, schema_map, do_strip_type_schemes, json_val):
     """Decode a single module from a JSON value.
 
-    Re-implements the logic of code_generation.decode_module_from_json to work
-    around a generated code issue (post_process thunk called incorrectly).
+    Uses a pre-built schema map (from bootstrap_schema_map()) to decode the
+    JSON into a Term, then decodes the Term into a Module.
     """
     import hydra.json.decode as json_decode
     import hydra.decode.module as decode_mod
     from hydra.core import Name, Type, TypeVariable
 
-    graph = modules_to_graph(bs_graph, tuple(universe_modules), tuple(universe_modules))
-    schema_map = build_schema_map(graph)
     mod_type = TypeVariable(Name("hydra.module.Module"))
 
     # Step 1: Decode JSON to a Term using the schema map
@@ -166,7 +138,7 @@ def decode_module(bs_graph, universe_modules, do_strip_type_schemes, json_val):
             raise RuntimeError("Unexpected JSON decode result type")
 
     # Step 2: Decode the Term to a Module
-    mod_result = decode_mod.module(graph, term)
+    mod_result = decode_mod.module(bs_graph, term)
     match mod_result:
         case Left(value=dec_err):
             raise RuntimeError(f"Module decode error: {dec_err.value}")
@@ -178,14 +150,19 @@ def decode_module(bs_graph, universe_modules, do_strip_type_schemes, json_val):
             raise RuntimeError("Unexpected module decode result type")
 
 
-def load_modules_from_json(strip_type_schemes, base_path, universe_modules, namespaces):
-    """Load modules from JSON files using the generated schema-based decoder."""
+def load_modules_from_json(strip_type_schemes, base_path, namespaces):
+    """Load modules from JSON files using the bootstrap schema map.
+
+    Uses bootstrap_schema_map() (from hydra.json.bootstrap.types_by_name)
+    to decode modules, matching Java's Generation.loadModulesFromJson().
+    """
     bs_graph = bootstrap_graph()
+    schema_map = bootstrap_schema_map()
     modules = []
     for ns in namespaces:
         file_path = os.path.join(base_path, namespace_to_path(ns) + ".json")
         json_val = parse_json_file(file_path)
-        mod = decode_module(bs_graph, universe_modules, strip_type_schemes, json_val)
+        mod = decode_module(bs_graph, schema_map, strip_type_schemes, json_val)
         print(f"  Loaded: {ns.value}")
         modules.append(mod)
     return modules
@@ -204,14 +181,15 @@ def generate_sources(coder, language, do_infer, do_expand, do_hoist_case, do_hoi
     """Generate source files and write them to disk."""
     import time as _time
     bs_graph = bootstrap_graph()
-    flow = generate_source_files(
+    cx = empty_context()
+    _t0 = _time.time()
+    result = generate_source_files(
         coder, language,
         do_infer, do_expand, do_hoist_case, do_hoist_poly,
-        bs_graph, tuple(universe), tuple(modules_to_generate))
-    _t0 = _time.time()
-    files = run_flow(bs_graph, flow)
+        bs_graph, tuple(universe), tuple(modules_to_generate), cx)
+    files = unwrap_either(result)
     _t1 = _time.time()
-    print(f"  Code generation flow took {_t1-_t0:.1f}s for {len(files)} files", flush=True)
+    print(f"  Code generation took {_t1-_t0:.1f}s for {len(files)} files", flush=True)
     for path, content in files:
         file_path = os.path.join(base_path, path)
         if not content.endswith("\n"):
