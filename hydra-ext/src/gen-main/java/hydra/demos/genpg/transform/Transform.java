@@ -43,8 +43,8 @@ public interface Transform {
             
             @Override
             public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.LiteralType.Boolean_ ignored) {
-              return hydra.lib.maybes.Maybe.apply(
-                (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
+              return hydra.lib.maybes.Maybe.applyLazy(
+                () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
                 (java.util.function.Function<Boolean, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(parsed))))))),
                 hydra.lib.literals.ReadBoolean.apply(value));
             }
@@ -61,24 +61,24 @@ public interface Transform {
                 
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.FloatType.Bigfloat ignored) {
-                  return hydra.lib.maybes.Maybe.apply(
-                    (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
+                  return hydra.lib.maybes.Maybe.applyLazy(
+                    () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
                     (java.util.function.Function<java.math.BigDecimal, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Bigfloat(parsed)))))))),
                     hydra.lib.literals.ReadBigfloat.apply(value));
                 }
                 
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.FloatType.Float32 ignored) {
-                  return hydra.lib.maybes.Maybe.apply(
-                    (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
+                  return hydra.lib.maybes.Maybe.applyLazy(
+                    () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
                     (java.util.function.Function<Float, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float32(parsed)))))))),
                     hydra.lib.literals.ReadFloat32.apply(value));
                 }
                 
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.FloatType.Float64 ignored) {
-                  return hydra.lib.maybes.Maybe.apply(
-                    (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
+                  return hydra.lib.maybes.Maybe.applyLazy(
+                    () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
                     (java.util.function.Function<Double, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Float_(new hydra.core.FloatValue.Float64(parsed)))))))),
                     hydra.lib.literals.ReadFloat64.apply(value));
                 }
@@ -97,16 +97,16 @@ public interface Transform {
                 
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.IntegerType.Int32 ignored) {
-                  return hydra.lib.maybes.Maybe.apply(
-                    (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
+                  return hydra.lib.maybes.Maybe.applyLazy(
+                    () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
                     (java.util.function.Function<Integer, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(parsed)))))))),
                     hydra.lib.literals.ReadInt32.apply(value));
                 }
                 
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.IntegerType.Int64 ignored) {
-                  return hydra.lib.maybes.Maybe.apply(
-                    (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
+                  return hydra.lib.maybes.Maybe.applyLazy(
+                    () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(parseError))),
                     (java.util.function.Function<Long, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (parsed -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64(parsed)))))))),
                     hydra.lib.literals.ReadInt64.apply(value));
                 }
@@ -121,8 +121,8 @@ public interface Transform {
         }
       });
     });
-    return hydra.lib.maybes.Maybe.apply(
-      (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))),
       decodeValue,
       mvalue);
   }
@@ -258,8 +258,8 @@ public interface Transform {
   }
   
   static <T1, T2> hydra.util.Pair<java.util.List<T1>, java.util.List<T2>> elementSpecsByTable_current(hydra.util.Maybe<hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>> existing) {
-    return hydra.lib.maybes.FromMaybe.apply(
-      (hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) ((hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) (new hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>((java.util.List<T1>) (java.util.List.<T1>of()), (java.util.List<T2>) (java.util.List.<T2>of())))),
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> (hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) ((hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) (new hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>((java.util.List<T1>) (java.util.List.<T1>of()), (java.util.List<T2>) (java.util.List.<T2>of())))),
       existing);
   }
   
@@ -278,8 +278,8 @@ public interface Transform {
   }
   
   static <T1, T2> hydra.util.Pair<java.util.List<T1>, java.util.List<T2>> elementSpecsByTable_current2(hydra.util.Maybe<hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>> existing) {
-    return hydra.lib.maybes.FromMaybe.apply(
-      (hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) ((hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) (new hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>((java.util.List<T1>) (java.util.List.<T1>of()), (java.util.List<T2>) (java.util.List.<T2>of())))),
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> (hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) ((hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>) (new hydra.util.Pair<java.util.List<T1>, java.util.List<T2>>((java.util.List<T1>) (java.util.List.<T1>of()), (java.util.List<T2>) (java.util.List.<T2>of())))),
       existing);
   }
   

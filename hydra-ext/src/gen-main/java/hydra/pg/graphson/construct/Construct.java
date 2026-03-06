@@ -13,8 +13,8 @@ public interface Construct {
         hydra.util.Lazy<T1> v = new hydra.util.Lazy<>(() -> hydra.pg.graphson.construct.Construct.<T0, T1>aggregateMap_v(p));
         return hydra.lib.maps.Insert.apply(
           k.get(),
-          hydra.lib.maybes.Maybe.apply(
-            hydra.lib.lists.Pure.apply(v.get()),
+          hydra.lib.maybes.Maybe.applyLazy(
+            () -> hydra.lib.lists.Pure.apply(v.get()),
             (java.util.function.Function<java.util.List<T1>, java.util.List<T1>>) (vs -> hydra.lib.lists.Cons.apply(
               v.get(),
               vs)),
