@@ -135,15 +135,17 @@ extendGraphForLambda g lam =
 extendGraphForLet :: ((Graph.Graph -> Core.Binding -> Maybe Core.Term) -> Graph.Graph -> Core.Let -> Graph.Graph)
 extendGraphForLet forBinding g letrec =  
   let bindings = (Core.letBindings letrec)
-  in Graph.Graph {
-    Graph.graphBoundTerms = (Maps.union (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings)) (Graph.graphBoundTerms g)),
-    Graph.graphBoundTypes = (Maps.union (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings))) (Graph.graphBoundTypes g)),
-    Graph.graphClassConstraints = (Graph.graphClassConstraints g),
-    Graph.graphLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Graph.graphLambdaVariables g) bindings),
-    Graph.graphMetadata = (Lists.foldl (\m -> \b -> Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding g b)) (Graph.graphMetadata g) bindings),
-    Graph.graphPrimitives = (Graph.graphPrimitives g),
-    Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
-    Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
+  in  
+    let g2 = (Lexical.extendGraphWithBindings bindings g)
+    in Graph.Graph {
+      Graph.graphBoundTerms = (Maps.union (Maps.fromList (Lists.map (\b -> (Core.bindingName b, (Core.bindingTerm b))) bindings)) (Graph.graphBoundTerms g)),
+      Graph.graphBoundTypes = (Maps.union (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings))) (Graph.graphBoundTypes g)),
+      Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+      Graph.graphLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Graph.graphLambdaVariables g) bindings),
+      Graph.graphMetadata = (Lists.foldl (\m -> \b -> Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding g2 b)) (Graph.graphMetadata g) bindings),
+      Graph.graphPrimitives = (Graph.graphPrimitives g),
+      Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
+      Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
 
 -- | Extend a graph by descending into a type lambda body
 extendGraphForTypeLambda :: (Graph.Graph -> Core.TypeLambda -> Graph.Graph)

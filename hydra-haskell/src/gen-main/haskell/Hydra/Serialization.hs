@@ -22,8 +22,8 @@ import qualified Data.Set as S
 
 angleBraces :: Ast.Brackets
 angleBraces = Ast.Brackets {
-  Ast.bracketsOpen = (sym "<"),
-  Ast.bracketsClose = (sym ">")}
+  Ast.bracketsOpen = (Ast.Symbol "<"),
+  Ast.bracketsClose = (Ast.Symbol ">")}
 
 angleBracesList :: (Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
 angleBracesList style els = (Logic.ifElse (Lists.null els) (cst "<>") (brackets angleBraces style (commaSep style els)))
@@ -58,8 +58,8 @@ curlyBlock style e = (curlyBracesList Nothing style [
 
 curlyBraces :: Ast.Brackets
 curlyBraces = Ast.Brackets {
-  Ast.bracketsOpen = (sym "{"),
-  Ast.bracketsClose = (sym "}")}
+  Ast.bracketsOpen = (Ast.Symbol "{"),
+  Ast.bracketsClose = (Ast.Symbol "}")}
 
 curlyBracesList :: (Maybe String -> Ast.BlockStyle -> [Ast.Expr] -> Ast.Expr)
 curlyBracesList msymb style els = (Logic.ifElse (Lists.null els) (cst "{}") (brackets curlyBraces style (symbolSep (Maybes.fromMaybe "," msymb) style els)))
@@ -265,8 +265,8 @@ parens = (brackets parentheses inlineStyle)
 
 parentheses :: Ast.Brackets
 parentheses = Ast.Brackets {
-  Ast.bracketsOpen = (sym "("),
-  Ast.bracketsClose = (sym ")")}
+  Ast.bracketsOpen = (Ast.Symbol "("),
+  Ast.bracketsClose = (Ast.Symbol ")")}
 
 parenthesize :: (Ast.Expr -> Ast.Expr)
 parenthesize exp =  
@@ -391,11 +391,11 @@ printExpr e =
                         let rhs = (idt padr (printExpr r))
                         in (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 lhs (pad padl)) sym) (pad padr)) rhs)
       Ast.ExprBrackets v0 ->  
-        let brackets = (Ast.bracketExprBrackets v0)
+        let brs = (Ast.bracketExprBrackets v0)
         in  
-          let l = (Ast.unSymbol (Ast.bracketsOpen brackets))
+          let l = (Ast.unSymbol (Ast.bracketsOpen brs))
           in  
-            let r = (Ast.unSymbol (Ast.bracketsClose brackets))
+            let r = (Ast.unSymbol (Ast.bracketsClose brs))
             in  
               let e = (Ast.bracketExprEnclosed v0)
               in  
@@ -433,8 +433,8 @@ spaceSep = (sep (Ast.Op {
 
 squareBrackets :: Ast.Brackets
 squareBrackets = Ast.Brackets {
-  Ast.bracketsOpen = (sym "["),
-  Ast.bracketsClose = (sym "]")}
+  Ast.bracketsOpen = (Ast.Symbol "["),
+  Ast.bracketsClose = (Ast.Symbol "]")}
 
 -- | Append a suffix string to an expression
 suffix :: (String -> Ast.Expr -> Ast.Expr)
