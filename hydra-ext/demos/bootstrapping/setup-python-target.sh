@@ -124,11 +124,11 @@ fi
 echo "Running Python tests..."
 STEP_START=$(date +%s)
 cd "$OUTPUT_DIR"
-if [ -d "src/gen-test" ]; then
-    HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" pytest src/test/ src/gen-test/ 2>&1
-else
-    HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" pytest src/test/ 2>&1
+TEST_DIRS="src/test/python"
+if [ -d "src/gen-test/python/generation" ]; then
+    TEST_DIRS="$TEST_DIRS src/gen-test/python/generation"
 fi
+HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" pytest $TEST_DIRS 2>&1
 TEST_EXIT=$?
 STEP_END=$(date +%s)
 echo "  Test time: $((STEP_END - STEP_START))s"
