@@ -195,7 +195,8 @@ main = do
   loadStart <- getCurrentTime
   mainMods <- loadModulesFromJson False kernelJsonDir kernelModules allKernelNamespaces
   loadEnd <- getCurrentTime
-  putStrLn $ "  Loaded " ++ show (length mainMods) ++ " modules (" ++ formatTime (elapsed loadEnd loadStart) ++ ")"
+  putStrLn $ "  Loaded " ++ show (length mainMods) ++ " modules."
+  putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd loadStart)
   putStrLn ""
 
   -- Step 2: Optionally load ext coder modules
@@ -209,7 +210,8 @@ main = do
       loadStart2 <- getCurrentTime
       mods <- loadModulesFromJson False extJsonDir kernelModules extCoderNamespaces
       loadEnd2 <- getCurrentTime
-      putStrLn $ "  Loaded " ++ show (length mods) ++ " modules (" ++ formatTime (elapsed loadEnd2 loadStart2) ++ ")"
+      putStrLn $ "  Loaded " ++ show (length mods) ++ " modules."
+      putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd2 loadStart2)
       putStrLn ""
       return mods
     else do
@@ -258,7 +260,7 @@ main = do
   putStrLn $ "Step " ++ stepNum ++ ": Mapping " ++ show (length modsToGenerate) ++ " modules to " ++ targetCap ++ "..."
 
   genStart <- getCurrentTime
-  case target of
+  mainFileCount <- case target of
     "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allMainModsFinal modsToGenerate
     "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outMain allMainModsFinal modsToGenerate
     "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allMainModsFinal modsToGenerate
@@ -267,8 +269,8 @@ main = do
       exitFailure
   genEnd <- getCurrentTime
 
-  mainFileCount <- countFiles outMain ext
-  putStrLn $ "  Generated " ++ show mainFileCount ++ " files (" ++ formatTime (elapsed genEnd genStart) ++ ")"
+  putStrLn $ "  Generated " ++ show mainFileCount ++ " files."
+  putStrLn $ "  Time: " ++ formatTime (elapsed genEnd genStart)
   putStrLn ""
 
   -- Optionally generate test modules
@@ -293,24 +295,24 @@ main = do
         when (not (Prelude.null extModsForTests)) $ do
           putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."
           case target of
-            "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allUniverse extModsForTests
-            "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outMain allUniverse extModsForTests
-            "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allUniverse extModsForTests
+            "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allUniverse extModsForTests >> return ()
+            "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outMain allUniverse extModsForTests >> return ()
+            "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allUniverse extModsForTests >> return ()
             _ -> return ()
           putStrLn ""
 
       putStrLn $ "Mapping test modules to " ++ targetCap ++ "..."
 
       testStart <- getCurrentTime
-      case target of
+      count <- case target of
         "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outTest allUniverse testMods
         "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outTest allUniverse testMods
         "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outTest allUniverse testMods
-        _ -> return ()
+        _ -> return 0
       testEnd <- getCurrentTime
 
-      count <- countFiles outTest ext
-      putStrLn $ "  Generated " ++ show count ++ " test files (" ++ formatTime (elapsed testEnd testStart) ++ ")"
+      putStrLn $ "  Generated " ++ show count ++ " test files."
+      putStrLn $ "  Time: " ++ formatTime (elapsed testEnd testStart)
       putStrLn ""
       return count
     else return 0
@@ -334,7 +336,8 @@ main = do
           return True
       genTestEnd <- getCurrentTime
       genTestCount <- countFiles genTestDir genTestExt
-      putStrLn $ "  Generated " ++ show genTestCount ++ " generation test files (" ++ formatTime (elapsed genTestEnd genTestStart) ++ ")"
+      putStrLn $ "  Generated " ++ show genTestCount ++ " generation test files."
+      putStrLn $ "  Time: " ++ formatTime (elapsed genTestEnd genTestStart)
       putStrLn ""
       return success
     else return True
