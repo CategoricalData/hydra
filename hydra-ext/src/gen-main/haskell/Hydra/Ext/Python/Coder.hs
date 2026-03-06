@@ -1311,15 +1311,15 @@ targetPythonVersion = Utils.targetPythonVersion
 
 -- | Like bindingMetadata, but only for bindings that will actually be thunked
 pythonBindingMetadata :: (Graph.Graph -> Core.Binding -> Maybe Core.Term)
-pythonBindingMetadata tc b = (Logic.ifElse (Logic.and (CoderUtils.isComplexBinding tc b) (Logic.not (CoderUtils.isTrivialTerm (Core.bindingTerm b)))) (CoderUtils.bindingMetadata tc b) Nothing)
+pythonBindingMetadata g b = (Logic.ifElse (shouldThunkBinding g b) (CoderUtils.bindingMetadata g b) Nothing)
+
+-- | Determine if a binding should be thunked based on its complexity and triviality
+shouldThunkBinding :: (Graph.Graph -> Core.Binding -> Bool)
+shouldThunkBinding g b = (Logic.and (CoderUtils.isComplexBinding g b) (Logic.not (CoderUtils.isTrivialTerm (Core.bindingTerm b))))
 
 -- | Analyze a function term with Python-specific Graph management
 analyzePythonFunction :: (Context.Context -> Helpers.PythonEnvironment -> Core.Term -> Either t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
 analyzePythonFunction cx env term = (CoderUtils.analyzeFunctionTermWith cx pythonBindingMetadata pythonEnvironmentGetGraph pythonEnvironmentSetGraph env term)
-
--- | Analyze a function term without recording binding metadata (for inline lambdas)
-analyzePythonFunctionInline :: (Context.Context -> Helpers.PythonEnvironment -> Core.Term -> Either t0 (Typing.FunctionStructure Helpers.PythonEnvironment))
-analyzePythonFunctionInline cx env term = (CoderUtils.analyzeFunctionTermInline cx pythonEnvironmentGetGraph pythonEnvironmentSetGraph env term)
 
 -- | Execute a computation with definitions in scope
 withDefinitions :: (Helpers.PythonEnvironment -> [Module.Definition] -> (Helpers.PythonEnvironment -> t0) -> t0)
@@ -1525,7 +1525,7 @@ encodeTermMultiline cx env term =
 -- | Encode a function term to a Python expression
 encodeFunction :: (Context.Context -> Helpers.PythonEnvironment -> Core.Function -> Either (Context.InContext Error.OtherError) Syntax.Expression)
 encodeFunction cx env f = ((\x -> case x of
-  Core.FunctionLambda v0 -> (Eithers.bind (analyzePythonFunctionInline cx env (Core.TermFunction (Core.FunctionLambda v0))) (\fs ->  
+  Core.FunctionLambda v0 -> (Eithers.bind (analyzePythonFunction cx env (Core.TermFunction (Core.FunctionLambda v0))) (\fs ->  
     let params = (Typing.functionStructureParams fs)
     in  
       let bindings = (Typing.functionStructureBindings fs)
@@ -1824,9 +1824,16 @@ encodeUnionEliminationInline cx env cs pyArg =
                           in  
                             let pyVariantName = (deconflictVariantName True env tname fname (Helpers.pythonEnvironmentGraph env))
                             in  
-                              let isinstanceCheck = (Utils.functionCall isinstancePrimary [
+                              let isinstanceCheck = (Logic.ifElse isEnum (Syntax.ExpressionSimple (Syntax.Disjunction [
+                                      Syntax.Conjunction [
+                                        Syntax.InversionSimple (Syntax.Comparison {
+                                          Syntax.comparisonLhs = (Utils.pyExpressionToBitwiseOr pyArg),
+                                          Syntax.comparisonRhs = [
+                                            Syntax.CompareOpBitwiseOrPair {
+                                              Syntax.compareOpBitwiseOrPairOperator = Syntax.CompareOpEq,
+                                              Syntax.compareOpBitwiseOrPairRhs = (Utils.pyExpressionToBitwiseOr (Utils.pyNameToPyExpression pyVariantName))}]})]])) (Utils.functionCall isinstancePrimary [
                                       pyArg,
-                                      (Utils.pyNameToPyExpression pyVariantName)])
+                                      (Utils.pyNameToPyExpression pyVariantName)]))
                               in (Eithers.bind (encodeTermInline cx env False fterm) (\pyBranch ->  
                                 let pyResult = (Logic.ifElse isEnum (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [
                                         pyArg]) (Logic.ifElse isUnitVariant (Utils.functionCall (Utils.pyExpressionToPyPrimary pyBranch) [

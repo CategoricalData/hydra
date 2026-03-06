@@ -108,6 +108,26 @@ pySimpleStatementToPyStatement :: (Syntax.SimpleStatement -> Syntax.Statement)
 pySimpleStatementToPyStatement s = (Syntax.StatementSimple [
   s])
 
+-- | Convert an Expression to a BitwiseOr, wrapping in parens if needed
+pyExpressionToBitwiseOr :: (Syntax.Expression -> Syntax.BitwiseOr)
+pyExpressionToBitwiseOr e = Syntax.BitwiseOr {
+  Syntax.bitwiseOrLhs = Nothing,
+  Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
+    Syntax.bitwiseXorLhs = Nothing,
+    Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
+      Syntax.bitwiseAndLhs = Nothing,
+      Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
+        Syntax.shiftExpressionLhs = Nothing,
+        Syntax.shiftExpressionRhs = Syntax.Sum {
+          Syntax.sumLhs = Nothing,
+          Syntax.sumRhs = Syntax.Term {
+            Syntax.termLhs = Nothing,
+            Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
+              Syntax.powerLhs = Syntax.AwaitPrimary {
+                Syntax.awaitPrimaryAwait = False,
+                Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomGroup (Syntax.GroupExpression (Syntax.NamedExpressionSimple e))))},
+              Syntax.powerRhs = Nothing}))}}}}}}
+
 -- | Convert an Expression to a SimpleStatement (as star expressions)
 pyExpressionToPySimpleStatement :: (Syntax.Expression -> Syntax.SimpleStatement)
 pyExpressionToPySimpleStatement expr = (Syntax.SimpleStatementStarExpressions [

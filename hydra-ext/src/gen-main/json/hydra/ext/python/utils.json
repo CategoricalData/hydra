@@ -496,6 +496,144 @@
               "domain": {"variable": "hydra.ext.python.syntax.SimpleStatement"}}},
           "variables": []}]},
     {
+      "name": "hydra.ext.python.utils.pyExpressionToBitwiseOr",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Convert an Expression to a BitwiseOr, wrapping in parens if needed"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "record": {
+                    "fields": [
+                      {
+                        "name": "lhs",
+                        "term": {
+                          "typeApplication": {
+                            "body": {"maybe": null},
+                            "type": {"variable": "hydra.ext.python.syntax.BitwiseOr"}}}},
+                      {
+                        "name": "rhs",
+                        "term": {
+                          "record": {
+                            "fields": [
+                              {
+                                "name": "lhs",
+                                "term": {
+                                  "typeApplication": {
+                                    "body": {"maybe": null},
+                                    "type": {"variable": "hydra.ext.python.syntax.BitwiseXor"}}}},
+                              {
+                                "name": "rhs",
+                                "term": {
+                                  "record": {
+                                    "fields": [
+                                      {
+                                        "name": "lhs",
+                                        "term": {
+                                          "typeApplication": {
+                                            "body": {"maybe": null},
+                                            "type": {"variable": "hydra.ext.python.syntax.BitwiseAnd"}}}},
+                                      {
+                                        "name": "rhs",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "lhs",
+                                                "term": {
+                                                  "typeApplication": {
+                                                    "body": {"maybe": null},
+                                                    "type": {"variable": "hydra.ext.python.syntax.ShiftLhs"}}}},
+                                              {
+                                                "name": "rhs",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "lhs",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {"maybe": null},
+                                                            "type": {"variable": "hydra.ext.python.syntax.SumLhs"}}}},
+                                                      {
+                                                        "name": "rhs",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "lhs",
+                                                                "term": {
+                                                                  "typeApplication": {
+                                                                    "body": {"maybe": null},
+                                                                    "type": {"variable": "hydra.ext.python.syntax.TermLhs"}}}},
+                                                              {
+                                                                "name": "rhs",
+                                                                "term": {
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "simple",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "lhs",
+                                                                              "term": {
+                                                                                "record": {
+                                                                                  "fields": [
+                                                                                    {"name": "await", "term": {"literal": {"boolean": false}}},
+                                                                                    {
+                                                                                      "name": "primary",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "simple",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {
+                                                                                                  "name": "group",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "expression",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {"name": "simple", "term": {"variable": "e"}},
+                                                                                                            "typeName": "hydra.ext.python.syntax.NamedExpression"}}},
+                                                                                                      "typeName": "hydra.ext.python.syntax.Group"}}},
+                                                                                                "typeName": "hydra.ext.python.syntax.Atom"}}},
+                                                                                          "typeName": "hydra.ext.python.syntax.Primary"}}}],
+                                                                                  "typeName": "hydra.ext.python.syntax.AwaitPrimary"}}},
+                                                                            {
+                                                                              "name": "rhs",
+                                                                              "term": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"maybe": null},
+                                                                                  "type": {"variable": "hydra.ext.python.syntax.Factor"}}}}],
+                                                                          "typeName": "hydra.ext.python.syntax.Power"}}},
+                                                                    "typeName": "hydra.ext.python.syntax.Factor"}}}],
+                                                            "typeName": "hydra.ext.python.syntax.Term"}}}],
+                                                    "typeName": "hydra.ext.python.syntax.Sum"}}}],
+                                            "typeName": "hydra.ext.python.syntax.ShiftExpression"}}}],
+                                    "typeName": "hydra.ext.python.syntax.BitwiseAnd"}}}],
+                            "typeName": "hydra.ext.python.syntax.BitwiseXor"}}}],
+                    "typeName": "hydra.ext.python.syntax.BitwiseOr"}},
+                "domain": [{"variable": "hydra.ext.python.syntax.Expression"}],
+                "parameter": "e"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ext.python.syntax.BitwiseOr"},
+              "domain": {"variable": "hydra.ext.python.syntax.Expression"}}},
+          "variables": []}]},
+    {
       "name": "hydra.ext.python.utils.pyExpressionToPySimpleStatement",
       "term": {
         "annotated": {

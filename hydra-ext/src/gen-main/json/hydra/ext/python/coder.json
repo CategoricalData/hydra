@@ -16809,34 +16809,17 @@
                                   "argument": {"variable": "b"},
                                   "function": {
                                     "application": {
-                                      "argument": {"variable": "tc"},
+                                      "argument": {"variable": "g"},
                                       "function": {"variable": "hydra.coderUtils.bindingMetadata"}}}}},
                               "function": {
                                 "application": {
                                   "argument": {
                                     "application": {
-                                      "argument": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "b"},
-                                                  "function": {
-                                                    "function": {
-                                                      "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
-                                              "function": {"variable": "hydra.coderUtils.isTrivialTerm"}}},
-                                          "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                                      "argument": {"variable": "b"},
                                       "function": {
                                         "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "b"},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {"variable": "tc"},
-                                                  "function": {"variable": "hydra.coderUtils.isComplexBinding"}}}}},
-                                          "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                          "argument": {"variable": "g"},
+                                          "function": {"variable": "hydra.ext.python.coder.shouldThunkBinding"}}}}},
                                   "function": {
                                     "typeApplication": {
                                       "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
@@ -16844,7 +16827,7 @@
                       "domain": [{"variable": "hydra.core.Binding"}],
                       "parameter": "b"}}},
                 "domain": [{"variable": "hydra.graph.Graph"}],
-                "parameter": "tc"}}}}},
+                "parameter": "g"}}}}},
       "type": [
         {
           "constraints": null,
@@ -16853,6 +16836,61 @@
               "codomain": {
                 "function": {
                   "codomain": {"maybe": {"variable": "hydra.core.Term"}},
+                  "domain": {"variable": "hydra.core.Binding"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.python.coder.shouldThunkBinding",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Determine if a binding should be thunked based on its complexity and triviality"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "b"},
+                                      "function": {
+                                        "function": {
+                                          "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
+                                  "function": {"variable": "hydra.coderUtils.isTrivialTerm"}}},
+                              "function": {"function": {"primitive": "hydra.lib.logic.not"}}}},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "b"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "g"},
+                                      "function": {"variable": "hydra.coderUtils.isComplexBinding"}}}}},
+                              "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                      "domain": [{"variable": "hydra.core.Binding"}],
+                      "parameter": "b"}}},
+                "domain": [{"variable": "hydra.graph.Graph"}],
+                "parameter": "g"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"literal": {"boolean": {}}},
                   "domain": {"variable": "hydra.core.Binding"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]},
@@ -16902,76 +16940,6 @@
                                                                 "body": {"variable": "hydra.coderUtils.analyzeFunctionTermWith"},
                                                                 "type": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
                                                             "type": {"variable": "t0"}}}}}}}}}}}}}}},
-                                "domain": [{"variable": "hydra.core.Term"}],
-                                "parameter": "term"}}},
-                          "domain": [{"variable": "hydra.ext.python.helpers.PythonEnvironment"}],
-                          "parameter": "env"}}},
-                    "domain": [{"variable": "hydra.context.Context"}],
-                    "parameter": "cx"}}}}},
-          "parameter": "t0"}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "either": {
-                          "left": {"variable": "t0"},
-                          "right": {
-                            "application": {
-                              "argument": {"variable": "hydra.ext.python.helpers.PythonEnvironment"},
-                              "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
-                      "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": ["t0"]}]},
-    {
-      "name": "hydra.ext.python.coder.analyzePythonFunctionInline",
-      "term": {
-        "typeLambda": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "@key": "description",
-                  "@value": {
-                    "literal": {
-                      "string": "Analyze a function term without recording binding metadata (for inline lambdas)"}}}],
-              "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "function": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {"variable": "term"},
-                                    "function": {
-                                      "application": {
-                                        "argument": {"variable": "env"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.ext.python.coder.pythonEnvironmentSetGraph"},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"variable": "hydra.ext.python.coder.pythonEnvironmentGetGraph"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "cx"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"variable": "hydra.coderUtils.analyzeFunctionTermInline"},
-                                                            "type": {"variable": "hydra.ext.python.helpers.PythonEnvironment"}}},
-                                                        "type": {"variable": "t0"}}}}}}}}}}}}},
                                 "domain": [{"variable": "hydra.core.Term"}],
                                 "parameter": "term"}}},
                           "domain": [{"variable": "hydra.ext.python.helpers.PythonEnvironment"}],
@@ -21090,7 +21058,7 @@
                                                                       "argument": {"variable": "cx"},
                                                                       "function": {
                                                                         "typeApplication": {
-                                                                          "body": {"variable": "hydra.ext.python.coder.analyzePythonFunctionInline"},
+                                                                          "body": {"variable": "hydra.ext.python.coder.analyzePythonFunction"},
                                                                           "type": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.error.OtherError"},
@@ -25843,16 +25811,80 @@
                                                                                                                     "term": {
                                                                                                                       "application": {
                                                                                                                         "argument": {
-                                                                                                                          "list": [
-                                                                                                                            {"variable": "pyArg"},
-                                                                                                                            {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {
+                                                                                                                              "list": [
+                                                                                                                                {"variable": "pyArg"},
+                                                                                                                                {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {"variable": "pyVariantName"},
+                                                                                                                                    "function": {"variable": "hydra.ext.python.utils.pyNameToPyExpression"}}}]},
+                                                                                                                            "function": {
                                                                                                                               "application": {
-                                                                                                                                "argument": {"variable": "pyVariantName"},
-                                                                                                                                "function": {"variable": "hydra.ext.python.utils.pyNameToPyExpression"}}}]},
+                                                                                                                                "argument": {"variable": "isinstancePrimary"},
+                                                                                                                                "function": {"variable": "hydra.ext.python.utils.functionCall"}}}}},
                                                                                                                         "function": {
                                                                                                                           "application": {
-                                                                                                                            "argument": {"variable": "isinstancePrimary"},
-                                                                                                                            "function": {"variable": "hydra.ext.python.utils.functionCall"}}}}},
+                                                                                                                            "argument": {
+                                                                                                                              "union": {
+                                                                                                                                "field": {
+                                                                                                                                  "name": "simple",
+                                                                                                                                  "term": {
+                                                                                                                                    "wrap": {
+                                                                                                                                      "body": {
+                                                                                                                                        "list": [
+                                                                                                                                          {
+                                                                                                                                            "wrap": {
+                                                                                                                                              "body": {
+                                                                                                                                                "list": [
+                                                                                                                                                  {
+                                                                                                                                                    "union": {
+                                                                                                                                                      "field": {
+                                                                                                                                                        "name": "simple",
+                                                                                                                                                        "term": {
+                                                                                                                                                          "record": {
+                                                                                                                                                            "fields": [
+                                                                                                                                                              {
+                                                                                                                                                                "name": "lhs",
+                                                                                                                                                                "term": {
+                                                                                                                                                                  "application": {
+                                                                                                                                                                    "argument": {"variable": "pyArg"},
+                                                                                                                                                                    "function": {"variable": "hydra.ext.python.utils.pyExpressionToBitwiseOr"}}}},
+                                                                                                                                                              {
+                                                                                                                                                                "name": "rhs",
+                                                                                                                                                                "term": {
+                                                                                                                                                                  "list": [
+                                                                                                                                                                    {
+                                                                                                                                                                      "record": {
+                                                                                                                                                                        "fields": [
+                                                                                                                                                                          {
+                                                                                                                                                                            "name": "operator",
+                                                                                                                                                                            "term": {
+                                                                                                                                                                              "union": {
+                                                                                                                                                                                "field": {"name": "eq", "term": {"unit": {}}},
+                                                                                                                                                                                "typeName": "hydra.ext.python.syntax.CompareOp"}}},
+                                                                                                                                                                          {
+                                                                                                                                                                            "name": "rhs",
+                                                                                                                                                                            "term": {
+                                                                                                                                                                              "application": {
+                                                                                                                                                                                "argument": {
+                                                                                                                                                                                  "application": {
+                                                                                                                                                                                    "argument": {"variable": "pyVariantName"},
+                                                                                                                                                                                    "function": {"variable": "hydra.ext.python.utils.pyNameToPyExpression"}}},
+                                                                                                                                                                                "function": {"variable": "hydra.ext.python.utils.pyExpressionToBitwiseOr"}}}}],
+                                                                                                                                                                        "typeName": "hydra.ext.python.syntax.CompareOpBitwiseOrPair"}}]}}],
+                                                                                                                                                            "typeName": "hydra.ext.python.syntax.Comparison"}}},
+                                                                                                                                                      "typeName": "hydra.ext.python.syntax.Inversion"}}]},
+                                                                                                                                              "typeName": "hydra.ext.python.syntax.Conjunction"}}]},
+                                                                                                                                      "typeName": "hydra.ext.python.syntax.Disjunction"}}},
+                                                                                                                                "typeName": "hydra.ext.python.syntax.Expression"}},
+                                                                                                                            "function": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "isEnum"},
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                                                    "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}},
                                                                                                                     "type": [
                                                                                                                       {
                                                                                                                         "constraints": null,
