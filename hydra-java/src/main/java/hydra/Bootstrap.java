@@ -217,7 +217,7 @@ public class Bootstrap {
         long mainFileCount = 0;
         try {
             mainFileCount = Files.walk(Paths.get(outMain))
-                    .filter(p -> p.toString().endsWith(ext))
+                    .filter(p -> p.toString().endsWith(ext) && !p.getFileName().toString().equals("__init__.py"))
                     .count();
         } catch (Exception e) {
             // ignore
@@ -280,7 +280,7 @@ public class Bootstrap {
 
             try {
                 testFileCount = Files.walk(Paths.get(outTest))
-                        .filter(p -> p.toString().endsWith(ext))
+                        .filter(p -> p.toString().endsWith(ext) && !p.getFileName().toString().equals("__init__.py"))
                         .count();
             } catch (Exception e) {
                 // ignore
