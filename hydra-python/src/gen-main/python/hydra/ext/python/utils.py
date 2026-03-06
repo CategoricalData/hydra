@@ -212,20 +212,16 @@ def decode_py_inversion_to_py_primary(i: hydra.ext.python.syntax.Inversion) -> M
 def decode_py_conjunction_to_py_primary(c: hydra.ext.python.syntax.Conjunction) -> Maybe[hydra.ext.python.syntax.Primary]:
     r"""Decode a Conjunction to a Primary if possible."""
     
-    @lru_cache(1)
-    def inversions() -> frozenlist[hydra.ext.python.syntax.Inversion]:
-        return c.value
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(inversions()), 1), (lambda : decode_py_inversion_to_py_primary(hydra.lib.lists.head(inversions()))), (lambda : Nothing()))
+    inversions = c.value
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(inversions), 1), (lambda : decode_py_inversion_to_py_primary(hydra.lib.lists.head(inversions))), (lambda : Nothing()))
 
 def decode_py_expression_to_py_primary(e: hydra.ext.python.syntax.Expression) -> Maybe[hydra.ext.python.syntax.Primary]:
     r"""Decode an Expression to a Primary if possible."""
     
     match e:
         case hydra.ext.python.syntax.ExpressionSimple(value=disj):
-            @lru_cache(1)
-            def conjunctions() -> frozenlist[hydra.ext.python.syntax.Conjunction]:
-                return disj.value
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(conjunctions()), 1), (lambda : decode_py_conjunction_to_py_primary(hydra.lib.lists.head(conjunctions()))), (lambda : Nothing()))
+            conjunctions = disj.value
+            return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(conjunctions), 1), (lambda : decode_py_conjunction_to_py_primary(hydra.lib.lists.head(conjunctions))), (lambda : Nothing()))
         
         case _:
             return Nothing()
@@ -311,6 +307,11 @@ def py_closed_pattern_to_py_patterns(p: hydra.ext.python.syntax.ClosedPattern) -
     r"""Convert a ClosedPattern to Patterns."""
     
     return cast(hydra.ext.python.syntax.Patterns, hydra.ext.python.syntax.PatternsPattern(cast(hydra.ext.python.syntax.Pattern, hydra.ext.python.syntax.PatternOr(hydra.ext.python.syntax.OrPattern((p,))))))
+
+def py_expression_to_bitwise_or(e: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.BitwiseOr:
+    r"""Convert an Expression to a BitwiseOr, wrapping in parens if needed."""
+    
+    return hydra.ext.python.syntax.BitwiseOr(Nothing(), hydra.ext.python.syntax.BitwiseXor(Nothing(), hydra.ext.python.syntax.BitwiseAnd(Nothing(), hydra.ext.python.syntax.ShiftExpression(Nothing(), hydra.ext.python.syntax.Sum(Nothing(), hydra.ext.python.syntax.Term(Nothing(), cast(hydra.ext.python.syntax.Factor, hydra.ext.python.syntax.FactorSimple(hydra.ext.python.syntax.Power(hydra.ext.python.syntax.AwaitPrimary(False, cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomGroup(cast(hydra.ext.python.syntax.Group, hydra.ext.python.syntax.GroupExpression(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(e))))))))), Nothing())))))))))
 
 def py_expression_to_disjunction(e: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.Disjunction:
     r"""Convert an Expression to a Disjunction, wrapping in parens if needed."""
@@ -407,12 +408,8 @@ def type_alias_statement310(name: hydra.ext.python.syntax.Name, _tparams: T0, mc
 def union_type_class_statements310(name: hydra.ext.python.syntax.Name, mcomment: Maybe[str], tyexpr: hydra.ext.python.syntax.Expression, extra_stmts: frozenlist[hydra.ext.python.syntax.Statement]) -> frozenlist[hydra.ext.python.syntax.Statement]:
     r"""Generate a subscriptable union class for Python 3.10."""
     
-    @lru_cache(1)
-    def name_str() -> str:
-        return name.value
-    @lru_cache(1)
-    def meta_name() -> hydra.ext.python.syntax.Name:
-        return hydra.ext.python.syntax.Name(hydra.lib.strings.cat2(hydra.lib.strings.cat2("_", name_str()), "Meta"))
+    name_str = name.value
+    meta_name = hydra.ext.python.syntax.Name(hydra.lib.strings.cat2(hydra.lib.strings.cat2("_", name_str), "Meta"))
     @lru_cache(1)
     def doc_string() -> str:
         return hydra.serialization.print_expr(hydra.ext.python.serde.encode_expression(tyexpr))
@@ -424,7 +421,7 @@ def union_type_class_statements310(name: hydra.ext.python.syntax.Name, mcomment:
         return cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementFunction(hydra.ext.python.syntax.FunctionDefinition(Nothing(), hydra.ext.python.syntax.FunctionDefRaw(False, hydra.ext.python.syntax.Name("__getitem__"), (), Just(get_item_params()), Nothing(), Nothing(), indented_block(Nothing(), ((return_object(),),))))))))
     @lru_cache(1)
     def meta_class() -> hydra.ext.python.syntax.Statement:
-        return py_class_definition_to_py_statement(hydra.ext.python.syntax.ClassDefinition(Nothing(), meta_name(), (), Just(py_expressions_to_py_args((cast(hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.ExpressionSimple(hydra.ext.python.syntax.Disjunction((hydra.ext.python.syntax.Conjunction((cast(hydra.ext.python.syntax.Inversion, hydra.ext.python.syntax.InversionSimple(hydra.ext.python.syntax.Comparison(hydra.ext.python.syntax.BitwiseOr(Nothing(), hydra.ext.python.syntax.BitwiseXor(Nothing(), hydra.ext.python.syntax.BitwiseAnd(Nothing(), hydra.ext.python.syntax.ShiftExpression(Nothing(), hydra.ext.python.syntax.Sum(Nothing(), hydra.ext.python.syntax.Term(Nothing(), cast(hydra.ext.python.syntax.Factor, hydra.ext.python.syntax.FactorSimple(hydra.ext.python.syntax.Power(hydra.ext.python.syntax.AwaitPrimary(False, cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(hydra.ext.python.syntax.Name("type")))))), Nothing()))))))))), ()))),)),)))),))), indented_block(Nothing(), ((get_item_method(),),))))
+        return py_class_definition_to_py_statement(hydra.ext.python.syntax.ClassDefinition(Nothing(), meta_name, (), Just(py_expressions_to_py_args((cast(hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.ExpressionSimple(hydra.ext.python.syntax.Disjunction((hydra.ext.python.syntax.Conjunction((cast(hydra.ext.python.syntax.Inversion, hydra.ext.python.syntax.InversionSimple(hydra.ext.python.syntax.Comparison(hydra.ext.python.syntax.BitwiseOr(Nothing(), hydra.ext.python.syntax.BitwiseXor(Nothing(), hydra.ext.python.syntax.BitwiseAnd(Nothing(), hydra.ext.python.syntax.ShiftExpression(Nothing(), hydra.ext.python.syntax.Sum(Nothing(), hydra.ext.python.syntax.Term(Nothing(), cast(hydra.ext.python.syntax.Factor, hydra.ext.python.syntax.FactorSimple(hydra.ext.python.syntax.Power(hydra.ext.python.syntax.AwaitPrimary(False, cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(hydra.ext.python.syntax.Name("type")))))), Nothing()))))))))), ()))),)),)))),))), indented_block(Nothing(), ((get_item_method(),),))))
     @lru_cache(1)
     def doc_stmt() -> hydra.ext.python.syntax.Statement:
         return py_expression_to_py_statement(triple_quoted_string(doc_string()))
@@ -433,7 +430,7 @@ def union_type_class_statements310(name: hydra.ext.python.syntax.Name, mcomment:
         return hydra.lib.logic.if_else(hydra.lib.lists.null(extra_stmts), (lambda : (pass_stmt := py_simple_statement_to_py_statement(cast(hydra.ext.python.syntax.SimpleStatement, hydra.ext.python.syntax.SimpleStatementPass())), ((doc_stmt(),), (pass_stmt,)))[1]), (lambda : ((doc_stmt(),), extra_stmts)))
     @lru_cache(1)
     def metaclass_arg() -> hydra.ext.python.syntax.Kwarg:
-        return hydra.ext.python.syntax.Kwarg(hydra.ext.python.syntax.Name("metaclass"), cast(hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.ExpressionSimple(hydra.ext.python.syntax.Disjunction((hydra.ext.python.syntax.Conjunction((cast(hydra.ext.python.syntax.Inversion, hydra.ext.python.syntax.InversionSimple(hydra.ext.python.syntax.Comparison(hydra.ext.python.syntax.BitwiseOr(Nothing(), hydra.ext.python.syntax.BitwiseXor(Nothing(), hydra.ext.python.syntax.BitwiseAnd(Nothing(), hydra.ext.python.syntax.ShiftExpression(Nothing(), hydra.ext.python.syntax.Sum(Nothing(), hydra.ext.python.syntax.Term(Nothing(), cast(hydra.ext.python.syntax.Factor, hydra.ext.python.syntax.FactorSimple(hydra.ext.python.syntax.Power(hydra.ext.python.syntax.AwaitPrimary(False, cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(meta_name()))))), Nothing()))))))))), ()))),)),)))))
+        return hydra.ext.python.syntax.Kwarg(hydra.ext.python.syntax.Name("metaclass"), cast(hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.ExpressionSimple(hydra.ext.python.syntax.Disjunction((hydra.ext.python.syntax.Conjunction((cast(hydra.ext.python.syntax.Inversion, hydra.ext.python.syntax.InversionSimple(hydra.ext.python.syntax.Comparison(hydra.ext.python.syntax.BitwiseOr(Nothing(), hydra.ext.python.syntax.BitwiseXor(Nothing(), hydra.ext.python.syntax.BitwiseAnd(Nothing(), hydra.ext.python.syntax.ShiftExpression(Nothing(), hydra.ext.python.syntax.Sum(Nothing(), hydra.ext.python.syntax.Term(Nothing(), cast(hydra.ext.python.syntax.Factor, hydra.ext.python.syntax.FactorSimple(hydra.ext.python.syntax.Power(hydra.ext.python.syntax.AwaitPrimary(False, cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(meta_name))))), Nothing()))))))))), ()))),)),)))))
     @lru_cache(1)
     def union_class() -> hydra.ext.python.syntax.Statement:
         return annotated_statement(mcomment, py_class_definition_to_py_statement(hydra.ext.python.syntax.ClassDefinition(Nothing(), name, (), Just(hydra.ext.python.syntax.Args((), (cast(hydra.ext.python.syntax.KwargOrStarred, hydra.ext.python.syntax.KwargOrStarredKwarg(metaclass_arg())),), ())), indented_block(Nothing(), body_groups()))))
@@ -442,9 +439,7 @@ def union_type_class_statements310(name: hydra.ext.python.syntax.Name, mcomment:
 def unit_variant_methods(class_name: hydra.ext.python.syntax.Name) -> frozenlist[hydra.ext.python.syntax.Statement]:
     r"""Generate __slots__, __eq__, and __hash__ methods for unit-typed union variants."""
     
-    @lru_cache(1)
-    def class_name_str() -> str:
-        return class_name.value
+    class_name_str = class_name.value
     @lru_cache(1)
     def slots_stmt() -> hydra.ext.python.syntax.Statement:
         return assignment_statement(hydra.ext.python.syntax.Name("__slots__"), py_primary_to_py_expression(cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomTuple(hydra.ext.python.syntax.Tuple(())))))))
@@ -456,7 +451,7 @@ def unit_variant_methods(class_name: hydra.ext.python.syntax.Name) -> frozenlist
         return cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementFunction(hydra.ext.python.syntax.FunctionDefinition(Nothing(), hydra.ext.python.syntax.FunctionDefRaw(False, hydra.ext.python.syntax.Name("__eq__"), (), Just(self_other_params()), Nothing(), Nothing(), indented_block(Nothing(), ((return_isinstance(),),))))))))
     @lru_cache(1)
     def return_hash() -> hydra.ext.python.syntax.Statement:
-        return py_simple_statement_to_py_statement(cast(hydra.ext.python.syntax.SimpleStatement, hydra.ext.python.syntax.SimpleStatementReturn(hydra.ext.python.syntax.ReturnStatement((cast(hydra.ext.python.syntax.StarExpression, hydra.ext.python.syntax.StarExpressionSimple(function_call(cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(hydra.ext.python.syntax.Name("hash"))))), (double_quoted_string(class_name_str()),)))),)))))
+        return py_simple_statement_to_py_statement(cast(hydra.ext.python.syntax.SimpleStatement, hydra.ext.python.syntax.SimpleStatementReturn(hydra.ext.python.syntax.ReturnStatement((cast(hydra.ext.python.syntax.StarExpression, hydra.ext.python.syntax.StarExpressionSimple(function_call(cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(hydra.ext.python.syntax.Name("hash"))))), (double_quoted_string(class_name_str),)))),)))))
     @lru_cache(1)
     def hash_method() -> hydra.ext.python.syntax.Statement:
         return cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementCompound(cast(hydra.ext.python.syntax.CompoundStatement, hydra.ext.python.syntax.CompoundStatementFunction(hydra.ext.python.syntax.FunctionDefinition(Nothing(), hydra.ext.python.syntax.FunctionDefRaw(False, hydra.ext.python.syntax.Name("__hash__"), (), Just(self_only_params()), Nothing(), Nothing(), indented_block(Nothing(), ((return_hash(),),))))))))

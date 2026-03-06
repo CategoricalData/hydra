@@ -59,12 +59,10 @@ def pop_stack_until(v: int, st0: hydra.topology.TarjanState) -> tuple[frozenlist
         @lru_cache(1)
         def xs() -> frozenlist[int]:
             return hydra.lib.lists.tail(st.stack)
-        @lru_cache(1)
-        def new_st() -> hydra.topology.TarjanState:
-            return hydra.topology.TarjanState(st.counter, st.indices, st.low_links, xs(), st.on_stack, st.sccs)
+        new_st = hydra.topology.TarjanState(st.counter, st.indices, st.low_links, xs(), st.on_stack, st.sccs)
         @lru_cache(1)
         def new_st2() -> hydra.topology.TarjanState:
-            return hydra.topology.TarjanState(new_st().counter, new_st().indices, new_st().low_links, new_st().stack, hydra.lib.sets.delete(x(), st.on_stack), new_st().sccs)
+            return hydra.topology.TarjanState(new_st.counter, new_st.indices, new_st.low_links, new_st.stack, hydra.lib.sets.delete(x(), st.on_stack), new_st.sccs)
         @lru_cache(1)
         def acc_() -> frozenlist[int]:
             return hydra.lib.lists.cons(x(), acc)

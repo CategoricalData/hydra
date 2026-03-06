@@ -317,10 +317,8 @@ def java_interface_declaration_to_java_class_body_declaration(nid: hydra.ext.jav
     return cast(hydra.ext.java.syntax.ClassBodyDeclaration, hydra.ext.java.syntax.ClassBodyDeclarationClassMember(cast(hydra.ext.java.syntax.ClassMemberDeclaration, hydra.ext.java.syntax.ClassMemberDeclarationInterface(cast(hydra.ext.java.syntax.InterfaceDeclaration, hydra.ext.java.syntax.InterfaceDeclarationNormalInterface(nid))))))
 
 def variable_to_java_identifier(name: hydra.core.Name) -> hydra.ext.java.syntax.Identifier:
-    @lru_cache(1)
-    def v() -> str:
-        return name.value
-    return hydra.lib.logic.if_else(hydra.lib.equality.equal(v(), "_"), (lambda : hydra.ext.java.syntax.Identifier("ignored")), (lambda : hydra.ext.java.syntax.Identifier(sanitize_java_name(v()))))
+    v = name.value
+    return hydra.lib.logic.if_else(hydra.lib.equality.equal(v, "_"), (lambda : hydra.ext.java.syntax.Identifier("ignored")), (lambda : hydra.ext.java.syntax.Identifier(sanitize_java_name(v))))
 
 def java_lambda(v: hydra.core.Name, body: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.Expression:
     return cast(hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.ExpressionLambda(hydra.ext.java.syntax.LambdaExpression(cast(hydra.ext.java.syntax.LambdaParameters, hydra.ext.java.syntax.LambdaParametersSingle(variable_to_java_identifier(v))), cast(hydra.ext.java.syntax.LambdaBody, hydra.ext.java.syntax.LambdaBodyExpression(body)))))
@@ -389,12 +387,10 @@ def java_reference_type_to_raw_type(rt: hydra.ext.java.syntax.ReferenceType):
                 return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.syntax.ClassType(anns, qual, id, ())))))
             
             case hydra.ext.java.syntax.ClassOrInterfaceTypeInterface(value=it):
-                @lru_cache(1)
-                def ct() -> hydra.ext.java.syntax.ClassType:
-                    return it.value
-                anns = ct().annotations
-                qual = ct().qualifier
-                id = ct().identifier
+                ct = it.value
+                anns = ct.annotations
+                qual = ct.qualifier
+                id = ct.identifier
                 return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeInterface(hydra.ext.java.syntax.InterfaceType(hydra.ext.java.syntax.ClassType(anns, qual, id, ()))))))
             
             case _:
@@ -503,10 +499,8 @@ def make_constructor(aliases: hydra.ext.java.helpers.Aliases, el_name: hydra.cor
     @lru_cache(1)
     def mods() -> frozenlist[hydra.ext.java.syntax.ConstructorModifier]:
         return (hydra.lib.logic.if_else(private, (lambda : cast(hydra.ext.java.syntax.ConstructorModifier, hydra.ext.java.syntax.ConstructorModifierPrivate())), (lambda : cast(hydra.ext.java.syntax.ConstructorModifier, hydra.ext.java.syntax.ConstructorModifierPublic()))),)
-    @lru_cache(1)
-    def body() -> hydra.ext.java.syntax.ConstructorBody:
-        return hydra.ext.java.syntax.ConstructorBody(Nothing(), stmts)
-    return cast(hydra.ext.java.syntax.ClassBodyDeclaration, hydra.ext.java.syntax.ClassBodyDeclarationConstructorDeclaration(hydra.ext.java.syntax.ConstructorDeclaration(mods(), cons(), Nothing(), body())))
+    body = hydra.ext.java.syntax.ConstructorBody(Nothing(), stmts)
+    return cast(hydra.ext.java.syntax.ClassBodyDeclaration, hydra.ext.java.syntax.ClassBodyDeclarationConstructorDeclaration(hydra.ext.java.syntax.ConstructorDeclaration(mods(), cons(), Nothing(), body)))
 
 def method_declaration(mods: frozenlist[hydra.ext.java.syntax.MethodModifier], tparams: frozenlist[hydra.ext.java.syntax.TypeParameter], anns: frozenlist[hydra.ext.java.syntax.Annotation], method_name: str, params: frozenlist[hydra.ext.java.syntax.FormalParameter], result: hydra.ext.java.syntax.Result, stmts: Maybe[frozenlist[hydra.ext.java.syntax.BlockStatement]]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
     return java_method_declaration_to_java_class_body_declaration(hydra.ext.java.syntax.MethodDeclaration(anns, mods, java_method_header(tparams, method_name, params, result), java_method_body(stmts)))
@@ -604,12 +598,10 @@ def to_java_array_type(t: hydra.ext.java.syntax.Type, cx: hydra.context.Context)
                 return Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeArray(hydra.ext.java.syntax.ArrayType(hydra.ext.java.syntax.Dims(((),)), cast(hydra.ext.java.syntax.ArrayType_Variant, hydra.ext.java.syntax.ArrayType_VariantClassOrInterface(cit))))))))
             
             case hydra.ext.java.syntax.ReferenceTypeArray(value=at):
-                @lru_cache(1)
-                def old_dims() -> frozenlist[frozenlist[hydra.ext.java.syntax.Annotation]]:
-                    return at.dims.value
+                old_dims = at.dims.value
                 @lru_cache(1)
                 def new_dims() -> hydra.ext.java.syntax.Dims:
-                    return hydra.ext.java.syntax.Dims(hydra.lib.lists.concat2(old_dims(), ((),)))
+                    return hydra.ext.java.syntax.Dims(hydra.lib.lists.concat2(old_dims, ((),)))
                 variant = at.variant
                 return Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeArray(hydra.ext.java.syntax.ArrayType(new_dims(), variant))))))
             

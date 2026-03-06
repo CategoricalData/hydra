@@ -90,12 +90,10 @@ def for_type_reference(cx: hydra.coders.AdapterContext, name: hydra.core.Name) -
         @lru_cache(1)
         def new_adapters() -> FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
             return hydra.lib.maps.insert(name, placeholder, adapters0)
-        @lru_cache(1)
-        def new_cx() -> hydra.coders.AdapterContext:
-            return hydra.coders.AdapterContext(cx2.graph, cx2.language, new_adapters())
+        new_cx = hydra.coders.AdapterContext(cx2.graph, cx2.language, new_adapters())
         @lru_cache(1)
         def mt() -> Maybe[hydra.core.Type]:
-            return hydra.schemas.resolve_type(new_cx().graph, cast(hydra.core.Type, hydra.core.TypeVariable(name)))
+            return hydra.schemas.resolve_type(new_cx.graph, cast(hydra.core.Type, hydra.core.TypeVariable(name)))
         return hydra.lib.maybes.maybe(Right(hydra.compute.Adapter(lossy, cast(hydra.core.Type, hydra.core.TypeVariable(name)), cast(hydra.core.Type, hydra.core.TypeVariable(name)), hydra.adapt.utils.bidirectional((lambda dir, _cx, term: Right(term))))), (lambda v1: for_type(cx2, adapters0, v1)), mt())
     lossy = False
     adapters = cx.adapters

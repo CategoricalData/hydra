@@ -460,12 +460,10 @@ def check_type(cx: hydra.context.Context, tx: hydra.graph.Graph, term: hydra.cor
 def check_type_subst(cx: hydra.context.Context, tx: hydra.graph.Graph, subst: hydra.typing.TypeSubst) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.typing.TypeSubst]:
     r"""Sanity-check a type substitution arising from unification. Specifically, check that schema types have not been inappropriately unified with type variables inferred from terms."""
     
-    @lru_cache(1)
-    def s() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-        return subst.value
+    s = subst.value
     @lru_cache(1)
     def vars() -> frozenset[hydra.core.Name]:
-        return hydra.lib.sets.from_list(hydra.lib.maps.keys(s()))
+        return hydra.lib.sets.from_list(hydra.lib.maps.keys(s))
     @lru_cache(1)
     def suspect_vars() -> frozenset[hydra.core.Name]:
         return hydra.lib.sets.intersection(vars(), hydra.lib.sets.from_list(hydra.lib.maps.keys(tx.schema_types)))
@@ -487,7 +485,7 @@ def check_type_subst(cx: hydra.context.Context, tx: hydra.graph.Graph, subst: hy
         return hydra.lib.sets.from_list(hydra.lib.lists.filter((lambda v: hydra.lib.maybes.maybe(False, (lambda x1: is_nominal(x1)), hydra.lexical.dereference_schema_type(v, tx.schema_types))), hydra.lib.sets.to_list(suspect_vars())))
     @lru_cache(1)
     def bad_pairs() -> frozenlist[tuple[hydra.core.Name, hydra.core.Type]]:
-        return hydra.lib.lists.filter((lambda p: hydra.lib.sets.member(hydra.lib.pairs.first(p), bad_vars())), hydra.lib.maps.to_list(s()))
+        return hydra.lib.lists.filter((lambda p: hydra.lib.sets.member(hydra.lib.pairs.first(p), bad_vars())), hydra.lib.maps.to_list(s))
     def print_pair(p: tuple[hydra.core.Name, hydra.core.Type]) -> str:
         return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.pairs.first(p).value, " --> "), hydra.show.core.type(hydra.lib.pairs.second(p)))
     return hydra.lib.logic.if_else(hydra.lib.sets.null(bad_vars()), (lambda : Right(subst)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2("Schema type(s) incorrectly unified: {", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda x1: print_pair(x1)), bad_pairs()))), "}")), cx))))

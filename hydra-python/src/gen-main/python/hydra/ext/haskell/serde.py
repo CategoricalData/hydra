@@ -156,7 +156,7 @@ def type_to_expr(htype: hydra.ext.haskell.ast.Type) -> hydra.ast.Expr:
             return hydra.serialization.ifx(hydra.ext.haskell.operators.arrow_op, type_to_expr(dom), type_to_expr(cod))
         
         case hydra.ext.haskell.ast.TypeList(value=htype_):
-            return hydra.serialization.bracket_list(hydra.serialization.inline_style(), (type_to_expr(htype_),))
+            return hydra.serialization.bracket_list(hydra.serialization.inline_style, (type_to_expr(htype_),))
         
         case hydra.ext.haskell.ast.TypeTuple(value=types):
             return hydra.serialization.paren_list(False, hydra.lib.lists.map((lambda x1: type_to_expr(x1)), types))
@@ -468,13 +468,13 @@ def import_to_expr(import_: hydra.ext.haskell.ast.Import) -> hydra.ast.Expr:
     def hiding_sec(spec: hydra.ext.haskell.ast.SpecImport) -> hydra.ast.Expr:
         match spec:
             case hydra.ext.haskell.ast.SpecImportHiding(value=names):
-                return hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("hiding "), (hydra.serialization.parens(hydra.serialization.comma_sep(hydra.serialization.inline_style(), hydra.lib.lists.map((lambda x1: import_export_spec_to_expr(x1)), names))),)))
+                return hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("hiding "), (hydra.serialization.parens(hydra.serialization.comma_sep(hydra.serialization.inline_style, hydra.lib.lists.map((lambda x1: import_export_spec_to_expr(x1)), names))),)))
             
             case _:
                 raise TypeError("Unsupported SpecImport")
     @lru_cache(1)
     def parts() -> frozenlist[hydra.ast.Expr]:
-        return hydra.lib.maybes.cat((Just(hydra.serialization.cst("import")), hydra.lib.logic.if_else(qual, (lambda : Just(hydra.serialization.cst("qualified"))), (lambda : Nothing())), Just(hydra.serialization.cst(name())), hydra.lib.maybes.map((lambda m: hydra.serialization.cst(hydra.lib.strings.cat2("as ", m.value))), mod), hydra.lib.maybes.map((lambda x1: hiding_sec(x1)), mspec)))
+        return hydra.lib.maybes.cat((Just(hydra.serialization.cst("import")), hydra.lib.logic.if_else(qual, (lambda : Just(hydra.serialization.cst("qualified"))), (lambda : Nothing())), Just(hydra.serialization.cst(name)), hydra.lib.maybes.map((lambda m: hydra.serialization.cst(hydra.lib.strings.cat2("as ", m.value))), mod), hydra.lib.maybes.map((lambda x1: hiding_sec(x1)), mspec)))
     return hydra.serialization.space_sep(parts())
 
 def module_head_to_expr(module_head: hydra.ext.haskell.ast.ModuleHead) -> hydra.ast.Expr:
@@ -485,7 +485,7 @@ def module_head_to_expr(module_head: hydra.ext.haskell.ast.ModuleHead) -> hydra.
     mname = mod_name.value
     @lru_cache(1)
     def head() -> hydra.ast.Expr:
-        return hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("module"), hydra.lib.lists.cons(hydra.serialization.cst(mname()), (hydra.serialization.cst("where"),))))
+        return hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("module"), hydra.lib.lists.cons(hydra.serialization.cst(mname), (hydra.serialization.cst("where"),))))
     return hydra.lib.maybes.maybe(head(), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), hydra.lib.lists.cons(hydra.serialization.cst(""), (head(),))))), mc)
 
 def to_simple_comments(c: str) -> str:

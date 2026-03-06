@@ -135,24 +135,20 @@ def escape_control_chars_in_json(input: frozenlist[int]) -> frozenlist[int]:
 def format_primitive(prim: hydra.graph.Primitive) -> str:
     r"""Format a primitive for the lexicon."""
     
-    @lru_cache(1)
-    def name() -> str:
-        return prim.name.value
+    name = prim.name.value
     @lru_cache(1)
     def type_str() -> str:
         return hydra.show.core.type_scheme(prim.type)
-    return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", name()), " : "), type_str())
+    return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", name), " : "), type_str())
 
 def format_term_binding(binding: hydra.core.Binding) -> str:
     r"""Format a term binding for the lexicon."""
     
-    @lru_cache(1)
-    def name() -> str:
-        return binding.name.value
+    name = binding.name.value
     @lru_cache(1)
     def type_str() -> str:
         return hydra.lib.maybes.maybe("?", (lambda scheme: hydra.show.core.type_scheme(scheme)), binding.type)
-    return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", name()), " : "), type_str())
+    return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", name), " : "), type_str())
 
 def format_type_binding(graph: hydra.graph.Graph, binding: hydra.core.Binding) -> Either[hydra.error.DecodingError, str]:
     r"""Format a type binding for the lexicon."""

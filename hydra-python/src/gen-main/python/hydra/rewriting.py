@@ -923,10 +923,8 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                             @lru_cache(1)
                             def new_val() -> hydra.core.Term:
                                 return rewrite_with_subst(((subst(), bound_vars()), next()), b().term)
-                            @lru_cache(1)
-                            def b1() -> hydra.core.Binding:
-                                return hydra.core.Binding(b().name, new_val(), Nothing())
-                            return step(hydra.lib.lists.cons(b1(), acc), tl())
+                            b1 = hydra.core.Binding(b().name, new_val(), Nothing())
+                            return step(hydra.lib.lists.cons(b1, acc), tl())
                         def with_type(ts: hydra.core.TypeScheme) -> frozenlist[hydra.core.Binding]:
                             vars = ts.variables
                             typ = ts.type

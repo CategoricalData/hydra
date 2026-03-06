@@ -94,11 +94,9 @@ def literal_type(lt: hydra.core.LiteralType) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def field_type(ft: hydra.core.FieldType) -> str:
-    @lru_cache(1)
-    def fname() -> str:
-        return ft.name.value
+    fname = ft.name.value
     ftyp = ft.type
-    return hydra.lib.strings.cat((fname(), ":", type(ftyp)))
+    return hydra.lib.strings.cat((fname, ":", type(ftyp)))
 
 def type(typ: hydra.core.Type) -> str:
     r"""Show a type as a string."""
@@ -148,11 +146,9 @@ def type(typ: hydra.core.Type) -> str:
             return hydra.lib.strings.cat(("either<", type(left_typ), ", ", type(right_typ), ">"))
         
         case hydra.core.TypeForall(value=ft):
-            @lru_cache(1)
-            def var() -> str:
-                return ft.parameter.value
+            var = ft.parameter.value
             body = ft.body
-            return hydra.lib.strings.cat(("(∀", var(), ".", type(body), ")"))
+            return hydra.lib.strings.cat(("(∀", var, ".", type(body), ")"))
         
         case hydra.core.TypeFunction():
             @lru_cache(1)
@@ -198,11 +194,9 @@ def type(typ: hydra.core.Type) -> str:
             return name.value
         
         case hydra.core.TypeWrap(value=wt):
-            @lru_cache(1)
-            def tname() -> str:
-                return wt.type_name.value
+            tname = wt.type_name.value
             typ1 = wt.body
-            return hydra.lib.strings.cat(("wrap[", tname(), "](", type(typ1), ")"))
+            return hydra.lib.strings.cat(("wrap[", tname, "](", type(typ1), ")"))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -295,32 +289,24 @@ def type_scheme(ts: hydra.core.TypeScheme) -> str:
 def binding(el: hydra.core.Binding) -> str:
     r"""Show a binding as a string."""
     
-    @lru_cache(1)
-    def name() -> str:
-        return el.name.value
+    name = el.name.value
     t = el.term
     @lru_cache(1)
     def type_str() -> str:
         return hydra.lib.maybes.maybe("", (lambda ts: hydra.lib.strings.cat((":(", type_scheme(ts), ")"))), el.type)
-    return hydra.lib.strings.cat((name(), type_str(), " = ", term(t)))
+    return hydra.lib.strings.cat((name, type_str(), " = ", term(t)))
 
 def elimination(elm: hydra.core.Elimination) -> str:
     r"""Show an elimination as a string."""
     
     match elm:
         case hydra.core.EliminationRecord(value=proj):
-            @lru_cache(1)
-            def tname() -> str:
-                return proj.type_name.value
-            @lru_cache(1)
-            def fname() -> str:
-                return proj.field.value
-            return hydra.lib.strings.cat(("project(", tname(), "){", fname(), "}"))
+            tname = proj.type_name.value
+            fname = proj.field.value
+            return hydra.lib.strings.cat(("project(", tname, "){", fname, "}"))
         
         case hydra.core.EliminationUnion(value=cs):
-            @lru_cache(1)
-            def tname() -> str:
-                return cs.type_name.value
+            tname = cs.type_name.value
             mdef = cs.default
             cases = cs.cases
             @lru_cache(1)
@@ -329,7 +315,7 @@ def elimination(elm: hydra.core.Elimination) -> str:
             @lru_cache(1)
             def all_fields() -> frozenlist[hydra.core.Field]:
                 return hydra.lib.lists.concat((cases, default_field()))
-            return hydra.lib.strings.cat(("case(", tname(), ")", fields(all_fields())))
+            return hydra.lib.strings.cat(("case(", tname, ")", fields(all_fields())))
         
         case hydra.core.EliminationWrap(value=tname):
             return hydra.lib.strings.cat(("unwrap(", tname.value, ")"))
@@ -338,11 +324,9 @@ def elimination(elm: hydra.core.Elimination) -> str:
             raise AssertionError("Unreachable: all variants handled")
 
 def field(field: hydra.core.Field) -> str:
-    @lru_cache(1)
-    def fname() -> str:
-        return field.name.value
+    fname = field.name.value
     fterm = field.term
-    return hydra.lib.strings.cat((fname(), "=", term(fterm)))
+    return hydra.lib.strings.cat((fname, "=", term(fterm)))
 
 def fields(flds: frozenlist[hydra.core.Field]) -> str:
     r"""Show a list of fields as a string."""
@@ -378,15 +362,13 @@ def injection(inj: hydra.core.Injection) -> str:
 def lambda_(l: hydra.core.Lambda) -> str:
     r"""Show a lambda as a string."""
     
-    @lru_cache(1)
-    def v() -> str:
-        return l.parameter.value
+    v = l.parameter.value
     mt = l.domain
     body = l.body
     @lru_cache(1)
     def type_str() -> str:
         return hydra.lib.maybes.maybe("", (lambda t: hydra.lib.strings.cat2(":", type(t))), mt)
-    return hydra.lib.strings.cat(("λ", v(), type_str(), ".", term(body)))
+    return hydra.lib.strings.cat(("λ", v, type_str(), ".", term(body)))
 
 def let(l: hydra.core.Let) -> str:
     r"""Show a let expression as a string."""
@@ -456,21 +438,17 @@ def term(t: hydra.core.Term) -> str:
             return hydra.lib.strings.cat(("(", term(hydra.lib.pairs.first(p)), ", ", term(hydra.lib.pairs.second(p)), ")"))
         
         case hydra.core.TermRecord(value=rec):
-            @lru_cache(1)
-            def tname() -> str:
-                return rec.type_name.value
+            tname = rec.type_name.value
             flds = rec.fields
-            return hydra.lib.strings.cat(("record(", tname(), ")", fields(flds)))
+            return hydra.lib.strings.cat(("record(", tname, ")", fields(flds)))
         
         case hydra.core.TermSet(value=s):
             return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda x1: term(x1)), hydra.lib.sets.to_list(s))), "}"))
         
         case hydra.core.TermTypeLambda(value=ta):
-            @lru_cache(1)
-            def param() -> str:
-                return ta.parameter.value
+            param = ta.parameter.value
             body = ta.body
-            return hydra.lib.strings.cat(("Λ", param(), ".", term(body)))
+            return hydra.lib.strings.cat(("Λ", param, ".", term(body)))
         
         case hydra.core.TermTypeApplication(value=tt):
             t2 = tt.body
@@ -487,11 +465,9 @@ def term(t: hydra.core.Term) -> str:
             return name.value
         
         case hydra.core.TermWrap(value=wt):
-            @lru_cache(1)
-            def tname() -> str:
-                return wt.type_name.value
+            tname = wt.type_name.value
             term1 = wt.body
-            return hydra.lib.strings.cat(("wrap(", tname(), "){", term(term1), "}"))
+            return hydra.lib.strings.cat(("wrap(", tname, "){", term(term1), "}"))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

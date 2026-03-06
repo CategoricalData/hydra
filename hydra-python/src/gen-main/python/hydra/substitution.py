@@ -77,12 +77,10 @@ def singleton_type_subst(v: hydra.core.Name, t: hydra.core.Type) -> hydra.typing
 def subst_in_class_constraints(subst: hydra.typing.TypeSubst, constraints: FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]:
     r"""Apply a type substitution to class constraints, propagating to free variables."""
     
-    @lru_cache(1)
-    def subst_map() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-        return subst.value
+    subst_map = subst.value
     def insert_or_merge(var_name: T0, metadata: hydra.core.TypeVariableMetadata, acc: FrozenDict[T0, hydra.core.TypeVariableMetadata]) -> FrozenDict[T0, hydra.core.TypeVariableMetadata]:
         return hydra.lib.maybes.maybe(hydra.lib.maps.insert(var_name, metadata, acc), (lambda existing: (merged := hydra.core.TypeVariableMetadata(hydra.lib.sets.union(existing.classes, metadata.classes)), hydra.lib.maps.insert(var_name, merged, acc))[1]), hydra.lib.maps.lookup(var_name, acc))
-    return hydra.lib.lists.foldl((lambda acc, pair: (var_name := hydra.lib.pairs.first(pair), metadata := hydra.lib.pairs.second(pair), hydra.lib.maybes.maybe(insert_or_merge(var_name, metadata, acc), (lambda target_type: (free_vars := hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_type(target_type)), hydra.lib.lists.foldl((lambda acc2, free_var: insert_or_merge(free_var, metadata, acc2)), acc, free_vars))[1]), hydra.lib.maps.lookup(var_name, subst_map())))[2]), hydra.lib.maps.empty(), hydra.lib.maps.to_list(constraints))
+    return hydra.lib.lists.foldl((lambda acc, pair: (var_name := hydra.lib.pairs.first(pair), metadata := hydra.lib.pairs.second(pair), hydra.lib.maybes.maybe(insert_or_merge(var_name, metadata, acc), (lambda target_type: (free_vars := hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_type(target_type)), hydra.lib.lists.foldl((lambda acc2, free_var: insert_or_merge(free_var, metadata, acc2)), acc, free_vars))[1]), hydra.lib.maps.lookup(var_name, subst_map)))[2]), hydra.lib.maps.empty(), hydra.lib.maps.to_list(constraints))
 
 def subst_in_type_scheme(subst: hydra.typing.TypeSubst, ts: hydra.core.TypeScheme) -> hydra.core.TypeScheme:
     r"""Apply a type substitution to a type scheme."""
@@ -151,15 +149,13 @@ def subst_types_in_term(subst: hydra.typing.TypeSubst, term0: hydra.core.Term) -
 def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) -> hydra.core.Term:
     r"""Apply a term substitution to a term."""
     
-    @lru_cache(1)
-    def s() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
-        return subst.value
+    s = subst.value
     def rewrite(recurse: Callable[[hydra.core.Term], hydra.core.Term], term: hydra.core.Term):
         def with_lambda(l: hydra.core.Lambda) -> hydra.core.Term:
             v = l.parameter
             @lru_cache(1)
             def subst2() -> hydra.typing.TermSubst:
-                return hydra.typing.TermSubst(hydra.lib.maps.delete(v, s()))
+                return hydra.typing.TermSubst(hydra.lib.maps.delete(v, s))
             return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(v, l.domain, substitute_in_term(subst2(), l.body))))))
         def with_let(lt: hydra.core.Let) -> hydra.core.Term:
             bindings = lt.bindings
@@ -168,7 +164,7 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
                 return hydra.lib.sets.from_list(hydra.lib.lists.map((lambda v1: v1.name), bindings))
             @lru_cache(1)
             def subst2() -> hydra.typing.TermSubst:
-                return hydra.typing.TermSubst(hydra.lib.maps.filter_with_key((lambda k, v: hydra.lib.logic.not_(hydra.lib.sets.member(k, names()))), s()))
+                return hydra.typing.TermSubst(hydra.lib.maps.filter_with_key((lambda k, v: hydra.lib.logic.not_(hydra.lib.sets.member(k, names()))), s))
             def rewrite_binding(b: hydra.core.Binding) -> hydra.core.Binding:
                 return hydra.core.Binding(b.name, substitute_in_term(subst2(), b.term), b.type)
             return cast(hydra.core.Term, hydra.core.TermLet(hydra.core.Let(hydra.lib.lists.map((lambda x1: rewrite_binding(x1)), bindings), substitute_in_term(subst2(), lt.body))))
@@ -187,7 +183,7 @@ def substitute_in_term(subst: hydra.typing.TermSubst, term0: hydra.core.Term) ->
                 return with_let(l)
             
             case hydra.core.TermVariable(value=name):
-                return hydra.lib.maybes.maybe(recurse(term), (lambda sterm: sterm), hydra.lib.maps.lookup(name, s()))
+                return hydra.lib.maybes.maybe(recurse(term), (lambda sterm: sterm), hydra.lib.maps.lookup(name, s))
             
             case _:
                 return recurse(term)

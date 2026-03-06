@@ -148,7 +148,10 @@ def extend_graph_for_let(for_binding: Callable[[hydra.graph.Graph, hydra.core.Bi
     r"""Extend a graph by descending into a let body."""
     
     bindings = letrec.bindings
-    return hydra.graph.Graph(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b.term)), bindings)), g.bound_terms), hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, ts)), b.type)), bindings))), g.bound_types), g.class_constraints, hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.delete(b.name, s)), g.lambda_variables, bindings), hydra.lib.lists.foldl((lambda m, b: hydra.lib.maybes.maybe(hydra.lib.maps.delete(b.name, m), (lambda t: hydra.lib.maps.insert(b.name, t, m)), for_binding(g, b))), g.metadata, bindings), g.primitives, g.schema_types, g.type_variables)
+    @lru_cache(1)
+    def g2() -> hydra.graph.Graph:
+        return hydra.lexical.extend_graph_with_bindings(bindings, g)
+    return hydra.graph.Graph(hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda b: (b.name, b.term)), bindings)), g.bound_terms), hydra.lib.maps.union(hydra.lib.maps.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda b: hydra.lib.maybes.map((lambda ts: (b.name, ts)), b.type)), bindings))), g.bound_types), g.class_constraints, hydra.lib.lists.foldl((lambda s, b: hydra.lib.sets.delete(b.name, s)), g.lambda_variables, bindings), hydra.lib.lists.foldl((lambda m, b: hydra.lib.maybes.maybe(hydra.lib.maps.delete(b.name, m), (lambda t: hydra.lib.maps.insert(b.name, t, m)), for_binding(g2(), b))), g.metadata, bindings), g.primitives, g.schema_types, g.type_variables)
 
 def extend_graph_for_type_lambda(g: hydra.graph.Graph, tlam: hydra.core.TypeLambda) -> hydra.graph.Graph:
     r"""Extend a graph by descending into a type lambda body."""

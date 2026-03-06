@@ -64,9 +64,6 @@ def java_env_set_graph(g: hydra.graph.Graph, env: hydra.ext.java.helpers.JavaEnv
 def analyze_java_function(env: hydra.ext.java.helpers.JavaEnvironment, term: hydra.core.Term, cx: hydra.context.Context, g: T0) -> Either[T1, hydra.typing.FunctionStructure[hydra.ext.java.helpers.JavaEnvironment]]:
     return hydra.coder_utils.analyze_function_term(cx, (lambda x1: java_env_get_graph(x1)), (lambda x1, x2: java_env_set_graph(x1, x2)), env, term)
 
-def analyze_java_function_no_infer(env: hydra.ext.java.helpers.JavaEnvironment, term: hydra.core.Term, cx: T0, g: T1) -> Either[T2, hydra.typing.FunctionStructure[hydra.ext.java.helpers.JavaEnvironment]]:
-    return hydra.coder_utils.analyze_function_term_no_infer((lambda x1: java_env_get_graph(x1)), (lambda x1, x2: java_env_set_graph(x1, x2)), env, term)
-
 def extract_arg_type(_lhs: T0, typ: hydra.core.Type):
     def _hoist_hydra_ext_java_coder_extract_arg_type_1(at1, typ, v1):
         match v1:
@@ -320,10 +317,8 @@ def encode_literal_type(lt: hydra.core.LiteralType, cx: T0, g: T1):
             raise AssertionError("Unreachable: all variants handled")
 
 def is_lambda_bound_variable(name: hydra.core.Name) -> bool:
-    @lru_cache(1)
-    def v() -> str:
-        return name.value
-    return hydra.lib.equality.lte(hydra.lib.strings.length(v()), 4)
+    v = name.value
+    return hydra.lib.equality.lte(hydra.lib.strings.length(v), 4)
 
 def encode_type_resolve_if_typedef(aliases: T0, bound_vars: frozenset[hydra.core.Name], in_scope_type_params: frozenset[hydra.core.Name], name: hydra.core.Name, cx: T1, g: hydra.graph.Graph):
     return hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.sets.member(name, bound_vars), hydra.lib.sets.member(name, in_scope_type_params)), (lambda : Right(Nothing())), (lambda : hydra.lib.logic.if_else(is_lambda_bound_variable(name), (lambda : Right(Nothing())), (lambda : (schema_types := g.schema_types, (_hoist_body_1 := (lambda ts, v1: (lambda _: Right(Nothing()))(v1.value) if isinstance(v1, hydra.core.TypeRecord) else (lambda _: Right(Nothing()))(v1.value) if isinstance(v1, hydra.core.TypeUnion) else (lambda _: Right(Nothing()))(v1.value) if isinstance(v1, hydra.core.TypeWrap) else Right(Just(ts.type))), hydra.lib.maybes.cases(hydra.lib.maps.lookup(name, schema_types), Right(Nothing()), (lambda ts: hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(ts.variables)), (lambda : Right(Nothing())), (lambda : _hoist_body_1(ts, hydra.rewriting.deannotate_type(ts.type)))))))[1])[1]))))
@@ -612,10 +607,8 @@ def binding_name_to_file_path(name: hydra.core.Name) -> str:
     ns_ = qn().namespace
     local = qn().local
     sanitized = hydra.formatting.sanitize_with_underscores(hydra.ext.java.language.reserved_words(), local)
-    @lru_cache(1)
-    def unq() -> hydra.core.Name:
-        return hydra.names.unqualify_name(hydra.module.QualifiedName(ns_, sanitized()))
-    return hydra.adapt.utils.name_to_file_path(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.PASCAL, hydra.module.FileExtension("java"), unq())
+    unq = hydra.names.unqualify_name(hydra.module.QualifiedName(ns_, sanitized))
+    return hydra.adapt.utils.name_to_file_path(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.PASCAL, hydra.module.FileExtension("java"), unq)
 
 def fresh_java_name_go(base: hydra.core.Name, avoid: frozenset[hydra.core.Name], i: int) -> hydra.core.Name:
     @lru_cache(1)
@@ -1060,13 +1053,9 @@ def element_java_identifier_qualify(aliases: hydra.ext.java.helpers.Aliases, mns
     return hydra.ext.java.utils.name_to_java_name(aliases, hydra.names.unqualify_name(hydra.module.QualifiedName(mns, s))).value
 
 def elements_class_name(ns: hydra.module.Namespace) -> str:
-    @lru_cache(1)
-    def ns_str() -> str:
-        return ns.value
-    @lru_cache(1)
-    def parts() -> frozenlist[str]:
-        return hydra.lib.strings.split_on(".", ns_str())
-    return hydra.formatting.sanitize_with_underscores(hydra.ext.java.language.reserved_words(), hydra.formatting.capitalize(hydra.lib.lists.last(parts())))
+    ns_str = ns.value
+    parts = hydra.lib.strings.split_on(".", ns_str)
+    return hydra.formatting.sanitize_with_underscores(hydra.ext.java.language.reserved_words(), hydra.formatting.capitalize(hydra.lib.lists.last(parts)))
 
 def element_java_identifier(is_prim: bool, is_method: bool, aliases: hydra.ext.java.helpers.Aliases, name: hydra.core.Name) -> hydra.ext.java.syntax.Identifier:
     @lru_cache(1)
@@ -1311,10 +1300,8 @@ def bindings_to_statements(env: hydra.ext.java.helpers.JavaEnvironment, bindings
     @lru_cache(1)
     def aliases_extended() -> hydra.ext.java.helpers.Aliases:
         return hydra.ext.java.helpers.Aliases(aliases.current_namespace, aliases.packages, aliases.branch_vars, hydra.lib.sets.union(aliases.recursive_vars, recursive_vars()), aliases.in_scope_type_params, aliases.polymorphic_locals, hydra.lib.sets.union(aliases.in_scope_java_vars, binding_vars()), aliases.var_renames, aliases.lambda_vars, aliases.type_var_subst, aliases.trusted_type_vars, aliases.method_codomain, hydra.lib.sets.union(aliases.thunked_vars, thunked_vars()))
-    @lru_cache(1)
-    def env_extended() -> hydra.ext.java.helpers.JavaEnvironment:
-        return hydra.ext.java.helpers.JavaEnvironment(aliases_extended(), g_extended())
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(bindings), (lambda : Right(((), env_extended()))), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda names: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda n: to_decl_init(aliases_extended(), g_extended(), recursive_vars(), flat_bindings(), n, cx, g)), names), (lambda inits: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda n: to_decl_statement(env_extended(), aliases_extended(), g_extended(), recursive_vars(), thunked_vars(), flat_bindings(), n, cx, g)), names), (lambda decls: Right(hydra.lib.lists.concat2(hydra.lib.maybes.cat(inits), decls))))))), sorted()), (lambda groups: Right((hydra.lib.lists.concat(groups), env_extended()))))))
+    env_extended = hydra.ext.java.helpers.JavaEnvironment(aliases_extended(), g_extended())
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(bindings), (lambda : Right(((), env_extended))), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda names: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda n: to_decl_init(aliases_extended(), g_extended(), recursive_vars(), flat_bindings(), n, cx, g)), names), (lambda inits: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda n: to_decl_statement(env_extended, aliases_extended(), g_extended(), recursive_vars(), thunked_vars(), flat_bindings(), n, cx, g)), names), (lambda decls: Right(hydra.lib.lists.concat2(hydra.lib.maybes.cat(inits), decls))))))), sorted()), (lambda groups: Right((hydra.lib.lists.concat(groups), env_extended))))))
 
 def encode_application(env: hydra.ext.java.helpers.JavaEnvironment, app: hydra.core.Application, cx: hydra.context.Context, g0: hydra.graph.Graph):
     aliases = env.aliases
@@ -2011,11 +1998,9 @@ def is_non_comparable_type(typ: hydra.core.Type):
                 return False
 
 def compare_field_expr(other_var: str, ft: hydra.core.FieldType) -> hydra.ext.java.syntax.Expression:
-    @lru_cache(1)
-    def fname() -> str:
-        return ft.name.value
+    fname = ft.name.value
     ftype = ft.type
-    return hydra.lib.logic.if_else(is_binary_type(ftype), (lambda : arrays_compare_expr(other_var, fname())), (lambda : hydra.lib.logic.if_else(is_non_comparable_type(ftype), (lambda : hash_code_compare_expr(other_var, fname())), (lambda : comparable_compare_expr(other_var, fname())))))
+    return hydra.lib.logic.if_else(is_binary_type(ftype), (lambda : arrays_compare_expr(other_var, fname)), (lambda : hydra.lib.logic.if_else(is_non_comparable_type(ftype), (lambda : hash_code_compare_expr(other_var, fname)), (lambda : comparable_compare_expr(other_var, fname)))))
 
 def compare_and_return_stmts(other_var: str, f: hydra.core.FieldType) -> frozenlist[hydra.ext.java.syntax.BlockStatement]:
     return (cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(hydra.ext.java.utils.java_assignment_statement(cast(hydra.ext.java.syntax.LeftHandSide, hydra.ext.java.syntax.LeftHandSideExpressionName(hydra.ext.java.syntax.ExpressionName(Nothing(), hydra.ext.java.utils.java_identifier("cmp")))), compare_field_expr(other_var, f)))), cast(hydra.ext.java.syntax.BlockStatement, hydra.ext.java.syntax.BlockStatementStatement(cast(hydra.ext.java.syntax.Statement, hydra.ext.java.syntax.StatementIfThen(hydra.ext.java.syntax.IfThenStatement(cmp_not_zero_expr(), hydra.ext.java.utils.java_return_statement(Just(hydra.ext.java.utils.java_expression_name_to_java_expression(hydra.ext.java.syntax.ExpressionName(Nothing(), hydra.ext.java.utils.java_identifier("cmp")))))))))))
@@ -2044,15 +2029,13 @@ def constant_decl(java_name: str, aliases: hydra.ext.java.helpers.Aliases, name:
     @lru_cache(1)
     def name_name() -> hydra.ext.java.syntax.Identifier:
         return hydra.ext.java.utils.name_to_java_name(aliases, hydra.core.Name("hydra.core.Name"))
-    @lru_cache(1)
-    def env() -> hydra.ext.java.helpers.JavaEnvironment:
-        return hydra.ext.java.helpers.JavaEnvironment(aliases, g)
-    return hydra.lib.eithers.bind(encode_type(aliases, hydra.lib.sets.empty(), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Name"))), cx, g), (lambda jt: hydra.lib.eithers.bind(encode_term(env(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(name.value)))), cx, g), (lambda arg: (init := cast(hydra.ext.java.syntax.VariableInitializer, hydra.ext.java.syntax.VariableInitializerExpression(hydra.ext.java.utils.java_constructor_call(hydra.ext.java.utils.java_constructor_name(name_name(), Nothing()), (arg,), Nothing()))), var := hydra.ext.java.utils.java_variable_declarator(hydra.ext.java.syntax.Identifier(java_name), Just(init)), Right(no_comment(hydra.ext.java.utils.java_member_field(mods, jt, var))))[2]))))
+    env = hydra.ext.java.helpers.JavaEnvironment(aliases, g)
+    return hydra.lib.eithers.bind(encode_type(aliases, hydra.lib.sets.empty(), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Name"))), cx, g), (lambda jt: hydra.lib.eithers.bind(encode_term(env, cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString(name.value)))), cx, g), (lambda arg: (init := cast(hydra.ext.java.syntax.VariableInitializer, hydra.ext.java.syntax.VariableInitializerExpression(hydra.ext.java.utils.java_constructor_call(hydra.ext.java.utils.java_constructor_name(name_name(), Nothing()), (arg,), Nothing()))), var := hydra.ext.java.utils.java_variable_declarator(hydra.ext.java.syntax.Identifier(java_name), Just(init)), Right(no_comment(hydra.ext.java.utils.java_member_field(mods, jt, var))))[2]))))
 
 def constant_decl_for_field_type(aliases: hydra.ext.java.helpers.Aliases, ftyp: hydra.core.FieldType, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.java.syntax.ClassBodyDeclarationWithComments]:
     name = ftyp.name
     java_name = hydra.formatting.non_alnum_to_underscores(hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.UPPER_SNAKE, name.value))
-    return constant_decl(java_name(), aliases, name, cx, g)
+    return constant_decl(java_name, aliases, name, cx, g)
 
 def constant_decl_for_type_name(aliases: hydra.ext.java.helpers.Aliases, name: hydra.core.Name, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.java.syntax.ClassBodyDeclarationWithComments]:
     return constant_decl("TYPE_", aliases, name, cx, g)
@@ -2068,16 +2051,12 @@ def construct_elements_interface(mod: hydra.module.Module, members: frozenlist[h
     @lru_cache(1)
     def el_name() -> hydra.core.Name:
         return hydra.names.unqualify_name(hydra.module.QualifiedName(Just(mod.namespace), class_name()))
-    @lru_cache(1)
-    def body() -> hydra.ext.java.syntax.InterfaceBody:
-        return hydra.ext.java.syntax.InterfaceBody(members)
+    body = hydra.ext.java.syntax.InterfaceBody(members)
     @lru_cache(1)
     def itf() -> hydra.ext.java.syntax.TypeDeclaration:
-        return cast(hydra.ext.java.syntax.TypeDeclaration, hydra.ext.java.syntax.TypeDeclarationInterface(cast(hydra.ext.java.syntax.InterfaceDeclaration, hydra.ext.java.syntax.InterfaceDeclarationNormalInterface(hydra.ext.java.syntax.NormalInterfaceDeclaration(mods, hydra.ext.java.utils.java_type_identifier(class_name()), (), (), body())))))
-    @lru_cache(1)
-    def decl() -> hydra.ext.java.syntax.TypeDeclarationWithComments:
-        return hydra.ext.java.syntax.TypeDeclarationWithComments(itf(), mod.description)
-    return (el_name(), cast(hydra.ext.java.syntax.CompilationUnit, hydra.ext.java.syntax.CompilationUnitOrdinary(hydra.ext.java.syntax.OrdinaryCompilationUnit(Just(pkg()), (), (decl(),)))))
+        return cast(hydra.ext.java.syntax.TypeDeclaration, hydra.ext.java.syntax.TypeDeclarationInterface(cast(hydra.ext.java.syntax.InterfaceDeclaration, hydra.ext.java.syntax.InterfaceDeclarationNormalInterface(hydra.ext.java.syntax.NormalInterfaceDeclaration(mods, hydra.ext.java.utils.java_type_identifier(class_name()), (), (), body)))))
+    decl = hydra.ext.java.syntax.TypeDeclarationWithComments(itf(), mod.description)
+    return (el_name(), cast(hydra.ext.java.syntax.CompilationUnit, hydra.ext.java.syntax.CompilationUnitOrdinary(hydra.ext.java.syntax.OrdinaryCompilationUnit(Just(pkg()), (), (decl,)))))
 
 def interface_types(is_ser: bool, aliases: hydra.ext.java.helpers.Aliases, tparams: frozenlist[hydra.ext.java.syntax.TypeParameter], el_name: hydra.core.Name) -> frozenlist[hydra.ext.java.syntax.InterfaceType]:
     @lru_cache(1)
@@ -2154,11 +2133,9 @@ def is_big_numeric_type(typ: hydra.core.Type):
             return False
 
 def eq_clause(tmp_name: str, ft: hydra.core.FieldType) -> hydra.ext.java.syntax.InclusiveOrExpression:
-    @lru_cache(1)
-    def fname() -> str:
-        return ft.name.value
+    fname = ft.name.value
     ftype = ft.type
-    return hydra.lib.logic.if_else(is_binary_type(ftype), (lambda : arrays_equals_clause(tmp_name, fname())), (lambda : hydra.lib.logic.if_else(is_big_numeric_type(ftype), (lambda : compare_to_zero_clause(tmp_name, fname())), (lambda : equals_clause(tmp_name, fname())))))
+    return hydra.lib.logic.if_else(is_binary_type(ftype), (lambda : arrays_equals_clause(tmp_name, fname)), (lambda : hydra.lib.logic.if_else(is_big_numeric_type(ftype), (lambda : compare_to_zero_clause(tmp_name, fname)), (lambda : equals_clause(tmp_name, fname)))))
 
 def record_equals_method(aliases: hydra.ext.java.helpers.Aliases, el_name: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
     anns = (hydra.ext.java.utils.override_annotation,)
@@ -2182,15 +2159,13 @@ def record_equals_method(aliases: hydra.ext.java.helpers.Aliases, el_name: hydra
 first20_primes = (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71)
 
 def hash_code_mult_pair(i: int, fname: hydra.core.Name) -> hydra.ext.java.syntax.MultiplicativeExpression:
-    @lru_cache(1)
-    def fname_str() -> str:
-        return fname.value
+    fname_str = fname.value
     @lru_cache(1)
     def lhs() -> hydra.ext.java.syntax.MultiplicativeExpression:
         return cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionUnary(hydra.ext.java.utils.java_primary_to_java_unary_expression(hydra.ext.java.utils.java_literal_to_java_primary(hydra.ext.java.utils.java_int(i)))))
     @lru_cache(1)
     def rhs() -> hydra.ext.java.syntax.UnaryExpression:
-        return hydra.ext.java.utils.java_postfix_expression_to_java_unary_expression(hydra.ext.java.utils.java_method_invocation_to_java_postfix_expression(hydra.ext.java.syntax.MethodInvocation(cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderComplex(hydra.ext.java.syntax.MethodInvocation_Complex(cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantType(hydra.ext.java.utils.java_type_name(hydra.ext.java.syntax.Identifier("java.util.Objects")))), (), hydra.ext.java.syntax.Identifier(hydra.ext.java.names.hash_code_method_name)))), (hydra.ext.java.utils.java_expression_name_to_java_expression(hydra.ext.java.syntax.ExpressionName(Nothing(), hydra.ext.java.syntax.Identifier(hydra.ext.java.utils.sanitize_java_name(fname_str())))),))))
+        return hydra.ext.java.utils.java_postfix_expression_to_java_unary_expression(hydra.ext.java.utils.java_method_invocation_to_java_postfix_expression(hydra.ext.java.syntax.MethodInvocation(cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderComplex(hydra.ext.java.syntax.MethodInvocation_Complex(cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantType(hydra.ext.java.utils.java_type_name(hydra.ext.java.syntax.Identifier("java.util.Objects")))), (), hydra.ext.java.syntax.Identifier(hydra.ext.java.names.hash_code_method_name)))), (hydra.ext.java.utils.java_expression_name_to_java_expression(hydra.ext.java.syntax.ExpressionName(Nothing(), hydra.ext.java.syntax.Identifier(hydra.ext.java.utils.sanitize_java_name(fname_str)))),))))
     return cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionTimes(hydra.ext.java.syntax.MultiplicativeExpression_Binary(lhs(), rhs())))
 
 def record_hash_code_method(fields: frozenlist[hydra.core.FieldType]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
@@ -2511,9 +2486,7 @@ def encode_definitions(mod: hydra.module.Module, defs: frozenlist[hydra.module.D
     @lru_cache(1)
     def aliases() -> hydra.ext.java.helpers.Aliases:
         return hydra.ext.java.utils.import_aliases_for_module(mod)
-    @lru_cache(1)
-    def env() -> hydra.ext.java.helpers.JavaEnvironment:
-        return hydra.ext.java.helpers.JavaEnvironment(aliases(), g)
+    env = hydra.ext.java.helpers.JavaEnvironment(aliases(), g)
     @lru_cache(1)
     def pkg() -> hydra.ext.java.syntax.PackageDeclaration:
         return hydra.ext.java.utils.java_package_declaration(mod.namespace)
@@ -2529,7 +2502,7 @@ def encode_definitions(mod: hydra.module.Module, defs: frozenlist[hydra.module.D
     @lru_cache(1)
     def non_typedef_defs() -> frozenlist[hydra.module.TypeDefinition]:
         return hydra.lib.lists.filter((lambda td: (typ := td.type, is_serializable_java_type(typ))[1]), type_defs())
-    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_type_definition(pkg(), aliases(), td, cx, g)), non_typedef_defs()), (lambda type_units: hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(term_defs()), (lambda : Right(())), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_term_definition(env(), td, cx, g)), term_defs()), (lambda data_members: Right((construct_elements_interface(mod, data_members),)))))), (lambda term_units: Right(hydra.lib.maps.from_list(hydra.lib.lists.concat2(type_units, term_units)))))))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_type_definition(pkg(), aliases(), td, cx, g)), non_typedef_defs()), (lambda type_units: hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.lists.null(term_defs()), (lambda : Right(())), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda td: encode_term_definition(env, td, cx, g)), term_defs()), (lambda data_members: Right((construct_elements_interface(mod, data_members),)))))), (lambda term_units: Right(hydra.lib.maps.from_list(hydra.lib.lists.concat2(type_units, term_units)))))))
 
 def get_function_type(ann: FrozenDict[hydra.core.Name, hydra.core.Term], cx: hydra.context.Context, g: hydra.graph.Graph):
     def _hoist_hydra_ext_java_coder_get_function_type_1(cx, t, v1):

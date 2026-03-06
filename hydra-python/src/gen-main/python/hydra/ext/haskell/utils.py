@@ -107,20 +107,14 @@ def newtype_accessor_name(name: hydra.core.Name) -> str:
 def type_name_for_record(sname: hydra.core.Name) -> str:
     r"""Extract the local type name from a fully qualified record type name."""
     
-    @lru_cache(1)
-    def sname_str() -> str:
-        return sname.value
-    @lru_cache(1)
-    def parts() -> frozenlist[str]:
-        return hydra.lib.strings.split_on(".", sname_str())
-    return hydra.lib.lists.last(parts())
+    sname_str = sname.value
+    parts = hydra.lib.strings.split_on(".", sname_str)
+    return hydra.lib.lists.last(parts)
 
 def record_field_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.ast.Name:
     r"""Generate a Haskell name for a record field accessor."""
     
-    @lru_cache(1)
-    def fname_str() -> str:
-        return fname.value
+    fname_str = fname.value
     @lru_cache(1)
     def qname() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(sname)
@@ -131,19 +125,11 @@ def record_field_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell
     @lru_cache(1)
     def decapitalized() -> str:
         return hydra.formatting.decapitalize(type_name_str())
-    @lru_cache(1)
-    def capitalized() -> str:
-        return hydra.formatting.capitalize(fname_str())
-    @lru_cache(1)
-    def nm() -> str:
-        return hydra.lib.strings.cat2(decapitalized(), capitalized())
-    @lru_cache(1)
-    def qual_name() -> hydra.module.QualifiedName:
-        return hydra.module.QualifiedName(ns, nm())
-    @lru_cache(1)
-    def unqual_name() -> hydra.core.Name:
-        return hydra.names.unqualify_name(qual_name())
-    return element_reference(namespaces, unqual_name())
+    capitalized = hydra.formatting.capitalize(fname_str)
+    nm = hydra.lib.strings.cat2(decapitalized(), capitalized)
+    qual_name = hydra.module.QualifiedName(ns, nm)
+    unqual_name = hydra.names.unqualify_name(qual_name)
+    return element_reference(namespaces, unqual_name)
 
 def simple_value_binding(hname: hydra.ext.haskell.ast.Name, rhs: hydra.ext.haskell.ast.Expression, bindings: Maybe[hydra.ext.haskell.ast.LocalBindings]) -> hydra.ext.haskell.ast.ValueBinding:
     r"""Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')."""
@@ -151,10 +137,8 @@ def simple_value_binding(hname: hydra.ext.haskell.ast.Name, rhs: hydra.ext.haske
     @lru_cache(1)
     def pat() -> hydra.ext.haskell.ast.Pattern:
         return cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternApplication(hydra.ext.haskell.ast.ApplicationPattern(hname, ())))
-    @lru_cache(1)
-    def right_hand_side() -> hydra.ext.haskell.ast.RightHandSide:
-        return hydra.ext.haskell.ast.RightHandSide(rhs)
-    return cast(hydra.ext.haskell.ast.ValueBinding, hydra.ext.haskell.ast.ValueBindingSimple(hydra.ext.haskell.ast.SimpleValueBinding(pat(), right_hand_side(), bindings)))
+    right_hand_side = hydra.ext.haskell.ast.RightHandSide(rhs)
+    return cast(hydra.ext.haskell.ast.ValueBinding, hydra.ext.haskell.ast.ValueBindingSimple(hydra.ext.haskell.ast.SimpleValueBinding(pat(), right_hand_side, bindings)))
 
 def to_type_application(types: frozenlist[hydra.ext.haskell.ast.Type]) -> hydra.ext.haskell.ast.Type:
     r"""Convert a list of types into a nested type application."""
@@ -166,9 +150,7 @@ def to_type_application(types: frozenlist[hydra.ext.haskell.ast.Type]) -> hydra.
 def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], sname: hydra.core.Name, fname: hydra.core.Name) -> hydra.ext.haskell.ast.Name:
     r"""Generate a Haskell name for a union variant constructor, with disambiguation."""
     
-    @lru_cache(1)
-    def fname_str() -> str:
-        return fname.value
+    fname_str = fname.value
     @lru_cache(1)
     def qname() -> hydra.module.QualifiedName:
         return hydra.names.qualify_name(sname)
@@ -179,9 +161,7 @@ def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: h
     @lru_cache(1)
     def capitalized_type_name() -> str:
         return hydra.formatting.capitalize(type_name_str())
-    @lru_cache(1)
-    def capitalized_field_name() -> str:
-        return hydra.formatting.capitalize(fname_str())
+    capitalized_field_name = hydra.formatting.capitalize(fname_str)
     def deconflict(name: str) -> str:
         @lru_cache(1)
         def tname() -> hydra.core.Name:
@@ -189,14 +169,10 @@ def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: h
         return hydra.lib.logic.if_else(hydra.lib.sets.member(tname(), bound_names), (lambda : deconflict(hydra.lib.strings.cat2(name, "_"))), (lambda : name))
     @lru_cache(1)
     def nm() -> str:
-        return deconflict(hydra.lib.strings.cat2(capitalized_type_name(), capitalized_field_name()))
-    @lru_cache(1)
-    def qual_name() -> hydra.module.QualifiedName:
-        return hydra.module.QualifiedName(ns, nm())
-    @lru_cache(1)
-    def unqual_name() -> hydra.core.Name:
-        return hydra.names.unqualify_name(qual_name())
-    return element_reference(namespaces, unqual_name())
+        return deconflict(hydra.lib.strings.cat2(capitalized_type_name(), capitalized_field_name))
+    qual_name = hydra.module.QualifiedName(ns, nm())
+    unqual_name = hydra.names.unqualify_name(qual_name)
+    return element_reference(namespaces, unqual_name)
 
 def unpack_forall_type(t: hydra.core.Type) -> tuple[frozenlist[hydra.core.Name], hydra.core.Type]:
     r"""Unpack nested forall types into a list of type variables and the inner type."""

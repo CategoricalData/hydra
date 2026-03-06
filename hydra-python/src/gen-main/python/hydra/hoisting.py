@@ -495,10 +495,8 @@ def hoist_subterms(should_hoist: Callable[[tuple[frozenlist[hydra.accessors.Term
             @lru_cache(1)
             def new_value() -> hydra.core.Term:
                 return hydra.lib.pairs.second(result())
-            @lru_cache(1)
-            def new_binding() -> hydra.core.Binding:
-                return hydra.core.Binding(binding.name, new_value(), binding.type)
-            return hydra.lib.lists.cons(new_binding(), acc)
+            new_binding = hydra.core.Binding(binding.name, new_value(), binding.type)
+            return hydra.lib.lists.cons(new_binding, acc)
         @lru_cache(1)
         def new_bindings_reversed() -> frozenlist[hydra.core.Binding]:
             return hydra.lib.lists.foldl((lambda x1, x2: process_binding(x1, x2)), (), bindings)

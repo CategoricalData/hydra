@@ -145,18 +145,16 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                     @lru_cache(1)
                     def unique_label() -> str:
                         return hydra.names.unique_label(current_visited(), raw_label())
-                    @lru_cache(1)
-                    def node() -> hydra.accessors.AccessorNode:
-                        return hydra.accessors.AccessorNode(name, raw_label(), unique_label())
+                    node = hydra.accessors.AccessorNode(name, raw_label(), unique_label())
                     @lru_cache(1)
                     def new_visited() -> frozenset[str]:
                         return hydra.lib.sets.insert(unique_label(), current_visited())
                     @lru_cache(1)
                     def new_nodes() -> frozenlist[hydra.accessors.AccessorNode]:
-                        return hydra.lib.lists.cons(node(), current_nodes())
+                        return hydra.lib.lists.cons(node, current_nodes())
                     @lru_cache(1)
                     def new_ids() -> FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]:
-                        return hydra.lib.maps.insert(name, node(), current_ids())
+                        return hydra.lib.maps.insert(name, node, current_ids())
                     return ((new_nodes(), new_visited()), new_ids())
                 @lru_cache(1)
                 def nodes_visited_ids1() -> tuple[tuple[frozenlist[hydra.accessors.AccessorNode], frozenset[str]], FrozenDict[hydra.core.Name, hydra.accessors.AccessorNode]]:
