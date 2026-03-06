@@ -61,8 +61,8 @@ public interface Names {
           (nsVal).value))));
     return hydra.lib.logic.IfElse.lazy(
       isQualified,
-      () -> hydra.lib.maybes.Maybe.apply(
-        hydra.lib.logic.IfElse.lazy(
+      () -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             mns,
             hydra.util.Maybe.just(focusNs.get())),
@@ -72,8 +72,8 @@ public interface Names {
             () -> hydra.ext.python.serde.Serde.escapePythonString(
               true,
               pyLocal))),
-          () -> hydra.lib.maybes.Maybe.apply(
-            new hydra.ext.python.syntax.Name(pyLocal),
+          () -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> new hydra.ext.python.syntax.Name(pyLocal),
             (java.util.function.Function<hydra.module.Namespace, hydra.ext.python.syntax.Name>) (nsVal -> new hydra.ext.python.syntax.Name(hydra.lib.strings.Cat2.apply(
               (pyNs).apply(nsVal),
               hydra.lib.strings.Cat2.apply(
@@ -95,8 +95,8 @@ public interface Names {
     hydra.module.QualifiedName qualName = hydra.names.Names.qualifyName(name);
     String local = (qualName).local;
     hydra.util.Maybe<hydra.module.Namespace> mns = (qualName).namespace;
-    return hydra.lib.maybes.Maybe.apply(
-      hydra.lib.logic.IfElse.lazy(
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
           mns,
           hydra.util.Maybe.just(focusNs.get())),
@@ -176,8 +176,8 @@ public interface Names {
       conv,
       env,
       name);
-    hydra.util.Lazy<Boolean> sameNamespace = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-      false,
+    hydra.util.Lazy<Boolean> sameNamespace = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> false,
       (java.util.function.Function<hydra.module.Namespace, Boolean>) (ns -> hydra.lib.equality.Equal.apply(
         ns,
         focusNs.get())),

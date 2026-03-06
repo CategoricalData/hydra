@@ -41,8 +41,8 @@ public interface Terms {
       hydra.util.Maybe<hydra.core.Type> mt = hydra.schemas.Schemas.resolveType(
         (newCx).graph,
         new hydra.core.Type.Variable(name));
-      return hydra.lib.maybes.Maybe.apply(
-        (hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>right((hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) (new hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>(lossy, new hydra.core.Type.Variable(name), new hydra.core.Type.Variable(name), hydra.adapt.utils.Utils.bidirectional((java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>>>) (dir -> (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>>) (_cx -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (term -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(term))))))))))))))),
+      return hydra.lib.maybes.Maybe.applyLazy(
+        () -> (hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>right((hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) ((hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>) (new hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>(lossy, new hydra.core.Type.Variable(name), new hydra.core.Type.Variable(name), hydra.adapt.utils.Utils.bidirectional((java.util.function.Function<hydra.coders.CoderDirection, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>>>) (dir -> (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>>) (_cx -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (term -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(term))))))))))))))),
         (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>>) (v1 -> hydra.adapt.terms.Terms.forTypeReference_forType(
           (java.util.function.Function<hydra.coders.AdapterContext, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>>>) (p0 -> p1 -> hydra.adapt.terms.Terms.termAdapter(
             p0,
@@ -59,8 +59,8 @@ public interface Terms {
       v1,
       v2,
       v3)))))))))));
-    return hydra.lib.maybes.Maybe.apply(
-      ((((forMissingAdapter).apply(cx)).apply(lossy)).apply(adapters)).apply(placeholder.get()),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> ((((forMissingAdapter).apply(cx)).apply(lossy)).apply(adapters)).apply(placeholder.get()),
       (java.util.function.Function<hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>>) (x -> (hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>>right(x)))),
       hydra.lib.maps.Lookup.apply(
         name,
@@ -68,8 +68,8 @@ public interface Terms {
   }
   
   static <T0, T1, T2> hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2> forTypeReference_encdec(hydra.core.Name name, java.util.Map<hydra.core.Name, hydra.compute.Adapter<T0, T1, T2, T2>> adapters0, hydra.coders.CoderDirection dir, hydra.context.Context cx, T2 term) {
-    return hydra.lib.maybes.Maybe.apply(
-      (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T2>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T2>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
         "no adapter for reference type ",
         (name).value)), cx))))),
       (java.util.function.Function<hydra.compute.Adapter<T0, T1, T2, T2>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T2>>) (ad -> hydra.adapt.utils.Utils.<T2>encodeDecode(
@@ -149,8 +149,8 @@ public interface Terms {
         cx2,
         graph,
         term),
-      (java.util.function.Function<String, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (s -> hydra.lib.maybes.Maybe.apply(
-        (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+      (java.util.function.Function<String, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (s -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           "failed to parse term: ",
           s)), cx2))))),
         (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (x -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(x)))),
@@ -230,8 +230,8 @@ public interface Terms {
         (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (field -> {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          return hydra.lib.maybes.FromMaybe.apply(
-            hydra.adapt.terms.Terms.functionToUnion_notFound(
+          return hydra.lib.maybes.FromMaybe.applyLazy(
+            () -> hydra.adapt.terms.Terms.functionToUnion_notFound(
               cx,
               fname),
             hydra.lib.maps.Lookup.apply(
@@ -289,8 +289,8 @@ public interface Terms {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term> visit(hydra.core.Term.Maybe m) {
-        return hydra.lib.maybes.Maybe.apply(
-          (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))))),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (r -> hydra.lib.eithers.Bind.apply(
             hydra.adapt.utils.Utils.encodeDecode(
               new hydra.coders.CoderDirection.Encode(),
@@ -459,8 +459,8 @@ public interface Terms {
   }
   
   static <T0, T1, T2, T3> hydra.compute.Coder<T3, T3> passFunction_getCoder(java.util.Map<T0, hydra.compute.Adapter<T1, T2, T3, T3>> caseAds, T0 fname) {
-    return hydra.lib.maybes.Maybe.apply(
-      hydra.adapt.utils.Utils.<T3>idCoder(),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.adapt.utils.Utils.<T3>idCoder(),
       (java.util.function.Function<hydra.compute.Adapter<T1, T2, T3, T3>, hydra.compute.Coder<T3, T3>>) ((java.util.function.Function<hydra.compute.Adapter<T1, T2, T3, T3>, hydra.compute.Coder<T3, T3>>) ((java.util.function.Function<hydra.compute.Adapter<T1, T2, T3, T3>, hydra.compute.Coder<T3, T3>>) ((java.util.function.Function<hydra.compute.Adapter<T1, T2, T3, T3>, hydra.compute.Coder<T3, T3>>) (projected -> projected.coder)))),
       hydra.lib.maps.Lookup.apply(
         fname,

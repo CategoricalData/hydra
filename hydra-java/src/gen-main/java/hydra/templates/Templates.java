@@ -207,8 +207,8 @@ public interface Templates {
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term> visit(hydra.core.Type.Variable tname) {
-        return hydra.lib.maybes.Maybe.apply(
-          (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             "Type variable ",
             hydra.lib.strings.Cat2.apply(
               hydra.show.core.Core.term(new hydra.core.Term.Variable((tname).value)),

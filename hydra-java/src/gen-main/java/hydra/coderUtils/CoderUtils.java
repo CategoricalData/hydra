@@ -267,9 +267,9 @@ public interface CoderUtils {
   static Boolean isComplexBinding(hydra.graph.Graph tc, hydra.core.Binding b) {
     hydra.util.Maybe<hydra.core.TypeScheme> mts = (b).type;
     hydra.core.Term term = (b).term;
-    return hydra.lib.maybes.Cases.apply(
+    return hydra.lib.maybes.Cases.applyLazy(
       mts,
-      hydra.coderUtils.CoderUtils.isComplexTerm(
+      () -> hydra.coderUtils.CoderUtils.isComplexTerm(
         tc,
         term),
       (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> {
@@ -354,8 +354,8 @@ public interface CoderUtils {
       
       @Override
       public Boolean visit(hydra.core.Term.Maybe opt) {
-        return hydra.lib.maybes.Maybe.apply(
-          true,
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> true,
           (java.util.function.Function<hydra.core.Term, Boolean>) (inner -> hydra.coderUtils.CoderUtils.isTrivialTerm(inner)),
           (opt).value);
       }
@@ -522,8 +522,8 @@ public interface CoderUtils {
                       true,
                       cases_));
                     hydra.util.Maybe<hydra.core.Term> dflt = ((cs).value).default_;
-                    hydra.util.Lazy<Boolean> dfltOk = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-                      true,
+                    hydra.util.Lazy<Boolean> dfltOk = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+                      () -> true,
                       (java.util.function.Function<hydra.core.Term, Boolean>) (d -> hydra.coderUtils.CoderUtils.isTailRecursiveInTailPosition(
                         funcName,
                         d)),
@@ -695,8 +695,8 @@ public interface CoderUtils {
               () -> ((java.util.function.Supplier<hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>>) (() -> {
                 hydra.core.Name v = ((lam).value).parameter;
                 return ((java.util.function.Supplier<hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>>) (() -> {
-                  hydra.util.Lazy<hydra.core.Type> dom = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-                    new hydra.core.Type.Variable(new hydra.core.Name("_")),
+                  hydra.util.Lazy<hydra.core.Type> dom = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+                    () -> new hydra.core.Type.Variable(new hydra.core.Name("_")),
                     (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x_ -> x_),
                     ((lam).value).domain));
                   return ((java.util.function.Supplier<hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>>) (() -> {

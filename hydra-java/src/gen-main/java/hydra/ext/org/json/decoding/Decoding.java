@@ -42,8 +42,8 @@ public interface Decoding {
         decodeValue,
         name,
         m),
-      (java.util.function.Function<hydra.util.Maybe<T1>, hydra.util.Either<String, T1>>) (v1 -> hydra.lib.maybes.Maybe.apply(
-        (hydra.util.Either<String, T1>) ((hydra.util.Either<String, T1>) (hydra.util.Either.<String, T1>left(hydra.lib.strings.Cat2.apply(
+      (java.util.function.Function<hydra.util.Maybe<T1>, hydra.util.Either<String, T1>>) (v1 -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> (hydra.util.Either<String, T1>) ((hydra.util.Either<String, T1>) (hydra.util.Either.<String, T1>left(hydra.lib.strings.Cat2.apply(
           "missing field: ",
           name)))),
         (java.util.function.Function<T1, hydra.util.Either<String, T1>>) (f -> (hydra.util.Either<String, T1>) ((hydra.util.Either<String, T1>) (hydra.util.Either.<String, T1>right(f)))),
@@ -65,8 +65,8 @@ public interface Decoding {
   }
   
   static <T0, T1, T2, T3> hydra.util.Either<T1, hydra.util.Maybe<T2>> decodeOptionalField(java.util.function.Function<T0, hydra.util.Either<T1, T2>> decodeValue, T3 name, java.util.Map<T3, T0> m) {
-    return hydra.lib.maybes.Maybe.apply(
-      (hydra.util.Either<T1, hydra.util.Maybe<T2>>) ((hydra.util.Either<T1, hydra.util.Maybe<T2>>) (hydra.util.Either.<T1, hydra.util.Maybe<T2>>right((hydra.util.Maybe<T2>) (hydra.util.Maybe.<T2>nothing())))),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> (hydra.util.Either<T1, hydra.util.Maybe<T2>>) ((hydra.util.Either<T1, hydra.util.Maybe<T2>>) (hydra.util.Either.<T1, hydra.util.Maybe<T2>>right((hydra.util.Maybe<T2>) (hydra.util.Maybe.<T2>nothing())))),
       (java.util.function.Function<T0, hydra.util.Either<T1, hydra.util.Maybe<T2>>>) (v -> hydra.lib.eithers.Map.apply(
         (java.util.function.Function<T2, hydra.util.Maybe<T2>>) (x -> hydra.util.Maybe.just(x)),
         (decodeValue).apply(v))),

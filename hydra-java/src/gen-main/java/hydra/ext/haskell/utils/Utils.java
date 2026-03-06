@@ -19,14 +19,14 @@ public interface Utils {
     hydra.util.Lazy<hydra.module.Namespace> gname = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(namespacePair.get()));
     hydra.util.Maybe<hydra.module.Namespace> mns = (qname).namespace;
     hydra.util.Lazy<java.util.Map<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>> namespacesMap = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.Map<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>>) (projected -> projected.mapping)).apply(namespaces));
-    return hydra.lib.maybes.Cases.apply(
+    return hydra.lib.maybes.Cases.applyLazy(
       (qname).namespace,
-      hydra.ext.haskell.utils.Utils.simpleName(local),
-      (java.util.function.Function<hydra.module.Namespace, hydra.ext.haskell.ast.Name>) (ns -> hydra.lib.maybes.Cases.apply(
+      () -> hydra.ext.haskell.utils.Utils.simpleName(local),
+      (java.util.function.Function<hydra.module.Namespace, hydra.ext.haskell.ast.Name>) (ns -> hydra.lib.maybes.Cases.applyLazy(
         hydra.lib.maps.Lookup.apply(
           ns,
           namespacesMap.get()),
-        hydra.ext.haskell.utils.Utils.simpleName(local),
+        () -> hydra.ext.haskell.utils.Utils.simpleName(local),
         (java.util.function.Function<hydra.ext.haskell.ast.ModuleName, hydra.ext.haskell.ast.Name>) (mn -> {
           String aliasStr = (mn).value;
           return hydra.lib.logic.IfElse.lazy(

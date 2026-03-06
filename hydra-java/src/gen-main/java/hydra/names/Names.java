@@ -10,10 +10,10 @@ public interface Names {
     hydra.module.QualifiedName qualName = hydra.names.Names.qualifyName(name);
     String local = (qualName).local;
     hydra.util.Maybe<hydra.module.Namespace> mns = (qualName).namespace;
-    return hydra.lib.maybes.Maybe.apply(
-      (name).value,
-      (java.util.function.Function<hydra.module.Namespace, String>) (ns -> hydra.lib.maybes.Maybe.apply(
-        local,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> (name).value,
+      (java.util.function.Function<hydra.module.Namespace, String>) (ns -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> local,
         (java.util.function.Function<String, String>) (pre -> hydra.lib.strings.Cat.apply(java.util.List.of(
           pre,
           ":",
@@ -85,8 +85,8 @@ public interface Names {
   }
   
   static hydra.core.Name unqualifyName(hydra.module.QualifiedName qname) {
-    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-      "",
+    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> "",
       (java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
         (n).value,
         ".")),

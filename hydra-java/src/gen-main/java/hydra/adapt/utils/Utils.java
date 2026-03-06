@@ -134,8 +134,8 @@ public interface Utils {
         hydra.lib.strings.SplitOn.apply(
           ".",
           (ns2).value))));
-    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-      "",
+    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> "",
       (java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
         (nsToFilePath).apply(n),
         "/")),

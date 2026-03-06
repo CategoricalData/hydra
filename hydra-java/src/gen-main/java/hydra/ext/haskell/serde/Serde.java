@@ -116,8 +116,8 @@ public interface Serde {
   static hydra.ast.Expr constructorWithCommentsToExpr(hydra.ext.haskell.ast.ConstructorWithComments consWithComments) {
     hydra.ext.haskell.ast.Constructor body = (consWithComments).body;
     hydra.util.Maybe<String> mc = (consWithComments).comments;
-    return hydra.lib.maybes.Maybe.apply(
-      hydra.ext.haskell.serde.Serde.constructorToExpr(body),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.ext.haskell.serde.Serde.constructorToExpr(body),
       (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toHaskellComments(c)),
         java.util.List.of(hydra.ext.haskell.serde.Serde.constructorToExpr(body))))),
@@ -231,8 +231,8 @@ public interface Serde {
   static hydra.ast.Expr declarationWithCommentsToExpr(hydra.ext.haskell.ast.DeclarationWithComments declWithComments) {
     hydra.ext.haskell.ast.Declaration body = (declWithComments).body;
     hydra.util.Maybe<String> mc = (declWithComments).comments;
-    return hydra.lib.maybes.Maybe.apply(
-      hydra.ext.haskell.serde.Serde.declarationToExpr(body),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.ext.haskell.serde.Serde.declarationToExpr(body),
       (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toHaskellComments(c)),
         java.util.List.of(hydra.ext.haskell.serde.Serde.declarationToExpr(body))))),
@@ -369,8 +369,8 @@ public interface Serde {
   static hydra.ast.Expr fieldWithCommentsToExpr(hydra.ext.haskell.ast.FieldWithComments fieldWithComments) {
     hydra.ext.haskell.ast.Field field = (fieldWithComments).field;
     hydra.util.Maybe<String> mc = (fieldWithComments).comments;
-    return hydra.lib.maybes.Maybe.apply(
-      hydra.ext.haskell.serde.Serde.fieldToExpr(field),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.ext.haskell.serde.Serde.fieldToExpr(field),
       (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toHaskellComments(c)),
         java.util.List.of(hydra.ext.haskell.serde.Serde.fieldToExpr(field))))),
@@ -524,8 +524,8 @@ public interface Serde {
         hydra.serialization.Serialization.cst(mname),
         java.util.List.of(hydra.serialization.Serialization.cst("where"))))));
     hydra.util.Maybe<String> mc = (moduleHead).comments;
-    return hydra.lib.maybes.Maybe.apply(
-      head.get(),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> head.get(),
       (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toHaskellComments(c)),
         hydra.lib.lists.Cons.apply(
@@ -540,8 +540,8 @@ public interface Serde {
       hydra.ext.haskell.serde.Serde::declarationWithCommentsToExpr,
       decls));
     hydra.util.Maybe<hydra.ext.haskell.ast.ModuleHead> mh = (module).head;
-    hydra.util.Lazy<java.util.List<hydra.ast.Expr>> headerLine = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-      (java.util.List<hydra.ast.Expr>) (java.util.List.<hydra.ast.Expr>of()),
+    hydra.util.Lazy<java.util.List<hydra.ast.Expr>> headerLine = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> (java.util.List<hydra.ast.Expr>) (java.util.List.<hydra.ast.Expr>of()),
       (java.util.function.Function<hydra.ext.haskell.ast.ModuleHead, java.util.List<hydra.ast.Expr>>) (h -> java.util.List.of(hydra.ext.haskell.serde.Serde.moduleHeadToExpr(h))),
       mh));
     java.util.List<hydra.ext.haskell.ast.Import> imports = (module).imports;
@@ -714,8 +714,8 @@ public interface Serde {
           hydra.ext.haskell.serde.Serde.patternToExpr(pat),
           hydra.ext.haskell.serde.Serde.rightHandSideToExpr(rhs));
         hydra.util.Maybe<hydra.ext.haskell.ast.LocalBindings> local = ((simpleVB).value).localBindings;
-        return hydra.lib.maybes.Maybe.apply(
-          body,
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> body,
           (java.util.function.Function<hydra.ext.haskell.ast.LocalBindings, hydra.ast.Expr>) (localBindings -> {
             java.util.List<hydra.ext.haskell.ast.LocalBinding> bindings = (localBindings).value;
             return hydra.serialization.Serialization.indentBlock(hydra.lib.lists.Cons.apply(

@@ -106,8 +106,8 @@ public interface Simple {
                     v2))),
                   (el).term),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.core.Binding>>) (newTerm -> hydra.lib.eithers.Bind.apply(
-                  hydra.lib.maybes.Maybe.apply(
-                    (hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())))),
+                  hydra.lib.maybes.Maybe.applyLazy(
+                    () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())))),
                     (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>>) (ts -> hydra.lib.eithers.Bind.apply(
                       hydra.adapt.simple.Simple.adaptTypeScheme(
                         constraints,
@@ -264,8 +264,8 @@ public interface Simple {
             @Override
             public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Function.Lambda l) {
               return hydra.lib.eithers.Bind.apply(
-                hydra.lib.maybes.Maybe.apply(
-                  (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Type>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Type>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())))),
+                hydra.lib.maybes.Maybe.applyLazy(
+                  () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Type>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Type>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())))),
                   (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Type>>>) (dom -> hydra.lib.eithers.Bind.apply(
                     hydra.adapt.simple.Simple.adaptType(
                       constraints,
@@ -381,8 +381,8 @@ public interface Simple {
   }
   
   static java.util.Map<hydra.core.LiteralType, hydra.core.LiteralType> adaptLiteralTypesMap(hydra.coders.LanguageConstraints constraints) {
-    java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>> tryType = (java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>>) (lt -> hydra.lib.maybes.Maybe.apply(
-      (hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>nothing()),
+    java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>> tryType = (java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>>) (lt -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> (hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>nothing()),
       (java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>>>) (lt2 -> hydra.util.Maybe.just((hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>) ((hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>) (new hydra.util.Pair<hydra.core.LiteralType, hydra.core.LiteralType>(lt, lt2))))),
       hydra.adapt.simple.Simple.adaptLiteralType(
         constraints,
@@ -393,8 +393,8 @@ public interface Simple {
   }
   
   static <T0> hydra.core.Literal adaptLiteralValue(java.util.Map<T0, hydra.core.LiteralType> litmap, T0 lt, hydra.core.Literal l) {
-    return hydra.lib.maybes.Maybe.apply(
-      new hydra.core.Literal.String_(hydra.show.core.Core.literal(l)),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> new hydra.core.Literal.String_(hydra.show.core.Core.literal(l)),
       (java.util.function.Function<hydra.core.LiteralType, hydra.core.Literal>) (lt2 -> hydra.adapt.simple.Simple.adaptLiteral(
         lt2,
         l)),
@@ -415,8 +415,8 @@ public interface Simple {
         @Override
         public hydra.util.Either<String, hydra.core.Term> visit(hydra.core.Term.Let lt) {
           java.util.function.Function<hydra.core.Binding, hydra.util.Either<String, hydra.core.Binding>> adaptB = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<String, hydra.core.Binding>>) (b -> hydra.lib.eithers.Bind.apply(
-            hydra.lib.maybes.Maybe.apply(
-              (hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())))),
+            hydra.lib.maybes.Maybe.applyLazy(
+              () -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())))),
               (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<String, hydra.util.Maybe<hydra.core.TypeScheme>>>) (ts -> hydra.lib.eithers.Bind.apply(
                 hydra.adapt.simple.Simple.adaptTypeScheme(
                   constraints,
@@ -478,8 +478,8 @@ public interface Simple {
       java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>> tryAlts = new java.util.concurrent.atomic.AtomicReference<>();
       forNonNull.set((java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (alts -> hydra.lib.eithers.Bind.apply(
         (tryTerm.get()).apply(hydra.lib.lists.Head.apply(alts)),
-        (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (mterm -> hydra.lib.maybes.Maybe.apply(
-          (tryAlts.get()).apply(hydra.lib.lists.Tail.apply(alts)),
+        (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (mterm -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> (tryAlts.get()).apply(hydra.lib.lists.Tail.apply(alts)),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (t -> (hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>right(hydra.util.Maybe.just(t))))),
           mterm)))));
       tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (alts -> hydra.lib.logic.IfElse.lazy(
@@ -511,8 +511,8 @@ public interface Simple {
         public hydra.util.Either<String, hydra.core.Term> otherwise(hydra.core.Term instance) {
           return hydra.lib.eithers.Bind.apply(
             (tryTerm.get()).apply(term1),
-            (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<String, hydra.core.Term>>) (mterm -> hydra.lib.maybes.Maybe.apply(
-              (hydra.util.Either<String, hydra.core.Term>) ((hydra.util.Either<String, hydra.core.Term>) (hydra.util.Either.<String, hydra.core.Term>left(hydra.lib.strings.Cat2.apply(
+            (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<String, hydra.core.Term>>) (mterm -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> (hydra.util.Either<String, hydra.core.Term>) ((hydra.util.Either<String, hydra.core.Term>) (hydra.util.Either.<String, hydra.core.Term>left(hydra.lib.strings.Cat2.apply(
                 "no alternatives for term: ",
                 (hydra_show_core_term2).apply(term1))))),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.core.Term>>) (term2 -> (hydra.util.Either<String, hydra.core.Term>) ((hydra.util.Either<String, hydra.core.Term>) (hydra.util.Either.<String, hydra.core.Term>right(term2)))),
@@ -568,8 +568,8 @@ public interface Simple {
             constraints,
             (lt).value),
           () -> hydra.util.Maybe.just(typ),
-          () -> hydra.lib.maybes.Maybe.apply(
-            hydra.util.Maybe.just(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
+          () -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> hydra.util.Maybe.just(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
             (java.util.function.Function<hydra.core.LiteralType, hydra.util.Maybe<hydra.core.Type>>) (lt2 -> hydra.util.Maybe.just(new hydra.core.Type.Literal(lt2))),
             hydra.lib.maps.Lookup.apply(
               (lt).value,
@@ -584,8 +584,8 @@ public interface Simple {
       tryAlts.set((java.util.function.Function<java.util.List<hydra.core.Type>, hydra.util.Maybe<hydra.core.Type>>) (alts -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(alts),
         () -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()),
-        () -> hydra.lib.maybes.Maybe.apply(
-          (tryAlts.get()).apply(hydra.lib.lists.Tail.apply(alts)),
+        () -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> (tryAlts.get()).apply(hydra.lib.lists.Tail.apply(alts)),
           (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (t -> hydra.util.Maybe.just(t)),
           (tryType.get()).apply(hydra.lib.lists.Head.apply(alts))))));
       return (tryAlts.get()).apply(alts0);
@@ -601,8 +601,8 @@ public interface Simple {
     }));
     java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>> rewrite = (java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>>) (recurse -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (typ -> hydra.lib.eithers.Bind.apply(
       (recurse).apply(typ),
-      (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (type1 -> hydra.lib.maybes.Maybe.apply(
-        (hydra.util.Either<String, hydra.core.Type>) ((hydra.util.Either<String, hydra.core.Type>) (hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat2.apply(
+      (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (type1 -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> (hydra.util.Either<String, hydra.core.Type>) ((hydra.util.Either<String, hydra.core.Type>) (hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat2.apply(
           "no alternatives for type: ",
           hydra.show.core.Core.type(typ))))),
         (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (type2 -> (hydra.util.Either<String, hydra.core.Type>) ((hydra.util.Either<String, hydra.core.Type>) (hydra.util.Either.<String, hydra.core.Type>right(type2)))),
@@ -657,8 +657,8 @@ public interface Simple {
             untypedBindings.get())))))));
     }));
     hydra.util.Lazy<java.util.Set<hydra.module.Namespace>> namespacesSet = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(namespaces));
-    java.util.function.Function<hydra.core.Binding, Boolean> isParentBinding = (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.Maybe.apply(
-      false,
+    java.util.function.Function<hydra.core.Binding, Boolean> isParentBinding = (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> false,
       (java.util.function.Function<hydra.module.Namespace, Boolean>) (ns -> hydra.lib.sets.Member.apply(
         ns,
         namespacesSet.get())),
@@ -728,19 +728,19 @@ public interface Simple {
               (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<String, hydra.util.Pair<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>>) (bins4 -> {
                 java.util.List<hydra.core.Binding> bins5 = (normalizeBindings).apply(bins4);
                 hydra.util.Lazy<java.util.List<hydra.core.Binding>> selectedElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
-                  (java.util.function.Function<hydra.core.Binding, Boolean>) (el -> hydra.lib.maybes.Maybe.apply(
-                    false,
+                  (java.util.function.Function<hydra.core.Binding, Boolean>) (el -> hydra.lib.maybes.Maybe.applyLazy(
+                    () -> false,
                     (java.util.function.Function<hydra.module.Namespace, Boolean>) (ns -> hydra.lib.sets.Member.apply(
                       ns,
                       namespacesSet.get())),
                     hydra.names.Names.namespaceOf((el).name))),
                   bins5));
                 hydra.util.Lazy<java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>> elementsByNamespace = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
-                  (java.util.function.Function<java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>>) (acc -> (java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>) (el -> hydra.lib.maybes.Maybe.apply(
-                    acc,
+                  (java.util.function.Function<java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>, java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>>) (acc -> (java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>) (el -> hydra.lib.maybes.Maybe.applyLazy(
+                    () -> acc,
                     (java.util.function.Function<hydra.module.Namespace, java.util.Map<hydra.module.Namespace, java.util.List<hydra.core.Binding>>>) (ns -> {
-                      hydra.util.Lazy<java.util.List<hydra.core.Binding>> existing = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-                        (java.util.List<hydra.core.Binding>) (java.util.List.<hydra.core.Binding>of()),
+                      hydra.util.Lazy<java.util.List<hydra.core.Binding>> existing = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+                        () -> (java.util.List<hydra.core.Binding>) (java.util.List.<hydra.core.Binding>of()),
                         (java.util.function.Function<java.util.List<hydra.core.Binding>, java.util.List<hydra.core.Binding>>) (hydra.lib.equality.Identity::apply),
                         hydra.lib.maps.Lookup.apply(
                           ns,
@@ -760,8 +760,8 @@ public interface Simple {
                   (el).type));
                 hydra.util.Lazy<java.util.List<java.util.List<hydra.module.TermDefinition>>> defsGrouped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                   (java.util.function.Function<hydra.module.Namespace, java.util.List<hydra.module.TermDefinition>>) (ns -> {
-                    hydra.util.Lazy<java.util.List<hydra.core.Binding>> elsForNs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-                      (java.util.List<hydra.core.Binding>) (java.util.List.<hydra.core.Binding>of()),
+                    hydra.util.Lazy<java.util.List<hydra.core.Binding>> elsForNs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+                      () -> (java.util.List<hydra.core.Binding>) (java.util.List.<hydra.core.Binding>of()),
                       (java.util.function.Function<java.util.List<hydra.core.Binding>, java.util.List<hydra.core.Binding>>) (hydra.lib.equality.Identity::apply),
                       hydra.lib.maps.Lookup.apply(
                         ns,
@@ -1061,8 +1061,8 @@ public interface Simple {
       
       @Override
       public hydra.util.Either<String, java.util.List<hydra.core.Term>> visit(hydra.core.Term.Maybe ot) {
-        return (hydra.util.Either<String, java.util.List<hydra.core.Term>>) ((hydra.util.Either<String, java.util.List<hydra.core.Term>>) (hydra.util.Either.<String, java.util.List<hydra.core.Term>>right(java.util.List.of(new hydra.core.Term.List(hydra.lib.maybes.Maybe.apply(
-          (java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()),
+        return (hydra.util.Either<String, java.util.List<hydra.core.Term>>) ((hydra.util.Either<String, java.util.List<hydra.core.Term>>) (hydra.util.Either.<String, java.util.List<hydra.core.Term>>right(java.util.List.of(new hydra.core.Term.List(hydra.lib.maybes.Maybe.applyLazy(
+          () -> (java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()),
           (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (term2 -> java.util.List.of(term2)),
           (ot).value))))));
       }

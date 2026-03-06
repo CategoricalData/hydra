@@ -35,8 +35,8 @@ public interface CodeGeneration {
           pending));
         return ((java.util.function.Supplier<java.util.Set<hydra.module.Namespace>>) (() -> {
           hydra.util.Lazy<java.util.Set<hydra.module.Namespace>> nextDeps = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.module.Namespace, java.util.List<hydra.module.Namespace>>) (nsv -> hydra.lib.maybes.Maybe.apply(
-              (java.util.List<hydra.module.Namespace>) (java.util.List.<hydra.module.Namespace>of()),
+            (java.util.function.Function<hydra.module.Namespace, java.util.List<hydra.module.Namespace>>) (nsv -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> (java.util.List<hydra.module.Namespace>) (java.util.List.<hydra.module.Namespace>of()),
               (java.util.function.Function<hydra.module.Module, java.util.List<hydra.module.Namespace>>) (depMod -> (getDeps).apply(depMod)),
               hydra.lib.maps.Lookup.apply(
                 nsv,
@@ -276,8 +276,8 @@ public interface CodeGeneration {
   
   static String formatTermBinding(hydra.core.Binding binding) {
     String name = ((binding).name).value;
-    hydra.util.Lazy<String> typeStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-      "?",
+    hydra.util.Lazy<String> typeStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> "?",
       (java.util.function.Function<hydra.core.TypeScheme, String>) (scheme -> hydra.show.core.Core.typeScheme(scheme)),
       (binding).type));
     return hydra.lib.strings.Cat2.apply(

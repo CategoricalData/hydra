@@ -32,8 +32,8 @@ public interface Module {
               hydra.decode.module.Module.typeDefinition(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>) ((hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>) (hydra.util.Either.<hydra.error.DecodingError, hydra.module.Definition>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>) ((hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>) (hydra.util.Either.<hydra.error.DecodingError, hydra.module.Definition>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",

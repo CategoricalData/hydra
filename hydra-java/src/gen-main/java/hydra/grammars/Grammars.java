@@ -17,8 +17,8 @@ public interface Grammars {
     java.util.function.Function<hydra.util.Pair<java.util.List<String>, java.util.Map<String, Integer>>, java.util.function.Function<hydra.grammar.Pattern, hydra.util.Pair<java.util.List<String>, java.util.Map<String, Integer>>>> nextName = (java.util.function.Function<hydra.util.Pair<java.util.List<String>, java.util.Map<String, Integer>>, java.util.function.Function<hydra.grammar.Pattern, hydra.util.Pair<java.util.List<String>, java.util.Map<String, Integer>>>>) (acc -> (java.util.function.Function<hydra.grammar.Pattern, hydra.util.Pair<java.util.List<String>, java.util.Map<String, Integer>>>) (pat -> {
       hydra.util.Lazy<java.util.Map<String, Integer>> nameMap = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(acc));
       String rn = hydra.grammars.Grammars.rawName(pat);
-      hydra.util.Lazy<hydra.util.Pair<String, Integer>> nameAndIndex = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-        (hydra.util.Pair<String, Integer>) ((hydra.util.Pair<String, Integer>) (new hydra.util.Pair<String, Integer>(rn, 1))),
+      hydra.util.Lazy<hydra.util.Pair<String, Integer>> nameAndIndex = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> (hydra.util.Pair<String, Integer>) ((hydra.util.Pair<String, Integer>) (new hydra.util.Pair<String, Integer>(rn, 1))),
         (java.util.function.Function<Integer, hydra.util.Pair<String, Integer>>) (i -> (hydra.util.Pair<String, Integer>) ((hydra.util.Pair<String, Integer>) (new hydra.util.Pair<String, Integer>(hydra.lib.strings.Cat2.apply(
           rn,
           hydra.lib.literals.ShowInt32.apply(hydra.lib.math.Add.apply(

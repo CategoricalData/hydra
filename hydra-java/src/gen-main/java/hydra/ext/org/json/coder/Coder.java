@@ -182,8 +182,8 @@ public interface Coder {
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>> visit(hydra.core.Term.Maybe opt) {
-        return hydra.lib.maybes.Maybe.apply(
-          (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>right((hydra.util.Maybe<hydra.util.Pair<String, T0>>) (hydra.util.Maybe.<hydra.util.Pair<String, T0>>nothing())))),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>right((hydra.util.Maybe<hydra.util.Pair<String, T0>>) (hydra.util.Maybe.<hydra.util.Pair<String, T0>>nothing())))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>>) (v -> hydra.lib.eithers.Bind.apply(
             ((((java.util.function.Function<hydra.compute.Coder<hydra.core.Term, T0>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>>) ((java.util.function.Function<hydra.compute.Coder<hydra.core.Term, T0>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>>>) (projected -> projected.encode))).apply(coder_)).apply(cx)).apply(v),
             (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>>) (encoded -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<String, T0>>>right(hydra.util.Maybe.just((hydra.util.Pair<String, T0>) ((hydra.util.Pair<String, T0>) (new hydra.util.Pair<String, T0>((fname).value, encoded)))))))))),
@@ -268,8 +268,8 @@ public interface Coder {
         hydra.json.model.Value defaultValue = new hydra.json.model.Value.Null();
         hydra.util.Lazy<hydra.core.FieldType> ft = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(coder));
         hydra.core.Name fname = (ft.get()).name;
-        hydra.util.Lazy<hydra.json.model.Value> jsonValue = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.apply(
-          defaultValue,
+        hydra.util.Lazy<hydra.json.model.Value> jsonValue = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> defaultValue,
           hydra.lib.maps.Lookup.apply(
             (fname).value,
             m)));
@@ -662,8 +662,8 @@ public interface Coder {
       
       @Override
       public hydra.util.Either<T0, hydra.util.Maybe<hydra.json.model.Value>> visit(hydra.core.Term.Maybe mt) {
-        return hydra.lib.maybes.Maybe.apply(
-          (hydra.util.Either<T0, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Either<T0, hydra.util.Maybe<hydra.json.model.Value>>) (hydra.util.Either.<T0, hydra.util.Maybe<hydra.json.model.Value>>right((hydra.util.Maybe<hydra.json.model.Value>) (hydra.util.Maybe.<hydra.json.model.Value>nothing())))),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (hydra.util.Either<T0, hydra.util.Maybe<hydra.json.model.Value>>) ((hydra.util.Either<T0, hydra.util.Maybe<hydra.json.model.Value>>) (hydra.util.Either.<T0, hydra.util.Maybe<hydra.json.model.Value>>right((hydra.util.Maybe<hydra.json.model.Value>) (hydra.util.Maybe.<hydra.json.model.Value>nothing())))),
           forTerm,
           (mt).value);
       }
@@ -796,8 +796,8 @@ public interface Coder {
       
       @Override
       public hydra.util.Either<T0, hydra.json.model.Value> visit(hydra.core.Term.Maybe mt) {
-        return hydra.lib.maybes.Maybe.apply(
-          (hydra.util.Either<T0, hydra.json.model.Value>) ((hydra.util.Either<T0, hydra.json.model.Value>) (hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Null()))),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (hydra.util.Either<T0, hydra.json.model.Value>) ((hydra.util.Either<T0, hydra.json.model.Value>) (hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Null()))),
           recurse,
           (mt).value);
       }
@@ -841,8 +841,8 @@ public interface Coder {
           () -> (hydra.util.Either<T0, hydra.json.model.Value>) ((hydra.util.Either<T0, hydra.json.model.Value>) (hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.String_(((field).name).value)))),
           () -> hydra.lib.eithers.Bind.apply(
             (fieldToKeyval).apply(field),
-            (java.util.function.Function<hydra.util.Maybe<hydra.util.Pair<String, hydra.json.model.Value>>, hydra.util.Either<T0, hydra.json.model.Value>>) (mkeyval -> (hydra.util.Either<T0, hydra.json.model.Value>) ((hydra.util.Either<T0, hydra.json.model.Value>) (hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(hydra.lib.maybes.Maybe.apply(
-              (java.util.List<hydra.util.Pair<String, hydra.json.model.Value>>) (java.util.List.<hydra.util.Pair<String, hydra.json.model.Value>>of()),
+            (java.util.function.Function<hydra.util.Maybe<hydra.util.Pair<String, hydra.json.model.Value>>, hydra.util.Either<T0, hydra.json.model.Value>>) (mkeyval -> (hydra.util.Either<T0, hydra.json.model.Value>) ((hydra.util.Either<T0, hydra.json.model.Value>) (hydra.util.Either.<T0, hydra.json.model.Value>right(new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(hydra.lib.maybes.Maybe.applyLazy(
+              () -> (java.util.List<hydra.util.Pair<String, hydra.json.model.Value>>) (java.util.List.<hydra.util.Pair<String, hydra.json.model.Value>>of()),
               (java.util.function.Function<hydra.util.Pair<String, hydra.json.model.Value>, java.util.List<hydra.util.Pair<String, hydra.json.model.Value>>>) (keyval -> java.util.List.of(keyval)),
               mkeyval)))))))));
       }

@@ -621,8 +621,8 @@ public interface Serde {
   static hydra.ast.Expr encodeImportFromAsName(hydra.ext.python.syntax.ImportFromAsName ifan) {
     hydra.util.Maybe<hydra.ext.python.syntax.Name> alias = (ifan).as;
     hydra.ext.python.syntax.Name name = (ifan).name;
-    return hydra.lib.maybes.Maybe.apply(
-      hydra.ext.python.serde.Serde.encodeName(name),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.ext.python.serde.Serde.encodeName(name),
       (java.util.function.Function<hydra.ext.python.syntax.Name, hydra.ast.Expr>) (a -> hydra.serialization.Serialization.spaceSep(java.util.List.of(
         hydra.ext.python.serde.Serde.encodeName(name),
         hydra.serialization.Serialization.cst("as"),

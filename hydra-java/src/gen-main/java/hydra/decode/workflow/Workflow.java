@@ -99,8 +99,8 @@ public interface Workflow {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.SchemaSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.SchemaSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",

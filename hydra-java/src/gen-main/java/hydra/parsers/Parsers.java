@@ -176,8 +176,8 @@ public interface Parsers {
   static hydra.parsing.Parser<Integer> satisfy(java.util.function.Function<Integer, Boolean> pred) {
     java.util.function.Function<String, hydra.parsing.ParseResult<Integer>> parse = (java.util.function.Function<String, hydra.parsing.ParseResult<Integer>>) (input -> {
       java.util.List<Integer> codes = hydra.lib.strings.ToList.apply(input);
-      return hydra.lib.maybes.Maybe.apply(
-        (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("unexpected end of input", input))),
+      return hydra.lib.maybes.Maybe.applyLazy(
+        () -> (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("unexpected end of input", input))),
         (java.util.function.Function<Integer, hydra.parsing.ParseResult<Integer>>) (c -> {
           hydra.util.Lazy<String> rest = new hydra.util.Lazy<>(() -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Drop.apply(
             1,

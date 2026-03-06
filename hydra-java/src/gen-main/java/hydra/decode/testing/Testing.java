@@ -84,8 +84,8 @@ public interface Testing {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.EvaluationStyle>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.EvaluationStyle>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -410,8 +410,8 @@ public interface Testing {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.FoldOperation>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.FoldOperation>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -554,8 +554,8 @@ public interface Testing {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.HoistPredicate>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.HoistPredicate>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -749,8 +749,8 @@ public interface Testing {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TermRewriter>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TermRewriter>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -830,8 +830,8 @@ public interface Testing {
             hydra.extract.helpers.Helpers.decodeUnit(
               cx,
               input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TypeRewriter>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TypeRewriter>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -1588,8 +1588,8 @@ public interface Testing {
               hydra.decode.testing.Testing.unshadowVariablesTestCase(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TestCase>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>) ((hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>) (hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TestCase>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",

@@ -11,8 +11,8 @@ public interface Monads {
   }
   
   static <T0> java.util.List<T0> maybeToList(hydra.util.Maybe<T0> mx) {
-    return hydra.lib.maybes.Maybe.apply(
-      (java.util.List<T0>) (java.util.List.<T0>of()),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> (java.util.List<T0>) (java.util.List.<T0>of()),
       (java.util.function.Function<T0, java.util.List<T0>>) (hydra.lib.lists.Pure::apply),
       mx);
   }

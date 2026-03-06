@@ -523,8 +523,8 @@ public interface Serde {
   static hydra.ast.Expr writeClassInstanceCreationExpression(hydra.ext.java.syntax.ClassInstanceCreationExpression cice) {
     hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression e = (cice).expression;
     hydra.util.Maybe<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier> mqual = (cice).qualifier;
-    return hydra.lib.maybes.Maybe.apply(
-      hydra.ext.java.serde.Serde.writeUnqualifiedClassInstanceCreationExpression(e),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.ext.java.serde.Serde.writeUnqualifiedClassInstanceCreationExpression(e),
       (java.util.function.Function<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier, hydra.ast.Expr>) (q -> hydra.serialization.Serialization.dotSep(java.util.List.of(
         hydra.ext.java.serde.Serde.writeClassInstanceCreationExpression_Qualifier(q),
         hydra.ext.java.serde.Serde.writeUnqualifiedClassInstanceCreationExpression(e)))),
@@ -2234,8 +2234,8 @@ public interface Serde {
   static hydra.ast.Expr writeSingleElementAnnotation(hydra.ext.java.syntax.SingleElementAnnotation sea) {
     hydra.util.Maybe<hydra.ext.java.syntax.ElementValue> mv = (sea).value;
     hydra.ext.java.syntax.TypeName tname = (sea).name;
-    return hydra.lib.maybes.Maybe.apply(
-      hydra.ext.java.serde.Serde.writeMarkerAnnotation(new hydra.ext.java.syntax.MarkerAnnotation(tname)),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.ext.java.serde.Serde.writeMarkerAnnotation(new hydra.ext.java.syntax.MarkerAnnotation(tname)),
       (java.util.function.Function<hydra.ext.java.syntax.ElementValue, hydra.ast.Expr>) (v -> hydra.serialization.Serialization.prefix(
         "@",
         hydra.serialization.Serialization.noSep(java.util.List.of(
@@ -2664,8 +2664,8 @@ public interface Serde {
     hydra.ext.java.syntax.VariableDeclaratorId id = (vd).id;
     hydra.ast.Expr idSec = hydra.ext.java.serde.Serde.writeVariableDeclaratorId(id);
     hydra.util.Maybe<hydra.ext.java.syntax.VariableInitializer> minit = (vd).initializer;
-    return hydra.lib.maybes.Maybe.apply(
-      idSec,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> idSec,
       (java.util.function.Function<hydra.ext.java.syntax.VariableInitializer, hydra.ast.Expr>) (init -> hydra.serialization.Serialization.infixWs(
         "=",
         idSec,
@@ -2714,8 +2714,8 @@ public interface Serde {
   static hydra.ast.Expr writeWhileStatement(hydra.ext.java.syntax.WhileStatement ws) {
     hydra.ext.java.syntax.Statement body = (ws).body;
     hydra.util.Maybe<hydra.ext.java.syntax.Expression> mcond = (ws).cond;
-    hydra.util.Lazy<hydra.ast.Expr> condSer = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-      hydra.serialization.Serialization.cst("true"),
+    hydra.util.Lazy<hydra.ast.Expr> condSer = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.serialization.Serialization.cst("true"),
       (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.ast.Expr>) (c -> hydra.ext.java.serde.Serde.writeExpression(c)),
       mcond));
     return hydra.serialization.Serialization.spaceSep(java.util.List.of(
@@ -2783,8 +2783,8 @@ public interface Serde {
   }
   
   static hydra.ast.Expr withComments(hydra.util.Maybe<String> mc, hydra.ast.Expr expr) {
-    return hydra.lib.maybes.Maybe.apply(
-      expr,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> expr,
       (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.serialization.Serialization.newlineSep(java.util.List.of(
         hydra.serialization.Serialization.cst(hydra.lib.strings.Cat2.apply(
           "/**\n",

@@ -111,8 +111,8 @@ public interface Modules {
             graph,
             coreTyp),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.module.Definition>>) (adaptedTyp -> (hydra.util.Either<String, hydra.module.Definition>) ((hydra.util.Either<String, hydra.module.Definition>) (hydra.util.Either.<String, hydra.module.Definition>right(new hydra.module.Definition.Type(new hydra.module.TypeDefinition(name, adaptedTyp))))))))),
-      () -> hydra.lib.maybes.Maybe.apply(
-        (hydra.util.Either<String, hydra.module.Definition>) ((hydra.util.Either<String, hydra.module.Definition>) (hydra.util.Either.<String, hydra.module.Definition>left(hydra.lib.strings.Cat2.apply(
+      () -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> (hydra.util.Either<String, hydra.module.Definition>) ((hydra.util.Either<String, hydra.module.Definition>) (hydra.util.Either.<String, hydra.module.Definition>left(hydra.lib.strings.Cat2.apply(
           "no adapter for element ",
           (name).value)))),
         (java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.util.Either<String, hydra.module.Definition>>) (adapter -> hydra.lib.eithers.Bind.apply(

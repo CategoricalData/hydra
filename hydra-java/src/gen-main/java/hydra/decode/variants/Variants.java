@@ -37,8 +37,8 @@ public interface Variants {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.EliminationVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.EliminationVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -85,8 +85,8 @@ public interface Variants {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -143,8 +143,8 @@ public interface Variants {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -266,8 +266,8 @@ public interface Variants {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -379,8 +379,8 @@ public interface Variants {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",

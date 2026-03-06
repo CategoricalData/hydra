@@ -161,8 +161,8 @@ public class EithersTest {
 
             42,
 
-            hydra.lib.eithers.FromLeft.apply(
-  99,
+            hydra.lib.eithers.FromLeft.applyLazy(
+  () -> 99,
   (hydra.util.Either<Integer, T3>) ((hydra.util.Either<Integer, T3>) (hydra.util.Either.<Integer, T3>left(42)))));
 
     }
@@ -175,8 +175,8 @@ public class EithersTest {
 
             99,
 
-            hydra.lib.eithers.FromLeft.apply(
-  99,
+            hydra.lib.eithers.FromLeft.applyLazy(
+  () -> 99,
   (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("test")))));
 
     }
@@ -191,8 +191,8 @@ public class EithersTest {
 
             "test",
 
-            hydra.lib.eithers.FromRight.apply(
-  "default",
+            hydra.lib.eithers.FromRight.applyLazy(
+  () -> "default",
   (hydra.util.Either<T3, String>) ((hydra.util.Either<T3, String>) (hydra.util.Either.<T3, String>right("test")))));
 
     }
@@ -205,8 +205,8 @@ public class EithersTest {
 
             "default",
 
-            hydra.lib.eithers.FromRight.apply(
-  "default",
+            hydra.lib.eithers.FromRight.applyLazy(
+  () -> "default",
   (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(42)))));
 
     }

@@ -202,8 +202,8 @@ public interface Helpers {
   }
   
   static <T0, T1, T2> hydra.util.Either<hydra.error.DecodingError, T2> requireField(String fieldName, java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Either<hydra.error.DecodingError, T2>>> decoder, java.util.Map<hydra.core.Name, T1> fieldMap, T0 g) {
-    return hydra.lib.maybes.Maybe.apply(
-      (hydra.util.Either<hydra.error.DecodingError, T2>) ((hydra.util.Either<hydra.error.DecodingError, T2>) (hydra.util.Either.<hydra.error.DecodingError, T2>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> (hydra.util.Either<hydra.error.DecodingError, T2>) ((hydra.util.Either<hydra.error.DecodingError, T2>) (hydra.util.Either.<hydra.error.DecodingError, T2>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
         "missing field ",
         fieldName,
         " in record")))))),

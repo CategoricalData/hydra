@@ -32,8 +32,8 @@ public interface Coders {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>) ((hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>) (hydra.util.Either.<hydra.error.DecodingError, hydra.coders.CoderDirection>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>) ((hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>) (hydra.util.Either.<hydra.error.DecodingError, hydra.coders.CoderDirection>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -121,8 +121,8 @@ public interface Coders {
               hydra.extract.helpers.Helpers.decodeUnit(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>) ((hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>) (hydra.util.Either.<hydra.error.DecodingError, hydra.coders.TraversalOrder>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>) ((hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>) (hydra.util.Either.<hydra.error.DecodingError, hydra.coders.TraversalOrder>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
