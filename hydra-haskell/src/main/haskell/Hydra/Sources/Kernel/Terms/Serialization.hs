@@ -134,7 +134,7 @@ define = definitionInModule module_
 
 angleBraces :: TBinding Brackets
 angleBraces = define "angleBraces" $
-  Ast.brackets (sym @@ string "<") (sym @@ string ">")
+  Ast.brackets (Ast.symbol (string "<")) (Ast.symbol (string ">"))
 
 angleBracesList :: TBinding (BlockStyle -> [Expr] -> Expr)
 angleBracesList = define "angleBracesList" $
@@ -188,7 +188,7 @@ curlyBlock = define "curlyBlock" $
 
 curlyBraces :: TBinding Brackets
 curlyBraces = define "curlyBraces" $
-  Ast.brackets (sym @@ string "{") (sym @@ string "}")
+  Ast.brackets (Ast.symbol (string "{")) (Ast.symbol (string "}"))
 
 curlyBracesList :: TBinding (Maybe String -> BlockStyle -> [Expr] -> Expr)
 curlyBracesList = define "curlyBracesList" $
@@ -396,7 +396,7 @@ parens = define "parens" $
 
 parentheses :: TBinding Brackets
 parentheses = define "parentheses" $
-  Ast.brackets (sym @@ string "(") (sym @@ string ")")
+  Ast.brackets (Ast.symbol (string "(")) (Ast.symbol (string ")"))
 
 parenthesize :: TBinding (Expr -> Expr)
 parenthesize = define "parenthesize" $
@@ -501,9 +501,9 @@ printExpr = define "printExpr" $
       "rhs" <~ var "idt" @@ var "padr" @@ (printExpr @@ var "r") $
       var "lhs" ++ (var "pad" @@ var "padl") ++ var "sym" ++ (var "pad" @@ var "padr") ++ var "rhs",
     _Expr_brackets>>: "bracketExpr" ~>
-      "brackets" <~ Ast.bracketExprBrackets (var "bracketExpr") $
-      "l" <~ Ast.unSymbol (Ast.bracketsOpen $ var "brackets") $
-      "r" <~ Ast.unSymbol (Ast.bracketsClose $ var "brackets") $
+      "brs" <~ Ast.bracketExprBrackets (var "bracketExpr") $
+      "l" <~ Ast.unSymbol (Ast.bracketsOpen $ var "brs") $
+      "r" <~ Ast.unSymbol (Ast.bracketsClose $ var "brs") $
       "e" <~ Ast.bracketExprEnclosed (var "bracketExpr") $
       "style" <~ Ast.bracketExprStyle (var "bracketExpr") $
       "body" <~ printExpr @@ var "e" $
@@ -536,7 +536,7 @@ spaceSep = define "spaceSep" $
 
 squareBrackets :: TBinding Brackets
 squareBrackets = define "squareBrackets" $
-  Ast.brackets (sym @@ string "[") (sym @@ string "]")
+  Ast.brackets (Ast.symbol (string "[")) (Ast.symbol (string "]"))
 
 suffix :: TBinding (String -> Expr -> Expr)
 suffix = define "suffix" $
