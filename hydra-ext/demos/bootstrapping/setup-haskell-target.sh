@@ -9,9 +9,19 @@
 
 set -e
 
-OUTPUT_DIR="$1"
+# Parse arguments
+NO_TEST=false
+POSITIONAL_ARGS=()
+for arg in "$@"; do
+    case "$arg" in
+        --no-test) NO_TEST=true ;;
+        *) POSITIONAL_ARGS+=("$arg") ;;
+    esac
+done
+
+OUTPUT_DIR="${POSITIONAL_ARGS[0]}"
 if [ -z "$OUTPUT_DIR" ]; then
-    echo "Usage: $0 <output-dir>"
+    echo "Usage: $0 [--no-test] <output-dir>"
     exit 1
 fi
 
@@ -34,16 +44,11 @@ echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/haskell"
 cp -r "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra" "$OUTPUT_DIR/src/main/haskell/"
 
-# Kernel sources modules (Hydra.Sources.*) needed for evaluation tests.
-echo "  Copying kernel sources modules..."
-if [ -d "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Sources" ]; then
-    mkdir -p "$OUTPUT_DIR/src/gen-main/haskell/Hydra/Sources"
-    cp -r "$HYDRA_HASKELL_DIR/src/gen-main/haskell/Hydra/Sources/"* "$OUTPUT_DIR/src/gen-main/haskell/Hydra/Sources/"
-fi
-
 # Copy ext modules from baseline, replacing any generated versions.
-# The bootstrap only generates a subset of ext modules (haskell, json);
-# other ext modules (java, python, scala, yaml) must come from the baseline.
+# Hand-written Sources modules (e.g. Templates.hs, Annotations.hs) import generated
+# modules like Hydra.Sources.Decode.Core and Hydra.Sources.Encode.Core, and
+# Staging/Yaml/Coder.hs imports Hydra.Ext.Org.Yaml.Model — all of which live in
+# gen-main. Copying the full baseline gen-main ext tree ensures these are available.
 echo "  Copying ext modules from baseline..."
 HS_GEN="$OUTPUT_DIR/src/gen-main/haskell"
 HS_BASELINE="$HYDRA_HASKELL_DIR/src/gen-main/haskell"
@@ -52,6 +57,16 @@ if [ -d "$HS_BASELINE/Hydra/Ext" ]; then
     cp -r "$HS_BASELINE/Hydra/Ext" "$HS_GEN/Hydra/"
     echo "    Copied Hydra/Ext from baseline"
 fi
+# Copy Sources/Decode and Sources/Encode (generated DSL source modules imported by
+# hand-written Sources modules like Templates.hs and Annotations.hs)
+for src_dir in Decode Encode; do
+    if [ -d "$HS_BASELINE/Hydra/Sources/$src_dir" ]; then
+        mkdir -p "$HS_GEN/Hydra/Sources"
+        rm -rf "$HS_GEN/Hydra/Sources/$src_dir"
+        cp -r "$HS_BASELINE/Hydra/Sources/$src_dir" "$HS_GEN/Hydra/Sources/"
+        echo "    Copied Hydra/Sources/$src_dir from baseline"
+    fi
+done
 
 # Test infrastructure
 echo "  Copying test infrastructure..."
@@ -78,14 +93,22 @@ echo "  Generated test modules:   $TEST_COUNT files"
 echo "  Static resources:         $STATIC_COUNT files"
 echo ""
 
-# Build and run tests
-echo "Building and running Haskell tests..."
+# Build
+echo "Building Haskell target..."
 STEP_START=$(date +%s)
 cd "$OUTPUT_DIR"
 stack build 2>&1
 BUILD_END=$(date +%s)
 echo "  Build time: $((BUILD_END - STEP_START))s"
-stack test 2>&1
+
+if [ "$NO_TEST" = true ]; then
+    echo ""
+    exit 0
+fi
+
+# Run tests
+echo "Running Haskell tests..."
+HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" stack test 2>&1
 TEST_EXIT=$?
 TEST_END=$(date +%s)
 echo "  Test time: $((TEST_END - BUILD_END))s"
