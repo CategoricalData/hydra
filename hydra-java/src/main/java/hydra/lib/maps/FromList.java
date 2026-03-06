@@ -94,9 +94,10 @@ public class FromList extends PrimitiveFunction {
     @SuppressWarnings("unchecked")
     static <K, V> Map<K, V> orderedMap(Map<K, V> source) {
         if (source instanceof TreeMap) {
-            TreeMap<K, V> result = new TreeMap<>(((TreeMap<K, V>) source).comparator());
-            result.putAll(source);
-            return result;
+            // Use the SortedMap copy constructor which iterates linearly,
+            // rather than putAll which uses recursive buildFromSorted and
+            // can cause StackOverflowError on large maps.
+            return new TreeMap<>((java.util.SortedMap<K, V>) source);
         }
         if (source.isEmpty()) {
             return new LinkedHashMap<>();
