@@ -762,9 +762,6 @@ javaEnvSetGraph g env = Helpers.JavaEnvironment {
 analyzeJavaFunction :: (Helpers.JavaEnvironment -> Core.Term -> Context.Context -> t0 -> Either t1 (Typing.FunctionStructure Helpers.JavaEnvironment))
 analyzeJavaFunction env term cx g = (CoderUtils.analyzeFunctionTerm cx javaEnvGetGraph javaEnvSetGraph env term)
 
-analyzeJavaFunctionNoInfer :: (Helpers.JavaEnvironment -> Core.Term -> t0 -> t1 -> Either t2 (Typing.FunctionStructure Helpers.JavaEnvironment))
-analyzeJavaFunctionNoInfer env term cx g = (CoderUtils.analyzeFunctionTermNoInfer javaEnvGetGraph javaEnvSetGraph env term)
-
 withLambda :: (Helpers.JavaEnvironment -> Core.Lambda -> (Helpers.JavaEnvironment -> t0) -> t0)
 withLambda env lam k = (Schemas.withLambdaContext javaEnvGetGraph javaEnvSetGraph env lam (\env1 ->  
   let aliases = (Helpers.javaEnvironmentAliases env1)
