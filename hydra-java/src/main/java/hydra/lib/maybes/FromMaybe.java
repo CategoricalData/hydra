@@ -9,6 +9,7 @@ import hydra.util.Maybe;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
@@ -52,23 +53,34 @@ public class FromMaybe extends PrimitiveFunction {
     }
 
     /**
-     * Returns the value from an optional or a default value. Curried version.
-     * @param <X> the value type
-     * @param defaultValue the default value to return if the optional is empty
-     * @return a function that takes an optional and returns the value or default
+     * @deprecated Use {@link #applyLazy(Supplier, Maybe)} instead. Eager evaluation of the default wastes memory.
      */
+    @Deprecated
     public static <X> Function<Maybe<X>, X> apply(X defaultValue) {
         return (opt) -> apply(defaultValue, opt);
     }
 
     /**
-     * Returns the value from an optional or a default value.
-     * @param <X> the value type
-     * @param defaultValue the default value to return if the optional is empty
-     * @param opt the optional value
-     * @return the contained value if present, otherwise the default value
+     * @deprecated Use {@link #applyLazy(Supplier, Maybe)} instead. Eager evaluation of the default wastes memory.
      */
+    @Deprecated
     public static <X> X apply(X defaultValue, Maybe<X> opt) {
         return opt.orElse(defaultValue);
+    }
+
+    /**
+     * Lazily returns the value from an optional or a default value.
+     * The default is only evaluated if the optional is empty.
+     */
+    public static <X> Function<Maybe<X>, X> applyLazy(Supplier<X> defaultValue) {
+        return (opt) -> applyLazy(defaultValue, opt);
+    }
+
+    /**
+     * Lazily returns the value from an optional or a default value.
+     * The default is only evaluated if the optional is empty.
+     */
+    public static <X> X applyLazy(Supplier<X> defaultValue, Maybe<X> opt) {
+        return opt.isJust() ? opt.fromJust() : defaultValue.get();
     }
 }

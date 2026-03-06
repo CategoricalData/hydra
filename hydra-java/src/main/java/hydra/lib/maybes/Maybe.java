@@ -9,6 +9,7 @@ import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.optional;
@@ -55,26 +56,36 @@ public class Maybe extends PrimitiveFunction {
     }
 
     /**
-     * Pattern matches on an optional value with a default. Curried version.
-     * @param <X> the optional value type
-     * @param <Y> the result type
-     * @param nothingCase the default value to return if the optional is empty
-     * @return a function that takes a Just case handler and returns a function that takes an optional
+     * @deprecated Use {@link #applyLazy(Supplier, Function, hydra.util.Maybe)} instead. Eager evaluation of the nothing case wastes memory.
      */
+    @Deprecated
     public static <X, Y> Function<Function<X, Y>, Function<hydra.util.Maybe<X>, Y>> apply(Y nothingCase) {
         return (justCase) -> (opt) -> apply(nothingCase, justCase, opt);
     }
 
     /**
-     * Pattern matches on an optional value with a default.
-     * @param <X> the optional value type
-     * @param <Y> the result type
-     * @param nothingCase the default value to return if the optional is empty
-     * @param justCase the function to apply to the value if the optional is present
-     * @param opt the optional value to match on
-     * @return the result of applying the appropriate handler
+     * @deprecated Use {@link #applyLazy(Supplier, Function, hydra.util.Maybe)} instead. Eager evaluation of the nothing case wastes memory.
      */
+    @Deprecated
     public static <X, Y> Y apply(Y nothingCase, Function<X, Y> justCase, hydra.util.Maybe<X> opt) {
         return opt.isJust() ? justCase.apply(opt.fromJust()) : nothingCase;
+    }
+
+    /**
+     * Lazily pattern matches on an optional value with a default.
+     * The nothing case is only evaluated if the optional is empty,
+     * avoiding construction of expensive error messages on the success path.
+     */
+    public static <X, Y> Function<Function<X, Y>, Function<hydra.util.Maybe<X>, Y>> applyLazy(Supplier<Y> nothingCase) {
+        return (justCase) -> (opt) -> applyLazy(nothingCase, justCase, opt);
+    }
+
+    /**
+     * Lazily pattern matches on an optional value with a default.
+     * The nothing case is only evaluated if the optional is empty,
+     * avoiding construction of expensive error messages on the success path.
+     */
+    public static <X, Y> Y applyLazy(Supplier<Y> nothingCase, Function<X, Y> justCase, hydra.util.Maybe<X> opt) {
+        return opt.isJust() ? justCase.apply(opt.fromJust()) : nothingCase.get();
     }
 }

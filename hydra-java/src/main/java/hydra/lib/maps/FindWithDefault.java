@@ -10,6 +10,7 @@ import hydra.util.Maybe;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -56,26 +57,34 @@ public class FindWithDefault extends PrimitiveFunction {
     }
 
     /**
-     * Returns the value or default.
-     * @param <K> the key type
-     * @param <V> the value type
-     * @param defaultValue the default value to return if key is not found
-     * @return a curried function that takes a key, a map, and returns the value or default
+     * @deprecated Use {@link #applyLazy(Supplier, Object, Map)} instead. Eager evaluation of the default wastes memory.
      */
+    @Deprecated
     public static <K, V> Function<K, Function<Map<K, V>, V>> apply(V defaultValue) {
         return key -> mp -> apply(defaultValue, key, mp);
     }
 
     /**
-     * Returns the value or default.
-     * @param <K> the key type
-     * @param <V> the value type
-     * @param defaultValue the default value to return if key is not found
-     * @param key the key to look up
-     * @param mp the map to search
-     * @return the value or default
+     * @deprecated Use {@link #applyLazy(Supplier, Object, Map)} instead. Eager evaluation of the default wastes memory.
      */
+    @Deprecated
     public static <K, V> V apply(V defaultValue, K key, Map<K, V> mp) {
         return mp.getOrDefault(key, defaultValue);
+    }
+
+    /**
+     * Lazily looks up a key in a map, returning a default if not found.
+     * The default is only evaluated if the key is absent.
+     */
+    public static <K, V> Function<K, Function<Map<K, V>, V>> applyLazy(Supplier<V> defaultValue) {
+        return key -> mp -> applyLazy(defaultValue, key, mp);
+    }
+
+    /**
+     * Lazily looks up a key in a map, returning a default if not found.
+     * The default is only evaluated if the key is absent.
+     */
+    public static <K, V> V applyLazy(Supplier<V> defaultValue, K key, Map<K, V> mp) {
+        return mp.containsKey(key) ? mp.get(key) : defaultValue.get();
     }
 }
