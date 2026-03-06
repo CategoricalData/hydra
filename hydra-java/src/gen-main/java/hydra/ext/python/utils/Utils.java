@@ -54,6 +54,10 @@ public interface Utils {
     return new hydra.ext.python.syntax.Statement.Simple(java.util.List.of(s));
   }
   
+  static hydra.ext.python.syntax.BitwiseOr pyExpressionToBitwiseOr(hydra.ext.python.syntax.Expression e) {
+    return new hydra.ext.python.syntax.BitwiseOr((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()), new hydra.ext.python.syntax.BitwiseXor((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseXor>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseXor>nothing()), new hydra.ext.python.syntax.BitwiseAnd((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseAnd>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseAnd>nothing()), new hydra.ext.python.syntax.ShiftExpression((hydra.util.Maybe<hydra.ext.python.syntax.ShiftLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.ShiftLhs>nothing()), new hydra.ext.python.syntax.Sum((hydra.util.Maybe<hydra.ext.python.syntax.SumLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.SumLhs>nothing()), new hydra.ext.python.syntax.Term((hydra.util.Maybe<hydra.ext.python.syntax.TermLhs>) (hydra.util.Maybe.<hydra.ext.python.syntax.TermLhs>nothing()), new hydra.ext.python.syntax.Factor.Simple(new hydra.ext.python.syntax.Power(new hydra.ext.python.syntax.AwaitPrimary(false, new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Group(new hydra.ext.python.syntax.Group.Expression(new hydra.ext.python.syntax.NamedExpression.Simple(e))))), (hydra.util.Maybe<hydra.ext.python.syntax.Factor>) (hydra.util.Maybe.<hydra.ext.python.syntax.Factor>nothing())))))))));
+  }
+  
   static hydra.ext.python.syntax.SimpleStatement pyExpressionToPySimpleStatement(hydra.ext.python.syntax.Expression expr) {
     return new hydra.ext.python.syntax.SimpleStatement.StarExpressions(java.util.List.of(new hydra.ext.python.syntax.StarExpression.Simple(expr)));
   }
