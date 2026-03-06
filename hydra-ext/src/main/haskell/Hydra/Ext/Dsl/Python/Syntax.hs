@@ -1144,6 +1144,19 @@ pyPrimaryToPyExpression p = inject Py._Expression Py._Expression_simple (pyPrima
 pyNameToPyExpression :: TTerm Py.Name -> TTerm Py.Expression
 pyNameToPyExpression n = pyPrimaryToPyExpression (pyNameToPyPrimary n)
 
+-- | Convert a Comparison to an Expression
+pyComparisonToPyExpression :: TTerm Py.Comparison -> TTerm Py.Expression
+pyComparisonToPyExpression c = inject Py._Expression Py._Expression_simple
+  (wrap Py._Disjunction (list [
+    wrap Py._Conjunction (list [
+      inject Py._Inversion Py._Inversion_simple c])]))
+
+-- | Create a CompareOpBitwiseOrPair with == operator
+compPairEq :: TTerm Py.BitwiseOr -> TTerm Py.CompareOpBitwiseOrPair
+compPairEq rhs = record Py._CompareOpBitwiseOrPair [
+  Py._CompareOpBitwiseOrPair_operator>>: injectUnit Py._CompareOp Py._CompareOp_eq,
+  Py._CompareOpBitwiseOrPair_rhs>>: rhs]
+
 -- | Convert a Python String to an Expression
 pyStringToPyExpression :: TTerm Py.String_ -> TTerm Py.Expression
 pyStringToPyExpression s = pyPrimaryToPyExpression (primarySimple (atomString s))
