@@ -895,13 +895,14 @@ wrapInSupplierLambda = def "wrapInSupplierLambda" $
 
 -- | For primitives requiring lazy evaluation, wrap branch arguments in Supplier lambdas.
 -- Java eagerly evaluates all method arguments, so ifElse branches must be wrapped
--- in () -> expr and called via IfElse.lazy().
+-- in () -> expr and called via IfElse.lazy(). Similarly, maybe's nothing case must be
+-- wrapped to avoid constructing expensive error messages on the success path.
 wrapLazyArguments :: TBinding (Name -> [Java.Expression] -> ([Java.Expression], Maybe String))
 wrapLazyArguments = def "wrapLazyArguments" $
   lambda "name" $ lambda "args" $
     Logic.ifElse
       (Logic.and
-        (Equality.equal (var "name") (wrap _Name (string "hydra.lib.logic.ifElse")))
+        (Equality.equal (var "name") (Core.nameLift _logic_ifElse))
         (Equality.equal (Lists.length (var "args")) (int32 3)))
       (pair
         (list [
@@ -909,7 +910,50 @@ wrapLazyArguments = def "wrapLazyArguments" $
           wrapInSupplierLambda @@ (Lists.at (int32 1) (var "args")),
           wrapInSupplierLambda @@ (Lists.at (int32 2) (var "args"))])
         (just (string "lazy")))
-      (pair (var "args") (nothing :: TTerm (Maybe String)))
+      (Logic.ifElse
+        (Logic.and
+          (Equality.equal (var "name") (Core.nameLift _maybes_maybe))
+          (Equality.equal (Lists.length (var "args")) (int32 3)))
+        (pair
+          (list [
+            wrapInSupplierLambda @@ (Lists.at (int32 0) (var "args")),
+            Lists.at (int32 1) (var "args"),
+            Lists.at (int32 2) (var "args")])
+          (just (string "applyLazy")))
+      (Logic.ifElse
+        (Logic.and
+          (Equality.equal (var "name") (Core.nameLift _maybes_cases))
+          (Equality.equal (Lists.length (var "args")) (int32 3)))
+        (pair
+          (list [
+            Lists.at (int32 0) (var "args"),
+            wrapInSupplierLambda @@ (Lists.at (int32 1) (var "args")),
+            Lists.at (int32 2) (var "args")])
+          (just (string "applyLazy")))
+      (Logic.ifElse
+        (Logic.and
+          (Equality.equal (var "name") (Core.nameLift _maps_findWithDefault))
+          (Equality.equal (Lists.length (var "args")) (int32 3)))
+        (pair
+          (list [
+            wrapInSupplierLambda @@ (Lists.at (int32 0) (var "args")),
+            Lists.at (int32 1) (var "args"),
+            Lists.at (int32 2) (var "args")])
+          (just (string "applyLazy")))
+      (Logic.ifElse
+        (Logic.and
+          (Logic.or
+            (Equality.equal (var "name") (Core.nameLift _maybes_fromMaybe))
+            (Logic.or
+              (Equality.equal (var "name") (Core.nameLift _eithers_fromLeft))
+              (Equality.equal (var "name") (Core.nameLift _eithers_fromRight))))
+          (Equality.equal (Lists.length (var "args")) (int32 2)))
+        (pair
+          (list [
+            wrapInSupplierLambda @@ (Lists.at (int32 0) (var "args")),
+            Lists.at (int32 1) (var "args")])
+          (just (string "applyLazy")))
+        (pair (var "args") (nothing :: TTerm (Maybe String)))))))
 
 -- =============================================================================
 -- Element naming
