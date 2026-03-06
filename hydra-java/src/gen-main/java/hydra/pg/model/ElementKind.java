@@ -7,12 +7,12 @@ import java.io.Serializable;
 /**
  * The kind of an element: vertex or edge
  */
-public abstract class ElementKind implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.ElementKind");
+public abstract class ElementKind implements Serializable, Comparable<ElementKind> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.ElementKind");
   
-  public static final hydra.core.Name FIELD_NAME_VERTEX = new hydra.core.Name("vertex");
+  public static final hydra.core.Name VERTEX = new hydra.core.Name("vertex");
   
-  public static final hydra.core.Name FIELD_NAME_EDGE = new hydra.core.Name("edge");
+  public static final hydra.core.Name EDGE = new hydra.core.Name("edge");
   
   private ElementKind () {
   
@@ -28,34 +28,45 @@ public abstract class ElementKind implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(ElementKind instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Vertex instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Edge instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
   public static final class Vertex extends hydra.pg.model.ElementKind implements Serializable {
-    public final Boolean value;
+    public Vertex () {
     
-    public Vertex (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      return other instanceof Vertex;
+      if (!(other instanceof Vertex)) {
+        return false;
+      }
+      Vertex o = (Vertex) other;
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return getClass().hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ElementKind other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -65,21 +76,32 @@ public abstract class ElementKind implements Serializable {
   }
   
   public static final class Edge extends hydra.pg.model.ElementKind implements Serializable {
-    public final Boolean value;
+    public Edge () {
     
-    public Edge (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      return other instanceof Edge;
+      if (!(other instanceof Edge)) {
+        return false;
+      }
+      Edge o = (Edge) other;
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return getClass().hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ElementKind other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

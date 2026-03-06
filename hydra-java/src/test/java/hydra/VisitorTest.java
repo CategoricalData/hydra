@@ -1,169 +1,201 @@
 package hydra;
 
-import hydra.ext.org.yaml.model.Node;
-import hydra.ext.org.yaml.model.Scalar;
+import hydra.core.FieldType;
+import hydra.core.FloatType;
+import hydra.core.IntegerType;
+import hydra.core.LiteralType;
+import hydra.core.Name;
+import hydra.core.RowType;
+import hydra.core.Type;
+import hydra.core.WrappedType;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import static hydra.VisitorTest.YamlDsl.float_;
-import static hydra.VisitorTest.YamlDsl.int_;
-import static hydra.VisitorTest.YamlDsl.map;
-import static hydra.VisitorTest.YamlDsl.seq;
-import static hydra.VisitorTest.YamlDsl.str;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
- * This test illustrates defining a simple domain-specific API on top of the generated YAML API in Java,
- * then constructing and visiting YAML nodes.
+ * This test illustrates constructing and visiting Hydra types using the generated visitor API.
  */
 public class VisitorTest {
-    private final Node yamlNode1 = str("foo bar baz");
-    private final Node yamlNode2 = int_(42);
-    private final Node yamlNode3 = seq(yamlNode1, yamlNode2);
-    private final Node yamlNode4 = map(
-            "lat", float_(37.7749),
-            "lon", float_(-122.4194));
+    // A few example types
+    private final Type stringType = new Type.Literal(new LiteralType.String_());
+    private final Type int32Type = new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32()));
+    private final Type float64Type = new Type.Literal(new LiteralType.Float_(new FloatType.Float64()));
+    private final Type listOfStrings = new Type.List(stringType);
+    private final Type maybeInt = new Type.Maybe(int32Type);
+    private final Type recordType = new Type.Record(new RowType(
+            new Name("LatLon"),
+            Arrays.asList(
+                    new FieldType(new Name("lat"), float64Type),
+                    new FieldType(new Name("lon"), float64Type))));
 
-    // Example visitor prints a given YAML node in a simple format
-    private final Node.Visitor<String> exampleVisitor = new Node.Visitor<String>() {
+    // Example visitor: format a type as a human-readable string
+    private final Type.Visitor<String> typeToString = new Type.Visitor<String>() {
         @Override
-        public String visit(Node.Mapping mapping) {
-            return "{" + mapping.value.entrySet().stream()
-                    .map(e -> e.getKey().accept(exampleVisitor) + "=" + e.getValue().accept(exampleVisitor))
-                    .collect(Collectors.joining(", ")) + "}";
+        public String visit(Type.Annotated instance) {
+            return instance.value.body.accept(typeToString) + " (annotated)";
         }
 
         @Override
-        public String visit(Node.Scalar scalar) {
-            return scalar.value.accept(new Scalar.Visitor<String>() {
+        public String visit(Type.Application instance) {
+            return "apply(" + instance.value.function.accept(typeToString)
+                    + ", " + instance.value.argument.accept(typeToString) + ")";
+        }
+
+        @Override
+        public String visit(Type.Either instance) {
+            return "either(" + instance.value.left.accept(typeToString)
+                    + ", " + instance.value.right.accept(typeToString) + ")";
+        }
+
+        @Override
+        public String visit(Type.Forall instance) {
+            return "forall " + instance.value.parameter.value + ". " + instance.value.body.accept(typeToString);
+        }
+
+        @Override
+        public String visit(Type.Function instance) {
+            return instance.value.domain.accept(typeToString) + " -> " + instance.value.codomain.accept(typeToString);
+        }
+
+        @Override
+        public String visit(Type.List instance) {
+            return "[" + instance.value.accept(typeToString) + "]";
+        }
+
+        @Override
+        public String visit(Type.Literal instance) {
+            return instance.value.accept(new LiteralType.Visitor<String>() {
                 @Override
-                public String visit(Scalar.Bool v) {
-                    return "bool:" + v.value;
+                public String visit(LiteralType.Binary instance) {
+                    return "binary";
                 }
 
                 @Override
-                public String visit(Scalar.Float_ v) {
-                    return "float:" + v.value;
+                public String visit(LiteralType.Boolean_ instance) {
+                    return "boolean";
                 }
 
                 @Override
-                public String visit(Scalar.Int v) {
-                    return "int:" + v.value;
+                public String visit(LiteralType.Float_ instance) {
+                    return "float64";
                 }
 
                 @Override
-                public String visit(Scalar.Null v) {
-                    return "null";
+                public String visit(LiteralType.Integer_ instance) {
+                    return "int32";
                 }
 
                 @Override
-                public String visit(Scalar.Str v) {
-                    return "str:\"" + v.value + "\"";
+                public String visit(LiteralType.String_ instance) {
+                    return "string";
                 }
             });
         }
 
         @Override
-        public String visit(Node.Sequence sequence) {
-            return "[" + sequence.value.stream()
-                    .map(node -> node.accept(exampleVisitor))
-                    .collect(Collectors.joining(", ")) + "]";
+        public String visit(Type.Map instance) {
+            return "map(" + instance.value.keys.accept(typeToString)
+                    + ", " + instance.value.values.accept(typeToString) + ")";
+        }
+
+        @Override
+        public String visit(Type.Maybe instance) {
+            return instance.value.accept(typeToString) + "?";
+        }
+
+        @Override
+        public String visit(Type.Pair instance) {
+            return "pair(" + instance.value.first.accept(typeToString)
+                    + ", " + instance.value.second.accept(typeToString) + ")";
+        }
+
+        @Override
+        public String visit(Type.Record instance) {
+            String fields = instance.value.fields.stream()
+                    .map(f -> f.name.value + ": " + f.type.accept(typeToString))
+                    .collect(Collectors.joining(", "));
+            return "{" + fields + "}";
+        }
+
+        @Override
+        public String visit(Type.Set instance) {
+            return "set(" + instance.value.accept(typeToString) + ")";
+        }
+
+        @Override
+        public String visit(Type.Union instance) {
+            String fields = instance.value.fields.stream()
+                    .map(f -> f.name.value + ": " + f.type.accept(typeToString))
+                    .collect(Collectors.joining(" | "));
+            return "(" + fields + ")";
+        }
+
+        @Override
+        public String visit(Type.Unit instance) {
+            return "unit";
+        }
+
+        @Override
+        public String visit(Type.Variable instance) {
+            return instance.value.value;
+        }
+
+        @Override
+        public String visit(Type.Wrap instance) {
+            return "wrap(" + instance.value.typeName.value + ", " + instance.value.body.accept(typeToString) + ")";
         }
     };
 
-    // Example partial visitor checks whether a node is numeric and equal to the number 42
-    private final Node.PartialVisitor<Boolean> examplePartialVisitor = new Node.PartialVisitor<Boolean>() {
+    // Example partial visitor: check whether a type is a numeric literal type
+    private final Type.PartialVisitor<Boolean> isNumericType = new Type.PartialVisitor<Boolean>() {
         @Override
-        public Boolean visit(Node.Scalar instance) {
-            return instance.value.accept(new Scalar.PartialVisitor<Boolean>() {
+        public Boolean visit(Type.Literal instance) {
+            return instance.value.accept(new LiteralType.PartialVisitor<Boolean>() {
                 @Override
-                public Boolean visit(Scalar.Float_ instance) {
-                    return instance.value.compareTo(BigDecimal.valueOf(42.0)) == 0;
+                public Boolean visit(LiteralType.Float_ instance) {
+                    return true;
                 }
 
                 @Override
-                public Boolean visit(Scalar.Int instance) {
-                    return instance.value.intValue() == 42;
+                public Boolean visit(LiteralType.Integer_ instance) {
+                    return true;
                 }
 
                 @Override
-                public Boolean otherwise(Scalar ignored) {
+                public Boolean otherwise(LiteralType ignored) {
                     return false;
                 }
             });
         }
 
         @Override
-        public Boolean otherwise(Node instance) {
+        public Boolean otherwise(Type instance) {
             return false;
         }
     };
 
     @Test
     public void demonstrateVisitor() {
-        assertEquals("str:\"foo bar baz\"", yamlNode1.accept(exampleVisitor));
-        assertEquals("int:42", yamlNode2.accept(exampleVisitor));
-        assertEquals("[str:\"foo bar baz\", int:42]", yamlNode3.accept(exampleVisitor));
-        assertEquals("{str:\"lat\"=float:37.7749, str:\"lon\"=float:-122.4194}",
-                yamlNode4.accept(exampleVisitor));
+        assertEquals("string", stringType.accept(typeToString));
+        assertEquals("int32", int32Type.accept(typeToString));
+        assertEquals("[string]", listOfStrings.accept(typeToString));
+        assertEquals("int32?", maybeInt.accept(typeToString));
+        assertEquals("{lat: float64, lon: float64}", recordType.accept(typeToString));
     }
 
     @Test
     public void demonstratePartialVisitor() {
-        assertFalse(yamlNode1.accept(examplePartialVisitor));
-        assertTrue(yamlNode2.accept(examplePartialVisitor));
-        assertFalse(yamlNode3.accept(examplePartialVisitor));
-    }
-
-    public interface YamlDsl {
-        static Node bool(boolean b) {
-            return new Node.Scalar(new Scalar.Bool(b));
-        }
-
-        static Node float_(double value) {
-            return new Node.Scalar(new Scalar.Float_(BigDecimal.valueOf(value)));
-        }
-
-        static Node int_(int value) {
-            return new Node.Scalar(new Scalar.Int(BigInteger.valueOf(value)));
-        }
-
-        static Node map(Map<Node, Node> m) {
-            return new Node.Mapping(m);
-        }
-
-        /**
-         * Construct a YAML map node from a flat key/value array.
-         */
-        static Node map(Object... keyvals) {
-            assert keyvals.length % 2 == 0;
-
-            Map<Node, Node> m = new HashMap<>();
-            for (int i = 0; i < keyvals.length; i += 2) {
-                String key = (String) keyvals[i];
-                Node value = (Node) keyvals[i + 1];
-                m.put(str(key), value);
-            }
-
-            return map(m);
-        }
-
-        static Node seq(Node... nodes) {
-            return new Node.Sequence(Arrays.asList(nodes));
-        }
-
-        static Node str(String s) {
-            return new Node.Scalar(new Scalar.Str(s));
-        }
+        assertFalse(stringType.accept(isNumericType));
+        assertTrue(int32Type.accept(isNumericType));
+        assertTrue(float64Type.accept(isNumericType));
+        assertFalse(listOfStrings.accept(isNumericType));
+        assertFalse(recordType.accept(isNumericType));
     }
 }

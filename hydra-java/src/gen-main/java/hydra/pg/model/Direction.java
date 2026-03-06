@@ -7,16 +7,16 @@ import java.io.Serializable;
 /**
  * The direction of an edge or edge pattern
  */
-public abstract class Direction implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Direction");
+public abstract class Direction implements Serializable, Comparable<Direction> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.Direction");
   
-  public static final hydra.core.Name FIELD_NAME_OUT = new hydra.core.Name("out");
+  public static final hydra.core.Name OUT = new hydra.core.Name("out");
   
-  public static final hydra.core.Name FIELD_NAME_IN = new hydra.core.Name("in");
+  public static final hydra.core.Name IN = new hydra.core.Name("in");
   
-  public static final hydra.core.Name FIELD_NAME_BOTH = new hydra.core.Name("both");
+  public static final hydra.core.Name BOTH = new hydra.core.Name("both");
   
-  public static final hydra.core.Name FIELD_NAME_UNDIRECTED = new hydra.core.Name("undirected");
+  public static final hydra.core.Name UNDIRECTED = new hydra.core.Name("undirected");
   
   private Direction () {
   
@@ -36,42 +36,53 @@ public abstract class Direction implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Direction instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Out instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(In instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Both instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Undirected instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
   public static final class Out extends hydra.pg.model.Direction implements Serializable {
-    public final Boolean value;
+    public Out () {
     
-    public Out (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      return other instanceof Out;
+      if (!(other instanceof Out)) {
+        return false;
+      }
+      Out o = (Out) other;
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return getClass().hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Direction other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -81,21 +92,32 @@ public abstract class Direction implements Serializable {
   }
   
   public static final class In extends hydra.pg.model.Direction implements Serializable {
-    public final Boolean value;
+    public In () {
     
-    public In (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      return other instanceof In;
+      if (!(other instanceof In)) {
+        return false;
+      }
+      In o = (In) other;
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return getClass().hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Direction other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -105,21 +127,32 @@ public abstract class Direction implements Serializable {
   }
   
   public static final class Both extends hydra.pg.model.Direction implements Serializable {
-    public final Boolean value;
+    public Both () {
     
-    public Both (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      return other instanceof Both;
+      if (!(other instanceof Both)) {
+        return false;
+      }
+      Both o = (Both) other;
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return getClass().hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Direction other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override
@@ -129,21 +162,32 @@ public abstract class Direction implements Serializable {
   }
   
   public static final class Undirected extends hydra.pg.model.Direction implements Serializable {
-    public final Boolean value;
+    public Undirected () {
     
-    public Undirected (Boolean value) {
-      java.util.Objects.requireNonNull((value));
-      this.value = value;
     }
     
     @Override
     public boolean equals(Object other) {
-      return other instanceof Undirected;
+      if (!(other instanceof Undirected)) {
+        return false;
+      }
+      Undirected o = (Undirected) other;
+      return true;
     }
     
     @Override
     public int hashCode() {
-      return getClass().hashCode();
+      return 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Direction other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      return 0;
     }
     
     @Override

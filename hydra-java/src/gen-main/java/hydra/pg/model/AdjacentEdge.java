@@ -2,19 +2,21 @@
 
 package hydra.pg.model;
 
+import java.io.Serializable;
+
 /**
  * An edge which is adjacent to a given vertex. Only the other endpoint of the edge is provided.
  */
-public class AdjacentEdge<V> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.AdjacentEdge");
+public class AdjacentEdge<V> implements Serializable, Comparable<AdjacentEdge<V>> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.AdjacentEdge");
   
-  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
+  public static final hydra.core.Name LABEL = new hydra.core.Name("label");
   
-  public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
+  public static final hydra.core.Name ID = new hydra.core.Name("id");
   
-  public static final hydra.core.Name FIELD_NAME_VERTEX = new hydra.core.Name("vertex");
+  public static final hydra.core.Name VERTEX = new hydra.core.Name("vertex");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
   
   /**
    * The label of the edge
@@ -37,10 +39,6 @@ public class AdjacentEdge<V> {
   public final java.util.Map<hydra.pg.model.PropertyKey, V> properties;
   
   public AdjacentEdge (hydra.pg.model.EdgeLabel label, V id, V vertex, java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
-    java.util.Objects.requireNonNull((label));
-    java.util.Objects.requireNonNull((id));
-    java.util.Objects.requireNonNull((vertex));
-    java.util.Objects.requireNonNull((properties));
     this.label = label;
     this.id = id;
     this.vertex = vertex;
@@ -52,32 +50,57 @@ public class AdjacentEdge<V> {
     if (!(other instanceof AdjacentEdge)) {
       return false;
     }
-    AdjacentEdge o = (AdjacentEdge) (other);
-    return label.equals(o.label) && id.equals(o.id) && vertex.equals(o.vertex) && properties.equals(o.properties);
+    AdjacentEdge o = (AdjacentEdge) other;
+    return java.util.Objects.equals(
+      this.label,
+      o.label) && java.util.Objects.equals(
+      this.id,
+      o.id) && java.util.Objects.equals(
+      this.vertex,
+      o.vertex) && java.util.Objects.equals(
+      this.properties,
+      o.properties);
   }
   
   @Override
   public int hashCode() {
-    return 2 * label.hashCode() + 3 * id.hashCode() + 5 * vertex.hashCode() + 7 * properties.hashCode();
+    return 2 * java.util.Objects.hashCode(label) + 3 * java.util.Objects.hashCode(id) + 5 * java.util.Objects.hashCode(vertex) + 7 * java.util.Objects.hashCode(properties);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(AdjacentEdge other) {
+    int cmp = 0;
+    cmp = ((Comparable) label).compareTo(other.label);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) id).compareTo(other.id);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) vertex).compareTo(other.vertex);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      properties.hashCode(),
+      other.properties.hashCode());
   }
   
   public AdjacentEdge withLabel(hydra.pg.model.EdgeLabel label) {
-    java.util.Objects.requireNonNull((label));
     return new AdjacentEdge(label, id, vertex, properties);
   }
   
   public AdjacentEdge withId(V id) {
-    java.util.Objects.requireNonNull((id));
     return new AdjacentEdge(label, id, vertex, properties);
   }
   
   public AdjacentEdge withVertex(V vertex) {
-    java.util.Objects.requireNonNull((vertex));
     return new AdjacentEdge(label, id, vertex, properties);
   }
   
   public AdjacentEdge withProperties(java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
-    java.util.Objects.requireNonNull((properties));
     return new AdjacentEdge(label, id, vertex, properties);
   }
 }

@@ -2,23 +2,23 @@
 
 package hydra.pg.model;
 
+import java.io.Serializable;
+
 /**
  * A graph; a self-contained collection of vertices and edges
  */
-public class Graph<V> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Graph");
+public class Graph<V> implements Serializable, Comparable<Graph<V>> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.Graph");
   
-  public static final hydra.core.Name FIELD_NAME_VERTICES = new hydra.core.Name("vertices");
+  public static final hydra.core.Name VERTICES = new hydra.core.Name("vertices");
   
-  public static final hydra.core.Name FIELD_NAME_EDGES = new hydra.core.Name("edges");
+  public static final hydra.core.Name EDGES = new hydra.core.Name("edges");
   
   public final java.util.Map<V, hydra.pg.model.Vertex<V>> vertices;
   
   public final java.util.Map<V, hydra.pg.model.Edge<V>> edges;
   
   public Graph (java.util.Map<V, hydra.pg.model.Vertex<V>> vertices, java.util.Map<V, hydra.pg.model.Edge<V>> edges) {
-    java.util.Objects.requireNonNull((vertices));
-    java.util.Objects.requireNonNull((edges));
     this.vertices = vertices;
     this.edges = edges;
   }
@@ -28,22 +28,39 @@ public class Graph<V> {
     if (!(other instanceof Graph)) {
       return false;
     }
-    Graph o = (Graph) (other);
-    return vertices.equals(o.vertices) && edges.equals(o.edges);
+    Graph o = (Graph) other;
+    return java.util.Objects.equals(
+      this.vertices,
+      o.vertices) && java.util.Objects.equals(
+      this.edges,
+      o.edges);
   }
   
   @Override
   public int hashCode() {
-    return 2 * vertices.hashCode() + 3 * edges.hashCode();
+    return 2 * java.util.Objects.hashCode(vertices) + 3 * java.util.Objects.hashCode(edges);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Graph other) {
+    int cmp = 0;
+    cmp = Integer.compare(
+      vertices.hashCode(),
+      other.vertices.hashCode());
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      edges.hashCode(),
+      other.edges.hashCode());
   }
   
   public Graph withVertices(java.util.Map<V, hydra.pg.model.Vertex<V>> vertices) {
-    java.util.Objects.requireNonNull((vertices));
     return new Graph(vertices, edges);
   }
   
   public Graph withEdges(java.util.Map<V, hydra.pg.model.Edge<V>> edges) {
-    java.util.Objects.requireNonNull((edges));
     return new Graph(vertices, edges);
   }
 }

@@ -7,15 +7,14 @@ import java.io.Serializable;
 /**
  * A property key
  */
-public class PropertyKey implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.PropertyKey");
+public class PropertyKey implements Serializable, Comparable<PropertyKey> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.PropertyKey");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   
   public PropertyKey (String value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -24,12 +23,20 @@ public class PropertyKey implements Serializable {
     if (!(other instanceof PropertyKey)) {
       return false;
     }
-    PropertyKey o = (PropertyKey) (other);
-    return value.equals(o.value);
+    PropertyKey o = (PropertyKey) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(PropertyKey other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

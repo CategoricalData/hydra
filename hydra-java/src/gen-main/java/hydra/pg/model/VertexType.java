@@ -2,17 +2,19 @@
 
 package hydra.pg.model;
 
+import java.io.Serializable;
+
 /**
  * The type of a vertex
  */
-public class VertexType<T> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.VertexType");
+public class VertexType<T> implements Serializable, Comparable<VertexType<T>> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.VertexType");
   
-  public static final hydra.core.Name FIELD_NAME_LABEL = new hydra.core.Name("label");
+  public static final hydra.core.Name LABEL = new hydra.core.Name("label");
   
-  public static final hydra.core.Name FIELD_NAME_ID = new hydra.core.Name("id");
+  public static final hydra.core.Name ID = new hydra.core.Name("id");
   
-  public static final hydra.core.Name FIELD_NAME_PROPERTIES = new hydra.core.Name("properties");
+  public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
   
   /**
    * The label of any vertex of this vertex type
@@ -30,9 +32,6 @@ public class VertexType<T> {
   public final java.util.List<hydra.pg.model.PropertyType<T>> properties;
   
   public VertexType (hydra.pg.model.VertexLabel label, T id, java.util.List<hydra.pg.model.PropertyType<T>> properties) {
-    java.util.Objects.requireNonNull((label));
-    java.util.Objects.requireNonNull((id));
-    java.util.Objects.requireNonNull((properties));
     this.label = label;
     this.id = id;
     this.properties = properties;
@@ -43,27 +42,47 @@ public class VertexType<T> {
     if (!(other instanceof VertexType)) {
       return false;
     }
-    VertexType o = (VertexType) (other);
-    return label.equals(o.label) && id.equals(o.id) && properties.equals(o.properties);
+    VertexType o = (VertexType) other;
+    return java.util.Objects.equals(
+      this.label,
+      o.label) && java.util.Objects.equals(
+      this.id,
+      o.id) && java.util.Objects.equals(
+      this.properties,
+      o.properties);
   }
   
   @Override
   public int hashCode() {
-    return 2 * label.hashCode() + 3 * id.hashCode() + 5 * properties.hashCode();
+    return 2 * java.util.Objects.hashCode(label) + 3 * java.util.Objects.hashCode(id) + 5 * java.util.Objects.hashCode(properties);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(VertexType other) {
+    int cmp = 0;
+    cmp = ((Comparable) label).compareTo(other.label);
+    if (cmp != 0) {
+      return cmp;
+    }
+    cmp = ((Comparable) id).compareTo(other.id);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return Integer.compare(
+      properties.hashCode(),
+      other.properties.hashCode());
   }
   
   public VertexType withLabel(hydra.pg.model.VertexLabel label) {
-    java.util.Objects.requireNonNull((label));
     return new VertexType(label, id, properties);
   }
   
   public VertexType withId(T id) {
-    java.util.Objects.requireNonNull((id));
     return new VertexType(label, id, properties);
   }
   
   public VertexType withProperties(java.util.List<hydra.pg.model.PropertyType<T>> properties) {
-    java.util.Objects.requireNonNull((properties));
     return new VertexType(label, id, properties);
   }
 }

@@ -7,15 +7,14 @@ import java.io.Serializable;
 /**
  * The label of a vertex. The default (null) vertex is represented by the empty string
  */
-public class VertexLabel implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.VertexLabel");
+public class VertexLabel implements Serializable, Comparable<VertexLabel> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.VertexLabel");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   
   public VertexLabel (String value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -24,12 +23,20 @@ public class VertexLabel implements Serializable {
     if (!(other instanceof VertexLabel)) {
       return false;
     }
-    VertexLabel o = (VertexLabel) (other);
-    return value.equals(o.value);
+    VertexLabel o = (VertexLabel) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(VertexLabel other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

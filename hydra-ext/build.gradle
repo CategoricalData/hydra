@@ -1,14 +1,36 @@
 plugins {
+    id 'antlr'
     id 'java-library'
 }
 
+apply plugin: 'antlr'
+
 dependencies {
     api project(':hydra-java')
+
+    antlr 'org.antlr:antlr4:4.13.2'
+
+    api group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
+    api group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
+    api group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-ntriples', version: rdf4jVersion
+
+    testImplementation 'org.apache.commons:commons-csv:1.10.0'
 }
 
-// Avoids duplicate KqlWriter.java
+// Avoid duplicate MapperBase.java and KqlWriter.java
 tasks.named('sourcesJar') {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    dependsOn generateGrammarSource // Ensure grammar is generated before sourcesJar
+}
+
+generateGrammarSource {
+    arguments += ["-package", "org.neo4j"]
+    arguments += ["-visitor"]
+    arguments += ["-no-listener"]
+}
+
+compileJava {
+    dependsOn generateGrammarSource
 }
 
 publishing {

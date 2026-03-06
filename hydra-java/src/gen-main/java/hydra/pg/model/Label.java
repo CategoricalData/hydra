@@ -7,12 +7,12 @@ import java.io.Serializable;
 /**
  * Either a vertex or edge label
  */
-public abstract class Label implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Label");
+public abstract class Label implements Serializable, Comparable<Label> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.Label");
   
-  public static final hydra.core.Name FIELD_NAME_VERTEX = new hydra.core.Name("vertex");
+  public static final hydra.core.Name VERTEX = new hydra.core.Name("vertex");
   
-  public static final hydra.core.Name FIELD_NAME_EDGE = new hydra.core.Name("edge");
+  public static final hydra.core.Name EDGE = new hydra.core.Name("edge");
   
   private Label () {
   
@@ -28,15 +28,15 @@ public abstract class Label implements Serializable {
   
   public interface PartialVisitor<R> extends Visitor<R> {
     default R otherwise(Label instance) {
-      throw new IllegalStateException("Non-exhaustive patterns when matching: " + (instance));
+      throw new IllegalStateException("Non-exhaustive patterns when matching: " + instance);
     }
     
     default R visit(Vertex instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
     
     default R visit(Edge instance) {
-      return otherwise((instance));
+      return otherwise(instance);
     }
   }
   
@@ -44,7 +44,6 @@ public abstract class Label implements Serializable {
     public final hydra.pg.model.VertexLabel value;
     
     public Vertex (hydra.pg.model.VertexLabel value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -53,13 +52,26 @@ public abstract class Label implements Serializable {
       if (!(other instanceof Vertex)) {
         return false;
       }
-      Vertex o = (Vertex) (other);
-      return value.equals(o.value);
+      Vertex o = (Vertex) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Label other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Vertex o = (Vertex) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -72,7 +84,6 @@ public abstract class Label implements Serializable {
     public final hydra.pg.model.EdgeLabel value;
     
     public Edge (hydra.pg.model.EdgeLabel value) {
-      java.util.Objects.requireNonNull((value));
       this.value = value;
     }
     
@@ -81,13 +92,26 @@ public abstract class Label implements Serializable {
       if (!(other instanceof Edge)) {
         return false;
       }
-      Edge o = (Edge) (other);
-      return value.equals(o.value);
+      Edge o = (Edge) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
     }
     
     @Override
     public int hashCode() {
-      return 2 * value.hashCode();
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Label other) {
+      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Edge o = (Edge) other;
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
