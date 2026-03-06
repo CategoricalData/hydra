@@ -198,9 +198,9 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.ClassType javaClassType(java.util.List<hydra.ext.java.syntax.ReferenceType> args, hydra.util.Maybe<hydra.ext.java.syntax.PackageName> pkg, String id) {
-    hydra.util.Lazy<hydra.ext.java.syntax.ClassTypeQualifier> qual = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.apply(
+    hydra.util.Lazy<hydra.ext.java.syntax.ClassTypeQualifier> qual = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
       pkg,
-      new hydra.ext.java.syntax.ClassTypeQualifier.None(),
+      () -> new hydra.ext.java.syntax.ClassTypeQualifier.None(),
       (java.util.function.Function<hydra.ext.java.syntax.PackageName, hydra.ext.java.syntax.ClassTypeQualifier>) (p -> new hydra.ext.java.syntax.ClassTypeQualifier.Package_(p))));
     hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.TypeArgument>> targs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.TypeArgument>) (rt -> new hydra.ext.java.syntax.TypeArgument.Reference(rt)),
@@ -267,9 +267,9 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.MethodBody javaMethodBody(hydra.util.Maybe<java.util.List<hydra.ext.java.syntax.BlockStatement>> mstmts) {
-    return hydra.lib.maybes.Cases.apply(
+    return hydra.lib.maybes.Cases.applyLazy(
       mstmts,
-      new hydra.ext.java.syntax.MethodBody.None(),
+      () -> new hydra.ext.java.syntax.MethodBody.None(),
       (java.util.function.Function<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.syntax.MethodBody>) (stmts -> new hydra.ext.java.syntax.MethodBody.Block(new hydra.ext.java.syntax.Block(stmts))));
   }
   
@@ -420,9 +420,9 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.MethodInvocation methodInvocation(hydra.util.Maybe<hydra.util.Either<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>> lhs, hydra.ext.java.syntax.Identifier methodName, java.util.List<hydra.ext.java.syntax.Expression> args) {
-    hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation_Header> header = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.apply(
+    hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation_Header> header = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
       lhs,
-      new hydra.ext.java.syntax.MethodInvocation_Header.Simple(new hydra.ext.java.syntax.MethodName(methodName)),
+      () -> new hydra.ext.java.syntax.MethodInvocation_Header.Simple(new hydra.ext.java.syntax.MethodName(methodName)),
       (java.util.function.Function<hydra.util.Either<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>, hydra.ext.java.syntax.MethodInvocation_Header>) (either -> new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.MethodInvocation_Variant>) (en -> new hydra.ext.java.syntax.MethodInvocation_Variant.Expression(en)),
         (java.util.function.Function<hydra.ext.java.syntax.Primary, hydra.ext.java.syntax.MethodInvocation_Variant>) (p -> new hydra.ext.java.syntax.MethodInvocation_Variant.Primary(p)),
@@ -501,21 +501,21 @@ public interface Utils {
   static hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> nameToQualifiedJavaName(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
     hydra.module.QualifiedName qn = hydra.names.Names.qualifyName(name);
     hydra.util.Maybe<hydra.module.Namespace> ns_ = (qn).namespace;
-    hydra.util.Lazy<hydra.util.Maybe<hydra.ext.java.syntax.PackageName>> alias = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.apply(
+    hydra.util.Lazy<hydra.util.Maybe<hydra.ext.java.syntax.PackageName>> alias = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
       ns_,
-      (hydra.util.Maybe<hydra.ext.java.syntax.PackageName>) (hydra.util.Maybe.<hydra.ext.java.syntax.PackageName>nothing()),
-      (java.util.function.Function<hydra.module.Namespace, hydra.util.Maybe<hydra.ext.java.syntax.PackageName>>) (n -> hydra.util.Maybe.just(hydra.lib.maybes.Cases.apply(
+      () -> (hydra.util.Maybe<hydra.ext.java.syntax.PackageName>) (hydra.util.Maybe.<hydra.ext.java.syntax.PackageName>nothing()),
+      (java.util.function.Function<hydra.module.Namespace, hydra.util.Maybe<hydra.ext.java.syntax.PackageName>>) (n -> hydra.util.Maybe.just(hydra.lib.maybes.Cases.applyLazy(
         hydra.lib.maps.Lookup.apply(
           n,
           (aliases).packages),
-        hydra.ext.java.names.Names.javaPackageName(hydra.lib.strings.SplitOn.apply(
+        () -> hydra.ext.java.names.Names.javaPackageName(hydra.lib.strings.SplitOn.apply(
           ".",
           (n).value)),
         (java.util.function.Function<hydra.ext.java.syntax.PackageName, hydra.ext.java.syntax.PackageName>) (id -> id))))));
     String local = (qn).local;
-    hydra.util.Lazy<hydra.ext.java.syntax.TypeIdentifier> jid = new hydra.util.Lazy<>(() -> hydra.ext.java.utils.Utils.javaTypeIdentifier(hydra.lib.maybes.Cases.apply(
+    hydra.util.Lazy<hydra.ext.java.syntax.TypeIdentifier> jid = new hydra.util.Lazy<>(() -> hydra.ext.java.utils.Utils.javaTypeIdentifier(hydra.lib.maybes.Cases.applyLazy(
       mlocal,
-      hydra.ext.java.utils.Utils.sanitizeJavaName(local),
+      () -> hydra.ext.java.utils.Utils.sanitizeJavaName(local),
       (java.util.function.Function<String, String>) (l -> hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           hydra.ext.java.utils.Utils.sanitizeJavaName(local),
@@ -523,9 +523,9 @@ public interface Utils {
         hydra.ext.java.utils.Utils.sanitizeJavaName(l))))));
     hydra.util.Lazy<hydra.ext.java.syntax.ClassTypeQualifier> pkg = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       qualify,
-      () -> hydra.lib.maybes.Cases.apply(
+      () -> hydra.lib.maybes.Cases.applyLazy(
         alias.get(),
-        new hydra.ext.java.syntax.ClassTypeQualifier.None(),
+        () -> new hydra.ext.java.syntax.ClassTypeQualifier.None(),
         (java.util.function.Function<hydra.ext.java.syntax.PackageName, hydra.ext.java.syntax.ClassTypeQualifier>) (p -> new hydra.ext.java.syntax.ClassTypeQualifier.Package_(p))),
       () -> new hydra.ext.java.syntax.ClassTypeQualifier.None()));
     return (hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) ((hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) (new hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>(jid.get(), pkg.get())));
@@ -558,15 +558,15 @@ public interface Utils {
     return hydra.lib.logic.IfElse.lazy(
       hydra.ext.java.utils.Utils.isEscaped((name).value),
       () -> new hydra.ext.java.syntax.Identifier(hydra.ext.java.utils.Utils.sanitizeJavaName(local)),
-      () -> hydra.lib.maybes.Cases.apply(
+      () -> hydra.lib.maybes.Cases.applyLazy(
         ns_,
-        new hydra.ext.java.syntax.Identifier(local),
+        () -> new hydra.ext.java.syntax.Identifier(local),
         (java.util.function.Function<hydra.module.Namespace, hydra.ext.java.syntax.Identifier>) (gname -> {
-          hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.apply(
+          hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
             hydra.lib.maps.Lookup.apply(
               gname,
               (aliases).packages),
-            hydra.lib.strings.SplitOn.apply(
+            () -> hydra.lib.strings.SplitOn.apply(
               ".",
               (gname).value),
             (java.util.function.Function<hydra.ext.java.syntax.PackageName, java.util.List<String>>) (pkgName -> hydra.lib.lists.Map.apply(
@@ -621,11 +621,11 @@ public interface Utils {
   }
   
   static hydra.core.Name lookupJavaVarName(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name name) {
-    return hydra.lib.maybes.Cases.apply(
+    return hydra.lib.maybes.Cases.applyLazy(
       hydra.lib.maps.Lookup.apply(
         name,
         (aliases).varRenames),
-      name,
+      () -> name,
       (java.util.function.Function<hydra.core.Name, hydra.core.Name>) (renamed -> renamed));
   }
   
@@ -680,9 +680,9 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression javaArrayCreation(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations primType, hydra.util.Maybe<hydra.ext.java.syntax.ArrayInitializer> minit) {
-    hydra.util.Lazy<hydra.ext.java.syntax.ArrayInitializer> init_ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.apply(
+    hydra.util.Lazy<hydra.ext.java.syntax.ArrayInitializer> init_ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
       minit,
-      new hydra.ext.java.syntax.ArrayInitializer((java.util.List<java.util.List<hydra.ext.java.syntax.VariableInitializer>>) (java.util.List.<java.util.List<hydra.ext.java.syntax.VariableInitializer>>of())),
+      () -> new hydra.ext.java.syntax.ArrayInitializer((java.util.List<java.util.List<hydra.ext.java.syntax.VariableInitializer>>) (java.util.List.<java.util.List<hydra.ext.java.syntax.VariableInitializer>>of())),
       (java.util.function.Function<hydra.ext.java.syntax.ArrayInitializer, hydra.ext.java.syntax.ArrayInitializer>) (i -> i)));
     return hydra.ext.java.utils.Utils.javaPrimaryToJavaExpression(new hydra.ext.java.syntax.Primary.ArrayCreation(new hydra.ext.java.syntax.ArrayCreationExpression.PrimitiveArray(new hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray(primType, (java.util.List<hydra.ext.java.syntax.Dims>) (java.util.List.<hydra.ext.java.syntax.Dims>of()), init_.get()))));
   }

@@ -65,15 +65,15 @@ public interface Hoisting {
   }
   
   static Boolean bindingIsPolymorphic(hydra.core.Binding binding) {
-    return hydra.lib.maybes.Maybe.apply(
-      false,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> false,
       (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.lib.logic.Not.apply(hydra.lib.lists.Null.apply((ts).variables))),
       (binding).type);
   }
   
   static Boolean bindingUsesContextTypeVars(hydra.graph.Graph cx, hydra.core.Binding binding) {
-    return hydra.lib.maybes.Maybe.apply(
-      false,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> false,
       (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> {
         java.util.Set<hydra.core.Name> contextTypeVars = (cx).typeVariables;
         java.util.Set<hydra.core.Name> freeInType = hydra.rewriting.Rewriting.freeVariablesInType((ts).type);
@@ -173,8 +173,8 @@ public interface Hoisting {
         hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.util.Maybe<hydra.core.Type>>) ((java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.util.Maybe<hydra.core.Type>>, hydra.util.Maybe<hydra.core.Type>>) (hydra.lib.pairs.Second::apply)),
           capturedTermVarTypePairs.get()))));
-      hydra.util.Lazy<java.util.Set<hydra.core.Name>> freeInBindingType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-        (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
+      hydra.util.Lazy<java.util.Set<hydra.core.Name>> freeInBindingType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
         (java.util.function.Function<hydra.core.TypeScheme, java.util.Set<hydra.core.Name>>) (ts -> hydra.rewriting.Rewriting.freeVariablesInType((ts).type)),
         (b.get()).type));
       hydra.util.Lazy<java.util.Set<hydra.core.Name>> freeInCapturedVarTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
@@ -221,8 +221,8 @@ public interface Hoisting {
       hydra.util.Lazy<hydra.core.Term> termWithTypeLambdas = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
         (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (t -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (v -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(v, t)))),
         termWithLambdas.get(),
-        hydra.lib.lists.Reverse.apply(hydra.lib.maybes.Maybe.apply(
-          (java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()),
+        hydra.lib.lists.Reverse.apply(hydra.lib.maybes.Maybe.applyLazy(
+          () -> (java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()),
           projected -> projected.variables,
           newTypeScheme.get()))));
       hydra.util.Lazy<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>> newBindingAndReplacement = new hydra.util.Lazy<>(() -> (hydra.util.Pair<hydra.core.Binding, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Binding, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Binding, hydra.core.Term>(new hydra.core.Binding(globalBindingName, termWithTypeLambdas.get(), newTypeScheme.get()), replacement.get()))));
@@ -337,8 +337,8 @@ public interface Hoisting {
           bindingEdges.get(),
           bindingImmediateCapturedVars.get())));
         hydra.util.Lazy<java.util.Set<hydra.core.Name>> polyLetVariables = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Filter.apply(
-          (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.lib.maybes.Maybe.apply(
-            false,
+          (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> false,
             hydra_schemas_fTypeIsPolymorphic2,
             hydra.lib.maybes.Map.apply(
               hydra_rewriting_typeSchemeToFType2,
@@ -349,8 +349,8 @@ public interface Hoisting {
             hydra.lib.sets.FromList.apply(hydra.lib.maps.Keys.apply((cx).boundTerms)),
             (cx).lambdaVariables)))));
         hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Name>>>> bindingsWithCapturedVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Name>>>) (b -> (hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Name>>(b, hydra.lib.maybes.Maybe.apply(
-            (java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()),
+          (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Name>>>) (b -> (hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Binding, java.util.List<hydra.core.Name>>(b, hydra.lib.maybes.Maybe.applyLazy(
+            () -> (java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()),
             (java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<hydra.core.Name>>) (vars -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Difference.apply(
               vars,
               polyLetVariables.get()))),
@@ -388,8 +388,8 @@ public interface Hoisting {
           (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.core.Binding>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Binding>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Binding>((b).name, b)))),
           hoistUs.get())));
         java.util.function.Function<hydra.core.Name, Boolean> isCacheable = (java.util.function.Function<hydra.core.Name, Boolean>) (name -> {
-          hydra.util.Lazy<Boolean> isPoly = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-            false,
+          hydra.util.Lazy<Boolean> isPoly = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+            () -> false,
             (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> (hydra_hoisting_bindingIsPolymorphic2).apply(b)),
             hydra.lib.maps.Lookup.apply(
               name,
@@ -411,8 +411,8 @@ public interface Hoisting {
           hoistNameReplacementPairs.get()));
         hydra.util.Lazy<java.util.List<hydra.core.Binding>> cacheBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Binding>) (p -> {
-            hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> origType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-              (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()),
+            hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> origType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()),
               (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.TypeScheme>>) (b -> (b).type),
               hydra.lib.maps.Lookup.apply(
                 hydra.lib.pairs.First.apply(p),

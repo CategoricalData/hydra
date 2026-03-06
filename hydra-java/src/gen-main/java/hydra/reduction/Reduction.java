@@ -281,8 +281,8 @@ public interface Reduction {
         n,
         0),
       () -> (java.util.List<hydra.util.Maybe<hydra.core.Type>>) (java.util.List.<hydra.util.Maybe<hydra.core.Type>>of()),
-      () -> hydra.lib.maybes.Maybe.apply(
-        hydra.lib.lists.Map.apply(
+      () -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> hydra.lib.lists.Map.apply(
           (java.util.function.Function<Integer, hydra.util.Maybe<hydra.core.Type>>) (ignored -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
           hydra.lib.math.Range.apply(
             1,
@@ -328,8 +328,8 @@ public interface Reduction {
         n,
         0),
       () -> mtyp,
-      () -> hydra.lib.maybes.Maybe.apply(
-        (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()),
+      () -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()),
         (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (typ -> (typ).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
           public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Type instance) {
@@ -399,8 +399,8 @@ public interface Reduction {
                     applied.get(),
                     indices));
                   return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
-                    hydra.util.Lazy<hydra.core.Term> fullyApplied = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-                      fullyAppliedRaw.get(),
+                    hydra.util.Lazy<hydra.core.Term> fullyApplied = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+                      () -> fullyAppliedRaw.get(),
                       (java.util.function.Function<hydra.core.Type, hydra.core.Term>) (ct -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(fullyAppliedRaw.get(), hydra.lib.maps.Singleton.apply(
                         new hydra.core.Name("type"),
                         hydra.encode.core.Core.type(ct))))),
@@ -463,8 +463,8 @@ public interface Reduction {
           
           @Override
           public Integer visit(hydra.core.Function.Primitive name) {
-            return hydra.lib.maybes.Maybe.apply(
-              0,
+            return hydra.lib.maybes.Maybe.applyLazy(
+              () -> 0,
               hydra.arity.Arity::typeSchemeArity,
               hydra.lib.maps.Lookup.apply(
                 (name).value,
@@ -497,8 +497,8 @@ public interface Reduction {
       
       @Override
       public Integer visit(hydra.core.Term.Variable name) {
-        return hydra.lib.maybes.Maybe.apply(
-          0,
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> 0,
           hydra.arity.Arity::typeArity,
           hydra.lib.maybes.Map.apply(
             hydra.rewriting.Rewriting::typeSchemeToFType,
@@ -870,8 +870,8 @@ public interface Reduction {
       
       @Override
       public Integer visit(hydra.core.Term.Variable name) {
-        return hydra.lib.maybes.Maybe.apply(
-          0,
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> 0,
           (java.util.function.Function<hydra.core.TypeScheme, Integer>) (ts -> hydra.arity.Arity.typeArity((ts).type)),
           hydra.lib.maybes.Bind.apply(
             hydra.lexical.Lexical.lookupElement(
@@ -958,8 +958,8 @@ public interface Reduction {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, Integer> visit(hydra.core.Term.Variable name) {
-            return hydra.lib.maybes.Maybe.apply(
-              hydra.lib.eithers.Map.apply(
+            return hydra.lib.maybes.Maybe.applyLazy(
+              () -> hydra.lib.eithers.Map.apply(
                 (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, Integer>) (_tc -> hydra.arity.Arity.typeArity(hydra.lib.pairs.First.apply(_tc))),
                 hydra.checking.Checking.typeOf(
                   cx,
@@ -1215,8 +1215,8 @@ public interface Reduction {
               ((cs).value).cases));
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.lists.Null.apply(matchingFields.get()),
-              () -> hydra.lib.maybes.Maybe.apply(
-                (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
+              () -> hydra.lib.maybes.Maybe.applyLazy(
+                () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
                   "no such field ",
                   ((field).name).value,
                   " in ",
@@ -1377,8 +1377,8 @@ public interface Reduction {
           hydra.util.Maybe<hydra.core.Binding> mBinding = hydra.lexical.Lexical.dereferenceElement(
             graph,
             (v).value);
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(((applyToArguments.get()).apply(original)).apply(args)))),
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(((applyToArguments.get()).apply(original)).apply(args)))),
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (binding -> (((applyIfNullary.get()).apply(eager2)).apply((binding).term)).apply(args)),
             mBinding);
         }
@@ -1489,8 +1489,8 @@ public interface Reduction {
           public Boolean visit(hydra.core.Elimination.Union cs) {
             return hydra.lib.logic.And.apply(
               (checkFields).apply(((cs).value).cases),
-              hydra.lib.maybes.Maybe.apply(
-                true,
+              hydra.lib.maybes.Maybe.applyLazy(
+                () -> true,
                 hydra.reduction.Reduction::termIsValue,
                 ((cs).value).default_));
           }
@@ -1555,8 +1555,8 @@ public interface Reduction {
       
       @Override
       public Boolean visit(hydra.core.Term.Maybe m) {
-        return hydra.lib.maybes.Maybe.apply(
-          true,
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> true,
           hydra.reduction.Reduction::termIsValue,
           (m).value);
       }

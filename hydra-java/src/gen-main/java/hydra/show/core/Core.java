@@ -13,8 +13,8 @@ public interface Core {
   static String binding(hydra.core.Binding el) {
     String name = ((el).name).value;
     hydra.core.Term t = (el).term;
-    hydra.util.Lazy<String> typeStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-      "",
+    hydra.util.Lazy<String> typeStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> "",
       (java.util.function.Function<hydra.core.TypeScheme, String>) (ts -> hydra.lib.strings.Cat.apply(java.util.List.of(
         ":(",
         hydra.show.core.Core.typeScheme(ts),
@@ -45,8 +45,8 @@ public interface Core {
       public String visit(hydra.core.Elimination.Union cs) {
         java.util.List<hydra.core.Field> cases = ((cs).value).cases;
         hydra.util.Maybe<hydra.core.Term> mdef = ((cs).value).default_;
-        hydra.util.Lazy<java.util.List<hydra.core.Field>> defaultField = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-          (java.util.List<hydra.core.Field>) (java.util.List.<hydra.core.Field>of()),
+        hydra.util.Lazy<java.util.List<hydra.core.Field>> defaultField = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> (java.util.List<hydra.core.Field>) (java.util.List.<hydra.core.Field>of()),
           (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Field>>) (d -> java.util.List.of(new hydra.core.Field(new hydra.core.Name("[default]"), d))),
           mdef));
         hydra.util.Lazy<java.util.List<hydra.core.Field>> allFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(java.util.List.of(
@@ -294,8 +294,8 @@ public interface Core {
   static String lambda(hydra.core.Lambda l) {
     hydra.core.Term body = (l).body;
     hydra.util.Maybe<hydra.core.Type> mt = (l).domain;
-    hydra.util.Lazy<String> typeStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-      "",
+    hydra.util.Lazy<String> typeStr = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> "",
       (java.util.function.Function<hydra.core.Type, String>) (t -> hydra.lib.strings.Cat2.apply(
         ":",
         hydra.show.core.Core.type(t))),
@@ -500,8 +500,8 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.Maybe mt) {
-        return hydra.lib.maybes.Maybe.apply(
-          "nothing",
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> "nothing",
           (java.util.function.Function<hydra.core.Term, String>) (t2 -> hydra.lib.strings.Cat.apply(java.util.List.of(
             "just(",
             hydra.show.core.Core.term(t2),

@@ -103,8 +103,8 @@ public interface Parsing {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",

@@ -262,8 +262,8 @@ public interface Formatting {
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(124, "verbar"))),
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(125, "rcub"))),
       (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(126, "tilde"))))));
-    java.util.function.Function<Integer, java.util.List<Integer>> alias = (java.util.function.Function<Integer, java.util.List<Integer>>) (c -> hydra.lib.maybes.FromMaybe.apply(
-      hydra.lib.lists.Pure.apply(c),
+    java.util.function.Function<Integer, java.util.List<Integer>> alias = (java.util.function.Function<Integer, java.util.List<Integer>>) (c -> hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> hydra.lib.lists.Pure.apply(c),
       hydra.lib.maybes.Map.apply(
         hydra.lib.strings.ToList::apply,
         hydra.lib.maps.Lookup.apply(

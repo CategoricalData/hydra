@@ -360,8 +360,8 @@ public interface Rewriting {
             
             @Override
             public java.util.Set<hydra.core.Name> visit(hydra.core.Function.Lambda l) {
-              hydra.util.Lazy<java.util.Set<hydra.core.Name>> domt = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-                (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
+              hydra.util.Lazy<java.util.Set<hydra.core.Name>> domt = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+                () -> (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
                 (java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>>) (v1 -> ((tryType).apply(vars)).apply(v1)),
                 ((l).value).domain));
               return hydra.lib.sets.Union.apply(
@@ -374,16 +374,16 @@ public interface Rewriting {
         @Override
         public java.util.Set<hydra.core.Name> visit(hydra.core.Term.Let l) {
           java.util.function.Function<hydra.core.Binding, java.util.Set<hydra.core.Name>> forBinding = (java.util.function.Function<hydra.core.Binding, java.util.Set<hydra.core.Name>>) (b -> {
-            hydra.util.Lazy<java.util.Set<hydra.core.Name>> newVars = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-              vars,
+            hydra.util.Lazy<java.util.Set<hydra.core.Name>> newVars = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> vars,
               (java.util.function.Function<hydra.core.TypeScheme, java.util.Set<hydra.core.Name>>) (ts -> hydra.lib.sets.Union.apply(
                 vars,
                 hydra.lib.sets.FromList.apply((ts).variables))),
               (b).type));
             return hydra.lib.sets.Union.apply(
               ((getAll.get()).apply(newVars.get())).apply((b).term),
-              hydra.lib.maybes.Maybe.apply(
-                (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
+              hydra.lib.maybes.Maybe.applyLazy(
+                () -> (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
                 (java.util.function.Function<hydra.core.TypeScheme, java.util.Set<hydra.core.Name>>) (ts -> ((tryType).apply(newVars.get())).apply((ts).type)),
                 (b).type));
           });
@@ -582,8 +582,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<String, hydra.core.Type> visit(hydra.core.Type.Variable v) {
-        return hydra.lib.maybes.Maybe.apply(
-          (hydra.util.Either<String, hydra.core.Type>) ((hydra.util.Either<String, hydra.core.Type>) (hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat2.apply(
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (hydra.util.Either<String, hydra.core.Type>) ((hydra.util.Either<String, hydra.core.Type>) (hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat2.apply(
             "No such type in schema: ",
             ((v).value).value)))),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (v1 -> ((hydra_rewriting_inlineType2).apply(schema)).apply(v1)),
@@ -822,8 +822,8 @@ public interface Rewriting {
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.lists.Null.apply(bs),
               () -> hydra.lib.lists.Reverse.apply(acc),
-              () -> hydra.lib.maybes.Maybe.apply(
-                noType.get(),
+              () -> hydra.lib.maybes.Maybe.applyLazy(
+                () -> noType.get(),
                 (java.util.function.Function<hydra.core.TypeScheme, java.util.List<hydra.core.Binding>>) (ts -> (withType).apply(ts)),
                 (b.get()).type));
           })));
@@ -852,8 +852,8 @@ public interface Rewriting {
   }
   
   static <T0> T0 normalizeTypeVariablesInTerm_replaceName(java.util.Map<T0, T0> subst, T0 v) {
-    return hydra.lib.maybes.FromMaybe.apply(
-      v,
+    return hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> v,
       hydra.lib.maps.Lookup.apply(
         v,
         subst));
@@ -863,8 +863,8 @@ public interface Rewriting {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<hydra.core.Name, T0>, hydra.util.Pair<hydra.core.Name, T0>>) (p -> {
         hydra.util.Lazy<hydra.core.Name> oldName = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(p));
-        hydra.util.Lazy<hydra.core.Name> newName = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.apply(
-          oldName.get(),
+        hydra.util.Lazy<hydra.core.Name> newName = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> oldName.get(),
           hydra.lib.maps.Lookup.apply(
             oldName.get(),
             newSubst)));
@@ -1166,8 +1166,8 @@ public interface Rewriting {
             () -> (forMono).apply(t),
             () -> typ);
         });
-        return hydra.lib.maybes.Maybe.apply(
-          typ,
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> typ,
           (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> (forTypeScheme).apply(ts)),
           hydra.lib.maps.Lookup.apply(
             (v).value,
@@ -1306,8 +1306,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Maybe mt) {
-        return hydra.lib.maybes.Maybe.apply(
-          dflt.get(),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> dflt.get(),
           (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>) (t -> hydra.rewriting.Rewriting.rewriteAndFoldTerm_forSingle(
             recurse,
             (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t1 -> new hydra.core.Term.Maybe(hydra.util.Maybe.just(t1))),
@@ -1556,8 +1556,8 @@ public interface Rewriting {
   }
   
   static <T1> T1 rewriteAndFoldTerm_val1(hydra.util.Maybe<hydra.util.Pair<T1, hydra.core.Term>> rmd, T1 val) {
-    return hydra.lib.maybes.Maybe.apply(
-      val,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> val,
       (java.util.function.Function<hydra.util.Pair<T1, hydra.core.Term>, T1>) ((java.util.function.Function<hydra.util.Pair<T1, hydra.core.Term>, T1>) (hydra.lib.pairs.First::apply)),
       rmd);
   }
@@ -1733,8 +1733,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Maybe mt) {
-        return hydra.lib.maybes.Maybe.apply(
-          dflt.get(),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> dflt.get(),
           (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>) (t -> hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forSingleWithAccessor(
             path,
             recurse,
@@ -2163,8 +2163,8 @@ public interface Rewriting {
   }
   
   static <T1> T1 rewriteAndFoldTermWithPath_val1(hydra.util.Maybe<hydra.util.Pair<T1, hydra.core.Term>> rmd, T1 val) {
-    return hydra.lib.maybes.Maybe.apply(
-      val,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> val,
       (java.util.function.Function<hydra.util.Pair<T1, hydra.core.Term>, T1>) ((java.util.function.Function<hydra.util.Pair<T1, hydra.core.Term>, T1>) (hydra.lib.pairs.First::apply)),
       rmd);
   }
@@ -2610,8 +2610,8 @@ public interface Rewriting {
         hydra.util.Maybe<hydra.core.Term> def = ((cs).value).default_;
         hydra.core.Name n = ((cs).value).typeName;
         return hydra.lib.eithers.Bind.apply(
-          hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<T1, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))),
+          hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<T1, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>>>) (t -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maybes.Pure::apply),
               (recurse).apply(t))),
@@ -3050,8 +3050,8 @@ public interface Rewriting {
         hydra.util.Maybe<hydra.core.Term> def = ((cs).value).default_;
         hydra.core.Name n = ((cs).value).typeName;
         return hydra.lib.eithers.Bind.apply(
-          hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<T3, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<T3, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<T3, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))),
+          hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<T3, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<T3, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<T3, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.util.Maybe<hydra.core.Term>>>) (t -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maybes.Pure::apply),
               (recurse).apply(t))),
@@ -3436,8 +3436,8 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Variable n) {
-        return new hydra.core.Type.Variable(hydra.lib.maybes.FromMaybe.apply(
-          (n).value,
+        return new hydra.core.Type.Variable(hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> (n).value,
           hydra.lib.maps.Lookup.apply(
             (n).value,
             subst)));
@@ -3499,8 +3499,8 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Variable n) {
-        return new hydra.core.Term.Variable(hydra.lib.maybes.FromMaybe.apply(
-          (n).value,
+        return new hydra.core.Term.Variable(hydra.lib.maybes.FromMaybe.applyLazy(
+          () -> (n).value,
           hydra.lib.maps.Lookup.apply(
             (n).value,
             subst)));
@@ -3516,8 +3516,8 @@ public interface Rewriting {
           
           @Override
           public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-            return hydra.lib.maybes.Maybe.apply(
-              (recurse).apply(term2),
+            return hydra.lib.maybes.Maybe.applyLazy(
+              () -> (recurse).apply(term2),
               (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (ignored -> term2),
               hydra.lib.maps.Lookup.apply(
                 ((l).value).parameter,
@@ -3593,8 +3593,8 @@ public interface Rewriting {
               @Override
               public java.util.List<hydra.core.Term> visit(hydra.core.Elimination.Union cs) {
                 return hydra.lib.lists.Concat2.apply(
-                  hydra.lib.maybes.Maybe.apply(
-                    (java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()),
+                  hydra.lib.maybes.Maybe.applyLazy(
+                    () -> (java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()),
                     (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (t -> java.util.List.of(t)),
                     ((cs).value).default_),
                   hydra.lib.lists.Map.apply(
@@ -3641,8 +3641,8 @@ public interface Rewriting {
       
       @Override
       public java.util.List<hydra.core.Term> visit(hydra.core.Term.Maybe m) {
-        return hydra.lib.maybes.Maybe.apply(
-          (java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()),
           (java.util.function.Function<hydra.core.Term, java.util.List<hydra.core.Term>>) (t -> java.util.List.of(t)),
           (m).value);
       }
@@ -3736,8 +3736,8 @@ public interface Rewriting {
               @Override
               public java.util.List<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Elimination.Union cs) {
                 return hydra.lib.lists.Concat2.apply(
-                  hydra.lib.maybes.Maybe.apply(
-                    (java.util.List<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (java.util.List.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of()),
+                  hydra.lib.maybes.Maybe.applyLazy(
+                    () -> (java.util.List<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (java.util.List.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of()),
                     (java.util.function.Function<hydra.core.Term, java.util.List<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>>) (t -> java.util.List.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.UnionCasesDefault(), t))))),
                     ((cs).value).default_),
                   hydra.lib.lists.Map.apply(
@@ -3786,8 +3786,8 @@ public interface Rewriting {
       
       @Override
       public java.util.List<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Maybe m) {
-        return hydra.lib.maybes.Maybe.apply(
-          (java.util.List<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (java.util.List.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of()),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (java.util.List<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (java.util.List.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of()),
           (java.util.function.Function<hydra.core.Term, java.util.List<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>>) (t -> java.util.List.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.MaybeTerm(), t))))),
           (m).value);
       }
@@ -4033,8 +4033,8 @@ public interface Rewriting {
   static java.util.Map<hydra.core.Name, hydra.core.Name> toShortNames(java.util.List<hydra.core.Name> original) {
     java.util.function.Function<java.util.Map<String, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Name, java.util.Map<String, java.util.Set<hydra.core.Name>>>> addName = (java.util.function.Function<java.util.Map<String, java.util.Set<hydra.core.Name>>, java.util.function.Function<hydra.core.Name, java.util.Map<String, java.util.Set<hydra.core.Name>>>>) (acc -> (java.util.function.Function<hydra.core.Name, java.util.Map<String, java.util.Set<hydra.core.Name>>>) (name -> {
       String local = hydra.names.Names.localNameOf(name);
-      hydra.util.Lazy<java.util.Set<hydra.core.Name>> group = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.apply(
-        (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
+      hydra.util.Lazy<java.util.Set<hydra.core.Name>> group = new hydra.util.Lazy<>(() -> hydra.lib.maybes.FromMaybe.applyLazy(
+        () -> (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
         hydra.lib.maps.Lookup.apply(
           local,
           acc)));
@@ -4104,8 +4104,8 @@ public interface Rewriting {
     hydra.util.Lazy<java.util.Set<hydra.core.Name>> keys = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Name>) ((java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Name>) (hydra.lib.pairs.First::apply)),
       bindings.get())));
-    java.util.function.Function<hydra.core.Name, hydra.util.Pair<hydra.core.Name, hydra.core.Term>> toPair = (java.util.function.Function<hydra.core.Name, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (name -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(name, hydra.lib.maybes.FromMaybe.apply(
-      new hydra.core.Term.Literal(new hydra.core.Literal.String_("Impossible!")),
+    java.util.function.Function<hydra.core.Name, hydra.util.Pair<hydra.core.Name, hydra.core.Term>> toPair = (java.util.function.Function<hydra.core.Name, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (name -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(name, hydra.lib.maybes.FromMaybe.applyLazy(
+      () -> new hydra.core.Term.Literal(new hydra.core.Literal.String_("Impossible!")),
       hydra.lib.maps.Lookup.apply(
         name,
         bindingMap))))));
@@ -4274,8 +4274,8 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Variable v) {
-        return new hydra.core.Term.Variable(hydra.lib.maybes.Maybe.apply(
-          (v).value,
+        return new hydra.core.Term.Variable(hydra.lib.maybes.Maybe.applyLazy(
+          () -> (v).value,
           (java.util.function.Function<hydra.core.Name, hydra.core.Name>) (renamed -> renamed),
           hydra.lib.maps.Lookup.apply(
             (v).value,

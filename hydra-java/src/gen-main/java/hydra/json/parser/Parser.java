@@ -74,8 +74,8 @@ public interface Parser {
       hydra.parsers.Parsers.optional(hydra.parsers.Parsers.char_(45)),
       (java.util.function.Function<hydra.util.Maybe<Integer>, hydra.parsing.Parser<String>>) (sign -> hydra.parsers.Parsers.bind(
         hydra.json.parser.Parser.digits(),
-        (java.util.function.Function<String, hydra.parsing.Parser<String>>) (digits -> hydra.parsers.Parsers.pure(hydra.lib.maybes.Maybe.apply(
-          digits,
+        (java.util.function.Function<String, hydra.parsing.Parser<String>>) (digits -> hydra.parsers.Parsers.pure(hydra.lib.maybes.Maybe.applyLazy(
+          () -> digits,
           (java.util.function.Function<Integer, String>) (ignored -> hydra.lib.strings.Cat2.apply(
             "-",
             digits)),
@@ -113,8 +113,8 @@ public interface Parser {
           (java.util.function.Function<String, String>) (digits -> hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "e",
-              hydra.lib.maybes.Maybe.apply(
-                "",
+              hydra.lib.maybes.Maybe.applyLazy(
+                () -> "",
                 (java.util.function.Function<Integer, String>) (arg_ -> hydra.lib.strings.FromList.apply(hydra.lib.lists.Pure.apply(arg_))),
                 sign)),
             digits)),
@@ -132,16 +132,16 @@ public interface Parser {
             hydra.util.Lazy<String> numStr = new hydra.util.Lazy<>(() -> hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 intPart,
-                hydra.lib.maybes.Maybe.apply(
-                  "",
+                hydra.lib.maybes.Maybe.applyLazy(
+                  () -> "",
                   (java.util.function.Function<String, String>) (hydra.lib.equality.Identity::apply),
                   fracPart)),
-              hydra.lib.maybes.Maybe.apply(
-                "",
+              hydra.lib.maybes.Maybe.applyLazy(
+                () -> "",
                 (java.util.function.Function<String, String>) (hydra.lib.equality.Identity::apply),
                 expPart)));
-            return hydra.parsers.Parsers.pure(new hydra.json.model.Value.Number_(hydra.lib.maybes.Maybe.apply(
-              new java.math.BigDecimal("0.0"),
+            return hydra.parsers.Parsers.pure(new hydra.json.model.Value.Number_(hydra.lib.maybes.Maybe.applyLazy(
+              () -> new java.math.BigDecimal("0.0"),
               (java.util.function.Function<java.math.BigDecimal, java.math.BigDecimal>) (hydra.lib.equality.Identity::apply),
               hydra.lib.literals.ReadBigfloat.apply(numStr.get()))));
           })))))));

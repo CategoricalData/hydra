@@ -212,10 +212,10 @@ public interface Accessors {
         
         @Override
         public hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.accessors.AccessorNode>, java.util.List<hydra.accessors.AccessorEdge>>, java.util.Set<String>> visit(hydra.core.Term.Variable name) {
-          return hydra.lib.maybes.Maybe.apply(
-            state,
-            (java.util.function.Function<hydra.accessors.AccessorNode, hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.accessors.AccessorNode>, java.util.List<hydra.accessors.AccessorEdge>>, java.util.Set<String>>>) (root -> hydra.lib.maybes.Maybe.apply(
-              state,
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> state,
+            (java.util.function.Function<hydra.accessors.AccessorNode, hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.accessors.AccessorNode>, java.util.List<hydra.accessors.AccessorEdge>>, java.util.Set<String>>>) (root -> hydra.lib.maybes.Maybe.applyLazy(
+              () -> state,
               (java.util.function.Function<hydra.accessors.AccessorNode, hydra.util.Pair<hydra.util.Pair<java.util.List<hydra.accessors.AccessorNode>, java.util.List<hydra.accessors.AccessorEdge>>, java.util.Set<String>>>) (node -> {
                 hydra.util.Lazy<hydra.accessors.AccessorEdge> edge = new hydra.util.Lazy<>(() -> new hydra.accessors.AccessorEdge(root, new hydra.accessors.AccessorPath(hydra.lib.lists.Reverse.apply(nextPath.get())), node));
                 hydra.util.Lazy<java.util.List<hydra.accessors.AccessorEdge>> newEdges = new hydra.util.Lazy<>(() -> hydra.lib.lists.Cons.apply(

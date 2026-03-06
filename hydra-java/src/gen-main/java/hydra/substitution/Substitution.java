@@ -87,8 +87,8 @@ public interface Substitution {
       (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>>) (acc -> (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (pair -> {
         hydra.util.Lazy<hydra.core.TypeVariableMetadata> metadata = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
         hydra.util.Lazy<hydra.core.Name> varName = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
-        return hydra.lib.maybes.Maybe.apply(
-          hydra.substitution.Substitution.substInClassConstraints_insertOrMerge(
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> hydra.substitution.Substitution.substInClassConstraints_insertOrMerge(
             varName.get(),
             metadata.get(),
             acc),
@@ -111,8 +111,8 @@ public interface Substitution {
   }
   
   static <T0> java.util.Map<T0, hydra.core.TypeVariableMetadata> substInClassConstraints_insertOrMerge(T0 varName, hydra.core.TypeVariableMetadata metadata, java.util.Map<T0, hydra.core.TypeVariableMetadata> acc) {
-    return hydra.lib.maybes.Maybe.apply(
-      hydra.lib.maps.Insert.apply(
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> hydra.lib.maps.Insert.apply(
         varName,
         metadata,
         acc),
@@ -201,8 +201,8 @@ public interface Substitution {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Variable name) {
-          return hydra.lib.maybes.Maybe.apply(
-            (recurse).apply(term),
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (recurse).apply(term),
             (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (sterm -> sterm),
             hydra.lib.maps.Lookup.apply(
               (name).value,
@@ -236,8 +236,8 @@ public interface Substitution {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall lt) {
-        return hydra.lib.maybes.Maybe.apply(
-          (recurse).apply(typ),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (recurse).apply(typ),
           (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (styp -> new hydra.core.Type.Forall(new hydra.core.ForallType(((lt).value).parameter, hydra.substitution.Substitution.substInType(
             (removeVar).apply(((lt).value).parameter),
             ((lt).value).body)))),
@@ -248,8 +248,8 @@ public interface Substitution {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Variable v) {
-        return hydra.lib.maybes.Maybe.apply(
-          typ,
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> typ,
           (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (styp -> styp),
           hydra.lib.maps.Lookup.apply(
             (v).value,

@@ -32,8 +32,8 @@ public interface Sorting {
   }
   
   static <T0, T1> java.util.List<T1> adjacencyListToMap_existing(T0 k, java.util.Map<T0, java.util.List<T1>> mp) {
-    return hydra.lib.maybes.Maybe.apply(
-      (java.util.List<T1>) (java.util.List.<T1>of()),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> (java.util.List<T1>) (java.util.List.<T1>of()),
       (java.util.function.Function<java.util.List<T1>, java.util.List<T1>>) (hydra.lib.equality.Identity::apply),
       hydra.lib.maps.Lookup.apply(
         k,
@@ -147,8 +147,8 @@ public interface Sorting {
   
   static <T0, T1> java.util.Set<T1> propagateTags_getTagsForNode(java.util.Map<T0, java.util.List<T0>> adjMap, java.util.Map<T0, java.util.Set<T1>> tagMap, T0 node) {
     return hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<T0, java.util.Set<T1>>) (n -> hydra.lib.maybes.Maybe.apply(
-        (java.util.Set<T1>) (hydra.lib.sets.Empty.<T1>apply()),
+      (java.util.function.Function<T0, java.util.Set<T1>>) (n -> hydra.lib.maybes.Maybe.applyLazy(
+        () -> (java.util.Set<T1>) (hydra.lib.sets.Empty.<T1>apply()),
         (java.util.function.Function<java.util.Set<T1>, java.util.Set<T1>>) (hydra.lib.equality.Identity::apply),
         hydra.lib.maps.Lookup.apply(
           n,
@@ -160,8 +160,8 @@ public interface Sorting {
   
   static <T0> java.util.Set<T0> propagateTags_reachable(java.util.Map<T0, java.util.List<T0>> adjMap, T0 node) {
     return hydra.sorting.Sorting.<T0>findReachableNodes(
-      (java.util.function.Function<T0, java.util.Set<T0>>) (n -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Maybe.apply(
-        (java.util.List<T0>) (java.util.List.<T0>of()),
+      (java.util.function.Function<T0, java.util.Set<T0>>) (n -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Maybe.applyLazy(
+        () -> (java.util.List<T0>) (java.util.List.<T0>of()),
         (java.util.function.Function<java.util.List<T0>, java.util.List<T0>>) (hydra.lib.equality.Identity::apply),
         hydra.lib.maps.Lookup.apply(
           n,

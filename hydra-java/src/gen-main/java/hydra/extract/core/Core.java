@@ -950,8 +950,8 @@ public interface Core {
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<T0>> visit(hydra.core.Term.Maybe mt) {
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<T0>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<T0>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<T0>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<T0>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<T0>>>) (t -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<T0, hydra.util.Maybe<T0>>) (hydra.lib.maybes.Pure::apply),
               (f).apply(t))),

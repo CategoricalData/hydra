@@ -44,8 +44,8 @@ public interface Encode {
       
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Maybe opt) {
-        return hydra.lib.maybes.Maybe.apply(
-          (hydra.util.Either<String, hydra.json.model.Value>) ((hydra.util.Either<String, hydra.json.model.Value>) (hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Null()))),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> (hydra.util.Either<String, hydra.json.model.Value>) ((hydra.util.Either<String, hydra.json.model.Value>) (hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Null()))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.json.model.Value>>) (v -> {
             hydra.util.Either<String, hydra.json.model.Value> encodedMaybe = hydra.json.encode.Encode.toJson(v);
             return hydra.lib.eithers.Map.apply(

@@ -200,15 +200,15 @@ public interface Utils {
   }
   
   static hydra.ext.python.syntax.Statement annotatedStatement(hydra.util.Maybe<String> mcomment, hydra.ext.python.syntax.Statement stmt) {
-    return hydra.lib.maybes.Maybe.apply(
-      stmt,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> stmt,
       (java.util.function.Function<String, hydra.ext.python.syntax.Statement>) (c -> new hydra.ext.python.syntax.Statement.Annotated(new hydra.ext.python.syntax.AnnotatedStatement(c, stmt))),
       mcomment);
   }
   
   static hydra.ext.python.syntax.Expression annotatedExpression(hydra.util.Maybe<String> mcomment, hydra.ext.python.syntax.Expression expr) {
-    return hydra.lib.maybes.Maybe.apply(
-      expr,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> expr,
       (java.util.function.Function<String, hydra.ext.python.syntax.Expression>) (c -> hydra.ext.python.utils.Utils.pyPrimaryToPyExpression(hydra.ext.python.utils.Utils.primaryWithExpressionSlices(
         hydra.ext.python.utils.Utils.pyNameToPyPrimary(new hydra.ext.python.syntax.Name("Annotated")),
         java.util.List.of(
@@ -361,8 +361,8 @@ public interface Utils {
   }
   
   static hydra.ext.python.syntax.Primary pyExpressionToPyPrimary(hydra.ext.python.syntax.Expression e) {
-    return hydra.lib.maybes.Maybe.apply(
-      new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Group(new hydra.ext.python.syntax.Group.Expression(new hydra.ext.python.syntax.NamedExpression.Simple(e)))),
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> new hydra.ext.python.syntax.Primary.Simple(new hydra.ext.python.syntax.Atom.Group(new hydra.ext.python.syntax.Group.Expression(new hydra.ext.python.syntax.NamedExpression.Simple(e)))),
       (java.util.function.Function<hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.Primary>) (prim -> prim),
       hydra.ext.python.utils.Utils.decodePyExpressionToPyPrimary(e));
   }
@@ -390,8 +390,8 @@ public interface Utils {
   }
   
   static hydra.ext.python.syntax.Block indentedBlock(hydra.util.Maybe<String> mcomment, java.util.List<java.util.List<hydra.ext.python.syntax.Statement>> stmts) {
-    hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Statement>> commentGroup = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
-      (java.util.List<hydra.ext.python.syntax.Statement>) (java.util.List.<hydra.ext.python.syntax.Statement>of()),
+    hydra.util.Lazy<java.util.List<hydra.ext.python.syntax.Statement>> commentGroup = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> (java.util.List<hydra.ext.python.syntax.Statement>) (java.util.List.<hydra.ext.python.syntax.Statement>of()),
       (java.util.function.Function<String, java.util.List<hydra.ext.python.syntax.Statement>>) (s -> java.util.List.of(hydra.ext.python.utils.Utils.commentStatement(s))),
       mcomment));
     hydra.util.Lazy<java.util.List<java.util.List<hydra.ext.python.syntax.Statement>>> groups = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
