@@ -154,6 +154,18 @@ def partition_eithers(eithers: frozenlist[Either[A, B]]) -> tuple[frozenlist[A],
     return (tuple(left_vals), tuple(right_vals))
 
 
+def foldl(f: Callable[[A], Callable[[B], Either[C, A]]], acc: A, xs: frozenlist[B]) -> Either[C, A]:
+    """Left-fold over a list with an Either-returning function, short-circuiting on Left."""
+    result = acc
+    for x in xs:
+        match f(result)(x):
+            case Left(err):
+                return Left(err)
+            case Right(val):
+                result = val
+    return Right(result)
+
+
 def map_maybe(f: Callable[[A], Either[C, B]], mx: Maybe[A]) -> Either[C, Maybe[B]]:
     """Map a function returning Either over a Maybe, or return Right(Nothing) if Nothing."""
     match mx:
