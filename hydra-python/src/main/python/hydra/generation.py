@@ -68,7 +68,7 @@ def bootstrap_graph():
 
 def empty_context():
     """Create an empty Context."""
-    return Context(elements=(), primitive_functions=(), other=FrozenDict({}))
+    return Context(trace=(), messages=(), other=FrozenDict({}))
 
 
 def unwrap_either(result):
