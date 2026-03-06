@@ -61,12 +61,14 @@ generateSources
   -> FilePath
   -> [Module]  -- ^ Universe
   -> [Module]  -- ^ Modules to generate
-  -> IO ()
+  -> IO Int  -- ^ Number of files written
 generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
     let cx = Monads.emptyContext
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
       Left ic -> fail $ "Failed to generate source files: " ++ formatError ic
-      Right files -> mapM_ writePair files
+      Right files -> do
+        mapM_ writePair files
+        return $ length files
   where
     writePair (path, s) = do
         let fullPath = FP.combine basePath path
@@ -85,7 +87,7 @@ modulesToGraph = CodeGeneration.modulesToGraph bootstrapGraph
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writeHaskell :: FilePath -> [Module] -> [Module] -> IO ()
+writeHaskell :: FilePath -> [Module] -> [Module] -> IO Int
 writeHaskell = generateSources moduleToHaskell haskellLanguage True False False False
 
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
@@ -200,7 +202,8 @@ writeCoderSourceHaskell :: ([Module] -> [Module] -> IO [Module]) -> FilePath -> 
 writeCoderSourceHaskell generate basePath universeModules typeModules = do
   sourceMods <- generateCoderSourceModules generate universeModules typeModules
   -- The source modules need the Module encoder/decoder and Core types
-  writeHaskell basePath (universeModules ++ sourceMods) sourceMods
+  _ <- writeHaskell basePath (universeModules ++ sourceMods) sourceMods
+  return ()
 
 -- | Write decoder Source modules as Haskell to the given path.
 -- These typically go to src/gen-main/haskell/Hydra/Sources/Decode/
@@ -226,7 +229,8 @@ writeCoderHaskell generate basePath universeModules typeModules = do
     -- Add core types namespace to each encoder/decoder module's type dependencies
     -- since the encoders/decoders reference hydra.core.Term, hydra.core.Injection, etc.
     let withCoreDeps = fmap addCoreDep coderMods
-    writeHaskell basePath universeModules withCoreDeps
+    _ <- writeHaskell basePath universeModules withCoreDeps
+    return ()
   where
     addCoreDep m = m { moduleTypeDependencies = CoreTypes.ns : moduleTypeDependencies m }
 
