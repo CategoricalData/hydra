@@ -2464,16 +2464,6 @@ public interface Coder {
       term);
   }
   
-  static <T0, T1, T2> hydra.util.Either<T2, hydra.typing.FunctionStructure<hydra.ext.java.helpers.JavaEnvironment>> analyzeJavaFunctionNoInfer(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Term term, T0 cx, T1 g) {
-    return hydra.coderUtils.CoderUtils.analyzeFunctionTermNoInfer(
-      hydra.ext.java.coder.Coder::javaEnvGetGraph,
-      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, hydra.ext.java.helpers.JavaEnvironment>>) (p0 -> p1 -> hydra.ext.java.coder.Coder.javaEnvSetGraph(
-        p0,
-        p1)),
-      env,
-      term);
-  }
-  
   static <T0> T0 withLambda(hydra.ext.java.helpers.JavaEnvironment env, hydra.core.Lambda lam, java.util.function.Function<hydra.ext.java.helpers.JavaEnvironment, T0> k) {
     return hydra.schemas.Schemas.withLambdaContext(
       hydra.ext.java.coder.Coder::javaEnvGetGraph,

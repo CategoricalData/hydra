@@ -7,7 +7,7 @@ package hydra.serialization;
  */
 public interface Serialization {
   static hydra.ast.Brackets angleBraces() {
-    return new hydra.ast.Brackets(hydra.serialization.Serialization.sym("<"), hydra.serialization.Serialization.sym(">"));
+    return new hydra.ast.Brackets(new hydra.ast.Symbol("<"), new hydra.ast.Symbol(">"));
   }
   
   static hydra.ast.Expr angleBracesList(hydra.ast.BlockStyle style, java.util.List<hydra.ast.Expr> els) {
@@ -83,7 +83,7 @@ public interface Serialization {
   }
   
   static hydra.ast.Brackets curlyBraces() {
-    return new hydra.ast.Brackets(hydra.serialization.Serialization.sym("{"), hydra.serialization.Serialization.sym("}"));
+    return new hydra.ast.Brackets(new hydra.ast.Symbol("{"), new hydra.ast.Symbol("}"));
   }
   
   static hydra.ast.Expr curlyBracesList(hydra.util.Maybe<String> msymb, hydra.ast.BlockStyle style, java.util.List<hydra.ast.Expr> els) {
@@ -397,7 +397,7 @@ public interface Serialization {
   }
   
   static hydra.ast.Brackets parentheses() {
-    return new hydra.ast.Brackets(hydra.serialization.Serialization.sym("("), hydra.serialization.Serialization.sym(")"));
+    return new hydra.ast.Brackets(new hydra.ast.Symbol("("), new hydra.ast.Symbol(")"));
   }
   
   static hydra.ast.Expr parenthesize(hydra.ast.Expr exp) {
@@ -643,7 +643,7 @@ public interface Serialization {
       public String visit(hydra.ast.Expr.Brackets bracketExpr) {
         hydra.ast.Expr e = ((bracketExpr).value).enclosed;
         String body = hydra.serialization.Serialization.printExpr(e);
-        hydra.ast.Brackets brackets = ((bracketExpr).value).brackets;
+        hydra.ast.Brackets brs = ((bracketExpr).value).brackets;
         hydra.ast.BlockStyle style = ((bracketExpr).value).style;
         hydra.util.Maybe<String> doIndent = (style).indent;
         hydra.util.Lazy<String> ibody = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.apply(
@@ -652,14 +652,14 @@ public interface Serialization {
             idt2,
             body)),
           doIndent));
-        String l = ((brackets).open).value;
+        String l = ((brs).open).value;
         Boolean nlAfter = (style).newlineAfterContent;
         Boolean nlBefore = (style).newlineBeforeContent;
         hydra.util.Lazy<String> pre = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           nlBefore,
           () -> "\n",
           () -> ""));
-        String r = ((brackets).close).value;
+        String r = ((brs).close).value;
         hydra.util.Lazy<String> suf = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           nlAfter,
           () -> "\n",
@@ -706,7 +706,7 @@ public interface Serialization {
   }
   
   static hydra.ast.Brackets squareBrackets() {
-    return new hydra.ast.Brackets(hydra.serialization.Serialization.sym("["), hydra.serialization.Serialization.sym("]"));
+    return new hydra.ast.Brackets(new hydra.ast.Symbol("["), new hydra.ast.Symbol("]"));
   }
   
   static hydra.ast.Expr suffix(String s, hydra.ast.Expr expr) {

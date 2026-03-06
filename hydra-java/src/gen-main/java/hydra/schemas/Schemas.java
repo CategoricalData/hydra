@@ -189,6 +189,9 @@ public interface Schemas {
   
   static hydra.graph.Graph extendGraphForLet(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, hydra.graph.Graph g, hydra.core.Let letrec) {
     java.util.List<hydra.core.Binding> bindings = (letrec).bindings;
+    hydra.graph.Graph g2 = hydra.lexical.Lexical.extendGraphWithBindings(
+      bindings,
+      g);
     return new hydra.graph.Graph(hydra.lib.maps.Union.apply(
       hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>) (b -> (hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>((b).name, (b).term)))),
@@ -213,7 +216,7 @@ public interface Schemas {
           (b).name,
           t,
           m)),
-        ((forBinding).apply(g)).apply(b)))),
+        ((forBinding).apply(g2)).apply(b)))),
       (g).metadata,
       bindings), (g).primitives, (g).schemaTypes, (g).typeVariables);
   }
