@@ -355,7 +355,15 @@ wrapLazyArguments :: (Core.Name -> [Syntax.Expression] -> ([Syntax.Expression], 
 wrapLazyArguments name args = (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) ([
   Lists.at 0 args,
   (wrapInSupplierLambda (Lists.at 1 args)),
-  (wrapInSupplierLambda (Lists.at 2 args))], (Just "lazy")) (args, Nothing))
+  (wrapInSupplierLambda (Lists.at 2 args))], (Just "lazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal (Lists.length args) 3)) ([
+  wrapInSupplierLambda (Lists.at 0 args),
+  (Lists.at 1 args),
+  (Lists.at 2 args)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) ([
+  Lists.at 0 args,
+  (wrapInSupplierLambda (Lists.at 1 args)),
+  (Lists.at 2 args)], (Just "applyLazy")) (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe")) (Logic.or (Equality.equal name (Core.Name "hydra.lib.eithers.fromLeft")) (Equality.equal name (Core.Name "hydra.lib.eithers.fromRight")))) (Equality.equal (Lists.length args) 2)) ([
+  wrapInSupplierLambda (Lists.at 0 args),
+  (Lists.at 1 args)], (Just "applyLazy")) (args, Nothing)))))
 
 wrapInSupplierLambda :: (Syntax.Expression -> Syntax.Expression)
 wrapInSupplierLambda expr = (Syntax.ExpressionLambda (Syntax.LambdaExpression {
