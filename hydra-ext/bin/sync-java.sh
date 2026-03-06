@@ -7,6 +7,7 @@ set -eo pipefail
 #   1. Main modules, eval lib, and coder modules (from JSON)
 #   2. Kernel test modules (from JSON)
 #   3. Generation tests (from Haskell DSL)
+#   4. Ext Java modules (PG model, decoders, encoders, etc.) into hydra-ext
 #
 # Prerequisites:
 #   - JSON modules must be up to date (run sync-haskell.sh and sync-ext.sh first)
@@ -36,9 +37,10 @@ for arg in "$@"; do
             echo ""
             echo "Steps performed:"
             echo "  1. Build executable"
-            echo "  2. Generate Java modules and tests from JSON"
-            echo "  3. Run Java build and tests (unless --quick)"
-            echo "  4. Report new files to git add"
+            echo "  2. Generate Java main modules and tests from JSON"
+            echo "  3. Generate ext Java modules (PG model, decoders, etc.)"
+            echo "  4. Build and test Java (unless --quick)"
+            echo "  5. Report new files to git add"
             exit 0
             ;;
     esac
@@ -60,62 +62,66 @@ cd "$HYDRA_EXT_DIR"
 # RTS flags to avoid stack overflow during generation
 RTS_FLAGS="+RTS -K256M -A32M -RTS"
 
-echo "Step 1/3: Building executable..."
+echo "Step 1/5: Building executable..."
 echo ""
 stack build hydra-ext:exe:bootstrap-from-json
 
 echo ""
-echo "Step 2/3: Generating Java modules and tests from JSON..."
+echo "Step 2/5: Generating Java main modules and tests from JSON..."
 echo ""
 stack exec bootstrap-from-json -- --target java --include-coders --include-tests --include-gentests $RTS_FLAGS
 
 echo ""
-echo "=========================================="
-echo "Generation complete!"
-echo "=========================================="
+echo "Step 3/5: Generating ext Java modules from JSON..."
+echo ""
+stack exec bootstrap-from-json -- --target java --output . --include-coders --ext-java-only $RTS_FLAGS
 
 if [ "$QUICK_MODE" = false ]; then
     echo ""
-    echo "Step 3/3: Building and testing Java..."
+    echo "Step 4/5: Building and testing Java..."
     echo ""
 
     cd "$HYDRA_ROOT_DIR"
 
-    ./gradlew :hydra-java:compileJava :hydra-java:compileTestJava
-    ./gradlew :hydra-java:test
+    ./gradlew :hydra-java:compileJava :hydra-ext:compileJava
+    ./gradlew :hydra-java:compileTestJava :hydra-ext:compileTestJava
+    ./gradlew :hydra-java:test :hydra-ext:test
 
     cd "$HYDRA_EXT_DIR"
 else
     echo ""
-    echo "Step 3/3: Skipped (--quick mode)"
+    echo "Step 4/5: Skipped (--quick mode)"
 fi
 
 echo ""
-echo "=========================================="
-echo "Checking for new files..."
-echo "=========================================="
+echo "Step 5/5: Generating ext Java modules from JSON..."
 echo ""
 
-cd "$HYDRA_JAVA_DIR"
+HYDRA_EXT_JAVA_DIR="$HYDRA_EXT_DIR"
 
-# Find untracked Java files in gen directories
-NEW_FILES=$(git status --porcelain src/gen-main/java src/gen-test/java 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+for CHECK_DIR in "$HYDRA_JAVA_DIR" "$HYDRA_EXT_JAVA_DIR"; do
+    cd "$CHECK_DIR"
+    LABEL=$(basename "$CHECK_DIR")
 
-if [ -n "$NEW_FILES" ]; then
-    echo "New files were created. You may want to run:"
-    echo ""
-    echo "  cd $HYDRA_JAVA_DIR"
-    echo "  git add src/gen-main/java src/gen-test/java"
-    echo ""
-    echo "New files:"
-    echo "$NEW_FILES" | head -20
-    NEW_COUNT=$(echo "$NEW_FILES" | wc -l | tr -d ' ')
-    if [ "$NEW_COUNT" -gt 20 ]; then
-        echo "  ... and $((NEW_COUNT - 20)) more"
+    NEW_FILES=$(git status --porcelain src/gen-main/java src/gen-test/java 2>/dev/null | grep "^??" | awk '{print $2}' || true)
+
+    if [ -n "$NEW_FILES" ]; then
+        echo "New files in $LABEL. You may want to run:"
+        echo ""
+        echo "  cd $CHECK_DIR"
+        echo "  git add src/gen-main/java src/gen-test/java"
+        echo ""
+        echo "New files:"
+        echo "$NEW_FILES" | head -20
+        NEW_COUNT=$(echo "$NEW_FILES" | wc -l | tr -d ' ')
+        if [ "$NEW_COUNT" -gt 20 ]; then
+            echo "  ... and $((NEW_COUNT - 20)) more"
+        fi
+        echo ""
+    else
+        echo "No new files in $LABEL."
     fi
-else
-    echo "No new files created."
-fi
+done
 
 echo ""
 echo "=========================================="

@@ -51,7 +51,7 @@ echo "Synchronizing Hydra-Ext"
 echo "=========================================="
 echo ""
 
-echo "Step 1/6: Building executables..."
+echo "Step 1/4: Building executables..."
 echo ""
 stack build \
     hydra-ext:exe:update-haskell-ext-main \
@@ -59,30 +59,19 @@ stack build \
     hydra-ext:exe:bootstrap-from-json
 
 echo ""
-echo "Step 2/6: Generating Haskell ext modules..."
+echo "Step 2/4: Generating Haskell ext modules..."
 echo ""
 stack exec update-haskell-ext-main -- $RTS_FLAGS
 
 echo ""
-echo "Step 3/6: Rebuilding..."
+echo "Step 3/4: Rebuilding..."
 echo ""
 stack build
 
 echo ""
-echo "Step 4/6: Exporting ext modules to JSON..."
+echo "Step 4/4: Exporting ext modules to JSON..."
 echo ""
 stack exec update-json-ext -- $RTS_FLAGS
-
-echo ""
-echo "Step 5/6: Generating ext Java from JSON..."
-echo ""
-stack exec bootstrap-from-json -- --target java --output . --include-coders --ext-java-only $RTS_FLAGS
-
-echo ""
-echo "Step 6/6: Compiling ext Java..."
-echo ""
-cd "$HYDRA_ROOT_DIR"
-./gradlew :hydra-ext:compileJava
 
 echo ""
 echo "=========================================="
