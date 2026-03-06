@@ -306,6 +306,8 @@ extendGraphForLet = define "extendGraphForLet" $
   doc "Extend a graph by descending into a let body" $
   "forBinding" ~> "g" ~> "letrec" ~>
   "bindings" <~ Core.letBindings (var "letrec") $
+  -- Pre-extend graph with sibling bindings so forBinding can resolve them
+  "g2" <~ (Lexical.extendGraphWithBindings @@ var "bindings" @@ var "g") $
   Graph.graph
     -- Add all binding terms
     (Maps.union
@@ -323,9 +325,9 @@ extendGraphForLet = define "extendGraphForLet" $
     (Lists.foldl ("s" ~> "b" ~> Sets.delete (Core.bindingName $ var "b") (var "s"))
       (Graph.graphLambdaVariables $ var "g")
       (var "bindings"))
-    -- Update metadata per binding
+    -- Update metadata per binding, using g2 so sibling bindings are visible
     (Lists.foldl
-      ("m" ~> "b" ~> optCases (var "forBinding" @@ var "g" @@ var "b")
+      ("m" ~> "b" ~> optCases (var "forBinding" @@ var "g2" @@ var "b")
         (Maps.delete (Core.bindingName $ var "b") (var "m"))
         ("t" ~> Maps.insert (Core.bindingName $ var "b") (var "t") (var "m")))
       (Graph.graphMetadata $ var "g")
