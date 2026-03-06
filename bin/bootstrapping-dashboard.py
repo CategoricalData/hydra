@@ -368,10 +368,7 @@ def cmd_latest(args):
             tf = test_gen.get("fileCount", "?")
             tt = fmt_time_short(test_gen.get("timeSeconds"))
 
-            if status == "diff":
-                line1.append(f"{_RED}{mf} main{_RESET} @ {mt}")
-            else:
-                line1.append(f"{mf} main @ {mt}")
+            line1.append(f"{mf} main @ {mt}")
             line2.append(f"{tf} test @ {tt}")
 
             # Test run time from benchmark JSONs
