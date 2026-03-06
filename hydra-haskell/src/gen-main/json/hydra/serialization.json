@@ -10,15 +10,11 @@
             {
               "name": "open",
               "term": {
-                "application": {
-                  "argument": {"literal": {"string": "<"}},
-                  "function": {"variable": "hydra.serialization.sym"}}}},
+                "wrap": {"body": {"literal": {"string": "<"}}, "typeName": "hydra.ast.Symbol"}}},
             {
               "name": "close",
               "term": {
-                "application": {
-                  "argument": {"literal": {"string": ">"}},
-                  "function": {"variable": "hydra.serialization.sym"}}}}],
+                "wrap": {"body": {"literal": {"string": ">"}}, "typeName": "hydra.ast.Symbol"}}}],
           "typeName": "hydra.ast.Brackets"}},
       "type": [
         {
@@ -397,15 +393,11 @@
             {
               "name": "open",
               "term": {
-                "application": {
-                  "argument": {"literal": {"string": "{"}},
-                  "function": {"variable": "hydra.serialization.sym"}}}},
+                "wrap": {"body": {"literal": {"string": "{"}}, "typeName": "hydra.ast.Symbol"}}},
             {
               "name": "close",
               "term": {
-                "application": {
-                  "argument": {"literal": {"string": "}"}},
-                  "function": {"variable": "hydra.serialization.sym"}}}}],
+                "wrap": {"body": {"literal": {"string": "}"}}, "typeName": "hydra.ast.Symbol"}}}],
           "typeName": "hydra.ast.Brackets"}},
       "type": [
         {
@@ -2392,15 +2384,11 @@
             {
               "name": "open",
               "term": {
-                "application": {
-                  "argument": {"literal": {"string": "("}},
-                  "function": {"variable": "hydra.serialization.sym"}}}},
+                "wrap": {"body": {"literal": {"string": "("}}, "typeName": "hydra.ast.Symbol"}}},
             {
               "name": "close",
               "term": {
-                "application": {
-                  "argument": {"literal": {"string": ")"}},
-                  "function": {"variable": "hydra.serialization.sym"}}}}],
+                "wrap": {"body": {"literal": {"string": ")"}}, "typeName": "hydra.ast.Symbol"}}}],
           "typeName": "hydra.ast.Brackets"}},
       "type": [
         {
@@ -3663,7 +3651,7 @@
                                             "let": {
                                               "bindings": [
                                                 {
-                                                  "name": "brackets",
+                                                  "name": "brs",
                                                   "term": {
                                                     "application": {
                                                       "argument": {"variable": "bracketExpr"},
@@ -3684,7 +3672,7 @@
                                                         "application": {
                                                           "argument": {
                                                             "application": {
-                                                              "argument": {"variable": "brackets"},
+                                                              "argument": {"variable": "brs"},
                                                               "function": {
                                                                 "function": {
                                                                   "elimination": {"record": {"field": "open", "typeName": "hydra.ast.Brackets"}}}}}},
@@ -3703,7 +3691,7 @@
                                                             "application": {
                                                               "argument": {
                                                                 "application": {
-                                                                  "argument": {"variable": "brackets"},
+                                                                  "argument": {"variable": "brs"},
                                                                   "function": {
                                                                     "function": {
                                                                       "elimination": {"record": {"field": "close", "typeName": "hydra.ast.Brackets"}}}}}},
@@ -4105,15 +4093,11 @@
             {
               "name": "open",
               "term": {
-                "application": {
-                  "argument": {"literal": {"string": "["}},
-                  "function": {"variable": "hydra.serialization.sym"}}}},
+                "wrap": {"body": {"literal": {"string": "["}}, "typeName": "hydra.ast.Symbol"}}},
             {
               "name": "close",
               "term": {
-                "application": {
-                  "argument": {"literal": {"string": "]"}},
-                  "function": {"variable": "hydra.serialization.sym"}}}}],
+                "wrap": {"body": {"literal": {"string": "]"}}, "typeName": "hydra.ast.Symbol"}}}],
           "typeName": "hydra.ast.Brackets"}},
       "type": [
         {

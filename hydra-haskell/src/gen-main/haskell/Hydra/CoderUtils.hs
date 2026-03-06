@@ -154,10 +154,13 @@ isTrivialTerm t = ((\x -> case x of
         Core.TermFunction v1 -> ((\x -> case x of
           Core.FunctionElimination v2 -> ((\x -> case x of
             Core.EliminationRecord _ -> (isTrivialTerm arg)
+            Core.EliminationWrap _ -> (isTrivialTerm arg)
             _ -> False) v2)
           _ -> False) v1)
         _ -> False) fun)
   Core.TermMaybe v0 -> (Maybes.maybe True (\inner -> isTrivialTerm inner) v0)
+  Core.TermRecord v0 -> (Lists.foldl (\acc -> \fld -> Logic.and acc (isTrivialTerm (Core.fieldTerm fld))) True (Core.recordFields v0))
+  Core.TermWrap v0 -> (isTrivialTerm (Core.wrappedTermBody v0))
   Core.TermTypeApplication v0 -> (isTrivialTerm (Core.typeApplicationTermBody v0))
   Core.TermTypeLambda v0 -> (isTrivialTerm (Core.typeLambdaBody v0))
   _ -> False) (Rewriting.deannotateTerm t))
@@ -233,6 +236,14 @@ typeOfTerm cx g term = (Eithers.map Pairs.first (Checking.typeOf cx g [] term))
 bindingMetadata :: (Graph.Graph -> Core.Binding -> Maybe Core.Term)
 bindingMetadata tc b = (Logic.ifElse (isComplexBinding tc b) (Just (Core.TermLiteral (Core.LiteralBoolean True))) Nothing)
 
+-- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
+analyzeFunctionTerm :: (Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
+analyzeFunctionTerm cx getTC setTC env term = (analyzeFunctionTermWith cx bindingMetadata getTC setTC env term)
+
+-- | Analyze a function term with configurable binding metadata
+analyzeFunctionTermWith :: (Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
+analyzeFunctionTermWith cx forBinding getTC setTC env term = (analyzeFunctionTermWith_gather cx forBinding getTC setTC True env [] [] [] [] [] term)
+
 analyzeFunctionTermWith_finish :: (Context.Context -> (t0 -> Graph.Graph) -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
 analyzeFunctionTermWith_finish cx getTC fEnv tparams args bindings doms tapps body =  
   let bodyWithTapps = (Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
@@ -282,71 +293,3 @@ analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode gEnv tparams ar
         let newEnv = (setTC (Schemas.extendGraphForTypeLambda (getTC gEnv) v0) gEnv)
         in (analyzeFunctionTermWith_gather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
   _ -> (analyzeFunctionTermWith_finish cx getTC gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
-
--- | Analyze a function term with configurable binding metadata
-analyzeFunctionTermWith :: (Context.Context -> (Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermWith cx forBinding getTC setTC env term = (analyzeFunctionTermWith_gather cx forBinding getTC setTC True env [] [] [] [] [] term)
-
-analyzeFunctionTermNoInferWith_finish :: (t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermNoInferWith_finish fEnv tparams args bindings doms tapps body =  
-  let bodyWithTapps = (Lists.foldl (\trm -> \typ -> Core.TermTypeApplication (Core.TypeApplicationTerm {
-          Core.typeApplicationTermBody = trm,
-          Core.typeApplicationTermType = typ})) body tapps)
-  in (Right (Typing.FunctionStructure {
-    Typing.functionStructureTypeParams = (Lists.reverse tparams),
-    Typing.functionStructureParams = (Lists.reverse args),
-    Typing.functionStructureBindings = bindings,
-    Typing.functionStructureBody = bodyWithTapps,
-    Typing.functionStructureDomains = (Lists.reverse doms),
-    Typing.functionStructureCodomain = Nothing,
-    Typing.functionStructureEnvironment = fEnv}))
-
-analyzeFunctionTermNoInferWith_gather :: ((Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> Bool -> t0 -> [Core.Name] -> [Core.Name] -> [Core.Binding] -> [Core.Type] -> [Core.Type] -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms tapps t = ((\x -> case x of
-  Core.TermFunction v0 -> ((\x -> case x of
-    Core.FunctionLambda v1 -> (Logic.ifElse argMode ( 
-      let v = (Core.lambdaParameter v1)
-      in  
-        let dom = (Maybes.maybe (Core.TypeVariable (Core.Name "_")) (\x_ -> x_) (Core.lambdaDomain v1))
-        in  
-          let body = (Core.lambdaBody v1)
-          in  
-            let newEnv = (setTC (Schemas.extendGraphForLambda (getTC gEnv) v1) gEnv)
-            in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode newEnv tparams (Lists.cons v args) bindings (Lists.cons dom doms) tapps body)) (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t))
-    _ -> (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t)) v0)
-  Core.TermLet v0 ->  
-    let newBindings = (Core.letBindings v0)
-    in  
-      let body = (Core.letBody v0)
-      in  
-        let newEnv = (setTC (Schemas.extendGraphForLet forBinding (getTC gEnv) v0) gEnv)
-        in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC False newEnv tparams args (Lists.concat2 bindings newBindings) doms tapps body)
-  Core.TermTypeApplication v0 ->  
-    let taBody = (Core.typeApplicationTermBody v0)
-    in  
-      let typ = (Core.typeApplicationTermType v0)
-      in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode gEnv tparams args bindings doms (Lists.cons typ tapps) taBody)
-  Core.TermTypeLambda v0 ->  
-    let tvar = (Core.typeLambdaParameter v0)
-    in  
-      let tlBody = (Core.typeLambdaBody v0)
-      in  
-        let newEnv = (setTC (Schemas.extendGraphForTypeLambda (getTC gEnv) v0) gEnv)
-        in (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
-  _ -> (analyzeFunctionTermNoInferWith_finish gEnv tparams args bindings doms tapps t)) (Rewriting.deannotateTerm t))
-
--- | Analyze a function term without type inference, with configurable binding metadata
-analyzeFunctionTermNoInferWith :: ((Graph.Graph -> Core.Binding -> Maybe Core.Term) -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermNoInferWith forBinding getTC setTC env term = (analyzeFunctionTermNoInferWith_gather forBinding getTC setTC True env [] [] [] [] [] term)
-
--- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
-analyzeFunctionTerm :: (Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
-analyzeFunctionTerm cx getTC setTC env term = (analyzeFunctionTermWith cx bindingMetadata getTC setTC env term)
-
--- | Analyze a function term without recording binding metadata
-analyzeFunctionTermInline :: (Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermInline cx getTC setTC env term = (analyzeFunctionTermWith cx (\_ -> \_ -> Nothing) getTC setTC env term)
-
--- | Analyze a function term without type inference (performance optimization)
-analyzeFunctionTermNoInfer :: ((t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0))
-analyzeFunctionTermNoInfer getTC setTC env term = (analyzeFunctionTermNoInferWith bindingMetadata getTC setTC env term)

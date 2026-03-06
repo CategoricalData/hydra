@@ -1409,6 +1409,17 @@
                                                                                                                     "argument": {"variable": "arg"},
                                                                                                                     "function": {"variable": "hydra.coderUtils.isTrivialTerm"}}},
                                                                                                                 "domain": [{"variable": "hydra.core.Projection"}],
+                                                                                                                "parameter": "_"}}}},
+                                                                                                        {
+                                                                                                          "name": "wrap",
+                                                                                                          "term": {
+                                                                                                            "function": {
+                                                                                                              "lambda": {
+                                                                                                                "body": {
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "arg"},
+                                                                                                                    "function": {"variable": "hydra.coderUtils.isTrivialTerm"}}},
+                                                                                                                "domain": [{"variable": "hydra.core.Name"}],
                                                                                                                 "parameter": "_"}}}}],
                                                                                                       "default": [{"literal": {"boolean": false}}],
                                                                                                       "typeName": "hydra.core.Elimination"}}}}}},
@@ -1453,6 +1464,74 @@
                                                       "type": {"variable": "hydra.core.Term"}}}}}}}}},
                                       "domain": [{"maybe": {"variable": "hydra.core.Term"}}],
                                       "parameter": "opt"}}}},
+                              {
+                                "name": "record",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "rec"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "fields", "typeName": "hydra.core.Record"}}}}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"literal": {"boolean": true}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "function": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "fld"},
+                                                                          "function": {
+                                                                            "function": {
+                                                                              "elimination": {"record": {"field": "term", "typeName": "hydra.core.Field"}}}}}},
+                                                                      "function": {"variable": "hydra.coderUtils.isTrivialTerm"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "acc"},
+                                                                      "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                                              "domain": [{"variable": "hydra.core.Field"}],
+                                                              "parameter": "fld"}}},
+                                                        "domain": [{"literal": {"boolean": {}}}],
+                                                        "parameter": "acc"}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                          "type": {"literal": {"boolean": {}}}}},
+                                                      "type": {"variable": "hydra.core.Field"}}}}}}}}},
+                                      "domain": [{"variable": "hydra.core.Record"}],
+                                      "parameter": "rec"}}}},
+                              {
+                                "name": "wrap",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "wt"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}}}},
+                                          "function": {"variable": "hydra.coderUtils.isTrivialTerm"}}},
+                                      "domain": [{"variable": "hydra.core.WrappedTerm"}],
+                                      "parameter": "wt"}}}},
                               {
                                 "name": "typeApplication",
                                 "term": {
@@ -2569,6 +2648,266 @@
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]},
     {
+      "name": "hydra.coderUtils.analyzeFunctionTerm",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {
+                          "string": "Analyze a function term, collecting lambdas, type lambdas, lets, and type applications"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {"variable": "term"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "env"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "setTC"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "getTC"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.coderUtils.bindingMetadata"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "cx"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {
+                                                                              "typeApplication": {
+                                                                                "body": {"variable": "hydra.coderUtils.analyzeFunctionTermWith"},
+                                                                                "type": {"variable": "t0"}}},
+                                                                            "type": {"variable": "t1"}}}}}}}}}}}}}}},
+                                                "domain": [{"variable": "hydra.core.Term"}],
+                                                "parameter": "term"}}},
+                                          "domain": [{"variable": "t0"}],
+                                          "parameter": "env"}}},
+                                    "domain": [
+                                      {
+                                        "function": {
+                                          "codomain": {
+                                            "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
+                                          "domain": {"variable": "hydra.graph.Graph"}}}],
+                                    "parameter": "setTC"}}},
+                              "domain": [
+                                {
+                                  "function": {
+                                    "codomain": {"variable": "hydra.graph.Graph"},
+                                    "domain": {"variable": "t0"}}}],
+                              "parameter": "getTC"}}},
+                        "domain": [{"variable": "hydra.context.Context"}],
+                        "parameter": "cx"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {
+                                "either": {
+                                  "left": {"variable": "t1"},
+                                  "right": {
+                                    "application": {
+                                      "argument": {"variable": "t0"},
+                                      "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
+                              "domain": {"variable": "hydra.core.Term"}}},
+                          "domain": {"variable": "t0"}}},
+                      "domain": {
+                        "function": {
+                          "codomain": {
+                            "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
+                          "domain": {"variable": "hydra.graph.Graph"}}}}},
+                  "domain": {
+                    "function": {
+                      "codomain": {"variable": "hydra.graph.Graph"},
+                      "domain": {"variable": "t0"}}}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": ["t0", "t1"]}]},
+    {
+      "name": "hydra.coderUtils.analyzeFunctionTermWith",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {
+                          "string": "Analyze a function term with configurable binding metadata"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {"variable": "term"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Binding"}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "env"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"literal": {"boolean": true}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "setTC"},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "getTC"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "forBinding"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "cx"},
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"variable": "hydra.coderUtils.analyzeFunctionTermWith_gather"},
+                                                                                                              "type": {"variable": "t0"}}},
+                                                                                                          "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                                                      "domain": [{"variable": "hydra.core.Term"}],
+                                                      "parameter": "term"}}},
+                                                "domain": [{"variable": "t0"}],
+                                                "parameter": "env"}}},
+                                          "domain": [
+                                            {
+                                              "function": {
+                                                "codomain": {
+                                                  "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
+                                                "domain": {"variable": "hydra.graph.Graph"}}}],
+                                          "parameter": "setTC"}}},
+                                    "domain": [
+                                      {
+                                        "function": {
+                                          "codomain": {"variable": "hydra.graph.Graph"},
+                                          "domain": {"variable": "t0"}}}],
+                                    "parameter": "getTC"}}},
+                              "domain": [
+                                {
+                                  "function": {
+                                    "codomain": {
+                                      "function": {
+                                        "codomain": {"maybe": {"variable": "hydra.core.Term"}},
+                                        "domain": {"variable": "hydra.core.Binding"}}},
+                                    "domain": {"variable": "hydra.graph.Graph"}}}],
+                              "parameter": "forBinding"}}},
+                        "domain": [{"variable": "hydra.context.Context"}],
+                        "parameter": "cx"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "function": {
+                          "codomain": {
+                            "function": {
+                              "codomain": {
+                                "function": {
+                                  "codomain": {
+                                    "either": {
+                                      "left": {"variable": "t1"},
+                                      "right": {
+                                        "application": {
+                                          "argument": {"variable": "t0"},
+                                          "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
+                                  "domain": {"variable": "hydra.core.Term"}}},
+                              "domain": {"variable": "t0"}}},
+                          "domain": {
+                            "function": {
+                              "codomain": {
+                                "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
+                              "domain": {"variable": "hydra.graph.Graph"}}}}},
+                      "domain": {
+                        "function": {
+                          "codomain": {"variable": "hydra.graph.Graph"},
+                          "domain": {"variable": "t0"}}}}},
+                  "domain": {
+                    "function": {
+                      "codomain": {
+                        "function": {
+                          "codomain": {"maybe": {"variable": "hydra.core.Term"}},
+                          "domain": {"variable": "hydra.core.Binding"}}},
+                      "domain": {"variable": "hydra.graph.Graph"}}}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": ["t0", "t1"]}]},
+    {
       "name": "hydra.coderUtils.analyzeFunctionTermWith_finish",
       "term": {
         "typeLambda": {
@@ -3591,1532 +3930,6 @@
                           "domain": {"variable": "hydra.core.Binding"}}},
                       "domain": {"variable": "hydra.graph.Graph"}}}}},
               "domain": {"variable": "hydra.context.Context"}}},
-          "variables": ["t0", "t1"]}]},
-    {
-      "name": "hydra.coderUtils.analyzeFunctionTermWith",
-      "term": {
-        "typeLambda": {
-          "body": {
-            "typeLambda": {
-              "body": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "Analyze a function term with configurable binding metadata"}}}],
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "application": {
-                                                          "argument": {"variable": "term"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}},
-                                                                  "function": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Binding"}}},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {
-                                                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                              "function": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "env"},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"literal": {"boolean": true}},
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "setTC"},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "getTC"},
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "forBinding"},
-                                                                                                  "function": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "cx"},
-                                                                                                      "function": {
-                                                                                                        "typeApplication": {
-                                                                                                          "body": {
-                                                                                                            "typeApplication": {
-                                                                                                              "body": {"variable": "hydra.coderUtils.analyzeFunctionTermWith_gather"},
-                                                                                                              "type": {"variable": "t0"}}},
-                                                                                                          "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}},
-                                                      "domain": [{"variable": "hydra.core.Term"}],
-                                                      "parameter": "term"}}},
-                                                "domain": [{"variable": "t0"}],
-                                                "parameter": "env"}}},
-                                          "domain": [
-                                            {
-                                              "function": {
-                                                "codomain": {
-                                                  "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                                "domain": {"variable": "hydra.graph.Graph"}}}],
-                                          "parameter": "setTC"}}},
-                                    "domain": [
-                                      {
-                                        "function": {
-                                          "codomain": {"variable": "hydra.graph.Graph"},
-                                          "domain": {"variable": "t0"}}}],
-                                    "parameter": "getTC"}}},
-                              "domain": [
-                                {
-                                  "function": {
-                                    "codomain": {
-                                      "function": {
-                                        "codomain": {"maybe": {"variable": "hydra.core.Term"}},
-                                        "domain": {"variable": "hydra.core.Binding"}}},
-                                    "domain": {"variable": "hydra.graph.Graph"}}}],
-                              "parameter": "forBinding"}}},
-                        "domain": [{"variable": "hydra.context.Context"}],
-                        "parameter": "cx"}}}}},
-              "parameter": "t1"}},
-          "parameter": "t0"}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "either": {
-                                      "left": {"variable": "t1"},
-                                      "right": {
-                                        "application": {
-                                          "argument": {"variable": "t0"},
-                                          "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
-                                  "domain": {"variable": "hydra.core.Term"}}},
-                              "domain": {"variable": "t0"}}},
-                          "domain": {
-                            "function": {
-                              "codomain": {
-                                "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                              "domain": {"variable": "hydra.graph.Graph"}}}}},
-                      "domain": {
-                        "function": {
-                          "codomain": {"variable": "hydra.graph.Graph"},
-                          "domain": {"variable": "t0"}}}}},
-                  "domain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"maybe": {"variable": "hydra.core.Term"}},
-                          "domain": {"variable": "hydra.core.Binding"}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": ["t0", "t1"]}]},
-    {
-      "name": "hydra.coderUtils.analyzeFunctionTermNoInferWith_finish",
-      "term": {
-        "typeLambda": {
-          "body": {
-            "typeLambda": {
-              "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "function": {
-                              "lambda": {
-                                "body": {
-                                  "function": {
-                                    "lambda": {
-                                      "body": {
-                                        "function": {
-                                          "lambda": {
-                                            "body": {
-                                              "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "let": {
-                                                            "bindings": [
-                                                              {
-                                                                "name": "bodyWithTapps",
-                                                                "term": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "tapps"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "body"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "function": {
-                                                                                "lambda": {
-                                                                                  "body": {
-                                                                                    "function": {
-                                                                                      "lambda": {
-                                                                                        "body": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "typeApplication",
-                                                                                              "term": {
-                                                                                                "record": {
-                                                                                                  "fields": [
-                                                                                                    {"name": "body", "term": {"variable": "trm"}},
-                                                                                                    {"name": "type", "term": {"variable": "typ"}}],
-                                                                                                  "typeName": "hydra.core.TypeApplicationTerm"}}},
-                                                                                            "typeName": "hydra.core.Term"}},
-                                                                                        "domain": [{"variable": "hydra.core.Type"}],
-                                                                                        "parameter": "typ"}}},
-                                                                                  "domain": [{"variable": "hydra.core.Term"}],
-                                                                                  "parameter": "trm"}}},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
-                                                                                    "type": {"variable": "hydra.core.Term"}}},
-                                                                                "type": {"variable": "hydra.core.Type"}}}}}}}}},
-                                                                "type": [
-                                                                  {
-                                                                    "constraints": null,
-                                                                    "type": {"variable": "hydra.core.Term"},
-                                                                    "variables": []}]}],
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "either": {
-                                                                        "@right": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "record": {
-                                                                                "fields": [
-                                                                                  {
-                                                                                    "name": "typeParams",
-                                                                                    "term": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "tparams"},
-                                                                                        "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
-                                                                                            "type": {"variable": "hydra.core.Name"}}}}}},
-                                                                                  {
-                                                                                    "name": "params",
-                                                                                    "term": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "args"},
-                                                                                        "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
-                                                                                            "type": {"variable": "hydra.core.Name"}}}}}},
-                                                                                  {"name": "bindings", "term": {"variable": "bindings"}},
-                                                                                  {"name": "body", "term": {"variable": "bodyWithTapps"}},
-                                                                                  {
-                                                                                    "name": "domains",
-                                                                                    "term": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "doms"},
-                                                                                        "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.reverse"}},
-                                                                                            "type": {"variable": "hydra.core.Type"}}}}}},
-                                                                                  {
-                                                                                    "name": "codomain",
-                                                                                    "term": {
-                                                                                      "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Type"}}}},
-                                                                                  {"name": "environment", "term": {"variable": "fEnv"}}],
-                                                                                "typeName": "hydra.typing.FunctionStructure"}},
-                                                                            "type": {"variable": "t0"}}}}},
-                                                                    "type": {"variable": "t1"}}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "t0"},
-                                                                    "function": {"variable": "hydra.typing.FunctionStructure"}}}}}}},
-                                                        "domain": [{"variable": "hydra.core.Term"}],
-                                                        "parameter": "body"}}},
-                                                  "domain": [{"list": {"variable": "hydra.core.Type"}}],
-                                                  "parameter": "tapps"}}},
-                                            "domain": [{"list": {"variable": "hydra.core.Type"}}],
-                                            "parameter": "doms"}}},
-                                      "domain": [{"list": {"variable": "hydra.core.Binding"}}],
-                                      "parameter": "bindings"}}},
-                                "domain": [{"list": {"variable": "hydra.core.Name"}}],
-                                "parameter": "args"}}},
-                          "domain": [{"list": {"variable": "hydra.core.Name"}}],
-                          "parameter": "tparams"}}},
-                    "domain": [{"variable": "t0"}],
-                    "parameter": "fEnv"}}},
-              "parameter": "t1"}},
-          "parameter": "t0"}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {
-                                        "either": {
-                                          "left": {"variable": "t1"},
-                                          "right": {
-                                            "application": {
-                                              "argument": {"variable": "t0"},
-                                              "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
-                                      "domain": {"variable": "hydra.core.Term"}}},
-                                  "domain": {"list": {"variable": "hydra.core.Type"}}}},
-                              "domain": {"list": {"variable": "hydra.core.Type"}}}},
-                          "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-                      "domain": {"list": {"variable": "hydra.core.Name"}}}},
-                  "domain": {"list": {"variable": "hydra.core.Name"}}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}]},
-    {
-      "name": "hydra.coderUtils.analyzeFunctionTermNoInferWith_gather",
-      "term": {
-        "typeLambda": {
-          "body": {
-            "typeLambda": {
-              "body": {
-                "function": {
-                  "lambda": {
-                    "body": {
-                      "function": {
-                        "lambda": {
-                          "body": {
-                            "function": {
-                              "lambda": {
-                                "body": {
-                                  "function": {
-                                    "lambda": {
-                                      "body": {
-                                        "function": {
-                                          "lambda": {
-                                            "body": {
-                                              "function": {
-                                                "lambda": {
-                                                  "body": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "function": {
-                                                            "lambda": {
-                                                              "body": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "function": {
-                                                                        "lambda": {
-                                                                          "body": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "t"},
-                                                                                        "function": {"variable": "hydra.rewriting.deannotateTerm"}}},
-                                                                                    "function": {
-                                                                                      "function": {
-                                                                                        "elimination": {
-                                                                                          "union": {
-                                                                                            "cases": [
-                                                                                              {
-                                                                                                "name": "function",
-                                                                                                "term": {
-                                                                                                  "function": {
-                                                                                                    "lambda": {
-                                                                                                      "body": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "f"},
-                                                                                                          "function": {
-                                                                                                            "function": {
-                                                                                                              "elimination": {
-                                                                                                                "union": {
-                                                                                                                  "cases": [
-                                                                                                                    {
-                                                                                                                      "name": "lambda",
-                                                                                                                      "term": {
-                                                                                                                        "function": {
-                                                                                                                          "lambda": {
-                                                                                                                            "body": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "t"},
-                                                                                                                                    "function": {
-                                                                                                                                      "application": {
-                                                                                                                                        "argument": {"variable": "tapps"},
-                                                                                                                                        "function": {
-                                                                                                                                          "application": {
-                                                                                                                                            "argument": {"variable": "doms"},
-                                                                                                                                            "function": {
-                                                                                                                                              "application": {
-                                                                                                                                                "argument": {"variable": "bindings"},
-                                                                                                                                                "function": {
-                                                                                                                                                  "application": {
-                                                                                                                                                    "argument": {"variable": "args"},
-                                                                                                                                                    "function": {
-                                                                                                                                                      "application": {
-                                                                                                                                                        "argument": {"variable": "tparams"},
-                                                                                                                                                        "function": {
-                                                                                                                                                          "application": {
-                                                                                                                                                            "argument": {"variable": "gEnv"},
-                                                                                                                                                            "function": {
-                                                                                                                                                              "typeApplication": {
-                                                                                                                                                                "body": {
-                                                                                                                                                                  "typeApplication": {
-                                                                                                                                                                    "body": {"variable": "hydra.coderUtils.analyzeFunctionTermNoInferWith_finish"},
-                                                                                                                                                                    "type": {"variable": "t0"}}},
-                                                                                                                                                                "type": {"variable": "t1"}}}}}}}}}}}}}}}}},
-                                                                                                                                "function": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {
-                                                                                                                                      "let": {
-                                                                                                                                        "bindings": [
-                                                                                                                                          {
-                                                                                                                                            "name": "v",
-                                                                                                                                            "term": {
-                                                                                                                                              "application": {
-                                                                                                                                                "argument": {"variable": "lam"},
-                                                                                                                                                "function": {
-                                                                                                                                                  "function": {
-                                                                                                                                                    "elimination": {"record": {"field": "parameter", "typeName": "hydra.core.Lambda"}}}}}},
-                                                                                                                                            "type": [
-                                                                                                                                              {
-                                                                                                                                                "constraints": null,
-                                                                                                                                                "type": {"variable": "hydra.core.Name"},
-                                                                                                                                                "variables": []}]}],
-                                                                                                                                        "body": {
-                                                                                                                                          "let": {
-                                                                                                                                            "bindings": [
-                                                                                                                                              {
-                                                                                                                                                "name": "dom",
-                                                                                                                                                "term": {
-                                                                                                                                                  "application": {
-                                                                                                                                                    "argument": {
-                                                                                                                                                      "application": {
-                                                                                                                                                        "argument": {"variable": "lam"},
-                                                                                                                                                        "function": {
-                                                                                                                                                          "function": {
-                                                                                                                                                            "elimination": {"record": {"field": "domain", "typeName": "hydra.core.Lambda"}}}}}},
-                                                                                                                                                    "function": {
-                                                                                                                                                      "application": {
-                                                                                                                                                        "argument": {
-                                                                                                                                                          "function": {
-                                                                                                                                                            "lambda": {
-                                                                                                                                                              "body": {"variable": "x_"},
-                                                                                                                                                              "domain": [{"variable": "hydra.core.Type"}],
-                                                                                                                                                              "parameter": "x_"}}},
-                                                                                                                                                        "function": {
-                                                                                                                                                          "application": {
-                                                                                                                                                            "argument": {
-                                                                                                                                                              "union": {
-                                                                                                                                                                "field": {
-                                                                                                                                                                  "name": "variable",
-                                                                                                                                                                  "term": {
-                                                                                                                                                                    "wrap": {"body": {"literal": {"string": "_"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                "typeName": "hydra.core.Type"}},
-                                                                                                                                                            "function": {
-                                                                                                                                                              "typeApplication": {
-                                                                                                                                                                "body": {
-                                                                                                                                                                  "typeApplication": {
-                                                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
-                                                                                                                                                                    "type": {"variable": "hydra.core.Type"}}},
-                                                                                                                                                                "type": {"variable": "hydra.core.Type"}}}}}}}}},
-                                                                                                                                                "type": [
-                                                                                                                                                  {
-                                                                                                                                                    "constraints": null,
-                                                                                                                                                    "type": {"variable": "hydra.core.Type"},
-                                                                                                                                                    "variables": []}]}],
-                                                                                                                                            "body": {
-                                                                                                                                              "let": {
-                                                                                                                                                "bindings": [
-                                                                                                                                                  {
-                                                                                                                                                    "name": "body",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "application": {
-                                                                                                                                                        "argument": {"variable": "lam"},
-                                                                                                                                                        "function": {
-                                                                                                                                                          "function": {
-                                                                                                                                                            "elimination": {"record": {"field": "body", "typeName": "hydra.core.Lambda"}}}}}},
-                                                                                                                                                    "type": [
-                                                                                                                                                      {
-                                                                                                                                                        "constraints": null,
-                                                                                                                                                        "type": {"variable": "hydra.core.Term"},
-                                                                                                                                                        "variables": []}]}],
-                                                                                                                                                "body": {
-                                                                                                                                                  "let": {
-                                                                                                                                                    "bindings": [
-                                                                                                                                                      {
-                                                                                                                                                        "name": "newEnv",
-                                                                                                                                                        "term": {
-                                                                                                                                                          "application": {
-                                                                                                                                                            "argument": {"variable": "gEnv"},
-                                                                                                                                                            "function": {
-                                                                                                                                                              "application": {
-                                                                                                                                                                "argument": {
-                                                                                                                                                                  "application": {
-                                                                                                                                                                    "argument": {"variable": "lam"},
-                                                                                                                                                                    "function": {
-                                                                                                                                                                      "application": {
-                                                                                                                                                                        "argument": {
-                                                                                                                                                                          "application": {"argument": {"variable": "gEnv"}, "function": {"variable": "getTC"}}},
-                                                                                                                                                                        "function": {"variable": "hydra.schemas.extendGraphForLambda"}}}}},
-                                                                                                                                                                "function": {"variable": "setTC"}}}}},
-                                                                                                                                                        "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
-                                                                                                                                                    "body": {
-                                                                                                                                                      "application": {
-                                                                                                                                                        "argument": {"variable": "body"},
-                                                                                                                                                        "function": {
-                                                                                                                                                          "application": {
-                                                                                                                                                            "argument": {"variable": "tapps"},
-                                                                                                                                                            "function": {
-                                                                                                                                                              "application": {
-                                                                                                                                                                "argument": {
-                                                                                                                                                                  "application": {
-                                                                                                                                                                    "argument": {"variable": "doms"},
-                                                                                                                                                                    "function": {
-                                                                                                                                                                      "application": {
-                                                                                                                                                                        "argument": {"variable": "dom"},
-                                                                                                                                                                        "function": {
-                                                                                                                                                                          "typeApplication": {
-                                                                                                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                                                                                                                                                            "type": {"variable": "hydra.core.Type"}}}}}}},
-                                                                                                                                                                "function": {
-                                                                                                                                                                  "application": {
-                                                                                                                                                                    "argument": {"variable": "bindings"},
-                                                                                                                                                                    "function": {
-                                                                                                                                                                      "application": {
-                                                                                                                                                                        "argument": {
-                                                                                                                                                                          "application": {
-                                                                                                                                                                            "argument": {"variable": "args"},
-                                                                                                                                                                            "function": {
-                                                                                                                                                                              "application": {
-                                                                                                                                                                                "argument": {"variable": "v"},
-                                                                                                                                                                                "function": {
-                                                                                                                                                                                  "typeApplication": {
-                                                                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                                                                                                                                                                    "type": {"variable": "hydra.core.Name"}}}}}}},
-                                                                                                                                                                        "function": {
-                                                                                                                                                                          "application": {
-                                                                                                                                                                            "argument": {"variable": "tparams"},
-                                                                                                                                                                            "function": {
-                                                                                                                                                                              "application": {
-                                                                                                                                                                                "argument": {"variable": "newEnv"},
-                                                                                                                                                                                "function": {
-                                                                                                                                                                                  "application": {
-                                                                                                                                                                                    "argument": {"variable": "argMode"},
-                                                                                                                                                                                    "function": {
-                                                                                                                                                                                      "application": {
-                                                                                                                                                                                        "argument": {"variable": "setTC"},
-                                                                                                                                                                                        "function": {
-                                                                                                                                                                                          "application": {
-                                                                                                                                                                                            "argument": {"variable": "getTC"},
-                                                                                                                                                                                            "function": {
-                                                                                                                                                                                              "application": {
-                                                                                                                                                                                                "argument": {"variable": "forBinding"},
-                                                                                                                                                                                                "function": {
-                                                                                                                                                                                                  "typeApplication": {
-                                                                                                                                                                                                    "body": {
-                                                                                                                                                                                                      "typeApplication": {
-                                                                                                                                                                                                        "body": {"variable": "hydra.coderUtils.analyzeFunctionTermNoInferWith_gather"},
-                                                                                                                                                                                                        "type": {"variable": "t0"}}},
-                                                                                                                                                                                                    "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
-                                                                                                                                    "function": {
-                                                                                                                                      "application": {
-                                                                                                                                        "argument": {"variable": "argMode"},
-                                                                                                                                        "function": {
-                                                                                                                                          "typeApplication": {
-                                                                                                                                            "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                                                                                                            "type": {
-                                                                                                                                              "either": {
-                                                                                                                                                "left": {"variable": "t1"},
-                                                                                                                                                "right": {
-                                                                                                                                                  "application": {
-                                                                                                                                                    "argument": {"variable": "t0"},
-                                                                                                                                                    "function": {"variable": "hydra.typing.FunctionStructure"}}}}}}}}}}}}},
-                                                                                                                            "domain": [{"variable": "hydra.core.Lambda"}],
-                                                                                                                            "parameter": "lam"}}}}],
-                                                                                                                  "default": [
-                                                                                                                    {
-                                                                                                                      "application": {
-                                                                                                                        "argument": {"variable": "t"},
-                                                                                                                        "function": {
-                                                                                                                          "application": {
-                                                                                                                            "argument": {"variable": "tapps"},
-                                                                                                                            "function": {
-                                                                                                                              "application": {
-                                                                                                                                "argument": {"variable": "doms"},
-                                                                                                                                "function": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "bindings"},
-                                                                                                                                    "function": {
-                                                                                                                                      "application": {
-                                                                                                                                        "argument": {"variable": "args"},
-                                                                                                                                        "function": {
-                                                                                                                                          "application": {
-                                                                                                                                            "argument": {"variable": "tparams"},
-                                                                                                                                            "function": {
-                                                                                                                                              "application": {
-                                                                                                                                                "argument": {"variable": "gEnv"},
-                                                                                                                                                "function": {
-                                                                                                                                                  "typeApplication": {
-                                                                                                                                                    "body": {
-                                                                                                                                                      "typeApplication": {
-                                                                                                                                                        "body": {"variable": "hydra.coderUtils.analyzeFunctionTermNoInferWith_finish"},
-                                                                                                                                                        "type": {"variable": "t0"}}},
-                                                                                                                                                    "type": {"variable": "t1"}}}}}}}}}}}}}}}}}],
-                                                                                                                  "typeName": "hydra.core.Function"}}}}}},
-                                                                                                      "domain": [{"variable": "hydra.core.Function"}],
-                                                                                                      "parameter": "f"}}}},
-                                                                                              {
-                                                                                                "name": "let",
-                                                                                                "term": {
-                                                                                                  "function": {
-                                                                                                    "lambda": {
-                                                                                                      "body": {
-                                                                                                        "let": {
-                                                                                                          "bindings": [
-                                                                                                            {
-                                                                                                              "name": "newBindings",
-                                                                                                              "term": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "lt"},
-                                                                                                                  "function": {
-                                                                                                                    "function": {
-                                                                                                                      "elimination": {"record": {"field": "bindings", "typeName": "hydra.core.Let"}}}}}},
-                                                                                                              "type": [
-                                                                                                                {
-                                                                                                                  "constraints": null,
-                                                                                                                  "type": {"list": {"variable": "hydra.core.Binding"}},
-                                                                                                                  "variables": []}]}],
-                                                                                                          "body": {
-                                                                                                            "let": {
-                                                                                                              "bindings": [
-                                                                                                                {
-                                                                                                                  "name": "body",
-                                                                                                                  "term": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "lt"},
-                                                                                                                      "function": {
-                                                                                                                        "function": {
-                                                                                                                          "elimination": {"record": {"field": "body", "typeName": "hydra.core.Let"}}}}}},
-                                                                                                                  "type": [
-                                                                                                                    {
-                                                                                                                      "constraints": null,
-                                                                                                                      "type": {"variable": "hydra.core.Term"},
-                                                                                                                      "variables": []}]}],
-                                                                                                              "body": {
-                                                                                                                "let": {
-                                                                                                                  "bindings": [
-                                                                                                                    {
-                                                                                                                      "name": "newEnv",
-                                                                                                                      "term": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "gEnv"},
-                                                                                                                          "function": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {"variable": "lt"},
-                                                                                                                                  "function": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {
-                                                                                                                                        "application": {"argument": {"variable": "gEnv"}, "function": {"variable": "getTC"}}},
-                                                                                                                                      "function": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {"variable": "forBinding"},
-                                                                                                                                          "function": {"variable": "hydra.schemas.extendGraphForLet"}}}}}}},
-                                                                                                                              "function": {"variable": "setTC"}}}}},
-                                                                                                                      "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
-                                                                                                                  "body": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "body"},
-                                                                                                                      "function": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "tapps"},
-                                                                                                                          "function": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {"variable": "doms"},
-                                                                                                                              "function": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {"variable": "newBindings"},
-                                                                                                                                      "function": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {"variable": "bindings"},
-                                                                                                                                          "function": {
-                                                                                                                                            "typeApplication": {
-                                                                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                                                                                                              "type": {"variable": "hydra.core.Binding"}}}}}}},
-                                                                                                                                  "function": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {"variable": "args"},
-                                                                                                                                      "function": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {"variable": "tparams"},
-                                                                                                                                          "function": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "newEnv"},
-                                                                                                                                              "function": {
-                                                                                                                                                "application": {
-                                                                                                                                                  "argument": {"literal": {"boolean": false}},
-                                                                                                                                                  "function": {
-                                                                                                                                                    "application": {
-                                                                                                                                                      "argument": {"variable": "setTC"},
-                                                                                                                                                      "function": {
-                                                                                                                                                        "application": {
-                                                                                                                                                          "argument": {"variable": "getTC"},
-                                                                                                                                                          "function": {
-                                                                                                                                                            "application": {
-                                                                                                                                                              "argument": {"variable": "forBinding"},
-                                                                                                                                                              "function": {
-                                                                                                                                                                "typeApplication": {
-                                                                                                                                                                  "body": {
-                                                                                                                                                                    "typeApplication": {
-                                                                                                                                                                      "body": {"variable": "hydra.coderUtils.analyzeFunctionTermNoInferWith_gather"},
-                                                                                                                                                                      "type": {"variable": "t0"}}},
-                                                                                                                                                                  "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
-                                                                                                      "domain": [{"variable": "hydra.core.Let"}],
-                                                                                                      "parameter": "lt"}}}},
-                                                                                              {
-                                                                                                "name": "typeApplication",
-                                                                                                "term": {
-                                                                                                  "function": {
-                                                                                                    "lambda": {
-                                                                                                      "body": {
-                                                                                                        "let": {
-                                                                                                          "bindings": [
-                                                                                                            {
-                                                                                                              "name": "taBody",
-                                                                                                              "term": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "ta"},
-                                                                                                                  "function": {
-                                                                                                                    "function": {
-                                                                                                                      "elimination": {
-                                                                                                                        "record": {"field": "body", "typeName": "hydra.core.TypeApplicationTerm"}}}}}},
-                                                                                                              "type": [
-                                                                                                                {
-                                                                                                                  "constraints": null,
-                                                                                                                  "type": {"variable": "hydra.core.Term"},
-                                                                                                                  "variables": []}]}],
-                                                                                                          "body": {
-                                                                                                            "let": {
-                                                                                                              "bindings": [
-                                                                                                                {
-                                                                                                                  "name": "typ",
-                                                                                                                  "term": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "ta"},
-                                                                                                                      "function": {
-                                                                                                                        "function": {
-                                                                                                                          "elimination": {
-                                                                                                                            "record": {"field": "type", "typeName": "hydra.core.TypeApplicationTerm"}}}}}},
-                                                                                                                  "type": [
-                                                                                                                    {
-                                                                                                                      "constraints": null,
-                                                                                                                      "type": {"variable": "hydra.core.Type"},
-                                                                                                                      "variables": []}]}],
-                                                                                                              "body": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "taBody"},
-                                                                                                                  "function": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "tapps"},
-                                                                                                                          "function": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {"variable": "typ"},
-                                                                                                                              "function": {
-                                                                                                                                "typeApplication": {
-                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                                                                                                                  "type": {"variable": "hydra.core.Type"}}}}}}},
-                                                                                                                      "function": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "doms"},
-                                                                                                                          "function": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {"variable": "bindings"},
-                                                                                                                              "function": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {"variable": "args"},
-                                                                                                                                  "function": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {"variable": "tparams"},
-                                                                                                                                      "function": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {"variable": "gEnv"},
-                                                                                                                                          "function": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "argMode"},
-                                                                                                                                              "function": {
-                                                                                                                                                "application": {
-                                                                                                                                                  "argument": {"variable": "setTC"},
-                                                                                                                                                  "function": {
-                                                                                                                                                    "application": {
-                                                                                                                                                      "argument": {"variable": "getTC"},
-                                                                                                                                                      "function": {
-                                                                                                                                                        "application": {
-                                                                                                                                                          "argument": {"variable": "forBinding"},
-                                                                                                                                                          "function": {
-                                                                                                                                                            "typeApplication": {
-                                                                                                                                                              "body": {
-                                                                                                                                                                "typeApplication": {
-                                                                                                                                                                  "body": {"variable": "hydra.coderUtils.analyzeFunctionTermNoInferWith_gather"},
-                                                                                                                                                                  "type": {"variable": "t0"}}},
-                                                                                                                                                              "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
-                                                                                                      "domain": [{"variable": "hydra.core.TypeApplicationTerm"}],
-                                                                                                      "parameter": "ta"}}}},
-                                                                                              {
-                                                                                                "name": "typeLambda",
-                                                                                                "term": {
-                                                                                                  "function": {
-                                                                                                    "lambda": {
-                                                                                                      "body": {
-                                                                                                        "let": {
-                                                                                                          "bindings": [
-                                                                                                            {
-                                                                                                              "name": "tvar",
-                                                                                                              "term": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "tl"},
-                                                                                                                  "function": {
-                                                                                                                    "function": {
-                                                                                                                      "elimination": {
-                                                                                                                        "record": {"field": "parameter", "typeName": "hydra.core.TypeLambda"}}}}}},
-                                                                                                              "type": [
-                                                                                                                {
-                                                                                                                  "constraints": null,
-                                                                                                                  "type": {"variable": "hydra.core.Name"},
-                                                                                                                  "variables": []}]}],
-                                                                                                          "body": {
-                                                                                                            "let": {
-                                                                                                              "bindings": [
-                                                                                                                {
-                                                                                                                  "name": "tlBody",
-                                                                                                                  "term": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "tl"},
-                                                                                                                      "function": {
-                                                                                                                        "function": {
-                                                                                                                          "elimination": {"record": {"field": "body", "typeName": "hydra.core.TypeLambda"}}}}}},
-                                                                                                                  "type": [
-                                                                                                                    {
-                                                                                                                      "constraints": null,
-                                                                                                                      "type": {"variable": "hydra.core.Term"},
-                                                                                                                      "variables": []}]}],
-                                                                                                              "body": {
-                                                                                                                "let": {
-                                                                                                                  "bindings": [
-                                                                                                                    {
-                                                                                                                      "name": "newEnv",
-                                                                                                                      "term": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "gEnv"},
-                                                                                                                          "function": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {"variable": "tl"},
-                                                                                                                                  "function": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {
-                                                                                                                                        "application": {"argument": {"variable": "gEnv"}, "function": {"variable": "getTC"}}},
-                                                                                                                                      "function": {"variable": "hydra.schemas.extendGraphForTypeLambda"}}}}},
-                                                                                                                              "function": {"variable": "setTC"}}}}},
-                                                                                                                      "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]}],
-                                                                                                                  "body": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "tlBody"},
-                                                                                                                      "function": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "tapps"},
-                                                                                                                          "function": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {"variable": "doms"},
-                                                                                                                              "function": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {"variable": "bindings"},
-                                                                                                                                  "function": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {"variable": "args"},
-                                                                                                                                      "function": {
-                                                                                                                                        "application": {
-                                                                                                                                          "argument": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "tparams"},
-                                                                                                                                              "function": {
-                                                                                                                                                "application": {
-                                                                                                                                                  "argument": {"variable": "tvar"},
-                                                                                                                                                  "function": {
-                                                                                                                                                    "typeApplication": {
-                                                                                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                                                                                                                                      "type": {"variable": "hydra.core.Name"}}}}}}},
-                                                                                                                                          "function": {
-                                                                                                                                            "application": {
-                                                                                                                                              "argument": {"variable": "newEnv"},
-                                                                                                                                              "function": {
-                                                                                                                                                "application": {
-                                                                                                                                                  "argument": {"variable": "argMode"},
-                                                                                                                                                  "function": {
-                                                                                                                                                    "application": {
-                                                                                                                                                      "argument": {"variable": "setTC"},
-                                                                                                                                                      "function": {
-                                                                                                                                                        "application": {
-                                                                                                                                                          "argument": {"variable": "getTC"},
-                                                                                                                                                          "function": {
-                                                                                                                                                            "application": {
-                                                                                                                                                              "argument": {"variable": "forBinding"},
-                                                                                                                                                              "function": {
-                                                                                                                                                                "typeApplication": {
-                                                                                                                                                                  "body": {
-                                                                                                                                                                    "typeApplication": {
-                                                                                                                                                                      "body": {"variable": "hydra.coderUtils.analyzeFunctionTermNoInferWith_gather"},
-                                                                                                                                                                      "type": {"variable": "t0"}}},
-                                                                                                                                                                  "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
-                                                                                                      "domain": [{"variable": "hydra.core.TypeLambda"}],
-                                                                                                      "parameter": "tl"}}}}],
-                                                                                            "default": [
-                                                                                              {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "t"},
-                                                                                                  "function": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "tapps"},
-                                                                                                      "function": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "doms"},
-                                                                                                          "function": {
-                                                                                                            "application": {
-                                                                                                              "argument": {"variable": "bindings"},
-                                                                                                              "function": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "args"},
-                                                                                                                  "function": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "tparams"},
-                                                                                                                      "function": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "gEnv"},
-                                                                                                                          "function": {
-                                                                                                                            "typeApplication": {
-                                                                                                                              "body": {
-                                                                                                                                "typeApplication": {
-                                                                                                                                  "body": {"variable": "hydra.coderUtils.analyzeFunctionTermNoInferWith_finish"},
-                                                                                                                                  "type": {"variable": "t0"}}},
-                                                                                                                              "type": {"variable": "t1"}}}}}}}}}}}}}}}}}],
-                                                                                            "typeName": "hydra.core.Term"}}}}}},
-                                                                                "domain": [{"variable": "hydra.core.Term"}],
-                                                                                "parameter": "t"}}},
-                                                                          "domain": [{"list": {"variable": "hydra.core.Type"}}],
-                                                                          "parameter": "tapps"}}},
-                                                                    "domain": [{"list": {"variable": "hydra.core.Type"}}],
-                                                                    "parameter": "doms"}}},
-                                                              "domain": [{"list": {"variable": "hydra.core.Binding"}}],
-                                                              "parameter": "bindings"}}},
-                                                        "domain": [{"list": {"variable": "hydra.core.Name"}}],
-                                                        "parameter": "args"}}},
-                                                  "domain": [{"list": {"variable": "hydra.core.Name"}}],
-                                                  "parameter": "tparams"}}},
-                                            "domain": [{"variable": "t0"}],
-                                            "parameter": "gEnv"}}},
-                                      "domain": [{"literal": {"boolean": {}}}],
-                                      "parameter": "argMode"}}},
-                                "domain": [
-                                  {
-                                    "function": {
-                                      "codomain": {
-                                        "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                      "domain": {"variable": "hydra.graph.Graph"}}}],
-                                "parameter": "setTC"}}},
-                          "domain": [
-                            {
-                              "function": {
-                                "codomain": {"variable": "hydra.graph.Graph"},
-                                "domain": {"variable": "t0"}}}],
-                          "parameter": "getTC"}}},
-                    "domain": [
-                      {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {"maybe": {"variable": "hydra.core.Term"}},
-                              "domain": {"variable": "hydra.core.Binding"}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}}],
-                    "parameter": "forBinding"}}},
-              "parameter": "t1"}},
-          "parameter": "t0"}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {
-                                    "function": {
-                                      "codomain": {
-                                        "function": {
-                                          "codomain": {
-                                            "function": {
-                                              "codomain": {
-                                                "function": {
-                                                  "codomain": {
-                                                    "function": {
-                                                      "codomain": {
-                                                        "either": {
-                                                          "left": {"variable": "t1"},
-                                                          "right": {
-                                                            "application": {
-                                                              "argument": {"variable": "t0"},
-                                                              "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
-                                                      "domain": {"variable": "hydra.core.Term"}}},
-                                                  "domain": {"list": {"variable": "hydra.core.Type"}}}},
-                                              "domain": {"list": {"variable": "hydra.core.Type"}}}},
-                                          "domain": {"list": {"variable": "hydra.core.Binding"}}}},
-                                      "domain": {"list": {"variable": "hydra.core.Name"}}}},
-                                  "domain": {"list": {"variable": "hydra.core.Name"}}}},
-                              "domain": {"variable": "t0"}}},
-                          "domain": {"literal": {"boolean": {}}}}},
-                      "domain": {
-                        "function": {
-                          "codomain": {
-                            "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}}}},
-                  "domain": {
-                    "function": {
-                      "codomain": {"variable": "hydra.graph.Graph"},
-                      "domain": {"variable": "t0"}}}}},
-              "domain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"maybe": {"variable": "hydra.core.Term"}},
-                      "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}}}},
-          "variables": ["t0", "t1"]}]},
-    {
-      "name": "hydra.coderUtils.analyzeFunctionTermNoInferWith",
-      "term": {
-        "typeLambda": {
-          "body": {
-            "typeLambda": {
-              "body": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "Analyze a function term without type inference, with configurable binding metadata"}}}],
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {"variable": "term"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Type"}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Binding"}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "env"},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"literal": {"boolean": true}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "setTC"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "getTC"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "forBinding"},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.coderUtils.analyzeFunctionTermNoInferWith_gather"},
-                                                                                                    "type": {"variable": "t0"}}},
-                                                                                                "type": {"variable": "t1"}}}}}}}}}}}}}}}}}}}}}}}}},
-                                                "domain": [{"variable": "hydra.core.Term"}],
-                                                "parameter": "term"}}},
-                                          "domain": [{"variable": "t0"}],
-                                          "parameter": "env"}}},
-                                    "domain": [
-                                      {
-                                        "function": {
-                                          "codomain": {
-                                            "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                          "domain": {"variable": "hydra.graph.Graph"}}}],
-                                    "parameter": "setTC"}}},
-                              "domain": [
-                                {
-                                  "function": {
-                                    "codomain": {"variable": "hydra.graph.Graph"},
-                                    "domain": {"variable": "t0"}}}],
-                              "parameter": "getTC"}}},
-                        "domain": [
-                          {
-                            "function": {
-                              "codomain": {
-                                "function": {
-                                  "codomain": {"maybe": {"variable": "hydra.core.Term"}},
-                                  "domain": {"variable": "hydra.core.Binding"}}},
-                              "domain": {"variable": "hydra.graph.Graph"}}}],
-                        "parameter": "forBinding"}}}}},
-              "parameter": "t1"}},
-          "parameter": "t0"}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "either": {
-                                  "left": {"variable": "t1"},
-                                  "right": {
-                                    "application": {
-                                      "argument": {"variable": "t0"},
-                                      "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
-                              "domain": {"variable": "hydra.core.Term"}}},
-                          "domain": {"variable": "t0"}}},
-                      "domain": {
-                        "function": {
-                          "codomain": {
-                            "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}}}},
-                  "domain": {
-                    "function": {
-                      "codomain": {"variable": "hydra.graph.Graph"},
-                      "domain": {"variable": "t0"}}}}},
-              "domain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"maybe": {"variable": "hydra.core.Term"}},
-                      "domain": {"variable": "hydra.core.Binding"}}},
-                  "domain": {"variable": "hydra.graph.Graph"}}}}},
-          "variables": ["t0", "t1"]}]},
-    {
-      "name": "hydra.coderUtils.analyzeFunctionTerm",
-      "term": {
-        "typeLambda": {
-          "body": {
-            "typeLambda": {
-              "body": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "Analyze a function term, collecting lambdas, type lambdas, lets, and type applications"}}}],
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {"variable": "term"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "env"},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"variable": "setTC"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "getTC"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.coderUtils.bindingMetadata"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "cx"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.coderUtils.analyzeFunctionTermWith"},
-                                                                                "type": {"variable": "t0"}}},
-                                                                            "type": {"variable": "t1"}}}}}}}}}}}}}}},
-                                                "domain": [{"variable": "hydra.core.Term"}],
-                                                "parameter": "term"}}},
-                                          "domain": [{"variable": "t0"}],
-                                          "parameter": "env"}}},
-                                    "domain": [
-                                      {
-                                        "function": {
-                                          "codomain": {
-                                            "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                          "domain": {"variable": "hydra.graph.Graph"}}}],
-                                    "parameter": "setTC"}}},
-                              "domain": [
-                                {
-                                  "function": {
-                                    "codomain": {"variable": "hydra.graph.Graph"},
-                                    "domain": {"variable": "t0"}}}],
-                              "parameter": "getTC"}}},
-                        "domain": [{"variable": "hydra.context.Context"}],
-                        "parameter": "cx"}}}}},
-              "parameter": "t1"}},
-          "parameter": "t0"}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "either": {
-                                  "left": {"variable": "t1"},
-                                  "right": {
-                                    "application": {
-                                      "argument": {"variable": "t0"},
-                                      "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
-                              "domain": {"variable": "hydra.core.Term"}}},
-                          "domain": {"variable": "t0"}}},
-                      "domain": {
-                        "function": {
-                          "codomain": {
-                            "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}}}},
-                  "domain": {
-                    "function": {
-                      "codomain": {"variable": "hydra.graph.Graph"},
-                      "domain": {"variable": "t0"}}}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": ["t0", "t1"]}]},
-    {
-      "name": "hydra.coderUtils.analyzeFunctionTermInline",
-      "term": {
-        "typeLambda": {
-          "body": {
-            "typeLambda": {
-              "body": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "Analyze a function term without recording binding metadata"}}}],
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {"variable": "term"},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "env"},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"variable": "setTC"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "getTC"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "function": {
-                                                                        "lambda": {
-                                                                          "body": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.core.Term"}}},
-                                                                                "domain": [{"variable": "hydra.core.Binding"}],
-                                                                                "parameter": "_"}}},
-                                                                          "domain": [{"variable": "hydra.graph.Graph"}],
-                                                                          "parameter": "_"}}},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "cx"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.coderUtils.analyzeFunctionTermWith"},
-                                                                                "type": {"variable": "t0"}}},
-                                                                            "type": {"variable": "t1"}}}}}}}}}}}}}}},
-                                                "domain": [{"variable": "hydra.core.Term"}],
-                                                "parameter": "term"}}},
-                                          "domain": [{"variable": "t0"}],
-                                          "parameter": "env"}}},
-                                    "domain": [
-                                      {
-                                        "function": {
-                                          "codomain": {
-                                            "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                          "domain": {"variable": "hydra.graph.Graph"}}}],
-                                    "parameter": "setTC"}}},
-                              "domain": [
-                                {
-                                  "function": {
-                                    "codomain": {"variable": "hydra.graph.Graph"},
-                                    "domain": {"variable": "t0"}}}],
-                              "parameter": "getTC"}}},
-                        "domain": [{"variable": "hydra.context.Context"}],
-                        "parameter": "cx"}}}}},
-              "parameter": "t1"}},
-          "parameter": "t0"}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "either": {
-                                  "left": {"variable": "t1"},
-                                  "right": {
-                                    "application": {
-                                      "argument": {"variable": "t0"},
-                                      "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
-                              "domain": {"variable": "hydra.core.Term"}}},
-                          "domain": {"variable": "t0"}}},
-                      "domain": {
-                        "function": {
-                          "codomain": {
-                            "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}}}},
-                  "domain": {
-                    "function": {
-                      "codomain": {"variable": "hydra.graph.Graph"},
-                      "domain": {"variable": "t0"}}}}},
-              "domain": {"variable": "hydra.context.Context"}}},
-          "variables": ["t0", "t1"]}]},
-    {
-      "name": "hydra.coderUtils.analyzeFunctionTermNoInfer",
-      "term": {
-        "typeLambda": {
-          "body": {
-            "typeLambda": {
-              "body": {
-                "annotated": {
-                  "annotation": [
-                    {
-                      "@key": "description",
-                      "@value": {
-                        "literal": {
-                          "string": "Analyze a function term without type inference (performance optimization)"}}}],
-                  "body": {
-                    "function": {
-                      "lambda": {
-                        "body": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "function": {
-                                  "lambda": {
-                                    "body": {
-                                      "function": {
-                                        "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {"variable": "term"},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {"variable": "env"},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {"variable": "setTC"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "getTC"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.coderUtils.bindingMetadata"},
-                                                              "function": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {"variable": "hydra.coderUtils.analyzeFunctionTermNoInferWith"},
-                                                                      "type": {"variable": "t0"}}},
-                                                                  "type": {"variable": "t1"}}}}}}}}}}}}},
-                                          "domain": [{"variable": "hydra.core.Term"}],
-                                          "parameter": "term"}}},
-                                    "domain": [{"variable": "t0"}],
-                                    "parameter": "env"}}},
-                              "domain": [
-                                {
-                                  "function": {
-                                    "codomain": {
-                                      "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                                    "domain": {"variable": "hydra.graph.Graph"}}}],
-                              "parameter": "setTC"}}},
-                        "domain": [
-                          {
-                            "function": {
-                              "codomain": {"variable": "hydra.graph.Graph"},
-                              "domain": {"variable": "t0"}}}],
-                        "parameter": "getTC"}}}}},
-              "parameter": "t1"}},
-          "parameter": "t0"}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "either": {
-                              "left": {"variable": "t1"},
-                              "right": {
-                                "application": {
-                                  "argument": {"variable": "t0"},
-                                  "function": {"variable": "hydra.typing.FunctionStructure"}}}}},
-                          "domain": {"variable": "hydra.core.Term"}}},
-                      "domain": {"variable": "t0"}}},
-                  "domain": {
-                    "function": {
-                      "codomain": {
-                        "function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t0"}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}}}},
-              "domain": {
-                "function": {
-                  "codomain": {"variable": "hydra.graph.Graph"},
-                  "domain": {"variable": "t0"}}}}},
           "variables": ["t0", "t1"]}]}],
   "namespace": "hydra.coderUtils",
   "termDependencies": [
