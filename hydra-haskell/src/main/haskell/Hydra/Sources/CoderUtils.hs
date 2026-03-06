@@ -109,16 +109,10 @@ module_ = Module ns elements
      toBinding typeOfTerm,
      -- Function analysis helpers
      toBinding bindingMetadata,
-     toBinding analyzeFunctionTermWith_finish,
-     toBinding analyzeFunctionTermWith_gather,
-     toBinding analyzeFunctionTermWith,
-     toBinding analyzeFunctionTermNoInferWith_finish,
-     toBinding analyzeFunctionTermNoInferWith_gather,
-     toBinding analyzeFunctionTermNoInferWith,
      toBinding analyzeFunctionTerm,
-     toBinding analyzeFunctionTermInline,
-     toBinding analyzeFunctionTermNoInfer]
-
+     toBinding analyzeFunctionTermWith,
+     toBinding analyzeFunctionTermWith_finish,
+     toBinding analyzeFunctionTermWith_gather]
 
 --------------------------------------------------------------------------------
 -- Simple pure functions
@@ -326,10 +320,18 @@ isTrivialTerm = define "isTrivialTerm" $
             _Function_elimination>>: "e" ~>
               cases _Elimination (var "e") (Just $ boolean False) [
                 -- record projection: trivial if the subject is trivial
-                _Elimination_record>>: constant (isTrivialTerm @@ var "arg")]]],
+                _Elimination_record>>: constant (isTrivialTerm @@ var "arg"),
+                -- newtype unwrap: trivial if the subject is trivial
+                _Elimination_wrap>>: constant (isTrivialTerm @@ var "arg")]]],
     -- Maybe term (just x) where x is trivial; nothing is also trivial
     _Term_maybe>>: "opt" ~>
       Maybes.maybe (boolean True) ("inner" ~> isTrivialTerm @@ var "inner") (var "opt"),
+    -- Record construction is trivial if all field terms are trivial
+    _Term_record>>: "rec" ~>
+      Lists.foldl ("acc" ~> "fld" ~> Logic.and (var "acc") (isTrivialTerm @@ (Core.fieldTerm $ var "fld")))
+        (boolean True) (Core.recordFields $ var "rec"),
+    -- Wrap (newtype construction) is trivial if the inner term is trivial
+    _Term_wrap>>: "wt" ~> isTrivialTerm @@ (Core.wrappedTermBody $ var "wt"),
     -- Type applications/lambdas: check the inner term
     _Term_typeApplication>>: "ta" ~> isTrivialTerm @@ (Core.typeApplicationTermBody $ var "ta"),
     _Term_typeLambda>>: "tl" ~> isTrivialTerm @@ (Core.typeLambdaBody $ var "tl")]
@@ -496,6 +498,41 @@ bindingMetadata = define "bindingMetadata" $
     (just MetaTerms.true)
     nothing
 
+-- | Analyze a function term by recursively peeling off lambdas, type lambdas, lets, and type applications.
+-- This is a common pattern across all language coders: we need to understand the structure of a function
+-- to properly encode it in the target language.
+analyzeFunctionTerm :: TBinding (
+  Context ->
+  (env -> Graph) ->
+  (Graph -> env -> env) ->
+  env ->
+  Term ->
+  Either (InContext OtherError) (FunctionStructure env))
+analyzeFunctionTerm = define "analyzeFunctionTerm" $
+  doc "Analyze a function term, collecting lambdas, type lambdas, lets, and type applications" $
+  "cx" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
+  analyzeFunctionTermWith @@ var "cx" @@ bindingMetadata @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
+
+analyzeFunctionTermWith :: TBinding (
+  Context ->
+  (Graph -> Binding -> Maybe Term) ->
+  (env -> Graph) ->
+  (Graph -> env -> env) ->
+  env ->
+  Term ->
+  Either (InContext OtherError) (FunctionStructure env))
+analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
+  doc "Analyze a function term with configurable binding metadata" $
+  "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
+  analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
+    @@ boolean True @@ var "env"
+    @@ list ([] :: [TTerm Name])
+    @@ list ([] :: [TTerm Name])
+    @@ list ([] :: [TTerm Binding])
+    @@ list ([] :: [TTerm Type])
+    @@ list ([] :: [TTerm Type])
+    @@ var "term"
+
 -- | Internal helper: analyze a function term with a configurable binding metadata function.
 -- This is the core implementation used by all analyzeFunctionTerm variants.
 --
@@ -593,174 +630,3 @@ analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
         @@ var "doms"
         @@ var "tapps"
         @@ var "tlBody"]
-
-analyzeFunctionTermWith :: TBinding (
-  Context ->
-  (Graph -> Binding -> Maybe Term) ->
-  (env -> Graph) ->
-  (Graph -> env -> env) ->
-  env ->
-  Term ->
-  Either (InContext OtherError) (FunctionStructure env))
-analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
-  doc "Analyze a function term with configurable binding metadata" $
-  "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  analyzeFunctionTermWith_gather @@ var "cx" @@ var "forBinding" @@ var "getTC" @@ var "setTC"
-    @@ boolean True @@ var "env"
-    @@ list ([] :: [TTerm Name])
-    @@ list ([] :: [TTerm Name])
-    @@ list ([] :: [TTerm Binding])
-    @@ list ([] :: [TTerm Type])
-    @@ list ([] :: [TTerm Type])
-    @@ var "term"
-
--- | Finish helper for analyzeFunctionTermNoInferWith: reapply type applications, skip type inference
-analyzeFunctionTermNoInferWith_finish :: TBinding (
-  env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Either (InContext OtherError) (FunctionStructure env))
-analyzeFunctionTermNoInferWith_finish = define "analyzeFunctionTermNoInferWith_finish" $
-  "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
-  "bodyWithTapps" <~ Lists.foldl
-    ("trm" ~> "typ" ~> Core.termTypeApplication (Core.typeApplicationTerm (var "trm") (var "typ")))
-    (var "body")
-    (var "tapps") $
-  right $ record _FunctionStructure [
-    _FunctionStructure_typeParams>>: Lists.reverse (var "tparams"),
-    _FunctionStructure_params>>: Lists.reverse (var "args"),
-    _FunctionStructure_bindings>>: var "bindings",
-    _FunctionStructure_body>>: var "bodyWithTapps",
-    _FunctionStructure_domains>>: Lists.reverse (var "doms"),
-    _FunctionStructure_codomain>>: nothing,
-    _FunctionStructure_environment>>: var "fEnv"]
-
--- | Gather helper for analyzeFunctionTermNoInferWith: recursively collect function components
-analyzeFunctionTermNoInferWith_gather :: TBinding (
-  (Graph -> Binding -> Maybe Term) ->
-  (env -> Graph) ->
-  (Graph -> env -> env) ->
-  Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Either (InContext OtherError) (FunctionStructure env))
-analyzeFunctionTermNoInferWith_gather = define "analyzeFunctionTermNoInferWith_gather" $
-  "forBinding" ~> "getTC" ~> "setTC" ~>
-  "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>
-  cases _Term (Rewriting.deannotateTerm @@ var "t")
-    (Just $ analyzeFunctionTermNoInferWith_finish @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
-    _Term_function>>: "f" ~>
-      cases _Function (var "f")
-        (Just $ analyzeFunctionTermNoInferWith_finish @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t") [
-        _Function_lambda>>: "lam" ~>
-          Logic.ifElse (var "argMode")
-            ("v" <~ Core.lambdaParameter (var "lam") $
-             "dom" <~ Maybes.maybe (Core.typeVariable (Core.name (string "_"))) identity (Core.lambdaDomain (var "lam")) $
-             "body" <~ Core.lambdaBody (var "lam") $
-             "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLambda @@ (var "getTC" @@ var "gEnv") @@ var "lam") @@ var "gEnv") $
-             analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
-               @@ var "argMode" @@ var "newEnv"
-               @@ var "tparams"
-               @@ (Lists.cons (var "v") (var "args"))
-               @@ var "bindings"
-               @@ (Lists.cons (var "dom") (var "doms"))
-               @@ var "tapps"
-               @@ var "body")
-            (analyzeFunctionTermNoInferWith_finish @@ var "gEnv" @@ var "tparams" @@ var "args" @@ var "bindings" @@ var "doms" @@ var "tapps" @@ var "t")],
-    _Term_let>>: "lt" ~>
-      "newBindings" <~ Core.letBindings (var "lt") $
-      "body" <~ Core.letBody (var "lt") $
-      "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForLet @@ var "forBinding" @@ (var "getTC" @@ var "gEnv") @@ var "lt") @@ var "gEnv") $
-      analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
-        @@ boolean False @@ var "newEnv"
-        @@ var "tparams"
-        @@ var "args"
-        @@ (Lists.concat2 (var "bindings") (var "newBindings"))
-        @@ var "doms"
-        @@ var "tapps"
-        @@ var "body",
-    _Term_typeApplication>>: "ta" ~>
-      "taBody" <~ Core.typeApplicationTermBody (var "ta") $
-      "typ" <~ Core.typeApplicationTermType (var "ta") $
-      analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
-        @@ var "argMode" @@ var "gEnv"
-        @@ var "tparams"
-        @@ var "args"
-        @@ var "bindings"
-        @@ var "doms"
-        @@ (Lists.cons (var "typ") (var "tapps"))
-        @@ var "taBody",
-    _Term_typeLambda>>: "tl" ~>
-      "tvar" <~ Core.typeLambdaParameter (var "tl") $
-      "tlBody" <~ Core.typeLambdaBody (var "tl") $
-      "newEnv" <~ (var "setTC" @@ (Schemas.extendGraphForTypeLambda @@ (var "getTC" @@ var "gEnv") @@ var "tl") @@ var "gEnv") $
-      analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
-        @@ var "argMode" @@ var "newEnv"
-        @@ (Lists.cons (var "tvar") (var "tparams"))
-        @@ var "args"
-        @@ var "bindings"
-        @@ var "doms"
-        @@ var "tapps"
-        @@ var "tlBody"]
-
--- | Internal helper: analyze a function term without type inference, with configurable binding metadata.
-analyzeFunctionTermNoInferWith :: TBinding (
-  (Graph -> Binding -> Maybe Term) ->
-  (env -> Graph) ->
-  (Graph -> env -> env) ->
-  env ->
-  Term ->
-  Either (InContext OtherError) (FunctionStructure env))
-analyzeFunctionTermNoInferWith = define "analyzeFunctionTermNoInferWith" $
-  doc "Analyze a function term without type inference, with configurable binding metadata" $
-  "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  analyzeFunctionTermNoInferWith_gather @@ var "forBinding" @@ var "getTC" @@ var "setTC"
-    @@ boolean True @@ var "env"
-    @@ list ([] :: [TTerm Name])
-    @@ list ([] :: [TTerm Name])
-    @@ list ([] :: [TTerm Binding])
-    @@ list ([] :: [TTerm Type])
-    @@ list ([] :: [TTerm Type])
-    @@ var "term"
-
--- | Analyze a function term by recursively peeling off lambdas, type lambdas, lets, and type applications.
--- This is a common pattern across all language coders: we need to understand the structure of a function
--- to properly encode it in the target language.
-analyzeFunctionTerm :: TBinding (
-  Context ->
-  (env -> Graph) ->
-  (Graph -> env -> env) ->
-  env ->
-  Term ->
-  Either (InContext OtherError) (FunctionStructure env))
-analyzeFunctionTerm = define "analyzeFunctionTerm" $
-  doc "Analyze a function term, collecting lambdas, type lambdas, lets, and type applications" $
-  "cx" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  analyzeFunctionTermWith @@ var "cx" @@ bindingMetadata @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
-
--- | Like analyzeFunctionTerm, but without recording binding metadata. This is used for inline
--- lambda expressions where let bindings are encoded as walrus operators (which evaluate
--- immediately and share values, so don't need thunking or function call syntax).
-analyzeFunctionTermInline :: TBinding (
-  Context ->
-  (env -> Graph) ->
-  (Graph -> env -> env) ->
-  env ->
-  Term ->
-  Either (InContext OtherError) (FunctionStructure env))
-analyzeFunctionTermInline = define "analyzeFunctionTermInline" $
-  doc "Analyze a function term without recording binding metadata" $
-  "cx" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  analyzeFunctionTermWith @@ var "cx" @@ (constant (constant nothing)) @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
-
--- | Analyze a function term without inferring the return type.
--- This is a performance optimization for dynamically-typed target languages (like Python)
--- where the codomain type is not needed and type inference is expensive.
-analyzeFunctionTermNoInfer :: TBinding (
-  (env -> Graph) ->
-  (Graph -> env -> env) ->
-  env ->
-  Term ->
-  Either (InContext OtherError) (FunctionStructure env))
-analyzeFunctionTermNoInfer = define "analyzeFunctionTermNoInfer" $
-  doc "Analyze a function term without type inference (performance optimization)" $
-  "getTC" ~> "setTC" ~> "env" ~> "term" ~>
-  analyzeFunctionTermNoInferWith @@ bindingMetadata @@ var "getTC" @@ var "setTC" @@ var "env" @@ var "term"
-
-
