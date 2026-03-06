@@ -43,11 +43,11 @@ def _format_time(seconds):
 
 
 def _count_files(directory, ext):
-    """Count files with a given extension in a directory tree."""
+    """Count files with a given extension in a directory tree, excluding __init__.py."""
     count = 0
     for _, _, files in os.walk(directory):
         for f in files:
-            if f.endswith(ext):
+            if f.endswith(ext) and f != "__init__.py":
                 count += 1
     return count
 
