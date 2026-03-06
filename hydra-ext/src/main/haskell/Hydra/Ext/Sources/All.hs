@@ -91,9 +91,11 @@ import qualified Hydra.Sources.Decode.Pg.Model                 as DecodePgModel
 import qualified Hydra.Sources.Encode.Pg.Mapping               as EncodePgMapping
 import qualified Hydra.Sources.Encode.Pg.Model                 as EncodePgModel
 
+import qualified Data.List as L
+
 
 -- | Coder modules for the three bootstrap-relevant languages: Haskell, Java, and Python.
--- Each list includes the coder itself plus its dependencies (helpers, names, serde, syntax, utils, language).
+--   Each list includes the coder itself plus its dependencies (helpers, names, serde, syntax, utils, language).
 hydraCoderModules :: [Module]
 hydraCoderModules = haskellModules ++ javaModules ++ pythonModules
 
@@ -115,11 +117,17 @@ hydraExtModules = otherExtModules
   ++ typescriptModules
 
 -- | All modules that should be exported to JSON, including decode/encode modules
--- that are not part of hydraExtModules (since they have their own Haskell gen-main).
+--   that are not part of hydraExtModules (since they have their own Haskell gen-main).
 hydraExtJsonModules :: [Module]
 hydraExtJsonModules = hydraExtModules
   ++ hydraExtDecodingModules
   ++ hydraExtEncodingModules
+
+-- | Ext modules whose generated Java is checked into hydra-ext/src/gen-main/java.
+--   These are the modules needed by hydra-ext demos and other Java code.
+--   Not to be confused with Java coder modules.
+hydraExtJavaModules :: [Module]
+hydraExtJavaModules = L.nub $ L.concat [pgModules, genpgModules, rdfModules]
 
 otherExtModules :: [Module]
 otherExtModules = [
@@ -140,7 +148,6 @@ otherExtModules = [
   ScalaMeta.module_,
   sqlModule,
   StacItems.module_,
-  XmlSchema.module_,
   GenPGTransform.module_]
 
 cppModules :: [Module]
@@ -196,6 +203,10 @@ jsonSchemaModules = [
 pgModules :: [Module]
 pgModules = [
   CypherFeatures.module_,
+  DecodePgMapping.module_,
+  DecodePgModel.module_,
+  EncodePgMapping.module_,
+  EncodePgModel.module_,
   Gremlin.module_,
   OpenCypher.module_,
   PgMapping.module_,
@@ -226,7 +237,8 @@ rdfModules = [
   OwlSyntax.module_,
   RdfSyntax.module_,
   ShaclModel.module_,
-  shexSyntaxModule]
+  shexSyntaxModule,
+  XmlSchema.module_]
 
 rustModules :: [Module]
 rustModules = [
@@ -257,40 +269,6 @@ hydraExtEncodingModules = [
   EncodePgMapping.module_,
   EncodePgModel.module_]
 
--- | Ext modules whose generated Java is checked into hydra-ext/src/gen-main/java.
--- These are the modules needed by hydra-ext demos and other Java code.
-hydraExtJavaModules :: [Module]
-hydraExtJavaModules =
-  [ DeltaParquet.module_
-  , TinkerpopFeatures.module_
-  , IanaRelations.module_
-  , OwlSyntax.module_
-  , XmlSchema.module_
-  , datalogSyntaxModule
-  , GraphsonCoder.module_
-  , GraphsonConstruct.module_
-  , GraphsonSyntax.module_
-  , GraphsonUtils.module_
-  , PgMapping.module_
-  , PgModel.module_
-  , DecodePgMapping.module_
-  , DecodePgModel.module_
-  , EncodePgMapping.module_
-  , EncodePgModel.module_
-  , GenPGTransform.module_
-  ]
-
 -- All hydra-ext modules for the GenPG demo
 genpgModules :: [Module]
-genpgModules = [
-    GraphsonCoder.module_,
-    GraphsonConstruct.module_,
-    GraphsonSyntax.module_,
-    GraphsonUtils.module_,
-    PgMapping.module_,
-    PgModel.module_,
-    GenPGTransform.module_,
-    DecodePgMapping.module_,
-    DecodePgModel.module_,
-    EncodePgMapping.module_,
-    EncodePgModel.module_]
+genpgModules = graphsonModules ++ pgModules ++ [GenPGTransform.module_]

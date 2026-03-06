@@ -7,15 +7,14 @@ import java.io.Serializable;
 /**
  * The label of an edge
  */
-public class EdgeLabel implements Serializable {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.EdgeLabel");
+public class EdgeLabel implements Serializable, Comparable<EdgeLabel> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.EdgeLabel");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   public final String value;
   
   public EdgeLabel (String value) {
-    java.util.Objects.requireNonNull((value));
     this.value = value;
   }
   
@@ -24,12 +23,20 @@ public class EdgeLabel implements Serializable {
     if (!(other instanceof EdgeLabel)) {
       return false;
     }
-    EdgeLabel o = (EdgeLabel) (other);
-    return value.equals(o.value);
+    EdgeLabel o = (EdgeLabel) other;
+    return java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(EdgeLabel other) {
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -2,15 +2,17 @@
 
 package hydra.pg.model;
 
+import java.io.Serializable;
+
 /**
  * A key/value property
  */
-public class Property<V> {
-  public static final hydra.core.Name TYPE_NAME = new hydra.core.Name("hydra.pg.model.Property");
+public class Property<V> implements Serializable, Comparable<Property<V>> {
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.pg.model.Property");
   
-  public static final hydra.core.Name FIELD_NAME_KEY = new hydra.core.Name("key");
+  public static final hydra.core.Name KEY = new hydra.core.Name("key");
   
-  public static final hydra.core.Name FIELD_NAME_VALUE = new hydra.core.Name("value");
+  public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
   /**
    * They key of the property
@@ -23,8 +25,6 @@ public class Property<V> {
   public final V value;
   
   public Property (hydra.pg.model.PropertyKey key, V value) {
-    java.util.Objects.requireNonNull((key));
-    java.util.Objects.requireNonNull((value));
     this.key = key;
     this.value = value;
   }
@@ -34,22 +34,35 @@ public class Property<V> {
     if (!(other instanceof Property)) {
       return false;
     }
-    Property o = (Property) (other);
-    return key.equals(o.key) && value.equals(o.value);
+    Property o = (Property) other;
+    return java.util.Objects.equals(
+      this.key,
+      o.key) && java.util.Objects.equals(
+      this.value,
+      o.value);
   }
   
   @Override
   public int hashCode() {
-    return 2 * key.hashCode() + 3 * value.hashCode();
+    return 2 * java.util.Objects.hashCode(key) + 3 * java.util.Objects.hashCode(value);
+  }
+  
+  @Override
+  @SuppressWarnings("unchecked")
+  public int compareTo(Property other) {
+    int cmp = 0;
+    cmp = ((Comparable) key).compareTo(other.key);
+    if (cmp != 0) {
+      return cmp;
+    }
+    return ((Comparable) value).compareTo(other.value);
   }
   
   public Property withKey(hydra.pg.model.PropertyKey key) {
-    java.util.Objects.requireNonNull((key));
     return new Property(key, value);
   }
   
   public Property withValue(V value) {
-    java.util.Objects.requireNonNull((value));
     return new Property(key, value);
   }
 }

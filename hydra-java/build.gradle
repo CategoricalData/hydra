@@ -1,41 +1,14 @@
 plugins {
-    id 'antlr'
     id 'maven-publish'
     id 'signing'
 }
 
-apply plugin: 'antlr'
-
 dependencies {
-    antlr 'org.antlr:antlr4:4.13.2'
-
-    api group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
-    api group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
-    api group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-ntriples', version: rdf4jVersion
-
     // Note: these are currently "main" dependencies rather than "test" dependencies due to reusable test utilities.
     //       These will likely be broken out into a separate module in the future.
     api(platform(group: 'org.junit', name: 'junit-bom', version: junitVersion))
     api('org.junit.jupiter:junit-jupiter')
     api group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: junitVersion
-
-    testImplementation 'org.apache.commons:commons-csv:1.10.0'
-}
-
-// Avoid duplicate MapperBase.java
-tasks.named('sourcesJar') {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    dependsOn generateGrammarSource // Ensure grammar is generated before sourcesJar
-}
-
-generateGrammarSource {
-    arguments += ["-package", "org.neo4j"]
-    arguments += ["-visitor"]
-    arguments += ["-no-listener"]
-}
-
-compileJava {
-    dependsOn generateGrammarSource
 }
 
 test {

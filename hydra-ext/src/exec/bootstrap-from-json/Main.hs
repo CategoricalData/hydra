@@ -236,10 +236,9 @@ main = do
     putStrLn $ "Filtering to type modules: " ++ show (length allMainMods) ++ " of " ++ show (length filtered1)
     putStrLn ""
 
-  -- Optionally filter to ext Java modules only
   -- When --ext-java-only is used, load the ext Java modules from JSON
-  -- (they are in hydraExtJavaModules, not in hydraCoderModules)
-  (extJavaMods, allMainModsFinal) <- if optExtJavaOnly opts
+  -- and generate only those (using allMainMods as the universe for type resolution)
+  (modsToGenerate, allModsFinal) <- if optExtJavaOnly opts
     then do
       extJavaNamespaces <- readManifestField extJsonDir "hydraExtJavaModules"
       -- Filter out modules already loaded as kernel or coder modules
@@ -249,11 +248,9 @@ main = do
       extMods <- loadModulesFromJson False extJsonDir kernelModules toLoad
       putStrLn $ "  Loaded " ++ show (length extMods) ++ " ext Java modules"
       putStrLn ""
-      let allModsWithExt = allMainMods ++ extMods
-      return (extMods, allModsWithExt)
+      return (extMods, allMainMods ++ extMods)
     else return (allMainMods, allMainMods)
 
-  let modsToGenerate = extJavaMods
 
   -- Generate main modules
   let stepNum = if optIncludeCoders opts then "3" else "2"
@@ -261,9 +258,9 @@ main = do
 
   genStart <- getCurrentTime
   mainFileCount <- case target of
-    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allMainModsFinal modsToGenerate
-    "java"    -> generateSources     moduleToJava    javaLanguage    False True False True   outMain allMainModsFinal modsToGenerate
-    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allMainModsFinal modsToGenerate
+    "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False outMain allModsFinal modsToGenerate
+    "java"    -> generateSources moduleToJava    javaLanguage    False True False True   outMain allModsFinal modsToGenerate
+    "python"  -> generateSources moduleToPython  pythonLanguage  False True True False   outMain allModsFinal modsToGenerate
     _ -> do
       putStrLn $ "Unknown target: " ++ target
       exitFailure

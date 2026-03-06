@@ -1,0 +1,1869 @@
+Section,Subsection,Id,Supported,Query
+Queries,Basic queries,1,yes,"MATCH (keanu:Person {name:'Keanu Reeves'})
+RETURN keanu.name AS name, keanu.born AS born"
+Queries,Basic queries,2,yes,"MATCH (people:Person)
+RETURN people
+LIMIT 5"
+Queries,Basic queries,3,yes,"MATCH (bornInEighties:Person)
+WHERE bornInEighties.born >= 1980 AND bornInEighties.born < 1990
+RETURN bornInEighties.name as name, bornInEighties.born as born
+ORDER BY born DESC"
+Queries,Basic queries,4,yes,"MATCH (m:Movie {title: 'The Matrix'})<-[d:DIRECTED]-(p:Person)
+RETURN p.name as director"
+Queries,Basic queries,5,yes,"MATCH (tom:Person {name:'Tom Hanks'})-[r]->(m:Movie)
+RETURN type(r) AS type, m.title AS movie"
+Queries,Basic queries,6,yes,"MATCH (:Person {name:'Tom Hanks'})-[r:!ACTED_IN]->(m:Movie)
+Return type(r) AS type, m.title AS movies"
+Queries,Basic queries,7,no,"MATCH (tom:Person {name:'Tom Hanks'})--{2}(colleagues:Person)
+RETURN DISTINCT colleagues.name AS name, colleagues.born AS bornIn
+ORDER BY bornIn
+LIMIT 5"
+Queries,Basic queries,8,no,"MATCH (p:Person {name:'Tom Hanks'})--{1,4}(colleagues:Person)
+RETURN DISTINCT colleagues.name AS name, colleagues.born AS bornIn
+ORDER BY bornIn, name
+LIMIT 5"
+Queries,Basic queries,9,no,"MATCH p=shortestPath(
+(:Person {name:""Keanu Reeves""})-[*]-(:Person {name:""Tom Hanks""})
+)
+RETURN p"
+Queries,Basic queries,10,yes,"MATCH (keanu:Person {name:'Keanu Reeves'})-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(coActors:Person),
+  (coActors:Person)-[:ACTED_IN]->(m2:Movie)<-[:ACTED_IN]-(cocoActors:Person)
+WHERE NOT (keanu)-[:ACTED_IN]->()<-[:ACTED_IN]-(cocoActors) AND keanu <> cocoActors
+RETURN cocoActors.name AS recommended, count(cocoActors) AS strength
+ORDER BY strength DESC
+LIMIT 7"
+Queries,Basic queries,11,yes,"MATCH (:Person {name: 'Keanu Reeves'})-[:ACTED_IN]->(:Movie)<-[:ACTED_IN]-(coActor:Person),
+  (coActor)-[:ACTED_IN]->(:Movie)<-[:ACTED_IN]-(:Person {name:'Tom Hanks'})
+RETURN DISTINCT coActor.name AS coActor"
+Queries,Basic queries,12,yes,"MATCH (n)
+DETACH DELETE n"
+Queries,Conditional expressions (CASE),1,no,"MATCH (n:Person)
+RETURN
+CASE n.eyes
+  WHEN 'blue'  THEN 1
+  WHEN 'brown', 'hazel' THEN 2
+  ELSE 3
+END AS result, n.eyes"
+Queries,Conditional expressions (CASE),2,no,"MATCH (n:Person)
+RETURN n.name,
+CASE n.age
+  WHEN IS NULL, IS NOT TYPED INTEGER | FLOAT THEN ""Unknown""
+  WHEN = 0, = 1, = 2 THEN ""Baby""
+  WHEN <= 13 THEN ""Child""
+  WHEN < 20 THEN ""Teenager""
+  WHEN < 30 THEN ""Young Adult""
+  WHEN > 1000 THEN ""Immortal""
+  ELSE ""Adult""
+END AS result"
+Queries,Conditional expressions (CASE),3,yes,"MATCH (n:Person)
+RETURN
+CASE
+  WHEN n.eyes = 'blue' THEN 1
+  WHEN n.age < 40      THEN 2
+  ELSE 3
+END AS result, n.eyes, n.age"
+Queries,Conditional expressions (CASE),4,yes,"MATCH (n:Person)
+RETURN n.name,
+CASE n.age
+  WHEN null THEN -1
+  ELSE n.age - 10
+END AS age_10_years_ago"
+Queries,Conditional expressions (CASE),5,yes,"MATCH (n:Person)
+RETURN n.name,
+CASE
+  WHEN n.age IS NULL THEN -1
+  ELSE n.age - 10
+END AS age_10_years_ago"
+Queries,Conditional expressions (CASE),6,yes,"MATCH (n:Person)
+WITH n,
+CASE n.eyes
+  WHEN 'blue'  THEN 1
+  WHEN 'brown' THEN 2
+  ELSE 3
+END AS colorCode
+SET n.colorCode = colorCode
+RETURN n.name, n.colorCode"
+Clauses,Clause composition,1,yes,"MATCH (john:Person {name: 'John'})
+MATCH (john)-[:FRIEND]->(friend)
+RETURN friend.name AS friendName"
+Clauses,Clause composition,2,yes,"MATCH (j:Person) WHERE j.name STARTS WITH ""J""
+CREATE (j)-[:FRIEND]->(jj:Person {name: ""Jay-jay""})"
+Clauses,Clause composition,3,yes,"CREATE (jj:Person {name: ""Jay-jay""})
+RETURN count(*) AS count
+  UNION
+MATCH (j:Person) WHERE j.name STARTS WITH ""J""
+RETURN count(*) AS count"
+Clauses,Clause composition,4,no,"MATCH (john:Person {name: 'John'})
+SET john.friends = []
+WITH john
+MATCH (john)-[:FRIEND]->(friend)
+WITH john, friend
+CALL {
+  WITH john, friend
+  WITH *, john.friends AS friends
+  SET john.friends = friends + friend.name
+}"
+Clauses,MATCH,1,yes,"MATCH (n)
+RETURN n"
+Clauses,MATCH,2,yes,"MATCH (movie:Movie)
+RETURN movie.title"
+Clauses,MATCH,3,yes,"MATCH (director {name: 'Oliver Stone'})--(movie)
+RETURN movie.title"
+Clauses,MATCH,4,yes,"MATCH (:Person {name: 'Oliver Stone'})--(movie:Movie)
+RETURN movie.title"
+Clauses,MATCH,5,no,"MATCH (n:Movie|Person)
+RETURN n.name AS name, n.title AS title"
+Clauses,MATCH,6,yes,"MATCH (:Person {name: 'Oliver Stone'})-->(movie)
+RETURN movie.title"
+Clauses,MATCH,7,yes,"MATCH (:Person {name: 'Oliver Stone'})-[r]->(movie)
+RETURN type(r)"
+Clauses,MATCH,8,yes,"MATCH (a)-[:ACTED_IN {role: 'Bud Fox'}]-(b)
+RETURN a, b"
+Clauses,MATCH,9,yes,"MATCH (wallstreet:Movie {title: 'Wall Street'})<-[:ACTED_IN]-(actor)
+RETURN actor.name"
+Clauses,MATCH,10,yes,"MATCH (wallstreet {title: 'Wall Street'})<-[:ACTED_IN|DIRECTED]-(person)
+RETURN person.name"
+Clauses,MATCH,11,yes,"MATCH (wallstreet {title: 'Wall Street'})<-[r:ACTED_IN]-(actor)
+RETURN r.role"
+Clauses,MATCH,12,yes,"MATCH
+  (martin:Person {name: 'Martin Sheen'}),
+  (rob:Person {name: 'Rob Reiner'})
+CREATE (rob)-[:`OLD FRIENDS`]->(martin)"
+Clauses,MATCH,13,yes,"MATCH (n {name: 'Rob Reiner'})-[r:`OLD FRIENDS`]->()
+RETURN type(r)"
+Clauses,MATCH,14,yes,"MATCH (charlie {name: 'Charlie Sheen'})-[:ACTED_IN]->(movie)<-[:DIRECTED]-(director)
+RETURN movie.title, director.name"
+Clauses,OPTIONAL MATCH,1,yes,"MATCH (a:Person {name: 'Martin Sheen'})
+MATCH (a)-[r:DIRECTED]->()
+RETURN a.name, r"
+Clauses,OPTIONAL MATCH,2,yes,"MATCH (p:Person {name: 'Martin Sheen'})
+OPTIONAL MATCH (p)-[r:DIRECTED]->()
+RETURN p.name, r"
+Clauses,OPTIONAL MATCH,3,yes,"MATCH (a:Movie {title: 'Wall Street'})
+OPTIONAL MATCH (a)-->(x)
+RETURN x"
+Clauses,OPTIONAL MATCH,4,yes,"MATCH (a:Person {name: 'Charlie Sheen'})
+OPTIONAL MATCH (a)-->(x)
+RETURN x"
+Clauses,OPTIONAL MATCH,5,yes,"MATCH (a:Movie {title: 'Wall Street'})
+OPTIONAL MATCH (a)-->(x)
+RETURN x, x.name"
+Clauses,OPTIONAL MATCH,6,yes,"MATCH (a:Person {name: 'Martin Sheen'})
+OPTIONAL MATCH (a)-->(x)
+RETURN x, x.name"
+Clauses,OPTIONAL MATCH,7,yes,"MATCH (a:Movie {title: 'Wall Street'})
+OPTIONAL MATCH (a)-[r:ACTED_IN]->()
+RETURN a.title, r"
+Clauses,OPTIONAL MATCH,8,yes,"MATCH (a:Movie {title: 'Wall Street'})
+OPTIONAL MATCH (x)-[r:ACTED_IN]->(a)
+RETURN a.title, x.name, type(r)"
+Clauses,RETURN,1,yes,"MATCH (p:Person {name: 'Keanu Reeves'})
+RETURN p"
+Clauses,RETURN,2,yes,"MATCH (p:Person {name: 'Keanu Reeves'})-[r:ACTED_IN]->(m)
+RETURN type(r)"
+Clauses,RETURN,3,yes,"MATCH (p:Person {name: 'Keanu Reeves'})
+RETURN p.bornIn"
+Clauses,RETURN,4,yes,"MATCH p = (keanu:Person {name: 'Keanu Reeves'})-[r]->(m)
+RETURN *"
+Clauses,RETURN,5,yes,"MATCH (`/uncommon variable\`)
+WHERE `/uncommon variable\`.name = 'Keanu Reeves'
+RETURN `/uncommon variable\`.bornIn"
+Clauses,RETURN,6,yes,"MATCH (p:Person {name: 'Keanu Reeves'})
+RETURN p.nationality AS citizenship"
+Clauses,RETURN,7,yes,"MATCH (n)
+RETURN n.bornIn"
+Clauses,RETURN,8,yes,"MATCH (m:Movie {title: 'Man of Tai Chi'})
+RETURN m.released < 2012, ""I'm a literal"",[p=(m)--() | p] AS `(m)--()`"
+Clauses,RETURN,9,yes,"MATCH (p:Person {name: 'Keanu Reeves'})-->(m)
+RETURN DISTINCT m"
+Clauses,WITH,1,yes,"MATCH (george {name: 'George'})<--(otherPerson)
+WITH otherPerson, toUpper(otherPerson.name) AS upperCaseName
+WHERE upperCaseName STARTS WITH 'C'
+RETURN otherPerson.name"
+Clauses,WITH,2,yes,"MATCH (person)-[r]->(otherPerson)
+WITH *, type(r) AS connectionType
+RETURN person.name, otherPerson.name, connectionType"
+Clauses,WITH,3,yes,"MATCH (david {name: 'David'})--(otherPerson)-->()
+WITH otherPerson, count(*) AS foaf
+WHERE foaf > 1
+RETURN otherPerson.name"
+Clauses,WITH,4,yes,"MATCH (n)
+WITH n
+ORDER BY n.name DESC
+LIMIT 3
+RETURN collect(n.name)"
+Clauses,WITH,5,yes,"MATCH (n {name: 'Anders'})--(m)
+WITH m
+ORDER BY m.name DESC
+LIMIT 1
+MATCH (m)--(o)
+RETURN o.name"
+Clauses,WITH,6,yes,"UNWIND [1, 2, 3, 4, 5, 6] AS x
+WITH x
+LIMIT 5
+WHERE x > 2
+RETURN x"
+Clauses,WITH,7,yes,"UNWIND [1, 2, 3, 4, 5, 6] AS x
+WITH x
+WHERE x > 2
+WITH x
+LIMIT 5
+RETURN x"
+Clauses,UNWIND,1,yes,"UNWIND [1, 2, 3, null] AS x
+RETURN x, 'val' AS y"
+Clauses,UNWIND,2,yes,"WITH [1, 1, 2, 2] AS coll
+UNWIND coll AS x
+WITH DISTINCT x
+RETURN collect(x) AS setOfVals"
+Clauses,UNWIND,3,yes,"WITH
+  [1, 2] AS a,
+  [3, 4] AS b
+UNWIND (a + b) AS x
+RETURN x"
+Clauses,UNWIND,4,yes,"WITH [[1, 2], [3, 4], 5] AS nested
+UNWIND nested AS x
+UNWIND x AS y
+RETURN y"
+Clauses,UNWIND,5,yes,"UNWIND [] AS empty
+RETURN 'literal_that_is_not_returned'"
+Clauses,UNWIND,6,yes,"WITH [] AS list
+UNWIND
+  CASE
+    WHEN list = [] THEN [null]
+    ELSE list
+  END AS emptylist
+RETURN emptylist"
+Clauses,UNWIND,7,yes,"UNWIND null AS x
+RETURN x, 'some_literal'"
+Clauses,UNWIND,8,yes,"UNWIND $events AS event
+MERGE (y:Year {year: event.year})
+MERGE (y)<-[:IN]-(e:Event {id: event.id})
+RETURN e.id AS x ORDER BY x"
+Clauses,WHERE,1,no,"WITH 30 AS minAge
+MATCH (a:Person WHERE a.name = 'Andy')-[:KNOWS]->(b:Person WHERE b.age > minAge)
+RETURN b.name"
+Clauses,WHERE,2,no,"MATCH (a:Person {name: 'Andy'})
+RETURN [(a)-->(b WHERE b:Person) | b.name] AS friends"
+Clauses,WHERE,3,yes,"MATCH (n:Person)
+WHERE n.name = 'Peter' XOR (n.age < 30 AND n.name = 'Timothy') OR NOT (n.name = 'Timothy' OR n.name = 'Peter')
+RETURN
+  n.name AS name,
+  n.age AS age
+ORDER BY name"
+Clauses,WHERE,4,yes,"MATCH (n)
+WHERE n:Swedish
+RETURN n.name, n.age"
+Clauses,WHERE,5,yes,"MATCH (n:Person)
+WHERE n.age < 30
+RETURN n.name, n.age"
+Clauses,WHERE,6,yes,"MATCH (n:Person)-[k:KNOWS]->(f)
+WHERE k.since < 2000
+RETURN f.name, f.age, f.email"
+Clauses,WHERE,7,yes,"WITH 'AGE' AS propname
+MATCH (n:Person)
+WHERE n[toLower(propname)] < 30
+RETURN n.name, n.age"
+Clauses,WHERE,8,yes,"MATCH (n:Person)
+WHERE n.belt IS NOT NULL
+RETURN n.name, n.belt"
+Clauses,WHERE,9,yes,"MATCH (n:Person)
+WITH n.name as name
+WHERE n.age = 25
+RETURN name"
+Clauses,WHERE,10,yes,"MATCH (n:Person)
+WHERE n.name STARTS WITH 'Pet'
+RETURN n.name, n.age"
+Clauses,WHERE,11,yes,"MATCH (n:Person)
+WHERE n.name ENDS WITH 'ter'
+RETURN n.name, n.age"
+Clauses,WHERE,12,yes,"MATCH (n:Person)
+WHERE n.name CONTAINS 'ete'
+RETURN n.name, n.age"
+Clauses,WHERE,13,no,"MATCH (n:Person)
+WHERE n.name IS NORMALIZED
+RETURN n.name AS normalizedNames"
+Clauses,WHERE,14,yes,"MATCH (n:Person)
+WHERE NOT n.name ENDS WITH 'y'
+RETURN n.name, n.age"
+Clauses,WHERE,15,yes,"MATCH (n:Person)
+WHERE n.name =~ 'Tim.*'
+RETURN n.name, n.age"
+Clauses,WHERE,16,yes,"MATCH (n:Person)
+WHERE n.email =~ '.*\\.com'
+RETURN n.name, n.age, n.email"
+Clauses,WHERE,17,yes,"MATCH (n:Person)
+WHERE n.name =~ '(?i)AND.*'
+RETURN n.name, n.age"
+Clauses,WHERE,18,yes,"MATCH
+  (timothy:Person {name: 'Timothy'}),
+  (other:Person)
+WHERE (other)-->(timothy)
+RETURN other.name, other.age"
+Clauses,WHERE,19,yes,"MATCH
+  (peter:Person {name: 'Peter'}),
+  (other:Person)
+WHERE NOT (other)-->(peter)
+RETURN other.name, other.age"
+Clauses,WHERE,20,yes,"MATCH (other:Person)
+WHERE (other)-[:KNOWS]-({name: 'Timothy'})
+RETURN other.name, other.age"
+Clauses,WHERE,21,yes,"MATCH (a:Person)
+WHERE a.name IN ['Peter', 'Timothy']
+RETURN a.name, a.age"
+Clauses,WHERE,22,yes,"MATCH (n:Person)
+WHERE n.belt = 'white'
+RETURN n.name, n.age, n.belt"
+Clauses,WHERE,23,yes,"MATCH (n:Person)
+WHERE n.belt = 'white' OR n.belt IS NULL
+RETURN n.name, n.age, n.belt
+ORDER BY n.name"
+Clauses,WHERE,24,yes,"MATCH (person:Person)
+WHERE person.name = 'Peter' AND person.belt IS NULL
+RETURN person.name, person.age, person.belt"
+Clauses,WHERE,25,yes,"MATCH (a:Person)
+WHERE a.name >= 'Peter'
+RETURN a.name, a.age"
+Clauses,WHERE,26,yes,"MATCH (a:Person)
+WHERE a.name > 'Andy' AND a.name < 'Timothy'
+RETURN a.name, a.age"
+Clauses,WHERE,27,no,"WITH 2000 AS minYear
+MATCH (a:Person)-[r:KNOWS WHERE r.since < minYear]->(b:Person)
+RETURN r.since"
+Clauses,WHERE,28,no,"WITH 2000 AS minYear
+MATCH (a:Person)-[r:KNOWS*1..3 WHERE r.since > b.yearOfBirth]->(b:Person)
+RETURN r.since"
+Clauses,WHERE,29,yes,"WITH 2000 AS minYear
+MATCH (a:Person)-[r:KNOWS]->(b:Person)
+WHERE r.since < minYear
+RETURN r.since"
+Clauses,WHERE,30,no,"WITH 2000 AS minYear
+MATCH (a:Person {name: 'Andy'})
+RETURN [(a)-[r:KNOWS WHERE r.since < minYear]->(b:Person) | r.since] AS years"
+Clauses,ORDER BY,1,yes,"MATCH (n)
+RETURN n.name, n.age
+ORDER BY n.name"
+Clauses,ORDER BY,2,yes,"MATCH (n)
+RETURN n.name, n.age
+ORDER BY n.age, n.name"
+Clauses,ORDER BY,3,yes,"MATCH (n)
+RETURN n.name, n.age
+ORDER BY elementId(n)"
+Clauses,ORDER BY,4,yes,"MATCH (n)
+RETURN n.name, n.age, n.length
+ORDER BY keys(n)"
+Clauses,ORDER BY,5,yes,"MATCH (n)
+RETURN n.name, n.age
+ORDER BY n.name DESC"
+Clauses,ORDER BY,6,yes,"MATCH (n)
+RETURN n.length, n.name, n.age
+ORDER BY n.length"
+Clauses,ORDER BY,7,yes,"MATCH (n)
+WITH n ORDER BY n.age
+RETURN collect(n.name) AS names"
+Clauses,SKIP,1,yes,"MATCH (n)
+RETURN n.name
+ORDER BY n.name
+SKIP 3"
+Clauses,SKIP,2,yes,"MATCH (n)
+RETURN n.name
+ORDER BY n.name
+SKIP 1
+LIMIT 2"
+Clauses,SKIP,3,yes,"MATCH (n)
+RETURN n.name
+ORDER BY n.name
+SKIP 1 + toInteger(3*rand())"
+Clauses,LIMIT,1,yes,"MATCH (n)
+RETURN n.name
+ORDER BY n.name
+LIMIT 3"
+Clauses,LIMIT,2,yes,"MATCH (n)
+RETURN n.name
+ORDER BY n.name
+LIMIT 1 + toInteger(3 * rand())"
+Clauses,LIMIT,3,yes,"CREATE (n)
+RETURN n
+LIMIT 0"
+Clauses,LIMIT,4,yes,"MATCH (n {name: 'A'})
+SET n.age = 60
+RETURN n
+LIMIT 0"
+Clauses,LIMIT,5,yes,"MATCH (n)
+WITH n ORDER BY n.name LIMIT 1
+SET n.locked = true
+RETURN n"
+Clauses,CREATE,1,yes,"CREATE (charlie:Person:Actor {name: 'Charlie Sheen'}), (oliver:Person:Director {name: 'Oliver Stone'})"
+Clauses,CREATE,2,no,"CREATE (charlie:Person&Actor {name: 'Charlie Sheen'}), (oliver:Person&Director {name: 'Oliver Stone'})"
+Clauses,CREATE,3,yes,CREATE (charlie:Person:Actor {name: 'Charlie Sheen'})-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie {title: 'Wall Street'})<-[:DIRECTED]-(oliver:Person:Director {name: 'Oliver Stone'})
+Clauses,CREATE,4,yes,"MATCH (charlie:Person {name: 'Charlie Sheen'}), (oliver:Person {name: 'Oliver Stone'})
+CREATE (charlie)-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie {title: 'Wall Street'})<-[:DIRECTED]-(oliver)"
+Clauses,CREATE,5,yes,"CREATE p = (charlie:Person:Actor {name: 'Charlie Sheen'})-[:ACTED_IN {role: 'Bud Fox'}]->(wallStreet:Movie {title: 'Wall Street'})<-[:DIRECTED]-(oliver:Person:Director {name: 'Oliver Stone'}), (wallStreet)<-[:ACTED_IN {role: 'Gordon Gekko'}]-(michael:Person:Actor {name: 'Michael Douglas'})
+RETURN length(p)"
+Clauses,CREATE,6,yes,"MATCH (charlie:Person {name: 'Charlie Sheen'})
+CREATE (charlie:Actor)"
+Clauses,CREATE,7,no,"MATCH (person:Person)
+  WHERE person.name IS NOT NULL
+CREATE (anotherPerson:Person {name: person.name, age: $age})"
+Clauses,CREATE,8,yes,"CREATE (charlie {score: oliver.score + 1}), (oliver {score: charlie.score + 1})"
+Clauses,CREATE,9,yes,"CREATE (n:Person $props)
+RETURN n"
+Clauses,CREATE,10,yes,"UNWIND $props AS map
+CREATE (n)
+SET n = map"
+Clauses,CREATE,11,no,INSERT (tom:Person&Actor&Director {name: 'Tom Hanks'})
+Clauses,DELETE,1,yes,"MATCH (n:Person {name: 'Tom Hanks'})
+DELETE n"
+Clauses,DELETE,2,no,"MATCH (n:Person {name: 'Tom Hanks'})
+NODETACH DELETE n"
+Clauses,DELETE,3,yes,"MATCH (n:Person {name: 'Laurence Fishburne'})-[r:ACTED_IN]->()
+DELETE r"
+Clauses,DELETE,4,yes,"MATCH (n:Person {name: 'Carrie-Anne Moss'})
+DETACH DELETE n"
+Clauses,DELETE,5,yes,"MATCH (n)
+DETACH DELETE n"
+Clauses,SET,1,yes,"MATCH (n {name: 'Andy'})
+SET n.surname = 'Taylor'
+RETURN n.name, n.surname"
+Clauses,SET,2,yes,"MATCH (n:Swedish {name: 'Andy'})-[r:KNOWS]->(m)
+SET r.since = 1999
+RETURN r, m.name AS friend"
+Clauses,SET,3,yes,"MATCH (n {name: 'Andy'})
+SET (CASE WHEN n.age = 36 THEN n END).worksIn = 'Malmo'
+RETURN n.name, n.worksIn"
+Clauses,SET,4,yes,"MATCH (n {name: 'Andy'})
+SET (CASE WHEN n.age = 55 THEN n END).worksIn = 'Malmo'
+RETURN n.name, n.worksIn"
+Clauses,SET,5,yes,"MATCH (n {name: 'Andy'})
+SET n.age = toString(n.age)
+RETURN n.name, n.age"
+Clauses,SET,6,yes,"MATCH (n {name: 'Andy'})
+SET n.name = null
+RETURN n.name, n.age"
+Clauses,SET,7,yes,"MATCH
+  (at {name: 'Andy'}),
+  (pn {name: 'Peter'})
+SET at = properties(pn)
+RETURN at.name, at.age, at.hungry, pn.name, pn.age"
+Clauses,SET,8,no,"MATCH (p {name: 'Peter'})
+SET p = {name: 'Peter Smith', position: 'Entrepreneur'}
+RETURN p.name, p.age, p.position"
+Clauses,SET,9,yes,"MATCH (p {name: 'Peter'})
+SET p = {}
+RETURN p.name, p.age"
+Clauses,SET,10,no,"MATCH (p {name: 'Peter'})
+SET p += {age: 38, hungry: true, position: 'Entrepreneur'}
+RETURN p.name, p.age, p.hungry, p.position"
+Clauses,SET,11,yes,"MATCH (p {name: 'Peter'})
+SET p += {}
+RETURN p.name, p.age"
+Clauses,SET,12,yes,"MATCH (n {name: 'Andy'})
+SET n.position = 'Developer', n.surname = 'Taylor'"
+Clauses,SET,13,yes,"MATCH (n {name: 'Andy'})
+SET n.surname = $surname
+RETURN n.name, n.surname"
+Clauses,SET,14,yes,"MATCH (n {name: 'Andy'})
+SET n = $props
+RETURN n.name, n.position, n.age, n.hungry"
+Clauses,SET,15,yes,"MATCH (n {name: 'Stefan'})
+SET n:German
+RETURN n.name, labels(n) AS labels"
+Clauses,SET,16,yes,"MATCH (n {name: 'George'})
+SET n:Swedish:Bossman
+RETURN n.name, labels(n) AS labels"
+Clauses,REMOVE,1,yes,"MATCH (a {name: 'Andy'})
+REMOVE a.age
+RETURN a.name, a.age"
+Clauses,REMOVE,2,yes,"MATCH (n {name: 'Peter'})
+REMOVE n:German
+RETURN n.name, labels(n)"
+Clauses,REMOVE,3,yes,"MATCH (n {name: 'Peter'})
+REMOVE n:German:Swedish
+RETURN n.name, labels(n)"
+Clauses,FOREACH,1,no,"MATCH p=(start)-[*]->(finish)
+WHERE start.name = 'A' AND finish.name = 'D'
+FOREACH (n IN nodes(p) | SET n.marked = true)"
+Clauses,MERGE,1,yes,"MERGE (robert:Critic)
+RETURN labels(robert)"
+Clauses,MERGE,2,yes,"MERGE (robert:Critic:Viewer)
+RETURN labels(robert)"
+Clauses,MERGE,3,no,"MERGE (robert:Critic&Viewer)
+RETURN labels(robert)"
+Clauses,MERGE,4,no,"MERGE (charlie {name: 'Charlie Sheen', age: 10})
+RETURN charlie"
+Clauses,MERGE,5,yes,"MERGE (michael:Person {name: 'Michael Douglas'})
+RETURN michael.name, michael.bornIn"
+Clauses,MERGE,6,yes,"MATCH (person:Person)
+MERGE (location:Location {name: person.bornIn})
+RETURN person.name, person.bornIn, location"
+Clauses,MERGE,7,no,"MERGE (keanu:Person {name: 'Keanu Reeves', bornIn: 'Beirut', chauffeurName: 'Eric Brown'})
+ON CREATE
+  SET keanu.created = timestamp()
+RETURN keanu.name, keanu.created"
+Clauses,MERGE,8,yes,"MERGE (person:Person)
+ON MATCH
+  SET person.found = true
+RETURN person.name, person.found"
+Clauses,MERGE,9,yes,"MERGE (keanu:Person {name: 'Keanu Reeves'})
+ON CREATE
+  SET keanu.created = timestamp()
+ON MATCH
+  SET keanu.lastSeen = timestamp()
+RETURN keanu.name, keanu.created, keanu.lastSeen"
+Clauses,MERGE,10,yes,"MERGE (person:Person)
+ON MATCH
+  SET
+    person.found = true,
+    person.lastAccessed = timestamp()
+RETURN person.name, person.found, person.lastAccessed"
+Clauses,MERGE,11,yes,"MATCH
+  (charlie:Person {name: 'Charlie Sheen'}),
+  (wallStreet:Movie {title: 'Wall Street'})
+MERGE (charlie)-[r:ACTED_IN]->(wallStreet)
+RETURN charlie.name, type(r), wallStreet.title"
+Clauses,MERGE,12,yes,"MATCH
+  (oliver:Person {name: 'Oliver Stone'}),
+  (reiner:Person {name: 'Rob Reiner'})
+MERGE (oliver)-[:DIRECTED]->(movie:Movie)<-[:DIRECTED]-(reiner)
+RETURN movie"
+Clauses,MERGE,13,yes,"MATCH
+  (charlie:Person {name: 'Charlie Sheen'}),
+  (oliver:Person {name: 'Oliver Stone'})
+MERGE (charlie)-[r:KNOWS]-(oliver)
+RETURN r"
+Clauses,MERGE,14,yes,"MATCH (person:Person)
+MERGE (location:Location {name: person.bornIn})
+MERGE (person)-[r:BORN_IN]->(location)
+RETURN person.name, person.bornIn, location"
+Clauses,MERGE,15,yes,"MATCH (person:Person)
+MERGE (person)-[r:HAS_CHAUFFEUR]->(chauffeur:Chauffeur {name: person.chauffeurName})
+RETURN person.name, person.chauffeurName, chauffeur"
+Clauses,MERGE,16,no,CREATE CONSTRAINT FOR (n:Person) REQUIRE n.name IS UNIQUE;
+Clauses,MERGE,17,no,CREATE CONSTRAINT FOR (n:Person) REQUIRE n.role IS UNIQUE;
+Clauses,MERGE,18,yes,"MERGE (laurence:Person {name: 'Laurence Fishburne'})
+RETURN laurence.name"
+Clauses,MERGE,19,yes,"MERGE (oliver:Person {name: 'Oliver Stone'})
+RETURN oliver.name, oliver.bornIn"
+Clauses,MERGE,20,no,"MERGE (michael:Person {name: 'Michael Douglas', role: 'Gordon Gekko'})
+RETURN michael"
+Clauses,MERGE,21,yes,"MERGE (michael:Person {name: 'Michael Douglas'})
+SET michael.role = 'Gordon Gekko'"
+Clauses,MERGE,22,no,"MERGE (oliver:Person {name: 'Oliver Stone', role: 'Gordon Gekko'})
+RETURN oliver"
+Clauses,MERGE,23,yes,"MERGE (charlie:Person {name: 'Charlie Sheen'})-[r:ACTED_IN {year: 1987}]->(wallStreet:Movie {title: 'Wall Street'})
+RETURN charlie.name, type(r), wallStreet.title"
+Clauses,MERGE,24,yes,"MATCH
+  (charlie:Person {name: 'Charlie Sheen'}),
+  (wallStreet:Movie {title: 'Wall Street'})
+MERGE (charlie)-[r:ACTED_IN {year: 1987}]->(wallStreet)
+RETURN charlie.name, type(r), wallStreet.title"
+Clauses,MERGE,25,no,"MERGE (person:Person {name: $param.name, bornIn: $param.bornIn, chauffeurName: $param.chauffeurName})
+RETURN person.name, person.bornIn, person.chauffeurName"
+Clauses,CALL procedure,1,yes,CALL db.labels()
+Clauses,CALL procedure,2,yes,CALL db.labels
+Clauses,CALL procedure,3,no,"SHOW PROCEDURES YIELD name, signature
+WHERE name = 'dbms.listConfig'
+RETURN signature"
+Clauses,CALL procedure,4,yes,"CALL dbms.checkConfigValue('server.bolt.enabled', 'true')"
+Clauses,CALL procedure,5,yes,"CALL dbms.checkConfigValue($setting, $value)"
+Clauses,CALL procedure,6,yes,CALL dbms.checkConfigValue
+Clauses,CALL procedure,7,yes,"CALL dbms.checkConfigValue($setting, 'true')"
+Clauses,CALL procedure,8,yes,"CALL dbms.checkConfigValue('server.bolt.enabled', 'true')"
+Clauses,CALL procedure,9,yes,CALL db.labels() YIELD *
+Clauses,CALL procedure,10,yes,"CALL db.labels() YIELD label
+RETURN count(label) AS numLabels"
+Clauses,CALL procedure,11,yes,"CALL db.labels() YIELD label
+WHERE label CONTAINS 'User'
+RETURN count(label) AS numLabels"
+Clauses,CALL procedure,12,yes,"CALL db.propertyKeys() YIELD propertyKey AS prop
+MATCH (n)
+WHERE n[prop] IS NOT NULL
+RETURN prop, count(n) AS numNodes"
+Clauses,UNION,1,yes,"MATCH (n:Actor)
+RETURN n.name AS name
+UNION ALL
+MATCH (n:Movie)
+RETURN n.title AS name"
+Clauses,UNION,2,yes,"MATCH (n:Actor)
+RETURN n.name AS name
+UNION
+MATCH (n:Movie)
+RETURN n.title AS name"
+Clauses,USE,1,no,"USE myDatabase
+MATCH (n) RETURN n"
+Clauses,USE,2,no,"USE myComposite.myConstituent
+MATCH (n) RETURN n"
+Clauses,USE,3,no,"USE graph.byName('myComposite.myConstituent')
+MATCH (n) RETURN n"
+Clauses,USE,4,no,"USE graph.byName($graphName)
+MATCH (n) RETURN n"
+Clauses,USE,5,no,"USE graph.byElementId(""4:c0a65d96-4993-4b0c-b036-e7ebd9174905:0"")
+MATCH (n) RETURN n"
+Subqueries,CALL subqueries,1,no,"UNWIND [0, 1, 2] AS x
+CALL {
+  RETURN 'hello' AS innerReturn
+}
+RETURN innerReturn"
+Subqueries,CALL subqueries,2,no,"UNWIND [0, 1, 2] AS x
+CALL {
+  MATCH (n:Counter)
+    SET n.count = n.count + 1
+  RETURN n.count AS innerCount
+}
+WITH innerCount
+MATCH (n:Counter)
+RETURN
+  innerCount,
+  n.count AS totalCount"
+Subqueries,CALL subqueries,3,no,"UNWIND [0, 1, 2] AS x
+CALL {
+  WITH x
+  RETURN x * 10 AS y
+}
+RETURN x, y"
+Subqueries,CALL subqueries,4,no,"MATCH (person:Person)
+WITH person ORDER BY person.age ASC LIMIT 1
+  SET person:ListHead
+WITH *
+MATCH (nextPerson: Person&!ListHead)
+WITH nextPerson ORDER BY nextPerson.age
+CALL {
+  WITH nextPerson
+  MATCH (current:ListHead)
+    REMOVE current:ListHead
+    SET nextPerson:ListHead
+    CREATE(current)-[:IS_YOUNGER_THAN]->(nextPerson)
+  RETURN current AS from, nextPerson AS to
+}
+RETURN
+  from.name AS name,
+  from.age AS age,
+  to.name AS closestOlderName,
+  to.age AS closestOlderAge"
+Subqueries,CALL subqueries,5,no,"CALL {
+  MATCH (p:Person)
+  RETURN p
+  ORDER BY p.age ASC
+  LIMIT 1
+UNION
+  MATCH (p:Person)
+  RETURN p
+  ORDER BY p.age DESC
+  LIMIT 1
+}
+RETURN p.name, p.age
+ORDER BY p.name"
+Subqueries,CALL subqueries,6,no,"MATCH (p:Person)
+CALL {
+    WITH p
+    OPTIONAL MATCH (p)-[o:OWES]->(other:Person)
+    RETURN o.dollars * -1 AS moneyOwed
+UNION ALL
+    WITH p
+    OPTIONAL MATCH (other:Person)-[o:OWES]->(p)
+    RETURN o.dollars AS moneyOwed
+}
+RETURN p.name, sum(moneyOwed) AS amountOwing"
+Subqueries,CALL subqueries,7,no,"MATCH (p:Person)
+CALL {
+  WITH p
+  MATCH (p)-[:FRIEND_OF]-(c:Person)
+  RETURN c.name AS friend
+}
+RETURN p.name, friend"
+Subqueries,CALL subqueries,8,no,"MATCH (p:Person)
+CALL {
+  WITH p
+  MATCH (p)-[o:OWES]->(c)
+  RETURN sum(o.dollars) AS owedAmount, c.name AS owedName
+}
+RETURN p.name, owedAmount, owedName"
+Subqueries,CALL subqueries,9,no,"MATCH (p:Person)
+CALL {
+  WITH p
+  UNWIND range (1, 5) AS i
+  CREATE (:Person {name: p.name})
+}
+RETURN count(*)"
+Subqueries,EXISTS subqueries,1,yes,"MATCH (person:Person)
+WHERE EXISTS {
+    (person)-[:HAS_DOG]->(:Dog)
+}
+RETURN person.name AS name"
+Subqueries,EXISTS subqueries,2,no,"MATCH (person:Person)
+WHERE EXISTS {
+  MATCH (person)-[:HAS_DOG]->(dog:Dog)
+  WHERE person.name = dog.name
+}
+RETURN person.name AS name"
+Subqueries,EXISTS subqueries,3,no,"MATCH (person:Person)
+WHERE EXISTS {
+  MATCH (person)-[:HAS_DOG]->(dog:Dog)
+  WHERE EXISTS {
+    MATCH (dog)-[:HAS_TOY]->(toy:Toy)
+    WHERE toy.name = 'Banana'
+  }
+}
+RETURN person.name AS name"
+Subqueries,EXISTS subqueries,4,no,"MATCH (person:Person)
+RETURN person.name AS name, EXISTS {
+  MATCH (person)-[:HAS_DOG]->(:Dog)
+} AS hasDog"
+Subqueries,EXISTS subqueries,5,no,"MATCH (person:Person)
+RETURN
+    person.name AS name,
+    EXISTS {
+        MATCH (person)-[:HAS_DOG]->(:Dog)
+        UNION
+        MATCH (person)-[:HAS_CAT]->(:Cat)
+    } AS hasPet"
+Subqueries,EXISTS subqueries,6,no,"WITH 'Peter' as name
+MATCH (person:Person {name: name})
+WHERE EXISTS {
+    WITH ""Ozzy"" AS name
+    MATCH (person)-[:HAS_DOG]->(d:Dog)
+    WHERE d.name = name
+}
+RETURN person.name AS name"
+Subqueries,EXISTS subqueries,7,no,"MATCH (person:Person)
+WHERE EXISTS {
+    WITH ""Ozzy"" AS dogName
+    MATCH (person)-[:HAS_DOG]->(d:Dog)
+    WHERE d.name = dogName
+}
+RETURN person.name AS name"
+Subqueries,EXISTS subqueries,8,yes,"MATCH (person:Person)
+WHERE EXISTS {
+    MATCH (person)-[:HAS_DOG]->(:Dog)
+    RETURN person.name
+}
+RETURN person.name AS name"
+Subqueries,COUNT subqueries,1,no,"MATCH (person:Person)
+WHERE COUNT { (person)-[:HAS_DOG]->(:Dog) } > 1
+RETURN person.name AS name"
+Subqueries,COUNT subqueries,2,no,"MATCH (person:Person)
+WHERE COUNT {
+  (person)-[:HAS_DOG]->(dog:Dog)
+  WHERE person.name = dog.name
+} = 1
+RETURN person.name AS name"
+Subqueries,COUNT subqueries,3,yes,"MATCH (person:Person)
+RETURN
+    person.name AS name,
+    COUNT {
+        MATCH (person)-[:HAS_DOG]->(dog:Dog)
+        RETURN dog.name AS petName
+        UNION
+        MATCH (person)-[:HAS_CAT]->(cat:Cat)
+        RETURN cat.name AS petName
+    } AS numPets"
+Subqueries,COUNT subqueries,4,no,"WITH 'Peter' as name
+MATCH (person:Person {name: name})
+WHERE COUNT {
+    WITH ""Ozzy"" AS name
+    MATCH (person)-[:HAS_DOG]->(d:Dog)
+    WHERE d.name = name
+} = 1
+RETURN person.name AS name"
+Subqueries,COUNT subqueries,5,no,"MATCH (person:Person)
+WHERE COUNT {
+    WITH ""Ozzy"" AS dogName
+    MATCH (person)-[:HAS_DOG]->(d:Dog)
+    WHERE d.name = dogName
+} = 1
+RETURN person.name AS name"
+Subqueries,COUNT subqueries,6,yes,"MATCH (person:Person)
+RETURN person.name, COUNT { (person)-[:HAS_DOG]->(:Dog) } as howManyDogs"
+Subqueries,COUNT subqueries,7,yes,"MATCH (person:Person) WHERE person.name =""Andy""
+SET person.howManyDogs = COUNT { (person)-[:HAS_DOG]->(:Dog) }
+RETURN person.howManyDogs as howManyDogs"
+Subqueries,COUNT subqueries,8,no,"MATCH (person:Person)
+RETURN
+   CASE
+     WHEN COUNT { (person)-[:HAS_DOG]->(:Dog) } > 1 THEN ""Doglover "" + person.name
+     ELSE person.name
+   END AS result"
+Subqueries,COUNT subqueries,9,yes,"MATCH (person:Person)
+RETURN COUNT { (person)-[:HAS_DOG]->(:Dog) } AS numDogs,
+       avg(person.age) AS averageAge
+ ORDER BY numDogs"
+Subqueries,COUNT subqueries,10,no,"MATCH (person:Person)
+WHERE COUNT {
+    MATCH (person)-[:HAS_DOG]->(:Dog)
+    RETURN person.name
+} = 1
+RETURN person.name AS name"
+Subqueries,COLLECT subqueries,1,no,"MATCH (person:Person)
+WHERE 'Ozzy' IN COLLECT { MATCH (person)-[:HAS_DOG]->(dog:Dog) RETURN dog.name }
+RETURN person.name AS name"
+Subqueries,COLLECT subqueries,2,yes,"MATCH (person:Person)
+RETURN person.name as name, COLLECT {
+  MATCH (person)-[r:HAS_DOG]->(dog:Dog)
+  WHERE r.since > 2017
+  RETURN dog.name
+} as youngDogs"
+Subqueries,COLLECT subqueries,3,yes,"MATCH (person:Person)
+RETURN
+    person.name AS name,
+    COLLECT {
+        MATCH (person)-[:HAS_DOG]->(dog:Dog)
+        RETURN dog.name AS petName
+        UNION
+        MATCH (person)-[:HAS_CAT]->(cat:Cat)
+        RETURN cat.name AS petName
+    } AS petNames"
+Subqueries,COLLECT subqueries,4,yes,"WITH 'Peter' as name
+MATCH (person:Person {name: name})
+RETURN COLLECT {
+    WITH 'Ozzy' AS name
+    MATCH (person)-[r:HAS_DOG]->(d:Dog {name: name})
+    RETURN d.name
+} as dogsOfTheYear"
+Subqueries,COLLECT subqueries,5,yes,"MATCH (person:Person)
+RETURN person.name AS name, COLLECT {
+    WITH 2018 AS yearOfTheDog
+    MATCH (person)-[r:HAS_DOG]->(d:Dog)
+    WHERE r.since = yearOfTheDog
+    RETURN d.name
+} as dogsOfTheYear"
+Subqueries,COLLECT subqueries,6,yes,"MATCH (person:Person)
+RETURN person.name,
+       COLLECT {
+            MATCH (person)-[:HAS_DOG]->(d:Dog)
+            MATCH (d)-[:HAS_TOY]->(t:Toy)
+            RETURN t.name
+       } as toyNames"
+Subqueries,COLLECT subqueries,7,yes,"MATCH (person:Person) WHERE person.name = ""Peter""
+SET person.dogNames = COLLECT { MATCH (person)-[:HAS_DOG]->(d:Dog) RETURN d.name }
+RETURN person.dogNames as dogNames"
+Subqueries,COLLECT subqueries,8,no,"MATCH (person:Person)
+RETURN
+   CASE
+     WHEN COLLECT { MATCH (person)-[:HAS_DOG]->(d:Dog) RETURN d.name } = []  THEN ""No Dogs "" + person.name
+     ELSE person.name
+   END AS result"
+Subqueries,COLLECT subqueries,9,yes,"MATCH (person:Person)
+RETURN COLLECT { MATCH (person)-[:HAS_DOG]->(d:Dog) RETURN d.name } AS dogNames,
+       avg(person.age) AS averageAge
+ ORDER BY dogNames"
+Subqueries,COLLECT subqueries,10,yes,"MATCH (p:Person)
+RETURN collect(p.nickname) AS names"
+Subqueries,COLLECT subqueries,11,yes,"RETURN COLLECT {
+        MATCH (p:Person)
+        RETURN p.nickname ORDER BY p.nickname
+      } AS names"
+Subqueries,COLLECT subqueries,12,yes,"RETURN COLLECT {
+        MATCH (p:Person)
+        WHERE p.nickname IS NOT NULL
+        RETURN p.nickname ORDER BY p.nickname
+      } AS names"
+Patterns,Concepts,1,no,MATCH ()
+Patterns,Concepts,2,no,MATCH (n)
+Patterns,Concepts,3,yes,"MATCH (n)
+RETURN n.name"
+Patterns,Concepts,4,no,MATCH (n:Stop)
+Patterns,Concepts,5,no,MATCH (n:(TrainStation&BusStation)|StationGroup)
+Patterns,Concepts,6,no,MATCH (n { mode: 'Rail' })
+Patterns,Concepts,7,no,MATCH (n:Station WHERE n.name STARTS WITH 'Preston')
+Patterns,Concepts,8,yes,"MATCH (s:Stop)-[:CALLS_AT]->(:Station {name: 'Denmark Hill'})
+RETURN s.departs AS departureTime"
+Patterns,Concepts,9,yes,"MATCH (n:Station {name: 'London Euston'})<-[:CALLS_AT]-(s1:Stop)
+  -[:NEXT]->(s2:Stop)-[:CALLS_AT]->(:Station {name: 'Coventry'})
+  <-[:CALLS_AT]-(s3:Stop)-[:NEXT]->(s4:Stop)-[:CALLS_AT]->(n)
+RETURN s1.departs+'-'+s2.departs AS outbound,
+  s3.departs+'-'+s4.departs AS `return`"
+Patterns,Concepts,10,no,"MATCH (:Station { name: 'Denmark Hill' })<-[:CALLS_AT]-(d:Stop)
+        -[:NEXT]->(:Stop)
+        -[:NEXT]->(:Stop)
+        -[:NEXT]->(a:Stop)-[:CALLS_AT]->
+      (:Station { name: 'Clapham Junction' })
+RETURN d.departs AS departureTime, a.arrives AS arrivalTime
+UNION
+MATCH (:Station { name: 'Denmark Hill' })<-[:CALLS_AT]-(d:Stop)
+        -[:NEXT]->(a:Stop)-[:CALLS_AT]->
+      (:Station { name: 'Clapham Junction' })
+RETURN d.departs AS departureTime, a.arrives AS arrivalTime"
+Patterns,Concepts,11,no,"MATCH (:Station { name: 'Denmark Hill' })<-[:CALLS_AT]-(d:Stop)
+      ((:Stop)-[:NEXT]->(:Stop)){1,3}
+      (a:Stop)-[:CALLS_AT]->(:Station { name: 'Clapham Junction' })
+RETURN d.departs AS departureTime, a.arrives AS arrivalTime"
+Patterns,Concepts,12,no,"MATCH (d:Station { name: 'Denmark Hill' })<-[:CALLS_AT]-(n:Stop)
+      ((:Stop)-[:NEXT]->(:Stop)){1,10}
+      (m:Stop)-[:CALLS_AT]->(a:Station { name: 'Clapham Junction' })
+WHERE m.arrives < time('17:18')
+RETURN n.departs AS departureTime"
+Patterns,Concepts,13,no,"MATCH (d:Station { name: 'Denmark Hill' })<-[:CALLS_AT]-(n:Stop)
+      (()-[:NEXT]->()){1,10}
+      (m:Stop)-[:CALLS_AT]->(a:Station { name: 'Clapham Junction' })
+WHERE m.arrives < time('17:18')
+RETURN n.departs AS departureTime"
+Patterns,Concepts,14,no,"MATCH (d:Station { name: 'Denmark Hill' })<-[:CALLS_AT]-
+        (n:Stop)-[:NEXT]->{1,10}(m:Stop)-[:CALLS_AT]->
+        (a:Station { name: 'Clapham Junction' })
+WHERE m.arrives < time('17:18')
+RETURN n.departs AS departureTime"
+Patterns,Concepts,15,no,"MATCH (:Station {name: 'Denmark Hill'})<-[:CALLS_AT]-(origin)
+      ((l)-[r:NEXT]->(m)){1,3}
+      ()-[:CALLS_AT]->(:Station {name: 'Clapham Junction'})
+RETURN origin.departs + [stop in m | stop.departs] AS departureTimes,
+       reduce(acc = 0.0, next in r | round(acc + next.distance, 2)) AS totalDistance"
+Patterns,Concepts,16,no,"MATCH p = shortestPath((hby)-[:LINK*]-(cnm))
+WHERE hby.name = 'Hartlebury' AND cnm.name = 'Cheltenham Spa'
+RETURN [n in nodes(p) | n.name] AS stops"
+Patterns,Concepts,17,no,"MATCH p = shortestPath((hby)-[:LINK*]-(cnm))
+WHERE all(link in relationships(p) WHERE link.distance < 20) AND
+      hby.name = 'Hartlebury' AND cnm.name = 'Cheltenham Spa'
+RETURN [n in nodes(p) | n.name] AS stops"
+Patterns,Concepts,18,no,"MATCH p = shortestPath((hby)-[:LINK*]-(cnm))
+WHERE hby.name = 'Hartlebury' AND cnm.name = 'Cheltenham Spa'
+WITH p
+WHERE all(link in relationships(p) WHERE link.distance < 20)
+RETURN [n in nodes(p) | n.name] AS stops"
+Patterns,Concepts,19,no,"MATCH p = shortestPath((hby)-[link:LINK*]-(cnm))
+WHERE reduce(acc = 0, l in link | acc + l.distance) > 50 AND
+      hby.name = 'Hartlebury' AND cnm.name = 'Cheltenham Spa'
+RETURN [n in nodes(p) | n.name] AS stops"
+Patterns,Concepts,20,no,"MATCH p = allShortestPaths((hby)-[link:LINK*]-(psh))
+WHERE hby.name = 'Hartlebury' AND psh.name = 'Pershore'
+RETURN [n in nodes(p) | n.name] AS stops"
+Patterns,Concepts,21,no,"MATCH (hby:Station {name: 'Hartlebury'}),
+      (cnm:Station {name: 'Cheltenham Spa'})
+MATCH p = shortestPath((hby)-[:LINK*]-(cnm))
+RETURN reduce(acc = 0, r in relationships(p) | acc + r.distance)
+  AS distance"
+Patterns,Concepts,22,no,"MATCH (hby:Station {name: 'Hartlebury'}),
+      (cnm:Station {name: 'Cheltenham Spa'})
+MATCH p = (hby)-[:LINK]-+(cnm)
+RETURN reduce(acc = 0, r in relationships(p) | acc + r.distance)
+  AS distance
+ORDER BY distance LIMIT 1"
+Patterns,Concepts,23,no,"MATCH (hby:Station {name: 'Hartlebury'}),
+      (cnm:Station {name: 'Cheltenham Spa'})
+MATCH p = (hby)
+          ((a)-[:LINK]-(b) WHERE point.distance(a.location, cnm.location) >
+            point.distance(b.location, cnm.location))+ (cnm)
+RETURN reduce(acc = 0, r in relationships(p) | acc + r.distance)
+  AS distance
+ORDER BY distance"
+Patterns,Concepts,24,no,"MATCH (:Station {name: 'Starbeck'})<-[:CALLS_AT]-
+        (a:Stop {departs: time('11:11')})-[:NEXT]->*(b)-[:NEXT]->*
+        (c:Stop)-[:CALLS_AT]->(lds:Station {name: 'Leeds'}),
+      (b)-[:CALLS_AT]->(l:Station)<-[:CALLS_AT]-(m:Stop)-[:NEXT]->*
+        (n:Stop)-[:CALLS_AT]->(lds),
+      (lds)<-[:CALLS_AT]-(x:Stop)-[:NEXT]->*(y:Stop)-[:CALLS_AT]->
+        (:Station {name: 'Huddersfield'})
+WHERE b.arrives < m.departs AND n.arrives < x.departs
+RETURN a.departs AS departs,
+       l.name AS changeAt,
+       m.departs AS changeDeparts,
+       y.arrives AS arrives
+ORDER BY y.arrives LIMIT 1"
+Patterns,Primer,1,yes,"MATCH ()
+RETURN count(*) AS numNodes"
+Patterns,Primer,2,yes,"MATCH (:Stop)
+RETURN count(*) AS numStops"
+Patterns,Primer,3,yes,"MATCH (s:Stop)-[:CALLS_AT]->(:Station {name: 'Denmark Hill'})
+RETURN s.arrives AS arrivalTime"
+Patterns,Primer,4,no,"MATCH (n:Station {name: 'Denmark Hill'})<-[:CALLS_AT]-
+        (s:Stop WHERE s.departs = time('22:37'))-[:NEXT]->
+        (:Stop)-[:CALLS_AT]->(d:Station)
+RETURN d.name AS nextCallingPoint"
+Patterns,Primer,5,no,"MATCH (:Station {name: 'Peckham Rye'})-[link:LINK]-+
+        (:Station {name: 'Clapham Junction'})
+RETURN reduce(acc = 0.0, l IN link | round(acc + l.distance, 2)) AS
+         totalDistance"
+Patterns,Primer,6,no,"MATCH (:Station {name: 'Peckham Rye'})
+      (()-[link:LINK]-(s) WHERE link.distance <= 2)+
+      (:Station {name: 'London Victoria'})
+UNWIND s AS station
+RETURN station.name AS callingPoint"
+Patterns,Primer,7,no,"MATCH (:Station {name: 'Denmark Hill'})<-[:CALLS_AT]-(s1:Stop)-[:NEXT]->+
+        (sN:Stop WHERE NOT EXISTS { (sN)-[:NEXT]->(:Stop) })-[:CALLS_AT]->
+        (d:Station)
+RETURN s1.departs AS departure, sN.arrives AS arrival,
+       d.name AS finalDestination"
+Patterns,Primer,8,no,"MATCH (:Station {name: 'Peckham Rye'})<-[:CALLS_AT]-(:Stop)
+      (()-[:NEXT]->(s:Stop))+
+      ()-[:CALLS_AT]->(:Station {name: 'Battersea Park'})
+UNWIND s AS stop
+MATCH (stop)-[:CALLS_AT]->(station:Station)
+RETURN stop.arrives AS arrival, station.name AS callingPoint"
+Patterns,Primer,9,no,"MATCH (n:Station)-[:LINK]-+(n)
+RETURN DISTINCT n.name AS station"
+Patterns,Primer,10,no,"MATCH (:Station {name: 'Denmark Hill'})<-[:CALLS_AT]-
+        (s1:Stop)-[:NEXT]->+(s2:Stop)-[:CALLS_AT]->
+        (c:Station)<-[:CALLS_AT]-(x:Stop),
+       (:Station {name: 'Clapham Junction'})<-[:CALLS_AT]-
+         (t1:Stop)-[:NEXT]->+(x)-[:NEXT]->+(:Stop)-[:CALLS_AT]->
+         (:Station {name: 'London Victoria'})
+WHERE t1.departs = time('22:46')
+      AND s2.arrives < x.departs
+RETURN s1.departs AS departure, s2.arrives AS changeArrival,
+       c.name AS changeAt"
+Patterns,Syntax and semantics,1,no,"MATCH (a {name: 'Dilshad'})<-[r*1..2]-(b)
+MATCH (c)<-[r*1..2]-(d)
+RETURN a = c, b = d, size(r)"
+Patterns,Syntax and semantics,2,no,"MATCH (a {name: 'Dilshad'})<-[r*1..2]-(b)
+MATCH (c)-[r*1..2]->(d)
+RETURN a = c, b = d, size(r)"
+Patterns,Syntax and semantics,3,no,"MATCH (a {name: 'Dilshad'})<-[r*1..2]-(b)
+WITH a, b, reverse(r) AS s
+MATCH (c)-[s*1..2]->(d)
+RETURN a = d, b = c, size(s)"
+Patterns,Syntax and semantics,4,no,"MATCH (a {name: 'Dilshad'})<-[r*1..2]-(b)
+MATCH (c)<-[r*2..3]-(d)
+RETURN a = c, b = d, size(r)"
+Values and types,Temporal values,1,yes,RETURN datetime('2015-06-24T12:50:35.556+0100') AS theDateTime
+Values and types,Temporal values,2,yes,RETURN localdatetime('2015185T19:32:24') AS theLocalDateTime
+Values and types,Temporal values,3,yes,RETURN date('+2015-W13-4') AS theDate
+Values and types,Temporal values,4,yes,RETURN time('125035.556+0100') AS theTime
+Values and types,Temporal values,5,yes,RETURN localtime('12:50:35.556') AS theLocalTime
+Values and types,Temporal values,6,no,"WITH date({year: 1984, month: 10, day: 11}) AS d
+RETURN d.year, d.quarter, d.month, d.week, d.weekYear, d.day, d.ordinalDay, d.dayOfWeek, d.dayOfQuarter"
+Values and types,Temporal values,7,no,"WITH datetime({
+  year: 1984, month: 11, day: 11,
+  hour: 12, minute: 31, second: 14, nanosecond: 645876123,
+  timezone: 'Europe/Stockholm'
+}) AS d
+RETURN d.year, d.quarter, d.month, d.week, d.weekYear, d.day, d.ordinalDay, d.dayOfWeek, d.dayOfQuarter"
+Values and types,Temporal values,8,no,"WITH datetime({
+  year: 1984, month: 11, day: 11,
+  hour: 12, minute: 31, second: 14, nanosecond: 645876123,
+  timezone: 'Europe/Stockholm'
+}) AS d
+RETURN d.hour, d.minute, d.second, d.millisecond, d.microsecond, d.nanosecond"
+Values and types,Temporal values,9,no,"WITH datetime({
+  year: 1984, month: 11, day: 11,
+  hour: 12, minute: 31, second: 14, nanosecond: 645876123,
+  timezone: 'Europe/Stockholm'
+}) AS d
+RETURN d.timezone, d.offset, d.offsetMinutes, d.epochSeconds, d.epochMillis"
+Values and types,Temporal values,10,yes,RETURN date.truncate('year') AS day
+Values and types,Temporal values,11,yes,"RETURN date.truncate('week', date('2019-10-01'), {dayOfWeek: 4}) AS thursday"
+Values and types,Temporal values,12,yes,RETURN duration('P14DT16H12M') AS theDuration
+Values and types,Temporal values,13,yes,RETURN duration('P5M1.5D') AS theDuration
+Values and types,Temporal values,14,yes,RETURN duration('PT0.75M') AS theDuration
+Values and types,Temporal values,15,yes,RETURN duration('P2.5W') AS theDuration
+Values and types,Temporal values,16,no,"WITH duration({years: 1, months: 5, days: 111, minutes: 42}) AS d
+RETURN d.years, d.quarters, d.quartersOfYear, d.months, d.monthsOfYear, d.monthsOfQuarter"
+Values and types,Temporal values,17,no,"WITH duration({months: 5, days: 25, hours: 1}) AS d
+RETURN d.weeks, d.days, d.daysOfWeek"
+Values and types,Temporal values,18,no,"WITH duration({
+  years: 1, months:1, days:1, hours: 1,
+  minutes: 1, seconds: 1, nanoseconds: 111111111
+}) AS d
+RETURN d.hours, d.minutes, d.seconds, d.milliseconds, d.microseconds, d.nanoseconds"
+Values and types,Temporal values,19,no,"WITH duration({
+  years: 1, months:1, days:1,
+  hours: 1, minutes: 1, seconds: 1, nanoseconds: 111111111
+}) AS d
+RETURN d.minutesOfHour, d.secondsOfMinute, d.millisecondsOfSecond, d.microsecondsOfSecond, d.nanosecondsOfSecond"
+Values and types,Temporal values,20,no,"RETURN duration({days: 1, hours: 12}) AS theDuration"
+Values and types,Temporal values,21,yes,"RETURN duration.between(date('1984-10-11'), date('2015-06-24')) AS theDuration"
+Values and types,Temporal values,22,yes,"RETURN duration.inDays(date('2014-10-11'), date('2015-08-06')) AS theDuration"
+Values and types,Temporal values,23,yes,"RETURN date.truncate('month', date() + duration('P2M')) - duration('P1D') AS lastDay"
+Values and types,Temporal values,24,no,"RETURN time('13:42:19') + duration({days: 1, hours: 12}) AS theTime"
+Values and types,Temporal values,25,no,"RETURN duration({days: 2, hours: 7}) + duration({months: 1, hours: 18}) AS theDuration"
+Values and types,Temporal values,26,no,"RETURN duration({hours: 5, minutes: 21}) * 14 AS theDuration"
+Values and types,Temporal values,27,no,"RETURN duration({hours: 3, minutes: 16}) / 2 AS theDuration"
+Values and types,Temporal values,28,yes,"WITH
+  datetime('2015-07-21T21:40:32.142+0100') AS date1,
+  datetime('2015-07-21T17:12:56.333+0100') AS date2
+RETURN
+CASE
+  WHEN date1 < date2 THEN date1 + duration(""P1D"") > date2
+  ELSE date2 + duration(""P1D"") > date1
+END AS lessThanOneDayApart"
+Values and types,Temporal values,29,yes,"RETURN [""Jan"", ""Feb"", ""Mar"", ""Apr"", ""May"", ""Jun"", ""Jul"", ""Aug"", ""Sep"", ""Oct"", ""Nov"", ""Dec""][date().month-1] AS month"
+Values and types,Spatial values,1,no,"WITH
+  point({latitude: toFloat('13.43'), longitude: toFloat('56.21')}) AS p1,
+  point({latitude: toFloat('13.10'), longitude: toFloat('56.41')}) AS p2
+RETURN toInteger(point.distance(p1, p2)/1000) AS km"
+Values and types,Spatial values,2,no,"WITH
+  point({x: 3, y: 0}) AS p2d,
+  point({x: 0, y: 4, z: 1}) AS p3d
+RETURN
+  point.distance(p2d, p3d) AS bad,
+  point.distance(p2d, point({x: p3d.x, y: p3d.y})) AS good"
+Values and types,Spatial values,3,no,"RETURN
+  point({x: 3, y: 0}) AS cartesian_2d,
+  point({x: 0, y: 4, z: 1}) AS cartesian_3d,
+  point({latitude: 12, longitude: 56}) AS geo_2d,
+  point({latitude: 12, longitude: 56, height: 1000}) AS geo_3d"
+Values and types,Spatial values,4,no,"WITH point({x: 3, y: 4}) AS p
+RETURN
+  p.x AS x,
+  p.y AS y,
+  p.crs AS crs,
+  p.srid AS srid"
+Values and types,Spatial values,5,no,"WITH point({latitude: 3, longitude: 4, height: 4321}) AS p
+RETURN
+  p.latitude AS latitude,
+  p.longitude AS longitude,
+  p.height AS height,
+  p.x AS x,
+  p.y AS y,
+  p.z AS z,
+  p.crs AS crs,
+  p.srid AS srid"
+Values and types,Lists,1,yes,"RETURN [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] AS list"
+Values and types,Lists,2,yes,"RETURN [0, ""hello"", 3.14, null] AS list"
+Values and types,Lists,3,yes,"WITH [5,1,7] AS list
+RETURN list[2]"
+Values and types,Lists,4,yes,"RETURN range(0, 10)[3] AS element"
+Values and types,Lists,5,yes,"RETURN range(0, 10)[-3] AS element"
+Values and types,Lists,6,yes,"RETURN range(0, 10)[0..3] AS list"
+Values and types,Lists,7,yes,"RETURN range(0, 10)[0..-5] AS list"
+Values and types,Lists,8,yes,"RETURN range(0, 10)[-5..] AS list"
+Values and types,Lists,9,yes,"RETURN range(0, 10)[..4] AS list"
+Values and types,Lists,10,yes,"RETURN range(0, 10)[15] AS list"
+Values and types,Lists,11,yes,"RETURN range(0, 10)[5..15] AS list"
+Values and types,Lists,12,yes,"RETURN size(range(0, 10)[0..3]) AS list"
+Values and types,Lists,13,yes,"MATCH (keanu:Person {name: 'Keanu Reeves'})
+RETURN [(keanu)-->(b:Movie) WHERE b.title CONTAINS 'Matrix' | b.released] AS years"
+Values and types,Lists,14,yes,"MATCH (keanu:Person {name: 'Keanu Reeves'})
+WITH keanu,[(keanu)-->(b:Movie) | b.title] AS movieTitles
+SET keanu.resume = movieTitles
+RETURN keanu.resume"
+Values and types,Lists,15,yes,"MATCH (keanu:Person {name: 'Keanu Reeves'})
+WITH keanu,[(keanu)-->(b:Movie) | b.title]  + [(keanu)-->(b:Movie) | b.released] AS movieTitles
+SET keanu.resume = movieTitles
+RETURN keanu.resume"
+Values and types,Lists,16,yes,"MATCH (keanu:Person {name:'Keanu Reeves'})
+RETURN [x IN keanu.resume WHERE x contains 'The Matrix'] AS matrixList"
+Values and types,Lists,17,yes,"RETURN [x IN range(0,10) WHERE x % 2 = 0 | x^3 ] AS result"
+Values and types,Lists,18,yes,"RETURN [x IN range(0,10) WHERE x % 2 = 0 ] AS result"
+Values and types,Lists,19,yes,"RETURN [x IN range(0,10) | x^3 ] AS result"
+Values and types,Maps,1,no,"RETURN {key: 'Value', listKey: [{inner: 'Map1'}, {inner: 'Map2'}]} AS map"
+Values and types,Maps,2,no,"MATCH (keanu:Person {name: 'Keanu Reeves'})-[:ACTED_IN]->(movie:Movie)
+WITH keanu, collect(movie{.title, .released}) AS movies
+RETURN keanu{.name, movies: movies}"
+Values and types,Maps,3,yes,"MATCH (actor:Person)-[:ACTED_IN]->(movie:Movie)
+WITH actor, count(movie) AS numberOfMovies
+RETURN actor{.name, numberOfMovies}"
+Values and types,Maps,4,yes,"MATCH (keanu:Person {name: 'Keanu Reeves'})
+RETURN keanu{.*, .age}"
+Values and types,Maps,5,no,"WITH {age: 58, profession: 'Actor'} as keanuStats
+RETURN keanuStats.profession AS profession"
+Values and types,Casting data values,1,yes,"MATCH (keanu:Person {name:'Keanu Reeves'})
+RETURN toFloat(keanu.age), toInteger(keanu.name)"
+Values and types,Casting data values,2,no,"WITH date({
+  year: 2023, month: 5, day: 2
+}) AS d
+RETURN toFloat(d)"
+Values and types,Casting data values,3,no,"WITH date({
+  year: 2023, month: 5, day: 2
+}) AS d
+RETURN toFloatOrNull(d)"
+Values and types,Casting data values,4,yes,"MATCH (keanu:Person {name:'Keanu Reeves'})
+RETURN toStringList([keanu.name, keanu.age]) AS keanuList"
+Values and types,Casting data values,5,yes,"MATCH (keanu:Person {name:'Keanu Reeves'})-[r:KNOWS]-()
+SET keanu.age = toString(keanu.age),
+    keanu.active = toString(keanu.active),
+    r.since = toString(r.since)
+RETURN keanu.age, keanu.active, r.since"
+Values and types,Type predicate expressions,1,no,"UNWIND [42, true, 'abc', null] AS val
+RETURN val, val IS :: INTEGER AS isInteger"
+Values and types,Type predicate expressions,2,no,"UNWIND [42, true, 'abc', null] AS val
+RETURN val, val IS NOT :: STRING AS notString"
+Values and types,Type predicate expressions,3,no,"RETURN
+  null IS :: BOOLEAN AS isBoolean,
+  null IS :: BOOLEAN NOT NULL AS isNotNullBoolean"
+Values and types,Type predicate expressions,4,no,"RETURN
+  (null + 1) IS NOT :: DATE AS isNotDate,
+  (null + 1) IS NOT :: DATE NOT NULL AS isNotNotNullDate"
+Values and types,Type predicate expressions,5,no,RETURN null IS :: NULL AS isNull
+Values and types,Type predicate expressions,6,no,RETURN 1 IS :: INTEGER NOT NULL | FLOAT
+Values and types,Type predicate expressions,7,no,"MATCH (n:Person)
+WHERE n.age IS :: INTEGER AND n.age > 18
+RETURN n.name AS name, n.age AS age"
+Values and types,Type predicate expressions,8,no,RETURN $int16param IS :: INTEGER AS isInteger
+Values and types,Type predicate expressions,9,no,"RETURN 42 IS :: ANY AS isOfTypeAny, 42 IS :: NOTHING AS isOfTypeNothing"
+Values and types,Type predicate expressions,10,no,"UNWIND [42, 42.0, ""42""] as val
+RETURN val, val IS :: INTEGER | FLOAT AS isNumber"
+Values and types,Type predicate expressions,11,no,"UNWIND [[42], [42, null], [42, 42.0]] as val
+RETURN val, val IS :: LIST<INTEGER> AS isIntList"
+Values and types,Type predicate expressions,12,no,"RETURN
+    [] IS :: LIST<NOTHING> AS isNothingList,
+    [] IS :: LIST<INTEGER> AS isIntList,
+    [] IS :: LIST<FLOAT NOT NULL> AS isFloatNotNullList"
+Values and types,Type predicate expressions,13,no,"WITH [1, 0, true, false] AS booleanList
+RETURN booleanList IS :: LIST<BOOLEAN | INTEGER> as isMixedList"
+Functions,Predicate functions,1,no,"MATCH p = (a)-[*]->(b)
+WHERE
+  a.name = 'Keanu Reeves'
+  AND b.name = 'Guy Pearce'
+  AND all(x IN nodes(p) WHERE x.age < 60)
+RETURN p"
+Functions,Predicate functions,2,no,"MATCH (p:Person)
+WHERE any(nationality IN p.nationality WHERE nationality = 'American')
+RETURN p"
+Functions,Predicate functions,3,no,"MATCH (p:Person)
+RETURN
+  p.name AS name,
+  exists((p)-[:ACTED_IN]->()) AS has_acted_in_rel"
+Functions,Predicate functions,4,yes,"MATCH (p:Person)
+WHERE NOT isEmpty(p.nationality)
+RETURN p.name, p.nationality"
+Functions,Predicate functions,5,yes,"MATCH (n)
+WHERE isEmpty(properties(n))
+RETURN n"
+Functions,Predicate functions,6,yes,"MATCH (p:Person)
+WHERE isEmpty(p.address)
+RETURN p.name AS name"
+Functions,Predicate functions,7,no,"MATCH p = (n)-[*]->(b)
+WHERE
+  n.name = 'Keanu Reeves'
+  AND none(x IN nodes(p) WHERE x.age > 60)
+RETURN p"
+Functions,Predicate functions,8,no,"MATCH p = (n)-->(b)
+WHERE
+  n.name = 'Keanu Reeves'
+  AND single(x IN nodes(p) WHERE x.nationality = 'Northern Irish')
+RETURN p"
+Functions,Scalar functions,1,yes,RETURN char_length('Alice')
+Functions,Scalar functions,2,yes,RETURN character_length('Alice')
+Functions,Scalar functions,3,yes,"MATCH (a)
+WHERE a.name = 'Alice'
+RETURN coalesce(a.hairColor, a.eyes)"
+Functions,Scalar functions,4,yes,"MATCH (n:Developer)
+RETURN elementId(n)"
+Functions,Scalar functions,5,yes,"MATCH (:Developer)-[r]-()
+RETURN elementId(r)"
+Functions,Scalar functions,6,yes,"MATCH (x:Developer)-[r]-()
+RETURN endNode(r)"
+Functions,Scalar functions,7,yes,"MATCH (a)
+WHERE a.name = 'Eskil'
+RETURN a.liked_colors, head(a.liked_colors)"
+Functions,Scalar functions,8,yes,"MATCH (a)
+RETURN id(a)"
+Functions,Scalar functions,9,yes,"MATCH (a)
+WHERE a.name = 'Eskil'
+RETURN a.liked_colors, last(a.liked_colors)"
+Functions,Scalar functions,10,yes,"MATCH p = (a)-->(b)-->(c)
+WHERE a.name = 'Alice'
+RETURN length(p)"
+Functions,Scalar functions,11,yes,"RETURN nullIf(4, 4)"
+Functions,Scalar functions,12,yes,"RETURN nullIf(""abc"", ""def"")"
+Functions,Scalar functions,13,yes,"MATCH (a)
+RETURN a.name AS name, coalesce(nullIf(a.eyes, ""brown""), ""hazel"") AS eyeColor"
+Functions,Scalar functions,14,no,"CREATE (p:Person {name: 'Stefan', city: 'Berlin'})
+RETURN properties(p)"
+Functions,Scalar functions,15,yes,RETURN randomUUID() AS uuid
+Functions,Scalar functions,16,yes,"RETURN size(['Alice', 'Bob'])"
+Functions,Scalar functions,17,yes,"MATCH (a)
+WHERE a.name = 'Alice'
+RETURN size([p=(a)-->()-->() | p]) AS fof"
+Functions,Scalar functions,18,yes,"MATCH (a)
+WHERE size(a.name) > 6
+RETURN size(a.name)"
+Functions,Scalar functions,19,yes,"MATCH (x:Developer)-[r]-()
+RETURN startNode(r)"
+Functions,Scalar functions,20,yes,RETURN timestamp()
+Functions,Scalar functions,21,yes,"RETURN toBoolean('true'), toBoolean('not a boolean'), toBoolean(0)"
+Functions,Scalar functions,22,yes,"RETURN toBooleanOrNull('true'), toBooleanOrNull('not a boolean'), toBooleanOrNull(0), toBooleanOrNull(1.5)"
+Functions,Scalar functions,23,no,toFloat(expression)
+Functions,Scalar functions,24,yes,"RETURN toFloat('11.5'), toFloat('not a number')"
+Functions,Scalar functions,25,yes,"RETURN toFloatOrNull('11.5'), toFloatOrNull('not a number'), toFloatOrNull(true)"
+Functions,Scalar functions,26,yes,"RETURN toInteger('42'), toInteger('not a number'), toInteger(true)"
+Functions,Scalar functions,27,yes,"RETURN toIntegerOrNull('42'), toIntegerOrNull('not a number'), toIntegerOrNull(true), toIntegerOrNull(['A', 'B', 'C'])"
+Functions,Scalar functions,28,yes,"MATCH (n)-[r]->()
+WHERE n.name = 'Alice'
+RETURN type(r)"
+Functions,Scalar functions,29,yes,"UNWIND [""abc"", 1, 2.0, true, [date()]] AS value
+RETURN valueType(value) AS result"
+Functions,Aggregating functions,1,yes,"MATCH (p:Person)
+RETURN avg(p.age)"
+Functions,Aggregating functions,2,yes,"UNWIND [duration('P2DT3H'), duration('PT1H45S')] AS dur
+RETURN avg(dur)"
+Functions,Aggregating functions,3,yes,"MATCH (p:Person)
+RETURN collect(p.age)"
+Functions,Aggregating functions,4,yes,"MATCH (p:Person {name: 'Keanu Reeves'})-->(x)
+RETURN labels(p), p.age, count(*)"
+Functions,Aggregating functions,5,yes,"MATCH (p:Person {name: 'Keanu Reeves'})-[r]->()
+RETURN type(r), count(*)"
+Functions,Aggregating functions,6,yes,"MATCH (p:Person)
+RETURN count(p.age)"
+Functions,Aggregating functions,7,no,"MATCH (p:Person)-->(friend:Person)-->(friendOfFriend:Person)
+WHERE p.name = 'Keanu Reeves'
+RETURN friendOfFriend.name, count(friendOfFriend), count(ALL friendOfFriend), count(DISTINCT friendOfFriend)"
+Functions,Aggregating functions,8,yes,"UNWIND [1, 'a', null, 0.2, 'b', '1', '99'] AS val
+RETURN max(val)"
+Functions,Aggregating functions,9,yes,"UNWIND [[1, 'a', 89], [1, 2]] AS val
+RETURN max(val)"
+Functions,Aggregating functions,10,yes,"MATCH (p:Person)
+RETURN max(p.age)"
+Functions,Aggregating functions,11,yes,"UNWIND [1, 'a', null, 0.2, 'b', '1', '99'] AS val
+RETURN min(val)"
+Functions,Aggregating functions,12,yes,"UNWIND ['d', [1, 2], ['a', 'c', 23]] AS val
+RETURN min(val)"
+Functions,Aggregating functions,13,yes,"MATCH (p:Person)
+RETURN min(p.age)"
+Functions,Aggregating functions,14,yes,"MATCH (p:Person)
+RETURN percentileCont(p.age, 0.4)"
+Functions,Aggregating functions,15,yes,"MATCH (p:Person)
+RETURN percentileDisc(p.age, 0.5)"
+Functions,Aggregating functions,16,yes,"MATCH (p:Person)
+WHERE p.name IN ['Keanu Reeves', 'Liam Neeson', 'Carrie Anne Moss']
+RETURN stDev(p.age)"
+Functions,Aggregating functions,17,yes,"MATCH (p:Person)
+WHERE p.name IN ['Keanu Reeves', 'Liam Neeson', 'Carrie Anne Moss']
+RETURN stDevP(p.age)"
+Functions,Aggregating functions,18,yes,"MATCH (p:Person)
+RETURN sum(p.age)"
+Functions,Aggregating functions,19,yes,"UNWIND [duration('P2DT3H'), duration('PT1H45S')] AS dur
+RETURN sum(dur)"
+Functions,Aggregating functions,20,yes,"MATCH (p:Person)
+RETURN max(p.age)"
+Functions,Aggregating functions,21,yes,"MATCH (p:Person)
+RETURN max(p.age) + 1"
+Functions,Aggregating functions,22,yes,"MATCH (p:Person{name:'Keanu Reeves'})-[:KNOWS]-(f:Person)
+RETURN p, p.age - max(f.age)"
+Functions,Aggregating functions,23,yes,"MATCH (p:Person {name:'Keanu Reeves'})-[:KNOWS]-(f:Person)
+RETURN p.age, p.age - max(f.age)"
+Functions,Aggregating functions,24,yes,"MATCH (p:Person {name:'Keanu Reeves'})-[:KNOWS]-(f:Person)
+RETURN p.age - max(f.age)"
+Functions,Aggregating functions,25,yes,"MATCH (p:Person {name:'Keanu Reeves'})-[:KNOWS]-(f:Person)
+RETURN p.age + p.age, p.age + p.age - max(f.age)"
+Functions,Aggregating functions,26,yes,"MATCH (p:Person {name:'Keanu Reeves'})-[:KNOWS]-(f:Person)
+WITH p.age + p.age AS groupingKey, f
+RETURN groupingKey, groupingKey - max(f.age)"
+Functions,List functions,1,yes,"MATCH (a) WHERE a.name = 'Alice'
+RETURN keys(a)"
+Functions,List functions,2,yes,"MATCH (a) WHERE a.name = 'Alice'
+RETURN labels(a)"
+Functions,List functions,3,yes,"MATCH p = (a)-->(b)-->(c)
+WHERE a.name = 'Alice' AND c.name = 'Eskil'
+RETURN nodes(p)"
+Functions,List functions,4,yes,"RETURN range(0, 10), range(2, 18, 3), range(0, 5, -1)"
+Functions,List functions,5,no,"MATCH p = (a)-->(b)-->(c)
+WHERE a.name = 'Alice' AND b.name = 'Bob' AND c.name = 'Daniel'
+RETURN reduce(totalAge = 0, n IN nodes(p) | totalAge + n.age) AS reduction"
+Functions,List functions,6,yes,"MATCH p = (a)-->(b)-->(c)
+WHERE a.name = 'Alice' AND c.name = 'Eskil'
+RETURN relationships(p)"
+Functions,List functions,7,yes,"WITH [4923,'abc',521, null, 487] AS ids
+RETURN reverse(ids)"
+Functions,List functions,8,yes,"MATCH (a) WHERE a.name = 'Eskil'
+RETURN a.array, tail(a.array)"
+Functions,List functions,9,yes,"RETURN toBooleanList(null) as noList,
+toBooleanList([null, null]) as nullsInList,
+toBooleanList(['a string', true, 'false', null, ['A','B']]) as mixedList"
+Functions,List functions,10,yes,"RETURN toFloatList(null) as noList,
+toFloatList([null, null]) as nullsInList,
+toFloatList(['a string', 2.5, '3.14159', null, ['A','B']]) as mixedList"
+Functions,List functions,11,yes,"RETURN toIntegerList(null) as noList,
+toIntegerList([null, null]) as nullsInList,
+toIntegerList(['a string', 2, '5', null, ['A','B']]) as mixedList"
+Functions,List functions,12,no,"RETURN toStringList(null) as noList,
+toStringList([null, null]) as nullsInList,
+toStringList(['already a string', 2, date({year:1955, month:11, day:5}), null, ['A','B']]) as mixedList"
+Functions,Mathematical functions - numeric,1,yes,"MATCH (a), (e) WHERE a.name = 'Alice' AND e.name = 'Eskil' RETURN a.age, e.age, abs(a.age - e.age)"
+Functions,Mathematical functions - numeric,2,yes,RETURN ceil(0.1)
+Functions,Mathematical functions - numeric,3,yes,RETURN floor(0.9)
+Functions,Mathematical functions - numeric,4,yes,RETURN isNaN(0/0.0)
+Functions,Mathematical functions - numeric,5,yes,RETURN rand()
+Functions,Mathematical functions - numeric,6,yes,RETURN round(3.141592)
+Functions,Mathematical functions - numeric,7,yes,RETURN round(-1.5)
+Functions,Mathematical functions - numeric,8,yes,"RETURN round(3.141592, 3)"
+Functions,Mathematical functions - numeric,9,yes,"RETURN round(-1.5, 0)"
+Functions,Mathematical functions - numeric,10,yes,"RETURN round(-1.55, 1)"
+Functions,Mathematical functions - numeric,11,yes,"RETURN round(1.249, 1, 'UP') AS positive,
+round(-1.251, 1, 'UP') AS negative,
+round(1.25, 1, 'UP') AS positiveTie,
+round(-1.35, 1, 'UP') AS negativeTie"
+Functions,Mathematical functions - numeric,12,yes,"RETURN round(1.249, 1, 'DOWN') AS positive,
+round(-1.251, 1, 'DOWN') AS negative,
+round(1.25, 1, 'DOWN') AS positiveTie,
+round(-1.35, 1, 'DOWN') AS negativeTie"
+Functions,Mathematical functions - numeric,13,yes,"RETURN round(1.249, 1, 'CEILING') AS positive,
+round(-1.251, 1, 'CEILING') AS negative,
+round(1.25, 1, 'CEILING') AS positiveTie,
+round(-1.35, 1, 'CEILING') AS negativeTie"
+Functions,Mathematical functions - numeric,14,yes,"RETURN round(1.249, 1, 'FLOOR') AS positive,
+round(-1.251, 1, 'FLOOR') AS negative,
+round(1.25, 1, 'FLOOR') AS positiveTie,
+round(-1.35, 1, 'FLOOR') AS negativeTie"
+Functions,Mathematical functions - numeric,15,yes,"RETURN round(1.249, 1, 'HALF_UP') AS positive,
+round(-1.251, 1, 'HALF_UP') AS negative,
+round(1.25, 1, 'HALF_UP') AS positiveTie,
+round(-1.35, 1, 'HALF_UP') AS negativeTie"
+Functions,Mathematical functions - numeric,16,yes,"RETURN round(1.249, 1, 'HALF_DOWN') AS positive,
+round(-1.251, 1, 'HALF_DOWN') AS negative,
+round(1.25, 1, 'HALF_DOWN') AS positiveTie,
+round(-1.35, 1, 'HALF_DOWN') AS negativeTie"
+Functions,Mathematical functions - numeric,17,yes,"RETURN round(1.249, 1, 'HALF_EVEN') AS positive,
+round(-1.251, 1, 'HALF_EVEN') AS negative,
+round(1.25, 1, 'HALF_EVEN') AS positiveTie,
+round(-1.35, 1, 'HALF_EVEN') AS negativeTie"
+Functions,Mathematical functions - numeric,18,yes,"RETURN sign(-17), sign(0.1)"
+Functions,Mathematical functions - logarithmic,1,yes,RETURN e()
+Functions,Mathematical functions - logarithmic,2,yes,RETURN exp(2)
+Functions,Mathematical functions - logarithmic,3,yes,RETURN log(27)
+Functions,Mathematical functions - logarithmic,4,yes,RETURN log10(27)
+Functions,Mathematical functions - logarithmic,5,yes,RETURN sqrt(256)
+Functions,Mathematical functions - trigonometric,1,yes,RETURN acos(0.5)
+Functions,Mathematical functions - trigonometric,2,yes,RETURN asin(0.5)
+Functions,Mathematical functions - trigonometric,3,yes,RETURN atan(0.5)
+Functions,Mathematical functions - trigonometric,4,yes,"RETURN atan2(0.5, 0.6)"
+Functions,Mathematical functions - trigonometric,5,yes,RETURN cos(0.5)
+Functions,Mathematical functions - trigonometric,6,yes,RETURN cot(0.5)
+Functions,Mathematical functions - trigonometric,7,yes,RETURN degrees(3.14159)
+Functions,Mathematical functions - trigonometric,8,yes,RETURN haversin(0.5)
+Functions,Mathematical functions - trigonometric,9,no,"CREATE (ber:City {lat: 52.5, lon: 13.4}), (sm:City {lat: 37.5, lon: -122.3})
+RETURN 2 * 6371 * asin(sqrt(haversin(radians( sm.lat - ber.lat ))
+  + cos(radians( sm.lat )) * cos(radians( ber.lat )) *
+  haversin(radians( sm.lon - ber.lon )))) AS dist"
+Functions,Mathematical functions - trigonometric,10,yes,RETURN pi()
+Functions,Mathematical functions - trigonometric,11,yes,RETURN radians(180)
+Functions,Mathematical functions - trigonometric,12,yes,RETURN sin(0.5)
+Functions,Mathematical functions - trigonometric,13,yes,RETURN tan(0.5)
+Functions,String functions,1,yes,"RETURN left('hello', 3)"
+Functions,String functions,2,yes,RETURN ltrim('   hello')
+Functions,String functions,3,yes,RETURN normalize('\u212B') = '\u00C5' AS result
+Functions,String functions,4,yes,"RETURN normalize('\uFE64', NFKC) = '\u003C' AS result"
+Functions,String functions,5,yes,"RETURN replace(""hello"", ""l"", ""w"")"
+Functions,String functions,6,yes,RETURN reverse('anagram')
+Functions,String functions,7,yes,"RETURN right('hello', 3)"
+Functions,String functions,8,yes,RETURN rtrim('hello   ')
+Functions,String functions,9,yes,"RETURN split('one,two', ',')"
+Functions,String functions,10,yes,"RETURN substring('hello', 1, 3), substring('hello', 2)"
+Functions,String functions,11,yes,RETURN toLower('HELLO')
+Functions,String functions,12,no,"RETURN
+  toString(11.5),
+  toString('already a string'),
+  toString(true),
+  toString(date({year: 1984, month: 10, day: 11})) AS dateString,
+  toString(datetime({year: 1984, month: 10, day: 11, hour: 12, minute: 31, second: 14, millisecond: 341, timezone: 'Europe/Stockholm'})) AS datetimeString,
+  toString(duration({minutes: 12, seconds: -60})) AS durationString"
+Functions,String functions,13,no,"RETURN toStringOrNull(11.5),
+toStringOrNull('already a string'),
+toStringOrNull(true),
+toStringOrNull(date({year: 1984, month: 10, day: 11})) AS dateString,
+toStringOrNull(datetime({year: 1984, month: 10, day: 11, hour: 12, minute: 31, second: 14, millisecond: 341, timezone: 'Europe/Stockholm'})) AS datetimeString,
+toStringOrNull(duration({minutes: 12, seconds: -60})) AS durationString,
+toStringOrNull(['A', 'B', 'C']) AS list"
+Functions,String functions,14,yes,RETURN toUpper('hello')
+Functions,String functions,15,yes,RETURN trim('   hello   ')
+Functions,Temporal functions - instant types,1,yes,RETURN date() AS currentDate
+Functions,Temporal functions - instant types,2,yes,RETURN date({timezone: 'America/Los Angeles'}) AS currentDateInLA
+Functions,Temporal functions - instant types,3,yes,RETURN date.transaction() AS currentDate
+Functions,Temporal functions - instant types,4,yes,RETURN date.statement() AS currentDate
+Functions,Temporal functions - instant types,5,yes,RETURN date.realtime() AS currentDate
+Functions,Temporal functions - instant types,6,yes,RETURN date.realtime('America/Los Angeles') AS currentDateInLA
+Functions,Temporal functions - instant types,7,no,"UNWIND [
+date({year: 1984, month: 10, day: 11}),
+date({year: 1984, month: 10}),
+date({year: 1984})
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,8,no,"UNWIND [
+date({year: 1984, week: 10, dayOfWeek: 3}),
+date({year: 1984, week: 10}),
+date({year: 1984})
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,9,no,"UNWIND [
+date({year: 1984, quarter: 3, dayOfQuarter: 45}),
+date({year: 1984, quarter: 3}),
+date({year: 1984})
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,10,no,"UNWIND [
+date({year: 1984, ordinalDay: 202}),
+date({year: 1984})
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,11,yes,"UNWIND [
+date('2015-07-21'),
+date('2015-07'),
+date('201507'),
+date('2015-W30-2'),
+date('2015202'),
+date('2015')
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,12,no,"UNWIND [
+date({year: 1984, month: 11, day: 11}),
+localdatetime({year: 1984, month: 11, day: 11, hour: 12, minute: 31, second: 14}),
+datetime({year: 1984, month: 11, day: 11, hour: 12, timezone: '+01:00'})
+] AS dd
+RETURN date({date: dd}) AS dateOnly, date({date: dd, day: 28}) AS dateDay"
+Functions,Temporal functions - instant types,13,no,"WITH
+  datetime({
+    year: 2017, month: 11, day: 11,
+    hour: 12, minute: 31, second: 14, nanosecond: 645876123,
+    timezone: '+01:00'
+  }) AS d
+RETURN
+  date.truncate('millennium', d) AS truncMillenium,
+  date.truncate('century', d) AS truncCentury,
+  date.truncate('decade', d) AS truncDecade,
+  date.truncate('year', d, {day: 5}) AS truncYear,
+  date.truncate('weekYear', d) AS truncWeekYear,
+  date.truncate('quarter', d) AS truncQuarter,
+  date.truncate('month', d) AS truncMonth,
+  date.truncate('week', d, {dayOfWeek: 2}) AS truncWeek,
+  date.truncate('day', d) AS truncDay"
+Functions,Temporal functions - instant types,14,yes,RETURN datetime() AS currentDateTime
+Functions,Temporal functions - instant types,15,yes,RETURN datetime({timezone: 'America/Los Angeles'}) AS currentDateTimeInLA
+Functions,Temporal functions - instant types,16,yes,RETURN datetime.transaction() AS currentDateTime
+Functions,Temporal functions - instant types,17,yes,RETURN datetime.transaction('America/Los Angeles') AS currentDateTimeInLA
+Functions,Temporal functions - instant types,18,yes,RETURN datetime.statement() AS currentDateTime
+Functions,Temporal functions - instant types,19,yes,RETURN datetime.realtime() AS currentDateTime
+Functions,Temporal functions - instant types,20,no,"UNWIND [
+datetime({year: 1984, month: 10, day: 11, hour: 12, minute: 31, second: 14, millisecond: 123, microsecond: 456, nanosecond: 789}),
+datetime({year: 1984, month: 10, day: 11, hour: 12, minute: 31, second: 14, millisecond: 645, timezone: '+01:00'}),
+datetime({year: 1984, month: 10, day: 11, hour: 12, minute: 31, second: 14, nanosecond: 645876123, timezone: 'Europe/Stockholm'}),
+datetime({year: 1984, month: 10, day: 11, hour: 12, minute: 31, second: 14, timezone: '+01:00'}),
+datetime({year: 1984, month: 10, day: 11, hour: 12, minute: 31, second: 14}),
+datetime({year: 1984, month: 10, day: 11, hour: 12, minute: 31, timezone: 'Europe/Stockholm'}),
+datetime({year: 1984, month: 10, day: 11, hour: 12, timezone: '+01:00'}),
+datetime({year: 1984, month: 10, day: 11, timezone: 'Europe/Stockholm'})
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,21,no,"UNWIND [
+datetime({year: 1984, week: 10, dayOfWeek: 3, hour: 12, minute: 31, second: 14, millisecond: 645}),
+datetime({year: 1984, week: 10, dayOfWeek: 3, hour: 12, minute: 31, second: 14, microsecond: 645876, timezone: '+01:00'}),
+datetime({year: 1984, week: 10, dayOfWeek: 3, hour: 12, minute: 31, second: 14, nanosecond: 645876123, timezone: 'Europe/Stockholm'}),
+datetime({year: 1984, week: 10, dayOfWeek: 3, hour: 12, minute: 31, second: 14, timezone: 'Europe/Stockholm'}),
+datetime({year: 1984, week: 10, dayOfWeek: 3, hour: 12, minute: 31, second: 14}),
+datetime({year: 1984, week: 10, dayOfWeek: 3, hour: 12, timezone: '+01:00'}),
+datetime({year: 1984, week: 10, dayOfWeek: 3, timezone: 'Europe/Stockholm'})
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,22,no,"UNWIND [
+datetime({year: 1984, quarter: 3, dayOfQuarter: 45, hour: 12, minute: 31, second: 14, microsecond: 645876}),
+datetime({year: 1984, quarter: 3, dayOfQuarter: 45, hour: 12, minute: 31, second: 14, timezone: '+01:00'}),
+datetime({year: 1984, quarter: 3, dayOfQuarter: 45, hour: 12, timezone: 'Europe/Stockholm'}),
+datetime({year: 1984, quarter: 3, dayOfQuarter: 45})
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,23,no,"UNWIND [
+datetime({year: 1984, ordinalDay: 202, hour: 12, minute: 31, second: 14, millisecond: 645}),
+datetime({year: 1984, ordinalDay: 202, hour: 12, minute: 31, second: 14, timezone: '+01:00'}),
+datetime({year: 1984, ordinalDay: 202, timezone: 'Europe/Stockholm'}),
+datetime({year: 1984, ordinalDay: 202})
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,24,yes,"UNWIND [
+datetime('2015-07-21T21:40:32.142+0100'),
+datetime('2015-W30-2T214032.142Z'),
+datetime('2015T214032-0100'),
+datetime('20150721T21:40-01:30'),
+datetime('2015-W30T2140-02'),
+datetime('2015202T21+18:00'),
+datetime('2015-07-21T21:40:32.142[Europe/London]'),
+datetime('2015-07-21T21:40:32.142-04[America/New_York]')
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,25,no,"WITH date({year: 1984, month: 10, day: 11}) AS dd
+RETURN
+  datetime({date: dd, hour: 10, minute: 10, second: 10}) AS dateHHMMSS,
+  datetime({date: dd, hour: 10, minute: 10, second: 10, timezone:'+05:00'}) AS dateHHMMSSTimezone,
+  datetime({date: dd, day: 28, hour: 10, minute: 10, second: 10}) AS dateDDHHMMSS,
+  datetime({date: dd, day: 28, hour: 10, minute: 10, second: 10, timezone:'Pacific/Honolulu'}) AS dateDDHHMMSSTimezone"
+Functions,Temporal functions - instant types,26,no,"WITH time({hour: 12, minute: 31, second: 14, microsecond: 645876, timezone: '+01:00'}) AS tt
+RETURN
+  datetime({year: 1984, month: 10, day: 11, time: tt}) AS YYYYMMDDTime,
+  datetime({year: 1984, month: 10, day: 11, time: tt, timezone:'+05:00'}) AS YYYYMMDDTimeTimezone,
+  datetime({year: 1984, month: 10, day: 11, time: tt, second: 42}) AS YYYYMMDDTimeSS,
+  datetime({year: 1984, month: 10, day: 11, time: tt, second: 42, timezone: 'Pacific/Honolulu'}) AS YYYYMMDDTimeSSTimezone"
+Functions,Temporal functions - instant types,27,no,"WITH
+  date({year: 1984, month: 10, day: 11}) AS dd,
+  localtime({hour: 12, minute: 31, second: 14, millisecond: 645}) AS tt
+RETURN
+  datetime({date: dd, time: tt}) AS dateTime,
+  datetime({date: dd, time: tt, timezone: '+05:00'}) AS dateTimeTimezone,
+  datetime({date: dd, time: tt, day: 28, second: 42}) AS dateTimeDDSS,
+  datetime({date: dd, time: tt, day: 28, second: 42, timezone: 'Pacific/Honolulu'}) AS dateTimeDDSSTimezone"
+Functions,Temporal functions - instant types,28,no,"WITH
+  datetime({
+    year: 1984, month: 10, day: 11,
+    hour: 12,
+    timezone: 'Europe/Stockholm'
+  }) AS dd
+RETURN
+  datetime({datetime: dd}) AS dateTime,
+  datetime({datetime: dd, timezone: '+05:00'}) AS dateTimeTimezone,
+  datetime({datetime: dd, day: 28, second: 42}) AS dateTimeDDSS,
+  datetime({datetime: dd, day: 28, second: 42, timezone: 'Pacific/Honolulu'}) AS dateTimeDDSSTimezone"
+Functions,Temporal functions - instant types,29,no,"RETURN datetime({epochSeconds: timestamp() / 1000, nanosecond: 23}) AS theDate"
+Functions,Temporal functions - instant types,30,yes,RETURN datetime({epochMillis: 424797300000}) AS theDate
+Functions,Temporal functions - instant types,31,no,"WITH
+  datetime({
+    year:2017, month:11, day:11,
+    hour:12, minute:31, second:14, nanosecond: 645876123,
+    timezone: '+03:00'
+  }) AS d
+RETURN
+  datetime.truncate('millennium', d, {timezone: 'Europe/Stockholm'}) AS truncMillenium,
+  datetime.truncate('year', d, {day: 5}) AS truncYear,
+  datetime.truncate('month', d) AS truncMonth,
+  datetime.truncate('day', d, {millisecond: 2}) AS truncDay,
+  datetime.truncate('hour', d) AS truncHour,
+  datetime.truncate('second', d) AS truncSecond"
+Functions,Temporal functions - instant types,32,yes,RETURN localdatetime() AS now
+Functions,Temporal functions - instant types,33,yes,RETURN localdatetime({timezone: 'America/Los Angeles'}) AS now
+Functions,Temporal functions - instant types,34,yes,RETURN localdatetime.transaction() AS now
+Functions,Temporal functions - instant types,35,yes,RETURN localdatetime.statement() AS now
+Functions,Temporal functions - instant types,36,yes,RETURN localdatetime.realtime() AS now
+Functions,Temporal functions - instant types,37,yes,RETURN localdatetime.realtime('America/Los Angeles') AS nowInLA
+Functions,Temporal functions - instant types,38,no,"RETURN
+  localdatetime({
+    year: 1984, month: 10, day: 11,
+    hour: 12, minute: 31, second: 14, millisecond: 123, microsecond: 456, nanosecond: 789
+  }) AS theDate"
+Functions,Temporal functions - instant types,39,no,"RETURN
+  localdatetime({
+    year: 1984, week: 10, dayOfWeek: 3,
+    hour: 12, minute: 31, second: 14, millisecond: 645
+  }) AS theDate"
+Functions,Temporal functions - instant types,40,no,"RETURN
+  localdatetime({
+    year: 1984, quarter: 3, dayOfQuarter: 45,
+    hour: 12, minute: 31, second: 14, nanosecond: 645876123
+  }) AS theDate"
+Functions,Temporal functions - instant types,41,no,"RETURN
+  localdatetime({
+    year: 1984, ordinalDay: 202,
+    hour: 12, minute: 31, second: 14, microsecond: 645876
+  }) AS theDate"
+Functions,Temporal functions - instant types,42,yes,"UNWIND [
+localdatetime('2015-07-21T21:40:32.142'),
+localdatetime('2015-W30-2T214032.142'),
+localdatetime('2015-202T21:40:32'),
+localdatetime('2015202T21')
+] AS theDate
+RETURN theDate"
+Functions,Temporal functions - instant types,43,no,"WITH date({year: 1984, month: 10, day: 11}) AS dd
+RETURN
+  localdatetime({date: dd, hour: 10, minute: 10, second: 10}) AS dateHHMMSS,
+  localdatetime({date: dd, day: 28, hour: 10, minute: 10, second: 10}) AS dateDDHHMMSS"
+Functions,Temporal functions - instant types,44,no,"WITH time({hour: 12, minute: 31, second: 14, microsecond: 645876, timezone: '+01:00'}) AS tt
+RETURN
+  localdatetime({year: 1984, month: 10, day: 11, time: tt}) AS YYYYMMDDTime,
+  localdatetime({year: 1984, month: 10, day: 11, time: tt, second: 42}) AS YYYYMMDDTimeSS"
+Functions,Temporal functions - instant types,45,no,"WITH
+  date({year: 1984, month: 10, day: 11}) AS dd,
+  time({hour: 12, minute: 31, second: 14, microsecond: 645876, timezone: '+01:00'}) AS tt
+RETURN
+  localdatetime({date: dd, time: tt}) AS dateTime,
+  localdatetime({date: dd, time: tt, day: 28, second: 42}) AS dateTimeDDSS"
+Functions,Temporal functions - instant types,46,no,"WITH
+  datetime({
+    year: 1984, month: 10, day: 11,
+    hour: 12,
+    timezone: '+01:00'
+  }) AS dd
+RETURN
+  localdatetime({datetime: dd}) AS dateTime,
+  localdatetime({datetime: dd, day: 28, second: 42}) AS dateTimeDDSS"
+Functions,Temporal functions - instant types,47,no,"WITH
+  localdatetime({
+    year: 2017, month: 11, day: 11,
+    hour: 12, minute: 31, second: 14, nanosecond: 645876123
+  }) AS d
+RETURN
+  localdatetime.truncate('millennium', d) AS truncMillenium,
+  localdatetime.truncate('year', d, {day: 2}) AS truncYear,
+  localdatetime.truncate('month', d) AS truncMonth,
+  localdatetime.truncate('day', d) AS truncDay,
+  localdatetime.truncate('hour', d, {nanosecond: 2}) AS truncHour,
+  localdatetime.truncate('second', d) AS truncSecond"
+Functions,Temporal functions - instant types,48,yes,RETURN localtime() AS now
+Functions,Temporal functions - instant types,49,yes,RETURN localtime({timezone: 'America/Los Angeles'}) AS nowInLA
+Functions,Temporal functions - instant types,50,yes,RETURN localtime.transaction() AS now
+Functions,Temporal functions - instant types,51,yes,RETURN localtime.statement() AS now
+Functions,Temporal functions - instant types,52,yes,RETURN localtime.statement('America/Los Angeles') AS nowInLA
+Functions,Temporal functions - instant types,53,yes,RETURN localtime.realtime() AS now
+Functions,Temporal functions - instant types,54,no,"UNWIND [
+localtime({hour: 12, minute: 31, second: 14, nanosecond: 789, millisecond: 123, microsecond: 456}),
+localtime({hour: 12, minute: 31, second: 14}),
+localtime({hour: 12})
+] AS theTime
+RETURN theTime"
+Functions,Temporal functions - instant types,55,yes,"UNWIND [
+localtime('21:40:32.142'),
+localtime('214032.142'),
+localtime('21:40'),
+localtime('21')
+] AS theTime
+RETURN theTime"
+Functions,Temporal functions - instant types,56,no,"WITH time({hour: 12, minute: 31, second: 14, microsecond: 645876, timezone: '+01:00'}) AS tt
+RETURN
+  localtime({time: tt}) AS timeOnly,
+  localtime({time: tt, second: 42}) AS timeSS"
+Functions,Temporal functions - instant types,57,no,"WITH time({hour: 12, minute: 31, second: 14, nanosecond: 645876123, timezone: '-01:00'}) AS t
+RETURN
+  localtime.truncate('day', t) AS truncDay,
+  localtime.truncate('hour', t) AS truncHour,
+  localtime.truncate('minute', t, {millisecond: 2}) AS truncMinute,
+  localtime.truncate('second', t) AS truncSecond,
+  localtime.truncate('millisecond', t) AS truncMillisecond,
+  localtime.truncate('microsecond', t) AS truncMicrosecond"
+Functions,Temporal functions - instant types,58,yes,RETURN time() AS currentTime
+Functions,Temporal functions - instant types,59,yes,RETURN time({timezone: 'America/Los Angeles'}) AS currentTimeInLA
+Functions,Temporal functions - instant types,60,yes,RETURN time.transaction() AS currentTime
+Functions,Temporal functions - instant types,61,yes,RETURN time.statement() AS currentTime
+Functions,Temporal functions - instant types,62,yes,RETURN time.statement('America/Los Angeles') AS currentTimeInLA
+Functions,Temporal functions - instant types,63,yes,RETURN time.realtime() AS currentTime
+Functions,Temporal functions - instant types,64,no,"UNWIND [
+time({hour: 12, minute: 31, second: 14, millisecond: 123, microsecond: 456, nanosecond: 789}),
+time({hour: 12, minute: 31, second: 14, nanosecond: 645876123}),
+time({hour: 12, minute: 31, second: 14, microsecond: 645876, timezone: '+01:00'}),
+time({hour: 12, minute: 31, timezone: '+01:00'}),
+time({hour: 12, timezone: '+01:00'})
+] AS theTime
+RETURN theTime"
+Functions,Temporal functions - instant types,65,yes,"UNWIND [
+time('21:40:32.142+0100'),
+time('214032.142Z'),
+time('21:40:32+01:00'),
+time('214032-0100'),
+time('21:40-01:30'),
+time('2140-00:00'),
+time('2140-02'),
+time('22+18:00')
+] AS theTime
+RETURN theTime"
+Functions,Temporal functions - instant types,66,no,"WITH localtime({hour: 12, minute: 31, second: 14, microsecond: 645876}) AS tt
+RETURN
+  time({time: tt}) AS timeOnly,
+  time({time: tt, timezone: '+05:00'}) AS timeTimezone,
+  time({time: tt, second: 42}) AS timeSS,
+  time({time: tt, second: 42, timezone: '+05:00'}) AS timeSSTimezone"
+Functions,Temporal functions - instant types,67,no,"WITH time({hour: 12, minute: 31, second: 14, nanosecond: 645876123, timezone: '-01:00'}) AS t
+RETURN
+  time.truncate('day', t) AS truncDay,
+  time.truncate('hour', t) AS truncHour,
+  time.truncate('minute', t) AS truncMinute,
+  time.truncate('second', t) AS truncSecond,
+  time.truncate('millisecond', t, {nanosecond: 2}) AS truncMillisecond,
+  time.truncate('microsecond', t) AS truncMicrosecond"
+Functions,Temporal functions - duration,1,no,"UNWIND [
+duration({days: 14, hours:16, minutes: 12}),
+duration({months: 5, days: 1.5}),
+duration({months: 0.75}),
+duration({weeks: 2.5}),
+duration({minutes: 1.5, seconds: 1, milliseconds: 123, microseconds: 456, nanoseconds: 789}),
+duration({minutes: 1.5, seconds: 1, nanoseconds: 123456789})
+] AS aDuration
+RETURN aDuration"
+Functions,Temporal functions - duration,2,yes,"UNWIND [
+duration(""P14DT16H12M""),
+duration(""P5M1.5D""),
+duration(""P0.75M""),
+duration(""PT0.75M""),
+duration(""P2012-02-02T14:37:21.545"")
+] AS aDuration
+RETURN aDuration"
+Functions,Temporal functions - duration,3,no,"UNWIND [
+duration.between(date(""1984-10-11""), date(""1985-11-25"")),
+duration.between(date(""1985-11-25""), date(""1984-10-11"")),
+duration.between(date(""1984-10-11""), datetime(""1984-10-12T21:40:32.142+0100"")),
+duration.between(date(""2015-06-24""), localtime(""14:30"")),
+duration.between(localtime(""14:30""), time(""16:30+0100"")),
+duration.between(localdatetime(""2015-07-21T21:40:32.142""), localdatetime(""2016-07-21T21:45:22.142"")),
+duration.between(datetime({year: 2017, month: 10, day: 29, hour: 0, timezone: 'Europe/Stockholm'}), datetime({year: 2017, month: 10, day: 29, hour: 0, timezone: 'Europe/London'}))
+] AS aDuration
+RETURN aDuration"
+Functions,Temporal functions - duration,4,no,"UNWIND [
+duration.inMonths(date(""1984-10-11""), date(""1985-11-25"")),
+duration.inMonths(date(""1985-11-25""), date(""1984-10-11"")),
+duration.inMonths(date(""1984-10-11""), datetime(""1984-10-12T21:40:32.142+0100"")),
+duration.inMonths(date(""2015-06-24""), localtime(""14:30"")),
+duration.inMonths(localdatetime(""2015-07-21T21:40:32.142""), localdatetime(""2016-07-21T21:45:22.142"")),
+duration.inMonths(datetime({year: 2017, month: 10, day: 29, hour: 0, timezone: 'Europe/Stockholm'}), datetime({year: 2017, month: 10, day: 29, hour: 0, timezone: 'Europe/London'}))
+] AS aDuration
+RETURN aDuration"
+Functions,Temporal functions - duration,5,no,"UNWIND [
+duration.inDays(date(""1984-10-11""), date(""1985-11-25"")),
+duration.inDays(date(""1985-11-25""), date(""1984-10-11"")),
+duration.inDays(date(""1984-10-11""), datetime(""1984-10-12T21:40:32.142+0100"")),
+duration.inDays(date(""2015-06-24""), localtime(""14:30"")),
+duration.inDays(localdatetime(""2015-07-21T21:40:32.142""), localdatetime(""2016-07-21T21:45:22.142"")),
+duration.inDays(datetime({year: 2017, month: 10, day: 29, hour: 0, timezone: 'Europe/Stockholm'}), datetime({year: 2017, month: 10, day: 29, hour: 0, timezone: 'Europe/London'}))
+] AS aDuration
+RETURN aDuration"
+Functions,Temporal functions - duration,6,no,"UNWIND [
+duration.inSeconds(date(""1984-10-11""), date(""1984-10-12"")),
+duration.inSeconds(date(""1984-10-12""), date(""1984-10-11"")),
+duration.inSeconds(date(""1984-10-11""), datetime(""1984-10-12T01:00:32.142+0100"")),
+duration.inSeconds(date(""2015-06-24""), localtime(""14:30"")),
+duration.inSeconds(datetime({year: 2017, month: 10, day: 29, hour: 0, timezone: 'Europe/Stockholm'}), datetime({year: 2017, month: 10, day: 29, hour: 0, timezone: 'Europe/London'}))
+] AS aDuration
+RETURN aDuration"
+Functions,Spatial functions,1,no,"WITH
+  point({x: 2.3, y: 4.5, crs: 'cartesian'}) AS p1,
+  point({x: 1.1, y: 5.4, crs: 'cartesian'}) AS p2
+RETURN point.distance(p1,p2) AS dist"
+Functions,Spatial functions,2,no,"WITH
+  point({longitude: 12.78, latitude: 56.7, height: 100}) AS p1,
+  point({latitude: 56.71, longitude: 12.79, height: 100}) AS p2
+RETURN point.distance(p1, p2) AS dist"
+Functions,Spatial functions,3,no,"MATCH (t:TrainStation)-[:TRAVEL_ROUTE]->(o:Office)
+WITH
+  point({longitude: t.longitude, latitude: t.latitude}) AS trainPoint,
+  point({longitude: o.longitude, latitude: o.latitude}) AS officePoint
+RETURN round(point.distance(trainPoint, officePoint)) AS travelDistance"
+Functions,Spatial functions,4,no,"RETURN point.distance(null, point({longitude: 56.7, latitude: 12.78})) AS d"
+Functions,Spatial functions,5,no,"WITH
+  point({x: 0, y: 0, crs: 'cartesian'}) AS lowerLeft,
+  point({x: 10, y: 10, crs: 'cartesian'}) AS upperRight
+RETURN point.withinBBox(point({x: 5, y: 5, crs: 'cartesian'}), lowerLeft, upperRight) AS result"
+Functions,Spatial functions,6,no,"WITH
+  point({longitude: 12.53, latitude: 55.66}) AS lowerLeft,
+  point({longitude: 12.614, latitude: 55.70}) AS upperRight
+MATCH (t:TrainStation)
+WHERE point.withinBBox(point({longitude: t.longitude, latitude: t.latitude}), lowerLeft, upperRight)
+RETURN count(t)"
+Functions,Spatial functions,7,no,"WITH
+  point({longitude: 179, latitude: 55.66}) AS lowerLeft,
+  point({longitude: -179, latitude: 55.70}) AS upperRight
+RETURN point.withinBBox(point({longitude: 180, latitude: 55.66}), lowerLeft, upperRight) AS result"
+Functions,Spatial functions,8,no,"RETURN
+  point.withinBBox(
+    null,
+    point({longitude: 56.7, latitude: 12.78}),
+    point({longitude: 57.0, latitude: 13.0})
+  ) AS in"
+Functions,Spatial functions,9,no,"RETURN point({longitude: 56.7, latitude: 12.78}) AS point"
+Functions,Spatial functions,10,no,"RETURN point({x: 2.3, y: 4.5, crs: 'WGS-84'}) AS point"
+Functions,Spatial functions,11,no,"MATCH (p:Office)
+RETURN point({longitude: p.longitude, latitude: p.latitude}) AS officePoint"
+Functions,Spatial functions,12,yes,RETURN point(null) AS p
+Functions,Spatial functions,13,no,"RETURN point({longitude: 56.7, latitude: 12.78, height: 8}) AS point"
+Functions,Spatial functions,14,no,"RETURN point({x: 2.3, y: 4.5}) AS point"
+Functions,Spatial functions,15,no,"RETURN point({x: 2.3, y: 4.5, z: 2}) AS point"
+Functions,Vector functions,1,yes,"MATCH (node:Node)
+WITH node, vector.similarity.euclidean($query, node.vector) AS score
+RETURN node, score
+ORDER BY score DESCENDING
+LIMIT 2;"
+Functions,Graph functions,1,yes,RETURN graph.names() AS name
+Functions,Graph functions,2,yes,"UNWIND graph.names() AS name
+RETURN name, graph.propertiesByName(name) AS props"
+Functions,Graph functions,3,no,"UNWIND graph.names() AS name
+WITH name, graph.propertiesByName(name) AS props
+WHERE ""A"" IN props.tags
+CALL {
+  USE graph.byName(name)
+  MATCH (n)
+  RETURN n
+}
+RETURN n"
+Functions,Graph functions,4,no,"UNWIND graph.names() AS graphName
+CALL {
+  USE graph.byName(graphName)
+  MATCH (n)
+  RETURN n
+}
+RETURN n"
+Functions,Graph functions,5,no,"USE graph.byElementId(""4:c0a65d96-4993-4b0c-b036-e7ebd9174905:0"")
+MATCH (n) RETURN n"
+Functions,Database functions,1,yes,"WITH ""2:efc7577d-022a-107c-a736-dbcdfc189c03:0"" AS eid
+RETURN db.nameFromElementId(eid) AS name"
+Functions,User-defined functions,1,yes,"MATCH (n:Member)
+RETURN org.neo4j.function.example.join(collect(n.name)) AS members"
+Functions,User-defined functions,2,yes,"MATCH (n:Member)
+RETURN org.neo4j.function.example.longestString(n.name) AS member"
