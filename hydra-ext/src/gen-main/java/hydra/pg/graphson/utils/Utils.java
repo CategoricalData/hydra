@@ -64,8 +64,8 @@ public interface Utils {
             props.get()),
           outV.get(),
           vmap));
-        return hydra.lib.maybes.Maybe.apply(
-          vmap1.get(),
+        return hydra.lib.maybes.Maybe.applyLazy(
+          () -> vmap1.get(),
           (java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, java.util.Map<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>>) (vae -> hydra.lib.maps.Insert.apply(
             inV.get(),
             (hydra.pg.model.VertexWithAdjacentEdges<T0>) (new hydra.pg.model.VertexWithAdjacentEdges<T0>(((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.pg.model.Vertex<T0>>) (projected -> projected.vertex)).apply(vae), hydra.lib.lists.Cons.apply(
@@ -109,8 +109,8 @@ public interface Utils {
   }
   
   static <T0> java.util.Map<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> elementsToVerticesWithAdjacentEdges_vmap1(hydra.pg.model.AdjacentEdge<T0> adjEdgeOut, T0 outV, java.util.Map<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> vmap) {
-    return hydra.lib.maybes.Maybe.apply(
-      vmap,
+    return hydra.lib.maybes.Maybe.applyLazy(
+      () -> vmap,
       (java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, java.util.Map<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>>) (vae -> hydra.lib.maps.Insert.apply(
         outV,
         (hydra.pg.model.VertexWithAdjacentEdges<T0>) (new hydra.pg.model.VertexWithAdjacentEdges<T0>(((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.pg.model.Vertex<T0>>) (projected -> projected.vertex)).apply(vae), ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, java.util.List<hydra.pg.model.AdjacentEdge<T0>>>) (projected -> projected.ins)).apply(vae), hydra.lib.lists.Cons.apply(

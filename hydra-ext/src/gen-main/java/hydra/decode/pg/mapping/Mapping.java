@@ -580,8 +580,8 @@ public interface Mapping {
               hydra.decode.pg.mapping.Mapping.edgeSpec(
                 cx,
                 input)))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -682,8 +682,8 @@ public interface Mapping {
                 hydra.lexical.Lexical.stripAndDereferenceTermEither(
                   cx,
                   input))))))))));
-          return hydra.lib.maybes.Maybe.apply(
-            (hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
