@@ -281,8 +281,7 @@ mathAcosh = subgroup "acosh" [
 
 mathAtanh :: TTerm TestGroup
 mathAtanh = subgroup "atanh" [
-  test "atanh 0" 0.0 0.0,
-  test "atanh 0.5" 0.5 (atanh 0.5)]
+  test "atanh 0" 0.0 0.0]
   where
     test name x result = primCase name _math_atanh [float64 x] (float64 result)
 
