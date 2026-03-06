@@ -9,6 +9,7 @@ import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static hydra.dsl.Types.either;
 import static hydra.dsl.Types.function;
@@ -54,19 +55,26 @@ public class FromRight extends PrimitiveFunction {
     }
 
     /**
-     * Extract the Right value from an Either, or return a default value if it is a Left.
-     *
-     * @param <A> the left type
-     * @param <B> the right type
-     * @param defaultValue the default value to return if the Either is a Left
-     * @param either the Either value to extract from
-     * @return the Right value or the default
+     * @deprecated Use {@link #applyLazy(Supplier, Either)} instead. Eager evaluation of the default wastes memory.
      */
+    @Deprecated
     public static <A, B> B apply(B defaultValue, hydra.util.Either<A, B> either) {
         if (either.isRight()) {
             return ((hydra.util.Either.Right<A, B>) either).value;
         } else {
             return defaultValue;
+        }
+    }
+
+    /**
+     * Lazily extract the Right value from an Either, or return a default value if it is a Left.
+     * The default is only evaluated if the Either is a Left.
+     */
+    public static <A, B> B applyLazy(Supplier<B> defaultValue, hydra.util.Either<A, B> either) {
+        if (either.isRight()) {
+            return ((hydra.util.Either.Right<A, B>) either).value;
+        } else {
+            return defaultValue.get();
         }
     }
 }
