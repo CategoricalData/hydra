@@ -287,10 +287,8 @@ def literal_adapter(cx: hydra.coders.AdapterContext, lt: hydra.core.LiteralType)
                 
                 case _:
                     raise TypeError("Unsupported Literal")
-        @lru_cache(1)
-        def step() -> hydra.compute.Coder[hydra.core.Literal, hydra.core.Literal]:
-            return hydra.compute.Coder((lambda x1, x2: match_binary(x1, x2)), (lambda x1, x2: match_string(x1, x2)))
-        return Right((hydra.compute.Adapter(False, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()), step()),))
+        step = hydra.compute.Coder((lambda x1, x2: match_binary(x1, x2)), (lambda x1, x2: match_string(x1, x2)))
+        return Right((hydra.compute.Adapter(False, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()), step),))
     def for_boolean(t: T0) -> Either[str, frozenlist[hydra.compute.Adapter[T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
         def match_boolean(step_: hydra.compute.Coder[hydra.core.IntegerValue, hydra.core.IntegerValue], cx2: hydra.context.Context, lit: hydra.core.Literal):
             def _hoist_match_boolean_1(cx2, step_, v1):

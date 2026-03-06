@@ -123,14 +123,12 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
         
         case hydra.core.TermRecord(value=r):
             def encode_field(f: hydra.core.Field) -> Either[str, tuple[str, hydra.json.model.Value]]:
-                @lru_cache(1)
-                def fname() -> str:
-                    return f.name.value
+                fname = f.name.value
                 fterm = f.term
                 @lru_cache(1)
                 def encoded_field() -> Either[str, hydra.json.model.Value]:
                     return to_json(fterm)
-                return hydra.lib.eithers.map((lambda v: (fname(), v)), encoded_field())
+                return hydra.lib.eithers.map((lambda v: (fname, v)), encoded_field())
             fields = r.fields
             @lru_cache(1)
             def encoded_fields() -> Either[str, frozenlist[tuple[str, hydra.json.model.Value]]]:

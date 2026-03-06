@@ -144,10 +144,8 @@ def cases(cx: hydra.context.Context, name: hydra.core.Name, graph: hydra.graph.G
 def case_field(cx: hydra.context.Context, name: hydra.core.Name, n: str, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Field]:
     r"""Extract a specific case handler from a case statement term."""
     
-    @lru_cache(1)
-    def field_name() -> hydra.core.Name:
-        return hydra.core.Name(n)
-    return hydra.lib.eithers.bind(cases(cx, name, graph, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name().value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : Left(hydra.context.InContext(hydra.error.OtherError("not enough cases"), cx))), (lambda : Right(hydra.lib.lists.head(matching)))))[1]))
+    field_name = hydra.core.Name(n)
+    return hydra.lib.eithers.bind(cases(cx, name, graph, term), (lambda cs: (matching := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name.value, field_name.value)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching), (lambda : Left(hydra.context.InContext(hydra.error.OtherError("not enough cases"), cx))), (lambda : Right(hydra.lib.lists.head(matching)))))[1]))
 
 def either_term(cx: hydra.context.Context, left_fun: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]], right_fun: Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T1]], graph: hydra.graph.Graph, term0: hydra.core.Term):
     def _hoist_hydra_extract_core_either_term_1(cx, left_fun, right_fun, term, v1):
@@ -338,10 +336,8 @@ def let(cx: hydra.context.Context, graph: hydra.graph.Graph, term0: hydra.core.T
 def let_binding(cx: hydra.context.Context, n: str, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
     r"""Extract a binding with the given name from a let term."""
     
-    @lru_cache(1)
-    def name() -> hydra.core.Name:
-        return hydra.core.Name(n)
-    return hydra.lib.eithers.bind(let(cx, graph, term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name().value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such binding: ", n)), cx))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : Right(hydra.lib.lists.head(matching_bindings).term)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("multiple bindings named ", n)), cx)))))))[1]))
+    name = hydra.core.Name(n)
+    return hydra.lib.eithers.bind(let(cx, graph, term), (lambda let_expr: (matching_bindings := hydra.lib.lists.filter((lambda b: hydra.lib.equality.equal(b.name.value, name.value)), let_expr.bindings), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_bindings), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such binding: ", n)), cx))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_bindings), 1), (lambda : Right(hydra.lib.lists.head(matching_bindings).term)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("multiple bindings named ", n)), cx)))))))[1]))
 
 def list(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term):
     def _hoist_hydra_extract_core_list_1(cx, stripped, v1):

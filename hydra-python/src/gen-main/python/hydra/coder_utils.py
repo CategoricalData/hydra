@@ -119,52 +119,6 @@ def analyze_function_term(cx: hydra.context.Context, get_t_c: Callable[[T0], hyd
     
     return analyze_function_term_with(cx, (lambda x1, x2: binding_metadata(x1, x2)), get_t_c, set_t_c, env, term)
 
-def analyze_function_term_inline(cx: hydra.context.Context, get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], env: T0, term: hydra.core.Term) -> Either[T1, hydra.typing.FunctionStructure[T0]]:
-    r"""Analyze a function term without recording binding metadata."""
-    
-    return analyze_function_term_with(cx, (lambda _, _2: Nothing()), get_t_c, set_t_c, env, term)
-
-def analyze_function_term_no_infer_with_finish(f_env: T0, tparams: frozenlist[hydra.core.Name], args: frozenlist[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], doms: frozenlist[hydra.core.Type], tapps: frozenlist[hydra.core.Type], body: hydra.core.Term) -> Either[T1, hydra.typing.FunctionStructure[T0]]:
-    @lru_cache(1)
-    def body_with_tapps() -> hydra.core.Term:
-        return hydra.lib.lists.foldl((lambda trm, typ: cast(hydra.core.Term, hydra.core.TermTypeApplication(hydra.core.TypeApplicationTerm(trm, typ)))), body, tapps)
-    return Right(hydra.typing.FunctionStructure(hydra.lib.lists.reverse(tparams), hydra.lib.lists.reverse(args), bindings, body_with_tapps(), hydra.lib.lists.reverse(doms), Nothing(), f_env))
-
-def analyze_function_term_no_infer_with_gather(for_binding: Callable[[hydra.graph.Graph, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], arg_mode: bool, g_env: T0, tparams: frozenlist[hydra.core.Name], args: frozenlist[hydra.core.Name], bindings: frozenlist[hydra.core.Binding], doms: frozenlist[hydra.core.Type], tapps: frozenlist[hydra.core.Type], t: hydra.core.Term):
-    while True:
-        def _hoist_hydra_coder_utils_analyze_function_term_no_infer_with_gather_1(arg_mode, args, bindings, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, v1):
-            match v1:
-                case hydra.core.FunctionLambda(value=lam):
-                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_"))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_no_infer_with_finish(g_env, tparams, args, bindings, doms, tapps, t)))
-                
-                case _:
-                    return analyze_function_term_no_infer_with_finish(g_env, tparams, args, bindings, doms, tapps, t)
-        match hydra.rewriting.deannotate_term(t):
-            case hydra.core.TermFunction(value=f):
-                return _hoist_hydra_coder_utils_analyze_function_term_no_infer_with_gather_1(arg_mode, args, bindings, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, f)
-            
-            case hydra.core.TermLet(value=lt):
-                return (new_bindings := lt.bindings, (body := lt.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_let(for_binding, get_t_c(g_env), lt), g_env), analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, False, new_env, tparams, args, hydra.lib.lists.concat2(bindings, new_bindings), doms, tapps, body))[1])[1])[1]
-            
-            case hydra.core.TermTypeApplication(value=ta):
-                return (ta_body := ta.body, (typ := ta.type, analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, g_env, tparams, args, bindings, doms, hydra.lib.lists.cons(typ, tapps), ta_body))[1])[1]
-            
-            case hydra.core.TermTypeLambda(value=tl):
-                return (tvar := tl.parameter, (tl_body := tl.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_type_lambda(get_t_c(g_env), tl), g_env), analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, arg_mode, new_env, hydra.lib.lists.cons(tvar, tparams), args, bindings, doms, tapps, tl_body))[1])[1])[1]
-            
-            case _:
-                return analyze_function_term_no_infer_with_finish(g_env, tparams, args, bindings, doms, tapps, t)
-
-def analyze_function_term_no_infer_with(for_binding: Callable[[hydra.graph.Graph, hydra.core.Binding], Maybe[hydra.core.Term]], get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], env: T0, term: hydra.core.Term) -> Either[T1, hydra.typing.FunctionStructure[T0]]:
-    r"""Analyze a function term without type inference, with configurable binding metadata."""
-    
-    return analyze_function_term_no_infer_with_gather(for_binding, get_t_c, set_t_c, True, env, (), (), (), (), (), term)
-
-def analyze_function_term_no_infer(get_t_c: Callable[[T0], hydra.graph.Graph], set_t_c: Callable[[hydra.graph.Graph, T0], T0], env: T0, term: hydra.core.Term) -> Either[T1, hydra.typing.FunctionStructure[T0]]:
-    r"""Analyze a function term without type inference (performance optimization)."""
-    
-    return analyze_function_term_no_infer_with((lambda x1, x2: binding_metadata(x1, x2)), get_t_c, set_t_c, env, term)
-
 def comments_from_element(cx: hydra.context.Context, g: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[str]]:
     r"""Extract comments/description from a Binding."""
     
@@ -357,6 +311,9 @@ def is_trivial_term(t: hydra.core.Term):
                     case hydra.core.EliminationRecord():
                         return is_trivial_term(arg)
                     
+                    case hydra.core.EliminationWrap():
+                        return is_trivial_term(arg)
+                    
                     case _:
                         return False
             def _hoist_body_2(v1):
@@ -377,6 +334,12 @@ def is_trivial_term(t: hydra.core.Term):
         
         case hydra.core.TermMaybe(value=opt):
             return hydra.lib.maybes.maybe(True, (lambda inner: is_trivial_term(inner)), opt)
+        
+        case hydra.core.TermRecord(value=rec):
+            return hydra.lib.lists.foldl((lambda acc, fld: hydra.lib.logic.and_(acc, is_trivial_term(fld.term))), True, rec.fields)
+        
+        case hydra.core.TermWrap(value=wt):
+            return is_trivial_term(wt.body)
         
         case hydra.core.TermTypeApplication(value=ta):
             return is_trivial_term(ta.body)

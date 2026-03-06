@@ -23,12 +23,10 @@ def type_constraint(tc: hydra.typing.TypeConstraint) -> str:
 def type_subst(ts: hydra.typing.TypeSubst) -> str:
     r"""Show a type substitution as a string."""
     
-    @lru_cache(1)
-    def subst() -> FrozenDict[hydra.core.Name, hydra.core.Type]:
-        return ts.value
+    subst = ts.value
     @lru_cache(1)
     def pairs() -> frozenlist[tuple[hydra.core.Name, hydra.core.Type]]:
-        return hydra.lib.maps.to_list(subst())
+        return hydra.lib.maps.to_list(subst)
     def show_pair(pair: tuple[hydra.core.Name, hydra.core.Type]) -> str:
         @lru_cache(1)
         def name() -> str:
