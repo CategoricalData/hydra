@@ -57,14 +57,14 @@ writeExtManifestJson basePath = do
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeCpp = generateSources moduleToCpp cppLanguage True False False False
 
 -- | Generate GraphQL source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writeGraphql :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writeGraphql :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeGraphql = generateSources moduleToGraphql graphqlLanguage True False False False
 
 -- | Generate Java source files from modules.
@@ -72,28 +72,28 @@ writeGraphql = generateSources moduleToGraphql graphqlLanguage True False False 
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 -- Note: Java uses doHoistPolymorphicLetBindings=True to hoist polymorphic let bindings to class level
-writeJava :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writeJava :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeJava = generateSources moduleToJava javaLanguage True True False True
 
 -- | Generate JSON Schema files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writeJsonSchema :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writeJsonSchema :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeJsonSchema = generateSources (moduleToJsonSchema (JsonSchemaOptions True)) jsonSchemaLanguage True False False False
 
 -- | Generate PDL (Pegasus) source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writePdl :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writePdl :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writePdl = generateSources moduleToPdl pdlLanguage True False False False
 
 -- | Generate Protocol Buffers source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writeProtobuf :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writeProtobuf :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeProtobuf = generateSources moduleToProtobuf protobufLanguage True False False False
 
 -- | Generate Python source files from modules.
@@ -101,19 +101,19 @@ writeProtobuf = generateSources moduleToProtobuf protobufLanguage True False Fal
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
 -- Note: Python uses doHoistCaseStatements=True to hoist case statements to let bindings
-writePython :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writePython :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writePython = generateSources moduleToPython pythonLanguage True True True False
 
 -- | Generate Rust source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writeRust :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writeRust :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeRust = generateSources moduleToRust rustLanguage True False False False
 
 -- | Generate Scala source files from modules.
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writeScala :: FP.FilePath -> [Module] -> [Module] -> IO ()
+writeScala :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeScala = generateSources moduleToScala scalaLanguage True True False False
