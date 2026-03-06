@@ -9,9 +9,19 @@
 
 set -e
 
-OUTPUT_DIR="$1"
+# Parse arguments
+NO_TEST=false
+POSITIONAL_ARGS=()
+for arg in "$@"; do
+    case "$arg" in
+        --no-test) NO_TEST=true ;;
+        *) POSITIONAL_ARGS+=("$arg") ;;
+    esac
+done
+
+OUTPUT_DIR="${POSITIONAL_ARGS[0]}"
 if [ -z "$OUTPUT_DIR" ]; then
-    echo "Usage: $0 <output-dir>"
+    echo "Usage: $0 [--no-test] <output-dir>"
     exit 1
 fi
 
@@ -37,7 +47,7 @@ JAVA_SRC="$HYDRA_JAVA_DIR/src/main/java/hydra"
 JAVA_DST="$OUTPUT_DIR/src/main/java/hydra"
 mkdir -p "$JAVA_DST"
 
-for f in Adapters.java Bootstrap.java Coders.java Generation.java HydraTestBase.java Lexical.java; do
+for f in Adapters.java Bootstrap.java Coders.java Generation.java HydraTestBase.java; do
     cp "$JAVA_SRC/$f" "$JAVA_DST/"
 done
 
@@ -59,16 +69,13 @@ for f in ReductionTest.java VisitorTest.java TestSuiteRunner.java; do
     fi
 done
 
+# Copy ext modules from baseline.
+# Generation.java imports hydra.ext.{java,python,haskell}.{coder,language} which
+# are generated ext modules. Copy all ext from baseline to ensure they're available.
+echo "  Copying ext modules from baseline..."
 JAVA_GEN="$OUTPUT_DIR/src/gen-main/java"
 JAVA_BASELINE="$HYDRA_JAVA_DIR/src/gen-main/java"
-
-# Copy ext modules from baseline, replacing any generated versions.
-# The bootstrap may generate ext modules with incorrect file paths for the
-# Java target (e.g. hydra/ext/syntax/ instead of hydra/ext/java/syntax/).
-# Using the baseline ensures correct package/path alignment.
-echo "  Copying ext modules from baseline..."
 if [ -d "$JAVA_BASELINE/hydra/ext" ]; then
-    # Remove any incorrectly-generated ext directories first
     rm -rf "$JAVA_GEN/hydra/ext"
     cp -r "$JAVA_BASELINE/hydra/ext" "$JAVA_GEN/hydra/"
     echo "    Copied hydra/ext from baseline"
@@ -91,14 +98,22 @@ echo "  Generated test modules:   $TEST_COUNT files"
 echo "  Static resources:         $STATIC_COUNT files"
 echo ""
 
-# Build and run tests
-echo "Building and running Java tests..."
+# Build
+echo "Building Java target..."
 STEP_START=$(date +%s)
 cd "$OUTPUT_DIR"
 ./gradlew compileJava compileTestJava 2>&1
 BUILD_END=$(date +%s)
 echo "  Build time: $((BUILD_END - STEP_START))s"
-./gradlew test 2>&1
+
+if [ "$NO_TEST" = true ]; then
+    echo ""
+    exit 0
+fi
+
+# Run tests
+echo "Running Java tests..."
+HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" ./gradlew test 2>&1
 TEST_EXIT=$?
 TEST_END=$(date +%s)
 echo "  Test time: $((TEST_END - BUILD_END))s"

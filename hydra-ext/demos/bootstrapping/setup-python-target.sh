@@ -9,9 +9,19 @@
 
 set -e
 
-OUTPUT_DIR="$1"
+# Parse arguments
+NO_TEST=false
+POSITIONAL_ARGS=()
+for arg in "$@"; do
+    case "$arg" in
+        --no-test) NO_TEST=true ;;
+        *) POSITIONAL_ARGS+=("$arg") ;;
+    esac
+done
+
+OUTPUT_DIR="${POSITIONAL_ARGS[0]}"
 if [ -z "$OUTPUT_DIR" ]; then
-    echo "Usage: $0 <output-dir>"
+    echo "Usage: $0 [--no-test] <output-dir>"
     exit 1
 fi
 
@@ -59,25 +69,22 @@ for d in lib dsl sources; do
     fi
 done
 
-# Kernel sources modules (hydra.sources.*) needed for evaluation tests.
-echo "  Copying kernel sources modules..."
-if [ -d "$HYDRA_PYTHON_DIR/src/gen-main/python/hydra/sources" ]; then
-    mkdir -p "$OUTPUT_DIR/src/gen-main/python/hydra/sources"
-    cp -r "$HYDRA_PYTHON_DIR/src/gen-main/python/hydra/sources/"* "$OUTPUT_DIR/src/gen-main/python/hydra/sources/"
-    find "$OUTPUT_DIR/src/gen-main/python/hydra/sources" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-fi
-
-PY_GEN="$OUTPUT_DIR/src/gen-main/python/hydra"
-PY_BASELINE="$HYDRA_PYTHON_DIR/src/gen-main/python/hydra"
-
-# Copy ext modules from baseline, replacing any generated versions.
-# The bootstrap only generates a subset of ext modules (haskell, json);
-# other ext modules (java, python, scala) must come from the baseline.
+# Copy ext modules from baseline.
+# Test infrastructure (e.g. test_suite_runner.py) imports hydra.ext.org.json.coder
+# and other ext modules. Copy all ext from baseline to ensure they're available.
 echo "  Copying ext modules from baseline..."
-if [ -d "$PY_BASELINE/ext" ]; then
-    rm -rf "$PY_GEN/ext"
-    cp -r "$PY_BASELINE/ext" "$PY_GEN/"
-    find "$PY_GEN/ext" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+PY_GEN="$OUTPUT_DIR/src/gen-main/python"
+PY_BASELINE="$HYDRA_PYTHON_DIR/src/gen-main/python"
+if [ -d "$PY_BASELINE/hydra/ext" ]; then
+    rm -rf "$PY_GEN/hydra/ext"
+    cp -r "$PY_BASELINE/hydra/ext" "$PY_GEN/hydra/"
+    # Ensure __init__.py files exist in ext directories
+    find "$PY_GEN/hydra/ext" -type d -not -name "__pycache__" -not -path "*/__pycache__/*" | while read dir; do
+        if [ ! -f "$dir/__init__.py" ]; then
+            echo "from pkgutil import extend_path" > "$dir/__init__.py"
+            echo "__path__ = extend_path(__path__, __name__)" >> "$dir/__init__.py"
+        fi
+    done
     echo "    Copied hydra/ext from baseline"
 fi
 
@@ -100,22 +107,27 @@ if [ ! -e "$OUTPUT_DIR/../hydra-haskell" ]; then
 fi
 
 # Summary
-MAIN_COUNT=$(find "$OUTPUT_DIR/src/gen-main" -name "*.py" 2>/dev/null | wc -l | tr -d ' ')
-TEST_COUNT=$(find "$OUTPUT_DIR/src/gen-test" -name "*.py" 2>/dev/null | wc -l | tr -d ' ')
-STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.py" 2>/dev/null | wc -l | tr -d ' ')
+MAIN_COUNT=$(find "$OUTPUT_DIR/src/gen-main" -name "*.py" ! -name "__init__.py" 2>/dev/null | wc -l | tr -d ' ')
+TEST_COUNT=$(find "$OUTPUT_DIR/src/gen-test" -name "*.py" ! -name "__init__.py" 2>/dev/null | wc -l | tr -d ' ')
+STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.py" ! -name "__init__.py" 2>/dev/null | wc -l | tr -d ' ')
 echo "  Generated main modules:   $MAIN_COUNT files"
 echo "  Generated test modules:   $TEST_COUNT files"
 echo "  Static resources:         $STATIC_COUNT files"
 echo ""
+
+if [ "$NO_TEST" = true ]; then
+    echo ""
+    exit 0
+fi
 
 # Run tests
 echo "Running Python tests..."
 STEP_START=$(date +%s)
 cd "$OUTPUT_DIR"
 if [ -d "src/gen-test" ]; then
-    pytest src/test/ src/gen-test/ 2>&1
+    HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" pytest src/test/ src/gen-test/ 2>&1
 else
-    pytest src/test/ 2>&1
+    HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" pytest src/test/ 2>&1
 fi
 TEST_EXIT=$?
 STEP_END=$(date +%s)
