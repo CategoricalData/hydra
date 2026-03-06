@@ -125,6 +125,11 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
         qname(namespace, "either"), eithers.either, ["x", "y", "z"],
         fun(x, z), fun(y, z), prims.either(x, y), z
     )
+    # foldl :: (x -> y -> Either z x) -> x -> [y] -> Either z x
+    primitives[qname(namespace, "foldl")] = prims.prim3(
+        qname(namespace, "foldl"), eithers.foldl, ["x", "y", "z"],
+        fun(x, fun(y, prims.either(z, x))), x, prims.list_(y), prims.either(z, x)
+    )
     primitives[qname(namespace, "fromLeft")] = prims.prim2(
         qname(namespace, "fromLeft"), eithers.from_left, ["x", "y"],
         x, prims.either(x, y), x
@@ -159,6 +164,11 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "mapMaybe")] = prims.prim2(
         qname(namespace, "mapMaybe"), eithers.map_maybe, ["x", "y", "z"],
         fun(x, prims.either(z, y)), prims.optional(x), prims.either(z, prims.optional(y))
+    )
+    # mapSet :: (x -> Either z y) -> Set x -> Either z (Set y)
+    primitives[qname(namespace, "mapSet")] = prims.prim2(
+        qname(namespace, "mapSet"), eithers.map_set, ["x", "y", "z"],
+        fun(x, prims.either(z, y)), prims.set_(x), prims.either(z, prims.set_(y))
     )
     primitives[qname(namespace, "partitionEithers")] = prims.prim1(
         qname(namespace, "partitionEithers"), eithers.partition_eithers, ["x", "y"],
