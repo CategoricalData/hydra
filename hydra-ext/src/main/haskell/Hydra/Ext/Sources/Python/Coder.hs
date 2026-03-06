@@ -206,8 +206,8 @@ module_ = Module ns elements
       toBinding targetPythonVersion,
       -- Function analysis
       toBinding pythonBindingMetadata,
+      toBinding shouldThunkBinding,
       toBinding analyzePythonFunction,
-      toBinding analyzePythonFunctionInline,
       -- withDefinitions context
       toBinding withDefinitions,
       -- Binding encoding
@@ -1795,32 +1795,28 @@ initialEnvironment = def "initialEnvironment" $
 pythonBindingMetadata :: TBinding (Graph -> Binding -> Maybe Term)
 pythonBindingMetadata = def "pythonBindingMetadata" $
   doc "Like bindingMetadata, but only for bindings that will actually be thunked" $
-  "tc" ~> "b" ~>
-  Logic.ifElse (Logic.and (CoderUtils.isComplexBinding @@ var "tc" @@ var "b")
-                           (Logic.not (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "b"))))
-    (CoderUtils.bindingMetadata @@ var "tc" @@ var "b")
+  "g" ~> "b" ~>
+  Logic.ifElse (shouldThunkBinding @@ var "g" @@ var "b")
+    (CoderUtils.bindingMetadata @@ var "g" @@ var "b")
     nothing
+
+shouldThunkBinding :: TBinding (Graph -> Binding -> Bool)
+shouldThunkBinding = def "shouldThunkBinding" $
+  doc "Determine if a binding should be thunked based on its complexity and triviality" $
+  "g" ~> "b" ~>
+  Logic.and
+    (CoderUtils.isComplexBinding @@ var "g" @@ var "b")
+    (Logic.not (CoderUtils.isTrivialTerm @@ (Core.bindingTerm $ var "b")))
 
 -- | Analyze a function term with Python-specific Graph management.
 --   This is a wrapper around CoderUtils.analyzeFunctionTermWith that provides the Python-specific
---   Graph getter/setter and Python-specific binding metadata (which skips trivial bindings).
+--   Graph getteranalyzePythonFunction/setter and Python-specific binding metadata (which skips trivial bindings).
 analyzePythonFunction :: TBinding (Context -> PyHelpers.PythonEnvironment -> Term -> Either (InContext OtherError) (FunctionStructure PyHelpers.PythonEnvironment))
 analyzePythonFunction = def "analyzePythonFunction" $
   doc "Analyze a function term with Python-specific Graph management" $
   lambda "cx" $ lambda "env" $ lambda "term" $
     CoderUtils.analyzeFunctionTermWith @@ var "cx" @@
       pythonBindingMetadata @@
-      pythonEnvironmentGetGraph @@
-      pythonEnvironmentSetGraph @@
-      var "env" @@ var "term"
-
--- | Like analyzePythonFunction but without recording binding metadata.
---   Used for inline lambda expressions where let bindings become walrus operators.
-analyzePythonFunctionInline :: TBinding (Context -> PyHelpers.PythonEnvironment -> Term -> Either (InContext OtherError) (FunctionStructure PyHelpers.PythonEnvironment))
-analyzePythonFunctionInline = def "analyzePythonFunctionInline" $
-  doc "Analyze a function term without recording binding metadata (for inline lambdas)" $
-  lambda "cx" $ lambda "env" $ lambda "term" $
-    CoderUtils.analyzeFunctionTermInline @@ var "cx" @@
       pythonEnvironmentGetGraph @@
       pythonEnvironmentSetGraph @@
       var "env" @@ var "term"
@@ -2078,8 +2074,7 @@ encodeFunction = def "encodeFunction" $
   "cx" ~> "env" ~> "f" ~>
     cases _Function (var "f") Nothing [
       _Function_lambda>>: "lam" ~>
-        -- Use analyzePythonFunctionInline for inline lambda expressions
-        "fs" <<= (analyzePythonFunctionInline @@ var "cx" @@ var "env" @@ (Core.termFunction $ Core.functionLambda $ var "lam")) $
+        "fs" <<= (analyzePythonFunction @@ var "cx" @@ var "env" @@ (Core.termFunction $ Core.functionLambda $ var "lam")) $
         "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
         "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
         "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
@@ -2450,9 +2445,18 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
         "isUnitVariant" <~ (isVariantUnitType @@ var "rt" @@ var "fname") $
         -- Get the Python variant class name (deconflicted to avoid collisions)
         "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env")) $
-        -- Create isinstance(arg, VariantType) check
-        "isinstanceCheck" <~ (PyUtils.functionCall @@ var "isinstancePrimary"
-          @@ list [var "pyArg", PyUtils.pyNameToPyExpression @@ var "pyVariantName"]) $
+        -- Create the check expression:
+        --   Enum types: arg == EnumType.VARIANT (using comparison operator)
+        --   Non-enum types: isinstance(arg, VariantType) (using function call)
+        "isinstanceCheck" <~ (Logic.ifElse (var "isEnum")
+          -- Enum: arg == EnumType.VARIANT (e.g. AssignmentOperator.SIMPLE)
+          (PyDsl.pyComparisonToPyExpression $ PyDsl.comparison
+            (PyUtils.pyExpressionToBitwiseOr @@ var "pyArg")
+            (list [PyDsl.compPairEq
+              (PyUtils.pyExpressionToBitwiseOr @@ (PyUtils.pyNameToPyExpression @@ var "pyVariantName"))]))
+          -- Non-enum: isinstance(arg, VariantType)
+          (PyUtils.functionCall @@ var "isinstancePrimary"
+            @@ list [var "pyArg", PyUtils.pyNameToPyExpression @@ var "pyVariantName"])) $
         -- Encode the branch term and apply it
         "pyBranch" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fterm") $
         "pyResult" <~ (Logic.ifElse (var "isEnum")

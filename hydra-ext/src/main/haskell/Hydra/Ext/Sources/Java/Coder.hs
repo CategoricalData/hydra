@@ -197,7 +197,6 @@ module_ = Module ns elements
       toBinding javaEnvSetGraph,
       -- Function analysis
       toBinding analyzeJavaFunction,
-      toBinding analyzeJavaFunctionNoInfer,
       -- Lambda context management
       toBinding withLambda,
       toBinding withTypeLambda,
@@ -1909,13 +1908,6 @@ analyzeJavaFunction = def "analyzeJavaFunction" $
   lambda "env" $ lambda "term" $
     "cx" ~> "g" ~>
     CoderUtils.analyzeFunctionTerm @@ var "cx" @@ javaEnvGetGraph @@ javaEnvSetGraph @@ var "env" @@ var "term"
-
--- | Like analyzeJavaFunction but without type inference for the codomain.
-analyzeJavaFunctionNoInfer :: TBinding (JavaHelpers.JavaEnvironment -> Term -> Context -> Graph -> Either (InContext OtherError) (FunctionStructure JavaHelpers.JavaEnvironment))
-analyzeJavaFunctionNoInfer = def "analyzeJavaFunctionNoInfer" $
-  lambda "env" $ lambda "term" $
-    "cx" ~> "g" ~>
-    CoderUtils.analyzeFunctionTermNoInfer @@ javaEnvGetGraph @@ javaEnvSetGraph @@ var "env" @@ var "term"
 
 -- =============================================================================
 -- Lambda context management

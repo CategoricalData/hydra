@@ -126,6 +126,7 @@ module_ = Module ns elements
       toBinding pyAtomToPyExpression,
       toBinding pyNameToPyExpression,
       toBinding pySimpleStatementToPyStatement,
+      toBinding pyExpressionToBitwiseOr,
       toBinding pyExpressionToPySimpleStatement,
       toBinding pyExpressionToPyStatement,
       toBinding pyExpressionToPyAnnotatedRhs,
@@ -674,6 +675,15 @@ pyExpressionToDisjunction = def "pyExpressionToDisjunction" $
             PyDsl.namedExpressionSimple $ var "e")]) [
       -- Simple expressions already contain a disjunction
       Py._Expression_simple>>: "disj" ~> var "disj"]
+
+-- | Convert an Expression to a BitwiseOr, wrapping in parens if needed
+pyExpressionToBitwiseOr :: TBinding (Py.Expression -> Py.BitwiseOr)
+pyExpressionToBitwiseOr = def "pyExpressionToBitwiseOr" $
+  doc "Convert an Expression to a BitwiseOr, wrapping in parens if needed" $
+  lambda "e" $
+    PyDsl.pyPrimaryToPyBitwiseOr
+      (PyDsl.primarySimple $ PyDsl.atomGroup $ PyDsl.groupExpression $
+        PyDsl.namedExpressionSimple $ var "e")
 
 -- | Convert a Primary to a Slice
 pyPrimaryToPySlice :: TBinding (Py.Primary -> Py.Slice)
