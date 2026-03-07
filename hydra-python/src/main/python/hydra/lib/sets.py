@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from collections.abc import Callable, Sequence
+from functools import cmp_to_key
 from typing import Any, TypeVar
 
 from hydra.dsl.python import frozenlist
@@ -69,13 +70,14 @@ def size(s: frozenset[Any]) -> int:
 def to_list(s: frozenset[A]) -> frozenlist[A]:
     """Convert a set to a list.
 
-    Attempts to sort if elements are comparable, otherwise returns unsorted.
+    Attempts to sort if elements are comparable, otherwise falls back to
+    structural comparison for deterministic ordering.
     """
     try:
         return tuple(sorted(s))  # type: ignore[type-var]
     except TypeError:
-        # Elements don't support comparison (e.g., Term objects)
-        return tuple(s)
+        from hydra.lib.maps import _structural_compare
+        return tuple(sorted(s, key=cmp_to_key(_structural_compare)))
 
 
 def union(s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
