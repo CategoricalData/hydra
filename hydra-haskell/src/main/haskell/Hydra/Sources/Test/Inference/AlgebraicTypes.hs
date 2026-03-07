@@ -58,17 +58,17 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
     -- Applying maps.map to a concrete function
     subgroup "maps.map applied to a function" [
       -- maps.map (partially applied): maps.map negate => map<k, int32> -> map<k, int32>
-      expectPoly 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 [tag_disabledForMinimalInference]
         (primitive _maps_map @@ primitive _math_negate)
-        ["t0"] (T.function (T.map (T.var "t0") T.int32) (T.map (T.var "t0") T.int32)),
+        ["t0"] [("t0", ["ordering"])] (T.function (T.map (T.var "t0") T.int32) (T.map (T.var "t0") T.int32)),
       -- maps.map with a lambda
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPolyConstrained 2 [tag_disabledForMinimalInference]
         (primitive _maps_map @@ lambda "x" (list [var "x"]))
-        ["t0", "t1"] (T.function (T.map (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.list $ T.var "t1"))),
+        ["t0", "t1"] [("t0", ["ordering"])] (T.function (T.map (T.var "t0") (T.var "t1")) (T.map (T.var "t0") (T.list $ T.var "t1"))),
       -- maps.map with sets.fromList: transforms map values from lists to sets
-      expectPoly 3 [tag_disabledForMinimalInference]
+      expectPolyConstrained 3 [tag_disabledForMinimalInference]
         (primitive _maps_map @@ primitive _sets_fromList)
-        ["t0", "t1"] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.set $ T.var "t1")))],
+        ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.set $ T.var "t1")))],
 
     -- Applying sets.map to cross-collection functions
     subgroup "sets.map applied to a function" [
@@ -77,18 +77,18 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
         (primitive _sets_map @@ primitive _math_negate)
         (T.function (T.set T.int32) (T.set T.int32)),
       -- sets.map with lists.length: set<list<t>> -> set<int32>
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPolyConstrained 2 [tag_disabledForMinimalInference]
         (primitive _sets_map @@ primitive _lists_length)
-        ["t0"] (T.function (T.set $ T.list $ T.var "t0") (T.set T.int32))],
+        ["t0"] [("t0", ["ordering"])] (T.function (T.set $ T.list $ T.var "t0") (T.set T.int32))],
 
     -- Composing collection primitives in let bindings
     subgroup "Composing collection primitives in let" [
       -- let f = maps.map sets.fromList in f
-      expectPoly 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 [tag_disabledForMinimalInference]
         (lets [
           "f">: primitive _maps_map @@ primitive _sets_fromList]
           $ var "f")
-        ["t0", "t1"] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.set $ T.var "t1"))),
+        ["t0", "t1"] [("t0", ["ordering"]), ("t1", ["ordering"])] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") (T.set $ T.var "t1"))),
       -- let f = maps.map sets.fromList; g = f (map literal) in g
       expectMono 2 [tag_disabledForMinimalInference]
         (lets [
@@ -100,13 +100,13 @@ testGroupForCollectionPrimitives = define "testGroupForCollectionPrimitives" $
     -- Composing map operations in lambdas
     subgroup "Map operations in lambdas" [
       -- \m. maps.map lists.length m  =>  map<k, list<t>> -> map<k, int32>
-      expectPoly 1 [tag_disabledForMinimalInference]
+      expectPolyConstrained 1 [tag_disabledForMinimalInference]
         (lambda "m" $ primitive _maps_map @@ primitive _lists_length @@ var "m")
-        ["t0", "t1"] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") T.int32)),
+        ["t0", "t1"] [("t0", ["ordering"])] (T.function (T.map (T.var "t0") (T.list $ T.var "t1")) (T.map (T.var "t0") T.int32)),
       -- \f. \m. maps.map f m  =>  (v1 -> v2) -> map<k, v1> -> map<k, v2>
-      expectPoly 2 [tag_disabledForMinimalInference]
+      expectPolyConstrained 2 [tag_disabledForMinimalInference]
         (lambda "f" $ lambda "m" $ primitive _maps_map @@ var "f" @@ var "m")
-        ["t0", "t1", "t2"] (T.functionMany [T.function (T.var "t0") (T.var "t1"), T.map (T.var "t2") (T.var "t0"), T.map (T.var "t2") (T.var "t1")])],
+        ["t0", "t1", "t2"] [("t2", ["ordering"])] (T.functionMany [T.function (T.var "t0") (T.var "t1"), T.map (T.var "t2") (T.var "t0"), T.map (T.var "t2") (T.var "t1")])],
 
     -- Fully applied collection conversions
     subgroup "Fully applied collection conversions" [
