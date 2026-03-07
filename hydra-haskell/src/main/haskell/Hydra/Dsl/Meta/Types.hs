@@ -17,6 +17,7 @@ import Hydra.Dsl.Meta.Base
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Maybe as Y
+import qualified Data.Set as S
 import Prelude hiding (either, map, maybe, product, sum)
 
 
@@ -188,6 +189,18 @@ poly params t = Phantoms.record _TypeScheme [
   Phantoms.field _TypeScheme_variables (Phantoms.list (name <$> params)),
   Phantoms.field _TypeScheme_type t,
   Phantoms.field _TypeScheme_constraints Phantoms.nothing]
+
+-- | Create a term-encoded polymorphic type scheme with class constraints
+-- Example: polyConstrained ["k", "v"] [("k", ["ordering"])] (map (var "k") (var "v"))
+polyConstrained :: [String] -> [(String, [String])] -> TTerm Type -> TTerm TypeScheme
+polyConstrained params constraints t = Phantoms.record _TypeScheme [
+  Phantoms.field _TypeScheme_variables (Phantoms.list (name <$> params)),
+  Phantoms.field _TypeScheme_type t,
+  Phantoms.field _TypeScheme_constraints constraintsTerm]
+  where
+    constraintsTerm = Phantoms.just $ Phantoms.map $ M.fromList
+      [(name v, Core.typeVariableMetadata (Phantoms.set (name <$> classes)))
+      | (v, classes) <- constraints]
 
 -- | Create a term-encoded product type (tuple) with multiple components using nested pairs
 -- Example: product [string, int32, boolean]
