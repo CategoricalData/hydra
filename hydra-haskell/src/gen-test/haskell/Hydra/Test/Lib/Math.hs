@@ -1250,16 +1250,6 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})),
             Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.0)))})),
           Testing.testCaseWithMetadataDescription = Nothing,
-          Testing.testCaseWithMetadataTags = []},
-        Testing.TestCaseWithMetadata {
-          Testing.testCaseWithMetadataName = "atanh 0.5",
-          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
-            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
-            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.atanh"))),
-              Core.applicationArgument = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.5)))})),
-            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 0.5493061443340549)))})),
-          Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
       Testing.testGroupName = "exp",

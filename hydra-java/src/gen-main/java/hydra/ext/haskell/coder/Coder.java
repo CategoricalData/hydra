@@ -1005,18 +1005,7 @@ public interface Coder {
   }
   
   static java.util.Set<hydra.core.Name> findOrdVariables(hydra.core.Type typ) {
-    java.util.function.Function<hydra.core.Name, Boolean> isTypeVariable = (java.util.function.Function<hydra.core.Name, Boolean>) (v -> {
-      hydra.util.Lazy<Boolean> hasNoNamespace = new hydra.util.Lazy<>(() -> hydra.lib.maybes.IsNothing.apply(hydra.names.Names.namespaceOf(v)));
-      String nameStr = (v).value;
-      hydra.util.Lazy<Boolean> startsWithT = new hydra.util.Lazy<>(() -> hydra.lib.equality.Equal.apply(
-        hydra.lib.strings.CharAt.apply(
-          0,
-          nameStr),
-        116));
-      return hydra.lib.logic.And.apply(
-        hasNoNamespace.get(),
-        startsWithT.get());
-    });
+    java.util.function.Function<hydra.core.Name, Boolean> isTypeVariable = (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.lib.maybes.IsNothing.apply(hydra.names.Names.namespaceOf(v)));
     java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>>> tryType = (java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>>>) (names -> (java.util.function.Function<hydra.core.Type, java.util.Set<hydra.core.Name>>) (t -> (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public java.util.Set<hydra.core.Name> otherwise(hydra.core.Type instance) {

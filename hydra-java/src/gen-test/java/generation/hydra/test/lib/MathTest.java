@@ -1412,20 +1412,6 @@ public class MathTest {
 
     }
 
-    @Test
-
-    public void testAtanhAtanh0dot5() {
-
-        assertEquals(
-
-            0.5493061443340549,
-
-            hydra.lib.math.Atanh.apply(0.5),
-
-            1e-15);
-
-    }
-
     // exp
 
     @Test

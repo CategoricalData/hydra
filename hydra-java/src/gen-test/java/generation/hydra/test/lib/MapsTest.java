@@ -366,8 +366,8 @@ public class MapsTest {
 
             "b",
 
-            hydra.lib.maps.FindWithDefault.apply(
-  "default",
+            hydra.lib.maps.FindWithDefault.applyLazy(
+  () -> "default",
   2,
   java.util.Map.ofEntries(
     java.util.Map.entry(
@@ -387,8 +387,8 @@ public class MapsTest {
 
             "default",
 
-            hydra.lib.maps.FindWithDefault.apply(
-  "default",
+            hydra.lib.maps.FindWithDefault.applyLazy(
+  () -> "default",
   3,
   java.util.Map.ofEntries(
     java.util.Map.entry(

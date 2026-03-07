@@ -84,7 +84,7 @@ def collect_type_variables_from_type(typ: hydra.core.Type) -> frozenlist[hydra.c
             return ()
 
 def collect_ord_constrained_variables(typ: hydra.core.Type) -> frozenlist[hydra.core.Name]:
-    r"""Collect type variables needing Ord constraints (from Set element types)."""
+    r"""Collect type variables needing Ord constraints (from Map key and Set element types)."""
     
     match typ:
         case hydra.core.TypeAnnotated(value=at):
@@ -103,7 +103,7 @@ def collect_ord_constrained_variables(typ: hydra.core.Type) -> frozenlist[hydra.
             return collect_ord_constrained_variables(elem_type)
         
         case hydra.core.TypeMap(value=mt):
-            return hydra.lib.lists.concat2(collect_ord_constrained_variables(mt.keys), collect_ord_constrained_variables(mt.values))
+            return hydra.lib.lists.concat((collect_type_variables_from_type(mt.keys), collect_ord_constrained_variables(mt.keys), collect_ord_constrained_variables(mt.values)))
         
         case hydra.core.TypeMaybe(value=elem_type2):
             return collect_ord_constrained_variables(elem_type2)

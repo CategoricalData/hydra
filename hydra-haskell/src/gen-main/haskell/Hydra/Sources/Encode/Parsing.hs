@@ -93,7 +93,12 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
                                 Core.projectionField = (Core.Name "remainder")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-      Core.bindingType = Nothing},
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.parsing.ParseError")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.parsing.parseResult"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -169,7 +174,19 @@ module_ = Module.Module {
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.parsing.parseError")),
                                   Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]}))))}))),
-      Core.bindingType = Nothing},
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [
+          Core.Name "a"],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
+            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+          Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
+              Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.parsing.ParseResult")),
+              Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})),
+            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
+        Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.parsing.parseSuccess"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -238,7 +255,19 @@ module_ = Module.Module {
                                   Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
                                   Core.projectionField = (Core.Name "remainder")})))),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-      Core.bindingType = Nothing}],
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [
+          Core.Name "a"],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
+            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+          Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
+              Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.parsing.ParseSuccess")),
+              Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "a"))})),
+            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
+        Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.encode.core"],
   Module.moduleTypeDependencies = [

@@ -226,13 +226,13 @@ collectForallVariables = define "collectForallVariables" $
       Lists.cons (Core.forallTypeParameter (var "ft"))
         (collectForallVariables @@ Core.forallTypeBody (var "ft"))]
 
--- | Collect type variables that appear in Set element positions and need Ord constraints.
+-- | Collect type variables that need Ord constraints (from Map key or Set element positions).
 -- This is a pure function that traverses the type structure without dereferencing type names.
 -- The collected variables use their original names; normalization will rename them later.
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
 collectOrdConstrainedVariables :: TBinding (Type -> [Name])
 collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
-  doc "Collect type variables needing Ord constraints (from Set element types)" $
+  doc "Collect type variables needing Ord constraints (from Map key and Set element types)" $
   "typ" ~>
   cases _Type (var "typ") (Just $ list ([] :: [TTerm Name])) [
     _Type_annotated>>: "at" ~>
@@ -249,10 +249,13 @@ collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
       collectOrdConstrainedVariables @@ Core.forallTypeBody (var "ft"),
     _Type_list>>: "elemType" ~>
       collectOrdConstrainedVariables @@ var "elemType",
+    -- For Map<K, V>, collect all type variables from K (they need Ord)
+    -- plus recurse into both K and V for nested Maps/Sets
     _Type_map>>: "mt" ~>
-      Lists.concat2
-        (collectOrdConstrainedVariables @@ Core.mapTypeKeys (var "mt"))
-        (collectOrdConstrainedVariables @@ Core.mapTypeValues (var "mt")),
+      Lists.concat (list [
+        collectTypeVariablesFromType @@ Core.mapTypeKeys (var "mt"),
+        collectOrdConstrainedVariables @@ Core.mapTypeKeys (var "mt"),
+        collectOrdConstrainedVariables @@ Core.mapTypeValues (var "mt")]),
     _Type_maybe>>: "elemType" ~>
       collectOrdConstrainedVariables @@ var "elemType",
     _Type_pair>>: "pt" ~>

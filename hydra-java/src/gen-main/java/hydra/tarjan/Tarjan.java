@@ -132,8 +132,8 @@ public interface Tarjan {
   
   static hydra.topology.TarjanState strongConnect(java.util.Map<Integer, java.util.List<Integer>> graph, Integer v, hydra.topology.TarjanState st) {
     Integer i = (st).counter;
-    hydra.util.Lazy<java.util.List<Integer>> neighbors = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-      (java.util.List<Integer>) (java.util.List.<Integer>of()),
+    hydra.util.Lazy<java.util.List<Integer>> neighbors = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
+      () -> (java.util.List<Integer>) (java.util.List.<Integer>of()),
       v,
       graph));
     hydra.util.Lazy<hydra.topology.TarjanState> newSt = new hydra.util.Lazy<>(() -> new hydra.topology.TarjanState(hydra.lib.math.Add.apply(
@@ -151,12 +151,12 @@ public interface Tarjan {
       (st).onStack), (st).sccs));
     java.util.function.Function<hydra.topology.TarjanState, java.util.function.Function<Integer, hydra.topology.TarjanState>> processNeighbor = (java.util.function.Function<hydra.topology.TarjanState, java.util.function.Function<Integer, hydra.topology.TarjanState>>) (st_ -> (java.util.function.Function<Integer, hydra.topology.TarjanState>) (w -> {
       java.util.function.Function<hydra.topology.TarjanState, hydra.topology.TarjanState> lowLink = (java.util.function.Function<hydra.topology.TarjanState, hydra.topology.TarjanState>) (s -> {
-        hydra.util.Lazy<Integer> idx_w = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-          hydra.constants.Constants.maxInt32(),
+        hydra.util.Lazy<Integer> idx_w = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
+          () -> hydra.constants.Constants.maxInt32(),
           w,
           (s).indices));
-        hydra.util.Lazy<Integer> lowV1 = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-          hydra.constants.Constants.maxInt32(),
+        hydra.util.Lazy<Integer> lowV1 = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
+          () -> hydra.constants.Constants.maxInt32(),
           v,
           (s).lowLinks));
         return new hydra.topology.TarjanState((s).counter, (s).indices, hydra.lib.maps.Insert.apply(
@@ -176,13 +176,13 @@ public interface Tarjan {
             w,
             st_);
           return ((java.util.function.Supplier<hydra.topology.TarjanState>) (() -> {
-            hydra.util.Lazy<Integer> lowV2 = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-              hydra.constants.Constants.maxInt32(),
+            hydra.util.Lazy<Integer> lowV2 = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
+              () -> hydra.constants.Constants.maxInt32(),
               v,
               (stAfter).lowLinks));
             return ((java.util.function.Supplier<hydra.topology.TarjanState>) (() -> {
-              hydra.util.Lazy<Integer> low_w = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-                hydra.constants.Constants.maxInt32(),
+              hydra.util.Lazy<Integer> low_w = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
+                () -> hydra.constants.Constants.maxInt32(),
                 w,
                 (stAfter).lowLinks));
               return new hydra.topology.TarjanState((stAfter).counter, (stAfter).indices, hydra.lib.maps.Insert.apply(
@@ -205,12 +205,12 @@ public interface Tarjan {
       processNeighbor,
       newSt.get(),
       neighbors.get()));
-    hydra.util.Lazy<Integer> idx_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-      hydra.constants.Constants.maxInt32(),
+    hydra.util.Lazy<Integer> idx_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
+      () -> hydra.constants.Constants.maxInt32(),
       v,
       (stAfterNeighbors.get()).indices));
-    hydra.util.Lazy<Integer> low_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.apply(
-      hydra.constants.Constants.maxInt32(),
+    hydra.util.Lazy<Integer> low_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
+      () -> hydra.constants.Constants.maxInt32(),
       v,
       (stAfterNeighbors.get()).lowLinks));
     return hydra.lib.logic.IfElse.lazy(

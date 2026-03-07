@@ -87,16 +87,16 @@ edgeSpec x = (Core.TermRecord (Core.Record {
 
 elementSpec :: (Mapping.ElementSpec -> Core.Term)
 elementSpec x = case x of
-  Mapping.ElementSpecVertex v1 -> (Core.TermUnion (Core.Injection {
+  Mapping.ElementSpecVertex v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "vertex"),
-      Core.fieldTerm = (vertexSpec v1)}}))
-  Mapping.ElementSpecEdge v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (vertexSpec v0)}}))
+  Mapping.ElementSpecEdge v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "edge"),
-      Core.fieldTerm = (edgeSpec v1)}}))
+      Core.fieldTerm = (edgeSpec v0)}}))
 
 propertySpec :: (Mapping.PropertySpec -> Core.Term)
 propertySpec x = (Core.TermRecord (Core.Record {
@@ -116,11 +116,11 @@ valueSpec x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "value"),
       Core.fieldTerm = Core.TermUnit}}))
-  Mapping.ValueSpecPattern v1 -> (Core.TermUnion (Core.Injection {
+  Mapping.ValueSpecPattern v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ValueSpec"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "pattern"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v1))}}))
+      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}}))
 
 vertexSpec :: (Mapping.VertexSpec -> Core.Term)
 vertexSpec x = (Core.TermRecord (Core.Record {

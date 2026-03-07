@@ -4268,7 +4268,7 @@
           "parameter": "t0"}},
       "type": [
         {
-          "constraints": null,
+          "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
           "type": {
             "function": {
               "codomain": {

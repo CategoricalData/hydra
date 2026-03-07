@@ -36,7 +36,7 @@ collectForallVariables typ = ((\x -> case x of
   Core.TypeForall v0 -> (Lists.cons (Core.forallTypeParameter v0) (collectForallVariables (Core.forallTypeBody v0)))
   _ -> []) typ)
 
--- | Collect type variables needing Ord constraints (from Set element types)
+-- | Collect type variables needing Ord constraints (from Map key and Set element types)
 collectOrdConstrainedVariables :: (Core.Type -> [Core.Name])
 collectOrdConstrainedVariables typ = ((\x -> case x of
   Core.TypeAnnotated v0 -> (collectOrdConstrainedVariables (Core.annotatedTypeBody v0))
@@ -44,7 +44,10 @@ collectOrdConstrainedVariables typ = ((\x -> case x of
   Core.TypeEither v0 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.eitherTypeLeft v0)) (collectOrdConstrainedVariables (Core.eitherTypeRight v0)))
   Core.TypeForall v0 -> (collectOrdConstrainedVariables (Core.forallTypeBody v0))
   Core.TypeList v0 -> (collectOrdConstrainedVariables v0)
-  Core.TypeMap v0 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.mapTypeKeys v0)) (collectOrdConstrainedVariables (Core.mapTypeValues v0)))
+  Core.TypeMap v0 -> (Lists.concat [
+    collectTypeVariablesFromType (Core.mapTypeKeys v0),
+    (collectOrdConstrainedVariables (Core.mapTypeKeys v0)),
+    (collectOrdConstrainedVariables (Core.mapTypeValues v0))])
   Core.TypeMaybe v0 -> (collectOrdConstrainedVariables v0)
   Core.TypePair v0 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.pairTypeFirst v0)) (collectOrdConstrainedVariables (Core.pairTypeSecond v0)))
   Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))

@@ -637,11 +637,8 @@ findOrdVariables = haskellCoderDefinition "findOrdVariables" $
           var "tryType" @@ var "names" @@ var "kt",
         _Type_set>>: "et" ~>
           var "tryType" @@ var "names" @@ var "et"],
-    "isTypeVariable">: "v" ~> lets [
-      "nameStr">: Core.unName $ var "v",
-      "hasNoNamespace">: Maybes.isNothing $ Names.namespaceOf @@ var "v",
-      "startsWithT">: Equality.equal (Strings.charAt (int32 0) (var "nameStr")) (int32 116)] $ -- 't' character
-      Logic.and (var "hasNoNamespace") (var "startsWithT"),
+    "isTypeVariable">: "v" ~>
+      Maybes.isNothing $ Names.namespaceOf @@ var "v",
     "tryType">: "names" ~> "t" ~>
       cases _Type (Rewriting.deannotateType @@ var "t")
         (Just $ var "names") [

@@ -56,6 +56,7 @@ import qualified Hydra.Sources.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
+import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Dsl.Meta.DeepCore as DC
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
@@ -72,13 +73,20 @@ ns = Namespace "hydra.encoding"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Monads.ns, Names.ns, Schemas.ns]
+    [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Monads.ns, Names.ns, Rewriting.ns, Schemas.ns]
     kernelTypesNamespaces $
     Just "Functions for generating term encoders from type modules"
   where
     elements = [
       toBinding encodeBinding,
       toBinding encodeBindingName,
+      toBinding encoderCollectForallVariables,
+      toBinding encoderCollectOrdVars,
+      toBinding encoderCollectTypeVarsFromType,
+      toBinding encoderFullResultType,
+      toBinding encoderType,
+      toBinding encoderTypeScheme,
+      toBinding prependForallEncoders,
       toBinding encodeFieldValue,
       toBinding encodeFloatValue,
       toBinding encodeInjection,
@@ -110,7 +118,9 @@ formatDecodingError :: TTerm (InContext DecodingError -> String)
 formatDecodingError = "ic" ~> Error.unDecodingError @@ Ctx.inContextObject (var "ic")
 
 -- | Encode a single type binding into an encoder binding
--- This decodes the term to a Type, then generates an encoder function
+-- This decodes the term to a Type, then generates an encoder function.
+-- Type variables that appear as Map keys or Set elements get Ord constraints
+-- via the encoder type scheme.
 encodeBinding :: TBinding (Context -> Graph -> Binding -> Either (InContext DecodingError) Binding)
 encodeBinding = define "encodeBinding" $
   doc "Transform a type binding into an encoder binding" $
@@ -120,7 +130,216 @@ encodeBinding = define "encodeBinding" $
       right (Core.binding
         (encodeBindingName @@ (Core.bindingName (var "b")))
         (encodeType @@ (var "typ"))
-        nothing))
+        (just (encoderTypeScheme @@ var "typ"))))
+
+-- | Construct a TypeScheme for an encoder function from a source type definition.
+-- For a type like @forall v. Graph v@ (where Graph has Map v (Vertex v)),
+-- produces the scheme @forall v. (v -> Term) -> Graph v -> Term@ with Ord constraint on v.
+--
+-- The type scheme uses the same variable names as the original type definition.
+-- Variable normalization (to t0, t1, etc.) happens later in the pipeline and
+-- handles renaming both variables and constraint keys consistently.
+encoderTypeScheme :: TBinding (Type -> TypeScheme)
+encoderTypeScheme = define "encoderTypeScheme" $
+  doc "Construct a TypeScheme for an encoder function from a source type" $
+  "typ" ~> lets [
+    -- Collect forall variables
+    "typeVars">: encoderCollectForallVariables @@ var "typ",
+
+    -- Build the encoder function type
+    "encoderFunType">: encoderType @@ var "typ",
+
+    -- Find Ord-constrained variables (those used as Map keys or Set elements)
+    "allOrdVars">: encoderCollectOrdVars @@ var "typ",
+    -- Filter to only actual forall-bound variables
+    "ordVars">: Lists.filter
+      ("v" ~> Lists.elem (var "v" :: TTerm Name) (var "typeVars" :: TTerm [Name]))
+      (var "allOrdVars"),
+
+    -- Build constraints map: {varName -> TypeVariableMetadata {classes = {ordering}}}
+    "constraints">:
+      Logic.ifElse (Lists.null (var "ordVars"))
+        nothing
+        (just $ Maps.fromList $ Lists.map
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering))
+          (var "ordVars"))] $
+  Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
+
+-- | Collect forall type variables from a type
+encoderCollectForallVariables :: TBinding (Type -> [Name])
+encoderCollectForallVariables = define "encoderCollectForallVariables" $
+  doc "Collect forall type variable names from a type" $
+  "typ" ~>
+  cases _Type (var "typ") (Just $ list ([] :: [TTerm Name])) [
+    _Type_annotated>>: "at" ~>
+      encoderCollectForallVariables @@ (Core.annotatedTypeBody (var "at")),
+    _Type_forall>>: "ft" ~>
+      Lists.cons (Core.forallTypeParameter (var "ft"))
+        (encoderCollectForallVariables @@ Core.forallTypeBody (var "ft"))]
+
+-- | Collect type variables that need Ord constraints (from Map key and Set element positions)
+encoderCollectOrdVars :: TBinding (Type -> [Name])
+encoderCollectOrdVars = define "encoderCollectOrdVars" $
+  doc "Collect type variables needing Ord constraints" $
+  "typ" ~>
+  cases _Type (var "typ") (Just $ list ([] :: [TTerm Name])) [
+    _Type_annotated>>: "at" ~>
+      encoderCollectOrdVars @@ (Core.annotatedTypeBody (var "at")),
+    _Type_application>>: "appType" ~>
+      Lists.concat2
+        (encoderCollectOrdVars @@ Core.applicationTypeFunction (var "appType"))
+        (encoderCollectOrdVars @@ Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~>
+      Lists.concat2
+        (encoderCollectOrdVars @@ Core.eitherTypeLeft (var "et"))
+        (encoderCollectOrdVars @@ Core.eitherTypeRight (var "et")),
+    _Type_forall>>: "ft" ~>
+      encoderCollectOrdVars @@ Core.forallTypeBody (var "ft"),
+    _Type_list>>: "elemType" ~>
+      encoderCollectOrdVars @@ var "elemType",
+    -- For Map<K, V>, collect all type variables from K (they need Ord)
+    _Type_map>>: "mt" ~>
+      Lists.concat (list [
+        encoderCollectTypeVarsFromType @@ Core.mapTypeKeys (var "mt"),
+        encoderCollectOrdVars @@ Core.mapTypeKeys (var "mt"),
+        encoderCollectOrdVars @@ Core.mapTypeValues (var "mt")]),
+    _Type_maybe>>: "elemType" ~>
+      encoderCollectOrdVars @@ var "elemType",
+    _Type_pair>>: "pt" ~>
+      Lists.concat2
+        (encoderCollectOrdVars @@ Core.pairTypeFirst (var "pt"))
+        (encoderCollectOrdVars @@ Core.pairTypeSecond (var "pt")),
+    _Type_record>>: "rt" ~>
+      Lists.concat $ Lists.map
+        ("ft" ~> encoderCollectOrdVars @@ Core.fieldTypeType (var "ft"))
+        (Core.rowTypeFields (var "rt")),
+    -- For Set<T>, collect all type variables from T (they all need Ord)
+    _Type_set>>: "elemType" ~>
+      Lists.concat2
+        (encoderCollectTypeVarsFromType @@ var "elemType")
+        (encoderCollectOrdVars @@ var "elemType"),
+    _Type_union>>: "rt" ~>
+      Lists.concat $ Lists.map
+        ("ft" ~> encoderCollectOrdVars @@ Core.fieldTypeType (var "ft"))
+        (Core.rowTypeFields (var "rt")),
+    _Type_wrap>>: "wt" ~>
+      encoderCollectOrdVars @@ Core.wrappedTypeBody (var "wt")]
+
+-- | Collect all type variables from a type expression
+encoderCollectTypeVarsFromType :: TBinding (Type -> [Name])
+encoderCollectTypeVarsFromType = define "encoderCollectTypeVarsFromType" $
+  doc "Collect all type variable names from a type expression" $
+  "typ" ~>
+  cases _Type (var "typ") (Just $ list ([] :: [TTerm Name])) [
+    _Type_annotated>>: "at" ~>
+      encoderCollectTypeVarsFromType @@ Core.annotatedTypeBody (var "at"),
+    _Type_application>>: "appType" ~>
+      Lists.concat2
+        (encoderCollectTypeVarsFromType @@ Core.applicationTypeFunction (var "appType"))
+        (encoderCollectTypeVarsFromType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_forall>>: "ft" ~>
+      encoderCollectTypeVarsFromType @@ Core.forallTypeBody (var "ft"),
+    _Type_list>>: "elemType" ~>
+      encoderCollectTypeVarsFromType @@ var "elemType",
+    _Type_map>>: "mt" ~>
+      Lists.concat2
+        (encoderCollectTypeVarsFromType @@ Core.mapTypeKeys (var "mt"))
+        (encoderCollectTypeVarsFromType @@ Core.mapTypeValues (var "mt")),
+    _Type_maybe>>: "elemType" ~>
+      encoderCollectTypeVarsFromType @@ var "elemType",
+    _Type_pair>>: "pt" ~>
+      Lists.concat2
+        (encoderCollectTypeVarsFromType @@ Core.pairTypeFirst (var "pt"))
+        (encoderCollectTypeVarsFromType @@ Core.pairTypeSecond (var "pt")),
+    _Type_record>>: "rt" ~>
+      Lists.concat $ Lists.map
+        ("ft" ~> encoderCollectTypeVarsFromType @@ Core.fieldTypeType (var "ft"))
+        (Core.rowTypeFields (var "rt")),
+    _Type_set>>: "elemType" ~>
+      encoderCollectTypeVarsFromType @@ var "elemType",
+    _Type_union>>: "rt" ~>
+      Lists.concat $ Lists.map
+        ("ft" ~> encoderCollectTypeVarsFromType @@ Core.fieldTypeType (var "ft"))
+        (Core.rowTypeFields (var "rt")),
+    _Type_variable>>: "name" ~>
+      list [var "name"],
+    _Type_wrap>>: "wt" ~>
+      encoderCollectTypeVarsFromType @@ Core.wrappedTypeBody (var "wt")]
+
+-- | Get the full result type for an encoder (the input type of the encoder function)
+-- Maps structural types to their nominal names, preserving type applications.
+encoderFullResultType :: TBinding (Type -> Type)
+encoderFullResultType = define "encoderFullResultType" $
+  doc "Get full result type for encoder input" $
+  "typ" ~>
+  cases _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
+    _Type_annotated>>: "at" ~>
+      encoderFullResultType @@ (Core.annotatedTypeBody (var "at")),
+    _Type_application>>: "appType" ~>
+      Core.typeApplication $ Core.applicationType
+        (encoderFullResultType @@ Core.applicationTypeFunction (var "appType"))
+        (Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~>
+      Core.typeEither $ Core.eitherType
+        (encoderFullResultType @@ Core.eitherTypeLeft (var "et"))
+        (encoderFullResultType @@ Core.eitherTypeRight (var "et")),
+    _Type_forall>>: "ft" ~>
+      Core.typeApplication $ Core.applicationType
+        (encoderFullResultType @@ Core.forallTypeBody (var "ft"))
+        (Core.typeVariable (Core.forallTypeParameter (var "ft"))),
+    _Type_list>>: "elemType" ~>
+      Core.typeList (encoderFullResultType @@ var "elemType"),
+    _Type_literal>>: "_" ~>
+      Core.typeVariable (Core.nameLift _Literal),
+    _Type_map>>: "mt" ~>
+      Core.typeMap $ Core.mapType
+        (encoderFullResultType @@ Core.mapTypeKeys (var "mt"))
+        (encoderFullResultType @@ Core.mapTypeValues (var "mt")),
+    _Type_maybe>>: "elemType" ~>
+      Core.typeMaybe (encoderFullResultType @@ var "elemType"),
+    _Type_pair>>: "pt" ~>
+      Core.typePair $ Core.pairType
+        (encoderFullResultType @@ Core.pairTypeFirst (var "pt"))
+        (encoderFullResultType @@ Core.pairTypeSecond (var "pt")),
+    _Type_record>>: "rt" ~>
+      Core.typeVariable (Core.rowTypeTypeName (var "rt")),
+    _Type_set>>: "elemType" ~>
+      Core.typeSet (encoderFullResultType @@ var "elemType"),
+    _Type_union>>: "rt" ~>
+      Core.typeVariable (Core.rowTypeTypeName (var "rt")),
+    _Type_unit>>: constant Core.typeUnit,
+    _Type_variable>>: "name" ~>
+      Core.typeVariable (var "name"),
+    _Type_wrap>>: "wt" ~>
+      Core.typeVariable (Core.wrappedTypeTypeName (var "wt"))]
+
+-- | Build the encoder function type for a given type
+-- For monomorphic types: InputType -> Term
+-- For polymorphic types: (a -> Term) -> ... -> InputType<a,...> -> Term
+encoderType :: TBinding (Type -> Type)
+encoderType = define "encoderType" $
+  doc "Build encoder function type" $
+  "typ" ~>
+  "resultType" <~ (encoderFullResultType @@ var "typ") $
+  "baseType" <~ (Core.typeFunction $ Core.functionType
+    (var "resultType")
+    (Core.typeVariable (Core.nameLift _Term))) $
+  prependForallEncoders @@ var "baseType" @@ var "typ"
+
+-- | Prepend encoder types for forall parameters
+-- For forall a. T: prepends (a -> Term) -> to the base type
+prependForallEncoders :: TBinding (Type -> Type -> Type)
+prependForallEncoders = define "prependForallEncoders" $
+  doc "Prepend encoder types for forall parameters to base type" $
+  "baseType" ~> "typ" ~> cases _Type (var "typ") (Just $ var "baseType") [
+    _Type_annotated>>: "at" ~>
+      prependForallEncoders @@ var "baseType" @@ Core.annotatedTypeBody (var "at"),
+    _Type_forall>>: "ft" ~>
+      Core.typeFunction $ Core.functionType
+        (Core.typeFunction $ Core.functionType
+          (Core.typeVariable (Core.forallTypeParameter (var "ft")))
+          (Core.typeVariable (Core.nameLift _Term)))
+        (prependForallEncoders @@ var "baseType" @@ Core.forallTypeBody (var "ft"))]
 
 -- | Generate a fully qualified binding name for an encoder function from a type name
 -- For example, "hydra.core.Name" -> "hydra.encode.core.name"

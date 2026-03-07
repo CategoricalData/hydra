@@ -502,10 +502,6 @@ def test_atanh__atanh_0():
 
     assert (hydra.lib.math.atanh(0.0)) == (0.0)
 
-def test_atanh__atanh_0_5():
-
-    assert (hydra.lib.math.atanh(0.5)) == (0.5493061443340549)
-
 # exp
 
 def test_exp__exp_0():

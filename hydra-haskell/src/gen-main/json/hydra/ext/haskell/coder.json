@@ -7356,66 +7356,15 @@
                           "function": {
                             "lambda": {
                               "body": {
-                                "let": {
-                                  "bindings": [
-                                    {
-                                      "name": "nameStr",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"variable": "v"},
-                                          "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                      "type": [
-                                        {
-                                          "constraints": null,
-                                          "type": {"literal": {"string": {}}},
-                                          "variables": []}]},
-                                    {
-                                      "name": "hasNoNamespace",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "v"},
-                                              "function": {"variable": "hydra.names.namespaceOf"}}},
-                                          "function": {
-                                            "typeApplication": {
-                                              "body": {"function": {"primitive": "hydra.lib.maybes.isNothing"}},
-                                              "type": {"variable": "hydra.module.Namespace"}}}}},
-                                      "type": [
-                                        {
-                                          "constraints": null,
-                                          "type": {"literal": {"boolean": {}}},
-                                          "variables": []}]},
-                                    {
-                                      "name": "startsWithT",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"literal": {"integer": {"int32": 116}}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "nameStr"},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {"literal": {"integer": {"int32": 0}}},
-                                                      "function": {"function": {"primitive": "hydra.lib.strings.charAt"}}}}}},
-                                              "function": {
-                                                "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
-                                                  "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                      "type": [
-                                        {
-                                          "constraints": null,
-                                          "type": {"literal": {"boolean": {}}},
-                                          "variables": []}]}],
-                                  "body": {
+                                "application": {
+                                  "argument": {
                                     "application": {
-                                      "argument": {"variable": "startsWithT"},
-                                      "function": {
-                                        "application": {
-                                          "argument": {"variable": "hasNoNamespace"},
-                                          "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}}}},
+                                      "argument": {"variable": "v"},
+                                      "function": {"variable": "hydra.names.namespaceOf"}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"function": {"primitive": "hydra.lib.maybes.isNothing"}},
+                                      "type": {"variable": "hydra.module.Namespace"}}}}},
                               "domain": [{"variable": "hydra.core.Name"}],
                               "parameter": "v"}}},
                         "type": [

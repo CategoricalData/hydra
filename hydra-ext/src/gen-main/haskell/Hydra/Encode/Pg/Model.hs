@@ -102,16 +102,16 @@ edgeType t x = (Core.TermRecord (Core.Record {
 
 element :: ((t0 -> Core.Term) -> Model.Element t0 -> Core.Term)
 element v x = case x of
-  Model.ElementVertex v1 -> (Core.TermUnion (Core.Injection {
+  Model.ElementVertex v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.model.Element"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "vertex"),
-      Core.fieldTerm = (vertex v v1)}}))
-  Model.ElementEdge v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (vertex v v0)}}))
+  Model.ElementEdge v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.model.Element"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "edge"),
-      Core.fieldTerm = (edge v v1)}}))
+      Core.fieldTerm = (edge v v0)}}))
 
 elementKind :: (Model.ElementKind -> Core.Term)
 elementKind x = case x of
@@ -139,16 +139,16 @@ elementTree v x = (Core.TermRecord (Core.Record {
 
 elementType :: ((t0 -> Core.Term) -> Model.ElementType t0 -> Core.Term)
 elementType t x = case x of
-  Model.ElementTypeVertex v1 -> (Core.TermUnion (Core.Injection {
+  Model.ElementTypeVertex v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "vertex"),
-      Core.fieldTerm = (vertexType t v1)}}))
-  Model.ElementTypeEdge v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (vertexType t v0)}}))
+  Model.ElementTypeEdge v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.model.ElementType"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "edge"),
-      Core.fieldTerm = (edgeType t v1)}}))
+      Core.fieldTerm = (edgeType t v0)}}))
 
 elementTypeTree :: ((t0 -> Core.Term) -> Model.ElementTypeTree t0 -> Core.Term)
 elementTypeTree t x = (Core.TermRecord (Core.Record {
@@ -185,16 +185,16 @@ graphSchema t x = (Core.TermRecord (Core.Record {
 
 label :: (Model.Label -> Core.Term)
 label x = case x of
-  Model.LabelVertex v1 -> (Core.TermUnion (Core.Injection {
+  Model.LabelVertex v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.model.Label"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "vertex"),
-      Core.fieldTerm = (vertexLabel v1)}}))
-  Model.LabelEdge v1 -> (Core.TermUnion (Core.Injection {
+      Core.fieldTerm = (vertexLabel v0)}}))
+  Model.LabelEdge v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.pg.model.Label"),
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "edge"),
-      Core.fieldTerm = (edgeLabel v1)}}))
+      Core.fieldTerm = (edgeLabel v0)}}))
 
 lazyGraph :: ((t0 -> Core.Term) -> Model.LazyGraph t0 -> Core.Term)
 lazyGraph v x = (Core.TermRecord (Core.Record {

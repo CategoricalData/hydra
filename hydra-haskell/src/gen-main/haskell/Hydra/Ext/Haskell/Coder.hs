@@ -433,11 +433,7 @@ findOrdVariables typ =
             in (tryType names kt)
           Core.TypeSet v0 -> (tryType names v0)
           _ -> names) typ_) 
-      isTypeVariable = (\v ->  
-              let nameStr = (Core.unName v) 
-                  hasNoNamespace = (Maybes.isNothing (Names.namespaceOf v))
-                  startsWithT = (Equality.equal (Strings.charAt 0 nameStr) 116)
-              in (Logic.and hasNoNamespace startsWithT))
+      isTypeVariable = (\v -> Maybes.isNothing (Names.namespaceOf v))
       tryType = (\names -> \t -> (\x -> case x of
               Core.TypeVariable v0 -> (Logic.ifElse (isTypeVariable v0) (Sets.insert v0 names) names)
               _ -> names) (Rewriting.deannotateType t))
